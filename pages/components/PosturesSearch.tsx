@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
 import postureData from "@/app/interfaces/postureData";
 
-export default function PostureSearch(props) {
+export default function PostureSearch(props: postureData[]) {
    
     const [postures, setPostures] = useState<postureData[]>([...props.postureData]);
 
@@ -14,7 +14,6 @@ export default function PostureSearch(props) {
          <Stack spacing={2} sx={{ background: "white" }}>
          <Autocomplete
            id="search-poses"
-           postures
            options={postures.map((posture: postureData) => posture.display_name)}
            renderInput={(params) => <TextField {...params} label="Yoga Postures" />}
            defaultValue={'Mountain Pose'}
@@ -22,7 +21,6 @@ export default function PostureSearch(props) {
            onChange={(event, value) => console.log(value)}
          />
          <Autocomplete
-           postures
            id="free-solo-2-demo"
            disableClearable
            options={postures.map((posture: postureData) => posture.category)}
