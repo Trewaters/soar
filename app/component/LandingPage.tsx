@@ -12,7 +12,7 @@ import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
 import ChangeHistoryOutlinedIcon from '@mui/icons-material/ChangeHistoryOutlined';
 import AirOutlinedIcon from '@mui/icons-material/AirOutlined';
 
-export default function MenuMain() {
+export default function LandingPage() {
 
     return (
         <>
