@@ -2,6 +2,25 @@
 
 Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
+## branches
+
+* `aum` - working branch
+* `version_stable` - stable version this is the stable build of the most current version I am working on.
+* `version_010` - release version 0.1.0. The "version" branches are locked after release.
+
+I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: *"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0.*
+
+## Milestones
+
+* [ ] 1.0.0 - MVP ( 4 sections, each with material).
+* [ ] 2.0.0 - Create User Profiles and allow them to save their progress
+* [ ] 2.x.0 - User Profile Customizations
+* [ ] 2.x.0 - Users can Add more poses, etc.
+* [ ] 2.x.0 - Users can create custom flows
+* [ ] 2.x.0 - Users can create journal about Meditations
+* [ ] 2.x.0 - Users can create custom Mantras
+
+Old ReadMe Below here...⬇️
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
