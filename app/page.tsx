@@ -9,10 +9,12 @@ export default function Home() {
 
   return (
     <>
+    <h1>Soar, Eight Limbs of Yoga</h1>
     <MenuMain />
     <MenuPlanner />
     <PostureSearch />
     <PostureCard />   
+    <p>Landing Page</p>
     </>
   )
 }
