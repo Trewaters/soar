@@ -17,6 +17,9 @@ export default function PostureSearch(props) {
            postures
            options={postures.map((posture: postureData) => posture.display_name)}
            renderInput={(params) => <TextField {...params} label="Yoga Postures" />}
+           defaultValue={'Mountain Pose'}
+           autoSelect={true}
+           onChange={(event, value) => console.log(value)}
          />
          <Autocomplete
            postures
