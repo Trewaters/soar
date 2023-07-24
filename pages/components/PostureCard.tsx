@@ -7,9 +7,9 @@ import CardMedia from '@mui/material/CardMedia';
 import Paper from "@mui/material/Paper";
 import { useState } from "react";
 
-export default function PostureCard(props: postureData[]) {
+export default function PostureCard(props: String) {
 
-    const [postures, setPostures] = useState<postureData[]>([...props.posturePropData]);
+    const [postures, setPostures] = useState<String>(props.posturePropData);
 
     return (
         <Paper>

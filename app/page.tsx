@@ -40,10 +40,6 @@ export default async function Home() {
     <LandingPage />
     <h2>Menu Planner</h2>
     <MenuPlanner />
-    <h2>Posture Search</h2>
-    <PostureSearch 
-    posturePropData ={posturePropData}
-     />
     <h2>Posture Card</h2>
     <PostureCard 
     posturePropData ={posturePropData}
