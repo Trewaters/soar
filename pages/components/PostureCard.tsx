@@ -1,14 +1,19 @@
+'use client'
+import postureData from "@/app/interfaces/postureData";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from '@mui/material/CardMedia';
 import Paper from "@mui/material/Paper";
+import { useState } from "react";
 
-export default async function PostureCard(props: any) {
+export default function PostureCard(props: postureData[]) {
+
+    const [postures, setPostures] = useState<postureData[]>([...props.posturePropData]);
 
     return (
         <Paper>
-            {/* {data.map((posture, index) => (
+            {postures.map((posture, index) => (
 
                 <Card key={index}>
                     <CardHeader
@@ -22,9 +27,9 @@ export default async function PostureCard(props: any) {
       />
                     <CardContent>
                         <i>asana posture</i>
-                        <p>Pronunciation: {posture.sanskrit_names.latin }</p> 
-                        <p>Duration: {posture duration }</p> 
-                        <p>Meaning of Posture: {posture.sanskrit_names.translation.description }</p> 
+                        <p>Pronunciation: posture.sanskrit_names.latin </p> 
+                        <p>Duration: posture duration</p> 
+                        <p>Meaning of Posture: posture.sanskrit_names.translation.description </p> 
                     <p>Intent of Posture:</p>
                     <p>Breath: (Inhale/Exhale)</p>
                         <p>Dristi: optimal gaze for the position </p>
@@ -34,7 +39,7 @@ export default async function PostureCard(props: any) {
                         <p>Completed: (Done ✅) </p>
                     </CardContent>
                 </Card>
-            ))} */}
+            ))}
         </Paper>
     );
 };

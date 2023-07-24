@@ -7,7 +7,7 @@ import postureData from "@/app/interfaces/postureData";
 
 export default function PostureSearch(props: postureData[]) {
    
-    const [postures, setPostures] = useState<postureData[]>([...props.postureData]);
+    const [postures, setPostures] = useState<postureData[]>([...props.posturePropData]);
 
 
     return (

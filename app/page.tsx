@@ -23,7 +23,7 @@ async function getData() {
 
 
 export default async function Home() {
-  const data = await getData()
+  const posturePropData: postureData[] = await getData()
 
   return (
     <>
@@ -42,11 +42,12 @@ export default async function Home() {
     <MenuPlanner />
     <h2>Posture Search</h2>
     <PostureSearch 
-    postureData={data}
+    posturePropData ={posturePropData}
      />
     <h2>Posture Card</h2>
-    <PostureCard />   
-    <p>Landing Page</p>
+    <PostureCard 
+    posturePropData ={posturePropData}
+    />   
     </>
   )
 }
