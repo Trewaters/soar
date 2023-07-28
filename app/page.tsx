@@ -1,7 +1,6 @@
 import LandingPage from './component/LandingPage'
 import MenuPlanner from './component/MenuPlanner'
 import PostureSearch from '../pages/components/PosturesSearch'
-import PostureCard from '@/pages/components/PostureCard'
 import postureData from './interfaces/postureData';
 
 async function getData() {
@@ -40,8 +39,8 @@ export default async function Home() {
     <LandingPage />
     <h2>Menu Planner</h2>
     <MenuPlanner />
-    <h2>Posture Card</h2>
-    <PostureCard 
+    <h2>Posture Search</h2>
+    <PostureSearch 
     posturePropData ={posturePropData}
     />   
     </>

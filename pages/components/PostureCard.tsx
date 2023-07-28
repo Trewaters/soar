@@ -1,4 +1,3 @@
-'use client'
 import postureData from "@/app/interfaces/postureData";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -7,15 +6,16 @@ import CardMedia from '@mui/material/CardMedia';
 import Paper from "@mui/material/Paper";
 import { useState } from "react";
 
-export default function PostureCard(props: String) {
 
-    const [postures, setPostures] = useState<String>(props.posturePropData);
+export default function PostureCard({postureCardProp}: postureData) {
+
+    const [posture, setposture] = useState<postureData>(postureCardProp);
+    console.log ("posture", posture)
+    console.log ("postureCardProp", postureCardProp)
 
     return (
         <Paper>
-            {postures.map((posture, index) => (
-
-                <Card key={index}>
+            <Card>
                     <CardHeader
                     title={posture.name}
                     subheader="posture name"
@@ -39,7 +39,6 @@ export default function PostureCard(props: String) {
                         <p>Completed: (Done ✅) </p>
                     </CardContent>
                 </Card>
-            ))}
         </Paper>
     );
 };
