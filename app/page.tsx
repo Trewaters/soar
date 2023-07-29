@@ -26,14 +26,6 @@ export default async function Home() {
 
   return (
     <>
-{/* working data fetch
-    <ul>
-      {data.map((posture, index) => (
-        <li key={index}>{posture.name}</li>
-      ))}
-    </ul>
-     */}
-
     <h1>Soar, Eight Limbs of Yoga</h1>
     <h2>Landing Page</h2>
     <LandingPage />
