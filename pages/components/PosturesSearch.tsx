@@ -15,7 +15,9 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
     const [postures, setPostures] = useState<postureData[]>(posturePropData);
     const [cardPosture, setcardPosture] = useState<string>();
 
-    const selectedPosture = postures.find(p => p.display_name === cardPosture);
+    // Find the selected posture based on the Autocomplete selection
+    const selectedPosture: postureData = postures.find(p => p.display_name === cardPosture);
+
     return (
       <>    
          <Stack spacing={2} sx={{ background: "white" }}>
@@ -25,10 +27,10 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
            renderInput={(params) => <TextField {...params} label="Yoga Postures" />}
            defaultValue={'Awkward'}
            autoSelect={true}
-           onChange={(event, value: String) => setcardPosture(value)}
+           onChange={(event, value: String | null) => setcardPosture(value || '')}
          />
          <Autocomplete
-           id="free-solo-2-demo"
+           id="search-categories"
            disableClearable
            options={postures.map((posture: postureData) => posture.category)}
            renderInput={(params) => (
