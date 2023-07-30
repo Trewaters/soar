@@ -1,8 +1,10 @@
+import Head from 'next/head';
 import LandingPage from './component/LandingPage'
 import MenuPlanner from './component/MenuPlanner'
 import PostureSearch from '../pages/components/PosturesSearch'
-import postureData from './interfaces/postureData';
-
+import postureData from '../interfaces/postureData';
+import { Box, Paper } from '@mui/material';
+/* 
 async function getData() {
   const res = await fetch('https://www.pocketyoga.com/poses.json')
   // The return value is *not* serialized
@@ -19,22 +21,33 @@ async function getData() {
   // return res.json()
   return postureProps
 }
-
+ */
 
 export default async function Home() {
-  const posturePropData: postureData[] = await getData()
+  // const posturePropData: postureData[] = await getData()
 
   return (
     <>
-    <h1>Soar, Eight Limbs of Yoga</h1>
-    <h2>Landing Page</h2>
+    <Head>
+      <title>Happy Yoga "Soar"</title>
+    </Head>
+    <Paper>
+    <h1>Eight Limbs of Yoga</h1>
+      <Box className={"flex items-center"}>
+
     <LandingPage />
+{/* 
     <h2>Menu Planner</h2>
     <MenuPlanner />
     <h2>Posture Search</h2>
     <PostureSearch 
     posturePropData ={posturePropData}
     />   
+  */}
+
+  </Box>
+  </Paper>
+  
     </>
   )
 }

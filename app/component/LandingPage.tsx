@@ -16,9 +16,11 @@ export default function LandingPage() {
 
     return (
         <>
-        <h1>Soar App</h1>
-            <p>Like a leaf on the wind</p>
-            Time: {new Date().toLocaleTimeString()}
+        <div>
+          
+            <i>a leaf on the wind</i>
+           <p> Time: {new Date().toLocaleTimeString()}</p>
+        </div>
         <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'lightgray' }}>
       <nav aria-label="main mailbox folders">
         <List>
