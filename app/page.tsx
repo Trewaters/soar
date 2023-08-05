@@ -24,28 +24,28 @@ async function getData() {
  */
 
 export default async function Home() {
-  const posturePropData: postureData[] = await getData()
+  // const posturePropData: postureData[] = await getData()
 
   return (
     <>
     <Head>
       <title>Happy Yoga &quot;Soar&quot;</title>
     </Head>
+    <Box sx={{  width: '100%', maxWidth: 360, bgcolor: 'lightgray' }}>
     <Paper>
-    <h1>Eight Limbs of Yoga</h1>
-      <Box className={"flex items-center"}>
-
     <LandingPage />
 
+    {/* 
     <h2>Menu Planner</h2>
     <MenuPlanner />
-
+    
     <h2>Posture Search</h2>
     <PostureSearch posturePropData ={posturePropData}
-    />   
+    />
+  */}
 
-  </Box>
   </Paper>
+  </Box>
   
     </>
   )

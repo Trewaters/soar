@@ -14,66 +14,62 @@ import AirOutlinedIcon from '@mui/icons-material/AirOutlined';
 
 export default function LandingPage() {
 
-    return (
-        <>
-        <div class={"text-center"}>
-
-        <div>
-          
-            <i>a leaf on the wind</i>
-           <p> Time: {new Date().toLocaleTimeString()}</p>
-        </div>
-        </div>
-        <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'lightgray' }}>
-      <nav aria-label="main mailbox folders">
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <WhatshotIcon />
-              </ListItemIcon>
-              <ListItemText primary="Flow Series" />
-            </ListItemButton>
-          </ListItem>
-      <Divider />
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <WaterDropOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Asana Postures" />
-            </ListItemButton>
-          </ListItem>
-      <Divider />
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <ChangeHistoryOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Meditation" />
-            </ListItemButton>
-          </ListItem>
-      <Divider />
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <AirOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Mantra" />
-            </ListItemButton>
-          </ListItem>
-      <Divider />
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <ConstructionOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Breathwork" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      </nav>
-    </Box>
-        </>
-    )
+  return (
+    <>
+      <div class={"text-center"}>
+        <i>Soar like a leaf on the wind</i>
+        <p> Time: {new Date().toLocaleTimeString()}</p>
+      </div>
+      <Box sx={{  width: '100%', maxWidth: 360, bgcolor: 'lightgray' }}>
+        <nav aria-label="main mailbox folders">
+          <List>
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <WhatshotIcon />
+                </ListItemIcon>
+                <ListItemText primary="Flow Series" />
+              </ListItemButton>
+            </ListItem>
+            <Divider />
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <WaterDropOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Asana Postures" />
+              </ListItemButton>
+            </ListItem>
+            <Divider />
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <ChangeHistoryOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Meditation" />
+              </ListItemButton>
+            </ListItem>
+            <Divider />
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <AirOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Mantra" />
+              </ListItemButton>
+            </ListItem>
+            <Divider />
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <ConstructionOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Breathwork" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </nav>
+      </Box>
+    </>
+  )
 }
