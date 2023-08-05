@@ -16,10 +16,13 @@ export default function LandingPage() {
 
     return (
         <>
+        <div class={"text-center"}>
+
         <div>
           
             <i>a leaf on the wind</i>
            <p> Time: {new Date().toLocaleTimeString()}</p>
+        </div>
         </div>
         <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'lightgray' }}>
       <nav aria-label="main mailbox folders">
