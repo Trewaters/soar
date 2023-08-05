@@ -11,12 +11,13 @@ import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
 import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
 import ChangeHistoryOutlinedIcon from '@mui/icons-material/ChangeHistoryOutlined';
 import AirOutlinedIcon from '@mui/icons-material/AirOutlined';
+import Link from 'next/link';
 
 export default function LandingPage() {
 
   return (
     <>
-      <div class={"text-center"}>
+      <div className={"text-center"}>
         <i>Soar like a leaf on the wind</i>
         <p> Time: {new Date().toLocaleTimeString()}</p>
       </div>
@@ -24,7 +25,7 @@ export default function LandingPage() {
         <nav aria-label="main mailbox folders">
           <List>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton component="a" href="/">
                 <ListItemIcon>
                   <WhatshotIcon />
                 </ListItemIcon>
@@ -33,11 +34,11 @@ export default function LandingPage() {
             </ListItem>
             <Divider />
             <ListItem disablePadding>
-              <ListItemButton>
+            <ListItemButton component="a" href="/asanaPostures">
                 <ListItemIcon>
                   <WaterDropOutlinedIcon />
                 </ListItemIcon>
-                <ListItemText primary="Asana Postures" />
+                <ListItemText primary="Asana Postures" passHref/>
               </ListItemButton>
             </ListItem>
             <Divider />

@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import React from "react";
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -12,8 +12,8 @@ interface PostureSearchProps{
 
 export default function PostureSearch({ posturePropData }: PostureSearchProps) {
    
-    const [postures, setPostures] = useState<postureData[]>(posturePropData);
-    const [cardPosture, setcardPosture] = useState<string>();
+    const [postures, setPostures] = React.useState<postureData[]>(posturePropData);
+    const [cardPosture, setcardPosture] = React.useState<string>();
 
     // Find the selected posture based on the Autocomplete selection
     const selectedPosture: postureData = postures.find(p => p.display_name === cardPosture);

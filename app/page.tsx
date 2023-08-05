@@ -28,25 +28,15 @@ export default async function Home() {
 
   return (
     <>
-    <Head>
-      <title>Happy Yoga &quot;Soar&quot;</title>
-    </Head>
-    <Box sx={{  width: '100%', maxWidth: 360, bgcolor: 'lightgray' }}>
-    <Paper>
-    <LandingPage />
+      <Head>
+        <title>Happy Yoga &quot;Soar&quot;</title>
+      </Head>
+      <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'lightgray' }}>
+        <Paper>
+          <LandingPage />
+        </Paper>
+      </Box>
 
-    {/* 
-    <h2>Menu Planner</h2>
-    <MenuPlanner />
-    
-    <h2>Posture Search</h2>
-    <PostureSearch posturePropData ={posturePropData}
-    />
-  */}
-
-  </Paper>
-  </Box>
-  
     </>
   )
 }
