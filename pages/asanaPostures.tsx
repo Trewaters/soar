@@ -1,9 +1,9 @@
 // import Link from 'next/link';
-// import postureData from "@/interfaces/postureData";
-// import PostureSearch from "./components/PosturesSearch";
+import postureData from "@/interfaces/postureData";
+import PostureSearch from "./components/PosturesSearch";
 
 
-/* async function getData() {
+async function getData() {
     const res = await fetch('https://www.pocketyoga.com/poses.json')
     // The return value is *not* serialized
     // You can return Date, Map, Set, etc.
@@ -18,15 +18,15 @@
   
     // return res.json()
     return postureProps
-  } */
+  }
 
-export default function AsanaPostures() {
-    // const posturePropData: postureData[] = await getData()
+export default async function AsanaPostures() {
+    const posturePropData: postureData[] = await getData()
 
     return (
         <>
             <h1>Asana Postures</h1>
-            {/* <PostureSearch posturePropData={posturePropData} /> */}
+            <PostureSearch posturePropData={posturePropData} />
         </>
     )
 }

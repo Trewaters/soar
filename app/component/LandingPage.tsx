@@ -21,7 +21,7 @@ export default function LandingPage() {
         <i>Soar like a leaf on the wind</i>
         <p> Time: {new Date().toLocaleTimeString()}</p>
       </div>
-      <Box sx={{   maxWidth: 360, bgcolor: 'lightgray' }}>
+      <Box sx={{  bgcolor: 'lightgray' }}>
         <nav aria-label="category list">
           <List>
             <ListItem disablePadding>

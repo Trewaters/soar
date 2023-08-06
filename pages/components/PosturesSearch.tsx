@@ -6,17 +6,18 @@ import Autocomplete from '@mui/material/Autocomplete';
 import postureData from "@/interfaces/postureData";
 import PostureCard from "./PostureCard";
 
-interface PostureSearchProps{
-  posturePropData: postureData[];
-}
+// interface PostureSearchProps{
+//   posturePropData: postureData[];
+// }
 
-export default function PostureSearch({ posturePropData }: PostureSearchProps) {
+// export default function PostureSearch({ posturePropData }: PostureSearchProps) {
+export default function PostureSearch(posturePropData: postureData[]) {
    
     const [postures, setPostures] = React.useState<postureData[]>(posturePropData);
     const [cardPosture, setcardPosture] = React.useState<string>();
 
     // Find the selected posture based on the Autocomplete selection
-    const selectedPosture: postureData = postures.find(p => p.display_name === cardPosture);
+    const selectedPosture: postureData | undefined = postures.find(p => p.display_name === cardPosture);
 
     return (
       <>    
