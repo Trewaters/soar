@@ -21,8 +21,8 @@ export default function LandingPage() {
         <i>Soar like a leaf on the wind</i>
         <p> Time: {new Date().toLocaleTimeString()}</p>
       </div>
-      <Box sx={{  width: '100%', maxWidth: 360, bgcolor: 'lightgray' }}>
-        <nav aria-label="main mailbox folders">
+      <Box sx={{   maxWidth: 360, bgcolor: 'lightgray' }}>
+        <nav aria-label="category list">
           <List>
             <ListItem disablePadding>
               <ListItemButton component="a" href="/">
@@ -34,12 +34,14 @@ export default function LandingPage() {
             </ListItem>
             <Divider />
             <ListItem disablePadding>
-            <ListItemButton component="a" href="/asanaPostures">
+              <Link  href="asanaPostures" passHref>
+            <ListItemButton>
                 <ListItemIcon>
                   <WaterDropOutlinedIcon />
                 </ListItemIcon>
-                <ListItemText primary="Asana Postures" passHref/>
+                <ListItemText primary="Asana Postures"/>
               </ListItemButton>
+              </Link>
             </ListItem>
             <Divider />
             <ListItem disablePadding>

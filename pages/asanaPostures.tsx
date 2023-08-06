@@ -1,4 +1,4 @@
-import Link from 'next/link';
+// import Link from 'next/link';
 // import postureData from "@/interfaces/postureData";
 // import PostureSearch from "./components/PosturesSearch";
 
@@ -20,7 +20,7 @@ import Link from 'next/link';
     return postureProps
   } */
 
-export default async function AsanaPostures() {
+export default function AsanaPostures() {
     // const posturePropData: postureData[] = await getData()
 
     return (
