@@ -1,8 +1,5 @@
 import Head from 'next/head';
-import LandingPage from './component/LandingPage'
-import MenuPlanner from './component/MenuPlanner'
-import PostureSearch from '../pages/components/PosturesSearch'
-import postureData from '../interfaces/postureData';
+import LandingPage from '../components/LandingPage'
 import { Box, Paper } from '@mui/material';
 
 export default async function Home() {
@@ -12,7 +9,7 @@ export default async function Home() {
       <Head>
         <title>Happy Yoga &quot;Soar&quot;</title>
       </Head>
-      <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', maxWidth: 360, bgcolor: 'lightgray' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', bgcolor: 'lightgray' }}>
         <Paper>
           <LandingPage />
         </Paper>
