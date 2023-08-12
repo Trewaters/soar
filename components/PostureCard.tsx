@@ -5,13 +5,9 @@ import CardHeader from "@mui/material/CardHeader";
 import CardMedia from '@mui/material/CardMedia';
 import Paper from "@mui/material/Paper";
 
-interface PostureCardProps {
-    postureCardProp: postureData;
-}
+export default function PostureCard(props: { postureCardProp: postureData }) {
 
-export default function PostureCard({ postureCardProp }: PostureCardProps) {
-
-    const posture = postureCardProp;
+    const posture = props.postureCardProp;
 
     return (
         <Paper>

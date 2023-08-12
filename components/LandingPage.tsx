@@ -10,7 +10,7 @@ import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
 import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
 import ChangeHistoryOutlinedIcon from '@mui/icons-material/ChangeHistoryOutlined';
 import AirOutlinedIcon from '@mui/icons-material/AirOutlined';
-import Link from 'next/link';
+import Link from '@mui/material/Link/Link';
 
 export default function LandingPage() {
 
@@ -18,66 +18,64 @@ export default function LandingPage() {
     <>
       <div className={"text-center bg-slate-400"}>
         <h1>
-        Soar like a leaf on the wind
+          Soar like a leaf on the wind
         </h1>
         <p> Time: {new Date().toLocaleTimeString()}</p>
       </div>
-      <Box sx={{  bgcolor: 'white' }}>
+      <Box sx={{ bgcolor: 'white' }}>
         <nav aria-label="category list">
-        <List>
+          <List>
             <ListItem disablePadding>
-              <Link href="/" passHref>
-                <ListItemButton component="a">
-                  <ListItemIcon>
-                    <WhatshotIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Flow Series" />
-                </ListItemButton>
-              </Link>
+
+              <ListItemButton component="a">
+                <ListItemIcon>
+                  <WhatshotIcon />
+                </ListItemIcon>
+                <ListItemText primary="Flow Series" />
+              </ListItemButton>
+
             </ListItem>
             <Divider />
             <ListItem disablePadding>
-              <Link href="/asanaPostures" passHref>
-                <ListItemButton component="a">
-                  <ListItemIcon>
-                    <WaterDropOutlinedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Asana Postures" />
-                </ListItemButton>
-              </Link>
+              <ListItemButton component={Link} href="/asanaPostures" role="button">
+                <ListItemIcon>
+                  <WaterDropOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Asana Postures" />
+              </ListItemButton>
             </ListItem>
             <Divider />
             <ListItem disablePadding>
-              <Link href="/meditation" passHref>
-                <ListItemButton component="a">
-                  <ListItemIcon>
-                    <ChangeHistoryOutlinedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Meditation" />
-                </ListItemButton>
-              </Link>
+
+              <ListItemButton component="a">
+                <ListItemIcon>
+                  <ChangeHistoryOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Meditation" />
+              </ListItemButton>
+
             </ListItem>
             <Divider />
             <ListItem disablePadding>
-              <Link href="/mantra" passHref>
-                <ListItemButton component="a">
-                  <ListItemIcon>
-                    <AirOutlinedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Mantra" />
-                </ListItemButton>
-              </Link>
+
+              <ListItemButton component="a">
+                <ListItemIcon>
+                  <AirOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Mantra" />
+              </ListItemButton>
+
             </ListItem>
             <Divider />
             <ListItem disablePadding>
-              <Link href="/breathwork" passHref>
-                <ListItemButton component="a">
-                  <ListItemIcon>
-                    <ConstructionOutlinedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Breathwork" />
-                </ListItemButton>
-              </Link>
+
+              <ListItemButton component="a">
+                <ListItemIcon>
+                  <ConstructionOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Breathwork" />
+              </ListItemButton>
+
             </ListItem>
           </List>
         </nav>
