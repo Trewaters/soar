@@ -11,8 +11,9 @@ import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined';
 import ChangeHistoryOutlinedIcon from '@mui/icons-material/ChangeHistoryOutlined';
 import AirOutlinedIcon from '@mui/icons-material/AirOutlined';
 import Link from '@mui/material/Link/Link';
+import postureData from '@/interfaces/postureData';
 
-export default function LandingPage() {
+export default function LandingPage(props: {postureProps: postureData[]}) {
 
   return (
     <>

@@ -31,6 +31,7 @@ async function getData(): Promise<postureData[]> {
 
 export default function Home({ postureProps }: InferGetStaticPropsType<typeof getStaticProps>) {
 
+  const postureDATA = postureProps;
   console.log("Posture Props:", postureProps);
 
   return (
@@ -40,7 +41,7 @@ export default function Home({ postureProps }: InferGetStaticPropsType<typeof ge
       </Head>
       <Box sx={{ display: 'flex', justifyContent: 'center', bgcolor: 'lightgray' }}>
         <Paper>
-          <LandingPage />
+          <LandingPage postureDATA={postureProps} />
         </Paper>
       </Box>
 
