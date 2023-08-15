@@ -12,6 +12,7 @@ import PostureCard from "./PostureCard";
 
 // export default function PostureSearch({ posturePropData }: PostureSearchProps) {
 export default function PostureSearch(posturePropData: postureData[]) {
+  console.log(`Object.keys(posturePropData) ${Object.keys(posturePropData)}`)
    
     const [postures, setPostures] = React.useState<postureData[]>(posturePropData);
     const [cardPosture, setcardPosture] = React.useState<string>();
@@ -22,6 +23,7 @@ export default function PostureSearch(posturePropData: postureData[]) {
     return (
       <>    
          <Stack spacing={2} sx={{ background: "white" }}>
+{/* 
          <Autocomplete
            id="search-poses"
            options={postures.map((posture: postureData) => posture.display_name)}
@@ -45,15 +47,16 @@ export default function PostureSearch(posturePropData: postureData[]) {
              />
            )}
          />
+          */}
        </Stack>
-        
+        {/* 
       <h2>Posture Card</h2>
       {selectedPosture && (
         <PostureCard
         postureCardProp={selectedPosture}
          />
       )}
-
+ */}
       </>
     )
 }
