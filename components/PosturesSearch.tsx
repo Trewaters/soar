@@ -5,42 +5,49 @@ import Autocomplete from '@mui/material/Autocomplete';
 import postureData from "@/interfaces/postureData";
 import PostureCard from "./PostureCard";
 
-// async function getData(): Promise<postureData[]> {
-//     try {
-//         const res = await fetch('https://www.pocketyoga.com/poses.json');
-//         if (!res.ok) throw new Error("Error fetching data");
-//         const postureProps: postureData[] = await res.json();
-//         return postureProps;
-//     } catch {
-//         console.log("Error fetching data");
-//         return [];
-//     }
-// }
+export async function getData() {
+  let postureProps: postureData[] = [];
 
-export default function PostureSearch(props: {postureProps: postureData[]}) {
-    const [postures, setPostures] = useState<postureData[]>(props.postureProps);
+  try {
+    const response = await fetch('https://www.pocketyoga.com/poses.json');
+
+    if (!response.ok) throw new Error("Error fetching data");
+
+    postureProps = await response.json();
+
+    console.log(`Fetched ${postureProps.length} postures`);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return postureProps
+  }
+  console.log(`getStaticProps fetched ${postureProps.length} postures`);
+
+  return postureProps
+
+};
+
+export default function PostureSearch() {
+    
+  const [postures, setPostures] = useState<postureData[]>();
     const [cardPosture, setcardPosture] = useState<string>();
 
-  //   useEffect(() => {
-  //     (async () => {
-  //         const fetchedPostures = await getData();
-  //         console.log("Fetched postures:", fetchedPostures);  // Log data here
-  //         setPostures(fetchedPostures);
-  //     })();
-  // }, []);
+    useEffect(() => {
+      (async () => {
+          const fetchedPostures = await getData();
+          console.log("Fetched postures:", fetchedPostures);  // Log data here
+          setPostures(fetchedPostures);
+      })();
+  }, []);
   
 
-    if (postures){
-      const selectedPosture: postureData | undefined = postures.find(p => p.display_name === cardPosture);
-    };
-
+  const selectedPosture: postureData | undefined = postures?.find(p => p.display_name === cardPosture);
 
     return (
       <>    
          <Stack spacing={2} sx={{ background: "white" }}>
          <Autocomplete
            id="search-poses"
-           options={postures.map((posture: postureData) => posture.display_name)}
+           options={postures?.map((posture: postureData) => posture.display_name)}  // Use optional chaining here
            renderInput={(params) => <TextField {...params} label="Yoga Postures" />}
            defaultValue={'Awkward'}
            autoSelect={true}
@@ -49,7 +56,7 @@ export default function PostureSearch(props: {postureProps: postureData[]}) {
          <Autocomplete
            id="search-categories"
            disableClearable
-           options={postures.map((posture: postureData) => posture.category)}
+           options={postures?.map((posture: postureData) => posture.category)}  // Use optional chaining here
            renderInput={(params) => (
              <TextField
                {...params}
