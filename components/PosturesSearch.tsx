@@ -5,40 +5,19 @@ import Autocomplete from '@mui/material/Autocomplete';
 import postureData from "@/interfaces/postureData";
 import PostureCard from "./PostureCard";
 
-export async function getData() {
-  let postureProps: postureData[] = [];
+// interface PostureSearchProps{
+//   posturePropData: postureData[];
+// }
 
-  try {
-    const response = await fetch('https://www.pocketyoga.com/poses.json');
 
-    if (!response.ok) throw new Error("Error fetching data");
-
-    postureProps = await response.json();
-
-    console.log(`Fetched ${postureProps.length} postures`);
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return postureProps
-  }
-  console.log(`getStaticProps fetched ${postureProps.length} postures`);
-
-  return postureProps
-
-};
-
-export default function PostureSearch() {
+export default function PostureSearch(props: {posturePropData: postureData[]}) {
     
+  
+  console.log(`Object.keys(posturePropData) ${Object.keys(props.posturePropData)}`)
+
   const [postures, setPostures] = useState<postureData[]>();
     const [cardPosture, setcardPosture] = useState<string>();
 
-    useEffect(() => {
-      (async () => {
-          const fetchedPostures = await getData();
-          console.log("Fetched postures:", fetchedPostures);  // Log data here
-          setPostures(fetchedPostures);
-      })();
-  }, []);
-  
 
   const selectedPosture: postureData | undefined = postures?.find(p => p.display_name === cardPosture);
 
