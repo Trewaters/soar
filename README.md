@@ -16,16 +16,11 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 [Bishop Fox - Cybersecurity Style Guide - v1.1] (https://www.bishopfox.com/blog/2018/02/hello-world-introducing-the-bishop-fox-cybersecurity-style-guide/)
 
-### Built With
-
-* This project was generated with [NextJS](https://nextjs.org/docs) version 13.
-* Material MUI
-
 ## CONTRIBUTIONS
 
 Solo project so far. Code and graphic design contributors are welcome and encouraged to help. Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to me. (I will copy their instructions when I get time, but for now ditto to what they say)
 
-## Authors
+## Author
 
 - **Tre' Grisby** - _Initial work_ - [trewaters](https://gitconnected.com/trewaters)
 
@@ -45,14 +40,6 @@ This project is licensed under the *GNU Affero General Public License v3.0* - se
 
 - Timeline: I started this in July 2023. I hope to have a MVP by the end of the year. I am working on this in my spare time, so it may take longer. I am also learning NextJS as I go, so that will slow me down as well.
 
-## Branches
-
-* `aum` - working branch
-* `version_stable` - stable version this is the stable build of the most current version I am working on.
-* `version_010` - release version 0.1.0. The "version" branches are locked after release.
-
-I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: *"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0.*
-
 ## Milestones
 
 * [ ] 1.0.0 - MVP ( 4 sections, each with material).
@@ -63,9 +50,22 @@ I follow Semantic Versioning for releases. [Read more here](https://semver.org/)
 * [ ] 2.x.0 - Users can create journal about Meditations
 * [ ] 2.x.0 - Users can create custom Mantras
 
+## Wireframe Look
+
 # DEVELOPER SECTION (below)
 
-## Prerequesites
+## Github Branches
+
+* `aum` - working branch
+* `version_stable` - stable version this is the stable build of the most current version I am working on.
+* `version_010` - release version 0.1.0. The "version" branches are locked after release.
+
+I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: *"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0.*
+
+## Prerequesites: Built With
+
+* This project was generated with [NextJS](https://nextjs.org/docs) version 13.
+* Material MUI
 
 ## Installing
 
