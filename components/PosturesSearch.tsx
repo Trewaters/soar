@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
 import postureData from "@/interfaces/postureData";
 import PostureCard from "./PostureCard";
-import { GetStaticProps } from "next";
+// import { GetStaticProps } from "next";
 
 // export async function getData() {
 //   let postureProps: postureData[] = [];
@@ -29,25 +29,25 @@ import { GetStaticProps } from "next";
 
 // };
 
-export async function getStaticProps(): GetStaticProps {
-  const response = await fetch(
-    "https://www.pocketyoga.com/poses.json"
-    ).then((response) => response.json());
+// export async function getStaticProps(): GetStaticProps {
+//   const response = await fetch(
+//     "https://www.pocketyoga.com/poses.json"
+//     ).then((response) => response.json());
       
     
-    console.log(`getApiData ${response}`);
+//     console.log(`getApiData ${response}`);
 
-  return {
-    props: {
-      postures: response,
-    },
-  };
-}
+//   return {
+//     props: {
+//       postures: response,
+//     },
+//   };
+// }
 
 
 export default function PostureSearch(props: { postures: postureData[] }) {
   
-  const [postures, setPostures] = useState<postureData[]>();
+  const [postures, setPostures] = useState<postureData[]>(props.postures);
   const [cardPosture, setcardPosture] = useState<string>();
     
     
@@ -64,7 +64,7 @@ export default function PostureSearch(props: { postures: postureData[] }) {
 
     return (
       <>    
-      {/* 
+      
          <Stack spacing={2} sx={{ background: "white" }}>
          <Autocomplete
            id="search-poses"
@@ -90,15 +90,15 @@ export default function PostureSearch(props: { postures: postureData[] }) {
            )}
          />
        </Stack>
-        */}
-     {/* 
+       
+     
         
       <h2>Posture Card</h2>
       {selectedPosture && (
         <PostureCard
         postureCardProp={selectedPosture}
          />
-      )} */}
+      )}
       </>
     )
 }
