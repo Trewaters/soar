@@ -1,6 +1,6 @@
 # Soar with Happy Yoga, like a leaf on the wind.
 
-version 0.1.0 or [version badge](https://badge.fury.io/)
+version 0.2.0 or [version badge](https://badge.fury.io/)
 
 App used to find and track Yoga practice. Find poses, create flows, and track progress. For beginners and experts alike. Created by a yoga instructor for yoga instructors and students.
 
@@ -10,7 +10,11 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 ### What the app should do?
 
+Used for Yoga practitioners of all levels. Created for all the yoga gurus in the world.
+
 ### Why is this app useful?
+
+When I was going through Corepower Teacher Training in Point Loma San Diego California it was difficult to find an app or website to track my yoga sequences. Please use this app to track your practice.
 
 ## CREDIT
 
@@ -40,6 +44,13 @@ This project is licensed under the *GNU Affero General Public License v3.0* - se
 
 - Timeline: I started this in July 2023. I hope to have a MVP by the end of the year. I am working on this in my spare time, so it may take longer. I am also learning NextJS as I go, so that will slow me down as well.
 
+## To Do:
+
+* Move To Do items to a wiki and project area of github. For now I have it in the Read Me.
+* Connect to a data source so I can actually use real data and allows users to save their work.
+* Add more details to Figma wireframes.
+* Begin adding a changelog to this project.
+
 ## Milestones
 
 * [ ] 1.0.0 - MVP ( 4 sections, each with material).
@@ -50,15 +61,18 @@ This project is licensed under the *GNU Affero General Public License v3.0* - se
 * [ ] 2.x.0 - Users can create journal about Meditations
 * [ ] 2.x.0 - Users can create custom Mantras
 
-## Wireframe Look
+## Wireframe "look and feel"
 
 # DEVELOPER SECTION (below)
 
 ## Github Branches
 
+*The "version_x" branches are locked after release.*
+
 * `aum` - working branch
 * `version_stable` - stable version this is the stable build of the most current version I am working on.
-* `version_010` - release version 0.1.0. The "version" branches are locked after release.
+* `version_010` - release version 0.1.0. (locked)
+* `version_020` - release version 0.2.0. (locked)
 
 I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: *"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0.*
 
