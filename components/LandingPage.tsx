@@ -27,7 +27,7 @@ export default function LandingPage() {
           <List>
             <ListItem disablePadding>
 
-              <ListItemButton component="a">
+              <ListItemButton component={Link} href="/flowSeries" role="button">
                 <ListItemIcon>
                   <WhatshotIcon />
                 </ListItemIcon>
