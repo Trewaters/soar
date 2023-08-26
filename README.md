@@ -52,6 +52,8 @@ This project is licensed under the *GNU Affero General Public License v3.0* - se
 
 ## Wireframe Look
 
+* Figma ([link here](https://www.figma.com/file/tqoZbETSUfPmvaNCsEDsAX/app-Soar?type=design&node-id=0-1&mode=design&t=WN34U2lnkiYvGVGq-0))
+
 # DEVELOPER SECTION (below)
 
 ## Github Branches
