@@ -1,8 +1,6 @@
-# Soar with Happy Yoga, like a leaf on the wind.
+# Happy Yoga, Soar like a leaf on the wind.
 
 version 0.2.0 or [version badge](https://badge.fury.io/)
-
-App used to find and track Yoga practice. Find poses, create flows, and track progress. For beginners and experts alike. Created by a yoga instructor for yoga instructors and students.
 
 Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
@@ -12,9 +10,13 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 Used for Yoga practitioners of all levels. Created for all the yoga gurus in the world.
 
+Track your Yoga practice. Find poses, create flows, and track progress. For beginners and experts alike. Created by a yoga instructor for yoga instructors and students.
+
 ### Why is this app useful?
 
-When I was going through Corepower Teacher Training in Point Loma San Diego California it was difficult to find an app or website to track my yoga sequences. Please use this app to track your practice.
+When I was going through Corepower Teacher Training in Point Loma San Diego California it was difficult to find an app or website to track my yoga sequences. Now that I have some time I want to create something that wasn't available for me when I needed it.
+
+Please use this app to track your yoga practice.
 
 ## CREDIT
 
@@ -48,7 +50,6 @@ This project is licensed under the *GNU Affero General Public License v3.0* - se
 
 * Move To Do items to a wiki and project area of github. For now I have it in the Read Me.
 * Connect to a data source so I can actually use real data and allows users to save their work.
-* Add more details to Figma wireframes.
 * Begin adding a changelog to this project.
 
 ## Milestones
