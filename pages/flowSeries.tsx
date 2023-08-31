@@ -1,11 +1,11 @@
-import { Button, alpha, styled } from "@mui/material";
+import { Button, Stack, alpha, styled } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import Link from "next/link";
 
-export default function flowSeries(){
-    
-const Search = styled('div')(({ theme }) => ({
+export default function flowSeries() {
+
+  const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -20,7 +20,7 @@ const Search = styled('div')(({ theme }) => ({
       width: 'auto',
     },
   }));
-  
+
   const SearchIconWrapper = styled('div')(({ theme }) => ({
     padding: theme.spacing(0, 2),
     height: '100%',
@@ -31,7 +31,7 @@ const Search = styled('div')(({ theme }) => ({
     justifyContent: 'center',
   }));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
       padding: theme.spacing(1, 1, 1, 0),
@@ -44,32 +44,33 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
       },
     },
   }));
-  
-    return(
+
+  return (
+    <>
+    <Stack direction="row" spacing={2}>
         <div>
-            <div>
-                <Button>Practice</Button><br/>
-                or<br/>
-                <Button>Create</Button>
-            </div>
-            <div>
-                <Button>Flow (full)</Button><br/>
-                vs.<br/>
-                <Link href="/Flow/seriesPractice" passHref>
-                <Button>Series (mini)</Button>
-                </Link>
-            </div>
-
-            <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-
+          <Button>Practice</Button><br />
+          or<br />
+          <Button>Create</Button>
         </div>
-    )
+        <div>
+          <Button>Flow (full)</Button><br />
+          vs.<br />
+          <Link href="/flow/seriesPractice" passHref>
+            <Button>Series (mini)</Button>
+          </Link>
+        </div>
+
+    </Stack>
+        <Search>
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            placeholder="Search…"
+            inputProps={{ 'aria-label': 'search' }}
+            />
+        </Search>
+            </>
+  )
 }
