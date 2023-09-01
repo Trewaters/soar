@@ -49,12 +49,29 @@ This project is licensed under the *GNU Affero General Public License v3.0* - se
 ## To Do:
 
 * Move To Do items to a wiki and project area of github. For now I have it in the Read Me.
+  - wiki has been removed from Github. (2023-09-01 13:25:12)
+  - must find what information has been moved already. (2023-09-01 13:25:35)
 * Connect to a data source so I can actually use real data and allows users to save their work.
 * Begin adding a changelog to this project.
 
 ## Milestones
 
-* [ ] 1.0.0 - MVP ( 4 sections, each with material).
+* [ ] 1.0.0 - MVP ( 4 sections, with material).
+  - Flow Series (...wip)
+  - Asana Postures (...wip)
+  - Meditation
+  - Mantra (...wip)
+  - Breathwork
+  - 8 Limbs of yoga (
+    1. Yamas 
+    2. Niyama    
+    3. Asana 
+    4. Pranayama 
+    5. Pratyahara 
+    6. Dharana 
+    7. Samadhi 
+    8. Asteya 
+    )
 * [ ] 2.0.0 - Create User Profiles and allow them to save their progress
 * [ ] 2.x.0 - User Profile Customizations
 * [ ] 2.x.0 - Users can Add more poses, etc.
