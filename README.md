@@ -59,8 +59,8 @@ This project is licensed under the *GNU Affero General Public License v3.0* - se
 * [ ] 1.0.0 - MVP ( 4 sections, with material).
   - Flow Series (...wip)
   - Asana Postures (...wip)
-  - Meditation
   - Mantra (...wip)
+  - Meditation
   - Breathwork
   - 8 Limbs of yoga (
     1. Yamas 
