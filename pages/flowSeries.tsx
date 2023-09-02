@@ -56,7 +56,7 @@ export default function flowSeries() {
         <div>
           <Button>Flow (full)</Button><br />
           vs.<br />
-          <Link href="/flow/seriesPractice" passHref>
+          <Link href="/Flow/SeriesPractice" passHref>
             <Button>Series (mini)</Button>
           </Link>
         </div>

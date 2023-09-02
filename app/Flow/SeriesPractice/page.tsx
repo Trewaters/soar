@@ -8,25 +8,26 @@ function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     console.info('You clicked a breadcrumb.');
   }
 
-export default function seriesPractice(){
+export default function page(){
 
-    const breadcrumbs = [
-        <Link underline="hover" key="1" color="inherit" href="/" onClick={handleClick}>
-          MUI
-        </Link>,
-        <Link
-          underline="hover"
-          key="2"
-          color="inherit"
-          href="/material-ui/getting-started/installation/"
-          onClick={handleClick}
-        >
-          Core
-        </Link>,
-        <Typography key="3" color="text.primary">
-          Breadcrumb
-        </Typography>,
-      ];
+    const breadcrumbs = []
+    // const breadcrumbs = [
+    //     <Link underline="hover" key="1" color="inherit" href="/" onClick={handleClick}>
+    //       MUI
+    //     </Link>,
+    //     <Link
+    //       underline="hover"
+    //       key="2"
+    //       color="inherit"
+    //       href="/material-ui/getting-started/installation/"
+    //       onClick={handleClick}
+    //     >
+    //       Core
+    //     </Link>,
+    //     <Typography key="3" color="text.primary">
+    //       Breadcrumb
+    //     </Typography>,
+    //   ];
 
       
     return(

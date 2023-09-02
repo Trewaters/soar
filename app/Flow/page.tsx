@@ -1,4 +1,4 @@
-export default function flow(){
+export default function page(){
     return(
         <>
         <h1>Flow Page</h1>
