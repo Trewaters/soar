@@ -3,7 +3,7 @@ import React from "react";
 import { Breadcrumbs, Card, CardContent, CardHeader, Link, Stack, Typography } from "@mui/material";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
-export default function page(e){
+export default async function page(e){
   
   function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
       event.preventDefault();
@@ -23,10 +23,10 @@ export default function page(e){
   body: JSON.stringify
   ({introPose, focusPose, outroPose}),
 })
+
 const {msg} = await res.json()
 setError(msg);
 console.log('error', error)
-};
 
     const breadcrumbs = [
         <Link underline="hover" key="1" color="inherit" href="/" onClick={handleClick}>

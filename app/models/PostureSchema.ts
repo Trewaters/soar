@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 
-const postureSchema = new Schema({
+const PostureSchema = new Schema({
     nameEnglish: {
         type: String,
         required: true,
@@ -13,3 +13,5 @@ const postureSchema = new Schema({
     difficulty: String,
     modifications: String,
 });
+
+export default PostureSchema;
