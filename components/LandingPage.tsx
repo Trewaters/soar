@@ -37,7 +37,7 @@ export default function LandingPage() {
             </ListItem>
             <Divider />
             <ListItem disablePadding>
-              <ListItemButton component={Link} href="/asanaPostures" role="button">
+              <ListItemButton component={Link} href="/flow" role="button">
                 <ListItemIcon>
                   <WaterDropOutlinedIcon />
                 </ListItemIcon>

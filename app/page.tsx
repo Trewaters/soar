@@ -6,10 +6,8 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Happy Yoga &quot;Soar&quot;',
 }
- 
 
 export default function Home() {
-
 
   return (
     <RootLayout>
