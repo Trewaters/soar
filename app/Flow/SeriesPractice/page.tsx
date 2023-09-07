@@ -1,6 +1,7 @@
 'use client'
 import React from "react";
-import { Breadcrumbs, Card, CardContent, CardHeader, Link, Stack, Typography } from "@mui/material";
+import Link from "next/link";
+import { Breadcrumbs, Card, CardContent, CardHeader, Stack, Typography } from "@mui/material";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 export default async function page(e){

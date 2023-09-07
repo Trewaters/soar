@@ -52,6 +52,8 @@ This project is licensed under the *GNU Affero General Public License v3.0* - se
   - wiki has been removed from Github. (2023-09-01 13:25:12)
   - must find what information has been moved already. (2023-09-01 13:25:35)
 * Connect to a data source so I can actually use real data and allows users to save their work.
+  - connect to MongoDB
+  - migrate json data to DB
 * Begin adding a changelog to this project.
 * Deploy on Vercel or some other free web hosting
 
