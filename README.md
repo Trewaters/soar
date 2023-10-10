@@ -99,6 +99,17 @@ This project is licensed under the *GNU Affero General Public License v3.0* - se
 
 I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: *"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0.*
 
+### Web Pages
+
+* `LandingPage` component is the start page for user app users. 
+  * Show current date time
+  * Menu of features
+    1. Flow Series (groups of postures)
+    2. Asana Postures (single postures)
+    3. Meditation (meditation prompts)
+    4. Mantra (verbal prose)
+    5. Breathwork (breathing exercises)
+
 ## Prerequesites: Built With
 
 * This project was generated with [NextJS](https://nextjs.org/docs) version 13.
