@@ -117,7 +117,7 @@ I follow Semantic Versioning for releases. [Read more here](https://semver.org/)
 
 ## Installing
 
-## Tests
+## Tests 
 
 ## Coding Style
 
