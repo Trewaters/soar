@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
 import postureData from "@/app/interfaces/postureData";
-import PostureCard from "./PostureCard";
+import PostureCard from "@components/PostureCard";
 
 interface PostureSearchProps{
   posturePropData: postureData[];
@@ -13,10 +13,10 @@ interface PostureSearchProps{
 export default function PostureSearch({ posturePropData }: PostureSearchProps) {
    
     const [postures, setPostures] = useState<postureData[]>(posturePropData);
-    const [cardPosture, setcardPosture] = useState<string>();
+    const [cardPosture, setcardPosture] = useState<string | null>();
 
     // Find the selected posture based on the Autocomplete selection
-    const selectedPosture: postureData = postures.find(p => p.display_name === cardPosture);
+    const selectedPosture = postures.find(p => p.display_name === cardPosture) || null;
 
     return (
       <>    
@@ -27,7 +27,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
            renderInput={(params) => <TextField {...params} label="Yoga Postures" />}
            defaultValue={'Awkward'}
            autoSelect={true}
-           onChange={(event, value: String | null) => setcardPosture(value || '')}
+          onChange={(event, value: string | null) => setcardPosture(value || '')}
          />
          <Autocomplete
            id="search-categories"
