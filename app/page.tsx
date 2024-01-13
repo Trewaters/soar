@@ -1,6 +1,6 @@
 import LandingPage from './component/LandingPage'
 import MenuPlanner from './component/MenuPlanner'
-import PostureSearch from '../pages/components/PosturesSearch'
+import PostureSearch from '@components/PosturesSearch'
 import postureData from './interfaces/postureData';
 
 async function getData() {

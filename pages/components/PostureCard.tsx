@@ -17,7 +17,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
         <Paper>
             <Card>
                 <CardHeader
-                    title={posture.name}
+                    title={posture?.name}
                     subheader="posture name"
                 />
                 <CardMedia
@@ -29,13 +29,13 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                     <i>asana posture</i>
                     <p>Pronunciation: posture.sanskrit_names.latin </p>
                     <p>Duration: posture duration</p>
-                    <p>Meaning of Posture: posture.sanskrit_names.translation.description </p>
+                    <p>Meaning of Posture: posture.sanskrit_names.translation?.description </p>
                     <p>Intent of Posture:</p>
                     <p>Breath: (Inhale/Exhale)</p>
                     <p>Dristi: optimal gaze for the position </p>
-                    <p>Difficulty: {posture.difficulty}</p>
-                    <p>Category: {posture.category}</p>
-                    <p>Description: {posture.description}</p>
+                    <p>Difficulty: {posture?.difficulty}</p>
+                    <p>Category: {posture?.category}</p>
+                    <p>Description: {posture?.description}</p>
                     <p>Completed: (Done ✅) </p>
                 </CardContent>
             </Card>
