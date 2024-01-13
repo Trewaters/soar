@@ -1,16 +1,16 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Divider from "@mui/material/Divider";
-import WhatshotIcon from "@mui/icons-material/Whatshot";
-import WaterDropOutlinedIcon from "@mui/icons-material/WaterDropOutlined";
-import ConstructionOutlinedIcon from "@mui/icons-material/ConstructionOutlined";
-import ChangeHistoryOutlinedIcon from "@mui/icons-material/ChangeHistoryOutlined";
-import AirOutlinedIcon from "@mui/icons-material/AirOutlined";
+import * as React from 'react'
+import Box from '@mui/material/Box'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import Divider from '@mui/material/Divider'
+import WhatshotIcon from '@mui/icons-material/Whatshot'
+import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
+import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined'
+import ChangeHistoryOutlinedIcon from '@mui/icons-material/ChangeHistoryOutlined'
+import AirOutlinedIcon from '@mui/icons-material/AirOutlined'
 
 export default function LandingPage() {
   return (
@@ -18,7 +18,7 @@ export default function LandingPage() {
       <h1>Soar App</h1>
       <p>Like a leaf on the wind</p>
       Time: {new Date().toLocaleTimeString()}
-      <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "lightgray" }}>
+      <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'lightgray' }}>
         <nav aria-label="main mailbox folders">
           <List>
             <ListItem disablePadding>
@@ -69,5 +69,5 @@ export default function LandingPage() {
         </nav>
       </Box>
     </>
-  );
+  )
 }

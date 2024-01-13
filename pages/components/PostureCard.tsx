@@ -1,16 +1,16 @@
-import postureData from "@/app/interfaces/postureData";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import Paper from "@mui/material/Paper";
+import postureData from '@/app/interfaces/postureData'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import CardHeader from '@mui/material/CardHeader'
+import CardMedia from '@mui/material/CardMedia'
+import Paper from '@mui/material/Paper'
 
 interface PostureCardProps {
-  postureCardProp: postureData;
+  postureCardProp: postureData
 }
 
 export default function PostureCard({ postureCardProp }: PostureCardProps) {
-  const posture = postureCardProp;
+  const posture = postureCardProp
 
   return (
     <Paper>
@@ -26,7 +26,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
           <p>Pronunciation: posture.sanskrit_names.latin </p>
           <p>Duration: posture duration</p>
           <p>
-            Meaning of Posture: posture.sanskrit_names.translation?.description{" "}
+            Meaning of Posture: posture.sanskrit_names.translation?.description{' '}
           </p>
           <p>Intent of Posture:</p>
           <p>Breath: (Inhale/Exhale)</p>
@@ -38,5 +38,5 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
         </CardContent>
       </Card>
     </Paper>
-  );
+  )
 }

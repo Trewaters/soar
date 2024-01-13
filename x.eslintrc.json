@@ -1,0 +1,32 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "next/core-web-vitals",
+    "prettier"
+  ],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": [
+      "warn",
+      {
+        "semi": false,
+        "singleQuote": true,
+        "endOfLine": "lf",
+        "trailingComma": "es5",
+        "tabWidth": 2,
+        "printWidth": 120,
+        "useTabs": true,
+        "bracketSpacing": true,
+        "jsxBracketSameLine": false,
+        "arrowParens": "avoid"
+      },
+      { "usePrettierrc": false }
+    ],
+    "no-unused-vars": "warn",
+    "no-console": "warn",
+    "eqeqeq": "warn",
+    "prefer-const": "warn",
+    "camelcase": "warn"
+  }
+}
