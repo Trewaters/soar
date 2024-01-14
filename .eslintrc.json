@@ -12,10 +12,14 @@
       {
         "semi": false,
         "singleQuote": true,
-        "trailingComma": "es5"
+        "trailingComma": "es5",
+        "tabWidth": 2,
+        "bracketSpacing": true
       },
       { "usePrettierrc": true }
     ],
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "no-console": "warn",
+    "eqeqeq": "warn"
   }
 }
