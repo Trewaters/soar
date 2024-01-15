@@ -21,7 +21,7 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@components/*": ["./pages/components/*"],
+      "@components/*": ["./pages/*"],
       "@styles/*": ["./styles/*"]
     }
   },

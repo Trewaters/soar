@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
 import postureData from '@/app/interfaces/postureData'
-import PostureCard from '@components/PostureCard'
+import PostureCard from '@/pages/PostureCard'
 
 interface PostureSearchProps {
   posturePropData: postureData[]
