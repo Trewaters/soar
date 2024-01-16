@@ -15,9 +15,6 @@ import AirOutlinedIcon from '@mui/icons-material/AirOutlined'
 export default function LandingPage() {
   return (
     <>
-      <h1>Soar App</h1>
-      <p>Like a leaf on the wind</p>
-      Time: {new Date().toLocaleTimeString()}
       <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'lightgray' }}>
         <nav aria-label="main mailbox folders">
           <List>

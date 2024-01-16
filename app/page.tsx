@@ -33,6 +33,9 @@ export default async function Home() {
           <Typography variant="h3">Soar</Typography>
         </Stack>
       </Stack>
+      <Typography variant="h1">Soar App</Typography>
+      <Typography variant="body1">Like a leaf on the wind</Typography>
+      Time: {new Date().toLocaleTimeString()}
       <Typography variant="body1">The 8 Limbs of Yoga </Typography>
       <TabHeader />
       <h2>Posture Search</h2>
