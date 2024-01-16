@@ -21,7 +21,7 @@ export default function TopNav() {
     <Box>
       <Stack justifyContent="flex-start">
         <IconButton aria-label="menu" onClick={handleClick}>
-          <MenuIcon />
+          <MenuIcon sx={{ width: 42, height: 42 }} />
         </IconButton>
         <Menu
           id="basic-menu"
@@ -33,7 +33,7 @@ export default function TopNav() {
           }}
         >
           <Link href="/" passHref>
-            <MenuItem onClick={handleClose}>Menu Planner</MenuItem>
+            <MenuItem onClick={handleClose}>Planner</MenuItem>
           </Link>
           <Link href="/" passHref>
             <MenuItem onClick={handleClose}>Posture Search</MenuItem>

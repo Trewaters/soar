@@ -30,13 +30,14 @@ export default async function Home() {
       <Stack direction="row" justifyContent="space-between">
         <TopNav />
         <Stack>
-          <Typography variant="h3">Soar</Typography>
+          <Typography variant="h3">Soar App</Typography>
         </Stack>
       </Stack>
-      <Typography variant="h1">Soar App</Typography>
       <Typography variant="body1">Like a leaf on the wind</Typography>
-      Time: {new Date().toLocaleTimeString()}
       <Typography variant="body1">The 8 Limbs of Yoga </Typography>
+      <Typography variant="body1">
+        Time: {new Date().toLocaleTimeString()}
+      </Typography>
       <TabHeader />
       <h2>Posture Search</h2>
       <PostureSearch posturePropData={posturePropData} />
