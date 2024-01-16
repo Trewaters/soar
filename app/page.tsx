@@ -1,11 +1,9 @@
 import React from 'react'
-import LandingPage from './landing-page'
-import MenuPlanner from './MenuPlanner'
-import PostureSearch from '@/pages/PosturesSearch'
-import postureData from './interfaces/postureData'
 import TopNav from '@/pages/top-nav'
-import { Box, Stack, Tab, Tabs, Typography } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import TabHeader from '@/pages/tab-header'
+import PostureSearch from '@components/PosturesSearch'
+import postureData from '@/app/interfaces/postureData'
 
 async function getData() {
   const res = await fetch('https://www.pocketyoga.com/poses.json')
@@ -37,9 +35,6 @@ export default async function Home() {
       </Stack>
       <Typography variant="body1">The 8 Limbs of Yoga </Typography>
       <TabHeader />
-      <LandingPage />
-      <h2>Menu Planner</h2>
-      <MenuPlanner />
       <h2>Posture Search</h2>
       <PostureSearch posturePropData={posturePropData} />
     </>

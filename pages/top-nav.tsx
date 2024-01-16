@@ -33,9 +33,6 @@ export default function TopNav() {
           }}
         >
           <Link href="/" passHref>
-            <MenuItem onClick={handleClose}>Landing Page</MenuItem>
-          </Link>
-          <Link href="/" passHref>
             <MenuItem onClick={handleClose}>Menu Planner</MenuItem>
           </Link>
           <Link href="/" passHref>

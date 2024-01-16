@@ -21,6 +21,7 @@
     ],
     "paths": {
       "@/*": ["./*"],
+      "@app/*": ["./app/*"],
       "@components/*": ["./pages/*"],
       "@styles/*": ["./styles/*"]
     }
