@@ -2,30 +2,9 @@ import React from 'react'
 import TopNav from '@/pages/top-nav'
 import { Box, Stack, Typography } from '@mui/material'
 import TabHeader from '@/pages/tab-header'
-import PostureSearch from '@components/PosturesSearch'
-import postureData from '@/app/interfaces/postureData'
 import CurrentTime from '@/pages/current-time'
 
-async function getData() {
-  const res = await fetch('https://www.pocketyoga.com/poses.json')
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
-
-  const postureProps = await res.json()
-
-  // Recommendation: handle errors
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data')
-  }
-
-  // return res.json()
-  return postureProps
-}
-
-export default async function Home() {
-  const posturePropData: postureData[] = await getData()
-
+export default function Home() {
   return (
     <>
       <Stack direction="row" justifyContent="space-between">
@@ -42,8 +21,6 @@ export default async function Home() {
         </Typography>
       </Box>
       <TabHeader />
-      <Typography variant="h2">Posture Search</Typography>
-      <PostureSearch posturePropData={posturePropData} />
     </>
   )
 }

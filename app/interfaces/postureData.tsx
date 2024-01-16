@@ -1,5 +1,6 @@
 // for postures.json data
 interface postureData {
+  id: number
   aka: string[]
   benefits: string
   category: string
