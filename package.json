@@ -19,6 +19,7 @@
     "@types/node": "^20.4.2",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
+    "luxon": "^3.4.4",
     "next": "^13.4.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -27,6 +28,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^14.1.2",
+    "@types/luxon": "^3.4.1",
     "babel-jest": "^29.7.0",
     "eslint": "^8.56.0",
     "eslint-config-next": "^13.4.12",

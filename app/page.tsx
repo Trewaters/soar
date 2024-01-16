@@ -1,9 +1,10 @@
 import React from 'react'
 import TopNav from '@/pages/top-nav'
-import { Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import TabHeader from '@/pages/tab-header'
 import PostureSearch from '@components/PosturesSearch'
 import postureData from '@/app/interfaces/postureData'
+import CurrentTime from '@/pages/current-time'
 
 async function getData() {
   const res = await fetch('https://www.pocketyoga.com/poses.json')
@@ -33,13 +34,15 @@ export default async function Home() {
           <Typography variant="h3">Soar App</Typography>
         </Stack>
       </Stack>
-      <Typography variant="body1">Like a leaf on the wind</Typography>
-      <Typography variant="body1">The 8 Limbs of Yoga </Typography>
-      <Typography variant="body1">
-        Time: {new Date().toLocaleTimeString()}
-      </Typography>
+      <Box textAlign="center">
+        <Typography variant="body1">Like a leaf on the wind</Typography>
+        <Typography variant="body1">The 8 Limbs of Yoga </Typography>
+        <Typography variant="body1">
+          <CurrentTime />
+        </Typography>
+      </Box>
       <TabHeader />
-      <h2>Posture Search</h2>
+      <Typography variant="h2">Posture Search</Typography>
       <PostureSearch posturePropData={posturePropData} />
     </>
   )
