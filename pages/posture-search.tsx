@@ -13,9 +13,9 @@ interface PostureSearchProps {
 export default function PostureSearch({ posturePropData }: PostureSearchProps) {
   const [postures, setPostures] = useState<postureData[]>(posturePropData)
   const [cardPosture, setcardPosture] = useState<string | null>()
-  const [value, setValue] = useState('Awkward')
-  const [inputValue, setInputValue] = useState('')
-  const [open, setOpen] = useState(false)
+  // const [value, setValue] = useState('Awkward')
+  // const [inputValue, setInputValue] = useState('')
+  // const [open, setOpen] = useState(false)
 
   // Find the selected posture based on the Autocomplete selection
   const selectedPosture = postures?.find((p) => p.display_name === cardPosture)
