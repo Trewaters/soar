@@ -1,7 +1,7 @@
-import TopNav from '@/pages/top-nav'
+import TopNav from '@components/top-nav'
 import { Stack, Typography } from '@mui/material'
 
-export function AppHeader() {
+export default function AppHeader() {
   return (
     <Stack direction="row" justifyContent="space-between">
       <TopNav />

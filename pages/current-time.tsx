@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { DateTime } from 'luxon'
 import Typography from '@mui/material/Typography'
 
-const CurrentTime = () => {
+export default function CurrentTime() {
   const [time, setTime] = useState(
     DateTime.now().toLocaleString(DateTime.TIME_WITH_SECONDS)
   )
@@ -20,5 +20,3 @@ const CurrentTime = () => {
 
   return <Typography variant="body1">{time}</Typography>
 }
-
-export default CurrentTime

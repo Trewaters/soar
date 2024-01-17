@@ -4,8 +4,8 @@ import { Box, Tab } from '@mui/material'
 import TabContext from '@mui/lab/TabContext'
 import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
-import LandingPage from '@/pages/landing-page'
-import MenuPlanner from '@/pages/MenuPlanner'
+import LandingPage from '@components/landing-page'
+import MenuPlanner from '@components/MenuPlanner'
 
 export default function tabHeader() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
