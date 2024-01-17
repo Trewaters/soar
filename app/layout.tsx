@@ -1,6 +1,7 @@
 import React from 'react'
 import type { Metadata } from 'next'
 import '@styles/globals.css'
+import { AppHeader } from './app-header'
 
 export const metadata: Metadata = {
   title: 'Happy Yoga',
@@ -14,7 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <main>
+          <AppHeader />
+          {children}
+        </main>
+      </body>
     </html>
   )
 }

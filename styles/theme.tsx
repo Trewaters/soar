@@ -23,22 +23,40 @@ export const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#ff0000',
+      main: '#F6893D',
+      light: '#FFBA6F',
+      dark: '#C3581A',
+      contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '#0000ff',
+      main: '#F6B93D',
+      light: '#FFD970',
+      dark: '#C38B1A',
+      contrastText: '#FFFFFF',
     },
     error: {
-      main: '#ff0000',
+      main: '#D32F2F',
+      light: '#E57373',
+      dark: '#9A0007',
+      contrastText: '#FFFFFF',
     },
     warning: {
-      main: '#ff0000',
+      main: '#FFA726',
+      light: '#FFD95B',
+      dark: '#C77800',
+      contrastText: '#FFFFFF',
     },
     info: {
-      main: '#ff0000',
+      main: '#1976D2',
+      light: '#63A4FF',
+      dark: '#004BA0',
+      contrastText: '#FFFFFF',
     },
     success: {
-      main: '#ff0000',
+      main: '#2E7D32',
+      light: '#60AD5E',
+      dark: '#005005',
+      contrastText: '#FFFFFF',
     },
     text: {
       primary: '#000000',

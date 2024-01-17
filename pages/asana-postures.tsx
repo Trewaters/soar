@@ -2,6 +2,7 @@ import React from 'react'
 import Typography from '@mui/material/Typography'
 import PostureSearch from '@components/posture-search'
 import postureData from '@/app/interfaces/postureData'
+import { AppHeader } from '@/app/app-header'
 
 async function getData() {
   const res = await fetch('/api/poses')
@@ -24,6 +25,7 @@ export default function AsanaPostures() {
 
   return (
     <>
+      <AppHeader />
       <div>Asana Postures</div>
       <Typography variant="h2">Posture Search</Typography>
       <PostureSearch posturePropData={posturePropData} />
