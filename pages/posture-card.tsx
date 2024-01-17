@@ -1,4 +1,4 @@
-import postureData from '@/app/interfaces/postureData'
+import postureData from '@interfaces/postureData'
 import { Stack, Typography } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
-import postureData from '@/app/interfaces/postureData'
+import postureData from '@interfaces/postureData'
 import PostureCard from '@/pages/posture-card'
 
 interface PostureSearchProps {

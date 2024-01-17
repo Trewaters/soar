@@ -23,6 +23,7 @@
       "@/*": ["./*"],
       "@app/*": ["./app/*"],
       "@components/*": ["./pages/*"],
+      "@interfaces/*": ["./app/interfaces/*"],
       "@styles/*": ["./styles/*"]
     }
   },

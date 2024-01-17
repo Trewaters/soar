@@ -1,7 +1,7 @@
 import React from 'react'
 import Typography from '@mui/material/Typography'
 import PostureSearch from '@components/posture-search'
-import postureData from '@/app/interfaces/postureData'
+import postureData from '@interfaces/postureData'
 
 async function getData() {
   const res = await fetch('/api/poses')
