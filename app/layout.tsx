@@ -1,20 +1,6 @@
-import React from 'react'
-import type { Metadata } from 'next'
+import { ReactNode } from 'react'
 import '@styles/globals.css'
 
-export const metadata: Metadata = {
-  title: 'Happy Yoga',
-  description: 'Soar like a leaf on the wind!',
-}
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  )
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return <main>{children}</main>
 }
