@@ -7,7 +7,7 @@ import TabPanel from '@mui/lab/TabPanel'
 import LandingPage from '@components/landing-page'
 import MenuPlanner from '@components/MenuPlanner'
 
-export default function tabHeader() {
+export default function TabHeader() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [value, setValue] = useState('1')
 

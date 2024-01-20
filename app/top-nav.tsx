@@ -12,7 +12,6 @@ export default function TopNav() {
   }
   const handleClose = () => {
     setAnchorEl(null)
-    // open <LandingPage />
   }
 
   const handleLogout = () => {}

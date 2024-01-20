@@ -2,13 +2,11 @@ import React from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 import TabHeader from '@components/tab-header'
 import CurrentTime from '@components/current-time'
-import TopNav from '@/pages/top-nav'
-// import AppHeader from '@app/app-header'
+import TopNav from '@/app/top-nav'
 
 export default function Home() {
   return (
     <>
-      {/* <AppHeader /> */}
       <Stack direction="row" justifyContent="space-between">
         <TopNav />
         <Stack>
