@@ -1,21 +1,21 @@
-import React from 'react'
+import { CSSProperties } from 'react'
 import { createTheme } from '@mui/material/styles'
 
 declare module '@mui/material/styles' {
-  // interface TypographyVariants {
-  //   cardTitle: React.CSSProperties
-  // }
+  interface TypographyVariants {
+    label: CSSProperties
+  }
 
   interface TypographyVariantsOptions {
-    cardTitle?: React.CSSProperties
+    label?: CSSProperties
   }
 }
 
-// declare module '@mui/material/Typography' {
-//   interface TypographyPropsVariantOverrides {
-//     cardTitle: true
-//   }
-// }
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    label: true
+  }
+}
 
 export const theme = createTheme({
   breakpoints: { values: { xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920 } },
@@ -60,7 +60,8 @@ export const theme = createTheme({
     },
     text: {
       primary: '#000000',
-      secondary: '#ffffff',
+      // used by CardHeader.subheader
+      secondary: '#C08926',
     },
     background: {
       default: '#ffffff',
@@ -76,23 +77,23 @@ export const theme = createTheme({
     divider: '#ffffff',
   },
   typography: {
-    fontFamily: ['Roboto', 'sans-serif'].join(','),
+    fontFamily: ['Lato', 'sans-serif'].join(','),
     button: {
       textTransform: 'none',
     },
-    h1: { fontSize: '6rem' },
-    h2: { fontSize: '3.75rem' },
-    h3: { fontSize: '3rem' },
-    h4: { fontSize: '2.125rem' },
-    h5: { fontSize: '1.5rem' },
-    h6: { fontSize: '1.25rem' },
-    body1: { fontSize: '1rem' },
-    body2: { fontSize: '0.875rem' },
-    subtitle1: { fontSize: '1rem' },
-    subtitle2: { fontSize: '0.875rem' },
-    overline: { fontSize: '0.75rem' },
-    caption: { fontSize: '0.75rem' },
-    cardTitle: { fontSize: '1.25rem' },
+    h1: { fontSize: '6em' },
+    h2: { fontSize: '3.75em' },
+    h3: { fontSize: '3em' },
+    h4: { fontSize: '2.125em' },
+    h5: { fontSize: '1.5em' },
+    h6: { fontSize: '1.25em' },
+    body1: { fontSize: '1em' },
+    body2: { fontSize: '0.875em' },
+    subtitle1: { fontSize: '1em' },
+    subtitle2: { fontSize: '0.875em' },
+    overline: { fontSize: '0.75em' },
+    caption: { fontSize: '0.75em' },
+    label: { fontSize: '1.5em', fontFamily: ['Lato', 'sans-serif'].join(',') },
   },
 })
 

@@ -1,10 +1,12 @@
 import postureData from '@interfaces/postureData'
-import { Stack, Typography } from '@mui/material'
+import { Grid, Stack } from '@mui/material'
+import { Typography } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import Paper from '@mui/material/Paper'
+import Image from 'next/image'
 
 interface PostureCardProps {
   postureCardProp: postureData
@@ -16,110 +18,105 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
   return (
     <Paper>
       <Card>
-        <CardHeader title={posture?.display_name} subheader="posture name" />
-        <CardMedia
-          sx={{ height: 300, width: 200 }}
-          image="yogaMat.jpg"
-          title="yoga mat"
+        <CardHeader
+          sx={{ textAlign: 'center' }}
+          title={posture?.display_name}
+          subheader={posture?.name}
         />
+        <CardMedia sx={{ width: '50%', margin: 'auto' }}>
+          <Image
+            src="/resized-posture card - generic.jpg"
+            alt="Yoga Posture Image"
+            width={500}
+            height={500}
+            layout="responsive"
+          />
+        </CardMedia>
         <CardContent>
-          <Typography variant="body1">asana posture</Typography>
-
-          <Stack spacing={3} direction="row">
-            <Stack alignItems="flex-start">
-              <Typography variant="body1">Pronunciation:</Typography>
-            </Stack>
-            <Stack>
+          <Grid container spacing={3}>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="label">Pronunciation:</Typography>
+            </Grid>
+            <Grid item xs={8}>
               <Typography variant="body1">posture.sanskrit_names</Typography>
-            </Stack>
-          </Stack>
-
-          <Stack spacing={3} direction="row">
-            <Stack alignItems="flex-start">
-              <Typography variant="body1">Duration:</Typography>
-            </Stack>
-            <Stack>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="label">Duration:</Typography>
+            </Grid>
+            <Grid item xs={8}>
               <Typography variant="body1">3 breaths</Typography>
-            </Stack>
-          </Stack>
+            </Grid>
 
-          <Stack spacing={3} direction="row">
-            <Stack alignItems="flex-start">
-              <Typography variant="body1">Meaning of Posture:</Typography>
-            </Stack>
-            <Stack>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="label">Meaning of Posture:</Typography>
+            </Grid>
+
+            <Grid item xs={8}>
               <Typography variant="body1">
                 posture.sanskrit_names[0].translation[0].description
               </Typography>
-            </Stack>
-          </Stack>
+            </Grid>
 
-          <Stack spacing={3} direction="row">
-            <Stack alignItems="flex-start">
-              <Typography variant="body1">Intent of Posture:</Typography>
-            </Stack>
-            <Stack>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="label">Intent of Posture:</Typography>
+            </Grid>
+
+            <Grid item xs={8}>
               <Typography variant="body1">n/a</Typography>
-            </Stack>
-          </Stack>
+            </Grid>
 
-          <Stack spacing={3} direction="row">
-            <Stack alignItems="flex-start">
-              <Typography variant="body1">Breath:</Typography>
-            </Stack>
-            <Stack>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="label">Breath:</Typography>
+            </Grid>
+
+            <Grid item xs={8}>
               <Typography variant="body1">(Inhale/Exhale)</Typography>
-            </Stack>
-          </Stack>
+            </Grid>
 
-          <Stack spacing={3} direction="row">
-            <Stack alignItems="flex-start">
-              <Typography variant="body1">Dristi:</Typography>
-            </Stack>
-            <Stack>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="label">Dristi:</Typography>
+            </Grid>
+
+            <Grid item xs={8}>
               <Typography variant="body1">
                 optimal gaze for the position
               </Typography>
-            </Stack>
-          </Stack>
+            </Grid>
 
-          <Stack spacing={3} direction="row">
-            <Stack alignItems="flex-start">
-              <Typography variant="body1">Difficulty:</Typography>
-            </Stack>
-            <Stack>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="label">Difficulty:</Typography>
+            </Grid>
+
+            <Grid item xs={8}>
               <Typography variant="body1">{posture?.difficulty}</Typography>
-            </Stack>
-          </Stack>
+            </Grid>
 
-          <Stack spacing={3} direction="row">
-            <Stack alignItems="flex-start">
-              <Typography variant="body1">Category:</Typography>
-            </Stack>
-            <Stack>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="label">Category:</Typography>
+            </Grid>
+
+            <Grid item xs={8}>
               <Typography variant="body1">
                 {`${posture?.category} ${posture?.subcategory} `}
               </Typography>
-            </Stack>
-          </Stack>
+            </Grid>
 
-          <Stack spacing={3} direction="row">
-            <Stack alignItems="flex-start">
-              <Typography variant="body1">Description:</Typography>
-            </Stack>
-            <Stack>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="label">Description:</Typography>
+            </Grid>
+
+            <Grid item xs={8}>
               <Typography variant="body1">{posture?.description}</Typography>
-            </Stack>
-          </Stack>
+            </Grid>
 
-          <Stack spacing={3} direction="row">
-            <Stack alignItems="flex-start">
-              <Typography variant="body1">Completed:</Typography>
-            </Stack>
-            <Stack>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="label">Completed:</Typography>
+            </Grid>
+
+            <Grid item xs={8}>
               <Typography variant="body1">(Done ✅) </Typography>
-            </Stack>
-          </Stack>
+            </Grid>
+          </Grid>
         </CardContent>
       </Card>
     </Paper>
