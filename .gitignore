@@ -33,9 +33,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-<<<<<<< HEAD
 
 # dev added files
 postures.json
-=======
->>>>>>> cd17c2b0f81368c86bfa3689c21599da2fe47ada
