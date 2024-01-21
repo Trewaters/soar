@@ -22,6 +22,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
           sx={{ textAlign: 'center' }}
           title={posture?.display_name}
           subheader={posture?.name}
+          color="primary"
         />
         <CardMedia sx={{ width: '50%', margin: 'auto' }}>
           <Image
