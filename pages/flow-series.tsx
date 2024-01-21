@@ -1,6 +1,7 @@
 import { Button, Stack, alpha, styled } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import InputBase from '@mui/material/InputBase'
+import Providers from '@/app/Providers'
 
 export default function FlowSeries() {
   const Search = styled('div')(({ theme }) => ({
@@ -44,17 +45,21 @@ export default function FlowSeries() {
   }))
 
   return (
-    <>
+    <Providers>
       <Stack direction="row" spacing={2}>
         <div>
           <Button variant="outlined">Practice</Button>
           <br />
           or
           <br />
-          <Button variant="contained">Create</Button>
+          <Button variant="contained" color="primary">
+            Create
+          </Button>
         </div>
         <div>
-          <Button variant="outlined">Flow (full)</Button>
+          <Button variant="outlined" color="primary">
+            Flow (full)
+          </Button>
           <br />
           vs.
           <br />
@@ -72,6 +77,6 @@ export default function FlowSeries() {
           inputProps={{ 'aria-label': 'search' }}
         />
       </Search>
-    </>
+    </Providers>
   )
 }
