@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Typography } from '@mui/material'
 import TabHeader from '@components/tab-header'
-import CurrentTime from '@components/current-time'
+import CurrentTime from '../components/current-time'
 // import TopNav from '@app/top-nav'
 
 export default function Home() {
