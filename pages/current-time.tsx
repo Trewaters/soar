@@ -18,5 +18,5 @@ export default function CurrentTime() {
     }
   }, [])
 
-  return <Typography variant="body1">{time}</Typography>
+  return <Typography variant="body1">{time as string}</Typography>
 }

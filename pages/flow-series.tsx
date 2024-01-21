@@ -1,7 +1,6 @@
 import { Button, Stack, alpha, styled } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import InputBase from '@mui/material/InputBase'
-import Link from 'next/link'
 
 export default function FlowSeries() {
   const Search = styled('div')(({ theme }) => ({
@@ -59,9 +58,9 @@ export default function FlowSeries() {
           <br />
           vs.
           <br />
-          <Link href="/Flow/SeriesPractice" passHref>
-            <Button variant="contained">Series (mini)</Button>
-          </Link>
+          <Button variant="contained" component="a">
+            Series (mini)
+          </Button>
         </div>
       </Stack>
       <Search>

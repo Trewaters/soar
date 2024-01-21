@@ -2,7 +2,6 @@
 import React from 'react'
 import { Box, IconButton, Menu, MenuItem, Stack } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import Link from 'next/link'
 
 export default function TopNav() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -13,8 +12,6 @@ export default function TopNav() {
   const handleClose = () => {
     setAnchorEl(null)
   }
-
-  const handleLogout = () => {}
 
   return (
     <Box>
@@ -31,14 +28,9 @@ export default function TopNav() {
             'aria-labelledby': 'basic-button',
           }}
         >
-          <Link href="/" passHref>
-            <MenuItem onClick={handleClose}>Planner</MenuItem>
-          </Link>
-          <Link href="/" passHref>
-            <MenuItem onClick={handleClose}>Posture Search</MenuItem>
-          </Link>
-          {/* Assuming Logout is a function, not a navigation */}
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          <MenuItem>
+            <p>Planner</p>
+          </MenuItem>
         </Menu>
       </Stack>
     </Box>

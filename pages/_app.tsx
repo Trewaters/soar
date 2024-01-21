@@ -1,13 +1,14 @@
 import { ComponentType } from 'react'
-// import type { Metadata } from 'next'
+import Head from 'next/head'
 import { ThemeProvider } from '@mui/material/styles'
 import { theme } from '@styles/theme'
 import RootLayout from '@/app/layout'
+import { Metadata } from 'next'
 
-// export const metadata: Metadata = {
-//   title: 'Happy Yoga',
-//   description: 'Soar like a leaf on the wind!',
-// }
+const metadata: Metadata = {
+  title: 'Happy Yoga',
+  description: 'Soar like a leaf on the wind!',
+}
 
 function MyApp({
   Component,
@@ -18,6 +19,13 @@ function MyApp({
 }) {
   return (
     <ThemeProvider theme={theme}>
+      <Head>
+        <title>{String(metadata.title)}</title>
+        <meta
+          name="description"
+          content={metadata.description || 'Soar like a leaf on the wind!'}
+        />
+      </Head>
       <RootLayout>
         <Component {...pageProps} />
       </RootLayout>
