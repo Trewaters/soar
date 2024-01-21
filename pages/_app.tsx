@@ -5,10 +5,10 @@ import { theme } from '@styles/theme'
 import RootLayout from '@/app/layout'
 import { Metadata } from 'next'
 
-const metadata: Metadata = {
-  title: 'Happy Yoga',
-  description: 'Soar like a leaf on the wind!',
-}
+// const metadata: Metadata = {
+//   title: 'Happy Yoga',
+//   description: 'Soar like a leaf on the wind!',
+// }
 
 function MyApp({
   Component,
@@ -19,13 +19,13 @@ function MyApp({
 }) {
   return (
     <ThemeProvider theme={theme}>
-      <Head>
+      {/* <Head>
         <title>{String(metadata.title)}</title>
         <meta
           name="description"
           content={metadata.description || 'Soar like a leaf on the wind!'}
         />
-      </Head>
+      </Head> */}
       <RootLayout>
         <Component {...pageProps} />
       </RootLayout>

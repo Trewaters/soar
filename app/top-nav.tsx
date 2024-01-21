@@ -1,6 +1,11 @@
 'use client'
 import React from 'react'
-import { Box, IconButton, Menu, MenuItem, Stack } from '@mui/material'
+import Box from '@mui/material/Box'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import Stack from '@mui/material/Stack'
+import Typography from '@mui/material/Typography'
 import MenuIcon from '@mui/icons-material/Menu'
 
 export default function TopNav() {
@@ -14,25 +19,30 @@ export default function TopNav() {
   }
 
   return (
-    <Box>
-      <Stack justifyContent="flex-start">
-        <IconButton aria-label="menu" onClick={handleClick}>
-          <MenuIcon sx={{ width: 42, height: 42 }} />
-        </IconButton>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          <MenuItem>
-            <p>Planner</p>
-          </MenuItem>
-        </Menu>
+    <Stack direction="row" justifyContent="space-between">
+      <Box>
+        <Stack justifyContent="flex-start">
+          <IconButton aria-label="menu" onClick={handleClick}>
+            <MenuIcon sx={{ width: 42, height: 42 }} />
+          </IconButton>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem>
+              <p>Planner</p>
+            </MenuItem>
+          </Menu>
+        </Stack>
+      </Box>
+      <Stack>
+        <Typography variant="h3">Soar App</Typography>
       </Stack>
-    </Box>
+    </Stack>
   )
 }
