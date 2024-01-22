@@ -49,7 +49,7 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 
 - `aum` - working branch
 - `version_stable` - stable version this is the stable build of the most current version I am working on.
-- `version_010` - release version 0.1.0.
+  - `version_010` - release version 0.1.0. commit sha ``. This version shows basic home navigation and posture cards with a layout.
 - The "version" branches are locked after release.
 
 I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: _"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0._
