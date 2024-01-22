@@ -1,4 +1,4 @@
-import { Button, Stack, alpha, styled } from '@mui/material'
+import { Button, Stack, Typography, alpha, styled } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import InputBase from '@mui/material/InputBase'
 import Providers from '@/app/Providers'
@@ -46,6 +46,7 @@ export default function FlowSeries() {
 
   return (
     <Providers>
+      {/* <Typography variant="h1">Flow Series</Typography> */}
       <Stack direction="row" spacing={2}>
         <div>
           <Button variant="outlined">Practice</Button>

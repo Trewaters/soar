@@ -26,7 +26,8 @@ interface postureData {
   sort_name: string
   subcategory: string
   two_sided: boolean
-  variations: null | any // Replace 'any' with an appropriate type if possible
+  // Replace 'any' with an appropriate type if possible
+  variations: null | any
   visibility: string
 }
 

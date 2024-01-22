@@ -19,7 +19,14 @@ export default function TabHeader() {
   return (
     <Box
       sx={{
-        width: '100%',
+        // Enables Flexbox
+        display: 'flex',
+        // Stack children vertically
+        flexDirection: 'column',
+        // Center content vertically
+        justifyContent: 'center',
+        // Center content horizontally
+        alignItems: 'center',
       }}
     >
       <TabContext value={value}>
@@ -44,11 +51,9 @@ export default function TabHeader() {
           <LandingPage />
         </TabPanel>
         <TabPanel value="2">
-          <h2>Menu Planner</h2>
           <MenuPlanner />
         </TabPanel>
         <TabPanel value="3">
-          <h2>Menu Planner</h2>
           <FlowSeries />
         </TabPanel>
       </TabContext>
