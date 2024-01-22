@@ -6,6 +6,7 @@ import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
 import LandingPage from '@components/landing-page'
 import MenuPlanner from '@components/MenuPlanner'
+import FlowSeries from './flow-series'
 
 export default function TabHeader() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -45,6 +46,10 @@ export default function TabHeader() {
         <TabPanel value="2">
           <h2>Menu Planner</h2>
           <MenuPlanner />
+        </TabPanel>
+        <TabPanel value="3">
+          <h2>Menu Planner</h2>
+          <FlowSeries />
         </TabPanel>
       </TabContext>
     </Box>
