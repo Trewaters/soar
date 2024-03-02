@@ -5,7 +5,7 @@ import TabContext from '@mui/lab/TabContext'
 import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
 import LandingPage from '@components/landing-page'
-import MenuPlanner from '@components/MenuPlanner'
+import PlannerMenu from '@/pages/planner-menu'
 import FlowSeries from './flow-series'
 
 export default function TabHeader() {
@@ -51,7 +51,7 @@ export default function TabHeader() {
           <LandingPage />
         </TabPanel>
         <TabPanel value="2">
-          <MenuPlanner />
+          <PlannerMenu />
         </TabPanel>
         <TabPanel value="3">
           <FlowSeries />
