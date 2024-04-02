@@ -45,10 +45,29 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 
 - Timeline: I started this in July 2023. I hope to have a MVP by the end of the year. I am working on this in my spare time, so it may take longer. I am also learning NextJS as I go, so that will slow me down as well.
 
+### Current Goals
+
+- **Feature Goal**, record personal yoga practice in app.
+- **Posture Card**, The Card comes up on Search. Polish the look of it.
+- **Top Navigation**, Use a component for Top Navigation.
+- **Header**, Make a header component.
+
+### Known Bugs
+
+**Theme broken, not global** (2024-01-21 15:31:30)
+
+Theme is only showing on top level page. Not passing down to children like "flow-series" page. I added a wrapper to make it work.
+
+https://mui.com/material-ui/customization/palette/
+https://mui.com/material-ui/customization/theme-components/
+https://mui.com/material-ui/customization/theming/
+
 ## Branches
 
-- `aum` - working branch
-- `version_stable` - stable version this is the stable build of the most current version I am working on.
+- [`main`](https://soar-main.vercel.app/) – stable branch, create develop from this but only merge stable branches (publised to Vercel)
+- [`develop`](https://soar-develop.vercel.app/) - active work
+- [`version_stable`](https://soar-jade.vercel.app/) - stable version this is the stable build of the most current version I am working on.
+  Feature/… - any feature I am working on that could go back into main when complete.
 - `version_010` - release version 0.1.0.
 - The "version" branches are locked after release.
 
