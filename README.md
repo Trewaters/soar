@@ -64,12 +64,13 @@ https://mui.com/material-ui/customization/theming/
 
 ## Branches
 
-- [`main`](https://soar-main.vercel.app/) – stable branch, create develop from this but only merge stable branches (publised to Vercel)
-- [`develop`](https://soar-develop.vercel.app/) - active work
-- [`version_stable`](https://soar-jade.vercel.app/) - stable version this is the stable build of the most current version I am working on.
-  Feature/… - any feature I am working on that could go back into main when complete.
-- `version_010` - release version 0.1.0.
-- The "version" branches are locked after release.
+1. [`develop`](https://soar-develop.vercel.app/) - active work
+2. [`main`](https://soar-main.vercel.app/) – stable branch, create develop from this but only merge stable branches (publised to Vercel)
+3. [`version_stable`](https://soar-jade.vercel.app/) - stable version this is the stable build of the most current version I am working on.
+4. Feature/… - any feature I am working on that could go back into main when complete.
+   `version_010` - release version 0.1.0.
+
+The "version" branches are locked after release.
 
 I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: _"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0._
 
