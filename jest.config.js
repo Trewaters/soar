@@ -1,4 +1,11 @@
-module.exports = {
+const config = {
+  collectCoverage: true,
+  collectCoverageFrom: [
+    '<rootDir>/pages/**/*.{ts,tsx}',
+    '<rootDir>/app/**/*.{ts,tsx}',
+    '!**/node_modules/**',
+    '!**/styles/**',
+  ],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
     // Handle module aliases
@@ -23,3 +30,5 @@ module.exports = {
     '^.+\\.module\\.(css|sass|scss)$',
   ],
 }
+
+module.exports = config
