@@ -1,4 +1,4 @@
-import { Button, Stack, Typography, alpha, styled } from '@mui/material'
+import { Box, Button, Stack, alpha, styled } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import InputBase from '@mui/material/InputBase'
 import Providers from '@/app/Providers'
@@ -47,37 +47,50 @@ export default function FlowSeries() {
   return (
     <Providers>
       {/* <Typography variant="h1">Flow Series</Typography> */}
-      <Stack direction="row" spacing={2}>
-        <div>
-          <Button variant="outlined">Practice</Button>
-          <br />
-          or
-          <br />
-          <Button variant="contained" color="primary">
-            Create
-          </Button>
-        </div>
-        <div>
-          <Button variant="outlined" color="primary">
-            Flow (full)
-          </Button>
-          <br />
-          vs.
-          <br />
-          <Button variant="contained" component="a">
-            Series (mini)
-          </Button>
-        </div>
-      </Stack>
-      <Search>
-        <SearchIconWrapper>
-          <SearchIcon />
-        </SearchIconWrapper>
-        <StyledInputBase
-          placeholder="Search…"
-          inputProps={{ 'aria-label': 'search' }}
-        />
-      </Search>
+      <Box
+        sx={{
+          // Enables Flexbox
+          display: 'flex',
+          // Stack children vertically
+          flexDirection: 'column',
+          // Center content vertically
+          justifyContent: 'center',
+          // Center content horizontally
+          alignItems: 'center',
+        }}
+      >
+        <Stack direction="row" spacing={2}>
+          <div>
+            <Button variant="outlined">Practice</Button>
+            <br />
+            or
+            <br />
+            <Button variant="contained" color="primary">
+              Create
+            </Button>
+          </div>
+          <div>
+            <Button variant="outlined" color="primary">
+              Flow (full)
+            </Button>
+            <br />
+            vs.
+            <br />
+            <Button variant="contained" component="a">
+              Series (mini)
+            </Button>
+          </div>
+        </Stack>
+        <Search>
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            placeholder="Search…"
+            inputProps={{ 'aria-label': 'search' }}
+          />
+        </Search>
+      </Box>
     </Providers>
   )
 }
