@@ -10,6 +10,32 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 ### What the app should do?
 
+#### Landing page
+
+**Flow Series**
+
+- Record posture practice
+
+**Asana Postures**
+
+- Show Yoga postures available
+
+**Meditaiton**
+
+- TBD
+
+**Mantra**
+
+- TBD
+
+**Breathwork**
+
+- TBD
+
+#### Landing page
+
+- Goals (long term), Today's workout (present day), Historical (past) practice
+
 ### Why is this app useful?
 
 ## CREDIT

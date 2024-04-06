@@ -1,6 +1,6 @@
 import React from 'react'
 import Typography from '@mui/material/Typography'
-import PostureSearch from '@components/posture-search'
+import PostureSearch from '@pages/posture-search'
 import postureData from '@interfaces/postureData'
 import Providers from '@/app/Providers'
 
