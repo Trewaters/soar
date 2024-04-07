@@ -4,11 +4,6 @@ import TopNav from '@app/top-nav'
 import { Metadata } from 'next'
 import Providers from '@app/Providers'
 
-// const metadata: Metadata = {
-//   title: 'Happy Yoga',
-//   description: 'Soar like a leaf on the wind!',
-// }
-
 export const metadata: Metadata = {
   title: 'Happy Yoga',
   description: 'Soar like a leaf on the wind!',
