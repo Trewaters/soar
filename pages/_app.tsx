@@ -1,10 +1,10 @@
-import Layout from '@/app/layout'
+import RootLayout from '@/app/layout'
 import { AppProps } from 'next/app'
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }) {
   return (
-    <Layout>
+    <RootLayout>
       <Component {...pageProps} />
-    </Layout>
+    </RootLayout>
   )
 }
