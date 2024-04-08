@@ -10,10 +10,6 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    // <Providers>
-    //   <TopNav />
-    //   <main>{children}</main>
-    // </Providers>
     <html lang="en">
       <Head>
         <title>Happy Yoga</title>

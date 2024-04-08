@@ -25,8 +25,10 @@ export default function Page() {
 
   return (
     <>
-      <div>Asana Postures</div>
-      <Typography variant="h2">Posture Search</Typography>
+      <Typography variant="body1" align="center">
+        Asana Postures
+      </Typography>
+      <Typography variant="label">Posture Search</Typography>
       <PostureSearch posturePropData={posturePropData} />
     </>
   )
