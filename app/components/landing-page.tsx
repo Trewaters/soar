@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -19,60 +19,60 @@ export default function LandingPage() {
       <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'lightgray' }}>
         <nav aria-label="main mailbox folders">
           <List>
-            <Link href="/flow-series" passHref>
-              <ListItem disablePadding>
+            <ListItem disablePadding>
+              <Link href="/flowSeries" passHref>
                 <ListItemButton>
                   <ListItemIcon>
                     <WhatshotIcon />
                   </ListItemIcon>
                   <ListItemText primary="Flow Series" />
                 </ListItemButton>
-              </ListItem>
-            </Link>
+              </Link>
+            </ListItem>
             <Divider />
-            <Link href="/asana-postures" passHref>
-              <ListItem disablePadding>
+            <ListItem disablePadding>
+              <Link href="/asanaPostures" passHref>
                 <ListItemButton>
                   <ListItemIcon>
                     <WaterDropOutlinedIcon />
                   </ListItemIcon>
                   <ListItemText primary="Asana Postures" />
                 </ListItemButton>
-              </ListItem>
-            </Link>
+              </Link>
+            </ListItem>
             <Divider />
-            <Link href="/meditation" passHref>
-              <ListItem disablePadding>
+            <ListItem disablePadding>
+              <Link href="/meditation" passHref>
                 <ListItemButton>
                   <ListItemIcon>
                     <ChangeHistoryOutlinedIcon />
                   </ListItemIcon>
                   <ListItemText primary="Meditation" />
                 </ListItemButton>
-              </ListItem>
-            </Link>
+              </Link>
+            </ListItem>
             <Divider />
-            <Link href="/mantra" passHref>
-              <ListItem disablePadding>
+            <ListItem disablePadding>
+              <Link href="/mantra" passHref>
                 <ListItemButton>
                   <ListItemIcon>
                     <AirOutlinedIcon />
                   </ListItemIcon>
                   <ListItemText primary="Mantra" />
                 </ListItemButton>
-              </ListItem>
-            </Link>
+              </Link>
+            </ListItem>
             <Divider />
-            <Link href="/breathwork" passHref>
-              <ListItem disablePadding>
+            <ListItem disablePadding>
+              <Link href="/breathwork" passHref>
                 <ListItemButton>
                   <ListItemIcon>
                     <ConstructionOutlinedIcon />
                   </ListItemIcon>
                   <ListItemText primary="Breathwork" />
                 </ListItemButton>
-              </ListItem>
-            </Link>
+              </Link>
+            </ListItem>
           </List>
         </nav>
       </Box>

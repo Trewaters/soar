@@ -1,13 +1,7 @@
 import React from 'react'
 import '@styles/globals.css'
-import TopNav from '@app/top-nav'
-import { Metadata } from 'next'
+import TopNav from '@app/components/top-nav'
 import Providers from '@app/Providers'
-
-export const metadata: Metadata = {
-  title: 'Happy Yoga',
-  description: 'Soar like a leaf on the wind!',
-}
 
 export default function RootLayout({
   children,
@@ -15,10 +9,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+    // <Providers>
+    //   <TopNav />
+    //   <main>{children}</main>
+    // </Providers>
     <html lang="en">
       <body>
         <Providers>
-          <TopNav />
+          <nav>
+            <TopNav />
+          </nav>
           <main>{children}</main>
         </Providers>
       </body>

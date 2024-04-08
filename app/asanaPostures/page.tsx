@@ -1,6 +1,6 @@
 import React from 'react'
 import Typography from '@mui/material/Typography'
-import PostureSearch from '@pages/posture-search'
+import PostureSearch from '@app/components/posture-search'
 import postureData from '@interfaces/postureData'
 import Providers from '@/app/Providers'
 
@@ -13,7 +13,7 @@ async function getData() {
   return response
 }
 
-export default function AsanaPostures() {
+export default function Page() {
   const [posturePropData, setPosturePropData] = React.useState<postureData[]>(
     []
   )
