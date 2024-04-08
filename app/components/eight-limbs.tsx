@@ -1,6 +1,6 @@
 import { List, ListItem, ListItemText, Typography } from '@mui/material'
 
-export function EightLimbs() {
+export default function EightLimbs() {
   return (
     <>
       <Typography variant="h1">Eight Limbs</Typography>

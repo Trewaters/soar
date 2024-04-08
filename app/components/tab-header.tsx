@@ -5,9 +5,8 @@ import TabContext from '@mui/lab/TabContext'
 import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
 import PlannerMenu from '@app/planner/page'
-import FlowSeries from '@app/flowSeries/page'
 import LandingPage from '@app/components/landing-page'
-import { EightLimbs } from './eight-limbs'
+import EightLimbs from './eight-limbs'
 
 export default function TabHeader() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
