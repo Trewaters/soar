@@ -49,7 +49,7 @@ export default function TopNav() {
         </Stack>
       </Box>
       <Stack>
-        <Typography variant="h3">Soar App</Typography>
+        <Typography variant="h3">Soar</Typography>
       </Stack>
     </Stack>
   )

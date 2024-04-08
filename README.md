@@ -18,7 +18,7 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 **Asana Postures**
 
-- Show Yoga postures available
+- Show Yoga postures and some details about the posture like names, description, etc.
 
 **Meditaiton**
 
@@ -37,6 +37,8 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 - Goals (long term), Today's workout (present day), Historical (past) practice
 
 ### Why is this app useful?
+
+Used as an aid in anyones active yoga practice. This app won't get you started doing yoga but if you are a yogi, instructor, or student this app is for you.
 
 ## CREDIT
 
@@ -80,13 +82,9 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 
 ### Known Bugs
 
-**Theme broken, not global** (2024-01-21 15:31:30)
+No Known Bugs!
 
-Theme is only showing on top level page. Not passing down to children like "flow-series" page. I added a wrapper to make it work.
-
-https://mui.com/material-ui/customization/palette/
-https://mui.com/material-ui/customization/theme-components/
-https://mui.com/material-ui/customization/theming/
+What you are experiencing is a feature 😉 ! Open a [github issue](https://github.com/Trewaters/soar/issues) if you disagree.
 
 ## Branches
 
@@ -150,7 +148,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Running unit tests
 
-execute the unit tests via **?Test Kit** [Karma](https://karma-runner.github.io).
+execute the unit tests via **Jest** [Jest](https://jestjs.io/).
 
 ## Running end-to-end tests
 
@@ -163,7 +161,8 @@ execute the end-to-end tests via **?Test Kit** [Protractor](http://www.protracto
 ## "Pushing good code"
 
 QUESTION: "Am I pushing good code?"
-_Answer yes to everything on the list below and you are!_
+
+_If you *Answer yes* to everything on the list below then you are pushing GREAT CODE!_
 
 1. `npm run dev` and there aren't any errors in the server terminal or client (web browser) console.
 2. `npm run build` no breaking build errors. Warnings are acceptable but should be minimized. Errors are not acceptable.
