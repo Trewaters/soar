@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <Box textAlign="center">
-        <Typography variant="body1">A leaf on the Wind</Typography>
+        <Typography variant="body1">Like a leaf on the Wind</Typography>
         <CurrentTime />
       </Box>
       <TabHeader />
