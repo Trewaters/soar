@@ -110,15 +110,25 @@ I follow Semantic Versioning for releases. [Read more here](https://semver.org/)
 - [ ] 2.x.0 - Users can create journal about Meditations
 - [ ] 2.x.0 - Users can create custom Mantras
 
-# DEVELOPER SECTION (below)
+# DEVELOPER SECTION
 
 ## Prerequesites
 
+Prereqs to work on this project..._(wip)_
+
 ## Installing
+
+..._(wip)_
 
 ## Tests
 
+..._(wip)_
+
 ## Coding Style
+
+..._(wip)_
+
+1. Prettier
 
 ## Deployment
 
@@ -147,5 +157,17 @@ execute the unit tests via **?Test Kit** [Karma](https://karma-runner.github.io)
 execute the end-to-end tests via **?Test Kit** [Protractor](http://www.protractortest.org/).
 
 ## Linting
+
+1. Eslint rules
+
+## "Pushing good code"
+
+QUESTION: "Am I pushing good code?"
+_Answer yes to everything on the list below and you are!_
+
+1. `npm run dev` and there aren't any errors in the server terminal or client (web browser) console.
+2. `npm run build` no breaking build errors. Warnings are acceptable but should be minimized. Errors are not acceptable.
+3. `npm run cover` to make sure no unit test are failing. Coverage goal is (A) 100%, (B) 90%, (C) 80%.
+4. Push `develop` branch to hosting. Then check how the app works on the web. Test with desktop and mobile device. Again checking the client (web browser) console for errors. "Click things and navigate around the app" especially any features your code touches.
 
 ## Further help

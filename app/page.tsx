@@ -7,8 +7,7 @@ export default function Home() {
   return (
     <>
       <Box textAlign="center">
-        <Typography variant="body1">Like a leaf on the wind</Typography>
-        <Typography variant="body1">The 8 Limbs of Yoga </Typography>
+        <Typography variant="body1">A leaf on the Wind</Typography>
         <CurrentTime />
       </Box>
       <TabHeader />
