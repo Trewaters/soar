@@ -1,3 +1,5 @@
+'use client'
+
 import { Button, Paper, Stack } from '@mui/material'
 import PriorityHighRoundedIcon from '@mui/icons-material/PriorityHighRounded'
 import LightModeIcon from '@mui/icons-material/LightMode'

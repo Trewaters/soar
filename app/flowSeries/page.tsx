@@ -1,6 +1,5 @@
-import { Box, Button, Stack, Typography, alpha, styled } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
-import InputBase from '@mui/material/InputBase'
+'use client'
+import { Box, Button, Stack, Typography } from '@mui/material'
 
 // const Search = styled('div')(({ theme }) => ({
 //   position: 'relative',
