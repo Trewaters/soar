@@ -55,32 +55,31 @@ export default function Page() {
         alignItems: 'center',
       }}
     >
-      <Typography variant="h2" align="center">
+      <Typography variant="h1" align="center">
         Flow Series
       </Typography>
-      <Stack direction="row" spacing={2}>
-        <div>
-          <Button variant="outlined" component="a">
-            Practice
-          </Button>
-          <br />
-          or
-          <br />
-          <Button variant="contained" color="primary" component="a">
-            Create
-          </Button>
-        </div>
-        <div>
-          <Button variant="outlined" color="primary" component="a">
-            Flow (full)
-          </Button>
-          <br />
-          vs.
-          <br />
-          <Button variant="contained" component="a">
-            Series (mini)
-          </Button>
-        </div>
+      <Stack
+        direction="row"
+        // justifyContent="space-between"
+        spacing={5}
+        sx={{ mt: 4 }}
+      >
+        <Button variant="outlined" component="a">
+          Practice
+        </Button>
+        <Typography variant="body1">or</Typography>
+        <Button variant="contained" color="primary" component="a">
+          Create
+        </Button>
+      </Stack>
+      <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
+        <Button variant="outlined" color="primary" component="a">
+          Flow (full)
+        </Button>
+        <Typography variant="body1">vs.</Typography>
+        <Button variant="contained" component="a">
+          Series (mini)
+        </Button>
       </Stack>
       {/* <Search>
           <SearchIconWrapper>
