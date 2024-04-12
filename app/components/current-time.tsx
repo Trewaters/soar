@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { DateTime } from 'luxon'
 import Typography from '@mui/material/Typography'
+import { Box, Skeleton } from '@mui/material'
 
 export default function CurrentTime() {
   const [time, setTime] = useState('')
@@ -16,7 +17,26 @@ export default function CurrentTime() {
     return () => clearInterval(timer)
   }, [])
 
-  if (!isMounted) return null
+  if (!isMounted)
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          height: '2em',
+        }}
+      >
+        <Typography variant="body1">
+          <Skeleton variant="text" sx={{ width: '10em' }} />
+        </Typography>
+      </Box>
+    )
 
-  return <Typography variant="body1">{time}</Typography>
+  return (
+    <Box sx={{ display: 'flex', justifyContent: 'center', height: '2em' }}>
+      <Typography variant="body1">
+        {time || <Skeleton variant="text" sx={{ width: '10em' }} />}
+      </Typography>
+    </Box>
+  )
 }
