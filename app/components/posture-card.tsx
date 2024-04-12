@@ -14,7 +14,7 @@ interface PostureCardProps {
 
 export default function PostureCard({ postureCardProp }: PostureCardProps) {
   const posture = postureCardProp
-  console.log('posture', posture)
+  // console.log('posture', posture)
 
   return (
     <Paper>
