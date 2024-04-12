@@ -14,6 +14,7 @@ interface PostureCardProps {
 
 export default function PostureCard({ postureCardProp }: PostureCardProps) {
   const posture = postureCardProp
+  console.log('posture', posture)
 
   return (
     <Paper>
@@ -36,38 +37,41 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
         <CardContent>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={4}>
-              <Typography variant="label">Pronunciation:</Typography>
+              <Typography variant="overline">Pronunciation:</Typography>
             </Grid>
             <Grid item xs={8}>
-              <Typography variant="body1">posture.sanskrit_names</Typography>
+              <Typography variant="body1">
+                {posture?.sanskrit_names[0].simplified}
+              </Typography>
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Typography variant="label">Duration:</Typography>
+              <Typography variant="overline">Duration:</Typography>
             </Grid>
             <Grid item xs={8}>
               <Typography variant="body1">3 breaths</Typography>
             </Grid>
 
             <Grid item xs={12} sm={4}>
-              <Typography variant="label">Meaning of Posture:</Typography>
+              <Typography variant="overline">Meaning of Posture:</Typography>
             </Grid>
 
             <Grid item xs={8}>
-              <Typography variant="body1">
-                posture.sanskrit_names[0].translation[0].description
-              </Typography>
+              <Typography variant="body1">Feel into the posture</Typography>
             </Grid>
 
             <Grid item xs={12} sm={4}>
-              <Typography variant="label">Intent of Posture:</Typography>
+              <Typography variant="overline">Intent of Posture:</Typography>
             </Grid>
 
             <Grid item xs={8}>
-              <Typography variant="body1">n/a</Typography>
+              <Typography variant="body1">{posture?.benefits}</Typography>
+              {/* <Typography variant="body1">
+                Push through crown, thumb, pinkies, and heels
+              </Typography> */}
             </Grid>
 
             <Grid item xs={12} sm={4}>
-              <Typography variant="label">Breath:</Typography>
+              <Typography variant="overline">Breath:</Typography>
             </Grid>
 
             <Grid item xs={8}>
@@ -75,17 +79,15 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
             </Grid>
 
             <Grid item xs={12} sm={4}>
-              <Typography variant="label">Dristi:</Typography>
+              <Typography variant="overline">Dristi:</Typography>
             </Grid>
 
             <Grid item xs={8}>
-              <Typography variant="body1">
-                optimal gaze for the position
-              </Typography>
+              <Typography variant="body1">optimal gaze</Typography>
             </Grid>
 
             <Grid item xs={12} sm={4}>
-              <Typography variant="label">Difficulty:</Typography>
+              <Typography variant="overline">Difficulty:</Typography>
             </Grid>
 
             <Grid item xs={8}>
@@ -93,17 +95,17 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
             </Grid>
 
             <Grid item xs={12} sm={4}>
-              <Typography variant="label">Category:</Typography>
+              <Typography variant="overline">Category:</Typography>
             </Grid>
 
             <Grid item xs={8}>
               <Typography variant="body1">
-                {`${posture?.category} ${posture?.subcategory} `}
+                {`${posture?.category}, ${posture?.subcategory}`}
               </Typography>
             </Grid>
 
             <Grid item xs={12} sm={4}>
-              <Typography variant="label">Description:</Typography>
+              <Typography variant="overline">Description:</Typography>
             </Grid>
 
             <Grid item xs={8}>
@@ -111,7 +113,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
             </Grid>
 
             <Grid item xs={12} sm={4}>
-              <Typography variant="label">Completed:</Typography>
+              <Typography variant="overline">Completed:</Typography>
             </Grid>
 
             <Grid item xs={8}>
