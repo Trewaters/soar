@@ -1,5 +1,6 @@
 'use client'
 import { Box, Button, Stack, Typography } from '@mui/material'
+import { Router } from 'next/router'
 
 // const Search = styled('div')(({ theme }) => ({
 //   position: 'relative',
@@ -58,13 +59,13 @@ export default function Page() {
       <Typography variant="h1" align="center">
         Flow Series
       </Typography>
-      <Stack
-        direction="row"
-        // justifyContent="space-between"
-        spacing={5}
-        sx={{ mt: 4 }}
-      >
-        <Button variant="outlined" component="a">
+      <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
+        <Button
+          variant="outlined"
+          href="/flowSeries/practice"
+          // component="a"
+          LinkComponent="a"
+        >
           Practice
         </Button>
         <Typography variant="body1">or</Typography>
