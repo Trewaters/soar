@@ -1,26 +1,9 @@
 'use client'
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Card,
-  CardContent,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { Box, Card, CardContent, Stack, Typography } from '@mui/material'
 
-const flows = [
-  ['Mountain Pose', 'Downward Dog', 'Warrior 1', 'Warrior 2', 'Triangle Pose'],
-  ['Tree Pose', "Child's Pose", 'Corpse Pose', 'Bridge Pose', 'Camel Pose'],
-  [
-    'Seated Forward Bend',
-    'Cobra Pose',
-    'Plank Pose',
-    'Four-Limbed Staff Pose',
-    'Crow Pose',
-  ],
-  ['Half Moon Pose', 'Chair Pose', 'Eagle Pose', 'Garland Pose', 'Boat Pose'],
-  [
+const flows = {
+  name: 'Sun Salutation A Series',
+  postures: [
     'Mountain Pose',
     'Downward Dog',
     'Warrior 1',
@@ -30,84 +13,34 @@ const flows = [
     "Child's Pose",
     'Corpse Pose',
   ],
-]
-const flowSeries = [
-  { id: 1, name: 'Mountain Series 1', flowSet: flows[0] },
-  { id: 2, name: 'Tree Series', flowSet: flows[1] },
-  { id: 3, name: 'Forward Bend Series', flowSet: flows[2] },
-  { id: 4, name: 'Half Moon Series', flowSet: flows[3] },
-  { id: 5, name: 'Mountain Series 2', flowSet: flows[4] },
-]
-/* use this later it was suggested by Ai
-const flowSeries = [
-  {
-    name: 'Warrior Series',
-    flows: [
-      ['Mountain Pose', 'Downward Dog', 'Warrior 1', 'Warrior 2', 'Triangle Pose'],
-      ['Tree Pose', "Child's Pose", 'Corpse Pose', 'Bridge Pose', 'Camel Pose'],
-      [
-        'Seated Forward Bend',
-        'Cobra Pose',
-        'Plank Pose',
-        'Four-Limbed Staff Pose',
-        'Crow Pose',
-      ],
-      ['Half Moon Pose', 'Chair Pose', 'Eagle Pose', 'Garland Pose', 'Boat Pose'],
-    ],
-  },
-  {
-    name: 'Sun Salutation Series',
-    flows: [
-      ['Mountain Pose', 'Downward Dog', 'Warrior 1', 'Warrior 2', 'Triangle Pose'],
-      ['Tree Pose', "Child's Pose", 'Corpse Pose', 'Bridge Pose', 'Camel Pose'],
-      [
-        'Seated Forward Bend',
-        'Cobra Pose',
-        'Plank Pose',
-        'Four-Limbed Staff Pose',
-        'Crow Pose',
-      ],
-      ['Half Moon Pose', 'Chair Pose', 'Eagle Pose', 'Garland Pose', 'Boat Pose'],
-    ],
-  },
-] */
+}
 
 export default function Page() {
   return (
     <>
-      <Typography variant="h1" textAlign="center">
-        Flow Series Practice
-      </Typography>
-      {flowSeries.map((flow) => (
-        <Accordion
-          key={flow.id}
-          sx={{ pb: '1em', borderWidth: '3px', margin: '1em' }}
-        >
-          <AccordionSummary>
-            <Typography variant="h2">{flow.name}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Stack rowGap={3} alignItems="center">
-              {flow.flowSet.map((pose) => (
-                <Card
-                  key={pose}
-                  sx={{
-                    width: '50%',
-                    boxShadow: 3,
-                    textAlign: 'center',
-                  }}
-                >
-                  <CardContent>
-                    <Typography key={pose} variant="body1">
-                      {pose}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              ))}
-            </Stack>
-          </AccordionDetails>
-        </Accordion>
-      ))}
+      <Box sx={{ margin: 4 }}>
+        <Typography variant="h1" textAlign="center">
+          {flows.name}
+        </Typography>
+      </Box>
+      <Stack rowGap={3} alignItems="center">
+        {flows.postures.map((pose) => (
+          <Card
+            key={pose}
+            sx={{
+              width: '50%',
+              boxShadow: 3,
+              textAlign: 'center',
+            }}
+          >
+            <CardContent>
+              <Typography key={pose} variant="body1">
+                {pose}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </Stack>
     </>
   )
 }

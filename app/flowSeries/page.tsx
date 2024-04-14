@@ -74,11 +74,20 @@ export default function Page() {
         </Button>
       </Stack>
       <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
-        <Button variant="outlined" color="primary" component="a">
+        <Button
+          variant="outlined"
+          color="primary"
+          LinkComponent="a"
+          href="/flowSeries/flowFull"
+        >
           Flow (full)
         </Button>
         <Typography variant="body1">vs.</Typography>
-        <Button variant="contained" component="a">
+        <Button
+          variant="contained"
+          LinkComponent="a"
+          href="/flowSeries/seriesMini"
+        >
           Series (mini)
         </Button>
       </Stack>
