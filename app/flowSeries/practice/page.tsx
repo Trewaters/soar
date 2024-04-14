@@ -32,10 +32,11 @@ const flows = [
   ],
 ]
 const flowSeries = [
-  { id: 1, name: 'Mountain Series', flowSet: flows[0] },
+  { id: 1, name: 'Mountain Series 1', flowSet: flows[0] },
   { id: 2, name: 'Tree Series', flowSet: flows[1] },
   { id: 3, name: 'Forward Bend Series', flowSet: flows[2] },
   { id: 4, name: 'Half Moon Series', flowSet: flows[3] },
+  { id: 5, name: 'Mountain Series 2', flowSet: flows[4] },
 ]
 /* use this later it was suggested by Ai
 const flowSeries = [
@@ -74,16 +75,32 @@ const flowSeries = [
 export default function Page() {
   return (
     <>
-      <Typography>Flow Series Practice</Typography>
+      <Typography variant="h1" textAlign="center">
+        Flow Series Practice
+      </Typography>
       {flowSeries.map((flow) => (
-        <Accordion key={flow.id}>
-          <AccordionSummary>{flow.name}</AccordionSummary>
+        <Accordion
+          key={flow.id}
+          sx={{ pb: '1em', borderWidth: '3px', margin: '1em' }}
+        >
+          <AccordionSummary>
+            <Typography variant="h2">{flow.name}</Typography>
+          </AccordionSummary>
           <AccordionDetails>
-            <Stack rowGap={2}>
+            <Stack rowGap={3} alignItems="center">
               {flow.flowSet.map((pose) => (
-                <Card key={pose} sx={{ width: '50%' }}>
+                <Card
+                  key={pose}
+                  sx={{
+                    width: '50%',
+                    boxShadow: 3,
+                    textAlign: 'center',
+                  }}
+                >
                   <CardContent>
-                    <Typography key={pose}>{pose}</Typography>
+                    <Typography key={pose} variant="body1">
+                      {pose}
+                    </Typography>
                   </CardContent>
                 </Card>
               ))}
