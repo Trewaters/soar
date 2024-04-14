@@ -3,7 +3,7 @@ import { List, ListItem, ListItemText, Typography } from '@mui/material'
 export default function EightLimbs() {
   return (
     <>
-      <Typography variant="h1">Eight Limbs</Typography>
+      <Typography variant="h2">Eight Limbs</Typography>
       <List>
         <ListItem>
           <ListItemText primary="Yama" secondary="Moral Restraints" />

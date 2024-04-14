@@ -15,10 +15,10 @@ export default function Page() {
   return (
     <>
       <Box sx={{ margin: 4 }}>
-        <Typography variant="h1" textAlign="center">
+        <Typography variant="h2" textAlign="center">
           Single Series
         </Typography>
-        <Typography variant="h2" textAlign="center">
+        <Typography variant="h3" textAlign="center">
           {series.seriesName}
         </Typography>
       </Box>

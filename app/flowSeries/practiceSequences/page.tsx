@@ -109,13 +109,13 @@ export default function Page() {
   ]
   return (
     <Paper>
-      <Typography variant="h1" align="center">
+      <Typography variant="h2" align="center">
         Practice Sequences
       </Typography>
       {sequence.map((flow) => (
         <React.Fragment key={flow.id}>
           <Box sx={{ margin: 4 }}>
-            <Typography variant="h2" textAlign="center">
+            <Typography variant="h3" textAlign="center">
               {flow.nameSequence}
             </Typography>
           </Box>

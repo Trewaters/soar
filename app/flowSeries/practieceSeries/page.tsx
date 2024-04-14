@@ -121,7 +121,7 @@ const flowSeries = [
 export default function Page() {
   return (
     <>
-      <Typography variant="h1" textAlign="center">
+      <Typography variant="h2" textAlign="center">
         Series Practice
       </Typography>
       {flowSeries.map((flow) => (
@@ -131,7 +131,7 @@ export default function Page() {
           disableGutters
         >
           <AccordionSummary sx={{ ml: 2, pt: 3 }}>
-            <Typography variant="h2">{flow.seriesName}</Typography>
+            <Typography variant="h3">{flow.seriesName}</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Stack rowGap={3} alignItems="center">

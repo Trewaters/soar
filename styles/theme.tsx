@@ -91,7 +91,7 @@ export const theme = createTheme({
       fontWeight: 'bold',
     },
     h2: {
-      fontSize: '2.7em',
+      fontSize: '2.3em',
       display: 'block',
       marginTop: '0.57em',
       marginBottom: '0.57em',
@@ -100,7 +100,7 @@ export const theme = createTheme({
       fontWeight: 'bold',
     },
     h3: {
-      fontSize: '2.2em',
+      fontSize: '2em',
       display: 'block',
       marginTop: '0.47em',
       marginBottom: '0.47em',

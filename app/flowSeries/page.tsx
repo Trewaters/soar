@@ -56,7 +56,7 @@ export default function Page() {
         alignItems: 'center',
       }}
     >
-      <Typography variant="h1" align="center">
+      <Typography variant="h2" align="center">
         Flow a Series
       </Typography>
       <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
