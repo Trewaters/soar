@@ -12,70 +12,61 @@ import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined'
 import ChangeHistoryOutlinedIcon from '@mui/icons-material/ChangeHistoryOutlined'
 import AirOutlinedIcon from '@mui/icons-material/AirOutlined'
 import Link from 'next/link'
+import { Typography } from '@mui/material'
 
 export default function LandingPage() {
   return (
     <>
-      <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'lightgray' }}>
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: 360,
+          bgcolor: 'lightgray',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
         <nav aria-label="main mailbox folders">
-          <List>
-            <ListItem disablePadding>
-              <Link href="/flowSeries" passHref>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <WhatshotIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Flow" />
-                </ListItemButton>
-              </Link>
-            </ListItem>
-            <Divider />
-            <ListItem disablePadding>
-              <Link href="/asanaPostures" passHref>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <WaterDropOutlinedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Asana Postures" />
-                </ListItemButton>
-              </Link>
-            </ListItem>
-            <Divider />
-            <ListItem disablePadding>
-              <Link href="/meditation" passHref>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <ChangeHistoryOutlinedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Meditation" />
-                </ListItemButton>
-              </Link>
-            </ListItem>
-            <Divider />
-            <ListItem disablePadding>
-              <Link href="/mantra" passHref>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <AirOutlinedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Mantra" />
-                </ListItemButton>
-              </Link>
-            </ListItem>
-            <Divider />
-            <ListItem disablePadding>
-              <Link href="/breathwork" passHref>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <ConstructionOutlinedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Breathwork" />
-                </ListItemButton>
-              </Link>
-            </ListItem>
+          <List sx={{ width: '100%' }}>
+            {links.map((link, index) => (
+              <React.Fragment key={link.name}>
+                {index > 0 && <Divider />}
+                <ListItem disablePadding>
+                  <Link href={link.href} passHref>
+                    <ListItemButton sx={{ justifyContent: 'flex-start' }}>
+                      <ListItemIcon>{link.icon}</ListItemIcon>
+                      <ListItemText>
+                        <Typography variant="button">{link.name}</Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+              </React.Fragment>
+            ))}
           </List>
         </nav>
       </Box>
     </>
   )
 }
+
+// Define the links and their icons separately for cleaner code
+const links = [
+  { name: 'Flow', href: '/flowSeries', icon: <WhatshotIcon /> },
+  {
+    name: 'Asana Postures',
+    href: '/asanaPostures',
+    icon: <WaterDropOutlinedIcon />,
+  },
+  {
+    name: 'Meditation',
+    href: '/meditation',
+    icon: <ChangeHistoryOutlinedIcon />,
+  },
+  { name: 'Mantra', href: '/mantra', icon: <AirOutlinedIcon /> },
+  {
+    name: 'Breathwork',
+    href: '/breathwork',
+    icon: <ConstructionOutlinedIcon />,
+  },
+]
