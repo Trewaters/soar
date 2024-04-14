@@ -1,17 +1,13 @@
 'use client'
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material'
 
-const flows = {
-  name: 'Sun Salutation A Series',
-  postures: [
-    'Mountain Pose',
-    'Downward Dog',
-    'Warrior 1',
-    'Warrior 2',
-    'Triangle Pose',
-    'Tree Pose',
-    "Child's Pose",
-    'Corpse Pose',
+const series = {
+  seriesName: 'Integration Series',
+  seriesPostures: [
+    "Child's Pose Balasana",
+    'Downward Facing Dog, Adho Mukha Svanasana',
+    'Ragdoll, Uttanasana',
+    'Stand at Attention, Samsthiti',
   ],
 }
 
@@ -20,11 +16,14 @@ export default function Page() {
     <>
       <Box sx={{ margin: 4 }}>
         <Typography variant="h1" textAlign="center">
-          {flows.name}
+          Single Series
+        </Typography>
+        <Typography variant="h2" textAlign="center">
+          {series.seriesName}
         </Typography>
       </Box>
       <Stack rowGap={3} alignItems="center">
-        {flows.postures.map((pose) => (
+        {series.seriesPostures.map((pose) => (
           <Card
             key={pose}
             sx={{

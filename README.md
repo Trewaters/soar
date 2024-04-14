@@ -12,9 +12,9 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 #### Landing page
 
-**Flow Series**
+**Flow**
 
-- Record posture practice
+- Record and practice postures.
 
 **Asana Postures**
 

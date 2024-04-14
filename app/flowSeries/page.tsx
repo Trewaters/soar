@@ -1,6 +1,6 @@
 'use client'
 import { Box, Button, Stack, Typography } from '@mui/material'
-import { Router } from 'next/router'
+// import { Router } from 'next/router'
 
 // const Search = styled('div')(({ theme }) => ({
 //   position: 'relative',
@@ -57,38 +57,38 @@ export default function Page() {
       }}
     >
       <Typography variant="h1" align="center">
-        Flow Series
+        Flow a Series
       </Typography>
       <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
         <Button
           variant="outlined"
-          href="/flowSeries/practice"
+          href="/flowSeries/singleSeries"
           // component="a"
           LinkComponent="a"
         >
-          Practice
+          Single Series
         </Button>
         <Typography variant="body1">or</Typography>
         <Button variant="contained" color="primary" component="a">
-          Create
+          Create Series
         </Button>
       </Stack>
       <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
         <Button
-          variant="outlined"
-          color="primary"
+          variant="contained"
           LinkComponent="a"
-          href="/flowSeries/flowFull"
+          href="/flowSeries/practieceSeries"
         >
-          Flow (full)
+          Practice Series
         </Button>
         <Typography variant="body1">vs.</Typography>
         <Button
-          variant="contained"
+          variant="outlined"
+          color="primary"
           LinkComponent="a"
-          href="/flowSeries/seriesMini"
+          href="/flowSeries/practiceSequences"
         >
-          Series (mini)
+          Practice Sequences
         </Button>
       </Stack>
       {/* <Search>

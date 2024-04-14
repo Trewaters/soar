@@ -25,7 +25,7 @@ export default function LandingPage() {
                   <ListItemIcon>
                     <WhatshotIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Flow Series" />
+                  <ListItemText primary="Flow" />
                 </ListItemButton>
               </Link>
             </ListItem>
