@@ -100,13 +100,15 @@ I follow Semantic Versioning for releases. [Read more here](https://semver.org/)
 
 ## Milestones
 
-- [ ] 1.0.0 - MVP ( 4 sections, each with material).
-- [ ] 2.0.0 - Create User Profiles and allow them to save their progress
-- [ ] 2.x.0 - User Profile Customizations
-- [ ] 2.x.0 - Users can Add more poses, etc.
-- [ ] 2.x.0 - Users can create custom flows
-- [ ] 2.x.0 - Users can create journal about Meditations
-- [ ] 2.x.0 - Users can create custom Mantras
+- [ ] 1.0.0 - MVP ( 2 sections - each with material, "Flow" and "Asana Postures").
+- [ ] 2.0.0 - Create User Profiles (connect to db)
+- [ ] x.x.0 - Allow User Profiles to save their progress (connect to db)
+- [ ] x.x.0 - User Profile Customizations (Connect "Planner" buttons)
+- [ ] x.x.0 - User Profile Customizations
+- [ ] x.x.0 - Users can Add more poses, etc.
+- [ ] x.x.0 - Users can create custom flows
+- [ ] x.x.0 - Users can create journal about Meditations
+- [ ] x.x.0 - Users can create custom Mantras
 
 # DEVELOPER SECTION
 

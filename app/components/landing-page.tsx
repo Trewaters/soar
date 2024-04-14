@@ -33,7 +33,9 @@ export default function LandingPage() {
                 {index > 0 && <Divider />}
                 <ListItem disablePadding>
                   <Link href={link.href} passHref>
-                    <ListItemButton sx={{ justifyContent: 'flex-start' }}>
+                    <ListItemButton
+                      sx={{ justifyContent: 'flex-start', width: '100%' }}
+                    >
                       <ListItemIcon>{link.icon}</ListItemIcon>
                       <ListItemText>
                         <Typography variant="button">{link.name}</Typography>
@@ -50,7 +52,6 @@ export default function LandingPage() {
   )
 }
 
-// Define the links and their icons separately for cleaner code
 const links = [
   { name: 'Flow', href: '/flowSeries', icon: <WhatshotIcon /> },
   {
