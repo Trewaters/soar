@@ -32,6 +32,10 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 - TBD
 
+**Yoga Journal**
+
+- TBD
+
 #### Landing page
 
 - Goals (long term), Today's workout (present day), Historical (past) practice
@@ -79,6 +83,7 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 - **Posture Card**, The Card comes up on Search. Polish the look of it.
 - **Top Navigation**, Use a component for Top Navigation.
 - **Header**, Make a header component.
+- **Yoga Journal**, Show date of entry, text, record voice, and allow image(s). Add share feature.
 
 ### Known Bugs
 
