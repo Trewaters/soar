@@ -82,7 +82,7 @@ export const theme = createTheme({
       textTransform: 'none',
     },
     h1: {
-      fontSize: '3em',
+      fontSize: '30px',
       display: 'block',
       marginTop: '0.67em',
       marginBottom: '0.67em',
@@ -91,7 +91,7 @@ export const theme = createTheme({
       fontWeight: 'bold',
     },
     h2: {
-      fontSize: '2.3em',
+      fontSize: '26px',
       display: 'block',
       marginTop: '0.57em',
       marginBottom: '0.57em',
@@ -100,7 +100,7 @@ export const theme = createTheme({
       fontWeight: 'bold',
     },
     h3: {
-      fontSize: '2em',
+      fontSize: '22px',
       display: 'block',
       marginTop: '0.47em',
       marginBottom: '0.47em',
@@ -109,7 +109,7 @@ export const theme = createTheme({
       fontWeight: 'bold',
     },
     h4: {
-      fontSize: '2em',
+      fontSize: '20px',
       display: 'block',
       marginTop: '0.37em',
       marginBottom: '0.47em',
@@ -118,7 +118,7 @@ export const theme = createTheme({
       fontWeight: 'bold',
     },
     h5: {
-      fontSize: '1.7em',
+      fontSize: '18px',
       display: 'block',
       marginTop: '0.37em',
       marginBottom: '0.37em',
@@ -127,7 +127,7 @@ export const theme = createTheme({
       fontWeight: 'bold',
     },
     h6: {
-      fontSize: '1.5em',
+      fontSize: '17px',
       display: 'block',
       marginTop: '0.37em',
       marginBottom: '0.37em',
@@ -135,8 +135,8 @@ export const theme = createTheme({
       marginRight: 0,
       fontWeight: 'bold',
     },
-    body1: { fontSize: '1em' },
-    body2: { fontSize: '0.875em' },
+    body1: { fontSize: '16px' },
+    body2: { fontSize: '10px' },
     subtitle1: { fontSize: '1.2em' },
     subtitle2: { fontSize: '1.05em' },
     overline: { fontSize: '0.9em' },
