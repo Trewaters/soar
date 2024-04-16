@@ -49,7 +49,7 @@ export default function TopNav() {
         </Stack>
       </Box>
       <Stack>
-        <Typography variant="h2" align="center">
+        <Typography variant="h1" align="center">
           Soar
         </Typography>
       </Stack>
