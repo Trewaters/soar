@@ -89,8 +89,8 @@ export const theme = createTheme({
     https://youtu.be/klXyJWlIzuY?si=tLj2PmYvdjCQwxzu
     */
     h1: {
-      fontSize: '3.5rem',
-      fontWeight: 'bold',
+      fontSize: '3rem',
+      fontWeight: '900',
       letterSpacing: '0.1em',
       wordSpacing: '1em',
       // display: 'block',
@@ -100,8 +100,8 @@ export const theme = createTheme({
       // marginRight: 0,
     },
     h2: {
-      fontSize: '2.5rem',
-      fontWeight: 'bold',
+      fontSize: '2rem',
+      fontWeight: '700',
       letterSpacing: '0.05em',
       wordSpacing: '0.05em',
       // display: 'block',
@@ -111,8 +111,8 @@ export const theme = createTheme({
       // marginRight: 0,
     },
     h3: {
-      fontSize: '2rem',
-      fontWeight: 'bold',
+      fontSize: '1.5rem',
+      fontWeight: '700',
       letterSpacing: '0.001em',
       wordSpacing: '0.01em',
       // display: 'block',
@@ -123,7 +123,7 @@ export const theme = createTheme({
     },
     h4: {
       fontSize: '1.8rem',
-      fontWeight: 'bolder',
+      fontWeight: '700',
       // display: 'block',
       // marginTop: '0.37em',
       // marginBottom: '0.47em',
@@ -132,7 +132,7 @@ export const theme = createTheme({
     },
     h5: {
       fontSize: '1.6rem',
-      fontWeight: 'bolder',
+      fontWeight: '700',
       // display: 'block',
       // marginTop: '0.37em',
       // marginBottom: '0.37em',
@@ -141,7 +141,7 @@ export const theme = createTheme({
     },
     h6: {
       fontSize: '1.4rem',
-      fontWeight: 'bolder',
+      fontWeight: '700',
       // display: 'block',
       // marginTop: '0.37em',
       // marginBottom: '0.37em',

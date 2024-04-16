@@ -127,7 +127,13 @@ export default function Page() {
       {flowSeries.map((flow) => (
         <Accordion
           key={flow.id}
-          sx={{ pb: '1em', borderWidth: '3px', margin: 3 }}
+          sx={{
+            pb: '1em',
+            borderWidth: '3px',
+            margin: 3,
+            borderColor: 'primary.main',
+            borderStyle: 'solid',
+          }}
           disableGutters
         >
           <AccordionSummary sx={{ ml: 2, pt: 3 }}>
@@ -139,13 +145,13 @@ export default function Page() {
                 <Card
                   key={pose}
                   sx={{
-                    width: '50%',
+                    width: '80%',
                     boxShadow: 3,
                     textAlign: 'center',
                   }}
                 >
                   <CardContent>
-                    <Typography key={pose} variant="body1">
+                    <Typography key={pose} variant="body1" textAlign={'left'}>
                       {pose}
                     </Typography>
                   </CardContent>
