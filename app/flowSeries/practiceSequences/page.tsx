@@ -108,13 +108,24 @@ export default function Page() {
     },
   ]
   return (
-    <Paper>
+    <Paper
+      sx={{
+        borderColor: 'primary.main',
+        borderWidth: '3px',
+        borderStyle: 'solid',
+        paddingTop: 4,
+      }}
+    >
       <Typography variant="h2" align="center">
         Practice Sequences
       </Typography>
       {sequence.map((flow) => (
         <React.Fragment key={flow.id}>
-          <Box sx={{ margin: 4 }}>
+          <Box
+            sx={{
+              margin: 4,
+            }}
+          >
             <Typography variant="h3" textAlign="center">
               {flow.nameSequence}
             </Typography>
@@ -127,6 +138,9 @@ export default function Page() {
                   width: '50%',
                   boxShadow: 3,
                   textAlign: 'center',
+                  borderColor: 'primary.main',
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
                 }}
               >
                 <CardHeader title={seriesMini.seriesName} />

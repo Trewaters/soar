@@ -148,6 +148,9 @@ export default function Page() {
                     width: '80%',
                     boxShadow: 3,
                     textAlign: 'center',
+                    borderColor: 'primary.light',
+                    borderWidth: '1px',
+                    borderStyle: 'solid',
                   }}
                 >
                   <CardContent>

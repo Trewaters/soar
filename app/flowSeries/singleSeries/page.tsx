@@ -34,6 +34,9 @@ export default function Page() {
                 boxShadow: 3,
                 display: 'flex',
                 flexDirection: 'row',
+                borderColor: 'primary.light',
+                borderWidth: '1px',
+                borderStyle: 'solid',
               }}
             >
               <CardMedia
