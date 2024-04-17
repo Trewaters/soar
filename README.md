@@ -85,6 +85,19 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 - **Header**, Make a header component.
 - **Yoga Journal**, Show date of entry, text, record voice, and allow image(s). Add share feature.
 
+## Milestones
+
+- [ ] 1.0.0 - MVP ( 2 sections - each with material, "Flow" and "Asana Postures").
+- [ ] 2.0.0 - Create User Profiles (connect to db)
+- [ ] x.x.0 - Allow User Profiles to save their progress (connect to db)
+- [ ] x.x.0 - User Profile Customizations (Connect "Planner" buttons)
+- [ ] x.x.0 - User Profile Customizations
+- [ ] x.x.0 - Users can Add more poses, etc.
+- [ ] x.x.0 - Users can create custom flows
+- [ ] x.x.0 - Users can create journal about Meditations
+- [ ] x.x.0 - Users can create custom Mantras
+- [ ]
+
 ### Known Bugs
 
 No Known Bugs!
@@ -102,18 +115,6 @@ What you are experiencing is a feature 😉 ! Open a [github issue](https://gith
 The "version" branches are locked after release.
 
 I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: _"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0._
-
-## Milestones
-
-- [ ] 1.0.0 - MVP ( 2 sections - each with material, "Flow" and "Asana Postures").
-- [ ] 2.0.0 - Create User Profiles (connect to db)
-- [ ] x.x.0 - Allow User Profiles to save their progress (connect to db)
-- [ ] x.x.0 - User Profile Customizations (Connect "Planner" buttons)
-- [ ] x.x.0 - User Profile Customizations
-- [ ] x.x.0 - Users can Add more poses, etc.
-- [ ] x.x.0 - Users can create custom flows
-- [ ] x.x.0 - Users can create journal about Meditations
-- [ ] x.x.0 - Users can create custom Mantras
 
 # DEVELOPER SECTION
 
