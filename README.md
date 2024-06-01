@@ -79,6 +79,7 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 
 ### Current Goals
 
+- (2024-06-01 09:17:02) update `jest.config.ts` old config found here "C:\Users\trewa\OneDrive\01-WORMHOLE\Yoga\app-Soar\old code\jest.config.ts"
 - **Feature Goal**, record personal yoga practice in app.
 - **Posture Card**, The Card comes up on Search. Polish the look of it.
 - **Top Navigation**, Use a component for Top Navigation.
@@ -180,3 +181,26 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 4. Push `develop` branch to hosting. Then check how the app works on the web. Test with desktop and mobile device. Again checking the client (web browser) console for errors. "Click things and navigate around the app" especially any features your code touches.
 
 ## Further help
+
+### Create Release Milestones
+
+Here is ChatGPT instructions on how to create release milestones that will use for my changelong under the "Versions" section.
+
+To manage releases on GitHub like the example you saw with `https://github.com/Level/level/releases/tag/0.9.0`, you'll need to use GitHub's release management features. This allows you to create, edit, and view releases that group together iterations of your project, often marking different versions or milestones with tags.
+
+Here’s a basic guide on how to create a release for your project on GitHub:
+
+1. **Navigate to Your Repository**: Go to the main page of your repository on GitHub.
+2. **Access Releases**: Click on the "Releases" section, usually found on the right sidebar under the "Code" tab.
+3. **Draft a New Release**: Click on "Draft a new release" or the "Create a new release" button at the top of the release list.
+4. **Tag Your Release**: Choose a tag for your release. You can select an existing tag or create a new one. If you create a new tag, you will need to specify which branch the tag is created from.
+5. **Fill Out Release Information**: Add a title and a description for your release. Here, you can include detailed information about what’s included in the release, bug fixes, or new features.
+6. **Attach Binaries** (optional): If you want to include compiled programs, executables, or binary files, you can attach them to the release.
+7. **Mark as Pre-release** (if applicable): If the release is not yet ready for production and is considered unstable, you can mark it as a pre-release.
+8. **Publish the Release**: Once you’ve configured all the details, click on "Publish release" to make it public. Alternatively, you can save it as a draft to continue working on it later.
+
+To see your releases, you can visit the "Releases" section of your repository. If you haven't created any releases yet, this page will guide you to make your first one. Additionally, if GitHub Discussions is enabled, you can also link a discussion to your release for community interaction.
+
+For your specific repository, you can start creating and managing releases by visiting [your project’s release section](https://github.com/Trewaters/soar/releases).
+
+This process not only helps in managing different versions but also allows your users to download specific snapshots of the code and associated files.
