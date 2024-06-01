@@ -119,27 +119,27 @@ The "version" branches are locked after release.
 
 I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: _"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0._
 
-# DEVELOPER SECTION
+## DEVELOPER SECTION
 
-## Prerequesites
+### Prerequesites
 
 Prereqs to work on this project..._(wip)_
 
-## Installing
+### Installing
 
 ..._(wip)_
 
-## Tests
+### Tests
 
 ..._(wip)_
 
-## Coding Style
+### Coding Style
 
 ..._(wip)_
 
 1. Prettier
 
-## Deployment
+### Deployment
 
 - Deploy on Vercel
 
@@ -147,7 +147,18 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-## Development server
+### Changelog
+
+**Types of changes**
+
+- `ADDED`: for new features.
+- `UPDATE`: for changes in existing functionality.
+- `DEPRECATED`: for soon-to-be removed features.
+- `REMOVED`: for now removed features.
+- `FIXED`: for any bug fixes.
+- `SECURITY`: in case of vulnerabilities.
+
+### Development server
 
 First, run the development server:
 
@@ -157,19 +168,19 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Running unit tests
+### Running unit tests
 
 execute the unit tests via **Jest** [Jest](https://jestjs.io/).
 
-## Running end-to-end tests
+### Running end-to-end tests
 
 execute the end-to-end tests via **?Test Kit** [Protractor](http://www.protractortest.org/).
 
-## Linting
+### Linting
 
 1. Eslint rules
 
-## "Pushing good code"
+### "Pushing good code"
 
 QUESTION: "Am I pushing good code?"
 
@@ -180,7 +191,7 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 3. `npm run cover` to make sure no unit test are failing. Coverage goal is (A) 100%, (B) 90%, (C) 80%.
 4. Push `develop` branch to hosting. Then check how the app works on the web. Test with desktop and mobile device. Again checking the client (web browser) console for errors. "Click things and navigate around the app" especially any features your code touches.
 
-## Further help
+### Further help
 
 ### Create Release Milestones
 
