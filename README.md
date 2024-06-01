@@ -82,8 +82,10 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 - **Feature Goal**, record personal yoga practice in app.
 - **Posture Card**, The Card comes up on Search. Polish the look of it.
 - **Top Navigation**, Use a component for Top Navigation.
+- **Footer**, Make a footer component. Include copyright 2023 - 2024, Name (Happy Yoga), Terms of use (tldr) or licensing, etc.
 - **Header**, Make a header component.
 - **Yoga Journal**, Show date of entry, text, record voice, and allow image(s). Add share feature.
+- **Changelog**, [follow these tips](https://keepachangelog.com/en/1.1.0/)
 
 ## Milestones
 
