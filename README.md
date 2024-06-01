@@ -70,12 +70,13 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 ## Acknowledgments
 
 - "I tip my hat to anyone whose code was used!" npm gives me a lot of people to thank!
-- Special thank you to my mom, wife, and daughter! Without their love and support this would gone nowhere.
+- Special thank you to my mom, wife, and my daughters! Without their love and support this would have gone nowhere.
 - Gratitude is the attitude!
 
-## NOTES
+## Journal
 
-- Timeline: I started this in July 2023. I hope to have a MVP by the end of the year. I am working on this in my spare time, so it may take longer. I am also learning NextJS as I go, so that will slow me down as well.
+- I started this in July 2023. I hope to have a MVP by the end of the year. I am working on this in my spare time, so it may take longer. I am also learning NextJS as I go, so that will slow me down as well.
+- Soon I will be releasing a version 1 of the app. It snuck up on me. I have actually done what I marked as a milestone for v1! Congrats to me!
 
 ### Current Goals
 
@@ -90,7 +91,7 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 
 ## Milestones
 
-- [ ] 1.0.0 - MVP ( 2 sections - each with material, "Flow" and "Asana Postures").
+- [x] 1.0.0 - MVP ( 2 sections - each with material, "Flow" and "Asana Postures").
 - [ ] 2.0.0 - Create User Profiles (connect to db)
 - [ ] x.x.0 - Allow User Profiles to save their progress (connect to db)
 - [ ] x.x.0 - User Profile Customizations (Connect "Planner" buttons)
@@ -99,7 +100,6 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 - [ ] x.x.0 - Users can create custom flows
 - [ ] x.x.0 - Users can create journal about Meditations
 - [ ] x.x.0 - Users can create custom Mantras
-- [ ]
 
 ### Known Bugs
 
@@ -193,7 +193,7 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 
 ### Further help
 
-### Create Release Milestones
+#### Create Release Milestones
 
 Here is ChatGPT instructions on how to create release milestones that will use for my changelong under the "Versions" section.
 
@@ -215,3 +215,21 @@ To see your releases, you can visit the "Releases" section of your repository. I
 For your specific repository, you can start creating and managing releases by visiting [your project’s release section](https://github.com/Trewaters/soar/releases).
 
 This process not only helps in managing different versions but also allows your users to download specific snapshots of the code and associated files.
+
+#### TIPS: Release tags
+
+When creating a new release in GitHub, the tags you choose can reflect your project's versioning strategy. Commonly, semantic versioning (SemVer) is used, which helps manage versions by conveying meaning about the underlying changes. Here are some suggested tags you could use based on the type of updates made to your project:
+
+1. **Major Releases (`vX.0.0`)**: Use this for major changes that may include breaking changes or significant features. For example, `v2.0.0` indicates a significant jump that might include changes not backward compatible with `v1.x.x`.
+
+2. **Minor Releases (`vX.Y.0`)**: Employ this tag for minor feature additions or improvements that are backward-compatible. For instance, `v1.3.0` could be a release that adds new functionalities to version `1.2.x` but does not break any existing functionality.
+
+3. **Patch Releases (`vX.Y.Z`)**: This is for small bug fixes or security patches that do not affect the API or major components of the software. For example, `v1.3.1` might include a small bug fix on top of the `v1.3.0` release.
+
+4. **Pre-release Versions**: For beta, alpha, or release candidates, you might use tags like `v1.4.0-alpha`, `v1.4.0-beta`, or `v1.4.0-rc.1`. These tags indicate that the release is not yet in its final form and is meant for testing.
+
+5. **Build Metadata**: Sometimes, additional build metadata can be attached to a version, such as `v1.4.0+20210901` indicating a build made on September 1, 2021.
+
+Using clear and consistent tags helps users and contributors understand the progression of your project and the stability of each release. For a detailed understanding of versioning and to get more insights on how to effectively manage your project releases, GitHub provides a helpful guide on [semantic versioning](https://semver.org/).
+
+Implementing a good versioning strategy with appropriate tags ensures that your project's releases are predictable, manageable, and less prone to errors.

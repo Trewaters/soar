@@ -42,6 +42,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <!-- UPDATE "unreleased once I create release milestones" -->
 
 [unreleased]: https://github.com/Level/level/releases/tag/0.9.0
+[1.0.0]: https://github.com/Trewaters/soar/releases/
 [0.1.0]: https://github.com/Trewaters/soar/compare/version_stable...HEAD
 
 # TEMPLATE
