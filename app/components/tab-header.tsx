@@ -4,9 +4,9 @@ import { Box, Tab } from '@mui/material'
 import TabContext from '@mui/lab/TabContext'
 import TabList from '@mui/lab/TabList'
 import TabPanel from '@mui/lab/TabPanel'
-import LandingPage from '@components/landing-page'
-import MenuPlanner from '@components/MenuPlanner'
-import FlowSeries from './flow-series'
+import PlannerMenu from '@app/planner/page'
+import LandingPage from '@app/components/landing-page'
+import EightLimbs from './eight-limbs'
 
 export default function TabHeader() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -44,17 +44,17 @@ export default function TabHeader() {
           >
             <Tab label="Landing" value="1" />
             <Tab label="Planner" value="2" />
-            <Tab label="Flow Series" value="3" />
+            <Tab label="8 Limb Path" value="3" />
           </TabList>
         </Box>
         <TabPanel value="1">
           <LandingPage />
         </TabPanel>
         <TabPanel value="2">
-          <MenuPlanner />
+          <PlannerMenu />
         </TabPanel>
         <TabPanel value="3">
-          <FlowSeries />
+          <EightLimbs />
         </TabPanel>
       </TabContext>
     </Box>

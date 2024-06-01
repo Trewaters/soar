@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${file}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch App",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "timeout": 40000,
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}

@@ -4,8 +4,8 @@ import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
 import postureData from '@interfaces/postureData'
-import PostureCard from '@components/posture-card'
 import Providers from '@/app/Providers'
+import PostureCard from '@app/components/posture-card'
 
 interface PostureSearchProps {
   posturePropData: postureData[]
@@ -31,7 +31,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
 
   return (
     <Providers>
-      <Stack spacing={2} sx={{ background: 'white' }}>
+      <Stack spacing={2} sx={{ background: 'white', mb: '1em' }}>
         <Autocomplete
           id="search-poses"
           options={postures}
@@ -95,7 +95,6 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
         /> */}
       </Stack>
 
-      <h2>Posture Card</h2>
       {selectedPosture && <PostureCard postureCardProp={selectedPosture} />}
     </Providers>
   )

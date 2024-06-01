@@ -1,23 +1,28 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import '@styles/globals.css'
-import TopNav from '@app/top-nav'
-import { Metadata } from 'next'
+import TopNav from '@app/components/top-nav'
 import Providers from '@app/Providers'
+import Head from 'next/head'
 
-const metadata: Metadata = {
-  title: 'Happy Yoga',
-  description: 'Soar like a leaf on the wind!',
-}
-
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en">
+      <Head>
+        <title>Happy Yoga</title>
+        <meta name="description" content="Soar like a leaf on the wind!" />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <body>
         <Providers>
-          <main>
+          <nav>
             <TopNav />
-            {children}
-          </main>
+          </nav>
+          <main>{children}</main>
         </Providers>
       </body>
     </html>

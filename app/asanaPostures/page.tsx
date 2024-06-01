@@ -1,8 +1,8 @@
+'use client'
 import React from 'react'
 import Typography from '@mui/material/Typography'
-import PostureSearch from '@components/posture-search'
+import PostureSearch from '@app/components/posture-search'
 import postureData from '@interfaces/postureData'
-import Providers from '@/app/Providers'
 
 async function getData() {
   const res = await fetch('/api/poses')
@@ -13,7 +13,7 @@ async function getData() {
   return response
 }
 
-export default function AsanaPostures() {
+export default function Page() {
   const [posturePropData, setPosturePropData] = React.useState<postureData[]>(
     []
   )
@@ -24,10 +24,11 @@ export default function AsanaPostures() {
   }, [])
 
   return (
-    <Providers>
-      <div>Asana Postures</div>
-      <Typography variant="h2">Posture Search</Typography>
+    <>
+      <Typography variant="h2" align="center">
+        Asana Postures
+      </Typography>
       <PostureSearch posturePropData={posturePropData} />
-    </Providers>
+    </>
   )
 }

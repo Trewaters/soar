@@ -7,6 +7,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import MenuIcon from '@mui/icons-material/Menu'
+import Link from 'next/link'
 
 export default function TopNav() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -35,13 +36,22 @@ export default function TopNav() {
             }}
           >
             <MenuItem>
-              <p>Planner</p>
+              <Link href="/" passHref>
+                <Typography variant="body1">Home</Typography>
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <Link href="/planner" passHref>
+                <Typography variant="body1">Planner</Typography>
+              </Link>
             </MenuItem>
           </Menu>
         </Stack>
       </Box>
       <Stack>
-        <Typography variant="h3">Soar App</Typography>
+        <Typography variant="h1" align="center">
+          Soar
+        </Typography>
       </Stack>
     </Stack>
   )

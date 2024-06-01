@@ -81,14 +81,75 @@ export const theme = createTheme({
     button: {
       textTransform: 'none',
     },
-    h1: { fontSize: '7.2em' },
-    h2: { fontSize: '4.5em' },
-    h3: { fontSize: '3.6em' },
-    h4: { fontSize: '2.55em' },
-    h5: { fontSize: '1.8em' },
-    h6: { fontSize: '1.5em' },
-    body1: { fontSize: '1.2em' },
-    body2: { fontSize: '1.05em' },
+    /*  
+    Read more about fonts here:
+    https://css-tricks.com/understanding-web-fonts-getting/
+
+    Typography videos:
+    https://youtu.be/klXyJWlIzuY?si=tLj2PmYvdjCQwxzu
+    */
+    h1: {
+      fontSize: '3rem',
+      fontWeight: '900',
+      letterSpacing: '0.1em',
+      wordSpacing: '1em',
+      // display: 'block',
+      // marginTop: '0.67em',
+      // marginBottom: '0.67em',
+      // marginLeft: 0,
+      // marginRight: 0,
+    },
+    h2: {
+      fontSize: '2rem',
+      fontWeight: '700',
+      letterSpacing: '0.05em',
+      wordSpacing: '0.05em',
+      // display: 'block',
+      // marginTop: '0.57em',
+      // marginBottom: '0.57em',
+      // marginLeft: 0,
+      // marginRight: 0,
+    },
+    h3: {
+      fontSize: '1.5rem',
+      fontWeight: '700',
+      letterSpacing: '0.001em',
+      wordSpacing: '0.01em',
+      // display: 'block',
+      // marginTop: '0.47em',
+      // marginBottom: '0.47em',
+      // marginLeft: 0,
+      // marginRight: 0,s
+    },
+    h4: {
+      fontSize: '1.8rem',
+      fontWeight: '700',
+      // display: 'block',
+      // marginTop: '0.37em',
+      // marginBottom: '0.47em',
+      // marginLeft: 0,
+      // marginRight: 0,
+    },
+    h5: {
+      fontSize: '1.6rem',
+      fontWeight: '700',
+      // display: 'block',
+      // marginTop: '0.37em',
+      // marginBottom: '0.37em',
+      // marginLeft: 0,
+      // marginRight: 0,
+    },
+    h6: {
+      fontSize: '1.4rem',
+      fontWeight: '700',
+      // display: 'block',
+      // marginTop: '0.37em',
+      // marginBottom: '0.37em',
+      // marginLeft: 0,
+      // marginRight: 0,
+    },
+    body1: { fontSize: '1rem' },
+    body2: { fontSize: '.8rem' },
     subtitle1: { fontSize: '1.2em' },
     subtitle2: { fontSize: '1.05em' },
     overline: { fontSize: '0.9em' },
