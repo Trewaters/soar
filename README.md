@@ -81,18 +81,17 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 ### Current Goals
 
 - (2024-06-01 09:17:02) update `jest.config.ts` old config found here "C:\Users\trewa\OneDrive\01-WORMHOLE\Yoga\app-Soar\old code\jest.config.ts"
-- **Feature Goal**, record personal yoga practice in app.
-- **Posture Card**, The Card comes up on Search. Polish the look of it.
+- **Record practice**, record personal yoga practice in app.
 - **Top Navigation**, Use a component for Top Navigation.
 - **Footer**, Make a footer component. Include copyright 2023 - 2024, Name (Happy Yoga), Terms of use (tldr) or licensing, etc.
 - **Header**, Make a header component.
-- **Yoga Journal**, Show date of entry, text, record voice, and allow image(s). Add share feature.
 - **Changelog**, [follow these tips](https://keepachangelog.com/en/1.1.0/)
 
 ## Milestones
 
 - [x] 1.0.0 - MVP ( 2 sections - each with material, "Flow" and "Asana Postures").
 - [ ] 2.0.0 - Create User Profiles (connect to db)
+- [ ] 2.1.0 - Routine/Practice Planner. Allow user to track progress and goals.
 - [ ] x.x.0 - Allow User Profiles to save their progress (connect to db)
 - [ ] x.x.0 - User Profile Customizations (Connect "Planner" buttons)
 - [ ] x.x.0 - User Profile Customizations
@@ -100,6 +99,7 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 - [ ] x.x.0 - Users can create custom flows
 - [ ] x.x.0 - Users can create journal about Meditations
 - [ ] x.x.0 - Users can create custom Mantras
+- [ ] x.x.0 - Add section: Meditation, Mantra, Breathwork
 
 ### Known Bugs
 
