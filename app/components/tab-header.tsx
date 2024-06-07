@@ -7,6 +7,7 @@ import TabPanel from '@mui/lab/TabPanel'
 import PlannerMenu from '@app/planner/page'
 import LandingPage from '@app/components/landing-page'
 import EightLimbs from './eight-limbs'
+import UserDetails from '@app/userManagement/UserDetails'
 
 export default function TabHeader() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -45,6 +46,7 @@ export default function TabHeader() {
             <Tab label="Landing" value="1" />
             <Tab label="Planner" value="2" />
             <Tab label="8 Limb Path" value="3" />
+            <Tab label="Users" value="4" />
           </TabList>
         </Box>
         <TabPanel value="1">
@@ -55,6 +57,9 @@ export default function TabHeader() {
         </TabPanel>
         <TabPanel value="3">
           <EightLimbs />
+        </TabPanel>
+        <TabPanel value="4">
+          <UserDetails />
         </TabPanel>
       </TabContext>
     </Box>
