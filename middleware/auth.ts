@@ -17,7 +17,7 @@ const authMiddleware = (handler: NextApiHandler) => {
     }
 
     // Attach userId to request object
-    req.userId = decoded.userId
+    ;(req as any).userId = decoded.userId
 
     return handler(req, res)
   }

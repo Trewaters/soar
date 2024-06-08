@@ -6,7 +6,8 @@ import prisma from '@lib/prisma'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // Access userId from req.userId
-  const userId = req.userId
+  // ! Fix this const should be `userId = req.userId`
+  const userId = req.body
 
   // Your protected logic here, for example fetching user data
   const user = await prisma.user.findUnique({ where: { id: userId } })

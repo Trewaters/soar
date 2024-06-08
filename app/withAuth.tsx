@@ -4,10 +4,10 @@ import React, { useEffect } from 'react'
 import { useAuth } from './context/AuthContext'
 import { useSession } from 'next-auth/react'
 
-const withAuth = (WrappedComponent) => {
-  return (props) => {
-    const [session, loading] = useSession()
-    const { user } = useAuth()
+const withAuth = (WrappedComponent: React.ComponentType) => {
+  const ComponentWithAuth = (props: React.JSX.IntrinsicAttributes) => {
+    const { data: session, status: loading } = useSession()
+    const { user } = useAuth() || {}
     const router = useRouter()
 
     useEffect(() => {
@@ -28,6 +28,10 @@ const withAuth = (WrappedComponent) => {
 
     return <WrappedComponent {...props} />
   }
+
+  ComponentWithAuth.displayName = `withAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`
+
+  return ComponentWithAuth
 }
 
 export default withAuth

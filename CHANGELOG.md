@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Prisma integrated to handle user login and accounts.
+- MongoDB connection for storing data.
+- Created User profile to manage user accounts.
+- Created Registration, Logout and Login pages.
 
 ### Changed
 
