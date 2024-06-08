@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import jwt_decode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 
 interface AuthContextType {
   user: any
@@ -13,14 +13,18 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export const AuthProvider: React.FC = ({ children }) => {
+type AuthProviderProps = {
+  children: React.ReactNode
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState(null)
   const router = useRouter()
 
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
-      const decoded = jwt_decode(token) as { userId: string }
+      const decoded = jwtDecode(token) as { userId: string }
       axios.get(`/api/user/${decoded.userId}`).then((res) => {
         setUser(res.data)
       })
@@ -31,7 +35,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     const response = await axios.post('/api/login', { email, password })
     const token = response.data.token
     localStorage.setItem('token', token)
-    const decoded = jwt_decode(token) as { userId: string }
+    const decoded = jwtDecode(token) as { userId: string }
     const user = await axios.get(`/api/user/${decoded.userId}`)
     setUser(user.data)
     router.push('/dashboard')

@@ -36,11 +36,11 @@ import MenuIcon from '@mui/icons-material/Menu'
 import DirectionsIcon from '@mui/icons-material/Directions'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-function not(a: readonly number[], b: readonly number[]) {
+function not(a: readonly string[], b: readonly string[]) {
   return a.filter((value) => b.indexOf(value) === -1)
 }
 
-function intersection(a: readonly number[], b: readonly number[]) {
+function intersection(a: readonly string[], b: readonly string[]) {
   return a.filter((value) => b.indexOf(value) !== -1)
 }
 
@@ -76,7 +76,7 @@ export default function UserDetails() {
    * Transfer List
    * https://mui.com/material-ui/react-transfer-list/
    */
-  const [checked, setChecked] = React.useState<readonly number[]>([])
+  const [checked, setChecked] = React.useState<readonly string[]>([])
   const [left, setLeft] = React.useState<readonly string[]>([
     '(Notification) Default Notifications (by...email/phone/etc):',
     '(Notification) watch post:',
@@ -91,16 +91,14 @@ export default function UserDetails() {
   const leftChecked = intersection(checked, left)
   const rightChecked = intersection(checked, right)
 
-  const handleToggle = (value: number) => () => {
+  const handleToggle = (value: string) => () => {
     const currentIndex = checked.indexOf(value)
     const newChecked = [...checked]
-
     if (currentIndex === -1) {
       newChecked.push(value)
     } else {
       newChecked.splice(currentIndex, 1)
     }
-
     setChecked(newChecked)
   }
 
@@ -126,10 +124,10 @@ export default function UserDetails() {
     setRight([])
   }
 
-  const customList = (items: readonly number[]) => (
+  const customList = (items: readonly string[]) => (
     <Paper sx={{ width: 200, height: 230, overflow: 'auto' }}>
       <List dense component="div" role="list">
-        {items.map((value: number) => {
+        {items.map((value: string) => {
           const labelId = `transfer-list-item-${value}-label`
 
           return (

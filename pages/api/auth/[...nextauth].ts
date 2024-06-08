@@ -1,9 +1,9 @@
 import NextAuth from 'next-auth'
-import Providers from 'next-auth/providers'
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { PrismaClient } from '@prisma/client'
-import clientPromise from '../../../lib/mongodb'
+import clientPromise from '@lib/mongodb'
+import Providers from '@app/Providers'
 
 const prisma = new PrismaClient()
 

@@ -1,8 +1,8 @@
 // pages/api/user/[id].ts
 
+import prisma from '@lib/prisma'
+import authMiddleware from '@middleware/auth'
 import { NextApiRequest, NextApiResponse } from 'next'
-import authMiddleware from '../../../middleware/auth'
-import prisma from '../../../lib/prisma'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query
