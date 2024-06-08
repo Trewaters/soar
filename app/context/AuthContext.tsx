@@ -4,9 +4,10 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { jwtDecode } from 'jwt-decode'
+import { User } from '@prisma/client'
 
 interface AuthContextType {
-  user: any
+  user: User
   login: (email: string, password: string) => Promise<void>
   logout: () => void
 }
@@ -18,7 +19,7 @@ type AuthProviderProps = {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<User>({} as User)
   const router = useRouter()
 
   useEffect(() => {
@@ -43,7 +44,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token')
-    setUser(null)
+    setUser({} as User)
     router.push('/')
   }
 

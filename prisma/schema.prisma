@@ -4,8 +4,6 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-// prisma/schema.prisma
-
 datasource db {
   provider = "mongodb" // or your database provider
   url      = env("DATABASE_URL")

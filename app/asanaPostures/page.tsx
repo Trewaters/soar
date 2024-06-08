@@ -3,11 +3,11 @@ import React from 'react'
 import Typography from '@mui/material/Typography'
 import PostureSearch from '@app/components/posture-search'
 import postureData from '@interfaces/postureData'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, User } from '@prisma/client'
 
 const prisma = new PrismaClient()
 async function main() {
-  const users = await prisma.user.findMany()
+  const users: User[] = await prisma.user.findMany()
   console.log(users)
 }
 
