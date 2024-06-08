@@ -1,4 +1,14 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {}
+module.exports = {
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.module.rules.push({
+        test: /prisma\/generated\/client\/runtime\/library.js/,
+        use: 'null-loader',
+      })
+    }
 
-module.exports = nextConfig
+    config.module.exprContextCritical = false
+
+    return config
+  },
+}

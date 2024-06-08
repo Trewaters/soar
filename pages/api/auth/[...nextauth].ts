@@ -2,10 +2,7 @@ import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import FacebookProvider from 'next-auth/providers/facebook'
 import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
-// import { PrismaClient } from '@prisma/client'
 import clientPromise from '@lib/mongodb'
-
-// const prisma = new PrismaClient()
 
 export default NextAuth({
   providers: [
