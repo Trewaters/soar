@@ -1,4 +1,3 @@
-// pages/dashboard.tsx
 import withAuth from '@app/withAuth'
 
 function Dashboard() {
