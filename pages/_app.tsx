@@ -1,21 +1,16 @@
-// pages/_app.tsx
-
 import React from 'react'
-import { AuthProvider } from '@app/context/AuthContext'
+// import { AuthProvider } from '@app/context/AuthContext'
+import { SessionProvider } from 'next-auth/react'
+import { AppProps } from 'next/app'
 import '../styles/globals.css'
 
-interface MyAppProps {
-  Component: React.ComponentType<any>
-  // pageProps: React.ReactNode
-  pageProps: Record<string, any>
-}
-
-function MyApp({ Component, pageProps }: MyAppProps) {
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider>
+    <SessionProvider session={pageProps.session}>
       <Component {...pageProps} />
-    </AuthProvider>
+      {/* <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider> */}
+    </SessionProvider>
   )
 }
-
-export default MyApp
