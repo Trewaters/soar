@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode'
 
 interface AuthContextType {
   user: any
-  login: (email: string, password: string) => Promise<void>
+  // login: (email: string, password: string) => Promise<void>
   logout: () => void
 }
 
@@ -18,7 +18,7 @@ type AuthProviderProps = {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User>({} as User)
+  const [user, setUser] = useState<string>('')
   const router = useRouter()
 
   useEffect(() => {
@@ -31,24 +31,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, [])
 
-  const login = async (email: string, password: string) => {
-    const response = await axios.post('/api/login', { email, password })
-    const token = response.data.token
-    localStorage.setItem('token', token)
-    const decoded = jwtDecode(token) as { userId: string }
-    const user = await axios.get(`/api/user/${decoded.userId}`)
-    setUser(user.data)
-    router.push('/dashboard')
-  }
+  // const login = async (email: string, password: string) => {
+  //   const response = await axios.post('/api/login', { email, password })
+  //   const token = response.data.token
+  //   localStorage.setItem('token', token)
+  //   const decoded = jwtDecode(token) as { userId: string }
+  //   const user = await axios.get(`/api/user/${decoded.userId}`)
+  //   setUser(user.data)
+  //   router.push('/dashboard')
+  // }
 
   const logout = () => {
     localStorage.removeItem('token')
-    setUser({} as User)
+    setUser('')
     router.push('/')
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    // <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, logout }}>
       {children}
     </AuthContext.Provider>
   )

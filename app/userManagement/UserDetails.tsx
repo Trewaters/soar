@@ -35,7 +35,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import MenuIcon from '@mui/icons-material/Menu'
 import DirectionsIcon from '@mui/icons-material/Directions'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Login } from '@mui/icons-material'
+// import { Login } from '@mui/icons-material'
 import LoginForm from './LoginForm'
 
 function not(a: readonly string[], b: readonly string[]) {
@@ -62,7 +62,7 @@ export default function UserDetails() {
   }
 
   // checkbox
-  const label = { inputProps: { 'aria-label': 'Switch demo' } }
+  // const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
   // Toggle Button
   const [alignment, setAlignment] = React.useState<string | null>('left')

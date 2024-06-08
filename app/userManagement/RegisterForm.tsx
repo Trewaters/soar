@@ -18,7 +18,7 @@ const RegisterForm = () => {
       validationSchema={RegistrationSchema}
       onSubmit={async (values, { setSubmitting }) => {
         try {
-          const response = await axios.post('/api/register', values)
+          // const response = await axios.post('/api/register', values)
           alert('Registration successful')
         } catch (error) {
           alert('Registration failed')
