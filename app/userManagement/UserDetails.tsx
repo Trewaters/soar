@@ -172,6 +172,7 @@ export default function UserDetails() {
           // defaultValue="defFirstName"
           placeholder='Enter "First Name"'
           label="First Name"
+          value={"Tre'"}
           variant="outlined"
           type="text"
         />
@@ -184,6 +185,7 @@ export default function UserDetails() {
           // defaultValue="defLastName"
           placeholder='Enter "Last Name"'
           label="Last Name"
+          value={'Grisby'}
           variant="outlined"
           type="text"
         />
@@ -196,6 +198,7 @@ export default function UserDetails() {
           // defaultValue="defLastName"
           placeholder="xyz@ABC.com"
           label="Email (primary/internal):"
+          value={'Bob@Mail.com'}
           variant="outlined"
           type="text"
         />
@@ -207,6 +210,7 @@ export default function UserDetails() {
           label="Password"
           variant="outlined"
           type="password"
+          value={'test'}
           autoComplete="current-password"
         />
       </FormControl>
@@ -215,6 +219,7 @@ export default function UserDetails() {
           required
           id="outlined-password-input"
           label="Confirm Password:"
+          value={'test'}
           variant="outlined"
           type="password"
         />
@@ -225,9 +230,9 @@ export default function UserDetails() {
           required
           id="outlined-email-input"
           label="Email (public):"
+          value={'Bob@Mail.com'}
           variant="outlined"
           type="email"
-          autoComplete="current-password"
         />
       </FormControl>
       <FormControl>
@@ -235,9 +240,9 @@ export default function UserDetails() {
           required
           id="outlined-email-input"
           label="Email (internal/alternate):"
+          value={'Bob@Mail.com'}
           variant="outlined"
           type="email"
-          autoComplete="current-password"
         />
       </FormControl>
 
@@ -247,6 +252,7 @@ export default function UserDetails() {
           id="outlined-textarea"
           placeholder="Enter...Bio"
           label="Description/About/Bio:"
+          value={'I am a yoga instructor.'}
           multiline
           maxRows={4}
           type="text"
@@ -259,6 +265,7 @@ export default function UserDetails() {
           id="outlined-textarea"
           placeholder="Enter...2 sentences"
           label="Headline:"
+          value={'I am a yoga instructor and Reiki Master.'}
           multiline
           maxRows={2}
           type="text"
@@ -271,12 +278,13 @@ export default function UserDetails() {
           id="outlined"
           placeholder="() xxx-xxx-xxxx"
           label="Phone Number:"
+          value={'(123) 456-7890'}
           type="phone"
         />
       </FormControl>
 
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <InputLabel id="demo-simple-select-label">Yoga Style</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
@@ -298,6 +306,7 @@ export default function UserDetails() {
           id="outlined"
           placeholder="Enter..."
           label="Yoga Experience:"
+          value={2}
           type="number"
         />
       </FormControl>
@@ -308,6 +317,7 @@ export default function UserDetails() {
           id="outlined"
           placeholder="Enter..."
           label="Company:"
+          value={'Happy Yoga'}
           type="text"
         />
       </FormControl>
@@ -343,6 +353,7 @@ export default function UserDetails() {
           id="outlined"
           placeholder="Enter..."
           label="(links) Website URL::"
+          value={'http://localhost:3000/'}
           type="url"
         />
       </FormControl>
@@ -353,6 +364,7 @@ export default function UserDetails() {
           id="outlined"
           placeholder="Enter..."
           label="(links) Blog URL::"
+          value={'http://localhost:3000/'}
           type="url"
         />
       </FormControl>
@@ -363,6 +375,7 @@ export default function UserDetails() {
           id="outlined"
           placeholder="Enter..."
           label="(links) Social URL::"
+          value={'http://localhost:3000/'}
           type="url"
         />
       </FormControl>
@@ -373,6 +386,7 @@ export default function UserDetails() {
           id="outlined"
           placeholder="Enter..."
           label="(links) Video/Streaming URL::"
+          value={'http://localhost:3000/'}
           type="url"
         />
       </FormControl>

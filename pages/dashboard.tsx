@@ -24,8 +24,8 @@ function Dashboard() {
     <div>
       <h1>Dashboard - Protected Page</h1>
       <ul>
-        {users.map((user) => (
-          <li key={user.id}>{user.email}</li>
+        {users.map((user, idx) => (
+          <li key={idx}>{user}</li>
         ))}
       </ul>
     </div>
