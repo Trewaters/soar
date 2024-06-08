@@ -161,7 +161,7 @@ export default function UserDetails() {
   - https://www.ventureharbour.com/form-design-best-practices/
   */
   return (
-    <Stack>
+    <Stack spacing={2}>
       <LoginPage />
       <h1>User Details</h1>
       {/* Text Fields, https://mui.com/material-ui/react-text-field/ */}
