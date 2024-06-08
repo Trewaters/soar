@@ -1,7 +1,9 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
+import { MongoDBAdapter } from '@next-auth/mongodb-adapter'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { PrismaClient } from '@prisma/client'
+import clientPromise from '../../../lib/mongodb'
 
 const prisma = new PrismaClient()
 
@@ -17,7 +19,8 @@ export default NextAuth({
     }),
     // Add more providers here
   ],
-  adapter: PrismaAdapter(prisma),
+  // adapter: PrismaAdapter(prisma),
+  adapter: MongoDBAdapter(clientPromise),
   secret: process.env.NEXTAUTH_SECRET,
   session: {
     jwt: true,
