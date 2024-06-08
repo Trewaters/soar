@@ -4,10 +4,9 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { jwtDecode } from 'jwt-decode'
-import { User } from '@prisma/client'
 
 interface AuthContextType {
-  user: User
+  user: any
   login: (email: string, password: string) => Promise<void>
   logout: () => void
 }

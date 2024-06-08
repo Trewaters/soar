@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from 'next'
 // import bcrypt from 'bcrypt'
 import prisma from '../../lib/prisma'
 import { generateToken } from '../../utils/jwt'
-import { User } from '@prisma/client'
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,7 +13,7 @@ export default async function handler(
     const { email, password } = req.body
 
     // Find user by email
-    const user: User | null = await prisma.user.findUnique({ where: { email } })
+    const user: any = await prisma.user.findUnique({ where: { email } })
     if (!user) {
       return res.status(400).json({ message: 'Invalid email or password' })
     }
