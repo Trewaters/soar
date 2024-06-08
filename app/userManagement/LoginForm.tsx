@@ -5,7 +5,7 @@ import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { TextField, Button, Box } from '@mui/material'
 import axios from 'axios'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),

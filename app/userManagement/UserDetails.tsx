@@ -35,6 +35,8 @@ import SearchIcon from '@mui/icons-material/Search'
 import MenuIcon from '@mui/icons-material/Menu'
 import DirectionsIcon from '@mui/icons-material/Directions'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Login } from '@mui/icons-material'
+import LoginForm from './LoginForm'
 
 function not(a: readonly string[], b: readonly string[]) {
   return a.filter((value) => b.indexOf(value) === -1)
@@ -160,6 +162,7 @@ export default function UserDetails() {
   */
   return (
     <Stack>
+      <LoginForm />
       <h1>User Details</h1>
       {/* Text Fields, https://mui.com/material-ui/react-text-field/ */}
       <FormControl>
