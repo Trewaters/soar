@@ -99,7 +99,6 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 - **Top Navigation**, Use a component for Top Navigation.
 - **Footer**, Make a footer component. Include copyright 2023 - 2024, Name (Happy Yoga), Terms of use (tldr) or licensing, etc.
 - **Header**, Make a header component.
-- **Changelog**, [follow these tips](https://keepachangelog.com/en/1.1.0/)
 
 ## Milestones
 
