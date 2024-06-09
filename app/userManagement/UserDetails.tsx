@@ -200,7 +200,7 @@ export default function UserDetails() {
   - https://www.ventureharbour.com/form-design-best-practices/
   */
   return (
-    <Box sx={{ m: 3 }}>
+    <Box sx={{ width: '80%', m: 3 }}>
       <Grid
         container
         spacing={3}
