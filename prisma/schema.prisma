@@ -1,17 +1,14 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 datasource db {
-  provider = "mongodb" // or your database provider
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 generator client {
   provider = "prisma-client-js"
-  output   = "/generated/client"
+  output   = "./generated/client"
 }
 
 model User {
@@ -23,6 +20,7 @@ model User {
   image          String?
   accounts       Account[]
   sessions       Session[]
+  practitioners  Practitioner[]
 }
 
 model Account {
@@ -50,69 +48,69 @@ model Session {
 }
 
 model Practitioner {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
-  firstName    String
-  lastName     String
-  pronouns     String
-  emailPublic  String
-  emailInternal  String
-  emailAlternate  String
-  phoneContact        String
-  bio        String
-  headline      String
-  yogaStyle         String
-  yogaExperience        String
-  Facebook      String
-  Google        String
-  Patreon       String
-  Twitch        String
-  Twitter       String
-  websiteURL    String
-  blogURL       String
-  socialURL     String
-  streamingURL  String
-  isInstructor  String
-  isStudent     String
-  isPrivate     String
-  calendar       String
-  timezone       String
-  location       String
-  isLocationPublic       String
-  exportAccountInfo       String
-  deleteAccountInfo       String
-  deleteAccountInfo       String
-  company       String
-  userId        String @db.ObjectId
-  user         User   @relation(fields: [userId], references: [id])
-}
-
-model AsanaPostures {
+  id                 String @id @default(auto()) @map("_id") @db.ObjectId
+  firstName          String
+  lastName           String
+  pronouns           String
+  emailPublic        String
+  emailInternal      String
+  emailAlternate     String
+  phoneContact       String
+  bio                String
+  headline           String
+  yogaStyle          String
+  yogaExperience     String
+  Facebook           String
+  Google             String
+  Patreon            String
+  Twitch             String
+  Twitter            String
+  websiteURL         String
+  blogURL            String
+  socialURL          String
+  streamingURL       String
+  isInstructor       String
+  isStudent          String
+  isPrivate          String
+  calendar           String
+  timezone           String
+  location           String
+  isLocationPublic   String
+  exportAccountInfo  String
+  deleteAccountInfo  String
+  company            String
+  userId             String @db.ObjectId
+  user               User   @relation(fields: [userId], references: [id])
 }
 
 model Series {
-  seriesName    String
-  seriesPostures  String[]
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  seriesName     String
+  seriesPostures String[]
 }
 
 model FlowSeries {
-  id            Int        @id @default(autoincrement())
-  seriesName    String
-  seriesSet   String
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  seriesName     String
+  seriesSet      String
 }
 
 model Sequence {
-  id             Int        @id @default(autoincrement())
-  nameSequence      String
-  sequencesSeries  SequencesSeries[]
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  nameSequence    String
+  sequencesSeries SequencesSeries[]
 }
 
 model SequencesSeries {
-  seriesName    String
-  seriesSet     String[]
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  seriesName   String
+  seriesSet    String[]
+  sequenceId   String   @db.ObjectId
+  sequence     Sequence @relation(fields: [sequenceId], references: [id])
 }
 
 model Posture {
-  id              Int        @id @default(autoincrement())
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
   aka             String[]
   benefits        String
   category        String
@@ -133,21 +131,21 @@ model Posture {
 }
 
 model SanskritName {
-  id             Int        @id @default(autoincrement())
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
   latin          String
   devanagari     String
   simplified     String
   translation    Translation[]
-  postureId      Int
-  posture        Posture     @relation(fields: [postureId], references: [id])
+  postureId      String         @db.ObjectId
+  posture        Posture        @relation(fields: [postureId], references: [id])
 }
 
 model Translation {
-  id            Int        @id @default(autoincrement())
-  latin         String
-  devanagari    String
-  simplified    String
-  description   String
-  sanskritNameId Int
-  sanskritName  SanskritName @relation(fields: [sanskritNameId], references: [id])
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  latin          String
+  devanagari     String
+  simplified     String
+  description    String
+  sanskritNameId String        @db.ObjectId
+  sanskritName   SanskritName  @relation(fields: [sanskritNameId], references: [id])
 }
