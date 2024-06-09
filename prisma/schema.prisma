@@ -85,3 +85,69 @@ model Practitioner {
   userId        String @db.ObjectId
   user         User   @relation(fields: [userId], references: [id])
 }
+
+model AsanaPostures {
+}
+
+model Series {
+  seriesName    String
+  seriesPostures  String[]
+}
+
+model FlowSeries {
+  id            Int        @id @default(autoincrement())
+  seriesName    String
+  seriesSet   String
+}
+
+model Sequence {
+  id             Int        @id @default(autoincrement())
+  nameSequence      String
+  sequencesSeries  SequencesSeries[]
+}
+
+model SequencesSeries {
+  seriesName    String
+  seriesSet     String[]
+}
+
+model Posture {
+  id              Int        @id @default(autoincrement())
+  aka             String[]
+  benefits        String
+  category        String
+  description     String
+  difficulty      String
+  display_name    String
+  name            String
+  next_poses      String[]
+  preferred_side  String
+  previous_poses  String[]
+  sanskrit_names  SanskritName[]
+  sideways        Boolean
+  sort_name       String
+  subcategory     String
+  two_sided       Boolean
+  variations      Json?
+  visibility      String
+}
+
+model SanskritName {
+  id             Int        @id @default(autoincrement())
+  latin          String
+  devanagari     String
+  simplified     String
+  translation    Translation[]
+  postureId      Int
+  posture        Posture     @relation(fields: [postureId], references: [id])
+}
+
+model Translation {
+  id            Int        @id @default(autoincrement())
+  latin         String
+  devanagari    String
+  simplified    String
+  description   String
+  sanskritNameId Int
+  sanskritName  SanskritName @relation(fields: [sanskritNameId], references: [id])
+}

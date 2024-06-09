@@ -1,6 +1,6 @@
 # Soar with Happy Yoga, like a leaf on the wind.
 
-version 0.1.0 or [version badge](https://badge.fury.io/)
+version 1.1.0 or [version badge](https://badge.fury.io/)
 
 App used to find and track Yoga practice. Find poses, create flows, and track progress. For beginners and experts alike. Created by a yoga instructor for yoga instructors and students.
 
@@ -14,7 +14,7 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 **Flow**
 
-- Record and practice postures.
+- Practice posture series and sequences.
 
 **Asana Postures**
 
@@ -36,9 +36,20 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 - TBD
 
-#### Landing page
+#### Planner page
 
-- Goals (long term), Today's workout (present day), Historical (past) practice
+- Goal: Goals (long term),
+- Today: Today's workout (present day),
+- History: Historical (past) practice
+
+#### 8 Limb Path
+
+- Reference area.
+
+#### Users
+
+- Login
+- Practitioner Details, profile image
 
 ### Why is this app useful?
 
@@ -52,6 +63,9 @@ Used as an aid in anyones active yoga practice. This app won't get you started d
 
 - This project was generated with [NextJS](https://nextjs.org/docs) version 13.
 - Material MUI
+- MongoDB
+- Prisma
+-
 
 ## CONTRIBUTIONS
 

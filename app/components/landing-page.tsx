@@ -8,9 +8,10 @@ import ListItemText from '@mui/material/ListItemText'
 import Divider from '@mui/material/Divider'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
-import ConstructionOutlinedIcon from '@mui/icons-material/ConstructionOutlined'
+import EditNoteIcon from '@mui/icons-material/EditNote'
 import ChangeHistoryOutlinedIcon from '@mui/icons-material/ChangeHistoryOutlined'
 import AirOutlinedIcon from '@mui/icons-material/AirOutlined'
+import LyricsIcon from '@mui/icons-material/Lyrics'
 import Link from 'next/link'
 import { Typography } from '@mui/material'
 
@@ -68,6 +69,11 @@ const links = [
   {
     name: 'Breathwork',
     href: '/breathwork',
-    icon: <ConstructionOutlinedIcon />,
+    icon: <LyricsIcon />,
+  },
+  {
+    name: 'Yoga Journal',
+    href: '/yogaJournal',
+    icon: <EditNoteIcon />,
   },
 ]

@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MongoDB connection for storing data.
 - Created User profile to manage user accounts.
 - Created Registration, Logout and Login pages.
-- Add Google Authentication
+- Added Google Authentication
+- Added "Practitioner Details" user information component.
 
 ### Changed
 
