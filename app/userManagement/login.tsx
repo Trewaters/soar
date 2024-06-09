@@ -12,13 +12,12 @@ https://next-auth.js.org/getting-started/example
 */
 const LoginPage = () => {
   return (
-    <div>
-      <h1>Login</h1>
-      <Typography variant="h6">Auth Buttons</Typography>
+    <>
+      {/* <Typography variant="h6">Auth Buttons</Typography> */}
       {/* <AuthButtons /> */}
-      <Typography variant="h6">Login Form</Typography>
+      <Typography variant="h6">Login</Typography>
       <LoginForm />
-    </div>
+    </>
   )
 }
 

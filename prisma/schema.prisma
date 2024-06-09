@@ -49,3 +49,39 @@ model Session {
   user         User     @relation(fields: [userId], references: [id])
 }
 
+model Practitioner {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  firstName    String
+  lastName     String
+  pronouns     String
+  emailPublic  String
+  emailInternal  String
+  emailAlternate  String
+  phoneContact        String
+  bio        String
+  headline      String
+  yogaStyle         String
+  yogaExperience        String
+  Facebook      String
+  Google        String
+  Patreon       String
+  Twitch        String
+  Twitter       String
+  websiteURL    String
+  blogURL       String
+  socialURL     String
+  streamingURL  String
+  isInstructor  String
+  isStudent     String
+  isPrivate     String
+  calendar       String
+  timezone       String
+  location       String
+  isLocationPublic       String
+  exportAccountInfo       String
+  deleteAccountInfo       String
+  deleteAccountInfo       String
+  company       String
+  userId        String @db.ObjectId
+  user         User   @relation(fields: [userId], references: [id])
+}
