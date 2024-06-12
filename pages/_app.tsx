@@ -1,16 +1,20 @@
 import React from 'react'
-// import { AuthProvider } from '@app/context/AuthContext'
 import { SessionProvider } from 'next-auth/react'
 import { AppProps } from 'next/app'
-import '../styles/globals.css'
+import '@styles/globals.css'
+import { AuthProvider } from '@app/context/AuthContext'
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+function SoarApp({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   return (
-    <SessionProvider session={pageProps.session}>
-      <Component {...pageProps} />
-      {/* <AuthProvider>
+    <SessionProvider session={session}>
+      <AuthProvider>
         <Component {...pageProps} />
-      </AuthProvider> */}
+      </AuthProvider>
     </SessionProvider>
   )
 }
+
+export default SoarApp

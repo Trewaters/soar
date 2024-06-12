@@ -1,5 +1,3 @@
-// pages/login.tsx
-
 import { Typography } from '@mui/material'
 import AuthButtons from './AuthButtons'
 import LoginForm from './LoginForm'
