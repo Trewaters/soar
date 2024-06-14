@@ -45,8 +45,6 @@ import SearchIcon from '@mui/icons-material/Search'
 import MenuIcon from '@mui/icons-material/Menu'
 import DirectionsIcon from '@mui/icons-material/Directions'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-// import { Login } from '@mui/icons-material'
-import LoginPage from './login'
 import { red } from '@mui/material/colors'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import FavoriteIcon from '@mui/icons-material/Favorite'
@@ -202,9 +200,6 @@ export default function UserDetails() {
   return (
     <Box sx={{ width: '50%', ml: '100px', display: 'flex' }}>
       <Grid container spacing={3} direction="row">
-        <Grid xs={12} item>
-          <LoginPage />
-        </Grid>
         {/* Text Fields, https://mui.com/material-ui/react-text-field/ */}
         <Grid xs={12} item>
           <Typography variant="h1">Practitioner Details</Typography>

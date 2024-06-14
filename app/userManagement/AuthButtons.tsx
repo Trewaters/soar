@@ -1,13 +1,14 @@
+'use client'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { Button, Stack } from '@mui/material'
 
 export default function AuthButtons() {
-  // const { data: session, status } = useSession()
+  const { data: session, status } = useSession()
 
   return (
     <Stack spacing={2} alignItems="center">
       Broken
-      {/* {!session && (
+      {!session && (
         <>
           <Button
             variant="contained"
@@ -32,7 +33,7 @@ export default function AuthButtons() {
             Sign out
           </Button>
         </>
-      )} */}
+      )}
     </Stack>
   )
 }

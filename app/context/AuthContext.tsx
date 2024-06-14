@@ -1,13 +1,12 @@
-// context/AuthContext.tsx
+'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import axios from 'axios'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { jwtDecode } from 'jwt-decode'
 
 interface AuthContextType {
   user: any
-  // login: (email: string, password: string) => Promise<void>
   logout: () => void
 }
 
@@ -31,16 +30,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, [])
 
-  // const login = async (email: string, password: string) => {
-  //   const response = await axios.post('/api/login', { email, password })
-  //   const token = response.data.token
-  //   localStorage.setItem('token', token)
-  //   const decoded = jwtDecode(token) as { userId: string }
-  //   const user = await axios.get(`/api/user/${decoded.userId}`)
-  //   setUser(user.data)
-  //   router.push('/dashboard')
-  // }
-
   const logout = () => {
     localStorage.removeItem('token')
     setUser('')
@@ -48,11 +37,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   return (
-    // <AuthContext.Provider value={{ user, login, logout }}>
     <AuthContext.Provider value={{ user, logout }}>
       {children}
     </AuthContext.Provider>
   )
 }
 
-export const useAuth = () => useContext(AuthContext)
+export const useAuth = () => {
+  const context = useContext(AuthContext)
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context
+}
