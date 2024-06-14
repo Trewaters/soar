@@ -200,14 +200,8 @@ export default function UserDetails() {
   - https://www.ventureharbour.com/form-design-best-practices/
   */
   return (
-    <Box sx={{ width: '80%', m: 3 }}>
-      <Grid
-        container
-        spacing={3}
-        justifyContent="center"
-        alignItems="center"
-        direction="row"
-      >
+    <Box sx={{ width: '50%', ml: '100px', display: 'flex' }}>
+      <Grid container spacing={3} direction="row">
         <Grid xs={12} item>
           <LoginPage />
         </Grid>

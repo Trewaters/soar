@@ -28,7 +28,7 @@
       "@components/*": ["./app/components/*"],
       "@interfaces/*": ["./app/interfaces/*"],
       "@styles/*": ["./styles/*"],
-      "@client-api/*": ["./pages/api/*"]
+      "@client-api/*": ["app/api/*"]
     }
   },
   "include": [
