@@ -2,9 +2,9 @@ import React from 'react'
 import { Box, Typography } from '@mui/material'
 import TabHeader from '@components/tab-header'
 import CurrentTime from '@components/current-time'
-import LoginPage from './userManagement/login'
+import LoginPage from './userManagement/LoginPage'
 
-export default function Home() {
+export default async function Home() {
   return (
     <>
       <LoginPage />
