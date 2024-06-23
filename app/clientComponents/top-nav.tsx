@@ -41,8 +41,13 @@ export default function TopNav() {
               </Link>
             </MenuItem>
             <MenuItem>
-              <Link href="/planner" passHref>
-                <Typography variant="body1">Planner</Typography>
+              <Link href="/flowSeries" passHref>
+                <Typography variant="body1">Flow</Typography>
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <Link href="/asanaPostures" passHref>
+                <Typography variant="body1">Postures</Typography>
               </Link>
             </MenuItem>
           </Menu>
