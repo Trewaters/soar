@@ -2,7 +2,7 @@ import React from 'react'
 import { Button } from '@mui/material'
 import { signIn, signOut } from 'auth'
 
-export default function UserButton({
+export default function SignIn({
   provider,
   ...props
 }: { provider?: string } & React.ComponentPropsWithRef<typeof Button>) {
@@ -13,7 +13,9 @@ export default function UserButton({
         await signIn(provider)
       }}
     >
-      <Button {...props}>Sign In</Button>
+      <Button type="submit" variant="contained" {...props}>
+        Sign In
+      </Button>
     </form>
   )
 }
@@ -26,7 +28,9 @@ export function SignOut(props: React.ComponentPropsWithRef<typeof Button>) {
         await signOut()
       }}
     >
-      <Button {...props}>Sign Out</Button>
+      <Button type="submit" variant="contained" {...props}>
+        Sign Out
+      </Button>
     </form>
   )
 }

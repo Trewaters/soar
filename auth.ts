@@ -6,18 +6,18 @@ import Google from 'next-auth/providers/google'
 import type { NextAuthConfig } from 'next-auth'
 
 const config = {
-  // theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
+  theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
   providers: [GitHub, Google],
   basePath: '/auth',
   callbacks: {
     authorized({ request, auth }) {
       const { pathname } = request.nextUrl
-      if (pathname === '/middleware-example') return !!auth
+      if (pathname === '/') return !!auth
       return true
     },
     jwt({ token, trigger, session, account }) {
       if (trigger === 'update') token.name = session.user.name
-      if (account?.provider === 'keycloak') {
+      if (account?.provider === 'google') {
         return { ...token, accessToken: account.access_token }
       }
       return token
