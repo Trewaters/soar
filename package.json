@@ -10,7 +10,8 @@
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "jest",
     "cover": "jest --coverage",
-    "pretty": "prettier --write ."
+    "pretty": "prettier --write .",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

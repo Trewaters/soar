@@ -179,7 +179,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - `REMOVED`: for now removed features.
 - `FIXED`: for any bug fixes.
 - `SECURITY`: in case of vulnerabilities.
-- `AUDIT`: code clean up.
+- `AUDIT`: code clean up. Carefully removing unnecessary files.
 
 ### Development server
 
