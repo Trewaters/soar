@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import Typography from '@mui/material/Typography'
-import PostureSearch from '@app/components/posture-search'
+import PostureSearch from '@components/posture-search'
 import postureData from '@interfaces/postureData'
 import prisma from '@lib/prisma'
 
