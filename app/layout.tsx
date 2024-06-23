@@ -1,7 +1,6 @@
-// import type { ReactNode } from 'react'
 import '@styles/globals.css'
 import type { Metadata } from 'next'
-// import TopNav from '@components/top-nav'
+import TopNav from '@components/top-nav'
 // import Providers from '@app/Providers'
 // import { AuthProvider } from './context/AuthContext'
 // import { SessionProvider } from 'next-auth/react'
@@ -27,16 +26,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="en">
       <body className={inter.className}>
         <Header />
-        {/* <Providers>
-          <nav>
-            <TopNav />
-          </nav>
-          <SessionProvider>
-            <AuthProvider>
-            <main>{children}</main>
-            </AuthProvider>
-            </SessionProvider>
-            </Providers> */}
+        <nav>
+          <TopNav />
+        </nav>
         <main>{children}</main>
       </body>
     </html>

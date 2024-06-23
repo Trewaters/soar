@@ -69,7 +69,16 @@ Used as an aid in anyones active yoga practice. This app won't get you started d
 
 ## CONTRIBUTIONS
 
-Solo project so far. Code and graphic design contributors are welcome and encouraged to help. Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to me. (I will copy their instructions when I get time, but for now ditto to what they say)
+Solo project so far. Code and graphic design contributors are welcome and encouraged to help.
+
+**Please read** [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to me. (I will copy their instructions when I get time, but for now ditto to what they say)
+
+### How to Contribute?
+
+I NEED HELP WITH...
+
+1. **Frontend design**: Designing look and feel for pages is not my strength. I would love help laying out pages better. _Make the app pretty!_
+2. **Fix Bugs**: See something wrong fix it or create an issue identifying how to reproduce the bug.
 
 ## Authors
 
@@ -170,6 +179,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - `REMOVED`: for now removed features.
 - `FIXED`: for any bug fixes.
 - `SECURITY`: in case of vulnerabilities.
+- `AUDIT`: code clean up.
 
 ### Development server
 
