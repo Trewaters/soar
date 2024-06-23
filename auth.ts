@@ -20,6 +20,9 @@ const config = {
       if (account?.provider === 'google') {
         return { ...token, accessToken: account.access_token }
       }
+      if (account?.provider === 'github') {
+        return { ...token, accessToken: account.access_token }
+      }
       return token
     },
     async session({ session, token }) {
