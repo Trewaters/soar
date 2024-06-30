@@ -14,6 +14,9 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@auth/core": "^0.34.1",
+    "@auth/mongodb-adapter": "^3.4.1",
+    "@auth/prisma-adapter": "^2.4.1",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.19",
@@ -26,7 +29,7 @@
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "luxon": "^3.4.4",
-    "mongodb": "^5.9.2",
+    "mongodb": "^6.8.0",
     "next": "latest",
     "next-auth": "^5.0.0-beta.19",
     "react": "^18.2.0",

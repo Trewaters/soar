@@ -1,4 +1,4 @@
-import { auth } from 'auth'
+import { auth } from '@/auth'
 import SignIn, { SignOut } from './auth-components'
 import { Avatar, Typography } from '@mui/material'
 

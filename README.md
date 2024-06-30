@@ -191,6 +191,50 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+Dev tip: sometimes I need to clear my npm cache so the versions are installed correctly
+
+```bash
+npm cache clean --force
+```
+
+**Prisma Databse**
+
+Start using Prisma Client in Node.js (See: https://pris.ly/d/client)
+
+```js
+import { PrismaClient } from './prisma/generated/client'
+const prisma = new PrismaClient()
+```
+
+or start using Prisma Client at the edge (See: https://pris.ly/d/accelerate)
+
+```js
+import { PrismaClient } from './prisma/generated/client/edge'
+const prisma = new PrismaClient()
+```
+
+**Known Error (as of 2024-06-30 11:38:23)**
+$ npm exec prisma migrate dev
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": MongoDB database "yogaDBSandbox" at "localhost:27017"
+
+Error: The "mongodb" provider is not supported with this command. For more info see https://www.prisma.io/docs/concepts/database-connectors/mongodb
+0: schema_core::state::DevDiagnostic
+at schema-engine\core\src\state.rs:276
+
+This works but not sure what it is doing.
+
+```bash
+npm exec prisma db push
+```
+
+This is failing for mongodb at the moment
+
+```bash
+npm exec prisma migrate dev
+```
+
 ### Running unit tests
 
 execute the unit tests via **Jest** [Jest](https://jestjs.io/).

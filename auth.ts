@@ -1,13 +1,22 @@
 import NextAuth from 'next-auth'
-import 'next-auth/jwt'
 
-import GitHub from 'next-auth/providers/github'
-import Google from 'next-auth/providers/google'
 import type { NextAuthConfig } from 'next-auth'
+import { type Adapter } from '@auth/core/adapters'
+import { PrismaAdapter } from '@auth/prisma-adapter'
+import { PrismaClient } from '@prisma/generated/client'
+import authConfig from '@auth.config'
+
+const prisma = new PrismaClient()
+
+const MyAdapter: Adapter = {
+  ...PrismaAdapter(prisma),
+  // Add your custom methods here
+}
 
 const config = {
   theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
-  providers: [GitHub, Google],
+  // adapter: PrismaAdapter(prisma),
+  // adapter: MyAdapter,
   basePath: '/auth',
   callbacks: {
     authorized({ request, auth }) {
@@ -25,13 +34,9 @@ const config = {
       }
       return token
     },
-    async session({ session, token }) {
-      if (token?.accessToken) {
-        session.accessToken = token.accessToken
-      }
-      return session
-    },
   },
+  ...authConfig,
+  session: { strategy: 'jwt' },
   experimental: {
     enableWebAuthn: true,
   },
@@ -39,15 +44,3 @@ const config = {
 } satisfies NextAuthConfig
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config)
-
-declare module 'next-auth' {
-  interface Session {
-    accessToken?: string
-  }
-}
-
-declare module 'next-auth/jwt' {
-  interface JWT {
-    accessToken?: string
-  }
-}
