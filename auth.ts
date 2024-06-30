@@ -1,17 +1,17 @@
 import NextAuth from 'next-auth'
 
 import type { NextAuthConfig } from 'next-auth'
-import { type Adapter } from '@auth/core/adapters'
-import { PrismaAdapter } from '@auth/prisma-adapter'
-import { PrismaClient } from '@prisma/generated/client'
+// import { type Adapter } from '@auth/core/adapters'
+// import { PrismaAdapter } from '@auth/prisma-adapter'
+// import { PrismaClient } from '@prisma/generated/client'
 import authConfig from '@auth.config'
 
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient()
 
-const MyAdapter: Adapter = {
-  ...PrismaAdapter(prisma),
-  // Add your custom methods here
-}
+// const MyAdapter: Adapter = {
+// ...PrismaAdapter(prisma),
+// Add your custom methods here
+// }
 
 const config = {
   theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
