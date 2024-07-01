@@ -19,6 +19,7 @@ Resource Links:
 
 * example app using mongodb adapter:
 - https://github.com/vercel/next.js/tree/canary/examples/with-mongodb
+- https://authjs.dev/getting-started/adapters/mongodb (this worked! 2024-06-30 20:36:59)
 */
 
 const MyAdapter: Adapter = {
