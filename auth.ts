@@ -28,7 +28,7 @@ const MyAdapter: Adapter = {
 
 const config = {
   theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
-  adapter: MyAdapter,
+  // adapter: MyAdapter,
   basePath: '/auth',
   callbacks: {
     authorized({ request, auth }) {
