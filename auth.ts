@@ -1,9 +1,9 @@
 import NextAuth from 'next-auth'
 import type { NextAuthConfig } from 'next-auth'
-import { type Adapter } from '@auth/core/adapters'
-import { MongoDBAdapter } from '@auth/mongodb-adapter'
+// import { type Adapter } from '@auth/core/adapters'
+// import { MongoDBAdapter } from '@auth/mongodb-adapter'
 import authConfig from '@auth.config'
-import clientPromise from '@lib/db'
+// import clientPromise from '@lib/db'
 
 /*  
 Resource Links:
@@ -20,13 +20,13 @@ Resource Links:
 - https://authjs.dev/getting-started/adapters/mongodb (this worked! 2024-06-30 20:36:59)
 */
 
-const MyAdapter: Adapter = {
-  ...MongoDBAdapter(clientPromise),
-}
+// const MyAdapter: Adapter = {
+//   ...MongoDBAdapter(clientPromise),
+// }
 
 const config = {
   theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
-  adapter: MyAdapter,
+  // adapter: MyAdapter,
   basePath: '/auth',
   callbacks: {
     authorized({ request, auth }) {
