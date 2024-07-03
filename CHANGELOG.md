@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- version 0.1.0 setup Changelog ([**@trewaters**](https://github.com/trewaters))
+- Prisma integrated to handle user login and accounts.
+- MongoDB connection for storing data.
+- Created User profile to manage user accounts.
+- Created Registration, Logout and Login pages.
+- Added Google Authentication
+- Added "Practitioner Details" user information component.
 
 ### Changed
 
@@ -23,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- not tracked until now
+- version 0.1.0 setup Changelog ([**@trewaters**](https://github.com/trewaters))
 
 ### Fixed
 

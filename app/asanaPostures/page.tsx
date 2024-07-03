@@ -1,8 +1,24 @@
 'use client'
 import React from 'react'
 import Typography from '@mui/material/Typography'
-import PostureSearch from '@app/components/posture-search'
+import PostureSearch from '@components/posture-search'
 import postureData from '@interfaces/postureData'
+// import prisma from '@lib/prisma'
+
+// async function main() {
+//   const users = await prisma.user.findMany()
+//   console.log(users)
+// }
+
+// main()
+//   .then(async () => {
+//     await prisma.$disconnect()
+//   })
+//   .catch(async (e) => {
+//     console.error(e)
+//     await prisma.$disconnect()
+//     process.exit(1)
+//   })
 
 async function getData() {
   const res = await fetch('/api/poses')

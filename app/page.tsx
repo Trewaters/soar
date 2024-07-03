@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material'
 import TabHeader from '@components/tab-header'
 import CurrentTime from '@components/current-time'
 
-export default function Home() {
+export default async function Home() {
   return (
     <>
       <Box textAlign="center">

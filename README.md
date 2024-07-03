@@ -1,6 +1,6 @@
 # Soar with Happy Yoga, like a leaf on the wind.
 
-version 0.1.0 or [version badge](https://badge.fury.io/)
+version 1.1.0 or [version badge](https://badge.fury.io/)
 
 App used to find and track Yoga practice. Find poses, create flows, and track progress. For beginners and experts alike. Created by a yoga instructor for yoga instructors and students.
 
@@ -14,7 +14,7 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 **Flow**
 
-- Record and practice postures.
+- Practice posture series and sequences.
 
 **Asana Postures**
 
@@ -36,9 +36,20 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 - TBD
 
-#### Landing page
+#### Planner page
 
-- Goals (long term), Today's workout (present day), Historical (past) practice
+- Goal: Goals (long term),
+- Today: Today's workout (present day),
+- History: Historical (past) practice
+
+#### 8 Limb Path
+
+- Reference area.
+
+#### Users
+
+- Login
+- Practitioner Details, profile image
 
 ### Why is this app useful?
 
@@ -52,10 +63,22 @@ Used as an aid in anyones active yoga practice. This app won't get you started d
 
 - This project was generated with [NextJS](https://nextjs.org/docs) version 13.
 - Material MUI
+- MongoDB
+- Prisma
+-
 
 ## CONTRIBUTIONS
 
-Solo project so far. Code and graphic design contributors are welcome and encouraged to help. Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to me. (I will copy their instructions when I get time, but for now ditto to what they say)
+Solo project so far. Code and graphic design contributors are welcome and encouraged to help.
+
+**Please read** [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to me. (I will copy their instructions when I get time, but for now ditto to what they say)
+
+### How to Contribute?
+
+I NEED HELP WITH...
+
+1. **Frontend design**: Designing look and feel for pages is not my strength. I would love help laying out pages better. _Make the app pretty!_
+2. **Fix Bugs**: See something wrong fix it or create an issue identifying how to reproduce the bug.
 
 ## Authors
 
@@ -81,18 +104,16 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 ### Current Goals
 
 - (2024-06-01 09:17:02) update `jest.config.ts` old config found here "C:\Users\trewa\OneDrive\01-WORMHOLE\Yoga\app-Soar\old code\jest.config.ts"
-- **Feature Goal**, record personal yoga practice in app.
-- **Posture Card**, The Card comes up on Search. Polish the look of it.
+- **Record practice**, record personal yoga practice in app.
 - **Top Navigation**, Use a component for Top Navigation.
 - **Footer**, Make a footer component. Include copyright 2023 - 2024, Name (Happy Yoga), Terms of use (tldr) or licensing, etc.
 - **Header**, Make a header component.
-- **Yoga Journal**, Show date of entry, text, record voice, and allow image(s). Add share feature.
-- **Changelog**, [follow these tips](https://keepachangelog.com/en/1.1.0/)
 
 ## Milestones
 
 - [x] 1.0.0 - MVP ( 2 sections - each with material, "Flow" and "Asana Postures").
 - [ ] 2.0.0 - Create User Profiles (connect to db)
+- [ ] 2.1.0 - Routine/Practice Planner. Allow user to track progress and goals.
 - [ ] x.x.0 - Allow User Profiles to save their progress (connect to db)
 - [ ] x.x.0 - User Profile Customizations (Connect "Planner" buttons)
 - [ ] x.x.0 - User Profile Customizations
@@ -100,6 +121,7 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 - [ ] x.x.0 - Users can create custom flows
 - [ ] x.x.0 - Users can create journal about Meditations
 - [ ] x.x.0 - Users can create custom Mantras
+- [ ] x.x.0 - Add section: Meditation, Mantra, Breathwork
 
 ### Known Bugs
 
@@ -157,6 +179,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - `REMOVED`: for now removed features.
 - `FIXED`: for any bug fixes.
 - `SECURITY`: in case of vulnerabilities.
+- `AUDIT`: code clean up. Carefully removing unnecessary files.
 
 ### Development server
 
@@ -167,6 +190,50 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+Dev tip: sometimes I need to clear my npm cache so the versions are installed correctly
+
+```bash
+npm cache clean --force
+```
+
+**Prisma Databse**
+
+Start using Prisma Client in Node.js (See: https://pris.ly/d/client)
+
+```js
+import { PrismaClient } from './prisma/generated/client'
+const prisma = new PrismaClient()
+```
+
+or start using Prisma Client at the edge (See: https://pris.ly/d/accelerate)
+
+```js
+import { PrismaClient } from './prisma/generated/client/edge'
+const prisma = new PrismaClient()
+```
+
+**Known Error (as of 2024-06-30 11:38:23)**
+$ npm exec prisma migrate dev
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": MongoDB database "yogaDBSandbox" at "localhost:27017"
+
+Error: The "mongodb" provider is not supported with this command. For more info see https://www.prisma.io/docs/concepts/database-connectors/mongodb
+0: schema_core::state::DevDiagnostic
+at schema-engine\core\src\state.rs:276
+
+This works but not sure what it is doing.
+
+```bash
+npm exec prisma db push
+```
+
+This is failing for mongodb at the moment
+
+```bash
+npm exec prisma migrate dev
+```
 
 ### Running unit tests
 
