@@ -8,10 +8,8 @@ import clientPromise from '@lib/db'
 /*  
 Resource Links:
 
-- https://authjs.dev/getting-started/adapters/prisma
 - https://www.prisma.io/docs/orm/overview/databases/mongodb
 - https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/mongodb/connect-your-database-typescript-mongodb
-- https://authjs.dev/getting-started/adapters/mongodb
 - https://authjs.dev/getting-started/migrating-to-v5#authenticating-server-side
 - https://authjs.dev/reference/core/adapters#adapter
 - https://authjs.dev/reference/nextjs/jwt
@@ -28,7 +26,7 @@ const MyAdapter: Adapter = {
 
 const config = {
   theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
-  // adapter: MyAdapter,
+  adapter: MyAdapter,
   basePath: '/auth',
   callbacks: {
     authorized({ request, auth }) {
