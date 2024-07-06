@@ -1,9 +1,6 @@
 import NextAuth from 'next-auth'
 import type { NextAuthConfig } from 'next-auth'
-import { type Adapter } from '@auth/core/adapters'
-import { MongoDBAdapter } from '@auth/mongodb-adapter'
 import authConfig from '@auth.config'
-import clientPromise from '@lib/db'
 
 /*  
 Resource Links:
@@ -20,13 +17,9 @@ Resource Links:
 - https://authjs.dev/getting-started/adapters/mongodb (this worked! 2024-06-30 20:36:59)
 */
 
-const MyAdapter: Adapter = {
-  ...MongoDBAdapter(clientPromise),
-}
-
 const config = {
+  ...authConfig,
   theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
-  adapter: MyAdapter,
   basePath: '/auth',
   callbacks: {
     authorized({ request, auth }) {
@@ -44,8 +37,47 @@ const config = {
       }
       return token
     },
+    // async signIn({ user, account, profile }) {
+    //   const email = user.email
+
+    //   // Check if the user already exists
+    //   const existingUser = await prisma.user.findUnique({
+    //     where: { email },
+    //   })
+
+    //   if (!existingUser) {
+    //     // Create a new user
+    //     await prisma.user.create({
+    //       data: {
+    //         email: user.email,
+    //         name: user.name,
+    //         image: user.image,
+    //         accounts: {
+    //           create: {
+    //             provider: account.provider,
+    //             providerAccountId: account.providerAccountId,
+    //             refresh_token: account.refresh_token,
+    //             access_token: account.access_token,
+    //             expires_at: account.expires_at,
+    //             token_type: account.token_type,
+    //             scope: account.scope,
+    //             id_token: account.id_token,
+    //             session_state: account.session_state,
+    //           },
+    //         },
+    //       },
+    //     })
+    //   }
+    //   return true
+    // },
+    // async session({ session, token }) {
+    //   if (token) {
+    //     session.user.id = token.id
+    //   }
+    //   return session
+    // },
   },
-  ...authConfig,
+  // secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: 'jwt' },
   experimental: {
     enableWebAuthn: true,
