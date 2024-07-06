@@ -54,3 +54,47 @@ const config = {
 } satisfies NextAuthConfig
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config)
+
+/*  */
+// const MyAdapter: Adapter = {
+//   ...MongoDBAdapter(clientPromise),
+// }
+
+/*  
+use auth/core instead of next-auth
+*/
+// import Auth, { type AuthConfig } from '@auth/core'
+
+// export const authConfig: AuthConfig = {...}
+
+// const request = new Request("https://example.com")
+// const response = await AuthHandler(request, authConfig)
+
+// const config = {
+//   theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
+//   adapter: MyAdapter,
+//   basePath: '/auth',
+//   callbacks: {
+//     // authorized({ request, auth }) {
+//     //   const { pathname } = request.nextUrl
+//     //   if (pathname === '/') return !!auth
+//     //   return true
+//     // },
+//     jwt({ token, trigger, session, account }) {
+//       if (trigger === 'update') token.name = session.user.name
+//       if (account?.provider === 'google') {
+//         return { ...token, accessToken: account.access_token }
+//       }
+//       if (account?.provider === 'github') {
+//         return { ...token, accessToken: account.access_token }
+//       }
+//       return token
+//     },
+//   },
+//   ...authConfig,
+//   session: { strategy: 'jwt' },
+//   experimental: {
+//     enableWebAuthn: true,
+//   },
+//   debug: process.env.NODE_ENV !== 'production' ? true : false,
+// } satisfies AuthConfig
