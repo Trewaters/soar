@@ -4,6 +4,9 @@ import { type Adapter } from '@auth/core/adapters'
 import { MongoDBAdapter } from '@auth/mongodb-adapter'
 import authConfig from '@auth.config'
 import clientPromise from '@lib/db'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 /*  
 Resource Links:
@@ -34,13 +37,56 @@ const config = {
       if (pathname === '/') return !!auth
       return true
     },
-    jwt({ token, trigger, session, account }) {
+    async signIn({ user, account, profile }) {
+      const email = user.email
+
+      // Check if the user already exists
+      const existingUser = await prisma.user.findUnique({
+        where: { email },
+      })
+
+      if (!existingUser && account) {
+        // Create a new user
+        await prisma.user.create({
+          data: {
+            email: user.email,
+            name: user.name,
+            image: user.image,
+            accounts: {
+              create: {
+                provider: account.provider,
+                providerAccountId: account.providerAccountId,
+                refresh_token: account.refresh_token,
+                access_token: account.access_token,
+                expires_at: account.expires_at,
+                token_type: account.token_type,
+                scope: account.scope,
+                id_token: account.id_token,
+                session_state: account.session_state,
+              },
+            },
+            profile: profile,
+          },
+        })
+      }
+      return true
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id as string
+      }
+      return session
+    },
+    jwt({ token, trigger, session, account, user }) {
       if (trigger === 'update') token.name = session.user.name
       if (account?.provider === 'google') {
         return { ...token, accessToken: account.access_token }
       }
       if (account?.provider === 'github') {
         return { ...token, accessToken: account.access_token }
+      }
+      if (user) {
+        token.id = user.id
       }
       return token
     },
@@ -53,7 +99,7 @@ const config = {
   debug: process.env.NODE_ENV !== 'production' ? true : false,
 } satisfies NextAuthConfig
 
-export const { handlers, auth, signIn, signOut } = NextAuth(config)
+export const { auth, handlers, signIn, signOut } = NextAuth(config)
 
 /*  */
 // const MyAdapter: Adapter = {

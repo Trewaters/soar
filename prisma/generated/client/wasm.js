@@ -16,12 +16,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 5.15.1
- * Query Engine version: 5675a3182f972f1a8f31d16eee6abf4fd54910e3
+ * Prisma Client JS version: 5.16.1
+ * Query Engine version: 34ace0eb2704183d2c05b60b52fba5c43c13f303
  */
 Prisma.prismaVersion = {
-  client: "5.15.1",
-  engine: "5675a3182f972f1a8f31d16eee6abf4fd54910e3"
+  client: "5.16.1",
+  engine: "34ace0eb2704183d2c05b60b52fba5c43c13f303"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -118,6 +118,7 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
+  profile: 'profile',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -166,6 +167,102 @@ exports.Prisma.AuthenticatorScalarFieldEnum = {
   transports: 'transports'
 };
 
+exports.Prisma.PractitionerScalarFieldEnum = {
+  id: 'id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  pronouns: 'pronouns',
+  emailPublic: 'emailPublic',
+  emailInternal: 'emailInternal',
+  emailAlternate: 'emailAlternate',
+  phoneContact: 'phoneContact',
+  bio: 'bio',
+  headline: 'headline',
+  yogaStyle: 'yogaStyle',
+  yogaExperience: 'yogaExperience',
+  Facebook: 'Facebook',
+  Google: 'Google',
+  Patreon: 'Patreon',
+  Twitch: 'Twitch',
+  Twitter: 'Twitter',
+  websiteURL: 'websiteURL',
+  blogURL: 'blogURL',
+  socialURL: 'socialURL',
+  streamingURL: 'streamingURL',
+  isInstructor: 'isInstructor',
+  isStudent: 'isStudent',
+  isPrivate: 'isPrivate',
+  calendar: 'calendar',
+  timezone: 'timezone',
+  location: 'location',
+  isLocationPublic: 'isLocationPublic',
+  exportAccountInfo: 'exportAccountInfo',
+  deleteAccountInfo: 'deleteAccountInfo',
+  company: 'company',
+  userId: 'userId'
+};
+
+exports.Prisma.SeriesScalarFieldEnum = {
+  id: 'id',
+  seriesName: 'seriesName',
+  seriesPostures: 'seriesPostures'
+};
+
+exports.Prisma.FlowSeriesScalarFieldEnum = {
+  id: 'id',
+  seriesName: 'seriesName',
+  seriesSet: 'seriesSet'
+};
+
+exports.Prisma.SequenceScalarFieldEnum = {
+  id: 'id',
+  nameSequence: 'nameSequence'
+};
+
+exports.Prisma.SequencesSeriesScalarFieldEnum = {
+  id: 'id',
+  seriesName: 'seriesName',
+  seriesSet: 'seriesSet',
+  sequenceId: 'sequenceId'
+};
+
+exports.Prisma.PostureScalarFieldEnum = {
+  id: 'id',
+  aka: 'aka',
+  benefits: 'benefits',
+  category: 'category',
+  description: 'description',
+  difficulty: 'difficulty',
+  display_name: 'display_name',
+  name: 'name',
+  next_poses: 'next_poses',
+  preferred_side: 'preferred_side',
+  previous_poses: 'previous_poses',
+  sideways: 'sideways',
+  sort_name: 'sort_name',
+  subcategory: 'subcategory',
+  two_sided: 'two_sided',
+  variations: 'variations',
+  visibility: 'visibility'
+};
+
+exports.Prisma.SanskritNameScalarFieldEnum = {
+  id: 'id',
+  latin: 'latin',
+  devanagari: 'devanagari',
+  simplified: 'simplified',
+  postureId: 'postureId'
+};
+
+exports.Prisma.TranslationScalarFieldEnum = {
+  id: 'id',
+  latin: 'latin',
+  devanagari: 'devanagari',
+  simplified: 'simplified',
+  description: 'description',
+  sanskritNameId: 'sanskritNameId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -182,7 +279,15 @@ exports.Prisma.ModelName = {
   Account: 'Account',
   Session: 'Session',
   VerificationToken: 'VerificationToken',
-  Authenticator: 'Authenticator'
+  Authenticator: 'Authenticator',
+  Practitioner: 'Practitioner',
+  Series: 'Series',
+  FlowSeries: 'FlowSeries',
+  Sequence: 'Sequence',
+  SequencesSeries: 'SequencesSeries',
+  Posture: 'Posture',
+  SanskritName: 'SanskritName',
+  Translation: 'Translation'
 };
 
 /**
