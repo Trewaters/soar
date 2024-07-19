@@ -65,7 +65,7 @@ Used as an aid in anyones active yoga practice. This app won't get you started d
 - Material MUI
 - MongoDB
 - Prisma
--
+- Auth.js v5 (Google, Github, Twitter X)
 
 ## CONTRIBUTIONS
 
