@@ -51,23 +51,19 @@ const config = {
         // Create a new user
         // await prisma.user.create({
         //   data: {
-        //     email: user.email,
-        //     name: user.name,
-        //     image: user.image,
-        //     accounts: {
-        //       create: {
-        //         provider: account.provider,
-        //         providerAccountId: account.providerAccountId,
-        //         refresh_token: account.refresh_token ?? undefined,
-        //         access_token: account.access_token ?? undefined,
-        //         expires_at: account.expires_at ?? undefined,
-        //         token_type: account.token_type ?? undefined,
-        //         scope: account.scope ?? undefined,
-        //         id_token: account.id_token ?? undefined,
-        //         session_state: JSON.stringify(account.session_state),
-        //       },
-        //     },
-        //     profile: JSON.stringify(profile),
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
         //   },
         // })
         try {
@@ -78,6 +74,20 @@ const config = {
               email: user.email,
               image: user.id,
               profile: JSON.stringify(profile),
+              accounts: {
+                create: {
+                  provider: account.provider,
+                  providerAccountId: account.providerAccountId,
+                  refresh_token: account.refresh_token ?? undefined,
+                  access_token: account.access_token ?? undefined,
+                  expires_at: account.expires_at ?? undefined,
+                  token_type: account.token_type ?? undefined,
+                  scope: account.scope ?? undefined,
+                  id_token: account.id_token ?? undefined,
+                  session_state: JSON.stringify(account.session_state),
+                  type: account.type,
+                },
+              },
             },
           })
           console.log('New user created:', newUser)

@@ -174,6 +174,34 @@ mongod --version
 mongod --config C:/data/config/mongod.conf
 ```
 
+**mongod.conf**
+
+```
+# mongod.conf
+
+# Where and how to store data.
+storage:
+  dbPath: c:/data/db
+
+# where to write logging data.
+systemLog:
+  destination: file
+  path: C:/data/log/mongod.log
+
+# network interfaces
+net:
+  port: 27017
+  bindIp: 127.0.0.1  # Listen to local interface only, comment to listen on all interfaces.
+
+# processManagement options
+processManagement:
+  pidFilePath: C:/data/mongod.pid  # location of pidfile
+
+# Replica Set Config
+replication:
+  replSetName: "rs0"
+```
+
 ### Tests
 
 ..._(wip)_
