@@ -6,13 +6,13 @@
   "scripts": {
     "dev": "next",
     "concurrent": "concurrently \"npm run mongod\" \"next dev\"",
-    "build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "jest",
     "cover": "jest --coverage",
     "pretty": "prettier --write .",
-    "postinstall": "prisma db push",
+    "postinstall": "prisma generate",
     "mongod": "mongod --dbpath c:/data/db"
   },
   "dependencies": {
