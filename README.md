@@ -275,7 +275,9 @@ Error: The "mongodb" provider is not supported with this command. For more info 
 0: schema_core::state::DevDiagnostic
 at schema-engine\core\src\state.rs:276
 
-This works but not sure what it is doing.
+```bash
+npx prisma generate
+```
 
 ```bash
 npm exec prisma db push
