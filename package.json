@@ -12,7 +12,7 @@
     "test": "jest",
     "cover": "jest --coverage",
     "pretty": "prettier --write .",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma generate && prisma db push",
     "mongod": "mongod --dbpath c:/data/db"
   },
   "dependencies": {
