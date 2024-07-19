@@ -114,6 +114,7 @@ Prisma.NullTypes = {
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
+  provider_id: 'provider_id',
   name: 'name',
   email: 'email',
   emailVerified: 'emailVerified',

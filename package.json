@@ -5,13 +5,15 @@
   "author": "Tre' Grisby <trewaters@hotmail.com>",
   "scripts": {
     "dev": "next",
+    "concurrent": "concurrently \"npm run mongod\" \"next dev\"",
     "build": "next build",
     "start": "next start",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "jest",
     "cover": "jest --coverage",
     "pretty": "prettier --write .",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "mongod": "mongod --dbpath c:/data/db"
   },
   "dependencies": {
     "@auth/core": "^0.34.1",
@@ -47,6 +49,7 @@
     "@types/node": "^20.12.8",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
+    "concurrently": "^8.2.2",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.0.4",
     "eslint-config-prettier": "^9.1.0",

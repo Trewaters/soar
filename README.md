@@ -149,7 +149,30 @@ Prereqs to work on this project..._(wip)_
 
 ### Installing
 
-..._(wip)_
+#### MongoDB
+
+Installed MongoD locally for development purposes. Use Cloud services for production.
+
+**Details**
+
+install location:
+
+```bash
+"C:\Program Files\MongoDB\Server\7.0\bin\mongod.exe" --dbpath="c:\data\db"
+```
+
+```bash
+mongod --version
+```
+
+**Replica Set**
+
+1. Start app `npm run dev`.
+2. Run with replica set in config:
+
+```bash
+mongod --config C:/data/config/mongod.conf
+```
 
 ### Tests
 
@@ -214,6 +237,7 @@ const prisma = new PrismaClient()
 ```
 
 **Known Error (as of 2024-06-30 11:38:23)**
+
 $ npm exec prisma migrate dev
 Environment variables loaded from .env
 Prisma schema loaded from prisma\schema.prisma

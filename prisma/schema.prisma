@@ -13,6 +13,7 @@ generator client {
 
 model User {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  provider_id   String?
   name          String?
   email         String?         @unique
   emailVerified DateTime?
@@ -34,20 +35,20 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.String
-  access_token      String? @db.String
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.String
-  session_state     String?
+  id_token          String?
+  session_state     Json?
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
   user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountId])
+  // @@unique([provider, providerAccountId])
 }
 
 model Session {
