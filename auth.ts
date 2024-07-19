@@ -48,54 +48,37 @@ const config = {
       console.log('account:', account)
 
       // if (!existingUser && account) {
-      //   // Create a new user
-      //   // await prisma.user.create({
-      //   //   data: {
-      //   //
-      //   //
-      //   //
-      //   //
-      //   //
-      //   //
-      //   //
-      //   //
-      //   //
-      //   //
-      //   //
-      //   //
-      //   //
-      //   //   },
-      //   // })
-      //   try {
-      //     const newUser = await prisma.user.create({
-      //       data: {
-      //         provider_id: user.id,
-      //         name: user.name,
-      //         email: user.email,
-      //         image: user.id,
-      //         profile: JSON.stringify(profile),
-      //         accounts: {
-      //           create: {
-      //             provider: account.provider,
-      //             providerAccountId: account.providerAccountId,
-      //             refresh_token: account.refresh_token ?? undefined,
-      //             access_token: account.access_token ?? undefined,
-      //             expires_at: account.expires_at ?? undefined,
-      //             token_type: account.token_type ?? undefined,
-      //             scope: account.scope ?? undefined,
-      //             id_token: account.id_token ?? undefined,
-      //             session_state: JSON.stringify(account.session_state),
-      //             type: account.type,
-      //           },
-      //         },
-      //       },
-      //     })
-      //     console.log('New user created:', newUser)
-      //   } catch (error) {
-      //     console.error('Error creating new user:', error)
-      //     throw error
-      //   }
-      // }
+      if (user && account) {
+        try {
+          const newUser = await prisma.user.create({
+            data: {
+              provider_id: user.id,
+              name: user.name,
+              email: user.email,
+              image: user.id,
+              profile: JSON.stringify(profile),
+              accounts: {
+                create: {
+                  provider: account.provider,
+                  providerAccountId: account.providerAccountId,
+                  refresh_token: account.refresh_token ?? undefined,
+                  access_token: account.access_token ?? undefined,
+                  expires_at: account.expires_at ?? undefined,
+                  token_type: account.token_type ?? undefined,
+                  scope: account.scope ?? undefined,
+                  id_token: account.id_token ?? undefined,
+                  session_state: JSON.stringify(account.session_state),
+                  type: account.type,
+                },
+              },
+            },
+          })
+          console.log('New user created:', newUser)
+        } catch (error) {
+          console.error('Error creating new user:', error)
+          throw error
+        }
+      }
       return true
     },
     async session({ session, token }) {
