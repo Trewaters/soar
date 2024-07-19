@@ -2,7 +2,7 @@ datasource db {
   provider = "mongodb"
   url      = env("MONGODB_URI")
 }
-  // DbName_prod = "happyYogaDb"
+  // DbName_prod = "YogaDB"
   // DbName_dev = "yogaDBSandbox"
 
 // https://www.prisma.io/docs/orm/overview/databases/mongodb
