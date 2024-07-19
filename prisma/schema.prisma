@@ -9,7 +9,8 @@ generator client {
   provider      = "prisma-client-js"
   output        = "./generated/client"
   // binaryTargets = ["native", "rhel-openssl-3.0.x"]
-  // binaryTargets = ["native", "rhel-openssl-1.0.x"]
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+  // binaryTargets = ["native", "libquery_engine-rhel-openssl-3.0.x.so.node"]
 }
 
 model User {
