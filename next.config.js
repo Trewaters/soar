@@ -27,6 +27,16 @@
 //   },
 // }
 /** @type {import("next").NextConfig} */
+// fix prisma Query engine issues
+const { PrismaPlugin } = require('@prisma/nextjs-monorepo-workaround-plugin')
+
 module.exports = {
   output: 'standalone',
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.plugins = [...config.plugins, new PrismaPlugin()]
+    }
+
+    return config
+  },
 }

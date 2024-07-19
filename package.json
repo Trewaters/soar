@@ -5,13 +5,15 @@
   "author": "Tre' Grisby <trewaters@hotmail.com>",
   "scripts": {
     "dev": "next",
+    "concurrent": "concurrently \"npm run mongod\" \"next dev\"",
     "build": "next build",
     "start": "next start",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "jest",
     "cover": "jest --coverage",
     "pretty": "prettier --write .",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "mongod": "mongod --dbpath c:/data/db"
   },
   "dependencies": {
     "@auth/core": "^0.34.1",
@@ -22,7 +24,7 @@
     "@mui/icons-material": "^5.15.19",
     "@mui/lab": "^5.0.0-alpha.160",
     "@mui/material": "^5.15.19",
-    "@prisma/client": "^5.15.0",
+    "@prisma/client": "^5.16.1",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "formik": "^2.4.6",
@@ -38,6 +40,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
+    "@prisma/nextjs-monorepo-workaround-plugin": "^5.17.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.3.1",
     "@types/bcrypt": "^5.0.2",
@@ -47,6 +50,8 @@
     "@types/node": "^20.12.8",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
+    "@vercel/nft": "^0.27.3",
+    "concurrently": "^8.2.2",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.0.4",
     "eslint-config-prettier": "^9.1.0",
@@ -55,7 +60,7 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.2.1",
-    "prisma": "^5.15.0",
+    "prisma": "^5.16.1",
     "semantic-release": "^23.0.8",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
