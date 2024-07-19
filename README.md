@@ -264,6 +264,39 @@ import { PrismaClient } from './prisma/generated/client/edge'
 const prisma = new PrismaClient()
 ```
 
+**Known Error (as of 2024-07-19 12:03:47)**
+
+Deploy issue on vercel that points to missing
+
+```log
+Unhandled Rejection: PrismaClientInitializationError: Prisma Client could not locate the Query Engine for runtime "rhel-openssl-3.0.x".
+
+We detected that you are using Next.js, learn how to fix this: https://pris.ly/d/engine-not-found-nextjs.
+
+This is likely caused by a bundler that has not copied "libquery_engine-rhel-openssl-3.0.x.so.node" next to the resulting bundle.
+Ensure that "libquery_engine-rhel-openssl-3.0.x.so.node" has been copied next to the bundle or in "prisma/generated/client".
+
+We would appreciate if you could take the time to share some information with us.
+Please help us by answering a few questions: https://pris.ly/engine-not-found-bundler-investigation
+
+The following locations have been searched:
+/var/task/prisma/generated/client
+/var/task/.next/server
+/vercel/path0/prisma/generated/client
+/var/task/.prisma/client
+/tmp/prisma-engines
+at Pa (/var/task/.next/server/chunks/447.js:64:756)
+at async Object.loadLibrary (/var/task/.next/server/chunks/447.js:111:10016)
+at async vr.loadEngine (/var/task/.next/server/chunks/447.js:112:448)
+at async vr.instantiateLibrary (/var/task/.next/server/chunks/447.js:111:12736) {
+clientVersion: '5.16.1',
+errorCode: undefined
+}
+Node.js process exited with exit status: 128. The logs above can help with debugging the issue.
+```
+
+https://www.prisma.io/docs/orm/more/help-and-troubleshooting/help-articles/nextjs-prisma-client-monorepo
+
 **Known Error (as of 2024-06-30 11:38:23)**
 
 $ npm exec prisma migrate dev

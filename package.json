@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
+    "@prisma/nextjs-monorepo-workaround-plugin": "^5.17.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.3.1",
     "@types/bcrypt": "^5.0.2",
