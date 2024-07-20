@@ -165,12 +165,14 @@ install location:
 mongod --version
 ```
 
-**Replica Set**
+**Starting MongoDB for local development**
 
 1. Start app: `npm run dev`.
 2. Run with replica set in config: `mongod --config C:/data/config/mongod.conf`
 
 **mongod.conf**
+
+details of my current config file as of 2024-07-20 06:55:53.
 
 ```
 # mongod.conf
@@ -210,7 +212,7 @@ replication:
 
 ### Deployment
 
-- Deploy on Vercel
+**Deployed on Vercel**
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
@@ -220,11 +222,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 **Types of changes**
 
-- `ADDED`: for new features.
+- `ADD`: for new features.
 - `UPDATE`: for changes in existing functionality.
-- `DEPRECATED`: for soon-to-be removed features.
-- `REMOVED`: for now removed features.
-- `FIXED`: for any bug fixes.
+- `DEPRECATE`: for soon-to-be removed features.
+- `REMOVE`: for now removed features.
+- `FIX`: for any bug fixes.
 - `SECURITY`: in case of vulnerabilities.
 - `AUDIT`: code clean up. Carefully removing unnecessary files.
 
@@ -307,6 +309,12 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 2. `npm run build` no breaking build errors. Warnings are acceptable but should be minimized. Errors are not acceptable.
 3. `npm run cover` to make sure no unit test are failing. Coverage goal is (A) 100%, (B) 90%, (C) 80%.
 4. Push `develop` branch to hosting. Then check how the app works on the web. Test with desktop and mobile device. Again checking the client (web browser) console for errors. "Click things and navigate around the app" especially any features your code touches.
+
+## TO DO
+
+2024-07-20 06:53:15
+
+- Add permanent IP Address to MongoDB Atlas Cluster whitelist for access. Upon deployment of non-alpha. So at the end of alpha phase of development.
 
 ### Further help
 
