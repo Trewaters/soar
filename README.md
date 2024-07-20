@@ -167,7 +167,7 @@ mongod --version
 
 **Starting MongoDB for local development**
 
-1. Start app: `npm run dev`.
+1. Start app: `npm run dev`
 2. Run with replica set in config: `mongod --config C:/data/config/mongod.conf`
 
 **mongod.conf**
