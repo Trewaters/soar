@@ -42,24 +42,16 @@ const config = {
       const email = user.email
 
       // Check if the user already exists
-      try {
-        const existingUser = await prisma.user.findUnique({
-          where: { email: email ?? undefined },
-        })
-        if (existingUser) {
-          console.log('User already exists:', existingUser)
-          return true
-        }
-      } catch (error) {
-        console.error('Error finding user:', error)
-        throw error
-      }
+      const existingUser = await prisma.user.findUnique({
+        where: { email: email ?? undefined },
+      })
 
       // console.log('existingUser:', existingUser)
-      console.log('account:', account)
+      // console.log('user:', user)
+      // console.log('account:', account)
+      console.log('profile:', profile)
 
-      // if (!existingUser && account) {
-      if (user && account) {
+      if (!existingUser && account) {
         try {
           const newUser = await prisma.user.create({
             data: {
@@ -75,6 +67,8 @@ const config = {
                   refresh_token: account.refresh_token ?? undefined,
                   access_token: account.access_token ?? undefined,
                   expires_at: account.expires_at ?? undefined,
+                  // add to schema
+                  // expires_in: account.expires_in ?? undefined,
                   token_type: account.token_type ?? undefined,
                   scope: account.scope ?? undefined,
                   id_token: account.id_token ?? undefined,
@@ -82,6 +76,96 @@ const config = {
                   type: account.type,
                 },
               },
+              // create a way to add generic profile schema for unknown providers
+              // profile: {
+              //   create: { ...profile },
+              // },
+
+              // create a new profile schema for each provider.
+              //   profile_github: {
+              //     create: {
+              //       login: profile.login,
+              //       profile_id: profile.id,
+              //       node_id: profile.node_id,
+              //       avatar_url: profile.avatar_url,
+              //       gravatar_id: profile.gravatar_id,
+              //       url: profile.url,
+              //       html_url: profile.html_url,
+              //       followers_url: profile.followers_url,
+              //       following_url: profile.following_url,
+              //       gists_url: profile.gists_url,
+              //       starred_url: profile.starred_url,
+              //       subscriptions_url: profile.subscriptions_url,
+              //       organizations_url: profile.organizations_url,
+              //       repos_url: profile.repos_url,
+              //       events_url: profile.events_url,
+              //       received_events_url: profile.received_events_url,
+              //       type: profile.type,
+              //       site_admin: profile.site_admin,
+              //       name: profile.name,
+              //       company: profile.company,
+              //       blog: profile.blog,
+              //       location: profile.location,
+              //       email: profile.email,
+              //       hireable: profile.hireable,
+              //       bio: profile.bio,
+              //       twitter_username: profile.twitter_username,
+              //       public_repos: profile.public_repos,
+              //       public_gists: profile.public_gists,
+              //       followers: profile.followers,
+              //       following: profile.following,
+              //       created_at: profile.created_at,
+              //       updated_at: profile.updated_at,
+              //       private_gists: profile.private_gists,
+              //       total_private_repos: profile.total_private_repos,
+              //       owned_private_repos: profile.owned_private_repos,
+              //       disk_usage: profile.disk_usage,
+              //       collaborators: profile.collaborators,
+              //       two_factor_authentication: profile.two_factor_authentication,
+              //       plan: {
+              //         create: {
+              //           name: profile.plan.name,
+              //           space: profile.plan.space,
+              //           collaborators: profile.plan.collaborators,
+              //           private_repos: profile.plan.private_repos,
+              //         },
+              //     },
+              //   },
+
+              //   profile_google: {
+              //     create: {
+              //       iss: profile.iss,
+              //       azp: profile.azp,
+              //       aud: profile.aud,
+              //       sub: profile.sub,
+              //       email: profile.email,
+              //       email_verified: profile.email_verified,
+              //       at_hash: profile.at_hash,
+              //       name: profile.name,
+              //       picture: profile.picture,
+              //       given_name: profile.given_name,
+              //       family_name: profile.family_name,
+              //       iat: profile.iat,
+              //       exp: profile.exp,
+              //   },
+              // },
+              /*  
+              profile: {
+  iss: 'https://accounts.google.com',
+  azp: '610525825838-ubl8468s8rf6dp12ptr4sd10rheq4a3q.apps.googleusercontent.com',
+  aud: '610525825838-ubl8468s8rf6dp12ptr4sd10rheq4a3q.apps.googleusercontent.com',
+  sub: '107162919693498907234',
+  email: 'trewaters@gmail.com',
+  email_verified: true,
+  at_hash: 'pBZO2Ln0aFiBam8Z11462g',
+  name: "Tre' Grisby",
+  picture: 'https://lh3.googleusercontent.com/a/ACg8ocJuJgOk3pUak1EOWgDnGcL5g8t_FQb9cwKzvRv56A71a7mpahlx=s96-c',
+  given_name: "Tre'",
+  family_name: 'Grisby',
+  iat: 1721485689,
+  exp: 1721489289
+}
+              */
             },
           })
           console.log('New user created:', newUser)
@@ -111,45 +195,6 @@ const config = {
       }
       return token
     },
-    // async signIn({ user, account, profile }) {
-    //   const email = user.email
-
-    //   // Check if the user already exists
-    //   const existingUser = await prisma.user.findUnique({
-    //     where: { email },
-    //   })
-
-    //   if (!existingUser) {
-    //     // Create a new user
-    //     await prisma.user.create({
-    //       data: {
-    //         email: user.email,
-    //         name: user.name,
-    //         image: user.image,
-    //         accounts: {
-    //           create: {
-    //             provider: account.provider,
-    //             providerAccountId: account.providerAccountId,
-    //             refresh_token: account.refresh_token,
-    //             access_token: account.access_token,
-    //             expires_at: account.expires_at,
-    //             token_type: account.token_type,
-    //             scope: account.scope,
-    //             id_token: account.id_token,
-    //             session_state: account.session_state,
-    //           },
-    //         },
-    //       },
-    //     })
-    //   }
-    //   return true
-    // },
-    // async session({ session, token }) {
-    //   if (token) {
-    //     session.user.id = token.id
-    //   }
-    //   return session
-    // },
   },
   // secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: 'jwt' },
