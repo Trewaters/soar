@@ -2,11 +2,10 @@ datasource db {
   provider = "mongodb"
   url      = env("MONGODB_URI")
 }
+  // DbName_prod = "YogaDB"
+  // DbName_dev = "yogaDBSandbox"
 
 // https://www.prisma.io/docs/orm/overview/databases/mongodb
-
-// possible solution to deployement issue
-// https://www.prisma.io/docs/orm/more/help-and-troubleshooting/help-articles/nextjs-prisma-client-monorepo
 
 generator client {
   provider      = "prisma-client-js"

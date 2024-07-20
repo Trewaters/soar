@@ -1,5 +1,7 @@
 import NextAuth from 'next-auth'
 import type { NextAuthConfig } from 'next-auth'
+import { type Adapter } from '@auth/core/adapters'
+import { MongoDBAdapter } from '@auth/mongodb-adapter'
 import authConfig from '@auth.config'
 import clientPromise from '@lib/db'
 import { PrismaClient } from '@prisma/generated/client'
@@ -21,9 +23,14 @@ Resource Links:
 - https://authjs.dev/getting-started/adapters/mongodb (this worked! 2024-06-30 20:36:59)
 */
 
+const MyAdapter: Adapter = {
+  ...MongoDBAdapter(clientPromise),
+}
+
 const config = {
   ...authConfig,
   theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
+  adapter: MyAdapter,
   basePath: '/auth',
   callbacks: {
     authorized({ request, auth }) {
@@ -35,31 +42,24 @@ const config = {
       const email = user.email
 
       // Check if the user already exists
-      const existingUser = await prisma.user.findUnique({
-        where: { email: email ?? undefined },
-      })
-      console.log('existingUser:', existingUser)
+      try {
+        const existingUser = await prisma.user.findUnique({
+          where: { email: email ?? undefined },
+        })
+        if (existingUser) {
+          console.log('User already exists:', existingUser)
+          return true
+        }
+      } catch (error) {
+        console.error('Error finding user:', error)
+        throw error
+      }
+
+      // console.log('existingUser:', existingUser)
       console.log('account:', account)
 
-      if (!existingUser && account) {
-        // Create a new user
-        // await prisma.user.create({
-        //   data: {
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //   },
-        // })
+      // if (!existingUser && account) {
+      if (user && account) {
         try {
           const newUser = await prisma.user.create({
             data: {
