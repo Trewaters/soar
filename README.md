@@ -167,12 +167,8 @@ mongod --version
 
 **Replica Set**
 
-1. Start app `npm run dev`.
-2. Run with replica set in config:
-
-```bash
-mongod --config C:/data/config/mongod.conf
-```
+1. Start app: `npm run dev`.
+2. Run with replica set in config: `mongod --config C:/data/config/mongod.conf`
 
 **mongod.conf**
 
