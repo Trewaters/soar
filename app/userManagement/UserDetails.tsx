@@ -52,6 +52,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import { PrismaClient } from '@prisma/generated/client'
 
 function not(a: readonly string[], b: readonly string[]) {
   return a.filter((value) => b.indexOf(value) === -1)
@@ -191,10 +192,55 @@ export default function UserDetails() {
   // )
 
   // image card
+  const prisma = new PrismaClient()
   const [expanded, setExpanded] = React.useState(false)
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
+  }
+
+  // Form actions
+  const [userData, setUserData] = React.useState({
+    pronouns: 'He/Him',
+    primaryEmail: '',
+  })
+  React.useEffect(() => {
+    const fetchUserData = async () => {
+      // Assuming you have a user ID to fetch. Adjust accordingly.
+      const userId = session?.user?.id
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+      })
+      if (user) {
+        setUserData({
+          pronouns: user.pronouns || 'He/Him',
+          primaryEmail: user.email || '',
+        })
+      }
+    }
+
+    fetchUserData()
+  }, [])
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target
+    setUserData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+  const handleSubmit = async (e: any) => {
+    e.preventDefault()
+    try {
+      await prisma.user.create({
+        data: {
+          pronouns: userData.pronouns,
+        },
+      })
+      console.log('Data saved')
+    } catch (error) {
+      console.error('Error saving data', error)
+    }
   }
 
   /*  
@@ -208,14 +254,17 @@ export default function UserDetails() {
       direction="row"
       justifyContent={'center'}
       sx={{ p: 2 }}
+      component={'form'}
+      onSubmit={handleSubmit}
     >
+      <Button type="submit">Save</Button>
       {/* Text Fields, https://mui.com/material-ui/react-text-field/ */}
       <Grid xs={12} item>
         <Typography variant="h2">Practitioner Details</Typography>
       </Grid>
       <Grid xs={12} item>
         {/* // TODO: create an image input and display component. */}
-        <Card sx={{ maxWidth: '90%', mx: 'auto' }}>
+        <Card>
           <CardHeader
             avatar={
               <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -279,7 +328,7 @@ export default function UserDetails() {
         <FormControl>
           <TextField
             name="User Name"
-            required
+            // required
             id="outlined-basic"
             placeholder='Enter "First Name"'
             label="First Name"
@@ -310,18 +359,19 @@ export default function UserDetails() {
           label="Pronouns:"
           variant="outlined"
           type="text"
-          defaultValue={'He/Him'}
+          defaultValue={userData.pronouns}
+          onChange={handleChange}
         />
       </Grid>
       <Grid xs={12} sm={12} md={12} item>
         <FormControl fullWidth>
           <TextField
-            required
+            // required
             id="outlined-email-input"
             name="primaryEmail"
             placeholder="xyz@ABC.com"
             label="Email (primary/internal):"
-            value={session?.user?.email}
+            value={userData.primaryEmail}
             variant="outlined"
             type="email"
           />
@@ -333,7 +383,7 @@ export default function UserDetails() {
             id="outlined-email-input"
             name="secondaryEmail"
             label="Email (secondary/internal):"
-            value={'...'}
+            value={'...@email.com'}
             variant="outlined"
             type="email"
           />
@@ -342,17 +392,17 @@ export default function UserDetails() {
       <Grid xs={12} sm={12} md={6} item>
         <FormControl fullWidth>
           <TextField
-            required
+            // required
             id="outlined-email-input"
             name="emailPublic"
             label="Email (public):"
-            value={'...'}
+            value={'...@email.com'}
             variant="outlined"
             type="email"
           />
         </FormControl>
       </Grid>
-      <Grid xs={12} sm={6} md={6} item>
+      {/* <Grid xs={12} sm={6} md={6} item>
         <FormControl>
           <TextField
             required
@@ -378,12 +428,11 @@ export default function UserDetails() {
             type="password"
           />
         </FormControl>
-      </Grid>
-
+      </Grid> */}
       <Grid xs={12} sm={6} md={6} item>
         <FormControl>
           <TextField
-            required
+            // required
             id="outlined"
             name="phoneContact"
             placeholder="() xxx-xxx-xxxx"
@@ -396,7 +445,7 @@ export default function UserDetails() {
       <Grid xs={12} sm={12} md={12} item>
         <FormControl fullWidth>
           <TextField
-            required
+            // required
             id="outlined-textarea"
             name="bio"
             placeholder="Enter...Bio"
@@ -411,7 +460,7 @@ export default function UserDetails() {
       <Grid xs={12} sm={12} md={12} item>
         <FormControl fullWidth>
           <TextField
-            required
+            // required
             id="outlined-textarea"
             name="headline"
             placeholder="Enter...2 sentences"

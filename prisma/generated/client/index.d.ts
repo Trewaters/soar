@@ -2084,6 +2084,7 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    pronouns: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2095,6 +2096,7 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    pronouns: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2106,6 +2108,7 @@ export namespace Prisma {
     email: number
     emailVerified: number
     image: number
+    pronouns: number
     profile: number
     createdAt: number
     updatedAt: number
@@ -2120,6 +2123,7 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    pronouns?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2131,6 +2135,7 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    pronouns?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2142,6 +2147,7 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    pronouns?: true
     profile?: true
     createdAt?: true
     updatedAt?: true
@@ -2227,6 +2233,7 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    pronouns: string | null
     profile: JsonValue | null
     createdAt: Date
     updatedAt: Date
@@ -2256,6 +2263,7 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    pronouns?: boolean
     profile?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2274,6 +2282,7 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    pronouns?: boolean
     profile?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2302,6 +2311,7 @@ export namespace Prisma {
       email: string | null
       emailVerified: Date | null
       image: string | null
+      pronouns: string | null
       profile: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
@@ -2707,6 +2717,7 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly emailVerified: FieldRef<"User", 'DateTime'>
     readonly image: FieldRef<"User", 'String'>
+    readonly pronouns: FieldRef<"User", 'String'>
     readonly profile: FieldRef<"User", 'Json'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
@@ -14742,6 +14753,7 @@ export namespace Prisma {
     email: 'email',
     emailVerified: 'emailVerified',
     image: 'image',
+    pronouns: 'pronouns',
     profile: 'profile',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -15030,6 +15042,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"User"> | string | null
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
+    pronouns?: StringNullableFilter<"User"> | string | null
     profile?: JsonNullableFilter<"User">
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
@@ -15046,6 +15059,7 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    pronouns?: SortOrder
     profile?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -15065,6 +15079,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"User"> | string | null
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
+    pronouns?: StringNullableFilter<"User"> | string | null
     profile?: JsonNullableFilter<"User">
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
@@ -15081,6 +15096,7 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    pronouns?: SortOrder
     profile?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -15099,6 +15115,7 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"User"> | string | null
     emailVerified?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
+    pronouns?: StringNullableWithAggregatesFilter<"User"> | string | null
     profile?: JsonNullableWithAggregatesFilter<"User">
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -15991,6 +16008,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    pronouns?: string | null
     profile?: InputJsonValue | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16007,6 +16025,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    pronouns?: string | null
     profile?: InputJsonValue | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16022,6 +16041,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
     profile?: InputJsonValue | InputJsonValue | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16037,6 +16057,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
     profile?: InputJsonValue | InputJsonValue | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16053,6 +16074,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    pronouns?: string | null
     profile?: InputJsonValue | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16064,6 +16086,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
     profile?: InputJsonValue | InputJsonValue | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16075,6 +16098,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
     profile?: InputJsonValue | InputJsonValue | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17130,6 +17154,7 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    pronouns?: SortOrder
     profile?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -17142,6 +17167,7 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    pronouns?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17153,6 +17179,7 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    pronouns?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18820,6 +18847,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    pronouns?: string | null
     profile?: InputJsonValue | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18835,6 +18863,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    pronouns?: string | null
     profile?: InputJsonValue | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18865,6 +18894,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
     profile?: InputJsonValue | InputJsonValue | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18879,6 +18909,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
     profile?: InputJsonValue | InputJsonValue | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18894,6 +18925,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    pronouns?: string | null
     profile?: InputJsonValue | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18909,6 +18941,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    pronouns?: string | null
     profile?: InputJsonValue | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18939,6 +18972,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
     profile?: InputJsonValue | InputJsonValue | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18953,6 +18987,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
     profile?: InputJsonValue | InputJsonValue | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -18968,6 +19003,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    pronouns?: string | null
     profile?: InputJsonValue | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -18983,6 +19019,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    pronouns?: string | null
     profile?: InputJsonValue | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19013,6 +19050,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
     profile?: InputJsonValue | InputJsonValue | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19027,6 +19065,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
     profile?: InputJsonValue | InputJsonValue | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19042,6 +19081,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    pronouns?: string | null
     profile?: InputJsonValue | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19057,6 +19097,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    pronouns?: string | null
     profile?: InputJsonValue | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19087,6 +19128,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
     profile?: InputJsonValue | InputJsonValue | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19101,6 +19143,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
     profile?: InputJsonValue | InputJsonValue | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
