@@ -152,7 +152,7 @@ const config = {
               // },
             },
           })
-          // console.log('New user created:', newUser)
+          console.log('New user created:', newUser)
         } catch (error) {
           console.error('Error creating new user:', error)
           throw error
@@ -164,7 +164,7 @@ const config = {
       if (token) {
         session.user.id = token.id as string
       }
-      // console.log('config session:', session)
+      console.log('config session:', session)
       return session
     },
     jwt({ token, trigger, session, account }) {
