@@ -5,7 +5,7 @@
   "author": "Tre' Grisby <trewaters@hotmail.com>",
   "scripts": {
     "dev": "next",
-    "concurrent": "concurrently \"npm run mongod\" \"next dev\"",
+    "concurrent": "concurrently \"mongod --config C:/data/config/mongod.conf\" \"next dev\"",
     "build": "next build",
     "start": "next start",
     "eslint": "eslint . --ext .js,.jsx,.ts,.tsx",
