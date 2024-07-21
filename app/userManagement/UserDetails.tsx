@@ -51,6 +51,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
 import { useSession } from 'next-auth/react'
+import Image from 'next/image'
 
 function not(a: readonly string[], b: readonly string[]) {
   return a.filter((value) => b.indexOf(value) === -1)
@@ -60,7 +61,7 @@ function intersection(a: readonly string[], b: readonly string[]) {
   return a.filter((value) => b.indexOf(value) !== -1)
 }
 
-// image card
+// profile card
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean
 }
@@ -79,7 +80,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 export default function UserDetails() {
   const { data: session, update } = useSession()
-  // console.log('UserDetails session', session)
+  console.log('UserDetails session', session)
   // Select: timezones
   // const [timezone, setTimezone] = React.useState('')
 
@@ -190,11 +191,11 @@ export default function UserDetails() {
   // )
 
   // image card
-  // const [expanded, setExpanded] = React.useState(false)
+  const [expanded, setExpanded] = React.useState(false)
 
-  // const handleExpandClick = () => {
-  //   setExpanded(!expanded)
-  // }
+  const handleExpandClick = () => {
+    setExpanded(!expanded)
+  }
 
   /*  
   Form reesources:
@@ -209,7 +210,7 @@ export default function UserDetails() {
         </Grid>
         <Grid xs={12} item>
           {/* // TODO: create an image input and display component. */}
-          {/* <Card sx={{ maxWidth: 345 }}>
+          <Card sx={{ maxWidth: 345, mx: 'auto' }}>
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -221,14 +222,19 @@ export default function UserDetails() {
                   <MoreVertIcon />
                 </IconButton>
               }
-              title="Tre' Grisby"
+              title={session?.user?.name}
               subheader="Member since 6/9/2024"
             />
             <CardMedia
               component="img"
-              height="194"
-              image="/stick-tree-pose-400x400.png"
+              src={session?.user?.image || ''}
               alt="Yoga"
+              sx={{
+                width: 'auto',
+                height: 'auto',
+                display: 'block',
+                margin: 'auto',
+              }}
             />
             <CardContent>
               <Typography variant="body2" color="text.secondary">
@@ -262,23 +268,23 @@ export default function UserDetails() {
                 <Typography>[LOCATION]</Typography>
               </CardContent>
             </Collapse>
-          </Card> */}
+          </Card>
         </Grid>
         <Grid xs={6} sm={6} md={6} item>
           <FormControl>
             <TextField
-              name="firstName"
+              name="User Name"
               required
               id="outlined-basic"
               placeholder='Enter "First Name"'
               label="First Name"
-              value={"Tre'"}
+              value={session?.user?.name}
               variant="outlined"
               type="text"
             />
           </FormControl>
         </Grid>
-        <Grid xs={6} sm={6} md={6} item>
+        {/* <Grid xs={6} sm={6} md={6} item>
           <FormControl>
             <TextField
               required
@@ -291,7 +297,7 @@ export default function UserDetails() {
               type="text"
             />
           </FormControl>
-        </Grid>
+        </Grid> */}
         <Grid xs={12} sm={6} md={6} item>
           <TextField
             name="pronouns"
@@ -321,7 +327,7 @@ export default function UserDetails() {
               name="emailInternal"
               placeholder="xyz@ABC.com"
               label="Email (primary/internal):"
-              value={'Bob@Mail.com'}
+              value={session?.user?.email}
               variant="outlined"
               type="text"
             />
