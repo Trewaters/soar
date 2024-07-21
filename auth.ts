@@ -1,4 +1,5 @@
 import NextAuth from 'next-auth'
+import 'next-auth/jwt'
 import type { NextAuthConfig } from 'next-auth'
 import { type Adapter } from '@auth/core/adapters'
 import { MongoDBAdapter } from '@auth/mongodb-adapter'
@@ -49,7 +50,7 @@ const config = {
       // console.log('existingUser:', existingUser)
       // console.log('user:', user)
       // console.log('account:', account)
-      console.log('profile:', profile)
+      // console.log('profile:', profile)
 
       if (!existingUser && account) {
         try {
@@ -149,26 +150,9 @@ const config = {
               //       exp: profile.exp,
               //   },
               // },
-              /*  
-              profile: {
-  iss: 'https://accounts.google.com',
-  azp: '610525825838-ubl8468s8rf6dp12ptr4sd10rheq4a3q.apps.googleusercontent.com',
-  aud: '610525825838-ubl8468s8rf6dp12ptr4sd10rheq4a3q.apps.googleusercontent.com',
-  sub: '107162919693498907234',
-  email: 'trewaters@gmail.com',
-  email_verified: true,
-  at_hash: 'pBZO2Ln0aFiBam8Z11462g',
-  name: "Tre' Grisby",
-  picture: 'https://lh3.googleusercontent.com/a/ACg8ocJuJgOk3pUak1EOWgDnGcL5g8t_FQb9cwKzvRv56A71a7mpahlx=s96-c',
-  given_name: "Tre'",
-  family_name: 'Grisby',
-  iat: 1721485689,
-  exp: 1721489289
-}
-              */
             },
           })
-          console.log('New user created:', newUser)
+          // console.log('New user created:', newUser)
         } catch (error) {
           console.error('Error creating new user:', error)
           throw error
@@ -180,18 +164,16 @@ const config = {
       if (token) {
         session.user.id = token.id as string
       }
+      // console.log('config session:', session)
       return session
     },
-    jwt({ token, trigger, session, account, user }) {
+    jwt({ token, trigger, session, account }) {
       if (trigger === 'update') token.name = session.user.name
       if (account?.provider === 'google') {
         return { ...token, accessToken: account.access_token }
       }
       if (account?.provider === 'github') {
         return { ...token, accessToken: account.access_token }
-      }
-      if (user) {
-        token.id = user.id
       }
       return token
     },

@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import {
   Accordion,
@@ -49,6 +50,7 @@ import { red } from '@mui/material/colors'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
+import { useSession } from 'next-auth/react'
 
 function not(a: readonly string[], b: readonly string[]) {
   return a.filter((value) => b.indexOf(value) === -1)
@@ -59,7 +61,6 @@ function intersection(a: readonly string[], b: readonly string[]) {
 }
 
 // image card
-
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean
 }
@@ -77,121 +78,123 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }))
 
 export default function UserDetails() {
+  const { data: session, update } = useSession()
+  // console.log('UserDetails session', session)
   // Select: timezones
-  const [timezone, setTimezone] = React.useState('')
+  // const [timezone, setTimezone] = React.useState('')
 
-  const handleTimezoneChange = (event: SelectChangeEvent) => {
-    setTimezone(event.target.value as string)
-  }
+  // const handleTimezoneChange = (event: SelectChangeEvent) => {
+  //   setTimezone(event.target.value as string)
+  // }
 
   // Select: yoga style
-  const [yogaStyle, setYogaStyle] = React.useState('')
+  // const [yogaStyle, setYogaStyle] = React.useState('')
 
-  const handleStyleChange = (event: SelectChangeEvent) => {
-    setYogaStyle(event.target.value as string)
-  }
+  // const handleStyleChange = (event: SelectChangeEvent) => {
+  //   setYogaStyle(event.target.value as string)
+  // }
 
   // checkbox
   // const label = { inputProps: { 'aria-label': 'Switch demo' } }
 
   // Toggle Button
-  const [alignment, setAlignment] = React.useState<string | null>('left')
+  // const [alignment, setAlignment] = React.useState<string | null>('left')
 
-  const handleCalendar = (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: string | null
-  ) => {
-    setAlignment(newAlignment)
-  }
+  // const handleCalendar = (
+  //   event: React.MouseEvent<HTMLElement>,
+  //   newAlignment: string | null
+  // ) => {
+  //   setAlignment(newAlignment)
+  // }
 
   /*
    * Transfer List
    * https://mui.com/material-ui/react-transfer-list/
    */
-  const [checked, setChecked] = React.useState<readonly string[]>([])
-  const [left, setLeft] = React.useState<readonly string[]>([
-    '(Notification) Default Notifications (by...email/phone/etc):',
-    '(Notification) watch post:',
-    '(Notification) watch instructor:',
-    '(Notification) Subscribe (frequency...weekly/daily):',
-  ])
-  const [right, setRight] = React.useState<readonly string[]>([
-    '4, 5, 6, 7',
-    '24,23,2,1',
-  ])
+  // const [checked, setChecked] = React.useState<readonly string[]>([])
+  // const [left, setLeft] = React.useState<readonly string[]>([
+  //   '(Notification) Default Notifications (by...email/phone/etc):',
+  //   '(Notification) watch post:',
+  //   '(Notification) watch instructor:',
+  //   '(Notification) Subscribe (frequency...weekly/daily):',
+  // ])
+  // const [right, setRight] = React.useState<readonly string[]>([
+  //   '4, 5, 6, 7',
+  //   '24,23,2,1',
+  // ])
 
-  const leftChecked = intersection(checked, left)
-  const rightChecked = intersection(checked, right)
+  // const leftChecked = intersection(checked, left)
+  // const rightChecked = intersection(checked, right)
 
-  const handleToggle = (value: string) => () => {
-    const currentIndex = checked.indexOf(value)
-    const newChecked = [...checked]
-    if (currentIndex === -1) {
-      newChecked.push(value)
-    } else {
-      newChecked.splice(currentIndex, 1)
-    }
-    setChecked(newChecked)
-  }
+  // const handleToggle = (value: string) => () => {
+  //   const currentIndex = checked.indexOf(value)
+  //   const newChecked = [...checked]
+  //   if (currentIndex === -1) {
+  //     newChecked.push(value)
+  //   } else {
+  //     newChecked.splice(currentIndex, 1)
+  //   }
+  //   setChecked(newChecked)
+  // }
 
-  const handleAllRight = () => {
-    setRight(right.concat(left))
-    setLeft([])
-  }
+  // const handleAllRight = () => {
+  //   setRight(right.concat(left))
+  //   setLeft([])
+  // }
 
-  const handleCheckedRight = () => {
-    setRight(right.concat(leftChecked))
-    setLeft(not(left, leftChecked))
-    setChecked(not(checked, leftChecked))
-  }
+  // const handleCheckedRight = () => {
+  //   setRight(right.concat(leftChecked))
+  //   setLeft(not(left, leftChecked))
+  //   setChecked(not(checked, leftChecked))
+  // }
 
-  const handleCheckedLeft = () => {
-    setLeft(left.concat(rightChecked))
-    setRight(not(right, rightChecked))
-    setChecked(not(checked, rightChecked))
-  }
+  // const handleCheckedLeft = () => {
+  //   setLeft(left.concat(rightChecked))
+  //   setRight(not(right, rightChecked))
+  //   setChecked(not(checked, rightChecked))
+  // }
 
-  const handleAllLeft = () => {
-    setLeft(left.concat(right))
-    setRight([])
-  }
+  // const handleAllLeft = () => {
+  //   setLeft(left.concat(right))
+  //   setRight([])
+  // }
 
-  const customList = (items: readonly string[]) => (
-    <Paper sx={{ width: 200, height: 230, overflow: 'auto' }}>
-      <List dense component="div" role="list">
-        {items.map((value: string) => {
-          const labelId = `transfer-list-item-${value}-label`
+  // const customList = (items: readonly string[]) => (
+  //   <Paper sx={{ width: 200, height: 230, overflow: 'auto' }}>
+  //     <List dense component="div" role="list">
+  //       {items.map((value: string) => {
+  //         const labelId = `transfer-list-item-${value}-label`
 
-          return (
-            <ListItemButton
-              key={value}
-              role="listitem"
-              onClick={handleToggle(value)}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  checked={checked.indexOf(value) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{
-                    'aria-labelledby': labelId,
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={`List item ${value + 1}`} />
-            </ListItemButton>
-          )
-        })}
-      </List>
-    </Paper>
-  )
+  //         return (
+  //           <ListItemButton
+  //             key={value}
+  //             role="listitem"
+  //             onClick={handleToggle(value)}
+  //           >
+  //             <ListItemIcon>
+  //               <Checkbox
+  //                 checked={checked.indexOf(value) !== -1}
+  //                 tabIndex={-1}
+  //                 disableRipple
+  //                 inputProps={{
+  //                   'aria-labelledby': labelId,
+  //                 }}
+  //               />
+  //             </ListItemIcon>
+  //             <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+  //           </ListItemButton>
+  //         )
+  //       })}
+  //     </List>
+  //   </Paper>
+  // )
 
   // image card
-  const [expanded, setExpanded] = React.useState(false)
+  // const [expanded, setExpanded] = React.useState(false)
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded)
-  }
+  // const handleExpandClick = () => {
+  //   setExpanded(!expanded)
+  // }
 
   /*  
   Form reesources:
@@ -206,7 +209,7 @@ export default function UserDetails() {
         </Grid>
         <Grid xs={12} item>
           {/* // TODO: create an image input and display component. */}
-          <Card sx={{ maxWidth: 345 }}>
+          {/* <Card sx={{ maxWidth: 345 }}>
             <CardHeader
               avatar={
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -259,7 +262,7 @@ export default function UserDetails() {
                 <Typography>[LOCATION]</Typography>
               </CardContent>
             </Collapse>
-          </Card>
+          </Card> */}
         </Grid>
         <Grid xs={6} sm={6} md={6} item>
           <FormControl>
@@ -410,7 +413,7 @@ export default function UserDetails() {
         </Grid>
 
         <Grid xs={12} sm={12} md={12} item>
-          <FormControl fullWidth>
+          {/* <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Yoga Style</InputLabel>
             <Select
               name="yogaStyle"
@@ -426,7 +429,7 @@ export default function UserDetails() {
               <MenuItem value={4}>Bikram Yoga</MenuItem>
               <MenuItem value={4}>Hatha Yoga</MenuItem>
             </Select>
-          </FormControl>
+          </FormControl> */}
         </Grid>
         <Grid xs={12} sm={6} md={6} item>
           <FormControl>
@@ -551,7 +554,7 @@ export default function UserDetails() {
             <FormLabel name="calendar" component="text">
               Calendar (google/outlook/Other):
             </FormLabel>
-            <ToggleButtonGroup
+            {/* <ToggleButtonGroup
               value={alignment}
               exclusive
               onChange={handleCalendar}
@@ -563,10 +566,10 @@ export default function UserDetails() {
               <ToggleButton value="center" aria-label="centered">
                 <DoNotDisturbIcon />
               </ToggleButton>
-            </ToggleButtonGroup>
+            </ToggleButtonGroup> */}
           </FormControl>
         </Grid>
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
+        {/* <Grid container spacing={2} justifyContent="center" alignItems="center">
           <Grid item>{customList(left)}</Grid>
           <Grid item>
             <Grid container direction="column" alignItems="center">
@@ -613,10 +616,10 @@ export default function UserDetails() {
             </Grid>
           </Grid>
           <Grid item>{customList(right)}</Grid>
-        </Grid>
+        </Grid> */}
 
         <Grid xs={12} sm={6} md={6} item>
-          <FormControl fullWidth>
+          {/* <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">
               Timezone: for date time conversions
             </InputLabel>
@@ -632,7 +635,7 @@ export default function UserDetails() {
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
             </Select>
-          </FormControl>
+          </FormControl> */}
         </Grid>
         <Grid xs={12} sm={6} md={6} item>
           {/*  
