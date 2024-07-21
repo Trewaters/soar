@@ -39,8 +39,8 @@ export default function TabHeader() {
           <TabList
             onChange={handleChange}
             aria-label="menu of tabs"
-            scrollButtons="auto"
             variant="scrollable"
+            scrollButtons="auto"
           >
             <Tab label="Landing" value="1" />
             <Tab label="Planner" value="2" />

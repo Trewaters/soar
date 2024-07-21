@@ -202,7 +202,7 @@ export default function UserDetails() {
   - https://www.ventureharbour.com/form-design-best-practices/
   */
   return (
-    <Box sx={{ width: '50%', ml: '100px', display: 'flex' }}>
+    <Box sx={{ width: 'auto', ml: '100px', display: 'flex' }}>
       <Grid container spacing={3} direction="row">
         {/* Text Fields, https://mui.com/material-ui/react-text-field/ */}
         <Grid xs={12} item>
