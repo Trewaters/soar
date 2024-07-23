@@ -4,7 +4,7 @@ import TopNav from '@components/top-nav'
 import Header from '@serverComponents/header'
 import { PropsWithChildren } from 'react'
 import UserButton from '@serverComponents/user-button'
-// import NextAuthProvider from './context/NextAuthProvider'
+import { Stack, Typography } from '@mui/material'
 
 export const metadata: Metadata = {
   title: 'Happy Yoga',
@@ -15,14 +15,17 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <body>
-        {/* <NextAuthProvider> */}
         <Header />
         <nav>
           <TopNav />
         </nav>
+        <Stack>
+          <Typography variant="h1" align="center">
+            Soar
+          </Typography>
+        </Stack>
         <UserButton />
         <main>{children}</main>
-        {/* </NextAuthProvider> */}
       </body>
     </html>
   )

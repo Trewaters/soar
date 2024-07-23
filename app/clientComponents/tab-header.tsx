@@ -64,7 +64,6 @@ export default function TabHeader() {
           value={value}
           onChange={handleChange}
           aria-label="tab menu"
-          variant="scrollable"
           scrollButtons="auto"
           centered
         >
