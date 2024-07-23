@@ -308,7 +308,7 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 1. `npm run dev` and there aren't any errors in the server terminal or client (web browser) console.
 2. `npm run build` no breaking build errors. Warnings are acceptable but should be minimized. Errors are not acceptable.
 3. `npm run cover` to make sure no unit test are failing. Coverage goal is (A) 100%, (B) 90%, (C) 80%.
-4. Push `develop` branch to hosting. Then check how the app works on the web. Test with desktop and mobile device. Again checking the client (web browser) console for errors. "Click things and navigate around the app" especially any features your code touches.
+4. Push `develop` branch to hosting. Verify that the build was Successful and show **Ready** in vercel hosting. Then check how the app works on the web. Test with desktop and mobile device. Again checking the client (web browser) console for errors. "Click things and navigate around the app" especially any features your code touches.
 
 ## TO DO
 
