@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
 import PostureSearch from '@components/posture-search'
 import postureData from '@interfaces/postureData'
@@ -20,31 +20,77 @@ import postureData from '@interfaces/postureData'
 //     process.exit(1)
 //   })
 
-async function getData() {
-  const res = await fetch('/api/poses')
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
-  }
-  const response = await res.json()
-  return response
-}
-
 export default function Page() {
+  // const [data, setData] = useState(null)
   const [posturePropData, setPosturePropData] = React.useState<postureData[]>(
     []
   )
-  React.useEffect(() => {
-    getData().then((data) => {
-      setPosturePropData(data)
-    })
-  }, [])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  const fetchData = async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const response = await fetch('api/poses')
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      setPosturePropData(await response.json())
+    } catch (error: Error | any) {
+      setError(error.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // React.useEffect(() => {
+  //   fetchData()
+  // }, [])
+
+  // const sendData = async () => {
+  //   setLoading(true)
+  //   setError(null)
+  //   try {
+  //     const response = await fetch('/poses', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ key: 'value' }),
+  //     })
+  //     if (!response.ok) {
+  //       throw new Error('Network response was not ok')
+  //     }
+  //     const result = await response.json()
+  //     setData(result)
+  //   } catch (error) {
+  //     setError(error.message)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   return (
     <>
       <Typography variant="h2" align="center">
         Asana Postures
       </Typography>
-      <PostureSearch posturePropData={posturePropData} />
+      {/* <button onClick={sendData} disabled={loading}>
+        Send Data
+      </button> */}
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
+      {posturePropData && posturePropData.length > 0 ? (
+        <pre>
+          {/* JSON: {JSON.stringify(data, null, 2)} <br /> */}
+          <PostureSearch posturePropData={posturePropData} />
+        </pre>
+      ) : (
+        <button onClick={fetchData} disabled={loading}>
+          Load Postures
+        </button>
+      )}
     </>
   )
 }
