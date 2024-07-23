@@ -24,13 +24,3 @@ a {
 a:hover {
   text-decoration: underline;
 }
-
-.hidden {
-  display: none;
-}
-
-.clearfix::after {
-  content: '';
-  display: block;
-  clear: both;
-}

@@ -199,10 +199,11 @@ export default function UserDetails() {
   // Form actions
   const [userData, setUserData] = React.useState({
     pronouns: 'He/Him',
-    primaryEmail: '',
-    name: '',
-    image: '',
+    primaryEmail: session?.user?.email,
+    name: session?.user?.name,
+    image: session?.user?.image,
   })
+  /* 
   React.useEffect(() => {
     // console.log('User useEffect', session?.user?.email)
     console.log('User useEffect triggers')
@@ -211,11 +212,11 @@ export default function UserDetails() {
     const fetchUserData = async () => {
       // const userId = session?.user?.id
       const userEmail = session?.user?.email
-      // const response = await fetch(`/api/user/${userId}`)
-      const response = await fetch(`/api/user/${userEmail}`)
-      console.log('useEffect response', response)
-      if (response.ok) {
-        const user = await response.json()
+      // const getUserData = await fetch(`/api/user/${userId}`)
+      const getUserData = await fetch(`/api/user/${userEmail}`)
+      console.log('useEffect getUserData', getUserData)
+      if (getUserData.ok) {
+        const user = await getUserData.json()
         setUserData({
           pronouns: user.pronouns || 'He/Him',
           primaryEmail: user.email || '',
@@ -228,7 +229,7 @@ export default function UserDetails() {
 
     fetchUserData()
   }, [])
-
+ */
   const handleChange = (e: any) => {
     const { name, value } = e.target
     setUserData((prev) => ({
@@ -239,7 +240,7 @@ export default function UserDetails() {
   const handleSubmit = async (e: any) => {
     e.preventDefault()
     try {
-      const response = await fetch(`/api/user/update`, {
+      const postUserData = await fetch(`/api/user/update`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -249,7 +250,7 @@ export default function UserDetails() {
           id: session?.user?.id,
         }),
       })
-      if (response.ok) {
+      if (postUserData.ok) {
         console.log('Data saved')
       } else {
         console.error('Error saving data')
@@ -304,7 +305,7 @@ export default function UserDetails() {
               />
               <CardMedia
                 component="img"
-                src={userData.image || '/stick-tree-pose-400x400.png'}
+                image={userData.image || '/stick-tree-pose-400x400.png'}
                 alt="Yoga"
                 sx={{
                   width: 'auto',
@@ -354,9 +355,10 @@ export default function UserDetails() {
                 // required
                 id="outlined-basic"
                 placeholder='Enter "First Name"'
-                label="First Name"
+                label="Name"
                 value={userData.name}
                 variant="outlined"
+                disabled
                 // type="text"
               />
             </FormControl>
@@ -400,6 +402,7 @@ export default function UserDetails() {
               />
             </FormControl>
           </Grid>
+          {/*
           <Grid xs={12} sm={12} md={6} item>
             <FormControl fullWidth>
               <TextField
@@ -425,6 +428,7 @@ export default function UserDetails() {
               />
             </FormControl>
           </Grid>
+*/}
           {/* <Grid xs={12} sm={6} md={6} item>
       <FormControl>
         <TextField
@@ -452,6 +456,7 @@ export default function UserDetails() {
         />
       </FormControl>
     </Grid> */}
+          {/* 
           <Grid xs={12} sm={6} md={6} item>
             <FormControl>
               <TextField
@@ -495,7 +500,7 @@ export default function UserDetails() {
               />
             </FormControl>
           </Grid>
-
+ */}
           <Grid xs={12} sm={12} md={12} item>
             {/* <FormControl fullWidth>
       <InputLabel id="demo-simple-select-label">Yoga Style</InputLabel>
@@ -515,6 +520,7 @@ export default function UserDetails() {
       </Select>
     </FormControl> */}
           </Grid>
+          {/*           
           <Grid xs={12} sm={6} md={6} item>
             <FormControl>
               <TextField
@@ -632,25 +638,27 @@ export default function UserDetails() {
               </FormGroup>
             </FormControl>
           </Grid>
-
+ */}
+          {/* 
           <Grid xs={12} sm={12} md={12} item>
             <FormControl>
               <FormLabel>Calendar (google/outlook/Other):</FormLabel>
-              {/* <ToggleButtonGroup
-        value={alignment}
-        exclusive
-        onChange={handleCalendar}
-        aria-label="Calendar Connect"
-      >
-        <ToggleButton value="left" aria-label="left aligned">
-          <CalendarMonthIcon />
-        </ToggleButton>
-        <ToggleButton value="center" aria-label="centered">
-          <DoNotDisturbIcon />
-        </ToggleButton>
-      </ToggleButtonGroup> */}
+              <ToggleButtonGroup
+                value={alignment}
+                exclusive
+                onChange={handleCalendar}
+                aria-label="Calendar Connect"
+              >
+                <ToggleButton value="left" aria-label="left aligned">
+                  <CalendarMonthIcon />
+                </ToggleButton>
+                <ToggleButton value="center" aria-label="centered">
+                  <DoNotDisturbIcon />
+                </ToggleButton>
+              </ToggleButtonGroup>
             </FormControl>
           </Grid>
+           */}
           {/* <Grid container spacing={2} justifyContent="center" alignItems="center">
     <Grid item>{customList(left)}</Grid>
     <Grid item>
@@ -699,26 +707,27 @@ export default function UserDetails() {
     </Grid>
     <Grid item>{customList(right)}</Grid>
   </Grid> */}
-
+          {/* 
           <Grid xs={12} sm={6} md={6} item>
-            {/* <FormControl fullWidth>
-      <InputLabel id="demo-simple-select-label">
-        Timezone: for date time conversions
-      </InputLabel>
-      <Select
-        labelId="demo-simple-select-label"
-        name="timezone"
-        id="demo-simple-select"
-        value={timezone}
-        label="Age"
-        onChange={handleTimezoneChange}
-      >
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
-      </Select>
-    </FormControl> */}
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Timezone: for date time conversions
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                name="timezone"
+                id="demo-simple-select"
+                value={timezone}
+                label="Age"
+                onChange={handleTimezoneChange}
+              >
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
+           */}
           <Grid xs={12} sm={6} md={6} item>
             {/*  
 Current Location: tips
@@ -728,6 +737,7 @@ google maps, https://support.google.com/maps/answer/7047426?hl=en&co=GENIE.Platf
 Google Maps JS API, https://developers.google.com/maps/documentation/javascript
 
 */}
+            {/* 
             <FormControl>
               <Paper
                 sx={{
@@ -763,8 +773,9 @@ Google Maps JS API, https://developers.google.com/maps/documentation/javascript
                 </IconButton>
               </Paper>
             </FormControl>
+ */}
           </Grid>
-
+          {/* 
           <Grid xs={12} sm={6} md={6} item>
             <FormControl>
               <FormControlLabel
@@ -840,6 +851,7 @@ Google Maps JS API, https://developers.google.com/maps/documentation/javascript
               </AccordionActions>
             </Accordion>
           </Grid>
+           */}
         </>
       )}
     </Grid>

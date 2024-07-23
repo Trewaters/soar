@@ -1,46 +1,93 @@
 'use client'
 import React, { useState } from 'react'
-import { Box, Tab } from '@mui/material'
-import TabContext from '@mui/lab/TabContext'
-import TabList from '@mui/lab/TabList'
-import TabPanel from '@mui/lab/TabPanel'
+import { Box, Tab, Tabs } from '@mui/material'
 import PlannerMenu from '@app/planner/page'
 import LandingPage from '@components/landing-page'
 import EightLimbs from './eight-limbs'
 import UserDetails from '@app/userManagement/UserDetails'
 
-export default function TabHeader() {
-  const [value, setValue] = useState('1')
+interface TabPanelProps {
+  children?: React.ReactNode
+  index: number
+  value: number
+}
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  )
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  }
+}
+
+export default function TabHeader() {
+  const [value, setValue] = useState(0)
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
 
   return (
-    <TabContext value={value}>
-      <TabList
-        onChange={handleChange}
-        aria-label="menu of tabs"
-        variant="scrollable"
-        scrollButtons="auto"
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+      }}
+    >
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: 360,
+          borderBottom: 1,
+          borderColor: 'divider',
+        }}
       >
-        <Tab label="Landing" value="1" />
-        <Tab label="Planner" value="2" />
-        <Tab label="8 Limb Path" value="3" />
-        <Tab label="Users" value="4" />
-      </TabList>
-      <TabPanel value="1">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="tab menu"
+          variant="scrollable"
+          scrollButtons="auto"
+          centered
+        >
+          <Tab label="Landing" {...a11yProps(0)} />
+          {/* <Tab label="Planner" {...a11yProps(1)} /> */}
+          <Tab label="8 Limb Path" {...a11yProps(1)} />
+          <Tab label="Users" {...a11yProps(2)} />
+        </Tabs>
+      </Box>
+      <CustomTabPanel value={value} index={0}>
         <LandingPage />
-      </TabPanel>
-      <TabPanel value="2">
+      </CustomTabPanel>
+      {/* 
+      <CustomTabPanel value={value} index={1}>
         <PlannerMenu />
-      </TabPanel>
-      <TabPanel value="3">
+      </CustomTabPanel>
+ */}
+      <CustomTabPanel value={value} index={1}>
         <EightLimbs />
-      </TabPanel>
-      <TabPanel value="4">
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={2}>
         <UserDetails />
-      </TabPanel>
-    </TabContext>
+      </CustomTabPanel>
+    </Box>
   )
 }

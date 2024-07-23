@@ -52,12 +52,13 @@ export default function LandingPage() {
 }
 
 const links = [
-  { name: 'Flow', href: '/flowSeries', icon: <WhatshotIcon /> },
   {
     name: 'Asana Postures',
     href: '/asanaPostures',
     icon: <WaterDropOutlinedIcon />,
   },
+  /* 
+  { name: 'Flow', href: '/flowSeries', icon: <WhatshotIcon /> },
   {
     name: 'Meditation',
     href: '/meditation',
@@ -74,4 +75,5 @@ const links = [
     href: '/yogaJournal',
     icon: <EditNoteIcon />,
   },
+   */
 ]
