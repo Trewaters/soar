@@ -277,7 +277,7 @@ export default function UserDetails() {
     >
       {
         // if no session, show loading
-        !session && <div>Loading...</div>
+        !session && <div>Sign In</div>
       }
       {session && (
         <>

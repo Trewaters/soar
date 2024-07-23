@@ -11,14 +11,8 @@ export default async function UserButton() {
 
   if (!session?.user) return <SignIn />
   return (
-    <div className="flex gap-2 items-center">
-      <Avatar
-        alt={session.user.name ?? ''}
-        src={session.user.image ?? undefined}
-      />
-      {/* <Typography variant="body1">{session.user.email}</Typography> */}
-      <Typography variant="body1">{session.user.name}</Typography>
+    <>
       <SignOut />
-    </div>
+    </>
   )
 }
