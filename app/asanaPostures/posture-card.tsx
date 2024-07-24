@@ -62,7 +62,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 border: '1px solid',
                 padding: '8px',
                 marginLeft: 2,
-                marginBottom: 2,
+                marginTop: 2,
               }}
             >
               <Typography
@@ -85,7 +85,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 border: '1px solid',
                 padding: '8px',
                 marginLeft: 2,
-                marginBottom: 2,
+                marginTop: 2,
               }}
             >
               <Typography
@@ -109,7 +109,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 border: '1px solid',
                 padding: '8px',
                 marginLeft: 2,
-                marginBottom: 2,
+                marginTop: 2,
               }}
             >
               <Typography
@@ -134,7 +134,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 border: '1px solid',
                 padding: '8px',
                 marginLeft: 2,
-                marginBottom: 2,
+                marginTop: 2,
               }}
             >
               <Typography
@@ -162,7 +162,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 border: '1px solid',
                 padding: '8px',
                 marginLeft: 2,
-                marginBottom: 2,
+                marginTop: 2,
               }}
             >
               <Typography
@@ -187,7 +187,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 border: '1px solid',
                 padding: '8px',
                 marginLeft: 2,
-                marginBottom: 2,
+                marginTop: 2,
               }}
             >
               <Typography
@@ -212,7 +212,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 border: '1px solid',
                 padding: '8px',
                 marginLeft: 2,
-                marginBottom: 2,
+                marginTop: 2,
               }}
             >
               <Typography
@@ -237,7 +237,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 border: '1px solid',
                 padding: '8px',
                 marginLeft: 2,
-                marginBottom: 2,
+                marginTop: 2,
               }}
             >
               <Typography
@@ -262,7 +262,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 border: '1px solid',
                 padding: '8px',
                 marginLeft: 2,
-                marginBottom: 2,
+                marginTop: 2,
               }}
             >
               <Typography
@@ -287,7 +287,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 border: '1px solid',
                 padding: '8px',
                 marginLeft: 2,
-                marginBottom: 2,
+                marginTop: 2,
               }}
             >
               <Typography
