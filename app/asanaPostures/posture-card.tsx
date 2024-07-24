@@ -73,7 +73,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               </Typography>
             </Grid>
             <Grid item xs={8}>
-              <Typography variant="body1" sx={{ color: '#333' }}>
+              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
                 {posture?.sanskrit_names[0].simplified}
               </Typography>
             </Grid>
@@ -96,7 +96,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               </Typography>
             </Grid>
             <Grid item xs={8}>
-              <Typography variant="body1" sx={{ color: '#333' }}>
+              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
                 3 breaths
               </Typography>
             </Grid>
@@ -121,7 +121,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
             </Grid>
 
             <Grid item xs={8}>
-              <Typography variant="body1" sx={{ color: '#333' }}>
+              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
                 Feel into the posture
               </Typography>
             </Grid>
@@ -146,10 +146,10 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
             </Grid>
 
             <Grid item xs={8}>
-              <Typography variant="body1" sx={{ color: '#333' }}>
+              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
                 {posture?.benefits}
               </Typography>
-              {/* <Typography variant="body1" sx={{ color: '#333' }}>
+              {/* <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
                 Push through crown, thumb, pinkies, and heels
               </Typography> */}
             </Grid>
@@ -174,7 +174,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
             </Grid>
 
             <Grid item xs={8}>
-              <Typography variant="body1" sx={{ color: '#333' }}>
+              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
                 (Inhale/Exhale)
               </Typography>
             </Grid>
@@ -199,7 +199,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
             </Grid>
 
             <Grid item xs={8}>
-              <Typography variant="body1" sx={{ color: '#333' }}>
+              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
                 optimal gaze
               </Typography>
             </Grid>
@@ -224,7 +224,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
             </Grid>
 
             <Grid item xs={8}>
-              <Typography variant="body1" sx={{ color: '#333' }}>
+              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
                 {posture?.difficulty}
               </Typography>
             </Grid>
@@ -249,7 +249,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
             </Grid>
 
             <Grid item xs={8}>
-              <Typography variant="body1" sx={{ color: '#333' }}>
+              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
                 {`${posture?.category}, ${posture?.subcategory}`}
               </Typography>
             </Grid>
@@ -274,7 +274,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
             </Grid>
 
             <Grid item xs={8}>
-              <Typography variant="body1" sx={{ color: '#333' }}>
+              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
                 {posture?.description}
               </Typography>
             </Grid>
@@ -299,7 +299,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
             </Grid>
 
             <Grid item xs={8}>
-              <Typography variant="body1" sx={{ color: '#333' }}>
+              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
                 (Done ✅){' '}
               </Typography>
             </Grid>
