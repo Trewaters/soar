@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
-import PostureSearch from '@components/posture-search'
+import PostureSearch from '@postures/posture-search'
 import postureData from '@interfaces/postureData'
 // import prisma from '@lib/prisma'
 
@@ -21,7 +21,6 @@ import postureData from '@interfaces/postureData'
 //   })
 
 export default function Page() {
-  // const [data, setData] = useState(null)
   const [posturePropData, setPosturePropData] = React.useState<postureData[]>(
     []
   )
@@ -79,16 +78,15 @@ export default function Page() {
       {/* <button onClick={sendData} disabled={loading}>
         Send Data
       </button> */}
-      {loading && <p>Loading...</p>}
+      {loading && <p>Loading Yoga Postures...</p>}
       {error && <p>Error: {error}</p>}
       {posturePropData && posturePropData.length > 0 ? (
         <pre>
-          {/* JSON: {JSON.stringify(data, null, 2)} <br /> */}
           <PostureSearch posturePropData={posturePropData} />
         </pre>
       ) : (
         <button onClick={fetchData} disabled={loading}>
-          Load Postures
+          Click to Load Postures
         </button>
       )}
     </>

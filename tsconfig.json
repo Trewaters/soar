@@ -26,6 +26,7 @@
       "@lib/*": ["./lib/*"],
       "@prismaSchema/*": ["./prisma/*"],
       "@components/*": ["./app/clientComponents/*"],
+      "@postures/*": ["./app/asanaPostures/*"],
       "@serverComponents/*": ["./components/*"],
       "@interfaces/*": ["./app/interfaces/*"],
       "@styles/*": ["./styles/*"],

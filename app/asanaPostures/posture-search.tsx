@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
 import postureData from '@interfaces/postureData'
 import Providers from '@/app/Providers'
-import PostureCard from '@components/posture-card'
+import PostureCard from '@postures/posture-card'
 
 interface PostureSearchProps {
   posturePropData: postureData[]
