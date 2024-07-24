@@ -20,7 +20,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
 
   // Find the selected posture based on the Autocomplete selection
   const selectedPosture = postures?.find((p) => p.display_name === cardPosture)
-  const defaultPosture = postures?.find((p) => p.display_name === 'Awkward')
+  const defaultPosture = postures?.find((p) => p.display_name === '')
   // console.log('defaultPosture', defaultPosture?.display_name)
   // console.log('selectedPosture', selectedPosture)
   // console.log('posturePropData', posturePropData)

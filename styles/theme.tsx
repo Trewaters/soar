@@ -23,10 +23,15 @@ export const theme = createTheme({
   palette: {
     // mode: 'light',
     primary: {
+      /*  
+      color examples
+      https://www.color-hex.com/color/f6893d
+      */
       main: '#F6893D',
       light: '#FFBA6F',
       dark: '#C3581A',
       contrastText: '#000000',
+      // cardTextBack: #fef3eb,
     },
     secondary: {
       main: '#F6B93D',

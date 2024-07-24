@@ -81,9 +81,7 @@ export default function Page() {
       {loading && <p>Loading Yoga Postures...</p>}
       {error && <p>Error: {error}</p>}
       {posturePropData && posturePropData.length > 0 ? (
-        <pre>
-          <PostureSearch posturePropData={posturePropData} />
-        </pre>
+        <PostureSearch posturePropData={posturePropData} />
       ) : (
         <button onClick={fetchData} disabled={loading}>
           Click to Load Postures

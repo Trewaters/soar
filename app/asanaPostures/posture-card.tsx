@@ -22,26 +22,19 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
         <CardHeader
           sx={{
             textAlign: 'center',
-            // backgroundColor: '#f5f5f5',
             backgroundColor: 'primary.main',
             padding: 3,
             marginBottom: 2,
             '& .MuiCardHeader-title': {
-              fontSize: '1.5rem',
               fontWeight: 'bold',
-              // color: '#333',
-              color: 'primary.contrastText',
             },
             '& .MuiCardHeader-subheader': {
-              fontSize: '1rem',
               fontWeight: 'light',
-              // color: '#777',
               color: 'primary.contrastText',
             },
           }}
           title={posture?.display_name}
           subheader={posture?.name}
-          // color="primary"
         />
         <CardMedia sx={{ width: '50%', margin: 'auto' }}>
           <Image
@@ -60,7 +53,39 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               sm={3}
               sx={{
                 border: '1px solid',
-                padding: '8px',
+                marginLeft: 2,
+                marginTop: 2,
+              }}
+            >
+              <Typography
+                variant="overline"
+                sx={{
+                  fontWeight: 'bold',
+                  color: '#555',
+                }}
+              >
+                Description:
+              </Typography>
+            </Grid>
+
+            <Grid item xs={12} sm={8} sx={{ marginBottom: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  backgroundColor: '#fef3eb',
+                  padding: 2,
+                  color: '#333',
+                }}
+              >
+                {posture?.description}
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={3}
+              sx={{
+                border: '1px solid',
                 marginLeft: 2,
                 marginTop: 2,
               }}
@@ -72,8 +97,16 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 Pronunciation:
               </Typography>
             </Grid>
-            <Grid item xs={8}>
-              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
+            <Grid item xs={12} sm={8} sx={{ marginBottom: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  backgroundColor: '#fef3eb',
+                  padding: 2,
+                  marginTop: 2,
+                  color: '#333',
+                }}
+              >
                 {posture?.sanskrit_names[0].simplified}
               </Typography>
             </Grid>
@@ -83,7 +116,6 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               sm={3}
               sx={{
                 border: '1px solid',
-                padding: '8px',
                 marginLeft: 2,
                 marginTop: 2,
               }}
@@ -95,8 +127,16 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 Duration:
               </Typography>
             </Grid>
-            <Grid item xs={8}>
-              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
+            <Grid item xs={12} sm={8} sx={{ marginBottom: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  backgroundColor: '#fef3eb',
+                  padding: 2,
+                  marginTop: 2,
+                  color: '#333',
+                }}
+              >
                 3 breaths
               </Typography>
             </Grid>
@@ -107,7 +147,6 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               sm={3}
               sx={{
                 border: '1px solid',
-                padding: '8px',
                 marginLeft: 2,
                 marginTop: 2,
               }}
@@ -120,8 +159,16 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               </Typography>
             </Grid>
 
-            <Grid item xs={8}>
-              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
+            <Grid item xs={12} sm={8} sx={{ marginBottom: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  backgroundColor: '#fef3eb',
+                  padding: 2,
+                  marginTop: 2,
+                  color: '#333',
+                }}
+              >
                 Feel into the posture
               </Typography>
             </Grid>
@@ -132,7 +179,6 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               sm={3}
               sx={{
                 border: '1px solid',
-                padding: '8px',
                 marginLeft: 2,
                 marginTop: 2,
               }}
@@ -145,8 +191,16 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               </Typography>
             </Grid>
 
-            <Grid item xs={8}>
-              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
+            <Grid item xs={12} sm={8} sx={{ marginBottom: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  backgroundColor: '#fef3eb',
+                  padding: 2,
+                  marginTop: 2,
+                  color: '#333',
+                }}
+              >
                 {posture?.benefits}
               </Typography>
               {/* <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
@@ -160,7 +214,6 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               sm={3}
               sx={{
                 border: '1px solid',
-                padding: '8px',
                 marginLeft: 2,
                 marginTop: 2,
               }}
@@ -173,8 +226,16 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               </Typography>
             </Grid>
 
-            <Grid item xs={8}>
-              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
+            <Grid item xs={12} sm={8} sx={{ marginBottom: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  backgroundColor: '#fef3eb',
+                  padding: 2,
+                  marginTop: 2,
+                  color: '#333',
+                }}
+              >
                 (Inhale/Exhale)
               </Typography>
             </Grid>
@@ -185,7 +246,6 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               sm={3}
               sx={{
                 border: '1px solid',
-                padding: '8px',
                 marginLeft: 2,
                 marginTop: 2,
               }}
@@ -198,8 +258,16 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               </Typography>
             </Grid>
 
-            <Grid item xs={8}>
-              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
+            <Grid item xs={12} sm={8} sx={{ marginBottom: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  backgroundColor: '#fef3eb',
+                  padding: 2,
+                  marginTop: 2,
+                  color: '#333',
+                }}
+              >
                 optimal gaze
               </Typography>
             </Grid>
@@ -210,7 +278,6 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               sm={3}
               sx={{
                 border: '1px solid',
-                padding: '8px',
                 marginLeft: 2,
                 marginTop: 2,
               }}
@@ -223,8 +290,16 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               </Typography>
             </Grid>
 
-            <Grid item xs={8}>
-              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
+            <Grid item xs={12} sm={8} sx={{ marginBottom: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  backgroundColor: '#fef3eb',
+                  padding: 2,
+                  marginTop: 2,
+                  color: '#333',
+                }}
+              >
                 {posture?.difficulty}
               </Typography>
             </Grid>
@@ -235,7 +310,6 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               sm={3}
               sx={{
                 border: '1px solid',
-                padding: '8px',
                 marginLeft: 2,
                 marginTop: 2,
               }}
@@ -248,8 +322,16 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               </Typography>
             </Grid>
 
-            <Grid item xs={8}>
-              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
+            <Grid item xs={12} sm={8} sx={{ marginBottom: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  backgroundColor: '#fef3eb',
+                  padding: 2,
+                  marginTop: 2,
+                  color: '#333',
+                }}
+              >
                 {`${posture?.category}, ${posture?.subcategory}`}
               </Typography>
             </Grid>
@@ -260,32 +342,6 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               sm={3}
               sx={{
                 border: '1px solid',
-                padding: '8px',
-                marginLeft: 2,
-                marginTop: 2,
-              }}
-            >
-              <Typography
-                variant="overline"
-                sx={{ fontWeight: 'bold', color: '#555' }}
-              >
-                Description:
-              </Typography>
-            </Grid>
-
-            <Grid item xs={8}>
-              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
-                {posture?.description}
-              </Typography>
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sm={3}
-              sx={{
-                border: '1px solid',
-                padding: '8px',
                 marginLeft: 2,
                 marginTop: 2,
               }}
@@ -298,8 +354,16 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               </Typography>
             </Grid>
 
-            <Grid item xs={8}>
-              <Typography variant="body1" sx={{ marginTop: 2, color: '#333' }}>
+            <Grid item xs={12} sm={8} sx={{ marginBottom: 2 }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  backgroundColor: '#fef3eb',
+                  padding: 2,
+                  marginTop: 2,
+                  color: '#333',
+                }}
+              >
                 (Done ✅){' '}
               </Typography>
             </Grid>
