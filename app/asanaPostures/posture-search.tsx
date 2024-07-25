@@ -31,7 +31,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
 
   return (
     <Providers>
-      <Stack spacing={2} sx={{ background: 'white', mb: '1em' }}>
+      <Stack spacing={2} sx={{ marginX: 3, background: 'white', mb: '1em' }}>
         <Autocomplete
           id="search-poses"
           options={postures}

@@ -7,6 +7,8 @@ import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import Paper from '@mui/material/Paper'
 import Image from 'next/image'
+import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material'
+import { CheckBox } from '@mui/icons-material'
 
 interface PostureCardProps {
   postureCardProp: postureData
@@ -75,6 +77,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   backgroundColor: '#fef3eb',
                   padding: 2,
                   color: '#333',
+                  borderTopRightRadius: { xs: 0, sm: 75 },
+                  borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
                 {posture?.description}
@@ -105,6 +109,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   padding: 2,
                   marginTop: 2,
                   color: '#333',
+                  borderTopRightRadius: { xs: 0, sm: 75 },
+                  borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
                 {posture?.sanskrit_names[0].simplified}
@@ -135,6 +141,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   padding: 2,
                   marginTop: 2,
                   color: '#333',
+                  borderTopRightRadius: { xs: 0, sm: 75 },
+                  borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
                 3 breaths
@@ -167,6 +175,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   padding: 2,
                   marginTop: 2,
                   color: '#333',
+                  borderTopRightRadius: { xs: 0, sm: 75 },
+                  borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
                 Feel into the posture
@@ -199,6 +209,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   padding: 2,
                   marginTop: 2,
                   color: '#333',
+                  borderTopRightRadius: { xs: 0, sm: 75 },
+                  borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
                 {posture?.benefits}
@@ -234,6 +246,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   padding: 2,
                   marginTop: 2,
                   color: '#333',
+                  borderTopRightRadius: { xs: 0, sm: 75 },
+                  borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
                 (Inhale/Exhale)
@@ -266,6 +280,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   padding: 2,
                   marginTop: 2,
                   color: '#333',
+                  borderTopRightRadius: { xs: 0, sm: 75 },
+                  borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
                 optimal gaze
@@ -298,6 +314,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   padding: 2,
                   marginTop: 2,
                   color: '#333',
+                  borderTopRightRadius: { xs: 0, sm: 75 },
+                  borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
                 {posture?.difficulty}
@@ -330,6 +348,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   padding: 2,
                   marginTop: 2,
                   color: '#333',
+                  borderTopRightRadius: { xs: 0, sm: 75 },
+                  borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
                 {`${posture?.category}, ${posture?.subcategory}`}
@@ -350,7 +370,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="overline"
                 sx={{ fontWeight: 'bold', color: '#555' }}
               >
-                Completed:
+                Activities:
               </Typography>
             </Grid>
 
@@ -362,9 +382,18 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   padding: 2,
                   marginTop: 2,
                   color: '#333',
+                  borderTopRightRadius: { xs: 0, sm: 75 },
+                  borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
-                (Done ✅){' '}
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox defaultChecked />}
+                    label="Completed"
+                  />
+                  <FormControlLabel control={<Checkbox />} label="Easy" />
+                  <FormControlLabel control={<Checkbox />} label="Difficult" />
+                </FormGroup>
               </Typography>
             </Grid>
           </Grid>
