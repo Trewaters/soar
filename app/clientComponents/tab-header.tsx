@@ -70,7 +70,7 @@ export default function TabHeader() {
           <Tab label="Landing" {...a11yProps(0)} />
           {/* <Tab label="Planner" {...a11yProps(1)} /> */}
           <Tab label="8 Limb Path" {...a11yProps(1)} />
-          <Tab label="Users" {...a11yProps(2)} />
+          <Tab label="Profile" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
