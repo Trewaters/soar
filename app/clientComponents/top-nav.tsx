@@ -36,11 +36,11 @@ const navLinks = [
     href: '/asanaPostures',
     icon: <ChevronRightIcon />,
   },
-  // {
-  //   name: 'Profile',
-  //   href: '/profile',
-  //   icon: <ChevronRightIcon />,
-  // },
+  {
+    name: 'Profile',
+    href: '/profile',
+    icon: <ChevronRightIcon />,
+  },
   // final item will have a divider above it
   {
     name: 'Sign In',
