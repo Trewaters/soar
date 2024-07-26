@@ -5,7 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import HomeIcon from '@mui/icons-material/Home'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import MenuIcon from '@mui/icons-material/Menu'
 import FlareIcon from '@mui/icons-material/Flare'
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import {
@@ -88,7 +88,7 @@ export default function TopNav() {
   return (
     <>
       <IconButton disableRipple onClick={toggleDrawer(true)}>
-        <ArrowForwardIcon />
+        <MenuIcon />
       </IconButton>
       <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
         {DrawerList}
