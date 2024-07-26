@@ -125,17 +125,38 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 
 ### Known Bugs
 
-No Known Bugs!
+**Twitter Auth Forbidden**
+
+2024-07-26 16:18:25
+
+Currently setup to use v5 of Auth.js. Provider must be tested from Vercel hosting due to TwitterX terms of use. When trying to login through provider I get a 403 error in the browser. No errors showing in Vercel. Just has redirect log to Twitter auth.
+
+```
+Jul 26 16:13:09.71
+POST
+302
+soar-pqzo6upmv-trewaters-projects.vercel.app
+/auth/signin/twitter
+```
 
 What you are experiencing is a feature 😉 ! Open a [github issue](https://github.com/Trewaters/soar/issues) if you disagree.
 
 ## Branches
 
-1. [`develop`](https://soar-develop.vercel.app/) - active work
-2. [`main`](https://soar-main.vercel.app/) – stable branch, create develop from this but only merge stable branches (publised to Vercel)
+1. [`main`](https://soar-main.vercel.app/) – mostly stable branch. Used for production deployment (publised to Vercel).
+2. [`develop`](https://soar-develop.vercel.app/) - active work that is merged into main. Use this branch to check builds and pre-production deployment issues. Any work I started is a branch created from develop.
 3. [`version_stable`](https://soar-jade.vercel.app/) - stable version this is the stable build of the most current version I am working on.
-4. Feature/… - any feature I am working on that could go back into main when complete.
+4. Feature/… - features I work on that could go merge into develop when complete.
    `version_010` - release version 0.1.0.
+
+### Current internal "feature" branches
+
+I create branches with the name of the feature I plan to work on. This way I keep my work seperated. If I don't finish I can come back to it, but it won't interfere with any other work I want to do on the app. These have been created organically and are due to change without notice because I am currently working alone.
+
+- "feature/auth"
+- "feature/nav"
+- "feature/profile"
+- "feature/posture-cards"
 
 The "version" branches are locked after release.
 
