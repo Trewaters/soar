@@ -75,7 +75,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="body1"
                 sx={{
                   backgroundColor: '#fef3eb',
-                  padding: 2,
+                  padding: 4,
                   color: '#333',
                   borderTopRightRadius: { xs: 0, sm: 75 },
                   borderBottomRightRadius: { xs: 0, sm: 75 },
@@ -106,7 +106,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="body1"
                 sx={{
                   backgroundColor: '#fef3eb',
-                  padding: 2,
+                  padding: 4,
                   marginTop: 2,
                   color: '#333',
                   borderTopRightRadius: { xs: 0, sm: 75 },
@@ -138,7 +138,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="body1"
                 sx={{
                   backgroundColor: '#fef3eb',
-                  padding: 2,
+                  padding: 4,
                   marginTop: 2,
                   color: '#333',
                   borderTopRightRadius: { xs: 0, sm: 75 },
@@ -172,7 +172,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="body1"
                 sx={{
                   backgroundColor: '#fef3eb',
-                  padding: 2,
+                  padding: 4,
                   marginTop: 2,
                   color: '#333',
                   borderTopRightRadius: { xs: 0, sm: 75 },
@@ -206,7 +206,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="body1"
                 sx={{
                   backgroundColor: '#fef3eb',
-                  padding: 2,
+                  padding: 4,
                   marginTop: 2,
                   color: '#333',
                   borderTopRightRadius: { xs: 0, sm: 75 },
@@ -243,7 +243,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="body1"
                 sx={{
                   backgroundColor: '#fef3eb',
-                  padding: 2,
+                  padding: 4,
                   marginTop: 2,
                   color: '#333',
                   borderTopRightRadius: { xs: 0, sm: 75 },
@@ -277,7 +277,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="body1"
                 sx={{
                   backgroundColor: '#fef3eb',
-                  padding: 2,
+                  padding: 4,
                   marginTop: 2,
                   color: '#333',
                   borderTopRightRadius: { xs: 0, sm: 75 },
@@ -311,7 +311,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="body1"
                 sx={{
                   backgroundColor: '#fef3eb',
-                  padding: 2,
+                  padding: 4,
                   marginTop: 2,
                   color: '#333',
                   borderTopRightRadius: { xs: 0, sm: 75 },
@@ -345,7 +345,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="body1"
                 sx={{
                   backgroundColor: '#fef3eb',
-                  padding: 2,
+                  padding: 4,
                   marginTop: 2,
                   color: '#333',
                   borderTopRightRadius: { xs: 0, sm: 75 },
@@ -379,7 +379,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="body1"
                 sx={{
                   backgroundColor: '#fef3eb',
-                  padding: 2,
+                  padding: 4,
                   marginTop: 2,
                   color: '#333',
                   borderTopRightRadius: { xs: 0, sm: 75 },
