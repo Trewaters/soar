@@ -6,6 +6,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import FlareIcon from '@mui/icons-material/Flare'
 import {
   Divider,
   Drawer,
@@ -14,8 +15,39 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from '@mui/material'
-import { useRouter } from 'next/navigation'
+
+import Link from 'next/link'
+
+const navLinks = [
+  {
+    name: 'Home',
+    href: '/',
+    icon: <HomeIcon />,
+  },
+  {
+    name: '8 Limbs',
+    href: '/eightLimbs',
+    icon: <FlareIcon />,
+  },
+  {
+    name: 'Asanas',
+    href: '/asanaPostures',
+    icon: <ChevronRightIcon />,
+  },
+  // {
+  //   name: 'Profile',
+  //   href: '/profile',
+  //   icon: <ChevronRightIcon />,
+  // },
+  // final item will have a divider above it
+  {
+    name: 'Sign In',
+    href: '/signIn',
+    icon: <AccountCircleIcon />,
+  },
+]
 
 export default function TopNav() {
   const [openDrawer, setOpenDrawer] = React.useState(false)
@@ -23,46 +55,32 @@ export default function TopNav() {
     setOpenDrawer(open)
   }
 
-  const router = useRouter()
-
-  const handleNavigation = (path: any) => {
-    router.push(path)
-  }
-
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-      <List>
-        {['Home', '8 Limbs', 'Profile'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton
-              onClick={() => {
-                if (text === 'Home') {
-                  handleNavigation('/')
-                  setOpenDrawer(false)
-                }
-              }}
-            >
-              <ListItemIcon>
-                {index === 0 ? <HomeIcon /> : <ChevronRightIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['Sign In'].map((text) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <AccountCircleIcon />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      <nav aria-label="quick menu">
+        <List>
+          {navLinks.map((navItem, index) => (
+            <React.Fragment key={navItem.name}>
+              {index === navLinks.length - 1 && <Divider />}
+              <ListItem disablePadding>
+                <Link href={navItem.href} passHref>
+                  <ListItemButton
+                    sx={{ width: '250px' }}
+                    onClick={() => {
+                      setOpenDrawer(false)
+                    }}
+                  >
+                    <ListItemIcon>{navItem.icon}</ListItemIcon>
+                    <ListItemText>
+                      <Typography variant="button">{navItem.name}</Typography>
+                    </ListItemText>
+                  </ListItemButton>
+                </Link>
+              </ListItem>
+            </React.Fragment>
+          ))}
+        </List>
+      </nav>
     </Box>
   )
 
