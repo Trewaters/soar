@@ -7,6 +7,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import FlareIcon from '@mui/icons-material/Flare'
+import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import {
   Divider,
   Drawer,
@@ -34,7 +35,7 @@ const navLinks = [
   {
     name: 'Asanas',
     href: '/asanaPostures',
-    icon: <ChevronRightIcon />,
+    icon: <WaterDropOutlinedIcon />,
   },
   {
     name: 'Profile',
