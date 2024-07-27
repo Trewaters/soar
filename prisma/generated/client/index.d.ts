@@ -15071,11 +15071,11 @@ export namespace Prisma {
 
   export type UserDataWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    provider_id?: string
     email?: string
     AND?: UserDataWhereInput | UserDataWhereInput[]
     OR?: UserDataWhereInput[]
     NOT?: UserDataWhereInput | UserDataWhereInput[]
-    provider_id?: StringNullableFilter<"UserData"> | string | null
     name?: StringNullableFilter<"UserData"> | string | null
     emailVerified?: DateTimeNullableFilter<"UserData"> | Date | string | null
     image?: StringNullableFilter<"UserData"> | string | null
@@ -15087,7 +15087,7 @@ export namespace Prisma {
     sessions?: SessionListRelationFilter
     Authenticator?: AuthenticatorListRelationFilter
     Practitioner?: PractitionerListRelationFilter
-  }, "id" | "email">
+  }, "id" | "provider_id" | "email">
 
   export type UserDataOrderByWithAggregationInput = {
     id?: SortOrder

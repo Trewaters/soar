@@ -204,31 +204,32 @@ export default function UserDetails() {
     image: session?.user?.image,
   })
 
-  React.useEffect(() => {
-    // console.log('User useEffect', session?.user?.email)
-    console.log('User useEffect triggers')
+  // React.useEffect(() => {
+  //   // console.log('User useEffect', session?.user?.email)
+  //   console.log('User useEffect triggers')
 
-    if (!session) return
-    const fetchUserData = async () => {
-      // const userId = session?.user?.id
-      const userEmail = session?.user?.email
-      // const getUserData = await fetch(`/api/user/${userId}`)
-      const getUserData = await fetch(`/api/user/?${userEmail}`)
-      console.log('useEffect getUserData', getUserData)
-      if (getUserData.ok) {
-        const user = await getUserData.json()
-        setUserData({
-          pronouns: user.pronouns || 'He/Him',
-          primaryEmail: user.email || '',
-          name: user.name || '',
-          image: user.image || '',
-        })
-        console.log('User data', user)
-      }
-    }
+  //   if (!session) return
+  //   const fetchUserData = async () => {
+  //     // const userId = session?.user?.id
+  //     const userEmail = session?.user?.email
+  //     // const getUserData = await fetch(`/api/user/${userId}`)
+  //     const getUserData = await fetch(`/api/user/?${userEmail}`)
+  //     console.log('useEffect getUserData', getUserData)
+  //     if (getUserData.ok) {
+  //       const user = await getUserData.json()
+  //       console.log('await getUserData', user)
+  //       // setUserData({
+  //       //   pronouns: user.pronouns || '*',
+  //       //   primaryEmail: user.email || '*',
+  //       //   name: user.name || '*',
+  //       //   image: user.image || '*',
+  //       // })
+  //       console.log('User data', user)
+  //     }
+  //   }
 
-    fetchUserData()
-  }, [])
+  //   fetchUserData()
+  // }, [])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target

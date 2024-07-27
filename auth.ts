@@ -164,7 +164,7 @@ const config = {
       if (token) {
         session.user.id = token.id as string
       }
-      console.log('config session:', session)
+      // console.log('config session:', session)
       return session
     },
     jwt({ token, trigger, session, account }) {

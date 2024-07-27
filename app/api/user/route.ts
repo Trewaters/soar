@@ -5,16 +5,21 @@ const prisma = new PrismaClient()
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   console.log(`searchParams: ${searchParams}`)
-  const id = searchParams.get('userEmail')
+  const id = searchParams
+  console.log(`GET id: ${id}`)
+  // const id = searchParams.get('userEmail')
   // const id = searchParams.get('userId')
   if (!id) {
     return Response.json({ error: 'User not found' })
   }
-  console.log(`api GET user: ${id}`)
+  console.log(`GET user: ${id}`)
+
+  const decodedId = id.toString().replace('%40', '@').replace('=', '')
+  console.log(`Decoded id: ${decodedId}`)
 
   try {
     const res = await prisma.userData.findUnique({
-      where: { email: id },
+      where: { email: decodedId.toString() },
       // where: { id: id },
     })
     console.log(`api prisma.user: ${JSON.stringify(res)}`)
