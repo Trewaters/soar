@@ -78,41 +78,35 @@ export default function UserDetails() {
   }
 
   // fetch user data based on session.user.email
+  const fetchUserData = async () => {
+    try {
+      const userEmail = session?.user?.email
+      if (!userEmail) return
+      console.log('Fetching user data for email:', userEmail)
+      const response = await fetch(
+        `/api/user/?email=${encodeURIComponent(userEmail)}`
+      )
+      console.log('useEffect response', response)
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(`Failed to fetch user data: ${errorText}`)
+      }
+      const user = await response.json()
+      console.log('useEffect fetchUserData', userData)
+      // TODO: this setUserData is clearing the data. Troubleshoot this.
+      // setUserData(user)
+    } catch (error) {
+      console.error('Error fetching user data', error)
+    }
+  }
+
+  // fetch user data based on session.user.email
   React.useEffect(() => {
     if (!session) return
-    // console.log('User useEffect triggers')
-    console.log('useEffect', session?.user?.email)
-
-    const fetchUserData = async () => {
-      try {
-        // const userId = session?.user?.id
-        const userEmail = session?.user?.email
-        if (!userEmail) return
-
-        // const response = await fetch(`/api/user/${userId}`)
-        // const response = await fetch(`/api/user/?email=${encodeURIComponent(userEmail)}`);
-        const response = await fetch(
-          `/api/user/?${encodeURIComponent(userEmail)}`
-        )
-        // const response = await fetch(`/api/user/?${userEmail}`)
-        console.log('useEffect response', response)
-
-        if (!response.ok) {
-          const errorText = await response.text()
-          throw new Error(`Failed to fetch user data: ${errorText}`)
-        }
-
-        const user = await response.json()
-        // setUserData(await response.json())
-        console.log('User data', userData)
-        setUserData(user)
-      } catch (error) {
-        console.error('Error fetching user data', error)
-      }
-    }
+    console.log('useEffect triggered with email', session?.user?.email)
 
     fetchUserData()
-  }, [session?.user?.email])
+  }, [session])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -136,6 +130,7 @@ export default function UserDetails() {
       })
       if (postUserData.ok) {
         console.log('Data saved')
+        await fetchUserData()
       } else {
         console.error('Error saving data')
         throw new Error('Error saving data')

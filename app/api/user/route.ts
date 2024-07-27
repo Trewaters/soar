@@ -4,31 +4,34 @@ const prisma = new PrismaClient()
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  console.log(`searchParams: ${searchParams}`)
-  const id = searchParams
-  console.log(`GET id: ${id}`)
-  // const id = searchParams.get('userEmail')
-  // const id = searchParams.get('userId')
-  if (!id) {
-    return Response.json({ error: 'User not found' })
-  }
-  console.log(`GET user: ${id}`)
+  const email = searchParams.get('email')
 
-  const decodedId = id.toString().replace('%40', '@').replace('=', '')
-  console.log(`Decoded id: ${decodedId}`)
+  if (!email) {
+    return new Response(JSON.stringify({ error: 'User not found' }), {
+      status: 404,
+    })
+  }
+
+  const decodedEmail = decodeURIComponent(email)
 
   try {
-    const res = await prisma.userData.findUnique({
-      where: { email: decodedId.toString() },
-      // where: { id: id },
+    const user = await prisma.userData.findUnique({
+      where: { email: decodedEmail },
     })
-    console.log(`api prisma.user: ${JSON.stringify(res)}`)
-    if (!res) {
-      return Response.json({ error: 'User not found' })
+
+    console.log(`api prisma.user: ${JSON.stringify(user)}`)
+
+    if (!user) {
+      return new Response(JSON.stringify({ error: 'User not found' }), {
+        status: 404,
+      })
     }
-    const data = await res
-    return Response.json({ data })
+
+    return new Response(JSON.stringify({ data: user }), { status: 200 })
   } catch (error) {
-    return Response.json({ error: 'Failed to fetch user data' })
+    return new Response(
+      JSON.stringify({ error: 'Failed to fetch user data' }),
+      { status: 500 }
+    )
   }
 }
