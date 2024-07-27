@@ -21,10 +21,10 @@ export async function POST(req: Request) {
 
   const { pronouns, email } = await req.json()
 
-  console.log(`pronouns, email: ${pronouns}, ${email}`)
+  // console.log(`pronouns, email: ${pronouns}, ${email}`)
 
   const decodedId = email.toString().replace('%40', '@').replace('=', '')
-  console.log(`Decoded id: ${decodedId}`)
+  // console.log(`Decoded id: ${decodedId}`)
 
   try {
     await prisma.userData.update({
