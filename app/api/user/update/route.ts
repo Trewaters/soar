@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/generated/client'
 
 const prisma = new PrismaClient()
 
-export async function POST(req: any) {
+export async function POST(req: Request) {
   // if (req.method === 'POST') {
   //   const { pronouns, id } = req.body
   //   try {
@@ -19,10 +19,16 @@ export async function POST(req: any) {
   //   Response.status(405).end(`Method ${req.method} Not Allowed`)
   // }
 
-  const { pronouns, id } = req.body
+  const { pronouns, email } = await req.json()
+
+  console.log(`pronouns, email: ${pronouns}, ${email}`)
+
+  const decodedId = email.toString().replace('%40', '@').replace('=', '')
+  console.log(`Decoded id: ${decodedId}`)
+
   try {
     await prisma.userData.update({
-      where: { id },
+      where: { email: decodedId },
       data: { pronouns },
     })
     return Response.json({ message: 'Data saved' })
