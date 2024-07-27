@@ -1,7 +1,6 @@
 'use client'
 import React, { useState } from 'react'
 import { Box, Tab, Tabs } from '@mui/material'
-import PlannerMenu from '@app/planner/page'
 import LandingPage from '@components/landing-page'
 import EightLimbs from './eight-limbs'
 import UserDetails from '@app/userManagement/UserDetails'

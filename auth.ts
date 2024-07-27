@@ -43,7 +43,7 @@ const config = {
       const email = user.email
 
       // Check if the user already exists
-      const existingUser = await prisma.user.findUnique({
+      const existingUser = await prisma.userData.findUnique({
         where: { email: email ?? undefined },
       })
 
@@ -54,7 +54,7 @@ const config = {
 
       if (!existingUser && account) {
         try {
-          const newUser = await prisma.user.create({
+          const newUser = await prisma.userData.create({
             data: {
               provider_id: user.id,
               name: user.name,

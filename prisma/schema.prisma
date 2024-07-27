@@ -13,7 +13,7 @@ generator client {
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
-model User {
+model UserData {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
   provider_id   String?
   name          String?
@@ -49,7 +49,7 @@ model Account {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // @@unique([provider, providerAccountId])
 }
@@ -59,7 +59,7 @@ model Session {
   sessionToken String   @unique
   userId       String   @db.ObjectId
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         UserData     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -85,7 +85,7 @@ model Authenticator {
   credentialBackedUp   Boolean
   transports           String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, credentialID])
 }
@@ -123,7 +123,7 @@ model Practitioner {
   deleteAccountInfo String
   company           String
   userId            String @db.ObjectId
-  user              User   @relation(fields: [userId], references: [id])
+  user              UserData   @relation(fields: [userId], references: [id])
 }
 
 model Series {

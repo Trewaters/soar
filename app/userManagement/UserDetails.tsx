@@ -203,7 +203,7 @@ export default function UserDetails() {
     name: session?.user?.name,
     image: session?.user?.image,
   })
-  /* 
+
   React.useEffect(() => {
     // console.log('User useEffect', session?.user?.email)
     console.log('User useEffect triggers')
@@ -213,7 +213,7 @@ export default function UserDetails() {
       // const userId = session?.user?.id
       const userEmail = session?.user?.email
       // const getUserData = await fetch(`/api/user/${userId}`)
-      const getUserData = await fetch(`/api/user/${userEmail}`)
+      const getUserData = await fetch(`/api/user/?${userEmail}`)
       console.log('useEffect getUserData', getUserData)
       if (getUserData.ok) {
         const user = await getUserData.json()
@@ -229,8 +229,8 @@ export default function UserDetails() {
 
     fetchUserData()
   }, [])
- */
-  const handleChange = (e: any) => {
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setUserData((prev) => ({
       ...prev,
@@ -262,7 +262,7 @@ export default function UserDetails() {
   }
 
   /*  
-  Form reesources:
+  Form resources:
   - https://www.ventureharbour.com/form-design-best-practices/
   */
   return (
@@ -378,15 +378,17 @@ export default function UserDetails() {
     </FormControl>
   </Grid> */}
           <Grid xs={12} sm={6} md={6} item>
-            <TextField
-              name="pronouns"
-              id="pronouns"
-              label="Pronouns:"
-              variant="outlined"
-              // type="text"
-              defaultValue={userData.pronouns}
-              onChange={handleChange}
-            />
+            <FormControl>
+              <TextField
+                name="pronouns"
+                id="pronouns"
+                label="Pronouns:"
+                variant="outlined"
+                // type="text"
+                defaultValue={userData.pronouns}
+                onChange={handleChange}
+              />
+            </FormControl>
           </Grid>
           <Grid xs={12} sm={12} md={12} item>
             <FormControl fullWidth>

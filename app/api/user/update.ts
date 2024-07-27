@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export default async function handler(req: any, res: any) {
+export async function POST(req: any, res: any) {
   if (req.method === 'POST') {
     const { pronouns, id } = req.body
     try {
