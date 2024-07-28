@@ -172,11 +172,11 @@ exports.Prisma.AuthenticatorScalarFieldEnum = {
 exports.Prisma.PractitionerScalarFieldEnum = {
   id: 'id',
   firstName: 'firstName',
+  lastName: 'lastName',
   bio: 'bio',
   headline: 'headline',
   location: 'location',
   websiteURL: 'websiteURL',
-  lastName: 'lastName',
   userId: 'userId'
 };
 

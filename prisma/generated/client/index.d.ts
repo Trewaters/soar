@@ -7019,33 +7019,33 @@ export namespace Prisma {
   export type PractitionerMinAggregateOutputType = {
     id: string | null
     firstName: string | null
+    lastName: string | null
     bio: string | null
     headline: string | null
     location: string | null
     websiteURL: string | null
-    lastName: string | null
     userId: string | null
   }
 
   export type PractitionerMaxAggregateOutputType = {
     id: string | null
     firstName: string | null
+    lastName: string | null
     bio: string | null
     headline: string | null
     location: string | null
     websiteURL: string | null
-    lastName: string | null
     userId: string | null
   }
 
   export type PractitionerCountAggregateOutputType = {
     id: number
     firstName: number
+    lastName: number
     bio: number
     headline: number
     location: number
     websiteURL: number
-    lastName: number
     userId: number
     _all: number
   }
@@ -7054,33 +7054,33 @@ export namespace Prisma {
   export type PractitionerMinAggregateInputType = {
     id?: true
     firstName?: true
+    lastName?: true
     bio?: true
     headline?: true
     location?: true
     websiteURL?: true
-    lastName?: true
     userId?: true
   }
 
   export type PractitionerMaxAggregateInputType = {
     id?: true
     firstName?: true
+    lastName?: true
     bio?: true
     headline?: true
     location?: true
     websiteURL?: true
-    lastName?: true
     userId?: true
   }
 
   export type PractitionerCountAggregateInputType = {
     id?: true
     firstName?: true
+    lastName?: true
     bio?: true
     headline?: true
     location?: true
     websiteURL?: true
-    lastName?: true
     userId?: true
     _all?: true
   }
@@ -7160,11 +7160,11 @@ export namespace Prisma {
   export type PractitionerGroupByOutputType = {
     id: string
     firstName: string
+    lastName: string
     bio: string
     headline: string
     location: string
     websiteURL: string
-    lastName: string
     userId: string
     _count: PractitionerCountAggregateOutputType | null
     _min: PractitionerMinAggregateOutputType | null
@@ -7188,11 +7188,11 @@ export namespace Prisma {
   export type PractitionerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     firstName?: boolean
+    lastName?: boolean
     bio?: boolean
     headline?: boolean
     location?: boolean
     websiteURL?: boolean
-    lastName?: boolean
     userId?: boolean
     user?: boolean | UserDataDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["practitioner"]>
@@ -7201,11 +7201,11 @@ export namespace Prisma {
   export type PractitionerSelectScalar = {
     id?: boolean
     firstName?: boolean
+    lastName?: boolean
     bio?: boolean
     headline?: boolean
     location?: boolean
     websiteURL?: boolean
-    lastName?: boolean
     userId?: boolean
   }
 
@@ -7221,11 +7221,11 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       firstName: string
+      lastName: string
       bio: string
       headline: string
       location: string
       websiteURL: string
-      lastName: string
       userId: string
     }, ExtArgs["result"]["practitioner"]>
     composites: {}
@@ -7622,11 +7622,11 @@ export namespace Prisma {
   interface PractitionerFieldRefs {
     readonly id: FieldRef<"Practitioner", 'String'>
     readonly firstName: FieldRef<"Practitioner", 'String'>
+    readonly lastName: FieldRef<"Practitioner", 'String'>
     readonly bio: FieldRef<"Practitioner", 'String'>
     readonly headline: FieldRef<"Practitioner", 'String'>
     readonly location: FieldRef<"Practitioner", 'String'>
     readonly websiteURL: FieldRef<"Practitioner", 'String'>
-    readonly lastName: FieldRef<"Practitioner", 'String'>
     readonly userId: FieldRef<"Practitioner", 'String'>
   }
     
@@ -14557,11 +14557,11 @@ export namespace Prisma {
   export const PractitionerScalarFieldEnum: {
     id: 'id',
     firstName: 'firstName',
+    lastName: 'lastName',
     bio: 'bio',
     headline: 'headline',
     location: 'location',
     websiteURL: 'websiteURL',
-    lastName: 'lastName',
     userId: 'userId'
   };
 
@@ -15122,11 +15122,11 @@ export namespace Prisma {
     NOT?: PractitionerWhereInput | PractitionerWhereInput[]
     id?: StringFilter<"Practitioner"> | string
     firstName?: StringFilter<"Practitioner"> | string
+    lastName?: StringFilter<"Practitioner"> | string
     bio?: StringFilter<"Practitioner"> | string
     headline?: StringFilter<"Practitioner"> | string
     location?: StringFilter<"Practitioner"> | string
     websiteURL?: StringFilter<"Practitioner"> | string
-    lastName?: StringFilter<"Practitioner"> | string
     userId?: StringFilter<"Practitioner"> | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
   }
@@ -15134,11 +15134,11 @@ export namespace Prisma {
   export type PractitionerOrderByWithRelationInput = {
     id?: SortOrder
     firstName?: SortOrder
+    lastName?: SortOrder
     bio?: SortOrder
     headline?: SortOrder
     location?: SortOrder
     websiteURL?: SortOrder
-    lastName?: SortOrder
     userId?: SortOrder
     user?: UserDataOrderByWithRelationInput
   }
@@ -15149,11 +15149,11 @@ export namespace Prisma {
     OR?: PractitionerWhereInput[]
     NOT?: PractitionerWhereInput | PractitionerWhereInput[]
     firstName?: StringFilter<"Practitioner"> | string
+    lastName?: StringFilter<"Practitioner"> | string
     bio?: StringFilter<"Practitioner"> | string
     headline?: StringFilter<"Practitioner"> | string
     location?: StringFilter<"Practitioner"> | string
     websiteURL?: StringFilter<"Practitioner"> | string
-    lastName?: StringFilter<"Practitioner"> | string
     userId?: StringFilter<"Practitioner"> | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
   }, "id">
@@ -15161,11 +15161,11 @@ export namespace Prisma {
   export type PractitionerOrderByWithAggregationInput = {
     id?: SortOrder
     firstName?: SortOrder
+    lastName?: SortOrder
     bio?: SortOrder
     headline?: SortOrder
     location?: SortOrder
     websiteURL?: SortOrder
-    lastName?: SortOrder
     userId?: SortOrder
     _count?: PractitionerCountOrderByAggregateInput
     _max?: PractitionerMaxOrderByAggregateInput
@@ -15178,11 +15178,11 @@ export namespace Prisma {
     NOT?: PractitionerScalarWhereWithAggregatesInput | PractitionerScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Practitioner"> | string
     firstName?: StringWithAggregatesFilter<"Practitioner"> | string
+    lastName?: StringWithAggregatesFilter<"Practitioner"> | string
     bio?: StringWithAggregatesFilter<"Practitioner"> | string
     headline?: StringWithAggregatesFilter<"Practitioner"> | string
     location?: StringWithAggregatesFilter<"Practitioner"> | string
     websiteURL?: StringWithAggregatesFilter<"Practitioner"> | string
-    lastName?: StringWithAggregatesFilter<"Practitioner"> | string
     userId?: StringWithAggregatesFilter<"Practitioner"> | string
   }
 
@@ -15988,72 +15988,72 @@ export namespace Prisma {
   export type PractitionerCreateInput = {
     id?: string
     firstName: string
+    lastName: string
     bio: string
     headline: string
     location: string
     websiteURL: string
-    lastName: string
     user: UserDataCreateNestedOneWithoutPractitionerInput
   }
 
   export type PractitionerUncheckedCreateInput = {
     id?: string
     firstName: string
+    lastName: string
     bio: string
     headline: string
     location: string
     websiteURL: string
-    lastName: string
     userId: string
   }
 
   export type PractitionerUpdateInput = {
     firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
     user?: UserDataUpdateOneRequiredWithoutPractitionerNestedInput
   }
 
   export type PractitionerUncheckedUpdateInput = {
     firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type PractitionerCreateManyInput = {
     id?: string
     firstName: string
+    lastName: string
     bio: string
     headline: string
     location: string
     websiteURL: string
-    lastName: string
     userId: string
   }
 
   export type PractitionerUpdateManyMutationInput = {
     firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
   }
 
   export type PractitionerUncheckedUpdateManyInput = {
     firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -16922,33 +16922,33 @@ export namespace Prisma {
   export type PractitionerCountOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
+    lastName?: SortOrder
     bio?: SortOrder
     headline?: SortOrder
     location?: SortOrder
     websiteURL?: SortOrder
-    lastName?: SortOrder
     userId?: SortOrder
   }
 
   export type PractitionerMaxOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
+    lastName?: SortOrder
     bio?: SortOrder
     headline?: SortOrder
     location?: SortOrder
     websiteURL?: SortOrder
-    lastName?: SortOrder
     userId?: SortOrder
   }
 
   export type PractitionerMinOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
+    lastName?: SortOrder
     bio?: SortOrder
     headline?: SortOrder
     location?: SortOrder
     websiteURL?: SortOrder
-    lastName?: SortOrder
     userId?: SortOrder
   }
 
@@ -17970,21 +17970,21 @@ export namespace Prisma {
   export type PractitionerCreateWithoutUserInput = {
     id?: string
     firstName: string
+    lastName: string
     bio: string
     headline: string
     location: string
     websiteURL: string
-    lastName: string
   }
 
   export type PractitionerUncheckedCreateWithoutUserInput = {
     id?: string
     firstName: string
+    lastName: string
     bio: string
     headline: string
     location: string
     websiteURL: string
-    lastName: string
   }
 
   export type PractitionerCreateOrConnectWithoutUserInput = {
@@ -18112,11 +18112,11 @@ export namespace Prisma {
     NOT?: PractitionerScalarWhereInput | PractitionerScalarWhereInput[]
     id?: StringFilter<"Practitioner"> | string
     firstName?: StringFilter<"Practitioner"> | string
+    lastName?: StringFilter<"Practitioner"> | string
     bio?: StringFilter<"Practitioner"> | string
     headline?: StringFilter<"Practitioner"> | string
     location?: StringFilter<"Practitioner"> | string
     websiteURL?: StringFilter<"Practitioner"> | string
-    lastName?: StringFilter<"Practitioner"> | string
     userId?: StringFilter<"Practitioner"> | string
   }
 
@@ -18795,11 +18795,11 @@ export namespace Prisma {
   export type PractitionerCreateManyUserInput = {
     id?: string
     firstName: string
+    lastName: string
     bio: string
     headline: string
     location: string
     websiteURL: string
-    lastName: string
   }
 
   export type AccountUpdateWithoutUserInput = {
@@ -18897,29 +18897,29 @@ export namespace Prisma {
 
   export type PractitionerUpdateWithoutUserInput = {
     firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
   }
 
   export type PractitionerUncheckedUpdateWithoutUserInput = {
     firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
   }
 
   export type PractitionerUncheckedUpdateManyWithoutUserInput = {
     firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
   }
 
   export type SequencesSeriesCreateManySequenceInput = {

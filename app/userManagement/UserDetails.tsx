@@ -48,7 +48,10 @@ export interface UserProfile {
   emailVerified: Date
   image: string
   pronouns: string
+  accounts: Record<string, any> | null
+  sessions: Record<string, any> | null
   profile: Record<string, any>
+  authenticator: Record<string, any> | null
   createdAt: Date
   updatedAt: Date
   practitionerProfile?: PractitionerProfile
@@ -56,11 +59,11 @@ export interface UserProfile {
 
 export interface PractitionerProfile {
   id: string
-  headline: string
+  firstName: string
   bio: string
+  headline: string
   location: string
   websiteURL: string
-  firstName: string
   lastName: string
   userId: string
   user: UserProfile
@@ -86,7 +89,10 @@ export default function UserDetails() {
     emailVerified: new Date(),
     image: session?.user?.image ?? '',
     pronouns: '',
+    accounts: {} as JSON,
+    sessions: {} as JSON,
     profile: {} as JSON,
+    authenticator: {} as JSON,
     createdAt: new Date(),
     updatedAt: new Date(),
   })
@@ -98,8 +104,8 @@ export default function UserDetails() {
       websiteURL: 'https://happyYoga.app',
       firstName: 'New First Name',
       lastName: 'New Last Name',
-      id: '',
-      userId: '',
+      id: session?.user?.id ?? '',
+      userId: session?.user?.id ?? '',
       user: userData,
     })
 
@@ -136,13 +142,32 @@ export default function UserDetails() {
         ...user.data,
         image: picture,
       }))
-      setPractitionerProfile((prevPractitionerProfile) => ({
-        ...prevPractitionerProfile,
-        ...user.data.practitionerProfile,
-      }))
       return user
     } catch (error) {
       console.error('Error fetching user data', error)
+    }
+  }
+  const fetchPractitionerData = async () => {
+    try {
+      const id = session?.user?.id
+      if (!id) return
+      // console.log('Fetching practitioner data for email:', id)
+      const response = await fetch(`/api/user/fetchPractitioner/?id=${id}`)
+      // console.log('useEffect response', response)
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(`Failed to fetch practitioner data: ${errorText}`)
+      }
+      const practitioner = await response.json()
+      // console.log('fetchUserData', practitioner.data)
+
+      setPractitionerProfile((prevPractitionerProfile) => ({
+        ...prevPractitionerProfile,
+        ...practitioner.data.practitionerProfile,
+      }))
+      return practitioner
+    } catch (error) {
+      console.error('Error fetching practitioner data', error)
     }
   }
 
@@ -167,8 +192,8 @@ export default function UserDetails() {
         throw new Error(`Failed to update practitioner data: ${errorText}`)
       }
 
-      const result = await response.json()
-      console.log('Practitioner data updated:', result)
+      // const result = await response.json()
+      // console.log('Practitioner data updated:', result)
     } catch (error) {
       console.error('Error updating practitioner data:', error)
     }
@@ -206,6 +231,7 @@ export default function UserDetails() {
     // console.log('useEffect triggered with email', session)
 
     fetchUserData()
+    fetchPractitionerData()
   }, [session])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -222,31 +248,8 @@ export default function UserDetails() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // try {
-    //   const postUserData = await fetch(`/api/user/updateUserData`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //       pronouns: userData?.pronouns,
-    //       email: session?.user?.email,
-    //     }),
-    //   })
-    //   if (postUserData.ok) {
-    //     // console.log('Data saved')
-    //     // const savedUser = await fetchUserData()
-    //     // setUserData(savedUser)
-    //   } else {
-    //     console.error('Error saving data')
-    //     throw new Error('Error saving data')
-    //   }
-    // } catch (error) {
-    //   console.error('Error saving data', error)
-    //   throw new Error('Error saving data')
-    // }
-    updateUserData(userData)
-    updatePractitionerData(practitionerProfile)
+    await updateUserData(userData)
+    await updatePractitionerData(practitionerProfile)
   }
 
   return (
@@ -380,9 +383,10 @@ export default function UserDetails() {
                 multiline
                 maxRows={2}
               />
-              {/* I am a Yoga instructor, Reiki Master, and creator of the Happy Yoga app. */}
+              {/* I am a happy Yoga instructor, happy Reiki Master, and creator of the Happy Yoga app. */}
             </FormControl>
           </Grid>
+          {practitionerProfile.headline}
         </>
       )}
     </Grid>
