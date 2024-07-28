@@ -96,8 +96,8 @@ export interface UserProfile {
 
 export default function UserDetails() {
   const { data: session, update } = useSession()
-  console.log('UserDetails session', session)
-  console.log('session?.user?.id', session?.user?.id)
+  // console.log('UserDetails session', session)
+  // console.log('session?.user?.id', session?.user?.id)
   // Select: timezones
   // const [timezone, setTimezone] = React.useState('')
 
@@ -230,7 +230,7 @@ export default function UserDetails() {
 
   // fetch user data based on session.user.email
   React.useEffect(() => {
-    console.log('useEffect', session?.user?.email)
+    // console.log('useEffect', session?.user?.email)
     // console.log('User useEffect triggers')
 
     if (!session) return

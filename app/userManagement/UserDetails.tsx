@@ -69,9 +69,6 @@ export default function UserDetails() {
     updatedAt: new Date(),
   })
 
-  console.log('UserDetails session', session)
-  console.log('session?.user?.id', session?.user?.id)
-
   // profile card expand
   const handleExpandClick = () => {
     setExpanded(!expanded)
@@ -92,9 +89,20 @@ export default function UserDetails() {
         throw new Error(`Failed to fetch user data: ${errorText}`)
       }
       const user = await response.json()
-      console.log('useEffect fetchUserData', userData)
-      // TODO: this setUserData is clearing the data. Troubleshoot this.
-      // setUserData(user)
+      console.log('fetchUserData', user.data)
+      console.log('fetchUserData user.data.profile', user.data.profile)
+
+      // Parse the profile field
+      const profile = JSON.parse(user.data.profile)
+      const picture = profile.picture
+
+      // Update userData with the extracted picture
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        ...user.data,
+        image: picture,
+      }))
+      return user
     } catch (error) {
       console.error('Error fetching user data', error)
     }
@@ -103,7 +111,7 @@ export default function UserDetails() {
   // fetch user data based on session.user.email
   React.useEffect(() => {
     if (!session) return
-    console.log('useEffect triggered with email', session?.user?.email)
+    console.log('useEffect triggered with email', session)
 
     fetchUserData()
   }, [session])
@@ -115,6 +123,7 @@ export default function UserDetails() {
       [name]: value,
     }))
   }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
@@ -124,13 +133,14 @@ export default function UserDetails() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          pronouns: userData.pronouns,
+          pronouns: userData?.pronouns,
           email: session?.user?.email,
         }),
       })
       if (postUserData.ok) {
         console.log('Data saved')
-        await fetchUserData()
+        // const savedUser = await fetchUserData()
+        // setUserData(savedUser)
       } else {
         console.error('Error saving data')
         throw new Error('Error saving data')
@@ -170,12 +180,13 @@ export default function UserDetails() {
                     <MoreVertIcon />
                   </IconButton>
                 }
-                title={userData.name}
-                subheader={`Member since ${userData.createdAt ?? '6/9/2024'}`}
+                title={userData?.name}
+                subheader={`Member since ${userData?.createdAt ?? '6/9/2024'}`}
               />
               <CardMedia
                 component="img"
-                image={userData.image || '/stick-tree-pose-400x400.png'}
+                // image={userData?.image ?? '/stick-tree-pose-400x400.png'}
+                image={userData?.image ?? '/stick-tree-pose-400x400.png'}
                 alt="Profile Image"
                 sx={{
                   width: 'auto',
@@ -225,7 +236,7 @@ export default function UserDetails() {
                 id="outlined-basic"
                 placeholder='Enter "First Name"'
                 label="Name"
-                value={userData.name}
+                value={userData?.name}
                 variant="outlined"
                 disabled
               />
@@ -238,7 +249,7 @@ export default function UserDetails() {
                 id="pronouns"
                 label="Pronouns:"
                 variant="outlined"
-                value={userData.pronouns}
+                value={userData?.pronouns}
                 onChange={handleChange}
               />
             </FormControl>
@@ -250,7 +261,7 @@ export default function UserDetails() {
                 name="email"
                 placeholder="xyz@ABC.com"
                 label="Email (primary/internal):"
-                value={userData.email}
+                value={userData?.email}
                 variant="outlined"
                 type="email"
               />
