@@ -243,7 +243,7 @@ export default function UserDetails() {
         // const response = await fetch(`/api/user/${userId}`)
         // const response = await fetch(`/api/user/?email=${encodeURIComponent(userEmail)}`);
         const response = await fetch(`/api/user/?${userEmail}`)
-        console.log('useEffect response', response)
+        // console.log('useEffect response', response)
 
         if (response.ok) {
           const user = await response.json()
@@ -282,7 +282,7 @@ export default function UserDetails() {
         }),
       })
       if (postUserData.ok) {
-        console.log('Data saved')
+        // console.log('Data saved')
       } else {
         console.error('Error saving data')
         throw new Error('Error saving data')

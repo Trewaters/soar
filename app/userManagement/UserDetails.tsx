@@ -54,7 +54,7 @@ export interface UserProfile {
 }
 
 export default function UserDetails() {
-  const { data: session, update } = useSession()
+  const { data: session } = useSession()
   const [expanded, setExpanded] = React.useState(false)
   const [userData, setUserData] = React.useState<UserProfile>({
     id: session?.user?.id ?? '',
@@ -79,18 +79,18 @@ export default function UserDetails() {
     try {
       const userEmail = session?.user?.email
       if (!userEmail) return
-      console.log('Fetching user data for email:', userEmail)
+      // console.log('Fetching user data for email:', userEmail)
       const response = await fetch(
         `/api/user/?email=${encodeURIComponent(userEmail)}`
       )
-      console.log('useEffect response', response)
+      // console.log('useEffect response', response)
       if (!response.ok) {
         const errorText = await response.text()
         throw new Error(`Failed to fetch user data: ${errorText}`)
       }
       const user = await response.json()
-      console.log('fetchUserData', user.data)
-      console.log('fetchUserData user.data.profile', user.data.profile)
+      // console.log('fetchUserData', user.data)
+      // console.log('fetchUserData user.data.profile', user.data.profile)
 
       // Parse the profile field
       const profile = JSON.parse(user.data.profile)
@@ -111,7 +111,7 @@ export default function UserDetails() {
   // fetch user data based on session.user.email
   React.useEffect(() => {
     if (!session) return
-    console.log('useEffect triggered with email', session)
+    // console.log('useEffect triggered with email', session)
 
     fetchUserData()
   }, [session])
@@ -138,7 +138,7 @@ export default function UserDetails() {
         }),
       })
       if (postUserData.ok) {
-        console.log('Data saved')
+        // console.log('Data saved')
         // const savedUser = await fetchUserData()
         // setUserData(savedUser)
       } else {

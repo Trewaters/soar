@@ -19,7 +19,7 @@ export async function GET(req: Request) {
       where: { email: decodedEmail },
     })
 
-    console.log(`api prisma.user: ${JSON.stringify(user)}`)
+    // console.log(`api prisma.user: ${JSON.stringify(user)}`)
 
     if (!user) {
       return new Response(JSON.stringify({ error: 'User not found' }), {
