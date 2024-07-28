@@ -93,11 +93,11 @@ model Authenticator {
 model Practitioner {
   id                String @id @default(auto()) @map("_id") @db.ObjectId
   firstName         String
+  lastName          String
   bio               String
   headline          String
   location          String
   websiteURL        String
-  lastName          String
   // pronouns          String
   // emailPublic       String
   // emailInternal     String

@@ -136,12 +136,17 @@ export default function UserDetails() {
         ...user.data,
         image: picture,
       }))
+      setPractitionerProfile((prevPractitionerProfile) => ({
+        ...prevPractitionerProfile,
+        ...user.data.practitionerProfile,
+      }))
       return user
     } catch (error) {
       console.error('Error fetching user data', error)
     }
   }
 
+  // TODO create a fetch for practitioner data
   const updatePractitionerData = async (
     practitionerData: PractitionerProfile
   ) => {
