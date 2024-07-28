@@ -7019,105 +7019,33 @@ export namespace Prisma {
   export type PractitionerMinAggregateOutputType = {
     id: string | null
     firstName: string | null
-    lastName: string | null
-    pronouns: string | null
-    emailPublic: string | null
-    emailInternal: string | null
-    emailAlternate: string | null
-    phoneContact: string | null
     bio: string | null
     headline: string | null
-    yogaStyle: string | null
-    yogaExperience: string | null
-    Facebook: string | null
-    Google: string | null
-    Patreon: string | null
-    Twitch: string | null
-    Twitter: string | null
-    websiteURL: string | null
-    blogURL: string | null
-    socialURL: string | null
-    streamingURL: string | null
-    isInstructor: string | null
-    isStudent: string | null
-    isPrivate: string | null
-    calendar: string | null
-    timezone: string | null
     location: string | null
-    isLocationPublic: string | null
-    exportAccountInfo: string | null
-    deleteAccountInfo: string | null
-    company: string | null
+    websiteURL: string | null
+    lastName: string | null
     userId: string | null
   }
 
   export type PractitionerMaxAggregateOutputType = {
     id: string | null
     firstName: string | null
-    lastName: string | null
-    pronouns: string | null
-    emailPublic: string | null
-    emailInternal: string | null
-    emailAlternate: string | null
-    phoneContact: string | null
     bio: string | null
     headline: string | null
-    yogaStyle: string | null
-    yogaExperience: string | null
-    Facebook: string | null
-    Google: string | null
-    Patreon: string | null
-    Twitch: string | null
-    Twitter: string | null
-    websiteURL: string | null
-    blogURL: string | null
-    socialURL: string | null
-    streamingURL: string | null
-    isInstructor: string | null
-    isStudent: string | null
-    isPrivate: string | null
-    calendar: string | null
-    timezone: string | null
     location: string | null
-    isLocationPublic: string | null
-    exportAccountInfo: string | null
-    deleteAccountInfo: string | null
-    company: string | null
+    websiteURL: string | null
+    lastName: string | null
     userId: string | null
   }
 
   export type PractitionerCountAggregateOutputType = {
     id: number
     firstName: number
-    lastName: number
-    pronouns: number
-    emailPublic: number
-    emailInternal: number
-    emailAlternate: number
-    phoneContact: number
     bio: number
     headline: number
-    yogaStyle: number
-    yogaExperience: number
-    Facebook: number
-    Google: number
-    Patreon: number
-    Twitch: number
-    Twitter: number
-    websiteURL: number
-    blogURL: number
-    socialURL: number
-    streamingURL: number
-    isInstructor: number
-    isStudent: number
-    isPrivate: number
-    calendar: number
-    timezone: number
     location: number
-    isLocationPublic: number
-    exportAccountInfo: number
-    deleteAccountInfo: number
-    company: number
+    websiteURL: number
+    lastName: number
     userId: number
     _all: number
   }
@@ -7126,105 +7054,33 @@ export namespace Prisma {
   export type PractitionerMinAggregateInputType = {
     id?: true
     firstName?: true
-    lastName?: true
-    pronouns?: true
-    emailPublic?: true
-    emailInternal?: true
-    emailAlternate?: true
-    phoneContact?: true
     bio?: true
     headline?: true
-    yogaStyle?: true
-    yogaExperience?: true
-    Facebook?: true
-    Google?: true
-    Patreon?: true
-    Twitch?: true
-    Twitter?: true
-    websiteURL?: true
-    blogURL?: true
-    socialURL?: true
-    streamingURL?: true
-    isInstructor?: true
-    isStudent?: true
-    isPrivate?: true
-    calendar?: true
-    timezone?: true
     location?: true
-    isLocationPublic?: true
-    exportAccountInfo?: true
-    deleteAccountInfo?: true
-    company?: true
+    websiteURL?: true
+    lastName?: true
     userId?: true
   }
 
   export type PractitionerMaxAggregateInputType = {
     id?: true
     firstName?: true
-    lastName?: true
-    pronouns?: true
-    emailPublic?: true
-    emailInternal?: true
-    emailAlternate?: true
-    phoneContact?: true
     bio?: true
     headline?: true
-    yogaStyle?: true
-    yogaExperience?: true
-    Facebook?: true
-    Google?: true
-    Patreon?: true
-    Twitch?: true
-    Twitter?: true
-    websiteURL?: true
-    blogURL?: true
-    socialURL?: true
-    streamingURL?: true
-    isInstructor?: true
-    isStudent?: true
-    isPrivate?: true
-    calendar?: true
-    timezone?: true
     location?: true
-    isLocationPublic?: true
-    exportAccountInfo?: true
-    deleteAccountInfo?: true
-    company?: true
+    websiteURL?: true
+    lastName?: true
     userId?: true
   }
 
   export type PractitionerCountAggregateInputType = {
     id?: true
     firstName?: true
-    lastName?: true
-    pronouns?: true
-    emailPublic?: true
-    emailInternal?: true
-    emailAlternate?: true
-    phoneContact?: true
     bio?: true
     headline?: true
-    yogaStyle?: true
-    yogaExperience?: true
-    Facebook?: true
-    Google?: true
-    Patreon?: true
-    Twitch?: true
-    Twitter?: true
-    websiteURL?: true
-    blogURL?: true
-    socialURL?: true
-    streamingURL?: true
-    isInstructor?: true
-    isStudent?: true
-    isPrivate?: true
-    calendar?: true
-    timezone?: true
     location?: true
-    isLocationPublic?: true
-    exportAccountInfo?: true
-    deleteAccountInfo?: true
-    company?: true
+    websiteURL?: true
+    lastName?: true
     userId?: true
     _all?: true
   }
@@ -7304,35 +7160,11 @@ export namespace Prisma {
   export type PractitionerGroupByOutputType = {
     id: string
     firstName: string
-    lastName: string
-    pronouns: string
-    emailPublic: string
-    emailInternal: string
-    emailAlternate: string
-    phoneContact: string
     bio: string
     headline: string
-    yogaStyle: string
-    yogaExperience: string
-    Facebook: string
-    Google: string
-    Patreon: string
-    Twitch: string
-    Twitter: string
-    websiteURL: string
-    blogURL: string
-    socialURL: string
-    streamingURL: string
-    isInstructor: string
-    isStudent: string
-    isPrivate: string
-    calendar: string
-    timezone: string
     location: string
-    isLocationPublic: string
-    exportAccountInfo: string
-    deleteAccountInfo: string
-    company: string
+    websiteURL: string
+    lastName: string
     userId: string
     _count: PractitionerCountAggregateOutputType | null
     _min: PractitionerMinAggregateOutputType | null
@@ -7356,35 +7188,11 @@ export namespace Prisma {
   export type PractitionerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     firstName?: boolean
-    lastName?: boolean
-    pronouns?: boolean
-    emailPublic?: boolean
-    emailInternal?: boolean
-    emailAlternate?: boolean
-    phoneContact?: boolean
     bio?: boolean
     headline?: boolean
-    yogaStyle?: boolean
-    yogaExperience?: boolean
-    Facebook?: boolean
-    Google?: boolean
-    Patreon?: boolean
-    Twitch?: boolean
-    Twitter?: boolean
-    websiteURL?: boolean
-    blogURL?: boolean
-    socialURL?: boolean
-    streamingURL?: boolean
-    isInstructor?: boolean
-    isStudent?: boolean
-    isPrivate?: boolean
-    calendar?: boolean
-    timezone?: boolean
     location?: boolean
-    isLocationPublic?: boolean
-    exportAccountInfo?: boolean
-    deleteAccountInfo?: boolean
-    company?: boolean
+    websiteURL?: boolean
+    lastName?: boolean
     userId?: boolean
     user?: boolean | UserDataDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["practitioner"]>
@@ -7393,35 +7201,11 @@ export namespace Prisma {
   export type PractitionerSelectScalar = {
     id?: boolean
     firstName?: boolean
-    lastName?: boolean
-    pronouns?: boolean
-    emailPublic?: boolean
-    emailInternal?: boolean
-    emailAlternate?: boolean
-    phoneContact?: boolean
     bio?: boolean
     headline?: boolean
-    yogaStyle?: boolean
-    yogaExperience?: boolean
-    Facebook?: boolean
-    Google?: boolean
-    Patreon?: boolean
-    Twitch?: boolean
-    Twitter?: boolean
-    websiteURL?: boolean
-    blogURL?: boolean
-    socialURL?: boolean
-    streamingURL?: boolean
-    isInstructor?: boolean
-    isStudent?: boolean
-    isPrivate?: boolean
-    calendar?: boolean
-    timezone?: boolean
     location?: boolean
-    isLocationPublic?: boolean
-    exportAccountInfo?: boolean
-    deleteAccountInfo?: boolean
-    company?: boolean
+    websiteURL?: boolean
+    lastName?: boolean
     userId?: boolean
   }
 
@@ -7437,35 +7221,11 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       firstName: string
-      lastName: string
-      pronouns: string
-      emailPublic: string
-      emailInternal: string
-      emailAlternate: string
-      phoneContact: string
       bio: string
       headline: string
-      yogaStyle: string
-      yogaExperience: string
-      Facebook: string
-      Google: string
-      Patreon: string
-      Twitch: string
-      Twitter: string
-      websiteURL: string
-      blogURL: string
-      socialURL: string
-      streamingURL: string
-      isInstructor: string
-      isStudent: string
-      isPrivate: string
-      calendar: string
-      timezone: string
       location: string
-      isLocationPublic: string
-      exportAccountInfo: string
-      deleteAccountInfo: string
-      company: string
+      websiteURL: string
+      lastName: string
       userId: string
     }, ExtArgs["result"]["practitioner"]>
     composites: {}
@@ -7862,35 +7622,11 @@ export namespace Prisma {
   interface PractitionerFieldRefs {
     readonly id: FieldRef<"Practitioner", 'String'>
     readonly firstName: FieldRef<"Practitioner", 'String'>
-    readonly lastName: FieldRef<"Practitioner", 'String'>
-    readonly pronouns: FieldRef<"Practitioner", 'String'>
-    readonly emailPublic: FieldRef<"Practitioner", 'String'>
-    readonly emailInternal: FieldRef<"Practitioner", 'String'>
-    readonly emailAlternate: FieldRef<"Practitioner", 'String'>
-    readonly phoneContact: FieldRef<"Practitioner", 'String'>
     readonly bio: FieldRef<"Practitioner", 'String'>
     readonly headline: FieldRef<"Practitioner", 'String'>
-    readonly yogaStyle: FieldRef<"Practitioner", 'String'>
-    readonly yogaExperience: FieldRef<"Practitioner", 'String'>
-    readonly Facebook: FieldRef<"Practitioner", 'String'>
-    readonly Google: FieldRef<"Practitioner", 'String'>
-    readonly Patreon: FieldRef<"Practitioner", 'String'>
-    readonly Twitch: FieldRef<"Practitioner", 'String'>
-    readonly Twitter: FieldRef<"Practitioner", 'String'>
-    readonly websiteURL: FieldRef<"Practitioner", 'String'>
-    readonly blogURL: FieldRef<"Practitioner", 'String'>
-    readonly socialURL: FieldRef<"Practitioner", 'String'>
-    readonly streamingURL: FieldRef<"Practitioner", 'String'>
-    readonly isInstructor: FieldRef<"Practitioner", 'String'>
-    readonly isStudent: FieldRef<"Practitioner", 'String'>
-    readonly isPrivate: FieldRef<"Practitioner", 'String'>
-    readonly calendar: FieldRef<"Practitioner", 'String'>
-    readonly timezone: FieldRef<"Practitioner", 'String'>
     readonly location: FieldRef<"Practitioner", 'String'>
-    readonly isLocationPublic: FieldRef<"Practitioner", 'String'>
-    readonly exportAccountInfo: FieldRef<"Practitioner", 'String'>
-    readonly deleteAccountInfo: FieldRef<"Practitioner", 'String'>
-    readonly company: FieldRef<"Practitioner", 'String'>
+    readonly websiteURL: FieldRef<"Practitioner", 'String'>
+    readonly lastName: FieldRef<"Practitioner", 'String'>
     readonly userId: FieldRef<"Practitioner", 'String'>
   }
     
@@ -14821,35 +14557,11 @@ export namespace Prisma {
   export const PractitionerScalarFieldEnum: {
     id: 'id',
     firstName: 'firstName',
-    lastName: 'lastName',
-    pronouns: 'pronouns',
-    emailPublic: 'emailPublic',
-    emailInternal: 'emailInternal',
-    emailAlternate: 'emailAlternate',
-    phoneContact: 'phoneContact',
     bio: 'bio',
     headline: 'headline',
-    yogaStyle: 'yogaStyle',
-    yogaExperience: 'yogaExperience',
-    Facebook: 'Facebook',
-    Google: 'Google',
-    Patreon: 'Patreon',
-    Twitch: 'Twitch',
-    Twitter: 'Twitter',
-    websiteURL: 'websiteURL',
-    blogURL: 'blogURL',
-    socialURL: 'socialURL',
-    streamingURL: 'streamingURL',
-    isInstructor: 'isInstructor',
-    isStudent: 'isStudent',
-    isPrivate: 'isPrivate',
-    calendar: 'calendar',
-    timezone: 'timezone',
     location: 'location',
-    isLocationPublic: 'isLocationPublic',
-    exportAccountInfo: 'exportAccountInfo',
-    deleteAccountInfo: 'deleteAccountInfo',
-    company: 'company',
+    websiteURL: 'websiteURL',
+    lastName: 'lastName',
     userId: 'userId'
   };
 
@@ -15410,35 +15122,11 @@ export namespace Prisma {
     NOT?: PractitionerWhereInput | PractitionerWhereInput[]
     id?: StringFilter<"Practitioner"> | string
     firstName?: StringFilter<"Practitioner"> | string
-    lastName?: StringFilter<"Practitioner"> | string
-    pronouns?: StringFilter<"Practitioner"> | string
-    emailPublic?: StringFilter<"Practitioner"> | string
-    emailInternal?: StringFilter<"Practitioner"> | string
-    emailAlternate?: StringFilter<"Practitioner"> | string
-    phoneContact?: StringFilter<"Practitioner"> | string
     bio?: StringFilter<"Practitioner"> | string
     headline?: StringFilter<"Practitioner"> | string
-    yogaStyle?: StringFilter<"Practitioner"> | string
-    yogaExperience?: StringFilter<"Practitioner"> | string
-    Facebook?: StringFilter<"Practitioner"> | string
-    Google?: StringFilter<"Practitioner"> | string
-    Patreon?: StringFilter<"Practitioner"> | string
-    Twitch?: StringFilter<"Practitioner"> | string
-    Twitter?: StringFilter<"Practitioner"> | string
-    websiteURL?: StringFilter<"Practitioner"> | string
-    blogURL?: StringFilter<"Practitioner"> | string
-    socialURL?: StringFilter<"Practitioner"> | string
-    streamingURL?: StringFilter<"Practitioner"> | string
-    isInstructor?: StringFilter<"Practitioner"> | string
-    isStudent?: StringFilter<"Practitioner"> | string
-    isPrivate?: StringFilter<"Practitioner"> | string
-    calendar?: StringFilter<"Practitioner"> | string
-    timezone?: StringFilter<"Practitioner"> | string
     location?: StringFilter<"Practitioner"> | string
-    isLocationPublic?: StringFilter<"Practitioner"> | string
-    exportAccountInfo?: StringFilter<"Practitioner"> | string
-    deleteAccountInfo?: StringFilter<"Practitioner"> | string
-    company?: StringFilter<"Practitioner"> | string
+    websiteURL?: StringFilter<"Practitioner"> | string
+    lastName?: StringFilter<"Practitioner"> | string
     userId?: StringFilter<"Practitioner"> | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
   }
@@ -15446,35 +15134,11 @@ export namespace Prisma {
   export type PractitionerOrderByWithRelationInput = {
     id?: SortOrder
     firstName?: SortOrder
-    lastName?: SortOrder
-    pronouns?: SortOrder
-    emailPublic?: SortOrder
-    emailInternal?: SortOrder
-    emailAlternate?: SortOrder
-    phoneContact?: SortOrder
     bio?: SortOrder
     headline?: SortOrder
-    yogaStyle?: SortOrder
-    yogaExperience?: SortOrder
-    Facebook?: SortOrder
-    Google?: SortOrder
-    Patreon?: SortOrder
-    Twitch?: SortOrder
-    Twitter?: SortOrder
-    websiteURL?: SortOrder
-    blogURL?: SortOrder
-    socialURL?: SortOrder
-    streamingURL?: SortOrder
-    isInstructor?: SortOrder
-    isStudent?: SortOrder
-    isPrivate?: SortOrder
-    calendar?: SortOrder
-    timezone?: SortOrder
     location?: SortOrder
-    isLocationPublic?: SortOrder
-    exportAccountInfo?: SortOrder
-    deleteAccountInfo?: SortOrder
-    company?: SortOrder
+    websiteURL?: SortOrder
+    lastName?: SortOrder
     userId?: SortOrder
     user?: UserDataOrderByWithRelationInput
   }
@@ -15485,35 +15149,11 @@ export namespace Prisma {
     OR?: PractitionerWhereInput[]
     NOT?: PractitionerWhereInput | PractitionerWhereInput[]
     firstName?: StringFilter<"Practitioner"> | string
-    lastName?: StringFilter<"Practitioner"> | string
-    pronouns?: StringFilter<"Practitioner"> | string
-    emailPublic?: StringFilter<"Practitioner"> | string
-    emailInternal?: StringFilter<"Practitioner"> | string
-    emailAlternate?: StringFilter<"Practitioner"> | string
-    phoneContact?: StringFilter<"Practitioner"> | string
     bio?: StringFilter<"Practitioner"> | string
     headline?: StringFilter<"Practitioner"> | string
-    yogaStyle?: StringFilter<"Practitioner"> | string
-    yogaExperience?: StringFilter<"Practitioner"> | string
-    Facebook?: StringFilter<"Practitioner"> | string
-    Google?: StringFilter<"Practitioner"> | string
-    Patreon?: StringFilter<"Practitioner"> | string
-    Twitch?: StringFilter<"Practitioner"> | string
-    Twitter?: StringFilter<"Practitioner"> | string
-    websiteURL?: StringFilter<"Practitioner"> | string
-    blogURL?: StringFilter<"Practitioner"> | string
-    socialURL?: StringFilter<"Practitioner"> | string
-    streamingURL?: StringFilter<"Practitioner"> | string
-    isInstructor?: StringFilter<"Practitioner"> | string
-    isStudent?: StringFilter<"Practitioner"> | string
-    isPrivate?: StringFilter<"Practitioner"> | string
-    calendar?: StringFilter<"Practitioner"> | string
-    timezone?: StringFilter<"Practitioner"> | string
     location?: StringFilter<"Practitioner"> | string
-    isLocationPublic?: StringFilter<"Practitioner"> | string
-    exportAccountInfo?: StringFilter<"Practitioner"> | string
-    deleteAccountInfo?: StringFilter<"Practitioner"> | string
-    company?: StringFilter<"Practitioner"> | string
+    websiteURL?: StringFilter<"Practitioner"> | string
+    lastName?: StringFilter<"Practitioner"> | string
     userId?: StringFilter<"Practitioner"> | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
   }, "id">
@@ -15521,35 +15161,11 @@ export namespace Prisma {
   export type PractitionerOrderByWithAggregationInput = {
     id?: SortOrder
     firstName?: SortOrder
-    lastName?: SortOrder
-    pronouns?: SortOrder
-    emailPublic?: SortOrder
-    emailInternal?: SortOrder
-    emailAlternate?: SortOrder
-    phoneContact?: SortOrder
     bio?: SortOrder
     headline?: SortOrder
-    yogaStyle?: SortOrder
-    yogaExperience?: SortOrder
-    Facebook?: SortOrder
-    Google?: SortOrder
-    Patreon?: SortOrder
-    Twitch?: SortOrder
-    Twitter?: SortOrder
-    websiteURL?: SortOrder
-    blogURL?: SortOrder
-    socialURL?: SortOrder
-    streamingURL?: SortOrder
-    isInstructor?: SortOrder
-    isStudent?: SortOrder
-    isPrivate?: SortOrder
-    calendar?: SortOrder
-    timezone?: SortOrder
     location?: SortOrder
-    isLocationPublic?: SortOrder
-    exportAccountInfo?: SortOrder
-    deleteAccountInfo?: SortOrder
-    company?: SortOrder
+    websiteURL?: SortOrder
+    lastName?: SortOrder
     userId?: SortOrder
     _count?: PractitionerCountOrderByAggregateInput
     _max?: PractitionerMaxOrderByAggregateInput
@@ -15562,35 +15178,11 @@ export namespace Prisma {
     NOT?: PractitionerScalarWhereWithAggregatesInput | PractitionerScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Practitioner"> | string
     firstName?: StringWithAggregatesFilter<"Practitioner"> | string
-    lastName?: StringWithAggregatesFilter<"Practitioner"> | string
-    pronouns?: StringWithAggregatesFilter<"Practitioner"> | string
-    emailPublic?: StringWithAggregatesFilter<"Practitioner"> | string
-    emailInternal?: StringWithAggregatesFilter<"Practitioner"> | string
-    emailAlternate?: StringWithAggregatesFilter<"Practitioner"> | string
-    phoneContact?: StringWithAggregatesFilter<"Practitioner"> | string
     bio?: StringWithAggregatesFilter<"Practitioner"> | string
     headline?: StringWithAggregatesFilter<"Practitioner"> | string
-    yogaStyle?: StringWithAggregatesFilter<"Practitioner"> | string
-    yogaExperience?: StringWithAggregatesFilter<"Practitioner"> | string
-    Facebook?: StringWithAggregatesFilter<"Practitioner"> | string
-    Google?: StringWithAggregatesFilter<"Practitioner"> | string
-    Patreon?: StringWithAggregatesFilter<"Practitioner"> | string
-    Twitch?: StringWithAggregatesFilter<"Practitioner"> | string
-    Twitter?: StringWithAggregatesFilter<"Practitioner"> | string
-    websiteURL?: StringWithAggregatesFilter<"Practitioner"> | string
-    blogURL?: StringWithAggregatesFilter<"Practitioner"> | string
-    socialURL?: StringWithAggregatesFilter<"Practitioner"> | string
-    streamingURL?: StringWithAggregatesFilter<"Practitioner"> | string
-    isInstructor?: StringWithAggregatesFilter<"Practitioner"> | string
-    isStudent?: StringWithAggregatesFilter<"Practitioner"> | string
-    isPrivate?: StringWithAggregatesFilter<"Practitioner"> | string
-    calendar?: StringWithAggregatesFilter<"Practitioner"> | string
-    timezone?: StringWithAggregatesFilter<"Practitioner"> | string
     location?: StringWithAggregatesFilter<"Practitioner"> | string
-    isLocationPublic?: StringWithAggregatesFilter<"Practitioner"> | string
-    exportAccountInfo?: StringWithAggregatesFilter<"Practitioner"> | string
-    deleteAccountInfo?: StringWithAggregatesFilter<"Practitioner"> | string
-    company?: StringWithAggregatesFilter<"Practitioner"> | string
+    websiteURL?: StringWithAggregatesFilter<"Practitioner"> | string
+    lastName?: StringWithAggregatesFilter<"Practitioner"> | string
     userId?: StringWithAggregatesFilter<"Practitioner"> | string
   }
 
@@ -16396,240 +15988,72 @@ export namespace Prisma {
   export type PractitionerCreateInput = {
     id?: string
     firstName: string
-    lastName: string
-    pronouns: string
-    emailPublic: string
-    emailInternal: string
-    emailAlternate: string
-    phoneContact: string
     bio: string
     headline: string
-    yogaStyle: string
-    yogaExperience: string
-    Facebook: string
-    Google: string
-    Patreon: string
-    Twitch: string
-    Twitter: string
-    websiteURL: string
-    blogURL: string
-    socialURL: string
-    streamingURL: string
-    isInstructor: string
-    isStudent: string
-    isPrivate: string
-    calendar: string
-    timezone: string
     location: string
-    isLocationPublic: string
-    exportAccountInfo: string
-    deleteAccountInfo: string
-    company: string
+    websiteURL: string
+    lastName: string
     user: UserDataCreateNestedOneWithoutPractitionerInput
   }
 
   export type PractitionerUncheckedCreateInput = {
     id?: string
     firstName: string
-    lastName: string
-    pronouns: string
-    emailPublic: string
-    emailInternal: string
-    emailAlternate: string
-    phoneContact: string
     bio: string
     headline: string
-    yogaStyle: string
-    yogaExperience: string
-    Facebook: string
-    Google: string
-    Patreon: string
-    Twitch: string
-    Twitter: string
-    websiteURL: string
-    blogURL: string
-    socialURL: string
-    streamingURL: string
-    isInstructor: string
-    isStudent: string
-    isPrivate: string
-    calendar: string
-    timezone: string
     location: string
-    isLocationPublic: string
-    exportAccountInfo: string
-    deleteAccountInfo: string
-    company: string
+    websiteURL: string
+    lastName: string
     userId: string
   }
 
   export type PractitionerUpdateInput = {
     firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    pronouns?: StringFieldUpdateOperationsInput | string
-    emailPublic?: StringFieldUpdateOperationsInput | string
-    emailInternal?: StringFieldUpdateOperationsInput | string
-    emailAlternate?: StringFieldUpdateOperationsInput | string
-    phoneContact?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
-    yogaStyle?: StringFieldUpdateOperationsInput | string
-    yogaExperience?: StringFieldUpdateOperationsInput | string
-    Facebook?: StringFieldUpdateOperationsInput | string
-    Google?: StringFieldUpdateOperationsInput | string
-    Patreon?: StringFieldUpdateOperationsInput | string
-    Twitch?: StringFieldUpdateOperationsInput | string
-    Twitter?: StringFieldUpdateOperationsInput | string
-    websiteURL?: StringFieldUpdateOperationsInput | string
-    blogURL?: StringFieldUpdateOperationsInput | string
-    socialURL?: StringFieldUpdateOperationsInput | string
-    streamingURL?: StringFieldUpdateOperationsInput | string
-    isInstructor?: StringFieldUpdateOperationsInput | string
-    isStudent?: StringFieldUpdateOperationsInput | string
-    isPrivate?: StringFieldUpdateOperationsInput | string
-    calendar?: StringFieldUpdateOperationsInput | string
-    timezone?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
-    isLocationPublic?: StringFieldUpdateOperationsInput | string
-    exportAccountInfo?: StringFieldUpdateOperationsInput | string
-    deleteAccountInfo?: StringFieldUpdateOperationsInput | string
-    company?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
     user?: UserDataUpdateOneRequiredWithoutPractitionerNestedInput
   }
 
   export type PractitionerUncheckedUpdateInput = {
     firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    pronouns?: StringFieldUpdateOperationsInput | string
-    emailPublic?: StringFieldUpdateOperationsInput | string
-    emailInternal?: StringFieldUpdateOperationsInput | string
-    emailAlternate?: StringFieldUpdateOperationsInput | string
-    phoneContact?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
-    yogaStyle?: StringFieldUpdateOperationsInput | string
-    yogaExperience?: StringFieldUpdateOperationsInput | string
-    Facebook?: StringFieldUpdateOperationsInput | string
-    Google?: StringFieldUpdateOperationsInput | string
-    Patreon?: StringFieldUpdateOperationsInput | string
-    Twitch?: StringFieldUpdateOperationsInput | string
-    Twitter?: StringFieldUpdateOperationsInput | string
-    websiteURL?: StringFieldUpdateOperationsInput | string
-    blogURL?: StringFieldUpdateOperationsInput | string
-    socialURL?: StringFieldUpdateOperationsInput | string
-    streamingURL?: StringFieldUpdateOperationsInput | string
-    isInstructor?: StringFieldUpdateOperationsInput | string
-    isStudent?: StringFieldUpdateOperationsInput | string
-    isPrivate?: StringFieldUpdateOperationsInput | string
-    calendar?: StringFieldUpdateOperationsInput | string
-    timezone?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
-    isLocationPublic?: StringFieldUpdateOperationsInput | string
-    exportAccountInfo?: StringFieldUpdateOperationsInput | string
-    deleteAccountInfo?: StringFieldUpdateOperationsInput | string
-    company?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type PractitionerCreateManyInput = {
     id?: string
     firstName: string
-    lastName: string
-    pronouns: string
-    emailPublic: string
-    emailInternal: string
-    emailAlternate: string
-    phoneContact: string
     bio: string
     headline: string
-    yogaStyle: string
-    yogaExperience: string
-    Facebook: string
-    Google: string
-    Patreon: string
-    Twitch: string
-    Twitter: string
-    websiteURL: string
-    blogURL: string
-    socialURL: string
-    streamingURL: string
-    isInstructor: string
-    isStudent: string
-    isPrivate: string
-    calendar: string
-    timezone: string
     location: string
-    isLocationPublic: string
-    exportAccountInfo: string
-    deleteAccountInfo: string
-    company: string
+    websiteURL: string
+    lastName: string
     userId: string
   }
 
   export type PractitionerUpdateManyMutationInput = {
     firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    pronouns?: StringFieldUpdateOperationsInput | string
-    emailPublic?: StringFieldUpdateOperationsInput | string
-    emailInternal?: StringFieldUpdateOperationsInput | string
-    emailAlternate?: StringFieldUpdateOperationsInput | string
-    phoneContact?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
-    yogaStyle?: StringFieldUpdateOperationsInput | string
-    yogaExperience?: StringFieldUpdateOperationsInput | string
-    Facebook?: StringFieldUpdateOperationsInput | string
-    Google?: StringFieldUpdateOperationsInput | string
-    Patreon?: StringFieldUpdateOperationsInput | string
-    Twitch?: StringFieldUpdateOperationsInput | string
-    Twitter?: StringFieldUpdateOperationsInput | string
-    websiteURL?: StringFieldUpdateOperationsInput | string
-    blogURL?: StringFieldUpdateOperationsInput | string
-    socialURL?: StringFieldUpdateOperationsInput | string
-    streamingURL?: StringFieldUpdateOperationsInput | string
-    isInstructor?: StringFieldUpdateOperationsInput | string
-    isStudent?: StringFieldUpdateOperationsInput | string
-    isPrivate?: StringFieldUpdateOperationsInput | string
-    calendar?: StringFieldUpdateOperationsInput | string
-    timezone?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
-    isLocationPublic?: StringFieldUpdateOperationsInput | string
-    exportAccountInfo?: StringFieldUpdateOperationsInput | string
-    deleteAccountInfo?: StringFieldUpdateOperationsInput | string
-    company?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
   }
 
   export type PractitionerUncheckedUpdateManyInput = {
     firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    pronouns?: StringFieldUpdateOperationsInput | string
-    emailPublic?: StringFieldUpdateOperationsInput | string
-    emailInternal?: StringFieldUpdateOperationsInput | string
-    emailAlternate?: StringFieldUpdateOperationsInput | string
-    phoneContact?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
-    yogaStyle?: StringFieldUpdateOperationsInput | string
-    yogaExperience?: StringFieldUpdateOperationsInput | string
-    Facebook?: StringFieldUpdateOperationsInput | string
-    Google?: StringFieldUpdateOperationsInput | string
-    Patreon?: StringFieldUpdateOperationsInput | string
-    Twitch?: StringFieldUpdateOperationsInput | string
-    Twitter?: StringFieldUpdateOperationsInput | string
-    websiteURL?: StringFieldUpdateOperationsInput | string
-    blogURL?: StringFieldUpdateOperationsInput | string
-    socialURL?: StringFieldUpdateOperationsInput | string
-    streamingURL?: StringFieldUpdateOperationsInput | string
-    isInstructor?: StringFieldUpdateOperationsInput | string
-    isStudent?: StringFieldUpdateOperationsInput | string
-    isPrivate?: StringFieldUpdateOperationsInput | string
-    calendar?: StringFieldUpdateOperationsInput | string
-    timezone?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
-    isLocationPublic?: StringFieldUpdateOperationsInput | string
-    exportAccountInfo?: StringFieldUpdateOperationsInput | string
-    deleteAccountInfo?: StringFieldUpdateOperationsInput | string
-    company?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
   }
 
@@ -17498,105 +16922,33 @@ export namespace Prisma {
   export type PractitionerCountOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
-    lastName?: SortOrder
-    pronouns?: SortOrder
-    emailPublic?: SortOrder
-    emailInternal?: SortOrder
-    emailAlternate?: SortOrder
-    phoneContact?: SortOrder
     bio?: SortOrder
     headline?: SortOrder
-    yogaStyle?: SortOrder
-    yogaExperience?: SortOrder
-    Facebook?: SortOrder
-    Google?: SortOrder
-    Patreon?: SortOrder
-    Twitch?: SortOrder
-    Twitter?: SortOrder
-    websiteURL?: SortOrder
-    blogURL?: SortOrder
-    socialURL?: SortOrder
-    streamingURL?: SortOrder
-    isInstructor?: SortOrder
-    isStudent?: SortOrder
-    isPrivate?: SortOrder
-    calendar?: SortOrder
-    timezone?: SortOrder
     location?: SortOrder
-    isLocationPublic?: SortOrder
-    exportAccountInfo?: SortOrder
-    deleteAccountInfo?: SortOrder
-    company?: SortOrder
+    websiteURL?: SortOrder
+    lastName?: SortOrder
     userId?: SortOrder
   }
 
   export type PractitionerMaxOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
-    lastName?: SortOrder
-    pronouns?: SortOrder
-    emailPublic?: SortOrder
-    emailInternal?: SortOrder
-    emailAlternate?: SortOrder
-    phoneContact?: SortOrder
     bio?: SortOrder
     headline?: SortOrder
-    yogaStyle?: SortOrder
-    yogaExperience?: SortOrder
-    Facebook?: SortOrder
-    Google?: SortOrder
-    Patreon?: SortOrder
-    Twitch?: SortOrder
-    Twitter?: SortOrder
-    websiteURL?: SortOrder
-    blogURL?: SortOrder
-    socialURL?: SortOrder
-    streamingURL?: SortOrder
-    isInstructor?: SortOrder
-    isStudent?: SortOrder
-    isPrivate?: SortOrder
-    calendar?: SortOrder
-    timezone?: SortOrder
     location?: SortOrder
-    isLocationPublic?: SortOrder
-    exportAccountInfo?: SortOrder
-    deleteAccountInfo?: SortOrder
-    company?: SortOrder
+    websiteURL?: SortOrder
+    lastName?: SortOrder
     userId?: SortOrder
   }
 
   export type PractitionerMinOrderByAggregateInput = {
     id?: SortOrder
     firstName?: SortOrder
-    lastName?: SortOrder
-    pronouns?: SortOrder
-    emailPublic?: SortOrder
-    emailInternal?: SortOrder
-    emailAlternate?: SortOrder
-    phoneContact?: SortOrder
     bio?: SortOrder
     headline?: SortOrder
-    yogaStyle?: SortOrder
-    yogaExperience?: SortOrder
-    Facebook?: SortOrder
-    Google?: SortOrder
-    Patreon?: SortOrder
-    Twitch?: SortOrder
-    Twitter?: SortOrder
-    websiteURL?: SortOrder
-    blogURL?: SortOrder
-    socialURL?: SortOrder
-    streamingURL?: SortOrder
-    isInstructor?: SortOrder
-    isStudent?: SortOrder
-    isPrivate?: SortOrder
-    calendar?: SortOrder
-    timezone?: SortOrder
     location?: SortOrder
-    isLocationPublic?: SortOrder
-    exportAccountInfo?: SortOrder
-    deleteAccountInfo?: SortOrder
-    company?: SortOrder
+    websiteURL?: SortOrder
+    lastName?: SortOrder
     userId?: SortOrder
   }
 
@@ -18618,69 +17970,21 @@ export namespace Prisma {
   export type PractitionerCreateWithoutUserInput = {
     id?: string
     firstName: string
-    lastName: string
-    pronouns: string
-    emailPublic: string
-    emailInternal: string
-    emailAlternate: string
-    phoneContact: string
     bio: string
     headline: string
-    yogaStyle: string
-    yogaExperience: string
-    Facebook: string
-    Google: string
-    Patreon: string
-    Twitch: string
-    Twitter: string
-    websiteURL: string
-    blogURL: string
-    socialURL: string
-    streamingURL: string
-    isInstructor: string
-    isStudent: string
-    isPrivate: string
-    calendar: string
-    timezone: string
     location: string
-    isLocationPublic: string
-    exportAccountInfo: string
-    deleteAccountInfo: string
-    company: string
+    websiteURL: string
+    lastName: string
   }
 
   export type PractitionerUncheckedCreateWithoutUserInput = {
     id?: string
     firstName: string
-    lastName: string
-    pronouns: string
-    emailPublic: string
-    emailInternal: string
-    emailAlternate: string
-    phoneContact: string
     bio: string
     headline: string
-    yogaStyle: string
-    yogaExperience: string
-    Facebook: string
-    Google: string
-    Patreon: string
-    Twitch: string
-    Twitter: string
-    websiteURL: string
-    blogURL: string
-    socialURL: string
-    streamingURL: string
-    isInstructor: string
-    isStudent: string
-    isPrivate: string
-    calendar: string
-    timezone: string
     location: string
-    isLocationPublic: string
-    exportAccountInfo: string
-    deleteAccountInfo: string
-    company: string
+    websiteURL: string
+    lastName: string
   }
 
   export type PractitionerCreateOrConnectWithoutUserInput = {
@@ -18808,35 +18112,11 @@ export namespace Prisma {
     NOT?: PractitionerScalarWhereInput | PractitionerScalarWhereInput[]
     id?: StringFilter<"Practitioner"> | string
     firstName?: StringFilter<"Practitioner"> | string
-    lastName?: StringFilter<"Practitioner"> | string
-    pronouns?: StringFilter<"Practitioner"> | string
-    emailPublic?: StringFilter<"Practitioner"> | string
-    emailInternal?: StringFilter<"Practitioner"> | string
-    emailAlternate?: StringFilter<"Practitioner"> | string
-    phoneContact?: StringFilter<"Practitioner"> | string
     bio?: StringFilter<"Practitioner"> | string
     headline?: StringFilter<"Practitioner"> | string
-    yogaStyle?: StringFilter<"Practitioner"> | string
-    yogaExperience?: StringFilter<"Practitioner"> | string
-    Facebook?: StringFilter<"Practitioner"> | string
-    Google?: StringFilter<"Practitioner"> | string
-    Patreon?: StringFilter<"Practitioner"> | string
-    Twitch?: StringFilter<"Practitioner"> | string
-    Twitter?: StringFilter<"Practitioner"> | string
-    websiteURL?: StringFilter<"Practitioner"> | string
-    blogURL?: StringFilter<"Practitioner"> | string
-    socialURL?: StringFilter<"Practitioner"> | string
-    streamingURL?: StringFilter<"Practitioner"> | string
-    isInstructor?: StringFilter<"Practitioner"> | string
-    isStudent?: StringFilter<"Practitioner"> | string
-    isPrivate?: StringFilter<"Practitioner"> | string
-    calendar?: StringFilter<"Practitioner"> | string
-    timezone?: StringFilter<"Practitioner"> | string
     location?: StringFilter<"Practitioner"> | string
-    isLocationPublic?: StringFilter<"Practitioner"> | string
-    exportAccountInfo?: StringFilter<"Practitioner"> | string
-    deleteAccountInfo?: StringFilter<"Practitioner"> | string
-    company?: StringFilter<"Practitioner"> | string
+    websiteURL?: StringFilter<"Practitioner"> | string
+    lastName?: StringFilter<"Practitioner"> | string
     userId?: StringFilter<"Practitioner"> | string
   }
 
@@ -19515,35 +18795,11 @@ export namespace Prisma {
   export type PractitionerCreateManyUserInput = {
     id?: string
     firstName: string
-    lastName: string
-    pronouns: string
-    emailPublic: string
-    emailInternal: string
-    emailAlternate: string
-    phoneContact: string
     bio: string
     headline: string
-    yogaStyle: string
-    yogaExperience: string
-    Facebook: string
-    Google: string
-    Patreon: string
-    Twitch: string
-    Twitter: string
-    websiteURL: string
-    blogURL: string
-    socialURL: string
-    streamingURL: string
-    isInstructor: string
-    isStudent: string
-    isPrivate: string
-    calendar: string
-    timezone: string
     location: string
-    isLocationPublic: string
-    exportAccountInfo: string
-    deleteAccountInfo: string
-    company: string
+    websiteURL: string
+    lastName: string
   }
 
   export type AccountUpdateWithoutUserInput = {
@@ -19641,101 +18897,29 @@ export namespace Prisma {
 
   export type PractitionerUpdateWithoutUserInput = {
     firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    pronouns?: StringFieldUpdateOperationsInput | string
-    emailPublic?: StringFieldUpdateOperationsInput | string
-    emailInternal?: StringFieldUpdateOperationsInput | string
-    emailAlternate?: StringFieldUpdateOperationsInput | string
-    phoneContact?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
-    yogaStyle?: StringFieldUpdateOperationsInput | string
-    yogaExperience?: StringFieldUpdateOperationsInput | string
-    Facebook?: StringFieldUpdateOperationsInput | string
-    Google?: StringFieldUpdateOperationsInput | string
-    Patreon?: StringFieldUpdateOperationsInput | string
-    Twitch?: StringFieldUpdateOperationsInput | string
-    Twitter?: StringFieldUpdateOperationsInput | string
-    websiteURL?: StringFieldUpdateOperationsInput | string
-    blogURL?: StringFieldUpdateOperationsInput | string
-    socialURL?: StringFieldUpdateOperationsInput | string
-    streamingURL?: StringFieldUpdateOperationsInput | string
-    isInstructor?: StringFieldUpdateOperationsInput | string
-    isStudent?: StringFieldUpdateOperationsInput | string
-    isPrivate?: StringFieldUpdateOperationsInput | string
-    calendar?: StringFieldUpdateOperationsInput | string
-    timezone?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
-    isLocationPublic?: StringFieldUpdateOperationsInput | string
-    exportAccountInfo?: StringFieldUpdateOperationsInput | string
-    deleteAccountInfo?: StringFieldUpdateOperationsInput | string
-    company?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
   }
 
   export type PractitionerUncheckedUpdateWithoutUserInput = {
     firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    pronouns?: StringFieldUpdateOperationsInput | string
-    emailPublic?: StringFieldUpdateOperationsInput | string
-    emailInternal?: StringFieldUpdateOperationsInput | string
-    emailAlternate?: StringFieldUpdateOperationsInput | string
-    phoneContact?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
-    yogaStyle?: StringFieldUpdateOperationsInput | string
-    yogaExperience?: StringFieldUpdateOperationsInput | string
-    Facebook?: StringFieldUpdateOperationsInput | string
-    Google?: StringFieldUpdateOperationsInput | string
-    Patreon?: StringFieldUpdateOperationsInput | string
-    Twitch?: StringFieldUpdateOperationsInput | string
-    Twitter?: StringFieldUpdateOperationsInput | string
-    websiteURL?: StringFieldUpdateOperationsInput | string
-    blogURL?: StringFieldUpdateOperationsInput | string
-    socialURL?: StringFieldUpdateOperationsInput | string
-    streamingURL?: StringFieldUpdateOperationsInput | string
-    isInstructor?: StringFieldUpdateOperationsInput | string
-    isStudent?: StringFieldUpdateOperationsInput | string
-    isPrivate?: StringFieldUpdateOperationsInput | string
-    calendar?: StringFieldUpdateOperationsInput | string
-    timezone?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
-    isLocationPublic?: StringFieldUpdateOperationsInput | string
-    exportAccountInfo?: StringFieldUpdateOperationsInput | string
-    deleteAccountInfo?: StringFieldUpdateOperationsInput | string
-    company?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
   }
 
   export type PractitionerUncheckedUpdateManyWithoutUserInput = {
     firstName?: StringFieldUpdateOperationsInput | string
-    lastName?: StringFieldUpdateOperationsInput | string
-    pronouns?: StringFieldUpdateOperationsInput | string
-    emailPublic?: StringFieldUpdateOperationsInput | string
-    emailInternal?: StringFieldUpdateOperationsInput | string
-    emailAlternate?: StringFieldUpdateOperationsInput | string
-    phoneContact?: StringFieldUpdateOperationsInput | string
     bio?: StringFieldUpdateOperationsInput | string
     headline?: StringFieldUpdateOperationsInput | string
-    yogaStyle?: StringFieldUpdateOperationsInput | string
-    yogaExperience?: StringFieldUpdateOperationsInput | string
-    Facebook?: StringFieldUpdateOperationsInput | string
-    Google?: StringFieldUpdateOperationsInput | string
-    Patreon?: StringFieldUpdateOperationsInput | string
-    Twitch?: StringFieldUpdateOperationsInput | string
-    Twitter?: StringFieldUpdateOperationsInput | string
-    websiteURL?: StringFieldUpdateOperationsInput | string
-    blogURL?: StringFieldUpdateOperationsInput | string
-    socialURL?: StringFieldUpdateOperationsInput | string
-    streamingURL?: StringFieldUpdateOperationsInput | string
-    isInstructor?: StringFieldUpdateOperationsInput | string
-    isStudent?: StringFieldUpdateOperationsInput | string
-    isPrivate?: StringFieldUpdateOperationsInput | string
-    calendar?: StringFieldUpdateOperationsInput | string
-    timezone?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
-    isLocationPublic?: StringFieldUpdateOperationsInput | string
-    exportAccountInfo?: StringFieldUpdateOperationsInput | string
-    deleteAccountInfo?: StringFieldUpdateOperationsInput | string
-    company?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
   }
 
   export type SequencesSeriesCreateManySequenceInput = {

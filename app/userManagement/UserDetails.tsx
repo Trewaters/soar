@@ -51,6 +51,28 @@ export interface UserProfile {
   profile: Record<string, any>
   createdAt: Date
   updatedAt: Date
+  practitionerProfile?: PractitionerProfile
+}
+
+export interface PractitionerProfile {
+  id: string
+  headline: string
+  bio: string
+  location: string
+  websiteURL: string
+  firstName: string
+  lastName: string
+  userId: string
+  user: UserProfile
+  // facebook: string
+  // instagram: string
+  // linkedin: string
+  // twitter: string
+  // youtube: string
+  // pinterest: string
+  // tiktok: string
+  // createdAt: Date
+  // updatedAt: Date
 }
 
 export default function UserDetails() {
@@ -68,6 +90,18 @@ export default function UserDetails() {
     createdAt: new Date(),
     updatedAt: new Date(),
   })
+  const [practitionerProfile, setPractitionerProfile] =
+    React.useState<PractitionerProfile>({
+      headline: 'New Headline',
+      bio: 'Updated bio',
+      location: 'New Location',
+      websiteURL: 'https://happyYoga.app',
+      firstName: 'New First Name',
+      lastName: 'New Last Name',
+      id: '',
+      userId: '',
+      user: userData,
+    })
 
   // profile card expand
   const handleExpandClick = () => {
@@ -108,26 +142,36 @@ export default function UserDetails() {
     }
   }
 
-  // fetch user data based on session.user.email
-  React.useEffect(() => {
-    if (!session) return
-    // console.log('useEffect triggered with email', session)
+  const updatePractitionerData = async (
+    practitionerData: PractitionerProfile
+  ) => {
+    try {
+      const response = await fetch('/api/user/updatePractitioner', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: session?.user?.email,
+          practitionerData,
+        }),
+      })
 
-    fetchUserData()
-  }, [session])
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(`Failed to update practitioner data: ${errorText}`)
+      }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setUserData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+      const result = await response.json()
+      console.log('Practitioner data updated:', result)
+    } catch (error) {
+      console.error('Error updating practitioner data:', error)
+    }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const updateUserData = async (userData: UserProfile) => {
     try {
-      const postUserData = await fetch(`/api/user/update`, {
+      const postUserData = await fetch(`/api/user/updateUserData`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -147,7 +191,57 @@ export default function UserDetails() {
       }
     } catch (error) {
       console.error('Error saving data', error)
+      throw new Error('Error saving data')
     }
+  }
+
+  // fetch user data based on session.user.email
+  React.useEffect(() => {
+    if (!session) return
+    // console.log('useEffect triggered with email', session)
+
+    fetchUserData()
+  }, [session])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setUserData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+    setPractitionerProfile((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    // try {
+    //   const postUserData = await fetch(`/api/user/updateUserData`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       pronouns: userData?.pronouns,
+    //       email: session?.user?.email,
+    //     }),
+    //   })
+    //   if (postUserData.ok) {
+    //     // console.log('Data saved')
+    //     // const savedUser = await fetchUserData()
+    //     // setUserData(savedUser)
+    //   } else {
+    //     console.error('Error saving data')
+    //     throw new Error('Error saving data')
+    //   }
+    // } catch (error) {
+    //   console.error('Error saving data', error)
+    //   throw new Error('Error saving data')
+    // }
+    updateUserData(userData)
+    updatePractitionerData(practitionerProfile)
   }
 
   return (
@@ -265,6 +359,23 @@ export default function UserDetails() {
                 variant="outlined"
                 type="email"
               />
+            </FormControl>
+          </Grid>
+          <Grid xs={12} sm={12} md={12} item>
+            <FormControl fullWidth>
+              <TextField
+                id="outlined-textarea"
+                name="headline"
+                placeholder="Enter...2 sentences"
+                label="Headline:"
+                value={
+                  practitionerProfile?.headline ?? 'I am a Yoga instructor.'
+                }
+                onChange={handleChange}
+                multiline
+                maxRows={2}
+              />
+              {/* I am a Yoga instructor, Reiki Master, and creator of the Happy Yoga app. */}
             </FormControl>
           </Grid>
         </>

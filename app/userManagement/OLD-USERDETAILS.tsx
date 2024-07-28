@@ -271,7 +271,7 @@ export default function UserDetails() {
   const handleSubmit = async (e: any) => {
     e.preventDefault()
     try {
-      const postUserData = await fetch(`/api/user/update`, {
+      const postUserData = await fetch(`/api/user/updateUserData`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -432,6 +432,7 @@ export default function UserDetails() {
                 value={userData.email}
                 variant="outlined"
                 type="email"
+                disabled
               />
             </FormControl>
           </Grid>
@@ -518,6 +519,7 @@ export default function UserDetails() {
               />
             </FormControl>
           </Grid>
+ */}
           <Grid xs={12} sm={12} md={12} item>
             <FormControl fullWidth>
               <TextField
@@ -533,7 +535,6 @@ export default function UserDetails() {
               />
             </FormControl>
           </Grid>
- */}
           <Grid xs={12} sm={12} md={12} item>
             {/* <FormControl fullWidth>
       <InputLabel id="demo-simple-select-label">Yoga Style</InputLabel>
