@@ -22,7 +22,7 @@ export async function GET(req: Request) {
       where: { email: decodedEmail },
     })
 
-    console.log(`api prisma.user: ${JSON.stringify(user)}`)
+    console.log('api prisma.user:', { user })
 
     if (!user) {
       return new Response(JSON.stringify({ error: 'User not found' }), {
@@ -38,45 +38,12 @@ export async function GET(req: Request) {
     )
   }
 
-  // TODO: replace try/catch with practitioner GET call 'app/api/user/fetchPractitioner/route.ts'
-  // try {
-  //   practitioner = await prisma.practitioner.findUnique({
-  //     // TODO Create a new practitioner
-  //     where: { id: user.id },
-  //   })
-
-  //   if (!practitioner) {
-  //     // TODO Create a new practitioner
-  //     practitioner = await prisma.practitioner.create({
-  //       data: {
-  //         id: user.id,
-  //         // ...practitionerData,
-  //         headline: 'New Headline',
-  //         bio: 'Updated bio',
-  //         location: 'New Location',
-  //         websiteURL: 'https://happyYoga.app',
-  //         firstName: 'New First Name',
-  //         lastName: 'New Last Name',
-  //         userId: user.id,
-  //       },
-  //     })
-  //     console.error('Practitioner created:', practitioner)
-  //   }
-  // } catch (error) {
-  //   console.error('Practitioner creation error:', error)
-  //   return new Response(
-  //     JSON.stringify({ error: 'Failed to create practitioner data' }),
-  //     { status: 500 }
-  //   )
-  // }
   try {
     practitioner = await fetch(
       `${baseUrl}/api/user/fetchPractitioner/?id=${user.id}`
     )
-    // .then(
-    //   (res) => res.json()
-    // )
-    console.log(`user GET practitioner: ${JSON.stringify(practitioner)}`)
+    const data = await practitioner.json()
+    console.log('user GET practitioner data:', data)
   } catch (error) {
     console.error('Practitioner creation error (api/user):', error)
     return new Response(

@@ -80,6 +80,7 @@ export interface PractitionerProfile {
 
 export default function UserDetails() {
   const { data: session } = useSession()
+  // console.log('session', session)
   const [expanded, setExpanded] = React.useState(false)
   const [userData, setUserData] = React.useState<UserProfile>({
     id: session?.user?.id ?? '',
@@ -147,23 +148,25 @@ export default function UserDetails() {
       console.error('Error fetching user data', error)
     }
   }
-  const fetchPractitionerData = async () => {
+
+  const fetchPractitionerData = async (user_id: any) => {
     try {
-      const id = session?.user?.id
+      // const id = session?.user?.id
+      const id = user_id
       if (!id) return
-      // console.log('Fetching practitioner data for email:', id)
+      // console.log('fetchPractitionerData data for id:', id)
       const response = await fetch(`/api/user/fetchPractitioner/?id=${id}`)
-      // console.log('useEffect response', response)
+      // console.log('fetchPractitionerData response', response)
       if (!response.ok) {
         const errorText = await response.text()
         throw new Error(`Failed to fetch practitioner data: ${errorText}`)
       }
       const practitioner = await response.json()
-      // console.log('fetchUserData', practitioner.data)
+      // console.log('fetchPractitionerData practitioner.data', practitioner.data)
 
       setPractitionerProfile((prevPractitionerProfile) => ({
         ...prevPractitionerProfile,
-        ...practitioner.data.practitionerProfile,
+        ...practitioner.data,
       }))
       return practitioner
     } catch (error) {
@@ -171,7 +174,6 @@ export default function UserDetails() {
     }
   }
 
-  // TODO create a fetch for practitioner data
   const updatePractitionerData = async (
     practitionerData: PractitionerProfile
   ) => {
@@ -231,7 +233,9 @@ export default function UserDetails() {
     // console.log('useEffect triggered with email', session)
 
     fetchUserData()
-    fetchPractitionerData()
+    // console.log('useEffect userData', userData)
+    fetchPractitionerData(userData.id)
+    // console.log('useEffect practitionerProfile', practitionerProfile)
   }, [session])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -250,6 +254,10 @@ export default function UserDetails() {
     e.preventDefault()
     await updateUserData(userData)
     await updatePractitionerData(practitionerProfile)
+    await fetchUserData()
+    // console.log('useEffect userData', userData)
+    await fetchPractitionerData(userData.id)
+    // console.log('useEffect practitionerProfile', practitionerProfile)
   }
 
   return (
@@ -386,7 +394,6 @@ export default function UserDetails() {
               {/* I am a happy Yoga instructor, happy Reiki Master, and creator of the Happy Yoga app. */}
             </FormControl>
           </Grid>
-          {practitionerProfile.headline}
         </>
       )}
     </Grid>

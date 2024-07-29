@@ -22,28 +22,29 @@ export async function GET(req: Request) {
       where: { id: id },
     })
 
-    if (!practitioner) {
-      // TODO Create a new practitioner
-      practitioner = await prisma.practitioner.create({
-        data: {
-          id: id,
-          // ...practitionerData,
-          headline: 'New Headline',
-          bio: 'Updated bio',
-          location: 'New Location',
-          websiteURL: 'https://happyYoga.app',
-          firstName: 'New First Name',
-          lastName: 'New Last Name',
-          userId: id,
-        },
-      })
-      console.error('Practitioner created:', practitioner)
+    console.error('GET fetchPractitioner:', { practitioner })
 
-      practitioner = await prisma.practitioner.findUnique({
-        // TODO Create a new practitioner
-        where: { id: id },
-      })
-    }
+    // if (!practitioner) {
+    //   // TODO Create a new practitioner
+    //   practitioner = await prisma.practitioner.create({
+    //     data: {
+    //       id: id,
+    //       // ...practitionerData,
+    //       headline: 'New Headline',
+    //       bio: 'Updated bio',
+    //       location: 'New Location',
+    //       websiteURL: 'https://happyYoga.app',
+    //       firstName: 'New First Name',
+    //       lastName: 'New Last Name',
+    //       userId: id,
+    //     },
+    //   })
+
+    //   // practitioner = await prisma.practitioner.findUnique({
+    //   //   // TODO Create a new practitioner
+    //   //   where: { id: id },
+    //   // })
+    // }
   } catch (error) {
     console.error(
       'Practitioner creation error (api/user/fetchPractitioner):',
