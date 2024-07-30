@@ -333,9 +333,10 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 
 ## TO DO
 
-2024-07-20 06:53:15
-
-- Add permanent IP Address to MongoDB Atlas Cluster whitelist for access. Upon deployment of non-alpha. So at the end of alpha phase of development.
+1. restructure MongoDB schema as a document DB and not a sql db. Running into issues updating all the prisma models with multiple GET and POST request. (2024-07-29 17:01:12)
+2. create a context for user to manage the state. (2024-07-29 17:01:14)
+3. Add Frontend Services to call my back end apis. (2024-07-29 17:02:20)
+4. Add permanent IP Address to MongoDB Atlas Cluster whitelist for access. Upon deployment of non-alpha. So at the end of alpha phase of development. (2024-07-20 06:53:15)
 
 ### Further help
 

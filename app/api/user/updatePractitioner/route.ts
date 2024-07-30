@@ -13,7 +13,7 @@ export async function POST(req: Request) {
       where: { email: decodedId },
     })
 
-    console.log(`practitioner prisma: ${{ getPrismaUser }}`)
+    // console.log('practitioner prisma:', { getPrismaUser })
 
     if (!getPrismaUser) {
       return new Response(

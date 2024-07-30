@@ -192,6 +192,9 @@ export default function UserDetails() {
       if (!response.ok) {
         const errorText = await response.text()
         throw new Error(`Failed to update practitioner data: ${errorText}`)
+      } else {
+        const savedPractitioner = await response.json()
+        return savedPractitioner
       }
 
       // const result = await response.json()
@@ -201,7 +204,9 @@ export default function UserDetails() {
     }
   }
 
-  const updateUserData = async (userData: UserProfile) => {
+  const updateUserData = async (
+    userData: UserProfile
+  ): Promise<UserProfile> => {
     try {
       const postUserData = await fetch(`/api/user/updateUserData`, {
         method: 'POST',
@@ -217,6 +222,7 @@ export default function UserDetails() {
         // console.log('Data saved')
         // const savedUser = await fetchUserData()
         // setUserData(savedUser)
+        return userData
       } else {
         console.error('Error saving data')
         throw new Error('Error saving data')
@@ -252,12 +258,15 @@ export default function UserDetails() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await updateUserData(userData)
-    await updatePractitionerData(practitionerProfile)
-    await fetchUserData()
+    const saveUser = await updateUserData(userData)
+    const savePractitioner = await updatePractitionerData(practitionerProfile)
+    // await fetchUserData()
     // console.log('useEffect userData', userData)
-    await fetchPractitionerData(userData.id)
+    // await fetchPractitionerData(userData.id)
     // console.log('useEffect practitionerProfile', practitionerProfile)
+
+    setUserData(saveUser)
+    setPractitionerProfile(savePractitioner)
   }
 
   return (
