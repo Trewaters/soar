@@ -55,12 +55,10 @@ type UserStateContextType = {
   dispatch: Dispatch<UserAction>
 }
 
-// export const UserStateContext = createContext<UserStateContextType>({
-//   state: initialState,
-//   dispatch: () => null,
-// })
-export const UserStateContext =
-  createContext<UserProfilePageState>(initialState)
+export const UserStateContext = createContext<UserStateContextType>({
+  state: initialState,
+  dispatch: () => null,
+})
 
 function UserReducer(
   state: UserProfilePageState,
@@ -74,24 +72,28 @@ function UserReducer(
   }
 }
 
-// export function UserStateProvider({ children }: {children: ReactNode}) {
-//   const [state, dispatch] = useReducer(UserReducer, initialState)
+export default function UserStateProvider({
+  children,
+}: {
+  children: ReactNode
+}) {
+  const [state, dispatch] = useReducer(UserReducer, initialState)
 
-//   // function to set user
+  // function to set user
 
-//   // const value = useMemo(() => ({ state, dispatch }), [state])
+  const value = useMemo(() => ({ state, dispatch }), [state])
 
-//   return (
-//     <UserStateContext.Provider value={value}>
-//   {children}
-//   </UserStateContext.Provider>
-//   )
-// }
+  return (
+    <UserStateContext.Provider value={value}>
+      {children}
+    </UserStateContext.Provider>
+  )
+}
 
-// export function useUser() {
-//   const context = useContext(UserStateContext)
-//   if (context === undefined) {
-//     throw new Error('useUser must be used within a UserStateProvider')
-//   }
-//   return context
-// }
+export function useUser() {
+  const context = useContext(UserStateContext)
+  if (context === undefined) {
+    throw new Error('useUser must be used within a UserStateProvider')
+  }
+  return context
+}
