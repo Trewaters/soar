@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useContext } from 'react'
 import {
   Avatar,
   Button,
@@ -23,6 +23,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
 import { useSession } from 'next-auth/react'
+import { UserStateContext } from '@app/context/UserContext'
 
 // profile card
 interface ExpandMoreProps extends IconButtonProps {
@@ -40,63 +41,11 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }))
 
-export interface UserProfile {
-  id: string
-  provider_id: string
-  name: string
-  email: string
-  emailVerified: Date
-  image: string
-  pronouns: string
-  accounts: Record<string, any> | null
-  sessions: Record<string, any> | null
-  profile: Record<string, any>
-  authenticator: Record<string, any> | null
-  createdAt: Date
-  updatedAt: Date
-  practitionerProfile?: PractitionerProfile
-}
-
-export interface PractitionerProfile {
-  id: string
-  firstName: string
-  bio: string
-  headline: string
-  location: string
-  websiteURL: string
-  lastName: string
-  userId: string
-  user: UserProfile
-  // facebook: string
-  // instagram: string
-  // linkedin: string
-  // twitter: string
-  // youtube: string
-  // pinterest: string
-  // tiktok: string
-  // createdAt: Date
-  // updatedAt: Date
-}
-
 export default function UserDetails() {
   const { data: session } = useSession()
   // console.log('session', session)
   const [expanded, setExpanded] = React.useState(false)
-  const [userData, setUserData] = React.useState<UserProfile>({
-    id: session?.user?.id ?? '',
-    provider_id: '',
-    name: session?.user?.name ?? '',
-    email: session?.user?.email ?? '',
-    emailVerified: new Date(),
-    image: session?.user?.image ?? '',
-    pronouns: '',
-    accounts: {} as JSON,
-    sessions: {} as JSON,
-    profile: {} as JSON,
-    authenticator: {} as JSON,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  })
+  const userData = useContext(UserStateContext)
   const [practitionerProfile, setPractitionerProfile] =
     React.useState<PractitionerProfile>({
       headline: 'New Headline',
@@ -205,8 +154,8 @@ export default function UserDetails() {
   }
 
   const updateUserData = async (
-    userData: UserProfile
-  ): Promise<UserProfile> => {
+    userData: UserProfilePageState
+  ): Promise<UserProfilePageState> => {
     try {
       const postUserData = await fetch(`/api/user/updateUserData`, {
         method: 'POST',

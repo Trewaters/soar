@@ -23,6 +23,7 @@
     "paths": {
       "@*": ["./*"],
       "@app/*": ["./app/*"],
+      "@context/*": ["./app/context/*"],
       "@lib/*": ["./lib/*"],
       "@prismaSchema/*": ["./prisma/*"],
       "@components/*": ["./app/clientComponents/*"],
