@@ -386,7 +386,7 @@ export default function UserDetails() {
               />
             </FormControl>
           </Grid>
-          <Grid xs={12} sm={12} md={12} item>
+          {/* <Grid xs={12} sm={12} md={12} item>
             <FormControl fullWidth>
               <TextField
                 id="outlined-textarea"
@@ -400,9 +400,9 @@ export default function UserDetails() {
                 multiline
                 maxRows={2}
               />
-              {/* I am a happy Yoga instructor, happy Reiki Master, and creator of the Happy Yoga app. */}
             </FormControl>
-          </Grid>
+          </Grid> */}
+          {/* I am a happy Yoga instructor, happy Reiki Master, and creator of the Happy Yoga app. */}
         </>
       )}
     </Grid>
