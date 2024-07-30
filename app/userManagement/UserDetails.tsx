@@ -44,20 +44,21 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 export default function UserDetails() {
   const { data: session } = useSession()
   // console.log('session', session)
-  const [expanded, setExpanded] = React.useState(false)
   const userData = useContext(UserStateContext)
-  const [practitionerProfile, setPractitionerProfile] =
-    React.useState<PractitionerProfile>({
-      headline: 'New Headline',
-      bio: 'Updated bio',
-      location: 'New Location',
-      websiteURL: 'https://happyYoga.app',
-      firstName: 'New First Name',
-      lastName: 'New Last Name',
-      id: session?.user?.id ?? '',
-      userId: session?.user?.id ?? '',
-      user: userData,
-    })
+  // const { userData, setUserData } = useContext(UserStateContext)
+  const [expanded, setExpanded] = React.useState(false)
+  // const [practitionerProfile, setPractitionerProfile] =
+  //   React.useState<PractitionerProfile>({
+  //     headline: 'New Headline',
+  //     bio: 'Updated bio',
+  //     location: 'New Location',
+  //     websiteURL: 'https://happyYoga.app',
+  //     firstName: 'New First Name',
+  //     lastName: 'New Last Name',
+  //     id: session?.user?.id ?? '',
+  //     userId: session?.user?.id ?? '',
+  //     user: userData,
+  //   })
 
   // profile card expand
   const handleExpandClick = () => {
@@ -87,11 +88,11 @@ export default function UserDetails() {
       const picture = profile.picture
 
       // Update userData with the extracted picture
-      setUserData((prevUserData) => ({
-        ...prevUserData,
-        ...user.data,
-        image: picture,
-      }))
+      // setUserData((prevUserData) => ({
+      //   ...prevUserData,
+      //   ...user.data,
+      //   image: picture,
+      // }))
       return user
     } catch (error) {
       console.error('Error fetching user data', error)
@@ -113,74 +114,74 @@ export default function UserDetails() {
       const practitioner = await response.json()
       // console.log('fetchPractitionerData practitioner.data', practitioner.data)
 
-      setPractitionerProfile((prevPractitionerProfile) => ({
-        ...prevPractitionerProfile,
-        ...practitioner.data,
-      }))
+      // setPractitionerProfile((prevPractitionerProfile) => ({
+      //   ...prevPractitionerProfile,
+      //   ...practitioner.data,
+      // }))
       return practitioner
     } catch (error) {
       console.error('Error fetching practitioner data', error)
     }
   }
 
-  const updatePractitionerData = async (
-    practitionerData: PractitionerProfile
-  ) => {
-    try {
-      const response = await fetch('/api/user/updatePractitioner', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: session?.user?.email,
-          practitionerData,
-        }),
-      })
+  // const updatePractitionerData = async (
+  //   practitionerData: PractitionerProfile
+  // ) => {
+  //   try {
+  //     const response = await fetch('/api/user/updatePractitioner', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         email: session?.user?.email,
+  //         practitionerData,
+  //       }),
+  //     })
 
-      if (!response.ok) {
-        const errorText = await response.text()
-        throw new Error(`Failed to update practitioner data: ${errorText}`)
-      } else {
-        const savedPractitioner = await response.json()
-        return savedPractitioner
-      }
+  //     if (!response.ok) {
+  //       const errorText = await response.text()
+  //       throw new Error(`Failed to update practitioner data: ${errorText}`)
+  //     } else {
+  //       const savedPractitioner = await response.json()
+  //       return savedPractitioner
+  //     }
 
-      // const result = await response.json()
-      // console.log('Practitioner data updated:', result)
-    } catch (error) {
-      console.error('Error updating practitioner data:', error)
-    }
-  }
+  //     // const result = await response.json()
+  //     // console.log('Practitioner data updated:', result)
+  //   } catch (error) {
+  //     console.error('Error updating practitioner data:', error)
+  //   }
+  // }
 
-  const updateUserData = async (
-    userData: UserProfilePageState
-  ): Promise<UserProfilePageState> => {
-    try {
-      const postUserData = await fetch(`/api/user/updateUserData`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          pronouns: userData?.pronouns,
-          email: session?.user?.email,
-        }),
-      })
-      if (postUserData.ok) {
-        // console.log('Data saved')
-        // const savedUser = await fetchUserData()
-        // setUserData(savedUser)
-        return userData
-      } else {
-        console.error('Error saving data')
-        throw new Error('Error saving data')
-      }
-    } catch (error) {
-      console.error('Error saving data', error)
-      throw new Error('Error saving data')
-    }
-  }
+  // const updateUserData = async (
+  //   userData: UserProfilePageState
+  // ): Promise<UserProfilePageState> => {
+  //   try {
+  //     const postUserData = await fetch(`/api/user/updateUserData`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         pronouns: userData?.pronouns,
+  //         email: session?.user?.email,
+  //       }),
+  //     })
+  //     if (postUserData.ok) {
+  //       // console.log('Data saved')
+  //       // const savedUser = await fetchUserData()
+  //       // setUserData(savedUser)
+  //       return userData
+  //     } else {
+  //       console.error('Error saving data')
+  //       throw new Error('Error saving data')
+  //     }
+  //   } catch (error) {
+  //     console.error('Error saving data', error)
+  //     throw new Error('Error saving data')
+  //   }
+  // }
 
   // fetch user data based on session.user.email
   React.useEffect(() => {
@@ -195,27 +196,27 @@ export default function UserDetails() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setUserData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-    setPractitionerProfile((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+    // setUserData((prev) => ({
+    //   ...prev,
+    //   [name]: value,
+    // }))
+    // setPractitionerProfile((prev) => ({
+    //   ...prev,
+    //   [name]: value,
+    // }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const saveUser = await updateUserData(userData)
-    const savePractitioner = await updatePractitionerData(practitionerProfile)
+    // const saveUser = await updateUserData(userData)
+    // const savePractitioner = await updatePractitionerData(practitionerProfile)
     // await fetchUserData()
     // console.log('useEffect userData', userData)
     // await fetchPractitionerData(userData.id)
     // console.log('useEffect practitionerProfile', practitionerProfile)
 
-    setUserData(saveUser)
-    setPractitionerProfile(savePractitioner)
+    // setUserData(saveUser)
+    // setPractitionerProfile(savePractitioner)
   }
 
   return (

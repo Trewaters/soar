@@ -1,5 +1,12 @@
 'use client'
-import React, { createContext, useReducer, useContext, ReactNode, useMemo, Dispatch } from 'react'
+import React, {
+  createContext,
+  useReducer,
+  useContext,
+  ReactNode,
+  useMemo,
+  Dispatch,
+} from 'react'
 
 export type UserProfilePageState = {
   id: string
@@ -48,9 +55,17 @@ type UserStateContextType = {
   dispatch: Dispatch<UserAction>
 }
 
-export const UserStateContext = createContext<UserStateContextType>({ state: initialState, dispatch: () => null })
+// export const UserStateContext = createContext<UserStateContextType>({
+//   state: initialState,
+//   dispatch: () => null,
+// })
+export const UserStateContext =
+  createContext<UserProfilePageState>(initialState)
 
-function UserReducer(state: UserProfilePageState, action: UserAction): UserProfilePageState {
+function UserReducer(
+  state: UserProfilePageState,
+  action: UserAction
+): UserProfilePageState {
   switch (action.type) {
     case 'SET_USER':
       return { ...state, ...action.payload }
@@ -59,24 +74,24 @@ function UserReducer(state: UserProfilePageState, action: UserAction): UserProfi
   }
 }
 
-export function UserStateProvider({ children }: {children: ReactNode}) {
-  const [state, dispatch] = useReducer(UserReducer, initialState)
+// export function UserStateProvider({ children }: {children: ReactNode}) {
+//   const [state, dispatch] = useReducer(UserReducer, initialState)
 
-  // function to set user
+//   // function to set user
 
-  // const value = useMemo(() => ({ state, dispatch }), [state])
+//   // const value = useMemo(() => ({ state, dispatch }), [state])
 
-  return (
-    <UserStateContext.Provider value={value}>
-  {children}
-  </UserStateContext.Provider>
-  )
-}
+//   return (
+//     <UserStateContext.Provider value={value}>
+//   {children}
+//   </UserStateContext.Provider>
+//   )
+// }
 
-export function useUser() {
-  const context = useContext(UserStateContext)
-  if (context === undefined) {
-    throw new Error('useUser must be used within a UserStateProvider')
-  }
-  return context
-}
+// export function useUser() {
+//   const context = useContext(UserStateContext)
+//   if (context === undefined) {
+//     throw new Error('useUser must be used within a UserStateProvider')
+//   }
+//   return context
+// }
