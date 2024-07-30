@@ -30,7 +30,6 @@ model UserData {
   headline          String
   location          String
   websiteURL        String
-  userId            String @db.ObjectId
   // pronouns          String
   // emailPublic       String
   // emailInternal     String

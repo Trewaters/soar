@@ -189,8 +189,8 @@ export default function UserDetails() {
     // console.log('useEffect triggered with email', session)
 
     fetchUserData()
-    // console.log('useEffect userData', userData)
-    fetchPractitionerData(userData.id)
+    console.log('useEffect userData', userData)
+    // fetchPractitionerData(userData.id)
     // console.log('useEffect practitionerProfile', practitionerProfile)
   }, [session])
 

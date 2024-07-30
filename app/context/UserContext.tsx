@@ -25,7 +25,6 @@ export type UserProfilePageState = {
   headline: string
   location: string
   websiteURL: string
-  userId: string
 }
 
 export type UserAction = { type: 'SET_USER'; payload: UserProfilePageState }
@@ -47,7 +46,6 @@ export const initialState: UserProfilePageState = {
   headline: '',
   location: '',
   websiteURL: '',
-  userId: '',
 }
 
 type UserStateContextType = {

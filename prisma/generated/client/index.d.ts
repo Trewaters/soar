@@ -983,7 +983,6 @@ export namespace Prisma {
     headline: string | null
     location: string | null
     websiteURL: string | null
-    userId: string | null
   }
 
   export type UserDataMaxAggregateOutputType = {
@@ -1002,7 +1001,6 @@ export namespace Prisma {
     headline: string | null
     location: string | null
     websiteURL: string | null
-    userId: string | null
   }
 
   export type UserDataCountAggregateOutputType = {
@@ -1022,7 +1020,6 @@ export namespace Prisma {
     headline: number
     location: number
     websiteURL: number
-    userId: number
     _all: number
   }
 
@@ -1043,7 +1040,6 @@ export namespace Prisma {
     headline?: true
     location?: true
     websiteURL?: true
-    userId?: true
   }
 
   export type UserDataMaxAggregateInputType = {
@@ -1062,7 +1058,6 @@ export namespace Prisma {
     headline?: true
     location?: true
     websiteURL?: true
-    userId?: true
   }
 
   export type UserDataCountAggregateInputType = {
@@ -1082,7 +1077,6 @@ export namespace Prisma {
     headline?: true
     location?: true
     websiteURL?: true
-    userId?: true
     _all?: true
   }
 
@@ -1175,7 +1169,6 @@ export namespace Prisma {
     headline: string
     location: string
     websiteURL: string
-    userId: string
     _count: UserDataCountAggregateOutputType | null
     _min: UserDataMinAggregateOutputType | null
     _max: UserDataMaxAggregateOutputType | null
@@ -1212,7 +1205,6 @@ export namespace Prisma {
     headline?: boolean
     location?: boolean
     websiteURL?: boolean
-    userId?: boolean
     accounts?: boolean | UserData$accountsArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userData"]>
@@ -1235,7 +1227,6 @@ export namespace Prisma {
     headline?: boolean
     location?: boolean
     websiteURL?: boolean
-    userId?: boolean
   }
 
   export type UserDataInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1265,7 +1256,6 @@ export namespace Prisma {
       headline: string
       location: string
       websiteURL: string
-      userId: string
     }, ExtArgs["result"]["userData"]>
     composites: {}
   }
@@ -1675,7 +1665,6 @@ export namespace Prisma {
     readonly headline: FieldRef<"UserData", 'String'>
     readonly location: FieldRef<"UserData", 'String'>
     readonly websiteURL: FieldRef<"UserData", 'String'>
-    readonly userId: FieldRef<"UserData", 'String'>
   }
     
 
@@ -3114,8 +3103,7 @@ export namespace Prisma {
     bio: 'bio',
     headline: 'headline',
     location: 'location',
-    websiteURL: 'websiteURL',
-    userId: 'userId'
+    websiteURL: 'websiteURL'
   };
 
   export type UserDataScalarFieldEnum = (typeof UserDataScalarFieldEnum)[keyof typeof UserDataScalarFieldEnum]
@@ -3248,7 +3236,6 @@ export namespace Prisma {
     headline?: StringFilter<"UserData"> | string
     location?: StringFilter<"UserData"> | string
     websiteURL?: StringFilter<"UserData"> | string
-    userId?: StringFilter<"UserData"> | string
     accounts?: AccountListRelationFilter
   }
 
@@ -3269,7 +3256,6 @@ export namespace Prisma {
     headline?: SortOrder
     location?: SortOrder
     websiteURL?: SortOrder
-    userId?: SortOrder
     accounts?: AccountOrderByRelationAggregateInput
   }
 
@@ -3293,7 +3279,6 @@ export namespace Prisma {
     headline?: StringFilter<"UserData"> | string
     location?: StringFilter<"UserData"> | string
     websiteURL?: StringFilter<"UserData"> | string
-    userId?: StringFilter<"UserData"> | string
     accounts?: AccountListRelationFilter
   }, "id" | "provider_id" | "email">
 
@@ -3314,7 +3299,6 @@ export namespace Prisma {
     headline?: SortOrder
     location?: SortOrder
     websiteURL?: SortOrder
-    userId?: SortOrder
     _count?: UserDataCountOrderByAggregateInput
     _max?: UserDataMaxOrderByAggregateInput
     _min?: UserDataMinOrderByAggregateInput
@@ -3340,7 +3324,6 @@ export namespace Prisma {
     headline?: StringWithAggregatesFilter<"UserData"> | string
     location?: StringWithAggregatesFilter<"UserData"> | string
     websiteURL?: StringWithAggregatesFilter<"UserData"> | string
-    userId?: StringWithAggregatesFilter<"UserData"> | string
   }
 
   export type AccountWhereInput = {
@@ -3462,7 +3445,6 @@ export namespace Prisma {
     headline: string
     location: string
     websiteURL: string
-    userId: string
     accounts?: AccountCreateNestedManyWithoutUserInput
   }
 
@@ -3483,7 +3465,6 @@ export namespace Prisma {
     headline: string
     location: string
     websiteURL: string
-    userId: string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -3503,7 +3484,6 @@ export namespace Prisma {
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
   }
 
@@ -3523,7 +3503,6 @@ export namespace Prisma {
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -3544,7 +3523,6 @@ export namespace Prisma {
     headline: string
     location: string
     websiteURL: string
-    userId: string
   }
 
   export type UserDataUpdateManyMutationInput = {
@@ -3563,7 +3541,6 @@ export namespace Prisma {
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserDataUncheckedUpdateManyInput = {
@@ -3582,7 +3559,6 @@ export namespace Prisma {
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type AccountCreateInput = {
@@ -3792,7 +3768,6 @@ export namespace Prisma {
     headline?: SortOrder
     location?: SortOrder
     websiteURL?: SortOrder
-    userId?: SortOrder
   }
 
   export type UserDataMaxOrderByAggregateInput = {
@@ -3811,7 +3786,6 @@ export namespace Prisma {
     headline?: SortOrder
     location?: SortOrder
     websiteURL?: SortOrder
-    userId?: SortOrder
   }
 
   export type UserDataMinOrderByAggregateInput = {
@@ -3830,7 +3804,6 @@ export namespace Prisma {
     headline?: SortOrder
     location?: SortOrder
     websiteURL?: SortOrder
-    userId?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -4362,7 +4335,6 @@ export namespace Prisma {
     headline: string
     location: string
     websiteURL: string
-    userId: string
   }
 
   export type UserDataUncheckedCreateWithoutAccountsInput = {
@@ -4382,7 +4354,6 @@ export namespace Prisma {
     headline: string
     location: string
     websiteURL: string
-    userId: string
   }
 
   export type UserDataCreateOrConnectWithoutAccountsInput = {
@@ -4417,7 +4388,6 @@ export namespace Prisma {
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserDataUncheckedUpdateWithoutAccountsInput = {
@@ -4436,7 +4406,6 @@ export namespace Prisma {
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
   }
 
   export type AccountCreateManyUserInput = {

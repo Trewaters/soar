@@ -128,8 +128,7 @@ exports.Prisma.UserDataScalarFieldEnum = {
   bio: 'bio',
   headline: 'headline',
   location: 'location',
-  websiteURL: 'websiteURL',
-  userId: 'userId'
+  websiteURL: 'websiteURL'
 };
 
 exports.Prisma.AccountScalarFieldEnum = {

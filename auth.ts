@@ -59,7 +59,7 @@ const config = {
               provider_id: user.id,
               name: user.name,
               email: user.email,
-              emailVerified: '',
+              emailVerified: new Date(),
               image: user.id,
               pronouns: '',
               profile: JSON.stringify(profile),
@@ -71,7 +71,6 @@ const config = {
               headline: '',
               location: '',
               websiteURL: '',
-              userId: user.id ?? '',
               accounts: {
                 create: {
                   provider: account.provider,
