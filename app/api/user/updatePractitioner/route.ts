@@ -38,10 +38,14 @@ export async function POST(req: Request) {
 
   // Try to update the practitioner data
   try {
-    await prisma.practitioner.update({
+    await prisma.userData.update({
       where: { id: getPrismaUser.id },
       data: validPractitionerData,
     })
+    // await prisma.practitioner.update({
+    //   where: { id: getPrismaUser.id },
+    //   data: validPractitionerData,
+    // })
   } catch (updateError: unknown) {
     // If update fails, create a new practitioner record
     console.error('updateError', updateError)

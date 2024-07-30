@@ -1,0 +1,82 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+// DbName_prod = "YogaDB"
+// DbName_dev = "yogaDBSandbox"
+
+// https://www.prisma.io/docs/orm/overview/databases/mongodb
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "./generated/client"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+model UserData {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  provider_id   String?   @unique
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  pronouns      String?
+  profile       Json?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  firstName     String
+  lastName      String
+  bio           String
+  headline      String
+  location      String
+  websiteURL    String
+  userId        String    @db.ObjectId
+  // pronouns          String
+  // emailPublic       String
+  // emailInternal     String
+  // emailAlternate    String
+  // phoneContact      String
+  // yogaStyle         String
+  // yogaExperience    String
+  // Facebook          String
+  // Google            String
+  // Patreon           String
+  // Twitch            String
+  // Twitter           String
+  // blogURL           String
+  // socialURL         String
+  // streamingURL      String
+  // isInstructor      String
+  // isStudent         String
+  // isPrivate         String
+  // calendar          String
+  // timezone          String
+  // isLocationPublic  String
+  // exportAccountInfo String
+  // deleteAccountInfo String
+  // company           String
+  accounts      Account[]
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // @@unique([provider, providerAccountId])
+}

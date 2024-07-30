@@ -17,7 +17,11 @@ export async function GET(req: Request) {
   }
 
   try {
-    practitioner = await prisma.practitioner.findUnique({
+    // practitioner = await prisma.practitioner.findUnique({
+    //   // TODO Create a new practitioner
+    //   where: { id: id },
+    // })
+    practitioner = await prisma.userData.findUnique({
       // TODO Create a new practitioner
       where: { id: id },
     })

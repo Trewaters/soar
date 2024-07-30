@@ -5,7 +5,7 @@ import TopNav from '@components/top-nav'
 import Header from '@serverComponents/header'
 import UserButton from '@serverComponents/user-button'
 import { Box, Stack, Typography } from '@mui/material'
-import { Providers } from './Providers'
+import { Providers } from '@providers/Providers'
 
 export const metadata: Metadata = {
   title: 'Happy Yoga',

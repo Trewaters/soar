@@ -24,6 +24,7 @@
       "@*": ["./*"],
       "@app/*": ["./app/*"],
       "@context/*": ["./app/context/*"],
+      "@providers/*": ["./app/providers/*"],
       "@lib/*": ["./lib/*"],
       "@prismaSchema/*": ["./prisma/*"],
       "@components/*": ["./app/clientComponents/*"],
