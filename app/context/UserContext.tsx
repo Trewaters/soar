@@ -8,7 +8,7 @@ import React, {
   Dispatch,
 } from 'react'
 
-export type UserProfilePageState = {
+export type UserProfile = {
   id: string
   provider_id: string
   name: string
@@ -25,61 +25,88 @@ export type UserProfilePageState = {
   headline: string
   location: string
   websiteURL: string
+  accounts: Record<string, any>
 }
 
-export type UserAction = { type: 'SET_USER'; payload: UserProfilePageState }
-
-export const initialState: UserProfilePageState = {
-  id: '1',
-  provider_id: '',
-  name: '',
-  email: '',
-  emailVerified: new Date(),
-  image: '',
-  pronouns: '',
-  profile: {} as Record<string, any>,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  firstName: '',
-  lastName: '',
-  bio: '',
-  headline: '',
-  location: '',
-  websiteURL: '',
+type UserProfilePageState = {
+  user: UserProfile
+  // setUser: (u: UserProfile) => void
 }
 
-type UserStateContextType = {
-  state: UserProfilePageState
-  dispatch: Dispatch<UserAction>
+// type UserAction = { type: 'SET_USER'; payload: UserProfilePageState }
+
+const initialState: UserProfilePageState = {
+  user: {
+    id: '1',
+    provider_id: '',
+    name: 'initialState',
+    email: '',
+    emailVerified: new Date(),
+    image: '',
+    pronouns: '',
+    profile: {} as Record<string, any>,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    firstName: '',
+    lastName: '',
+    bio: '',
+    headline: '',
+    location: '',
+    websiteURL: '',
+    accounts: {} as Record<string, any>,
+  },
+  // setUser: () => null,
 }
 
-export const UserStateContext = createContext<UserStateContextType>({
-  state: initialState,
-  dispatch: () => null,
-})
+// type UserStateContextType = {
+//   state: UserProfilePageState
+//   dispatch: Dispatch<UserAction>
+// }
 
-function UserReducer(
-  state: UserProfilePageState,
-  action: UserAction
-): UserProfilePageState {
-  switch (action.type) {
-    case 'SET_USER':
-      return { ...state, ...action.payload }
-    default:
-      return state
-  }
-}
+// const UserStateContext = createContext<UserStateContextType>({
+//   state: initialState,
+//   dispatch: () => null,
+// })
+
+export const UserStateContext = createContext(initialState)
+
+// function UserReducer(
+//   state: UserProfilePageState,
+//   action: UserAction
+// ): UserProfilePageState {
+//   switch (action.type) {
+//     case 'SET_USER':
+//       return { ...state, ...action.payload }
+//     default:
+//       return state
+//   }
+// }
 
 export default function UserStateProvider({
   children,
 }: {
   children: ReactNode
 }) {
-  const [state, dispatch] = useReducer(UserReducer, initialState)
+  // const [state, dispatch] = useReducer(UserReducer, initialState)
+  const value: UserProfilePageState = {
+    user: initialState.user,
+    // setUser: initialState.setUser,
+  }
 
-  // function to set user
+  // function to set user by getting userData record from db
+  // function setUser(user: UserProfilePageState) {
+  //   dispatch({ type: 'SET_USER', payload: user })
+  // }
 
-  const value = useMemo(() => ({ state, dispatch }), [state])
+  // const value = useMemo(
+  //   () => ({
+  //     state: state,
+  //     dispatch: dispatch,
+  //     user: state.user,
+  //     setUser: setUser,
+  //   }),
+  //   [state]
+  // )
 
   return (
     <UserStateContext.Provider value={value}>
@@ -88,7 +115,7 @@ export default function UserStateProvider({
   )
 }
 
-export function useUser() {
+export function UseUser() {
   const context = useContext(UserStateContext)
   if (context === undefined) {
     throw new Error('useUser must be used within a UserStateProvider')

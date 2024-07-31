@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext } from 'react'
+import React, { use, useContext } from 'react'
 import {
   Avatar,
   Button,
@@ -44,7 +44,15 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 export default function UserDetails() {
   const { data: session } = useSession()
   // console.log('session', session)
+
   const userData = useContext(UserStateContext)
+  console.log('userData', userData)
+  // const { state, dispatch } = useContext<UserStateContextType>(UserStateContext)
+  // const dispatchUserAction = dispatch as React.Dispatch<UserAction>
+
+  // console.log('UserDetails state.user', state.user)
+  // console.log('UserDetails user', user)
+  // console.log('UserDetails userData', userData)
   // const { userData, setUserData } = useContext(UserStateContext)
   const [expanded, setExpanded] = React.useState(false)
   // const [practitionerProfile, setPractitionerProfile] =
@@ -79,21 +87,23 @@ export default function UserDetails() {
         const errorText = await response.text()
         throw new Error(`Failed to fetch user data: ${errorText}`)
       }
-      const user = await response.json()
-      // console.log('fetchUserData', user.data)
-      // console.log('fetchUserData user.data.profile', user.data.profile)
+      const fetchUser = await response.json()
+      // console.log('fetchUserData', fetchUser.data)
+      // console.log('fetchUserData fetchUser.data.profile', fetchUser.data.profile)
 
       // Parse the profile field
-      const profile = JSON.parse(user.data.profile)
+      const profile = JSON.parse(fetchUser.data.profile)
       const picture = profile.picture
 
-      // Update userData with the extracted picture
-      // setUserData((prevUserData) => ({
-      //   ...prevUserData,
-      //   ...user.data,
-      //   image: picture,
-      // }))
-      return user
+      // dispatchUserAction({
+      //   type: 'SET_USER',
+      //   payload: {
+      //     ...state.user,
+      //     ...fetchUser.data,
+      //     image: picture,
+      //   },
+      // })
+      return fetchUser
     } catch (error) {
       console.error('Error fetching user data', error)
     }
@@ -164,7 +174,7 @@ export default function UserDetails() {
   //         'Content-Type': 'application/json',
   //       },
   //       body: JSON.stringify({
-  //         pronouns: userData?.pronouns,
+  //         pronouns: user.pronouns,
   //         email: session?.user?.email,
   //       }),
   //     })
@@ -189,7 +199,8 @@ export default function UserDetails() {
     // console.log('useEffect triggered with email', session)
 
     fetchUserData()
-    console.log('useEffect userData', userData)
+    // console.log('useEffect userData', state.user)
+    // console.log('useEffect userData', userData)
     // fetchPractitionerData(userData.id)
     // console.log('useEffect practitionerProfile', practitionerProfile)
   }, [session])
@@ -241,7 +252,8 @@ export default function UserDetails() {
               <CardHeader
                 avatar={
                   <Avatar sx={{ bgcolor: red[500] }} aria-label="user initial">
-                    {userData?.name?.charAt(0) ?? 'U'}
+                    {/* {state.user.name?.charAt(0) ?? 'U'} */}
+                    {userData?.user.name ?? 'U'}
                   </Avatar>
                 }
                 action={
@@ -249,13 +261,13 @@ export default function UserDetails() {
                     <MoreVertIcon />
                   </IconButton>
                 }
-                title={userData?.name}
-                subheader={`Member since ${userData?.createdAt ?? '6/9/2024'}`}
+                title={userData?.user.name}
+                subheader={`Member since ${userData?.user.createdAt ?? '6/9/2024'}`}
               />
               <CardMedia
                 component="img"
-                // image={userData?.image ?? '/stick-tree-pose-400x400.png'}
-                image={userData?.image ?? '/stick-tree-pose-400x400.png'}
+                // image={userData?.user.image ?? '/stick-tree-pose-400x400.png'}
+                image={userData?.user.image ?? '/stick-tree-pose-400x400.png'}
                 alt="Profile Image"
                 sx={{
                   width: 'auto',
@@ -305,7 +317,7 @@ export default function UserDetails() {
                 id="outlined-basic"
                 placeholder='Enter "First Name"'
                 label="Name"
-                value={userData?.name}
+                value={userData?.user.name}
                 variant="outlined"
                 disabled
               />
@@ -318,7 +330,7 @@ export default function UserDetails() {
                 id="pronouns"
                 label="Pronouns:"
                 variant="outlined"
-                value={userData?.pronouns}
+                value={userData?.user.pronouns}
                 onChange={handleChange}
               />
             </FormControl>
@@ -330,7 +342,7 @@ export default function UserDetails() {
                 name="email"
                 placeholder="xyz@ABC.com"
                 label="Email (primary/internal):"
-                value={userData?.email}
+                value={userData?.user.email}
                 variant="outlined"
                 type="email"
               />
