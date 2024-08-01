@@ -12,7 +12,6 @@ export function Providers({ children }: { children: ReactNode }) {
       {/* CssBaseline to kickstart an elegant, consistent, and simple baseline to build upon. */}
       <CssBaseline>
         <UserStateProvider>{children}</UserStateProvider>
-        {children}
       </CssBaseline>
     </ThemeProvider>
   )

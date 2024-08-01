@@ -1,5 +1,5 @@
 'use client'
-import React, { use, useContext } from 'react'
+import React, { use, useContext, useEffect } from 'react'
 import {
   Avatar,
   Button,
@@ -45,7 +45,8 @@ export default function UserDetails() {
   const { data: session } = useSession()
   // console.log('session', session)
 
-  const userData = useContext(UserStateContext)
+  // const { setEmail, userData } = useContext(UserStateContext)
+  const { setEmail, userData } = useContext(UserStateContext)
   console.log('userData', userData)
   // const { state, dispatch } = useContext<UserStateContextType>(UserStateContext)
   // const dispatchUserAction = dispatch as React.Dispatch<UserAction>
@@ -74,40 +75,40 @@ export default function UserDetails() {
   }
 
   // fetch user data based on session.user.email
-  const fetchUserData = async () => {
-    try {
-      const userEmail = session?.user?.email
-      if (!userEmail) return
-      // console.log('Fetching user data for email:', userEmail)
-      const response = await fetch(
-        `/api/user/?email=${encodeURIComponent(userEmail)}`
-      )
-      // console.log('useEffect response', response)
-      if (!response.ok) {
-        const errorText = await response.text()
-        throw new Error(`Failed to fetch user data: ${errorText}`)
-      }
-      const fetchUser = await response.json()
-      // console.log('fetchUserData', fetchUser.data)
-      // console.log('fetchUserData fetchUser.data.profile', fetchUser.data.profile)
+  // const fetchUserData = async () => {
+  //   try {
+  //     const userEmail = session?.user?.email
+  //     if (!userEmail) return
+  //     // console.log('Fetching user data for email:', userEmail)
+  //     const response = await fetch(
+  //       `/api/user/?email=${encodeURIComponent(userEmail)}`
+  //     )
+  //     // console.log('useEffect response', response)
+  //     if (!response.ok) {
+  //       const errorText = await response.text()
+  //       throw new Error(`Failed to fetch user data: ${errorText}`)
+  //     }
+  //     const fetchUser = await response.json()
+  //     // console.log('fetchUserData', fetchUser.data)
+  //     // console.log('fetchUserData fetchUser.data.profile', fetchUser.data.profile)
 
-      // Parse the profile field
-      const profile = JSON.parse(fetchUser.data.profile)
-      const picture = profile.picture
+  //     // Parse the profile field
+  //     const profile = JSON.parse(fetchUser.data.profile)
+  //     const picture = profile.picture
 
-      // dispatchUserAction({
-      //   type: 'SET_USER',
-      //   payload: {
-      //     ...state.user,
-      //     ...fetchUser.data,
-      //     image: picture,
-      //   },
-      // })
-      return fetchUser
-    } catch (error) {
-      console.error('Error fetching user data', error)
-    }
-  }
+  //     // dispatchUserAction({
+  //     //   type: 'SET_USER',
+  //     //   payload: {
+  //     //     ...state.user,
+  //     //     ...fetchUser.data,
+  //     //     image: picture,
+  //     //   },
+  //     // })
+  //     return fetchUser
+  //   } catch (error) {
+  //     console.error('Error fetching user data', error)
+  //   }
+  // }
 
   const fetchPractitionerData = async (user_id: any) => {
     try {
@@ -193,17 +194,25 @@ export default function UserDetails() {
   //   }
   // }
 
-  // fetch user data based on session.user.email
-  React.useEffect(() => {
-    if (!session) return
-    // console.log('useEffect triggered with email', session)
+  // // fetch user data based on session.user.email
+  // React.useEffect(() => {
+  //   if (!session) return
+  //   // console.log('useEffect triggered with email', session)
 
-    fetchUserData()
-    // console.log('useEffect userData', state.user)
-    // console.log('useEffect userData', userData)
-    // fetchPractitionerData(userData.id)
-    // console.log('useEffect practitionerProfile', practitionerProfile)
-  }, [session])
+  //   fetchUserData()
+  //   // console.log('useEffect userData', state.user)
+  //   // console.log('useEffect userData', userData)
+  //   // fetchPractitionerData(userData.id)
+  //   // console.log('useEffect practitionerProfile', practitionerProfile)
+  // }, [session])
+
+  useEffect(() => {
+    if (!session) return
+    if (session?.user?.email && userData?.email !== session.user.email) {
+      setEmail(session.user.email)
+    }
+  }, [session, setEmail, userData])
+  console.log('useEffect userData', userData)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -253,7 +262,7 @@ export default function UserDetails() {
                 avatar={
                   <Avatar sx={{ bgcolor: red[500] }} aria-label="user initial">
                     {/* {state.user.name?.charAt(0) ?? 'U'} */}
-                    {userData?.user.name ?? 'U'}
+                    {userData?.name ?? 'U'}
                   </Avatar>
                 }
                 action={
@@ -261,13 +270,13 @@ export default function UserDetails() {
                     <MoreVertIcon />
                   </IconButton>
                 }
-                title={userData?.user.name}
-                subheader={`Member since ${userData?.user.createdAt ?? '6/9/2024'}`}
+                title={userData?.name}
+                subheader={`Member since ${userData?.createdAt ?? '6/9/2024'}`}
               />
               <CardMedia
                 component="img"
-                // image={userData?.user.image ?? '/stick-tree-pose-400x400.png'}
-                image={userData?.user.image ?? '/stick-tree-pose-400x400.png'}
+                // image={userData?.image ?? '/stick-tree-pose-400x400.png'}
+                image={userData?.image ?? '/stick-tree-pose-400x400.png'}
                 alt="Profile Image"
                 sx={{
                   width: 'auto',
@@ -317,7 +326,7 @@ export default function UserDetails() {
                 id="outlined-basic"
                 placeholder='Enter "First Name"'
                 label="Name"
-                value={userData?.user.name}
+                value={userData?.name}
                 variant="outlined"
                 disabled
               />
@@ -330,7 +339,7 @@ export default function UserDetails() {
                 id="pronouns"
                 label="Pronouns:"
                 variant="outlined"
-                value={userData?.user.pronouns}
+                value={userData?.pronouns}
                 onChange={handleChange}
               />
             </FormControl>
@@ -342,7 +351,7 @@ export default function UserDetails() {
                 name="email"
                 placeholder="xyz@ABC.com"
                 label="Email (primary/internal):"
-                value={userData?.user.email}
+                value={userData?.email}
                 variant="outlined"
                 type="email"
               />
