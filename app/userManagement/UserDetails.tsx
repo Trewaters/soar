@@ -1,5 +1,5 @@
 'use client'
-import React, { use, useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import {
   Avatar,
   Button,
@@ -43,91 +43,19 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 export default function UserDetails() {
   const { data: session } = useSession()
-  // console.log('session', session)
+  console.log('session', session)
 
-  // const { setEmail, userData } = useContext(UserStateContext)
-  const { setEmail, userData, userDataProfile } = useContext(UserStateContext)
+  const { setEmail, userData, userGithubProfile, userGoogleProfile } =
+    useContext(UserStateContext)
   console.log('userData', userData)
-  console.log('userDataProfile', userDataProfile)
+  console.log('userGithubProfile', userGithubProfile)
+  console.log('userGoogleProfile', userGoogleProfile)
 
   const [expanded, setExpanded] = React.useState(false)
-  // const [practitionerProfile, setPractitionerProfile] =
-  //   React.useState<PractitionerProfile>({
-  //     headline: 'New Headline',
-  //     bio: 'Updated bio',
-  //     location: 'New Location',
-  //     websiteURL: 'https://happyYoga.app',
-  //     firstName: 'New First Name',
-  //     lastName: 'New Last Name',
-  //     id: session?.user?.id ?? '',
-  //     userId: session?.user?.id ?? '',
-  //     user: userData,
-  //   })
 
   // profile card expand
   const handleExpandClick = () => {
     setExpanded(!expanded)
-  }
-
-  // fetch user data based on session.user.email
-  // const fetchUserData = async () => {
-  //   try {
-  //     const userEmail = session?.user?.email
-  //     if (!userEmail) return
-  //     // console.log('Fetching user data for email:', userEmail)
-  //     const response = await fetch(
-  //       `/api/user/?email=${encodeURIComponent(userEmail)}`
-  //     )
-  //     // console.log('useEffect response', response)
-  //     if (!response.ok) {
-  //       const errorText = await response.text()
-  //       throw new Error(`Failed to fetch user data: ${errorText}`)
-  //     }
-  //     const fetchUser = await response.json()
-  //     // console.log('fetchUserData', fetchUser.data)
-  //     // console.log('fetchUserData fetchUser.data.profile', fetchUser.data.profile)
-
-  //     // Parse the profile field
-  //     const profile = JSON.parse(fetchUser.data.profile)
-  //     const picture = profile.picture
-
-  //     // dispatchUserAction({
-  //     //   type: 'SET_USER',
-  //     //   payload: {
-  //     //     ...state.user,
-  //     //     ...fetchUser.data,
-  //     //     image: picture,
-  //     //   },
-  //     // })
-  //     return fetchUser
-  //   } catch (error) {
-  //     console.error('Error fetching user data', error)
-  //   }
-  // }
-
-  const fetchPractitionerData = async (user_id: any) => {
-    try {
-      // const id = session?.user?.id
-      const id = user_id
-      if (!id) return
-      // console.log('fetchPractitionerData data for id:', id)
-      const response = await fetch(`/api/user/fetchPractitioner/?id=${id}`)
-      // console.log('fetchPractitionerData response', response)
-      if (!response.ok) {
-        const errorText = await response.text()
-        throw new Error(`Failed to fetch practitioner data: ${errorText}`)
-      }
-      const practitioner = await response.json()
-      // console.log('fetchPractitionerData practitioner.data', practitioner.data)
-
-      // setPractitionerProfile((prevPractitionerProfile) => ({
-      //   ...prevPractitionerProfile,
-      //   ...practitioner.data,
-      // }))
-      return practitioner
-    } catch (error) {
-      console.error('Error fetching practitioner data', error)
-    }
   }
 
   // const updatePractitionerData = async (
@@ -195,8 +123,6 @@ export default function UserDetails() {
   //   // console.log('useEffect triggered with email', session)
 
   //   fetchUserData()
-  //   // console.log('useEffect userData', state.user)
-  //   // console.log('useEffect userData', userData)
   //   // fetchPractitionerData(userData.id)
   //   // console.log('useEffect practitionerProfile', practitionerProfile)
   // }, [session])
@@ -208,9 +134,8 @@ export default function UserDetails() {
     }
     console.log('useEffect userData', userData)
     // console.log('useEffect profile', userData.profile)
-    // console.log(      'useEffect userData?.profile',      JSON.parse(JSON.stringify(userData?.profile))    )
     // console.log('useEffect JSON.parse', JSON.parse(userData?.profile))
-  }, [session, setEmail, userData])
+  }, [session, setEmail, userData, userGithubProfile, userGoogleProfile])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -229,7 +154,6 @@ export default function UserDetails() {
     // const saveUser = await updateUserData(userData)
     // const savePractitioner = await updatePractitionerData(practitionerProfile)
     // await fetchUserData()
-    // console.log('useEffect userData', userData)
     // await fetchPractitionerData(userData.id)
     // console.log('useEffect practitionerProfile', practitionerProfile)
 
@@ -259,8 +183,7 @@ export default function UserDetails() {
               <CardHeader
                 avatar={
                   <Avatar sx={{ bgcolor: red[500] }} aria-label="user initial">
-                    {/* {state.user.name?.charAt(0) ?? 'U'} */}
-                    {userData?.name ?? 'U'}
+                    {userData?.name?.charAt(0) ?? 'U'}
                   </Avatar>
                 }
                 action={
@@ -273,9 +196,7 @@ export default function UserDetails() {
               />
               <CardMedia
                 component="img"
-                image={
-                  userDataProfile?.avatar_url ?? '/stick-tree-pose-400x400.png'
-                }
+                src={userData?.image ?? '/stick-tree-pose-400x400.png'}
                 alt="Profile Image"
                 sx={{
                   width: 'auto',

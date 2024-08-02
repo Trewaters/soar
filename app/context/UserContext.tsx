@@ -31,7 +31,7 @@ export type UserData = {
   accounts: Record<string, any>
 }
 
-export type UserProfile = {
+export type UserGithubProfile = {
   login: string
   id: number
   node_id: string
@@ -78,9 +78,26 @@ export type UserProfile = {
   }
 }
 
+export type UserGoogleProfile = {
+  iss: string
+  azp: string
+  aud: string
+  sub: string
+  email: string
+  email_verified: boolean
+  at_hash: string
+  name: string
+  picture: string
+  given_name: string
+  family_name: string
+  iat: number
+  exp: number
+}
+
 type UserProfilePageState = {
   userData: UserData
-  userDataProfile: UserProfile
+  userGithubProfile: UserGithubProfile
+  userGoogleProfile: UserGoogleProfile
   fetchUserData: (email: string) => void
   setEmail: (email: string) => void
 }
@@ -107,7 +124,7 @@ const initialState: UserProfilePageState = {
     websiteURL: '',
     accounts: {} as Record<string, any>,
   },
-  userDataProfile: {
+  userGithubProfile: {
     login: '',
     id: 0,
     node_id: '',
@@ -153,6 +170,21 @@ const initialState: UserProfilePageState = {
       private_repos: 0,
     },
   },
+  userGoogleProfile: {
+    iss: '',
+    azp: '',
+    aud: '',
+    sub: '',
+    email: '',
+    email_verified: false,
+    at_hash: '',
+    name: '',
+    picture: '',
+    given_name: '',
+    family_name: '',
+    iat: 0,
+    exp: 0,
+  },
   fetchUserData: () => null,
   setEmail: () => null,
 }
@@ -184,26 +216,44 @@ export default function UserStateProvider({
   children: ReactNode
 }) {
   // const [state, dispatch] = useReducer(UserReducer, initialState)
-  // const [user, setUser] = useState<UserData>(initialState.user)
   const [userData, setUserData] = useState<UserData>(initialState.userData)
-  const [userDataProfile, setUserDataProfile] = useState<UserProfile>(
-    initialState.userDataProfile
+  const [userGithubProfile, setUserGithubProfile] = useState<UserGithubProfile>(
+    initialState.userGithubProfile
   )
-  const [email, setEmail] = useState<string>('t@t.com')
+  const [userGoogleProfile, setUserGoogleProfile] = useState<UserGoogleProfile>(
+    initialState.userGoogleProfile
+  )
+  const [email, setEmail] = useState<string>('')
 
   const fetchUserData = async (email: string) => {
     try {
-      const response = await fetch(
+      const userResponse = await fetch(
         `/api/user/?email=${encodeURIComponent(email)}`
       )
-      if (!response.ok) {
-        const errorText = await response.text()
+      if (!userResponse.ok) {
+        const errorText = await userResponse.text()
         throw new Error(`Failed to fetch user data: ${errorText}`)
       }
-      const fetchUser = await response.json()
+      const fetchUser = await userResponse.json()
       setUserData(fetchUser.data)
-      const profile = JSON.parse(fetchUser.data.profile)
-      setUserDataProfile(profile)
+      console.log('fetchUser.data:', fetchUser.data)
+
+      const accountResponse = await fetch(
+        `/api/user/fetchAccount/?id=${fetchUser.data.id}`
+      )
+      const fetchAccount = await accountResponse.json()
+      console.log('fetchAccount.data:', fetchAccount.data)
+
+      // // set user profile data based on userData.id > account.provider
+      // const profile = JSON.parse(fetchUser.data.profile)
+      // if (fetchAccount.data.provider === 'github') {
+      //   setUserGithubProfile(profile as UserGithubProfile)
+      //   console.log('setUserGithubProfile:', profile)
+      // } else if (fetchAccount.data.provider === 'google') {
+      //   setUserGoogleProfile(profile as UserGoogleProfile)
+      //   console.log('setUserGoogleProfile:', profile)
+      // }
+      // setUserGithubProfile(profile)
     } catch (error) {
       console.error('Error fetching user data', error)
     }
@@ -215,19 +265,15 @@ export default function UserStateProvider({
   }
 
   useEffect(() => {
-    // const email = 'trewaters@gmail.com'
     if (email) {
       fetchUserData(email)
     }
   }, [])
 
-  // const value = {
-  //   user,
-  //   setUser,
-  // }
   const value = {
     userData,
-    userDataProfile,
+    userGithubProfile,
+    userGoogleProfile,
     fetchUserData,
     setEmail: updateEmail,
   }
