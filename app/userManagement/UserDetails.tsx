@@ -46,15 +46,10 @@ export default function UserDetails() {
   // console.log('session', session)
 
   // const { setEmail, userData } = useContext(UserStateContext)
-  const { setEmail, userData } = useContext(UserStateContext)
+  const { setEmail, userData, userDataProfile } = useContext(UserStateContext)
   console.log('userData', userData)
-  // const { state, dispatch } = useContext<UserStateContextType>(UserStateContext)
-  // const dispatchUserAction = dispatch as React.Dispatch<UserAction>
+  console.log('userDataProfile', userDataProfile)
 
-  // console.log('UserDetails state.user', state.user)
-  // console.log('UserDetails user', user)
-  // console.log('UserDetails userData', userData)
-  // const { userData, setUserData } = useContext(UserStateContext)
   const [expanded, setExpanded] = React.useState(false)
   // const [practitionerProfile, setPractitionerProfile] =
   //   React.useState<PractitionerProfile>({
@@ -211,8 +206,11 @@ export default function UserDetails() {
     if (session?.user?.email && userData?.email !== session.user.email) {
       setEmail(session.user.email)
     }
+    console.log('useEffect userData', userData)
+    // console.log('useEffect profile', userData.profile)
+    // console.log(      'useEffect userData?.profile',      JSON.parse(JSON.stringify(userData?.profile))    )
+    // console.log('useEffect JSON.parse', JSON.parse(userData?.profile))
   }, [session, setEmail, userData])
-  console.log('useEffect userData', userData)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -275,8 +273,9 @@ export default function UserDetails() {
               />
               <CardMedia
                 component="img"
-                // image={userData?.image ?? '/stick-tree-pose-400x400.png'}
-                image={userData?.image ?? '/stick-tree-pose-400x400.png'}
+                image={
+                  userDataProfile?.avatar_url ?? '/stick-tree-pose-400x400.png'
+                }
                 alt="Profile Image"
                 sx={{
                   width: 'auto',

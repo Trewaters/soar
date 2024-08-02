@@ -81,7 +81,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }))
 
-export interface UserProfile {
+export interface UserData {
   id: string
   provider_id: string
   name: string
@@ -215,7 +215,7 @@ export default function UserDetails() {
   }
 
   // user data
-  const [userData, setUserData] = React.useState<UserProfile>({
+  const [userData, setUserData] = React.useState<UserData>({
     id: session?.user?.id ?? '',
     provider_id: '',
     name: session?.user?.name ?? '',
