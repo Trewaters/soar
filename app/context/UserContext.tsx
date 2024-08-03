@@ -4,11 +4,9 @@ import {
   useReducer,
   useContext,
   ReactNode,
-  useMemo,
   Dispatch,
   useState,
   useEffect,
-  FC,
 } from 'react'
 
 export type UserData = {
@@ -93,15 +91,16 @@ export type UserGoogleProfile = {
   exp: number
 }
 
-type UserProfilePageState = {
+export type UserProfilePageState = {
   userData: UserData
   userGithubProfile: UserGithubProfile
   userGoogleProfile: UserGoogleProfile
-  fetchUserData: (email: string) => void
-  setEmail: (email: string) => void
 }
 
-// type UserAction = { type: 'SET_USER'; payload: UserProfilePageState }
+type UserAction =
+  | { type: 'SET_USER'; payload: UserData }
+  | { type: 'SET_GITHUB_PROFILE'; payload: UserGithubProfile }
+  | { type: 'SET_GOOGLE_PROFILE'; payload: UserGoogleProfile }
 
 const initialState: UserProfilePageState = {
   userData: {
@@ -183,133 +182,88 @@ const initialState: UserProfilePageState = {
     iat: 0,
     exp: 0,
   },
-  fetchUserData: () => null,
-  setEmail: () => null,
 }
 
-// interface UserStateContextType {
-//   userData: UserData
-//   fetchUserData: (email: string) => void
-//   setEmail: (email: string) => void
-// }
+interface UserStateContextType {
+  state: UserProfilePageState
+  dispatch: Dispatch<UserAction>
+}
 
-export const UserStateContext =
-  createContext<UserProfilePageState>(initialState)
+export const UserStateContext = createContext<UserStateContextType>({
+  state: initialState,
+  dispatch: () => null,
+})
 
-// function UserReducer(
-//   state: UserProfilePageState,
-//   action: UserAction
-// ): UserProfilePageState {
-//   switch (action.type) {
-//     case 'SET_USER':
-//       return { ...state, ...action.payload }
-//     default:
-//       return state
-//   }
-// }
+function UserReducer(
+  state: UserProfilePageState,
+  action: UserAction
+): UserProfilePageState {
+  switch (action.type) {
+    case 'SET_USER':
+      return { ...state, userData: action.payload }
+    case 'SET_GITHUB_PROFILE':
+      return { ...state, userGithubProfile: action.payload }
+    case 'SET_GOOGLE_PROFILE':
+      return { ...state, userGoogleProfile: action.payload }
+    default:
+      return state
+  }
+}
 
 export default function UserStateProvider({
   children,
 }: {
   children: ReactNode
 }) {
-  // const [state, dispatch] = useReducer(UserReducer, initialState)
-  const [userData, setUserData] = useState<UserData>(initialState.userData)
-  const [userGithubProfile, setUserGithubProfile] = useState<UserGithubProfile>(
-    initialState.userGithubProfile
-  )
-  const [userGoogleProfile, setUserGoogleProfile] = useState<UserGoogleProfile>(
-    initialState.userGoogleProfile
-  )
-  const [email, setEmail] = useState<string>('')
-
-  const fetchUserData = async (email: string) => {
-    console.log('fetchUserData by email:', email)
-    let fetchUser: any
-    try {
-      const userResponse = await fetch(
-        `/api/user/?email=${encodeURIComponent(email)}`
-      )
-      if (!userResponse.ok) {
-        const errorText = await userResponse.text()
-        throw new Error(`Failed to fetch user data: ${errorText}`)
-      }
-      fetchUser = await userResponse.json()
-      setUserData(fetchUser.data)
-      // console.log('fetchUser.data:', fetchUser.data)
-    } catch (error) {
-      console.error('Error fetching user data', error)
-    }
-
-    try {
-      // console.log('accountResponse fetchUser.data.id:', fetchUser.data.id)
-
-      const accountResponse = await fetch(
-        `/api/user/fetchAccount/?userId=${fetchUser.data.id}`
-      )
-      const fetchAccount = await accountResponse.json()
-      // console.log('fetchAccount.data:', fetchAccount.data)
-
-      // set user profile data based on userData.id > account.provider
-      const profile = JSON.parse(fetchUser.data.profile)
-      if (fetchAccount.data.provider === 'github') {
-        setUserGithubProfile(profile as UserGithubProfile)
-        // console.log('setUserGithubProfile:', profile)
-      } else if (fetchAccount.data.provider === 'google') {
-        setUserGoogleProfile(profile as UserGoogleProfile)
-        // console.log('setUserGoogleProfile:', profile)
-      }
-    } catch (error) {
-      console.error('Error fetching user profile', error)
-    }
-  }
-
-  const updateEmail = (email: string) => {
-    setEmail(email)
-    fetchUserData(email)
-  }
+  const [state, dispatch] = useReducer(UserReducer, initialState)
 
   useEffect(() => {
-    if (!email) {
-      return
+    const fetchUserData = async (email: string) => {
+      console.log('fetchUserData by email:', email)
+      let fetchUser: any
+      try {
+        const userResponse = await fetch(
+          `/api/user/?email=${encodeURIComponent(email)}`
+        )
+        if (!userResponse.ok) {
+          const errorText = await userResponse.text()
+          throw new Error(`Failed to fetch user data: ${errorText}`)
+        }
+        fetchUser = await userResponse.json()
+        dispatch({ type: 'SET_USER', payload: fetchUser.data })
+      } catch (error) {
+        console.error('Error fetching user data', error)
+      }
+
+      try {
+        const accountResponse = await fetch(
+          `/api/user/fetchAccount/?userId=${fetchUser.data.id}`
+        )
+        const fetchAccount = await accountResponse.json()
+        const profile = JSON.parse(fetchUser.data.profile)
+        if (fetchAccount.data.provider === 'github') {
+          dispatch({
+            type: 'SET_GITHUB_PROFILE',
+            payload: profile as UserGithubProfile,
+          })
+        } else if (fetchAccount.data.provider === 'google') {
+          dispatch({
+            type: 'SET_GOOGLE_PROFILE',
+            payload: profile as UserGoogleProfile,
+          })
+        }
+      } catch (error) {
+        console.error('Error fetching user profile', error)
+      }
     }
 
-    if (email) {
-      fetchUserData(email)
-      console.log('useEffect email:', email)
+    if (state.userData.email) {
+      fetchUserData(state.userData.email)
     }
-  }, [])
-
-  const value = {
-    userData,
-    userGithubProfile,
-    userGoogleProfile,
-    setEmail: updateEmail,
-    fetchUserData,
-  }
-
-  // const value: UserProfilePageState = {
-  //   user: initialState.user,
-  //   setUser: initialState.setUser,
-  // }
-
-  // function to set user by getting userData record from db
-  // function setUser(user: UserProfilePageState) {
-  //   dispatch({ type: 'SET_USER', payload: user })
-  // }
-
-  // const value = useMemo(
-  //   () => ({
-  //     state: state,
-  //     dispatch: dispatch,
-  //     user: state.user,
-  //     setUser: setUser,
-  //   }),
-  //   [state]
-  // )
+  }, [state.userData.email])
 
   return (
-    <UserStateContext.Provider value={value}>
+    <UserStateContext.Provider value={{ state, dispatch }}>
       {children}
     </UserStateContext.Provider>
   )

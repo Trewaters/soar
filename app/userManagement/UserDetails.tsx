@@ -24,6 +24,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
 import { useSession } from 'next-auth/react'
 import { UserStateContext } from '@app/context/UserContext'
+import { UseUser } from '@app/context/UserContext'
 
 // profile card
 interface ExpandMoreProps extends IconButtonProps {
@@ -43,122 +44,55 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 export default function UserDetails() {
   const { data: session } = useSession()
-  // console.log('session', session)
-
-  const { setEmail, userData, userGithubProfile, userGoogleProfile } =
-    useContext(UserStateContext)
-  // console.log('userData', userData)
-  // console.log('userGithubProfile', userGithubProfile)
-  // console.log('userGoogleProfile', userGoogleProfile)
+  const {
+    state: { userData },
+    dispatch,
+  } = UseUser()
 
   const [expanded, setExpanded] = React.useState(false)
 
-  // profile card expand
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
 
-  // const updatePractitionerData = async (
-  //   practitionerData: PractitionerProfile
-  // ) => {
-  //   try {
-  //     const response = await fetch('/api/user/updatePractitioner', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         email: session?.user?.email,
-  //         practitionerData,
-  //       }),
-  //     })
-
-  //     if (!response.ok) {
-  //       const errorText = await response.text()
-  //       throw new Error(`Failed to update practitioner data: ${errorText}`)
-  //     } else {
-  //       const savedPractitioner = await response.json()
-  //       return savedPractitioner
-  //     }
-
-  //     // const result = await response.json()
-  //     // console.log('Practitioner data updated:', result)
-  //   } catch (error) {
-  //     console.error('Error updating practitioner data:', error)
-  //   }
-  // }
-
-  // const updateUserData = async (
-  //   userData: UserProfilePageState
-  // ): Promise<UserProfilePageState> => {
-  //   try {
-  //     const postUserData = await fetch(`/api/user/updateUserData`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         pronouns: user.pronouns,
-  //         email: session?.user?.email,
-  //       }),
-  //     })
-  //     if (postUserData.ok) {
-  //       // console.log('Data saved')
-  //       // const savedUser = await fetchUserData()
-  //       // setUserData(savedUser)
-  //       return userData
-  //     } else {
-  //       console.error('Error saving data')
-  //       throw new Error('Error saving data')
-  //     }
-  //   } catch (error) {
-  //     console.error('Error saving data', error)
-  //     throw new Error('Error saving data')
-  //   }
-  // }
-
-  // // fetch user data based on session.user.email
-  // React.useEffect(() => {
-  //   if (!session) return
-  //   // console.log('useEffect triggered with email', session)
-
-  //   fetchUserData()
-  //   // fetchPractitionerData(userData.id)
-  //   // console.log('useEffect practitionerProfile', practitionerProfile)
-  // }, [session])
-
   useEffect(() => {
     if (!session) return
     if (session?.user?.email && userData?.email !== session.user.email) {
-      setEmail(session.user.email)
+      dispatch({
+        type: 'SET_USER',
+        payload: { ...userData, email: session.user.email },
+      })
     }
-    // console.log('useEffect userData', userData)
-    // console.log('useEffect profile', userData.profile)
-    // console.log('useEffect JSON.parse', JSON.parse(userData?.profile))
-  }, [session, setEmail, userData, userGithubProfile, userGoogleProfile])
+  }, [session, dispatch, userData])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    // setUserData((prev) => ({
-    //   ...prev,
-    //   [name]: value,
-    // }))
-    // setPractitionerProfile((prev) => ({
-    //   ...prev,
-    //   [name]: value,
-    // }))
+    dispatch({ type: 'SET_USER', payload: { ...userData, [name]: value } })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // const saveUser = await updateUserData(userData)
-    // const savePractitioner = await updatePractitionerData(practitionerProfile)
-    // await fetchUserData()
-    // await fetchPractitionerData(userData.id)
-    // console.log('useEffect practitionerProfile', practitionerProfile)
+    try {
+      const response = await fetch(
+        `/api/user/updateUserData/?email=${userData.email}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userData),
+        }
+      )
 
-    // setUserData(saveUser)
-    // setPractitionerProfile(savePractitioner)
+      if (!response.ok) {
+        throw new Error('Failed to update user data')
+      }
+
+      const updatedUser = await response.json()
+      dispatch({ type: 'SET_USER', payload: updatedUser })
+    } catch (error) {
+      console.error('Error updating user data:', error)
+    }
   }
 
   return (
@@ -277,22 +211,20 @@ export default function UserDetails() {
               />
             </FormControl>
           </Grid>
-          {/* <Grid xs={12} sm={12} md={12} item>
+          <Grid xs={12} sm={12} md={12} item>
             <FormControl fullWidth>
               <TextField
                 id="outlined-textarea"
                 name="headline"
                 placeholder="Enter...2 sentences"
                 label="Headline:"
-                value={
-                  practitionerProfile?.headline ?? 'I am a Yoga instructor.'
-                }
+                value={userData?.headline ?? 'I am a Yoga instructor.'}
                 onChange={handleChange}
                 multiline
                 maxRows={2}
               />
             </FormControl>
-          </Grid> */}
+          </Grid>
           {/* I am a happy Yoga instructor, happy Reiki Master, and creator of the Happy Yoga app. */}
         </>
       )}
