@@ -1,6 +1,5 @@
 import { auth } from '@/auth'
 import SignIn, { SignOut } from './auth-components'
-import { Avatar, Typography } from '@mui/material'
 
 export default async function UserButton() {
   /*  

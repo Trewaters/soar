@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import {
   Avatar,
   Button,
@@ -26,7 +26,6 @@ import ShareIcon from '@mui/icons-material/Share'
 import MapIcon from '@mui/icons-material/Map'
 import LinkIcon from '@mui/icons-material/Link'
 import { useSession } from 'next-auth/react'
-import { UserStateContext } from '@app/context/UserContext'
 import { UseUser } from '@app/context/UserContext'
 import Link from 'next/link'
 
@@ -95,7 +94,7 @@ export default function UserDetails() {
       const updatedUser = await response.json()
       dispatch({ type: 'SET_USER', payload: updatedUser })
     } catch (error) {
-      console.error('Error updating user data:', error)
+      throw new Error(`Error updating user data: ${error}`)
     }
   }
   const membershipDate = new Date(userData?.createdAt).toLocaleDateString()
@@ -130,8 +129,7 @@ export default function UserDetails() {
                     <MoreVertIcon />
                   </IconButton>
                 }
-                title={userData?.name}
-                // subheader={`Member since ${userData?.createdAt ?? '6/9/2024'}`}
+                title={userData?.name ?? 'Yogi Name'}
                 subheader={`Member since ${membershipDate ?? '6/9/2024'}`}
               />
               <CardMedia
@@ -147,7 +145,7 @@ export default function UserDetails() {
               />
               <CardContent>
                 <Typography variant="body2" color="text.secondary">
-                  {userData?.headline}
+                  {userData?.headline ?? 'What does yoga mean to you?'}
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
@@ -182,14 +180,14 @@ export default function UserDetails() {
                   <Stack direction="row" justifyContent="center" spacing={2}>
                     <LinkIcon />
                     <Typography paragraph>
-                      <Link href={userData.websiteURL}>
+                      <Link href={userData.websiteURL ?? ''}>
                         {userData.websiteURL}
                       </Link>
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={2}>
                     <MapIcon />
-                    <Typography>{userData.location}</Typography>
+                    <Typography>{userData.location ?? ''}</Typography>
                   </Stack>
                 </CardContent>
               </Collapse>
@@ -202,7 +200,7 @@ export default function UserDetails() {
                 id="outlined-basic"
                 placeholder='Enter "First Name"'
                 label="Name"
-                value={userData?.name}
+                value={userData?.name ?? ''}
                 variant="outlined"
                 disabled
               />
@@ -215,7 +213,7 @@ export default function UserDetails() {
                 id="outlined-basic"
                 placeholder='Enter "First Name"'
                 label="First Name"
-                value={userData.firstName}
+                value={userData.firstName ?? ''}
                 onChange={handleChange}
                 variant="outlined"
               />
@@ -229,7 +227,7 @@ export default function UserDetails() {
                 id="outlined-basic"
                 placeholder='Enter "Last Name"'
                 label="Last Name"
-                value={userData.lastName}
+                value={userData.lastName ?? ''}
                 onChange={handleChange}
                 variant="outlined"
                 type="text"
@@ -243,7 +241,7 @@ export default function UserDetails() {
                 id="pronouns"
                 label="Pronouns:"
                 variant="outlined"
-                value={userData?.pronouns}
+                value={userData?.pronouns ?? ''}
                 onChange={handleChange}
               />
             </FormControl>
@@ -255,9 +253,10 @@ export default function UserDetails() {
                 name="email"
                 placeholder="xyz@ABC.com"
                 label="Email (primary/internal):"
-                value={userData?.email}
+                value={userData?.email ?? ''}
                 variant="outlined"
                 type="email"
+                disabled
               />
             </FormControl>
           </Grid>
@@ -283,7 +282,7 @@ export default function UserDetails() {
                 name="bio"
                 placeholder="Enter...Bio"
                 label="Description/About/Bio:"
-                value={userData?.bio}
+                value={userData?.bio ?? ''}
                 onChange={handleChange}
                 multiline
                 maxRows={4}

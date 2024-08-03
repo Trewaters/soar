@@ -243,7 +243,7 @@ export default function UserStateProvider({
         fetchUser = await userResponse.json()
         dispatch({ type: 'SET_USER', payload: fetchUser.data })
       } catch (error) {
-        console.error('Error fetching user data', error)
+        throw new Error(`Error fetching user data: ${error}`)
       }
 
       try {
@@ -264,7 +264,7 @@ export default function UserStateProvider({
           })
         }
       } catch (error) {
-        console.error('Error fetching user profile', error)
+        throw new Error(`Error fetching user profile: ${error}`)
       }
     }
 
