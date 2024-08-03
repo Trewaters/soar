@@ -141,7 +141,7 @@ export default function UserDetails() {
               />
               <CardContent>
                 <Typography variant="body2" color="text.secondary">
-                  [HEADLINE] Happy Yoga instructor and Happy Reiki Master.
+                  {userData?.headline}
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
