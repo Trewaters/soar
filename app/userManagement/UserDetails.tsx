@@ -180,12 +180,18 @@ export default function UserDetails() {
                   <Stack direction="row" justifyContent="center" spacing={2}>
                     <LinkIcon />
                     <Typography paragraph>
+                      {/* 
+                      // TODO: add a way to update the website URL
+                      */}
                       <Link href={userData.websiteURL ?? ''}>
                         {userData.websiteURL}
                       </Link>
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={2}>
+                    {/* 
+                      // TODO: add a way to update the location
+                      */}
                     <MapIcon />
                     <Typography>{userData.location ?? ''}</Typography>
                   </Stack>
