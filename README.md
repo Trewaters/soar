@@ -155,7 +155,7 @@ I create branches with the name of the feature I plan to work on. This way I kee
 
 - "feature/auth"
 - "feature/nav"
-- "feature/profile"
+- "feature/profile"- keeping this branch until I finish working on the yogi profile page. Allow view, edit and shareable link of profile data.
 - "feature/posture-cards"
 
 The "version" branches are locked after release.

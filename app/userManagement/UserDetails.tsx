@@ -13,6 +13,7 @@ import {
   Grid,
   IconButton,
   IconButtonProps,
+  Stack,
   styled,
   TextField,
   Typography,
@@ -22,9 +23,12 @@ import { red } from '@mui/material/colors'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
+import MapIcon from '@mui/icons-material/Map'
+import LinkIcon from '@mui/icons-material/Link'
 import { useSession } from 'next-auth/react'
 import { UserStateContext } from '@app/context/UserContext'
 import { UseUser } from '@app/context/UserContext'
+import Link from 'next/link'
 
 // profile card
 interface ExpandMoreProps extends IconButtonProps {
@@ -94,11 +98,12 @@ export default function UserDetails() {
       console.error('Error updating user data:', error)
     }
   }
+  const membershipDate = new Date(userData?.createdAt).toLocaleDateString()
 
   return (
     <Grid
       container
-      spacing={2}
+      spacing={4}
       direction="row"
       justifyContent={'center'}
       sx={{ p: 2 }}
@@ -110,7 +115,7 @@ export default function UserDetails() {
         <>
           <Button type="submit">Save</Button>
           <Grid xs={12} item>
-            <Typography variant="h2">Practitioner Details</Typography>
+            <Typography variant="h2">Yogi Profile</Typography>
           </Grid>
           <Grid xs={12} item>
             <Card>
@@ -126,7 +131,8 @@ export default function UserDetails() {
                   </IconButton>
                 }
                 title={userData?.name}
-                subheader={`Member since ${userData?.createdAt ?? '6/9/2024'}`}
+                // subheader={`Member since ${userData?.createdAt ?? '6/9/2024'}`}
+                subheader={`Member since ${membershipDate ?? '6/9/2024'}`}
               />
               <CardMedia
                 component="img"
@@ -162,18 +168,34 @@ export default function UserDetails() {
               </CardActions>
               <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                  <Typography paragraph>Share Quickly:</Typography>
-                  <Typography paragraph>Information about the user.</Typography>
-                  <Typography paragraph>
-                    [YOGA_STYLE], [YOGA_EXPERIENCE], [COMPANY]
-                  </Typography>
-                  <Typography paragraph>[LINKS_WEBSITE_URL]</Typography>
-                  <Typography>[LOCATION]</Typography>
+                  <Stack direction="row" spacing={2}>
+                    <Typography paragraph>Share Quickly: </Typography>
+                    <Typography paragraph>
+                      Information about yourself.
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={2}>
+                    <Typography paragraph>[YOGA_STYLE]</Typography>
+                    <Typography paragraph>[YOGA_EXPERIENCE]</Typography>
+                    <Typography paragraph>[userCompany]</Typography>
+                  </Stack>
+                  <Stack direction="row" justifyContent="center" spacing={2}>
+                    <LinkIcon />
+                    <Typography paragraph>
+                      <Link href={userData.websiteURL}>
+                        {userData.websiteURL}
+                      </Link>
+                    </Typography>
+                  </Stack>
+                  <Stack direction="row" spacing={2}>
+                    <MapIcon />
+                    <Typography>{userData.location}</Typography>
+                  </Stack>
                 </CardContent>
               </Collapse>
             </Card>
           </Grid>
-          <Grid xs={12} sm={6} md={6} item>
+          <Grid xs={12} sm={12} md={12} item>
             <FormControl>
               <TextField
                 name="name"
@@ -186,7 +208,35 @@ export default function UserDetails() {
               />
             </FormControl>
           </Grid>
-          <Grid xs={12} sm={6} md={6} item>
+          <Grid xs={6} sm={6} md={6} item>
+            <FormControl>
+              <TextField
+                name="firstName"
+                id="outlined-basic"
+                placeholder='Enter "First Name"'
+                label="First Name"
+                value={userData.firstName}
+                onChange={handleChange}
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
+          <Grid xs={6} sm={6} md={6} item>
+            <FormControl>
+              <TextField
+                required
+                name="lastName"
+                id="outlined-basic"
+                placeholder='Enter "Last Name"'
+                label="Last Name"
+                value={userData.lastName}
+                onChange={handleChange}
+                variant="outlined"
+                type="text"
+              />
+            </FormControl>
+          </Grid>
+          <Grid xs={12} sm={12} md={12} item>
             <FormControl>
               <TextField
                 name="pronouns"
@@ -224,8 +274,23 @@ export default function UserDetails() {
                 maxRows={2}
               />
             </FormControl>
+            {/* I am a happy Yoga instructor, happy Reiki Master, and creator of the Happy Yoga app. */}
           </Grid>
-          {/* I am a happy Yoga instructor, happy Reiki Master, and creator of the Happy Yoga app. */}
+          <Grid xs={12} sm={12} md={12} item>
+            <FormControl fullWidth>
+              <TextField
+                id="outlined-biography"
+                name="bio"
+                placeholder="Enter...Bio"
+                label="Description/About/Bio:"
+                value={userData?.bio}
+                onChange={handleChange}
+                multiline
+                maxRows={4}
+              />
+            </FormControl>
+            {/* 'I am a yoga instructor. A software engineer bringing yoga to practitioners. A Reiki master who builds strength through practice. A father, husband, and son.' */}
+          </Grid>
         </>
       )}
     </Grid>

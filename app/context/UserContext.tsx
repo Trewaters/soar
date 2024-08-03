@@ -5,27 +5,39 @@ import {
   useContext,
   ReactNode,
   Dispatch,
-  useState,
   useEffect,
 } from 'react'
 
 export type UserData = {
+  // 'id' is not editable
   id: string
+  // 'provider_id' is not editable
   provider_id: string
+  // 'name' is username and not editable
   name: string
+  // 'email' is not editable
   email: string
-  emailVerified: Date
+  // 'image' is not editable
   image: string
-  pronouns: string
-  profile: Record<string, any>
+  // 'createdAt' is not editable
   createdAt: Date
+  // following fields are editable
   updatedAt: Date
+  pronouns: string
+  headline: string
+  websiteURL: string
+  location: string
   firstName: string
   lastName: string
   bio: string
-  headline: string
-  location: string
-  websiteURL: string
+
+  emailVerified: Date
+  profile: Record<string, any>
+  // TODO: Add the following fields to the UserData object (type/interface, updateUserData route, and UserDetails.tsx)
+  // yogaStyle: string
+  // yogaExperience: string
+  // yogaCertification: string
+  // userCompany: string
 }
 
 export type UserGithubProfile = {
@@ -219,7 +231,6 @@ export default function UserStateProvider({
 
   useEffect(() => {
     const fetchUserData = async (email: string) => {
-      console.log('fetchUserData by email:', email)
       let fetchUser: any
       try {
         const userResponse = await fetch(
