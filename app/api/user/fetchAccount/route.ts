@@ -6,7 +6,6 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const userId = searchParams.get('userId')
   let account
-  // let practitioner
 
   if (!userId) {
     return new Response(JSON.stringify({ error: 'Account not found' }), {
@@ -15,11 +14,11 @@ export async function GET(req: Request) {
   }
 
   try {
-    account = await prisma.account.findUnique({
-      where: { id: userId },
+    account = await prisma.providerAccount.findUnique({
+      where: { userId: userId },
     })
 
-    console.log('api prisma.account:', { account })
+    // console.log('api prisma.account:', { account })
 
     if (!account) {
       return new Response(JSON.stringify({ error: 'Account not found' }), {

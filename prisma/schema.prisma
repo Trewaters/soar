@@ -54,12 +54,12 @@ model UserData {
   // exportAccountInfo String
   // deleteAccountInfo String
   // company           String
-  accounts      Account[]
+  providerAccounts      ProviderAccount[]
 }
 
-model Account {
+model ProviderAccount {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId
+  userId            String  @db.ObjectId @unique
   type              String
   provider          String
   providerAccountId String

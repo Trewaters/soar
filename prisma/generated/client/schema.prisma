@@ -15,23 +15,22 @@ generator client {
 }
 
 model UserData {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  provider_id   String?   @unique
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  pronouns      String?
-  profile       Json?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  firstName     String
-  lastName      String
-  bio           String
-  headline      String
-  location      String
-  websiteURL    String
-  // userId        String @default(auto()) @map("_id") @db.ObjectId
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
+  provider_id      String?           @unique
+  name             String?
+  email            String?           @unique
+  emailVerified    DateTime?
+  image            String?
+  pronouns         String?
+  profile          Json?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  firstName        String
+  lastName         String
+  bio              String
+  headline         String
+  location         String
+  websiteURL       String
   // pronouns          String
   // emailPublic       String
   // emailInternal     String
@@ -56,12 +55,12 @@ model UserData {
   // exportAccountInfo String
   // deleteAccountInfo String
   // company           String
-  accounts      Account[]
+  providerAccounts ProviderAccount[]
 }
 
-model Account {
+model ProviderAccount {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId
+  userId            String  @unique @db.ObjectId
   type              String
   provider          String
   providerAccountId String

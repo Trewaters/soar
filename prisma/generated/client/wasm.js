@@ -131,7 +131,7 @@ exports.Prisma.UserDataScalarFieldEnum = {
   websiteURL: 'websiteURL'
 };
 
-exports.Prisma.AccountScalarFieldEnum = {
+exports.Prisma.ProviderAccountScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   type: 'type',
@@ -161,7 +161,7 @@ exports.Prisma.QueryMode = {
 
 exports.Prisma.ModelName = {
   UserData: 'UserData',
-  Account: 'Account'
+  ProviderAccount: 'ProviderAccount'
 };
 
 /**

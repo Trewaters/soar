@@ -50,7 +50,7 @@ const config = {
               headline: '',
               location: '',
               websiteURL: '',
-              accounts: {
+              providerAccounts: {
                 create: {
                   provider: account.provider,
                   providerAccountId: account.providerAccountId,
@@ -64,6 +64,8 @@ const config = {
                   id_token: account.id_token ?? undefined,
                   session_state: JSON.stringify(account.session_state),
                   type: account.type,
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
                 },
               },
               // create a way to add generic profile schema for unknown providers
@@ -72,7 +74,7 @@ const config = {
               // },
             },
           })
-          console.log('New user created:', newUser)
+          // console.log('New user created:', newUser)
         } catch (error) {
           console.error('Error creating new user:', error)
           throw error

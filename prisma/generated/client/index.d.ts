@@ -19,10 +19,10 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type UserData = $Result.DefaultSelection<Prisma.$UserDataPayload>
 /**
- * Model Account
+ * Model ProviderAccount
  * 
  */
-export type Account = $Result.DefaultSelection<Prisma.$AccountPayload>
+export type ProviderAccount = $Result.DefaultSelection<Prisma.$ProviderAccountPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -125,14 +125,14 @@ export class PrismaClient<
   get userData(): Prisma.UserDataDelegate<ExtArgs>;
 
   /**
-   * `prisma.account`: Exposes CRUD operations for the **Account** model.
+   * `prisma.providerAccount`: Exposes CRUD operations for the **ProviderAccount** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Accounts
-    * const accounts = await prisma.account.findMany()
+    * // Fetch zero or more ProviderAccounts
+    * const providerAccounts = await prisma.providerAccount.findMany()
     * ```
     */
-  get account(): Prisma.AccountDelegate<ExtArgs>;
+  get providerAccount(): Prisma.ProviderAccountDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -611,7 +611,7 @@ export namespace Prisma {
 
   export const ModelName: {
     UserData: 'UserData',
-    Account: 'Account'
+    ProviderAccount: 'ProviderAccount'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -627,7 +627,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "userData" | "account"
+      modelProps: "userData" | "providerAccount"
       txIsolationLevel: never
     }
     model: {
@@ -705,77 +705,77 @@ export namespace Prisma {
           }
         }
       }
-      Account: {
-        payload: Prisma.$AccountPayload<ExtArgs>
-        fields: Prisma.AccountFieldRefs
+      ProviderAccount: {
+        payload: Prisma.$ProviderAccountPayload<ExtArgs>
+        fields: Prisma.ProviderAccountFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.AccountFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AccountPayload> | null
+            args: Prisma.ProviderAccountFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderAccountPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.AccountFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AccountPayload>
+            args: Prisma.ProviderAccountFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderAccountPayload>
           }
           findFirst: {
-            args: Prisma.AccountFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AccountPayload> | null
+            args: Prisma.ProviderAccountFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderAccountPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.AccountFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AccountPayload>
+            args: Prisma.ProviderAccountFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderAccountPayload>
           }
           findMany: {
-            args: Prisma.AccountFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AccountPayload>[]
+            args: Prisma.ProviderAccountFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderAccountPayload>[]
           }
           create: {
-            args: Prisma.AccountCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AccountPayload>
+            args: Prisma.ProviderAccountCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderAccountPayload>
           }
           createMany: {
-            args: Prisma.AccountCreateManyArgs<ExtArgs>
+            args: Prisma.ProviderAccountCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           delete: {
-            args: Prisma.AccountDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AccountPayload>
+            args: Prisma.ProviderAccountDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderAccountPayload>
           }
           update: {
-            args: Prisma.AccountUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AccountPayload>
+            args: Prisma.ProviderAccountUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderAccountPayload>
           }
           deleteMany: {
-            args: Prisma.AccountDeleteManyArgs<ExtArgs>
+            args: Prisma.ProviderAccountDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.AccountUpdateManyArgs<ExtArgs>
+            args: Prisma.ProviderAccountUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           upsert: {
-            args: Prisma.AccountUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$AccountPayload>
+            args: Prisma.ProviderAccountUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProviderAccountPayload>
           }
           aggregate: {
-            args: Prisma.AccountAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateAccount>
+            args: Prisma.ProviderAccountAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProviderAccount>
           }
           groupBy: {
-            args: Prisma.AccountGroupByArgs<ExtArgs>
-            result: $Utils.Optional<AccountGroupByOutputType>[]
+            args: Prisma.ProviderAccountGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProviderAccountGroupByOutputType>[]
           }
           findRaw: {
-            args: Prisma.AccountFindRawArgs<ExtArgs>
+            args: Prisma.ProviderAccountFindRawArgs<ExtArgs>
             result: JsonObject
           }
           aggregateRaw: {
-            args: Prisma.AccountAggregateRawArgs<ExtArgs>
+            args: Prisma.ProviderAccountAggregateRawArgs<ExtArgs>
             result: JsonObject
           }
           count: {
-            args: Prisma.AccountCountArgs<ExtArgs>
-            result: $Utils.Optional<AccountCountAggregateOutputType> | number
+            args: Prisma.ProviderAccountCountArgs<ExtArgs>
+            result: $Utils.Optional<ProviderAccountCountAggregateOutputType> | number
           }
         }
       }
@@ -927,11 +927,11 @@ export namespace Prisma {
    */
 
   export type UserDataCountOutputType = {
-    accounts: number
+    providerAccounts: number
   }
 
   export type UserDataCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    accounts?: boolean | UserDataCountOutputTypeCountAccountsArgs
+    providerAccounts?: boolean | UserDataCountOutputTypeCountProviderAccountsArgs
   }
 
   // Custom InputTypes
@@ -948,8 +948,8 @@ export namespace Prisma {
   /**
    * UserDataCountOutputType without action
    */
-  export type UserDataCountOutputTypeCountAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AccountWhereInput
+  export type UserDataCountOutputTypeCountProviderAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProviderAccountWhereInput
   }
 
 
@@ -1205,7 +1205,7 @@ export namespace Prisma {
     headline?: boolean
     location?: boolean
     websiteURL?: boolean
-    accounts?: boolean | UserData$accountsArgs<ExtArgs>
+    providerAccounts?: boolean | UserData$providerAccountsArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userData"]>
 
@@ -1230,14 +1230,14 @@ export namespace Prisma {
   }
 
   export type UserDataInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    accounts?: boolean | UserData$accountsArgs<ExtArgs>
+    providerAccounts?: boolean | UserData$providerAccountsArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $UserDataPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "UserData"
     objects: {
-      accounts: Prisma.$AccountPayload<ExtArgs>[]
+      providerAccounts: Prisma.$ProviderAccountPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1619,7 +1619,7 @@ export namespace Prisma {
    */
   export interface Prisma__UserDataClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    accounts<T extends UserData$accountsArgs<ExtArgs> = {}>(args?: Subset<T, UserData$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany"> | Null>
+    providerAccounts<T extends UserData$providerAccountsArgs<ExtArgs> = {}>(args?: Subset<T, UserData$providerAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1991,23 +1991,23 @@ export namespace Prisma {
   }
 
   /**
-   * UserData.accounts
+   * UserData.providerAccounts
    */
-  export type UserData$accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type UserData$providerAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Account
+     * Select specific fields to fetch from the ProviderAccount
      */
-    select?: AccountSelect<ExtArgs> | null
+    select?: ProviderAccountSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AccountInclude<ExtArgs> | null
-    where?: AccountWhereInput
-    orderBy?: AccountOrderByWithRelationInput | AccountOrderByWithRelationInput[]
-    cursor?: AccountWhereUniqueInput
+    include?: ProviderAccountInclude<ExtArgs> | null
+    where?: ProviderAccountWhereInput
+    orderBy?: ProviderAccountOrderByWithRelationInput | ProviderAccountOrderByWithRelationInput[]
+    cursor?: ProviderAccountWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
+    distinct?: ProviderAccountScalarFieldEnum | ProviderAccountScalarFieldEnum[]
   }
 
   /**
@@ -2026,26 +2026,26 @@ export namespace Prisma {
 
 
   /**
-   * Model Account
+   * Model ProviderAccount
    */
 
-  export type AggregateAccount = {
-    _count: AccountCountAggregateOutputType | null
-    _avg: AccountAvgAggregateOutputType | null
-    _sum: AccountSumAggregateOutputType | null
-    _min: AccountMinAggregateOutputType | null
-    _max: AccountMaxAggregateOutputType | null
+  export type AggregateProviderAccount = {
+    _count: ProviderAccountCountAggregateOutputType | null
+    _avg: ProviderAccountAvgAggregateOutputType | null
+    _sum: ProviderAccountSumAggregateOutputType | null
+    _min: ProviderAccountMinAggregateOutputType | null
+    _max: ProviderAccountMaxAggregateOutputType | null
   }
 
-  export type AccountAvgAggregateOutputType = {
+  export type ProviderAccountAvgAggregateOutputType = {
     expires_at: number | null
   }
 
-  export type AccountSumAggregateOutputType = {
+  export type ProviderAccountSumAggregateOutputType = {
     expires_at: number | null
   }
 
-  export type AccountMinAggregateOutputType = {
+  export type ProviderAccountMinAggregateOutputType = {
     id: string | null
     userId: string | null
     type: string | null
@@ -2061,7 +2061,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type AccountMaxAggregateOutputType = {
+  export type ProviderAccountMaxAggregateOutputType = {
     id: string | null
     userId: string | null
     type: string | null
@@ -2077,7 +2077,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type AccountCountAggregateOutputType = {
+  export type ProviderAccountCountAggregateOutputType = {
     id: number
     userId: number
     type: number
@@ -2096,15 +2096,15 @@ export namespace Prisma {
   }
 
 
-  export type AccountAvgAggregateInputType = {
+  export type ProviderAccountAvgAggregateInputType = {
     expires_at?: true
   }
 
-  export type AccountSumAggregateInputType = {
+  export type ProviderAccountSumAggregateInputType = {
     expires_at?: true
   }
 
-  export type AccountMinAggregateInputType = {
+  export type ProviderAccountMinAggregateInputType = {
     id?: true
     userId?: true
     type?: true
@@ -2120,7 +2120,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type AccountMaxAggregateInputType = {
+  export type ProviderAccountMaxAggregateInputType = {
     id?: true
     userId?: true
     type?: true
@@ -2136,7 +2136,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type AccountCountAggregateInputType = {
+  export type ProviderAccountCountAggregateInputType = {
     id?: true
     userId?: true
     type?: true
@@ -2154,93 +2154,93 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type AccountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Account to aggregate.
+     * Filter which ProviderAccount to aggregate.
      */
-    where?: AccountWhereInput
+    where?: ProviderAccountWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Accounts to fetch.
+     * Determine the order of ProviderAccounts to fetch.
      */
-    orderBy?: AccountOrderByWithRelationInput | AccountOrderByWithRelationInput[]
+    orderBy?: ProviderAccountOrderByWithRelationInput | ProviderAccountOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: AccountWhereUniqueInput
+    cursor?: ProviderAccountWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Accounts from the position of the cursor.
+     * Take `±n` ProviderAccounts from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Accounts.
+     * Skip the first `n` ProviderAccounts.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Accounts
+     * Count returned ProviderAccounts
     **/
-    _count?: true | AccountCountAggregateInputType
+    _count?: true | ProviderAccountCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: AccountAvgAggregateInputType
+    _avg?: ProviderAccountAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: AccountSumAggregateInputType
+    _sum?: ProviderAccountSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: AccountMinAggregateInputType
+    _min?: ProviderAccountMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: AccountMaxAggregateInputType
+    _max?: ProviderAccountMaxAggregateInputType
   }
 
-  export type GetAccountAggregateType<T extends AccountAggregateArgs> = {
-        [P in keyof T & keyof AggregateAccount]: P extends '_count' | 'count'
+  export type GetProviderAccountAggregateType<T extends ProviderAccountAggregateArgs> = {
+        [P in keyof T & keyof AggregateProviderAccount]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateAccount[P]>
-      : GetScalarType<T[P], AggregateAccount[P]>
+        : GetScalarType<T[P], AggregateProviderAccount[P]>
+      : GetScalarType<T[P], AggregateProviderAccount[P]>
   }
 
 
 
 
-  export type AccountGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AccountWhereInput
-    orderBy?: AccountOrderByWithAggregationInput | AccountOrderByWithAggregationInput[]
-    by: AccountScalarFieldEnum[] | AccountScalarFieldEnum
-    having?: AccountScalarWhereWithAggregatesInput
+  export type ProviderAccountGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProviderAccountWhereInput
+    orderBy?: ProviderAccountOrderByWithAggregationInput | ProviderAccountOrderByWithAggregationInput[]
+    by: ProviderAccountScalarFieldEnum[] | ProviderAccountScalarFieldEnum
+    having?: ProviderAccountScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: AccountCountAggregateInputType | true
-    _avg?: AccountAvgAggregateInputType
-    _sum?: AccountSumAggregateInputType
-    _min?: AccountMinAggregateInputType
-    _max?: AccountMaxAggregateInputType
+    _count?: ProviderAccountCountAggregateInputType | true
+    _avg?: ProviderAccountAvgAggregateInputType
+    _sum?: ProviderAccountSumAggregateInputType
+    _min?: ProviderAccountMinAggregateInputType
+    _max?: ProviderAccountMaxAggregateInputType
   }
 
-  export type AccountGroupByOutputType = {
+  export type ProviderAccountGroupByOutputType = {
     id: string
     userId: string
     type: string
@@ -2255,28 +2255,28 @@ export namespace Prisma {
     session_state: JsonValue | null
     createdAt: Date
     updatedAt: Date
-    _count: AccountCountAggregateOutputType | null
-    _avg: AccountAvgAggregateOutputType | null
-    _sum: AccountSumAggregateOutputType | null
-    _min: AccountMinAggregateOutputType | null
-    _max: AccountMaxAggregateOutputType | null
+    _count: ProviderAccountCountAggregateOutputType | null
+    _avg: ProviderAccountAvgAggregateOutputType | null
+    _sum: ProviderAccountSumAggregateOutputType | null
+    _min: ProviderAccountMinAggregateOutputType | null
+    _max: ProviderAccountMaxAggregateOutputType | null
   }
 
-  type GetAccountGroupByPayload<T extends AccountGroupByArgs> = Prisma.PrismaPromise<
+  type GetProviderAccountGroupByPayload<T extends ProviderAccountGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<AccountGroupByOutputType, T['by']> &
+      PickEnumerable<ProviderAccountGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof AccountGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof ProviderAccountGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], AccountGroupByOutputType[P]>
-            : GetScalarType<T[P], AccountGroupByOutputType[P]>
+              : GetScalarType<T[P], ProviderAccountGroupByOutputType[P]>
+            : GetScalarType<T[P], ProviderAccountGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type AccountSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type ProviderAccountSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
     type?: boolean
@@ -2292,10 +2292,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDataDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["account"]>
+  }, ExtArgs["result"]["providerAccount"]>
 
 
-  export type AccountSelectScalar = {
+  export type ProviderAccountSelectScalar = {
     id?: boolean
     userId?: boolean
     type?: boolean
@@ -2312,12 +2312,12 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type AccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDataDefaultArgs<ExtArgs>
   }
 
-  export type $AccountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Account"
+  export type $ProviderAccountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProviderAccount"
     objects: {
       user: Prisma.$UserDataPayload<ExtArgs>
     }
@@ -2336,143 +2336,143 @@ export namespace Prisma {
       session_state: Prisma.JsonValue | null
       createdAt: Date
       updatedAt: Date
-    }, ExtArgs["result"]["account"]>
+    }, ExtArgs["result"]["providerAccount"]>
     composites: {}
   }
 
-  type AccountGetPayload<S extends boolean | null | undefined | AccountDefaultArgs> = $Result.GetResult<Prisma.$AccountPayload, S>
+  type ProviderAccountGetPayload<S extends boolean | null | undefined | ProviderAccountDefaultArgs> = $Result.GetResult<Prisma.$ProviderAccountPayload, S>
 
-  type AccountCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<AccountFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: AccountCountAggregateInputType | true
+  type ProviderAccountCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ProviderAccountFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ProviderAccountCountAggregateInputType | true
     }
 
-  export interface AccountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Account'], meta: { name: 'Account' } }
+  export interface ProviderAccountDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProviderAccount'], meta: { name: 'ProviderAccount' } }
     /**
-     * Find zero or one Account that matches the filter.
-     * @param {AccountFindUniqueArgs} args - Arguments to find a Account
+     * Find zero or one ProviderAccount that matches the filter.
+     * @param {ProviderAccountFindUniqueArgs} args - Arguments to find a ProviderAccount
      * @example
-     * // Get one Account
-     * const account = await prisma.account.findUnique({
+     * // Get one ProviderAccount
+     * const providerAccount = await prisma.providerAccount.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends AccountFindUniqueArgs>(args: SelectSubset<T, AccountFindUniqueArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+    findUnique<T extends ProviderAccountFindUniqueArgs>(args: SelectSubset<T, ProviderAccountFindUniqueArgs<ExtArgs>>): Prisma__ProviderAccountClient<$Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
 
     /**
-     * Find one Account that matches the filter or throw an error with `error.code='P2025'` 
+     * Find one ProviderAccount that matches the filter or throw an error with `error.code='P2025'` 
      * if no matches were found.
-     * @param {AccountFindUniqueOrThrowArgs} args - Arguments to find a Account
+     * @param {ProviderAccountFindUniqueOrThrowArgs} args - Arguments to find a ProviderAccount
      * @example
-     * // Get one Account
-     * const account = await prisma.account.findUniqueOrThrow({
+     * // Get one ProviderAccount
+     * const providerAccount = await prisma.providerAccount.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends AccountFindUniqueOrThrowArgs>(args: SelectSubset<T, AccountFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+    findUniqueOrThrow<T extends ProviderAccountFindUniqueOrThrowArgs>(args: SelectSubset<T, ProviderAccountFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProviderAccountClient<$Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
 
     /**
-     * Find the first Account that matches the filter.
+     * Find the first ProviderAccount that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AccountFindFirstArgs} args - Arguments to find a Account
+     * @param {ProviderAccountFindFirstArgs} args - Arguments to find a ProviderAccount
      * @example
-     * // Get one Account
-     * const account = await prisma.account.findFirst({
+     * // Get one ProviderAccount
+     * const providerAccount = await prisma.providerAccount.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends AccountFindFirstArgs>(args?: SelectSubset<T, AccountFindFirstArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+    findFirst<T extends ProviderAccountFindFirstArgs>(args?: SelectSubset<T, ProviderAccountFindFirstArgs<ExtArgs>>): Prisma__ProviderAccountClient<$Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
 
     /**
-     * Find the first Account that matches the filter or
+     * Find the first ProviderAccount that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AccountFindFirstOrThrowArgs} args - Arguments to find a Account
+     * @param {ProviderAccountFindFirstOrThrowArgs} args - Arguments to find a ProviderAccount
      * @example
-     * // Get one Account
-     * const account = await prisma.account.findFirstOrThrow({
+     * // Get one ProviderAccount
+     * const providerAccount = await prisma.providerAccount.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends AccountFindFirstOrThrowArgs>(args?: SelectSubset<T, AccountFindFirstOrThrowArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+    findFirstOrThrow<T extends ProviderAccountFindFirstOrThrowArgs>(args?: SelectSubset<T, ProviderAccountFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProviderAccountClient<$Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
 
     /**
-     * Find zero or more Accounts that matches the filter.
+     * Find zero or more ProviderAccounts that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AccountFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {ProviderAccountFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Accounts
-     * const accounts = await prisma.account.findMany()
+     * // Get all ProviderAccounts
+     * const providerAccounts = await prisma.providerAccount.findMany()
      * 
-     * // Get first 10 Accounts
-     * const accounts = await prisma.account.findMany({ take: 10 })
+     * // Get first 10 ProviderAccounts
+     * const providerAccounts = await prisma.providerAccount.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const accountWithIdOnly = await prisma.account.findMany({ select: { id: true } })
+     * const providerAccountWithIdOnly = await prisma.providerAccount.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends AccountFindManyArgs>(args?: SelectSubset<T, AccountFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany">>
+    findMany<T extends ProviderAccountFindManyArgs>(args?: SelectSubset<T, ProviderAccountFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "findMany">>
 
     /**
-     * Create a Account.
-     * @param {AccountCreateArgs} args - Arguments to create a Account.
+     * Create a ProviderAccount.
+     * @param {ProviderAccountCreateArgs} args - Arguments to create a ProviderAccount.
      * @example
-     * // Create one Account
-     * const Account = await prisma.account.create({
+     * // Create one ProviderAccount
+     * const ProviderAccount = await prisma.providerAccount.create({
      *   data: {
-     *     // ... data to create a Account
+     *     // ... data to create a ProviderAccount
      *   }
      * })
      * 
      */
-    create<T extends AccountCreateArgs>(args: SelectSubset<T, AccountCreateArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "create">, never, ExtArgs>
+    create<T extends ProviderAccountCreateArgs>(args: SelectSubset<T, ProviderAccountCreateArgs<ExtArgs>>): Prisma__ProviderAccountClient<$Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "create">, never, ExtArgs>
 
     /**
-     * Create many Accounts.
-     * @param {AccountCreateManyArgs} args - Arguments to create many Accounts.
+     * Create many ProviderAccounts.
+     * @param {ProviderAccountCreateManyArgs} args - Arguments to create many ProviderAccounts.
      * @example
-     * // Create many Accounts
-     * const account = await prisma.account.createMany({
+     * // Create many ProviderAccounts
+     * const providerAccount = await prisma.providerAccount.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends AccountCreateManyArgs>(args?: SelectSubset<T, AccountCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends ProviderAccountCreateManyArgs>(args?: SelectSubset<T, ProviderAccountCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a Account.
-     * @param {AccountDeleteArgs} args - Arguments to delete one Account.
+     * Delete a ProviderAccount.
+     * @param {ProviderAccountDeleteArgs} args - Arguments to delete one ProviderAccount.
      * @example
-     * // Delete one Account
-     * const Account = await prisma.account.delete({
+     * // Delete one ProviderAccount
+     * const ProviderAccount = await prisma.providerAccount.delete({
      *   where: {
-     *     // ... filter to delete one Account
+     *     // ... filter to delete one ProviderAccount
      *   }
      * })
      * 
      */
-    delete<T extends AccountDeleteArgs>(args: SelectSubset<T, AccountDeleteArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+    delete<T extends ProviderAccountDeleteArgs>(args: SelectSubset<T, ProviderAccountDeleteArgs<ExtArgs>>): Prisma__ProviderAccountClient<$Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "delete">, never, ExtArgs>
 
     /**
-     * Update one Account.
-     * @param {AccountUpdateArgs} args - Arguments to update one Account.
+     * Update one ProviderAccount.
+     * @param {ProviderAccountUpdateArgs} args - Arguments to update one ProviderAccount.
      * @example
-     * // Update one Account
-     * const account = await prisma.account.update({
+     * // Update one ProviderAccount
+     * const providerAccount = await prisma.providerAccount.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2482,30 +2482,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends AccountUpdateArgs>(args: SelectSubset<T, AccountUpdateArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "update">, never, ExtArgs>
+    update<T extends ProviderAccountUpdateArgs>(args: SelectSubset<T, ProviderAccountUpdateArgs<ExtArgs>>): Prisma__ProviderAccountClient<$Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "update">, never, ExtArgs>
 
     /**
-     * Delete zero or more Accounts.
-     * @param {AccountDeleteManyArgs} args - Arguments to filter Accounts to delete.
+     * Delete zero or more ProviderAccounts.
+     * @param {ProviderAccountDeleteManyArgs} args - Arguments to filter ProviderAccounts to delete.
      * @example
-     * // Delete a few Accounts
-     * const { count } = await prisma.account.deleteMany({
+     * // Delete a few ProviderAccounts
+     * const { count } = await prisma.providerAccount.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends AccountDeleteManyArgs>(args?: SelectSubset<T, AccountDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends ProviderAccountDeleteManyArgs>(args?: SelectSubset<T, ProviderAccountDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Accounts.
+     * Update zero or more ProviderAccounts.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AccountUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {ProviderAccountUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Accounts
-     * const account = await prisma.account.updateMany({
+     * // Update many ProviderAccounts
+     * const providerAccount = await prisma.providerAccount.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -2515,79 +2515,79 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends AccountUpdateManyArgs>(args: SelectSubset<T, AccountUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends ProviderAccountUpdateManyArgs>(args: SelectSubset<T, ProviderAccountUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Account.
-     * @param {AccountUpsertArgs} args - Arguments to update or create a Account.
+     * Create or update one ProviderAccount.
+     * @param {ProviderAccountUpsertArgs} args - Arguments to update or create a ProviderAccount.
      * @example
-     * // Update or create a Account
-     * const account = await prisma.account.upsert({
+     * // Update or create a ProviderAccount
+     * const providerAccount = await prisma.providerAccount.upsert({
      *   create: {
-     *     // ... data to create a Account
+     *     // ... data to create a ProviderAccount
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Account we want to update
+     *     // ... the filter for the ProviderAccount we want to update
      *   }
      * })
      */
-    upsert<T extends AccountUpsertArgs>(args: SelectSubset<T, AccountUpsertArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+    upsert<T extends ProviderAccountUpsertArgs>(args: SelectSubset<T, ProviderAccountUpsertArgs<ExtArgs>>): Prisma__ProviderAccountClient<$Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
 
     /**
-     * Find zero or more Accounts that matches the filter.
-     * @param {AccountFindRawArgs} args - Select which filters you would like to apply.
+     * Find zero or more ProviderAccounts that matches the filter.
+     * @param {ProviderAccountFindRawArgs} args - Select which filters you would like to apply.
      * @example
-     * const account = await prisma.account.findRaw({
+     * const providerAccount = await prisma.providerAccount.findRaw({
      *   filter: { age: { $gt: 25 } } 
      * })
      */
-    findRaw(args?: AccountFindRawArgs): Prisma.PrismaPromise<JsonObject>
+    findRaw(args?: ProviderAccountFindRawArgs): Prisma.PrismaPromise<JsonObject>
 
     /**
-     * Perform aggregation operations on a Account.
-     * @param {AccountAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * Perform aggregation operations on a ProviderAccount.
+     * @param {ProviderAccountAggregateRawArgs} args - Select which aggregations you would like to apply.
      * @example
-     * const account = await prisma.account.aggregateRaw({
+     * const providerAccount = await prisma.providerAccount.aggregateRaw({
      *   pipeline: [
      *     { $match: { status: "registered" } },
      *     { $group: { _id: "$country", total: { $sum: 1 } } }
      *   ]
      * })
      */
-    aggregateRaw(args?: AccountAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+    aggregateRaw(args?: ProviderAccountAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
 
 
     /**
-     * Count the number of Accounts.
+     * Count the number of ProviderAccounts.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AccountCountArgs} args - Arguments to filter Accounts to count.
+     * @param {ProviderAccountCountArgs} args - Arguments to filter ProviderAccounts to count.
      * @example
-     * // Count the number of Accounts
-     * const count = await prisma.account.count({
+     * // Count the number of ProviderAccounts
+     * const count = await prisma.providerAccount.count({
      *   where: {
-     *     // ... the filter for the Accounts we want to count
+     *     // ... the filter for the ProviderAccounts we want to count
      *   }
      * })
     **/
-    count<T extends AccountCountArgs>(
-      args?: Subset<T, AccountCountArgs>,
+    count<T extends ProviderAccountCountArgs>(
+      args?: Subset<T, ProviderAccountCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], AccountCountAggregateOutputType>
+          : GetScalarType<T['select'], ProviderAccountCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Account.
+     * Allows you to perform aggregations operations on a ProviderAccount.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AccountAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {ProviderAccountAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -2607,13 +2607,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends AccountAggregateArgs>(args: Subset<T, AccountAggregateArgs>): Prisma.PrismaPromise<GetAccountAggregateType<T>>
+    aggregate<T extends ProviderAccountAggregateArgs>(args: Subset<T, ProviderAccountAggregateArgs>): Prisma.PrismaPromise<GetProviderAccountAggregateType<T>>
 
     /**
-     * Group by Account.
+     * Group by ProviderAccount.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {AccountGroupByArgs} args - Group by arguments.
+     * @param {ProviderAccountGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -2628,14 +2628,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends AccountGroupByArgs,
+      T extends ProviderAccountGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AccountGroupByArgs['orderBy'] }
-        : { orderBy?: AccountGroupByArgs['orderBy'] },
+        ? { orderBy: ProviderAccountGroupByArgs['orderBy'] }
+        : { orderBy?: ProviderAccountGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -2684,20 +2684,20 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, AccountGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAccountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, ProviderAccountGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProviderAccountGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Account model
+   * Fields of the ProviderAccount model
    */
-  readonly fields: AccountFieldRefs;
+  readonly fields: ProviderAccountFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Account.
+   * The delegate class that acts as a "Promise-like" for ProviderAccount.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__AccountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__ProviderAccountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDataDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDataDefaultArgs<ExtArgs>>): Prisma__UserDataClient<$Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
     /**
@@ -2726,324 +2726,324 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Account model
+   * Fields of the ProviderAccount model
    */ 
-  interface AccountFieldRefs {
-    readonly id: FieldRef<"Account", 'String'>
-    readonly userId: FieldRef<"Account", 'String'>
-    readonly type: FieldRef<"Account", 'String'>
-    readonly provider: FieldRef<"Account", 'String'>
-    readonly providerAccountId: FieldRef<"Account", 'String'>
-    readonly refresh_token: FieldRef<"Account", 'String'>
-    readonly access_token: FieldRef<"Account", 'String'>
-    readonly expires_at: FieldRef<"Account", 'Int'>
-    readonly token_type: FieldRef<"Account", 'String'>
-    readonly scope: FieldRef<"Account", 'String'>
-    readonly id_token: FieldRef<"Account", 'String'>
-    readonly session_state: FieldRef<"Account", 'Json'>
-    readonly createdAt: FieldRef<"Account", 'DateTime'>
-    readonly updatedAt: FieldRef<"Account", 'DateTime'>
+  interface ProviderAccountFieldRefs {
+    readonly id: FieldRef<"ProviderAccount", 'String'>
+    readonly userId: FieldRef<"ProviderAccount", 'String'>
+    readonly type: FieldRef<"ProviderAccount", 'String'>
+    readonly provider: FieldRef<"ProviderAccount", 'String'>
+    readonly providerAccountId: FieldRef<"ProviderAccount", 'String'>
+    readonly refresh_token: FieldRef<"ProviderAccount", 'String'>
+    readonly access_token: FieldRef<"ProviderAccount", 'String'>
+    readonly expires_at: FieldRef<"ProviderAccount", 'Int'>
+    readonly token_type: FieldRef<"ProviderAccount", 'String'>
+    readonly scope: FieldRef<"ProviderAccount", 'String'>
+    readonly id_token: FieldRef<"ProviderAccount", 'String'>
+    readonly session_state: FieldRef<"ProviderAccount", 'Json'>
+    readonly createdAt: FieldRef<"ProviderAccount", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProviderAccount", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Account findUnique
+   * ProviderAccount findUnique
    */
-  export type AccountFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Account
+     * Select specific fields to fetch from the ProviderAccount
      */
-    select?: AccountSelect<ExtArgs> | null
+    select?: ProviderAccountSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AccountInclude<ExtArgs> | null
+    include?: ProviderAccountInclude<ExtArgs> | null
     /**
-     * Filter, which Account to fetch.
+     * Filter, which ProviderAccount to fetch.
      */
-    where: AccountWhereUniqueInput
+    where: ProviderAccountWhereUniqueInput
   }
 
   /**
-   * Account findUniqueOrThrow
+   * ProviderAccount findUniqueOrThrow
    */
-  export type AccountFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Account
+     * Select specific fields to fetch from the ProviderAccount
      */
-    select?: AccountSelect<ExtArgs> | null
+    select?: ProviderAccountSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AccountInclude<ExtArgs> | null
+    include?: ProviderAccountInclude<ExtArgs> | null
     /**
-     * Filter, which Account to fetch.
+     * Filter, which ProviderAccount to fetch.
      */
-    where: AccountWhereUniqueInput
+    where: ProviderAccountWhereUniqueInput
   }
 
   /**
-   * Account findFirst
+   * ProviderAccount findFirst
    */
-  export type AccountFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Account
+     * Select specific fields to fetch from the ProviderAccount
      */
-    select?: AccountSelect<ExtArgs> | null
+    select?: ProviderAccountSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AccountInclude<ExtArgs> | null
+    include?: ProviderAccountInclude<ExtArgs> | null
     /**
-     * Filter, which Account to fetch.
+     * Filter, which ProviderAccount to fetch.
      */
-    where?: AccountWhereInput
+    where?: ProviderAccountWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Accounts to fetch.
+     * Determine the order of ProviderAccounts to fetch.
      */
-    orderBy?: AccountOrderByWithRelationInput | AccountOrderByWithRelationInput[]
+    orderBy?: ProviderAccountOrderByWithRelationInput | ProviderAccountOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Accounts.
+     * Sets the position for searching for ProviderAccounts.
      */
-    cursor?: AccountWhereUniqueInput
+    cursor?: ProviderAccountWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Accounts from the position of the cursor.
+     * Take `±n` ProviderAccounts from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Accounts.
+     * Skip the first `n` ProviderAccounts.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Accounts.
+     * Filter by unique combinations of ProviderAccounts.
      */
-    distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
+    distinct?: ProviderAccountScalarFieldEnum | ProviderAccountScalarFieldEnum[]
   }
 
   /**
-   * Account findFirstOrThrow
+   * ProviderAccount findFirstOrThrow
    */
-  export type AccountFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Account
+     * Select specific fields to fetch from the ProviderAccount
      */
-    select?: AccountSelect<ExtArgs> | null
+    select?: ProviderAccountSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AccountInclude<ExtArgs> | null
+    include?: ProviderAccountInclude<ExtArgs> | null
     /**
-     * Filter, which Account to fetch.
+     * Filter, which ProviderAccount to fetch.
      */
-    where?: AccountWhereInput
+    where?: ProviderAccountWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Accounts to fetch.
+     * Determine the order of ProviderAccounts to fetch.
      */
-    orderBy?: AccountOrderByWithRelationInput | AccountOrderByWithRelationInput[]
+    orderBy?: ProviderAccountOrderByWithRelationInput | ProviderAccountOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Accounts.
+     * Sets the position for searching for ProviderAccounts.
      */
-    cursor?: AccountWhereUniqueInput
+    cursor?: ProviderAccountWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Accounts from the position of the cursor.
+     * Take `±n` ProviderAccounts from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Accounts.
+     * Skip the first `n` ProviderAccounts.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Accounts.
+     * Filter by unique combinations of ProviderAccounts.
      */
-    distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
+    distinct?: ProviderAccountScalarFieldEnum | ProviderAccountScalarFieldEnum[]
   }
 
   /**
-   * Account findMany
+   * ProviderAccount findMany
    */
-  export type AccountFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Account
+     * Select specific fields to fetch from the ProviderAccount
      */
-    select?: AccountSelect<ExtArgs> | null
+    select?: ProviderAccountSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AccountInclude<ExtArgs> | null
+    include?: ProviderAccountInclude<ExtArgs> | null
     /**
-     * Filter, which Accounts to fetch.
+     * Filter, which ProviderAccounts to fetch.
      */
-    where?: AccountWhereInput
+    where?: ProviderAccountWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Accounts to fetch.
+     * Determine the order of ProviderAccounts to fetch.
      */
-    orderBy?: AccountOrderByWithRelationInput | AccountOrderByWithRelationInput[]
+    orderBy?: ProviderAccountOrderByWithRelationInput | ProviderAccountOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Accounts.
+     * Sets the position for listing ProviderAccounts.
      */
-    cursor?: AccountWhereUniqueInput
+    cursor?: ProviderAccountWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Accounts from the position of the cursor.
+     * Take `±n` ProviderAccounts from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Accounts.
+     * Skip the first `n` ProviderAccounts.
      */
     skip?: number
-    distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
+    distinct?: ProviderAccountScalarFieldEnum | ProviderAccountScalarFieldEnum[]
   }
 
   /**
-   * Account create
+   * ProviderAccount create
    */
-  export type AccountCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Account
+     * Select specific fields to fetch from the ProviderAccount
      */
-    select?: AccountSelect<ExtArgs> | null
+    select?: ProviderAccountSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AccountInclude<ExtArgs> | null
+    include?: ProviderAccountInclude<ExtArgs> | null
     /**
-     * The data needed to create a Account.
+     * The data needed to create a ProviderAccount.
      */
-    data: XOR<AccountCreateInput, AccountUncheckedCreateInput>
+    data: XOR<ProviderAccountCreateInput, ProviderAccountUncheckedCreateInput>
   }
 
   /**
-   * Account createMany
+   * ProviderAccount createMany
    */
-  export type AccountCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Accounts.
+     * The data used to create many ProviderAccounts.
      */
-    data: AccountCreateManyInput | AccountCreateManyInput[]
+    data: ProviderAccountCreateManyInput | ProviderAccountCreateManyInput[]
   }
 
   /**
-   * Account update
+   * ProviderAccount update
    */
-  export type AccountUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Account
+     * Select specific fields to fetch from the ProviderAccount
      */
-    select?: AccountSelect<ExtArgs> | null
+    select?: ProviderAccountSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AccountInclude<ExtArgs> | null
+    include?: ProviderAccountInclude<ExtArgs> | null
     /**
-     * The data needed to update a Account.
+     * The data needed to update a ProviderAccount.
      */
-    data: XOR<AccountUpdateInput, AccountUncheckedUpdateInput>
+    data: XOR<ProviderAccountUpdateInput, ProviderAccountUncheckedUpdateInput>
     /**
-     * Choose, which Account to update.
+     * Choose, which ProviderAccount to update.
      */
-    where: AccountWhereUniqueInput
+    where: ProviderAccountWhereUniqueInput
   }
 
   /**
-   * Account updateMany
+   * ProviderAccount updateMany
    */
-  export type AccountUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Accounts.
+     * The data used to update ProviderAccounts.
      */
-    data: XOR<AccountUpdateManyMutationInput, AccountUncheckedUpdateManyInput>
+    data: XOR<ProviderAccountUpdateManyMutationInput, ProviderAccountUncheckedUpdateManyInput>
     /**
-     * Filter which Accounts to update
+     * Filter which ProviderAccounts to update
      */
-    where?: AccountWhereInput
+    where?: ProviderAccountWhereInput
   }
 
   /**
-   * Account upsert
+   * ProviderAccount upsert
    */
-  export type AccountUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Account
+     * Select specific fields to fetch from the ProviderAccount
      */
-    select?: AccountSelect<ExtArgs> | null
+    select?: ProviderAccountSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AccountInclude<ExtArgs> | null
+    include?: ProviderAccountInclude<ExtArgs> | null
     /**
-     * The filter to search for the Account to update in case it exists.
+     * The filter to search for the ProviderAccount to update in case it exists.
      */
-    where: AccountWhereUniqueInput
+    where: ProviderAccountWhereUniqueInput
     /**
-     * In case the Account found by the `where` argument doesn't exist, create a new Account with this data.
+     * In case the ProviderAccount found by the `where` argument doesn't exist, create a new ProviderAccount with this data.
      */
-    create: XOR<AccountCreateInput, AccountUncheckedCreateInput>
+    create: XOR<ProviderAccountCreateInput, ProviderAccountUncheckedCreateInput>
     /**
-     * In case the Account was found with the provided `where` argument, update it with this data.
+     * In case the ProviderAccount was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<AccountUpdateInput, AccountUncheckedUpdateInput>
+    update: XOR<ProviderAccountUpdateInput, ProviderAccountUncheckedUpdateInput>
   }
 
   /**
-   * Account delete
+   * ProviderAccount delete
    */
-  export type AccountDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Account
+     * Select specific fields to fetch from the ProviderAccount
      */
-    select?: AccountSelect<ExtArgs> | null
+    select?: ProviderAccountSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AccountInclude<ExtArgs> | null
+    include?: ProviderAccountInclude<ExtArgs> | null
     /**
-     * Filter which Account to delete.
+     * Filter which ProviderAccount to delete.
      */
-    where: AccountWhereUniqueInput
+    where: ProviderAccountWhereUniqueInput
   }
 
   /**
-   * Account deleteMany
+   * ProviderAccount deleteMany
    */
-  export type AccountDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Accounts to delete
+     * Filter which ProviderAccounts to delete
      */
-    where?: AccountWhereInput
+    where?: ProviderAccountWhereInput
   }
 
   /**
-   * Account findRaw
+   * ProviderAccount findRaw
    */
-  export type AccountFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
      */
@@ -3055,9 +3055,9 @@ export namespace Prisma {
   }
 
   /**
-   * Account aggregateRaw
+   * ProviderAccount aggregateRaw
    */
-  export type AccountAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
      */
@@ -3069,17 +3069,17 @@ export namespace Prisma {
   }
 
   /**
-   * Account without action
+   * ProviderAccount without action
    */
-  export type AccountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ProviderAccountDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Account
+     * Select specific fields to fetch from the ProviderAccount
      */
-    select?: AccountSelect<ExtArgs> | null
+    select?: ProviderAccountSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: AccountInclude<ExtArgs> | null
+    include?: ProviderAccountInclude<ExtArgs> | null
   }
 
 
@@ -3109,7 +3109,7 @@ export namespace Prisma {
   export type UserDataScalarFieldEnum = (typeof UserDataScalarFieldEnum)[keyof typeof UserDataScalarFieldEnum]
 
 
-  export const AccountScalarFieldEnum: {
+  export const ProviderAccountScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
     type: 'type',
@@ -3126,7 +3126,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt'
   };
 
-  export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
+  export type ProviderAccountScalarFieldEnum = (typeof ProviderAccountScalarFieldEnum)[keyof typeof ProviderAccountScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -3236,7 +3236,7 @@ export namespace Prisma {
     headline?: StringFilter<"UserData"> | string
     location?: StringFilter<"UserData"> | string
     websiteURL?: StringFilter<"UserData"> | string
-    accounts?: AccountListRelationFilter
+    providerAccounts?: ProviderAccountListRelationFilter
   }
 
   export type UserDataOrderByWithRelationInput = {
@@ -3256,7 +3256,7 @@ export namespace Prisma {
     headline?: SortOrder
     location?: SortOrder
     websiteURL?: SortOrder
-    accounts?: AccountOrderByRelationAggregateInput
+    providerAccounts?: ProviderAccountOrderByRelationAggregateInput
   }
 
   export type UserDataWhereUniqueInput = Prisma.AtLeast<{
@@ -3279,7 +3279,7 @@ export namespace Prisma {
     headline?: StringFilter<"UserData"> | string
     location?: StringFilter<"UserData"> | string
     websiteURL?: StringFilter<"UserData"> | string
-    accounts?: AccountListRelationFilter
+    providerAccounts?: ProviderAccountListRelationFilter
   }, "id" | "provider_id" | "email">
 
   export type UserDataOrderByWithAggregationInput = {
@@ -3326,28 +3326,28 @@ export namespace Prisma {
     websiteURL?: StringWithAggregatesFilter<"UserData"> | string
   }
 
-  export type AccountWhereInput = {
-    AND?: AccountWhereInput | AccountWhereInput[]
-    OR?: AccountWhereInput[]
-    NOT?: AccountWhereInput | AccountWhereInput[]
-    id?: StringFilter<"Account"> | string
-    userId?: StringFilter<"Account"> | string
-    type?: StringFilter<"Account"> | string
-    provider?: StringFilter<"Account"> | string
-    providerAccountId?: StringFilter<"Account"> | string
-    refresh_token?: StringNullableFilter<"Account"> | string | null
-    access_token?: StringNullableFilter<"Account"> | string | null
-    expires_at?: IntNullableFilter<"Account"> | number | null
-    token_type?: StringNullableFilter<"Account"> | string | null
-    scope?: StringNullableFilter<"Account"> | string | null
-    id_token?: StringNullableFilter<"Account"> | string | null
-    session_state?: JsonNullableFilter<"Account">
-    createdAt?: DateTimeFilter<"Account"> | Date | string
-    updatedAt?: DateTimeFilter<"Account"> | Date | string
+  export type ProviderAccountWhereInput = {
+    AND?: ProviderAccountWhereInput | ProviderAccountWhereInput[]
+    OR?: ProviderAccountWhereInput[]
+    NOT?: ProviderAccountWhereInput | ProviderAccountWhereInput[]
+    id?: StringFilter<"ProviderAccount"> | string
+    userId?: StringFilter<"ProviderAccount"> | string
+    type?: StringFilter<"ProviderAccount"> | string
+    provider?: StringFilter<"ProviderAccount"> | string
+    providerAccountId?: StringFilter<"ProviderAccount"> | string
+    refresh_token?: StringNullableFilter<"ProviderAccount"> | string | null
+    access_token?: StringNullableFilter<"ProviderAccount"> | string | null
+    expires_at?: IntNullableFilter<"ProviderAccount"> | number | null
+    token_type?: StringNullableFilter<"ProviderAccount"> | string | null
+    scope?: StringNullableFilter<"ProviderAccount"> | string | null
+    id_token?: StringNullableFilter<"ProviderAccount"> | string | null
+    session_state?: JsonNullableFilter<"ProviderAccount">
+    createdAt?: DateTimeFilter<"ProviderAccount"> | Date | string
+    updatedAt?: DateTimeFilter<"ProviderAccount"> | Date | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
   }
 
-  export type AccountOrderByWithRelationInput = {
+  export type ProviderAccountOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
     type?: SortOrder
@@ -3365,28 +3365,28 @@ export namespace Prisma {
     user?: UserDataOrderByWithRelationInput
   }
 
-  export type AccountWhereUniqueInput = Prisma.AtLeast<{
+  export type ProviderAccountWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: AccountWhereInput | AccountWhereInput[]
-    OR?: AccountWhereInput[]
-    NOT?: AccountWhereInput | AccountWhereInput[]
-    userId?: StringFilter<"Account"> | string
-    type?: StringFilter<"Account"> | string
-    provider?: StringFilter<"Account"> | string
-    providerAccountId?: StringFilter<"Account"> | string
-    refresh_token?: StringNullableFilter<"Account"> | string | null
-    access_token?: StringNullableFilter<"Account"> | string | null
-    expires_at?: IntNullableFilter<"Account"> | number | null
-    token_type?: StringNullableFilter<"Account"> | string | null
-    scope?: StringNullableFilter<"Account"> | string | null
-    id_token?: StringNullableFilter<"Account"> | string | null
-    session_state?: JsonNullableFilter<"Account">
-    createdAt?: DateTimeFilter<"Account"> | Date | string
-    updatedAt?: DateTimeFilter<"Account"> | Date | string
+    userId?: string
+    AND?: ProviderAccountWhereInput | ProviderAccountWhereInput[]
+    OR?: ProviderAccountWhereInput[]
+    NOT?: ProviderAccountWhereInput | ProviderAccountWhereInput[]
+    type?: StringFilter<"ProviderAccount"> | string
+    provider?: StringFilter<"ProviderAccount"> | string
+    providerAccountId?: StringFilter<"ProviderAccount"> | string
+    refresh_token?: StringNullableFilter<"ProviderAccount"> | string | null
+    access_token?: StringNullableFilter<"ProviderAccount"> | string | null
+    expires_at?: IntNullableFilter<"ProviderAccount"> | number | null
+    token_type?: StringNullableFilter<"ProviderAccount"> | string | null
+    scope?: StringNullableFilter<"ProviderAccount"> | string | null
+    id_token?: StringNullableFilter<"ProviderAccount"> | string | null
+    session_state?: JsonNullableFilter<"ProviderAccount">
+    createdAt?: DateTimeFilter<"ProviderAccount"> | Date | string
+    updatedAt?: DateTimeFilter<"ProviderAccount"> | Date | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
-  }, "id">
+  }, "id" | "userId">
 
-  export type AccountOrderByWithAggregationInput = {
+  export type ProviderAccountOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
     type?: SortOrder
@@ -3401,31 +3401,31 @@ export namespace Prisma {
     session_state?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    _count?: AccountCountOrderByAggregateInput
-    _avg?: AccountAvgOrderByAggregateInput
-    _max?: AccountMaxOrderByAggregateInput
-    _min?: AccountMinOrderByAggregateInput
-    _sum?: AccountSumOrderByAggregateInput
+    _count?: ProviderAccountCountOrderByAggregateInput
+    _avg?: ProviderAccountAvgOrderByAggregateInput
+    _max?: ProviderAccountMaxOrderByAggregateInput
+    _min?: ProviderAccountMinOrderByAggregateInput
+    _sum?: ProviderAccountSumOrderByAggregateInput
   }
 
-  export type AccountScalarWhereWithAggregatesInput = {
-    AND?: AccountScalarWhereWithAggregatesInput | AccountScalarWhereWithAggregatesInput[]
-    OR?: AccountScalarWhereWithAggregatesInput[]
-    NOT?: AccountScalarWhereWithAggregatesInput | AccountScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Account"> | string
-    userId?: StringWithAggregatesFilter<"Account"> | string
-    type?: StringWithAggregatesFilter<"Account"> | string
-    provider?: StringWithAggregatesFilter<"Account"> | string
-    providerAccountId?: StringWithAggregatesFilter<"Account"> | string
-    refresh_token?: StringNullableWithAggregatesFilter<"Account"> | string | null
-    access_token?: StringNullableWithAggregatesFilter<"Account"> | string | null
-    expires_at?: IntNullableWithAggregatesFilter<"Account"> | number | null
-    token_type?: StringNullableWithAggregatesFilter<"Account"> | string | null
-    scope?: StringNullableWithAggregatesFilter<"Account"> | string | null
-    id_token?: StringNullableWithAggregatesFilter<"Account"> | string | null
-    session_state?: JsonNullableWithAggregatesFilter<"Account">
-    createdAt?: DateTimeWithAggregatesFilter<"Account"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Account"> | Date | string
+  export type ProviderAccountScalarWhereWithAggregatesInput = {
+    AND?: ProviderAccountScalarWhereWithAggregatesInput | ProviderAccountScalarWhereWithAggregatesInput[]
+    OR?: ProviderAccountScalarWhereWithAggregatesInput[]
+    NOT?: ProviderAccountScalarWhereWithAggregatesInput | ProviderAccountScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProviderAccount"> | string
+    userId?: StringWithAggregatesFilter<"ProviderAccount"> | string
+    type?: StringWithAggregatesFilter<"ProviderAccount"> | string
+    provider?: StringWithAggregatesFilter<"ProviderAccount"> | string
+    providerAccountId?: StringWithAggregatesFilter<"ProviderAccount"> | string
+    refresh_token?: StringNullableWithAggregatesFilter<"ProviderAccount"> | string | null
+    access_token?: StringNullableWithAggregatesFilter<"ProviderAccount"> | string | null
+    expires_at?: IntNullableWithAggregatesFilter<"ProviderAccount"> | number | null
+    token_type?: StringNullableWithAggregatesFilter<"ProviderAccount"> | string | null
+    scope?: StringNullableWithAggregatesFilter<"ProviderAccount"> | string | null
+    id_token?: StringNullableWithAggregatesFilter<"ProviderAccount"> | string | null
+    session_state?: JsonNullableWithAggregatesFilter<"ProviderAccount">
+    createdAt?: DateTimeWithAggregatesFilter<"ProviderAccount"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProviderAccount"> | Date | string
   }
 
   export type UserDataCreateInput = {
@@ -3445,7 +3445,7 @@ export namespace Prisma {
     headline: string
     location: string
     websiteURL: string
-    accounts?: AccountCreateNestedManyWithoutUserInput
+    providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateInput = {
@@ -3465,7 +3465,7 @@ export namespace Prisma {
     headline: string
     location: string
     websiteURL: string
-    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUpdateInput = {
@@ -3484,7 +3484,7 @@ export namespace Prisma {
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    accounts?: AccountUpdateManyWithoutUserNestedInput
+    providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateInput = {
@@ -3503,7 +3503,7 @@ export namespace Prisma {
     headline?: StringFieldUpdateOperationsInput | string
     location?: StringFieldUpdateOperationsInput | string
     websiteURL?: StringFieldUpdateOperationsInput | string
-    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataCreateManyInput = {
@@ -3561,7 +3561,7 @@ export namespace Prisma {
     websiteURL?: StringFieldUpdateOperationsInput | string
   }
 
-  export type AccountCreateInput = {
+  export type ProviderAccountCreateInput = {
     id?: string
     type: string
     provider: string
@@ -3575,10 +3575,10 @@ export namespace Prisma {
     session_state?: InputJsonValue | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserDataCreateNestedOneWithoutAccountsInput
+    user: UserDataCreateNestedOneWithoutProviderAccountsInput
   }
 
-  export type AccountUncheckedCreateInput = {
+  export type ProviderAccountUncheckedCreateInput = {
     id?: string
     userId: string
     type: string
@@ -3595,7 +3595,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type AccountUpdateInput = {
+  export type ProviderAccountUpdateInput = {
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
     providerAccountId?: StringFieldUpdateOperationsInput | string
@@ -3608,10 +3608,10 @@ export namespace Prisma {
     session_state?: InputJsonValue | InputJsonValue | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserDataUpdateOneRequiredWithoutAccountsNestedInput
+    user?: UserDataUpdateOneRequiredWithoutProviderAccountsNestedInput
   }
 
-  export type AccountUncheckedUpdateInput = {
+  export type ProviderAccountUncheckedUpdateInput = {
     userId?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
@@ -3627,7 +3627,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AccountCreateManyInput = {
+  export type ProviderAccountCreateManyInput = {
     id?: string
     userId: string
     type: string
@@ -3644,7 +3644,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type AccountUpdateManyMutationInput = {
+  export type ProviderAccountUpdateManyMutationInput = {
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
     providerAccountId?: StringFieldUpdateOperationsInput | string
@@ -3659,7 +3659,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AccountUncheckedUpdateManyInput = {
+  export type ProviderAccountUncheckedUpdateManyInput = {
     userId?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
@@ -3741,13 +3741,13 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
-  export type AccountListRelationFilter = {
-    every?: AccountWhereInput
-    some?: AccountWhereInput
-    none?: AccountWhereInput
+  export type ProviderAccountListRelationFilter = {
+    every?: ProviderAccountWhereInput
+    some?: ProviderAccountWhereInput
+    none?: ProviderAccountWhereInput
   }
 
-  export type AccountOrderByRelationAggregateInput = {
+  export type ProviderAccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -3904,7 +3904,7 @@ export namespace Prisma {
     isNot?: UserDataWhereInput
   }
 
-  export type AccountCountOrderByAggregateInput = {
+  export type ProviderAccountCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     type?: SortOrder
@@ -3921,11 +3921,11 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type AccountAvgOrderByAggregateInput = {
+  export type ProviderAccountAvgOrderByAggregateInput = {
     expires_at?: SortOrder
   }
 
-  export type AccountMaxOrderByAggregateInput = {
+  export type ProviderAccountMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     type?: SortOrder
@@ -3941,7 +3941,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type AccountMinOrderByAggregateInput = {
+  export type ProviderAccountMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     type?: SortOrder
@@ -3957,7 +3957,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type AccountSumOrderByAggregateInput = {
+  export type ProviderAccountSumOrderByAggregateInput = {
     expires_at?: SortOrder
   }
 
@@ -3978,18 +3978,18 @@ export namespace Prisma {
     isSet?: boolean
   }
 
-  export type AccountCreateNestedManyWithoutUserInput = {
-    create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
-    createMany?: AccountCreateManyUserInputEnvelope
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+  export type ProviderAccountCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
+    createMany?: ProviderAccountCreateManyUserInputEnvelope
+    connect?: ProviderAccountWhereUniqueInput | ProviderAccountWhereUniqueInput[]
   }
 
-  export type AccountUncheckedCreateNestedManyWithoutUserInput = {
-    create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
-    createMany?: AccountCreateManyUserInputEnvelope
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+  export type ProviderAccountUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
+    createMany?: ProviderAccountCreateManyUserInputEnvelope
+    connect?: ProviderAccountWhereUniqueInput | ProviderAccountWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -4010,37 +4010,37 @@ export namespace Prisma {
     set?: string
   }
 
-  export type AccountUpdateManyWithoutUserNestedInput = {
-    create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
-    upsert?: AccountUpsertWithWhereUniqueWithoutUserInput | AccountUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: AccountCreateManyUserInputEnvelope
-    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    update?: AccountUpdateWithWhereUniqueWithoutUserInput | AccountUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: AccountUpdateManyWithWhereWithoutUserInput | AccountUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
+  export type ProviderAccountUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
+    upsert?: ProviderAccountUpsertWithWhereUniqueWithoutUserInput | ProviderAccountUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProviderAccountCreateManyUserInputEnvelope
+    set?: ProviderAccountWhereUniqueInput | ProviderAccountWhereUniqueInput[]
+    disconnect?: ProviderAccountWhereUniqueInput | ProviderAccountWhereUniqueInput[]
+    delete?: ProviderAccountWhereUniqueInput | ProviderAccountWhereUniqueInput[]
+    connect?: ProviderAccountWhereUniqueInput | ProviderAccountWhereUniqueInput[]
+    update?: ProviderAccountUpdateWithWhereUniqueWithoutUserInput | ProviderAccountUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProviderAccountUpdateManyWithWhereWithoutUserInput | ProviderAccountUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProviderAccountScalarWhereInput | ProviderAccountScalarWhereInput[]
   }
 
-  export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
-    create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
-    upsert?: AccountUpsertWithWhereUniqueWithoutUserInput | AccountUpsertWithWhereUniqueWithoutUserInput[]
-    createMany?: AccountCreateManyUserInputEnvelope
-    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    update?: AccountUpdateWithWhereUniqueWithoutUserInput | AccountUpdateWithWhereUniqueWithoutUserInput[]
-    updateMany?: AccountUpdateManyWithWhereWithoutUserInput | AccountUpdateManyWithWhereWithoutUserInput[]
-    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
+  export type ProviderAccountUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
+    upsert?: ProviderAccountUpsertWithWhereUniqueWithoutUserInput | ProviderAccountUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ProviderAccountCreateManyUserInputEnvelope
+    set?: ProviderAccountWhereUniqueInput | ProviderAccountWhereUniqueInput[]
+    disconnect?: ProviderAccountWhereUniqueInput | ProviderAccountWhereUniqueInput[]
+    delete?: ProviderAccountWhereUniqueInput | ProviderAccountWhereUniqueInput[]
+    connect?: ProviderAccountWhereUniqueInput | ProviderAccountWhereUniqueInput[]
+    update?: ProviderAccountUpdateWithWhereUniqueWithoutUserInput | ProviderAccountUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ProviderAccountUpdateManyWithWhereWithoutUserInput | ProviderAccountUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ProviderAccountScalarWhereInput | ProviderAccountScalarWhereInput[]
   }
 
-  export type UserDataCreateNestedOneWithoutAccountsInput = {
-    create?: XOR<UserDataCreateWithoutAccountsInput, UserDataUncheckedCreateWithoutAccountsInput>
-    connectOrCreate?: UserDataCreateOrConnectWithoutAccountsInput
+  export type UserDataCreateNestedOneWithoutProviderAccountsInput = {
+    create?: XOR<UserDataCreateWithoutProviderAccountsInput, UserDataUncheckedCreateWithoutProviderAccountsInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutProviderAccountsInput
     connect?: UserDataWhereUniqueInput
   }
 
@@ -4053,12 +4053,12 @@ export namespace Prisma {
     unset?: boolean
   }
 
-  export type UserDataUpdateOneRequiredWithoutAccountsNestedInput = {
-    create?: XOR<UserDataCreateWithoutAccountsInput, UserDataUncheckedCreateWithoutAccountsInput>
-    connectOrCreate?: UserDataCreateOrConnectWithoutAccountsInput
-    upsert?: UserDataUpsertWithoutAccountsInput
+  export type UserDataUpdateOneRequiredWithoutProviderAccountsNestedInput = {
+    create?: XOR<UserDataCreateWithoutProviderAccountsInput, UserDataUncheckedCreateWithoutProviderAccountsInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutProviderAccountsInput
+    upsert?: UserDataUpsertWithoutProviderAccountsInput
     connect?: UserDataWhereUniqueInput
-    update?: XOR<XOR<UserDataUpdateToOneWithWhereWithoutAccountsInput, UserDataUpdateWithoutAccountsInput>, UserDataUncheckedUpdateWithoutAccountsInput>
+    update?: XOR<XOR<UserDataUpdateToOneWithWhereWithoutProviderAccountsInput, UserDataUpdateWithoutProviderAccountsInput>, UserDataUncheckedUpdateWithoutProviderAccountsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -4241,7 +4241,7 @@ export namespace Prisma {
     isSet?: boolean
   }
 
-  export type AccountCreateWithoutUserInput = {
+  export type ProviderAccountCreateWithoutUserInput = {
     id?: string
     type: string
     provider: string
@@ -4257,7 +4257,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type AccountUncheckedCreateWithoutUserInput = {
+  export type ProviderAccountUncheckedCreateWithoutUserInput = {
     id?: string
     type: string
     provider: string
@@ -4273,52 +4273,52 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type AccountCreateOrConnectWithoutUserInput = {
-    where: AccountWhereUniqueInput
-    create: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput>
+  export type ProviderAccountCreateOrConnectWithoutUserInput = {
+    where: ProviderAccountWhereUniqueInput
+    create: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput>
   }
 
-  export type AccountCreateManyUserInputEnvelope = {
-    data: AccountCreateManyUserInput | AccountCreateManyUserInput[]
+  export type ProviderAccountCreateManyUserInputEnvelope = {
+    data: ProviderAccountCreateManyUserInput | ProviderAccountCreateManyUserInput[]
   }
 
-  export type AccountUpsertWithWhereUniqueWithoutUserInput = {
-    where: AccountWhereUniqueInput
-    update: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
-    create: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput>
+  export type ProviderAccountUpsertWithWhereUniqueWithoutUserInput = {
+    where: ProviderAccountWhereUniqueInput
+    update: XOR<ProviderAccountUpdateWithoutUserInput, ProviderAccountUncheckedUpdateWithoutUserInput>
+    create: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput>
   }
 
-  export type AccountUpdateWithWhereUniqueWithoutUserInput = {
-    where: AccountWhereUniqueInput
-    data: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
+  export type ProviderAccountUpdateWithWhereUniqueWithoutUserInput = {
+    where: ProviderAccountWhereUniqueInput
+    data: XOR<ProviderAccountUpdateWithoutUserInput, ProviderAccountUncheckedUpdateWithoutUserInput>
   }
 
-  export type AccountUpdateManyWithWhereWithoutUserInput = {
-    where: AccountScalarWhereInput
-    data: XOR<AccountUpdateManyMutationInput, AccountUncheckedUpdateManyWithoutUserInput>
+  export type ProviderAccountUpdateManyWithWhereWithoutUserInput = {
+    where: ProviderAccountScalarWhereInput
+    data: XOR<ProviderAccountUpdateManyMutationInput, ProviderAccountUncheckedUpdateManyWithoutUserInput>
   }
 
-  export type AccountScalarWhereInput = {
-    AND?: AccountScalarWhereInput | AccountScalarWhereInput[]
-    OR?: AccountScalarWhereInput[]
-    NOT?: AccountScalarWhereInput | AccountScalarWhereInput[]
-    id?: StringFilter<"Account"> | string
-    userId?: StringFilter<"Account"> | string
-    type?: StringFilter<"Account"> | string
-    provider?: StringFilter<"Account"> | string
-    providerAccountId?: StringFilter<"Account"> | string
-    refresh_token?: StringNullableFilter<"Account"> | string | null
-    access_token?: StringNullableFilter<"Account"> | string | null
-    expires_at?: IntNullableFilter<"Account"> | number | null
-    token_type?: StringNullableFilter<"Account"> | string | null
-    scope?: StringNullableFilter<"Account"> | string | null
-    id_token?: StringNullableFilter<"Account"> | string | null
-    session_state?: JsonNullableFilter<"Account">
-    createdAt?: DateTimeFilter<"Account"> | Date | string
-    updatedAt?: DateTimeFilter<"Account"> | Date | string
+  export type ProviderAccountScalarWhereInput = {
+    AND?: ProviderAccountScalarWhereInput | ProviderAccountScalarWhereInput[]
+    OR?: ProviderAccountScalarWhereInput[]
+    NOT?: ProviderAccountScalarWhereInput | ProviderAccountScalarWhereInput[]
+    id?: StringFilter<"ProviderAccount"> | string
+    userId?: StringFilter<"ProviderAccount"> | string
+    type?: StringFilter<"ProviderAccount"> | string
+    provider?: StringFilter<"ProviderAccount"> | string
+    providerAccountId?: StringFilter<"ProviderAccount"> | string
+    refresh_token?: StringNullableFilter<"ProviderAccount"> | string | null
+    access_token?: StringNullableFilter<"ProviderAccount"> | string | null
+    expires_at?: IntNullableFilter<"ProviderAccount"> | number | null
+    token_type?: StringNullableFilter<"ProviderAccount"> | string | null
+    scope?: StringNullableFilter<"ProviderAccount"> | string | null
+    id_token?: StringNullableFilter<"ProviderAccount"> | string | null
+    session_state?: JsonNullableFilter<"ProviderAccount">
+    createdAt?: DateTimeFilter<"ProviderAccount"> | Date | string
+    updatedAt?: DateTimeFilter<"ProviderAccount"> | Date | string
   }
 
-  export type UserDataCreateWithoutAccountsInput = {
+  export type UserDataCreateWithoutProviderAccountsInput = {
     id?: string
     provider_id?: string | null
     name?: string | null
@@ -4337,7 +4337,7 @@ export namespace Prisma {
     websiteURL: string
   }
 
-  export type UserDataUncheckedCreateWithoutAccountsInput = {
+  export type UserDataUncheckedCreateWithoutProviderAccountsInput = {
     id?: string
     provider_id?: string | null
     name?: string | null
@@ -4356,23 +4356,23 @@ export namespace Prisma {
     websiteURL: string
   }
 
-  export type UserDataCreateOrConnectWithoutAccountsInput = {
+  export type UserDataCreateOrConnectWithoutProviderAccountsInput = {
     where: UserDataWhereUniqueInput
-    create: XOR<UserDataCreateWithoutAccountsInput, UserDataUncheckedCreateWithoutAccountsInput>
+    create: XOR<UserDataCreateWithoutProviderAccountsInput, UserDataUncheckedCreateWithoutProviderAccountsInput>
   }
 
-  export type UserDataUpsertWithoutAccountsInput = {
-    update: XOR<UserDataUpdateWithoutAccountsInput, UserDataUncheckedUpdateWithoutAccountsInput>
-    create: XOR<UserDataCreateWithoutAccountsInput, UserDataUncheckedCreateWithoutAccountsInput>
+  export type UserDataUpsertWithoutProviderAccountsInput = {
+    update: XOR<UserDataUpdateWithoutProviderAccountsInput, UserDataUncheckedUpdateWithoutProviderAccountsInput>
+    create: XOR<UserDataCreateWithoutProviderAccountsInput, UserDataUncheckedCreateWithoutProviderAccountsInput>
     where?: UserDataWhereInput
   }
 
-  export type UserDataUpdateToOneWithWhereWithoutAccountsInput = {
+  export type UserDataUpdateToOneWithWhereWithoutProviderAccountsInput = {
     where?: UserDataWhereInput
-    data: XOR<UserDataUpdateWithoutAccountsInput, UserDataUncheckedUpdateWithoutAccountsInput>
+    data: XOR<UserDataUpdateWithoutProviderAccountsInput, UserDataUncheckedUpdateWithoutProviderAccountsInput>
   }
 
-  export type UserDataUpdateWithoutAccountsInput = {
+  export type UserDataUpdateWithoutProviderAccountsInput = {
     provider_id?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4390,7 +4390,7 @@ export namespace Prisma {
     websiteURL?: StringFieldUpdateOperationsInput | string
   }
 
-  export type UserDataUncheckedUpdateWithoutAccountsInput = {
+  export type UserDataUncheckedUpdateWithoutProviderAccountsInput = {
     provider_id?: NullableStringFieldUpdateOperationsInput | string | null
     name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: NullableStringFieldUpdateOperationsInput | string | null
@@ -4408,7 +4408,7 @@ export namespace Prisma {
     websiteURL?: StringFieldUpdateOperationsInput | string
   }
 
-  export type AccountCreateManyUserInput = {
+  export type ProviderAccountCreateManyUserInput = {
     id?: string
     type: string
     provider: string
@@ -4424,7 +4424,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type AccountUpdateWithoutUserInput = {
+  export type ProviderAccountUpdateWithoutUserInput = {
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
     providerAccountId?: StringFieldUpdateOperationsInput | string
@@ -4439,7 +4439,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AccountUncheckedUpdateWithoutUserInput = {
+  export type ProviderAccountUncheckedUpdateWithoutUserInput = {
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
     providerAccountId?: StringFieldUpdateOperationsInput | string
@@ -4454,7 +4454,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AccountUncheckedUpdateManyWithoutUserInput = {
+  export type ProviderAccountUncheckedUpdateManyWithoutUserInput = {
     type?: StringFieldUpdateOperationsInput | string
     provider?: StringFieldUpdateOperationsInput | string
     providerAccountId?: StringFieldUpdateOperationsInput | string
@@ -4483,9 +4483,9 @@ export namespace Prisma {
      */
     export type UserDataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDataDefaultArgs<ExtArgs>
     /**
-     * @deprecated Use AccountDefaultArgs instead
+     * @deprecated Use ProviderAccountDefaultArgs instead
      */
-    export type AccountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AccountDefaultArgs<ExtArgs>
+    export type ProviderAccountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ProviderAccountDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

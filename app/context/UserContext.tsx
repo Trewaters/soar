@@ -28,7 +28,6 @@ export type UserData = {
   headline: string
   location: string
   websiteURL: string
-  accounts: Record<string, any>
 }
 
 export type UserGithubProfile = {
@@ -122,7 +121,6 @@ const initialState: UserProfilePageState = {
     headline: '',
     location: '',
     websiteURL: '',
-    accounts: {} as Record<string, any>,
   },
   userGithubProfile: {
     login: '',
@@ -226,6 +224,8 @@ export default function UserStateProvider({
   const [email, setEmail] = useState<string>('')
 
   const fetchUserData = async (email: string) => {
+    console.log('fetchUserData by email:', email)
+    let fetchUser: any
     try {
       const userResponse = await fetch(
         `/api/user/?email=${encodeURIComponent(email)}`
@@ -234,28 +234,33 @@ export default function UserStateProvider({
         const errorText = await userResponse.text()
         throw new Error(`Failed to fetch user data: ${errorText}`)
       }
-      const fetchUser = await userResponse.json()
+      fetchUser = await userResponse.json()
       setUserData(fetchUser.data)
-      console.log('fetchUser.data:', fetchUser.data)
-
-      const accountResponse = await fetch(
-        `/api/user/fetchAccount/?id=${fetchUser.data.id}`
-      )
-      const fetchAccount = await accountResponse.json()
-      console.log('fetchAccount.data:', fetchAccount.data)
-
-      // // set user profile data based on userData.id > account.provider
-      // const profile = JSON.parse(fetchUser.data.profile)
-      // if (fetchAccount.data.provider === 'github') {
-      //   setUserGithubProfile(profile as UserGithubProfile)
-      //   console.log('setUserGithubProfile:', profile)
-      // } else if (fetchAccount.data.provider === 'google') {
-      //   setUserGoogleProfile(profile as UserGoogleProfile)
-      //   console.log('setUserGoogleProfile:', profile)
-      // }
-      // setUserGithubProfile(profile)
+      // console.log('fetchUser.data:', fetchUser.data)
     } catch (error) {
       console.error('Error fetching user data', error)
+    }
+
+    try {
+      // console.log('accountResponse fetchUser.data.id:', fetchUser.data.id)
+
+      const accountResponse = await fetch(
+        `/api/user/fetchAccount/?userId=${fetchUser.data.id}`
+      )
+      const fetchAccount = await accountResponse.json()
+      // console.log('fetchAccount.data:', fetchAccount.data)
+
+      // set user profile data based on userData.id > account.provider
+      const profile = JSON.parse(fetchUser.data.profile)
+      if (fetchAccount.data.provider === 'github') {
+        setUserGithubProfile(profile as UserGithubProfile)
+        // console.log('setUserGithubProfile:', profile)
+      } else if (fetchAccount.data.provider === 'google') {
+        setUserGoogleProfile(profile as UserGoogleProfile)
+        // console.log('setUserGoogleProfile:', profile)
+      }
+    } catch (error) {
+      console.error('Error fetching user profile', error)
     }
   }
 
@@ -265,8 +270,13 @@ export default function UserStateProvider({
   }
 
   useEffect(() => {
+    if (!email) {
+      return
+    }
+
     if (email) {
       fetchUserData(email)
+      console.log('useEffect email:', email)
     }
   }, [])
 
@@ -274,8 +284,8 @@ export default function UserStateProvider({
     userData,
     userGithubProfile,
     userGoogleProfile,
-    fetchUserData,
     setEmail: updateEmail,
+    fetchUserData,
   }
 
   // const value: UserProfilePageState = {

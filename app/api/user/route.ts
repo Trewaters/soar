@@ -7,7 +7,6 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const email = searchParams.get('email')
   let user
-  // let practitioner
 
   if (!email) {
     return new Response(JSON.stringify({ error: 'User not found' }), {

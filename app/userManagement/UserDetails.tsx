@@ -43,13 +43,13 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 export default function UserDetails() {
   const { data: session } = useSession()
-  console.log('session', session)
+  // console.log('session', session)
 
   const { setEmail, userData, userGithubProfile, userGoogleProfile } =
     useContext(UserStateContext)
-  console.log('userData', userData)
-  console.log('userGithubProfile', userGithubProfile)
-  console.log('userGoogleProfile', userGoogleProfile)
+  // console.log('userData', userData)
+  // console.log('userGithubProfile', userGithubProfile)
+  // console.log('userGoogleProfile', userGoogleProfile)
 
   const [expanded, setExpanded] = React.useState(false)
 
@@ -132,7 +132,7 @@ export default function UserDetails() {
     if (session?.user?.email && userData?.email !== session.user.email) {
       setEmail(session.user.email)
     }
-    console.log('useEffect userData', userData)
+    // console.log('useEffect userData', userData)
     // console.log('useEffect profile', userData.profile)
     // console.log('useEffect JSON.parse', JSON.parse(userData?.profile))
   }, [session, setEmail, userData, userGithubProfile, userGoogleProfile])
