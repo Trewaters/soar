@@ -194,6 +194,9 @@ export default function UserDetails() {
                     </Stack>
                   </Stack>
                   <Stack direction="row" spacing={2}>
+                    {/* 
+                      // TODO: add a way to update the location
+                      */}
                     <MapIcon />
                     <Typography>{userData.location ?? ''}</Typography>
                   </Stack>
