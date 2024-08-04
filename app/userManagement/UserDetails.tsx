@@ -35,7 +35,7 @@ interface ExpandMoreProps extends IconButtonProps {
 }
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props
+  const { ...other } = props
   return <IconButton {...other} />
 })(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
@@ -120,7 +120,7 @@ export default function UserDetails() {
             <Card>
               <CardHeader
                 avatar={
-                  <Avatar sx={{ bgcolor: red[500] }} aria-label="user initial">
+                  <Avatar sx={{ bgcolor: red[500] }} aria-label="name initial">
                     {userData?.name?.charAt(0) ?? 'U'}
                   </Avatar>
                 }
@@ -164,26 +164,34 @@ export default function UserDetails() {
                   <ExpandMoreIcon />
                 </ExpandMore>
               </CardActions>
-              <Collapse in={expanded} timeout="auto" unmountOnExit>
+              <Collapse
+                in={expanded}
+                timeout="auto"
+                unmountOnExit
+                // sx={{
+                //   maxWidth: '70vw',
+                //   // width: '70vw',
+                // }}
+              >
                 <CardContent>
                   <Stack direction="row" spacing={2}>
-                    <Typography paragraph>Share Quickly: </Typography>
-                    <Typography paragraph>
+                    <Typography variant="body1">Share Quickly: </Typography>
+                    <Typography variant="body1">
                       Information about yourself.
                     </Typography>
                   </Stack>
-                  <Stack direction="row" spacing={2}>
-                    <Typography paragraph>[YOGA_STYLE]</Typography>
-                    <Typography paragraph>[YOGA_EXPERIENCE]</Typography>
-                    <Typography paragraph>[userCompany]</Typography>
-                  </Stack>
-                  <Stack direction="row" justifyContent="center" spacing={2}>
-                    <LinkIcon />
-                    <Typography paragraph>
-                      <Link href={userData.websiteURL ?? ''}>
-                        {userData.websiteURL}
-                      </Link>
-                    </Typography>
+                  <Stack direction="column" spacing={2}>
+                    <Typography variant="body1">[YOGA_STYLE]</Typography>
+                    <Typography variant="body1">[YOGA_EXPERIENCE]</Typography>
+                    <Typography variant="body1">[userCompany]</Typography>
+                    <Stack direction="row" spacing={2}>
+                      <LinkIcon />
+                      <Typography variant="body1">
+                        <Link href={userData.websiteURL ?? ''}>
+                          {userData.websiteURL}
+                        </Link>
+                      </Typography>
+                    </Stack>
                   </Stack>
                   <Stack direction="row" spacing={2}>
                     <MapIcon />
