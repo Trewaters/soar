@@ -66,7 +66,7 @@ export default function Page() {
           // component="a"
           LinkComponent="a"
         >
-          Single Series
+          Practice Series
         </Button>
         {/*         
         <Typography variant="body1">or</Typography>

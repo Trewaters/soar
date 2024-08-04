@@ -53,7 +53,7 @@ export default function Page() {
                   alt="Yoga Posture Image"
                   width={100}
                   height={100}
-                  layout="fixed"
+                  priority={true}
                 />
               </CardMedia>
               <CardContent sx={{ flex: '1 1 auto' }}>
