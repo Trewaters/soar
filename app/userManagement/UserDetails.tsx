@@ -290,6 +290,32 @@ export default function UserDetails() {
             </FormControl>
             {/* 'I am a yoga instructor. A software engineer bringing yoga to practitioners. A Reiki master who builds strength through practice. A father, husband, and son.' */}
           </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormControl>
+              <TextField
+                name="websiteURL"
+                id="outlined-webisite-url-input"
+                placeholder="www.WebsiteUrl.com"
+                label="Website URL"
+                value={userData?.websiteURL ?? ''}
+                onChange={handleChange}
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
+          <Grid xs={12} sm={6} md={6} item>
+            <FormControl>
+              <TextField
+                name="location"
+                id="outlined-webisite-url-input"
+                placeholder='Enter "your location"'
+                label="location"
+                value={userData?.location ?? ''}
+                onChange={handleChange}
+                variant="outlined"
+              />
+            </FormControl>
+          </Grid>
         </>
       )}
     </Grid>
