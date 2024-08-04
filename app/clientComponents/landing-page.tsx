@@ -21,8 +21,8 @@ const links = [
     href: '/asanaPostures',
     icon: <WaterDropOutlinedIcon />,
   },
-  /* 
   { name: 'Flow', href: '/flowSeries', icon: <WhatshotIcon /> },
+  /* 
   {
     name: 'Meditation',
     href: '/meditation',
@@ -47,21 +47,24 @@ export default function LandingPage() {
     <Box
       sx={{
         width: '100%',
-        maxWidth: 360,
+        maxWidth: '360px',
         bgcolor: 'lightgray',
         display: 'flex',
         justifyContent: 'center',
       }}
     >
       <nav aria-label="main menu">
-        <List sx={{ width: '100%' }}>
+        <List sx={{ width: '183px' }}>
           {links.map((link, index) => (
             <React.Fragment key={link.name}>
               {index > 0 && <Divider />}
               <ListItem disablePadding>
                 <Link href={link.href} passHref>
                   <ListItemButton
-                    sx={{ justifyContent: 'flex-start', width: '100%' }}
+                    sx={{
+                      justifyContent: 'flex-start',
+                      width: '183px',
+                    }}
                   >
                     <ListItemIcon>{link.icon}</ListItemIcon>
                     <ListItemText>

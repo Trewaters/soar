@@ -8,6 +8,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import MenuIcon from '@mui/icons-material/Menu'
 import FlareIcon from '@mui/icons-material/Flare'
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
+import WhatshotIcon from '@mui/icons-material/Whatshot'
 import {
   Divider,
   Drawer,
@@ -36,6 +37,11 @@ const navLinks = [
     name: 'Asanas',
     href: '/asanaPostures',
     icon: <WaterDropOutlinedIcon />,
+  },
+  {
+    name: 'Flows',
+    href: '/flowSeries',
+    icon: <WhatshotIcon />,
   },
   {
     name: 'Profile',
