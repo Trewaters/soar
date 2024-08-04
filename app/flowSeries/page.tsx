@@ -68,6 +68,7 @@ export default function Page() {
         >
           Single Series
         </Button>
+        {/*         
         <Typography variant="body1">or</Typography>
         <Button variant="contained" color="primary" component="a">
           Create Series
@@ -89,7 +90,7 @@ export default function Page() {
           href="/flowSeries/practiceSequences"
         >
           Practice Sequences
-        </Button>
+        </Button> */}
       </Stack>
       {/* <Search>
           <SearchIconWrapper>
