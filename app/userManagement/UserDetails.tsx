@@ -187,7 +187,15 @@ export default function UserDetails() {
                     <Stack direction="row" spacing={2}>
                       <LinkIcon />
                       <Typography variant="body1">
-                        <Link href={userData.websiteURL ?? ''}>
+                        <Link
+                          href={
+                            userData.websiteURL?.startsWith('http')
+                              ? userData.websiteURL
+                              : `https://${userData.websiteURL}`
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           {userData.websiteURL}
                         </Link>
                       </Typography>
