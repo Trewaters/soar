@@ -62,7 +62,7 @@ export default function Page() {
       <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
         <Button
           variant="outlined"
-          href="/flowSeries/singleSeries"
+          href="/flowSeries/practiceSeries"
           // component="a"
           LinkComponent="a"
         >

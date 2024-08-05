@@ -23,7 +23,7 @@ export default function Page() {
   return (
     <>
       <Box width="100%" textAlign="center" marginTop={4}>
-        <Typography variant="h2">Single Series</Typography>
+        <Typography variant="h2">Practice Series</Typography>
         <Typography variant="h3">{series.seriesName}</Typography>
         <Stack rowGap={3} alignItems="center" marginTop={4}>
           {series.seriesPostures.map((pose) => (
