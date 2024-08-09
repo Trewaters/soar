@@ -11,6 +11,7 @@ import {
 import Image from 'next/image'
 
 const series: flowSeriesData = {
+  id: 1,
   seriesName: 'Integration Series',
   seriesPostures: [
     "Child's Pose Balasana",

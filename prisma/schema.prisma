@@ -112,10 +112,10 @@ model AsanaPosture {
   duration         String?
 }
 
-model AsanaSequence {
+model AsanaSeries {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  nameSequence    String
-  sequencesSeries   String[]
+  seriesName    String
+  seriesPostures  String[]
   description     String
   duration        String
   image           String?
@@ -123,10 +123,10 @@ model AsanaSequence {
   updatedAt       DateTime? @updatedAt
 }
 
-model AsanaSeries {
+model AsanaSequence {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  seriesName    String
-  seriesPostures  String[]
+  nameSequence    String
+  sequencesSeries   String[]
   description     String
   duration        String
   image           String?

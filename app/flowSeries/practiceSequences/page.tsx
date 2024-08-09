@@ -18,6 +18,7 @@ export default function Page() {
       nameSequence: 'C1 Sequence',
       sequencesSeries: [
         {
+          id: 1,
           seriesName: 'Integration Series',
           seriesPostures: [
             "Child's Pose Balasana",
@@ -27,6 +28,7 @@ export default function Page() {
           ],
         },
         {
+          id: 2,
           seriesName: 'Sun Salutation A Series',
           seriesPostures: [
             'Mountain Pose, Tadasana',
@@ -38,6 +40,7 @@ export default function Page() {
           ],
         },
         {
+          id: 3,
           seriesName: 'Sun Salutation B Series',
           seriesPostures: [
             'Chair Pose, Utkatasana',
@@ -53,6 +56,7 @@ export default function Page() {
           ],
         },
         {
+          id: 4,
           seriesName: 'Crescent Lunge Series',
           seriesPostures: [
             'Crescent Lunge, Anjanayesana',
@@ -65,6 +69,7 @@ export default function Page() {
           ],
         },
         {
+          id: 5,
           seriesName: 'Balancing Series',
           seriesPostures: [
             'Eagle Pose, Garudasana',
@@ -73,6 +78,7 @@ export default function Page() {
           ],
         },
         {
+          id: 6,
           seriesName: 'Triangle Series',
           seriesPostures: [
             'Warrior One, Virabhadrasana I',
@@ -82,10 +88,12 @@ export default function Page() {
           ],
         },
         {
+          id: 7,
           seriesName: 'Hip Series',
           seriesPostures: ['Half Pigeon Eka Pada Rajakapotasana'],
         },
         {
+          id: 8,
           seriesName: 'Spine Series',
           seriesPostures: [
             'Cobra Pose, Bhujangasana',
@@ -96,6 +104,7 @@ export default function Page() {
           ],
         },
         {
+          id: 9,
           seriesName: 'Surrender Series',
           seriesPostures: [
             'Seated Forward Fold, Paschimittonasana',
