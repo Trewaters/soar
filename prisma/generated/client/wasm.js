@@ -148,6 +148,39 @@ exports.Prisma.ProviderAccountScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AsanaPostureScalarFieldEnum = {
+  id: 'id',
+  alternate_english_name: 'alternate_english_name',
+  benefits: 'benefits',
+  category: 'category',
+  description: 'description',
+  difficulty: 'difficulty',
+  simplified_english_name: 'simplified_english_name',
+  english_name: 'english_name',
+  next_poses: 'next_poses',
+  preferred_side: 'preferred_side',
+  previous_poses: 'previous_poses',
+  sanskrit_names: 'sanskrit_names',
+  sideways: 'sideways',
+  sort_english_name: 'sort_english_name',
+  subcategory: 'subcategory',
+  two_sided: 'two_sided',
+  variations_english_name: 'variations_english_name',
+  visibility: 'visibility',
+  image: 'image',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  acitivity_completed: 'acitivity_completed',
+  acitivity_easy: 'acitivity_easy',
+  acitivity_difficult: 'acitivity_difficult',
+  acitivity_practice: 'acitivity_practice',
+  posture_intent: 'posture_intent',
+  posture_meaning: 'posture_meaning',
+  dristi: 'dristi',
+  breath: 'breath',
+  duration: 'duration'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -161,7 +194,8 @@ exports.Prisma.QueryMode = {
 
 exports.Prisma.ModelName = {
   UserData: 'UserData',
-  ProviderAccount: 'ProviderAccount'
+  ProviderAccount: 'ProviderAccount',
+  AsanaPosture: 'AsanaPosture'
 };
 
 /**

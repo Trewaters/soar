@@ -1,4 +1,5 @@
 import { List, ListItem, ListItemText, Typography } from '@mui/material'
+import Link from 'next/link'
 
 export default function EightLimbs() {
   return (
@@ -18,7 +19,11 @@ export default function EightLimbs() {
           <ListItemText primary="Dharana" secondary="Concentration" />
         </ListItem>
         <ListItem>
-          <ListItemText primary="Asana" secondary="Physical Postures" />
+          <Link href="/asanaPostures" passHref legacyBehavior>
+            <a style={{ textDecoration: 'none', color: 'inherit' }}>
+              <ListItemText primary="Asana" secondary="Physical Postures" />
+            </a>
+          </Link>
         </ListItem>
         <ListItem>
           <ListItemText primary="Dhyana" secondary="Meditation" />

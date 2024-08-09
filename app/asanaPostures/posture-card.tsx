@@ -1,4 +1,4 @@
-import postureData from '@interfaces/postureData'
+import PostureCardFields from '@interfaces/postureData'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card'
@@ -11,7 +11,7 @@ import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material'
 import { CheckBox } from '@mui/icons-material'
 
 interface PostureCardProps {
-  postureCardProp: postureData
+  postureCardProp: PostureCardFields
 }
 
 export default function PostureCard({ postureCardProp }: PostureCardProps) {
@@ -35,8 +35,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               color: 'primary.contrastText',
             },
           }}
-          title={posture?.display_name}
-          subheader={posture?.name}
+          title={posture?.simplified_english_name}
+          subheader={posture?.english_name}
         />
         <CardMedia sx={{ width: '50%', margin: 'auto' }}>
           <Image
@@ -98,7 +98,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="overline"
                 sx={{ fontWeight: 'bold', color: '#555' }}
               >
-                Pronunciation:
+                Sanskrit Name:
               </Typography>
             </Grid>
             <Grid item xs={12} sm={8} sx={{ marginBottom: 2 }}>
@@ -113,7 +113,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
-                {posture?.sanskrit_names[0].simplified}
+                {posture?.sanskrit_names?.[0]?.simplified ?? 'No Sanskrit Name'}
               </Typography>
             </Grid>
             <Grid
@@ -197,7 +197,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="overline"
                 sx={{ fontWeight: 'bold', color: '#555' }}
               >
-                Intent of Posture:
+                Benefits:
               </Typography>
             </Grid>
 
