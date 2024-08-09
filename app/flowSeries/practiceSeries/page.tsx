@@ -1,4 +1,5 @@
 'use client'
+import { flowSeriesData } from '@app/interfaces/flowSeries'
 import {
   Box,
   Card,
@@ -9,7 +10,7 @@ import {
 } from '@mui/material'
 import Image from 'next/image'
 
-const series = {
+const series: flowSeriesData = {
   seriesName: 'Integration Series',
   seriesPostures: [
     "Child's Pose Balasana",

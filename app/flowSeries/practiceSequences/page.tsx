@@ -1,4 +1,5 @@
 'use client'
+import { sequenceData } from '@app/interfaces/sequence'
 import {
   Box,
   Card,
@@ -11,14 +12,14 @@ import {
 import React from 'react'
 
 export default function Page() {
-  const sequence = [
+  const sequence: sequenceData[] = [
     {
       id: 1,
       nameSequence: 'C1 Sequence',
       sequencesSeries: [
         {
           seriesName: 'Integration Series',
-          seriesSet: [
+          seriesPostures: [
             "Child's Pose Balasana",
             'Downward Facing Dog, Adho Mukha Svanasana',
             'Ragdoll, Uttanasana',
@@ -27,7 +28,7 @@ export default function Page() {
         },
         {
           seriesName: 'Sun Salutation A Series',
-          seriesSet: [
+          seriesPostures: [
             'Mountain Pose, Tadasana',
             'Standing Forward Fold, Uttanasana',
             'Halfway Lift Ardha, Uttanasana',
@@ -38,7 +39,7 @@ export default function Page() {
         },
         {
           seriesName: 'Sun Salutation B Series',
-          seriesSet: [
+          seriesPostures: [
             'Chair Pose, Utkatasana',
             'Standing Forward Fold, Uttanasana',
             'Halfway Lift, Ardha Uttanasana',
@@ -53,7 +54,7 @@ export default function Page() {
         },
         {
           seriesName: 'Crescent Lunge Series',
-          seriesSet: [
+          seriesPostures: [
             'Crescent Lunge, Anjanayesana',
             'Revolved Crescent Lunge, Parivrtta Anjanayesana',
             "Runner's Lunge, Anjaneyasana",
@@ -65,7 +66,7 @@ export default function Page() {
         },
         {
           seriesName: 'Balancing Series',
-          seriesSet: [
+          seriesPostures: [
             'Eagle Pose, Garudasana',
             "Dancer's Pose, Natarajasana",
             'Tree Pose, Vrksasana',
@@ -73,7 +74,7 @@ export default function Page() {
         },
         {
           seriesName: 'Triangle Series',
-          seriesSet: [
+          seriesPostures: [
             'Warrior One, Virabhadrasana I',
             'Warrior Two, Virabhadrasana II',
             'Triangle Pose, Trikonasana',
@@ -82,11 +83,11 @@ export default function Page() {
         },
         {
           seriesName: 'Hip Series',
-          seriesSet: ['Half Pigeon Eka Pada Rajakapotasana'],
+          seriesPostures: ['Half Pigeon Eka Pada Rajakapotasana'],
         },
         {
           seriesName: 'Spine Series',
-          seriesSet: [
+          seriesPostures: [
             'Cobra Pose, Bhujangasana',
             'Bow Pose, Dhanurasana',
             'Camel Pose, Ustrasana',
@@ -96,7 +97,7 @@ export default function Page() {
         },
         {
           seriesName: 'Surrender Series',
-          seriesSet: [
+          seriesPostures: [
             'Seated Forward Fold, Paschimittonasana',
             'Happy Baby, Ananda Balasana',
             'Supine Twist, Jathara Parivartanasana',
@@ -145,7 +146,7 @@ export default function Page() {
               >
                 <CardHeader title={seriesMini.seriesName} />
                 <CardContent>
-                  {seriesMini.seriesSet.map((asana, asanaIndex) => (
+                  {seriesMini.seriesPostures.map((asana, asanaIndex) => (
                     <Typography
                       key={asanaIndex}
                       textAlign={'left'}

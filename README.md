@@ -302,7 +302,7 @@ npx prisma generate
 npm exec prisma db push
 ```
 
-This is failing for mongodb at the moment
+This is failing for mongodb at the moment (2024-08-09 06:22:38)
 
 ```bash
 npm exec prisma migrate dev
