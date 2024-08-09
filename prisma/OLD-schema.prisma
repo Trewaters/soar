@@ -159,7 +159,7 @@ model Posture {
   category       String
   description    String
   difficulty     String
-  display_name   String
+  simplified_english_name   String
   name           String
   next_poses     String[]
   preferred_side String

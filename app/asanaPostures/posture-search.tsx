@@ -18,9 +18,11 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
   // const [open, setOpen] = useState(false)
 
   // Find the selected posture based on the Autocomplete selection
-  const selectedPosture = postures?.find((p) => p.display_name === cardPosture)
-  const defaultPosture = postures?.find((p) => p.display_name === '')
-  // console.log('defaultPosture', defaultPosture?.display_name)
+  const selectedPosture = postures?.find(
+    (p) => p.simplified_english_name === cardPosture
+  )
+  const defaultPosture = postures?.find((p) => p.simplified_english_name === '')
+  // console.log('defaultPosture', defaultPosture?.simplified_english_name)
   // console.log('selectedPosture', selectedPosture)
   // console.log('posturePropData', posturePropData)
 
@@ -34,10 +36,12 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
         <Autocomplete
           id="search-poses"
           options={postures}
-          getOptionLabel={(option: postureData) => option.display_name}
+          getOptionLabel={(option: postureData) =>
+            option.simplified_english_name
+          }
           renderOption={(props, option) => (
             <li {...props} key={option.id}>
-              {option.display_name}
+              {option.simplified_english_name}
             </li>
           )}
           renderInput={(params) => (
@@ -45,7 +49,9 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
           )}
           defaultValue={defaultPosture}
           autoSelect={true}
-          onChange={(event, value) => setcardPosture(value?.display_name || '')}
+          onChange={(event, value) =>
+            setcardPosture(value?.simplified_english_name || '')
+          }
         />
         {/* 
         // unsuccessful attempt to clear input so entire list shows
@@ -56,10 +62,10 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
           onOpen={() => setOpen(true)}
           onClose={() => setOpen(false)}
           options={postures}
-          getOptionLabel={(option: postureData) => option.display_name}
+          getOptionLabel={(option: postureData) => option.simplified_english_name}
           renderOption={(props, option) => (
             <li {...props} key={option.id}>
-              {option.display_name}
+              {option.simplified_english_name}
             </li>
           )}
           renderInput={(params) => (
@@ -69,8 +75,8 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
           // value={value}
           autoSelect={true}
           onChange={(event, newValue) => {
-            setValue(newValue?.display_name || '')
-            setcardPosture(newValue?.display_name || '')
+            setValue(newValue?.simplified_english_name || '')
+            setcardPosture(newValue?.simplified_english_name || '')
           }}
           inputValue={inputValue}
           onInputChange={(event, newInputValue) => {

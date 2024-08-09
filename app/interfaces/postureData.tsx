@@ -10,7 +10,7 @@ interface postureData {
   description: string
   difficulty: string
 
-  // display_name: string
+  // simplified_english_name: string
   simplified_english_name: string
 
   // name: string
