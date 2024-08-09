@@ -113,7 +113,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
-                {posture?.sanskrit_names?.[0]?.simplified ?? 'No Sanskrit Name'}
+                {posture?.sanskrit_names?.[0]?.simplified ??
+                  'Sanskrit Name not-found'}
               </Typography>
             </Grid>
             <Grid
