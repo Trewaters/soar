@@ -1,5 +1,5 @@
 // Full Posutre Data Interface
-interface postureData {
+interface PostureData {
   id: number
 
   // aka: string[]
@@ -137,4 +137,4 @@ interface postureDataAbbreviated1 {
   visibility: string
 }
 
-export default postureData
+export default PostureData

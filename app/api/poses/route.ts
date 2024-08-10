@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import postureData from '@interfaces/postureData'
 import { PrismaClient } from '@prisma/generated/client'
 
 const prisma = new PrismaClient()
@@ -29,8 +28,8 @@ export async function GET() {
       throw new Error(`Error fetching data: ${response.status}`)
     }
     const data = await response.json()
-    const dataWithId: postureData[] = data.map(
-      (item: postureData, index: number) => ({
+    const dataWithId: PostureData[] = data.map(
+      (item: PostureData, index: number) => ({
         ...item,
         id: index + 1,
       })

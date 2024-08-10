@@ -68,13 +68,17 @@ export default function Page() {
         >
           Practice Series
         </Button>
-        {/*         
         <Typography variant="body1">or</Typography>
-        <Button variant="contained" color="primary" component="a">
+        <Button
+          variant="contained"
+          color="primary"
+          href="/flowSeries/createSeries"
+          LinkComponent="a"
+        >
           Create Series
         </Button>
       </Stack>
-      <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
+      {/* <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
         <Button
           variant="contained"
           LinkComponent="a"
@@ -90,8 +94,8 @@ export default function Page() {
           href="/flowSeries/practiceSequences"
         >
           Practice Sequences
-        </Button> */}
-      </Stack>
+        </Button>
+      </Stack> */}
       {/* <Search>
           <SearchIconWrapper>
             <SearchIcon />

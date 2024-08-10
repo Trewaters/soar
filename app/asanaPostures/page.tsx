@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
 import PostureSearch from '@postures/posture-search'
-import postureData from '@interfaces/postureData'
+import PostureData from '@interfaces/postureData'
 // import prisma from '@lib/prisma'
 
 // async function main() {
@@ -21,7 +21,7 @@ import postureData from '@interfaces/postureData'
 //   })
 
 export default function Page() {
-  const [posturePropData, setPosturePropData] = React.useState<postureData[]>(
+  const [posturePropData, setPosturePropData] = React.useState<PostureData[]>(
     []
   )
   const [loading, setLoading] = useState(false)

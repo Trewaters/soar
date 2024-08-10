@@ -3,15 +3,15 @@ import React, { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
-import postureData from '@interfaces/postureData'
+import PostureData from '@interfaces/postureData'
 import PostureCard from '@postures/posture-card'
 
 interface PostureSearchProps {
-  posturePropData: postureData[]
+  posturePropData: PostureData[]
 }
 
 export default function PostureSearch({ posturePropData }: PostureSearchProps) {
-  const [postures, setPostures] = useState<postureData[]>(posturePropData)
+  const [postures, setPostures] = useState<PostureData[]>(posturePropData)
   const [cardPosture, setcardPosture] = useState<string | null>()
   // const [value, setValue] = useState('Awkward')
   // const [inputValue, setInputValue] = useState('')
@@ -36,7 +36,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
         <Autocomplete
           id="search-poses"
           options={postures}
-          getOptionLabel={(option: postureData) =>
+          getOptionLabel={(option: PostureData) =>
             option.simplified_english_name
           }
           renderOption={(props, option) => (
@@ -62,7 +62,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
           onOpen={() => setOpen(true)}
           onClose={() => setOpen(false)}
           options={postures}
-          getOptionLabel={(option: postureData) => option.simplified_english_name}
+          getOptionLabel={(option: PostureData) => option.simplified_english_name}
           renderOption={(props, option) => (
             <li {...props} key={option.id}>
               {option.simplified_english_name}
@@ -86,7 +86,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
         {/* <Autocomplete
           id="search-categories"
           disableClearable
-          options={postures?.map((posture: postureData) => posture.category)}
+          options={postures?.map((posture: PostureData) => posture.category)}
           renderInput={(params) => (
             <TextField
               {...params}
