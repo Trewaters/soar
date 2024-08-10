@@ -36,8 +36,9 @@ export default function Page() {
   useEffect(() => {
     async function fetchData() {
       const baseUrl =
-        process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000'
+        process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
       const url = new URL('/api/series/', baseUrl)
+      console.log('url', url)
       const res = await fetch(url.toString())
       const data = await res.json()
       const seriesData = Array.isArray(data) ? data : [data]
