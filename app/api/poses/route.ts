@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 export async function GET() {
   try {
     const data = await prisma.asanaPosture.findMany()
-    console.log('data', data)
+    // console.log('data', data)
     const dataWithId = data.map((item, index) => ({
       ...item,
       id: index + 1,
