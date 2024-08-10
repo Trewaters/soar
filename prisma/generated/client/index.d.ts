@@ -28,6 +28,16 @@ export type ProviderAccount = $Result.DefaultSelection<Prisma.$ProviderAccountPa
  * 
  */
 export type AsanaPosture = $Result.DefaultSelection<Prisma.$AsanaPosturePayload>
+/**
+ * Model AsanaSeries
+ * 
+ */
+export type AsanaSeries = $Result.DefaultSelection<Prisma.$AsanaSeriesPayload>
+/**
+ * Model AsanaSequence
+ * 
+ */
+export type AsanaSequence = $Result.DefaultSelection<Prisma.$AsanaSequencePayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -148,6 +158,26 @@ export class PrismaClient<
     * ```
     */
   get asanaPosture(): Prisma.AsanaPostureDelegate<ExtArgs>;
+
+  /**
+   * `prisma.asanaSeries`: Exposes CRUD operations for the **AsanaSeries** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AsanaSeries
+    * const asanaSeries = await prisma.asanaSeries.findMany()
+    * ```
+    */
+  get asanaSeries(): Prisma.AsanaSeriesDelegate<ExtArgs>;
+
+  /**
+   * `prisma.asanaSequence`: Exposes CRUD operations for the **AsanaSequence** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AsanaSequences
+    * const asanaSequences = await prisma.asanaSequence.findMany()
+    * ```
+    */
+  get asanaSequence(): Prisma.AsanaSequenceDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -627,7 +657,9 @@ export namespace Prisma {
   export const ModelName: {
     UserData: 'UserData',
     ProviderAccount: 'ProviderAccount',
-    AsanaPosture: 'AsanaPosture'
+    AsanaPosture: 'AsanaPosture',
+    AsanaSeries: 'AsanaSeries',
+    AsanaSequence: 'AsanaSequence'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -643,7 +675,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "userData" | "providerAccount" | "asanaPosture"
+      modelProps: "userData" | "providerAccount" | "asanaPosture" | "asanaSeries" | "asanaSequence"
       txIsolationLevel: never
     }
     model: {
@@ -866,6 +898,154 @@ export namespace Prisma {
           count: {
             args: Prisma.AsanaPostureCountArgs<ExtArgs>
             result: $Utils.Optional<AsanaPostureCountAggregateOutputType> | number
+          }
+        }
+      }
+      AsanaSeries: {
+        payload: Prisma.$AsanaSeriesPayload<ExtArgs>
+        fields: Prisma.AsanaSeriesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AsanaSeriesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSeriesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AsanaSeriesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSeriesPayload>
+          }
+          findFirst: {
+            args: Prisma.AsanaSeriesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSeriesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AsanaSeriesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSeriesPayload>
+          }
+          findMany: {
+            args: Prisma.AsanaSeriesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSeriesPayload>[]
+          }
+          create: {
+            args: Prisma.AsanaSeriesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSeriesPayload>
+          }
+          createMany: {
+            args: Prisma.AsanaSeriesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.AsanaSeriesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSeriesPayload>
+          }
+          update: {
+            args: Prisma.AsanaSeriesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSeriesPayload>
+          }
+          deleteMany: {
+            args: Prisma.AsanaSeriesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AsanaSeriesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AsanaSeriesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSeriesPayload>
+          }
+          aggregate: {
+            args: Prisma.AsanaSeriesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAsanaSeries>
+          }
+          groupBy: {
+            args: Prisma.AsanaSeriesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AsanaSeriesGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.AsanaSeriesFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.AsanaSeriesAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.AsanaSeriesCountArgs<ExtArgs>
+            result: $Utils.Optional<AsanaSeriesCountAggregateOutputType> | number
+          }
+        }
+      }
+      AsanaSequence: {
+        payload: Prisma.$AsanaSequencePayload<ExtArgs>
+        fields: Prisma.AsanaSequenceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AsanaSequenceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSequencePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AsanaSequenceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSequencePayload>
+          }
+          findFirst: {
+            args: Prisma.AsanaSequenceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSequencePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AsanaSequenceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSequencePayload>
+          }
+          findMany: {
+            args: Prisma.AsanaSequenceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSequencePayload>[]
+          }
+          create: {
+            args: Prisma.AsanaSequenceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSequencePayload>
+          }
+          createMany: {
+            args: Prisma.AsanaSequenceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.AsanaSequenceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSequencePayload>
+          }
+          update: {
+            args: Prisma.AsanaSequenceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSequencePayload>
+          }
+          deleteMany: {
+            args: Prisma.AsanaSequenceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AsanaSequenceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AsanaSequenceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaSequencePayload>
+          }
+          aggregate: {
+            args: Prisma.AsanaSequenceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAsanaSequence>
+          }
+          groupBy: {
+            args: Prisma.AsanaSequenceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AsanaSequenceGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.AsanaSequenceFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.AsanaSequenceAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.AsanaSequenceCountArgs<ExtArgs>
+            result: $Utils.Optional<AsanaSequenceCountAggregateOutputType> | number
           }
         }
       }
@@ -3207,7 +3387,7 @@ export namespace Prisma {
     posture_intent: string | null
     posture_meaning: string | null
     dristi: string | null
-    breath: string | null
+    breath_duration: string | null
     duration: string | null
   }
 
@@ -3235,7 +3415,7 @@ export namespace Prisma {
     posture_intent: string | null
     posture_meaning: string | null
     dristi: string | null
-    breath: string | null
+    breath_duration: string | null
     duration: string | null
   }
 
@@ -3268,7 +3448,7 @@ export namespace Prisma {
     posture_intent: number
     posture_meaning: number
     dristi: number
-    breath: number
+    breath_duration: number
     duration: number
     _all: number
   }
@@ -3298,7 +3478,7 @@ export namespace Prisma {
     posture_intent?: true
     posture_meaning?: true
     dristi?: true
-    breath?: true
+    breath_duration?: true
     duration?: true
   }
 
@@ -3326,7 +3506,7 @@ export namespace Prisma {
     posture_intent?: true
     posture_meaning?: true
     dristi?: true
-    breath?: true
+    breath_duration?: true
     duration?: true
   }
 
@@ -3359,7 +3539,7 @@ export namespace Prisma {
     posture_intent?: true
     posture_meaning?: true
     dristi?: true
-    breath?: true
+    breath_duration?: true
     duration?: true
     _all?: true
   }
@@ -3465,7 +3645,7 @@ export namespace Prisma {
     posture_intent: string | null
     posture_meaning: string | null
     dristi: string | null
-    breath: string | null
+    breath_duration: string | null
     duration: string | null
     _count: AsanaPostureCountAggregateOutputType | null
     _min: AsanaPostureMinAggregateOutputType | null
@@ -3515,7 +3695,7 @@ export namespace Prisma {
     posture_intent?: boolean
     posture_meaning?: boolean
     dristi?: boolean
-    breath?: boolean
+    breath_duration?: boolean
     duration?: boolean
   }, ExtArgs["result"]["asanaPosture"]>
 
@@ -3549,7 +3729,7 @@ export namespace Prisma {
     posture_intent?: boolean
     posture_meaning?: boolean
     dristi?: boolean
-    breath?: boolean
+    breath_duration?: boolean
     duration?: boolean
   }
 
@@ -3586,7 +3766,7 @@ export namespace Prisma {
       posture_intent: string | null
       posture_meaning: string | null
       dristi: string | null
-      breath: string | null
+      breath_duration: string | null
       duration: string | null
     }, ExtArgs["result"]["asanaPosture"]>
     composites: {}
@@ -4008,7 +4188,7 @@ export namespace Prisma {
     readonly posture_intent: FieldRef<"AsanaPosture", 'String'>
     readonly posture_meaning: FieldRef<"AsanaPosture", 'String'>
     readonly dristi: FieldRef<"AsanaPosture", 'String'>
-    readonly breath: FieldRef<"AsanaPosture", 'String'>
+    readonly breath_duration: FieldRef<"AsanaPosture", 'String'>
     readonly duration: FieldRef<"AsanaPosture", 'String'>
   }
     
@@ -4311,6 +4491,1850 @@ export namespace Prisma {
 
 
   /**
+   * Model AsanaSeries
+   */
+
+  export type AggregateAsanaSeries = {
+    _count: AsanaSeriesCountAggregateOutputType | null
+    _min: AsanaSeriesMinAggregateOutputType | null
+    _max: AsanaSeriesMaxAggregateOutputType | null
+  }
+
+  export type AsanaSeriesMinAggregateOutputType = {
+    id: string | null
+    seriesName: string | null
+    breath_duration: string | null
+    description: string | null
+    duration: string | null
+    image: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AsanaSeriesMaxAggregateOutputType = {
+    id: string | null
+    seriesName: string | null
+    breath_duration: string | null
+    description: string | null
+    duration: string | null
+    image: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AsanaSeriesCountAggregateOutputType = {
+    id: number
+    seriesName: number
+    seriesPostures: number
+    breath_duration: number
+    description: number
+    duration: number
+    image: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AsanaSeriesMinAggregateInputType = {
+    id?: true
+    seriesName?: true
+    breath_duration?: true
+    description?: true
+    duration?: true
+    image?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AsanaSeriesMaxAggregateInputType = {
+    id?: true
+    seriesName?: true
+    breath_duration?: true
+    description?: true
+    duration?: true
+    image?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AsanaSeriesCountAggregateInputType = {
+    id?: true
+    seriesName?: true
+    seriesPostures?: true
+    breath_duration?: true
+    description?: true
+    duration?: true
+    image?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AsanaSeriesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AsanaSeries to aggregate.
+     */
+    where?: AsanaSeriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AsanaSeries to fetch.
+     */
+    orderBy?: AsanaSeriesOrderByWithRelationInput | AsanaSeriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AsanaSeriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AsanaSeries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AsanaSeries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AsanaSeries
+    **/
+    _count?: true | AsanaSeriesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AsanaSeriesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AsanaSeriesMaxAggregateInputType
+  }
+
+  export type GetAsanaSeriesAggregateType<T extends AsanaSeriesAggregateArgs> = {
+        [P in keyof T & keyof AggregateAsanaSeries]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAsanaSeries[P]>
+      : GetScalarType<T[P], AggregateAsanaSeries[P]>
+  }
+
+
+
+
+  export type AsanaSeriesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AsanaSeriesWhereInput
+    orderBy?: AsanaSeriesOrderByWithAggregationInput | AsanaSeriesOrderByWithAggregationInput[]
+    by: AsanaSeriesScalarFieldEnum[] | AsanaSeriesScalarFieldEnum
+    having?: AsanaSeriesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AsanaSeriesCountAggregateInputType | true
+    _min?: AsanaSeriesMinAggregateInputType
+    _max?: AsanaSeriesMaxAggregateInputType
+  }
+
+  export type AsanaSeriesGroupByOutputType = {
+    id: string
+    seriesName: string
+    seriesPostures: string[]
+    breath_duration: string | null
+    description: string | null
+    duration: string | null
+    image: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    _count: AsanaSeriesCountAggregateOutputType | null
+    _min: AsanaSeriesMinAggregateOutputType | null
+    _max: AsanaSeriesMaxAggregateOutputType | null
+  }
+
+  type GetAsanaSeriesGroupByPayload<T extends AsanaSeriesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AsanaSeriesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AsanaSeriesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AsanaSeriesGroupByOutputType[P]>
+            : GetScalarType<T[P], AsanaSeriesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AsanaSeriesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    seriesName?: boolean
+    seriesPostures?: boolean
+    breath_duration?: boolean
+    description?: boolean
+    duration?: boolean
+    image?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["asanaSeries"]>
+
+
+  export type AsanaSeriesSelectScalar = {
+    id?: boolean
+    seriesName?: boolean
+    seriesPostures?: boolean
+    breath_duration?: boolean
+    description?: boolean
+    duration?: boolean
+    image?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $AsanaSeriesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AsanaSeries"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      seriesName: string
+      seriesPostures: string[]
+      breath_duration: string | null
+      description: string | null
+      duration: string | null
+      image: string | null
+      createdAt: Date | null
+      updatedAt: Date | null
+    }, ExtArgs["result"]["asanaSeries"]>
+    composites: {}
+  }
+
+  type AsanaSeriesGetPayload<S extends boolean | null | undefined | AsanaSeriesDefaultArgs> = $Result.GetResult<Prisma.$AsanaSeriesPayload, S>
+
+  type AsanaSeriesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<AsanaSeriesFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: AsanaSeriesCountAggregateInputType | true
+    }
+
+  export interface AsanaSeriesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AsanaSeries'], meta: { name: 'AsanaSeries' } }
+    /**
+     * Find zero or one AsanaSeries that matches the filter.
+     * @param {AsanaSeriesFindUniqueArgs} args - Arguments to find a AsanaSeries
+     * @example
+     * // Get one AsanaSeries
+     * const asanaSeries = await prisma.asanaSeries.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AsanaSeriesFindUniqueArgs>(args: SelectSubset<T, AsanaSeriesFindUniqueArgs<ExtArgs>>): Prisma__AsanaSeriesClient<$Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one AsanaSeries that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {AsanaSeriesFindUniqueOrThrowArgs} args - Arguments to find a AsanaSeries
+     * @example
+     * // Get one AsanaSeries
+     * const asanaSeries = await prisma.asanaSeries.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AsanaSeriesFindUniqueOrThrowArgs>(args: SelectSubset<T, AsanaSeriesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AsanaSeriesClient<$Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first AsanaSeries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSeriesFindFirstArgs} args - Arguments to find a AsanaSeries
+     * @example
+     * // Get one AsanaSeries
+     * const asanaSeries = await prisma.asanaSeries.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AsanaSeriesFindFirstArgs>(args?: SelectSubset<T, AsanaSeriesFindFirstArgs<ExtArgs>>): Prisma__AsanaSeriesClient<$Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first AsanaSeries that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSeriesFindFirstOrThrowArgs} args - Arguments to find a AsanaSeries
+     * @example
+     * // Get one AsanaSeries
+     * const asanaSeries = await prisma.asanaSeries.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AsanaSeriesFindFirstOrThrowArgs>(args?: SelectSubset<T, AsanaSeriesFindFirstOrThrowArgs<ExtArgs>>): Prisma__AsanaSeriesClient<$Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more AsanaSeries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSeriesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AsanaSeries
+     * const asanaSeries = await prisma.asanaSeries.findMany()
+     * 
+     * // Get first 10 AsanaSeries
+     * const asanaSeries = await prisma.asanaSeries.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const asanaSeriesWithIdOnly = await prisma.asanaSeries.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AsanaSeriesFindManyArgs>(args?: SelectSubset<T, AsanaSeriesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a AsanaSeries.
+     * @param {AsanaSeriesCreateArgs} args - Arguments to create a AsanaSeries.
+     * @example
+     * // Create one AsanaSeries
+     * const AsanaSeries = await prisma.asanaSeries.create({
+     *   data: {
+     *     // ... data to create a AsanaSeries
+     *   }
+     * })
+     * 
+     */
+    create<T extends AsanaSeriesCreateArgs>(args: SelectSubset<T, AsanaSeriesCreateArgs<ExtArgs>>): Prisma__AsanaSeriesClient<$Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many AsanaSeries.
+     * @param {AsanaSeriesCreateManyArgs} args - Arguments to create many AsanaSeries.
+     * @example
+     * // Create many AsanaSeries
+     * const asanaSeries = await prisma.asanaSeries.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AsanaSeriesCreateManyArgs>(args?: SelectSubset<T, AsanaSeriesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a AsanaSeries.
+     * @param {AsanaSeriesDeleteArgs} args - Arguments to delete one AsanaSeries.
+     * @example
+     * // Delete one AsanaSeries
+     * const AsanaSeries = await prisma.asanaSeries.delete({
+     *   where: {
+     *     // ... filter to delete one AsanaSeries
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AsanaSeriesDeleteArgs>(args: SelectSubset<T, AsanaSeriesDeleteArgs<ExtArgs>>): Prisma__AsanaSeriesClient<$Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one AsanaSeries.
+     * @param {AsanaSeriesUpdateArgs} args - Arguments to update one AsanaSeries.
+     * @example
+     * // Update one AsanaSeries
+     * const asanaSeries = await prisma.asanaSeries.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AsanaSeriesUpdateArgs>(args: SelectSubset<T, AsanaSeriesUpdateArgs<ExtArgs>>): Prisma__AsanaSeriesClient<$Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more AsanaSeries.
+     * @param {AsanaSeriesDeleteManyArgs} args - Arguments to filter AsanaSeries to delete.
+     * @example
+     * // Delete a few AsanaSeries
+     * const { count } = await prisma.asanaSeries.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AsanaSeriesDeleteManyArgs>(args?: SelectSubset<T, AsanaSeriesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AsanaSeries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSeriesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AsanaSeries
+     * const asanaSeries = await prisma.asanaSeries.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AsanaSeriesUpdateManyArgs>(args: SelectSubset<T, AsanaSeriesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one AsanaSeries.
+     * @param {AsanaSeriesUpsertArgs} args - Arguments to update or create a AsanaSeries.
+     * @example
+     * // Update or create a AsanaSeries
+     * const asanaSeries = await prisma.asanaSeries.upsert({
+     *   create: {
+     *     // ... data to create a AsanaSeries
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AsanaSeries we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AsanaSeriesUpsertArgs>(args: SelectSubset<T, AsanaSeriesUpsertArgs<ExtArgs>>): Prisma__AsanaSeriesClient<$Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+    /**
+     * Find zero or more AsanaSeries that matches the filter.
+     * @param {AsanaSeriesFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const asanaSeries = await prisma.asanaSeries.findRaw({
+     *   filter: { age: { $gt: 25 } } 
+     * })
+     */
+    findRaw(args?: AsanaSeriesFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a AsanaSeries.
+     * @param {AsanaSeriesAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const asanaSeries = await prisma.asanaSeries.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: AsanaSeriesAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of AsanaSeries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSeriesCountArgs} args - Arguments to filter AsanaSeries to count.
+     * @example
+     * // Count the number of AsanaSeries
+     * const count = await prisma.asanaSeries.count({
+     *   where: {
+     *     // ... the filter for the AsanaSeries we want to count
+     *   }
+     * })
+    **/
+    count<T extends AsanaSeriesCountArgs>(
+      args?: Subset<T, AsanaSeriesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AsanaSeriesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AsanaSeries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSeriesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AsanaSeriesAggregateArgs>(args: Subset<T, AsanaSeriesAggregateArgs>): Prisma.PrismaPromise<GetAsanaSeriesAggregateType<T>>
+
+    /**
+     * Group by AsanaSeries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSeriesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AsanaSeriesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AsanaSeriesGroupByArgs['orderBy'] }
+        : { orderBy?: AsanaSeriesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AsanaSeriesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAsanaSeriesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AsanaSeries model
+   */
+  readonly fields: AsanaSeriesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AsanaSeries.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AsanaSeriesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AsanaSeries model
+   */ 
+  interface AsanaSeriesFieldRefs {
+    readonly id: FieldRef<"AsanaSeries", 'String'>
+    readonly seriesName: FieldRef<"AsanaSeries", 'String'>
+    readonly seriesPostures: FieldRef<"AsanaSeries", 'String[]'>
+    readonly breath_duration: FieldRef<"AsanaSeries", 'String'>
+    readonly description: FieldRef<"AsanaSeries", 'String'>
+    readonly duration: FieldRef<"AsanaSeries", 'String'>
+    readonly image: FieldRef<"AsanaSeries", 'String'>
+    readonly createdAt: FieldRef<"AsanaSeries", 'DateTime'>
+    readonly updatedAt: FieldRef<"AsanaSeries", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AsanaSeries findUnique
+   */
+  export type AsanaSeriesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSeries
+     */
+    select?: AsanaSeriesSelect<ExtArgs> | null
+    /**
+     * Filter, which AsanaSeries to fetch.
+     */
+    where: AsanaSeriesWhereUniqueInput
+  }
+
+  /**
+   * AsanaSeries findUniqueOrThrow
+   */
+  export type AsanaSeriesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSeries
+     */
+    select?: AsanaSeriesSelect<ExtArgs> | null
+    /**
+     * Filter, which AsanaSeries to fetch.
+     */
+    where: AsanaSeriesWhereUniqueInput
+  }
+
+  /**
+   * AsanaSeries findFirst
+   */
+  export type AsanaSeriesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSeries
+     */
+    select?: AsanaSeriesSelect<ExtArgs> | null
+    /**
+     * Filter, which AsanaSeries to fetch.
+     */
+    where?: AsanaSeriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AsanaSeries to fetch.
+     */
+    orderBy?: AsanaSeriesOrderByWithRelationInput | AsanaSeriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AsanaSeries.
+     */
+    cursor?: AsanaSeriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AsanaSeries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AsanaSeries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AsanaSeries.
+     */
+    distinct?: AsanaSeriesScalarFieldEnum | AsanaSeriesScalarFieldEnum[]
+  }
+
+  /**
+   * AsanaSeries findFirstOrThrow
+   */
+  export type AsanaSeriesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSeries
+     */
+    select?: AsanaSeriesSelect<ExtArgs> | null
+    /**
+     * Filter, which AsanaSeries to fetch.
+     */
+    where?: AsanaSeriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AsanaSeries to fetch.
+     */
+    orderBy?: AsanaSeriesOrderByWithRelationInput | AsanaSeriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AsanaSeries.
+     */
+    cursor?: AsanaSeriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AsanaSeries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AsanaSeries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AsanaSeries.
+     */
+    distinct?: AsanaSeriesScalarFieldEnum | AsanaSeriesScalarFieldEnum[]
+  }
+
+  /**
+   * AsanaSeries findMany
+   */
+  export type AsanaSeriesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSeries
+     */
+    select?: AsanaSeriesSelect<ExtArgs> | null
+    /**
+     * Filter, which AsanaSeries to fetch.
+     */
+    where?: AsanaSeriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AsanaSeries to fetch.
+     */
+    orderBy?: AsanaSeriesOrderByWithRelationInput | AsanaSeriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AsanaSeries.
+     */
+    cursor?: AsanaSeriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AsanaSeries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AsanaSeries.
+     */
+    skip?: number
+    distinct?: AsanaSeriesScalarFieldEnum | AsanaSeriesScalarFieldEnum[]
+  }
+
+  /**
+   * AsanaSeries create
+   */
+  export type AsanaSeriesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSeries
+     */
+    select?: AsanaSeriesSelect<ExtArgs> | null
+    /**
+     * The data needed to create a AsanaSeries.
+     */
+    data: XOR<AsanaSeriesCreateInput, AsanaSeriesUncheckedCreateInput>
+  }
+
+  /**
+   * AsanaSeries createMany
+   */
+  export type AsanaSeriesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AsanaSeries.
+     */
+    data: AsanaSeriesCreateManyInput | AsanaSeriesCreateManyInput[]
+  }
+
+  /**
+   * AsanaSeries update
+   */
+  export type AsanaSeriesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSeries
+     */
+    select?: AsanaSeriesSelect<ExtArgs> | null
+    /**
+     * The data needed to update a AsanaSeries.
+     */
+    data: XOR<AsanaSeriesUpdateInput, AsanaSeriesUncheckedUpdateInput>
+    /**
+     * Choose, which AsanaSeries to update.
+     */
+    where: AsanaSeriesWhereUniqueInput
+  }
+
+  /**
+   * AsanaSeries updateMany
+   */
+  export type AsanaSeriesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AsanaSeries.
+     */
+    data: XOR<AsanaSeriesUpdateManyMutationInput, AsanaSeriesUncheckedUpdateManyInput>
+    /**
+     * Filter which AsanaSeries to update
+     */
+    where?: AsanaSeriesWhereInput
+  }
+
+  /**
+   * AsanaSeries upsert
+   */
+  export type AsanaSeriesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSeries
+     */
+    select?: AsanaSeriesSelect<ExtArgs> | null
+    /**
+     * The filter to search for the AsanaSeries to update in case it exists.
+     */
+    where: AsanaSeriesWhereUniqueInput
+    /**
+     * In case the AsanaSeries found by the `where` argument doesn't exist, create a new AsanaSeries with this data.
+     */
+    create: XOR<AsanaSeriesCreateInput, AsanaSeriesUncheckedCreateInput>
+    /**
+     * In case the AsanaSeries was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AsanaSeriesUpdateInput, AsanaSeriesUncheckedUpdateInput>
+  }
+
+  /**
+   * AsanaSeries delete
+   */
+  export type AsanaSeriesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSeries
+     */
+    select?: AsanaSeriesSelect<ExtArgs> | null
+    /**
+     * Filter which AsanaSeries to delete.
+     */
+    where: AsanaSeriesWhereUniqueInput
+  }
+
+  /**
+   * AsanaSeries deleteMany
+   */
+  export type AsanaSeriesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AsanaSeries to delete
+     */
+    where?: AsanaSeriesWhereInput
+  }
+
+  /**
+   * AsanaSeries findRaw
+   */
+  export type AsanaSeriesFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * AsanaSeries aggregateRaw
+   */
+  export type AsanaSeriesAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * AsanaSeries without action
+   */
+  export type AsanaSeriesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSeries
+     */
+    select?: AsanaSeriesSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AsanaSequence
+   */
+
+  export type AggregateAsanaSequence = {
+    _count: AsanaSequenceCountAggregateOutputType | null
+    _min: AsanaSequenceMinAggregateOutputType | null
+    _max: AsanaSequenceMaxAggregateOutputType | null
+  }
+
+  export type AsanaSequenceMinAggregateOutputType = {
+    id: string | null
+    nameSequence: string | null
+    description: string | null
+    duration: string | null
+    image: string | null
+    breath_direction: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AsanaSequenceMaxAggregateOutputType = {
+    id: string | null
+    nameSequence: string | null
+    description: string | null
+    duration: string | null
+    image: string | null
+    breath_direction: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AsanaSequenceCountAggregateOutputType = {
+    id: number
+    nameSequence: number
+    sequencesSeries: number
+    description: number
+    duration: number
+    image: number
+    breath_direction: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AsanaSequenceMinAggregateInputType = {
+    id?: true
+    nameSequence?: true
+    description?: true
+    duration?: true
+    image?: true
+    breath_direction?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AsanaSequenceMaxAggregateInputType = {
+    id?: true
+    nameSequence?: true
+    description?: true
+    duration?: true
+    image?: true
+    breath_direction?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AsanaSequenceCountAggregateInputType = {
+    id?: true
+    nameSequence?: true
+    sequencesSeries?: true
+    description?: true
+    duration?: true
+    image?: true
+    breath_direction?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AsanaSequenceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AsanaSequence to aggregate.
+     */
+    where?: AsanaSequenceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AsanaSequences to fetch.
+     */
+    orderBy?: AsanaSequenceOrderByWithRelationInput | AsanaSequenceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AsanaSequenceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AsanaSequences from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AsanaSequences.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AsanaSequences
+    **/
+    _count?: true | AsanaSequenceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AsanaSequenceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AsanaSequenceMaxAggregateInputType
+  }
+
+  export type GetAsanaSequenceAggregateType<T extends AsanaSequenceAggregateArgs> = {
+        [P in keyof T & keyof AggregateAsanaSequence]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAsanaSequence[P]>
+      : GetScalarType<T[P], AggregateAsanaSequence[P]>
+  }
+
+
+
+
+  export type AsanaSequenceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AsanaSequenceWhereInput
+    orderBy?: AsanaSequenceOrderByWithAggregationInput | AsanaSequenceOrderByWithAggregationInput[]
+    by: AsanaSequenceScalarFieldEnum[] | AsanaSequenceScalarFieldEnum
+    having?: AsanaSequenceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AsanaSequenceCountAggregateInputType | true
+    _min?: AsanaSequenceMinAggregateInputType
+    _max?: AsanaSequenceMaxAggregateInputType
+  }
+
+  export type AsanaSequenceGroupByOutputType = {
+    id: string
+    nameSequence: string
+    sequencesSeries: string[]
+    description: string | null
+    duration: string | null
+    image: string | null
+    breath_direction: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    _count: AsanaSequenceCountAggregateOutputType | null
+    _min: AsanaSequenceMinAggregateOutputType | null
+    _max: AsanaSequenceMaxAggregateOutputType | null
+  }
+
+  type GetAsanaSequenceGroupByPayload<T extends AsanaSequenceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AsanaSequenceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AsanaSequenceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AsanaSequenceGroupByOutputType[P]>
+            : GetScalarType<T[P], AsanaSequenceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AsanaSequenceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    nameSequence?: boolean
+    sequencesSeries?: boolean
+    description?: boolean
+    duration?: boolean
+    image?: boolean
+    breath_direction?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["asanaSequence"]>
+
+
+  export type AsanaSequenceSelectScalar = {
+    id?: boolean
+    nameSequence?: boolean
+    sequencesSeries?: boolean
+    description?: boolean
+    duration?: boolean
+    image?: boolean
+    breath_direction?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $AsanaSequencePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AsanaSequence"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      nameSequence: string
+      sequencesSeries: string[]
+      description: string | null
+      duration: string | null
+      image: string | null
+      breath_direction: string | null
+      createdAt: Date | null
+      updatedAt: Date | null
+    }, ExtArgs["result"]["asanaSequence"]>
+    composites: {}
+  }
+
+  type AsanaSequenceGetPayload<S extends boolean | null | undefined | AsanaSequenceDefaultArgs> = $Result.GetResult<Prisma.$AsanaSequencePayload, S>
+
+  type AsanaSequenceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<AsanaSequenceFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: AsanaSequenceCountAggregateInputType | true
+    }
+
+  export interface AsanaSequenceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AsanaSequence'], meta: { name: 'AsanaSequence' } }
+    /**
+     * Find zero or one AsanaSequence that matches the filter.
+     * @param {AsanaSequenceFindUniqueArgs} args - Arguments to find a AsanaSequence
+     * @example
+     * // Get one AsanaSequence
+     * const asanaSequence = await prisma.asanaSequence.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AsanaSequenceFindUniqueArgs>(args: SelectSubset<T, AsanaSequenceFindUniqueArgs<ExtArgs>>): Prisma__AsanaSequenceClient<$Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one AsanaSequence that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {AsanaSequenceFindUniqueOrThrowArgs} args - Arguments to find a AsanaSequence
+     * @example
+     * // Get one AsanaSequence
+     * const asanaSequence = await prisma.asanaSequence.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AsanaSequenceFindUniqueOrThrowArgs>(args: SelectSubset<T, AsanaSequenceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AsanaSequenceClient<$Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first AsanaSequence that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSequenceFindFirstArgs} args - Arguments to find a AsanaSequence
+     * @example
+     * // Get one AsanaSequence
+     * const asanaSequence = await prisma.asanaSequence.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AsanaSequenceFindFirstArgs>(args?: SelectSubset<T, AsanaSequenceFindFirstArgs<ExtArgs>>): Prisma__AsanaSequenceClient<$Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first AsanaSequence that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSequenceFindFirstOrThrowArgs} args - Arguments to find a AsanaSequence
+     * @example
+     * // Get one AsanaSequence
+     * const asanaSequence = await prisma.asanaSequence.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AsanaSequenceFindFirstOrThrowArgs>(args?: SelectSubset<T, AsanaSequenceFindFirstOrThrowArgs<ExtArgs>>): Prisma__AsanaSequenceClient<$Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more AsanaSequences that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSequenceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AsanaSequences
+     * const asanaSequences = await prisma.asanaSequence.findMany()
+     * 
+     * // Get first 10 AsanaSequences
+     * const asanaSequences = await prisma.asanaSequence.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const asanaSequenceWithIdOnly = await prisma.asanaSequence.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AsanaSequenceFindManyArgs>(args?: SelectSubset<T, AsanaSequenceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a AsanaSequence.
+     * @param {AsanaSequenceCreateArgs} args - Arguments to create a AsanaSequence.
+     * @example
+     * // Create one AsanaSequence
+     * const AsanaSequence = await prisma.asanaSequence.create({
+     *   data: {
+     *     // ... data to create a AsanaSequence
+     *   }
+     * })
+     * 
+     */
+    create<T extends AsanaSequenceCreateArgs>(args: SelectSubset<T, AsanaSequenceCreateArgs<ExtArgs>>): Prisma__AsanaSequenceClient<$Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many AsanaSequences.
+     * @param {AsanaSequenceCreateManyArgs} args - Arguments to create many AsanaSequences.
+     * @example
+     * // Create many AsanaSequences
+     * const asanaSequence = await prisma.asanaSequence.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AsanaSequenceCreateManyArgs>(args?: SelectSubset<T, AsanaSequenceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a AsanaSequence.
+     * @param {AsanaSequenceDeleteArgs} args - Arguments to delete one AsanaSequence.
+     * @example
+     * // Delete one AsanaSequence
+     * const AsanaSequence = await prisma.asanaSequence.delete({
+     *   where: {
+     *     // ... filter to delete one AsanaSequence
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AsanaSequenceDeleteArgs>(args: SelectSubset<T, AsanaSequenceDeleteArgs<ExtArgs>>): Prisma__AsanaSequenceClient<$Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one AsanaSequence.
+     * @param {AsanaSequenceUpdateArgs} args - Arguments to update one AsanaSequence.
+     * @example
+     * // Update one AsanaSequence
+     * const asanaSequence = await prisma.asanaSequence.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AsanaSequenceUpdateArgs>(args: SelectSubset<T, AsanaSequenceUpdateArgs<ExtArgs>>): Prisma__AsanaSequenceClient<$Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more AsanaSequences.
+     * @param {AsanaSequenceDeleteManyArgs} args - Arguments to filter AsanaSequences to delete.
+     * @example
+     * // Delete a few AsanaSequences
+     * const { count } = await prisma.asanaSequence.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AsanaSequenceDeleteManyArgs>(args?: SelectSubset<T, AsanaSequenceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AsanaSequences.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSequenceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AsanaSequences
+     * const asanaSequence = await prisma.asanaSequence.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AsanaSequenceUpdateManyArgs>(args: SelectSubset<T, AsanaSequenceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one AsanaSequence.
+     * @param {AsanaSequenceUpsertArgs} args - Arguments to update or create a AsanaSequence.
+     * @example
+     * // Update or create a AsanaSequence
+     * const asanaSequence = await prisma.asanaSequence.upsert({
+     *   create: {
+     *     // ... data to create a AsanaSequence
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AsanaSequence we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AsanaSequenceUpsertArgs>(args: SelectSubset<T, AsanaSequenceUpsertArgs<ExtArgs>>): Prisma__AsanaSequenceClient<$Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+    /**
+     * Find zero or more AsanaSequences that matches the filter.
+     * @param {AsanaSequenceFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const asanaSequence = await prisma.asanaSequence.findRaw({
+     *   filter: { age: { $gt: 25 } } 
+     * })
+     */
+    findRaw(args?: AsanaSequenceFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a AsanaSequence.
+     * @param {AsanaSequenceAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const asanaSequence = await prisma.asanaSequence.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: AsanaSequenceAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of AsanaSequences.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSequenceCountArgs} args - Arguments to filter AsanaSequences to count.
+     * @example
+     * // Count the number of AsanaSequences
+     * const count = await prisma.asanaSequence.count({
+     *   where: {
+     *     // ... the filter for the AsanaSequences we want to count
+     *   }
+     * })
+    **/
+    count<T extends AsanaSequenceCountArgs>(
+      args?: Subset<T, AsanaSequenceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AsanaSequenceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AsanaSequence.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSequenceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AsanaSequenceAggregateArgs>(args: Subset<T, AsanaSequenceAggregateArgs>): Prisma.PrismaPromise<GetAsanaSequenceAggregateType<T>>
+
+    /**
+     * Group by AsanaSequence.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaSequenceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AsanaSequenceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AsanaSequenceGroupByArgs['orderBy'] }
+        : { orderBy?: AsanaSequenceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AsanaSequenceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAsanaSequenceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AsanaSequence model
+   */
+  readonly fields: AsanaSequenceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AsanaSequence.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AsanaSequenceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AsanaSequence model
+   */ 
+  interface AsanaSequenceFieldRefs {
+    readonly id: FieldRef<"AsanaSequence", 'String'>
+    readonly nameSequence: FieldRef<"AsanaSequence", 'String'>
+    readonly sequencesSeries: FieldRef<"AsanaSequence", 'String[]'>
+    readonly description: FieldRef<"AsanaSequence", 'String'>
+    readonly duration: FieldRef<"AsanaSequence", 'String'>
+    readonly image: FieldRef<"AsanaSequence", 'String'>
+    readonly breath_direction: FieldRef<"AsanaSequence", 'String'>
+    readonly createdAt: FieldRef<"AsanaSequence", 'DateTime'>
+    readonly updatedAt: FieldRef<"AsanaSequence", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AsanaSequence findUnique
+   */
+  export type AsanaSequenceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSequence
+     */
+    select?: AsanaSequenceSelect<ExtArgs> | null
+    /**
+     * Filter, which AsanaSequence to fetch.
+     */
+    where: AsanaSequenceWhereUniqueInput
+  }
+
+  /**
+   * AsanaSequence findUniqueOrThrow
+   */
+  export type AsanaSequenceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSequence
+     */
+    select?: AsanaSequenceSelect<ExtArgs> | null
+    /**
+     * Filter, which AsanaSequence to fetch.
+     */
+    where: AsanaSequenceWhereUniqueInput
+  }
+
+  /**
+   * AsanaSequence findFirst
+   */
+  export type AsanaSequenceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSequence
+     */
+    select?: AsanaSequenceSelect<ExtArgs> | null
+    /**
+     * Filter, which AsanaSequence to fetch.
+     */
+    where?: AsanaSequenceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AsanaSequences to fetch.
+     */
+    orderBy?: AsanaSequenceOrderByWithRelationInput | AsanaSequenceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AsanaSequences.
+     */
+    cursor?: AsanaSequenceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AsanaSequences from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AsanaSequences.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AsanaSequences.
+     */
+    distinct?: AsanaSequenceScalarFieldEnum | AsanaSequenceScalarFieldEnum[]
+  }
+
+  /**
+   * AsanaSequence findFirstOrThrow
+   */
+  export type AsanaSequenceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSequence
+     */
+    select?: AsanaSequenceSelect<ExtArgs> | null
+    /**
+     * Filter, which AsanaSequence to fetch.
+     */
+    where?: AsanaSequenceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AsanaSequences to fetch.
+     */
+    orderBy?: AsanaSequenceOrderByWithRelationInput | AsanaSequenceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AsanaSequences.
+     */
+    cursor?: AsanaSequenceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AsanaSequences from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AsanaSequences.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AsanaSequences.
+     */
+    distinct?: AsanaSequenceScalarFieldEnum | AsanaSequenceScalarFieldEnum[]
+  }
+
+  /**
+   * AsanaSequence findMany
+   */
+  export type AsanaSequenceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSequence
+     */
+    select?: AsanaSequenceSelect<ExtArgs> | null
+    /**
+     * Filter, which AsanaSequences to fetch.
+     */
+    where?: AsanaSequenceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AsanaSequences to fetch.
+     */
+    orderBy?: AsanaSequenceOrderByWithRelationInput | AsanaSequenceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AsanaSequences.
+     */
+    cursor?: AsanaSequenceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AsanaSequences from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AsanaSequences.
+     */
+    skip?: number
+    distinct?: AsanaSequenceScalarFieldEnum | AsanaSequenceScalarFieldEnum[]
+  }
+
+  /**
+   * AsanaSequence create
+   */
+  export type AsanaSequenceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSequence
+     */
+    select?: AsanaSequenceSelect<ExtArgs> | null
+    /**
+     * The data needed to create a AsanaSequence.
+     */
+    data: XOR<AsanaSequenceCreateInput, AsanaSequenceUncheckedCreateInput>
+  }
+
+  /**
+   * AsanaSequence createMany
+   */
+  export type AsanaSequenceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AsanaSequences.
+     */
+    data: AsanaSequenceCreateManyInput | AsanaSequenceCreateManyInput[]
+  }
+
+  /**
+   * AsanaSequence update
+   */
+  export type AsanaSequenceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSequence
+     */
+    select?: AsanaSequenceSelect<ExtArgs> | null
+    /**
+     * The data needed to update a AsanaSequence.
+     */
+    data: XOR<AsanaSequenceUpdateInput, AsanaSequenceUncheckedUpdateInput>
+    /**
+     * Choose, which AsanaSequence to update.
+     */
+    where: AsanaSequenceWhereUniqueInput
+  }
+
+  /**
+   * AsanaSequence updateMany
+   */
+  export type AsanaSequenceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AsanaSequences.
+     */
+    data: XOR<AsanaSequenceUpdateManyMutationInput, AsanaSequenceUncheckedUpdateManyInput>
+    /**
+     * Filter which AsanaSequences to update
+     */
+    where?: AsanaSequenceWhereInput
+  }
+
+  /**
+   * AsanaSequence upsert
+   */
+  export type AsanaSequenceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSequence
+     */
+    select?: AsanaSequenceSelect<ExtArgs> | null
+    /**
+     * The filter to search for the AsanaSequence to update in case it exists.
+     */
+    where: AsanaSequenceWhereUniqueInput
+    /**
+     * In case the AsanaSequence found by the `where` argument doesn't exist, create a new AsanaSequence with this data.
+     */
+    create: XOR<AsanaSequenceCreateInput, AsanaSequenceUncheckedCreateInput>
+    /**
+     * In case the AsanaSequence was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AsanaSequenceUpdateInput, AsanaSequenceUncheckedUpdateInput>
+  }
+
+  /**
+   * AsanaSequence delete
+   */
+  export type AsanaSequenceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSequence
+     */
+    select?: AsanaSequenceSelect<ExtArgs> | null
+    /**
+     * Filter which AsanaSequence to delete.
+     */
+    where: AsanaSequenceWhereUniqueInput
+  }
+
+  /**
+   * AsanaSequence deleteMany
+   */
+  export type AsanaSequenceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AsanaSequences to delete
+     */
+    where?: AsanaSequenceWhereInput
+  }
+
+  /**
+   * AsanaSequence findRaw
+   */
+  export type AsanaSequenceFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * AsanaSequence aggregateRaw
+   */
+  export type AsanaSequenceAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * AsanaSequence without action
+   */
+  export type AsanaSequenceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaSequence
+     */
+    select?: AsanaSequenceSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -4385,11 +6409,41 @@ export namespace Prisma {
     posture_intent: 'posture_intent',
     posture_meaning: 'posture_meaning',
     dristi: 'dristi',
-    breath: 'breath',
+    breath_duration: 'breath_duration',
     duration: 'duration'
   };
 
   export type AsanaPostureScalarFieldEnum = (typeof AsanaPostureScalarFieldEnum)[keyof typeof AsanaPostureScalarFieldEnum]
+
+
+  export const AsanaSeriesScalarFieldEnum: {
+    id: 'id',
+    seriesName: 'seriesName',
+    seriesPostures: 'seriesPostures',
+    breath_duration: 'breath_duration',
+    description: 'description',
+    duration: 'duration',
+    image: 'image',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AsanaSeriesScalarFieldEnum = (typeof AsanaSeriesScalarFieldEnum)[keyof typeof AsanaSeriesScalarFieldEnum]
+
+
+  export const AsanaSequenceScalarFieldEnum: {
+    id: 'id',
+    nameSequence: 'nameSequence',
+    sequencesSeries: 'sequencesSeries',
+    description: 'description',
+    duration: 'duration',
+    image: 'image',
+    breath_direction: 'breath_direction',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AsanaSequenceScalarFieldEnum = (typeof AsanaSequenceScalarFieldEnum)[keyof typeof AsanaSequenceScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -4737,7 +6791,7 @@ export namespace Prisma {
     posture_intent?: StringNullableFilter<"AsanaPosture"> | string | null
     posture_meaning?: StringNullableFilter<"AsanaPosture"> | string | null
     dristi?: StringNullableFilter<"AsanaPosture"> | string | null
-    breath?: StringNullableFilter<"AsanaPosture"> | string | null
+    breath_duration?: StringNullableFilter<"AsanaPosture"> | string | null
     duration?: StringNullableFilter<"AsanaPosture"> | string | null
   }
 
@@ -4770,7 +6824,7 @@ export namespace Prisma {
     posture_intent?: SortOrder
     posture_meaning?: SortOrder
     dristi?: SortOrder
-    breath?: SortOrder
+    breath_duration?: SortOrder
     duration?: SortOrder
   }
 
@@ -4806,7 +6860,7 @@ export namespace Prisma {
     posture_intent?: StringNullableFilter<"AsanaPosture"> | string | null
     posture_meaning?: StringNullableFilter<"AsanaPosture"> | string | null
     dristi?: StringNullableFilter<"AsanaPosture"> | string | null
-    breath?: StringNullableFilter<"AsanaPosture"> | string | null
+    breath_duration?: StringNullableFilter<"AsanaPosture"> | string | null
     duration?: StringNullableFilter<"AsanaPosture"> | string | null
   }, "id">
 
@@ -4839,7 +6893,7 @@ export namespace Prisma {
     posture_intent?: SortOrder
     posture_meaning?: SortOrder
     dristi?: SortOrder
-    breath?: SortOrder
+    breath_duration?: SortOrder
     duration?: SortOrder
     _count?: AsanaPostureCountOrderByAggregateInput
     _max?: AsanaPostureMaxOrderByAggregateInput
@@ -4878,8 +6932,152 @@ export namespace Prisma {
     posture_intent?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
     posture_meaning?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
     dristi?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
-    breath?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    breath_duration?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
     duration?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+  }
+
+  export type AsanaSeriesWhereInput = {
+    AND?: AsanaSeriesWhereInput | AsanaSeriesWhereInput[]
+    OR?: AsanaSeriesWhereInput[]
+    NOT?: AsanaSeriesWhereInput | AsanaSeriesWhereInput[]
+    id?: StringFilter<"AsanaSeries"> | string
+    seriesName?: StringFilter<"AsanaSeries"> | string
+    seriesPostures?: StringNullableListFilter<"AsanaSeries">
+    breath_duration?: StringNullableFilter<"AsanaSeries"> | string | null
+    description?: StringNullableFilter<"AsanaSeries"> | string | null
+    duration?: StringNullableFilter<"AsanaSeries"> | string | null
+    image?: StringNullableFilter<"AsanaSeries"> | string | null
+    createdAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
+    updatedAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
+  }
+
+  export type AsanaSeriesOrderByWithRelationInput = {
+    id?: SortOrder
+    seriesName?: SortOrder
+    seriesPostures?: SortOrder
+    breath_duration?: SortOrder
+    description?: SortOrder
+    duration?: SortOrder
+    image?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AsanaSeriesWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AsanaSeriesWhereInput | AsanaSeriesWhereInput[]
+    OR?: AsanaSeriesWhereInput[]
+    NOT?: AsanaSeriesWhereInput | AsanaSeriesWhereInput[]
+    seriesName?: StringFilter<"AsanaSeries"> | string
+    seriesPostures?: StringNullableListFilter<"AsanaSeries">
+    breath_duration?: StringNullableFilter<"AsanaSeries"> | string | null
+    description?: StringNullableFilter<"AsanaSeries"> | string | null
+    duration?: StringNullableFilter<"AsanaSeries"> | string | null
+    image?: StringNullableFilter<"AsanaSeries"> | string | null
+    createdAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
+    updatedAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
+  }, "id">
+
+  export type AsanaSeriesOrderByWithAggregationInput = {
+    id?: SortOrder
+    seriesName?: SortOrder
+    seriesPostures?: SortOrder
+    breath_duration?: SortOrder
+    description?: SortOrder
+    duration?: SortOrder
+    image?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AsanaSeriesCountOrderByAggregateInput
+    _max?: AsanaSeriesMaxOrderByAggregateInput
+    _min?: AsanaSeriesMinOrderByAggregateInput
+  }
+
+  export type AsanaSeriesScalarWhereWithAggregatesInput = {
+    AND?: AsanaSeriesScalarWhereWithAggregatesInput | AsanaSeriesScalarWhereWithAggregatesInput[]
+    OR?: AsanaSeriesScalarWhereWithAggregatesInput[]
+    NOT?: AsanaSeriesScalarWhereWithAggregatesInput | AsanaSeriesScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AsanaSeries"> | string
+    seriesName?: StringWithAggregatesFilter<"AsanaSeries"> | string
+    seriesPostures?: StringNullableListFilter<"AsanaSeries">
+    breath_duration?: StringNullableWithAggregatesFilter<"AsanaSeries"> | string | null
+    description?: StringNullableWithAggregatesFilter<"AsanaSeries"> | string | null
+    duration?: StringNullableWithAggregatesFilter<"AsanaSeries"> | string | null
+    image?: StringNullableWithAggregatesFilter<"AsanaSeries"> | string | null
+    createdAt?: DateTimeNullableWithAggregatesFilter<"AsanaSeries"> | Date | string | null
+    updatedAt?: DateTimeNullableWithAggregatesFilter<"AsanaSeries"> | Date | string | null
+  }
+
+  export type AsanaSequenceWhereInput = {
+    AND?: AsanaSequenceWhereInput | AsanaSequenceWhereInput[]
+    OR?: AsanaSequenceWhereInput[]
+    NOT?: AsanaSequenceWhereInput | AsanaSequenceWhereInput[]
+    id?: StringFilter<"AsanaSequence"> | string
+    nameSequence?: StringFilter<"AsanaSequence"> | string
+    sequencesSeries?: StringNullableListFilter<"AsanaSequence">
+    description?: StringNullableFilter<"AsanaSequence"> | string | null
+    duration?: StringNullableFilter<"AsanaSequence"> | string | null
+    image?: StringNullableFilter<"AsanaSequence"> | string | null
+    breath_direction?: StringNullableFilter<"AsanaSequence"> | string | null
+    createdAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
+    updatedAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
+  }
+
+  export type AsanaSequenceOrderByWithRelationInput = {
+    id?: SortOrder
+    nameSequence?: SortOrder
+    sequencesSeries?: SortOrder
+    description?: SortOrder
+    duration?: SortOrder
+    image?: SortOrder
+    breath_direction?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AsanaSequenceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AsanaSequenceWhereInput | AsanaSequenceWhereInput[]
+    OR?: AsanaSequenceWhereInput[]
+    NOT?: AsanaSequenceWhereInput | AsanaSequenceWhereInput[]
+    nameSequence?: StringFilter<"AsanaSequence"> | string
+    sequencesSeries?: StringNullableListFilter<"AsanaSequence">
+    description?: StringNullableFilter<"AsanaSequence"> | string | null
+    duration?: StringNullableFilter<"AsanaSequence"> | string | null
+    image?: StringNullableFilter<"AsanaSequence"> | string | null
+    breath_direction?: StringNullableFilter<"AsanaSequence"> | string | null
+    createdAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
+    updatedAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
+  }, "id">
+
+  export type AsanaSequenceOrderByWithAggregationInput = {
+    id?: SortOrder
+    nameSequence?: SortOrder
+    sequencesSeries?: SortOrder
+    description?: SortOrder
+    duration?: SortOrder
+    image?: SortOrder
+    breath_direction?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AsanaSequenceCountOrderByAggregateInput
+    _max?: AsanaSequenceMaxOrderByAggregateInput
+    _min?: AsanaSequenceMinOrderByAggregateInput
+  }
+
+  export type AsanaSequenceScalarWhereWithAggregatesInput = {
+    AND?: AsanaSequenceScalarWhereWithAggregatesInput | AsanaSequenceScalarWhereWithAggregatesInput[]
+    OR?: AsanaSequenceScalarWhereWithAggregatesInput[]
+    NOT?: AsanaSequenceScalarWhereWithAggregatesInput | AsanaSequenceScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AsanaSequence"> | string
+    nameSequence?: StringWithAggregatesFilter<"AsanaSequence"> | string
+    sequencesSeries?: StringNullableListFilter<"AsanaSequence">
+    description?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
+    duration?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
+    image?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
+    breath_direction?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
+    createdAt?: DateTimeNullableWithAggregatesFilter<"AsanaSequence"> | Date | string | null
+    updatedAt?: DateTimeNullableWithAggregatesFilter<"AsanaSequence"> | Date | string | null
   }
 
   export type UserDataCreateInput = {
@@ -5158,7 +7356,7 @@ export namespace Prisma {
     posture_intent?: string | null
     posture_meaning?: string | null
     dristi?: string | null
-    breath?: string | null
+    breath_duration?: string | null
     duration?: string | null
   }
 
@@ -5191,7 +7389,7 @@ export namespace Prisma {
     posture_intent?: string | null
     posture_meaning?: string | null
     dristi?: string | null
-    breath?: string | null
+    breath_duration?: string | null
     duration?: string | null
   }
 
@@ -5223,7 +7421,7 @@ export namespace Prisma {
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
     posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
-    breath?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_duration?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -5255,7 +7453,7 @@ export namespace Prisma {
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
     posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
-    breath?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_duration?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -5288,7 +7486,7 @@ export namespace Prisma {
     posture_intent?: string | null
     posture_meaning?: string | null
     dristi?: string | null
-    breath?: string | null
+    breath_duration?: string | null
     duration?: string | null
   }
 
@@ -5320,7 +7518,7 @@ export namespace Prisma {
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
     posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
-    breath?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_duration?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
@@ -5352,8 +7550,168 @@ export namespace Prisma {
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
     posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
-    breath?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_duration?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AsanaSeriesCreateInput = {
+    id?: string
+    seriesName: string
+    seriesPostures?: AsanaSeriesCreateseriesPosturesInput | string[]
+    breath_duration?: string | null
+    description?: string | null
+    duration?: string | null
+    image?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
+  }
+
+  export type AsanaSeriesUncheckedCreateInput = {
+    id?: string
+    seriesName: string
+    seriesPostures?: AsanaSeriesCreateseriesPosturesInput | string[]
+    breath_duration?: string | null
+    description?: string | null
+    duration?: string | null
+    image?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
+  }
+
+  export type AsanaSeriesUpdateInput = {
+    seriesName?: StringFieldUpdateOperationsInput | string
+    seriesPostures?: AsanaSeriesUpdateseriesPosturesInput | string[]
+    breath_duration?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AsanaSeriesUncheckedUpdateInput = {
+    seriesName?: StringFieldUpdateOperationsInput | string
+    seriesPostures?: AsanaSeriesUpdateseriesPosturesInput | string[]
+    breath_duration?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AsanaSeriesCreateManyInput = {
+    id?: string
+    seriesName: string
+    seriesPostures?: AsanaSeriesCreateseriesPosturesInput | string[]
+    breath_duration?: string | null
+    description?: string | null
+    duration?: string | null
+    image?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
+  }
+
+  export type AsanaSeriesUpdateManyMutationInput = {
+    seriesName?: StringFieldUpdateOperationsInput | string
+    seriesPostures?: AsanaSeriesUpdateseriesPosturesInput | string[]
+    breath_duration?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AsanaSeriesUncheckedUpdateManyInput = {
+    seriesName?: StringFieldUpdateOperationsInput | string
+    seriesPostures?: AsanaSeriesUpdateseriesPosturesInput | string[]
+    breath_duration?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AsanaSequenceCreateInput = {
+    id?: string
+    nameSequence: string
+    sequencesSeries?: AsanaSequenceCreatesequencesSeriesInput | string[]
+    description?: string | null
+    duration?: string | null
+    image?: string | null
+    breath_direction?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
+  }
+
+  export type AsanaSequenceUncheckedCreateInput = {
+    id?: string
+    nameSequence: string
+    sequencesSeries?: AsanaSequenceCreatesequencesSeriesInput | string[]
+    description?: string | null
+    duration?: string | null
+    image?: string | null
+    breath_direction?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
+  }
+
+  export type AsanaSequenceUpdateInput = {
+    nameSequence?: StringFieldUpdateOperationsInput | string
+    sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | string[]
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_direction?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AsanaSequenceUncheckedUpdateInput = {
+    nameSequence?: StringFieldUpdateOperationsInput | string
+    sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | string[]
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_direction?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AsanaSequenceCreateManyInput = {
+    id?: string
+    nameSequence: string
+    sequencesSeries?: AsanaSequenceCreatesequencesSeriesInput | string[]
+    description?: string | null
+    duration?: string | null
+    image?: string | null
+    breath_direction?: string | null
+    createdAt?: Date | string | null
+    updatedAt?: Date | string | null
+  }
+
+  export type AsanaSequenceUpdateManyMutationInput = {
+    nameSequence?: StringFieldUpdateOperationsInput | string
+    sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | string[]
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_direction?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AsanaSequenceUncheckedUpdateManyInput = {
+    nameSequence?: StringFieldUpdateOperationsInput | string
+    sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | string[]
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_direction?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -5721,7 +8079,7 @@ export namespace Prisma {
     posture_intent?: SortOrder
     posture_meaning?: SortOrder
     dristi?: SortOrder
-    breath?: SortOrder
+    breath_duration?: SortOrder
     duration?: SortOrder
   }
 
@@ -5749,7 +8107,7 @@ export namespace Prisma {
     posture_intent?: SortOrder
     posture_meaning?: SortOrder
     dristi?: SortOrder
-    breath?: SortOrder
+    breath_duration?: SortOrder
     duration?: SortOrder
   }
 
@@ -5777,7 +8135,7 @@ export namespace Prisma {
     posture_intent?: SortOrder
     posture_meaning?: SortOrder
     dristi?: SortOrder
-    breath?: SortOrder
+    breath_duration?: SortOrder
     duration?: SortOrder
   }
 
@@ -5796,6 +8154,74 @@ export namespace Prisma {
     _min?: NestedBoolNullableFilter<$PrismaModel>
     _max?: NestedBoolNullableFilter<$PrismaModel>
     isSet?: boolean
+  }
+
+  export type AsanaSeriesCountOrderByAggregateInput = {
+    id?: SortOrder
+    seriesName?: SortOrder
+    seriesPostures?: SortOrder
+    breath_duration?: SortOrder
+    description?: SortOrder
+    duration?: SortOrder
+    image?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AsanaSeriesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    seriesName?: SortOrder
+    breath_duration?: SortOrder
+    description?: SortOrder
+    duration?: SortOrder
+    image?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AsanaSeriesMinOrderByAggregateInput = {
+    id?: SortOrder
+    seriesName?: SortOrder
+    breath_duration?: SortOrder
+    description?: SortOrder
+    duration?: SortOrder
+    image?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AsanaSequenceCountOrderByAggregateInput = {
+    id?: SortOrder
+    nameSequence?: SortOrder
+    sequencesSeries?: SortOrder
+    description?: SortOrder
+    duration?: SortOrder
+    image?: SortOrder
+    breath_direction?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AsanaSequenceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    nameSequence?: SortOrder
+    description?: SortOrder
+    duration?: SortOrder
+    image?: SortOrder
+    breath_direction?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AsanaSequenceMinOrderByAggregateInput = {
+    id?: SortOrder
+    nameSequence?: SortOrder
+    description?: SortOrder
+    duration?: SortOrder
+    image?: SortOrder
+    breath_direction?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ProviderAccountCreateNestedManyWithoutUserInput = {
@@ -5933,6 +8359,24 @@ export namespace Prisma {
   export type NullableBoolFieldUpdateOperationsInput = {
     set?: boolean | null
     unset?: boolean
+  }
+
+  export type AsanaSeriesCreateseriesPosturesInput = {
+    set: string[]
+  }
+
+  export type AsanaSeriesUpdateseriesPosturesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type AsanaSequenceCreatesequencesSeriesInput = {
+    set: string[]
+  }
+
+  export type AsanaSequenceUpdatesequencesSeriesInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -6392,6 +8836,14 @@ export namespace Prisma {
      * @deprecated Use AsanaPostureDefaultArgs instead
      */
     export type AsanaPostureArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AsanaPostureDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use AsanaSeriesDefaultArgs instead
+     */
+    export type AsanaSeriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AsanaSeriesDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use AsanaSequenceDefaultArgs instead
+     */
+    export type AsanaSequenceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AsanaSequenceDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

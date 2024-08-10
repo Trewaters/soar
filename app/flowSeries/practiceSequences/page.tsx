@@ -1,5 +1,5 @@
 'use client'
-import { sequenceData } from '@app/interfaces/sequence'
+import { SequenceData } from '@app/interfaces/sequence'
 import {
   Box,
   Card,
@@ -12,7 +12,7 @@ import {
 import React from 'react'
 
 export default function Page() {
-  const sequence: sequenceData[] = [
+  const sequence: SequenceData[] = [
     {
       id: 1,
       nameSequence: 'C1 Sequence',

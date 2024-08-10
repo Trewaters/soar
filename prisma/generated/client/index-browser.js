@@ -177,8 +177,32 @@ exports.Prisma.AsanaPostureScalarFieldEnum = {
   posture_intent: 'posture_intent',
   posture_meaning: 'posture_meaning',
   dristi: 'dristi',
-  breath: 'breath',
+  breath_duration: 'breath_duration',
   duration: 'duration'
+};
+
+exports.Prisma.AsanaSeriesScalarFieldEnum = {
+  id: 'id',
+  seriesName: 'seriesName',
+  seriesPostures: 'seriesPostures',
+  breath_duration: 'breath_duration',
+  description: 'description',
+  duration: 'duration',
+  image: 'image',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AsanaSequenceScalarFieldEnum = {
+  id: 'id',
+  nameSequence: 'nameSequence',
+  sequencesSeries: 'sequencesSeries',
+  description: 'description',
+  duration: 'duration',
+  image: 'image',
+  breath_direction: 'breath_direction',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -195,7 +219,9 @@ exports.Prisma.QueryMode = {
 exports.Prisma.ModelName = {
   UserData: 'UserData',
   ProviderAccount: 'ProviderAccount',
-  AsanaPosture: 'AsanaPosture'
+  AsanaPosture: 'AsanaPosture',
+  AsanaSeries: 'AsanaSeries',
+  AsanaSequence: 'AsanaSequence'
 };
 
 /**

@@ -108,7 +108,7 @@ model AsanaPosture {
   posture_intent    String?
   posture_meaning    String?
   dristi            String?
-  breath           String?
+  breath_duration           String?
   duration         String?
 }
 
@@ -116,8 +116,9 @@ model AsanaSeries {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
   seriesName    String
   seriesPostures  String[]
-  description     String
-  duration        String
+  breath_duration           String?
+  description     String?
+  duration        String?
   image           String?
   createdAt       DateTime? @default(now())
   updatedAt       DateTime? @updatedAt
@@ -127,9 +128,10 @@ model AsanaSequence {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
   nameSequence    String
   sequencesSeries   String[]
-  description     String
-  duration        String
+  description     String?
+  duration        String?
   image           String?
+  breath_direction           String?
   createdAt       DateTime? @default(now())
   updatedAt       DateTime? @updatedAt
 }

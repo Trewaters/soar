@@ -1,12 +1,13 @@
-import { flowSeriesData } from '@interfaces/flowSeries'
+import { FlowSeriesData } from '@interfaces/flowSeries'
 
-export interface sequenceData {
+export interface SequenceData {
   id: number
   nameSequence: string
-  sequencesSeries: flowSeriesData[]
+  sequencesSeries: FlowSeriesData[]
   description?: string
   duration?: string
   image?: string
+  breath_direction?: string
   createdAt?: string
   updatedAt?: string
 }
