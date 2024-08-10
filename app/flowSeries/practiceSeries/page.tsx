@@ -1,4 +1,5 @@
 'use client'
+import { GetServerSideProps } from 'next'
 import { FlowSeriesData } from '@app/interfaces/flowSeries'
 import {
   Autocomplete,
@@ -13,37 +14,36 @@ import {
 import Image from 'next/image'
 import { ChangeEvent, useEffect, useState } from 'react'
 
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const baseUrl =
+//     process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000'
+//   const url = new URL('/api/series/', baseUrl)
+//   const res = await fetch(url.toString())
+//   const data = await res.json()
+//   const seriesData = Array.isArray(data) ? data : [data]
+
+//   return {
+//     props: {
+//       initialSeries: JSON.parse(JSON.stringify(seriesData)),
+//     },
+//   }
+// }
+
 export default function Page() {
   const [series, setSeries] = useState<FlowSeriesData[]>([])
   const [flow, setFlow] = useState<FlowSeriesData>()
 
-  async function fetchData() {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000'
-    const url = new URL('/api/series/', baseUrl)
-    const res = await fetch(url.toString())
-    const data = await res.json()
-    // console.log('fetchData seriesMany data', data)
-    /* console.log(
-      'fetchData seriesMany parse',
-      JSON.parse(JSON.stringify(data[0]))
-    ) */
-    // console.log('fetchData seriesMany', JSON.stringify(data))
-    // console.log('fetchData seriesMany stringify', JSON.stringify(data))
-
-    const seriesData = Array.isArray(data) ? data : [data]
-    // console.log('fetchData seriesData', JSON.stringify(seriesData))
-
-    // setSeries(data)
-    // setSeries(JSON.parse(data))
-    // setSeries(JSON.parse(JSON.stringify(data[0])))
-    setSeries(JSON.parse(JSON.stringify(seriesData)))
-    // console.log('series', series)
-
-    // return JSON.parse(JSON.stringify(data[0]))
-  }
-
   useEffect(() => {
+    async function fetchData() {
+      const baseUrl =
+        process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000'
+      const url = new URL('/api/series/', baseUrl)
+      const res = await fetch(url.toString())
+      const data = await res.json()
+      const seriesData = Array.isArray(data) ? data : [data]
+      setSeries(JSON.parse(JSON.stringify(seriesData)))
+    }
+
     fetchData()
   }, [])
 
@@ -76,13 +76,6 @@ export default function Page() {
         )}
         sx={{ width: '50%' }}
         renderInput={(params) => <TextField {...params} label="Flow Series" />}
-        // renderInput={(params) => (
-        //   <>
-        //     {series.map((item, index) => (
-        //       <TextField {...params} label={item.seriesName} key={index} />
-        //     ))}
-        //   </>
-        // )}
         onChange={handleSelect}
       />
       {flow && (
