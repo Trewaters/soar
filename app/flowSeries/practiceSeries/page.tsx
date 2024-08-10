@@ -35,8 +35,7 @@ export default function Page() {
 
   useEffect(() => {
     async function fetchData() {
-      const baseUrl =
-        process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000'
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL // || 'http://localhost:3000'
       const url = new URL('/api/series/', baseUrl)
       const res = await fetch(url.toString())
       const data = await res.json()
