@@ -1,4 +1,5 @@
 'use client'
+import { FEATURES } from '@app/FEATURES'
 import { Box, Button, Stack, Typography } from '@mui/material'
 // import { Router } from 'next/router'
 
@@ -68,15 +69,19 @@ export default function Page() {
         >
           Practice Series
         </Button>
-        <Typography variant="body1">or</Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          href="/flowSeries/createSeries"
-          LinkComponent="a"
-        >
-          Create Series
-        </Button>
+        {FEATURES.SHOW_CREATE_SERIES && (
+          <>
+            <Typography variant="body1">or</Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              href="/flowSeries/createSeries"
+              LinkComponent="a"
+            >
+              Create Series
+            </Button>
+          </>
+        )}
       </Stack>
       {/* <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
         <Button

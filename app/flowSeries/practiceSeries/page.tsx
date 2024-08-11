@@ -1,9 +1,9 @@
 'use client'
-import { GetServerSideProps } from 'next'
 import { FlowSeriesData } from '@app/interfaces/flowSeries'
 import {
   Autocomplete,
   Box,
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -13,6 +13,8 @@ import {
 } from '@mui/material'
 import Image from 'next/image'
 import { ChangeEvent, useEffect, useState } from 'react'
+import LoginIcon from '@mui/icons-material/Login'
+import LogoutIcon from '@mui/icons-material/Logout'
 
 // export const getServerSideProps: GetServerSideProps = async () => {
 //   const baseUrl =
@@ -64,24 +66,40 @@ export default function Page() {
       spacing={2}
       sx={{ marginX: 3, marginY: 3, background: 'white', mb: '1em' }}
     >
-      <Autocomplete
-        disablePortal
-        id="combo-box-series-search"
-        options={series}
-        getOptionLabel={(option: FlowSeriesData) => option.seriesName}
-        renderOption={(props, option) => (
-          <li {...props} key={option.id}>
-            {option.seriesName}
-          </li>
-        )}
-        sx={{ width: '50%' }}
-        renderInput={(params) => <TextField {...params} label="Flow Series" />}
-        onChange={handleSelect}
-      />
+      <Typography variant="h2" textAlign="center">
+        Practice Yoga Series
+      </Typography>
+      <Stack direction={'row'} justifyContent={'space-between'}>
+        <Autocomplete
+          disablePortal
+          id="combo-box-series-search"
+          options={series}
+          getOptionLabel={(option: FlowSeriesData) => option.seriesName}
+          renderOption={(props, option) => (
+            <li {...props} key={option.id}>
+              {option.seriesName}
+            </li>
+          )}
+          sx={{ width: '50%' }}
+          renderInput={(params) => (
+            <TextField {...params} label="Flow Series" />
+          )}
+          onChange={handleSelect}
+        />
+        <Button
+          variant="outlined"
+          href="/flowSeries"
+          // component="a"
+          LinkComponent="a"
+        >
+          Back to home
+        </Button>
+      </Stack>
       {flow && (
         <Box width="100%" textAlign="center" marginTop={4} key={flow.id}>
-          <Typography variant="h2">Practice Series</Typography>
-          <Typography variant="h3">{flow.seriesName}</Typography>
+          <Typography variant="h3" sx={{ marginTop: 3 }}>
+            {flow.seriesName}
+          </Typography>
           <Stack rowGap={3} alignItems="center" marginTop={4}>
             {flow.seriesPostures.map((pose) => (
               <Card
@@ -120,6 +138,10 @@ export default function Page() {
                 </CardContent>
               </Card>
             ))}
+            <Typography variant="h3" sx={{ marginTop: 3 }}>
+              Description
+            </Typography>
+            <Typography variant="body1">{flow.description}</Typography>
           </Stack>
         </Box>
       )}

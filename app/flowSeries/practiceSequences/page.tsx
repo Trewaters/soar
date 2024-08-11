@@ -18,7 +18,7 @@ export default function Page() {
       nameSequence: 'C1 Sequence',
       sequencesSeries: [
         {
-          id: 1,
+          id: '1',
           seriesName: 'Integration Series',
           seriesPostures: [
             "Child's Pose Balasana",
@@ -28,7 +28,7 @@ export default function Page() {
           ],
         },
         {
-          id: 2,
+          id: '2',
           seriesName: 'Sun Salutation A Series',
           seriesPostures: [
             'Mountain Pose, Tadasana',
@@ -40,7 +40,7 @@ export default function Page() {
           ],
         },
         {
-          id: 3,
+          id: '3',
           seriesName: 'Sun Salutation B Series',
           seriesPostures: [
             'Chair Pose, Utkatasana',
@@ -56,7 +56,7 @@ export default function Page() {
           ],
         },
         {
-          id: 4,
+          id: '4',
           seriesName: 'Crescent Lunge Series',
           seriesPostures: [
             'Crescent Lunge, Anjanayesana',
@@ -69,7 +69,7 @@ export default function Page() {
           ],
         },
         {
-          id: 5,
+          id: '5',
           seriesName: 'Balancing Series',
           seriesPostures: [
             'Eagle Pose, Garudasana',
@@ -78,7 +78,7 @@ export default function Page() {
           ],
         },
         {
-          id: 6,
+          id: '6',
           seriesName: 'Triangle Series',
           seriesPostures: [
             'Warrior One, Virabhadrasana I',
@@ -88,12 +88,12 @@ export default function Page() {
           ],
         },
         {
-          id: 7,
+          id: '7',
           seriesName: 'Hip Series',
           seriesPostures: ['Half Pigeon Eka Pada Rajakapotasana'],
         },
         {
-          id: 8,
+          id: '8',
           seriesName: 'Spine Series',
           seriesPostures: [
             'Cobra Pose, Bhujangasana',
@@ -104,7 +104,7 @@ export default function Page() {
           ],
         },
         {
-          id: 9,
+          id: '9',
           seriesName: 'Surrender Series',
           seriesPostures: [
             'Seated Forward Fold, Paschimittonasana',
@@ -170,6 +170,34 @@ export default function Page() {
           </Stack>
         </React.Fragment>
       ))}
+      {/* 
+                  // breath icons
+                  import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+                  import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+                  import ContactlessIcon from '@mui/icons-material/Contactless';
+                  import DeblurIcon from '@mui/icons-material/Deblur';
+                  import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
+                  import FastForwardIcon from '@mui/icons-material/FastForward';
+                  import FastRewindIcon from '@mui/icons-material/FastRewind';
+                  import FileUploadIcon from '@mui/icons-material/FileUpload';
+                  import FileDownloadIcon from '@mui/icons-material/FileDownload';
+                  import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+                  import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+                  import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+                  import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
+                  import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
+                  import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+
+                  // best so far
+                  import LoginIcon from '@mui/icons-material/Login';
+                  import LogoutIcon from '@mui/icons-material/Logout';
+                  <LoginIcon />
+                    <LogoutIcon />
+
+                  // meditation icon
+                  import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
+
+                  */}
     </Paper>
   )
 }

@@ -1,5 +1,5 @@
 export interface FlowSeriesData {
-  id: number
+  id: string
   seriesName: string
   seriesPostures: string[]
   breath_duration?: string
