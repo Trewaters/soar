@@ -37,16 +37,19 @@ export default function Page() {
 
   useEffect(() => {
     async function fetchData() {
-      const baseUrl =
-        process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-      const url = new URL('/api/series/', baseUrl)
-      const res = await fetch(url.toString())
-      // const res = await fetch('api/series')
-      const data = await res.json()
-      const seriesData = Array.isArray(data) ? data : [data]
+      // const baseUrl =
+      //   process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
+      // const url = new URL('/api/series/', baseUrl)
+      // const response = await fetch(url)
+      const response = await fetch('/api/series')
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      // const data = await response.json()
+      // const seriesData = Array.isArray(data) ? data : [data]
       // setSeries(JSON.parse(JSON.stringify(seriesData)))
-      console.log(seriesData)
-      setSeries(seriesData)
+      // console.log(seriesData)
+      setSeries(await response.json())
     }
 
     fetchData()
