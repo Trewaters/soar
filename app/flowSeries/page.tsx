@@ -83,24 +83,27 @@ export default function Page() {
           </>
         )}
       </Stack>
-      {/* <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
-        <Button
-          variant="contained"
-          LinkComponent="a"
-          href="/flowSeries/practieceSeries"
-        >
-          Practice Series
-        </Button>
-        <Typography variant="body1">vs.</Typography>
-        <Button
-          variant="outlined"
-          color="primary"
-          LinkComponent="a"
-          href="/flowSeries/practiceSequences"
-        >
-          Practice Sequences
-        </Button>
-      </Stack> */}
+      {FEATURES.SHOW_PRACTICE_SEQUENCE && (
+        <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
+          <Button
+            variant="contained"
+            LinkComponent="a"
+            href="/flowSeries/practieceSeries"
+          >
+            Practice Series
+          </Button>
+          <Typography variant="body1">vs.</Typography>
+          <Button
+            variant="outlined"
+            color="primary"
+            LinkComponent="a"
+            href="/flowSeries/practiceSequences"
+          >
+            Practice Sequences
+          </Button>
+        </Stack>
+      )}
+
       {/* <Search>
           <SearchIconWrapper>
             <SearchIcon />

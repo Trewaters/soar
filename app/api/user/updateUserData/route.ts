@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         bio,
       },
     })
-    return Response.json({ message: 'Data saved' })
+    return Response.json({ message: 'User Data saved' })
   } catch (error) {
     return Response.json({ error: 'Error saving data' })
   }

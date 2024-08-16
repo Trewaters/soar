@@ -1,4 +1,5 @@
 'use client'
+import React from 'react'
 import { FEATURES } from '@app/FEATURES'
 import { FlowSeriesData } from '@app/interfaces/flowSeries'
 // import { FlowSeriesData } from '@app/interfaces/flowSeries'
@@ -19,131 +20,25 @@ import {
 } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
 
-// const flowSeries: FlowSeriesData[] = [
-//   {
-//     id: 1,
-//     seriesName: 'Integration Series',
-//     seriesPostures: [
-//       'Stand at Attention, Samsthiti',
-//       'Ragdoll, Uttanasana',
-//       'Downward Facing Dog, Adho Mukha Svanasana',
-//       "Child's Pose Balasana",
-//     ],
-//   },
-//   {
-//     id: 2,
-//     seriesName: 'Sun Salutation A Series',
-//     seriesPostures: [
-//       'Mountain Pose, Tadasana',
-//       'Standing Forward Fold, Uttanasana',
-//       'Halfway Lift Ardha, Uttanasana',
-//       'High to Low Plank, Chaturanga Dandasana',
-//       'Upward Facing Dog, Urdhva Mukha Svanasana',
-//       'Downward Facing Dog, Adho Mukha Svanasana',
-//     ],
-//   },
-//   {
-//     id: 3,
-//     seriesName: 'Sun Salutation B Series',
-//     seriesPostures: [
-//       'Chair Pose, Utkatasana',
-//       'Standing Forward Fold, Uttanasana',
-//       'Halfway Lift, Ardha Uttanasana',
-//       'High to Low Plank, Chaturanga Dandasana',
-//       'Upward Facing Dog, Urdhva Mukha Svanasana',
-//       'Downward Facing Dog, Adho Mukha Svanasana',
-//       'Warrior Two, Virabhadrasana II',
-//       'Extended Side Angle, Utthita Parsvakonasana',
-//       'Reverse Warrior, Parivrtta Virabhadrasana II',
-//       'High to Low Plank, Chaturanga Dandasana',
-//     ],
-//   },
-//   {
-//     id: 4,
-//     seriesName: 'Core Series',
-//     seriesPostures: [
-//       'Reclined Bound Angle Sit Ups, Supta Baddha Konasana Sit Ups',
-//       'Bicycle Twists',
-//       'Boat Pose, Navasana',
-//     ],
-//   },
-//   {
-//     id: 5,
-//     seriesName: 'Crescent Lunge Series',
-//     seriesPostures: [
-//       'Crescent Lunge, Anjanayesana',
-//       'Revolved Crescent Lunge, Parivrtta Anjanayesana',
-//       "Runner's Lunge, Anjaneyasana",
-//       'Side Plank, Vasisthasana',
-//       'Prayer Twist, Parivrtta Utkatasana',
-//       'Gorilla Pose, Padahastasana',
-//       'Crow Pose, Bakasana',
-//     ],
-//   },
-//   {
-//     id: 6,
-//     seriesName: 'Balancing Series',
-//     seriesPostures: [
-//       'Eagle Pose, Garudasana',
-//       "Dancer's Pose, Natarajasana",
-//       'Tree Pose, Vrksasana',
-//     ],
-//   },
-//   {
-//     id: 7,
-//     seriesName: 'Triangle Series',
-//     seriesPostures: [
-//       'Warrior One, Virabhadrasana I',
-//       'Warrior Two, Virabhadrasana II',
-//       'Triangle Pose, Trikonasana',
-//       'Wide Leg Forward Fold, Paschimottansana',
-//     ],
-//   },
-//   {
-//     id: 8,
-//     seriesName: 'Hip Series',
-//     seriesPostures: ['Half Pigeon Eka Pada Rajakapotasana'],
-//   },
-//   {
-//     id: 9,
-//     seriesName: 'Spine Series',
-//     seriesPostures: [
-//       'Cobra Pose, Bhujangasana',
-//       'Bow Pose, Dhanurasana',
-//       'Camel Pose, Ustrasana',
-//       'Bridge Pose, Setu Bandha Sarvangasana',
-//       'Reclined Bound Angle Pose, Supta Baddha Konasana',
-//     ],
-//   },
-//   {
-//     id: 10,
-//     seriesName: 'Surrender Series',
-//     seriesPostures: [
-//       'Seated Forward Fold, Paschimittonasana',
-//       'Happy Baby, Ananda Balasana',
-//       'Supine Twist, Jathara Parivartanasana',
-//       'Corpse Pose, Savasana',
-//       'Easy Pose, Sukhasana',
-//     ],
-//   },
-// ]
-
 export default function Page() {
   // const [series, setSeries] = useState<FlowSeriesData[]>([])
+
+  // full series data
   const [singleSeries, setSingleSeries] = useState<FlowSeriesData>(
     {} as FlowSeriesData
   )
-
+  // series properties
   const [seriesName, setSeriesName] = useState('')
-  const [seriesPostures, setSeriesPostures] = useState('')
+  const [seriesPostures, setSeriesPostures] = useState<string[]>([])
   const [breathDuration, setBreathDuration] = useState('')
   const [description, setDescription] = useState('')
   const [duration, setDuration] = useState('')
   const [image, setImage] = useState('')
 
-  const [postureName, setPostureName] = useState<String>('')
+  // posture data
   const [postures, setPostures] = useState<PostureData[]>([])
   const [singlePosture, setSinglePosture] = useState<PostureData>()
+  const [postureName, setPostureName] = useState('')
 
   useEffect(() => {
     async function fetchData() {
@@ -179,27 +74,148 @@ export default function Page() {
     if (value) {
       // console.log('value', value)
       setSinglePosture(value)
+      console.log('singlePosture', singlePosture)
+
       setPostureName(value.english_name)
+      console.log('postureName', postureName)
+
+      setSeriesPostures((prevPostures) => [...prevPostures, value.english_name])
+      console.log('seriesPostures', seriesPostures)
     }
   }
 
-  async function handleSubmit(series: FlowSeriesData) {
+  // function handleChange(event: ChangeEvent<HTMLInputElement>) {}
+
+  async function handleSubmit(e: React.FormEvent) {
     // console.log('series', series)
+    e.preventDefault()
+    // setSingleSeries()
+    setSingleSeries({
+      ...singleSeries,
+      ['seriesPostures']: seriesPostures,
+    })
+
     try {
-      const response = await fetch('/api/createSeries', {
+      const response = await fetch('/api/series/createSeries', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(series),
+        body: JSON.stringify(singleSeries),
       })
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
-      // setSingleSeries(await response.json())
+      setSingleSeries(await response.json())
     } catch (error: Error | any) {
       error.message
     }
+  }
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    // console.log('event', event)
+    const { name, value } = event.target
+
+    switch (name) {
+      case 'id':
+      case 'seriesName':
+        setSeriesName(value)
+        // console.log('seriesName', seriesName)
+        setSingleSeries({
+          ...singleSeries,
+          [name]: value,
+        })
+        break
+      case 'seriesPostures':
+        setSeriesPostures((prevPostures) => [...prevPostures, value])
+
+        console.log('seriesPostures', seriesPostures)
+
+        setSingleSeries({
+          ...singleSeries,
+          ['seriesPostures']: seriesPostures,
+        })
+        break
+      case 'breath_duration':
+        setBreathDuration(value)
+        setSingleSeries({
+          ...singleSeries,
+          [name]: value,
+        })
+        break
+      case 'description':
+        setDescription(value)
+        setSingleSeries({
+          ...singleSeries,
+          [name]: value,
+        })
+        break
+      case 'duration':
+        setDuration(value)
+        setSingleSeries({
+          ...singleSeries,
+          [name]: value,
+        })
+        break
+      case 'image':
+        setImage(value)
+        setSingleSeries({
+          ...singleSeries,
+          [name]: value,
+        })
+        break
+      // case 'createdAt':
+      // case 'updatedAt':
+      default:
+        console.warn(`Unhandled input value: ${name}`)
+    }
+
+    // setSingleSeries({
+    //   ...singleSeries,
+    //   [name]: value,
+    // })
+    // interface PrevState {
+    //   [key: string]: FlowSeriesData[keyof FlowSeriesData]
+    // }
+    // setSingleSeries((prevState: PrevState) => {
+    //   let checkArray = prevState[name]
+    //   // Check if the field is an array
+    //   if (Array.isArray(checkArray)) {
+    //     // Assuming you want to update the entire array or a specific index
+    //     // For example, updating the entire array
+    //     return {
+    //       ...prevState,
+    //       [name]: [...value.split(',')], // Assuming value is a comma-separated string
+    //     }
+    //   } else {
+    //     // Update the field normally
+    //     return {
+    //       ...prevState,
+    //       [name]: value,
+    //     }
+    //   }
+    // })
+    // const setSingleSeries = (name: string, value: string) => {
+    //   setSingleSeries((prevState: PrevState) => {
+    //     let checkArray = prevState[name]
+    //     // Check if the field is an array
+    //     if (Array.isArray(checkArray)) {
+    //       // Assuming you want to update the entire array
+    //       return {
+    //         ...prevState,
+    //         [name]: [...value.split(',')], // Assuming value is a comma-separated string
+    //       }
+    //     } else {
+    //       // Update the field normally
+    //       return {
+    //         ...prevState,
+    //         [name]: value,
+    //       }
+    //     }
+    //   })
+    // }
+
+    console.log('singleSeries', singleSeries)
   }
 
   return (
@@ -210,29 +226,38 @@ export default function Page() {
             Create a Series
           </Typography>
           <form>
-            <FormControl>
-              <Grid container spacing={3}>
+            <Grid container spacing={3}>
+              <FormControl>
                 <Grid item xs={12}>
                   <TextField
                     id="outlined-basic"
                     label="Series Name"
                     variant="outlined"
+                    name="seriesName"
                     value={seriesName}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      setSeriesName(event.currentTarget.value)
-                    }
+                    // onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    //   setSeriesName(event.currentTarget.value)
+                    // }
+                    onChange={handleChange}
                   />
                 </Grid>
-                <Grid item xs={12}>
+              </FormControl>
+
+              <Grid item xs={12} display={'flex'} direction={'column'}>
+                <FormControl>
                   <TextField
                     id="outlined-basic"
                     label="Series Postures"
                     variant="outlined"
-                    value={postureName}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      setSeriesPostures(event.currentTarget.value)
-                    }
+                    name="seriesPostures"
+                    value={seriesPostures}
+                    // onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    //   setSeriesPostures(event.currentTarget.value)
+                    // }
+                    onChange={handleChange}
                   />
+                </FormControl>
+                <FormControl>
                   <Autocomplete
                     disablePortal
                     id="combo-box-series-search"
@@ -251,68 +276,89 @@ export default function Page() {
                     )}
                     onChange={handleSelect}
                   />
-                </Grid>
-                <Grid item xs={12}>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <FormControl>
                   <TextField
                     id="outlined-basic"
                     label="Breath Duration"
                     variant="outlined"
+                    name="breath_duration"
                     value={breathDuration}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      setBreathDuration(event.currentTarget.value)
-                    }
+                    // onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    //   setBreathDuration(event.currentTarget.value)
+                    // }
+                    onChange={handleChange}
                   />
-                </Grid>
-                <Grid item xs={12}>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <FormControl>
                   <TextField
                     id="outlined-basic"
                     label="Description"
                     multiline
                     variant="outlined"
+                    name="description"
                     value={description}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      setDescription(event.currentTarget.value)
-                    }
+                    // onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    //   setDescription(event.currentTarget.value)
+                    // }
+                    onChange={handleChange}
                   />
-                </Grid>
-                <Grid item xs={12}>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <FormControl>
                   <TextField
                     id="outlined-basic"
                     label="Duration"
                     variant="outlined"
+                    name="duration"
                     value={duration}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      setDuration(event.currentTarget.value)
-                    }
+                    // onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    //   setDuration(event.currentTarget.value)
+                    // }
+                    onChange={handleChange}
                   />
-                </Grid>
-                <Grid item xs={12}>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <FormControl>
                   <TextField
                     id="outlined-basic"
                     label="Image"
                     variant="outlined"
+                    name="image"
                     value={image}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      setImage(event.currentTarget.value)
-                    }
+                    // onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    //   setImage(event.currentTarget.value)
+                    // }
+                    onChange={handleChange}
                   />
-                </Grid>
-                <Grid item xs={12}>
-                  <Stack direction="row" spacing={2} justifyContent="center">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleSubmit(singleSeries)}
-                    >
-                      Submit
-                    </Button>
-                    <Button variant="outlined" color="secondary">
-                      Cancel
-                    </Button>
-                  </Stack>
-                </Grid>
+                </FormControl>
               </Grid>
-            </FormControl>
+
+              <Grid item xs={12}>
+                <Stack direction="row" spacing={2} justifyContent="center">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                  <Button variant="outlined" color="secondary">
+                    Cancel
+                  </Button>
+                </Stack>
+              </Grid>
+            </Grid>
           </form>
           {/* {flowSeries.map((flow) => (
         <Accordion

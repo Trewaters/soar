@@ -1,30 +1,63 @@
 // Create a Series
 import { FlowSeriesData } from '@app/interfaces/flowSeries'
 import { PrismaClient } from '@prisma/generated/client'
-import { NextResponse } from 'next/server'
 
 const prisma = new PrismaClient()
 
 export async function POST(request: Request) {
-  try {
-    const body: FlowSeriesData = await request.json()
+  const {
+    seriesName,
+    seriesPostures,
+    breath_duration,
+    description,
+    duration,
+    image,
+  } = await request.json()
 
-    const data = await prisma.asanaSeries.create({
+  console.log(
+    'createSeries-POST Request',
+    seriesName,
+    seriesPostures,
+    breath_duration,
+    description,
+    duration,
+    image
+  )
+
+  try {
+    // const body: FlowSeriesData = await request.json()
+
+    // const maxIdRecord = await prisma.asanaSeries.findFirst({
+    //   orderBy: {
+    //     id: 'desc',
+    //   },
+    //   select: {
+    //     id: true,
+    //   },
+    // })
+
+    // const newId = maxIdRecord ? maxIdRecord.id + 1 : 1
+    // Get the current date and time
+    // const now = new Date()
+    // const newId = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`
+
+    await prisma.asanaSeries.create({
       data: {
-        id: body.id,
-        seriesName: body.seriesName,
-        seriesPostures: body.seriesPostures,
-        breath_duration: body.breath_duration,
-        description: body.description,
-        duration: body.duration,
-        image: body.image,
+        seriesName,
+        seriesPostures,
+        breath_duration,
+        description,
+        duration,
+        image,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
     })
-    return NextResponse.json(data)
+    // return Response.json(data)
+    console.log('Response', Response)
+    return Response.json({ message: 'Series Data saved' })
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return Response.json({ error: error.message }, { status: 500 })
   } finally {
     await prisma.$disconnect()
   }
