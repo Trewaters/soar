@@ -1,4 +1,4 @@
-import { FlowSeriesData } from '@interfaces/flowSeries'
+import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
 
 export interface SequenceData {
   id: number

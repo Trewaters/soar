@@ -155,15 +155,20 @@ export default function Page() {
               >
                 <CardHeader title={seriesMini.seriesName} />
                 <CardContent>
-                  {seriesMini.seriesPostures.map((asana, asanaIndex) => (
-                    <Typography
-                      key={asanaIndex}
-                      textAlign={'left'}
-                      variant="body1"
-                    >
-                      {asana}
-                    </Typography>
-                  ))}
+                  {/* 
+                  // ! add types to this
+                   */}
+                  {seriesMini.seriesPostures.map(
+                    (asana: any, asanaIndex: any) => (
+                      <Typography
+                        key={asanaIndex}
+                        textAlign={'left'}
+                        variant="body1"
+                      >
+                        {asana}
+                      </Typography>
+                    )
+                  )}
                 </CardContent>
               </Card>
             ))}
