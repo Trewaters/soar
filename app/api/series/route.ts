@@ -1,4 +1,4 @@
-import { FlowSeriesData } from '@app/interfaces/flowSeries'
+import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
 import { PrismaClient } from '@prisma/generated/client'
 import { NextResponse } from 'next/server'
 

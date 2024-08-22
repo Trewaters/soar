@@ -1,5 +1,5 @@
 'use client'
-import { FlowSeriesData } from '@app/interfaces/flowSeries'
+import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
 import {
   Autocomplete,
   Box,

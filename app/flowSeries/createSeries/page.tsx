@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
+import { useFlowSeries } from '@app/context/AsanaSeriesContext'
 import { FEATURES } from '@app/FEATURES'
-import { FlowSeriesData } from '@app/interfaces/flowSeries'
-// import { FlowSeriesData } from '@app/interfaces/flowSeries'
+import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
 import PostureData from '@app/interfaces/postureData'
 import {
   Accordion,
@@ -21,19 +21,15 @@ import {
 import { ChangeEvent, useEffect, useState } from 'react'
 
 export default function Page() {
-  // const [series, setSeries] = useState<FlowSeriesData[]>([])
-
-  // full series data
-  const [singleSeries, setSingleSeries] = useState<FlowSeriesData>(
-    {} as FlowSeriesData
-  )
-  // series properties
-  const [seriesName, setSeriesName] = useState('')
-  const [seriesPostures, setSeriesPostures] = useState<string[]>([])
-  const [breathDuration, setBreathDuration] = useState('')
-  const [description, setDescription] = useState('')
-  const [duration, setDuration] = useState('')
-  const [image, setImage] = useState('')
+  const { state, dispatch } = useFlowSeries()
+  const {
+    seriesName,
+    seriesPostures,
+    breath_duration,
+    description,
+    duration,
+    image,
+  } = state.flowSeries
 
   // posture data
   const [postures, setPostures] = useState<PostureData[]>([])
@@ -79,21 +75,31 @@ export default function Page() {
       setPostureName(value.english_name)
       console.log('postureName', postureName)
 
-      setSeriesPostures((prevPostures) => [...prevPostures, value.english_name])
-      console.log('seriesPostures', seriesPostures)
+      dispatch({
+        type: 'SET_FLOW_SERIES',
+        payload: {
+          ...state.flowSeries,
+          seriesPostures: [
+            ...state.flowSeries.seriesPostures,
+            value.english_name,
+          ],
+        },
+      })
     }
   }
 
-  // function handleChange(event: ChangeEvent<HTMLInputElement>) {}
-
   async function handleSubmit(e: React.FormEvent) {
-    // console.log('series', series)
     e.preventDefault()
-    // setSingleSeries()
-    setSingleSeries({
-      ...singleSeries,
-      ['seriesPostures']: seriesPostures,
-    })
+    const updatedSeries = {
+      ...state.flowSeries,
+      seriesName,
+      seriesPostures,
+      breath_duration,
+      description,
+      duration,
+      image,
+    }
+    dispatch({ type: 'SET_FLOW_SERIES', payload: updatedSeries })
 
     try {
       const response = await fetch('/api/series/createSeries', {
@@ -101,121 +107,27 @@ export default function Page() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(singleSeries),
+        body: JSON.stringify(updatedSeries),
       })
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
-      setSingleSeries(await response.json())
+      const data = await response.json()
+      console.log('handleSubmit', data)
     } catch (error: Error | any) {
       error.message
     }
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    // console.log('event', event)
     const { name, value } = event.target
-
-    switch (name) {
-      case 'id':
-      case 'seriesName':
-        setSeriesName(value)
-        // console.log('seriesName', seriesName)
-        setSingleSeries({
-          ...singleSeries,
-          [name]: value,
-        })
-        break
-      case 'seriesPostures':
-        setSeriesPostures((prevPostures) => [...prevPostures, value])
-
-        console.log('seriesPostures', seriesPostures)
-
-        setSingleSeries({
-          ...singleSeries,
-          ['seriesPostures']: seriesPostures,
-        })
-        break
-      case 'breath_duration':
-        setBreathDuration(value)
-        setSingleSeries({
-          ...singleSeries,
-          [name]: value,
-        })
-        break
-      case 'description':
-        setDescription(value)
-        setSingleSeries({
-          ...singleSeries,
-          [name]: value,
-        })
-        break
-      case 'duration':
-        setDuration(value)
-        setSingleSeries({
-          ...singleSeries,
-          [name]: value,
-        })
-        break
-      case 'image':
-        setImage(value)
-        setSingleSeries({
-          ...singleSeries,
-          [name]: value,
-        })
-        break
-      // case 'createdAt':
-      // case 'updatedAt':
-      default:
-        console.warn(`Unhandled input value: ${name}`)
-    }
-
-    // setSingleSeries({
-    //   ...singleSeries,
-    //   [name]: value,
-    // })
-    // interface PrevState {
-    //   [key: string]: FlowSeriesData[keyof FlowSeriesData]
-    // }
-    // setSingleSeries((prevState: PrevState) => {
-    //   let checkArray = prevState[name]
-    //   // Check if the field is an array
-    //   if (Array.isArray(checkArray)) {
-    //     // Assuming you want to update the entire array or a specific index
-    //     // For example, updating the entire array
-    //     return {
-    //       ...prevState,
-    //       [name]: [...value.split(',')], // Assuming value is a comma-separated string
-    //     }
-    //   } else {
-    //     // Update the field normally
-    //     return {
-    //       ...prevState,
-    //       [name]: value,
-    //     }
-    //   }
-    // })
-    // const setSingleSeries = (name: string, value: string) => {
-    //   setSingleSeries((prevState: PrevState) => {
-    //     let checkArray = prevState[name]
-    //     // Check if the field is an array
-    //     if (Array.isArray(checkArray)) {
-    //       // Assuming you want to update the entire array
-    //       return {
-    //         ...prevState,
-    //         [name]: [...value.split(',')], // Assuming value is a comma-separated string
-    //       }
-    //     } else {
-    //       // Update the field normally
-    //       return {
-    //         ...prevState,
-    //         [name]: value,
-    //       }
-    //     }
-    //   })
-    // }
-
-    console.log('singleSeries', singleSeries)
+    dispatch({
+      type: 'SET_FLOW_SERIES',
+      payload: {
+        ...state.flowSeries,
+        [name]: value,
+      },
+    })
   }
 
   return (
@@ -286,7 +198,7 @@ export default function Page() {
                     label="Breath Duration"
                     variant="outlined"
                     name="breath_duration"
-                    value={breathDuration}
+                    value={breath_duration}
                     // onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     //   setBreathDuration(event.currentTarget.value)
                     // }

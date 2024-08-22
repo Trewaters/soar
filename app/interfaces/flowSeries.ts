@@ -1,4 +1,4 @@
-export interface FlowSeriesData {
+export interface OLDFlowSeriesData {
   id?: string
   seriesName: string
   seriesPostures: string[]
