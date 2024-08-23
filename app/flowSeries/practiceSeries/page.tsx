@@ -98,7 +98,7 @@ export default function Page() {
           // component="a"
           LinkComponent="a"
         >
-          Back to home
+          Back to flow
         </Button>
       </Stack>
       {flow && (
