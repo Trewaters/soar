@@ -333,7 +333,7 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 
 ## TO DO
 
-- Wire up the User Profile page (2024-08-01 20:30:34)
+- Finish setting up login on all pages. Restricting access to features based on signing into their user profile. (2024-08-23 07:08:21)
 - Add Frontend Services to call my back end apis. (2024-07-29 17:02:20)
 - Add permanent IP Address to MongoDB Atlas Cluster whitelist for access. Upon deployment of non-alpha. So at the end of alpha phase of development. (2024-07-20 06:53:15)
 
