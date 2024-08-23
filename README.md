@@ -10,15 +10,18 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 ### What the app should do?
 
-#### Landing page
-
-**Flow**
-
-- Practice posture series and sequences.
+#### App Sections
 
 **Asana Postures**
 
-- Show Yoga postures and some details about the posture like names, description, etc.
+- Show Yoga postures and some details about the posture including names, description, etc.
+
+**Flow**
+
+- Series are multiple asanas done in order. Series are smaller pieces that combine to make a Full Sequences.
+- Practice series
+- Practice sequences.
+- Create series.
 
 **Meditaiton**
 
@@ -333,7 +336,14 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 
 ## TO DO
 
-- Finish setting up login on all pages. Restricting access to features based on signing into their user profile. (2024-08-23 07:08:21)
+### Next
+
+1. Create a Practice Sequence page that shows sequences from MongoDB. (2024-08-23 16:41:01)
+2. Create a Sequence, upload to MongoDB. (2024-08-23 16:41:06)
+
+### Anytime
+
+- Finish setting up login access restrictions on all pages that need it (user profile, any submit pages like createSeries, etc.). Restricting access to features based on signing into their user profile. (2024-08-23 07:08:21)
 - Add Frontend Services to call my back end apis. (2024-07-29 17:02:20)
 - Add permanent IP Address to MongoDB Atlas Cluster whitelist for access. Upon deployment of non-alpha. So at the end of alpha phase of development. (2024-07-20 06:53:15)
 
