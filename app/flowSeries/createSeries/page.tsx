@@ -19,8 +19,11 @@ import {
   Typography,
 } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 export default function Page() {
+  const { data: session } = useSession()
+  console.log('session', session)
   const { state, dispatch } = useFlowSeries()
   const {
     seriesName,
@@ -262,6 +265,7 @@ export default function Page() {
                     variant="contained"
                     color="primary"
                     onClick={handleSubmit}
+                    disabled={!session}
                   >
                     Submit
                   </Button>
