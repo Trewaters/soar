@@ -62,7 +62,7 @@ export default function Page() {
       </Typography>
       <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
         <Button
-          variant="outlined"
+          variant="contained"
           href="/flowSeries/practiceSeries"
           // component="a"
           LinkComponent="a"
@@ -73,7 +73,7 @@ export default function Page() {
           <>
             <Typography variant="body1">or</Typography>
             <Button
-              variant="contained"
+              variant="outlined"
               color="primary"
               href="/flowSeries/createSeries"
               LinkComponent="a"
@@ -88,19 +88,23 @@ export default function Page() {
           <Button
             variant="contained"
             LinkComponent="a"
-            href="/flowSeries/practieceSeries"
-          >
-            Practice Series
-          </Button>
-          <Typography variant="body1">vs.</Typography>
-          <Button
-            variant="outlined"
-            color="primary"
-            LinkComponent="a"
             href="/flowSeries/practiceSequences"
           >
-            Practice Sequences
+            Practice Sequence
           </Button>
+          {FEATURES.SHOW_CREATE_SEQUENCE && (
+            <>
+              <Typography variant="body1">or</Typography>
+              <Button
+                variant="outlined"
+                color="primary"
+                LinkComponent="a"
+                href="/flowSeries/practiceSequences"
+              >
+                Create Sequence
+              </Button>
+            </>
+          )}
         </Stack>
       )}
 
