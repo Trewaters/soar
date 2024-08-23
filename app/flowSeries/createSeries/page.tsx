@@ -61,7 +61,7 @@ export default function Page() {
     }
 
     fetchData()
-  }, [])
+  }, [session])
 
   function handleSelect(event: ChangeEvent<{}>, value: PostureData | null) {
     // Logs the type of event (e.g., 'click')
@@ -265,7 +265,7 @@ export default function Page() {
                     variant="contained"
                     color="primary"
                     onClick={handleSubmit}
-                    disabled={!session}
+                    disabled={session === null}
                   >
                     Submit
                   </Button>
