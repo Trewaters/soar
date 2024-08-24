@@ -1,9 +1,9 @@
-import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
+import { FlowSeriesSequence } from '@app/context/AsanaSeriesContext'
 
 export interface SequenceData {
   id: number
   nameSequence: string
-  sequencesSeries: FlowSeriesData[]
+  sequencesSeries: FlowSeriesSequence[]
   description?: string
   duration?: string
   image?: string

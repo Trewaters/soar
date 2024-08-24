@@ -127,7 +127,7 @@ model AsanaSeries {
 model AsanaSequence {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
   nameSequence    String
-  sequencesSeries   String[]
+  sequencesSeries   Json[]
   description     String?
   duration        String?
   image           String?

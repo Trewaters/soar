@@ -128,9 +128,9 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 
 ### Known Bugs
 
-**Twitter Auth Forbidden**
+**TITLE (as of DATE)**
 
-2024-07-26 16:18:25
+**Twitter Auth Forbidden (as of 2024-07-26 16:18:25)**
 
 Currently setup to use v5 of Auth.js. Provider must be tested from Vercel hosting due to TwitterX terms of use. When trying to login through provider I get a 403 error in the browser. No errors showing in Vercel. Just has redirect log to Twitter auth.
 
@@ -285,17 +285,6 @@ or start using Prisma Client at the edge (See: https://pris.ly/d/accelerate)
 import { PrismaClient } from './prisma/generated/client/edge'
 const prisma = new PrismaClient()
 ```
-
-**Known Error (as of 2024-06-30 11:38:23)**
-
-$ npm exec prisma migrate dev
-Environment variables loaded from .env
-Prisma schema loaded from prisma\schema.prisma
-Datasource "db": MongoDB database "yogaDBSandbox" at "localhost:27017"
-
-Error: The "mongodb" provider is not supported with this command. For more info see https://www.prisma.io/docs/concepts/database-connectors/mongodb
-0: schema_core::state::DevDiagnostic
-at schema-engine\core\src\state.rs:276
 
 ```bash
 npx prisma generate

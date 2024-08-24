@@ -5568,7 +5568,7 @@ export namespace Prisma {
   export type AsanaSequenceGroupByOutputType = {
     id: string
     nameSequence: string
-    sequencesSeries: string[]
+    sequencesSeries: JsonValue[]
     description: string | null
     duration: string | null
     image: string | null
@@ -5626,7 +5626,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       nameSequence: string
-      sequencesSeries: string[]
+      sequencesSeries: Prisma.JsonValue[]
       description: string | null
       duration: string | null
       image: string | null
@@ -6027,7 +6027,7 @@ export namespace Prisma {
   interface AsanaSequenceFieldRefs {
     readonly id: FieldRef<"AsanaSequence", 'String'>
     readonly nameSequence: FieldRef<"AsanaSequence", 'String'>
-    readonly sequencesSeries: FieldRef<"AsanaSequence", 'String[]'>
+    readonly sequencesSeries: FieldRef<"AsanaSequence", 'Json[]'>
     readonly description: FieldRef<"AsanaSequence", 'String'>
     readonly duration: FieldRef<"AsanaSequence", 'String'>
     readonly image: FieldRef<"AsanaSequence", 'String'>
@@ -7014,7 +7014,7 @@ export namespace Prisma {
     NOT?: AsanaSequenceWhereInput | AsanaSequenceWhereInput[]
     id?: StringFilter<"AsanaSequence"> | string
     nameSequence?: StringFilter<"AsanaSequence"> | string
-    sequencesSeries?: StringNullableListFilter<"AsanaSequence">
+    sequencesSeries?: JsonNullableListFilter<"AsanaSequence">
     description?: StringNullableFilter<"AsanaSequence"> | string | null
     duration?: StringNullableFilter<"AsanaSequence"> | string | null
     image?: StringNullableFilter<"AsanaSequence"> | string | null
@@ -7041,7 +7041,7 @@ export namespace Prisma {
     OR?: AsanaSequenceWhereInput[]
     NOT?: AsanaSequenceWhereInput | AsanaSequenceWhereInput[]
     nameSequence?: StringFilter<"AsanaSequence"> | string
-    sequencesSeries?: StringNullableListFilter<"AsanaSequence">
+    sequencesSeries?: JsonNullableListFilter<"AsanaSequence">
     description?: StringNullableFilter<"AsanaSequence"> | string | null
     duration?: StringNullableFilter<"AsanaSequence"> | string | null
     image?: StringNullableFilter<"AsanaSequence"> | string | null
@@ -7071,7 +7071,7 @@ export namespace Prisma {
     NOT?: AsanaSequenceScalarWhereWithAggregatesInput | AsanaSequenceScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"AsanaSequence"> | string
     nameSequence?: StringWithAggregatesFilter<"AsanaSequence"> | string
-    sequencesSeries?: StringNullableListFilter<"AsanaSequence">
+    sequencesSeries?: JsonNullableListFilter<"AsanaSequence">
     description?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
     duration?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
     image?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
@@ -7637,7 +7637,7 @@ export namespace Prisma {
   export type AsanaSequenceCreateInput = {
     id?: string
     nameSequence: string
-    sequencesSeries?: AsanaSequenceCreatesequencesSeriesInput | string[]
+    sequencesSeries?: AsanaSequenceCreatesequencesSeriesInput | InputJsonValue[]
     description?: string | null
     duration?: string | null
     image?: string | null
@@ -7649,7 +7649,7 @@ export namespace Prisma {
   export type AsanaSequenceUncheckedCreateInput = {
     id?: string
     nameSequence: string
-    sequencesSeries?: AsanaSequenceCreatesequencesSeriesInput | string[]
+    sequencesSeries?: AsanaSequenceCreatesequencesSeriesInput | InputJsonValue[]
     description?: string | null
     duration?: string | null
     image?: string | null
@@ -7660,7 +7660,7 @@ export namespace Prisma {
 
   export type AsanaSequenceUpdateInput = {
     nameSequence?: StringFieldUpdateOperationsInput | string
-    sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | string[]
+    sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | InputJsonValue[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7671,7 +7671,7 @@ export namespace Prisma {
 
   export type AsanaSequenceUncheckedUpdateInput = {
     nameSequence?: StringFieldUpdateOperationsInput | string
-    sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | string[]
+    sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | InputJsonValue[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7683,7 +7683,7 @@ export namespace Prisma {
   export type AsanaSequenceCreateManyInput = {
     id?: string
     nameSequence: string
-    sequencesSeries?: AsanaSequenceCreatesequencesSeriesInput | string[]
+    sequencesSeries?: AsanaSequenceCreatesequencesSeriesInput | InputJsonValue[]
     description?: string | null
     duration?: string | null
     image?: string | null
@@ -7694,7 +7694,7 @@ export namespace Prisma {
 
   export type AsanaSequenceUpdateManyMutationInput = {
     nameSequence?: StringFieldUpdateOperationsInput | string
-    sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | string[]
+    sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | InputJsonValue[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7705,7 +7705,7 @@ export namespace Prisma {
 
   export type AsanaSequenceUncheckedUpdateManyInput = {
     nameSequence?: StringFieldUpdateOperationsInput | string
-    sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | string[]
+    sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | InputJsonValue[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8371,12 +8371,12 @@ export namespace Prisma {
   }
 
   export type AsanaSequenceCreatesequencesSeriesInput = {
-    set: string[]
+    set: InputJsonValue[]
   }
 
   export type AsanaSequenceUpdatesequencesSeriesInput = {
-    set?: string[]
-    push?: string | string[]
+    set?: InputJsonValue[]
+    push?: InputJsonValue | InputJsonValue[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {

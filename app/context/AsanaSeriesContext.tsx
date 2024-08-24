@@ -7,12 +7,25 @@ import {
   useReducer,
 } from 'react'
 
+// used for the series page data
 export interface FlowSeriesData {
   id?: string
   seriesName: string
   seriesPostures: string[]
   breath_duration?: string
   description?: string
+  duration?: string
+  image?: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+// used for the sequence page data
+export interface FlowSeriesSequence {
+  id?: string
+  seriesName: string
+  seriesPostures: string[]
+  breath_duration?: string
   duration?: string
   image?: string
   createdAt?: string
