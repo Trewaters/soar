@@ -2,6 +2,7 @@
 import { SequenceData } from '@app/interfaces/sequence'
 import {
   Box,
+  Button,
   Card,
   CardContent,
   CardHeader,
@@ -136,14 +137,16 @@ export default function Page() {
   }, [])
 
   return (
-    <Paper
-      sx={{
-        borderColor: 'primary.main',
-        borderWidth: '3px',
-        borderStyle: 'solid',
-        paddingTop: 4,
-      }}
-    >
+    <>
+      <Button
+        variant="outlined"
+        href="/flowSeries"
+        LinkComponent="a"
+        size="medium"
+        sx={{ my: 3, display: 'block' }}
+      >
+        Back to flow
+      </Button>
       <Typography variant="h2" align="center">
         Practice Sequences
       </Typography>
@@ -151,7 +154,7 @@ export default function Page() {
         <React.Fragment key={flow.id}>
           <Box
             sx={{
-              margin: 4,
+              margin: 2,
             }}
           >
             <Typography variant="h3" textAlign="center">
@@ -163,7 +166,7 @@ export default function Page() {
               <Card
                 key={i}
                 sx={{
-                  width: '50%',
+                  width: '85%',
                   boxShadow: 3,
                   textAlign: 'center',
                   borderColor: 'primary.main',
@@ -182,6 +185,7 @@ export default function Page() {
                         key={asanaIndex}
                         textAlign={'left'}
                         variant="body1"
+                        sx={{ my: 2 }}
                       >
                         {asana}
                       </Typography>
@@ -221,6 +225,6 @@ export default function Page() {
                   import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
 
                   */}
-    </Paper>
+    </>
   )
 }
