@@ -327,8 +327,7 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 
 ### Next
 
-1. Create a Practice Sequence page that shows sequences from MongoDB. (2024-08-23 16:41:01)
-2. Create a Sequence, upload to MongoDB. (2024-08-23 16:41:06)
+1. Create a Sequence, upload to MongoDB. (2024-08-23 16:41:06)
 
 ### Anytime
 

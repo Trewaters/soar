@@ -75,7 +75,16 @@ export default function Page() {
       <Typography variant="h2" textAlign="center">
         Practice Yoga Series
       </Typography>
-      <Stack direction={'row'} justifyContent={'space-between'}>
+      <Stack direction={'column'} justifyContent={'space-between'}>
+        <Button
+          variant="outlined"
+          href="/flowSeries"
+          // component="a"
+          LinkComponent="a"
+          sx={{ my: 3 }}
+        >
+          Back to flow
+        </Button>
         <Autocomplete
           disablePortal
           id="combo-box-series-search"
@@ -92,14 +101,6 @@ export default function Page() {
           )}
           onChange={handleSelect}
         />
-        <Button
-          variant="outlined"
-          href="/flowSeries"
-          // component="a"
-          LinkComponent="a"
-        >
-          Back to flow
-        </Button>
       </Stack>
       {flow && (
         <Box width="100%" textAlign="center" marginTop={4} key={flow.id}>

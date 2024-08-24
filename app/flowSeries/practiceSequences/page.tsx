@@ -1,124 +1,31 @@
 'use client'
 import { SequenceData } from '@app/interfaces/sequence'
 import {
+  Autocomplete,
   Box,
   Button,
   Card,
   CardContent,
   CardHeader,
-  Paper,
   Stack,
+  TextField,
   Typography,
 } from '@mui/material'
-import React, { useEffect } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 
 export default function Page() {
-  // const sequence: SequenceData[] = [
-  //   {
-  //     id: 1,
-  //     nameSequence: 'C1 Sequence',
-  //     sequencesSeries: [
-  //       {
-  //         id: '1',
-  //         seriesName: 'Integration Series',
-  //         seriesPostures: [
-  //           "Child's Pose Balasana",
-  //           'Downward Facing Dog, Adho Mukha Svanasana',
-  //           'Ragdoll, Uttanasana',
-  //           'Stand at Attention, Samsthiti',
-  //         ],
-  //       },
-  //       {
-  //         id: '2',
-  //         seriesName: 'Sun Salutation A Series',
-  //         seriesPostures: [
-  //           'Mountain Pose, Tadasana',
-  //           'Standing Forward Fold, Uttanasana',
-  //           'Halfway Lift Ardha, Uttanasana',
-  //           'High to Low Plank, Chaturanga Dandasana',
-  //           'Upward Facing Dog, Urdhva Mukha Svanasana',
-  //           'Downward Facing Dog, Adho Mukha Svanasana',
-  //         ],
-  //       },
-  //       {
-  //         id: '3',
-  //         seriesName: 'Sun Salutation B Series',
-  //         seriesPostures: [
-  //           'Chair Pose, Utkatasana',
-  //           'Standing Forward Fold, Uttanasana',
-  //           'Halfway Lift, Ardha Uttanasana',
-  //           'High to Low Plank, Chaturanga Dandasana',
-  //           'Upward Facing Dog, Urdhva Mukha Svanasana',
-  //           'Downward Facing Dog, Adho Mukha Svanasana',
-  //           'Warrior Two, Virabhadrasana II',
-  //           'Extended Side Angle, Utthita Parsvakonasana',
-  //           'Reverse Warrior, Parivrtta Virabhadrasana II',
-  //           'High to Low Plank, Chaturanga Dandasana',
-  //         ],
-  //       },
-  //       {
-  //         id: '4',
-  //         seriesName: 'Crescent Lunge Series',
-  //         seriesPostures: [
-  //           'Crescent Lunge, Anjanayesana',
-  //           'Revolved Crescent Lunge, Parivrtta Anjanayesana',
-  //           "Runner's Lunge, Anjaneyasana",
-  //           'Side Plank, Vasisthasana',
-  //           'Prayer Twist, Parivrtta Utkatasana',
-  //           'Gorilla Pose, Padahastasana',
-  //           'Crow Pose, Bakasana',
-  //         ],
-  //       },
-  //       {
-  //         id: '5',
-  //         seriesName: 'Balancing Series',
-  //         seriesPostures: [
-  //           'Eagle Pose, Garudasana',
-  //           "Dancer's Pose, Natarajasana",
-  //           'Tree Pose, Vrksasana',
-  //         ],
-  //       },
-  //       {
-  //         id: '6',
-  //         seriesName: 'Triangle Series',
-  //         seriesPostures: [
-  //           'Warrior One, Virabhadrasana I',
-  //           'Warrior Two, Virabhadrasana II',
-  //           'Triangle Pose, Trikonasana',
-  //           'Wide Leg Forward Fold, Paschimottansana',
-  //         ],
-  //       },
-  //       {
-  //         id: '7',
-  //         seriesName: 'Hip Series',
-  //         seriesPostures: ['Half Pigeon Eka Pada Rajakapotasana'],
-  //       },
-  //       {
-  //         id: '8',
-  //         seriesName: 'Spine Series',
-  //         seriesPostures: [
-  //           'Cobra Pose, Bhujangasana',
-  //           'Bow Pose, Dhanurasana',
-  //           'Camel Pose, Ustrasana',
-  //           'Bridge Pose, Setu Bandha Sarvangasana',
-  //           'Reclined Bound Angle Pose, Supta Baddha Konasana',
-  //         ],
-  //       },
-  //       {
-  //         id: '9',
-  //         seriesName: 'Surrender Series',
-  //         seriesPostures: [
-  //           'Seated Forward Fold, Paschimittonasana',
-  //           'Happy Baby, Ananda Balasana',
-  //           'Supine Twist, Jathara Parivartanasana',
-  //           'Corpse Pose, Savasana',
-  //           'Easy Pose, Sukhasana',
-  //         ],
-  //       },
-  //     ],
-  //   },
-  // ]
-  const [sequences, setSequences] = React.useState<SequenceData[]>([])
+  const [sequences, setSequences] = useState<SequenceData[]>([])
+  const [singleSequence, setSingleSequence] = useState<SequenceData>({
+    id: 0,
+    nameSequence: '',
+    sequencesSeries: [],
+    description: '',
+    duration: '',
+    image: '',
+    breath_direction: '',
+    createdAt: '',
+    updatedAt: '',
+  })
 
   useEffect(() => {
     async function fetchData() {
@@ -136,6 +43,18 @@ export default function Page() {
     fetchData()
   }, [])
 
+  function handleSelect(event: ChangeEvent<{}>, value: SequenceData | null) {
+    // Logs the type of event (e.g., 'click')
+    // console.log('Event type:', event.type)
+    // Logs the element that triggered the event
+    // console.log('Event target:', event.target)
+    console.log('Selected value:', value)
+    event.preventDefault()
+    if (value) {
+      setSingleSequence(value)
+    }
+  }
+
   return (
     <>
       <Button
@@ -150,53 +69,65 @@ export default function Page() {
       <Typography variant="h2" align="center">
         Practice Sequences
       </Typography>
-      {sequences.map((flow) => (
-        <React.Fragment key={flow.id}>
-          <Box
-            sx={{
-              margin: 2,
-            }}
-          >
-            <Typography variant="h3" textAlign="center">
-              {flow.nameSequence}
-            </Typography>
-          </Box>
-          <Stack rowGap={3} alignItems="center">
-            {flow.sequencesSeries.map((seriesMini, i) => (
-              <Card
-                key={i}
-                sx={{
-                  width: '85%',
-                  boxShadow: 3,
-                  textAlign: 'center',
-                  borderColor: 'primary.main',
-                  borderWidth: '1px',
-                  borderStyle: 'solid',
-                }}
-              >
-                <CardHeader title={seriesMini.seriesName} />
-                <CardContent>
-                  {/* 
+      <Autocomplete
+        disablePortal
+        id="combo-box-series-search"
+        options={sequences}
+        getOptionLabel={(option: SequenceData) => option.nameSequence}
+        renderOption={(props, option) => (
+          <li {...props} key={option.id}>
+            {option.nameSequence}
+          </li>
+        )}
+        sx={{ width: '50%' }}
+        renderInput={(params) => <TextField {...params} label="Flow Series" />}
+        onChange={handleSelect}
+      />
+      <React.Fragment key={singleSequence.id}>
+        <Box
+          sx={{
+            margin: 2,
+          }}
+        >
+          <Typography variant="h3" textAlign="center">
+            {singleSequence.nameSequence}
+          </Typography>
+        </Box>
+        <Stack rowGap={3} alignItems="center">
+          {singleSequence.sequencesSeries.map((seriesMini, i) => (
+            <Card
+              key={i}
+              sx={{
+                width: '85%',
+                boxShadow: 3,
+                textAlign: 'center',
+                borderColor: 'primary.main',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+              }}
+            >
+              <CardHeader title={seriesMini.seriesName} />
+              <CardContent>
+                {/* 
                   // ! add types to this
                    */}
-                  {seriesMini.seriesPostures.map(
-                    (asana: any, asanaIndex: any) => (
-                      <Typography
-                        key={asanaIndex}
-                        textAlign={'left'}
-                        variant="body1"
-                        sx={{ my: 2 }}
-                      >
-                        {asana}
-                      </Typography>
-                    )
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </Stack>
-        </React.Fragment>
-      ))}
+                {seriesMini.seriesPostures.map(
+                  (asana: any, asanaIndex: any) => (
+                    <Typography
+                      key={asanaIndex}
+                      textAlign={'left'}
+                      variant="body1"
+                      sx={{ my: 2 }}
+                    >
+                      {asana}
+                    </Typography>
+                  )
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </Stack>
+      </React.Fragment>
       {/* 
                   // breath icons
                   import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
