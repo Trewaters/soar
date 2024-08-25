@@ -1,5 +1,5 @@
 'use client'
-import { SequenceData } from '@app/interfaces/sequence'
+import { SequenceData } from '@app/context/SequenceContext'
 import {
   Autocomplete,
   Box,

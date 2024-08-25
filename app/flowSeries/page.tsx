@@ -99,7 +99,7 @@ export default function Page() {
                 variant="outlined"
                 color="primary"
                 LinkComponent="a"
-                href="/flowSeries/practiceSequences"
+                href="/flowSeries/createSequence"
               >
                 Create Sequence
               </Button>

@@ -1,5 +1,3 @@
-// Create a Series
-import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
 import { PrismaClient } from '@prisma/generated/client'
 
 const prisma = new PrismaClient()

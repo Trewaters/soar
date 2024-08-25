@@ -328,6 +328,22 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 ### Next
 
 1. Create a Sequence, upload to MongoDB. (2024-08-23 16:41:06)
+2. Sequence (2024-08-24 08:43:39)
+   - Views change… Practice view is “wheel of fortune” scrolling view, it highlights current pose (half screen magnification) while above and below are smaller. ; Study view allows a list view of the poses in the sequence.
+   - Improve layout for readability
+3. Asana (2024-08-24 08:44:11)
+   - Save sequence of postures. (Naomi must-have)
+   - Work toward a peak post. App creates a sequence of postures for a peak posture. User pics the peak posture and the app shows a sequence that will build to it. (Naomi must-have)
+4. Navigation (2024-08-24 08:44:15)
+   - Improve top left hamburger menu. Quick links go here. Move landing page menu to the hamburger.
+   - “Soar” at top right links back to HOME screen.
+   - Add main navigation across top of app below header.
+5. Add Google Analytics (2024-08-24 08:44:21)
+6. Add Google Maps (2024-08-24 08:44:25)
+7. Hide features behind a flag (2024-08-24 08:44:29)
+   - Add user roles to application. Pass with the session. (dev, admin, tester, etc)
+   - Restrict Features. Allow “My” (dev) role to see the features while work on them
+   - Create series (etc) MUST be restricted to certain users.
 
 ### Anytime
 
