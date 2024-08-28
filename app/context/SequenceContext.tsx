@@ -3,7 +3,7 @@ import {
   createContext,
   Dispatch,
   ReactNode,
-  use,
+  useContext,
   useEffect,
   useReducer,
 } from 'react'
@@ -34,6 +34,7 @@ const initialState: SequencePageState = {
     description: '',
     duration: '',
     image: '',
+    // ! REMOVE: breath_direction is not need. (2024-08-27 16:49:10)
     breath_direction: '',
     createdAt: '',
     updatedAt: '',
@@ -88,7 +89,7 @@ export default function SequenceProvider({
 }
 
 export function useSequence() {
-  const context = use(SequenceContext)
+  const context = useContext(SequenceContext)
   if (context === undefined) {
     throw new Error('useSequence must be used within a SequenceProvider')
   }

@@ -2,7 +2,6 @@
 import React from 'react'
 import { useFlowSeries } from '@app/context/AsanaSeriesContext'
 import { FEATURES } from '@app/FEATURES'
-import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
 import PostureData from '@app/interfaces/postureData'
 import {
   Accordion,
@@ -13,6 +12,7 @@ import {
   Card,
   CardContent,
   FormControl,
+  FormGroup,
   Grid,
   Stack,
   TextField,
@@ -36,8 +36,8 @@ export default function Page() {
 
   // posture data
   const [postures, setPostures] = useState<PostureData[]>([])
-  const [singlePosture, setSinglePosture] = useState<PostureData>()
-  const [postureName, setPostureName] = useState('')
+  // const [singlePosture, setSinglePosture] = useState<PostureData>()
+  // const [postureName, setPostureName] = useState('')
 
   useEffect(() => {
     async function fetchData() {
@@ -72,11 +72,11 @@ export default function Page() {
     event.preventDefault()
     if (value) {
       // console.log('value', value)
-      setSinglePosture(value)
-      console.log('singlePosture', singlePosture)
+      // setSinglePosture(value)
+      // console.log('singlePosture', singlePosture)
 
-      setPostureName(value.english_name)
-      console.log('postureName', postureName)
+      // setPostureName(value.english_name)
+      // console.log('postureName', postureName)
 
       dispatch({
         type: 'SET_FLOW_SERIES',
@@ -149,7 +149,7 @@ export default function Page() {
             Create a Series
           </Typography>
 
-          <form>
+          <FormGroup>
             <Grid container spacing={3}>
               <FormControl>
                 <Grid item xs={12}>
@@ -179,6 +179,7 @@ export default function Page() {
                     //   setSeriesPostures(event.currentTarget.value)
                     // }
                     onChange={handleChange}
+                    disabled
                   />
                 </FormControl>
                 <FormControl>
@@ -284,47 +285,7 @@ export default function Page() {
                 </Stack>
               </Grid>
             </Grid>
-          </form>
-          {/* {flowSeries.map((flow) => (
-        <Accordion
-          key={flow.id}
-          sx={{
-            pb: '1em',
-            borderWidth: '3px',
-            margin: 3,
-            borderColor: 'primary.main',
-            borderStyle: 'solid',
-          }}
-          disableGutters
-        >
-          <AccordionSummary sx={{ ml: 2, pt: 3 }}>
-            <Typography variant="h3">{flow.seriesName}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Stack rowGap={3} alignItems="center">
-              {flow.seriesPostures.map((pose) => (
-                <Card
-                  key={pose}
-                  sx={{
-                    width: '80%',
-                    boxShadow: 3,
-                    textAlign: 'center',
-                    borderColor: 'primary.light',
-                    borderWidth: '1px',
-                    borderStyle: 'solid',
-                  }}
-                >
-                  <CardContent>
-                    <Typography key={pose} variant="body1" textAlign={'left'}>
-                      {pose}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              ))}
-            </Stack>
-          </AccordionDetails>
-        </Accordion>
-      ))} */}
+          </FormGroup>
         </>
       )}
     </>

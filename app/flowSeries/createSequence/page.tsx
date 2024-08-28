@@ -1,6 +1,6 @@
 'use client'
 import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
-import { useSequence } from '@app/context/SequenceContext'
+import { SequenceData, useSequence } from '@app/context/SequenceContext'
 import { FEATURES } from '@app/FEATURES'
 import {
   Autocomplete,
@@ -8,6 +8,9 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  List,
+  ListItem,
+  ListItemText,
   Stack,
   TextField,
   Typography,
@@ -22,13 +25,12 @@ async function fetchSequence() {
       throw new Error('Network response was not ok')
     }
     const data = await res.json()
-    console.log('fetchSequence-data', data)
+    // console.log('fetchSequence-data', data)
     return data
   } catch (error) {
     console.error('Error fetching sequence data:', error)
   }
 }
-console.log('fetchSequence', fetchSequence())
 
 async function fetchSeries() {
   try {
@@ -37,7 +39,7 @@ async function fetchSeries() {
       throw new Error('Network response was not ok')
     }
     const data = await res.json()
-    console.log('fetchSeries-data', data)
+    // console.log('fetchSeries-data', data)
     return data
   } catch (error) {
     console.error('Error fetching sequence data:', error)
@@ -48,47 +50,102 @@ export default function Page() {
   const { data: session } = useSession()
   // console.log('session', session)
   const { state, dispatch } = useSequence()
+  // const {
+  //   nameSequence,
+  //   sequencesSeries,
+  //   description,
+  //   duration,
+  //   image,
+  //   breath_direction,
+  // } = state.sequences
+
+  const [sequences, setSequences] = useState<SequenceData>({
+    id: 0,
+    nameSequence: '',
+    sequencesSeries: [],
+    description: '',
+    duration: '',
+    image: '',
+    breath_direction: '',
+  })
+
+  const [nameSequence, setNameSequence] = useState('')
+  const [sequencesSeries, setSequenceSeries] = useState<FlowSeriesData[]>([])
+  const [description, setDescription] = useState('')
+  const [duration, setDuration] = useState('')
+  const [image, setImage] = useState('')
+  const [breath_direction, setBreathDirection] = useState('')
+
   const [flowSeries, setFlowSeries] = useState<FlowSeriesData[]>([])
-  const {
-    nameSequence,
-    sequencesSeries,
-    description,
-    duration,
-    image,
-    breath_direction,
-  } = state.sequences
+  const [seriesNameSet, setSeriesNameSet] = useState<string[]>([])
+  const [postures, setPostures] = useState<string[]>([])
 
   useEffect(() => {
     async function getData() {
       const seriesData = await fetchSeries()
-      const sequenceData = await fetchSequence()
+      // const sequenceData = await fetchSequence()
 
       if (seriesData) {
         setFlowSeries(seriesData)
       }
-      if (sequenceData) {
-        dispatch({ type: 'SET_SEQUENCES', payload: sequenceData })
-      }
+      // if (sequenceData) {
+      //   dispatch({ type: 'SET_SEQUENCES', payload: sequenceData })
+      // }
     }
     getData()
-  }, [dispatch])
+  }, [session])
 
   function handleSelect(event: ChangeEvent<{}>, value: FlowSeriesData | null) {
     // Logs the type of event (e.g., 'click')
     // console.log('Event type:', event.type)
     // Logs the element that triggered the event
     // console.log('Event target:', event.target)
-    // console.log('Selected value:', value)
+    console.log('Selected value:', value)
     event.preventDefault()
     if (value) {
-      setFlowSeries([value])
+      setSeriesNameSet((prevSeriesNameSet) => [
+        ...prevSeriesNameSet,
+        value.seriesName,
+      ])
+      // console.log('seriesNameSet', seriesNameSet)
+      // console.log('value.seriesName', value.seriesName)
+
+      setPostures(value.seriesPostures)
+      // console.log('postures', postures)
+
+      // setSequenceSeries((prevSeries) => [...prevSeries, value])
+      // console.log('sequenceSeries', sequenceSeries)
+
+      // dispatch({
+      //   type: 'SET_SEQUENCES',
+      //   payload: {
+      //     ...state.sequences,
+      //     sequencesSeries: [...state.sequences.sequencesSeries, value],
+      //   },
+      // })
+      setSequences({
+        ...sequences,
+        sequencesSeries: [...sequences.sequencesSeries, value],
+      })
+      // console.log('state.sequences', state.sequences.sequencesSeries)
+      console.log('sequences', sequences)
     }
   }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
+    // const updatedSequence = {
+    //   ...state.sequences,
+    //   nameSequence,
+    //   sequencesSeries,
+    //   description,
+    //   duration,
+    //   image,
+    //   breath_direction,
+    // }
+    console.log('handleSubmit-sequences', sequences)
     const updatedSequence = {
-      ...state.sequences,
+      ...sequences,
       nameSequence,
       sequencesSeries,
       description,
@@ -97,10 +154,12 @@ export default function Page() {
       breath_direction,
     }
 
-    dispatch({ type: 'SET_SEQUENCES', payload: updatedSequence })
+    // dispatch({ type: 'SET_SEQUENCES', payload: updatedSequence })
+
+    console.log('handleSubmit-updatedSequence', updatedSequence)
 
     try {
-      const response = await fetch('/api/series/createSequence', {
+      const response = await fetch('/api/sequences/createSequence', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,6 +173,41 @@ export default function Page() {
       console.log('handleSubmit', data)
     } catch (error: Error | any) {
       error.message
+    }
+  }
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target
+    console.log('handleChange', name, value)
+    console.log('handleChange state.sequences', state.sequences)
+    // dispatch({
+    //   type: 'SET_SEQUENCES',
+    //   payload: {
+    //     ...state.sequences,
+    //     [name]: value,
+    //   },
+    // })
+    switch (name) {
+      case 'nameSequence':
+        setNameSequence(value)
+        break
+      case 'sequencesSeries':
+        setSequenceSeries(
+          (prevValue) => [...prevValue, value] as FlowSeriesData[]
+        )
+        break
+      case 'description':
+        setDescription(value)
+        break
+      case 'duration':
+        setDuration(value)
+        break
+      case 'image':
+        setImage(value)
+        break
+      case 'breath_direction':
+        setBreathDirection(value)
+        break
     }
   }
 
@@ -143,28 +237,47 @@ export default function Page() {
             <FormControl>
               <FormLabel>Sequence Name</FormLabel>
               <TextField
-                id="nameSequence"
+                id="outlined-basic"
                 variant="outlined"
+                name="nameSequence"
                 value={nameSequence}
-                onChange={(e) =>
-                  dispatch({
-                    type: 'SET_SEQUENCES',
-                    payload: {
-                      ...state.sequences,
-                      nameSequence: e.target.value,
-                    },
-                  })
-                }
+                onChange={handleChange}
               />
             </FormControl>
+
             <FormControl>
               <FormLabel>Series Name</FormLabel>
               <TextField
                 id="seriesName"
                 variant="outlined"
-                // value={sequencesSeries[0].seriesName}
+                name="seriesName"
+                value={seriesNameSet}
+                onChange={handleChange}
+                disabled
               />
             </FormControl>
+            <Stack
+              direction="row"
+              spacing={2}
+              justifyContent="flex-end"
+              sx={{ mt: 3 }}
+            >
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setSeriesNameSet((prev) => prev.slice(0, -1))}
+              >
+                <Typography>Remove One (-1)</Typography>
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setSeriesNameSet([])}
+              >
+                Clear
+              </Button>
+            </Stack>
+
             <Autocomplete
               disablePortal
               id="combo-box-series-search"
@@ -177,50 +290,32 @@ export default function Page() {
               )}
               sx={{ my: 3 }}
               renderInput={(params) => (
-                <TextField {...params} label="Series Postures" />
+                <TextField {...params} label="Pick Series" />
               )}
               onChange={handleSelect}
             />
-            <FormControl>
-              <FormLabel>Series Postures</FormLabel>
-              <TextField
-                id={`seriesPostures`}
-                variant="outlined"
-                // value={sequencesSeries[0].seriesPostures.join(',')}
-                // onChange={(e) => {
-                //   const updatedPostures = e.target.value.split(', ')
-                //   const updatedSequencesSeries = sequencesSeries.map(
-                //     (series, index) =>
-                //       index === 0
-                //         ? { ...series, seriesPostures: updatedPostures }
-                //         : series
-                //   )
-                //   dispatch({
-                //     type: 'SET_SEQUENCES',
-                //     payload: {
-                //       ...state.sequences,
-                //       sequencesSeries: updatedSequencesSeries,
-                //     },
-                //   })
-                // }}
-              />
-            </FormControl>
+
+            {postures?.length > 0 && (
+              <>
+                <Typography>Series Postures</Typography>
+                <List>
+                  {postures.map((series, index) => (
+                    <ListItem key={`${series}${index}`}>
+                      <ListItemText primary={series} />
+                    </ListItem>
+                  ))}
+                </List>
+              </>
+            )}
 
             <FormControl>
               <FormLabel>Description</FormLabel>
               <TextField
                 id="description"
                 variant="outlined"
+                name="description"
                 value={description}
-                onChange={(e) =>
-                  dispatch({
-                    type: 'SET_SEQUENCES',
-                    payload: {
-                      ...state.sequences,
-                      description: e.target.value,
-                    },
-                  })
-                }
+                onChange={handleChange}
               />
             </FormControl>
             <FormControl>
@@ -228,16 +323,9 @@ export default function Page() {
               <TextField
                 id="duration"
                 variant="outlined"
+                name="duration"
                 value={duration}
-                onChange={(e) =>
-                  dispatch({
-                    type: 'SET_SEQUENCES',
-                    payload: {
-                      ...state.sequences,
-                      duration: e.target.value,
-                    },
-                  })
-                }
+                onChange={handleChange}
               />
             </FormControl>
             <FormControl>
@@ -245,16 +333,9 @@ export default function Page() {
               <TextField
                 id="image"
                 variant="outlined"
+                name="image"
                 value={image}
-                onChange={(e) =>
-                  dispatch({
-                    type: 'SET_SEQUENCES',
-                    payload: {
-                      ...state.sequences,
-                      image: e.target.value,
-                    },
-                  })
-                }
+                onChange={handleChange}
               />
             </FormControl>
             <FormControl>
@@ -262,16 +343,9 @@ export default function Page() {
               <TextField
                 id="breath_direction"
                 variant="outlined"
+                name="breath_direction"
                 value={breath_direction}
-                onChange={(e) =>
-                  dispatch({
-                    type: 'SET_SEQUENCES',
-                    payload: {
-                      ...state.sequences,
-                      breath_direction: e.target.value,
-                    },
-                  })
-                }
+                onChange={handleChange}
               />
             </FormControl>
 
