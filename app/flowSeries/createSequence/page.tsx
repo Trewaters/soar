@@ -100,7 +100,7 @@ export default function Page() {
     // console.log('Event type:', event.type)
     // Logs the element that triggered the event
     // console.log('Event target:', event.target)
-    console.log('Selected value:', value)
+    // console.log('Selected value:', value)
     event.preventDefault()
     if (value) {
       setSeriesNameSet((prevSeriesNameSet) => [
@@ -127,8 +127,12 @@ export default function Page() {
         ...sequences,
         sequencesSeries: [...sequences.sequencesSeries, value],
       })
+      // setSequences({
+      //   ...sequences,
+      //   sequencesSeries: [...sequences.sequencesSeries, value],
+      // })
       // console.log('state.sequences', state.sequences.sequencesSeries)
-      console.log('sequences', sequences)
+      // console.log('sequences', sequences)
     }
   }
 
@@ -143,11 +147,11 @@ export default function Page() {
     //   image,
     //   breath_direction,
     // }
-    console.log('handleSubmit-sequences', sequences)
+    // console.log('handleSubmit-sequences', sequences)
     const updatedSequence = {
       ...sequences,
       nameSequence,
-      sequencesSeries,
+      sequencesSeries: sequences.sequencesSeries,
       description,
       duration,
       image,
@@ -156,7 +160,7 @@ export default function Page() {
 
     // dispatch({ type: 'SET_SEQUENCES', payload: updatedSequence })
 
-    console.log('handleSubmit-updatedSequence', updatedSequence)
+    // console.log('handleSubmit-updatedSequence', updatedSequence)
 
     try {
       const response = await fetch('/api/sequences/createSequence', {
@@ -170,7 +174,7 @@ export default function Page() {
         throw new Error('Network response was not ok')
       }
       const data = await response.json()
-      console.log('handleSubmit', data)
+      // console.log('handleSubmit', data)
     } catch (error: Error | any) {
       error.message
     }
@@ -178,8 +182,9 @@ export default function Page() {
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target
-    console.log('handleChange', name, value)
-    console.log('handleChange state.sequences', state.sequences)
+    // console.log('handleChange', name, value)
+    // console.log('handleChange state.sequences', state.sequences)
+    // console.log('handleChange sequences', sequences)
     // dispatch({
     //   type: 'SET_SEQUENCES',
     //   payload: {
@@ -191,10 +196,16 @@ export default function Page() {
       case 'nameSequence':
         setNameSequence(value)
         break
-      case 'sequencesSeries':
+      // case 'sequencesSeries':
+      //   setSequenceSeries(
+      //     (prevValue) => [...prevValue, value] as FlowSeriesData[]
+      //   )
+      //   break
+      case 'seriesName':
         setSequenceSeries(
           (prevValue) => [...prevValue, value] as FlowSeriesData[]
         )
+        setSeriesNameSet((prev) => [...prev, value])
         break
       case 'description':
         setDescription(value)
