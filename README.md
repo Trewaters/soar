@@ -156,11 +156,11 @@ What you are experiencing is a feature 😉 ! Open a [github issue](https://gith
 
 I create branches with the name of the feature I plan to work on. This way I keep my work seperated. If I don't finish I can come back to it, but it won't interfere with any other work I want to do on the app. These have been created organically and are due to change without notice because I am currently working alone.
 
-- "feature/flow": Create the Flow portions of the app. Series and Sequences.
-- "feature/auth"
-- "feature/nav"
-- "feature/profile"- keeping this branch until I finish working on the yogi profile page. Allow view, edit and shareable link of profile data.
-- "feature/posture-cards"
+- _"feature/flow":_ Flow portions of the app. View, edit, create the Series and Sequences.
+- _"feature/auth":_ Develop authentication, user roles, general app security, etc.
+- _"feature/nav":_ Application navigation elements
+- _"feature/profile":_ Work on the yogi user profile. Allow view, edit and shareable link of profile data.
+- _"feature/posture-cards":_ Work on asana features. Allow view, edit, and create postures.
 
 The "version" branches are locked after release.
 

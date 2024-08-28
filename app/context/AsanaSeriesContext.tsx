@@ -12,7 +12,8 @@ export interface FlowSeriesData {
   id?: string
   seriesName: string
   seriesPostures: string[]
-  breath_duration?: string
+  // breath will be a string of the breath count and type (inhale, exhale)
+  breath?: string
   description?: string
   duration?: string
   image?: string
@@ -25,7 +26,7 @@ export interface FlowSeriesSequence {
   id?: string
   seriesName: string
   seriesPostures: string[]
-  breath_duration?: string
+  breath?: string
   duration?: string
   image?: string
   createdAt?: string
@@ -42,7 +43,7 @@ const initialState: FlowSeriesPageState = {
   flowSeries: {
     seriesName: '',
     seriesPostures: [],
-    breath_duration: '',
+    breath: '',
     description: '',
     duration: '',
     image: '',

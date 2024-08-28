@@ -3,20 +3,14 @@ import { PrismaClient } from '@prisma/generated/client'
 const prisma = new PrismaClient()
 
 export async function POST(request: Request) {
-  const {
-    seriesName,
-    seriesPostures,
-    breath_duration,
-    description,
-    duration,
-    image,
-  } = await request.json()
+  const { seriesName, seriesPostures, breath, description, duration, image } =
+    await request.json()
 
   console.log(
     'createSeries-POST Request',
     seriesName,
     seriesPostures,
-    breath_duration,
+    breath,
     description,
     duration,
     image
@@ -43,7 +37,7 @@ export async function POST(request: Request) {
       data: {
         seriesName,
         seriesPostures,
-        breath_duration,
+        breath,
         description,
         duration,
         image,
@@ -81,7 +75,7 @@ export async function POST(request: Request) {
 //           'Upward Salute',
 //           'Mountain Pose',
 //         ],
-//         breath_duration: '5 breaths',
+//         breath: '5 breaths',
 //         description:
 //           'A series of postures that warm up the body and prepare it for more intense postures.',
 //         duration: '5 minutes',

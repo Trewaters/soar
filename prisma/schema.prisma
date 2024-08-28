@@ -108,7 +108,7 @@ model AsanaPosture {
   posture_intent    String?
   posture_meaning    String?
   dristi            String?
-  breath_duration           String?
+  breath           String?
   duration         String?
 }
 
@@ -116,7 +116,7 @@ model AsanaSeries {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
   seriesName    String
   seriesPostures  String[]
-  breath_duration           String?
+  breath           String?
   description     String?
   duration        String?
   image           String?

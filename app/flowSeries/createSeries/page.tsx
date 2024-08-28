@@ -14,6 +14,7 @@ import {
   FormControl,
   FormGroup,
   Grid,
+  InputLabel,
   Stack,
   TextField,
   Typography,
@@ -25,14 +26,8 @@ export default function Page() {
   const { data: session } = useSession()
   // console.log('session', session)
   const { state, dispatch } = useFlowSeries()
-  const {
-    seriesName,
-    seriesPostures,
-    breath_duration,
-    description,
-    duration,
-    image,
-  } = state.flowSeries
+  const { seriesName, seriesPostures, breath, description, duration, image } =
+    state.flowSeries
 
   // posture data
   const [postures, setPostures] = useState<PostureData[]>([])
@@ -97,7 +92,7 @@ export default function Page() {
       ...state.flowSeries,
       seriesName,
       seriesPostures,
-      breath_duration,
+      breath,
       description,
       duration,
       image,
@@ -149,11 +144,12 @@ export default function Page() {
             Create a Series
           </Typography>
 
-          <FormGroup>
-            <Grid container spacing={3}>
+          <Grid container flexDirection={'column'}>
+            <FormGroup>
               <FormControl>
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{ mb: 2 }}>
                   <TextField
+                    sx={{ width: '100%' }}
                     id="outlined-basic"
                     label="Series Name"
                     variant="outlined"
@@ -167,7 +163,13 @@ export default function Page() {
                 </Grid>
               </FormControl>
 
-              <Grid item xs={12} display={'flex'} direction={'column'}>
+              <Grid
+                item
+                xs={12}
+                display={'flex'}
+                direction={'column'}
+                sx={{ mb: 2 }}
+              >
                 <FormControl>
                   <TextField
                     id="outlined-basic"
@@ -204,14 +206,14 @@ export default function Page() {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{ mb: 2 }}>
                 <FormControl>
                   <TextField
                     id="outlined-basic"
-                    label="Breath Duration"
+                    label="Breath"
                     variant="outlined"
-                    name="breath_duration"
-                    value={breath_duration}
+                    name="breath"
+                    value={breath}
                     // onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     //   setBreathDuration(event.currentTarget.value)
                     // }
@@ -220,7 +222,7 @@ export default function Page() {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{ mb: 2 }}>
                 <FormControl>
                   <TextField
                     id="outlined-basic"
@@ -237,7 +239,7 @@ export default function Page() {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{ mb: 2 }}>
                 <FormControl>
                   <TextField
                     id="outlined-basic"
@@ -253,7 +255,7 @@ export default function Page() {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{ mb: 2 }}>
                 <FormControl>
                   <TextField
                     id="outlined-basic"
@@ -284,8 +286,8 @@ export default function Page() {
                   </Button>
                 </Stack>
               </Grid>
-            </Grid>
-          </FormGroup>
+            </FormGroup>
+          </Grid>
         </>
       )}
     </>

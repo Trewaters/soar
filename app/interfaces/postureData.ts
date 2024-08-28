@@ -55,7 +55,7 @@ interface PostureData {
   posture_intent?: string
   posture_meaning?: string
   dristi?: string
-  breath_duration?: string
+  breath?: string
   duration?: string
 }
 
@@ -71,7 +71,7 @@ export interface PostureCardFields {
   duration: string
   posture_meaning: string
   benefits: string
-  breath_duration: string
+  breath: string
   dristi: string
   difficulty: string
   category: string
