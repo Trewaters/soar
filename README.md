@@ -330,6 +330,9 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 
 _(in order of priority top to bottom)_
 
+- Series (2024-08-28 18:08:51)
+  - "Create a Series", improve UI for "Series Postures". Use a bunch of icons with the posture name and an arrow to indicate order.
+  - When creating new postures add "Breath" from "Create a series" page to the "BreathSeries" data object I just created in prisma.
 - Sequence (2024-08-24 08:43:39)
   - Views change… Practice view is “wheel of fortune” scrolling view, it highlights current pose (half screen magnification) while above and below are smaller. ; Study view allows a list view of the poses in the sequence.
   - Improve layout for readability

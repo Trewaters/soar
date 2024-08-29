@@ -3388,6 +3388,7 @@ export namespace Prisma {
     posture_meaning: string | null
     dristi: string | null
     breathDefault: string | null
+    breathSeries: string | null
   }
 
   export type AsanaPostureMaxAggregateOutputType = {
@@ -3415,6 +3416,7 @@ export namespace Prisma {
     posture_meaning: string | null
     dristi: string | null
     breathDefault: string | null
+    breathSeries: string | null
   }
 
   export type AsanaPostureCountAggregateOutputType = {
@@ -3447,6 +3449,7 @@ export namespace Prisma {
     posture_meaning: number
     dristi: number
     breathDefault: number
+    breathSeries: number
     _all: number
   }
 
@@ -3476,6 +3479,7 @@ export namespace Prisma {
     posture_meaning?: true
     dristi?: true
     breathDefault?: true
+    breathSeries?: true
   }
 
   export type AsanaPostureMaxAggregateInputType = {
@@ -3503,6 +3507,7 @@ export namespace Prisma {
     posture_meaning?: true
     dristi?: true
     breathDefault?: true
+    breathSeries?: true
   }
 
   export type AsanaPostureCountAggregateInputType = {
@@ -3535,6 +3540,7 @@ export namespace Prisma {
     posture_meaning?: true
     dristi?: true
     breathDefault?: true
+    breathSeries?: true
     _all?: true
   }
 
@@ -3640,6 +3646,7 @@ export namespace Prisma {
     posture_meaning: string | null
     dristi: string | null
     breathDefault: string | null
+    breathSeries: string | null
     _count: AsanaPostureCountAggregateOutputType | null
     _min: AsanaPostureMinAggregateOutputType | null
     _max: AsanaPostureMaxAggregateOutputType | null
@@ -3689,6 +3696,7 @@ export namespace Prisma {
     posture_meaning?: boolean
     dristi?: boolean
     breathDefault?: boolean
+    breathSeries?: boolean
   }, ExtArgs["result"]["asanaPosture"]>
 
 
@@ -3722,6 +3730,7 @@ export namespace Prisma {
     posture_meaning?: boolean
     dristi?: boolean
     breathDefault?: boolean
+    breathSeries?: boolean
   }
 
 
@@ -3758,6 +3767,7 @@ export namespace Prisma {
       posture_meaning: string | null
       dristi: string | null
       breathDefault: string | null
+      breathSeries: string | null
     }, ExtArgs["result"]["asanaPosture"]>
     composites: {}
   }
@@ -4179,6 +4189,7 @@ export namespace Prisma {
     readonly posture_meaning: FieldRef<"AsanaPosture", 'String'>
     readonly dristi: FieldRef<"AsanaPosture", 'String'>
     readonly breathDefault: FieldRef<"AsanaPosture", 'String'>
+    readonly breathSeries: FieldRef<"AsanaPosture", 'String'>
   }
     
 
@@ -6398,7 +6409,8 @@ export namespace Prisma {
     posture_intent: 'posture_intent',
     posture_meaning: 'posture_meaning',
     dristi: 'dristi',
-    breathDefault: 'breathDefault'
+    breathDefault: 'breathDefault',
+    breathSeries: 'breathSeries'
   };
 
   export type AsanaPostureScalarFieldEnum = (typeof AsanaPostureScalarFieldEnum)[keyof typeof AsanaPostureScalarFieldEnum]
@@ -6780,6 +6792,7 @@ export namespace Prisma {
     posture_meaning?: StringNullableFilter<"AsanaPosture"> | string | null
     dristi?: StringNullableFilter<"AsanaPosture"> | string | null
     breathDefault?: StringNullableFilter<"AsanaPosture"> | string | null
+    breathSeries?: StringNullableFilter<"AsanaPosture"> | string | null
   }
 
   export type AsanaPostureOrderByWithRelationInput = {
@@ -6812,6 +6825,7 @@ export namespace Prisma {
     posture_meaning?: SortOrder
     dristi?: SortOrder
     breathDefault?: SortOrder
+    breathSeries?: SortOrder
   }
 
   export type AsanaPostureWhereUniqueInput = Prisma.AtLeast<{
@@ -6847,6 +6861,7 @@ export namespace Prisma {
     posture_meaning?: StringNullableFilter<"AsanaPosture"> | string | null
     dristi?: StringNullableFilter<"AsanaPosture"> | string | null
     breathDefault?: StringNullableFilter<"AsanaPosture"> | string | null
+    breathSeries?: StringNullableFilter<"AsanaPosture"> | string | null
   }, "id">
 
   export type AsanaPostureOrderByWithAggregationInput = {
@@ -6879,6 +6894,7 @@ export namespace Prisma {
     posture_meaning?: SortOrder
     dristi?: SortOrder
     breathDefault?: SortOrder
+    breathSeries?: SortOrder
     _count?: AsanaPostureCountOrderByAggregateInput
     _max?: AsanaPostureMaxOrderByAggregateInput
     _min?: AsanaPostureMinOrderByAggregateInput
@@ -6917,6 +6933,7 @@ export namespace Prisma {
     posture_meaning?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
     dristi?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
     breathDefault?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    breathSeries?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
   }
 
   export type AsanaSeriesWhereInput = {
@@ -7340,6 +7357,7 @@ export namespace Prisma {
     posture_meaning?: string | null
     dristi?: string | null
     breathDefault?: string | null
+    breathSeries?: string | null
   }
 
   export type AsanaPostureUncheckedCreateInput = {
@@ -7372,6 +7390,7 @@ export namespace Prisma {
     posture_meaning?: string | null
     dristi?: string | null
     breathDefault?: string | null
+    breathSeries?: string | null
   }
 
   export type AsanaPostureUpdateInput = {
@@ -7403,6 +7422,7 @@ export namespace Prisma {
     posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
     breathDefault?: NullableStringFieldUpdateOperationsInput | string | null
+    breathSeries?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AsanaPostureUncheckedUpdateInput = {
@@ -7434,6 +7454,7 @@ export namespace Prisma {
     posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
     breathDefault?: NullableStringFieldUpdateOperationsInput | string | null
+    breathSeries?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AsanaPostureCreateManyInput = {
@@ -7466,6 +7487,7 @@ export namespace Prisma {
     posture_meaning?: string | null
     dristi?: string | null
     breathDefault?: string | null
+    breathSeries?: string | null
   }
 
   export type AsanaPostureUpdateManyMutationInput = {
@@ -7497,6 +7519,7 @@ export namespace Prisma {
     posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
     breathDefault?: NullableStringFieldUpdateOperationsInput | string | null
+    breathSeries?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AsanaPostureUncheckedUpdateManyInput = {
@@ -7528,6 +7551,7 @@ export namespace Prisma {
     posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
     breathDefault?: NullableStringFieldUpdateOperationsInput | string | null
+    breathSeries?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AsanaSeriesCreateInput = {
@@ -8056,6 +8080,7 @@ export namespace Prisma {
     posture_meaning?: SortOrder
     dristi?: SortOrder
     breathDefault?: SortOrder
+    breathSeries?: SortOrder
   }
 
   export type AsanaPostureMaxOrderByAggregateInput = {
@@ -8083,6 +8108,7 @@ export namespace Prisma {
     posture_meaning?: SortOrder
     dristi?: SortOrder
     breathDefault?: SortOrder
+    breathSeries?: SortOrder
   }
 
   export type AsanaPostureMinOrderByAggregateInput = {
@@ -8110,6 +8136,7 @@ export namespace Prisma {
     posture_meaning?: SortOrder
     dristi?: SortOrder
     breathDefault?: SortOrder
+    breathSeries?: SortOrder
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {

@@ -186,24 +186,37 @@ export default function Page() {
                     disabled
                   />
                 </FormControl>
+              </Grid>
+              <FormControl>
+                <Autocomplete
+                  sx={{ mb: 2 }}
+                  disablePortal
+                  id="combo-box-series-search"
+                  options={postures}
+                  getOptionLabel={(option: PostureData) => option.english_name}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.id}>
+                      {option.english_name}
+                    </li>
+                  )}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Flow Series" />
+                  )}
+                  onChange={handleSelect}
+                />
+              </FormControl>
+              <Grid item xs={6} sx={{ mb: 2 }}>
                 <FormControl>
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-series-search"
-                    options={postures}
-                    getOptionLabel={(option: PostureData) =>
-                      option.english_name
-                    }
-                    renderOption={(props, option) => (
-                      <li {...props} key={option.id}>
-                        {option.english_name}
-                      </li>
-                    )}
-                    sx={{ width: '50%', mt: 3 }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Flow Series" />
-                    )}
-                    onChange={handleSelect}
+                  <TextField
+                    id="outlined-basic"
+                    label="Breath"
+                    variant="outlined"
+                    name="breath"
+                    value={breath}
+                    // onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    //   setBreathDuration(event.currentTarget.value)
+                    // }
+                    onChange={handleChange}
                   />
                 </FormControl>
               </Grid>

@@ -109,6 +109,8 @@ model AsanaPosture {
   posture_meaning    String?
   dristi            String?
   breathDefault           String?
+  // added for the breath while in series
+  breathSeries           String?
   // duration         String?
 }
 
