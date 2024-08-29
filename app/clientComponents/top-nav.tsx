@@ -52,7 +52,7 @@ const navLinks = [
   // final item will have a divider above it
   {
     name: 'Sign In',
-    href: '/signIn',
+    href: '/userManagement/signIn',
     icon: <AccountCircleIcon />,
   },
 ]
@@ -105,6 +105,7 @@ export default function TopNav() {
       <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
         <Paper onClick={handleClick} sx={{ height: '100%' }}>
           {DrawerList}
+          {/* add the Sign in button here outside the list. I want to have text ("Login/Logout") change based on the session status. */}
         </Paper>
       </Drawer>
     </>
