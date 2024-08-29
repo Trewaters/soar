@@ -205,21 +205,6 @@ export default function Page() {
                   onChange={handleSelect}
                 />
               </FormControl>
-              <Grid item xs={6} sx={{ mb: 2 }}>
-                <FormControl>
-                  <TextField
-                    id="outlined-basic"
-                    label="Breath"
-                    variant="outlined"
-                    name="breath"
-                    value={breath}
-                    // onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                    //   setBreathDuration(event.currentTarget.value)
-                    // }
-                    onChange={handleChange}
-                  />
-                </FormControl>
-              </Grid>
 
               <Grid item xs={12} sx={{ mb: 2 }}>
                 <FormControl>
