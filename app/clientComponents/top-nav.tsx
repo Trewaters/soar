@@ -17,6 +17,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Paper,
   Typography,
 } from '@mui/material'
 
@@ -91,13 +92,20 @@ export default function TopNav() {
     </Box>
   )
 
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    // event.stopPropagation()
+    setOpenDrawer(false)
+  }
+
   return (
     <>
       <IconButton disableRipple onClick={toggleDrawer(true)}>
         <MenuIcon />
       </IconButton>
       <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
-        {DrawerList}
+        <Paper onClick={handleClick} sx={{ height: '100%' }}>
+          {DrawerList}
+        </Paper>
       </Drawer>
     </>
   )

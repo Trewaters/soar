@@ -334,12 +334,16 @@ _(in order of priority top to bottom)_
   - Views change… Practice view is “wheel of fortune” scrolling view, it highlights current pose (half screen magnification) while above and below are smaller. ; Study view allows a list view of the poses in the sequence.
   - Improve layout for readability
 - Asana (2024-08-24 08:44:11)
-  - Save sequence of postures. (Naomi must-have)
-  - Work toward a peak post. App creates a sequence of postures for a peak posture. User pics the peak posture and the app shows a sequence that will build to it. (Naomi must-have)
-- Navigation (2024-08-24 08:44:15)
+  - Work toward a peak pose. App creates a sequence of postures for a peak posture. User pics the peak posture and the app shows a sequence that will build to it. (Naomi must-have)
+- Navigation (2024-08-24 08:44:15)\
   - Improve top left hamburger menu. Quick links go here. Move landing page menu to the hamburger.
   - “Soar” at top right links back to HOME screen.
   - Add main navigation across top of app below header.
+  - Clean up the Sign In/Sign Out button.
+- Clean up UI
+  - create header
+  - create footer
+- Clean up data and database objects. Remove unused data fields. Add Player Tested feedback.
 - Add Google Analytics (2024-08-24 08:44:21)
 - Add Google Maps (2024-08-24 08:44:25)
 - Hide features behind a flag (2024-08-24 08:44:29)
