@@ -56,7 +56,7 @@ interface PostureData {
   posture_meaning?: string
   dristi?: string
   breath?: string
-  duration?: string
+  // duration?: string
 }
 
 // PostureCard fields
@@ -68,7 +68,7 @@ export interface PostureCardFields {
   sanskrit_names: {
     simplified: string
   }[]
-  duration: string
+  // duration: string
   posture_meaning: string
   benefits: string
   breath: string

@@ -43,9 +43,9 @@ export default function Page() {
     }
   }
 
-  // React.useEffect(() => {
-  //   fetchData()
-  // }, [])
+  React.useEffect(() => {
+    fetchData()
+  }, [])
 
   // const sendData = async () => {
   //   setLoading(true)
@@ -80,13 +80,14 @@ export default function Page() {
       </button> */}
       {loading && <p>Loading Yoga Postures...</p>}
       {error && <p>Error: {error}</p>}
-      {posturePropData && posturePropData.length > 0 ? (
+      {/* {posturePropData && posturePropData.length > 0 ? (
         <PostureSearch posturePropData={posturePropData} />
       ) : (
         <button onClick={fetchData} disabled={loading}>
           Click to Load Postures
         </button>
-      )}
+      )} */}
+      <PostureSearch posturePropData={posturePropData} />
     </>
   )
 }

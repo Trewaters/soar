@@ -57,18 +57,20 @@ export default function Page() {
 
   return (
     <>
-      <Button
-        variant="outlined"
-        href="/flowSeries"
-        LinkComponent="a"
-        size="medium"
-        sx={{ my: 3, display: 'block' }}
-      >
-        Back to flow
-      </Button>
-      <Typography variant="h2" align="center">
-        Practice Sequences
-      </Typography>
+      <Stack flexDirection={'column'}>
+        <Typography variant="h2" align="center">
+          Practice Sequences
+        </Typography>
+        <Button
+          variant="outlined"
+          href="/flowSeries"
+          LinkComponent="a"
+          size="medium"
+          sx={{ my: 3, display: 'block' }}
+        >
+          Back to flow
+        </Button>
+      </Stack>
       <Autocomplete
         disablePortal
         id="combo-box-series-search"
@@ -79,7 +81,7 @@ export default function Page() {
             {option.nameSequence}
           </li>
         )}
-        sx={{ width: '50%' }}
+        sx={{ width: '100%' }}
         renderInput={(params) => <TextField {...params} label="Flow Series" />}
         onChange={handleSelect}
       />

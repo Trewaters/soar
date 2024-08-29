@@ -95,7 +95,7 @@ export default function Page() {
               {option.seriesName}
             </li>
           )}
-          sx={{ width: '50%' }}
+          sx={{ width: 'auto' }}
           renderInput={(params) => (
             <TextField {...params} label="Flow Series" />
           )}

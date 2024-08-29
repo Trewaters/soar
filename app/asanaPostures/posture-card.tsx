@@ -117,6 +117,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   'Sanskrit Name not-found'}
               </Typography>
             </Grid>
+            {/* 
             <Grid
               item
               xs={12}
@@ -131,7 +132,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="overline"
                 sx={{ fontWeight: 'bold', color: '#555' }}
               >
-                Duration:
+                Duration (minutes):
               </Typography>
             </Grid>
             <Grid item xs={12} sm={8} sx={{ marginBottom: 2 }}>
@@ -146,10 +147,10 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
-                3 breaths
+                1-3 minutes
               </Typography>
             </Grid>
-
+ */}
             <Grid
               item
               xs={12}
@@ -235,7 +236,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                 variant="overline"
                 sx={{ fontWeight: 'bold', color: '#555' }}
               >
-                Breath:
+                Breath (default):
               </Typography>
             </Grid>
 

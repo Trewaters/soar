@@ -177,8 +177,7 @@ exports.Prisma.AsanaPostureScalarFieldEnum = {
   posture_intent: 'posture_intent',
   posture_meaning: 'posture_meaning',
   dristi: 'dristi',
-  breath: 'breath',
-  duration: 'duration'
+  breathDefault: 'breathDefault'
 };
 
 exports.Prisma.AsanaSeriesScalarFieldEnum = {

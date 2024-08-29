@@ -132,17 +132,19 @@ export default function Page() {
     <>
       {FEATURES.SHOW_CREATE_SERIES && (
         <>
-          <Button
-            variant="outlined"
-            href="/flowSeries"
-            LinkComponent="a"
-            sx={{ my: 3, display: 'block' }}
-          >
-            Back to flow
-          </Button>
-          <Typography variant="h2" textAlign="center">
-            Create a Series
-          </Typography>
+          <Stack flexDirection={'column'}>
+            <Typography variant="h2" textAlign="center">
+              Create a Series
+            </Typography>
+            <Button
+              variant="outlined"
+              href="/flowSeries"
+              LinkComponent="a"
+              sx={{ my: 3, display: 'block' }}
+            >
+              Back to flow
+            </Button>
+          </Stack>
 
           <Grid container flexDirection={'column'}>
             <FormGroup>

@@ -227,7 +227,7 @@ export default function Page() {
       {FEATURES.SHOW_CREATE_SEQUENCE && (
         <>
           <Stack
-            direction="row"
+            direction="column"
             spacing={5}
             sx={{ mt: 4 }}
             justifyContent={'space-between'}
@@ -236,6 +236,7 @@ export default function Page() {
               Create a Sequence
             </Typography>
             <Button
+              fullWidth
               variant="outlined"
               href="/flowSeries"
               LinkComponent="a"
