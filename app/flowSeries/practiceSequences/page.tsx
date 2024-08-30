@@ -90,7 +90,7 @@ export default function Page() {
             margin: 2,
           }}
         >
-          <Typography variant="h3" textAlign="center">
+          <Typography variant="h1" component="h3" textAlign="center">
             {singleSequence.nameSequence}
           </Typography>
         </Box>
@@ -114,14 +114,23 @@ export default function Page() {
                    */}
                 {seriesMini.seriesPostures.map(
                   (asana: any, asanaIndex: any) => (
-                    <Typography
-                      key={asanaIndex}
-                      textAlign={'left'}
-                      variant="body1"
-                      sx={{ my: 2 }}
-                    >
-                      {asana}
-                    </Typography>
+                    <Stack direction={'column'} key={asanaIndex} sx={{ mb: 3 }}>
+                      <Typography
+                        key={asanaIndex}
+                        textAlign={'left'}
+                        fontWeight={'bold'}
+                        variant="body1"
+                      >
+                        {asana.split(',')[0]}
+                      </Typography>
+                      <Typography
+                        key={asanaIndex}
+                        textAlign={'left'}
+                        variant="body2"
+                      >
+                        {asana.split(',')[1]}
+                      </Typography>
+                    </Stack>
                   )
                 )}
               </CardContent>

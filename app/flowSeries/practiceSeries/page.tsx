@@ -137,9 +137,14 @@ export default function Page() {
                   />
                 </CardMedia>
                 <CardContent sx={{ flex: '1 1 auto' }}>
-                  <Typography textAlign={'left'} variant="body1">
-                    {pose}
-                  </Typography>
+                  <Stack direction="column" spacing={1}>
+                    <Typography textAlign={'left'} variant="body1">
+                      {pose.split(',')[0]}
+                    </Typography>
+                    <Typography textAlign={'left'} variant="body2">
+                      {pose.split(',')[1]}
+                    </Typography>
+                  </Stack>
                 </CardContent>
               </Card>
             ))}

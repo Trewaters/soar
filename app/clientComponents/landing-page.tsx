@@ -9,7 +9,7 @@ import Divider from '@mui/material/Divider'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import Link from 'next/link'
-import { Typography } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 
 const links = [
   {
@@ -40,38 +40,26 @@ const links = [
 
 export default function LandingPage() {
   return (
-    <Box
-      sx={{
-        width: '100%',
-        maxWidth: '360px',
-        bgcolor: 'lightgray',
-        display: 'flex',
-        justifyContent: 'center',
-      }}
-    >
+    <Box>
       <nav aria-label="main menu">
-        <List sx={{ width: '183px' }}>
-          {links.map((link, index) => (
+        <Stack direction="column" spacing={2}>
+          {links.map((link) => (
             <React.Fragment key={link.name}>
-              {index > 0 && <Divider />}
-              <ListItem disablePadding>
-                <Link href={link.href} passHref>
-                  <ListItemButton
-                    sx={{
-                      justifyContent: 'flex-start',
-                      width: '183px',
-                    }}
-                  >
-                    <ListItemIcon>{link.icon}</ListItemIcon>
-                    <ListItemText>
-                      <Typography variant="button">{link.name}</Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                </Link>
-              </ListItem>
+              <Link href={link.href} passHref>
+                <Button
+                  sx={{
+                    '&:hover': {
+                      backgroundColor: 'transparent',
+                    },
+                  }}
+                  startIcon={link.icon}
+                >
+                  <Typography variant="button">{link.name}</Typography>
+                </Button>
+              </Link>
             </React.Fragment>
           ))}
-        </List>
+        </Stack>
       </nav>
     </Box>
   )
