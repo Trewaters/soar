@@ -100,19 +100,20 @@ export default function UserDetails() {
   const membershipDate = new Date(userData?.createdAt).toLocaleDateString()
 
   return (
-    <Grid
-      container
-      spacing={4}
-      direction="row"
-      justifyContent={'center'}
-      sx={{ p: 2 }}
-      component={'form'}
-      onSubmit={handleSubmit}
-    >
-      {!session && <div>Sign In</div>}
+    <>
+      {!session && <Typography variant="h2">Sign In</Typography>}
       {session && (
-        <>
-          <Button type="submit">Save</Button>
+        <Grid
+          container
+          spacing={4}
+          sx={{ p: 4 }}
+          component={'form'}
+          onSubmit={handleSubmit}
+          width={'100vw'}
+        >
+          <Grid xs={12} item sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Button type="submit">Save</Button>
+          </Grid>
           <Grid xs={12} item>
             <Typography variant="h2">Yogi Profile</Typography>
           </Grid>
@@ -335,8 +336,8 @@ export default function UserDetails() {
               />
             </FormControl>
           </Grid>
-        </>
+        </Grid>
       )}
-    </Grid>
+    </>
   )
 }
