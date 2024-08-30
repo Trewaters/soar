@@ -129,83 +129,90 @@ export default function Page() {
   }
 
   return (
-    <>
-      {FEATURES.SHOW_CREATE_SERIES && (
-        <>
-          <Stack flexDirection={'column'}>
-            <Typography variant="h2" textAlign="center">
-              Create a Series
-            </Typography>
-            <Button
-              variant="outlined"
-              href="/flowSeries"
-              LinkComponent="a"
-              sx={{ my: 3, display: 'block' }}
-            >
-              Back to flow
-            </Button>
-          </Stack>
-
-          <Grid container flexDirection={'column'}>
-            <FormGroup>
-              <FormControl>
-                <Grid item xs={12} sx={{ mb: 2 }}>
-                  <TextField
-                    sx={{ width: '100%' }}
-                    id="outlined-basic"
-                    label="Series Name"
-                    variant="outlined"
-                    name="seriesName"
-                    value={seriesName}
-                    // onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                    //   setSeriesName(event.currentTarget.value)
-                    // }
-                    onChange={handleChange}
-                  />
-                </Grid>
-              </FormControl>
-
-              <Grid
-                item
-                xs={12}
-                display={'flex'}
-                direction={'column'}
-                sx={{ mb: 2 }}
+    <Stack
+      spacing={2}
+      flexDirection={'column'}
+      sx={{ marginX: 3, marginY: 3, background: 'white', mb: '1em' }}
+    >
+      <>
+        {FEATURES.SHOW_CREATE_SERIES && (
+          <>
+            <Stack flexDirection={'column'}>
+              <Typography variant="h2" textAlign="center">
+                Create a Series
+              </Typography>
+              <Button
+                variant="outlined"
+                href="/flowSeries"
+                LinkComponent="a"
+                sx={{ my: 3, display: 'block' }}
               >
+                Back to flow
+              </Button>
+            </Stack>
+
+            <Grid container flexDirection={'column'}>
+              <FormGroup>
                 <FormControl>
-                  <TextField
-                    id="outlined-basic"
-                    label="Series Postures"
-                    variant="outlined"
-                    name="seriesPostures"
-                    value={seriesPostures}
-                    // onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                    //   setSeriesPostures(event.currentTarget.value)
-                    // }
-                    onChange={handleChange}
-                    disabled
+                  <Grid item xs={12} sx={{ mb: 2 }}>
+                    <TextField
+                      sx={{ width: '100%' }}
+                      id="outlined-basic"
+                      label="Series Name"
+                      variant="outlined"
+                      name="seriesName"
+                      value={seriesName}
+                      // onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      //   setSeriesName(event.currentTarget.value)
+                      // }
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                </FormControl>
+
+                <Grid
+                  item
+                  xs={12}
+                  display={'flex'}
+                  direction={'column'}
+                  sx={{ mb: 2 }}
+                >
+                  <FormControl>
+                    <TextField
+                      id="outlined-basic"
+                      label="Series Postures"
+                      variant="outlined"
+                      name="seriesPostures"
+                      value={seriesPostures}
+                      // onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      //   setSeriesPostures(event.currentTarget.value)
+                      // }
+                      onChange={handleChange}
+                      disabled
+                    />
+                  </FormControl>
+                </Grid>
+                <FormControl>
+                  <Autocomplete
+                    sx={{ mb: 2 }}
+                    disablePortal
+                    id="combo-box-series-search"
+                    options={postures}
+                    getOptionLabel={(option: PostureData) =>
+                      option.english_name
+                    }
+                    renderOption={(props, option) => (
+                      <li {...props} key={option.id}>
+                        {option.english_name}
+                      </li>
+                    )}
+                    renderInput={(params) => (
+                      <TextField {...params} label="Flow Series" />
+                    )}
+                    onChange={handleSelect}
                   />
                 </FormControl>
-              </Grid>
-              <FormControl>
-                <Autocomplete
-                  sx={{ mb: 2 }}
-                  disablePortal
-                  id="combo-box-series-search"
-                  options={postures}
-                  getOptionLabel={(option: PostureData) => option.english_name}
-                  renderOption={(props, option) => (
-                    <li {...props} key={option.id}>
-                      {option.english_name}
-                    </li>
-                  )}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Flow Series" />
-                  )}
-                  onChange={handleSelect}
-                />
-              </FormControl>
-              {/* 
+                {/* 
               <Grid item xs={12} sx={{ mb: 2 }}>
                 <FormControl>
                   <TextField
@@ -219,74 +226,75 @@ export default function Page() {
                 </FormControl>
               </Grid>
  */}
-              <Grid item xs={12} sx={{ mb: 2 }}>
-                <FormControl>
-                  <TextField
-                    id="outlined-basic"
-                    label="Description"
-                    multiline
-                    variant="outlined"
-                    name="description"
-                    value={description}
-                    // onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                    //   setDescription(event.currentTarget.value)
-                    // }
-                    onChange={handleChange}
-                  />
-                </FormControl>
-              </Grid>
+                <Grid item xs={12} sx={{ mb: 2 }}>
+                  <FormControl>
+                    <TextField
+                      id="outlined-basic"
+                      label="Description"
+                      multiline
+                      variant="outlined"
+                      name="description"
+                      value={description}
+                      // onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      //   setDescription(event.currentTarget.value)
+                      // }
+                      onChange={handleChange}
+                    />
+                  </FormControl>
+                </Grid>
 
-              <Grid item xs={12} sx={{ mb: 2 }}>
-                <FormControl>
-                  <TextField
-                    id="outlined-basic"
-                    label="Duration"
-                    variant="outlined"
-                    name="duration"
-                    value={duration}
-                    // onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                    //   setDuration(event.currentTarget.value)
-                    // }
-                    onChange={handleChange}
-                  />
-                </FormControl>
-              </Grid>
+                <Grid item xs={12} sx={{ mb: 2 }}>
+                  <FormControl>
+                    <TextField
+                      id="outlined-basic"
+                      label="Duration"
+                      variant="outlined"
+                      name="duration"
+                      value={duration}
+                      // onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      //   setDuration(event.currentTarget.value)
+                      // }
+                      onChange={handleChange}
+                    />
+                  </FormControl>
+                </Grid>
 
-              <Grid item xs={12} sx={{ mb: 2 }}>
-                <FormControl>
-                  <TextField
-                    id="outlined-basic"
-                    label="Image"
-                    variant="outlined"
-                    name="image"
-                    value={image}
-                    // onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                    //   setImage(event.currentTarget.value)
-                    // }
-                    onChange={handleChange}
-                  />
-                </FormControl>
-              </Grid>
+                <Grid item xs={12} sx={{ mb: 2 }}>
+                  <FormControl>
+                    <TextField
+                      id="outlined-basic"
+                      label="Image"
+                      variant="outlined"
+                      name="image"
+                      value={image}
+                      // onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      //   setImage(event.currentTarget.value)
+                      // }
+                      onChange={handleChange}
+                    />
+                  </FormControl>
+                </Grid>
 
-              <Grid item xs={12}>
-                <Stack direction="row" spacing={2} justifyContent="center">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                    disabled={session === null}
-                  >
-                    Submit
-                  </Button>
-                  <Button variant="outlined" color="secondary">
-                    Cancel
-                  </Button>
-                </Stack>
-              </Grid>
-            </FormGroup>
-          </Grid>
-        </>
-      )}
-    </>
+                <Grid item xs={12}>
+                  <Stack direction="row" spacing={2} justifyContent="center">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit}
+                      disabled={session === null}
+                    >
+                      Submit
+                    </Button>
+                    <Button variant="outlined" color="secondary">
+                      Cancel
+                    </Button>
+                  </Stack>
+                </Grid>
+              </FormGroup>
+            </Grid>
+          </>
+        )}
+      </>
+    </Stack>
   )
 }
