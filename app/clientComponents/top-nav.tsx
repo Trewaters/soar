@@ -18,6 +18,7 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
+  Stack,
   Typography,
 } from '@mui/material'
 
@@ -125,9 +126,25 @@ export default function TopNav() {
 
   return (
     <>
-      <IconButton disableRipple onClick={toggleDrawer(true)}>
-        <MenuIcon />
-      </IconButton>
+      <Stack direction="row" justifyContent={'space-between'}>
+        <IconButton disableRipple onClick={toggleDrawer(true)}>
+          <MenuIcon />
+        </IconButton>
+        <Link href="/" passHref legacyBehavior>
+          <a style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Typography
+              variant="h1"
+              sx={{
+                cursor: 'pointer',
+                textDecoration: 'none',
+                '& :hover:': { textDecoration: 'none' },
+              }}
+            >
+              Soar
+            </Typography>
+          </a>
+        </Link>
+      </Stack>
       <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
         <Paper onClick={handleClick} sx={{ height: '100%' }}>
           {DrawerList}

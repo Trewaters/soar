@@ -331,21 +331,22 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 _(in order of priority top to bottom)_
 
 - Series (2024-08-28 18:08:51)
-  - "Create a Series", improve UI for "Series Postures". Use a bunch of icons with the posture name and an arrow to indicate order.
-  - When creating new postures add "Breath" from "Create a series" page to the "BreathSeries" data object I just created in prisma.
+  - Improve UI for "Series Postures".
+  - Refactor layout: Instead of a text field, Use icons between the posture names and an arrow to indicate the posture order.
+  - When creating new postures add "Breath" from "Create a series" page to the "BreathSeries" data object I just created in prisma. (count and direction, maybe?)
 - Sequence (2024-08-24 08:43:39)
-  - Views change… Practice view is “wheel of fortune” scrolling view, it highlights current pose (half screen magnification) while above and below are smaller. ; Study view allows a list view of the poses in the sequence.
-  - Improve layout for readability
+  - Views change… **_Practice view_** is “wheel of fortune” scrolling view, it highlights current pose (half screen magnification) while above and below are smaller. ; **_Study view_** allows a list view of the poses in the sequence.
+  - Improve UI for "Sequences"
 - Asana (2024-08-24 08:44:11)
   - Work toward a peak pose. App creates a sequence of postures for a peak posture. User pics the peak posture and the app shows a sequence that will build to it. (Naomi must-have)
 - Navigation (2024-08-24 08:44:15)\
-  - Improve top left hamburger menu. Quick links go here. Move landing page menu to the hamburger.
   - “Soar” at top right links back to HOME screen.
   - Add main navigation across top of app below header.
   - Clean up the Sign In/Sign Out button.
 - Clean up UI
   - create header
   - create footer
+  - Add loading skeleton to yogi profile.
 - Clean up data and database objects. Remove unused data fields. Add Player Tested feedback.
 - Add Google Analytics (2024-08-24 08:44:21)
 - Add Google Maps (2024-08-24 08:44:25)
