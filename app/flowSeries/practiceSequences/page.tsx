@@ -48,7 +48,6 @@ export default function Page() {
     // console.log('Event type:', event.type)
     // Logs the element that triggered the event
     // console.log('Event target:', event.target)
-    console.log('Selected value:', value)
     event.preventDefault()
     if (value) {
       setSingleSequence(value)

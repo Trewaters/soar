@@ -7,8 +7,7 @@ import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import Paper from '@mui/material/Paper'
 import Image from 'next/image'
-import { Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material'
-import { CheckBox } from '@mui/icons-material'
+import { Checkbox, FormControlLabel, FormGroup } from '@mui/material'
 
 interface PostureCardProps {
   postureCardProp: PostureCardFields
@@ -16,8 +15,6 @@ interface PostureCardProps {
 
 export default function PostureCard({ postureCardProp }: PostureCardProps) {
   const posture = postureCardProp
-  // console.log('posture', posture)
-
   return (
     <Paper>
       <Card>

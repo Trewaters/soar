@@ -1,4 +1,3 @@
-import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
 import { PrismaClient } from '@prisma/generated/client'
 import { NextResponse } from 'next/server'
 
@@ -7,7 +6,6 @@ const prisma = new PrismaClient()
 export async function GET() {
   try {
     const data = await prisma.asanaSeries.findMany()
-    console.log('asanaSeries data', data)
     const dataWithId = data.map((item, index) => ({
       ...item,
       id: index + 1,

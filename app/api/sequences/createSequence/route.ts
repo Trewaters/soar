@@ -12,16 +12,6 @@ export async function POST(request: Request) {
     breath_direction,
   } = await request.json()
 
-  console.log(
-    'createSequence-POST Request',
-    nameSequence,
-    sequencesSeries,
-    description,
-    duration,
-    image,
-    breath_direction
-  )
-
   try {
     await prisma.asanaSequence.create({
       data: {

@@ -1,6 +1,5 @@
 import { auth } from '@auth'
-import { Session } from 'next-auth'
-import { SessionProvider, useSession } from 'next-auth/react'
+import { SessionProvider } from 'next-auth/react'
 import { ReactNode } from 'react'
 
 // create a layout page for nextjs

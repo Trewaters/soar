@@ -17,43 +17,11 @@ export async function GET(req: Request) {
   }
 
   try {
-    // practitioner = await prisma.practitioner.findUnique({
-    //   // TODO Create a new practitioner
-    //   where: { id: id },
-    // })
     practitioner = await prisma.userData.findUnique({
       // TODO Create a new practitioner
       where: { id: id },
     })
-
-    console.error('GET fetchPractitioner:', { practitioner })
-
-    // if (!practitioner) {
-    //   // TODO Create a new practitioner
-    //   practitioner = await prisma.practitioner.create({
-    //     data: {
-    //       id: id,
-    //       // ...practitionerData,
-    //       headline: 'New Headline',
-    //       bio: 'Updated bio',
-    //       location: 'New Location',
-    //       websiteURL: 'https://happyYoga.app',
-    //       firstName: 'New First Name',
-    //       lastName: 'New Last Name',
-    //       userId: id,
-    //     },
-    //   })
-
-    //   // practitioner = await prisma.practitioner.findUnique({
-    //   //   // TODO Create a new practitioner
-    //   //   where: { id: id },
-    //   // })
-    // }
   } catch (error) {
-    console.error(
-      'Practitioner creation error (api/user/fetchPractitioner):',
-      error
-    )
     return new Response(
       JSON.stringify({ error: 'Failed to create practitioner data' }),
       { status: 500 }

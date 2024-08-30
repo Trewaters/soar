@@ -8,12 +8,9 @@ export async function POST(req: Request) {
   let getPrismaUser
 
   try {
-    // Find the user by email
     getPrismaUser = await prisma.userData.findUnique({
       where: { email: decodedId },
     })
-
-    // console.log('practitioner prisma:', { getPrismaUser })
 
     if (!getPrismaUser) {
       return new Response(
@@ -24,7 +21,6 @@ export async function POST(req: Request) {
       )
     }
   } catch (error) {
-    console.error('Error updating practitioner data:', error)
     return new Response(
       JSON.stringify({
         error: 'Error updating practitioner data!',
@@ -42,13 +38,8 @@ export async function POST(req: Request) {
       where: { id: getPrismaUser.id },
       data: validPractitionerData,
     })
-    // await prisma.practitioner.update({
-    //   where: { id: getPrismaUser.id },
-    //   data: validPractitionerData,
-    // })
   } catch (updateError: unknown) {
     // If update fails, create a new practitioner record
-    console.error('updateError', updateError)
     return new Response(
       JSON.stringify({
         error: 'Error updating practitioner data!',

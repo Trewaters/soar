@@ -18,19 +18,19 @@ import {
 import { useSession } from 'next-auth/react'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 
-async function fetchSequence() {
-  try {
-    const res = await fetch('/api/sequences')
-    if (!res.ok) {
-      throw new Error('Network response was not ok')
-    }
-    const data = await res.json()
-    // console.log('fetchSequence-data', data)
-    return data
-  } catch (error) {
-    console.error('Error fetching sequence data:', error)
-  }
-}
+// async function fetchSequence() {
+//   try {
+//     const res = await fetch('/api/sequences')
+//     if (!res.ok) {
+//       throw new Error('Network response was not ok')
+//     }
+//     const data = await res.json()
+//     // console.log('fetchSequence-data', data)
+//     return data
+//   } catch (error) {
+//     console.error('Error fetching sequence data:', error)
+//   }
+// }
 
 async function fetchSeries() {
   try {
@@ -39,17 +39,16 @@ async function fetchSeries() {
       throw new Error('Network response was not ok')
     }
     const data = await res.json()
-    // console.log('fetchSeries-data', data)
     return data
   } catch (error) {
-    console.error('Error fetching sequence data:', error)
+    throw new Error('Error fetching sequence data')
   }
 }
 
 export default function Page() {
   const { data: session } = useSession()
   // console.log('session', session)
-  const { state, dispatch } = useSequence()
+  // const { state, dispatch } = useSequence()
   // const {
   //   nameSequence,
   //   sequencesSeries,
@@ -202,9 +201,9 @@ export default function Page() {
       //   )
       //   break
       case 'seriesName':
-        setSequenceSeries(
-          (prevValue) => [...prevValue, value] as FlowSeriesData[]
-        )
+        // setSequenceSeries(
+        //   (prevValue) => [...prevValue, value] as FlowSeriesData[]
+        // )
         setSeriesNameSet((prev) => [...prev, value])
         break
       case 'description':

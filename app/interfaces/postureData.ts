@@ -83,58 +83,58 @@ export interface PostureCardFields {
   posture_intent: string
 }
 
-interface postureDataAbbreviated3 {
-  id: number
-  alternate_english_name: string[]
-  benefits: string
-  category: string
-  simplified_english_name: string
-  english_name: string
-  sanskrit_names: {
-    latin: string
-    simplified: string
-  }[]
-  sort_english_name: string
-  subcategory: string
-}
+// interface postureDataAbbreviated3 {
+//   id: number
+//   alternate_english_name: string[]
+//   benefits: string
+//   category: string
+//   simplified_english_name: string
+//   english_name: string
+//   sanskrit_names: {
+//     latin: string
+//     simplified: string
+//   }[]
+//   sort_english_name: string
+//   subcategory: string
+// }
 
-interface postureDataAbbreviated2 {
-  id: number
-  alternate_english_name: string[]
-  benefits: string
-  category: string
-  difficulty: string
-  simplified_english_name: string
-  english_name: string
-  sanskrit_names: {
-    latin: string
-    simplified: string
-  }[]
-  sort_english_name: string
-  subcategory: string
-  variations_english_name: null | any
-}
+// interface postureDataAbbreviated2 {
+//   id: number
+//   alternate_english_name: string[]
+//   benefits: string
+//   category: string
+//   difficulty: string
+//   simplified_english_name: string
+//   english_name: string
+//   sanskrit_names: {
+//     latin: string
+//     simplified: string
+//   }[]
+//   sort_english_name: string
+//   subcategory: string
+//   variations_english_name: null | any
+// }
 
-interface postureDataAbbreviated1 {
-  id: number
-  alternate_english_name: string[]
-  benefits: string
-  category: string
-  description: string
-  difficulty: string
-  simplified_english_name: string
-  english_name: string
-  next_poses: string[]
-  preferred_side: string
-  previous_poses: string[]
-  sanskrit_names: {
-    latin: string
-    simplified: string
-  }[]
-  sort_english_name: string
-  subcategory: string
-  variations_english_name: null | any
-  visibility: string
-}
+// interface postureDataAbbreviated1 {
+//   id: number
+//   alternate_english_name: string[]
+//   benefits: string
+//   category: string
+//   description: string
+//   difficulty: string
+//   simplified_english_name: string
+//   english_name: string
+//   next_poses: string[]
+//   preferred_side: string
+//   previous_poses: string[]
+//   sanskrit_names: {
+//     latin: string
+//     simplified: string
+//   }[]
+//   sort_english_name: string
+//   subcategory: string
+//   variations_english_name: null | any
+//   visibility: string
+// }
 
 export default PostureData

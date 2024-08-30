@@ -13,8 +13,6 @@ import {
 } from '@mui/material'
 import Image from 'next/image'
 import { ChangeEvent, useEffect, useState } from 'react'
-import LoginIcon from '@mui/icons-material/Login'
-import LogoutIcon from '@mui/icons-material/Logout'
 
 // export const getServerSideProps: GetServerSideProps = async () => {
 //   const baseUrl =
