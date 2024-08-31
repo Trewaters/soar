@@ -331,26 +331,21 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 _(in order of priority top to bottom)_
 
 - Series (2024-08-28 18:08:51)
-  - Improve UI for "Series Postures".
-  - Refactor layout: Instead of a text field, Use icons between the posture names and an arrow to indicate the posture order.
   - When creating new postures add "Breath" from "Create a series" page to the "BreathSeries" data object I just created in prisma. (count and direction, maybe?)
 - Sequence (2024-08-24 08:43:39)
   - Views change… **_Practice view_** is “wheel of fortune” scrolling view, it highlights current pose (half screen magnification) while above and below are smaller. ; **_Study view_** allows a list view of the poses in the sequence.
-  - Improve UI for "Sequences"
-- Asana (2024-08-24 08:44:11)
-  - Work toward a peak pose. App creates a sequence of postures for a peak posture. User pics the peak posture and the app shows a sequence that will build to it. (Naomi must-have)
 - Navigation (2024-08-24 08:44:15)\
-  - “Soar” at top right links back to HOME screen.
   - Add main navigation across top of app below header.
-  - Clean up the Sign In/Sign Out button.
-- Clean up UI
-  - create header
-  - create footer
+- Clean up add Quality, do QA
+  - Clean up UI. Start using Lighthouse for improvements.
+  - Check accessibility
+  - create header based on best practices
+  - create footer based on best practices
   - Add loading skeleton to yogi profile.
-- Clean up data and database objects. Remove unused data fields. Add Player Tested feedback.
+  - Clean up data and database objects. Remove unused data fields. Add Player Tested feedback.
 - Add Google Analytics (2024-08-24 08:44:21)
 - Add Google Maps (2024-08-24 08:44:25)
-- Hide features behind a flag (2024-08-24 08:44:29)
+- Hide (unfinished/unstarted) features behind a flag (2024-08-24 08:44:29)
   - Add user roles to application. Pass with the session. (dev, admin, tester, etc)
   - Restrict Features. Allow “My” (dev) role to see the features while work on them
   - Create series (etc) MUST be restricted to certain users.
