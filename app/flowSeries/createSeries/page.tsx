@@ -8,12 +8,15 @@ import {
   AccordionDetails,
   AccordionSummary,
   Autocomplete,
+  Box,
   Button,
   Card,
   CardContent,
   FormControl,
   FormGroup,
   Grid,
+  Icon,
+  IconButton,
   InputLabel,
   Stack,
   TextField,
@@ -21,6 +24,7 @@ import {
 } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
+import NavigationIcon from '@mui/icons-material/Navigation'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -162,9 +166,6 @@ export default function Page() {
                       variant="outlined"
                       name="seriesName"
                       value={seriesName}
-                      // onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      //   setSeriesName(event.currentTarget.value)
-                      // }
                       onChange={handleChange}
                     />
                   </Grid>
@@ -178,18 +179,52 @@ export default function Page() {
                   sx={{ mb: 2 }}
                 >
                   <FormControl>
+                    {/* 
                     <TextField
                       id="outlined-basic"
                       label="Series Postures"
                       variant="outlined"
                       name="seriesPostures"
                       value={seriesPostures}
-                      // onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      //   setSeriesPostures(event.currentTarget.value)
-                      // }
                       onChange={handleChange}
                       disabled
                     />
+ */}
+
+                    <Stack
+                      spacing={1}
+                      direction={'row'}
+                      flexWrap={'wrap'}
+                      display={'flex'}
+                      sx={{
+                        mx: 4,
+                        mb: 2,
+                      }}
+                    >
+                      {seriesPostures.map((word, index) => (
+                        <Box
+                          key={`${word}+${index}`}
+                          display={'flex'}
+                          sx={{
+                            alignItems: 'center',
+                            // border: '1px solid #ccc',
+                            pl: 2,
+                          }}
+                        >
+                          <Typography key={word} variant="h3">
+                            {word}
+                          </Typography>
+                          <IconButton
+                            disabled
+                            sx={{
+                              transform: 'rotate(90deg)',
+                            }}
+                          >
+                            <NavigationIcon />
+                          </IconButton>
+                        </Box>
+                      ))}
+                    </Stack>
                   </FormControl>
                 </Grid>
                 <FormControl>
@@ -242,7 +277,7 @@ export default function Page() {
                     />
                   </FormControl>
                 </Grid>
-
+                {/* 
                 <Grid item xs={12} sx={{ mb: 2 }}>
                   <FormControl>
                     <TextField
@@ -251,14 +286,12 @@ export default function Page() {
                       variant="outlined"
                       name="duration"
                       value={duration}
-                      // onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      //   setDuration(event.currentTarget.value)
-                      // }
                       onChange={handleChange}
                     />
                   </FormControl>
                 </Grid>
-
+ */}
+                {/* 
                 <Grid item xs={12} sx={{ mb: 2 }}>
                   <FormControl>
                     <TextField
@@ -274,7 +307,7 @@ export default function Page() {
                     />
                   </FormControl>
                 </Grid>
-
+ */}
                 <Grid item xs={12}>
                   <Stack direction="row" spacing={2} justifyContent="center">
                     <Button

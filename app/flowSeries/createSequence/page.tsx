@@ -4,6 +4,7 @@ import { SequenceData } from '@app/context/SequenceContext'
 import { FEATURES } from '@app/FEATURES'
 import {
   Autocomplete,
+  Box,
   Button,
   FormControl,
   FormGroup,
@@ -263,6 +264,7 @@ export default function Page() {
 
               <FormControl>
                 <FormLabel>Series Name</FormLabel>
+                {/* 
                 <TextField
                   id="seriesName"
                   variant="outlined"
@@ -271,7 +273,28 @@ export default function Page() {
                   onChange={handleChange}
                   disabled
                 />
+                 */}
+                <Stack
+                  direction="column"
+                  spacing={2}
+                  justifyContent="flex-start"
+                  sx={{ mt: 3 }}
+                >
+                  {seriesNameSet.map((series, index) => (
+                    <Box
+                      key={`${series}+${index}`}
+                      display={'flex'}
+                      sx={{ pl: 4 }}
+                    >
+                      <Typography sx={{ mr: 2 }} key={index}>
+                        {index + 1}.
+                      </Typography>
+                      <Typography key={index}>{series}</Typography>
+                    </Box>
+                  ))}
+                </Stack>
               </FormControl>
+
               <Stack
                 direction="row"
                 spacing={2}
@@ -313,7 +336,9 @@ export default function Page() {
 
               {postures?.length > 0 && (
                 <>
-                  <Typography>Series Postures</Typography>
+                  <Typography variant="h3">
+                    {seriesNameSet.slice(-1)[0]} Postures
+                  </Typography>
                   <List>
                     {postures.map((series, index) => (
                       <ListItem key={`${series}${index}`}>
@@ -334,6 +359,7 @@ export default function Page() {
                   onChange={handleChange}
                 />
               </FormControl>
+              {/* 
               <FormControl>
                 <FormLabel>Duration</FormLabel>
                 <TextField
@@ -344,6 +370,8 @@ export default function Page() {
                   onChange={handleChange}
                 />
               </FormControl>
+               */}
+              {/* 
               <FormControl>
                 <FormLabel>Image</FormLabel>
                 <TextField
@@ -354,6 +382,8 @@ export default function Page() {
                   onChange={handleChange}
                 />
               </FormControl>
+ */}
+              {/* 
               <FormControl>
                 <FormLabel>Breath Direction</FormLabel>
                 <TextField
@@ -364,7 +394,7 @@ export default function Page() {
                   onChange={handleChange}
                 />
               </FormControl>
-
+ */}
               <Stack
                 direction="row"
                 spacing={2}
