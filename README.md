@@ -14,14 +14,15 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 **Asana Postures**
 
-- Show Yoga postures and some details about the posture including names, description, etc.
+- View Yoga postures with details about the posture like name, description, etc.
 
 **Flow**
 
 - Series are multiple asanas done in order. Series are smaller pieces that combine to make a Full Sequences.
-- Practice series
-- Practice sequences.
-- Create series.
+- View series
+- View sequences
+- Create series
+- Create sequences
 
 **Meditaiton**
 
@@ -41,18 +42,20 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 #### Planner page
 
-- Goal: Goals (long term),
-- Today: Today's workout (present day),
-- History: Historical (past) practice
+- [in-progress] Goal: Goals (long term),
+- [in-progress] Today: Today's workout (present day),
+- [in-progress] History: Historical (past) practice
 
 #### 8 Limb Path
 
-- Reference area.
+- Reference area with definitions for the 8 limbs of yoga. Meant to be a resource for more information.
 
 #### Users
 
 - Login
-- Practitioner Details, profile image
+- Logout
+- View User details, profile image from social login.
+- Edit User details, profile image from social login.
 
 ### Why is this app useful?
 
