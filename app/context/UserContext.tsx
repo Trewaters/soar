@@ -30,6 +30,12 @@ export type UserData = {
   firstName: string
   lastName: string
   bio: string
+  shareQuick: string
+  yogaStyle: string
+  yogaExperience: string
+  company: string
+  socialURL: string
+  isLocationPublic: string
 
   emailVerified: Date
   profile: Record<string, any>
@@ -132,6 +138,12 @@ const initialState: UserProfilePageState = {
     headline: '',
     location: '',
     websiteURL: '',
+    shareQuick: '',
+    yogaStyle: '',
+    yogaExperience: '',
+    company: '',
+    socialURL: '',
+    isLocationPublic: '',
   },
   userGithubProfile: {
     login: '',

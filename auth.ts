@@ -50,6 +50,12 @@ const config = {
               headline: '',
               location: '',
               websiteURL: '',
+              shareQuick: '',
+              yogaStyle: '',
+              yogaExperience: '',
+              company: '',
+              socialURL: '',
+              isLocationPublic: '',
               providerAccounts: {
                 create: {
                   provider: account.provider,

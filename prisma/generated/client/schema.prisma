@@ -15,46 +15,48 @@ generator client {
 }
 
 model UserData {
-  id               String            @id @default(auto()) @map("_id") @db.ObjectId
-  provider_id      String?           @unique
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  provider_id      String?   @unique
   name             String?
-  email            String?           @unique
+  email            String?   @unique
   emailVerified    DateTime?
   image            String?
   pronouns         String?
   profile          Json?
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
   firstName        String
   lastName         String
   bio              String
   headline         String
   location         String
   websiteURL       String
+  shareQuick       String?
+  yogaStyle        String?
+  yogaExperience   String?
+  company          String?
+  socialURL        String?
+  isLocationPublic String?
+
   // pronouns          String
   // emailPublic       String
   // emailInternal     String
   // emailAlternate    String
   // phoneContact      String
-  // yogaStyle         String
-  // yogaExperience    String
   // Facebook          String
   // Google            String
   // Patreon           String
   // Twitch            String
   // Twitter           String
   // blogURL           String
-  // socialURL         String
   // streamingURL      String
   // isInstructor      String
   // isStudent         String
   // isPrivate         String
   // calendar          String
   // timezone          String
-  // isLocationPublic  String
   // exportAccountInfo String
   // deleteAccountInfo String
-  // company           String
   providerAccounts ProviderAccount[]
 }
 
