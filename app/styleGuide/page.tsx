@@ -55,13 +55,13 @@ export default function StyleGuide() {
             main: #F6893D
           </Typography>
           <Typography variant="body1" sx={{ color: '#FFBA6F' }}>
-            light: '#FFBA6F'
+            light: #FFBA6F
           </Typography>
           <Typography variant="body1" sx={{ color: '#C3581A' }}>
-            dark: '#C3581A'
+            dark: #C3581A
           </Typography>
           <Typography variant="body1" sx={{ color: '#000000' }}>
-            contrastText: '#000000'
+            contrastText: #000000
           </Typography>
         </Box>
         <Box sx={{ border: '2px solid black' }}>
@@ -72,16 +72,16 @@ export default function StyleGuide() {
             secondary
           </Typography>
           <Typography variant="body1" sx={{ color: '#F6B93D' }}>
-            main: '#F6B93D'
+            main: F6B93D
           </Typography>
           <Typography variant="body1" sx={{ color: '#FFD970' }}>
-            light: '#FFD970'
+            light: FFD970
           </Typography>
           <Typography variant="body1" sx={{ color: '#C38B1A' }}>
-            dark: '#C38B1A'
+            dark: C38B1A
           </Typography>
           <Typography variant="body1" sx={{ color: '#000000' }}>
-            contrastText: '#000000'
+            contrastText: 000000
           </Typography>
         </Box>
         <Box sx={{ border: '2px solid black' }}>
@@ -92,16 +92,16 @@ export default function StyleGuide() {
             error
           </Typography>
           <Typography variant="body1" sx={{ color: '#D32F2F' }}>
-            main: '#D32F2F'
+            main: D32F2F
           </Typography>
           <Typography variant="body1" sx={{ color: '#E57373' }}>
-            light: '#E57373'
+            light: E57373
           </Typography>
           <Typography variant="body1" sx={{ color: '#9A0007' }}>
-            dark: '#9A0007'
+            dark: 9A0007
           </Typography>
           <Typography variant="body1" sx={{ color: '#F6893D' }}>
-            contrastText: '#F6893D'
+            contrastText: F6893D
           </Typography>
         </Box>
         <Box sx={{ border: '2px solid black' }}>
@@ -112,16 +112,16 @@ export default function StyleGuide() {
             warning
           </Typography>
           <Typography variant="body1" sx={{ color: '#FFA726' }}>
-            main: '#FFA726'
+            main: FFA726
           </Typography>
           <Typography variant="body1" sx={{ color: '#FFD95B' }}>
-            light: '#FFD95B'
+            light: FFD95B
           </Typography>
           <Typography variant="body1" sx={{ color: '#C77800' }}>
-            dark: '#C77800'
+            dark: C77800
           </Typography>
           <Typography variant="body1" sx={{ color: '#000000' }}>
-            contrastText: '#000000'
+            contrastText: 000000
           </Typography>
         </Box>
         <Box sx={{ border: '2px solid black' }}>
@@ -132,16 +132,16 @@ export default function StyleGuide() {
             info
           </Typography>
           <Typography variant="body1" sx={{ color: '#1976D2' }}>
-            main: '#1976D2'
+            main: 1976D2
           </Typography>
           <Typography variant="body1" sx={{ color: '#63A4FF' }}>
-            light: '#63A4FF'
+            light: 63A4FF
           </Typography>
           <Typography variant="body1" sx={{ color: '#004BA0' }}>
-            dark: '#004BA0'
+            dark: 004BA0
           </Typography>
           <Typography variant="body1" sx={{ color: '#FFFFFF' }}>
-            contrastText: '#FFFFFF'
+            contrastText: FFFFFF
           </Typography>
         </Box>
         <Box sx={{ border: '2px solid black' }}>
@@ -152,22 +152,20 @@ export default function StyleGuide() {
             success
           </Typography>
           <Typography variant="body1" sx={{ color: '#2E7D32' }}>
-            main: '#2E7D32'
+            main: 2E7D32
           </Typography>
           <Typography variant="body1" sx={{ color: '#60AD5E' }}>
-            light: '#60AD5E'
+            light: 60AD5E
           </Typography>
           <Typography variant="body1" sx={{ color: '#005005' }}>
-            dark: '#005005'
+            dark: 005005
           </Typography>
           <Typography variant="body1" sx={{ color: '#FFFFFF' }}>
-            contrastText: '#FFFFFF'
+            contrastText: FFFFFF
           </Typography>
         </Box>
       </Stack>
-      <Typography variant="body1">
-        fontFamily: ['Lato', 'sans-serif'],
-      </Typography>
+      <Typography variant="body1">fontFamily: [Lato, sans-serif]</Typography>
     </Stack>
   )
 }
