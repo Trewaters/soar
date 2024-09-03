@@ -6,7 +6,7 @@ export default function StyleGuide() {
       <Box
         display={'flex'}
         flexDirection={'column'}
-        sx={{ border: '2px solid black', px: 4 }}
+        sx={{ border: '2px solid black', px: 4, py: 2 }}
       >
         <Typography variant="h1">h1. Heading</Typography>
         <Typography variant="h2">h2. Heading</Typography>
@@ -36,15 +36,24 @@ export default function StyleGuide() {
         <Typography variant="label">label text</Typography>
       </Box>
       <Typography variant="body1">
-        breakpoints: values: xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920,
+        breakpoints: ( xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920 )
       </Typography>
       <Typography variant="body1">
-        spacing: [0, 4, 8, 16, 32, 40, 48, 64],
+        spacing: [0, 4, 8, 16, 32, 40, 48, 64]
       </Typography>
+      <Typography variant="body1">fontFamily: [Lato, sans-serif]</Typography>
 
-      <Typography variant="h2">palette</Typography>
-      <Stack gap={2} spacing={3} direction={'row'} flexWrap={'wrap'}>
-        <Box sx={{ border: '2px solid black' }}>
+      <Typography alignSelf={'center'} variant="h2">
+        Palette
+      </Typography>
+      <Stack
+        gap={3}
+        spacing={3}
+        direction={'row'}
+        flexWrap={'wrap'}
+        justifyContent={'center'}
+      >
+        <Box sx={{ px: 2, border: '2px solid black' }}>
           <Typography
             variant="h3"
             sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
@@ -64,7 +73,7 @@ export default function StyleGuide() {
             contrastText: #000000
           </Typography>
         </Box>
-        <Box sx={{ border: '2px solid black' }}>
+        <Box sx={{ px: 2, border: '2px solid black' }}>
           <Typography
             variant="h3"
             sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
@@ -84,7 +93,7 @@ export default function StyleGuide() {
             contrastText: 000000
           </Typography>
         </Box>
-        <Box sx={{ border: '2px solid black' }}>
+        <Box sx={{ px: 2, border: '2px solid black' }}>
           <Typography
             variant="h3"
             sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
@@ -104,7 +113,7 @@ export default function StyleGuide() {
             contrastText: F6893D
           </Typography>
         </Box>
-        <Box sx={{ border: '2px solid black' }}>
+        <Box sx={{ px: 2, border: '2px solid black' }}>
           <Typography
             variant="h3"
             sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
@@ -124,7 +133,7 @@ export default function StyleGuide() {
             contrastText: 000000
           </Typography>
         </Box>
-        <Box sx={{ border: '2px solid black' }}>
+        <Box sx={{ px: 2, border: '2px solid black' }}>
           <Typography
             variant="h3"
             sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
@@ -144,7 +153,7 @@ export default function StyleGuide() {
             contrastText: FFFFFF
           </Typography>
         </Box>
-        <Box sx={{ border: '2px solid black' }}>
+        <Box sx={{ px: 2, border: '2px solid black' }}>
           <Typography
             variant="h3"
             sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
@@ -165,7 +174,6 @@ export default function StyleGuide() {
           </Typography>
         </Box>
       </Stack>
-      <Typography variant="body1">fontFamily: [Lato, sans-serif]</Typography>
     </Stack>
   )
 }
