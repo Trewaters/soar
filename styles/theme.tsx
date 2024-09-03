@@ -97,7 +97,7 @@ export const theme = createTheme({
       fontSize: '3rem',
       fontWeight: '900',
       letterSpacing: '0.1rem',
-      wordSpacing: '1rem',
+      wordSpacing: '0.1rem',
       // display: 'block',
       // marginTop: '0.67rem',
       // marginBottom: '0.67rem',
@@ -116,10 +116,10 @@ export const theme = createTheme({
       // marginRight: 0,
     },
     h3: {
-      fontSize: '1.5rrem',
+      fontSize: '1.8rem',
       fontWeight: '700',
       letterSpacing: '0.001rem',
-      wordSpacing: '0.01rem',
+      wordSpacing: '0.001rem',
       // display: 'block',
       // marginTop: '0.47rem',
       // marginBottom: '0.47rem',
@@ -127,7 +127,7 @@ export const theme = createTheme({
       // marginRight: 0,s
     },
     h4: {
-      fontSize: '1.8rem',
+      fontSize: '1.6rem',
       fontWeight: '700',
       // display: 'block',
       // marginTop: '0.37rem',
@@ -136,7 +136,7 @@ export const theme = createTheme({
       // marginRight: 0,
     },
     h5: {
-      fontSize: '1.6rem',
+      fontSize: '1.4rem',
       fontWeight: '700',
       // display: 'block',
       // marginTop: '0.37rem',
@@ -145,7 +145,7 @@ export const theme = createTheme({
       // marginRight: 0,
     },
     h6: {
-      fontSize: '1.4rem',
+      fontSize: '1.2rem',
       fontWeight: '700',
       // display: 'block',
       // marginTop: '0.37rem',
