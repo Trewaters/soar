@@ -5,6 +5,7 @@ import PostureSearch from '@postures/posture-search'
 import PostureData from '@interfaces/postureData'
 import { Button } from '@mui/material'
 import { useRouter } from 'next/navigation'
+import { FEATURES } from '@app/FEATURES'
 // import prisma from '@lib/prisma'
 
 // async function main() {
@@ -97,7 +98,9 @@ export default function Page() {
         </button>
       )} */}
       <PostureSearch posturePropData={posturePropData} />
-      <Button onClick={handleClick}>Practice View</Button>
+      {FEATURES.SHOW_PRACTICE_VIEW_ASANA && (
+        <Button onClick={handleClick}>Practice View</Button>
+      )}
     </>
   )
 }
