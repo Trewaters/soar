@@ -6932,6 +6932,7 @@ export namespace Prisma {
 
   export type AsanaPostureWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    english_name?: string
     AND?: AsanaPostureWhereInput | AsanaPostureWhereInput[]
     OR?: AsanaPostureWhereInput[]
     NOT?: AsanaPostureWhereInput | AsanaPostureWhereInput[]
@@ -6941,7 +6942,6 @@ export namespace Prisma {
     description?: StringFilter<"AsanaPosture"> | string
     difficulty?: StringFilter<"AsanaPosture"> | string
     simplified_english_name?: StringFilter<"AsanaPosture"> | string
-    english_name?: StringFilter<"AsanaPosture"> | string
     next_poses?: StringNullableListFilter<"AsanaPosture">
     preferred_side?: StringNullableFilter<"AsanaPosture"> | string | null
     previous_poses?: StringNullableListFilter<"AsanaPosture">
@@ -6964,7 +6964,7 @@ export namespace Prisma {
     dristi?: StringNullableFilter<"AsanaPosture"> | string | null
     breathDefault?: StringNullableFilter<"AsanaPosture"> | string | null
     breathSeries?: StringNullableFilter<"AsanaPosture"> | string | null
-  }, "id">
+  }, "id" | "english_name">
 
   export type AsanaPostureOrderByWithAggregationInput = {
     id?: SortOrder
