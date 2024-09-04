@@ -89,7 +89,7 @@ model AsanaPosture {
   description     String
   difficulty      String
   simplified_english_name    String
-  english_name            String
+  english_name            String  @unique
   next_poses    String[]
   preferred_side  String?
   previous_poses    String[]

@@ -3,6 +3,9 @@ import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
 import PostureSearch from '@postures/posture-search'
 import PostureData from '@interfaces/postureData'
+import { Button } from '@mui/material'
+import { useRouter } from 'next/navigation'
+import { FEATURES } from '@app/FEATURES'
 // import prisma from '@lib/prisma'
 
 // async function main() {
@@ -26,6 +29,7 @@ export default function Page() {
   )
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const router = useRouter()
 
   const fetchData = async () => {
     setLoading(true)
@@ -70,6 +74,12 @@ export default function Page() {
   //   }
   // }
 
+  function handleClick() {
+    console.log('Practice View')
+    // send pose name to api/poses/?english_name=${pose_name}
+    // show asana practice view
+    router.push('/asanaPostures/viewAsanaPractice')
+  }
   return (
     <>
       <Typography variant="h2" align="center">
@@ -88,6 +98,9 @@ export default function Page() {
         </button>
       )} */}
       <PostureSearch posturePropData={posturePropData} />
+      {FEATURES.SHOW_PRACTICE_VIEW_ASANA && (
+        <Button onClick={handleClick}>Practice View</Button>
+      )}
     </>
   )
 }
