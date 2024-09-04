@@ -13,7 +13,6 @@ export default function ViewAsanaPractice() {
   useEffect(() => {
     const getViewPose = async () => {
       const response = await fetch('/api/poses/?english_name=Archer')
-      // console.log('viewPose', response)
       const responseData = await response.json()
       setViewPose(responseData)
       // return await response.json()

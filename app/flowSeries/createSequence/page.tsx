@@ -26,7 +26,6 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 //       throw new Error('Network response was not ok')
 //     }
 //     const data = await res.json()
-//     // console.log('fetchSequence-data', data)
 //     return data
 //   } catch (error) {
 //     console.error('Error fetching sequence data:', error)
@@ -48,7 +47,6 @@ async function fetchSeries() {
 
 export default function Page() {
   const { data: session } = useSession()
-  // console.log('session', session)
   // const { state, dispatch } = useSequence()
   // const {
   //   nameSequence,
@@ -97,24 +95,15 @@ export default function Page() {
 
   function handleSelect(event: ChangeEvent<{}>, value: FlowSeriesData | null) {
     // Logs the type of event (e.g., 'click')
-    // console.log('Event type:', event.type)
     // Logs the element that triggered the event
-    // console.log('Event target:', event.target)
-    // console.log('Selected value:', value)
     event.preventDefault()
     if (value) {
       setSeriesNameSet((prevSeriesNameSet) => [
         ...prevSeriesNameSet,
         value.seriesName,
       ])
-      // console.log('seriesNameSet', seriesNameSet)
-      // console.log('value.seriesName', value.seriesName)
-
       setPostures(value.seriesPostures)
-      // console.log('postures', postures)
-
       // setSequenceSeries((prevSeries) => [...prevSeries, value])
-      // console.log('sequenceSeries', sequenceSeries)
 
       // dispatch({
       //   type: 'SET_SEQUENCES',
@@ -131,8 +120,6 @@ export default function Page() {
       //   ...sequences,
       //   sequencesSeries: [...sequences.sequencesSeries, value],
       // })
-      // console.log('state.sequences', state.sequences.sequencesSeries)
-      // console.log('sequences', sequences)
     }
   }
 
@@ -147,7 +134,6 @@ export default function Page() {
     //   image,
     //   breath_direction,
     // }
-    // console.log('handleSubmit-sequences', sequences)
     const updatedSequence = {
       ...sequences,
       nameSequence,
@@ -159,8 +145,6 @@ export default function Page() {
     }
 
     // dispatch({ type: 'SET_SEQUENCES', payload: updatedSequence })
-
-    // console.log('handleSubmit-updatedSequence', updatedSequence)
 
     try {
       const response = await fetch('/api/sequences/createSequence', {
@@ -174,7 +158,6 @@ export default function Page() {
         throw new Error('Network response was not ok')
       }
       const data = await response.json()
-      // console.log('handleSubmit', data)
     } catch (error: Error | any) {
       error.message
     }
@@ -182,9 +165,6 @@ export default function Page() {
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target
-    // console.log('handleChange', name, value)
-    // console.log('handleChange state.sequences', state.sequences)
-    // console.log('handleChange sequences', sequences)
     // dispatch({
     //   type: 'SET_SEQUENCES',
     //   payload: {

@@ -624,17 +624,6 @@ export default function UserDetails() {
 
                   <Stack direction="column" spacing={2} mb={2}>
                     <Stack direction="row" spacing={2} alignItems={'center'}>
-                      <FormControl>
-                        <TextField
-                          name="websiteURL"
-                          id="outlined-basic"
-                          placeholder='Enter "website URL"'
-                          label="Website URL"
-                          value={userData.websiteURL ?? ''}
-                          variant="outlined"
-                          onChange={handleChange}
-                        />
-                      </FormControl>
                       <LinkIcon />
                       <Typography variant="body1">
                         <Link
@@ -761,7 +750,7 @@ export default function UserDetails() {
               <TextField
                 name="websiteURL"
                 id="outlined-webisite-url-input"
-                placeholder="www.WebsiteUrl.com"
+                placeholder="Enter website URL"
                 label="Website URL"
                 value={userData?.websiteURL ?? ''}
                 onChange={handleChange}

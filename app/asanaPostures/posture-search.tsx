@@ -22,9 +22,6 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
     (p) => p.simplified_english_name === cardPosture
   )
   const defaultPosture = postures?.find((p) => p.simplified_english_name === '')
-  // console.log('defaultPosture', defaultPosture?.simplified_english_name)
-  // console.log('selectedPosture', selectedPosture)
-  // console.log('posturePropData', posturePropData)
 
   useEffect(() => {
     setPostures(posturePropData)

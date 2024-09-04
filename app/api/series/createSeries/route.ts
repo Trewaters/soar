@@ -6,16 +6,6 @@ export async function POST(request: Request) {
   const { seriesName, seriesPostures, breath, description, duration, image } =
     await request.json()
 
-  console.log(
-    'createSeries-POST Request',
-    seriesName,
-    seriesPostures,
-    breath,
-    description,
-    duration,
-    image
-  )
-
   try {
     // const body: FlowSeriesData = await request.json()
 

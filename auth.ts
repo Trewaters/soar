@@ -80,7 +80,6 @@ const config = {
               // },
             },
           })
-          // console.log('New user created:', newUser)
         } catch (error) {
           console.error('Error creating new user:', error)
           throw error

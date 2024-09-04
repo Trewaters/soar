@@ -17,7 +17,6 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
       }
 
-      console.log('pose', pose)
       return NextResponse.json(pose)
     } catch (error: any) {
       return NextResponse.json({ error: error.message }, { status: 500 })
@@ -28,7 +27,6 @@ export async function GET(request: NextRequest) {
 
   try {
     const data = await prisma.asanaPosture.findMany()
-    // console.log('data', data)
     const dataWithId = data.map((item, index) => ({
       ...item,
       id: index + 1,

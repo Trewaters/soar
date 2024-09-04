@@ -64,13 +64,11 @@ export default function TopNav() {
     setOpenDrawer(open)
   }
   // const session = auth()
-  // console.log('TopNav session', session)
 
   // useEffect(() => {
   //   // get session
   //   async function checkSession() {
   //     const session = await auth()
-  //     console.log('TopNav session', session)
   //   }
   //   checkSession()
   // }, [])

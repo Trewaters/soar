@@ -46,7 +46,6 @@ export default function Page() {
       // const data = await response.json()
       // const seriesData = Array.isArray(data) ? data : [data]
       // setSeries(JSON.parse(JSON.stringify(seriesData)))
-      // console.log(seriesData)
       setSeries(await response.json())
     }
 
@@ -55,10 +54,7 @@ export default function Page() {
 
   function handleSelect(event: ChangeEvent<{}>, value: FlowSeriesData | null) {
     // Logs the type of event (e.g., 'click')
-    // console.log('Event type:', event.type)
     // Logs the element that triggered the event
-    // console.log('Event target:', event.target)
-    // console.log('Selected value:', value)
     event.preventDefault()
     if (value) {
       setFlow(value)

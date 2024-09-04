@@ -45,9 +45,7 @@ export default function Page() {
 
   function handleSelect(event: ChangeEvent<{}>, value: SequenceData | null) {
     // Logs the type of event (e.g., 'click')
-    // console.log('Event type:', event.type)
     // Logs the element that triggered the event
-    // console.log('Event target:', event.target)
     event.preventDefault()
     if (value) {
       setSingleSequence(value)

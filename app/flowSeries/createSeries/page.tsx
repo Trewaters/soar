@@ -28,7 +28,6 @@ import NavigationIcon from '@mui/icons-material/Navigation'
 
 export default function Page() {
   const { data: session } = useSession()
-  // console.log('session', session)
   const { state, dispatch } = useFlowSeries()
   const { seriesName, seriesPostures, breath, description, duration, image } =
     state.flowSeries
@@ -49,7 +48,6 @@ export default function Page() {
       // setSeries(JSON.parse(JSON.stringify(seriesData)))
       try {
         const response = await fetch('/api/poses')
-        // console.log('response', response)
         if (!response.ok) {
           throw new Error('Network response was not ok')
         }
@@ -64,18 +62,12 @@ export default function Page() {
 
   function handleSelect(event: ChangeEvent<{}>, value: PostureData | null) {
     // Logs the type of event (e.g., 'click')
-    // console.log('Event type:', event.type)
     // Logs the element that triggered the event
-    // console.log('Event target:', event.target)
-    // console.log('Selected value:', value)
     event.preventDefault()
     if (value) {
-      // console.log('value', value)
       // setSinglePosture(value)
-      // console.log('singlePosture', singlePosture)
 
       // setPostureName(value.english_name)
-      // console.log('postureName', postureName)
 
       dispatch({
         type: 'SET_FLOW_SERIES',
@@ -115,7 +107,6 @@ export default function Page() {
         throw new Error('Network response was not ok')
       }
       const data = await response.json()
-      console.log('handleSubmit', data)
     } catch (error: Error | any) {
       error.message
     }

@@ -18,8 +18,6 @@ export async function GET(req: Request) {
       where: { userId: userId },
     })
 
-    // console.log('api prisma.account:', { account })
-
     if (!account) {
       return new Response(JSON.stringify({ error: 'Account not found' }), {
         status: 404,

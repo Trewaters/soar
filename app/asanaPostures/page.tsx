@@ -10,7 +10,6 @@ import { FEATURES } from '@app/FEATURES'
 
 // async function main() {
 //   const users = await prisma.user.findMany()
-//   console.log(users)
 // }
 
 // main()
@@ -75,7 +74,6 @@ export default function Page() {
   // }
 
   function handleClick() {
-    console.log('Practice View')
     // send pose name to api/poses/?english_name=${pose_name}
     // show asana practice view
     router.push('/asanaPostures/viewAsanaPractice')
