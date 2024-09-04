@@ -81,7 +81,8 @@ Solo project so far. Code and graphic design contributors are welcome and encour
 I NEED HELP WITH...
 
 1. **Frontend design**: Designing look and feel for pages is not my strength. I would love help laying out pages better. _Make the app pretty!_
-2. **Fix Bugs**: See something wrong fix it or create an issue identifying how to reproduce the bug.
+2. **Yoga Pose images**: I need images for the yoga poses. It should be a set of images.
+3. **Fix Bugs**: See something wrong fix it or create an issue identifying how to reproduce the bug.
 
 ## Authors
 
@@ -106,7 +107,7 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 
 ### Current Goals
 
-- (2024-06-01 09:17:02) update `jest.config.ts` old config found here "C:\Users\trewa\OneDrive\01-WORMHOLE\Yoga\app-Soar\old code\jest.config.ts"
+- (2024-06-01 09:17:02) update `jest.config.ts` old config found here "...\Yoga\app-Soar\old code\jest.config.ts"
 - **Record practice**, record personal yoga practice in app.
 - **Top Navigation**, Use a component for Top Navigation.
 - **Footer**, Make a footer component. Include copyright 2023 - 2024, Name (Happy Yoga), Terms of use (tldr) or licensing, etc.
@@ -115,13 +116,13 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 ## Milestones
 
 - [x] 1.0.0 - MVP ( 2 sections - each with material, "Flow" and "Asana Postures").
-- [ ] 2.0.0 - Create User Profiles (connect to db)
+- [x] 2.0.0 - Create User Profiles (connect to db)
 - [ ] 2.1.0 - Routine/Practice Planner. Allow user to track progress and goals.
 - [ ] x.x.0 - Allow User Profiles to save their progress (connect to db)
 - [ ] x.x.0 - User Profile Customizations (Connect "Planner" buttons)
 - [ ] x.x.0 - User Profile Customizations
 - [ ] x.x.0 - Users can Add more poses, etc.
-- [ ] x.x.0 - Users can create custom flows
+- [x] x.x.0 - Users can create custom flows
 - [ ] x.x.0 - Users can create journal about Meditations
 - [ ] x.x.0 - Users can create custom Mantras
 - [ ] x.x.0 - Add section: Meditation, Mantra, Breathwork
@@ -229,6 +230,10 @@ replication:
 ### Tests
 
 ..._(wip)_
+
+### Style Guide (look & feel)
+
+[Style Guide](http://localhost:3000/styleGuide) for Happy Yoga. View this page to see fonts, colors, and letter sizing across the website.
 
 ### Coding Style
 
