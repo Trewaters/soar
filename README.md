@@ -161,7 +161,7 @@ What you are experiencing is a feature 😉 ! Open a [github issue](https://gith
 I create branches with the name of the feature I plan to work on. This way I keep my work seperated. If I don't finish I can come back to it, but it won't interfere with any other work I want to do on the app. These have been created organically and are due to change without notice because I am currently working alone.
 
 - _"feature/app-theme-and-style":_ Update the app theme and style. Use professional themes as influence. [Link to "Style Guide" page](http://localhost:3000/styleGuide)
-- _"feature/flow":_ Flow portions of the app. View, edit, create the Series and Sequences.
+- _"feature/flow":_ Flow portions of the app. View, edit, create Asanas, Series and Sequences.
 - _"feature/auth":_ Develop authentication, user roles, general app security, etc.
 - _"feature/nav":_ Application navigation elements
 - _"feature/profile":_ Work on the yogi user profile. Allow view, edit and shareable link of profile data.
