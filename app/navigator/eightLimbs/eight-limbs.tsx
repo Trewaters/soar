@@ -19,7 +19,7 @@ export default function EightLimbs() {
           <ListItemText primary="Dharana" secondary="Concentration" />
         </ListItem>
         <ListItem>
-          <Link href="/asanaPostures" passHref legacyBehavior>
+          <Link href="/navigator/asanaPostures" passHref legacyBehavior>
             <a style={{ textDecoration: 'none', color: 'inherit' }}>
               <ListItemText primary="Asana" secondary="Physical Postures" />
             </a>

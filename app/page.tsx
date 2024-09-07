@@ -1,21 +1,14 @@
 import React from 'react'
-import { Box, Typography } from '@mui/material'
-import TabHeader from '@components/tab-header'
-import CurrentTime from '@components/current-time'
-import { auth } from 'auth'
-import { SessionProvider } from 'next-auth/react'
+import { redirect } from 'next/navigation'
 
-export default async function Home() {
-  const session = await auth()
+export default function Home() {
+  redirect('/navigator')
   return (
     <>
-      <SessionProvider basePath={'/auth'} session={session}>
-        <Box textAlign="center">
-          <Typography variant="body1">Like a leaf on the Wind</Typography>
-          <CurrentTime />
-        </Box>
-        <TabHeader />
-      </SessionProvider>
+      {/* 
+      Notes (2024-09-06 18:30:38):
+      moved to "framed" so I can control when I show the menu navigation. 
+      */}
     </>
   )
 }

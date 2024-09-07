@@ -6,13 +6,18 @@ import PauseCircleIcon from '@mui/icons-material/PauseCircle'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
 import AsanaTimer from '@app/clientComponents/asanaTimer'
 import { useTimer } from '@app/context/timerContext'
+import { useRouter } from 'next/navigation'
+import HomeIcon from '@mui/icons-material/Home'
 
 export default function ViewAsanaPractice() {
+  // NOTES: include icons for more information like safety tips, focuse points, etc.
+
   /* call api/poses/?english_name=${pose_name} */
   const [viewPose, setViewPose] = useState<PostureData>()
   const [elapsedTime, setElapsedTime] = useState(0)
   // const [isPaused, setIsPaused] = useState(false)
   const { state, dispatch } = useTimer()
+  const router = useRouter()
 
   const handleTimeUpdate = (time: number) => {
     setElapsedTime(time)
@@ -60,12 +65,17 @@ export default function ViewAsanaPractice() {
     console.log('state.watch', state.watch)
   }
 
+  const handleBackClick = () => {
+    console.log('Back Clicked')
+    router.push('/navigator/asanaPostures')
+  }
+
   return (
     <Paper style={paperStyle}>
       <Grid container>
         <Grid item xs={12}>
-          <Typography variant="h1" color={'white'}>
-            VIEW: Asana Pose Practice
+          <Typography variant="h1" textAlign={'center'} color={'white'}>
+            Asana Practice
           </Typography>
         </Grid>
 
@@ -123,8 +133,13 @@ export default function ViewAsanaPractice() {
           </IconButton>
         </Grid>
 
-        <Grid item xs={10}>
+        <Grid item xs={8}>
           <Button>NEXT</Button>
+        </Grid>
+        <Grid item xs={2}>
+          <IconButton sx={{ color: 'white' }} onClick={handleBackClick}>
+            <HomeIcon />
+          </IconButton>
         </Grid>
       </Grid>
     </Paper>

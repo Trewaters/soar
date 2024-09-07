@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
 import PostureData from '@interfaces/postureData'
-import PostureCard from '@postures/posture-card'
+import PostureCard from '@app/navigator/asanaPostures/posture-card'
 
 interface PostureSearchProps {
   posturePropData: PostureData[]

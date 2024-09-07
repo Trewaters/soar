@@ -76,7 +76,7 @@ export default function Page() {
       <Stack direction={'column'} justifyContent={'space-between'}>
         <Button
           variant="outlined"
-          href="/flowSeries"
+          href="/navigator/flowSeries"
           // component="a"
           LinkComponent="a"
           sx={{ my: 3 }}

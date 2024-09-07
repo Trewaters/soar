@@ -32,22 +32,22 @@ const navLinks = [
   },
   {
     name: '8 Limbs',
-    href: '/eightLimbs',
+    href: '/navigator/eightLimbs',
     icon: <FlareIcon />,
   },
   {
     name: 'Asanas',
-    href: '/asanaPostures',
+    href: '/navigator/asanaPostures',
     icon: <WaterDropOutlinedIcon />,
   },
   {
     name: 'Flows',
-    href: '/flowSeries',
+    href: '/navigator/flowSeries',
     icon: <WhatshotIcon />,
   },
   {
     name: 'Profile',
-    href: '/profile',
+    href: '/navigator/profile',
     icon: <ChevronRightIcon />,
   },
   // final item will have a divider above it

@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
-import PostureSearch from '@postures/posture-search'
+import PostureSearch from '@app/navigator/asanaPostures/posture-search'
 import PostureData from '@interfaces/postureData'
 import { Button } from '@mui/material'
 import { useRouter } from 'next/navigation'
@@ -35,7 +35,7 @@ export default function Page() {
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch('api/poses')
+      const response = await fetch('../api/poses')
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
@@ -78,7 +78,7 @@ export default function Page() {
     console.log('Practice View')
     // send pose name to api/poses/?english_name=${pose_name}
     // show asana practice view
-    router.push('/asanaPostures/viewAsanaPractice')
+    router.push('/views/viewAsanaPractice')
   }
   return (
     <>
