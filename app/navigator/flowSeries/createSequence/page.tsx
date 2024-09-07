@@ -223,7 +223,7 @@ export default function Page() {
               <Button
                 fullWidth
                 variant="outlined"
-                href="/flowSeries"
+                href="/navigator/flowSeries"
                 LinkComponent="a"
                 sx={{ my: 3, display: 'block' }}
               >

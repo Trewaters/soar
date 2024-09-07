@@ -63,7 +63,7 @@ export default function Page() {
       <Stack direction="row" spacing={5} sx={{ mt: 4 }}>
         <Button
           variant="contained"
-          href="/flowSeries/practiceSeries"
+          href="/navigator/flowSeries/practiceSeries"
           // component="a"
           LinkComponent="a"
         >
@@ -75,7 +75,7 @@ export default function Page() {
             <Button
               variant="outlined"
               color="primary"
-              href="/flowSeries/createSeries"
+              href="/navigator/flowSeries/createSeries"
               LinkComponent="a"
             >
               Create Series
@@ -88,7 +88,7 @@ export default function Page() {
           <Button
             variant="contained"
             LinkComponent="a"
-            href="/flowSeries/practiceSequences"
+            href="/navigator/flowSeries/practiceSequences"
           >
             Practice Sequence
           </Button>
@@ -99,7 +99,7 @@ export default function Page() {
                 variant="outlined"
                 color="primary"
                 LinkComponent="a"
-                href="/flowSeries/createSequence"
+                href="/navigator/flowSeries/createSequence"
               >
                 Create Sequence
               </Button>
