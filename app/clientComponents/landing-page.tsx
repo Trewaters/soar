@@ -14,10 +14,10 @@ import { Button, Stack, Typography } from '@mui/material'
 const links = [
   {
     name: 'Asana Postures',
-    href: '/asanaPostures',
+    href: '/navigator/asanaPostures',
     icon: <WaterDropOutlinedIcon />,
   },
-  { name: 'Flow', href: '/flowSeries', icon: <WhatshotIcon /> },
+  { name: 'Flow', href: '/navigator/flowSeries', icon: <WhatshotIcon /> },
   /* 
   {
     name: 'Meditation',

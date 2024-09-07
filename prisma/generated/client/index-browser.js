@@ -184,16 +184,17 @@ exports.Prisma.AsanaPostureScalarFieldEnum = {
   posture_meaning: 'posture_meaning',
   dristi: 'dristi',
   breathDefault: 'breathDefault',
-  breathSeries: 'breathSeries'
+  breathSeries: 'breathSeries',
+  durationAsana: 'durationAsana'
 };
 
 exports.Prisma.AsanaSeriesScalarFieldEnum = {
   id: 'id',
   seriesName: 'seriesName',
   seriesPostures: 'seriesPostures',
-  breath: 'breath',
+  breathSeries: 'breathSeries',
   description: 'description',
-  duration: 'duration',
+  durationSeries: 'durationSeries',
   image: 'image',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -204,7 +205,7 @@ exports.Prisma.AsanaSequenceScalarFieldEnum = {
   nameSequence: 'nameSequence',
   sequencesSeries: 'sequencesSeries',
   description: 'description',
-  duration: 'duration',
+  durationSequence: 'durationSequence',
   image: 'image',
   breath_direction: 'breath_direction',
   createdAt: 'createdAt',

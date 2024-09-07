@@ -13,6 +13,12 @@ export async function POST(req: Request) {
     firstName,
     lastName,
     bio,
+    shareQuick,
+    yogaStyle,
+    yogaExperience,
+    company,
+    socialURL,
+    isLocationPublic,
   } = await req.json()
 
   const decodedId = email.toString().replace('%40', '@').replace('=', '')
@@ -29,6 +35,12 @@ export async function POST(req: Request) {
         firstName,
         lastName,
         bio,
+        shareQuick,
+        yogaStyle,
+        yogaExperience,
+        company,
+        socialURL,
+        isLocationPublic,
       },
     })
     return Response.json({ message: 'User Data saved' })

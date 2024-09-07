@@ -90,7 +90,7 @@ model AsanaPosture {
   description             String
   difficulty              String
   simplified_english_name String
-  english_name            String
+  english_name            String    @unique
   next_poses              String[]
   preferred_side          String?
   previous_poses          String[]
@@ -111,19 +111,23 @@ model AsanaPosture {
   posture_intent          String?
   posture_meaning         String?
   dristi                  String?
-  breathDefault           String?
+  // breath consist of 3 parts: inhale, exhale, hold
+  // ["inhale/exhale", "how long to hold?s", "how many to breaths to take?"]
+  breathDefault           String[]
   // added for the breath while in series
-  breathSeries            String?
-  // duration         String?
+  breathSeries            String[]
+  durationAsana           String?
 }
 
 model AsanaSeries {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   seriesName     String
   seriesPostures String[]
-  breath         String?
+  // breath           String?
+  // breath specified for the series
+  breathSeries   String[]
   description    String?
-  duration       String?
+  durationSeries String?
   image          String?
   createdAt      DateTime? @default(now())
   updatedAt      DateTime? @updatedAt
@@ -134,7 +138,7 @@ model AsanaSequence {
   nameSequence     String
   sequencesSeries  Json[]
   description      String?
-  duration         String?
+  durationSequence String?
   image            String?
   breath_direction String?
   createdAt        DateTime? @default(now())

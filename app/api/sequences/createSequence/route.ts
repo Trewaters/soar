@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     nameSequence,
     sequencesSeries,
     description,
-    duration,
+    durationSequence,
     image,
     breath_direction,
   } = await request.json()
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
         nameSequence,
         sequencesSeries,
         description,
-        duration,
+        durationSequence,
         image,
         breath_direction,
         createdAt: new Date().toISOString(),

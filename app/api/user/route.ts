@@ -21,8 +21,6 @@ export async function GET(req: Request) {
       where: { email: decodedEmail },
     })
 
-    // console.log('api prisma.user:', { user })
-
     if (!user) {
       return new Response(JSON.stringify({ error: 'User not found' }), {
         status: 404,
@@ -40,7 +38,6 @@ export async function GET(req: Request) {
   //     `${baseUrl}/api/user/fetchPractitioner/?id=${user.id}`
   //   )
   //   const data = await practitioner.json()
-  //   console.log('user GET practitioner data:', data)
   // } catch (error) {
   //   console.error('Practitioner creation error (api/user):', error)
   //   return new Response(
