@@ -349,6 +349,7 @@ _(in order of priority top to bottom)_
   - Add user roles to application. Pass with the session. (dev, admin, tester, etc)
   - Restrict Features. Allow “My” (dev) role to see the features while work on them
   - Create series (etc) MUST be restricted to certain users.
+- Add expandable list of Yoga Styles on the user profile details page, still allow freeform text entries. (2024-09-07 14:40:20)
 
 ### Anytime
 
