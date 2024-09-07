@@ -3453,8 +3453,7 @@ export namespace Prisma {
     posture_intent: string | null
     posture_meaning: string | null
     dristi: string | null
-    breathDefault: string | null
-    breathSeries: string | null
+    durationAsana: string | null
   }
 
   export type AsanaPostureMaxAggregateOutputType = {
@@ -3481,8 +3480,7 @@ export namespace Prisma {
     posture_intent: string | null
     posture_meaning: string | null
     dristi: string | null
-    breathDefault: string | null
-    breathSeries: string | null
+    durationAsana: string | null
   }
 
   export type AsanaPostureCountAggregateOutputType = {
@@ -3516,6 +3514,7 @@ export namespace Prisma {
     dristi: number
     breathDefault: number
     breathSeries: number
+    durationAsana: number
     _all: number
   }
 
@@ -3544,8 +3543,7 @@ export namespace Prisma {
     posture_intent?: true
     posture_meaning?: true
     dristi?: true
-    breathDefault?: true
-    breathSeries?: true
+    durationAsana?: true
   }
 
   export type AsanaPostureMaxAggregateInputType = {
@@ -3572,8 +3570,7 @@ export namespace Prisma {
     posture_intent?: true
     posture_meaning?: true
     dristi?: true
-    breathDefault?: true
-    breathSeries?: true
+    durationAsana?: true
   }
 
   export type AsanaPostureCountAggregateInputType = {
@@ -3607,6 +3604,7 @@ export namespace Prisma {
     dristi?: true
     breathDefault?: true
     breathSeries?: true
+    durationAsana?: true
     _all?: true
   }
 
@@ -3711,8 +3709,9 @@ export namespace Prisma {
     posture_intent: string | null
     posture_meaning: string | null
     dristi: string | null
-    breathDefault: string | null
-    breathSeries: string | null
+    breathDefault: string[]
+    breathSeries: string[]
+    durationAsana: string | null
     _count: AsanaPostureCountAggregateOutputType | null
     _min: AsanaPostureMinAggregateOutputType | null
     _max: AsanaPostureMaxAggregateOutputType | null
@@ -3763,6 +3762,7 @@ export namespace Prisma {
     dristi?: boolean
     breathDefault?: boolean
     breathSeries?: boolean
+    durationAsana?: boolean
   }, ExtArgs["result"]["asanaPosture"]>
 
 
@@ -3797,6 +3797,7 @@ export namespace Prisma {
     dristi?: boolean
     breathDefault?: boolean
     breathSeries?: boolean
+    durationAsana?: boolean
   }
 
 
@@ -3832,8 +3833,9 @@ export namespace Prisma {
       posture_intent: string | null
       posture_meaning: string | null
       dristi: string | null
-      breathDefault: string | null
-      breathSeries: string | null
+      breathDefault: string[]
+      breathSeries: string[]
+      durationAsana: string | null
     }, ExtArgs["result"]["asanaPosture"]>
     composites: {}
   }
@@ -4254,8 +4256,9 @@ export namespace Prisma {
     readonly posture_intent: FieldRef<"AsanaPosture", 'String'>
     readonly posture_meaning: FieldRef<"AsanaPosture", 'String'>
     readonly dristi: FieldRef<"AsanaPosture", 'String'>
-    readonly breathDefault: FieldRef<"AsanaPosture", 'String'>
-    readonly breathSeries: FieldRef<"AsanaPosture", 'String'>
+    readonly breathDefault: FieldRef<"AsanaPosture", 'String[]'>
+    readonly breathSeries: FieldRef<"AsanaPosture", 'String[]'>
+    readonly durationAsana: FieldRef<"AsanaPosture", 'String'>
   }
     
 
@@ -4569,9 +4572,8 @@ export namespace Prisma {
   export type AsanaSeriesMinAggregateOutputType = {
     id: string | null
     seriesName: string | null
-    breath: string | null
     description: string | null
-    duration: string | null
+    durationSeries: string | null
     image: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4580,9 +4582,8 @@ export namespace Prisma {
   export type AsanaSeriesMaxAggregateOutputType = {
     id: string | null
     seriesName: string | null
-    breath: string | null
     description: string | null
-    duration: string | null
+    durationSeries: string | null
     image: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4592,9 +4593,9 @@ export namespace Prisma {
     id: number
     seriesName: number
     seriesPostures: number
-    breath: number
+    breathSeries: number
     description: number
-    duration: number
+    durationSeries: number
     image: number
     createdAt: number
     updatedAt: number
@@ -4605,9 +4606,8 @@ export namespace Prisma {
   export type AsanaSeriesMinAggregateInputType = {
     id?: true
     seriesName?: true
-    breath?: true
     description?: true
-    duration?: true
+    durationSeries?: true
     image?: true
     createdAt?: true
     updatedAt?: true
@@ -4616,9 +4616,8 @@ export namespace Prisma {
   export type AsanaSeriesMaxAggregateInputType = {
     id?: true
     seriesName?: true
-    breath?: true
     description?: true
-    duration?: true
+    durationSeries?: true
     image?: true
     createdAt?: true
     updatedAt?: true
@@ -4628,9 +4627,9 @@ export namespace Prisma {
     id?: true
     seriesName?: true
     seriesPostures?: true
-    breath?: true
+    breathSeries?: true
     description?: true
-    duration?: true
+    durationSeries?: true
     image?: true
     createdAt?: true
     updatedAt?: true
@@ -4713,9 +4712,9 @@ export namespace Prisma {
     id: string
     seriesName: string
     seriesPostures: string[]
-    breath: string | null
+    breathSeries: string[]
     description: string | null
-    duration: string | null
+    durationSeries: string | null
     image: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4742,9 +4741,9 @@ export namespace Prisma {
     id?: boolean
     seriesName?: boolean
     seriesPostures?: boolean
-    breath?: boolean
+    breathSeries?: boolean
     description?: boolean
-    duration?: boolean
+    durationSeries?: boolean
     image?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4755,9 +4754,9 @@ export namespace Prisma {
     id?: boolean
     seriesName?: boolean
     seriesPostures?: boolean
-    breath?: boolean
+    breathSeries?: boolean
     description?: boolean
-    duration?: boolean
+    durationSeries?: boolean
     image?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4771,9 +4770,9 @@ export namespace Prisma {
       id: string
       seriesName: string
       seriesPostures: string[]
-      breath: string | null
+      breathSeries: string[]
       description: string | null
-      duration: string | null
+      durationSeries: string | null
       image: string | null
       createdAt: Date | null
       updatedAt: Date | null
@@ -5172,9 +5171,9 @@ export namespace Prisma {
     readonly id: FieldRef<"AsanaSeries", 'String'>
     readonly seriesName: FieldRef<"AsanaSeries", 'String'>
     readonly seriesPostures: FieldRef<"AsanaSeries", 'String[]'>
-    readonly breath: FieldRef<"AsanaSeries", 'String'>
+    readonly breathSeries: FieldRef<"AsanaSeries", 'String[]'>
     readonly description: FieldRef<"AsanaSeries", 'String'>
-    readonly duration: FieldRef<"AsanaSeries", 'String'>
+    readonly durationSeries: FieldRef<"AsanaSeries", 'String'>
     readonly image: FieldRef<"AsanaSeries", 'String'>
     readonly createdAt: FieldRef<"AsanaSeries", 'DateTime'>
     readonly updatedAt: FieldRef<"AsanaSeries", 'DateTime'>
@@ -5492,7 +5491,7 @@ export namespace Prisma {
     id: string | null
     nameSequence: string | null
     description: string | null
-    duration: string | null
+    durationSequence: string | null
     image: string | null
     breath_direction: string | null
     createdAt: Date | null
@@ -5503,7 +5502,7 @@ export namespace Prisma {
     id: string | null
     nameSequence: string | null
     description: string | null
-    duration: string | null
+    durationSequence: string | null
     image: string | null
     breath_direction: string | null
     createdAt: Date | null
@@ -5515,7 +5514,7 @@ export namespace Prisma {
     nameSequence: number
     sequencesSeries: number
     description: number
-    duration: number
+    durationSequence: number
     image: number
     breath_direction: number
     createdAt: number
@@ -5528,7 +5527,7 @@ export namespace Prisma {
     id?: true
     nameSequence?: true
     description?: true
-    duration?: true
+    durationSequence?: true
     image?: true
     breath_direction?: true
     createdAt?: true
@@ -5539,7 +5538,7 @@ export namespace Prisma {
     id?: true
     nameSequence?: true
     description?: true
-    duration?: true
+    durationSequence?: true
     image?: true
     breath_direction?: true
     createdAt?: true
@@ -5551,7 +5550,7 @@ export namespace Prisma {
     nameSequence?: true
     sequencesSeries?: true
     description?: true
-    duration?: true
+    durationSequence?: true
     image?: true
     breath_direction?: true
     createdAt?: true
@@ -5636,7 +5635,7 @@ export namespace Prisma {
     nameSequence: string
     sequencesSeries: JsonValue[]
     description: string | null
-    duration: string | null
+    durationSequence: string | null
     image: string | null
     breath_direction: string | null
     createdAt: Date | null
@@ -5665,7 +5664,7 @@ export namespace Prisma {
     nameSequence?: boolean
     sequencesSeries?: boolean
     description?: boolean
-    duration?: boolean
+    durationSequence?: boolean
     image?: boolean
     breath_direction?: boolean
     createdAt?: boolean
@@ -5678,7 +5677,7 @@ export namespace Prisma {
     nameSequence?: boolean
     sequencesSeries?: boolean
     description?: boolean
-    duration?: boolean
+    durationSequence?: boolean
     image?: boolean
     breath_direction?: boolean
     createdAt?: boolean
@@ -5694,7 +5693,7 @@ export namespace Prisma {
       nameSequence: string
       sequencesSeries: Prisma.JsonValue[]
       description: string | null
-      duration: string | null
+      durationSequence: string | null
       image: string | null
       breath_direction: string | null
       createdAt: Date | null
@@ -6095,7 +6094,7 @@ export namespace Prisma {
     readonly nameSequence: FieldRef<"AsanaSequence", 'String'>
     readonly sequencesSeries: FieldRef<"AsanaSequence", 'Json[]'>
     readonly description: FieldRef<"AsanaSequence", 'String'>
-    readonly duration: FieldRef<"AsanaSequence", 'String'>
+    readonly durationSequence: FieldRef<"AsanaSequence", 'String'>
     readonly image: FieldRef<"AsanaSequence", 'String'>
     readonly breath_direction: FieldRef<"AsanaSequence", 'String'>
     readonly createdAt: FieldRef<"AsanaSequence", 'DateTime'>
@@ -6482,7 +6481,8 @@ export namespace Prisma {
     posture_meaning: 'posture_meaning',
     dristi: 'dristi',
     breathDefault: 'breathDefault',
-    breathSeries: 'breathSeries'
+    breathSeries: 'breathSeries',
+    durationAsana: 'durationAsana'
   };
 
   export type AsanaPostureScalarFieldEnum = (typeof AsanaPostureScalarFieldEnum)[keyof typeof AsanaPostureScalarFieldEnum]
@@ -6492,9 +6492,9 @@ export namespace Prisma {
     id: 'id',
     seriesName: 'seriesName',
     seriesPostures: 'seriesPostures',
-    breath: 'breath',
+    breathSeries: 'breathSeries',
     description: 'description',
-    duration: 'duration',
+    durationSeries: 'durationSeries',
     image: 'image',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -6508,7 +6508,7 @@ export namespace Prisma {
     nameSequence: 'nameSequence',
     sequencesSeries: 'sequencesSeries',
     description: 'description',
-    duration: 'duration',
+    durationSequence: 'durationSequence',
     image: 'image',
     breath_direction: 'breath_direction',
     createdAt: 'createdAt',
@@ -6893,8 +6893,9 @@ export namespace Prisma {
     posture_intent?: StringNullableFilter<"AsanaPosture"> | string | null
     posture_meaning?: StringNullableFilter<"AsanaPosture"> | string | null
     dristi?: StringNullableFilter<"AsanaPosture"> | string | null
-    breathDefault?: StringNullableFilter<"AsanaPosture"> | string | null
-    breathSeries?: StringNullableFilter<"AsanaPosture"> | string | null
+    breathDefault?: StringNullableListFilter<"AsanaPosture">
+    breathSeries?: StringNullableListFilter<"AsanaPosture">
+    durationAsana?: StringNullableFilter<"AsanaPosture"> | string | null
   }
 
   export type AsanaPostureOrderByWithRelationInput = {
@@ -6928,6 +6929,7 @@ export namespace Prisma {
     dristi?: SortOrder
     breathDefault?: SortOrder
     breathSeries?: SortOrder
+    durationAsana?: SortOrder
   }
 
   export type AsanaPostureWhereUniqueInput = Prisma.AtLeast<{
@@ -6962,8 +6964,9 @@ export namespace Prisma {
     posture_intent?: StringNullableFilter<"AsanaPosture"> | string | null
     posture_meaning?: StringNullableFilter<"AsanaPosture"> | string | null
     dristi?: StringNullableFilter<"AsanaPosture"> | string | null
-    breathDefault?: StringNullableFilter<"AsanaPosture"> | string | null
-    breathSeries?: StringNullableFilter<"AsanaPosture"> | string | null
+    breathDefault?: StringNullableListFilter<"AsanaPosture">
+    breathSeries?: StringNullableListFilter<"AsanaPosture">
+    durationAsana?: StringNullableFilter<"AsanaPosture"> | string | null
   }, "id" | "english_name">
 
   export type AsanaPostureOrderByWithAggregationInput = {
@@ -6997,6 +7000,7 @@ export namespace Prisma {
     dristi?: SortOrder
     breathDefault?: SortOrder
     breathSeries?: SortOrder
+    durationAsana?: SortOrder
     _count?: AsanaPostureCountOrderByAggregateInput
     _max?: AsanaPostureMaxOrderByAggregateInput
     _min?: AsanaPostureMinOrderByAggregateInput
@@ -7034,8 +7038,9 @@ export namespace Prisma {
     posture_intent?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
     posture_meaning?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
     dristi?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
-    breathDefault?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
-    breathSeries?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    breathDefault?: StringNullableListFilter<"AsanaPosture">
+    breathSeries?: StringNullableListFilter<"AsanaPosture">
+    durationAsana?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
   }
 
   export type AsanaSeriesWhereInput = {
@@ -7045,9 +7050,9 @@ export namespace Prisma {
     id?: StringFilter<"AsanaSeries"> | string
     seriesName?: StringFilter<"AsanaSeries"> | string
     seriesPostures?: StringNullableListFilter<"AsanaSeries">
-    breath?: StringNullableFilter<"AsanaSeries"> | string | null
+    breathSeries?: StringNullableListFilter<"AsanaSeries">
     description?: StringNullableFilter<"AsanaSeries"> | string | null
-    duration?: StringNullableFilter<"AsanaSeries"> | string | null
+    durationSeries?: StringNullableFilter<"AsanaSeries"> | string | null
     image?: StringNullableFilter<"AsanaSeries"> | string | null
     createdAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
@@ -7057,9 +7062,9 @@ export namespace Prisma {
     id?: SortOrder
     seriesName?: SortOrder
     seriesPostures?: SortOrder
-    breath?: SortOrder
+    breathSeries?: SortOrder
     description?: SortOrder
-    duration?: SortOrder
+    durationSeries?: SortOrder
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7072,9 +7077,9 @@ export namespace Prisma {
     NOT?: AsanaSeriesWhereInput | AsanaSeriesWhereInput[]
     seriesName?: StringFilter<"AsanaSeries"> | string
     seriesPostures?: StringNullableListFilter<"AsanaSeries">
-    breath?: StringNullableFilter<"AsanaSeries"> | string | null
+    breathSeries?: StringNullableListFilter<"AsanaSeries">
     description?: StringNullableFilter<"AsanaSeries"> | string | null
-    duration?: StringNullableFilter<"AsanaSeries"> | string | null
+    durationSeries?: StringNullableFilter<"AsanaSeries"> | string | null
     image?: StringNullableFilter<"AsanaSeries"> | string | null
     createdAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
@@ -7084,9 +7089,9 @@ export namespace Prisma {
     id?: SortOrder
     seriesName?: SortOrder
     seriesPostures?: SortOrder
-    breath?: SortOrder
+    breathSeries?: SortOrder
     description?: SortOrder
-    duration?: SortOrder
+    durationSeries?: SortOrder
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -7102,9 +7107,9 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"AsanaSeries"> | string
     seriesName?: StringWithAggregatesFilter<"AsanaSeries"> | string
     seriesPostures?: StringNullableListFilter<"AsanaSeries">
-    breath?: StringNullableWithAggregatesFilter<"AsanaSeries"> | string | null
+    breathSeries?: StringNullableListFilter<"AsanaSeries">
     description?: StringNullableWithAggregatesFilter<"AsanaSeries"> | string | null
-    duration?: StringNullableWithAggregatesFilter<"AsanaSeries"> | string | null
+    durationSeries?: StringNullableWithAggregatesFilter<"AsanaSeries"> | string | null
     image?: StringNullableWithAggregatesFilter<"AsanaSeries"> | string | null
     createdAt?: DateTimeNullableWithAggregatesFilter<"AsanaSeries"> | Date | string | null
     updatedAt?: DateTimeNullableWithAggregatesFilter<"AsanaSeries"> | Date | string | null
@@ -7118,7 +7123,7 @@ export namespace Prisma {
     nameSequence?: StringFilter<"AsanaSequence"> | string
     sequencesSeries?: JsonNullableListFilter<"AsanaSequence">
     description?: StringNullableFilter<"AsanaSequence"> | string | null
-    duration?: StringNullableFilter<"AsanaSequence"> | string | null
+    durationSequence?: StringNullableFilter<"AsanaSequence"> | string | null
     image?: StringNullableFilter<"AsanaSequence"> | string | null
     breath_direction?: StringNullableFilter<"AsanaSequence"> | string | null
     createdAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
@@ -7130,7 +7135,7 @@ export namespace Prisma {
     nameSequence?: SortOrder
     sequencesSeries?: SortOrder
     description?: SortOrder
-    duration?: SortOrder
+    durationSequence?: SortOrder
     image?: SortOrder
     breath_direction?: SortOrder
     createdAt?: SortOrder
@@ -7145,7 +7150,7 @@ export namespace Prisma {
     nameSequence?: StringFilter<"AsanaSequence"> | string
     sequencesSeries?: JsonNullableListFilter<"AsanaSequence">
     description?: StringNullableFilter<"AsanaSequence"> | string | null
-    duration?: StringNullableFilter<"AsanaSequence"> | string | null
+    durationSequence?: StringNullableFilter<"AsanaSequence"> | string | null
     image?: StringNullableFilter<"AsanaSequence"> | string | null
     breath_direction?: StringNullableFilter<"AsanaSequence"> | string | null
     createdAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
@@ -7157,7 +7162,7 @@ export namespace Prisma {
     nameSequence?: SortOrder
     sequencesSeries?: SortOrder
     description?: SortOrder
-    duration?: SortOrder
+    durationSequence?: SortOrder
     image?: SortOrder
     breath_direction?: SortOrder
     createdAt?: SortOrder
@@ -7175,7 +7180,7 @@ export namespace Prisma {
     nameSequence?: StringWithAggregatesFilter<"AsanaSequence"> | string
     sequencesSeries?: JsonNullableListFilter<"AsanaSequence">
     description?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
-    duration?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
+    durationSequence?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
     image?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
     breath_direction?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
     createdAt?: DateTimeNullableWithAggregatesFilter<"AsanaSequence"> | Date | string | null
@@ -7500,8 +7505,9 @@ export namespace Prisma {
     posture_intent?: string | null
     posture_meaning?: string | null
     dristi?: string | null
-    breathDefault?: string | null
-    breathSeries?: string | null
+    breathDefault?: AsanaPostureCreatebreathDefaultInput | string[]
+    breathSeries?: AsanaPostureCreatebreathSeriesInput | string[]
+    durationAsana?: string | null
   }
 
   export type AsanaPostureUncheckedCreateInput = {
@@ -7533,8 +7539,9 @@ export namespace Prisma {
     posture_intent?: string | null
     posture_meaning?: string | null
     dristi?: string | null
-    breathDefault?: string | null
-    breathSeries?: string | null
+    breathDefault?: AsanaPostureCreatebreathDefaultInput | string[]
+    breathSeries?: AsanaPostureCreatebreathSeriesInput | string[]
+    durationAsana?: string | null
   }
 
   export type AsanaPostureUpdateInput = {
@@ -7565,8 +7572,9 @@ export namespace Prisma {
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
     posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
-    breathDefault?: NullableStringFieldUpdateOperationsInput | string | null
-    breathSeries?: NullableStringFieldUpdateOperationsInput | string | null
+    breathDefault?: AsanaPostureUpdatebreathDefaultInput | string[]
+    breathSeries?: AsanaPostureUpdatebreathSeriesInput | string[]
+    durationAsana?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AsanaPostureUncheckedUpdateInput = {
@@ -7597,8 +7605,9 @@ export namespace Prisma {
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
     posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
-    breathDefault?: NullableStringFieldUpdateOperationsInput | string | null
-    breathSeries?: NullableStringFieldUpdateOperationsInput | string | null
+    breathDefault?: AsanaPostureUpdatebreathDefaultInput | string[]
+    breathSeries?: AsanaPostureUpdatebreathSeriesInput | string[]
+    durationAsana?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AsanaPostureCreateManyInput = {
@@ -7630,8 +7639,9 @@ export namespace Prisma {
     posture_intent?: string | null
     posture_meaning?: string | null
     dristi?: string | null
-    breathDefault?: string | null
-    breathSeries?: string | null
+    breathDefault?: AsanaPostureCreatebreathDefaultInput | string[]
+    breathSeries?: AsanaPostureCreatebreathSeriesInput | string[]
+    durationAsana?: string | null
   }
 
   export type AsanaPostureUpdateManyMutationInput = {
@@ -7662,8 +7672,9 @@ export namespace Prisma {
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
     posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
-    breathDefault?: NullableStringFieldUpdateOperationsInput | string | null
-    breathSeries?: NullableStringFieldUpdateOperationsInput | string | null
+    breathDefault?: AsanaPostureUpdatebreathDefaultInput | string[]
+    breathSeries?: AsanaPostureUpdatebreathSeriesInput | string[]
+    durationAsana?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AsanaPostureUncheckedUpdateManyInput = {
@@ -7694,17 +7705,18 @@ export namespace Prisma {
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
     posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
-    breathDefault?: NullableStringFieldUpdateOperationsInput | string | null
-    breathSeries?: NullableStringFieldUpdateOperationsInput | string | null
+    breathDefault?: AsanaPostureUpdatebreathDefaultInput | string[]
+    breathSeries?: AsanaPostureUpdatebreathSeriesInput | string[]
+    durationAsana?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AsanaSeriesCreateInput = {
     id?: string
     seriesName: string
     seriesPostures?: AsanaSeriesCreateseriesPosturesInput | string[]
-    breath?: string | null
+    breathSeries?: AsanaSeriesCreatebreathSeriesInput | string[]
     description?: string | null
-    duration?: string | null
+    durationSeries?: string | null
     image?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -7714,9 +7726,9 @@ export namespace Prisma {
     id?: string
     seriesName: string
     seriesPostures?: AsanaSeriesCreateseriesPosturesInput | string[]
-    breath?: string | null
+    breathSeries?: AsanaSeriesCreatebreathSeriesInput | string[]
     description?: string | null
-    duration?: string | null
+    durationSeries?: string | null
     image?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -7725,9 +7737,9 @@ export namespace Prisma {
   export type AsanaSeriesUpdateInput = {
     seriesName?: StringFieldUpdateOperationsInput | string
     seriesPostures?: AsanaSeriesUpdateseriesPosturesInput | string[]
-    breath?: NullableStringFieldUpdateOperationsInput | string | null
+    breathSeries?: AsanaSeriesUpdatebreathSeriesInput | string[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    durationSeries?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7736,9 +7748,9 @@ export namespace Prisma {
   export type AsanaSeriesUncheckedUpdateInput = {
     seriesName?: StringFieldUpdateOperationsInput | string
     seriesPostures?: AsanaSeriesUpdateseriesPosturesInput | string[]
-    breath?: NullableStringFieldUpdateOperationsInput | string | null
+    breathSeries?: AsanaSeriesUpdatebreathSeriesInput | string[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    durationSeries?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7748,9 +7760,9 @@ export namespace Prisma {
     id?: string
     seriesName: string
     seriesPostures?: AsanaSeriesCreateseriesPosturesInput | string[]
-    breath?: string | null
+    breathSeries?: AsanaSeriesCreatebreathSeriesInput | string[]
     description?: string | null
-    duration?: string | null
+    durationSeries?: string | null
     image?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -7759,9 +7771,9 @@ export namespace Prisma {
   export type AsanaSeriesUpdateManyMutationInput = {
     seriesName?: StringFieldUpdateOperationsInput | string
     seriesPostures?: AsanaSeriesUpdateseriesPosturesInput | string[]
-    breath?: NullableStringFieldUpdateOperationsInput | string | null
+    breathSeries?: AsanaSeriesUpdatebreathSeriesInput | string[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    durationSeries?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7770,9 +7782,9 @@ export namespace Prisma {
   export type AsanaSeriesUncheckedUpdateManyInput = {
     seriesName?: StringFieldUpdateOperationsInput | string
     seriesPostures?: AsanaSeriesUpdateseriesPosturesInput | string[]
-    breath?: NullableStringFieldUpdateOperationsInput | string | null
+    breathSeries?: AsanaSeriesUpdatebreathSeriesInput | string[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    durationSeries?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7783,7 +7795,7 @@ export namespace Prisma {
     nameSequence: string
     sequencesSeries?: AsanaSequenceCreatesequencesSeriesInput | InputJsonValue[]
     description?: string | null
-    duration?: string | null
+    durationSequence?: string | null
     image?: string | null
     breath_direction?: string | null
     createdAt?: Date | string | null
@@ -7795,7 +7807,7 @@ export namespace Prisma {
     nameSequence: string
     sequencesSeries?: AsanaSequenceCreatesequencesSeriesInput | InputJsonValue[]
     description?: string | null
-    duration?: string | null
+    durationSequence?: string | null
     image?: string | null
     breath_direction?: string | null
     createdAt?: Date | string | null
@@ -7806,7 +7818,7 @@ export namespace Prisma {
     nameSequence?: StringFieldUpdateOperationsInput | string
     sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | InputJsonValue[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    durationSequence?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     breath_direction?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7817,7 +7829,7 @@ export namespace Prisma {
     nameSequence?: StringFieldUpdateOperationsInput | string
     sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | InputJsonValue[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    durationSequence?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     breath_direction?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7829,7 +7841,7 @@ export namespace Prisma {
     nameSequence: string
     sequencesSeries?: AsanaSequenceCreatesequencesSeriesInput | InputJsonValue[]
     description?: string | null
-    duration?: string | null
+    durationSequence?: string | null
     image?: string | null
     breath_direction?: string | null
     createdAt?: Date | string | null
@@ -7840,7 +7852,7 @@ export namespace Prisma {
     nameSequence?: StringFieldUpdateOperationsInput | string
     sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | InputJsonValue[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    durationSequence?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     breath_direction?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -7851,7 +7863,7 @@ export namespace Prisma {
     nameSequence?: StringFieldUpdateOperationsInput | string
     sequencesSeries?: AsanaSequenceUpdatesequencesSeriesInput | InputJsonValue[]
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    duration?: NullableStringFieldUpdateOperationsInput | string | null
+    durationSequence?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     breath_direction?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -8243,6 +8255,7 @@ export namespace Prisma {
     dristi?: SortOrder
     breathDefault?: SortOrder
     breathSeries?: SortOrder
+    durationAsana?: SortOrder
   }
 
   export type AsanaPostureMaxOrderByAggregateInput = {
@@ -8269,8 +8282,7 @@ export namespace Prisma {
     posture_intent?: SortOrder
     posture_meaning?: SortOrder
     dristi?: SortOrder
-    breathDefault?: SortOrder
-    breathSeries?: SortOrder
+    durationAsana?: SortOrder
   }
 
   export type AsanaPostureMinOrderByAggregateInput = {
@@ -8297,8 +8309,7 @@ export namespace Prisma {
     posture_intent?: SortOrder
     posture_meaning?: SortOrder
     dristi?: SortOrder
-    breathDefault?: SortOrder
-    breathSeries?: SortOrder
+    durationAsana?: SortOrder
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -8322,9 +8333,9 @@ export namespace Prisma {
     id?: SortOrder
     seriesName?: SortOrder
     seriesPostures?: SortOrder
-    breath?: SortOrder
+    breathSeries?: SortOrder
     description?: SortOrder
-    duration?: SortOrder
+    durationSeries?: SortOrder
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -8333,9 +8344,8 @@ export namespace Prisma {
   export type AsanaSeriesMaxOrderByAggregateInput = {
     id?: SortOrder
     seriesName?: SortOrder
-    breath?: SortOrder
     description?: SortOrder
-    duration?: SortOrder
+    durationSeries?: SortOrder
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -8344,9 +8354,8 @@ export namespace Prisma {
   export type AsanaSeriesMinOrderByAggregateInput = {
     id?: SortOrder
     seriesName?: SortOrder
-    breath?: SortOrder
     description?: SortOrder
-    duration?: SortOrder
+    durationSeries?: SortOrder
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -8357,7 +8366,7 @@ export namespace Prisma {
     nameSequence?: SortOrder
     sequencesSeries?: SortOrder
     description?: SortOrder
-    duration?: SortOrder
+    durationSequence?: SortOrder
     image?: SortOrder
     breath_direction?: SortOrder
     createdAt?: SortOrder
@@ -8368,7 +8377,7 @@ export namespace Prisma {
     id?: SortOrder
     nameSequence?: SortOrder
     description?: SortOrder
-    duration?: SortOrder
+    durationSequence?: SortOrder
     image?: SortOrder
     breath_direction?: SortOrder
     createdAt?: SortOrder
@@ -8379,7 +8388,7 @@ export namespace Prisma {
     id?: SortOrder
     nameSequence?: SortOrder
     description?: SortOrder
-    duration?: SortOrder
+    durationSequence?: SortOrder
     image?: SortOrder
     breath_direction?: SortOrder
     createdAt?: SortOrder
@@ -8489,6 +8498,14 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type AsanaPostureCreatebreathDefaultInput = {
+    set: string[]
+  }
+
+  export type AsanaPostureCreatebreathSeriesInput = {
+    set: string[]
+  }
+
   export type AsanaPostureUpdatealternate_english_nameInput = {
     set?: string[]
     push?: string | string[]
@@ -8523,11 +8540,30 @@ export namespace Prisma {
     unset?: boolean
   }
 
+  export type AsanaPostureUpdatebreathDefaultInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type AsanaPostureUpdatebreathSeriesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
   export type AsanaSeriesCreateseriesPosturesInput = {
     set: string[]
   }
 
+  export type AsanaSeriesCreatebreathSeriesInput = {
+    set: string[]
+  }
+
   export type AsanaSeriesUpdateseriesPosturesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type AsanaSeriesUpdatebreathSeriesInput = {
     set?: string[]
     push?: string | string[]
   }

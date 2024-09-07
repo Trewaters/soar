@@ -3,8 +3,14 @@ import { PrismaClient } from '@prisma/generated/client'
 const prisma = new PrismaClient()
 
 export async function POST(request: Request) {
-  const { seriesName, seriesPostures, breath, description, duration, image } =
-    await request.json()
+  const {
+    seriesName,
+    seriesPostures,
+    breathSeries,
+    description,
+    durationSeries,
+    image,
+  } = await request.json()
 
   try {
     // const body: FlowSeriesData = await request.json()
@@ -27,9 +33,9 @@ export async function POST(request: Request) {
       data: {
         seriesName,
         seriesPostures,
-        breath,
+        breathSeries,
         description,
-        duration,
+        durationSeries,
         image,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
