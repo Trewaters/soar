@@ -9,10 +9,14 @@ import { useTimer } from '@app/context/timerContext'
 import { useRouter } from 'next/navigation'
 import HomeIcon from '@mui/icons-material/Home'
 
-export default function ViewAsanaPractice() {
+export default function ViewAsanaPractice({
+  params,
+}: {
+  params: { pose: string }
+}) {
   // NOTES: include icons for more information like safety tips, focuse points, etc.
 
-  /* call api/poses/?english_name=${pose_name} */
+  /* call api/poses/?english_name=${pose} */
   const [viewPose, setViewPose] = useState<PostureData>()
   const [elapsedTime, setElapsedTime] = useState(0)
   // const [isPaused, setIsPaused] = useState(false)
@@ -36,7 +40,7 @@ export default function ViewAsanaPractice() {
 
   useEffect(() => {
     const getViewPose = async () => {
-      const response = await fetch('/api/poses/?english_name=Archer')
+      const response = await fetch(`/api/poses/?english_name=${params.pose}`)
       const responseData = await response.json()
       setViewPose(responseData)
       // return await response.json()
@@ -86,7 +90,7 @@ export default function ViewAsanaPractice() {
         {/* 
         <Grid item xs={6}>
           <Typography variant="subtitle1" color={'white'}>
-            [PROGRESS_BAR]
+            [PROGRESS_BAR]`
           </Typography>
         </Grid>
 

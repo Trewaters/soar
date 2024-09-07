@@ -5,6 +5,9 @@ import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
 import PostureData from '@interfaces/postureData'
 import PostureCard from '@app/navigator/asanaPostures/posture-card'
+import { Button } from '@mui/material'
+import { useRouter } from 'next/navigation'
+import { FEATURES } from '@app/FEATURES'
 
 interface PostureSearchProps {
   posturePropData: PostureData[]
@@ -22,10 +25,17 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
     (p) => p.simplified_english_name === cardPosture
   )
   const defaultPosture = postures?.find((p) => p.simplified_english_name === '')
+  const router = useRouter()
 
   useEffect(() => {
     setPostures(posturePropData)
   }, [posturePropData])
+
+  function handleClick() {
+    // send pose name to api/poses/?english_name=${pose_name}
+    // show asana practice view
+    router.push(`../views/viewAsanaPractice/${selectedPosture?.english_name}/`)
+  }
 
   return (
     <>
@@ -96,6 +106,10 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
           )}
         /> */}
       </Stack>
+
+      {selectedPosture && FEATURES.SHOW_PRACTICE_VIEW_ASANA && (
+        <Button onClick={handleClick}>Practice View</Button>
+      )}
 
       {selectedPosture && <PostureCard postureCardProp={selectedPosture} />}
     </>
