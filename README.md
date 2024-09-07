@@ -339,13 +339,13 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 
 _(in order of priority top to bottom)_
 
-- Series (2024-08-28 18:08:51)
-  - When creating new postures add "Breath" from "Create a series" page to the "BreathSeries" data object I just created in prisma. (count and direction, maybe?)
+- User Profile (2024-09-07 07:48:17)
+  - enable share icon, allow user to share the information in that area.
+  - enable favorite "heart" icon, expand functionality later when there are user roles.
 - Sequence (2024-08-24 08:43:39)
   - Views change… **_Practice view_** is “wheel of fortune” scrolling view, it highlights current pose (half screen magnification) while above and below are smaller. ; **_Study view_** allows a list view of the poses in the sequence.
-- Navigation (2024-08-24 08:44:15)\
-  - Add main navigation across top of app below header.
-- Clean up add Quality, do QA
+- Clean up & add Quality,
+  - QA, Quality analysis
   - Clean up UI. Start using Lighthouse for improvements.
   - Check accessibility
   - create header based on best practices
