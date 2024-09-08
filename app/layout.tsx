@@ -3,6 +3,7 @@ import { ReactNode } from 'react'
 import type { Metadata } from 'next'
 import Header from '@serverComponents/header'
 import { Providers } from '@providers/Providers'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
   title: 'Happy Yoga',
@@ -15,9 +16,25 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <Providers>
           <Header />
+          {/* add google analytics script below header */}
+          {/* <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-BE8QV7LLJV"
+          ></script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-BE8QV7LLJV');
+          `,
+            }}
+          /> */}
           <main>{children}</main>
         </Providers>
       </body>
+      <GoogleAnalytics gaId="G-BE8QV7LLJV" />
     </html>
   )
 }

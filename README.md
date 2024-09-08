@@ -342,8 +342,6 @@ _(in order of priority top to bottom)_
 - User Profile (2024-09-07 07:48:17)
   - enable share icon, allow user to share the information in that area.
   - enable favorite "heart" icon, expand functionality later when there are user roles.
-- Sequence (2024-08-24 08:43:39)
-  - Views change… **_Practice view_** is “wheel of fortune” scrolling view, it highlights current pose (half screen magnification) while above and below are smaller. ; **_Study view_** allows a list view of the poses in the sequence.
 - Clean up & add Quality,
   - QA, Quality analysis
   - Clean up UI. Start using Lighthouse for improvements.
