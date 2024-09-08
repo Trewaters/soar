@@ -17,7 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Providers>
           <Header />
           {/* add google analytics script below header */}
-          {/* <script
+          <script
             async
             src="https://www.googletagmanager.com/gtag/js?id=G-BE8QV7LLJV"
           ></script>
@@ -30,11 +30,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             gtag('config', 'G-BE8QV7LLJV');
           `,
             }}
-          /> */}
+          />
           <main>{children}</main>
         </Providers>
       </body>
-      <GoogleAnalytics gaId="G-BE8QV7LLJV" />
+      {/* <GoogleAnalytics gaId="G-BE8QV7LLJV" /> */}
     </html>
   )
 }
