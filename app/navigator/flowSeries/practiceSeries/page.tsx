@@ -147,7 +147,9 @@ export default function Page() {
             <Typography variant="h3" sx={{ marginTop: 3 }}>
               Description
             </Typography>
-            <Typography variant="body1">{flow.description}</Typography>
+            <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
+              {flow.description}
+            </Typography>
           </Stack>
         </Box>
       )}
