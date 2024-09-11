@@ -21,10 +21,8 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
   // const [open, setOpen] = useState(false)
 
   // Find the selected posture based on the Autocomplete selection
-  const selectedPosture = postures?.find(
-    (p) => p.simplified_english_name === cardPosture
-  )
-  const defaultPosture = postures?.find((p) => p.simplified_english_name === '')
+  const selectedPosture = postures?.find((p) => p.english_name === cardPosture)
+  const defaultPosture = postures?.find((p) => p.english_name === '')
   const router = useRouter()
 
   useEffect(() => {
@@ -43,12 +41,10 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
         <Autocomplete
           id="search-poses"
           options={postures}
-          getOptionLabel={(option: PostureData) =>
-            option.simplified_english_name
-          }
+          getOptionLabel={(option: PostureData) => option.english_name}
           renderOption={(props, option) => (
             <li {...props} key={option.id}>
-              {option.simplified_english_name}
+              {option.english_name}
             </li>
           )}
           renderInput={(params) => (
@@ -56,9 +52,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
           )}
           defaultValue={defaultPosture}
           autoSelect={true}
-          onChange={(event, value) =>
-            setcardPosture(value?.simplified_english_name || '')
-          }
+          onChange={(event, value) => setcardPosture(value?.english_name || '')}
         />
         {/* 
         // unsuccessful attempt to clear input so entire list shows
@@ -69,10 +63,10 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
           onOpen={() => setOpen(true)}
           onClose={() => setOpen(false)}
           options={postures}
-          getOptionLabel={(option: PostureData) => option.simplified_english_name}
+          getOptionLabel={(option: PostureData) => option.english_name}
           renderOption={(props, option) => (
             <li {...props} key={option.id}>
-              {option.simplified_english_name}
+              {option.english_name}
             </li>
           )}
           renderInput={(params) => (
@@ -82,8 +76,8 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
           // value={value}
           autoSelect={true}
           onChange={(event, newValue) => {
-            setValue(newValue?.simplified_english_name || '')
-            setcardPosture(newValue?.simplified_english_name || '')
+            setValue(newValue?.english_name || '')
+            setcardPosture(newValue?.english_name || '')
           }}
           inputValue={inputValue}
           onInputChange={(event, newInputValue) => {
