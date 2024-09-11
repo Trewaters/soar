@@ -32,8 +32,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               color: 'primary.contrastText',
             },
           }}
-          title={posture?.simplified_english_name}
-          subheader={posture?.english_name}
+          title={posture?.english_name}
+          subheader={posture?.simplified_english_name}
         />
         <CardMedia sx={{ width: '50%', margin: 'auto' }}>
           <Image
