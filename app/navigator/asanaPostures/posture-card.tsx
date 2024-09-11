@@ -76,6 +76,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   color: '#333',
                   borderTopRightRadius: { xs: 0, sm: 75 },
                   borderBottomRightRadius: { xs: 0, sm: 75 },
+                  whiteSpace: 'pre-line',
                 }}
               >
                 {posture?.description}
