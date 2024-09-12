@@ -1,7 +1,7 @@
 'use client'
 import PostureData from '@app/interfaces/postureData'
 import { Box, Button, Grid, IconButton, Paper, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PauseCircleIcon from '@mui/icons-material/PauseCircle'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
 import AsanaTimer from '@app/clientComponents/asanaTimer'
@@ -48,11 +48,17 @@ export default function ViewAsanaPractice({
     getViewPose()
   }, [params.pose])
 
-  const paperStyle = {
+  const paperStyle: React.CSSProperties = {
+    padding: '20px',
     backgroundImage: 'url(/PismoBeachSunset-2020-03-19.JPG)',
     backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
-    padding: '20px',
+    width: '100vw',
+    height: '100vh',
+    position: 'fixed',
+    top: 0,
+    left: 0,
   }
 
   const handleIconButtonClick = () => {
@@ -74,77 +80,83 @@ export default function ViewAsanaPractice({
   }
 
   return (
-    <Paper style={paperStyle}>
-      <Grid container>
-        <Grid item xs={12}>
-          <Typography variant="h1" textAlign={'center'} color={'white'}>
-            Asana Practice
-          </Typography>
-        </Grid>
+    <div className="fullscreen-background">
+      <Paper style={paperStyle}>
+        <Grid container>
+          <Grid item xs={12}>
+            <Typography variant="h1" textAlign={'center'} color={'white'}>
+              Asana Practice
+            </Typography>
+          </Grid>
 
+          <Grid item xs={6}>
+            <Typography variant="subtitle1" color={'white'}>
+              {viewPose?.english_name}
+            </Typography>
+          </Grid>
+          {/* 
         <Grid item xs={6}>
-          <Typography variant="subtitle1" color={'white'}>
-            {viewPose?.english_name}
-          </Typography>
+        <Typography variant="subtitle1" color={'white'}>
+        [PROGRESS_BAR]`
+        </Typography>
         </Grid>
-        {/* 
-        <Grid item xs={6}>
-          <Typography variant="subtitle1" color={'white'}>
-            [PROGRESS_BAR]`
-          </Typography>
-        </Grid>
-
+        
         <Grid item xs={12}>
-          <Typography variant="body1" color={'white'}>
-            Next: {viewPose?.next_poses}
-          </Typography>
+        <Typography variant="body1" color={'white'}>
+        Next: {viewPose?.next_poses}
+        </Typography>
         </Grid>
-
+        
         <Grid item xs={12}>
-          <Typography variant="body1" color={'white'}>
-            [SERIES NAME]
-          </Typography>
+        <Typography variant="body1" color={'white'}>
+        [SERIES NAME]
+        </Typography>
         </Grid>
-
+        
         <Grid item xs={12}>
-          <Typography variant="body1" color={'white'}>
-            [TIMER... TIME REMAINING]
-          </Typography>
+        <Typography variant="body1" color={'white'}>
+        [TIMER... TIME REMAINING]
+        </Typography>
         </Grid>
-
+        
         <Grid item xs={12}>
-          <Typography variant="body1" color={'white'}>
-            [TIMER... TOTAL TIME]
-          </Typography>
+        <Typography variant="body1" color={'white'}>
+        [TIMER... TOTAL TIME]
+        </Typography>
         </Grid>
- */}
+        */}
 
-        <Grid item xs={12}>
-          <AsanaTimer
-            onTimeUpdate={handleTimeUpdate}
-            onPauseUpdate={handlePauseUpdate}
-          />
-        </Grid>
+          <Grid item xs={12}>
+            <AsanaTimer
+              onTimeUpdate={handleTimeUpdate}
+              onPauseUpdate={handlePauseUpdate}
+            />
+          </Grid>
 
-        <Grid item xs={2}>
-          <IconButton onClick={handleIconButtonClick}>
-            {state.watch.isPaused ? (
-              <PlayCircleIcon sx={{ color: 'white', height: 40, width: 40 }} />
-            ) : (
-              <PauseCircleIcon sx={{ color: 'white', height: 40, width: 40 }} />
-            )}
-          </IconButton>
-        </Grid>
+          <Grid item xs={2}>
+            <IconButton onClick={handleIconButtonClick}>
+              {state.watch.isPaused ? (
+                <PlayCircleIcon
+                  sx={{ color: 'white', height: 40, width: 40 }}
+                />
+              ) : (
+                <PauseCircleIcon
+                  sx={{ color: 'white', height: 40, width: 40 }}
+                />
+              )}
+            </IconButton>
+          </Grid>
 
-        <Grid item xs={8}>
-          <Button>NEXT</Button>
+          <Grid item xs={8}>
+            <Button>NEXT</Button>
+          </Grid>
+          <Grid item xs={2}>
+            <IconButton sx={{ color: 'white' }} onClick={handleBackClick}>
+              <HomeIcon />
+            </IconButton>
+          </Grid>
         </Grid>
-        <Grid item xs={2}>
-          <IconButton sx={{ color: 'white' }} onClick={handleBackClick}>
-            <HomeIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
-    </Paper>
+      </Paper>
+    </div>
   )
 }
