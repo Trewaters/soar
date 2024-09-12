@@ -485,6 +485,33 @@ export default function UserDetails() {
 
   const membershipDate = new Date(userData?.createdAt).toLocaleDateString()
 
+  const handleShare = async () => {
+    const shareData = {
+      title: 'Happy Yoga',
+      text: `Check out ${userData.firstName} ${userData.lastName}! ${userData.headline}; ${userData.shareQuick}; ${userData.yogaStyle}; ${userData.yogaExperience};  ${userData.company}; ${userData.websiteURL}; ${userData.location};`,
+      url: window.location.href,
+    }
+    const resultPara = document.querySelector('.result')
+
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(shareData))
+      console.log('Content copied to clipboard')
+
+      if (navigator.share) {
+        await navigator.share(shareData)
+        console.log('Content shared successfully')
+      } else {
+        console.log('Web Share API not supported in this browser.')
+        alert('Link copied to clipboard. Share it manually!')
+      }
+    } catch (error) {
+      console.error('Error sharing content:', error)
+      if (resultPara) {
+        resultPara.textContent = `Error: ${error}`
+      }
+    }
+  }
+
   return (
     <>
       {!session && (
@@ -553,7 +580,7 @@ export default function UserDetails() {
                 <IconButton aria-label="add to favorites" disabled>
                   <FavoriteIcon />
                 </IconButton>
-                <IconButton aria-label="share" disabled>
+                <IconButton aria-label="share" onClick={handleShare}>
                   <ShareIcon />
                 </IconButton>
                 <ExpandMore
