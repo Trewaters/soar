@@ -46,7 +46,7 @@ export default function ViewAsanaPractice({
       // return await response.json()
     }
     getViewPose()
-  }, [])
+  }, [params.pose])
 
   const paperStyle = {
     backgroundImage: 'url(/PismoBeachSunset-2020-03-19.JPG)',
@@ -61,7 +61,7 @@ export default function ViewAsanaPractice({
       type: 'SET_TIMER',
       payload: {
         ...state.watch,
-        isPaused: newPauseState,
+        isPaused: !newPauseState,
         startTime: Date.now(),
       },
     })

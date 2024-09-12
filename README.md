@@ -344,6 +344,11 @@ _(in order of priority top to bottom)_
   - enable favorite "heart" icon, expand functionality later when there are user roles.
 - Clean up & add Quality,
   - QA, Quality analysis
+    - add remove and clear buttons to "Create flow". (2024-09-11 18:36:26)
+    - Profile page jumps when it loads. prevent this jumping. (2024-09-11 18:36:23)
+    - Add home button to "Asana Postures" page. (2024-09-11 18:36:19)
+    - "Create Series" remove last arrow icon from the Flow Series list. (2024-09-11 18:36:13)
+    - "Create Series/Sequence" Add ability to clear form, enable cancel (resetting the form to empty)
   - Clean up UI. Start using Lighthouse for improvements.
   - Check accessibility
   - create header based on best practices
