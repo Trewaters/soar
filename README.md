@@ -16,7 +16,7 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 - View Yoga postures with details about the posture like name, description, etc.
 
-**Flow**
+**Flows**
 
 - Series are multiple asanas done in order. Series are smaller pieces that combine to make a Full Sequences.
 - View series
@@ -118,7 +118,7 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 
 ## Milestones
 
-- [x] 1.0.0 - MVP ( 2 sections - each with material, "Flow" and "Asana Postures").
+- [x] 1.0.0 - MVP ( 2 sections - each with material, "Flows" and "Asana Postures").
 - [x] 2.0.0 - Create User Profiles (connect to db)
 - [ ] 2.1.0 - Routine/Practice Planner. Allow user to track progress and goals.
 - [ ] x.x.0 - Allow User Profiles to save their progress (connect to db)
@@ -347,7 +347,7 @@ _(in order of priority top to bottom)_
     - add remove and clear buttons to "Create flow". (2024-09-11 18:36:26)
     - Profile page jumps when it loads. prevent this jumping. (2024-09-11 18:36:23)
     - Add home button to "Asana Postures" page. (2024-09-11 18:36:19)
-    - "Create Series" remove last arrow icon from the Flow Series list. (2024-09-11 18:36:13)
+    - "Create Series" remove last arrow icon from the Flows Series list. (2024-09-11 18:36:13)
     - "Create Series/Sequence" Add ability to clear form, enable cancel (resetting the form to empty)
   - Clean up UI. Start using Lighthouse for improvements.
   - Check accessibility
