@@ -4,6 +4,7 @@ import { SequenceData } from '@app/context/SequenceContext'
 import { FEATURES } from '@app/FEATURES'
 import {
   Autocomplete,
+  Avatar,
   Box,
   Button,
   FormControl,
@@ -11,26 +12,20 @@ import {
   FormLabel,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemText,
+  ListSubheader,
   Stack,
   TextField,
   Typography,
 } from '@mui/material'
 import { useSession } from 'next-auth/react'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
-
-// async function fetchSequence() {
-//   try {
-//     const res = await fetch('/api/sequences')
-//     if (!res.ok) {
-//       throw new Error('Network response was not ok')
-//     }
-//     const data = await res.json()
-//     return data
-//   } catch (error) {
-//     console.error('Error fetching sequence data:', error)
-//   }
-// }
+import { LooksOne } from '@mui/icons-material'
+import LooksTwoIcon from '@mui/icons-material/LooksTwo'
+import Looks3Icon from '@mui/icons-material/Looks3'
+import Looks4Icon from '@mui/icons-material/Looks4'
+import Looks5Icon from '@mui/icons-material/Looks5'
 
 async function fetchSeries() {
   try {
@@ -47,15 +42,6 @@ async function fetchSeries() {
 
 export default function Page() {
   const { data: session } = useSession()
-  // const { state, dispatch } = useSequence()
-  // const {
-  //   nameSequence,
-  //   sequencesSeries,
-  //   description,
-  //   duration,
-  //   image,
-  //   breath_direction,
-  // } = state.sequences
 
   const [sequences, setSequences] = useState<SequenceData>({
     id: 0,
@@ -68,7 +54,6 @@ export default function Page() {
   })
 
   const [nameSequence, setNameSequence] = useState('')
-  // const [sequencesSeries, setSequenceSeries] = useState<FlowSeriesData[]>([])
   const [description, setDescription] = useState('')
   const [duration, setDuration] = useState('')
   const [image, setImage] = useState('')
@@ -81,14 +66,10 @@ export default function Page() {
   useEffect(() => {
     async function getData() {
       const seriesData = await fetchSeries()
-      // const sequenceData = await fetchSequence()
 
       if (seriesData) {
         setFlowSeries(seriesData)
       }
-      // if (sequenceData) {
-      //   dispatch({ type: 'SET_SEQUENCES', payload: sequenceData })
-      // }
     }
     getData()
   }, [session])
@@ -103,37 +84,15 @@ export default function Page() {
         value.seriesName,
       ])
       setPostures(value.seriesPostures)
-      // setSequenceSeries((prevSeries) => [...prevSeries, value])
-
-      // dispatch({
-      //   type: 'SET_SEQUENCES',
-      //   payload: {
-      //     ...state.sequences,
-      //     sequencesSeries: [...state.sequences.sequencesSeries, value],
-      //   },
-      // })
       setSequences({
         ...sequences,
         sequencesSeries: [...sequences.sequencesSeries, value],
       })
-      // setSequences({
-      //   ...sequences,
-      //   sequencesSeries: [...sequences.sequencesSeries, value],
-      // })
     }
   }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
-    // const updatedSequence = {
-    //   ...state.sequences,
-    //   nameSequence,
-    //   sequencesSeries,
-    //   description,
-    //   duration,
-    //   image,
-    //   breath_direction,
-    // }
     const updatedSequence = {
       ...sequences,
       nameSequence,
@@ -143,8 +102,6 @@ export default function Page() {
       image,
       breath_direction,
     }
-
-    // dispatch({ type: 'SET_SEQUENCES', payload: updatedSequence })
 
     try {
       const response = await fetch('/api/sequences/createSequence', {
@@ -165,26 +122,11 @@ export default function Page() {
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target
-    // dispatch({
-    //   type: 'SET_SEQUENCES',
-    //   payload: {
-    //     ...state.sequences,
-    //     [name]: value,
-    //   },
-    // })
     switch (name) {
       case 'nameSequence':
         setNameSequence(value)
         break
-      // case 'sequencesSeries':
-      //   setSequenceSeries(
-      //     (prevValue) => [...prevValue, value] as FlowSeriesData[]
-      //   )
-      //   break
       case 'seriesName':
-        // setSequenceSeries(
-        //   (prevValue) => [...prevValue, value] as FlowSeriesData[]
-        // )
         setSeriesNameSet((prev) => [...prev, value])
         break
       case 'description':
@@ -220,6 +162,68 @@ export default function Page() {
               <Typography variant="h2" textAlign="center">
                 Create a Sequence
               </Typography>
+              <List
+                sx={{
+                  width: 'auto',
+                  // maxWidth: 360,
+                  bgcolor: 'background.helper',
+                  alignSelf: 'center',
+                  borderRadius: 4,
+                  my: 3,
+                }}
+              >
+                <ListSubheader
+                  sx={{ bgcolor: 'background.helper', textAlign: 'center' }}
+                  component="h3"
+                  id="nested-list-subheader"
+                >
+                  Welcome to the sequence creation page
+                </ListSubheader>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <LooksOne />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="If you can't find a sequence, create your own!" />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <LooksTwoIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary='"Sequence Name": Type a unique name for your sequence.' />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Looks3Icon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary='"Pick Series": Add a series to
+                  your sequence by selecting them from the "Pick Series"
+                  dropdown below. View the asana postures in the series below "Pick Series" Click the "X" to enter a new series. "Remove One (-1)" will remove the last series added. "Clear" will remove all series so you can start over.'
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Looks4Icon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary='"Description": Type a description of your sequence.' />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Looks5Icon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary='Click "Submit" when you are done.' />
+                </ListItem>
+              </List>
               <Button
                 fullWidth
                 variant="outlined"
@@ -239,21 +243,12 @@ export default function Page() {
                   name="nameSequence"
                   value={nameSequence}
                   onChange={handleChange}
+                  sx={{ mb: 3 }}
                 />
               </FormControl>
 
               <FormControl>
                 <FormLabel>Series Name</FormLabel>
-                {/* 
-                <TextField
-                  id="seriesName"
-                  variant="outlined"
-                  name="seriesName"
-                  value={seriesNameSet}
-                  onChange={handleChange}
-                  disabled
-                />
-                 */}
                 <Stack
                   direction="column"
                   spacing={2}
@@ -335,46 +330,11 @@ export default function Page() {
                   id="description"
                   variant="outlined"
                   name="description"
+                  multiline
                   value={description}
                   onChange={handleChange}
                 />
               </FormControl>
-              {/* 
-              <FormControl>
-                <FormLabel>Duration</FormLabel>
-                <TextField
-                  id="duration"
-                  variant="outlined"
-                  name="duration"
-                  value={duration}
-                  onChange={handleChange}
-                />
-              </FormControl>
-               */}
-              {/* 
-              <FormControl>
-                <FormLabel>Image</FormLabel>
-                <TextField
-                  id="image"
-                  variant="outlined"
-                  name="image"
-                  value={image}
-                  onChange={handleChange}
-                />
-              </FormControl>
- */}
-              {/* 
-              <FormControl>
-                <FormLabel>Breath Direction</FormLabel>
-                <TextField
-                  id="breath_direction"
-                  variant="outlined"
-                  name="breath_direction"
-                  value={breath_direction}
-                  onChange={handleChange}
-                />
-              </FormControl>
- */}
               <Stack
                 direction="row"
                 spacing={2}

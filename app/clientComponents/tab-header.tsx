@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { Box, Tab, Tabs } from '@mui/material'
 import LandingPage from '@components/landing-page'
 import EightLimbs from '@app/navigator/eightLimbs/eight-limbs'
-import UserDetails from '@app/navigator/profile/UserDetails'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -66,25 +65,15 @@ export default function TabHeader() {
           scrollButtons="auto"
           centered
         >
-          <Tab label="Landing" {...a11yProps(0)} />
-          {/* <Tab label="Planner" {...a11yProps(1)} /> */}
-          <Tab label="8 Limb Path" {...a11yProps(1)} />
-          <Tab label="Profile" {...a11yProps(2)} />
+          <Tab label="Practice" {...a11yProps(0)} />
+          <Tab label="Reference" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
         <LandingPage />
       </CustomTabPanel>
-      {/* 
-      <CustomTabPanel value={value} index={1}>
-        <PlannerMenu />
-      </CustomTabPanel>
- */}
       <CustomTabPanel value={value} index={1}>
         <EightLimbs />
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <UserDetails />
       </CustomTabPanel>
     </Box>
   )

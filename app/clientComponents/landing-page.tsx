@@ -17,7 +17,7 @@ const links = [
     href: '/navigator/asanaPostures',
     icon: <WaterDropOutlinedIcon />,
   },
-  { name: 'Flow', href: '/navigator/flowSeries', icon: <WhatshotIcon /> },
+  { name: 'Flows', href: '/navigator/flowSeries', icon: <WhatshotIcon /> },
   /* 
   {
     name: 'Meditation',
