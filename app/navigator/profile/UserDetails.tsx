@@ -408,6 +408,7 @@ import LinkIcon from '@mui/icons-material/Link'
 import { useSession } from 'next-auth/react'
 import { UseUser } from '@app/context/UserContext'
 import Link from 'next/link'
+import MyMap from '@app/clientComponents/googleMaps'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean
@@ -577,9 +578,9 @@ export default function UserDetails() {
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
-                <IconButton aria-label="add to favorites" disabled>
+                {/* <IconButton aria-label="add to favorites" disabled>
                   <FavoriteIcon />
-                </IconButton>
+                </IconButton> */}
                 <IconButton aria-label="share" onClick={handleShare}>
                   <ShareIcon />
                 </IconButton>
@@ -673,6 +674,7 @@ export default function UserDetails() {
                      */}
                     <MapIcon />
                     <Typography>{userData.location ?? ''}</Typography>
+                    <MyMap />
                   </Stack>
                 </CardContent>
               </Collapse>

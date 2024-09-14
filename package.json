@@ -26,6 +26,7 @@
     "@mui/material": "^5.15.19",
     "@next/third-parties": "^14.2.8",
     "@prisma/client": "^5.16.1",
+    "@react-google-maps/api": "^2.19.3",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "jwt-decode": "^4.0.0",
@@ -33,7 +34,7 @@
     "mongodb": "^6.8.0",
     "next": "^14.2.8",
     "next-auth": "^5.0.0-beta.19",
-    "react": "^18.2.0",
+    "react": "^18.3.1",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
@@ -46,7 +47,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/luxon": "^3.4.1",
     "@types/node": "^20.12.8",
-    "@types/react": "^18.2.48",
+    "@types/react": "^18.3.5",
     "@types/react-dom": "^18.2.18",
     "@vercel/nft": "^0.27.3",
     "concurrently": "^8.2.2",

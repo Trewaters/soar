@@ -339,9 +339,6 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 
 _(in order of priority top to bottom)_
 
-- User Profile (2024-09-07 07:48:17)
-  - enable share icon, allow user to share the information in that area.
-  - enable favorite "heart" icon, expand functionality later when there are user roles.
 - Clean up & add Quality,
   - QA, Quality analysis
     - add remove and clear buttons to "Create flow". (2024-09-11 18:36:26)
@@ -355,7 +352,6 @@ _(in order of priority top to bottom)_
   - create footer based on best practices
   - Add loading skeleton to yogi profile.
   - Clean up data and database objects. Remove unused data fields. Add Player Tested feedback.
-- Add Google Analytics (2024-08-24 08:44:21)
 - Add Google Maps (2024-08-24 08:44:25)
 - Hide (unfinished/unstarted) features behind a flag (2024-08-24 08:44:29)
   - Add user roles to application. Pass with the session. (dev, admin, tester, etc)
