@@ -4,20 +4,19 @@ import { useFlowSeries } from '@app/context/AsanaSeriesContext'
 import { FEATURES } from '@app/FEATURES'
 import PostureData from '@app/interfaces/postureData'
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Autocomplete,
+  Avatar,
   Box,
   Button,
-  Card,
-  CardContent,
   FormControl,
   FormGroup,
   Grid,
-  Icon,
   IconButton,
-  InputLabel,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  ListSubheader,
   Stack,
   TextField,
   Typography,
@@ -25,6 +24,11 @@ import {
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import NavigationIcon from '@mui/icons-material/Navigation'
+import { LooksOne } from '@mui/icons-material'
+import LooksTwoIcon from '@mui/icons-material/LooksTwo'
+import Looks3Icon from '@mui/icons-material/Looks3'
+import Looks4Icon from '@mui/icons-material/Looks4'
+import Looks5Icon from '@mui/icons-material/Looks5'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -34,8 +38,6 @@ export default function Page() {
 
   // posture data
   const [postures, setPostures] = useState<PostureData[]>([])
-  // const [singlePosture, setSinglePosture] = useState<PostureData>()
-  // const [postureName, setPostureName] = useState('')
 
   useEffect(() => {
     async function fetchData() {
@@ -65,10 +67,6 @@ export default function Page() {
     // Logs the element that triggered the event
     event.preventDefault()
     if (value) {
-      // setSinglePosture(value)
-
-      // setPostureName(value.english_name)
-
       dispatch({
         type: 'SET_FLOW_SERIES',
         payload: {
@@ -136,6 +134,68 @@ export default function Page() {
               <Typography variant="h2" textAlign="center">
                 Create a Series
               </Typography>
+              <List
+                sx={{
+                  width: 'auto',
+                  // maxWidth: 360,
+                  bgcolor: 'background.helper',
+                  alignSelf: 'center',
+                  borderRadius: 4,
+                  my: 3,
+                }}
+              >
+                <ListSubheader
+                  sx={{ bgcolor: 'background.helper', textAlign: 'center' }}
+                  component="h3"
+                  id="nested-list-subheader"
+                >
+                  Welcome to the series creation page
+                </ListSubheader>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <LooksOne />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="If you can't find a series you like, create your own!" />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <LooksTwoIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary='"Series Name": Type a unique name for your series.' />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Looks3Icon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary='"Flow Series": Add asana postures to
+                  your series by selecting them from the "Flow Series"
+                  dropdown below. Click the "X" to enter a new posture.'
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Looks4Icon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary='"Description": Type a description of your series.' />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Looks5Icon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary='Click "Submit" when you are done.' />
+                </ListItem>
+              </List>
               <Button
                 variant="outlined"
                 href="/navigator/flowSeries"
@@ -170,18 +230,6 @@ export default function Page() {
                   sx={{ mb: 2 }}
                 >
                   <FormControl>
-                    {/* 
-                    <TextField
-                      id="outlined-basic"
-                      label="Series Postures"
-                      variant="outlined"
-                      name="seriesPostures"
-                      value={seriesPostures}
-                      onChange={handleChange}
-                      disabled
-                    />
- */}
-
                     <Stack
                       spacing={1}
                       direction={'row'}
@@ -238,20 +286,7 @@ export default function Page() {
                     onChange={handleSelect}
                   />
                 </FormControl>
-                {/* 
-              <Grid item xs={12} sx={{ mb: 2 }}>
-                <FormControl>
-                  <TextField
-                    id="outlined-basic"
-                    label="Breath"
-                    variant="outlined"
-                    name="breath"
-                    value={breath}
-                    onChange={handleChange}
-                  />
-                </FormControl>
-              </Grid>
- */}
+
                 <Grid item xs={12} sx={{ mb: 2 }}>
                   <FormControl>
                     <TextField
@@ -261,44 +296,10 @@ export default function Page() {
                       variant="outlined"
                       name="description"
                       value={description}
-                      // onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      //   setDescription(event.currentTarget.value)
-                      // }
                       onChange={handleChange}
                     />
                   </FormControl>
                 </Grid>
-                {/* 
-                <Grid item xs={12} sx={{ mb: 2 }}>
-                  <FormControl>
-                    <TextField
-                      id="outlined-basic"
-                      label="Duration"
-                      variant="outlined"
-                      name="duration"
-                      value={duration}
-                      onChange={handleChange}
-                    />
-                  </FormControl>
-                </Grid>
- */}
-                {/* 
-                <Grid item xs={12} sx={{ mb: 2 }}>
-                  <FormControl>
-                    <TextField
-                      id="outlined-basic"
-                      label="Image"
-                      variant="outlined"
-                      name="image"
-                      value={image}
-                      // onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      //   setImage(event.currentTarget.value)
-                      // }
-                      onChange={handleChange}
-                    />
-                  </FormControl>
-                </Grid>
- */}
                 <Grid item xs={12}>
                   <Stack direction="row" spacing={2} justifyContent="center">
                     <Button

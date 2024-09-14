@@ -67,8 +67,8 @@ export default function Page() {
         Flows
       </Typography>
 
-      <Stack spacing={5} sx={{ mt: 4 }}>
-        <Typography variant="body1" align="center">
+      <Stack spacing={5} alignItems={'center'} sx={{ mt: 4, width: '50%' }}>
+        <Typography variant="body2" sx={{ width: '50%' }}>
           Series are made up of asana poses.
         </Typography>
         <Button
@@ -76,7 +76,7 @@ export default function Page() {
           href="/navigator/flowSeries/practiceSeries"
           LinkComponent="a"
           startIcon={<SelfImprovementIcon />}
-          sx={{ width: '50%' }}
+          // sx={{ width: '50%' }}
         >
           Practice Series
         </Button>
@@ -87,12 +87,12 @@ export default function Page() {
             href="/navigator/flowSeries/createSeries"
             LinkComponent="a"
             startIcon={<HexagonIcon />}
-            sx={{ width: '50%' }}
+            // sx={{ width: '50%' }}
           >
             Create Series
           </Button>
         )}
-        <Typography variant="body1" align="center">
+        <Typography variant="body2" sx={{ width: '50%' }}>
           Sequences can be up to an hour or more and are made up of Series.
         </Typography>
         {FEATURES.SHOW_PRACTICE_SEQUENCE && (
@@ -108,7 +108,7 @@ export default function Page() {
                 height={24}
               />
             }
-            sx={{ width: '50%' }}
+            // sx={{ width: '50%' }}
           >
             Practice Sequence
           </Button>
@@ -120,7 +120,7 @@ export default function Page() {
             LinkComponent="a"
             href="/navigator/flowSeries/createSequence"
             startIcon={<HiveIcon />}
-            sx={{ width: '50%' }}
+            // sx={{ width: '50%' }}
           >
             Create Sequence
           </Button>
