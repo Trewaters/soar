@@ -292,6 +292,7 @@ export default function Page() {
                     <TextField
                       id="outlined-basic"
                       label="Description"
+                      sx={{ width: '95vw' }}
                       multiline
                       variant="outlined"
                       name="description"

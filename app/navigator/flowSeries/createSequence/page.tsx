@@ -330,6 +330,7 @@ export default function Page() {
                   id="description"
                   variant="outlined"
                   name="description"
+                  multiline
                   value={description}
                   onChange={handleChange}
                 />
