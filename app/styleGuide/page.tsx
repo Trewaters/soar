@@ -1,6 +1,54 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 
 export default function StyleGuide() {
+  // Define color palette
+  type ColorPalette = {
+    [key: string]: {
+      main: string
+      light: string
+      dark: string
+      contrastText: string
+    }
+  }
+
+  const colors: ColorPalette = {
+    primary: {
+      main: '#F6893D',
+      light: '#FFBA6F',
+      dark: '#C3581A',
+      contrastText: '#000000',
+    },
+    secondary: {
+      main: '#F6B93D',
+      light: '#FFD970',
+      dark: '#C38B1A',
+      contrastText: '#000000',
+    },
+    error: {
+      main: '#D32F2F',
+      light: '#E57373',
+      dark: '#9A0007',
+      contrastText: '#F6893D',
+    },
+    warning: {
+      main: '#FFA726',
+      light: '#FFD95B',
+      dark: '#C77800',
+      contrastText: '#000000',
+    },
+    info: {
+      main: '#1976D2',
+      light: '#63A4FF',
+      dark: '#004BA0',
+      contrastText: '#FFFFFF',
+    },
+    success: {
+      main: '#2E7D32',
+      light: '#60AD5E',
+      dark: '#005005',
+      contrastText: '#FFFFFF',
+    },
+  }
   return (
     <Stack spacing={2} sx={{ p: 4 }}>
       <Box
@@ -173,6 +221,46 @@ export default function StyleGuide() {
             contrastText: FFFFFF
           </Typography>
         </Box>
+      </Stack>
+
+      <Stack
+        gap={3}
+        spacing={3}
+        direction={'row'}
+        flexWrap={'wrap'}
+        justifyContent={'center'}
+        paddingTop={5}
+      >
+        {Object.keys(colors).map((colorKey) => (
+          <Box key={colorKey} sx={{ px: 2, pb: 2, border: '2px solid black' }}>
+            <Typography
+              variant="h3"
+              sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
+            >
+              {colorKey}
+            </Typography>
+            <Stack spacing={1}>
+              {Object.entries(colors[colorKey]).map(([variant, color]) => (
+                <Button
+                  key={variant}
+                  variant="contained"
+                  sx={{
+                    backgroundColor: color as string,
+                    color:
+                      colorKey === 'info' || colorKey === 'success'
+                        ? '#FFFFFF'
+                        : '#000000',
+                    '&:hover': {
+                      backgroundColor: color as string,
+                    },
+                  }}
+                >
+                  {variant}: {color}
+                </Button>
+              ))}
+            </Stack>
+          </Box>
+        ))}
       </Stack>
     </Stack>
   )
