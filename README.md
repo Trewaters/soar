@@ -341,18 +341,18 @@ _(in order of priority top to bottom)_
 
 - Clean up & add Quality,
   - QA, Quality analysis
-    - add remove and clear buttons to "Create flow". (2024-09-11 18:36:26)
     - Profile page jumps when it loads. prevent this jumping. (2024-09-11 18:36:23)
     - Add home button to "Asana Postures" page. (2024-09-11 18:36:19)
-    - "Create Series" remove last arrow icon from the Flows Series list. (2024-09-11 18:36:13)
-    - "Create Series/Sequence" Add ability to clear form, enable cancel (resetting the form to empty)
+    - "Create Series" Add ability to clear form, enable cancel (resetting the form to empty)
+    - "Create Sequence" Add ability to clear form, enable cancel (resetting the form to empty)
+    - "Create Series" Add redirect after click submit
+    - "Create Sequence" Add redirect after click submit
   - Clean up UI. Start using Lighthouse for improvements.
   - Check accessibility
   - create header based on best practices
   - create footer based on best practices
   - Add loading skeleton to yogi profile.
   - Clean up data and database objects. Remove unused data fields. Add Player Tested feedback.
-- Add Google Analytics (2024-08-24 08:44:21)
 - Add Google Maps (2024-08-24 08:44:25)
 - Hide (unfinished/unstarted) features behind a flag (2024-08-24 08:44:29)
   - Add user roles to application. Pass with the session. (dev, admin, tester, etc)

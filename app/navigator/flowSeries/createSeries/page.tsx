@@ -253,16 +253,56 @@ export default function Page() {
                           <Typography key={word} variant="h3">
                             {word}
                           </Typography>
-                          <IconButton
-                            disabled
-                            sx={{
-                              transform: 'rotate(90deg)',
-                            }}
-                          >
-                            <NavigationIcon />
-                          </IconButton>
+                          {index < seriesPostures.length - 1 && (
+                            <IconButton
+                              disabled
+                              sx={{
+                                transform: 'rotate(90deg)',
+                              }}
+                            >
+                              <NavigationIcon />
+                            </IconButton>
+                          )}
                         </Box>
                       ))}
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      justifyContent="flex-end"
+                      sx={{ mt: 3 }}
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>
+                          dispatch({
+                            type: 'SET_FLOW_SERIES',
+                            payload: {
+                              ...state.flowSeries,
+                              seriesPostures:
+                                state.flowSeries.seriesPostures.slice(0, -1),
+                            },
+                          })
+                        }
+                      >
+                        <Typography>Remove One (-1)</Typography>
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>
+                          dispatch({
+                            type: 'SET_FLOW_SERIES',
+                            payload: {
+                              ...state.flowSeries,
+                              seriesPostures: [],
+                            },
+                          })
+                        }
+                      >
+                        Clear
+                      </Button>
                     </Stack>
                   </FormControl>
                 </Grid>
