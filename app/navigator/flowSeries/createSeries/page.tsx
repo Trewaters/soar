@@ -29,15 +29,15 @@ import LooksTwoIcon from '@mui/icons-material/LooksTwo'
 import Looks3Icon from '@mui/icons-material/Looks3'
 import Looks4Icon from '@mui/icons-material/Looks4'
 import Looks5Icon from '@mui/icons-material/Looks5'
+import { useRouter } from 'next/navigation'
 
 export default function Page() {
   const { data: session } = useSession()
   const { state, dispatch } = useFlowSeries()
   const { seriesName, seriesPostures, breath, description, duration, image } =
     state.flowSeries
-
-  // posture data
   const [postures, setPostures] = useState<PostureData[]>([])
+  const router = useRouter()
 
   useEffect(() => {
     async function fetchData() {
@@ -108,6 +108,7 @@ export default function Page() {
     } catch (error: Error | any) {
       error.message
     }
+    router.push('/navigator/flowSeries')
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -117,6 +118,21 @@ export default function Page() {
       payload: {
         ...state.flowSeries,
         [name]: value,
+      },
+    })
+  }
+
+  function handleCancel() {
+    dispatch({
+      type: 'SET_FLOW_SERIES',
+      payload: {
+        ...state.flowSeries,
+        seriesName: '',
+        seriesPostures: [],
+        breath: '',
+        description: '',
+        duration: '',
+        image: '',
       },
     })
   }
@@ -351,7 +367,11 @@ export default function Page() {
                     >
                       Submit
                     </Button>
-                    <Button variant="outlined" color="secondary">
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={handleCancel}
+                    >
                       Cancel
                     </Button>
                   </Stack>

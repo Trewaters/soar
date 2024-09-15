@@ -26,6 +26,7 @@ import LooksTwoIcon from '@mui/icons-material/LooksTwo'
 import Looks3Icon from '@mui/icons-material/Looks3'
 import Looks4Icon from '@mui/icons-material/Looks4'
 import Looks5Icon from '@mui/icons-material/Looks5'
+import { useRouter } from 'next/navigation'
 
 async function fetchSeries() {
   try {
@@ -62,6 +63,8 @@ export default function Page() {
   const [flowSeries, setFlowSeries] = useState<FlowSeriesData[]>([])
   const [seriesNameSet, setSeriesNameSet] = useState<string[]>([])
   const [postures, setPostures] = useState<string[]>([])
+
+  const router = useRouter()
 
   useEffect(() => {
     async function getData() {
@@ -118,6 +121,7 @@ export default function Page() {
     } catch (error: Error | any) {
       error.message
     }
+    router.push('/navigator/flowSeries')
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -142,6 +146,13 @@ export default function Page() {
         setBreathDirection(value)
         break
     }
+  }
+
+  function handleCancel() {
+    // Clear the form
+    setNameSequence('')
+    setDescription('')
+    setSeriesNameSet([])
   }
 
   return (
@@ -349,7 +360,11 @@ export default function Page() {
                 >
                   Submit
                 </Button>
-                <Button variant="outlined" color="secondary">
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={handleCancel}
+                >
                   Cancel
                 </Button>
               </Stack>
