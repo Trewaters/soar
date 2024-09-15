@@ -5,6 +5,15 @@ import Header from '@serverComponents/header'
 import { Providers } from '@providers/Providers'
 import { GoogleAnalytics } from '@next/third-parties/google'
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'gmp-map': any
+      'gmp-advanced-marker': any
+    }
+  }
+}
+
 export const metadata: Metadata = {
   title: 'Happy Yoga',
   description: 'Soar like a leaf on the wind!',
