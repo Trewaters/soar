@@ -339,7 +339,6 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 
 _(in order of priority top to bottom)_
 
-- Add expandable list of Yoga Styles on the user profile details page, still allow freeform text entries. (2024-09-07 14:40:20)
 - Clean up & add Quality,
   - QA, Quality analysis
     - Profile page jumps when it loads. prevent this jumping. (2024-09-11 18:36:23)

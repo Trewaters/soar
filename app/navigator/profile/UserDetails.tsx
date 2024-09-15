@@ -398,6 +398,7 @@ import {
   IconButtonProps,
   styled,
   Autocomplete,
+  Tooltip,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { red } from '@mui/material/colors'
@@ -554,11 +555,6 @@ export default function UserDetails() {
           onSubmit={handleSubmit}
           width={'100vw'}
         >
-          <Grid xs={12} item sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Button type="submit" disabled={loading}>
-              {loading ? <CircularProgress size={24} /> : 'Save'}
-            </Button>
-          </Grid>
           {error && (
             <Grid xs={12} item>
               <Typography color="error">{error}</Typography>
@@ -576,9 +572,11 @@ export default function UserDetails() {
                   </Avatar>
                 }
                 action={
-                  <IconButton aria-label="settings">
-                    <MoreVertIcon />
-                  </IconButton>
+                  <Tooltip title="Save">
+                    <IconButton aria-label="settings" onClick={handleSubmit}>
+                      <MoreVertIcon />
+                    </IconButton>
+                  </Tooltip>
                 }
                 title={userData?.name ?? 'Yogi Name'}
                 subheader={`Member since ${membershipDate ?? '6/9/2024'}`}
@@ -835,6 +833,15 @@ export default function UserDetails() {
                 variant="outlined"
               />
             </FormControl>
+          </Grid>
+          <Grid
+            xs={12}
+            item
+            sx={{ display: 'flex', justifyContent: 'flex-end' }}
+          >
+            <Button type="submit" disabled={loading} variant="contained">
+              {loading ? <CircularProgress /> : 'Save'}
+            </Button>
           </Grid>
         </Grid>
       )}
