@@ -339,26 +339,21 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 
 _(in order of priority top to bottom)_
 
+- Add expandable list of Yoga Styles on the user profile details page, still allow freeform text entries. (2024-09-07 14:40:20)
 - Clean up & add Quality,
   - QA, Quality analysis
     - Profile page jumps when it loads. prevent this jumping. (2024-09-11 18:36:23)
     - Add home button to "Asana Postures" page. (2024-09-11 18:36:19)
-    - "Create Series" Add ability to clear form, enable cancel (resetting the form to empty)
-    - "Create Sequence" Add ability to clear form, enable cancel (resetting the form to empty)
-    - "Create Series" Add redirect after click submit
-    - "Create Sequence" Add redirect after click submit
   - Clean up UI. Start using Lighthouse for improvements.
   - Check accessibility
   - create header based on best practices
   - create footer based on best practices
   - Add loading skeleton to yogi profile.
-  - Clean up data and database objects. Remove unused data fields. Add Player Tested feedback.
-- Add Google Maps (2024-08-24 08:44:25)
+  - Clean up data and database objects. Remove unused data fields. Add User Tested feedback.
 - Hide (unfinished/unstarted) features behind a flag (2024-08-24 08:44:29)
   - Add user roles to application. Pass with the session. (dev, admin, tester, etc)
   - Restrict Features. Allow “My” (dev) role to see the features while work on them
   - Create series (etc) MUST be restricted to certain users.
-- Add expandable list of Yoga Styles on the user profile details page, still allow freeform text entries. (2024-09-07 14:40:20)
 
 ### Anytime
 
