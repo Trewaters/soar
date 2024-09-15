@@ -342,7 +342,6 @@ _(in order of priority top to bottom)_
 - Clean up & add Quality,
   - QA, Quality analysis
     - Profile page jumps when it loads. prevent this jumping. (2024-09-11 18:36:23)
-    - Add home button to "Asana Postures" page. (2024-09-11 18:36:19)
   - Clean up UI. Start using Lighthouse for improvements.
   - Check accessibility
   - create header based on best practices
