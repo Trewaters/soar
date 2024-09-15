@@ -12,7 +12,7 @@ function MyComponent() {
     googleMapsApiKey: `${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
   })
 
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars, no-undef
   const [map, setMap] = useState<google.maps.Map | null>(null)
   // eslint-disable-next-line no-unused-vars
   const [center, setCenter] = useState({ lat: 32.763, lng: -117.123 })
