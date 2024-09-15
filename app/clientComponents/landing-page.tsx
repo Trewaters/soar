@@ -1,11 +1,5 @@
 import React from 'react'
 import Box from '@mui/material/Box'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import Divider from '@mui/material/Divider'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import Link from 'next/link'
@@ -18,24 +12,6 @@ const links = [
     icon: <WaterDropOutlinedIcon />,
   },
   { name: 'Flows', href: '/navigator/flowSeries', icon: <WhatshotIcon /> },
-  /* 
-  {
-    name: 'Meditation',
-    href: '/meditation',
-    icon: <ChangeHistoryOutlinedIcon />,
-  },
-  { name: 'Mantra', href: '/mantra', icon: <AirOutlinedIcon /> },
-  {
-    name: 'Breathwork',
-    href: '/breathwork',
-    icon: <LyricsIcon />,
-  },
-  {
-    name: 'Yoga Journal',
-    href: '/yogaJournal',
-    icon: <EditNoteIcon />,
-  },
-   */
 ]
 
 export default function LandingPage() {

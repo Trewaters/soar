@@ -10,6 +10,7 @@ import FlareIcon from '@mui/icons-material/Flare'
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
 import {
+  Button,
   Divider,
   Drawer,
   List,
@@ -129,18 +130,30 @@ export default function TopNav() {
           <MenuIcon />
         </IconButton>
         <Link href="/" passHref legacyBehavior>
-          <a style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Button
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              margin: 0,
+              textDecoration: 'none',
+              color: 'inherit',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              window.location.href = '/'
+            }}
+          >
             <Typography
               variant="h1"
               sx={{
-                cursor: 'pointer',
                 textDecoration: 'none',
                 '& :hover:': { textDecoration: 'none' },
               }}
             >
               Soar
             </Typography>
-          </a>
+          </Button>
         </Link>
       </Stack>
       <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
