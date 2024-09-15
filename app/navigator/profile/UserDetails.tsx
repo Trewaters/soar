@@ -397,6 +397,7 @@ import {
   CircularProgress,
   IconButtonProps,
   styled,
+  Autocomplete,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { red } from '@mui/material/colors'
@@ -413,6 +414,27 @@ import MyMap from '@app/clientComponents/googleMaps'
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean
 }
+
+const yogaStyles = [
+  'Ashtanga',
+  'Vinyasa Flow',
+  'Hatha',
+  'Yin',
+  'Restorative',
+  'Nidra',
+  'Hot yoga',
+  'Kundalini',
+  'Iyengar',
+  'Power Yoga',
+  'Bikram Yoga',
+  'Anusara',
+  'Sivananda',
+  'Jivamukti',
+  'Aerial Yoga',
+  'Prenatal Yoga',
+  'Kripalu',
+  'AcroYoga',
+]
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
   const { expand, ...other } = props
@@ -611,14 +633,28 @@ export default function UserDetails() {
 
                   <Stack direction="row" spacing={2} mb={2}>
                     <FormControl>
-                      <TextField
-                        name="yogaStyle"
-                        id="outlined-basic"
-                        placeholder='Enter "Yoga Style"'
-                        label="Yoga Style"
+                      <Autocomplete
+                        freeSolo
+                        sx={{ width: '207px' }}
+                        options={yogaStyles}
                         value={userData.yogaStyle ?? ''}
-                        variant="outlined"
-                        onChange={handleChange}
+                        onChange={(event, newValue) => {
+                          dispatch({
+                            type: 'SET_USER',
+                            payload: { ...userData, yogaStyle: newValue ?? '' },
+                          })
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="yogaStyle"
+                            id="outlined-basic"
+                            placeholder='Enter "Yoga Style"'
+                            label="Yoga Style"
+                            variant="outlined"
+                            onChange={handleChange}
+                          />
+                        )}
                       />
                     </FormControl>
                   </Stack>
