@@ -104,6 +104,7 @@ export default function Page() {
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
+      // eslint-disable-next-line no-unused-vars
       const data = await response.json()
     } catch (error: Error | any) {
       error.message

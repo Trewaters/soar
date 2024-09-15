@@ -1,7 +1,15 @@
-import { List, ListItem, ListItemText, Typography } from '@mui/material'
-import Link from 'next/link'
+'use client'
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from '@mui/material'
+import { useRouter } from 'next/navigation'
 
 export default function EightLimbs() {
+  const router = useRouter()
   return (
     <>
       <Typography variant="h2">Eight Limbs</Typography>
@@ -19,11 +27,22 @@ export default function EightLimbs() {
           <ListItemText primary="Dharana" secondary="Concentration" />
         </ListItem>
         <ListItem>
-          <Link href="/navigator/asanaPostures" passHref legacyBehavior>
-            <a style={{ textDecoration: 'none', color: 'inherit' }}>
-              <ListItemText primary="Asana" secondary="Physical Postures" />
-            </a>
-          </Link>
+          <ListItemButton
+            sx={{
+              cursor: 'pointer',
+              pl: 0,
+              py: 0,
+              '&:hover': {
+                backgroundColor: 'transparent',
+                textDecoration: 'none',
+              },
+            }}
+            onClick={() => {
+              router.push('/navigator/asanaPostures')
+            }}
+          >
+            <ListItemText primary="Asana" secondary="Physical Postures" />
+          </ListItemButton>
         </ListItem>
         <ListItem>
           <ListItemText primary="Dhyana" secondary="Meditation" />

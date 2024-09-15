@@ -25,7 +25,9 @@ export interface TimerWatch {
 }
 
 export interface AsanaTimerProps {
+  // eslint-disable-next-line no-unused-vars
   onTimeUpdate: (time: number) => void
+  // eslint-disable-next-line no-unused-vars
   onPauseUpdate: (isPaused: boolean) => void
 }
 

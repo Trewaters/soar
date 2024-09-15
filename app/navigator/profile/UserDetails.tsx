@@ -403,7 +403,6 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { red } from '@mui/material/colors'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
 import MapIcon from '@mui/icons-material/Map'
 import LinkIcon from '@mui/icons-material/Link'
@@ -438,6 +437,7 @@ const yogaStyles = [
 ]
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
+  // eslint-disable-next-line no-unused-vars
   const { expand, ...other } = props
   return <IconButton {...other} />
 })(({ theme, expand }: { theme: any; expand: boolean }) => ({
@@ -519,17 +519,17 @@ export default function UserDetails() {
 
     try {
       await navigator.clipboard.writeText(JSON.stringify(shareData))
-      console.log('Content copied to clipboard')
+      // console.log('Content copied to clipboard')
 
       if (navigator.share) {
         await navigator.share(shareData)
-        console.log('Content shared successfully')
+        // console.log('Content shared successfully')
       } else {
-        console.log('Web Share API not supported in this browser.')
+        // console.log('Web Share API not supported in this browser.')
         alert('Link copied to clipboard. Share it manually!')
       }
     } catch (error) {
-      console.error('Error sharing content:', error)
+      // console.error('Error sharing content:', error)
       if (resultPara) {
         resultPara.textContent = `Error: ${error}`
       }

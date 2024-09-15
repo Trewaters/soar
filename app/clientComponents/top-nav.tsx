@@ -24,6 +24,7 @@ import {
 } from '@mui/material'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const navLinks = [
   {
@@ -64,6 +65,7 @@ export default function TopNav() {
   const toggleDrawer = (open: boolean) => () => {
     setOpenDrawer(open)
   }
+  const router = useRouter()
   // const session = auth()
 
   // useEffect(() => {
@@ -131,7 +133,7 @@ export default function TopNav() {
         </IconButton>
         <Link href="/" passHref legacyBehavior>
           <Button
-            style={{
+            sx={{
               background: 'none',
               border: 'none',
               padding: 0,
@@ -141,7 +143,7 @@ export default function TopNav() {
               cursor: 'pointer',
             }}
             onClick={() => {
-              window.location.href = '/'
+              router.push('/')
             }}
           >
             <Typography

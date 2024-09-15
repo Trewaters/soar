@@ -26,6 +26,7 @@ function MyComponent() {
     [center]
   )
 
+  // eslint-disable-next-line no-unused-vars
   const onUnmount = useCallback(function callback(map: any) {
     setMap(null)
   }, [])
