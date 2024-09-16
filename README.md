@@ -359,8 +359,8 @@ _(in order of priority top to bottom)_
 
 ### Anytime
 
-- Finish setting up login access restrictions on all pages that need it (user profile, any submit pages like createSeries, etc.). Restricting access to features based on signing into their user profile. (2024-08-23 07:08:21)
 - Add Frontend Services to call my back end apis. (2024-07-29 17:02:20)
+- Create and httpAdapter to replace axios and use fetch (2024-09-15 20:05:58)
 - Add permanent IP Address to MongoDB Atlas Cluster whitelist for access. Upon deployment of non-alpha. So at the end of alpha phase of development. (2024-07-20 06:53:15)
 
 ### Further help
