@@ -5,9 +5,11 @@ import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
 import PostureData from '@interfaces/postureData'
 import PostureCard from '@app/navigator/asanaPostures/posture-card'
-import { Button } from '@mui/material'
+import { Button, ButtonGroup, IconButton } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { FEATURES } from '@app/FEATURES'
+import yogaMatWoman from '@public/yogaMatWoman.svg'
+import Image from 'next/image'
 
 interface PostureSearchProps {
   posturePropData: PostureData[]
@@ -102,7 +104,20 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
       </Stack>
 
       {selectedPosture && FEATURES.SHOW_PRACTICE_VIEW_ASANA && (
-        <Button onClick={handleClick}>Practice View</Button>
+        <ButtonGroup
+          variant="contained"
+          aria-label="Basic button group"
+          sx={{ m: 2 }}
+        >
+          <IconButton disableRipple onClick={handleClick}>
+            <Image
+              src={yogaMatWoman}
+              alt="practice view"
+              width={24}
+              height={24}
+            />
+          </IconButton>
+        </ButtonGroup>
       )}
 
       {selectedPosture && <PostureCard postureCardProp={selectedPosture} />}
