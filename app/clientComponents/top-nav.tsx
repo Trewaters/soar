@@ -3,12 +3,12 @@ import React from 'react'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import HomeIcon from '@mui/icons-material/Home'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import MenuIcon from '@mui/icons-material/Menu'
 import FlareIcon from '@mui/icons-material/Flare'
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import {
   Button,
   Divider,
@@ -50,13 +50,13 @@ const navLinks = [
   {
     name: 'Profile',
     href: '/navigator/profile',
-    icon: <ChevronRightIcon />,
+    icon: <ManageAccountsIcon />,
   },
   // final item will have a divider above it
   {
     name: 'Sign In',
     href: '/userManagement/signIn',
-    icon: <AccountCircleIcon />,
+    icon: <AdminPanelSettingsIcon />,
   },
 ]
 
