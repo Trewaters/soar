@@ -339,19 +339,24 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 
 _(in order of priority top to bottom)_
 
-- Clean up & add Quality,
-  - QA, Quality analysis
+- Clean up & add Quality, QA, Quality analysis
+  - Clean up UI.
     - Profile page jumps when it loads. prevent this jumping. (2024-09-11 18:36:23)
-  - Clean up UI. Start using Lighthouse for improvements.
-  - Check accessibility
+    - Add loading skeleton to yogi profile.
+  - Check accessibility. Verify I have basic elements for users.
   - create header based on best practices
   - create footer based on best practices
-  - Add loading skeleton to yogi profile.
   - Clean up data and database objects. Remove unused data fields. Add User Tested feedback.
 - Hide (unfinished/unstarted) features behind a flag (2024-08-24 08:44:29)
   - Add user roles to application. Pass with the session. (dev, admin, tester, etc)
   - Restrict Features. Allow “My” (dev) role to see the features while work on them
   - Create series (etc) MUST be restricted to certain users.
+- Need Logo and images associated with that. Update favicon, etc.
+- Privacy Policy
+- Terms of Service
+- Cookie Policy
+- Disclaimer (if applicable)
+- CTA button, encourage feedback!
 
 ### Anytime
 
