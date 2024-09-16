@@ -343,7 +343,6 @@ _(in order of priority top to bottom)_
   - Clean up UI.
     - Profile page jumps when it loads. prevent this jumping. (2024-09-11 18:36:23)
     - Add loading skeleton to yogi profile.
-  - Check accessibility. Verify I have basic elements for users.
   - create header based on best practices
   - create footer based on best practices
   - Clean up data and database objects. Remove unused data fields. Add User Tested feedback.
