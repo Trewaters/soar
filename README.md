@@ -344,7 +344,7 @@ _(in order of priority top to bottom)_
     - Profile page jumps when it loads. prevent this jumping. (2024-09-11 18:36:23)
     - Add loading skeleton to yogi profile.
   - create header based on best practices
-  - create footer based on best practices
+  - create footer based on best practices. Add text style, update position
   - Clean up data and database objects. Remove unused data fields. Add User Tested feedback.
 - Hide (unfinished/unstarted) features behind a flag (2024-08-24 08:44:29)
   - Add user roles to application. Pass with the session. (dev, admin, tester, etc)

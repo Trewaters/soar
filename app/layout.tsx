@@ -3,6 +3,7 @@ import { ReactNode } from 'react'
 import type { Metadata } from 'next'
 import Header from '@serverComponents/header'
 import { Providers } from '@providers/Providers'
+import Footer from '@serverComponents/footer'
 
 declare global {
   // eslint-disable-next-line no-unused-vars
@@ -42,10 +43,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           `,
             }}
           />
+          {/* <GoogleAnalytics gaId="G-BE8QV7LLJV" /> */}
           <main>{children}</main>
+          <Footer />
         </Providers>
       </body>
-      {/* <GoogleAnalytics gaId="G-BE8QV7LLJV" /> */}
     </html>
   )
 }
