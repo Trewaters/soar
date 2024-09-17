@@ -2,27 +2,31 @@ import { CSSProperties } from 'react'
 import { createTheme } from '@mui/material/styles'
 
 declare module '@mui/material/styles' {
+  // eslint-disable-next-line no-unused-vars
   interface TypographyVariants {
     label: CSSProperties
   }
 
+  // eslint-disable-next-line no-unused-vars
   interface TypographyVariantsOptions {
     label?: CSSProperties
   }
 
+  // eslint-disable-next-line no-unused-vars
   interface TypeBackground {
     helper: string
   }
 }
 
 declare module '@mui/material/Typography' {
+  // eslint-disable-next-line no-unused-vars
   interface TypographyPropsVariantOverrides {
     label: true
   }
 }
 
 export const theme = createTheme({
-  breakpoints: { values: { xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920 } },
+  breakpoints: { values: { xs: 0, sm: 600, md: 900, lg: 1200, xl: 1536 } },
   spacing: [0, 4, 8, 16, 32, 40, 48, 64],
   palette: {
     // mode: 'light',

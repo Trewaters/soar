@@ -9,7 +9,7 @@ export default async function Page() {
 
   return (
     <SessionProvider basePath={'/auth'} session={session}>
-      <Box textAlign="center">
+      <Box textAlign="center" sx={{ marginTop: 4 }}>
         <Typography variant="body1">Like a leaf on the Wind</Typography>
         <CurrentTime />
       </Box>

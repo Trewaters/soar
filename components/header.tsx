@@ -10,6 +10,7 @@ import WhatshotIcon from '@mui/icons-material/Whatshot'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import {
+  AppBar,
   Button,
   Divider,
   Drawer,
@@ -126,7 +127,7 @@ export default function Header() {
   }
 
   return (
-    <>
+    <AppBar position="static">
       <Box sx={{ height: '69px' }}>
         <Stack direction="row" justifyContent={'space-between'}>
           <IconButton disableRipple onClick={toggleDrawer(true)}>
@@ -165,6 +166,6 @@ export default function Header() {
           {DrawerList}
         </Paper>
       </Drawer>
-    </>
+    </AppBar>
   )
 }
