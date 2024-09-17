@@ -4,6 +4,8 @@ import type { Metadata } from 'next'
 import Header from '@serverComponents/header'
 import { Providers } from '@providers/Providers'
 import Footer from '@serverComponents/footer'
+import { Grid, Stack } from '@mui/material'
+import { Box } from '@mui/system'
 
 declare global {
   // eslint-disable-next-line no-unused-vars
@@ -44,7 +46,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           />
           {/* <GoogleAnalytics gaId="G-BE8QV7LLJV" /> */}
           <main>{children}</main>
-          <Footer />
+          <Stack sx={{ position: 'relative', bottom: 0, marginTop: '240px' }}>
+            <Footer />
+          </Stack>
         </Providers>
       </body>
     </html>
