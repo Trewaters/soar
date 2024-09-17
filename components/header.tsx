@@ -127,37 +127,39 @@ export default function Header() {
 
   return (
     <>
-      <Stack direction="row" justifyContent={'space-between'}>
-        <IconButton disableRipple onClick={toggleDrawer(true)}>
-          <MenuIcon />
-        </IconButton>
-        <Link href="/" passHref legacyBehavior>
-          <Button
-            sx={{
-              background: 'none',
-              border: 'none',
-              padding: 0,
-              margin: 0,
-              textDecoration: 'none',
-              color: 'inherit',
-              cursor: 'pointer',
-            }}
-            onClick={() => {
-              router.push('/')
-            }}
-          >
-            <Typography
-              variant="h1"
+      <Box sx={{ height: '69px' }}>
+        <Stack direction="row" justifyContent={'space-between'}>
+          <IconButton disableRipple onClick={toggleDrawer(true)}>
+            <MenuIcon />
+          </IconButton>
+          <Link href="/" passHref legacyBehavior>
+            <Button
               sx={{
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                margin: 0,
                 textDecoration: 'none',
-                '& :hover:': { textDecoration: 'none' },
+                color: 'inherit',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                router.push('/')
               }}
             >
-              Soar
-            </Typography>
-          </Button>
-        </Link>
-      </Stack>
+              <Typography
+                variant="h1"
+                sx={{
+                  textDecoration: 'none',
+                  '& :hover:': { textDecoration: 'none' },
+                }}
+              >
+                Soar
+              </Typography>
+            </Button>
+          </Link>
+        </Stack>
+      </Box>
       <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
         <Paper onClick={handleClick} sx={{ height: '100%' }}>
           {DrawerList}
