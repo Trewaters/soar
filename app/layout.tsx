@@ -27,7 +27,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
-        {/* <Header /> */}
         <Providers>
           {/* add google analytics script below header */}
           {/* eslint-disable-next-line @next/next/next-script-for-ga */}

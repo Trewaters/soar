@@ -127,7 +127,7 @@ export default function Header() {
   }
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ marginBottom: 2 }}>
       <Box sx={{ height: '69px' }}>
         <Stack direction="row" justifyContent={'space-between'}>
           <IconButton disableRipple onClick={toggleDrawer(true)}>
