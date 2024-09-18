@@ -4,26 +4,26 @@ import React from 'react'
 const TermsOfService: React.FC = () => {
   return (
     <Box style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-      <h1>Terms of Service</h1>
+      <Typography variant="h1">Terms of Service</Typography>
       <Typography variant="body1">Last updated: [Date]</Typography>
       <Typography variant="body1">
         Welcome to Happy Yoga Soar. These terms and conditions outline the rules
         and regulations for the use of Happy Yoga Soar&apos;s Website, located
         at [Your Website URL].
       </Typography>
-      <h2>1. Terms</h2>
+      <Typography variant="h2">1. Terms</Typography>
       <Typography variant="body1">
         By accessing this website we assume you accept these terms and
         conditions. Do not continue to use Happy Yoga Soar if you do not agree
         to take all of the terms and conditions stated on this page.
       </Typography>
-      <h2>2. Cookies</h2>
+      <Typography variant="h2">2. Cookies</Typography>
       <Typography variant="body1">
         We employ the use of cookies. By accessing Happy Yoga Soar, you agreed
         to use cookies in agreement with the Happy Yoga Soar&apos;s Privacy
         Policy.
       </Typography>
-      <h2>3. License</h2>
+      <Typography variant="h2">3. License</Typography>
       <Typography variant="body1">
         Unless otherwise stated, Happy Yoga Soar and/or its licensors own the
         intellectual property rights for all material on Happy Yoga Soar. All
@@ -31,17 +31,17 @@ const TermsOfService: React.FC = () => {
         Happy Yoga Soar for your own personal use subjected to restrictions set
         in these terms and conditions.
       </Typography>
-      <h2>4. User Comments</h2>
+      <Typography variant="h2">4. User Comments</Typography>
       <Typography variant="body1">
         Certain parts of this website offer the opportunity for users to post
         and exchange opinions and information in certain areas of the website.
         Happy Yoga Soar does not filter, edit, publish or review Comments prior
         to their presence on the website. Comments do not reflect the views and
-        opinions of Happy Yoga Soar,its agents and/or affiliates. Comments
+        opinions of Happy Yoga Soar, its agents and/or affiliates. Comments
         reflect the views and opinions of the person who post their views and
         opinions.
       </Typography>
-      <h2>5. Hyperlinking to our Content</h2>
+      <Typography variant="h2">5. Hyperlinking to our Content</Typography>
       <Typography variant="body1">
         The following organizations may link to our Website without prior
         written approval: Government agencies; Search engines; News
@@ -51,13 +51,13 @@ const TermsOfService: React.FC = () => {
         non-profit organizations, charity shopping malls, and charity
         fundraising groups which may not hyperlink to our Web site.
       </Typography>
-      <h2>6. iFrames</h2>
+      <Typography variant="h2">6. iFrames</Typography>
       <Typography variant="body1">
         Without prior approval and written permission, you may not create frames
         around our Webpages that alter in any way the visual presentation or
         appearance of our Website.
       </Typography>
-      <h2>7. Content Liability</h2>
+      <Typography variant="h2">7. Content Liability</Typography>
       <Typography variant="body1">
         We shall not be hold responsible for any content that appears on your
         Website. You agree to protect and defend us against all claims that is
@@ -66,25 +66,27 @@ const TermsOfService: React.FC = () => {
         otherwise violates, or advocates the infringement or other violation of,
         any third party rights.
       </Typography>
-      <h2>8. Your Privacy</h2>
+      <Typography variant="h2">8. Your Privacy</Typography>
       <Typography variant="body1">Please read Privacy Policy</Typography>
-      <h2>9. Reservation of Rights</h2>
+      <Typography variant="h2">9. Reservation of Rights</Typography>
       <Typography variant="body1">
         We reserve the right to request that you remove all links or any
         particular link to our Website. You approve to immediately remove all
         links to our Website upon request. We also reserve the right to amen
-        these terms and conditions and it’s linking policy at any time. By
+        these terms and conditions and it&apos;s linking policy at any time. By
         continuously linking to our Website, you agree to be bound to and follow
         these linking terms and conditions.
       </Typography>
-      <h2>10. Removal of links from our website</h2>
+      <Typography variant="h2">
+        10. Removal of links from our website
+      </Typography>
       <Typography variant="body1">
         If you find any link on our Website that is offensive for any reason,
         you are free to contact and inform us any moment. We will consider
         requests to remove links but we are not obligated to or so or to respond
         to you directly.
       </Typography>
-      <h2>11. Disclaimer</h2>
+      <Typography variant="h2">11. Disclaimer</Typography>
       <Typography variant="body1">
         To the maximum extent permitted by applicable law, we exclude all
         representations, warranties and conditions relating to our website and
