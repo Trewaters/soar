@@ -30,9 +30,9 @@ export default function Footer() {
           </Stack>
           <Stack>
             <Typography variant="body2">
-              View our By using this site, you agree to our&nbsp;
-              <Link href="/terms">Terms of Service</Link>&nbsp; for more details
-              on how we protect your information.
+              View our&nbsp; <Link href="/terms">Terms of Service</Link>
+              .&nbsp;By using this website and mobile application, you agree to
+              comply with and be bound by the following terms and conditions.
             </Typography>
           </Stack>
           <Stack>
