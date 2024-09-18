@@ -30,7 +30,8 @@ export default function Footer() {
           </Stack>
           <Stack>
             <Typography variant="body2">
-              View our&nbsp; <Link href="/terms">Terms of Service</Link>
+              View our&nbsp;{' '}
+              <Link href="/compliance/terms">Terms of Service</Link>
               .&nbsp;By using this website and mobile application, you agree to
               comply with and be bound by the following terms and conditions.
             </Typography>
