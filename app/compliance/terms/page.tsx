@@ -1,13 +1,16 @@
 import { Box, Stack, Typography } from '@mui/material'
 import React from 'react'
+import { TermsService } from './constants/Strings'
 
 const TermsOfService: React.FC = () => {
   return (
     <Box style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
       <Stack spacing={'64px'}>
         <Stack>
-          <Typography variant="h1">Terms of Service</Typography>
-          <Typography variant="body1">Last updated: [Date]</Typography>
+          <Typography variant="h1">{TermsService.TITLE}</Typography>
+          <Typography variant="body1">
+            {TermsService.LAST_UPDATED} [Date]
+          </Typography>
           <Typography variant="body1">
             Welcome to Happy Yoga Soar. These terms and conditions outline the
             rules and regulations for the use of Happy Yoga Soar&apos;s Website,
@@ -15,23 +18,21 @@ const TermsOfService: React.FC = () => {
           </Typography>
         </Stack>
         <Stack>
-          <Typography variant="h2">1. Terms</Typography>
+          <Typography variant="h2">1. {TermsService.TERMS_HEADING}</Typography>
+          <Typography variant="body1">{TermsService.TERMS_DETAILS}</Typography>
+        </Stack>
+        <Stack>
+          <Typography variant="h2">
+            2. {TermsService.COOKIES_HEADING}
+          </Typography>
           <Typography variant="body1">
-            By accessing this website we assume you accept these terms and
-            conditions. Do not continue to use Happy Yoga Soar if you do not
-            agree to take all of the terms and conditions stated on this page.
+            {TermsService.COOKIES_DETAILS}
           </Typography>
         </Stack>
         <Stack>
-          <Typography variant="h2">2. Cookies</Typography>
-          <Typography variant="body1">
-            We employ the use of cookies. By accessing Happy Yoga Soar, you
-            agreed to use cookies in agreement with the Happy Yoga Soar&apos;s
-            Privacy Policy.
+          <Typography variant="h2">
+            {TermsService.TERMS_HEADING}3. License
           </Typography>
-        </Stack>
-        <Stack>
-          <Typography variant="h2">3. License</Typography>
           <Typography variant="body1">
             Unless otherwise stated, Happy Yoga Soar and/or its licensors own
             the intellectual property rights for all material on Happy Yoga
@@ -41,7 +42,9 @@ const TermsOfService: React.FC = () => {
           </Typography>
         </Stack>
         <Stack>
-          <Typography variant="h2">4. User Comments</Typography>
+          <Typography variant="h2">
+            {TermsService.TERMS_HEADING}4. User Comments
+          </Typography>
           <Typography variant="body1">
             Certain parts of this website offer the opportunity for users to
             post and exchange opinions and information in certain areas of the
@@ -53,7 +56,9 @@ const TermsOfService: React.FC = () => {
           </Typography>
         </Stack>
         <Stack>
-          <Typography variant="h2">5. Hyperlinking to our Content</Typography>
+          <Typography variant="h2">
+            {TermsService.TERMS_HEADING}5. Hyperlinking to our Content
+          </Typography>
           <Typography variant="body1">
             The following organizations may link to our Website without prior
             written approval: Government agencies; Search engines; News
@@ -65,7 +70,9 @@ const TermsOfService: React.FC = () => {
           </Typography>
         </Stack>
         <Stack>
-          <Typography variant="h2">6. iFrames</Typography>
+          <Typography variant="h2">
+            {TermsService.TERMS_HEADING}6. iFrames
+          </Typography>
           <Typography variant="body1">
             Without prior approval and written permission, you may not create
             frames around our Webpages that alter in any way the visual
@@ -73,7 +80,9 @@ const TermsOfService: React.FC = () => {
           </Typography>
         </Stack>
         <Stack>
-          <Typography variant="h2">7. Content Liability</Typography>
+          <Typography variant="h2">
+            {TermsService.TERMS_HEADING}7. Content Liability
+          </Typography>
           <Typography variant="body1">
             We shall not be hold responsible for any content that appears on
             your Website. You agree to protect and defend us against all claims
@@ -84,11 +93,15 @@ const TermsOfService: React.FC = () => {
           </Typography>
         </Stack>
         <Stack>
-          <Typography variant="h2">8. Your Privacy</Typography>
+          <Typography variant="h2">
+            {TermsService.TERMS_HEADING}8. Your Privacy
+          </Typography>
           <Typography variant="body1">Please read Privacy Policy</Typography>
         </Stack>
         <Stack>
-          <Typography variant="h2">9. Reservation of Rights</Typography>
+          <Typography variant="h2">
+            {TermsService.TERMS_HEADING}9. Reservation of Rights
+          </Typography>
           <Typography variant="body1">
             We reserve the right to request that you remove all links or any
             particular link to our Website. You approve to immediately remove
@@ -100,6 +113,7 @@ const TermsOfService: React.FC = () => {
         </Stack>
         <Stack>
           <Typography variant="h2">
+            {TermsService.TERMS_HEADING}
             10. Removal of links from our website
           </Typography>
           <Typography variant="body1">
@@ -110,7 +124,9 @@ const TermsOfService: React.FC = () => {
           </Typography>
         </Stack>
         <Stack>
-          <Typography variant="h2">11. Disclaimer</Typography>
+          <Typography variant="h2">
+            {TermsService.TERMS_HEADING}11. Disclaimer
+          </Typography>
           <Typography variant="body1">
             To the maximum extent permitted by applicable law, we exclude all
             representations, warranties and conditions relating to our website
