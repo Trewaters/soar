@@ -18,119 +18,77 @@ const TermsOfService: React.FC = () => {
           </Typography>
         </Stack>
         <Stack>
-          <Typography variant="h2">1. {TermsService.TERMS_HEADING}</Typography>
+          <Typography variant="h2">{TermsService.TERMS_HEADING}</Typography>
           <Typography variant="body1">{TermsService.TERMS_DETAILS}</Typography>
         </Stack>
         <Stack>
-          <Typography variant="h2">
-            2. {TermsService.COOKIES_HEADING}
-          </Typography>
+          <Typography variant="h2">{TermsService.COOKIES_HEADING}</Typography>
           <Typography variant="body1">
             {TermsService.COOKIES_DETAILS}
           </Typography>
         </Stack>
         <Stack>
-          <Typography variant="h2">
-            {TermsService.TERMS_HEADING}3. License
-          </Typography>
+          <Typography variant="h2">{TermsService.LICENSE_HEADING}</Typography>
           <Typography variant="body1">
-            Unless otherwise stated, Happy Yoga Soar and/or its licensors own
-            the intellectual property rights for all material on Happy Yoga
-            Soar. All intellectual property rights are reserved. You may access
-            this from Happy Yoga Soar for your own personal use subjected to
-            restrictions set in these terms and conditions.
+            {TermsService.LICENSE_DETAILS}
           </Typography>
         </Stack>
         <Stack>
           <Typography variant="h2">
-            {TermsService.TERMS_HEADING}4. User Comments
+            {TermsService.USER_COMMENTS_HEADING}
           </Typography>
           <Typography variant="body1">
-            Certain parts of this website offer the opportunity for users to
-            post and exchange opinions and information in certain areas of the
-            website. Happy Yoga Soar does not filter, edit, publish or review
-            Comments prior to their presence on the website. Comments do not
-            reflect the views and opinions of Happy Yoga Soar, its agents and/or
-            affiliates. Comments reflect the views and opinions of the person
-            who post their views and opinions.
+            {TermsService.USER_COMMENTS_DETAILS}
+          </Typography>
+        </Stack>
+        <Stack>
+          <Typography variant="h2">{TermsService.HYPERLINK_HEADING}</Typography>
+          <Typography variant="body1">
+            {TermsService.HYPERLINK_DETAILS}
+          </Typography>
+        </Stack>
+        <Stack>
+          <Typography variant="h2">{TermsService.IFRAMES_HEADING}</Typography>
+          <Typography variant="body1">
+            {TermsService.IFRAMES_DETAILS}
           </Typography>
         </Stack>
         <Stack>
           <Typography variant="h2">
-            {TermsService.TERMS_HEADING}5. Hyperlinking to our Content
+            {TermsService.CONTENT_LIABILITY_HEADING}
           </Typography>
           <Typography variant="body1">
-            The following organizations may link to our Website without prior
-            written approval: Government agencies; Search engines; News
-            organizations; Online directory distributors may link to our Website
-            in the same manner as they hyperlink to the Websites of other listed
-            businesses; and System wide Accredited Businesses except soliciting
-            non-profit organizations, charity shopping malls, and charity
-            fundraising groups which may not hyperlink to our Web site.
+            {TermsService.CONTENT_LIABILITY_DETAILS}
+          </Typography>
+        </Stack>
+        <Stack>
+          <Typography variant="h2">{TermsService.PRIVACY_HEADING}</Typography>
+          <Typography variant="body1">
+            {TermsService.PRIVACY_DETAILS}
           </Typography>
         </Stack>
         <Stack>
           <Typography variant="h2">
-            {TermsService.TERMS_HEADING}6. iFrames
+            {TermsService.RESERVATION_RIGHTS_HEADING}
           </Typography>
           <Typography variant="body1">
-            Without prior approval and written permission, you may not create
-            frames around our Webpages that alter in any way the visual
-            presentation or appearance of our Website.
+            {TermsService.RESERVATION_RIGHTS_DETAILS}
           </Typography>
         </Stack>
         <Stack>
           <Typography variant="h2">
-            {TermsService.TERMS_HEADING}7. Content Liability
+            {TermsService.LINK_REMOVAL_HEADING}
           </Typography>
           <Typography variant="body1">
-            We shall not be hold responsible for any content that appears on
-            your Website. You agree to protect and defend us against all claims
-            that is rising on your Website. No link(s) should appear on any
-            Website that may be interpreted as libelous, obscene or criminal, or
-            which infringes, otherwise violates, or advocates the infringement
-            or other violation of, any third party rights.
+            {TermsService.LINK_REMOVAL_DETAILS}
           </Typography>
         </Stack>
         <Stack>
           <Typography variant="h2">
-            {TermsService.TERMS_HEADING}8. Your Privacy
-          </Typography>
-          <Typography variant="body1">Please read Privacy Policy</Typography>
-        </Stack>
-        <Stack>
-          <Typography variant="h2">
-            {TermsService.TERMS_HEADING}9. Reservation of Rights
+            {TermsService.DISCLAIMER_HEADING}
           </Typography>
           <Typography variant="body1">
-            We reserve the right to request that you remove all links or any
-            particular link to our Website. You approve to immediately remove
-            all links to our Website upon request. We also reserve the right to
-            amen these terms and conditions and it&apos;s linking policy at any
-            time. By continuously linking to our Website, you agree to be bound
-            to and follow these linking terms and conditions.
-          </Typography>
-        </Stack>
-        <Stack>
-          <Typography variant="h2">
-            {TermsService.TERMS_HEADING}
-            10. Removal of links from our website
-          </Typography>
-          <Typography variant="body1">
-            If you find any link on our Website that is offensive for any
-            reason, you are free to contact and inform us any moment. We will
-            consider requests to remove links but we are not obligated to or so
-            or to respond to you directly.
-          </Typography>
-        </Stack>
-        <Stack>
-          <Typography variant="h2">
-            {TermsService.TERMS_HEADING}11. Disclaimer
-          </Typography>
-          <Typography variant="body1">
-            To the maximum extent permitted by applicable law, we exclude all
-            representations, warranties and conditions relating to our website
-            and the use of this website. Nothing in this disclaimer will:
+            {TermsService.DISCLAIMER_DETAILS}
           </Typography>
           <ul>
             <li>
