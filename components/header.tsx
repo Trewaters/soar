@@ -127,38 +127,64 @@ export default function Header() {
   }
 
   return (
-    <AppBar position="static" sx={{ marginBottom: 4 }}>
-      <Box sx={{ height: '69px' }}>
+    <AppBar
+      position="static"
+      sx={{
+        marginBottom: 4,
+        borderBottomLeftRadius: 16,
+        borderBottomRightRadius: 16,
+        pr: 2,
+        height: '69px',
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          height: '100%',
+        }}
+      >
         <Stack direction="row" justifyContent={'space-between'}>
           <IconButton disableRipple onClick={toggleDrawer(true)}>
-            <MenuIcon />
+            <MenuIcon sx={{ height: '2em', width: '2em' }} />
           </IconButton>
-          <Link href="/" passHref legacyBehavior>
-            <Button
-              sx={{
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                margin: 0,
-                textDecoration: 'none',
-                color: 'inherit',
-                cursor: 'pointer',
-              }}
-              onClick={() => {
-                router.push('/')
-              }}
-            >
-              <Typography
-                variant="h1"
+          <Box
+            sx={{
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)',
+            }}
+          >
+            <Link href="/" passHref legacyBehavior>
+              <Button
                 sx={{
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                  margin: 0,
                   textDecoration: 'none',
-                  '& :hover:': { textDecoration: 'none' },
+                  color: 'inherit',
+                  cursor: 'pointer',
+                }}
+                onClick={() => {
+                  router.push('/')
                 }}
               >
-                Soar
-              </Typography>
-            </Button>
-          </Link>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    pt: 3,
+                    textDecoration: 'none',
+                    textTransform: 'uppercase',
+                    '& :hover:': { textDecoration: 'none' },
+                  }}
+                >
+                  Soar
+                </Typography>
+              </Button>
+            </Link>
+          </Box>
         </Stack>
       </Box>
       <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
