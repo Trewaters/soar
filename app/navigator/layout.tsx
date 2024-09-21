@@ -11,6 +11,9 @@ export default function NavigatorLayout({ children }: { children: ReactNode }) {
       </nav>
       <section>{children}</section>
       <Stack sx={{ position: 'relative', bottom: 0, marginTop: '240px' }}>
+        {/* 
+        // ! add bottom nav as per Natasa's design
+        */}
         <Footer />
       </Stack>
     </>

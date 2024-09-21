@@ -136,6 +136,7 @@ export default function Header() {
         pr: 2,
         height: '69px',
       }}
+      elevation={0}
     >
       <Box
         sx={{
