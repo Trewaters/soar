@@ -1,6 +1,10 @@
-import { Box, Button, Stack, Typography } from '@mui/material'
+'use client'
+import { Box, Button, Stack, Typography, useTheme } from '@mui/material'
+import { StyleGuideText } from './constants/Strings'
 
 export default function StyleGuide() {
+  const theme = useTheme()
+
   // Define color palette
   type ColorPalette = {
     [key: string]: {
@@ -12,6 +16,45 @@ export default function StyleGuide() {
   }
 
   const colors: ColorPalette = {
+    primary: {
+      main: theme.palette.primary.main,
+      light: theme.palette.primary.light,
+      dark: theme.palette.primary.dark,
+      contrastText: theme.palette.primary.contrastText,
+    },
+    secondary: {
+      main: theme.palette.secondary.main,
+      light: theme.palette.secondary.light,
+      dark: theme.palette.secondary.dark,
+      contrastText: theme.palette.secondary.contrastText,
+    },
+    error: {
+      main: theme.palette.error.main,
+      light: theme.palette.error.light,
+      dark: theme.palette.error.dark,
+      contrastText: theme.palette.error.contrastText,
+    },
+    warning: {
+      main: theme.palette.warning.main,
+      light: theme.palette.warning.light,
+      dark: theme.palette.warning.dark,
+      contrastText: theme.palette.warning.contrastText,
+    },
+    info: {
+      main: theme.palette.info.main,
+      light: theme.palette.info.light,
+      dark: theme.palette.info.dark,
+      contrastText: theme.palette.info.contrastText,
+    },
+    success: {
+      main: theme.palette.success.main,
+      light: theme.palette.success.light,
+      dark: theme.palette.success.dark,
+      contrastText: theme.palette.success.contrastText,
+    },
+  }
+
+  /* const colors: ColorPalette = {
     primary: {
       main: '#F6893D',
       light: '#FFBA6F',
@@ -48,7 +91,8 @@ export default function StyleGuide() {
       dark: '#005005',
       contrastText: '#FFFFFF',
     },
-  }
+  } */
+
   return (
     <Stack spacing={2} sx={{ p: 4 }}>
       <Box
@@ -56,32 +100,70 @@ export default function StyleGuide() {
         flexDirection={'column'}
         sx={{ border: '2px solid black', px: 4, py: 2 }}
       >
-        <Typography variant="h1">h1. Heading</Typography>
-        <Typography variant="h2">h2. Heading</Typography>
-        <Typography variant="h3">h3. Heading</Typography>
-        <Typography variant="h4">h4. Heading</Typography>
-        <Typography variant="h5">h5. Heading</Typography>
-        <Typography variant="h6">h6. Heading</Typography>
-        <Typography variant="subtitle1">
-          subtitle1. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-          Quos blanditiis tenetur
-        </Typography>
-        <Typography variant="subtitle2">
-          subtitle2. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-          Quos blanditiis tenetur
-        </Typography>
-        <Typography variant="body1">
-          body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
-          blanditiis tenetur
-        </Typography>
-        <Typography variant="body2">
-          body2. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
-          blanditiis tenetur
-        </Typography>
-        {/* <Typography variant="button">button text</Typography> */}
-        <Typography variant="caption">caption text</Typography>
-        <Typography variant="overline">overline text</Typography>
-        <Typography variant="label">label text</Typography>
+        <Stack spacing={2}>
+          <Typography
+            variant="h1"
+            component={'h1'}
+            sx={{ alignSelf: 'center', borderBottom: '1px solid black' }}
+          >
+            Typography
+          </Typography>
+          <Typography
+            variant="h3"
+            component={'p'}
+            sx={{ alignSelf: 'center', pt: '16px' }}
+          >
+            Headings
+          </Typography>
+        </Stack>
+        <Stack spacing={2} textAlign={'center'} sx={{ py: '32px' }}>
+          <Typography variant="h1" component={'p'}>
+            H1 - Heading
+          </Typography>
+          <Typography variant="h2" component={'p'}>
+            H2 - Heading
+          </Typography>
+          <Typography variant="h3" component={'p'}>
+            H3 - Heading
+          </Typography>
+          <Typography variant="h4" component={'p'}>
+            H4 - Heading
+          </Typography>
+          <Typography variant="h5" component={'p'}>
+            H5 - Heading
+          </Typography>
+          <Typography variant="h6" component={'p'}>
+            H6 - Heading
+          </Typography>
+          <Typography variant="subtitle1" component={'p'}>
+            subtitle1
+          </Typography>
+          <Typography variant="subtitle2" component={'p'}>
+            subtitle2
+          </Typography>
+        </Stack>
+        <Stack spacing={2} textAlign={'center'} sx={{ py: '32px' }}>
+          <Typography
+            variant="h3"
+            component={'p'}
+            sx={{ alignSelf: 'center', pb: '16px' }}
+          >
+            Body Text
+          </Typography>
+          <Typography variant="body1" component={'p'}>
+            body1
+          </Typography>
+          <Typography variant="body1" component={'p'}>
+            Default paragraph text used for most of the app.
+          </Typography>
+          <Typography variant="body2">body2</Typography>
+          <Typography variant="body2">
+            Slightly smaller paragraph text used for less important information.
+          </Typography>
+          <Typography variant="caption">Caption Text</Typography>
+          <Typography variant="overline">Overline Text</Typography>
+          <Typography variant="label">Label Text</Typography>
+        </Stack>
       </Box>
       <Typography variant="body1">
         breakpoints: ( xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920 )
@@ -106,19 +188,22 @@ export default function StyleGuide() {
             variant="h3"
             sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
           >
-            primary
+            {StyleGuideText.PRIMARY}
           </Typography>
-          <Typography variant="body1" sx={{ color: '#F6893D' }}>
-            main: #F6893D
+          <Typography variant="body1" color={theme.palette.primary.main}>
+            main: {theme.palette.primary.main.toString()}
           </Typography>
-          <Typography variant="body1" sx={{ color: '#FFBA6F' }}>
-            light: #FFBA6F
+          <Typography variant="body1" color={theme.palette.primary.light}>
+            light: {theme.palette.primary.light.toString()}
           </Typography>
-          <Typography variant="body1" sx={{ color: '#C3581A' }}>
-            dark: #C3581A
+          <Typography variant="body1" color={theme.palette.primary.dark}>
+            dark: {theme.palette.primary.dark.toString()}
           </Typography>
-          <Typography variant="body1" sx={{ color: '#000000' }}>
-            contrastText: #000000
+          <Typography
+            variant="body1"
+            color={theme.palette.primary.contrastText}
+          >
+            contrastText: {theme.palette.primary.contrastText.toString()}
           </Typography>
         </Box>
         <Box sx={{ px: 2, border: '2px solid black' }}>
@@ -126,7 +211,7 @@ export default function StyleGuide() {
             variant="h3"
             sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
           >
-            secondary
+            {StyleGuideText.SECONDARY}
           </Typography>
           <Typography variant="body1" sx={{ color: '#F6B93D' }}>
             main: F6B93D
@@ -146,7 +231,7 @@ export default function StyleGuide() {
             variant="h3"
             sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
           >
-            error
+            {StyleGuideText.ERROR}
           </Typography>
           <Typography variant="body1" sx={{ color: '#D32F2F' }}>
             main: D32F2F
@@ -166,7 +251,7 @@ export default function StyleGuide() {
             variant="h3"
             sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
           >
-            warning
+            {StyleGuideText.WARNING}
           </Typography>
           <Typography variant="body1" sx={{ color: '#FFA726' }}>
             main: FFA726
@@ -186,7 +271,7 @@ export default function StyleGuide() {
             variant="h3"
             sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
           >
-            info
+            {StyleGuideText.INFO}
           </Typography>
           <Typography variant="body1" sx={{ color: '#1976D2' }}>
             main: 1976D2
@@ -206,7 +291,7 @@ export default function StyleGuide() {
             variant="h3"
             sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
           >
-            success
+            {StyleGuideText.SUCCESS}
           </Typography>
           <Typography variant="body1" sx={{ color: '#2E7D32' }}>
             main: 2E7D32
