@@ -36,14 +36,14 @@ export default function NavBottom() {
             height={20}
           />
         </IconButton>
-        <IconButton disableRipple disabled>
+        {/* <IconButton disableRipple disabled>
           <Image
             alt="Bottom burger menu icon"
             src="/icons/bottom-burger-menu.svg"
             width={20}
             height={20}
           />
-        </IconButton>
+        </IconButton> */}
       </Toolbar>
     </>
   )

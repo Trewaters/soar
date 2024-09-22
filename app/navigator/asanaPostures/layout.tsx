@@ -6,7 +6,15 @@ export default function AsanaLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <section>{children}</section>
-      <Stack sx={{ position: 'relative', bottom: 0, marginTop: '16px' }}>
+      <Stack
+        width={'100%'}
+        sx={{
+          position: 'absolute',
+          bottom: 0,
+          marginTop: '16px',
+          marginBottom: 4,
+        }}
+      >
         <NavBottom />
       </Stack>
     </>
