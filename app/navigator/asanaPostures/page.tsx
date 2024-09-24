@@ -1,8 +1,9 @@
 'use client'
 import { useEffect, useState } from 'react'
-import Typography from '@mui/material/Typography'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
 import PostureData from '@interfaces/postureData'
+import NavBottom from '@serverComponents/navBottom'
+import { Card, CardMedia, CardContent } from '@mui/material'
 
 export default function Page() {
   const [posturePropData, setPosturePropData] = useState<PostureData[]>([])
@@ -31,12 +32,58 @@ export default function Page() {
 
   return (
     <>
-      <Typography variant="h2" align="center">
+      {/* <Typography variant="h2" align="center">
         Asana Postures
-      </Typography>
-      {loading && <p>Loading Yoga Postures...</p>}
-      {error && <p>Error: {error}</p>}
-      <PostureSearch posturePropData={posturePropData} />
+      </Typography> */}
+      <Card
+        sx={{
+          width: ['100vw', '100%'],
+        }}
+      >
+        <CardMedia
+          component="img"
+          height={'auto'}
+          width={'auto'}
+          image="/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png"
+          alt="Asana Posture Search"
+          // sx={{
+          //   objectFit: 'cover',
+          //   backgroundSize: '50%',
+          //   backgroundPosition: 'center',
+          // }}
+        />
+        {loading && <p>Loading Yoga Postures...</p>}
+        {error && <p>Error: {error}</p>}
+        <CardContent>
+          <PostureSearch posturePropData={posturePropData} />
+        </CardContent>
+      </Card>
+      <NavBottom />
+
+      {/* <Box sx={{ height: '100px', mt: '16px' }}>
+        <Box textAlign={'center'}>
+          <Image
+            alt="Asana Posture Search"
+            height={355 * 1.5}
+            width={430 * 1.5}
+            src={
+              '/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png'
+            }
+          ></Image>
+          <Box
+            sx={{
+              position: 'relative',
+              // top: '50%',
+              // top: '600px',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 1,
+            }}
+          >
+            <PostureSearch posturePropData={posturePropData} />
+          </Box>
+        </Box>
+      </Box> */}
     </>
   )
 }

@@ -1,11 +1,7 @@
 import '@styles/globals.css'
 import { ReactNode } from 'react'
 import type { Metadata } from 'next'
-import Header from '@serverComponents/header'
 import { Providers } from '@providers/Providers'
-import Footer from '@serverComponents/footer'
-import { Grid, Stack } from '@mui/material'
-import { Box } from '@mui/system'
 
 declare global {
   // eslint-disable-next-line no-unused-vars
