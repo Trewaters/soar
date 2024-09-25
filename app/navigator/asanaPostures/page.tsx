@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
 import PostureData from '@interfaces/postureData'
 import NavBottom from '@serverComponents/navBottom'
-import { Card, CardMedia, CardContent } from '@mui/material'
+import { Card, CardMedia, CardContent, Box } from '@mui/material'
 
 export default function Page() {
   const [posturePropData, setPosturePropData] = useState<PostureData[]>([])
@@ -31,19 +31,18 @@ export default function Page() {
   }, [])
 
   return (
-    <>
-      {/* <Typography variant="h2" align="center">
-        Asana Postures
-      </Typography> */}
+    <Box display={'flex'} flexDirection={'column'}>
       <Card
         sx={{
-          width: ['100vw', '100%'],
+          width: ['90vw', '100%'],
+          alignSelf: 'center',
+          mb: '16px',
         }}
       >
         <CardMedia
           component="img"
           height={'auto'}
-          width={'auto'}
+          // width={'auto'}
           image="/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png"
           alt="Asana Posture Search"
           // sx={{
@@ -84,6 +83,6 @@ export default function Page() {
           </Box>
         </Box>
       </Box> */}
-    </>
+    </Box>
   )
 }
