@@ -1,9 +1,9 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, SyntheticEvent } from 'react'
 import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
-import PostureData from '@interfaces/postureData'
+import { PostureData, useAsanaPosture } from '@context/AsanaPostureContext'
 import PostureCard from '@app/navigator/asanaPostures/posture-card'
 import { Button } from '@mui/material'
 import { useRouter } from 'next/navigation'
@@ -14,14 +14,19 @@ interface PostureSearchProps {
 }
 
 export default function PostureSearch({ posturePropData }: PostureSearchProps) {
+  const { state, dispatch } = useAsanaPosture()
   const [postures, setPostures] = useState<PostureData[]>(posturePropData)
   const [cardPosture, setcardPosture] = useState<string | null>()
+  const [selectedPosture, setSelectedPosture] = useState<
+    PostureData | undefined
+  >(state.postures)
   // const [value, setValue] = useState('Awkward')
   // const [inputValue, setInputValue] = useState('')
   // const [open, setOpen] = useState(false)
 
   // Find the selected posture based on the Autocomplete selection
-  const selectedPosture = postures?.find((p) => p.english_name === cardPosture)
+  // const selectedPosture = postures?.find((p) => p.english_name === cardPosture)
+  // setSelectedPosture(postures?.find((p) => p.english_name === cardPosture))
   const defaultPosture = postures?.find((p) => p.english_name === '')
   const router = useRouter()
 
@@ -33,6 +38,15 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
     // send pose name to api/poses/?english_name=${pose_name}
     // show asana practice view
     router.push(`../views/viewAsanaPractice/${selectedPosture?.english_name}/`)
+  }
+
+  function handleChange(
+    event: SyntheticEvent<Element, Event>,
+    value: PostureData | null
+  ) {
+    dispatch({ type: 'SET_POSTURES', payload: value ?? state.postures })
+
+    setcardPosture(value?.english_name || '')
   }
 
   return (
@@ -52,7 +66,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
           )}
           defaultValue={defaultPosture}
           autoSelect={true}
-          onChange={(event, value) => setcardPosture(value?.english_name || '')}
+          onChange={handleChange}
         />
         {/* 
         // unsuccessful attempt to clear input so entire list shows
@@ -105,7 +119,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
         <Button onClick={handleClick}>Practice View</Button>
       )}
 
-      {selectedPosture && <PostureCard postureCardProp={selectedPosture} />}
+      {/* {selectedPosture && <PostureCard postureCardProp={selectedPosture} />} */}
     </>
   )
 }

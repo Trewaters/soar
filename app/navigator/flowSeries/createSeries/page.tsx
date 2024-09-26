@@ -1,8 +1,7 @@
 'use client'
 import React from 'react'
-import { useFlowSeries } from '@app/context/AsanaSeriesContext'
+import { useFlowSeries } from '@context/AsanaSeriesContext'
 import { FEATURES } from '@app/FEATURES'
-import PostureData from '@app/interfaces/postureData'
 import {
   Accordion,
   AccordionDetails,
@@ -25,6 +24,13 @@ import {
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import NavigationIcon from '@mui/icons-material/Navigation'
+import { LooksOne } from '@mui/icons-material'
+import LooksTwoIcon from '@mui/icons-material/LooksTwo'
+import Looks3Icon from '@mui/icons-material/Looks3'
+import Looks4Icon from '@mui/icons-material/Looks4'
+import Looks5Icon from '@mui/icons-material/Looks5'
+import { useRouter } from 'next/navigation'
+import { PostureData } from '@context/AsanaPostureContext'
 
 export default function Page() {
   const { data: session } = useSession()

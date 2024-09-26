@@ -1,4 +1,4 @@
-import { FlowSeriesSequence } from '@app/context/AsanaSeriesContext'
+import { FlowSeriesSequence } from '@context/AsanaSeriesContext'
 import {
   createContext,
   Dispatch,

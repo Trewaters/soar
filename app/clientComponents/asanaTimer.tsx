@@ -67,7 +67,7 @@ export default function AsanaTimer() {
 }
  */
 
-import { AsanaTimerProps, useTimer } from '@app/context/timerContext'
+import { AsanaTimerProps, useTimer } from '@context/timerContext'
 import { useEffect, useState } from 'react'
 
 export default function AsanaTimer({

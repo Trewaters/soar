@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import PauseCircleIcon from '@mui/icons-material/PauseCircle'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
 import AsanaTimer from '@app/clientComponents/asanaTimer'
-import { useTimer } from '@app/context/timerContext'
+import { useTimer } from '@context/timerContext'
 import { useRouter } from 'next/navigation'
 import HomeIcon from '@mui/icons-material/Home'
 

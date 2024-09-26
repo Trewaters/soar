@@ -26,7 +26,7 @@
 // import MapIcon from '@mui/icons-material/Map'
 // import LinkIcon from '@mui/icons-material/Link'
 // import { useSession } from 'next-auth/react'
-// import { UseUser } from '@app/context/UserContext'
+// import { UseUser } from '@context/UserContext'
 // import Link from 'next/link'
 
 // // // profile card
@@ -406,7 +406,7 @@ import ShareIcon from '@mui/icons-material/Share'
 import MapIcon from '@mui/icons-material/Map'
 import LinkIcon from '@mui/icons-material/Link'
 import { useSession } from 'next-auth/react'
-import { UseUser } from '@app/context/UserContext'
+import { UseUser } from '@context/UserContext'
 import Link from 'next/link'
 
 interface ExpandMoreProps extends IconButtonProps {

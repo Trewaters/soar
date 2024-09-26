@@ -1,13 +1,17 @@
-import TopNav from '@app/clientComponents/top-nav'
+import Footer from '@serverComponents/footer'
+import Header from '@serverComponents/header'
 import { ReactNode } from 'react'
 
 export default function NavigatorLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <nav>
-        <TopNav />
-      </nav>
-      <section>{children}</section>
+      <>
+        <nav>
+          <Header />
+        </nav>
+        <main>{children}</main>
+        <Footer />
+      </>
     </>
   )
 }

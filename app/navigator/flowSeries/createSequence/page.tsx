@@ -1,6 +1,6 @@
 'use client'
-import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
-import { SequenceData } from '@app/context/SequenceContext'
+import { FlowSeriesData } from '@context/AsanaSeriesContext'
+import { SequenceData } from '@context/SequenceContext'
 import { FEATURES } from '@app/FEATURES'
 import {
   Autocomplete,

@@ -1,4 +1,3 @@
-import PostureCardFields from '@interfaces/postureData'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import Card from '@mui/material/Card'
@@ -8,9 +7,11 @@ import CardMedia from '@mui/material/CardMedia'
 import Paper from '@mui/material/Paper'
 import Image from 'next/image'
 import { Checkbox, FormControlLabel, FormGroup } from '@mui/material'
+import { PostureCardFields, PostureData } from '@context/AsanaPostureContext'
 
 interface PostureCardProps {
-  postureCardProp: PostureCardFields
+  // postcontext: PostureCardFields
+  postureCardProp: PostureData
 }
 
 export default function PostureCard({ postureCardProp }: PostureCardProps) {
