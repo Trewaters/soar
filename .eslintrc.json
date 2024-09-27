@@ -1,11 +1,25 @@
 {
   "extends": [
+    "next",
+    "next/core-web-vitals",
+    "prettier",
     "eslint:recommended",
     "plugin:prettier/recommended",
-    "next/core-web-vitals",
-    "prettier"
+
+    // Accessibility
+    "plugin:jsx-a11y/recommended"
+
+    // "plugin:react/recommended",
+    // "plugin:@typescript-eslint/recommended"
+    // "plugin:@next/next/recommended"
   ],
-  "plugins": ["prettier"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["prettier", "jsx-a11y", "@typescript-eslint", "react"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "rules": {
     "prettier/prettier": [
       "warn",
@@ -22,6 +36,20 @@
     "no-console": "warn",
     "eqeqeq": "warn",
     "linebreak-style": "off",
-    "no-inline-comments": "warn"
+    // "no-inline-comments": "warn",
+    // "next/no-img-element": "warn",
+    // "next/no-html-link-for-pages": "error",
+    // "next/no-sync-scripts": "warn",
+    // "react/jsx-uses-react": "error",
+    // "react/jsx-uses-vars": "error",
+    // "react-hooks/rules-of-hooks": "error",
+    // "@typescript-eslint/no-unused-vars": "error",
+    // "@typescript-eslint/explicit-module-boundary-types": "warn",
+    // "@typescript-eslint/no-explicit-any": "warn"
+
+    // Accessibility
+    "jsx-a11y/anchor-is-valid": "warn",
+    "jsx-a11y/alt-text": "warn",
+    "jsx-a11y/label-has-associated-control": "warn"
   }
 }

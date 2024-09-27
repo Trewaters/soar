@@ -1,6 +1,6 @@
 'use client'
 import PostureData from '@app/interfaces/postureData'
-import { Box, Button, Grid, IconButton, Paper, Typography } from '@mui/material'
+import { Button, Grid, IconButton, Paper, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import PauseCircleIcon from '@mui/icons-material/PauseCircle'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
@@ -18,6 +18,7 @@ export default function ViewAsanaPractice({
 
   /* call api/poses/?english_name=${pose} */
   const [viewPose, setViewPose] = useState<PostureData>()
+  // eslint-disable-next-line no-unused-vars
   const [elapsedTime, setElapsedTime] = useState(0)
   // const [isPaused, setIsPaused] = useState(false)
   const { state, dispatch } = useTimer()
@@ -71,11 +72,11 @@ export default function ViewAsanaPractice({
         startTime: Date.now(),
       },
     })
-    console.log('state.watch', state.watch)
+    // console.log('state.watch', state.watch)
   }
 
   const handleBackClick = () => {
-    console.log('Back Clicked')
+    // console.log('Back Clicked')
     router.push('/navigator/asanaPostures')
   }
 

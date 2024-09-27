@@ -16,7 +16,7 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 - View Yoga postures with details about the posture like name, description, etc.
 
-**Flow**
+**Flows**
 
 - Series are multiple asanas done in order. Series are smaller pieces that combine to make a Full Sequences.
 - View series
@@ -67,11 +67,13 @@ Used as an aid in anyones active yoga practice. This app won't get you started d
 
 ### Built With
 
-- This project was generated with [NextJS](https://nextjs.org/docs) version 13.
+- This project was generated with [NextJS](https://nextjs.org/docs)
 - Material MUI
 - MongoDB
 - Prisma
 - Auth.js v5 (Google, Github, Twitter X)
+- Google APIs
+- Google Analytics
 
 ## CONTRIBUTIONS
 
@@ -86,6 +88,7 @@ I NEED HELP WITH...
 1. **Frontend design**: Designing look and feel for pages is not my strength. I would love help laying out pages better. _Make the app pretty!_
 2. **Yoga Pose images**: I need images for the yoga poses. It should be a set of images.
 3. **Fix Bugs**: See something wrong fix it or create an issue identifying how to reproduce the bug.
+4. **Add Unit Test**: Using Jest for testing. Write test for anything that isn't covered currently.
 
 ## Authors
 
@@ -110,15 +113,15 @@ This project is licensed under the _GNU Affero General Public License v3.0_ - se
 
 ### Current Goals
 
-- (2024-06-01 09:17:02) update `jest.config.ts` old config found here "...\Yoga\app-Soar\old code\jest.config.ts"
+(2024-09-17 16:55:11) update Goals for MVP and beyond +1.
+
 - **Record practice**, record personal yoga practice in app.
-- **Top Navigation**, Use a component for Top Navigation.
-- **Footer**, Make a footer component. Include copyright 2023 - 2024, Name (Happy Yoga), Terms of use (tldr) or licensing, etc.
-- **Header**, Make a header component.
 
 ## Milestones
 
-- [x] 1.0.0 - MVP ( 2 sections - each with material, "Flow" and "Asana Postures").
+(2024-09-17 16:55:34) update milestones so they match my current notes.
+
+- [x] 1.0.0 - MVP ( 2 sections - each with material, "Flows" and "Asana Postures").
 - [x] 2.0.0 - Create User Profiles (connect to db)
 - [ ] 2.1.0 - Routine/Practice Planner. Allow user to track progress and goals.
 - [ ] x.x.0 - Allow User Profiles to save their progress (connect to db)
@@ -232,6 +235,10 @@ replication:
 
 ### Tests
 
+Using Jest.
+
+My current excuse is to wait until MVP before creating test around features.
+
 ..._(wip)_
 
 ### Style Guide (look & feel)
@@ -240,9 +247,8 @@ replication:
 
 ### Coding Style
 
-..._(wip)_
-
 1. Prettier
+2. Eslint
 
 ### Deployment
 
@@ -339,34 +345,26 @@ _If you *Answer yes* to everything on the list below then you are pushing GREAT 
 
 _(in order of priority top to bottom)_
 
-- User Profile (2024-09-07 07:48:17)
-  - enable share icon, allow user to share the information in that area.
-  - enable favorite "heart" icon, expand functionality later when there are user roles.
-- Clean up & add Quality,
-  - QA, Quality analysis
-    - add remove and clear buttons to "Create flow". (2024-09-11 18:36:26)
+- Clean up & add Quality, QA, Quality analysis
+  - Clean up UI.
     - Profile page jumps when it loads. prevent this jumping. (2024-09-11 18:36:23)
-    - Add home button to "Asana Postures" page. (2024-09-11 18:36:19)
-    - "Create Series" remove last arrow icon from the Flow Series list. (2024-09-11 18:36:13)
-    - "Create Series/Sequence" Add ability to clear form, enable cancel (resetting the form to empty)
-  - Clean up UI. Start using Lighthouse for improvements.
-  - Check accessibility
-  - create header based on best practices
-  - create footer based on best practices
-  - Add loading skeleton to yogi profile.
-  - Clean up data and database objects. Remove unused data fields. Add Player Tested feedback.
-- Add Google Analytics (2024-08-24 08:44:21)
-- Add Google Maps (2024-08-24 08:44:25)
+    - Add loading skeleton to yogi profile.
+  - Clean up data and database objects. Remove unused data fields. Add User Tested feedback.
 - Hide (unfinished/unstarted) features behind a flag (2024-08-24 08:44:29)
   - Add user roles to application. Pass with the session. (dev, admin, tester, etc)
   - Restrict Features. Allow “My” (dev) role to see the features while work on them
   - Create series (etc) MUST be restricted to certain users.
-- Add expandable list of Yoga Styles on the user profile details page, still allow freeform text entries. (2024-09-07 14:40:20)
+- Need Logo and images associated with that. Update favicon, etc.
+- Privacy Policy
+- Terms of Service
+- Cookie Policy
+- Disclaimer (if applicable)
+- CTA button, encourage feedback!
 
 ### Anytime
 
-- Finish setting up login access restrictions on all pages that need it (user profile, any submit pages like createSeries, etc.). Restricting access to features based on signing into their user profile. (2024-08-23 07:08:21)
-- Add Frontend Services to call my back end apis. (2024-07-29 17:02:20)
+- Create Frontend Services files to call my back end apis. Seperates frontend and backend api information. (2024-07-29 17:02:20)
+- Create and httpAdapter to replace axios and use fetch (2024-09-15 20:05:58)
 - Add permanent IP Address to MongoDB Atlas Cluster whitelist for access. Upon deployment of non-alpha. So at the end of alpha phase of development. (2024-07-20 06:53:15)
 
 ### Further help

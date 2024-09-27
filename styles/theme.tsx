@@ -2,23 +2,31 @@ import { CSSProperties } from 'react'
 import { createTheme } from '@mui/material/styles'
 
 declare module '@mui/material/styles' {
+  // eslint-disable-next-line no-unused-vars
   interface TypographyVariants {
     label: CSSProperties
   }
 
+  // eslint-disable-next-line no-unused-vars
   interface TypographyVariantsOptions {
     label?: CSSProperties
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  interface TypeBackground {
+    helper: string
   }
 }
 
 declare module '@mui/material/Typography' {
+  // eslint-disable-next-line no-unused-vars
   interface TypographyPropsVariantOverrides {
     label: true
   }
 }
 
 export const theme = createTheme({
-  breakpoints: { values: { xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920 } },
+  breakpoints: { values: { xs: 0, sm: 600, md: 900, lg: 1200, xl: 1536 } },
   spacing: [0, 4, 8, 16, 32, 40, 48, 64],
   palette: {
     // mode: 'light',
@@ -31,7 +39,6 @@ export const theme = createTheme({
       light: '#FFBA6F',
       dark: '#C3581A',
       contrastText: '#000000',
-      // cardTextBack: #fef3eb,
     },
     secondary: {
       main: '#F6B93D',
@@ -63,23 +70,11 @@ export const theme = createTheme({
       dark: '#005005',
       contrastText: '#FFFFFF',
     },
-    // text: {
-    //   primary: '#000000',
-    //   // used by CardHeader.subheader
-    //   secondary: '#C08926',
-    // },
-    // background: {
-    //   default: '#ffffff',
-    //   paper: '#ffffff',
-    // },
-    // action: {
-    //   active: '#ffffff',
-    //   hover: '#ffffff',
-    //   selected: '#ffffff',
-    //   disabled: '#ffffff',
-    //   disabledBackground: '#ffffff',
-    // },
-    // divider: '#ffffff',
+    background: {
+      default: '#f0f0f0',
+      paper: '#ffffff',
+      helper: '#fef5e7',
+    },
   },
   typography: {
     fontFamily: ['Lato', 'sans-serif'].join(','),
@@ -98,60 +93,30 @@ export const theme = createTheme({
       fontWeight: '900',
       letterSpacing: '0.1rem',
       wordSpacing: '0.1rem',
-      // display: 'block',
-      // marginTop: '0.67rem',
-      // marginBottom: '0.67rem',
-      // marginLeft: 0,
-      // marginRight: 0,
     },
     h2: {
       fontSize: '2rem',
       fontWeight: '700',
       letterSpacing: '0.05rem',
       wordSpacing: '0.05rem',
-      // display: 'block',
-      // marginTop: '0.57rem',
-      // marginBottom: '0.57rem',
-      // marginLeft: 0,
-      // marginRight: 0,
     },
     h3: {
       fontSize: '1.8rem',
       fontWeight: '700',
       letterSpacing: '0.001rem',
       wordSpacing: '0.001rem',
-      // display: 'block',
-      // marginTop: '0.47rem',
-      // marginBottom: '0.47rem',
-      // marginLeft: 0,
-      // marginRight: 0,s
     },
     h4: {
       fontSize: '1.6rem',
       fontWeight: '700',
-      // display: 'block',
-      // marginTop: '0.37rem',
-      // marginBottom: '0.47rem',
-      // marginLeft: 0,
-      // marginRight: 0,
     },
     h5: {
       fontSize: '1.4rem',
       fontWeight: '700',
-      // display: 'block',
-      // marginTop: '0.37rem',
-      // marginBottom: '0.37rem',
-      // marginLeft: 0,
-      // marginRight: 0,
     },
     h6: {
       fontSize: '1.2rem',
       fontWeight: '700',
-      // display: 'block',
-      // marginTop: '0.37rem',
-      // marginBottom: '0.37rem',
-      // marginLeft: 0,
-      // marginRight: 0,
     },
     body1: { fontSize: '1rem' },
     body2: { fontSize: '.8rem' },

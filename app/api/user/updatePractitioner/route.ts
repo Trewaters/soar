@@ -30,6 +30,7 @@ export async function POST(req: Request) {
   }
 
   // Remove invalid fields from practitionerData
+  // eslint-disable-next-line no-unused-vars
   const { id, userId, user, ...validPractitionerData } = practitionerData
 
   // Try to update the practitioner data

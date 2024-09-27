@@ -397,23 +397,47 @@ import {
   CircularProgress,
   IconButtonProps,
   styled,
+  Autocomplete,
+  Tooltip,
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { red } from '@mui/material/colors'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import FavoriteIcon from '@mui/icons-material/Favorite'
 import ShareIcon from '@mui/icons-material/Share'
 import MapIcon from '@mui/icons-material/Map'
 import LinkIcon from '@mui/icons-material/Link'
 import { useSession } from 'next-auth/react'
 import { UseUser } from '@context/UserContext'
 import Link from 'next/link'
+import MyMap from '@app/clientComponents/googleMaps'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean
 }
 
+const yogaStyles = [
+  'Ashtanga',
+  'Vinyasa Flow',
+  'Hatha',
+  'Yin',
+  'Restorative',
+  'Nidra',
+  'Hot yoga',
+  'Kundalini',
+  'Iyengar',
+  'Power Yoga',
+  'Bikram Yoga',
+  'Anusara',
+  'Sivananda',
+  'Jivamukti',
+  'Aerial Yoga',
+  'Prenatal Yoga',
+  'Kripalu',
+  'AcroYoga',
+]
+
 const ExpandMore = styled((props: ExpandMoreProps) => {
+  // eslint-disable-next-line no-unused-vars
   const { expand, ...other } = props
   return <IconButton {...other} />
 })(({ theme, expand }: { theme: any; expand: boolean }) => ({
@@ -485,6 +509,33 @@ export default function UserDetails() {
 
   const membershipDate = new Date(userData?.createdAt).toLocaleDateString()
 
+  const handleShare = async () => {
+    const shareData = {
+      title: 'Happy Yoga',
+      text: `Check out ${userData.firstName} ${userData.lastName}! ${userData.headline}; ${userData.shareQuick}; ${userData.yogaStyle}; ${userData.yogaExperience};  ${userData.company}; ${userData.websiteURL}; ${userData.location};`,
+      url: window.location.href,
+    }
+    const resultPara = document.querySelector('.result')
+
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(shareData))
+      // console.log('Content copied to clipboard')
+
+      if (navigator.share) {
+        await navigator.share(shareData)
+        // console.log('Content shared successfully')
+      } else {
+        // console.log('Web Share API not supported in this browser.')
+        alert('Link copied to clipboard. Share it manually!')
+      }
+    } catch (error) {
+      // console.error('Error sharing content:', error)
+      if (resultPara) {
+        resultPara.textContent = `Error: ${error}`
+      }
+    }
+  }
+
   return (
     <>
       {!session && (
@@ -504,11 +555,6 @@ export default function UserDetails() {
           onSubmit={handleSubmit}
           width={'100vw'}
         >
-          <Grid xs={12} item sx={{ display: 'flex', justifyContent: 'center' }}>
-            <Button type="submit" disabled={loading}>
-              {loading ? <CircularProgress size={24} /> : 'Save'}
-            </Button>
-          </Grid>
           {error && (
             <Grid xs={12} item>
               <Typography color="error">{error}</Typography>
@@ -526,9 +572,11 @@ export default function UserDetails() {
                   </Avatar>
                 }
                 action={
-                  <IconButton aria-label="settings">
-                    <MoreVertIcon />
-                  </IconButton>
+                  <Tooltip title="Save">
+                    <IconButton aria-label="settings" onClick={handleSubmit}>
+                      <MoreVertIcon />
+                    </IconButton>
+                  </Tooltip>
                 }
                 title={userData?.name ?? 'Yogi Name'}
                 subheader={`Member since ${membershipDate ?? '6/9/2024'}`}
@@ -550,10 +598,10 @@ export default function UserDetails() {
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
-                <IconButton aria-label="add to favorites" disabled>
+                {/* <IconButton aria-label="add to favorites" disabled>
                   <FavoriteIcon />
-                </IconButton>
-                <IconButton aria-label="share" disabled>
+                </IconButton> */}
+                <IconButton aria-label="share" onClick={handleShare}>
                   <ShareIcon />
                 </IconButton>
                 <ExpandMore
@@ -583,14 +631,28 @@ export default function UserDetails() {
 
                   <Stack direction="row" spacing={2} mb={2}>
                     <FormControl>
-                      <TextField
-                        name="yogaStyle"
-                        id="outlined-basic"
-                        placeholder='Enter "Yoga Style"'
-                        label="Yoga Style"
+                      <Autocomplete
+                        freeSolo
+                        sx={{ width: '207px' }}
+                        options={yogaStyles}
                         value={userData.yogaStyle ?? ''}
-                        variant="outlined"
-                        onChange={handleChange}
+                        onChange={(event, newValue) => {
+                          dispatch({
+                            type: 'SET_USER',
+                            payload: { ...userData, yogaStyle: newValue ?? '' },
+                          })
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="yogaStyle"
+                            id="outlined-basic"
+                            placeholder='Enter "Yoga Style"'
+                            label="Yoga Style"
+                            variant="outlined"
+                            onChange={handleChange}
+                          />
+                        )}
                       />
                     </FormControl>
                   </Stack>
@@ -646,6 +708,7 @@ export default function UserDetails() {
                      */}
                     <MapIcon />
                     <Typography>{userData.location ?? ''}</Typography>
+                    <MyMap />
                   </Stack>
                 </CardContent>
               </Collapse>
@@ -770,6 +833,15 @@ export default function UserDetails() {
                 variant="outlined"
               />
             </FormControl>
+          </Grid>
+          <Grid
+            xs={12}
+            item
+            sx={{ display: 'flex', justifyContent: 'flex-end' }}
+          >
+            <Button type="submit" disabled={loading} variant="contained">
+              {loading ? <CircularProgress /> : 'Save'}
+            </Button>
           </Grid>
         </Grid>
       )}

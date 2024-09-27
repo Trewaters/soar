@@ -3,20 +3,19 @@ import React from 'react'
 import { useFlowSeries } from '@context/AsanaSeriesContext'
 import { FEATURES } from '@app/FEATURES'
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Autocomplete,
+  Avatar,
   Box,
   Button,
-  Card,
-  CardContent,
   FormControl,
   FormGroup,
   Grid,
-  Icon,
   IconButton,
-  InputLabel,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  ListSubheader,
   Stack,
   TextField,
   Typography,
@@ -37,11 +36,8 @@ export default function Page() {
   const { state, dispatch } = useFlowSeries()
   const { seriesName, seriesPostures, breath, description, duration, image } =
     state.flowSeries
-
-  // posture data
   const [postures, setPostures] = useState<PostureData[]>([])
-  // const [singlePosture, setSinglePosture] = useState<PostureData>()
-  // const [postureName, setPostureName] = useState('')
+  const router = useRouter()
 
   useEffect(() => {
     async function fetchData() {
@@ -71,10 +67,6 @@ export default function Page() {
     // Logs the element that triggered the event
     event.preventDefault()
     if (value) {
-      // setSinglePosture(value)
-
-      // setPostureName(value.english_name)
-
       dispatch({
         type: 'SET_FLOW_SERIES',
         payload: {
@@ -112,10 +104,12 @@ export default function Page() {
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
+      // eslint-disable-next-line no-unused-vars
       const data = await response.json()
     } catch (error: Error | any) {
       error.message
     }
+    router.push('/navigator/flowSeries')
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -125,6 +119,21 @@ export default function Page() {
       payload: {
         ...state.flowSeries,
         [name]: value,
+      },
+    })
+  }
+
+  function handleCancel() {
+    dispatch({
+      type: 'SET_FLOW_SERIES',
+      payload: {
+        ...state.flowSeries,
+        seriesName: '',
+        seriesPostures: [],
+        breath: '',
+        description: '',
+        duration: '',
+        image: '',
       },
     })
   }
@@ -142,6 +151,68 @@ export default function Page() {
               <Typography variant="h2" textAlign="center">
                 Create a Series
               </Typography>
+              <List
+                sx={{
+                  width: 'auto',
+                  // maxWidth: 360,
+                  bgcolor: 'background.helper',
+                  alignSelf: 'center',
+                  borderRadius: 4,
+                  my: 3,
+                }}
+              >
+                <ListSubheader
+                  sx={{ bgcolor: 'background.helper', textAlign: 'center' }}
+                  component="h3"
+                  id="nested-list-subheader"
+                >
+                  Welcome to the series creation page
+                </ListSubheader>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <LooksOne />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="If you can't find a series you like, create your own!" />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <LooksTwoIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary='"Series Name": Type a unique name for your series.' />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Looks3Icon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary='"Flow Series": Add asana postures to
+                  your series by selecting them from the "Flow Series"
+                  dropdown below. Click the "X" to enter a new posture.'
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Looks4Icon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary='"Description": Type a description of your series.' />
+                </ListItem>
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <Looks5Icon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary='Click "Submit" when you are done.' />
+                </ListItem>
+              </List>
               <Button
                 variant="outlined"
                 href="/navigator/flowSeries"
@@ -176,18 +247,6 @@ export default function Page() {
                   sx={{ mb: 2 }}
                 >
                   <FormControl>
-                    {/* 
-                    <TextField
-                      id="outlined-basic"
-                      label="Series Postures"
-                      variant="outlined"
-                      name="seriesPostures"
-                      value={seriesPostures}
-                      onChange={handleChange}
-                      disabled
-                    />
- */}
-
                     <Stack
                       spacing={1}
                       direction={'row'}
@@ -211,16 +270,56 @@ export default function Page() {
                           <Typography key={word} variant="h3">
                             {word}
                           </Typography>
-                          <IconButton
-                            disabled
-                            sx={{
-                              transform: 'rotate(90deg)',
-                            }}
-                          >
-                            <NavigationIcon />
-                          </IconButton>
+                          {index < seriesPostures.length - 1 && (
+                            <IconButton
+                              disabled
+                              sx={{
+                                transform: 'rotate(90deg)',
+                              }}
+                            >
+                              <NavigationIcon />
+                            </IconButton>
+                          )}
                         </Box>
                       ))}
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      justifyContent="flex-end"
+                      sx={{ mt: 3 }}
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>
+                          dispatch({
+                            type: 'SET_FLOW_SERIES',
+                            payload: {
+                              ...state.flowSeries,
+                              seriesPostures:
+                                state.flowSeries.seriesPostures.slice(0, -1),
+                            },
+                          })
+                        }
+                      >
+                        <Typography>Remove One (-1)</Typography>
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>
+                          dispatch({
+                            type: 'SET_FLOW_SERIES',
+                            payload: {
+                              ...state.flowSeries,
+                              seriesPostures: [],
+                            },
+                          })
+                        }
+                      >
+                        Clear
+                      </Button>
                     </Stack>
                   </FormControl>
                 </Grid>
@@ -244,67 +343,21 @@ export default function Page() {
                     onChange={handleSelect}
                   />
                 </FormControl>
-                {/* 
-              <Grid item xs={12} sx={{ mb: 2 }}>
-                <FormControl>
-                  <TextField
-                    id="outlined-basic"
-                    label="Breath"
-                    variant="outlined"
-                    name="breath"
-                    value={breath}
-                    onChange={handleChange}
-                  />
-                </FormControl>
-              </Grid>
- */}
+
                 <Grid item xs={12} sx={{ mb: 2 }}>
                   <FormControl>
                     <TextField
                       id="outlined-basic"
                       label="Description"
+                      sx={{ width: '95vw' }}
                       multiline
                       variant="outlined"
                       name="description"
                       value={description}
-                      // onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      //   setDescription(event.currentTarget.value)
-                      // }
                       onChange={handleChange}
                     />
                   </FormControl>
                 </Grid>
-                {/* 
-                <Grid item xs={12} sx={{ mb: 2 }}>
-                  <FormControl>
-                    <TextField
-                      id="outlined-basic"
-                      label="Duration"
-                      variant="outlined"
-                      name="duration"
-                      value={duration}
-                      onChange={handleChange}
-                    />
-                  </FormControl>
-                </Grid>
- */}
-                {/* 
-                <Grid item xs={12} sx={{ mb: 2 }}>
-                  <FormControl>
-                    <TextField
-                      id="outlined-basic"
-                      label="Image"
-                      variant="outlined"
-                      name="image"
-                      value={image}
-                      // onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      //   setImage(event.currentTarget.value)
-                      // }
-                      onChange={handleChange}
-                    />
-                  </FormControl>
-                </Grid>
- */}
                 <Grid item xs={12}>
                   <Stack direction="row" spacing={2} justifyContent="center">
                     <Button
@@ -315,7 +368,11 @@ export default function Page() {
                     >
                       Submit
                     </Button>
-                    <Button variant="outlined" color="secondary">
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={handleCancel}
+                    >
                       Cancel
                     </Button>
                   </Stack>

@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import Typography from '@mui/material/Typography'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
 import NavBottom from '@serverComponents/navBottom'
 import { Card, CardContent, Box } from '@mui/material'
