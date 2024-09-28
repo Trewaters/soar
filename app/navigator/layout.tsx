@@ -1,17 +1,14 @@
-import Footer from '@serverComponents/footer'
 import Header from '@serverComponents/header'
 import { ReactNode } from 'react'
 
 export default function NavigatorLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <>
-        <nav>
-          <Header />
-        </nav>
-        <main>{children}</main>
-        <Footer />
-      </>
+      <nav>
+        <Header />
+      </nav>
+      <main>{children}</main>
+      {/* <Footer /> */}
     </>
   )
 }

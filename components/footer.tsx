@@ -6,11 +6,13 @@ export default function Footer() {
     <footer>
       <Box
         sx={{
+          position: 'absolute',
+          bottom: 0,
+          // marginTop: '620%',
           width: '100%',
           p: '2rem',
           color: 'text.secondary',
         }}
-        // sx={{ position: 'absolue', bottom: 0, marginTop: '240px' }}
         textAlign={'center'}
       >
         <Stack display={'flex'} justifyContent={'space-between'} flex={'wrap'}>
