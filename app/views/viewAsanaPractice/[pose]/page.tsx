@@ -1,5 +1,4 @@
 'use client'
-import PostureData from '@app/interfaces/postureData'
 import { Button, Grid, IconButton, Paper, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import PauseCircleIcon from '@mui/icons-material/PauseCircle'
@@ -8,6 +7,7 @@ import AsanaTimer from '@app/clientComponents/asanaTimer'
 import { useTimer } from '@context/timerContext'
 import { useRouter } from 'next/navigation'
 import HomeIcon from '@mui/icons-material/Home'
+import { PostureData } from '@app/context/AsanaPostureContext'
 
 export default function ViewAsanaPractice({
   params,

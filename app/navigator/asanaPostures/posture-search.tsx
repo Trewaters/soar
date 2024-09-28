@@ -22,13 +22,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
   const [selectedPosture, setSelectedPosture] = useState<
     PostureData | undefined
   >(state.postures)
-  // const [value, setValue] = useState('Awkward')
-  // const [inputValue, setInputValue] = useState('')
-  // const [open, setOpen] = useState(false)
 
-  // Find the selected posture based on the Autocomplete selection
-  // const selectedPosture = postures?.find((p) => p.english_name === cardPosture)
-  // setSelectedPosture(postures?.find((p) => p.english_name === cardPosture))
   const defaultPosture = postures?.find((p) => p.english_name === '')
   const router = useRouter()
 
@@ -37,8 +31,6 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
   }, [posturePropData])
 
   function handleClick() {
-    // send pose name to api/poses/?english_name=${pose_name}
-    // show asana practice view
     router.push(`../views/viewAsanaPractice/${selectedPosture?.english_name}/`)
   }
 
@@ -53,7 +45,17 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
 
   return (
     <>
-      <Stack spacing={2} sx={{ marginX: 3, background: 'white', mb: '1em' }}>
+      <Stack
+        spacing={2}
+        sx={{
+          marginX: 3,
+          background: 'white',
+          mb: '1em',
+          // alignItems: 'center',
+          // justifyContent: 'center',
+          width: '100%',
+        }}
+      >
         <Autocomplete
           id="search-poses"
           options={postures}
@@ -69,6 +71,9 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
           defaultValue={defaultPosture}
           autoSelect={true}
           onChange={handleChange}
+          sx={{
+            width: '100%',
+          }}
         />
         {/* 
         // unsuccessful attempt to clear input so entire list shows

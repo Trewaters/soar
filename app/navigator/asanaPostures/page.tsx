@@ -38,7 +38,7 @@ export default function Page() {
       <Box
         sx={{
           alignSelf: 'center',
-          mb: '16px',
+          pt: '16px',
         }}
       >
         <Image
@@ -48,43 +48,37 @@ export default function Page() {
           width={'430'}
         ></Image>
       </Box>
-      <Card
+      <Box
         sx={{
-          width: ['90vw', '100%'],
           alignSelf: 'center',
-          mb: '16px',
+          width: '50%',
         }}
       >
-        {/* <CardMedia
-          component="img"
-          height={'auto'}
-          // width={'auto'}
-          // image="/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png"
-          // alt="Asana Posture Search"
-          // sx={{
-          //   objectFit: 'cover',
-          //   backgroundSize: '50%',
-          //   backgroundPosition: 'center',
-          // }}
-        /> */}
-        {loading && <p>Loading Yoga Postures...</p>}
-        {error && <p>Error: {error}</p>}
-        <CardContent
+        <Card
           sx={{
-            position: 'absolute',
-            top: '200px',
-            width: '90%',
-            transform: 'translateX(0%)',
+            width: ['90vw', '90%'],
           }}
         >
-          {/* 
+          {loading && <p>Loading Yoga Postures...</p>}
+          {error && <p>Error: {error}</p>}
+          <CardContent
+            sx={{
+              position: 'absolute',
+              top: '300px',
+              // width: '430px',
+              maxwidth: '430px',
+              transform: 'translateX(0%)',
+            }}
+          >
+            {/* 
           Rewrite so there is more seperation of concerns. 
            1) PostureSearch should only be responsible for rendering the search bar and the list of postures.
            2) PostureSearch should return a value that is rendered in an Asana Card.
           */}
-          <PostureSearch posturePropData={posturePropData} />
-        </CardContent>
-      </Card>
+            <PostureSearch posturePropData={posturePropData} />
+          </CardContent>
+        </Card>
+      </Box>
       <Box sx={{ height: '100px', mt: '16px' }}>
         {state.postures.id !== 0 && (
           <PostureCard postureCardProp={state.postures} />
