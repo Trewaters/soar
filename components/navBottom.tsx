@@ -1,5 +1,5 @@
 'use client'
-import { IconButton, Toolbar } from '@mui/material'
+import { AppBar, IconButton, Toolbar } from '@mui/material'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
@@ -7,8 +7,19 @@ export default function NavBottom() {
   const router = useRouter()
   return (
     <>
-      <Toolbar
-        sx={{ backgroundColor: 'white', alignSelf: 'center', borderRadius: 2 }}
+      <AppBar
+        sx={{
+          backgroundColor: 'white',
+          alignSelf: 'center',
+          borderRadius: 2,
+          width: 'auto',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          bottom: '20px',
+          right: 'auto',
+          top: 'auto',
+          position: 'fixed',
+        }}
       >
         <IconButton
           disableRipple
@@ -44,7 +55,7 @@ export default function NavBottom() {
             height={20}
           />
         </IconButton> */}
-      </Toolbar>
+      </AppBar>
     </>
   )
 }
