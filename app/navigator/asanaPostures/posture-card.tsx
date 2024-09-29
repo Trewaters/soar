@@ -6,16 +6,30 @@ import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import Paper from '@mui/material/Paper'
 import Image from 'next/image'
-import { Checkbox, FormControlLabel, FormGroup } from '@mui/material'
-import { PostureCardFields, PostureData } from '@context/AsanaPostureContext'
+import {
+  ButtonGroup,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  IconButton,
+} from '@mui/material'
+import { PostureData } from '@context/AsanaPostureContext'
+import { FEATURES } from '@app/FEATURES'
+import { useRouter } from 'next/navigation'
+import yogaMatWoman from '@public/yogaMatWoman.svg'
 
 interface PostureCardProps {
-  // postcontext: PostureCardFields
   postureCardProp: PostureData
 }
 
 export default function PostureCard({ postureCardProp }: PostureCardProps) {
   const posture = postureCardProp
+  const router = useRouter()
+
+  function handleClick() {
+    router.push(`../views/viewAsanaPractice/${posture?.english_name}/`)
+  }
+
   return (
     <Paper>
       <Card>
@@ -400,6 +414,22 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
           </Grid>
         </CardContent>
       </Card>
+      {posture && FEATURES.SHOW_PRACTICE_VIEW_ASANA && (
+        <ButtonGroup
+          variant="contained"
+          aria-label="Basic button group"
+          sx={{ m: 2 }}
+        >
+          <IconButton disableRipple onClick={handleClick}>
+            <Image
+              src={yogaMatWoman}
+              alt="practice view"
+              width={24}
+              height={24}
+            />
+          </IconButton>
+        </ButtonGroup>
+      )}
     </Paper>
   )
 }
