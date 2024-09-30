@@ -8,6 +8,8 @@ Found yoga poses [here](https://www.pocketyoga.com/pose/)
 
 ## Getting Started
 
+Looking for developers, testers, practitioners, and users.
+
 ### What the app should do?
 
 #### App Sections
