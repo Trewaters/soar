@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
 import { PostureData, useAsanaPosture } from '@context/AsanaPostureContext'
+import { useRouter } from 'next/navigation'
 
 interface PostureSearchProps {
   posturePropData: PostureData[]
@@ -13,6 +14,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
   const { state, dispatch } = useAsanaPosture()
   const [postures, setPostures] = useState<PostureData[]>(posturePropData)
   const [cardPosture, setcardPosture] = useState<string | null>()
+  const router = useRouter()
 
   const defaultPosture = postures?.find((p) => p.english_name === '')
 
@@ -27,6 +29,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
     dispatch({ type: 'SET_POSTURES', payload: value ?? state.postures })
 
     setcardPosture(value?.english_name || '')
+    router.push(`../navigator/asanaPostures/${value?.english_name}/`)
   }
 
   return (

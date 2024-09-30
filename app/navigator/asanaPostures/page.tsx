@@ -79,11 +79,11 @@ export default function Page() {
           </CardContent>
         </Card>
       </Box>
-      <Box sx={{ height: '100px', mt: '16px' }}>
+      {/* <Box sx={{ height: '100px', mt: '16px' }}>
         {state.postures.id !== 0 && (
           <PostureCard postureCardProp={state.postures} />
         )}
-      </Box>
+      </Box> */}
       <NavBottom />
 
       {/* <Box sx={{ height: '100px', mt: '16px' }}>
