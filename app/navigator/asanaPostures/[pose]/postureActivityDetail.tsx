@@ -7,6 +7,7 @@ import CardMedia from '@mui/material/CardMedia'
 import Paper from '@mui/material/Paper'
 import Image from 'next/image'
 import {
+  Box,
   ButtonGroup,
   Checkbox,
   FormControlLabel,
@@ -37,131 +38,117 @@ export default function PostureActivityDetail({
   }
 
   return (
-    <Paper>
-      <Card>
-        <CardHeader
+    <Paper
+      sx={{
+        mt: '-2.2px',
+      }}
+    >
+      <Box
+        sx={{
+          textAlign: 'center',
+          backgroundImage: `url('/icons/designImages/asana-back-pattern 1.svg')`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          alignContent: 'space-around',
+          display: 'flex',
+          flexDirection: 'column',
+          pb: 4,
+        }}
+      >
+        <Image
+          alt="Asana Standing"
+          height={36}
+          width={36}
+          src={'/icons/designImages/asana-standing.svg'}
+        ></Image>
+        <Typography variant="h1" component={'h2'}>
+          {posture?.english_name}
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          component={'h3'}
           sx={{
-            textAlign: 'center',
-            backgroundColor: 'primary.main',
-            padding: 3,
-            marginBottom: 2,
-            display: 'flex',
-
-            '& .MuiCardHeader-title': {
-              fontWeight: 'bold',
-            },
-            '& .MuiCardHeader-subheader': {
-              fontWeight: 'light',
-              color: 'primary.contrastText',
-            },
+            mx: '40%',
+            color: 'primary.contrastText',
+            border: '1px solid black',
+            borderRadius: '8px',
+            backgroundColor: 'info.contrastText',
           }}
-          avatar={
-            <Image
-              alt="Asana Standing"
-              height={36}
-              width={36}
-              src={'/icons/designImages/asana-standing.svg'}
-            ></Image>
-          }
-          title={posture?.english_name}
-          titleTypographyProps={{
-            variant: 'h1',
-            component: 'h2',
-            sx: { color: 'primary.contrastText' },
-          }}
-          subheader={posture?.category}
-          subheaderTypographyProps={{
-            variant: 'subtitle1',
-            component: 'h3',
-            sx: {
-              mx: '40%',
-              color: 'primary.contrastText',
-              border: '1px solid black',
-              borderRadius: '8px',
-              backgroundColor: 'info.contrastText',
-            },
-          }}
-        />
-        <CardMedia sx={{ width: '50%', margin: 'auto' }}>
-          {/* <Image
-            src="/resized-posture card - generic.jpg"
-            alt="Yoga Posture Image"
-            width={500}
-            height={500}
-            layout="responsive"
-          /> */}
-        </CardMedia>
-        <CardContent sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Stack direction={'column'}>
-            <AsanaDetails
-              details={posture?.description}
-              label="Description"
-              sx={{ mb: '32px' }}
-            />
-            <AsanaDetails
-              details={
-                posture?.sanskrit_names?.[0]?.simplified ??
-                'Sanskrit Name not-found'
-              }
-              label="Sanskrit Name"
-              sx={{ mb: '32px' }}
-            />
-            <AsanaDetails
-              details={posture?.posture_meaning ?? 'Feel into the asana.'}
-              label="Meaning of Posture"
-              sx={{ mb: '32px' }}
-            />
-            <AsanaDetails
-              details={posture?.benefits}
-              label="Benefits"
-              sx={{ mb: '32px' }}
-            />
-            <AsanaDetails
-              details={posture?.breath ?? 'Inhale/Exhale'}
-              label="Breath (default)"
-              sx={{ mb: '32px' }}
-            />
-            <AsanaDetails
-              details={posture?.dristi ?? 'optimal gaze'}
-              label="Dristi"
-              sx={{ mb: '32px' }}
-            />
-            <AsanaDetails
-              details={posture?.difficulty}
-              label="Difficulty"
-              sx={{ mb: '32px' }}
-            />
-            <AsanaDetails
-              details={`${posture?.category}, ${posture?.subcategory}`}
-              label="Category"
-              sx={{ mb: '32px' }}
-            />
-            <AsanaDetails
-              details={posture?.dristi ?? 'optimal gaze'}
-              label="Activities"
-              sx={{ mb: '32px' }}
-            />
-            <Typography
-              variant="body1"
-              sx={{
-                padding: 4,
-                marginTop: 2,
-                borderTopRightRadius: { xs: 0, sm: 75 },
-                borderBottomRightRadius: { xs: 0, sm: 75 },
-              }}
-            >
-              <FormGroup>
-                <FormControlLabel
-                  control={<Checkbox defaultChecked />}
-                  label="Completed"
-                />
-                <FormControlLabel control={<Checkbox />} label="Easy" />
-                <FormControlLabel control={<Checkbox />} label="Difficult" />
-              </FormGroup>
-            </Typography>
-          </Stack>
-        </CardContent>
-      </Card>
+        >
+          {posture?.category}
+        </Typography>
+      </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', mt: 3 }}>
+        <Stack direction={'column'}>
+          <AsanaDetails
+            details={posture?.description}
+            label="Description"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={
+              posture?.sanskrit_names?.[0]?.simplified ??
+              'Sanskrit Name not-found'
+            }
+            label="Sanskrit Name"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={posture?.posture_meaning ?? 'Feel into the asana.'}
+            label="Meaning of Posture"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={posture?.benefits}
+            label="Benefits"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={posture?.breath ?? 'Inhale/Exhale'}
+            label="Breath (default)"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={posture?.dristi ?? 'optimal gaze'}
+            label="Dristi"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={posture?.difficulty}
+            label="Difficulty"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={`${posture?.category}, ${posture?.subcategory}`}
+            label="Category"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={posture?.dristi ?? 'optimal gaze'}
+            label="Activities"
+            sx={{ mb: '32px' }}
+          />
+          <Typography
+            variant="body1"
+            sx={{
+              padding: 4,
+              marginTop: 2,
+              borderTopRightRadius: { xs: 0, sm: 75 },
+              borderBottomRightRadius: { xs: 0, sm: 75 },
+            }}
+          >
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox defaultChecked />}
+                label="Completed"
+              />
+              <FormControlLabel control={<Checkbox />} label="Easy" />
+              <FormControlLabel control={<Checkbox />} label="Difficult" />
+            </FormGroup>
+          </Typography>
+        </Stack>
+      </Box>
       {posture && FEATURES.SHOW_PRACTICE_VIEW_ASANA && (
         <ButtonGroup
           variant="contained"

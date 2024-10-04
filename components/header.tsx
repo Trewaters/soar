@@ -130,7 +130,7 @@ export default function Header() {
     <AppBar
       position="static"
       sx={{
-        marginBottom: 4,
+        // marginBottom: 4,
         borderBottomLeftRadius: 16,
         borderBottomRightRadius: 16,
         pr: 2,
