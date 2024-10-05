@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
 import NavBottom from '@serverComponents/navBottom'
-import { Card, CardContent, Box } from '@mui/material'
+import { Card, CardContent, Box, CircularProgress } from '@mui/material'
 import Image from 'next/image'
 import { PostureData, useAsanaPosture } from '@context/AsanaPostureContext'
 import PostureCard from './posture-card'
@@ -59,8 +59,6 @@ export default function Page() {
             width: ['90vw', '90%'],
           }}
         >
-          {loading && <p>Loading Yoga Postures...</p>}
-          {error && <p>Error: {error}</p>}
           <CardContent
             sx={{
               position: 'absolute',
@@ -78,6 +76,10 @@ export default function Page() {
             <PostureSearch posturePropData={posturePropData} />
           </CardContent>
         </Card>
+        {loading && (
+          <CircularProgress sx={{ backgroundColor: 'transparent' }} />
+        )}
+        {error && <p>Error: {error}</p>}
       </Box>
       {/* <Box sx={{ height: '100px', mt: '16px' }}>
         {state.postures.id !== 0 && (

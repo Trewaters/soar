@@ -128,12 +128,20 @@ export default function PostureActivityDetail({
           </Stack>
         </Stack>
       </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', mt: 3 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          mt: 3,
+        }}
+      >
         <Stack direction={'column'}>
           <AsanaDetails
             details={posture?.description}
             label="Description"
-            sx={{ mb: '32px' }}
+            sx={{
+              mb: '32px',
+            }}
           />
           <AsanaDetails
             details={
