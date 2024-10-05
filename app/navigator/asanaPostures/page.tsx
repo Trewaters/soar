@@ -84,7 +84,6 @@ export default function Page() {
           <PostureCard postureCardProp={state.postures} />
         )}
       </Box> */}
-      <NavBottom />
 
       {/* <Box sx={{ height: '100px', mt: '16px' }}>
         <Box textAlign={'center'}>

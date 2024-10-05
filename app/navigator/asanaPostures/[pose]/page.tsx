@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { PostureData } from '@app/context/AsanaPostureContext'
 import PostureActivityDetail from './postureActivityDetail'
+import { Box } from '@mui/material'
 
 export default function Page({ params }: { params: { pose: string } }) {
   const [viewPose, setViewPose] = useState<PostureData>({} as PostureData)
@@ -16,9 +17,14 @@ export default function Page({ params }: { params: { pose: string } }) {
     getViewPose()
   }, [params.pose])
   return (
-    <>
+    <Box
+      sx={{
+        pb: '60px',
+      }}
+    >
+      {/* removed the older posture card. Call it layout 1. My original attempt. */}
       {/* <PostureCard postureCardProp={viewPose} /> */}
       <PostureActivityDetail postureCardProp={viewPose} />
-    </>
+    </Box>
   )
 }

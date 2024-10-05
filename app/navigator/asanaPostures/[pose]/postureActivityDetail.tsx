@@ -15,6 +15,7 @@ import {
   Icon,
   IconButton,
   Stack,
+  SvgIcon,
 } from '@mui/material'
 import { PostureData } from '@context/AsanaPostureContext'
 import { FEATURES } from '@app/FEATURES'
@@ -56,28 +57,75 @@ export default function PostureActivityDetail({
           pb: 4,
         }}
       >
-        <Image
-          alt="Asana Standing"
-          height={36}
-          width={36}
-          src={'/icons/designImages/asana-standing.svg'}
-        ></Image>
-        <Typography variant="h1" component={'h2'}>
-          {posture?.english_name}
-        </Typography>
-        <Typography
-          variant="subtitle1"
-          component={'h3'}
-          sx={{
-            mx: '40%',
-            color: 'primary.contrastText',
-            border: '1px solid black',
-            borderRadius: '8px',
-            backgroundColor: 'info.contrastText',
-          }}
-        >
-          {posture?.category}
-        </Typography>
+        <Stack direction={'column'} alignSelf={'center'}>
+          <Stack>
+            <Paper
+              elevation={1}
+              sx={{
+                borderRadius: '16px',
+                backgroundColor: 'info.contrastText',
+                mt: 3,
+                mb: '-24px',
+                mx: '25%',
+                zIndex: 1,
+              }}
+            >
+              <Box
+                sx={{
+                  borderRadius: '16px',
+                  height: '50%',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  px: 2,
+                  py: 1,
+                }}
+                justifyContent={'space-around'}
+                alignItems={'center'}
+              >
+                <Image
+                  alt="Asana Standing"
+                  height={36}
+                  width={36}
+                  style={{
+                    alignContent: 'center',
+                    // color: 'success.main',
+                    // color: 'white',
+                  }}
+                  src={'/icons/designImages/asana-standing.svg'}
+                ></Image>
+                <Typography
+                  variant="h4"
+                  component={'p'}
+                  sx={{ color: 'secondary.contrastText' }}
+                >
+                  {posture?.category}
+                </Typography>
+              </Box>
+            </Paper>
+          </Stack>
+          <Stack>
+            <Typography
+              variant="h1"
+              component={'h2'}
+              sx={{
+                pl: 2,
+                pt: 2,
+                height: '200px',
+                width: '400px',
+                backgroundColor: 'info.contrastText',
+                color: 'primary.main',
+                borderRadius: '12px',
+                alignContent: 'center',
+              }}
+            >
+              {posture?.english_name}
+              <br />
+              <Typography variant="subtitle1" component={'p'}>
+                {posture?.alternate_english_name}
+              </Typography>
+            </Typography>
+          </Stack>
+        </Stack>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', mt: 3 }}>
         <Stack direction={'column'}>

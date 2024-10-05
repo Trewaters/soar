@@ -1,5 +1,14 @@
+import { Box } from '@mui/material'
+import NavBottom from '@serverComponents/navBottom'
 import React, { ReactNode } from 'react'
 
 export default function AsanaLayout({ children }: { children: ReactNode }) {
-  return <>{children}</>
+  return (
+    <>
+      <main>{children}</main>
+      <nav>
+        <NavBottom />
+      </nav>
+    </>
+  )
 }
