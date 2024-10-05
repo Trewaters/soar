@@ -5,11 +5,13 @@ declare module '@mui/material/styles' {
   // eslint-disable-next-line no-unused-vars
   interface TypographyVariants {
     label: CSSProperties
+    splashTitle: CSSProperties
   }
 
   // eslint-disable-next-line no-unused-vars
   interface TypographyVariantsOptions {
     label?: CSSProperties
+    splashTitle?: CSSProperties
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -22,6 +24,7 @@ declare module '@mui/material/Typography' {
   // eslint-disable-next-line no-unused-vars
   interface TypographyPropsVariantOverrides {
     label: true
+    splashTitle: true
   }
 }
 
@@ -124,7 +127,13 @@ export const theme = createTheme({
     subtitle2: { fontSize: '1.05rem' },
     overline: { fontSize: '0.9rem' },
     caption: { fontSize: '0.9rem' },
-    label: { fontSize: '1.8rem', fontFamily: ['Lato', 'sans-serif'].join(',') },
+    label: { fontSize: '1.8rem' },
+    splashTitle: {
+      fontSize: '6rem',
+      fontWeight: '900',
+      letterSpacing: '0.1rem',
+      wordSpacing: '0.1rem',
+    },
   },
   components: {
     // Name of the component

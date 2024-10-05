@@ -1,4 +1,3 @@
-import { Box } from '@mui/material'
 import NavBottom from '@serverComponents/navBottom'
 import React, { ReactNode } from 'react'
 

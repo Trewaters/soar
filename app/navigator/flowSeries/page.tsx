@@ -6,6 +6,7 @@ import HexagonIcon from '@mui/icons-material/Hexagon'
 import HiveIcon from '@mui/icons-material/Hive'
 import warrior1 from '@public/warrior one-icon.svg'
 import Image from 'next/image'
+import SplashHeader from '@app/clientComponents/splash-header'
 
 // import { Router } from 'next/router'
 
@@ -63,9 +64,11 @@ export default function Page() {
         alignItems: 'center',
       }}
     >
-      <Typography variant="h2" align="center">
-        Flows
-      </Typography>
+      <SplashHeader
+        src={'/icons/designImages/splash-flows.png'}
+        alt={'Flows'}
+        title="Flows"
+      />
 
       <Stack spacing={5} alignItems={'center'} sx={{ mt: 4, width: '50%' }}>
         <Typography variant="body2" sx={{ width: '50%' }}>

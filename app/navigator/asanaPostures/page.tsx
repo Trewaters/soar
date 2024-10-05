@@ -6,6 +6,7 @@ import { Card, CardContent, Box, CircularProgress } from '@mui/material'
 import Image from 'next/image'
 import { PostureData, useAsanaPosture } from '@context/AsanaPostureContext'
 import PostureCard from './posture-card'
+import SplashHeader from '@app/clientComponents/splash-header'
 
 export default function Page() {
   const { state } = useAsanaPosture()
@@ -35,47 +36,22 @@ export default function Page() {
 
   return (
     <Box display={'flex'} flexDirection={'column'}>
+      <SplashHeader
+        src={
+          '/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png'
+        }
+        alt={'Asana Posture Search'}
+        title="Asanas"
+      />
       <Box
         sx={{
           alignSelf: 'center',
-          pt: '16px',
+          width: 'auto',
+          position: 'relative',
+          bottom: '141px',
         }}
       >
-        <Image
-          src="/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png"
-          alt="Asana Posture Search"
-          height={'355'}
-          width={'430'}
-        ></Image>
-      </Box>
-      <Box
-        sx={{
-          alignSelf: 'center',
-          width: '50%',
-        }}
-      >
-        <Card
-          sx={{
-            width: ['90vw', '90%'],
-          }}
-        >
-          <CardContent
-            sx={{
-              position: 'absolute',
-              top: '300px',
-              // width: '430px',
-              maxwidth: '430px',
-              transform: 'translateX(0%)',
-            }}
-          >
-            {/* 
-          Rewrite so there is more seperation of concerns. 
-           1) PostureSearch should only be responsible for rendering the search bar and the list of postures.
-           2) PostureSearch should return a value that is rendered in an Asana Card.
-          */}
-            <PostureSearch posturePropData={posturePropData} />
-          </CardContent>
-        </Card>
+        <PostureSearch posturePropData={posturePropData} />
         {loading && (
           <CircularProgress sx={{ backgroundColor: 'transparent' }} />
         )}
