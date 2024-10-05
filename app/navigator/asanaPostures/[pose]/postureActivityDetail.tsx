@@ -77,7 +77,7 @@ export default function PostureActivityDetail({
                   height: '50%',
                   display: 'flex',
                   flexDirection: 'row',
-                  px: 2,
+                  px: 4,
                   py: 1,
                 }}
                 justifyContent={'space-around'}
@@ -89,13 +89,11 @@ export default function PostureActivityDetail({
                   width={36}
                   style={{
                     alignContent: 'center',
-                    // color: 'success.main',
-                    // color: 'white',
                   }}
                   src={'/icons/designImages/asana-standing.svg'}
                 ></Image>
                 <Typography
-                  variant="h4"
+                  variant="h5"
                   component={'p'}
                   sx={{ color: 'secondary.contrastText' }}
                 >
@@ -121,7 +119,11 @@ export default function PostureActivityDetail({
             >
               {posture?.english_name}
               <br />
-              <Typography variant="subtitle1" component={'p'}>
+              <Typography
+                variant="subtitle1"
+                component={'p'}
+                color={'primary.contrastText'}
+              >
                 {posture?.alternate_english_name}
               </Typography>
             </Typography>
