@@ -10,6 +10,7 @@ import {
   Box,
   ButtonGroup,
   Checkbox,
+  Chip,
   FormControlLabel,
   FormGroup,
   Icon,
@@ -177,24 +178,38 @@ export default function PostureActivityDetail({
             label="Activities"
             sx={{ mb: '32px' }}
           />
-          <Typography
+          <Stack
+            flexDirection={'row'}
+            gap={2}
+            sx={{
+              ml: { xs: 2, md: '23%' },
+            }}
+          >
+            <Stack>
+              <Chip label="Completed" variant="outlined" />
+            </Stack>
+            <Stack>
+              <Chip label="Easy" variant="outlined" />
+            </Stack>
+            <Stack>
+              <Chip label="Difficult" />
+            </Stack>
+          </Stack>
+          {/* <Typography
             variant="body1"
             sx={{
               padding: 4,
               marginTop: 2,
               borderTopRightRadius: { xs: 0, sm: 75 },
               borderBottomRightRadius: { xs: 0, sm: 75 },
+              ml: { xs: 0, md: '23%' },
             }}
           >
             <FormGroup>
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Completed"
-              />
-              <FormControlLabel control={<Checkbox />} label="Easy" />
+              <FormControlLabel control={<Checkbox />} label="" />
               <FormControlLabel control={<Checkbox />} label="Difficult" />
             </FormGroup>
-          </Typography>
+          </Typography> */}
         </Stack>
       </Box>
       {posture && FEATURES.SHOW_PRACTICE_VIEW_ASANA && (
