@@ -35,6 +35,47 @@ export default function PostureActivityDetail({
   const posture = postureCardProp
   const router = useRouter()
 
+  const getAsanaIconUrl = (category: string) => {
+    switch (category) {
+      case 'prone':
+        return '/icons/designImages/asana-standing.svg'
+      case 'standing':
+        return '/icons/designImages/asana-standing.svg'
+      case 'seated':
+        return '/icons/designImages/asana-supine.svg'
+      case 'supine':
+        return '/icons/designImages/asana-supine.svg'
+      case 'inverted':
+        return '/icons/designImages/asana-inverted.svg'
+      case 'arm_leg_support':
+        return '/icons/designImages/asana-inverted.svg'
+      case 'arm_balance_and_inversion':
+        return '/icons/designImages/asana-inverted.svg'
+      default:
+        return '/stick-tree-pose-400x400.png'
+    }
+  }
+  const getAsanaBackgroundUrl = (category: string) => {
+    switch (category) {
+      case 'prone':
+        return `url('/icons/designImages/asana-back-pattern 1.svg')`
+      case 'standing':
+        return `url('/icons/designImages/asana-back-pattern 1.svg')`
+      case 'seated':
+        return `url('/icons/designImages/asana-back-pattern 2.svg')`
+      case 'supine':
+        return `url('/icons/designImages/asana-back-pattern 2.svg')`
+      case 'inverted':
+        return `url('/icons/designImages/asana-back-pattern 3.svg')`
+      case 'arm_leg_support':
+        return `url('/icons/designImages/asana-back-pattern 3.svg')`
+      case 'arm_balance_and_inversion':
+        return `url('/icons/designImages/asana-back-pattern 3.svg')`
+      default:
+        return '/stick-tree-pose-400x400.png'
+    }
+  }
+
   function handleClick() {
     router.push(`../../views/viewAsanaPractice/${posture?.english_name}/`)
   }
@@ -48,7 +89,7 @@ export default function PostureActivityDetail({
       <Box
         sx={{
           textAlign: 'center',
-          backgroundImage: `url('/icons/designImages/asana-back-pattern 1.svg')`,
+          backgroundImage: `${getAsanaBackgroundUrl(posture?.category)}`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
@@ -90,7 +131,7 @@ export default function PostureActivityDetail({
                   style={{
                     alignContent: 'center',
                   }}
-                  src={'/icons/designImages/asana-standing.svg'}
+                  src={getAsanaIconUrl(posture?.category)}
                 ></Image>
                 <Typography
                   variant="h5"
@@ -118,14 +159,17 @@ export default function PostureActivityDetail({
               }}
             >
               {posture?.english_name}
-              <br />
-              <Typography
-                variant="subtitle1"
-                component={'p'}
-                color={'primary.contrastText'}
-              >
-                {posture?.alternate_english_name}
-              </Typography>
+
+              {(posture?.alternate_english_name || []).map((name) => (
+                <Typography
+                  variant="subtitle1"
+                  component={'p'}
+                  color={'primary.contrastText'}
+                  key={name}
+                >
+                  {name}
+                </Typography>
+              ))}
             </Typography>
           </Stack>
         </Stack>
