@@ -18,6 +18,10 @@ declare module '@mui/material/styles' {
   interface TypeBackground {
     helper: string
   }
+
+  interface PaletteOptions {
+    navSplash: PaletteOptions['primary']
+  }
 }
 
 declare module '@mui/material/Typography' {
@@ -72,6 +76,12 @@ export const theme = createTheme({
       light: '#60AD5E',
       dark: '#005005',
       contrastText: '#FFFFFF',
+    },
+    navSplash: {
+      main: '#185A77',
+      light: '#F6893D',
+      dark: '#004BA0',
+      contrastText: '#07020D',
     },
     background: {
       default: '#f0f0f0',

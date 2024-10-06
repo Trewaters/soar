@@ -1,6 +1,15 @@
 'use client'
 import { FEATURES } from '@app/FEATURES'
-import { Box, Button, Stack, Typography } from '@mui/material'
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Stack,
+  Typography,
+} from '@mui/material'
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement'
 import HexagonIcon from '@mui/icons-material/Hexagon'
 import HiveIcon from '@mui/icons-material/Hive'
@@ -54,15 +63,12 @@ export default function Page() {
   return (
     <Box
       sx={{
-        // Enables Flexbox
         display: 'flex',
-        // Stack children vertically
         flexDirection: 'column',
-        // Center content vertically
         justifyContent: 'center',
-        // Center content horizontally
         alignItems: 'center',
         mt: 4,
+        width: '100%',
       }}
     >
       <SplashHeader
@@ -70,66 +76,218 @@ export default function Page() {
         alt={'Flows'}
         title="Flows"
       />
+      <Box
+        sx={{
+          position: 'relative',
+          display: 'flex',
+          height: '260px',
+          width: '44%',
+          borderRadius: '8px',
+          border: '1px solid',
+          borderColor: 'primary.main',
+          alignItems: 'center',
+          overflow: 'hidden',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
 
-      <Stack spacing={5} alignItems={'center'} sx={{ mt: 4, width: '50%' }}>
-        <Typography variant="body2" sx={{ width: '50%' }}>
+          backgroundImage: `url('/icons/designImages/button-practice-series.png')`,
+          backgroundSize: 'contain',
+          backgroundPosition: 'top',
+          backgroundRepeat: 'no-repeat',
+          mb: 4,
+        }}
+      >
+        <Typography
+          variant="body1"
+          component={'h2'}
+          sx={{
+            color: 'navSplash.main',
+            alignSelf: 'start',
+            mt: 2,
+            mx: 4,
+            fontWeight: 'bold',
+          }}
+        >
           Series are made up of asana poses.
         </Typography>
         <Button
-          variant="contained"
+          // variant="text"
           href="/navigator/flowSeries/practiceSeries"
-          LinkComponent="a"
-          startIcon={<SelfImprovementIcon />}
-          // sx={{ width: '50%' }}
+          // startIcon={<SelfImprovementIcon />}
+          endIcon={
+            <SelfImprovementIcon style={{ height: '36px', width: '36px' }} />
+          }
+          sx={{
+            backgroundColor: 'info.contrastText',
+            // alignSelf: 'end',
+            // alignItems: 'center',
+            // justifyItems: 'start',
+            justifyContent: 'center',
+            // width: ['80vw', '80%'],
+            width: ['100vw', '100%'],
+          }}
         >
-          Practice Series
+          <Typography variant="h3">Practice Series</Typography>
         </Button>
-        {FEATURES.SHOW_CREATE_SERIES && (
-          <Button
-            variant="contained"
-            color="primary"
-            href="/navigator/flowSeries/createSeries"
-            LinkComponent="a"
-            startIcon={<HexagonIcon />}
-            // sx={{ width: '50%' }}
+      </Box>
+
+      {typeof window !== 'undefined' && FEATURES.SHOW_CREATE_SERIES && (
+        <Box
+          sx={{
+            position: 'relative',
+            display: 'flex',
+            height: '202px',
+            width: '44%',
+            borderRadius: '8px',
+            border: '1px solid',
+            borderColor: 'primary.main',
+            alignItems: 'center',
+            overflow: 'hidden',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+
+            backgroundImage: `url('/icons/designImages/beautiful-young-woman-practices-yoga-asana-garudas.png')`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'top',
+            backgroundRepeat: 'no-repeat',
+            mb: 4,
+          }}
+        >
+          <Typography
+            variant="body1"
+            component={'h2'}
+            sx={{
+              color: 'navSplash.main',
+              alignSelf: 'start',
+              mt: 2,
+              mx: 4,
+              fontWeight: 'bold',
+            }}
           >
-            Create Series
-          </Button>
-        )}
-        <Typography variant="body2" sx={{ width: '50%' }}>
-          Sequences can be up to an hour or more and are made up of Series.
-        </Typography>
-        {FEATURES.SHOW_PRACTICE_SEQUENCE && (
+            Create your own Series of asana poses.
+          </Typography>
           <Button
-            variant="contained"
-            LinkComponent="a"
-            href="/navigator/flowSeries/practiceSequences"
-            startIcon={
+            href="/navigator/flowSeries/createSeries"
+            endIcon={
               <Image
-                src={warrior1}
-                alt="warrior1 Icon"
-                width={24}
-                height={24}
+                src="/warrior one-icon.svg"
+                alt="practice series icon"
+                height={36}
+                width={36}
               />
             }
-            // sx={{ width: '50%' }}
+            sx={{
+              backgroundColor: 'info.contrastText',
+              justifyContent: 'center',
+              width: ['100vw', '100%'],
+            }}
           >
-            Practice Sequence
+            <Typography variant="h3">Create Series</Typography>
           </Button>
-        )}
-        {FEATURES.SHOW_CREATE_SEQUENCE && (
+        </Box>
+      )}
+
+      {typeof window !== 'undefined' && FEATURES.SHOW_PRACTICE_SEQUENCE && (
+        <Box
+          sx={{
+            position: 'relative',
+            display: 'flex',
+            height: '202px',
+            width: '44%',
+            borderRadius: '8px',
+            border: '1px solid',
+            borderColor: 'primary.main',
+            alignItems: 'center',
+            overflow: 'hidden',
+
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+
+            backgroundImage: `url('/icons/designImages/beautiful-young-woman-practices-yoga-asana.png')`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'top',
+            backgroundRepeat: 'no-repeat',
+            mb: 4,
+          }}
+        >
+          <Typography
+            variant="body1"
+            component={'h2'}
+            sx={{
+              color: 'navSplash.main',
+              alignSelf: 'start',
+              mt: 2,
+              ml: 4,
+              fontWeight: 'bold',
+            }}
+          >
+            Sequences are ordered series.
+          </Typography>
           <Button
-            variant="contained"
-            color="primary"
-            LinkComponent="a"
-            href="/navigator/flowSeries/createSequence"
-            startIcon={<HiveIcon />}
-            // sx={{ width: '50%' }}
+            href="/navigator/flowSeries/practiceSequences"
+            endIcon={<HexagonIcon style={{ height: '36px', width: '36px' }} />}
+            sx={{
+              backgroundColor: 'info.contrastText',
+              justifyContent: 'center',
+              width: ['100vw', '100%'],
+            }}
           >
-            Create Sequence
+            <Typography variant="h3" noWrap>
+              Practice Sequence
+            </Typography>
           </Button>
-        )}
-      </Stack>
+        </Box>
+      )}
+
+      {typeof window !== 'undefined' && FEATURES.SHOW_CREATE_SEQUENCE && (
+        <Box
+          sx={{
+            position: 'relative',
+            display: 'flex',
+            height: '202px',
+            width: '44%',
+            borderRadius: '8px',
+            border: '1px solid',
+            borderColor: 'primary.main',
+            alignItems: 'center',
+            overflow: 'hidden',
+
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+
+            backgroundImage: `url('/icons/designImages/beautiful-young-woman-practices-yoga-create-sequence.png')`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'top',
+            backgroundRepeat: 'no-repeat',
+            mb: 4,
+          }}
+        >
+          <Typography
+            variant="h3"
+            component={'h2'}
+            sx={{
+              color: 'navSplash.main',
+              alignSelf: 'start',
+              mt: 2,
+              ml: 4,
+            }}
+          >
+            Create your Sequences.
+          </Typography>
+          <Button
+            // variant="text"
+            href="/navigator/flowSeries/createSequence"
+            endIcon={<HiveIcon style={{ height: '36px', width: '36px' }} />}
+            sx={{
+              backgroundColor: 'info.contrastText',
+              justifyContent: 'center',
+              width: ['100vw', '100%'],
+            }}
+          >
+            <Typography variant="h3">Create Sequence</Typography>
+          </Button>
+        </Box>
+      )}
     </Box>
   )
 }
