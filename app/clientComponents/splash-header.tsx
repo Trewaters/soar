@@ -10,8 +10,9 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
   return (
     <Box
       sx={{
-        alignSelf: 'center',
+        display: 'contents',
         pt: '16px',
+        // mr: '200px',
       }}
     >
       <Image
@@ -19,15 +20,18 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
         alt={props.alt}
         height={'355'}
         width={'430'}
+        style={{
+          display: 'flex',
+          alignSelf: 'center',
+        }}
       ></Image>
       <Typography
         variant="splashTitle"
         sx={{
           position: 'relative',
           bottom: '220px',
-          // left: '0px',
-          left: '20%',
-          // right: '360px',
+          display: 'flex',
+          alignSelf: 'center',
           color: 'primary.main',
           backgroundColor: 'rgba(128, 128, 128, 0.5)', // Gray with 80% opacity
           width: 'fit-content',
