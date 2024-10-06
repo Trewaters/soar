@@ -35,7 +35,7 @@ export default function Page() {
   }, [])
 
   return (
-    <Box display={'flex'} flexDirection={'column'}>
+    <Box display={'flex'} flexDirection={'column'} sx={{ mt: 4 }}>
       <SplashHeader
         src={
           '/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png'

@@ -1,8 +1,8 @@
 import { Box, Paper, Typography } from '@mui/material'
 import Image from 'next/image'
-import { ComponentProps } from 'react'
+import React from 'react'
 
-interface SplashHeaderProps extends ComponentProps<typeof Image> {
+interface SplashHeaderProps extends React.ComponentProps<typeof Image> {
   title: string
 }
 
@@ -11,8 +11,6 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
     <Box
       sx={{
         display: 'contents',
-        pt: '16px',
-        // mr: '200px',
       }}
     >
       <Image

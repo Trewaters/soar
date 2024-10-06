@@ -62,6 +62,7 @@ export default function Page() {
         justifyContent: 'center',
         // Center content horizontally
         alignItems: 'center',
+        mt: 4,
       }}
     >
       <SplashHeader
