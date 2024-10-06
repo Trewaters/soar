@@ -64,11 +64,7 @@ export default function Page() {
         alignItems: 'center',
       }}
     >
-      <SplashHeader
-        src={'/icons/designImages/splash-flows.png'}
-        alt={'Flows'}
-        title="Flows"
-      />
+      <SplashHeader src={''} alt={'Flows'} title="Flows" />
 
       <Stack spacing={5} alignItems={'center'} sx={{ mt: 4, width: '50%' }}>
         <Typography variant="body2" sx={{ width: '50%' }}>
