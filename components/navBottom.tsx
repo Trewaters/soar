@@ -3,7 +3,7 @@ import React, { AppBar, IconButton, Toolbar } from '@mui/material'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
-export default function NavBottom() {
+export default function NavBottom(props: { subRoute: string }) {
   const router = useRouter()
   return (
     <>
@@ -50,7 +50,7 @@ export default function NavBottom() {
         <IconButton
           disableRipple
           onClick={() => {
-            router.push('/navigator/asanaPostures')
+            router.push(props.subRoute)
           }}
         >
           <Image

@@ -6,7 +6,7 @@ export default function AsanaLayout({ children }: { children: ReactNode }) {
     <>
       <main>{children}</main>
       <nav>
-        <NavBottom />
+        <NavBottom subRoute="/navigator/asanaPostures" />
       </nav>
     </>
   )
