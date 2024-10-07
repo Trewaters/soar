@@ -94,7 +94,7 @@ export default function Page() {
           position: 'relative',
           display: 'flex',
           height: '202px',
-          width: '390px',
+          width: '381px',
           borderRadius: '8px',
           border: '1px solid',
           borderColor: 'primary.main',
