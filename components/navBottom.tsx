@@ -10,15 +10,12 @@ export default function NavBottom(props: { subRoute: string }) {
       <AppBar
         sx={{
           backgroundColor: 'white',
-          alignSelf: 'center',
           borderRadius: 2,
-          width: 'auto',
+          width: '100%',
           flexDirection: 'row',
+          display: 'flex',
           justifyContent: 'center',
-          bottom: '20px',
-          right: 'auto',
-          top: 'auto',
-          position: 'fixed',
+          position: 'relative',
         }}
       >
         <IconButton

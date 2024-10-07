@@ -1,11 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
-import NavBottom from '@serverComponents/navBottom'
 import { Card, CardContent, Box, CircularProgress } from '@mui/material'
-import Image from 'next/image'
 import { PostureData, useAsanaPosture } from '@context/AsanaPostureContext'
-import PostureCard from './posture-card'
 import SplashHeader from '@app/clientComponents/splash-header'
 
 export default function Page() {
