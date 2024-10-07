@@ -76,10 +76,15 @@ export default function Page() {
           sx={{
             backgroundColor: 'info.contrastText',
             justifyContent: 'center',
-            width: ['100vw', '100%'],
+            width: '100%',
+            whiteSpace: 'normal',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
           }}
         >
-          <Typography variant="h3">Practice Series</Typography>
+          <Typography variant="h6" sx={{ whiteSpace: 'normal' }}>
+            Practice Series
+          </Typography>
         </Button>
       </Box>
 
@@ -137,10 +142,15 @@ export default function Page() {
           sx={{
             backgroundColor: 'info.contrastText',
             justifyContent: 'center',
-            width: ['100vw', '100%'],
+            width: '100%',
+            whiteSpace: 'normal',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
           }}
         >
-          <Typography variant="h3">Create Series</Typography>
+          <Typography variant="h6" sx={{ whiteSpace: 'normal' }}>
+            Create Series
+          </Typography>
         </Button>
       </Box>
 
@@ -185,10 +195,13 @@ export default function Page() {
           sx={{
             backgroundColor: 'info.contrastText',
             justifyContent: 'center',
-            width: ['100vw', '100%'],
+            width: '100%',
+            whiteSpace: 'normal',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
           }}
         >
-          <Typography variant="h3" noWrap>
+          <Typography variant="h6" sx={{ whiteSpace: 'normal' }}>
             Practice Sequence
           </Typography>
         </Button>
@@ -242,10 +255,15 @@ export default function Page() {
           sx={{
             backgroundColor: 'info.contrastText',
             justifyContent: 'center',
-            width: ['100vw', '100%'],
+            width: '100%',
+            whiteSpace: 'normal',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
           }}
         >
-          <Typography variant="h3">Create Sequence</Typography>
+          <Typography variant="h6" sx={{ whiteSpace: 'normal' }}>
+            Create Sequence
+          </Typography>
         </Button>
       </Box>
     </Box>
