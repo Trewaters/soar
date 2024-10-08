@@ -65,7 +65,7 @@ export default function Page() {
           <Image
             alt="Asana Posture Search"
             height={355 * 1.5}
-            width={430 * 1.5}
+            width={384 * 1.5}
             src={
               '/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png'
             }

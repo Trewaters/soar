@@ -17,7 +17,7 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
         src={props.src}
         alt={props.alt}
         height={'355'}
-        width={'430'}
+        width={'384'}
         style={{
           display: 'flex',
           alignSelf: 'center',

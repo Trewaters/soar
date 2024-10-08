@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react'
 export default function AsanaLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <main>{children}</main>
+      {children}
       <nav>
         <NavBottom subRoute="/navigator/asanaPostures" />
       </nav>

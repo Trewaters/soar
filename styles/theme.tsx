@@ -33,7 +33,8 @@ declare module '@mui/material/Typography' {
 }
 
 export const theme = createTheme({
-  breakpoints: { values: { xs: 0, sm: 600, md: 900, lg: 1200, xl: 1536 } },
+  // breakpoints: { values: { xs: 0, sm: 600, md: 900, lg: 1200, xl: 1536 } },
+  breakpoints: { values: { xs: 0, sm: 375, md: 768, lg: 1024, xl: 1536 } },
   spacing: [0, 4, 8, 16, 32, 40, 48, 64],
   palette: {
     // mode: 'light',
