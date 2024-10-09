@@ -39,7 +39,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
         marginX: 3,
         background: 'white',
         mb: '1em',
-        width: '40vw',
+        width: { xs: '90vw', md: '40vw' },
       }}
     >
       <Autocomplete
