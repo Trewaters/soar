@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
 import { PostureData, useAsanaPosture } from '@context/AsanaPostureContext'
 import { useRouter } from 'next/navigation'
+import SearchIcon from '@mui/icons-material/Search'
 
 interface PostureSearchProps {
   posturePropData: PostureData[]
@@ -40,6 +41,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
         background: 'white',
         mb: '1em',
         width: { xs: '90vw', md: '40vw' },
+        borderRadius: '13px',
       }}
     >
       <Autocomplete
@@ -52,11 +54,38 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
           </li>
         )}
         renderInput={(params) => (
-          <TextField {...params} label="Yoga Postures" />
+          <TextField
+            {...params}
+            // label="Yoga Postures"
+            placeholder="Search for a Yoga Posture"
+            InputProps={{
+              ...params.InputProps,
+              startAdornment: (
+                <>
+                  <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
+                  {params.InputProps.startAdornment}
+                </>
+              ),
+            }}
+          />
         )}
         defaultValue={defaultPosture}
         autoSelect={true}
         onChange={handleChange}
+        sx={{
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderRadius: '13px',
+            borderColor: 'primary.main',
+          },
+          // '& .MuiAutocomplete-startAdornment': {
+          //   backgroundImage:
+          //     'url("/icons/designImages/search-magnifying-glass.svg")',
+          //   backgroundSize: 'cover', // Adjust as needed
+          //   backgroundPosition: 'center', // Adjust as needed
+          //   width: '100px', // Adjust as needed
+          //   height: '100px', // Adjust as needed
+          // },
+        }}
       />
     </Stack>
   )
