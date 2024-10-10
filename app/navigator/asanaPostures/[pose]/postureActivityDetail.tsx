@@ -120,6 +120,7 @@ export default function PostureActivityDetail({
                   flexDirection: 'row',
                   px: 4,
                   py: 1,
+                  overflow: 'hidden', // Ensure the box does not overflow
                 }}
                 justifyContent={'space-around'}
                 alignItems={'center'}
@@ -136,7 +137,13 @@ export default function PostureActivityDetail({
                 <Typography
                   variant="h5"
                   component={'p'}
-                  sx={{ color: 'secondary.contrastText' }}
+                  sx={{
+                    color: 'secondary.contrastText',
+                    flexShrink: 1, // Prevent the text from growing beyond the container
+                    overflow: 'hidden', // Hide overflow text
+                    textOverflow: 'ellipsis', // Add ellipsis for overflow text
+                    whiteSpace: 'nowrap', // Prevent text from wrapping
+                  }}
                 >
                   {posture?.category}
                 </Typography>
@@ -156,6 +163,7 @@ export default function PostureActivityDetail({
                 color: 'primary.main',
                 borderRadius: '12px',
                 alignContent: 'center',
+                boxShadow: '0 2px 2px 2px rgba(211, 211, 211, 0.5)',
               }}
             >
               {posture?.english_name}
