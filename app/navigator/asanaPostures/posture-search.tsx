@@ -56,7 +56,6 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
         renderInput={(params) => (
           <TextField
             {...params}
-            // label="Yoga Postures"
             placeholder="Search for a Yoga Posture"
             InputProps={{
               ...params.InputProps,
@@ -76,15 +75,8 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
           '& .MuiOutlinedInput-notchedOutline': {
             borderRadius: '13px',
             borderColor: 'primary.main',
+            boxShadow: '0 2px 2px 2px gray',
           },
-          // '& .MuiAutocomplete-startAdornment': {
-          //   backgroundImage:
-          //     'url("/icons/designImages/search-magnifying-glass.svg")',
-          //   backgroundSize: 'cover', // Adjust as needed
-          //   backgroundPosition: 'center', // Adjust as needed
-          //   width: '100px', // Adjust as needed
-          //   height: '100px', // Adjust as needed
-          // },
         }}
       />
     </Stack>

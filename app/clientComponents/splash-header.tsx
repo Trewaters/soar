@@ -11,6 +11,7 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
     <Box
       sx={{
         display: 'contents',
+        // boxShadow: '0 2px 2px 2px gray',
       }}
     >
       <Image
@@ -21,6 +22,7 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
         style={{
           display: 'flex',
           alignSelf: 'center',
+          boxShadow: '0 2px 2px 2px gray',
         }}
       ></Image>
       <Typography

@@ -40,7 +40,7 @@ export default function Page() {
           height: '260px',
           // maxWidth: '100vw',
           // width: '80%',
-          width: '384px',
+          width: '372px',
           borderRadius: '8px',
           border: '1px solid',
           borderColor: 'primary.main',
@@ -54,6 +54,7 @@ export default function Page() {
           backgroundPosition: 'top',
           backgroundRepeat: 'no-repeat',
           mb: 4,
+          boxShadow: '0 2px 2px 2px gray',
         }}
       >
         <Typography
@@ -94,7 +95,7 @@ export default function Page() {
           position: 'relative',
           display: 'flex',
           height: '202px',
-          width: '381px',
+          width: '372px',
           borderRadius: '8px',
           border: '1px solid',
           borderColor: 'primary.main',
@@ -108,6 +109,7 @@ export default function Page() {
           backgroundPosition: 'top',
           backgroundRepeat: 'no-repeat',
           mb: 4,
+          boxShadow: '0 2px 2px 2px gray',
         }}
       >
         <Typography
@@ -160,7 +162,7 @@ export default function Page() {
           position: 'relative',
           display: 'flex',
           height: '202px',
-          width: '384px',
+          width: '372px',
           borderRadius: '8px',
           border: '1px solid',
           borderColor: 'primary.main',
@@ -175,6 +177,7 @@ export default function Page() {
           backgroundPosition: 'top',
           backgroundRepeat: 'no-repeat',
           mb: 4,
+          boxShadow: '0 2px 2px 2px gray',
         }}
       >
         <Typography
@@ -213,7 +216,7 @@ export default function Page() {
           position: 'relative',
           display: 'flex',
           height: '202px',
-          width: '384px',
+          width: '372px',
           borderRadius: '8px',
           border: '1px solid',
           borderColor: 'primary.main',
@@ -228,6 +231,7 @@ export default function Page() {
           backgroundPosition: 'top',
           backgroundRepeat: 'no-repeat',
           mb: 4,
+          boxShadow: '0 2px 2px 2px gray',
         }}
       >
         <Typography
