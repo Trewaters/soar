@@ -30,7 +30,7 @@ export default function Page() {
       }}
     >
       <SplashHeader
-        src={'/icons/designImages/splash-flows.png'}
+        src={'/icons/designImages/splash-flows-2.png'}
         alt={'Flows'}
         title="Flows"
       />
@@ -38,8 +38,6 @@ export default function Page() {
         sx={{
           display: 'flex',
           height: '260px',
-          // maxWidth: '100vw',
-          // width: '80%',
           width: '372px',
           borderRadius: '8px',
           border: '1px solid',
