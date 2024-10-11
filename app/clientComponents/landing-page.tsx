@@ -30,7 +30,7 @@ export default function LandingPage() {
                   }}
                   startIcon={link.icon}
                 >
-                  <Typography variant="button">{link.name}</Typography>
+                  <Typography variant="body1">{link.name}</Typography>
                 </Button>
               </Link>
             </React.Fragment>
