@@ -38,10 +38,6 @@ export const theme = createTheme({
   palette: {
     // mode: 'light',
     primary: {
-      /*  
-      color examples
-      https://www.color-hex.com/color/f6893d
-      */
       main: '#F6893D',
       light: '#FFBA6F',
       dark: '#C3581A',
@@ -78,9 +74,11 @@ export const theme = createTheme({
       contrastText: '#FFFFFF',
     },
     navSplash: {
+      // color for the splash header body text
       main: '#185A77',
-      light: '#F6893D',
-      dark: '#004BA0',
+      // used for the background of the splash header titles, '#F8F4F2' is 'rgba(248, 244, 242, 0.5)'
+      light: 'rgba(248, 244, 242, 0.5)',
+      dark: '#F8F4F2',
       contrastText: '#07020D',
     },
     background: {

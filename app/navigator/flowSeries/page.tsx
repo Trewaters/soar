@@ -16,8 +16,29 @@ import HiveIcon from '@mui/icons-material/Hive'
 import warrior1 from '@public/warrior one-icon.svg'
 import Image from 'next/image'
 import SplashHeader from '@app/clientComponents/splash-header'
+import { useRouter } from 'next/navigation'
+import SplashNavButton from '@app/clientComponents/splash-nav-button'
 
 export default function Page() {
+  const router = useRouter()
+
+  const handlePracticeSeriesClick = () => {
+    console.log('Splash button clicked')
+    router.push('/navigator/flowSeries/practiceSeries')
+  }
+  const handleCreateSeriesClick = () => {
+    console.log('Splash button clicked')
+    router.push('/navigator/flowSeries/createSeries')
+  }
+  const handlePracticeSequenceClick = () => {
+    console.log('Splash button clicked')
+    router.push('/navigator/flowSeries/practiceSequences')
+  }
+  const handleCreateSequenceClick = () => {
+    console.log('Splash button clicked')
+    router.push('/navigator/flowSeries/createSequence')
+  }
+
   return (
     <Box
       sx={{
@@ -34,241 +55,42 @@ export default function Page() {
         alt={'Flows'}
         title="Flows"
       />
-      <Box
+      <SplashNavButton
+        title="Practice Series"
+        description="Series are made up of asana poses."
         sx={{
-          display: 'flex',
-          height: '260px',
-          width: '372px',
-          borderRadius: '8px',
-          border: '1px solid',
-          borderColor: 'primary.main',
-          alignItems: 'center',
-          overflow: 'hidden',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-
-          backgroundImage: `url('/icons/designImages/button-practice-series.png')`,
-          backgroundSize: 'contain',
-          backgroundPosition: 'top',
-          backgroundRepeat: 'no-repeat',
-          mb: 4,
-          boxShadow: '0 2px 2px 2px gray',
+          backgroundImage:
+            "url('/icons/designImages/button-practice-series.png')",
         }}
-      >
-        <Typography
-          variant="body1"
-          component={'h2'}
-          sx={{
-            color: 'navSplash.main',
-            alignSelf: 'start',
-            mt: 2,
-            mx: 4,
-            fontWeight: 'bold',
-          }}
-        >
-          Series are made up of asana poses.
-        </Typography>
-        <Button
-          href="/navigator/flowSeries/practiceSeries"
-          endIcon={
-            <SelfImprovementIcon style={{ height: '36px', width: '36px' }} />
-          }
-          sx={{
-            backgroundColor: 'info.contrastText',
-            justifyContent: 'center',
-            width: '100%',
-            whiteSpace: 'normal',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          <Typography variant="h6" sx={{ whiteSpace: 'normal' }}>
-            Practice Series
-          </Typography>
-        </Button>
-      </Box>
-
-      <Box
+        onClick={handlePracticeSeriesClick}
+      />
+      <SplashNavButton
+        title="Create Series"
+        description="Create your own Series of asana poses."
         sx={{
-          position: 'relative',
-          display: 'flex',
-          height: '202px',
-          width: '372px',
-          borderRadius: '8px',
-          border: '1px solid',
-          borderColor: 'primary.main',
-          alignItems: 'center',
-          overflow: 'hidden',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-
-          backgroundImage: `url('/icons/designImages/beautiful-young-woman-practices-yoga-asana-garudas.png')`,
-          backgroundSize: 'contain',
-          backgroundPosition: 'top',
-          backgroundRepeat: 'no-repeat',
-          mb: 4,
-          boxShadow: '0 2px 2px 2px gray',
+          backgroundImage:
+            "url('/icons/designImages/beautiful-young-woman-practices-yoga-asana-garudas.png')",
         }}
-      >
-        <Typography
-          variant="body1"
-          component={'h2'}
-          sx={{
-            color: 'navSplash.main',
-            alignSelf: 'start',
-            mt: 2,
-            mx: 4,
-            fontWeight: 'bold',
-          }}
-        >
-          Create your own Series of asana poses.
-        </Typography>
-        <Image
-          src="/icons/subscription-star.svg"
-          alt="subscription icon"
-          height={36}
-          width={36}
-          style={{ position: 'relative', left: '132px', top: '15px' }}
-        />
-        <Button
-          href="/navigator/flowSeries/createSeries"
-          endIcon={
-            <Image
-              src="/warrior one-icon.svg"
-              alt="practice series icon"
-              height={36}
-              width={36}
-            />
-          }
-          sx={{
-            backgroundColor: 'info.contrastText',
-            justifyContent: 'center',
-            width: '100%',
-            whiteSpace: 'normal',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          <Typography variant="h6" sx={{ whiteSpace: 'normal' }}>
-            Create Series
-          </Typography>
-        </Button>
-      </Box>
-
-      <Box
+        onClick={handleCreateSeriesClick}
+      />
+      <SplashNavButton
+        title="Practice Sequence"
+        description="Sequences are ordered series."
         sx={{
-          position: 'relative',
-          display: 'flex',
-          height: '202px',
-          width: '372px',
-          borderRadius: '8px',
-          border: '1px solid',
-          borderColor: 'primary.main',
-          alignItems: 'center',
-          overflow: 'hidden',
-
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-
-          backgroundImage: `url('/icons/designImages/beautiful-young-woman-practices-yoga-asana.png')`,
-          backgroundSize: 'contain',
-          backgroundPosition: 'top',
-          backgroundRepeat: 'no-repeat',
-          mb: 4,
-          boxShadow: '0 2px 2px 2px gray',
+          backgroundImage:
+            "url('/icons/designImages/beautiful-young-woman-practices-yoga-asana.png')",
         }}
-      >
-        <Typography
-          variant="body1"
-          component={'h2'}
-          sx={{
-            color: 'navSplash.main',
-            alignSelf: 'start',
-            mt: 2,
-            ml: 4,
-            fontWeight: 'bold',
-          }}
-        >
-          Sequences are ordered series.
-        </Typography>
-        <Button
-          href="/navigator/flowSeries/practiceSequences"
-          endIcon={<HexagonIcon style={{ height: '36px', width: '36px' }} />}
-          sx={{
-            backgroundColor: 'info.contrastText',
-            justifyContent: 'center',
-            width: '100%',
-            whiteSpace: 'normal',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          <Typography variant="h6" sx={{ whiteSpace: 'normal' }}>
-            Practice Sequence
-          </Typography>
-        </Button>
-      </Box>
-
-      <Box
+        onClick={handlePracticeSequenceClick}
+      />
+      <SplashNavButton
+        title="Create Sequence"
+        description="Create your Sequences."
         sx={{
-          position: 'relative',
-          display: 'flex',
-          height: '202px',
-          width: '372px',
-          borderRadius: '8px',
-          border: '1px solid',
-          borderColor: 'primary.main',
-          alignItems: 'center',
-          overflow: 'hidden',
-
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-
-          backgroundImage: `url('/icons/designImages/beautiful-young-woman-practices-yoga-create-sequence.png')`,
-          backgroundSize: 'contain',
-          backgroundPosition: 'top',
-          backgroundRepeat: 'no-repeat',
-          mb: 4,
-          boxShadow: '0 2px 2px 2px gray',
+          backgroundImage:
+            "url('/icons/designImages/beautiful-young-woman-practices-yoga-create-sequence.png')",
         }}
-      >
-        <Typography
-          variant="body1"
-          component={'h2'}
-          sx={{
-            color: 'navSplash.main',
-            alignSelf: 'start',
-            mt: 2,
-            ml: 4,
-            fontWeight: 'bold',
-          }}
-        >
-          Create your Sequences.
-        </Typography>
-        <Image
-          src="/icons/subscription-star.svg"
-          alt="subscription icon"
-          height={36}
-          width={36}
-          style={{ position: 'relative', left: '132px', top: '15px' }}
-        />
-        <Button
-          href="/navigator/flowSeries/createSequence"
-          endIcon={<HiveIcon style={{ height: '36px', width: '36px' }} />}
-          sx={{
-            backgroundColor: 'info.contrastText',
-            justifyContent: 'center',
-            width: '100%',
-            whiteSpace: 'normal',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          <Typography variant="h6" sx={{ whiteSpace: 'normal' }}>
-            Create Sequence
-          </Typography>
-        </Button>
-      </Box>
+        onClick={handleCreateSequenceClick}
+      />
     </Box>
   )
 }

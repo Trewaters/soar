@@ -33,7 +33,7 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
           display: 'flex',
           alignSelf: 'center',
           color: 'primary.main',
-          backgroundColor: 'rgba(128, 128, 128, 0.5)', // Gray with 80% opacity
+          backgroundColor: 'navSplash.light',
           width: 'fit-content',
           padding: '8px',
           borderRadius: '8px',
