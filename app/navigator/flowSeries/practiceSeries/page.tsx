@@ -13,6 +13,7 @@ import {
 } from '@mui/material'
 import Image from 'next/image'
 import { ChangeEvent, useEffect, useState } from 'react'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 // export const getServerSideProps: GetServerSideProps = async () => {
 //   const baseUrl =
@@ -71,11 +72,12 @@ export default function Page() {
       </Typography>
       <Stack direction={'column'} justifyContent={'space-between'}>
         <Button
-          variant="outlined"
+          variant="text"
           href="/navigator/flowSeries"
-          // component="a"
           LinkComponent="a"
-          sx={{ my: 3 }}
+          sx={{ my: 3, alignSelf: 'flex-start' }}
+          startIcon={<ArrowBackIcon />}
+          disableRipple
         >
           Back to flow
         </Button>
