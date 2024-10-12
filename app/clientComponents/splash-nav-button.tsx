@@ -30,6 +30,11 @@ export default function SplashNavButton({
         backgroundRepeat: 'no-repeat',
         mb: 4,
         boxShadow: '0 2px 2px 2px gray',
+        ':hover': {
+          cursor: 'pointer',
+          borderColor: 'primary.main',
+          boxShadow: '0 2px 2px 2px #F6893D',
+        },
       }}
       onClick={props.onClick}
     >
