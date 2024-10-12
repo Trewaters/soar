@@ -1,5 +1,5 @@
 'use client'
-import React, { AppBar, IconButton, Stack, Toolbar } from '@mui/material'
+import React, { AppBar, IconButton } from '@mui/material'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 

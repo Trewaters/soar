@@ -41,7 +41,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
         background: 'white',
         mb: '1em',
         width: { xs: '90vw', md: '40vw' },
-        borderRadius: '13px',
+        borderRadius: '12px',
       }}
     >
       <Autocomplete
@@ -73,7 +73,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
         onChange={handleChange}
         sx={{
           '& .MuiOutlinedInput-notchedOutline': {
-            borderRadius: '13px',
+            borderRadius: '12px',
             borderColor: 'primary.main',
             boxShadow: '0 2px 2px 2px gray',
           },
