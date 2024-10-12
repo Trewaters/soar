@@ -75,7 +75,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
           '& .MuiOutlinedInput-notchedOutline': {
             borderRadius: '12px',
             borderColor: 'primary.main',
-            boxShadow: '0 2px 2px 2px gray',
+            boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
           },
         }}
       />
