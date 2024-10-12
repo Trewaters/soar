@@ -62,6 +62,7 @@ export const theme = createTheme({
       contrastText: '#000000',
     },
     info: {
+      // #5DB7DE suggested for Flow info icon
       main: '#1976D2',
       light: '#63A4FF',
       dark: '#004BA0',

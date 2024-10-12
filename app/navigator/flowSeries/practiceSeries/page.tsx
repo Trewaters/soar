@@ -88,14 +88,21 @@ export default function Page() {
           variant="text"
           href="/navigator/flowSeries"
           LinkComponent="a"
-          sx={{ my: 3, alignSelf: 'flex-start' }}
+          sx={{
+            my: 3,
+            alignSelf: 'flex-start',
+            '&:hover': {
+              backgroundColor: 'transparent',
+              boxShadow: 'none',
+            },
+          }}
           startIcon={<ArrowBackIcon />}
           disableRipple
         >
           Back to flow
         </Button>
-        <IconButton onClick={handleInfoClick}>
-          <HelpIcon sx={{ color: 'primary.main' }} />
+        <IconButton disableRipple onClick={handleInfoClick}>
+          <HelpIcon sx={{ color: 'info.light' }} />
         </IconButton>
       </Stack>
       <Stack sx={{ px: 4, pb: 2 }}>
