@@ -18,7 +18,7 @@ export default function SplashNavButton({
         display: 'flex',
         height: '260px',
         width: '363px',
-        borderRadius: '8px',
+        borderRadius: '12px',
         border: '1px solid',
         borderColor: 'primary.main',
         alignItems: 'center',
@@ -29,7 +29,10 @@ export default function SplashNavButton({
         backgroundPosition: 'top',
         backgroundRepeat: 'no-repeat',
         mb: 4,
-        boxShadow: '0 2px 2px 2px gray',
+        boxShadow: [
+          '0 -2px 4px 0 rgba(0, 0, 0, 0.25)',
+          '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+        ].join(', '),
         ':hover': {
           cursor: 'pointer',
           borderColor: 'primary.main',
