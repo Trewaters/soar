@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardMedia,
+  IconButton,
   Stack,
   TextField,
   Typography,
@@ -14,6 +15,7 @@ import {
 import Image from 'next/image'
 import { ChangeEvent, useEffect, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import HelpIcon from '@mui/icons-material/Help'
 
 // export const getServerSideProps: GetServerSideProps = async () => {
 //   const baseUrl =
@@ -62,6 +64,12 @@ export default function Page() {
     }
   }
 
+  function handleInfoClick() {
+    alert(
+      'Select a series to view the postures and description. Click on the back button to return to the flow series.'
+    )
+  }
+
   return (
     <Stack
       spacing={2}
@@ -70,7 +78,12 @@ export default function Page() {
       <Typography variant="h2" textAlign="center">
         Practice Yoga Series
       </Typography>
-      <Stack direction={'column'} justifyContent={'space-between'}>
+      <Stack
+        direction={'row'}
+        gap={2}
+        justifyContent={'space-between'}
+        sx={{ px: 4 }}
+      >
         <Button
           variant="text"
           href="/navigator/flowSeries"
@@ -81,6 +94,11 @@ export default function Page() {
         >
           Back to flow
         </Button>
+        <IconButton onClick={handleInfoClick}>
+          <HelpIcon sx={{ color: 'primary.main' }} />
+        </IconButton>
+      </Stack>
+      <Stack sx={{ px: 4, pb: 2 }}>
         <Autocomplete
           disablePortal
           id="combo-box-series-search"
@@ -91,9 +109,20 @@ export default function Page() {
               {option.seriesName}
             </li>
           )}
-          sx={{ width: 'auto' }}
+          sx={{
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderRadius: '12px',
+              borderColor: 'primary.main',
+              boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+              width: 'auto',
+            },
+          }}
           renderInput={(params) => (
-            <TextField {...params} label="Flow Series" />
+            <TextField
+              sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+              {...params}
+              placeholder="Search for a Series"
+            />
           )}
           onChange={handleSelect}
         />

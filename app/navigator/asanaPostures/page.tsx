@@ -1,7 +1,13 @@
 'use client'
 import { useEffect, useState } from 'react'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
-import { Card, CardContent, Box, CircularProgress } from '@mui/material'
+import {
+  Card,
+  CardContent,
+  Box,
+  CircularProgress,
+  Typography,
+} from '@mui/material'
 import { PostureData, useAsanaPosture } from '@context/AsanaPostureContext'
 import SplashHeader from '@app/clientComponents/splash-header'
 
@@ -52,7 +58,7 @@ export default function Page() {
         {loading && (
           <CircularProgress sx={{ backgroundColor: 'transparent' }} />
         )}
-        {error && <p>Error: {error}</p>}
+        {error && <Typography>Error: {error}</Typography>}
       </Box>
       {/* <Box sx={{ height: '100px', mt: '16px' }}>
         {state.postures.id !== 0 && (
