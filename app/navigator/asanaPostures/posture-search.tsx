@@ -56,6 +56,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
         renderInput={(params) => (
           <TextField
             {...params}
+            sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
             placeholder="Search for a Yoga Posture"
             InputProps={{
               ...params.InputProps,
