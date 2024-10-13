@@ -1,16 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600;700&display=swap');
 
-html,
 body {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
   min-height: 100vh;
 }
 
@@ -52,7 +42,7 @@ a:hover {
   text-transform: capitalize;
   height: auto;
   padding: 10px;
-  width: 100%;
+  /* width: 100%; */
   /* color: var(--primary-main); */
   color: #f6893d;
 }

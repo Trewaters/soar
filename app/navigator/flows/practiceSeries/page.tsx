@@ -147,7 +147,7 @@ export default function Page() {
                 </Typography>
                 <Stack>
                   {flow.seriesPostures.map((pose) => (
-                    <div key={pose} className="lines">
+                    <Box key={pose} className="lines">
                       <Box key={pose} className="journalLine">
                         <Typography textAlign={'left'} variant="body1">
                           {pose.split(',')[0]}
@@ -156,15 +156,17 @@ export default function Page() {
                           {pose.split(',')[1]}
                         </Typography>
                       </Box>
-                    </div>
+                    </Box>
                   ))}
-                  <Typography variant="h3" sx={{ marginTop: 3 }}>
-                    Description
-                  </Typography>
-                  <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
-                    {flow.description}
-                  </Typography>
                 </Stack>
+              </Box>
+              <Box>
+                <Typography variant="h3" sx={{ marginTop: 3 }}>
+                  Description
+                </Typography>
+                <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
+                  {flow.description}
+                </Typography>
               </Box>
             </Box>
           </Box>
