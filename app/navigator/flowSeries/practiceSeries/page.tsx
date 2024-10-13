@@ -71,6 +71,14 @@ export default function Page() {
   }
 
   return (
+    // <Box
+    //   sx={{
+    //     backgroundColor: '#f5f5f5',
+    //     width: '600px',
+    //     margin: '0 auto',
+    //     padding: 0,
+    //   }}
+    // >
     <Stack
       spacing={2}
       sx={{ marginX: 3, marginY: 3, background: 'white', mb: '1em' }}
@@ -91,6 +99,7 @@ export default function Page() {
           sx={{
             my: 3,
             alignSelf: 'flex-start',
+            color: 'primary.contrastText',
             '&:hover': {
               backgroundColor: 'transparent',
               boxShadow: 'none',
@@ -135,62 +144,35 @@ export default function Page() {
         />
       </Stack>
       {flow && (
-        <Box width="100%" textAlign="center" marginTop={4} key={flow.id}>
-          <Typography variant="h3" sx={{ marginTop: 3 }}>
-            {flow.seriesName}
-          </Typography>
-          <Stack rowGap={3} alignItems="center" marginTop={4}>
-            {flow.seriesPostures.map((pose) => (
-              <Card
-                key={pose}
-                sx={{
-                  width: '100%',
-                  boxShadow: 3,
-                  display: 'flex',
-                  flexDirection: 'row',
-                  borderColor: 'primary.light',
-                  borderWidth: '1px',
-                  borderStyle: 'solid',
-                }}
-              >
-                <CardMedia
-                  component="div"
-                  sx={{
-                    width: 100,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Image
-                    src="/stick-tree-pose-400x400.png"
-                    alt="Yoga Posture Image"
-                    width={100}
-                    height={100}
-                    priority={true}
-                  />
-                </CardMedia>
-                <CardContent sx={{ flex: '1 1 auto' }}>
-                  <Stack direction="column" spacing={1}>
+        <Box width="100%" key={flow.id}>
+          <Box display={'flex'} flexDirection={'column'} alignItems={'center'}>
+            <Typography variant="h3" sx={{ marginY: 3 }}>
+              {flow.seriesName}
+            </Typography>
+            <Stack className="list">
+              {flow.seriesPostures.map((pose) => (
+                <div key={pose} className="lines">
+                  <Box key={pose} className="listLine">
                     <Typography textAlign={'left'} variant="body1">
                       {pose.split(',')[0]}
                     </Typography>
                     <Typography textAlign={'left'} variant="body2">
                       {pose.split(',')[1]}
                     </Typography>
-                  </Stack>
-                </CardContent>
-              </Card>
-            ))}
-            <Typography variant="h3" sx={{ marginTop: 3 }}>
-              Description
-            </Typography>
-            <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
-              {flow.description}
-            </Typography>
-          </Stack>
+                  </Box>
+                </div>
+              ))}
+              <Typography variant="h3" sx={{ marginTop: 3 }}>
+                Description
+              </Typography>
+              <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
+                {flow.description}
+              </Typography>
+            </Stack>
+          </Box>
         </Box>
       )}
     </Stack>
+    // </Box>
   )
 }

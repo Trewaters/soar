@@ -20,3 +20,41 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.list {
+  color: #555;
+  font-size: 22px;
+  padding: 0 !important;
+  width: 500px;
+  font-family: courier, monospace;
+  border: 1px solid #dedede;
+}
+
+.list .listLine {
+  list-style: none;
+  border-bottom: 1px dotted #ccc;
+  text-indent: 25px;
+  height: auto;
+  padding: 10px;
+  width: 434px;
+  text-transform: capitalize;
+}
+
+.list .listLine:hover {
+  background-color: #f0f0f0;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  -o-transition: all 0.2s;
+}
+
+.lines {
+  border-left: 1px solid #ffaa9f;
+  border-right: 1px solid #ffaa9f;
+  width: 2px;
+  float: left;
+  /* height: 495px; */
+  margin-left: 40px;
+  white-space: nowrap;
+}

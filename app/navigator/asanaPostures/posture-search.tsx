@@ -6,6 +6,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 import { PostureData, useAsanaPosture } from '@context/AsanaPostureContext'
 import { useRouter } from 'next/navigation'
 import SearchIcon from '@mui/icons-material/Search'
+import { Box } from '@mui/material'
 
 interface PostureSearchProps {
   posturePropData: PostureData[]
