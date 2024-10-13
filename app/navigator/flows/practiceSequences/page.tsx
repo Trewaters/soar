@@ -65,7 +65,7 @@ export default function Page() {
           </Typography>
           <Button
             variant="outlined"
-            href="/navigator/flowSeries"
+            href="/navigator/flows"
             LinkComponent="a"
             size="medium"
             sx={{ my: 3, display: 'block' }}

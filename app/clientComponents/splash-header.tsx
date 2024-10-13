@@ -11,7 +11,7 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
     <Box
       sx={{
         display: 'contents',
-        // boxShadow: '0 2px 2px 2px gray',
+        position: 'relative',
       }}
     >
       <Image
@@ -28,15 +28,21 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
       <Typography
         variant="splashTitle"
         sx={{
-          position: 'relative',
-          bottom: '220px',
+          position: 'absolute',
+          // bottom: '220px',
+          // left: '50%', // Center horizontally
+          // transform: 'translateX(-50%)', // Center horizontally
           display: 'flex',
           alignSelf: 'center',
           color: 'primary.main',
           backgroundColor: 'navSplash.light',
           width: 'fit-content',
+          // width: '-webkit-fill-available',
           padding: '8px',
           borderRadius: '8px',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'normal',
         }}
       >
         {title}

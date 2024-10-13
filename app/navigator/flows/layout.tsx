@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <SessionProvider basePath={'/auth'} session={session}>
         {children}
       </SessionProvider>
-      <NavBottom subRoute="/navigator/flowSeries" />
+      <NavBottom subRoute="/navigator/flows" />
     </>
   )
 }

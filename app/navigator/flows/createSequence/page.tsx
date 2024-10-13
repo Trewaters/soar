@@ -122,7 +122,7 @@ export default function Page() {
     } catch (error: Error | any) {
       error.message
     }
-    router.push('/navigator/flowSeries')
+    router.push('/navigator/flows')
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -239,7 +239,7 @@ export default function Page() {
               <Button
                 fullWidth
                 variant="outlined"
-                href="/navigator/flowSeries"
+                href="/navigator/flows"
                 LinkComponent="a"
                 sx={{ my: 3, display: 'block' }}
               >

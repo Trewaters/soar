@@ -8,16 +8,16 @@ export default function Page() {
   const router = useRouter()
 
   const handlePracticeSeriesClick = () => {
-    router.push('/navigator/flowSeries/practiceSeries')
+    router.push('/navigator/flows/practiceSeries')
   }
   const handleCreateSeriesClick = () => {
-    router.push('/navigator/flowSeries/createSeries')
+    router.push('/navigator/flows/createSeries')
   }
   const handlePracticeSequenceClick = () => {
-    router.push('/navigator/flowSeries/practiceSequences')
+    router.push('/navigator/flows/practiceSequences')
   }
   const handleCreateSequenceClick = () => {
-    router.push('/navigator/flowSeries/createSequence')
+    router.push('/navigator/flows/createSequence')
   }
 
   return (
@@ -25,10 +25,8 @@ export default function Page() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
         alignItems: 'center',
         mt: 4,
-        width: '100%',
       }}
     >
       <SplashHeader
@@ -36,6 +34,7 @@ export default function Page() {
         alt={'Flows'}
         title="Flows"
       />
+      <Box height={'32px'} />
       <SplashNavButton
         title="Practice Series"
         description="Series are made up of asana poses."

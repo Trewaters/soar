@@ -1,18 +1,11 @@
 'use client'
 import { useEffect, useState } from 'react'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
-import {
-  Card,
-  CardContent,
-  Box,
-  CircularProgress,
-  Typography,
-} from '@mui/material'
-import { PostureData, useAsanaPosture } from '@context/AsanaPostureContext'
+import { Box, CircularProgress, Typography } from '@mui/material'
+import { PostureData } from '@context/AsanaPostureContext'
 import SplashHeader from '@app/clientComponents/splash-header'
 
 export default function Page() {
-  const { state } = useAsanaPosture()
   const [posturePropData, setPosturePropData] = useState<PostureData[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -60,36 +53,6 @@ export default function Page() {
         )}
         {error && <Typography>Error: {error}</Typography>}
       </Box>
-      {/* <Box sx={{ height: '100px', mt: '16px' }}>
-        {state.postures.id !== 0 && (
-          <PostureCard postureCardProp={state.postures} />
-        )}
-      </Box> */}
-
-      {/* <Box sx={{ height: '100px', mt: '16px' }}>
-        <Box textAlign={'center'}>
-          <Image
-            alt="Asana Posture Search"
-            height={355 * 1.5}
-            width={384 * 1.5}
-            src={
-              '/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png'
-            }
-          ></Image>
-          <Box
-            sx={{
-              position: 'relative',
-              // top: '50%',
-              // top: '600px',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              zIndex: 1,
-            }}
-          >
-            <PostureSearch posturePropData={posturePropData} />
-          </Box>
-        </Box>
-      </Box> */}
     </Box>
   )
 }

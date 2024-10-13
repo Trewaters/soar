@@ -45,7 +45,7 @@ const navLinks = [
   },
   {
     name: 'Flows',
-    href: '/navigator/flowSeries',
+    href: '/navigator/flows',
     icon: <WhatshotIcon />,
   },
   {

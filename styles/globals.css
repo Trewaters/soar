@@ -21,26 +21,25 @@ a:hover {
   text-decoration: underline;
 }
 
-.list {
+.journal {
   color: #555;
   font-size: 22px;
   padding: 0 !important;
-  width: 500px;
+  width: 100%;
   font-family: courier, monospace;
   border: 1px solid #dedede;
 }
 
-.list .listLine {
+.journal .journalLine {
   list-style: none;
   border-bottom: 1px dotted #ccc;
-  text-indent: 25px;
+  text-transform: capitalize;
   height: auto;
   padding: 10px;
-  width: 434px;
-  text-transform: capitalize;
+  width: 30vw;
 }
 
-.list .listLine:hover {
+.journal .journalLine:hover {
   background-color: #f0f0f0;
   transition: all 0.2s;
   -webkit-transition: all 0.2s;
