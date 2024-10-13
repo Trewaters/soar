@@ -10,11 +10,12 @@ export default function NavBottom(props: { subRoute: string }) {
       sx={{
         backgroundColor: 'info.contrastText',
         borderRadius: 2,
-        width: '30vw',
+        width: { sm: '100vw', md: '40vw' },
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
+        px: 2,
         position: 'relative',
-        left: '35%',
+        left: { sm: '0', md: '30vw' },
       }}
     >
       <IconButton
