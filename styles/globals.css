@@ -29,11 +29,11 @@ a:hover {
 }
 
 .journal {
-  color: #555;
   border-radius: 12px;
   /* padding: 0 !important; */
   width: 100%;
   border: 1px solid #dedede;
+  box-shadow: 0 2px 48px 5px rgba(0, 0, 0, 0.1);
 }
 
 .journal .journalLine {
@@ -42,7 +42,7 @@ a:hover {
   text-transform: capitalize;
   height: auto;
   padding: 10px;
-  width: 30vw;
+  width: 70vw;
 }
 .journal .journalTitle {
   list-style: none;

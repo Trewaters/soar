@@ -130,7 +130,7 @@ export default function Page() {
           />
         </Stack>
         {flow && (
-          <Box width="100%" key={flow.id}>
+          <Box width="100%" sx={{ p: 2 }} key={flow.id}>
             <Box
               display={'flex'}
               flexDirection={'column'}

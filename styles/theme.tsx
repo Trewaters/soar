@@ -83,6 +83,7 @@ export const theme = createTheme({
       contrastText: '#07020D',
     },
     background: {
+      // journal background color, #f0f0f0
       default: '#f0f0f0',
       paper: '#ffffff',
       helper: '#fef5e7',
