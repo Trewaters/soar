@@ -136,19 +136,15 @@ export default function Page() {
               flexDirection={'column'}
               alignItems={'center'}
             >
-              <Typography variant="h3" sx={{ marginY: 3 }}>
-                {flow.seriesName}
-              </Typography>
-              <Box
-                className="journal"
-                sx={{
-                  padding: 2,
-                  border: '1px solid #ccc',
-                  borderRadius: '8px',
-                  backgroundColor: '#f9f9f9',
-                  width: '100%',
-                }}
-              >
+              <Box className="journal">
+                <Typography
+                  variant="h3"
+                  className="journalTitle"
+                  textAlign={'center'}
+                  sx={{ marginTop: 2 }}
+                >
+                  {flow.seriesName}
+                </Typography>
                 <Stack>
                   {flow.seriesPostures.map((pose) => (
                     <div key={pose} className="lines">
