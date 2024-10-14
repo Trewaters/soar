@@ -16,6 +16,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import HelpIcon from '@mui/icons-material/Help'
 import SplashHeader from '@app/clientComponents/splash-header'
+import Image from 'next/image'
 
 export default function Page() {
   const [series, setSeries] = useState<FlowSeriesData[]>([])
@@ -160,10 +161,21 @@ export default function Page() {
                   ))}
                 </Stack>
               </Box>
-              <Box>
-                <Typography variant="h3" sx={{ marginTop: 3 }}>
-                  Description
-                </Typography>
+              <Box
+                className={'journal'}
+                sx={{ marginTop: '32px', p: 4, color: 'primary.main' }}
+              >
+                <Stack flexDirection={'row'} alignItems={'center'}>
+                  <Typography variant="h3" sx={{ mr: 2 }}>
+                    Description
+                  </Typography>
+                  <Image
+                    src={'/icons/designImages/leaf-2.svg'}
+                    alt={'leaf icon'}
+                    height={21}
+                    width={21}
+                  ></Image>
+                </Stack>
                 <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
                   {flow.description}
                 </Typography>
