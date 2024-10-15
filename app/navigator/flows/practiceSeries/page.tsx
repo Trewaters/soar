@@ -17,6 +17,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import HelpIcon from '@mui/icons-material/Help'
 import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
+import SubNavHeader from '@app/clientComponents/sub-nav-header'
 
 export default function Page() {
   const [series, setSeries] = useState<FlowSeriesData[]>([])
@@ -73,7 +74,7 @@ export default function Page() {
           alt={'Practice Series'}
           title="Practice Series"
         />
-        <Stack
+        {/* <Stack
           direction={'row'}
           gap={2}
           justifyContent={'space-between'}
@@ -100,7 +101,12 @@ export default function Page() {
           <IconButton disableRipple onClick={handleInfoClick}>
             <HelpIcon sx={{ color: 'info.light' }} />
           </IconButton>
-        </Stack>
+        </Stack> */}
+        <SubNavHeader
+          title="Flows"
+          link="/navigator/flows"
+          onClick={handleInfoClick}
+        />
         <Stack sx={{ px: 4, pb: 2 }}>
           <Autocomplete
             disablePortal
