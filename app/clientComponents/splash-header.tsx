@@ -42,7 +42,7 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
           borderRadius: '8px',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
-          whiteSpace: 'normal',
+          // whiteSpace: 'normal',
         }}
       >
         {title}

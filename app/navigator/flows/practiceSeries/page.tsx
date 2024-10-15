@@ -1,23 +1,11 @@
 'use client'
 import { FlowSeriesData } from '@context/AsanaSeriesContext'
-import {
-  Autocomplete,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CardMedia,
-  IconButton,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Autocomplete, Box, Stack, TextField, Typography } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import HelpIcon from '@mui/icons-material/Help'
 import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import SearchIcon from '@mui/icons-material/Search'
 
 export default function Page() {
   const [series, setSeries] = useState<FlowSeriesData[]>([])
@@ -74,34 +62,6 @@ export default function Page() {
           alt={'Practice Series'}
           title="Practice Series"
         />
-        {/* <Stack
-          direction={'row'}
-          gap={2}
-          justifyContent={'space-between'}
-          sx={{ px: 4, mt: 3 }}
-        >
-          <Button
-            variant="text"
-            href="/navigator/flows"
-            LinkComponent="a"
-            sx={{
-              my: 3,
-              alignSelf: 'flex-start',
-              color: 'primary.contrastText',
-              '&:hover': {
-                backgroundColor: 'transparent',
-                boxShadow: 'none',
-              },
-            }}
-            startIcon={<ArrowBackIcon />}
-            disableRipple
-          >
-            Back to flow
-          </Button>
-          <IconButton disableRipple onClick={handleInfoClick}>
-            <HelpIcon sx={{ color: 'info.light' }} />
-          </IconButton>
-        </Stack> */}
         <SubNavHeader
           title="Flows"
           link="/navigator/flows"
@@ -131,6 +91,15 @@ export default function Page() {
                 sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
                 {...params}
                 placeholder="Search for a Series"
+                InputProps={{
+                  ...params.InputProps,
+                  startAdornment: (
+                    <>
+                      <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
+                      {params.InputProps.startAdornment}
+                    </>
+                  ),
+                }}
               />
             )}
             onChange={handleSelect}
