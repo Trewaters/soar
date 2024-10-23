@@ -8,33 +8,31 @@ interface SubNavHeaderProps extends ComponentProps<typeof IconButton> {
   link: string
 }
 
+/**
+ * SubNavHeader component renders a navigation header with a back button and a help icon button.
+ *
+ * @component
+ * @param {SubNavHeaderProps} props - The properties for the SubNavHeader component.
+ * @param {string} props.title - The title to be displayed on the back button.
+ * @param {string} props.link - The URL to navigate to when the back button is clicked.
+ * @param {function} [props.onClick] - Optional click handler for the help icon button.
+ *
+ * @example
+ * <SubNavHeader
+ *   title="Dashboard"
+ *   link="/dashboard"
+ *   onClick={() => console.log('Help icon clicked')}
+ * />
+ */
 const SubNavHeader: React.FC<SubNavHeaderProps> = ({
   title,
   link,
   ...props
 }) => {
   return (
-    // <div className="sub-nav-header">
-    //   <h2>{title}</h2>
-    //   <nav>
-    //     <ul>
-    //       {links.map((link, index) => (
-    //         <li key={index}>
-    //           <a href={link.href}>{link.name}</a>
-    //         </li>
-    //       ))}
-    //     </ul>
-    //   </nav>
-    // </div>
-    <Stack
-      direction={'row'}
-      gap={2}
-      justifyContent={'space-between'}
-      sx={{ px: 4, mt: 3 }}
-    >
+    <Stack direction={'row'} justifyContent={'space-between'}>
       <Button
         variant="text"
-        // href="/navigator/flows"
         href={link}
         LinkComponent="a"
         sx={{

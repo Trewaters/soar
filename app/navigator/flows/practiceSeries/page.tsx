@@ -53,10 +53,12 @@ export default function Page() {
         justifyContent: 'center',
         alignItems: 'center',
         mt: 4,
-        width: '100%',
       }}
     >
-      <Stack spacing={2} sx={{ marginX: 3, marginY: 3, mb: '1em' }}>
+      <Stack
+        spacing={2}
+        sx={{ marginX: 3, marginY: 3, mb: '1em', width: 'fit-content' }}
+      >
         <SplashHeader
           src={'/icons/designImages/splash-flows-2.png'}
           alt={'Practice Series'}

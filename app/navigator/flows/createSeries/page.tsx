@@ -155,10 +155,12 @@ export default function Page() {
         justifyContent: 'center',
         alignItems: 'center',
         mt: 4,
-        width: '100%',
       }}
     >
-      <Stack spacing={2} sx={{ marginX: 3, marginY: 3, mb: '1em' }}>
+      <Stack
+        spacing={2}
+        sx={{ marginX: 3, marginY: 3, mb: '1em', width: 'fit-content' }}
+      >
         <SplashHeader
           src={'/icons/designImages/header-create-series.png'}
           alt={'Create Series'}
@@ -169,13 +171,6 @@ export default function Page() {
           link="/navigator/flows"
           onClick={toggleDrawer(!open)}
         />
-        <Box width="100%" sx={{ p: 2 }}>
-          <Box
-            display={'flex'}
-            flexDirection={'column'}
-            alignItems={'center'}
-          ></Box>
-        </Box>
         {FEATURES.SHOW_CREATE_SERIES && (
           <>
             <FormControl>
@@ -193,14 +188,15 @@ export default function Page() {
                     borderRadius: '12px',
                     borderColor: 'primary.main',
                     boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-                    width: 'auto',
                   },
                 }}
                 disablePortal
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+                    sx={{
+                      '& .MuiInputBase-input': { color: 'primary.main' },
+                    }}
                     placeholder="Add a pose to your series"
                     InputProps={{
                       ...params.InputProps,
@@ -216,140 +212,142 @@ export default function Page() {
                 onChange={handleSelect}
               />
             </FormControl>
-            <FormGroup>
-              <FormControl>
-                <Grid item xs={12} sx={{ mb: 2 }}>
-                  <TextField
-                    sx={{ width: '100%' }}
-                    id="outlined-basic"
-                    label="Series Name"
-                    variant="outlined"
-                    name="seriesName"
-                    value={seriesName}
-                    onChange={handleChange}
-                  />
-                </Grid>
-              </FormControl>
-
-              <Grid
-                item
-                xs={12}
-                display={'flex'}
-                direction={'column'}
-                sx={{ mb: 2 }}
-              >
+            <Box className="journal">
+              <FormGroup>
                 <FormControl>
-                  <Stack
-                    spacing={1}
-                    direction={'row'}
-                    flexWrap={'wrap'}
-                    display={'flex'}
-                    sx={{
-                      mx: 4,
-                      mb: 2,
-                    }}
-                  >
-                    {seriesPostures.map((word, index) => (
-                      <Box
-                        key={`${word}+${index}`}
-                        display={'flex'}
-                        sx={{
-                          alignItems: 'center',
-                          // border: '1px solid #ccc',
-                          pl: 2,
-                        }}
-                      >
-                        <Typography key={word} variant="h3">
-                          {word}
-                        </Typography>
-                        {index < seriesPostures.length - 1 && (
-                          <IconButton
-                            disabled
+                  <Grid item xs={12} sx={{ mb: 2 }}>
+                    <TextField
+                      sx={{ width: '100%' }}
+                      id="series-name"
+                      placeholder="Give your Series a name..."
+                      name="seriesName"
+                      value={seriesName}
+                      onChange={handleChange}
+                      className="journalTitle"
+                    />
+                  </Grid>
+                </FormControl>
+
+                <Grid
+                  item
+                  xs={12}
+                  display={'flex'}
+                  direction={'column'}
+                  sx={{ mb: 2 }}
+                >
+                  <FormControl>
+                    <Stack
+                      className="lines"
+                      spacing={1}
+                      direction={'row'}
+                      flexWrap={'wrap'}
+                      display={'flex'}
+                      sx={{
+                        mx: 4,
+                        mb: 2,
+                        pl: 2,
+                      }}
+                    >
+                      {seriesPostures.map((word, index) => (
+                        <Box
+                          key={`${word}+${index}`}
+                          display={'flex'}
+                          sx={{
+                            alignItems: 'center',
+                            // border: '1px solid #ccc',
+                            pl: 2,
+                          }}
+                        >
+                          <Typography
+                            key={word}
+                            variant="body1"
+                            className="journalLine"
                             sx={{
-                              transform: 'rotate(90deg)',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
                             }}
                           >
-                            <NavigationIcon />
-                          </IconButton>
-                        )}
-                      </Box>
-                    ))}
-                  </Stack>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="flex-end"
-                    sx={{ mt: 3 }}
-                  >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() =>
-                        dispatch({
-                          type: 'SET_FLOW_SERIES',
-                          payload: {
-                            ...state.flowSeries,
-                            seriesPostures:
-                              state.flowSeries.seriesPostures.slice(0, -1),
-                          },
-                        })
-                      }
+                            {word}
+                          </Typography>
+                        </Box>
+                      ))}
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      justifyContent="flex-end"
+                      sx={{ mt: 3 }}
                     >
-                      <Typography>Remove One (-1)</Typography>
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() =>
-                        dispatch({
-                          type: 'SET_FLOW_SERIES',
-                          payload: {
-                            ...state.flowSeries,
-                            seriesPostures: [],
-                          },
-                        })
-                      }
-                    >
-                      Clear
-                    </Button>
-                  </Stack>
-                </FormControl>
-              </Grid>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>
+                          dispatch({
+                            type: 'SET_FLOW_SERIES',
+                            payload: {
+                              ...state.flowSeries,
+                              seriesPostures:
+                                state.flowSeries.seriesPostures.slice(0, -1),
+                            },
+                          })
+                        }
+                      >
+                        <Typography>Remove One (-1)</Typography>
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>
+                          dispatch({
+                            type: 'SET_FLOW_SERIES',
+                            payload: {
+                              ...state.flowSeries,
+                              seriesPostures: [],
+                            },
+                          })
+                        }
+                      >
+                        Clear
+                      </Button>
+                    </Stack>
+                  </FormControl>
+                </Grid>
 
-              <Grid item xs={12} sx={{ mb: 2 }}>
-                <FormControl>
-                  <TextField
-                    id="outlined-basic"
-                    label="Description"
-                    sx={{ width: '95vw' }}
-                    multiline
-                    variant="outlined"
-                    name="description"
-                    value={description}
-                    onChange={handleChange}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <Stack direction="row" spacing={2} justifyContent="center">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                    disabled={session === null}
-                  >
-                    Submit
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={handleCancel}
-                  >
-                    Cancel
-                  </Button>
-                </Stack>
-              </Grid>
-            </FormGroup>
+                <Grid item xs={12} sx={{ mb: 2 }}>
+                  <FormControl sx={{ width: '100%' }}>
+                    <TextField
+                      id="outlined-basic"
+                      label="Description"
+                      multiline
+                      minRows={4}
+                      variant="outlined"
+                      name="description"
+                      value={description}
+                      onChange={handleChange}
+                    />
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <Stack direction="row" spacing={2} justifyContent="center">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit}
+                      disabled={session === null}
+                    >
+                      Submit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={handleCancel}
+                    >
+                      Start Over
+                    </Button>
+                  </Stack>
+                </Grid>
+              </FormGroup>
+            </Box>
           </>
         )}
       </Stack>
@@ -366,7 +364,7 @@ export default function Page() {
           </Typography>
           <List
             sx={{
-              width: 'auto',
+              // width: 'auto',
               // maxWidth: 360,
               bgcolor: 'background.helper',
               alignSelf: 'center',
