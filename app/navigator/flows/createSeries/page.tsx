@@ -222,9 +222,7 @@ export default function Page() {
                   <Grid item xs={12}>
                     <TextField
                       sx={{ width: '100%' }}
-                      InputProps={{
-                        sx: { color: 'primary.main' },
-                      }}
+                      // InputProps={{}}
                       variant="standard"
                       id="series-name"
                       placeholder="Give your Series a name..."
@@ -271,9 +269,8 @@ export default function Page() {
                       >
                         <Stack>
                           <IconButton
-                            // sx={{ pr: 2 }}
                             disableRipple
-                            color="error"
+                            sx={{ color: 'error.main' }}
                             onClick={() =>
                               dispatch({
                                 type: 'SET_FLOW_SERIES',
@@ -335,7 +332,7 @@ export default function Page() {
                         <Typography>Remove One (-1)</Typography>
                       </Button>
  */}
-                    <Button
+                    {/* <Button
                       variant="contained"
                       color="primary"
                       onClick={() =>
@@ -349,11 +346,11 @@ export default function Page() {
                       }
                     >
                       Clear
-                    </Button>
+                    </Button> */}
                   </Stack>
                 </FormControl>
 
-                <Grid item xs={12} sx={{ mb: 2 }}>
+                <Grid item xs={12} sx={{ mb: 2, mx: 2 }}>
                   <FormControl sx={{ width: '100%' }}>
                     <TextField
                       id="outlined-basic"
@@ -367,7 +364,7 @@ export default function Page() {
                     />
                   </FormControl>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{ mb: 2 }}>
                   <Stack direction="row" spacing={2} justifyContent="center">
                     <Button
                       variant="contained"
