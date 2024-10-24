@@ -34,6 +34,7 @@ import { PostureData } from '@context/AsanaPostureContext'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SearchIcon from '@mui/icons-material/Search'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -215,15 +216,20 @@ export default function Page() {
             <Box className="journal">
               <FormGroup>
                 <FormControl>
-                  <Grid item xs={12} sx={{ mb: 2 }}>
+                  <Grid item xs={12}>
                     <TextField
                       sx={{ width: '100%' }}
+                      InputProps={{
+                        sx: { color: 'primary.main' },
+                      }}
+                      variant="standard"
                       id="series-name"
                       placeholder="Give your Series a name..."
                       name="seriesName"
                       value={seriesName}
                       onChange={handleChange}
                       className="journalTitle"
+                      color="primary"
                     />
                   </Grid>
                 </FormControl>
@@ -252,10 +258,10 @@ export default function Page() {
                         <Box
                           key={`${word}+${index}`}
                           display={'flex'}
+                          flexDirection={'row'}
                           sx={{
                             alignItems: 'center',
-                            // border: '1px solid #ccc',
-                            pl: 2,
+                            border: '1px solid #ccc',
                           }}
                         >
                           <Typography
@@ -269,6 +275,23 @@ export default function Page() {
                           >
                             {word}
                           </Typography>
+                          <IconButton
+                            // sx={{ pr: 2 }}
+                            onClick={() =>
+                              dispatch({
+                                type: 'SET_FLOW_SERIES',
+                                payload: {
+                                  ...state.flowSeries,
+                                  seriesPostures:
+                                    state.flowSeries.seriesPostures.filter(
+                                      (item) => item !== word
+                                    ),
+                                },
+                              })
+                            }
+                          >
+                            <DeleteForeverIcon />
+                          </IconButton>
                         </Box>
                       ))}
                     </Stack>
@@ -278,6 +301,7 @@ export default function Page() {
                       justifyContent="flex-end"
                       sx={{ mt: 3 }}
                     >
+                      {/* 
                       <Button
                         variant="contained"
                         color="primary"
@@ -294,6 +318,7 @@ export default function Page() {
                       >
                         <Typography>Remove One (-1)</Typography>
                       </Button>
+ */}
                       <Button
                         variant="contained"
                         color="primary"
