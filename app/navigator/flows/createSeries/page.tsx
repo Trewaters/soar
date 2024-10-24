@@ -73,17 +73,20 @@ export default function Page() {
   }, [session])
 
   function handleSelect(event: ChangeEvent<{}>, value: PostureData | null) {
-    // Logs the type of event (e.g., 'click')
-    // Logs the element that triggered the event
     event.preventDefault()
     if (value) {
+      const simplifiedName =
+        Array.isArray(value.sanskrit_names) &&
+        value.sanskrit_names[0]?.simplified
+          ? value.sanskrit_names[0].simplified
+          : ''
       dispatch({
         type: 'SET_FLOW_SERIES',
         payload: {
           ...state.flowSeries,
           seriesPostures: [
             ...state.flowSeries.seriesPostures,
-            value.english_name,
+            value.english_name + '; ' + simplifiedName,
           ],
         },
       })
@@ -288,16 +291,22 @@ export default function Page() {
                           </IconButton>
                         </Stack>
                         <Stack>
-                          <Typography
-                            key={word}
-                            variant="body1"
-                            sx={{
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                            }}
-                          >
-                            {word}
-                          </Typography>
+                          {word.split(';').map((splitWord, idx) => (
+                            <Typography
+                              key={`${word}-${idx}`}
+                              variant={idx === 1 ? 'body2' : 'body1'}
+                              sx={{
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                ...(idx === 1 && {
+                                  fontWeight: 'bold',
+                                  fontStyle: 'italic',
+                                }), // Add emphasis styles here
+                              }}
+                            >
+                              {splitWord}
+                            </Typography>
+                          ))}
                         </Stack>
                       </Stack>
                     ))}
