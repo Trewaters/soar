@@ -34,7 +34,7 @@ a:hover {
   min-width: 300px;
   max-width: 500px;
   box-sizing: border-box;
-  display: block;
+  /* display: block; */
 }
 .journal .journalTitle {
   list-style: none;

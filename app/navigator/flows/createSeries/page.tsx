@@ -234,49 +234,43 @@ export default function Page() {
                   </Grid>
                 </FormControl>
 
-                <Grid
-                  item
-                  xs={12}
-                  display={'flex'}
-                  direction={'column'}
-                  sx={{ mb: 2 }}
-                >
-                  <FormControl>
-                    <Stack
-                      className="lines"
-                      spacing={1}
-                      direction={'row'}
-                      flexWrap={'wrap'}
-                      display={'flex'}
-                      sx={{
-                        mx: 4,
-                        mb: 2,
-                        pl: 2,
-                      }}
-                    >
-                      {seriesPostures.map((word, index) => (
-                        <Box
-                          key={`${word}+${index}`}
-                          display={'flex'}
-                          flexDirection={'row'}
-                          sx={{
-                            alignItems: 'center',
-                            border: '1px solid #ccc',
-                          }}
-                        >
-                          <Typography
-                            key={word}
-                            variant="body1"
-                            className="journalLine"
-                            sx={{
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                            }}
-                          >
-                            {word}
-                          </Typography>
+                <FormControl>
+                  <Stack
+                    className="lines"
+                    spacing={1}
+                    // display={'flex'}
+                    // flexDirection={'column'}
+                    // flexWrap={'wrap'}
+                    // alignItems={'center'}
+                    // justifyContent={'space-between'}
+                    sx={{
+                      mx: 4,
+                      mb: 2,
+                      pl: 2,
+                    }}
+                  >
+                    {seriesPostures.map((word, index) => (
+                      <Stack
+                        className="journalLine"
+                        key={`${word}+${index}`}
+                        sx={{
+                          alignItems: 'center',
+                          // alignContent: 'center',
+                          // alignSelf: 'center',
+                          display: 'flex',
+                          flexDirection: 'row',
+                          // justifyContent: 'center',
+                          // justifyItems: 'center',
+                          // justifySelf: 'center',
+                          // direction: 'row',
+                          // textAlign: 'center',
+                        }}
+                      >
+                        <Stack>
                           <IconButton
                             // sx={{ pr: 2 }}
+                            disableRipple
+                            color="error"
                             onClick={() =>
                               dispatch({
                                 type: 'SET_FLOW_SERIES',
@@ -292,16 +286,29 @@ export default function Page() {
                           >
                             <DeleteForeverIcon />
                           </IconButton>
-                        </Box>
-                      ))}
-                    </Stack>
-                    <Stack
-                      direction="row"
-                      spacing={2}
-                      justifyContent="flex-end"
-                      sx={{ mt: 3 }}
-                    >
-                      {/* 
+                        </Stack>
+                        <Stack>
+                          <Typography
+                            key={word}
+                            variant="body1"
+                            sx={{
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {word}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                    ))}
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    justifyContent="flex-end"
+                    sx={{ mt: 3 }}
+                  >
+                    {/* 
                       <Button
                         variant="contained"
                         color="primary"
@@ -319,24 +326,23 @@ export default function Page() {
                         <Typography>Remove One (-1)</Typography>
                       </Button>
  */}
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() =>
-                          dispatch({
-                            type: 'SET_FLOW_SERIES',
-                            payload: {
-                              ...state.flowSeries,
-                              seriesPostures: [],
-                            },
-                          })
-                        }
-                      >
-                        Clear
-                      </Button>
-                    </Stack>
-                  </FormControl>
-                </Grid>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() =>
+                        dispatch({
+                          type: 'SET_FLOW_SERIES',
+                          payload: {
+                            ...state.flowSeries,
+                            seriesPostures: [],
+                          },
+                        })
+                      }
+                    >
+                      Clear
+                    </Button>
+                  </Stack>
+                </FormControl>
 
                 <Grid item xs={12} sx={{ mb: 2 }}>
                   <FormControl sx={{ width: '100%' }}>
