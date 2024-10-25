@@ -16,7 +16,7 @@ export default function SplashNavButton({
       sx={{
         ...props.sx,
         display: 'flex',
-        height: '260px',
+        height: '210px',
         width: '363px',
         borderRadius: '12px',
         border: '1px solid',

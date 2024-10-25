@@ -7,8 +7,10 @@ import {
   Avatar,
   Box,
   Button,
+  Checkbox,
   Drawer,
   FormControl,
+  FormControlLabel,
   FormGroup,
   Grid,
   IconButton,
@@ -44,6 +46,7 @@ export default function Page() {
   const [postures, setPostures] = useState<PostureData[]>([])
   const router = useRouter()
   const [open, setOpen] = React.useState(false)
+  const [isDirty, setIsDirty] = useState(false)
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen)
@@ -134,6 +137,7 @@ export default function Page() {
         [name]: value,
       },
     })
+    setIsDirty(event.target.value.length > 0)
   }
 
   function handleCancel() {
@@ -219,20 +223,57 @@ export default function Page() {
             <Box className="journal">
               <FormGroup>
                 <FormControl>
-                  <Grid item xs={12}>
+                  <Grid
+                    item
+                    xs={12}
+                    className="journalTitle"
+                    display={'flex'}
+                    direction={'row'}
+                  >
                     <TextField
-                      sx={{ width: '100%' }}
-                      // InputProps={{}}
+                      sx={{
+                        '& .MuiInputBase-input': { color: 'primary.main' },
+                        width: '100%',
+                      }}
                       variant="standard"
                       id="series-name"
                       placeholder="Give your Series a name..."
                       name="seriesName"
                       value={seriesName}
                       onChange={handleChange}
-                      className="journalTitle"
-                      color="primary"
+                      // className="journalTitle"
+                      InputProps={{
+                        style: { color: 'primary.main' },
+                      }}
                     />
+                    <>
+                      <Checkbox
+                        checked={isDirty}
+                        sx={{
+                          color: 'primary.main',
+                          '&.Mui-checked': {
+                            color: 'primary.main',
+                          },
+                        }}
+                      />
+                    </>
                   </Grid>
+                  {/* <Grid item xs={12}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={isDirty}
+                          sx={{
+                            color: 'primary.main',
+                            '&.Mui-checked': {
+                              color: 'primary.main',
+                            },
+                          }}
+                        />
+                      }
+                      label="Text field is dirty"
+                    />
+                  </Grid> */}
                 </FormControl>
 
                 <FormControl>
@@ -361,6 +402,10 @@ export default function Page() {
                       name="description"
                       value={description}
                       onChange={handleChange}
+                      sx={{
+                        '& .MuiInputBase-input': { color: 'primary.main' },
+                        width: '100%',
+                      }}
                     />
                   </FormControl>
                 </Grid>

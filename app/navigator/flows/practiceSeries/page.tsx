@@ -1,6 +1,13 @@
 'use client'
 import { FlowSeriesData } from '@context/AsanaSeriesContext'
-import { Autocomplete, Box, Stack, TextField, Typography } from '@mui/material'
+import {
+  Autocomplete,
+  Box,
+  Stack,
+  TextField,
+  Typography,
+  useTheme,
+} from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
 import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
@@ -8,6 +15,7 @@ import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
 
 export default function Page() {
+  const theme = useTheme()
   const [series, setSeries] = useState<FlowSeriesData[]>([])
   const [flow, setFlow] = useState<FlowSeriesData>()
 
@@ -119,7 +127,10 @@ export default function Page() {
                   variant="h3"
                   className="journalTitle"
                   textAlign={'center'}
-                  sx={{ marginTop: 2 }}
+                  sx={{
+                    marginTop: 2,
+                    color: `${theme.palette.primary.main}`,
+                  }}
                 >
                   {flow.seriesName}
                 </Typography>

@@ -1,13 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600;700&display=swap');
 
+:root {
+  --background-default: #f0f0f0;
+  --background-paper: #ffffff;
+  --background-helper: #fef5e7;
+  --journal-bottomBorder: #ccc;
+  --primary-main: #f6893d; /* Removed quotes */
+}
+
 body {
   min-height: 100vh;
 }
-
-/* ? not sure how to use root and css variables yet. */
-/* :root {
-  --primary-main: '#F6893D';
-} */
 
 a {
   color: inherit;
@@ -22,12 +25,12 @@ a:hover {
   border-radius: 12px;
   /* padding: 0 !important; */
   width: 100%;
-  border: 1px solid #dedede;
+  border: 1px solid var(--background-default);
   box-shadow: 0 2px 48px 5px rgba(0, 0, 0, 0.1);
 }
 
 .journal .journalLine {
-  border-bottom: 1px dotted #ccc;
+  border-bottom: 1px dotted var(--journal-bottomBorder);
   text-transform: capitalize;
   height: auto;
   padding: 10px;
@@ -38,15 +41,15 @@ a:hover {
 }
 .journal .journalTitle {
   list-style: none;
-  border-bottom: 1px #ccc;
+  border-bottom: 1px var(--journal-bottomBorder);
   border-bottom-style: double;
   border-bottom-width: thick;
   text-transform: capitalize;
   height: auto;
   padding: 10px;
   /* width: 100%; */
-  /* color: var(--primary-main); */
-  color: #f6893d;
+  color: var(--primary-main);
+  /* color: #f6893d; */
 }
 
 .journal .journalLine:hover {

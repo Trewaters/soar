@@ -1,7 +1,7 @@
 import { Stack, Button, IconButton } from '@mui/material'
 import React, { ComponentProps } from 'react'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import HelpIcon from '@mui/icons-material/Help'
+import Image from 'next/image'
 
 interface SubNavHeaderProps extends ComponentProps<typeof IconButton> {
   title: string
@@ -44,13 +44,22 @@ const SubNavHeader: React.FC<SubNavHeaderProps> = ({
             boxShadow: 'none',
           },
         }}
-        startIcon={<ArrowBackIcon />}
+        startIcon={
+          <>
+            <Image
+              width={18}
+              height={18}
+              src="/icons/sub-nav-header-back-arrow-icon.svg"
+              alt="back arrow"
+            />
+          </>
+        }
         disableRipple
       >
         Back to {title}
       </Button>
       <IconButton disableRipple onClick={props.onClick}>
-        <HelpIcon sx={{ color: 'info.light' }} />
+        <HelpIcon sx={{ color: 'success.light' }} />
       </IconButton>
     </Stack>
   )

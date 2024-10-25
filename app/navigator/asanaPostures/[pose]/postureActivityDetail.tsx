@@ -1,28 +1,11 @@
-import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
-import CardMedia from '@mui/material/CardMedia'
 import Paper from '@mui/material/Paper'
 import Image from 'next/image'
-import {
-  Box,
-  ButtonGroup,
-  Checkbox,
-  Chip,
-  FormControlLabel,
-  FormGroup,
-  Icon,
-  IconButton,
-  Stack,
-  SvgIcon,
-} from '@mui/material'
+import { Box, ButtonGroup, Chip, IconButton, Stack } from '@mui/material'
 import { PostureData } from '@context/AsanaPostureContext'
 import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
 import yogaMatWoman from '@public/yogaMatWoman.svg'
-import asanaStanding from '@public/icons/designImages/asana-standing.svg'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 
 interface PostureCardProps {

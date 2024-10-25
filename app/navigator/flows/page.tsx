@@ -39,8 +39,7 @@ export default function Page() {
         title="Practice Series"
         description="Series are made up of asana poses."
         sx={{
-          backgroundImage:
-            "url('/icons/designImages/button-practice-series.png')",
+          backgroundImage: "url('/images/practice-series-color.png')",
         }}
         onClick={handlePracticeSeriesClick}
       />
@@ -48,8 +47,7 @@ export default function Page() {
         title="Create Series"
         description="Create your own Series of asana poses."
         sx={{
-          backgroundImage:
-            "url('/icons/designImages/beautiful-young-woman-practices-yoga-asana-garudas.png')",
+          backgroundImage: "url('/images/create-series-bw.png')",
         }}
         onClick={handleCreateSeriesClick}
       />
