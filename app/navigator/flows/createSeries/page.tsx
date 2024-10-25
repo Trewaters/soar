@@ -423,6 +423,9 @@ export default function Page() {
                             checked={isDirtyDescription}
                             onChange={handleChange}
                             sx={{
+                              position: 'absolute',
+                              top: 0,
+                              right: 0,
                               color: 'primary.main',
                               '&.Mui-checked': {
                                 color: 'primary.main',
