@@ -308,21 +308,14 @@ export default function Page() {
                         key={`${word}+${index}`}
                         sx={{
                           alignItems: 'center',
-                          // alignContent: 'center',
-                          // alignSelf: 'center',
                           display: 'flex',
                           flexDirection: 'row',
-                          // justifyContent: 'center',
-                          // justifyItems: 'center',
-                          // justifySelf: 'center',
-                          // direction: 'row',
-                          // textAlign: 'center',
                         }}
                       >
                         <Stack>
                           <IconButton
                             disableRipple
-                            sx={{ color: 'error.main' }}
+                            sx={{ color: 'error.light' }}
                             onClick={() =>
                               dispatch({
                                 type: 'SET_FLOW_SERIES',
