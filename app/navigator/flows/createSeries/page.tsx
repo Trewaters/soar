@@ -47,6 +47,7 @@ export default function Page() {
   const router = useRouter()
   const [open, setOpen] = React.useState(false)
   const [isDirty, setIsDirty] = useState(false)
+  const [isDirtyDescription, setIsDirtyDescription] = useState(false)
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen)
@@ -137,7 +138,18 @@ export default function Page() {
         [name]: value,
       },
     })
-    setIsDirty(event.target.value.length > 0)
+    switch (name) {
+      case 'seriesName':
+        setIsDirty(value.length > 0)
+
+        break
+      case 'description':
+        setIsDirtyDescription(event.target.value.length > 0)
+
+        break
+      default:
+        break
+    }
   }
 
   function handleCancel() {
@@ -241,7 +253,6 @@ export default function Page() {
                       name="seriesName"
                       value={seriesName}
                       onChange={handleChange}
-                      // className="journalTitle"
                       InputProps={{
                         style: { color: 'primary.main' },
                       }}
@@ -405,6 +416,20 @@ export default function Page() {
                       sx={{
                         '& .MuiInputBase-input': { color: 'primary.main' },
                         width: '100%',
+                      }}
+                      InputProps={{
+                        endAdornment: (
+                          <Checkbox
+                            checked={isDirtyDescription}
+                            onChange={handleChange}
+                            sx={{
+                              color: 'primary.main',
+                              '&.Mui-checked': {
+                                color: 'primary.main',
+                              },
+                            }}
+                          />
+                        ),
                       }}
                     />
                   </FormControl>
