@@ -9,7 +9,8 @@ export default function NavBottom(props: { subRoute: string }) {
     <AppBar
       sx={{
         backgroundColor: 'info.contrastText',
-        borderRadius: 2,
+        borderTopRightRadius: { sm: 2, md: 0 },
+        borderTopLeftRadius: { sm: 2, md: 0 },
         width: { sm: '100vw', md: '40vw' },
         flexDirection: 'row',
         justifyContent: 'space-between',
