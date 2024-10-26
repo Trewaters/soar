@@ -101,6 +101,7 @@ export default function Page() {
                 sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
                 {...params}
                 placeholder="Search for a Series"
+                // label="Flow Series"
                 InputProps={{
                   ...params.InputProps,
                   startAdornment: (
