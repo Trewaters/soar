@@ -312,7 +312,6 @@ export default function Page() {
                           </Stack>
                         </Box>
                       }
-                      sx={{ '& .journal .journalTitle': { pb: 0 } }}
                     />
                     <CardContent className="lines" sx={{ p: 0 }}>
                       {seriesMini.seriesPostures.map((asana, asanaIndex) => (
