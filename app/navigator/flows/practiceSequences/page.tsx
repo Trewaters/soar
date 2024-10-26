@@ -253,6 +253,12 @@ export default function Page() {
                                     alt={'sequence-back-arrow'}
                                   />
                                 }
+                                sx={{
+                                  '&:hover': {
+                                    backgroundColor: 'transparent',
+                                    boxShadow: 'none',
+                                  },
+                                }}
                               >
                                 {singleSequence.sequencesSeries[page - 2]
                                   ?.seriesName || 'Previous'}
@@ -287,6 +293,12 @@ export default function Page() {
                                     alt={'sequence-back-arrow'}
                                   />
                                 }
+                                sx={{
+                                  '&:hover': {
+                                    backgroundColor: 'transparent',
+                                    boxShadow: 'none',
+                                  },
+                                }}
                               >
                                 {singleSequence.sequencesSeries[page]
                                   ?.seriesName || 'Next'}
