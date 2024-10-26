@@ -45,8 +45,8 @@ a:hover {
   border-bottom-style: double;
   border-bottom-width: thick;
   text-transform: capitalize;
+  padding-bottom: 0px;
   height: auto;
-  padding: 10px;
   /* width: 100%; */
   color: var(--primary-main);
   /* color: #f6893d; */
