@@ -163,8 +163,10 @@ export default function Page() {
                     borderTopLeftRadius: '12px',
                     borderTopRightRadius: '12px',
                     width: 'fit-content',
-                    ml: 4,
-                    px: 2,
+                    ml: 5,
+                    pr: 7,
+                    pl: 2,
+                    // px: 2,
                     fontWeight: 'bold',
                   }}
                 >
@@ -346,13 +348,6 @@ export default function Page() {
                     </CardContent>
                   </Card>
                 ))}
-                {/* <Pagination
-                  count={Math.ceil(
-                    singleSequence.sequencesSeries.length / itemsPerPage
-                  )}
-                  page={page}
-                  onChange={handleChange}
-                /> */}
                 <CustomPaginationCircles
                   count={Math.ceil(
                     singleSequence.sequencesSeries.length / itemsPerPage
