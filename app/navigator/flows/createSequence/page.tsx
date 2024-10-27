@@ -30,6 +30,7 @@ import Looks5Icon from '@mui/icons-material/Looks5'
 import { useRouter } from 'next/navigation'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import SearchIcon from '@mui/icons-material/Search'
 
 async function fetchSeries() {
   try {
@@ -261,9 +262,32 @@ export default function Page() {
                       {option.seriesName}
                     </li>
                   )}
-                  sx={{ my: 3 }}
+                  sx={{
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderRadius: '12px',
+                      borderColor: 'primary.main',
+                      boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+                    },
+                    my: 3,
+                  }}
                   renderInput={(params) => (
-                    <TextField {...params} label="Pick Series" />
+                    <TextField
+                      {...params}
+                      sx={{
+                        '& .MuiInputBase-input': { color: 'primary.main' },
+                      }}
+                      label="Pick Series"
+                      placeholder="Search for a Series"
+                      InputProps={{
+                        ...params.InputProps,
+                        startAdornment: (
+                          <>
+                            <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
+                            {params.InputProps.startAdornment}
+                          </>
+                        ),
+                      }}
+                    />
                   )}
                   onChange={handleSelect}
                 />
