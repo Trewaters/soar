@@ -190,159 +190,171 @@ export default function Page() {
             link="/navigator/flows"
             onClick={toggleDrawer(!open)}
           />
-          {FEATURES.SHOW_CREATE_SEQUENCE && (
-            <>
-              <FormGroup sx={{ mt: 4 }}>
-                <FormControl>
-                  <FormLabel>Sequence Name</FormLabel>
-                  <TextField
-                    id="outlined-basic"
-                    variant="outlined"
-                    name="nameSequence"
-                    value={nameSequence}
-                    onChange={handleChange}
-                    sx={{ mb: 3 }}
-                  />
-                </FormControl>
-
-                <FormControl>
-                  <FormLabel>Series Name</FormLabel>
-                  <Stack
-                    direction="column"
-                    spacing={2}
-                    justifyContent="flex-start"
-                    sx={{ mt: 3 }}
-                  >
-                    {seriesNameSet.map((series, index) => (
-                      <Box
-                        key={`${series}+${index}`}
-                        display={'flex'}
-                        sx={{ pl: 4 }}
-                      >
-                        <Typography sx={{ mr: 2 }} key={index}>
-                          {index + 1}.
-                        </Typography>
-                        <Typography key={index}>{series}</Typography>
-                      </Box>
-                    ))}
-                  </Stack>
-                </FormControl>
-
-                <Stack
-                  direction="row"
-                  spacing={2}
-                  justifyContent="flex-end"
-                  sx={{ mt: 3 }}
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() =>
-                      setSeriesNameSet((prev) => prev.slice(0, -1))
-                    }
-                  >
-                    <Typography>Remove One (-1)</Typography>
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => setSeriesNameSet([])}
-                  >
-                    Clear
-                  </Button>
-                </Stack>
-
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-series-search"
-                  options={flowSeries}
-                  getOptionLabel={(option: FlowSeriesData) => option.seriesName}
-                  renderOption={(props, option) => (
-                    <li {...props} key={option.id}>
-                      {option.seriesName}
-                    </li>
-                  )}
+          <Stack sx={{ px: 4, pb: 2 }}>
+            <Autocomplete
+              disablePortal
+              id="combo-box-series-search"
+              options={flowSeries}
+              getOptionLabel={(option: FlowSeriesData) => option.seriesName}
+              renderOption={(props, option) => (
+                <li {...props} key={option.id}>
+                  {option.seriesName}
+                </li>
+              )}
+              sx={{
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderRadius: '12px',
+                  borderColor: 'primary.main',
+                  boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+                },
+                my: 3,
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
                   sx={{
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderRadius: '12px',
-                      borderColor: 'primary.main',
-                      boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-                    },
-                    my: 3,
+                    '& .MuiInputBase-input': { color: 'primary.main' },
                   }}
-                  renderInput={(params) => (
+                  // label="Pick Series"
+                  placeholder="Add a Series to your Sequence..."
+                  InputProps={{
+                    ...params.InputProps,
+                    startAdornment: (
+                      <>
+                        <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
+                        {params.InputProps.startAdornment}
+                      </>
+                    ),
+                  }}
+                />
+              )}
+              onChange={handleSelect}
+            />
+            {FEATURES.SHOW_CREATE_SEQUENCE && (
+              <>
+                <FormGroup sx={{ mt: 4 }}>
+                  <FormControl>
                     <TextField
-                      {...params}
+                      id="outlined-basic"
+                      variant="filled"
+                      name="nameSequence"
+                      value={nameSequence}
+                      onChange={handleChange}
+                      placeholder="Give your Sequence a name"
                       sx={{
-                        '& .MuiInputBase-input': { color: 'primary.main' },
-                      }}
-                      label="Pick Series"
-                      placeholder="Search for a Series"
-                      InputProps={{
-                        ...params.InputProps,
-                        startAdornment: (
-                          <>
-                            <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
-                            {params.InputProps.startAdornment}
-                          </>
-                        ),
+                        backgroundColor: 'primary.main',
+                        borderTopLeftRadius: '12px',
+                        borderTopRightRadius: '12px',
+                        width: 'fit-content',
+                        ml: 5,
+                        pr: 7,
+                        pl: 2,
+                        fontWeight: 'bold',
                       }}
                     />
-                  )}
-                  onChange={handleSelect}
-                />
+                  </FormControl>
 
-                {postures?.length > 0 && (
-                  <>
-                    <Typography variant="h3">
-                      {seriesNameSet.slice(-1)[0]} Postures
-                    </Typography>
-                    <List>
-                      {postures.map((series, index) => (
-                        <ListItem key={`${series}${index}`}>
-                          <ListItemText primary={series} />
-                        </ListItem>
+                  <FormControl className="journal">
+                    <FormLabel className="journalTitle">Series Name</FormLabel>
+                    <Stack
+                      direction="column"
+                      spacing={2}
+                      justifyContent="flex-start"
+                      sx={{ mt: 3 }}
+                      className="lines"
+                    >
+                      {seriesNameSet.map((series, index) => (
+                        <Box
+                          key={`${series}+${index}`}
+                          display={'flex'}
+                          sx={{ pl: 4 }}
+                          className="journalLine"
+                        >
+                          <Typography sx={{ mr: 2 }} key={index}>
+                            {index + 1}.
+                          </Typography>
+                          <Typography key={index}>{series}</Typography>
+                        </Box>
                       ))}
-                    </List>
-                  </>
-                )}
+                    </Stack>
+                  </FormControl>
 
-                <FormControl>
-                  <FormLabel>Description</FormLabel>
-                  <TextField
-                    id="description"
-                    variant="outlined"
-                    name="description"
-                    multiline
-                    value={description}
-                    onChange={handleChange}
-                  />
-                </FormControl>
-                <Stack
-                  direction="row"
-                  spacing={2}
-                  justifyContent="center"
-                  sx={{ mt: 4 }}
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                    disabled={session === null}
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    justifyContent="flex-end"
+                    sx={{ mt: 3 }}
                   >
-                    Submit
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={handleCancel}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() =>
+                        setSeriesNameSet((prev) => prev.slice(0, -1))
+                      }
+                    >
+                      <Typography>Remove One (-1)</Typography>
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => setSeriesNameSet([])}
+                    >
+                      Clear
+                    </Button>
+                  </Stack>
+
+                  {postures?.length > 0 && (
+                    <>
+                      <Typography variant="h3">
+                        {seriesNameSet.slice(-1)[0]} Postures
+                      </Typography>
+                      <List>
+                        {postures.map((series, index) => (
+                          <ListItem key={`${series}${index}`}>
+                            <ListItemText primary={series} />
+                          </ListItem>
+                        ))}
+                      </List>
+                    </>
+                  )}
+
+                  <FormControl>
+                    <FormLabel>Description</FormLabel>
+                    <TextField
+                      id="description"
+                      variant="outlined"
+                      name="description"
+                      multiline
+                      value={description}
+                      onChange={handleChange}
+                    />
+                  </FormControl>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    justifyContent="center"
+                    sx={{ mt: 4 }}
                   >
-                    Cancel
-                  </Button>
-                </Stack>
-              </FormGroup>
-            </>
-          )}
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit}
+                      disabled={session === null}
+                    >
+                      Submit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </Button>
+                  </Stack>
+                </FormGroup>
+              </>
+            )}
+          </Stack>
         </Stack>
         <Drawer
           onClick={toggleDrawer(!open)}
@@ -414,169 +426,6 @@ export default function Page() {
           </List>
         </Drawer>
       </Box>
-
-      {/* 
-    OLD CODE BELOW
-    */}
-
-      {/* <Stack
-        spacing={2}
-        flexDirection={'column'}
-        sx={{ marginX: 3, marginY: 3, background: 'white', mb: '1em' }}
-      >
-        <>
-          {FEATURES.SHOW_CREATE_SEQUENCE && (
-            <>
-              <Stack
-                direction="column"
-                spacing={5}
-                sx={{ mt: 4 }}
-                justifyContent={'space-between'}
-              >
-                <Typography variant="h2" textAlign="center">
-                  Create a Sequence
-                </Typography>
-
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  href="/navigator/flows"
-                  LinkComponent="a"
-                  sx={{ my: 3, display: 'block' }}
-                >
-                  Back to flow
-                </Button>
-              </Stack>
-              <FormGroup sx={{ mt: 4 }}>
-                <FormControl>
-                  <FormLabel>Sequence Name</FormLabel>
-                  <TextField
-                    id="outlined-basic"
-                    variant="outlined"
-                    name="nameSequence"
-                    value={nameSequence}
-                    onChange={handleChange}
-                    sx={{ mb: 3 }}
-                  />
-                </FormControl>
-
-                <FormControl>
-                  <FormLabel>Series Name</FormLabel>
-                  <Stack
-                    direction="column"
-                    spacing={2}
-                    justifyContent="flex-start"
-                    sx={{ mt: 3 }}
-                  >
-                    {seriesNameSet.map((series, index) => (
-                      <Box
-                        key={`${series}+${index}`}
-                        display={'flex'}
-                        sx={{ pl: 4 }}
-                      >
-                        <Typography sx={{ mr: 2 }} key={index}>
-                          {index + 1}.
-                        </Typography>
-                        <Typography key={index}>{series}</Typography>
-                      </Box>
-                    ))}
-                  </Stack>
-                </FormControl>
-
-                <Stack
-                  direction="row"
-                  spacing={2}
-                  justifyContent="flex-end"
-                  sx={{ mt: 3 }}
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() =>
-                      setSeriesNameSet((prev) => prev.slice(0, -1))
-                    }
-                  >
-                    <Typography>Remove One (-1)</Typography>
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => setSeriesNameSet([])}
-                  >
-                    Clear
-                  </Button>
-                </Stack>
-
-                <Autocomplete
-                  disablePortal
-                  id="combo-box-series-search"
-                  options={flowSeries}
-                  getOptionLabel={(option: FlowSeriesData) => option.seriesName}
-                  renderOption={(props, option) => (
-                    <li {...props} key={option.id}>
-                      {option.seriesName}
-                    </li>
-                  )}
-                  sx={{ my: 3 }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Pick Series" />
-                  )}
-                  onChange={handleSelect}
-                />
-
-                {postures?.length > 0 && (
-                  <>
-                    <Typography variant="h3">
-                      {seriesNameSet.slice(-1)[0]} Postures
-                    </Typography>
-                    <List>
-                      {postures.map((series, index) => (
-                        <ListItem key={`${series}${index}`}>
-                          <ListItemText primary={series} />
-                        </ListItem>
-                      ))}
-                    </List>
-                  </>
-                )}
-
-                <FormControl>
-                  <FormLabel>Description</FormLabel>
-                  <TextField
-                    id="description"
-                    variant="outlined"
-                    name="description"
-                    multiline
-                    value={description}
-                    onChange={handleChange}
-                  />
-                </FormControl>
-                <Stack
-                  direction="row"
-                  spacing={2}
-                  justifyContent="center"
-                  sx={{ mt: 4 }}
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                    disabled={session === null}
-                  >
-                    Submit
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    onClick={handleCancel}
-                  >
-                    Cancel
-                  </Button>
-                </Stack>
-              </FormGroup>
-            </>
-          )}
-        </>
-      </Stack> */}
     </>
   )
 }

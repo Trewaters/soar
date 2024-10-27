@@ -132,7 +132,6 @@ export default function Page() {
                 <TextField
                   sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
                   {...params}
-                  // label="Flow Sequence"
                   placeholder="Search for a Sequence"
                   InputProps={{
                     ...params.InputProps,
@@ -166,59 +165,12 @@ export default function Page() {
                     ml: 5,
                     pr: 7,
                     pl: 2,
-                    // px: 2,
                     fontWeight: 'bold',
                   }}
                 >
                   {singleSequence.nameSequence}
                 </Typography>
               </Box>
-              {/* 
-              <Stack rowGap={3} alignItems="center">
-                {singleSequence.sequencesSeries.map((seriesMini, i) => (
-                  <Card
-                    key={i}
-                    sx={{
-                      width: '85%',
-                      boxShadow: 3,
-                      textAlign: 'center',
-                      borderColor: 'primary.main',
-                      borderWidth: '1px',
-                      borderStyle: 'solid',
-                    }}
-                  >
-                    <CardHeader title={seriesMini.seriesName} />
-                    <CardContent>
-                      {seriesMini.seriesPostures.map(
-                        (asana: any, asanaIndex: any) => (
-                          <Stack
-                            direction={'column'}
-                            key={asanaIndex}
-                            sx={{ mb: 3 }}
-                          >
-                            <Typography
-                              key={asanaIndex}
-                              textAlign={'left'}
-                              fontWeight={'bold'}
-                              variant="body1"
-                            >
-                              {asana.split(',')[0]}
-                            </Typography>
-                            <Typography
-                              key={asanaIndex}
-                              textAlign={'left'}
-                              variant="body2"
-                            >
-                              {asana.split(',')[1]}
-                            </Typography>
-                          </Stack>
-                        )
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
-              </Stack>
-               */}
               <Stack rowGap={3} alignItems="center">
                 {paginatedData.map((seriesMini, i) => (
                   <Card
