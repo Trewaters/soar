@@ -37,6 +37,7 @@ import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SearchIcon from '@mui/icons-material/Search'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import AutocompleteComponent from '@app/clientComponents/autocomplete-search'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -76,7 +77,10 @@ export default function Page() {
     fetchData()
   }, [session])
 
-  function handleSelect(event: ChangeEvent<{}>, value: PostureData | null) {
+  function handleSelect(
+    event: React.SyntheticEvent<Element, Event>,
+    value: PostureData | null
+  ) {
     event.preventDefault()
     if (value) {
       const simplifiedName =
@@ -194,42 +198,24 @@ export default function Page() {
         {FEATURES.SHOW_CREATE_SERIES && (
           <>
             <FormControl>
-              <Autocomplete
-                id="combo-box-series-search"
+              <AutocompleteComponent
                 options={postures}
-                getOptionLabel={(option: PostureData) => option.english_name}
-                renderOption={(props, option) => (
-                  <li {...props} key={option.id}>
-                    {option.english_name}
-                  </li>
-                )}
-                sx={{
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderRadius: '12px',
-                    borderColor: 'primary.main',
-                    boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-                  },
+                getOptionLabel={(option) =>
+                  (option as PostureData).english_name
+                }
+                renderOption={(props, option) => {
+                  const postureOption = option as PostureData
+                  return (
+                    <li {...props} key={postureOption.id}>
+                      {postureOption.english_name}
+                    </li>
+                  )
                 }}
-                disablePortal
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    sx={{
-                      '& .MuiInputBase-input': { color: 'primary.main' },
-                    }}
-                    placeholder="Add a pose to your series"
-                    InputProps={{
-                      ...params.InputProps,
-                      startAdornment: (
-                        <>
-                          <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
-                          {params.InputProps.startAdornment}
-                        </>
-                      ),
-                    }}
-                  />
-                )}
-                onChange={handleSelect}
+                placeholder="Add a pose to your series"
+                onChange={(event, value) =>
+                  handleSelect(event, value as PostureData | null)
+                }
+                renderInput={() => <TextField placeholder="Search..." />}
               />
             </FormControl>
             <Box className="journal">
