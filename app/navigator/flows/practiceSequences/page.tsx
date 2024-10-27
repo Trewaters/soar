@@ -17,6 +17,7 @@ import {
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search'
 import Image from '@node_modules/next/image'
+import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
 
 interface SeriesMini {
   seriesName: string
@@ -316,31 +317,43 @@ export default function Page() {
                     <CardContent className="lines" sx={{ p: 0 }}>
                       {seriesMini.seriesPostures.map((asana, asanaIndex) => (
                         <Stack
-                          direction={'column'}
+                          direction={'row'}
                           key={asanaIndex}
                           className="journalLine"
+                          alignItems="flex-start"
                         >
                           <Typography
-                            key={asanaIndex}
-                            textAlign={'left'}
-                            fontWeight={'bold'}
                             variant="body1"
+                            fontWeight="bold"
+                            sx={{ width: '30px', textAlign: 'right', mr: 2 }}
                           >
-                            {asana.split(',')[0]}
+                            {asanaIndex + 1}.
                           </Typography>
-                          <Typography
-                            key={asanaIndex}
-                            textAlign={'left'}
-                            variant="body2"
-                          >
-                            {asana.split(',')[1]}
-                          </Typography>
+                          <Stack direction={'column'}>
+                            <Typography
+                              textAlign={'left'}
+                              fontWeight={'bold'}
+                              variant="body1"
+                            >
+                              {asana.split(',')[0]}
+                            </Typography>
+                            <Typography textAlign={'left'} variant="body2">
+                              {asana.split(',')[1]}
+                            </Typography>
+                          </Stack>
                         </Stack>
                       ))}
                     </CardContent>
                   </Card>
                 ))}
-                <Pagination
+                {/* <Pagination
+                  count={Math.ceil(
+                    singleSequence.sequencesSeries.length / itemsPerPage
+                  )}
+                  page={page}
+                  onChange={handleChange}
+                /> */}
+                <CustomPaginationCircles
                   count={Math.ceil(
                     singleSequence.sequencesSeries.length / itemsPerPage
                   )}
