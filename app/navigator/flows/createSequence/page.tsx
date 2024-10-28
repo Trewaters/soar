@@ -231,7 +231,7 @@ export default function Page() {
             link="/navigator/flows"
             onClick={toggleDrawer(!open)}
           />
-          <Stack sx={{ px: 4, pb: 2 }}>
+          <FormControl>
             <Autocomplete
               disablePortal
               id="combo-box-series-search"
@@ -270,6 +270,8 @@ export default function Page() {
               )}
               onChange={handleSelect}
             />
+          </FormControl>
+          <Box>
             {FEATURES.SHOW_CREATE_SEQUENCE && (
               <>
                 <FormGroup sx={{ mt: 4 }}>
@@ -392,7 +394,10 @@ export default function Page() {
                       onChange={handleChange}
                       sx={{
                         '& .MuiInputBase-input': { color: 'primary.main' },
-                        width: '100%',
+                        width: '90%',
+                        alignSelf: 'center',
+                        color: 'primary.main',
+                        backgroundColor: 'navSplash.dark',
                       }}
                       InputProps={{
                         endAdornment: (
@@ -438,7 +443,7 @@ export default function Page() {
                 </FormGroup>
               </>
             )}
-          </Stack>
+          </Box>
         </Stack>
         <Drawer
           onClick={toggleDrawer(!open)}
