@@ -34,6 +34,7 @@ import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import { ArrowBack, ArrowForward } from '@mui/icons-material'
 
 async function fetchSeries() {
   try {
@@ -72,6 +73,10 @@ export default function Page() {
   const [postures, setPostures] = useState<string[]>([])
   const [open, setOpen] = useState(false)
 
+  const [currentSeriesIndex, setCurrentSeriesIndex] = useState(
+    seriesNameSet.length - 1
+  )
+
   const router = useRouter()
 
   useEffect(() => {
@@ -85,9 +90,8 @@ export default function Page() {
     getData()
   }, [session])
 
+  // Ensure postures are updated when a new series is added
   function handleSelect(event: ChangeEvent<{}>, value: FlowSeriesData | null) {
-    // Logs the type of event (e.g., 'click')
-    // Logs the element that triggered the event
     event.preventDefault()
     if (value) {
       setSeriesNameSet((prevSeriesNameSet) => [
@@ -99,6 +103,9 @@ export default function Page() {
         ...sequences,
         sequencesSeries: [...sequences.sequencesSeries, value],
       })
+      const newIndex = seriesNameSet.length // Update index when a new series is added
+      setCurrentSeriesIndex(newIndex)
+      updatePostures(newIndex)
     }
   }
 
@@ -125,7 +132,6 @@ export default function Page() {
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
-      // eslint-disable-next-line no-unused-vars
       const data = await response.json()
     } catch (error: Error | any) {
       error.message
@@ -158,7 +164,6 @@ export default function Page() {
   }
 
   function handleCancel() {
-    // Clear the form
     setNameSequence('')
     setDescription('')
     setSeriesNameSet([])
@@ -167,6 +172,35 @@ export default function Page() {
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen)
   }
+
+  // Function to update postures based on the current series index
+  const updatePostures = (index: number) => {
+    const seriesName = seriesNameSet[index]
+    const series = flowSeries.find((s) => s.seriesName === seriesName)
+    if (series) {
+      setPostures(series.seriesPostures)
+    }
+  }
+
+  // Update handleNextSeries to call updatePostures
+  const handleNextSeries = () => {
+    setCurrentSeriesIndex((prevIndex) => {
+      const newIndex = Math.min(prevIndex + 1, seriesNameSet.length - 1)
+      updatePostures(newIndex)
+      return newIndex
+    })
+  }
+
+  // Update handlePreviousSeries to call updatePostures
+  const handlePreviousSeries = () => {
+    setCurrentSeriesIndex((prevIndex) => {
+      const newIndex = Math.max(prevIndex - 1, 0)
+      updatePostures(newIndex)
+      return newIndex
+    })
+  }
+
+  const currentSeriesName = seriesNameSet[currentSeriesIndex] || ''
 
   return (
     <>
@@ -218,7 +252,6 @@ export default function Page() {
                   sx={{
                     '& .MuiInputBase-input': { color: 'primary.main' },
                   }}
-                  // label="Pick Series"
                   placeholder="Add a Series to your Sequence..."
                   InputProps={{
                     ...params.InputProps,
@@ -281,36 +314,12 @@ export default function Page() {
                       ))}
                     </Stack>
                   </FormControl>
-                  {/* 
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="flex-end"
-                    sx={{ mt: 3 }}
-                  >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() =>
-                        setSeriesNameSet((prev) => prev.slice(0, -1))
-                      }
-                    >
-                      <Typography>Remove One (-1)</Typography>
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => setSeriesNameSet([])}
-                    >
-                      Clear
-                    </Button>
-                  </Stack> */}
 
                   {postures?.length > 0 && (
                     <>
                       <FormControl sx={{ mt: 4 }} className="journal">
                         <FormLabel className="journalTitle">
-                          {seriesNameSet.slice(-1)[0]}
+                          {currentSeriesName}
                         </FormLabel>
 
                         <List className="lines">
@@ -347,6 +356,21 @@ export default function Page() {
                             <DeleteForeverIcon />
                             <ListItemText primary="Remove series" />
                           </ListItemIcon>
+                          <IconButton
+                            onClick={handlePreviousSeries}
+                            disabled={currentSeriesIndex === 0}
+                          >
+                            <ArrowBack />
+                          </IconButton>
+                          <Typography>{currentSeriesName}</Typography>
+                          <IconButton
+                            onClick={handleNextSeries}
+                            disabled={
+                              currentSeriesIndex === seriesNameSet.length - 1
+                            }
+                          >
+                            <ArrowForward />
+                          </IconButton>
                         </ListItem>
                       </FormControl>
                     </>
@@ -399,7 +423,6 @@ export default function Page() {
           <List
             sx={{
               width: 'auto',
-              // maxWidth: 360,
               bgcolor: 'background.helper',
               alignSelf: 'center',
               borderRadius: 4,
