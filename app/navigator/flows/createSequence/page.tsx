@@ -21,6 +21,7 @@ import {
   TextField,
   Typography,
   ListItemIcon,
+  Checkbox,
 } from '@mui/material'
 import { useSession } from 'next-auth/react'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
@@ -150,6 +151,7 @@ export default function Page() {
         break
       case 'description':
         setDescription(value)
+        setIsDirtyDescription(event.target.value.length > 0)
         break
       case 'duration':
         setDuration(value)
@@ -167,6 +169,7 @@ export default function Page() {
     setNameSequence('')
     setDescription('')
     setSeriesNameSet([])
+    setIsDirtyDescription(false)
   }
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -201,6 +204,7 @@ export default function Page() {
   }
 
   const currentSeriesName = seriesNameSet[currentSeriesIndex] || ''
+  const [isDirtyDescription, setIsDirtyDescription] = useState(false)
 
   return (
     <>
@@ -376,15 +380,37 @@ export default function Page() {
                     </>
                   )}
 
-                  <FormControl>
-                    <FormLabel>Description</FormLabel>
+                  <FormControl sx={{ width: '100%', mt: 3 }}>
                     <TextField
                       id="description"
+                      label="Description"
+                      multiline
+                      minRows={4}
                       variant="outlined"
                       name="description"
-                      multiline
                       value={description}
                       onChange={handleChange}
+                      sx={{
+                        '& .MuiInputBase-input': { color: 'primary.main' },
+                        width: '100%',
+                      }}
+                      InputProps={{
+                        endAdornment: (
+                          <Checkbox
+                            checked={isDirtyDescription}
+                            onChange={handleChange}
+                            sx={{
+                              position: 'absolute',
+                              top: 0,
+                              right: 0,
+                              color: 'primary.main',
+                              '&.Mui-checked': {
+                                color: 'primary.main',
+                              },
+                            }}
+                          />
+                        ),
+                      }}
                     />
                   </FormControl>
                   <Stack
@@ -406,7 +432,7 @@ export default function Page() {
                       color="secondary"
                       onClick={handleCancel}
                     >
-                      Cancel
+                      Start Over
                     </Button>
                   </Stack>
                 </FormGroup>
