@@ -7,6 +7,7 @@ import {
   Avatar,
   Box,
   Button,
+  IconButton,
   Drawer,
   FormControl,
   FormGroup,
@@ -19,6 +20,7 @@ import {
   Stack,
   TextField,
   Typography,
+  ListItemIcon,
 } from '@mui/material'
 import { useSession } from 'next-auth/react'
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
@@ -31,6 +33,7 @@ import { useRouter } from 'next/navigation'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 
 async function fetchSeries() {
   try {
@@ -278,7 +281,7 @@ export default function Page() {
                       ))}
                     </Stack>
                   </FormControl>
-
+                  {/* 
                   <Stack
                     direction="row"
                     spacing={2}
@@ -301,20 +304,51 @@ export default function Page() {
                     >
                       Clear
                     </Button>
-                  </Stack>
+                  </Stack> */}
 
                   {postures?.length > 0 && (
                     <>
-                      <Typography variant="h3">
-                        {seriesNameSet.slice(-1)[0]} Postures
-                      </Typography>
-                      <List>
-                        {postures.map((series, index) => (
-                          <ListItem key={`${series}${index}`}>
-                            <ListItemText primary={series} />
-                          </ListItem>
-                        ))}
-                      </List>
+                      <FormControl sx={{ mt: 4 }} className="journal">
+                        <FormLabel className="journalTitle">
+                          {seriesNameSet.slice(-1)[0]}
+                        </FormLabel>
+
+                        <List className="lines">
+                          {postures.map((series, index) => (
+                            <ListItem
+                              className="journalLine"
+                              sx={{ whiteSpace: 'collapse' }}
+                              key={`${series}${index}`}
+                            >
+                              <ListItemText
+                                primary={series.split(',').map((item, idx) => (
+                                  <Typography
+                                    variant="body1"
+                                    key={idx}
+                                    sx={{
+                                      fontStyle:
+                                        idx === 1 ? 'italic' : 'normal',
+                                    }}
+                                  >
+                                    {item}
+                                  </Typography>
+                                ))}
+                              />
+                            </ListItem>
+                          ))}
+                        </List>
+                        <ListItem>
+                          <ListItemIcon
+                            sx={{ color: 'error.light' }}
+                            onClick={() =>
+                              setSeriesNameSet((prev) => prev.slice(0, -1))
+                            }
+                          >
+                            <DeleteForeverIcon />
+                            <ListItemText primary="Remove series" />
+                          </ListItemIcon>
+                        </ListItem>
+                      </FormControl>
                     </>
                   )}
 
