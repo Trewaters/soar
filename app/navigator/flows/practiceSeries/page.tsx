@@ -80,6 +80,7 @@ export default function Page() {
         <Stack sx={{ px: 2 }}>
           <Autocomplete
             disablePortal
+            freeSolo={false}
             id="combo-box-series-search"
             options={series}
             getOptionLabel={(option: FlowSeriesData) => option.seriesName}
