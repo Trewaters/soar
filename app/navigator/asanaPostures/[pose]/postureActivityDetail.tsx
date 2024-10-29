@@ -258,9 +258,11 @@ export default function PostureActivityDetail({
               ml: { xs: 2, md: '23%' },
               boxShadow: '0 -4px 4px 0 #000000',
               opacity: 0.75, // 25% transparency
-              width: '50%',
+              width: '100%', // Make the width responsive
+              maxWidth: '50%', // Ensure it doesn't exceed 50% of the parent
               borderRadius: '12px',
               backdropFilter: 'blur(48%)', // Add blur effect
+              overflow: 'hidden', // Prevent overflow
             }}
           >
             <Stack>
