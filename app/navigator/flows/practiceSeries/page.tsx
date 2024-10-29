@@ -77,7 +77,7 @@ export default function Page() {
           link="/navigator/flows"
           onClick={handleInfoClick}
         />
-        <Stack sx={{ px: 4, pb: 2 }}>
+        <Stack>
           <Autocomplete
             disablePortal
             id="combo-box-series-search"
@@ -93,7 +93,6 @@ export default function Page() {
                 borderRadius: '12px',
                 borderColor: 'primary.main',
                 boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-                width: 'auto',
               },
             }}
             renderInput={(params) => (

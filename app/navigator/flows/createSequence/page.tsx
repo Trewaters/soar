@@ -217,10 +217,7 @@ export default function Page() {
           mt: 4,
         }}
       >
-        <Stack
-          spacing={2}
-          sx={{ marginX: 3, marginY: 3, mb: '1em', width: 'fit-content' }}
-        >
+        <Stack sx={{ marginX: 3, marginY: 3, mb: '1em' }}>
           <SplashHeader
             src={'/images/header-create-sequences.png'}
             alt={'Create Sequences'}
@@ -231,7 +228,7 @@ export default function Page() {
             link="/navigator/flows"
             onClick={toggleDrawer(!open)}
           />
-          <FormControl>
+          <FormControl sx={{ px: 4, pb: 2 }}>
             <Autocomplete
               disablePortal
               id="combo-box-series-search"
@@ -271,7 +268,7 @@ export default function Page() {
               onChange={handleSelect}
             />
           </FormControl>
-          <Box>
+          <Box sx={{ px: 2 }}>
             {FEATURES.SHOW_CREATE_SEQUENCE && (
               <>
                 <FormGroup sx={{ mt: 4 }}>

@@ -194,8 +194,8 @@ export default function Page() {
           onClick={toggleDrawer(!open)}
         />
         {FEATURES.SHOW_CREATE_SERIES && (
-          <>
-            <FormControl>
+          <Box sx={{ px: 2 }}>
+            <FormControl sx={{ width: '100%', mb: 3 }}>
               <AutocompleteComponent
                 options={postures}
                 getOptionLabel={(option) =>
@@ -435,7 +435,7 @@ export default function Page() {
                 </Grid>
               </FormGroup>
             </Box>
-          </>
+          </Box>
         )}
       </Stack>
       {/* information drawer */}
