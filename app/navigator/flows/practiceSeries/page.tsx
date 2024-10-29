@@ -3,6 +3,7 @@ import { FlowSeriesData } from '@context/AsanaSeriesContext'
 import {
   Autocomplete,
   Box,
+  Drawer,
   Stack,
   TextField,
   Typography,
@@ -18,6 +19,7 @@ export default function Page() {
   const theme = useTheme()
   const [series, setSeries] = useState<FlowSeriesData[]>([])
   const [flow, setFlow] = useState<FlowSeriesData>()
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
@@ -48,9 +50,7 @@ export default function Page() {
   }
 
   function handleInfoClick() {
-    alert(
-      'Select a series to view the postures and description. Click on the back button to return to the flow series.'
-    )
+    setOpen(!open)
   }
 
   return (
@@ -173,6 +173,14 @@ export default function Page() {
           </Box>
         )}
       </Stack>
+      <Drawer
+        // sx={{ width: '50%' }}
+        anchor="bottom"
+        open={open}
+        onClose={() => setOpen(false)}
+      >
+        <Typography variant="body1">Pick a Series to practice.</Typography>
+      </Drawer>
     </Box>
   )
 }

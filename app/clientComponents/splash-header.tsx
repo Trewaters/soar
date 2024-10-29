@@ -40,20 +40,16 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
         variant="splashTitle"
         sx={{
           position: 'absolute',
-          // bottom: '220px',
-          // left: '50%', // Center horizontally
-          // transform: 'translateX(-50%)', // Center horizontally
+          top: '30%', // Center vertically
           display: 'flex',
           alignSelf: 'center',
           color: 'primary.main',
           backgroundColor: 'navSplash.light',
           width: 'fit-content',
-          // width: '-webkit-fill-available',
           padding: '8px',
           borderRadius: '8px',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
-          // whiteSpace: 'normal',
         }}
       >
         {title}

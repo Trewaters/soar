@@ -31,7 +31,7 @@ export default function Page() {
   }, [])
 
   return (
-    <Box display={'flex'} flexDirection={'column'} sx={{ mt: 4 }}>
+    <Box display={'flex'} flexDirection={'column'}>
       <SplashHeader
         src={
           '/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png'
@@ -42,9 +42,7 @@ export default function Page() {
       <Box
         sx={{
           alignSelf: 'center',
-          width: 'auto',
-          position: 'relative',
-          bottom: '141px',
+          my: 4,
         }}
       >
         <PostureSearch posturePropData={posturePropData} />

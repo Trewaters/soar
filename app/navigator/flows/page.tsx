@@ -26,7 +26,6 @@ export default function Page() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        mt: 4,
       }}
     >
       <SplashHeader

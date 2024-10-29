@@ -1,3 +1,5 @@
+'use client'
+import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Image from 'next/image'
@@ -17,6 +19,31 @@ export default function PostureActivityDetail({
 }: PostureCardProps) {
   const posture = postureCardProp
   const router = useRouter()
+  const [easyChipVariant, setEasyChipVariant] = useState<'filled' | 'outlined'>(
+    'outlined'
+  )
+  const [averageChipVariant, setAverageChipVariant] = useState<
+    'filled' | 'outlined'
+  >('outlined')
+  const [difficultChipVariant, setDifficultChipVariant] = useState<
+    'filled' | 'outlined'
+  >('outlined')
+
+  const handleEasyChipClick = () => {
+    setEasyChipVariant((prev) => (prev === 'outlined' ? 'filled' : 'outlined'))
+  }
+
+  const handleAverageChipClick = () => {
+    setAverageChipVariant((prev) =>
+      prev === 'outlined' ? 'filled' : 'outlined'
+    )
+  }
+
+  const handleDifficultChipClick = () => {
+    setDifficultChipVariant((prev) =>
+      prev === 'outlined' ? 'filled' : 'outlined'
+    )
+  }
 
   const getAsanaIconUrl = (category: string) => {
     switch (category) {
@@ -227,17 +254,35 @@ export default function PostureActivityDetail({
             flexDirection={'row'}
             gap={2}
             sx={{
+              p: 2,
               ml: { xs: 2, md: '23%' },
+              boxShadow: '0 -4px 4px 0 #000000',
+              opacity: 0.75, // 25% transparency
+              width: '50%',
+              borderRadius: '12px',
+              backdropFilter: 'blur(48%)', // Add blur effect
             }}
           >
             <Stack>
-              <Chip label="Completed" variant="outlined" />
+              <Chip
+                label="Easy"
+                variant={easyChipVariant}
+                onClick={handleEasyChipClick}
+              />
             </Stack>
             <Stack>
-              <Chip label="Easy" variant="outlined" />
+              <Chip
+                label="Average"
+                variant={averageChipVariant}
+                onClick={handleAverageChipClick}
+              />
             </Stack>
             <Stack>
-              <Chip label="Difficult" />
+              <Chip
+                label="Difficult"
+                variant={difficultChipVariant}
+                onClick={handleDifficultChipClick}
+              />
             </Stack>
           </Stack>
           {/* <Typography
