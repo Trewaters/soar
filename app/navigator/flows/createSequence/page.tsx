@@ -299,7 +299,9 @@ export default function Page() {
                   </FormControl>
 
                   <FormControl className="journal">
-                    <FormLabel className="journalTitle">Series Name</FormLabel>
+                    <FormLabel className="journalTitle">
+                      List of Series in this Sequence
+                    </FormLabel>
                     <Stack
                       direction="column"
                       spacing={2}
