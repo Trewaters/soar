@@ -16,21 +16,28 @@ export default async function UserButton() {
         {!session?.user && (
           <Box sx={{ pt: 4 }} display={'flex'} flexDirection={'column'}>
             <Typography variant="h2">Good Bye 👋🏾</Typography>
-            <Typography variant="h2">or</Typography>
-            <Typography variant="h2">sign in again 🔓</Typography>
+            <Typography variant="h3" component="p">
+              or
+            </Typography>
+            <Typography variant="subtitle1">sign in again 🔓</Typography>
+            <Typography variant="body1">
+              Don&apos;t have an account yet❔Click sign in to create one
+            </Typography>
           </Box>
         )}
       </>
     )
   return (
     <>
-      <SignOut />
       {session?.user && (
-        <Box sx={{ pt: 4 }}>
-          <Typography variant="h2">Welcome 🔆</Typography>
-          <Typography variant="h2">{session.user.name}</Typography>
+        <Box sx={{ pt: 4, pb: 3 }}>
+          <Typography variant="h2">Welcome back 🔆</Typography>
+          <Typography variant="subtitle1">
+            We&apos;re happy you are here {session.user.name}
+          </Typography>
         </Box>
       )}
+      <SignOut />
     </>
   )
 }
