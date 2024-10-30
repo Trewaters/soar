@@ -36,6 +36,7 @@ import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import { ArrowBack, ArrowForward } from '@mui/icons-material'
+import Image from 'next/image'
 
 async function fetchSeries() {
   try {
@@ -275,7 +276,7 @@ export default function Page() {
                   <FormControl>
                     <TextField
                       id="outlined-basic"
-                      variant="filled"
+                      variant="standard"
                       name="nameSequence"
                       value={nameSequence}
                       onChange={handleChange}
@@ -284,11 +285,15 @@ export default function Page() {
                         backgroundColor: 'primary.main',
                         borderTopLeftRadius: '12px',
                         borderTopRightRadius: '12px',
-                        width: 'fit-content',
+                        width: '80%',
+                        height: '2em',
                         ml: 5,
                         pr: 7,
                         pl: 2,
                         fontWeight: 'bold',
+                        '& .MuiInputBase-input': {
+                          padding: '0.5em 0 0 0',
+                        },
                       }}
                     />
                   </FormControl>
@@ -379,19 +384,62 @@ export default function Page() {
                     </>
                   )}
 
-                  <FormControl sx={{ width: '100%', mt: 3 }}>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    justifyContent="center"
+                    sx={{ mt: 4 }}
+                  >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit}
+                      disabled={session === null}
+                    >
+                      Submit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="inherit"
+                      sx={{ color: 'primary.contrastText' }}
+                      onClick={handleCancel}
+                    >
+                      Start Over
+                    </Button>
+                  </Stack>
+                  <FormControl
+                    sx={{
+                      width: '100%',
+                      mt: 3,
+                      border: '1px solid black',
+                      borderRadius: '12px',
+                      p: 2,
+                    }}
+                  >
+                    <Stack gap={2} flexDirection={'row'} alignItems={'center'}>
+                      <Typography color={'primary.main'} variant="h3">
+                        Description
+                      </Typography>
+                      <Image
+                        src={'/icons/designImages/leaf-2.svg'}
+                        alt={'leaf icon'}
+                        height={21}
+                        width={21}
+                      ></Image>
+                    </Stack>
                     <TextField
                       id="description"
-                      label="Description"
+                      // label="Description"
+                      placeholder="Type a description of your sequence"
                       multiline
                       minRows={4}
-                      variant="outlined"
+                      variant="standard"
                       name="description"
                       value={description}
                       onChange={handleChange}
                       sx={{
                         '& .MuiInputBase-input': { color: 'primary.main' },
-                        width: '90%',
+                        width: '100%',
                         alignSelf: 'center',
                         color: 'primary.main',
                         backgroundColor: 'navSplash.dark',
@@ -415,28 +463,6 @@ export default function Page() {
                       }}
                     />
                   </FormControl>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="center"
-                    sx={{ mt: 4 }}
-                  >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleSubmit}
-                      disabled={session === null}
-                    >
-                      Submit
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={handleCancel}
-                    >
-                      Start Over
-                    </Button>
-                  </Stack>
                 </FormGroup>
               </>
             )}

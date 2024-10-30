@@ -36,7 +36,7 @@ import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SplashHeader from '@app/clientComponents/splash-header'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AutocompleteComponent from '@app/clientComponents/autocomplete-search'
-import Image from '@node_modules/next/image'
+import Image from 'next/image'
 
 export default function Page() {
   const { data: session } = useSession()
