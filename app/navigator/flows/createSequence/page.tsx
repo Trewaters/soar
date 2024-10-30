@@ -355,30 +355,47 @@ export default function Page() {
                           ))}
                         </List>
                         <ListItem>
-                          <ListItemIcon
-                            sx={{ color: 'error.light' }}
-                            onClick={() =>
-                              setSeriesNameSet((prev) => prev.slice(0, -1))
-                            }
-                          >
-                            <DeleteForeverIcon />
-                            <ListItemText primary="Remove series" />
-                          </ListItemIcon>
-                          <IconButton
-                            onClick={handlePreviousSeries}
-                            disabled={currentSeriesIndex === 0}
-                          >
-                            <ArrowBack />
-                          </IconButton>
-                          <Typography>{currentSeriesName}</Typography>
-                          <IconButton
-                            onClick={handleNextSeries}
-                            disabled={
-                              currentSeriesIndex === seriesNameSet.length - 1
-                            }
-                          >
-                            <ArrowForward />
-                          </IconButton>
+                          <Stack>
+                            <Stack>
+                              <ListItemIcon
+                                sx={{ color: 'error.light' }}
+                                onClick={() =>
+                                  setSeriesNameSet((prev) => prev.slice(0, -1))
+                                }
+                              >
+                                <DeleteForeverIcon />
+                                <ListItemText primary="Remove series" />
+                              </ListItemIcon>
+                            </Stack>
+                            <Stack flexDirection={'row'} alignItems={'center'}>
+                              <Typography>
+                                {currentSeriesIndex > 0
+                                  ? seriesNameSet[currentSeriesIndex - 1]
+                                  : ''}
+                              </Typography>
+                              <IconButton
+                                onClick={handlePreviousSeries}
+                                disabled={currentSeriesIndex === 0}
+                              >
+                                <ArrowBack />
+                              </IconButton>
+
+                              <IconButton
+                                onClick={handleNextSeries}
+                                disabled={
+                                  currentSeriesIndex ===
+                                  seriesNameSet.length - 1
+                                }
+                              >
+                                <ArrowForward />
+                              </IconButton>
+                              <Typography>
+                                {currentSeriesIndex < seriesNameSet.length - 1
+                                  ? seriesNameSet[currentSeriesIndex + 1]
+                                  : ''}
+                              </Typography>
+                            </Stack>
+                          </Stack>
                         </ListItem>
                       </FormControl>
                     </>
