@@ -36,6 +36,7 @@ import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SplashHeader from '@app/clientComponents/splash-header'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AutocompleteComponent from '@app/clientComponents/autocomplete-search'
+import Image from '@node_modules/next/image'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -378,15 +379,58 @@ export default function Page() {
                     </Button> */}
                   </Stack>
                 </FormControl>
+                <Grid item xs={12} sx={{ mb: 3 }}>
+                  <Stack direction="row" spacing={2} justifyContent="center">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit}
+                      disabled={session === null}
+                      sx={{ borderRadius: '12px' }}
+                    >
+                      Submit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="inherit"
+                      sx={{
+                        color: 'primary.contrastText',
+                        borderRadius: '12px',
+                      }}
+                      onClick={handleCancel}
+                    >
+                      Start Over
+                    </Button>
+                  </Stack>
+                </Grid>
 
                 <Grid item xs={12} sx={{ mb: 2, mx: 2 }}>
-                  <FormControl sx={{ width: '100%' }}>
+                  <FormControl
+                    sx={{
+                      width: '100%',
+                      border: '1px solid black',
+                      borderRadius: '12px',
+                      p: 2,
+                    }}
+                  >
+                    <Stack gap={2} flexDirection={'row'} alignItems={'center'}>
+                      <Typography color={'primary.main'} variant="h3">
+                        Description
+                      </Typography>
+                      <Image
+                        src={'/icons/designImages/leaf-2.svg'}
+                        alt={'leaf icon'}
+                        height={21}
+                        width={21}
+                      ></Image>
+                    </Stack>
                     <TextField
                       id="outlined-basic"
-                      label="Description"
+                      // label="Description"
+                      placeholder="Type a description..."
                       multiline
                       minRows={4}
-                      variant="outlined"
+                      variant="standard"
                       name="description"
                       value={description}
                       onChange={handleChange}
@@ -413,25 +457,6 @@ export default function Page() {
                       }}
                     />
                   </FormControl>
-                </Grid>
-                <Grid item xs={12} sx={{ mb: 2 }}>
-                  <Stack direction="row" spacing={2} justifyContent="center">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleSubmit}
-                      disabled={session === null}
-                    >
-                      Submit
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={handleCancel}
-                    >
-                      Start Over
-                    </Button>
-                  </Stack>
                 </Grid>
               </FormGroup>
             </Box>
