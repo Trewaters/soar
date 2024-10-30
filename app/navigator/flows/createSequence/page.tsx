@@ -421,7 +421,7 @@ export default function Page() {
                         Description
                       </Typography>
                       <Image
-                        src={'/icons/designImages/leaf-2.svg'}
+                        src={'/icons/designImages/leaf-3.svg'}
                         alt={'leaf icon'}
                         height={21}
                         width={21}
