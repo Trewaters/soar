@@ -129,6 +129,13 @@ export default function Page() {
             id="combo-box-series-search"
             options={sequences}
             getOptionLabel={(option: SequenceData) => option.nameSequence}
+            filterOptions={(options, state) =>
+              options.filter((option) =>
+                option.nameSequence
+                  .toLowerCase()
+                  .includes(state.inputValue.toLowerCase())
+              )
+            }
             renderOption={(props, option) => (
               <li {...props} key={option.id}>
                 {option.nameSequence}

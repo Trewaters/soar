@@ -52,6 +52,22 @@ export default function AutocompleteComponent(props: CustomAutocompleteProps) {
           }
           return null
         }}
+        filterOptions={(options, state) =>
+          options.filter((option) => {
+            const typedOption = option as AutocompleteOption
+            if ('english_name' in typedOption) {
+              return typedOption.english_name
+                .toLowerCase()
+                .includes(state.inputValue.toLowerCase())
+            }
+            if ('name' in typedOption) {
+              return typedOption.name
+                .toLowerCase()
+                .includes(state.inputValue.toLowerCase())
+            }
+            return false
+          })
+        }
         sx={{
           '& .MuiOutlinedInput-notchedOutline': {
             borderRadius: '12px',

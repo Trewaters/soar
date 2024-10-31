@@ -642,6 +642,13 @@ export default function UserDetails() {
                             payload: { ...userData, yogaStyle: newValue ?? '' },
                           })
                         }}
+                        filterOptions={(options, state) =>
+                          options.filter((option) =>
+                            option
+                              .toLowerCase()
+                              .includes(state.inputValue.toLowerCase())
+                          )
+                        }
                         renderInput={(params) => (
                           <TextField
                             {...params}

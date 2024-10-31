@@ -240,6 +240,13 @@ export default function Page() {
                   {option.seriesName}
                 </li>
               )}
+              filterOptions={(options, state) =>
+                options.filter((option) =>
+                  option.seriesName
+                    .toLowerCase()
+                    .includes(state.inputValue.toLowerCase())
+                )
+              }
               sx={{
                 '& .MuiOutlinedInput-notchedOutline': {
                   borderRadius: '12px',

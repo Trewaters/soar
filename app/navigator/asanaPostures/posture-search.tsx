@@ -45,14 +45,15 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
       }}
     >
       <Autocomplete
-        id="search-poses"
+        disablePortal
         options={postures}
-        getOptionLabel={(option: PostureData) => option.english_name}
-        renderOption={(props, option) => (
-          <li {...props} key={option.id}>
-            {option.english_name}
-          </li>
-        )}
+        sx={{
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderRadius: '12px',
+            borderColor: 'primary.main',
+            boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+          },
+        }}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -69,16 +70,23 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
             }}
           />
         )}
+        filterOptions={(options, state) =>
+          options.filter((option) =>
+            option.english_name
+              .toLowerCase()
+              .includes(state.inputValue.toLowerCase())
+          )
+        }
+        id="search-poses"
+        getOptionLabel={(option: PostureData) => option.english_name}
+        renderOption={(props, option) => (
+          <li {...props} key={option.id}>
+            {option.english_name}
+          </li>
+        )}
         defaultValue={defaultPosture}
         autoSelect={true}
         onChange={handleChange}
-        sx={{
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderRadius: '12px',
-            borderColor: 'primary.main',
-            boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-          },
-        }}
       />
     </Stack>
   )
