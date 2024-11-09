@@ -80,7 +80,7 @@ export default function Page() {
         session.status === 'resolved_model' &&
         session.value === 'null')
     ) {
-      router.push('/')
+      router.push('/navigator/flows')
     }
 
     fetchData()
