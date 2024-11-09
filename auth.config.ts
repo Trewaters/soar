@@ -17,110 +17,105 @@ export default {
   providers: [
     GitHub,
     Google,
-    Credentials({
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
-      credentials: {
-        email: {},
-        password: {},
-      },
-      authorize: async (credentials) => {
-        // let user = null
+    // Credentials({
+    //   // You can specify which fields should be submitted, by adding keys to the `credentials` object.
+    //   // e.g. domain, username, password, 2FA token, etc.
+    //   credentials: {
+    //     email: {},
+    //     password: {},
+    //   },
+    //   authorize: async (credentials) => {
+    //     // let user = null
 
-        // logic to salt and hash password
-        // const pwHash = saltAndHashPassword(credentials.password)
-        // const pwHash = credentials.password
+    //     // logic to salt and hash password
+    //     // const pwHash = saltAndHashPassword(credentials.password)
+    //     // const pwHash = credentials.password
 
-        // logic to verify if the user exists
-        // user = await getUserFromDb(credentials.email, pwHash)
+    //     // logic to verify if the user exists
+    //     // user = await getUserFromDb(credentials.email, pwHash)
 
-        const email = credentials.email
+    //     const email = credentials.email
 
-        const existingUser = await prisma.userData.findUnique({
-          where: { email: typeof email === 'string' ? email : undefined },
-        })
+    //     const existingUser = await prisma.userData.findUnique({
+    //       where: { email: typeof email === 'string' ? email : undefined },
+    //     })
 
-        // if (!existingUser) {
-        //   try {
-        //     const newUser = await prisma.userData.create({
-        //       data: {
-        //         provider_id: user.id,
-        //         name: user.name,
-        //         email: user.email,
-        //         emailVerified: new Date(),
-        //         image: user.image,
-        //         pronouns: '',
-        //         profile: JSON.stringify(profile),
-        //         createdAt: new Date(),
-        //         updatedAt: new Date(),
-        //         firstName: '',
-        //         lastName: '',
-        //         bio: '',
-        //         headline: '',
-        //         location: '',
-        //         websiteURL: '',
-        //         shareQuick: '',
-        //         yogaStyle: '',
-        //         yogaExperience: '',
-        //         company: '',
-        //         socialURL: '',
-        //         isLocationPublic: '',
-        //         providerAccounts: {
-        //           create: {
-        //             provider: account.provider,
-        //             providerAccountId: account.providerAccountId,
-        //             refresh_token: account.refresh_token ?? undefined,
-        //             access_token: account.access_token ?? undefined,
-        //             expires_at: account.expires_at ?? undefined,
-        //             // add to schema
-        //             // expires_in: account.expires_in ?? undefined,
-        //             token_type: account.token_type ?? undefined,
-        //             scope: account.scope ?? undefined,
-        //             id_token: account.id_token ?? undefined,
-        //             session_state: JSON.stringify(account.session_state),
-        //             type: account.type,
-        //             createdAt: new Date(),
-        //             updatedAt: new Date(),
-        //           },
-        //         },
-        //         // create a way to add generic profile schema for unknown providers
-        //         // profile: {
-        //         //   create: { ...profile },
-        //         // },
-        //       },
-        //     })
-        //   } catch (error) {
-        //     console.error('Error creating new user:', error)
-        //     throw error
-        //   }
-        // }
+    //     // if (!existingUser) {
+    //     //   try {
+    //     //     const newUser = await prisma.userData.create({
+    //     //       data: {
+    //     //         provider_id: user.id,
+    //     //         name: user.name,
+    //     //         email: user.email,
+    //     //         emailVerified: new Date(),
+    //     //         image: user.image,
+    //     //         pronouns: '',
+    //     //         profile: JSON.stringify(profile),
+    //     //         createdAt: new Date(),
+    //     //         updatedAt: new Date(),
+    //     //         firstName: '',
+    //     //         lastName: '',
+    //     //         bio: '',
+    //     //         headline: '',
+    //     //         location: '',
+    //     //         websiteURL: '',
+    //     //         shareQuick: '',
+    //     //         yogaStyle: '',
+    //     //         yogaExperience: '',
+    //     //         company: '',
+    //     //         socialURL: '',
+    //     //         isLocationPublic: '',
+    //     //         providerAccounts: {
+    //     //           create: {
+    //     //             provider: account.provider,
+    //     //             providerAccountId: account.providerAccountId,
+    //     //             refresh_token: account.refresh_token ?? undefined,
+    //     //             access_token: account.access_token ?? undefined,
+    //     //             expires_at: account.expires_at ?? undefined,
+    //     //             // add to schema
+    //     //             // expires_in: account.expires_in ?? undefined,
+    //     //             token_type: account.token_type ?? undefined,
+    //     //             scope: account.scope ?? undefined,
+    //     //             id_token: account.id_token ?? undefined,
+    //     //             session_state: JSON.stringify(account.session_state),
+    //     //             type: account.type,
+    //     //             createdAt: new Date(),
+    //     //             updatedAt: new Date(),
+    //     //           },
+    //     //         },
+    //     //         // create a way to add generic profile schema for unknown providers
+    //     //         // profile: {
+    //     //         //   create: { ...profile },
+    //     //         // },
+    //     //       },
+    //     //     })
+    //     //   } catch (error) {
+    //     //     console.error('Error creating new user:', error)
+    //     //     throw error
+    //     //   }
+    //     // }
 
-        if (!existingUser) {
-          // No user found, so this is their first attempt to login
-          // Optionally, this is also the place you could do a user registration
-          throw new Error('Invalid credentials.')
-        }
-        /*         if (!user) {
-          // No user found, so this is their first attempt to login
-          // Optionally, this is also the place you could do a user registration
-          throw new Error('Invalid credentials.')
-        } */
+    //     if (!existingUser) {
+    //       // No user found, so this is their first attempt to login
+    //       // Optionally, this is also the place you could do a user registration
+    //       throw new Error('Invalid credentials.')
+    //     }
+    //     /*         if (!user) {
+    //       // No user found, so this is their first attempt to login
+    //       // Optionally, this is also the place you could do a user registration
+    //       throw new Error('Invalid credentials.')
+    //     } */
 
-        // return user object with their profile data
-        // return user
-        return existingUser
-      },
-    }),
+    //     // return user object with their profile data
+    //     // return user
+    //     return existingUser
+    //   },
+    // }),
   ],
   theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
   adapter: MyAdapter,
   basePath: '/auth',
   callbacks: {
-    authorized: async ({ auth }) => {
-      console.log('authorized auth', auth)
-      // Logged in users are authenticated, otherwise redirect to login page
-      return !!auth
-    },
     async signIn({ user, account, profile }) {
       console.log('signIn user', user)
       const email = user.email
