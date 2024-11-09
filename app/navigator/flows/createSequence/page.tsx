@@ -90,7 +90,12 @@ export default function Page() {
       }
     }
 
-    if (session === null) {
+    if (
+      session === null ||
+      (session &&
+        session.status === 'resolved_model' &&
+        session.value === 'null')
+    ) {
       router.push('/')
     }
 
