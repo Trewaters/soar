@@ -23,16 +23,17 @@
     "paths": {
       "@*": ["./*"],
       "@app/*": ["./app/*"],
-      "@context/*": ["./app/context/*"],
-      "@providers/*": ["./app/providers/*"],
-      "@lib/*": ["./lib/*"],
-      "@prismaSchema/*": ["./prisma/*"],
+      "@auth": ["./auth"],
+      "@client-api/*": ["./app/api/*"],
       "@components/*": ["./app/clientComponents/*"],
-      "@postures/*": ["app/navigator/asanaPostures/*"],
-      "@serverComponents/*": ["./components/*"],
+      "@context/*": ["./app/context/*"],
       "@interfaces/*": ["./app/interfaces/*"],
-      "@styles/*": ["./styles/*"],
-      "@client-api/*": ["app/api/*"]
+      "@lib/*": ["./lib/*"],
+      "@postures/*": ["./app/navigator/asanaPostures/*"],
+      "@prismaSchema/*": ["./prisma/*"],
+      "@providers/*": ["./app/providers/*"],
+      "@serverComponents/*": ["./components/*"],
+      "@styles/*": ["./styles/*"]
     }
   },
   "include": [

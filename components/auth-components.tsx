@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Stack } from '@mui/material'
-import { signIn, signOut } from '@/auth'
+import { signIn, signOut } from '@auth'
 
 export default async function SignIn({
   provider,
