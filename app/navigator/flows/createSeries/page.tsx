@@ -74,7 +74,7 @@ export default function Page() {
     }
     console.log('create series session', session)
 
-    if (session === null) {
+    if (session === null || (session && session.user === null)) {
       router.push('/')
     }
 
