@@ -89,6 +89,11 @@ export default function Page() {
         setFlowSeries(seriesData)
       }
     }
+
+    if (session === null) {
+      router.push('/')
+    }
+
     getData()
   }, [session])
 

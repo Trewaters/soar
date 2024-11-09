@@ -72,9 +72,14 @@ export default function Page() {
         error.message
       }
     }
+    console.log('create series session', session)
+
+    if (session === null) {
+      router.push('/')
+    }
 
     fetchData()
-  }, [session])
+  }, [router, session])
 
   function handleSelect(
     event: React.SyntheticEvent<Element, Event>,
