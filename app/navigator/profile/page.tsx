@@ -1,11 +1,21 @@
+'use client'
 import { auth } from '@auth'
 import { Box, Stack } from '@mui/material'
 import { SessionProvider } from 'next-auth/react'
 import UserDetails from './UserDetails'
-import SignIn, { SignOut } from '@serverComponents/auth-components'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default async function Page() {
   const session = await auth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!session) {
+      router.push('/auth/signin')
+    }
+  })
+
   return (
     <Box
       display={'flex'}
@@ -18,15 +28,6 @@ export default async function Page() {
         <Stack>
           <UserDetails />
         </Stack>
-        {session ? (
-          <Stack>
-            <SignOut />
-          </Stack>
-        ) : (
-          <Stack>
-            <SignIn />
-          </Stack>
-        )}
       </SessionProvider>
     </Box>
   )

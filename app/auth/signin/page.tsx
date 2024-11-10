@@ -1,17 +1,12 @@
-'use client'
 import { Box, Stack, Typography, Button } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
-import { signOut } from '@auth'
-import React, { useEffect } from 'react'
+import { signOut, signIn } from '@auth'
 
-export default function SignIn(
-  props: React.ComponentPropsWithRef<typeof Button>
-) {
-  useEffect(() => {
-    signOut()
-  }, [])
-
+export default function SignIn({
+  provider,
+  ...props
+}: { provider?: string } & React.ComponentPropsWithRef<typeof Button>) {
   return (
     <>
       <nav>
@@ -62,13 +57,24 @@ export default function SignIn(
               Signing in will automatically create an account for you.
             </Typography>
           </Stack>
-          <form
+          {/* <form
             action={async () => {
+              'use server'
               await signOut()
             }}
           >
             <Button type="submit" variant="contained" {...props}>
               Sign Out
+            </Button>
+          </form> */}
+          <form
+            action={async () => {
+              'use server'
+              await signIn(provider)
+            }}
+          >
+            <Button type="submit" variant="contained" {...props}>
+              Sign In
             </Button>
           </form>
         </Stack>
