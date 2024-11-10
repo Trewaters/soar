@@ -4,9 +4,10 @@ import Header from '@serverComponents/header'
 import Image from 'next/image'
 import React, { useEffect } from 'react'
 
-export default async function SignOutPage(
-  props: React.ComponentPropsWithRef<typeof Button>
-) {
+export default async function SignOutPage({
+  provider,
+  ...props
+}: { provider?: string } & React.ComponentPropsWithRef<typeof Button>) {
   const session = await auth()
 
   // useEffect(() => {
@@ -55,7 +56,7 @@ export default async function SignOutPage(
           </Box>
         </Stack>
         <Stack textAlign={'center'} spacing={2} sx={{ my: 6 }}>
-          {/* <form
+          <form
             action={async () => {
               'use server'
               await signIn(provider)
@@ -63,16 +64,6 @@ export default async function SignOutPage(
           >
             <Button type="submit" variant="contained" {...props}>
               Sign In
-            </Button>
-          </form> */}
-          <form
-            action={async () => {
-              'use server'
-              await signOut()
-            }}
-          >
-            <Button type="submit" variant="contained" {...props}>
-              Sign Out
             </Button>
           </form>
         </Stack>
