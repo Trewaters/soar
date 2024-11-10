@@ -56,7 +56,7 @@ const navLinks = [
   // final item will have a divider above it
   {
     name: 'Sign In',
-    href: '/userManagement/signIn',
+    href: '/auth/signin',
     icon: <AdminPanelSettingsIcon />,
   },
 ]

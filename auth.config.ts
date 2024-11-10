@@ -213,6 +213,10 @@ export default {
     enableWebAuthn: true,
   },
   debug: process.env.NODE_ENV !== 'production' ? true : false,
+  pages: {
+    signIn: '/auth/signin',
+    signOut: '/auth/signout',
+  },
 } satisfies NextAuthConfig
 
 /*
