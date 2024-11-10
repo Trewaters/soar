@@ -45,7 +45,7 @@ export default async function SignOutPage() {
               the home page.
             </Typography>
           </Box>
-          <SignOut />
+          {/* <SignOut /> */}
         </Stack>
       </Stack>
     </>

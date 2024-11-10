@@ -45,9 +45,9 @@ export default function SignIn() {
               We&apos;re happy you&apos;re here!
             </Typography>
           </Box>
-          <Stack>
+          {/* <Stack>
             <SignIn />
-          </Stack>
+          </Stack> */}
           <Stack>
             <Typography variant="subtitle1">sign in again 🔓</Typography>
             <Typography variant="body1">
