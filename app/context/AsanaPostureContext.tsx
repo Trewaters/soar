@@ -8,7 +8,42 @@ import {
   useReducer,
 } from 'react'
 
-// Full Posutre Data Interface
+// Full Posture Data Interface
+// ! udpate name to 'FullAsanaData' ( 2024-11-10 12:27:15 )
+// Full Asana Posture Data, “AsanaPosture” is all data for Asana. Update name to [FullAsanaData]
+
+/*  
+include the following fields:
+Abbreviated Posture 1
+
+•	Category
+•	English names [0]
+•	Sanskrit name
+•	Description
+•	Benefits
+•	Difficulty
+•	Lore
+•	Breath default
+•	Dristi
+•	Activities
+•	Variations
+•	Modifications
+•	Suggested postures
+•	Preparatory postures
+•	Sideways
+•	Image
+•	Activities – completed, practice
+•	Posture intent
+•	Duration asana
+•	Transition in/out
+•	Setupcues
+•	Deepening cues
+•	Customize asana
+•	Additional cues
+•	Joint action
+•	Muscle action
+
+*/
 export interface PostureData {
   id: number
 
@@ -69,7 +104,15 @@ export interface PostureData {
   // duration?: string
 }
 
-// future posture definitions
+//
+// Abbreviated Posture 1, display in Asanas > Postures
+// ! displayAsanaPosture
+
+// Abbreviated Posture 2, display in Asanas > Practice view
+// ! displayAsanaPracticeView
+
+// Abbreviated Posture 3, display in Flows > Practice Series
+// ! displayAsanaFlowSeries
 
 // interface postureDataAbbreviated3 {
 //   id: number

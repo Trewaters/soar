@@ -171,6 +171,7 @@ I create branches with the name of the feature I plan to work on. This way I kee
 - _"feature/nav":_ Application navigation elements
 - _"feature/profile":_ Work on the yogi user profile. Allow view, edit and shareable link of profile data.
 - _"feature/posture-cards":_ Work on asana features. Allow view, edit, and create postures.
+- _"feature/core":_ Core work in the app like data connections, env variables, etc.
 
 The "version" branches are locked after release.
 

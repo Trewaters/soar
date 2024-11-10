@@ -83,39 +83,42 @@ model ProviderAccount {
 
 model AsanaPosture {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  alternate_english_name  String[]
+  english_names            String  @unique
+  // alternate_english_name  String[]
+  // simplified_english_name    String
+  sanskrit_names  Json[]
+  sort_english_name   String
+  // variations_english_name String[]
+  description     String
   benefits        String?
   category        String
-  description     String
   difficulty      String
-  simplified_english_name    String
-  english_name            String  @unique
-  next_poses    String[]
+  lore            String?
+  breathDirectionDefault String
+  dristi            String?
+  variations      String[]
+  modifications   String[]
+  suggested_postures    String[]
+  preparatory_postures    String[]
   preferred_side  String?
-  previous_poses    String[]
-  sanskrit_names  Json[]
   sideways       Boolean
-  sort_english_name   String
-  subcategory     String
-  two_sided       Boolean
-  variations_english_name String[]
-  visibility      String
   image           String?
   createdAt       DateTime? @default(now())
   updatedAt       DateTime? @updatedAt
   acitivity_completed Boolean?
-  acitivity_easy     Boolean?
-  acitivity_difficult Boolean?
   acitivity_practice  Boolean?
   posture_intent    String?
-  posture_meaning    String?
-  dristi            String?
-  // breath consist of 3 parts: inhale, exhale, hold
-  // ["inhale/exhale", "how long to hold?s", "how many to breaths to take?"]
-  breathDefault           String[]
-  // added for the breath while in series
   breathSeries           String[]
   durationAsana         String?
+  transitionCuesOut   String?
+  transitionCuesIn    String?
+  setupCues           String?
+  deepeningCues       String?
+  customizeAsana      String?
+  additionalCues      String?
+  jointAction         String?
+  muscleAction        String?
+  created_by          String?
 }
 
 model AsanaSeries {
