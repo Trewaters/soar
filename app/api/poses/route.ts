@@ -17,6 +17,10 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
       }
 
+      if (pose.breath_direction_default === null) {
+        pose.breath_direction_default = ''
+      }
+
       return NextResponse.json(pose)
     } catch (error: any) {
       return NextResponse.json({ error: error.message }, { status: 500 })
@@ -30,6 +34,11 @@ export async function GET(request: NextRequest) {
     const dataWithId = data.map((item, index) => ({
       ...item,
       id: index + 1,
+      // Ensure breath_direction_default is not null
+      breath_direction_default:
+        item.breath_direction_default === null
+          ? 'neutral'
+          : item.breath_direction_default,
     }))
     return NextResponse.json(dataWithId)
   } catch (error: any) {

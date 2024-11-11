@@ -178,13 +178,13 @@ export default function PostureActivityDetail({
             >
               {posture?.sort_english_name}
 
-              <Typography
+              {/* <Typography
                 variant="subtitle1"
                 component={'p'}
                 color={'primary.contrastText'}
               >
-                {posture?.sanskrit_names}
-              </Typography>
+                {posture?.sanskrit_names ?? 'Sanskrit Name not-found'}
+              </Typography> */}
             </Typography>
           </Stack>
         </Stack>
@@ -204,11 +204,11 @@ export default function PostureActivityDetail({
               mb: '32px',
             }}
           />
-          <AsanaDetails
-            details={posture?.sanskrit_names ?? 'Sanskrit Name not-found'}
+          {/* <AsanaDetails
+            details={posture?.sanskrit_names[0] ?? 'Sanskrit Name not-found'}
             label="Sanskrit Name"
             sx={{ mb: '32px' }}
-          />
+          /> */}
           <AsanaDetails
             details={posture?.posture_intent ?? 'Feel into the asana.'}
             label="Meaning of Posture"

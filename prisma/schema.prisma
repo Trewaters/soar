@@ -84,21 +84,21 @@ model ProviderAccount {
 model AsanaPosture {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
   english_names            String [] 
-  sanskrit_names  String
+  sanskrit_names  Json?
   sort_english_name   String @unique
-  description     String
+  description     String?
   benefits        String?
-  category        String
-  difficulty      String
+  category        String?
+  difficulty      String?
   lore            String?
-  breath_direction_default String
+  breath_direction_default String?
   dristi            String?
   variations      String[]
   modifications   String[]
   suggested_postures    String[]
   preparatory_postures    String[]
   preferred_side  String?
-  sideways       Boolean
+  sideways       Boolean?
   image           String?
   created_on       DateTime? @default(now())
   updated_on       DateTime? @updatedAt
