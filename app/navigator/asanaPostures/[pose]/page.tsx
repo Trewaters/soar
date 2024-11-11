@@ -1,11 +1,11 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { PostureData } from '@app/context/AsanaPostureContext'
+import { FullAsanaData } from '@app/context/AsanaPostureContext'
 import PostureActivityDetail from './postureActivityDetail'
 import { Box } from '@mui/material'
 
 export default function Page({ params }: { params: { pose: string } }) {
-  const [viewPose, setViewPose] = useState<PostureData>({} as PostureData)
+  const [viewPose, setViewPose] = useState<FullAsanaData>({} as FullAsanaData)
 
   useEffect(() => {
     const getViewPose = async () => {

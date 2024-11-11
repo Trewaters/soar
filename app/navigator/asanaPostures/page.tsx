@@ -2,11 +2,11 @@
 import { useEffect, useState } from 'react'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
 import { Box, CircularProgress, Typography } from '@mui/material'
-import { PostureData } from '@context/AsanaPostureContext'
+import { FullAsanaData } from '@context/AsanaPostureContext'
 import SplashHeader from '@app/clientComponents/splash-header'
 
 export default function Page() {
-  const [posturePropData, setPosturePropData] = useState<PostureData[]>([])
+  const [posturePropData, setPosturePropData] = useState<FullAsanaData[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 

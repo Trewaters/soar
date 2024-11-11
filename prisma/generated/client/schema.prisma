@@ -84,9 +84,9 @@ model ProviderAccount {
 
 model AsanaPosture {
   id                       String    @id @default(auto()) @map("_id") @db.ObjectId
-  english_names            String    @unique
-  sanskrit_names           Json[]
-  sort_english_name        String
+  english_names            String[]
+  sanskrit_names           String
+  sort_english_name        String    @unique
   description              String
   benefits                 String?
   category                 String
@@ -101,8 +101,8 @@ model AsanaPosture {
   preferred_side           String?
   sideways                 Boolean
   image                    String?
-  created_at               DateTime? @default(now())
-  updated_at               DateTime? @updatedAt
+  created_on               DateTime? @default(now())
+  updated_on               DateTime? @updatedAt
   acitivity_completed      Boolean?
   acitivity_practice       Boolean?
   posture_intent           String?

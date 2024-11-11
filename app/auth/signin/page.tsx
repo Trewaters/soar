@@ -1,11 +1,10 @@
-import { Box, Stack, Typography, Button } from '@mui/material'
+import React from 'react'
+import { Box, Stack, Typography, Button, ButtonProps } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
-import { signOut, signIn } from '@auth'
+import { signOut } from '@auth'
 
-export default function SignIn(
-  props: React.ComponentPropsWithRef<typeof Button>
-) {
+export default function SignIn(props: ButtonProps) {
   return (
     <>
       <nav>

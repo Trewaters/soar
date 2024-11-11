@@ -13,13 +13,13 @@ import {
   FormGroup,
   IconButton,
 } from '@mui/material'
-import { PostureData } from '@context/AsanaPostureContext'
+import { FullAsanaData } from '@context/AsanaPostureContext'
 import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
 import yogaMatWoman from '@public/yogaMatWoman.svg'
 
 interface PostureCardProps {
-  postureCardProp: PostureData
+  postureCardProp: FullAsanaData
 }
 
 export default function PostureCard({ postureCardProp }: PostureCardProps) {
@@ -27,7 +27,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
   const router = useRouter()
 
   function handleClick() {
-    router.push(`../views/viewAsanaPractice/${posture?.english_name}/`)
+    router.push(`../views/viewAsanaPractice/${posture?.sort_english_name}/`)
   }
 
   return (
@@ -47,8 +47,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               color: 'primary.contrastText',
             },
           }}
-          title={posture?.english_name}
-          subheader={posture?.simplified_english_name}
+          title={posture?.sort_english_name}
+          subheader={posture?.sanskrit_names}
         />
         <CardMedia sx={{ width: '50%', margin: 'auto' }}>
           <Image
@@ -126,8 +126,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
-                {posture?.sanskrit_names?.[0]?.simplified ??
-                  'Sanskrit Name not-found'}
+                {posture?.sanskrit_names ?? 'Sanskrit Name not-found'}
               </Typography>
             </Grid>
             {/* 
@@ -367,7 +366,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
-                {`${posture?.category}, ${posture?.subcategory}`}
+                {`${posture?.category}, ${posture?.category}`}
               </Typography>
             </Grid>
 

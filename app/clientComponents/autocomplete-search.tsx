@@ -2,14 +2,14 @@ import React from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 import SearchIcon from '@mui/icons-material/Search'
-import { PostureData } from '@app/context/AsanaPostureContext'
+import { FullAsanaData } from '@app/context/AsanaPostureContext'
 
 interface AnotherOptionType {
   id: string
   name: string
 }
 
-type AutocompleteOption = PostureData | AnotherOptionType
+type AutocompleteOption = FullAsanaData | AnotherOptionType
 
 interface CustomAutocompleteProps
   extends React.ComponentProps<typeof Autocomplete> {
@@ -24,8 +24,8 @@ export default function AutocompleteComponent(props: CustomAutocompleteProps) {
         options={props.options}
         getOptionLabel={(option) => {
           const typedOption = option as AutocompleteOption
-          if ('english_name' in typedOption) {
-            return typedOption.english_name
+          if ('sort_english_name' in typedOption) {
+            return typedOption.sort_english_name
           }
           if ('name' in typedOption) {
             return typedOption.name
@@ -34,11 +34,11 @@ export default function AutocompleteComponent(props: CustomAutocompleteProps) {
         }}
         renderOption={(props, option) => {
           const typedOption = option as AutocompleteOption
-          if ('english_name' in typedOption) {
+          if ('sort_english_name' in typedOption) {
             const postureOption = typedOption
             return (
               <li {...props} key={postureOption.id}>
-                {postureOption.english_name}
+                {postureOption.sort_english_name}
               </li>
             )
           }
@@ -55,8 +55,8 @@ export default function AutocompleteComponent(props: CustomAutocompleteProps) {
         filterOptions={(options, state) =>
           options.filter((option) => {
             const typedOption = option as AutocompleteOption
-            if ('english_name' in typedOption) {
-              return typedOption.english_name
+            if ('sort_english_name' in typedOption) {
+              return typedOption.sort_english_name
                 .toLowerCase()
                 .includes(state.inputValue.toLowerCase())
             }

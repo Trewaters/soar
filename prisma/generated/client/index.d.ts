@@ -3431,7 +3431,7 @@ export namespace Prisma {
 
   export type AsanaPostureMinAggregateOutputType = {
     id: string | null
-    english_names: string | null
+    sanskrit_names: string | null
     sort_english_name: string | null
     description: string | null
     benefits: string | null
@@ -3443,8 +3443,8 @@ export namespace Prisma {
     preferred_side: string | null
     sideways: boolean | null
     image: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    created_on: Date | null
+    updated_on: Date | null
     acitivity_completed: boolean | null
     acitivity_practice: boolean | null
     posture_intent: string | null
@@ -3462,7 +3462,7 @@ export namespace Prisma {
 
   export type AsanaPostureMaxAggregateOutputType = {
     id: string | null
-    english_names: string | null
+    sanskrit_names: string | null
     sort_english_name: string | null
     description: string | null
     benefits: string | null
@@ -3474,8 +3474,8 @@ export namespace Prisma {
     preferred_side: string | null
     sideways: boolean | null
     image: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    created_on: Date | null
+    updated_on: Date | null
     acitivity_completed: boolean | null
     acitivity_practice: boolean | null
     posture_intent: string | null
@@ -3510,8 +3510,8 @@ export namespace Prisma {
     preferred_side: number
     sideways: number
     image: number
-    created_at: number
-    updated_at: number
+    created_on: number
+    updated_on: number
     acitivity_completed: number
     acitivity_practice: number
     posture_intent: number
@@ -3532,7 +3532,7 @@ export namespace Prisma {
 
   export type AsanaPostureMinAggregateInputType = {
     id?: true
-    english_names?: true
+    sanskrit_names?: true
     sort_english_name?: true
     description?: true
     benefits?: true
@@ -3544,8 +3544,8 @@ export namespace Prisma {
     preferred_side?: true
     sideways?: true
     image?: true
-    created_at?: true
-    updated_at?: true
+    created_on?: true
+    updated_on?: true
     acitivity_completed?: true
     acitivity_practice?: true
     posture_intent?: true
@@ -3563,7 +3563,7 @@ export namespace Prisma {
 
   export type AsanaPostureMaxAggregateInputType = {
     id?: true
-    english_names?: true
+    sanskrit_names?: true
     sort_english_name?: true
     description?: true
     benefits?: true
@@ -3575,8 +3575,8 @@ export namespace Prisma {
     preferred_side?: true
     sideways?: true
     image?: true
-    created_at?: true
-    updated_at?: true
+    created_on?: true
+    updated_on?: true
     acitivity_completed?: true
     acitivity_practice?: true
     posture_intent?: true
@@ -3611,8 +3611,8 @@ export namespace Prisma {
     preferred_side?: true
     sideways?: true
     image?: true
-    created_at?: true
-    updated_at?: true
+    created_on?: true
+    updated_on?: true
     acitivity_completed?: true
     acitivity_practice?: true
     posture_intent?: true
@@ -3704,8 +3704,8 @@ export namespace Prisma {
 
   export type AsanaPostureGroupByOutputType = {
     id: string
-    english_names: string
-    sanskrit_names: JsonValue[]
+    english_names: string[]
+    sanskrit_names: string
     sort_english_name: string
     description: string
     benefits: string | null
@@ -3721,8 +3721,8 @@ export namespace Prisma {
     preferred_side: string | null
     sideways: boolean
     image: string | null
-    created_at: Date | null
-    updated_at: Date | null
+    created_on: Date | null
+    updated_on: Date | null
     acitivity_completed: boolean | null
     acitivity_practice: boolean | null
     posture_intent: string | null
@@ -3775,8 +3775,8 @@ export namespace Prisma {
     preferred_side?: boolean
     sideways?: boolean
     image?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    created_on?: boolean
+    updated_on?: boolean
     acitivity_completed?: boolean
     acitivity_practice?: boolean
     posture_intent?: boolean
@@ -3813,8 +3813,8 @@ export namespace Prisma {
     preferred_side?: boolean
     sideways?: boolean
     image?: boolean
-    created_at?: boolean
-    updated_at?: boolean
+    created_on?: boolean
+    updated_on?: boolean
     acitivity_completed?: boolean
     acitivity_practice?: boolean
     posture_intent?: boolean
@@ -3837,8 +3837,8 @@ export namespace Prisma {
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      english_names: string
-      sanskrit_names: Prisma.JsonValue[]
+      english_names: string[]
+      sanskrit_names: string
       sort_english_name: string
       description: string
       benefits: string | null
@@ -3854,8 +3854,8 @@ export namespace Prisma {
       preferred_side: string | null
       sideways: boolean
       image: string | null
-      created_at: Date | null
-      updated_at: Date | null
+      created_on: Date | null
+      updated_on: Date | null
       acitivity_completed: boolean | null
       acitivity_practice: boolean | null
       posture_intent: string | null
@@ -4263,8 +4263,8 @@ export namespace Prisma {
    */ 
   interface AsanaPostureFieldRefs {
     readonly id: FieldRef<"AsanaPosture", 'String'>
-    readonly english_names: FieldRef<"AsanaPosture", 'String'>
-    readonly sanskrit_names: FieldRef<"AsanaPosture", 'Json[]'>
+    readonly english_names: FieldRef<"AsanaPosture", 'String[]'>
+    readonly sanskrit_names: FieldRef<"AsanaPosture", 'String'>
     readonly sort_english_name: FieldRef<"AsanaPosture", 'String'>
     readonly description: FieldRef<"AsanaPosture", 'String'>
     readonly benefits: FieldRef<"AsanaPosture", 'String'>
@@ -4280,8 +4280,8 @@ export namespace Prisma {
     readonly preferred_side: FieldRef<"AsanaPosture", 'String'>
     readonly sideways: FieldRef<"AsanaPosture", 'Boolean'>
     readonly image: FieldRef<"AsanaPosture", 'String'>
-    readonly created_at: FieldRef<"AsanaPosture", 'DateTime'>
-    readonly updated_at: FieldRef<"AsanaPosture", 'DateTime'>
+    readonly created_on: FieldRef<"AsanaPosture", 'DateTime'>
+    readonly updated_on: FieldRef<"AsanaPosture", 'DateTime'>
     readonly acitivity_completed: FieldRef<"AsanaPosture", 'Boolean'>
     readonly acitivity_practice: FieldRef<"AsanaPosture", 'Boolean'>
     readonly posture_intent: FieldRef<"AsanaPosture", 'String'>
@@ -6507,8 +6507,8 @@ export namespace Prisma {
     preferred_side: 'preferred_side',
     sideways: 'sideways',
     image: 'image',
-    created_at: 'created_at',
-    updated_at: 'updated_at',
+    created_on: 'created_on',
+    updated_on: 'updated_on',
     acitivity_completed: 'acitivity_completed',
     acitivity_practice: 'acitivity_practice',
     posture_intent: 'posture_intent',
@@ -6629,16 +6629,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Json[]'
+   * Reference to a field of type 'Boolean'
    */
-  export type ListJsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json[]'>
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
   /**
-   * Reference to a field of type 'Boolean'
+   * Reference to a field of type 'Json[]'
    */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+  export type ListJsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json[]'>
     
 
 
@@ -6906,8 +6906,8 @@ export namespace Prisma {
     OR?: AsanaPostureWhereInput[]
     NOT?: AsanaPostureWhereInput | AsanaPostureWhereInput[]
     id?: StringFilter<"AsanaPosture"> | string
-    english_names?: StringFilter<"AsanaPosture"> | string
-    sanskrit_names?: JsonNullableListFilter<"AsanaPosture">
+    english_names?: StringNullableListFilter<"AsanaPosture">
+    sanskrit_names?: StringFilter<"AsanaPosture"> | string
     sort_english_name?: StringFilter<"AsanaPosture"> | string
     description?: StringFilter<"AsanaPosture"> | string
     benefits?: StringNullableFilter<"AsanaPosture"> | string | null
@@ -6923,8 +6923,8 @@ export namespace Prisma {
     preferred_side?: StringNullableFilter<"AsanaPosture"> | string | null
     sideways?: BoolFilter<"AsanaPosture"> | boolean
     image?: StringNullableFilter<"AsanaPosture"> | string | null
-    created_at?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
-    updated_at?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
+    created_on?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
+    updated_on?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
     acitivity_completed?: BoolNullableFilter<"AsanaPosture"> | boolean | null
     acitivity_practice?: BoolNullableFilter<"AsanaPosture"> | boolean | null
     posture_intent?: StringNullableFilter<"AsanaPosture"> | string | null
@@ -6960,8 +6960,8 @@ export namespace Prisma {
     preferred_side?: SortOrder
     sideways?: SortOrder
     image?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    created_on?: SortOrder
+    updated_on?: SortOrder
     acitivity_completed?: SortOrder
     acitivity_practice?: SortOrder
     posture_intent?: SortOrder
@@ -6980,12 +6980,12 @@ export namespace Prisma {
 
   export type AsanaPostureWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    english_names?: string
+    sort_english_name?: string
     AND?: AsanaPostureWhereInput | AsanaPostureWhereInput[]
     OR?: AsanaPostureWhereInput[]
     NOT?: AsanaPostureWhereInput | AsanaPostureWhereInput[]
-    sanskrit_names?: JsonNullableListFilter<"AsanaPosture">
-    sort_english_name?: StringFilter<"AsanaPosture"> | string
+    english_names?: StringNullableListFilter<"AsanaPosture">
+    sanskrit_names?: StringFilter<"AsanaPosture"> | string
     description?: StringFilter<"AsanaPosture"> | string
     benefits?: StringNullableFilter<"AsanaPosture"> | string | null
     category?: StringFilter<"AsanaPosture"> | string
@@ -7000,8 +7000,8 @@ export namespace Prisma {
     preferred_side?: StringNullableFilter<"AsanaPosture"> | string | null
     sideways?: BoolFilter<"AsanaPosture"> | boolean
     image?: StringNullableFilter<"AsanaPosture"> | string | null
-    created_at?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
-    updated_at?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
+    created_on?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
+    updated_on?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
     acitivity_completed?: BoolNullableFilter<"AsanaPosture"> | boolean | null
     acitivity_practice?: BoolNullableFilter<"AsanaPosture"> | boolean | null
     posture_intent?: StringNullableFilter<"AsanaPosture"> | string | null
@@ -7016,7 +7016,7 @@ export namespace Prisma {
     joint_action?: StringNullableFilter<"AsanaPosture"> | string | null
     muscle_action?: StringNullableFilter<"AsanaPosture"> | string | null
     created_by?: StringNullableFilter<"AsanaPosture"> | string | null
-  }, "id" | "english_names">
+  }, "id" | "sort_english_name">
 
   export type AsanaPostureOrderByWithAggregationInput = {
     id?: SortOrder
@@ -7037,8 +7037,8 @@ export namespace Prisma {
     preferred_side?: SortOrder
     sideways?: SortOrder
     image?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    created_on?: SortOrder
+    updated_on?: SortOrder
     acitivity_completed?: SortOrder
     acitivity_practice?: SortOrder
     posture_intent?: SortOrder
@@ -7063,8 +7063,8 @@ export namespace Prisma {
     OR?: AsanaPostureScalarWhereWithAggregatesInput[]
     NOT?: AsanaPostureScalarWhereWithAggregatesInput | AsanaPostureScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"AsanaPosture"> | string
-    english_names?: StringWithAggregatesFilter<"AsanaPosture"> | string
-    sanskrit_names?: JsonNullableListFilter<"AsanaPosture">
+    english_names?: StringNullableListFilter<"AsanaPosture">
+    sanskrit_names?: StringWithAggregatesFilter<"AsanaPosture"> | string
     sort_english_name?: StringWithAggregatesFilter<"AsanaPosture"> | string
     description?: StringWithAggregatesFilter<"AsanaPosture"> | string
     benefits?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
@@ -7080,8 +7080,8 @@ export namespace Prisma {
     preferred_side?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
     sideways?: BoolWithAggregatesFilter<"AsanaPosture"> | boolean
     image?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
-    created_at?: DateTimeNullableWithAggregatesFilter<"AsanaPosture"> | Date | string | null
-    updated_at?: DateTimeNullableWithAggregatesFilter<"AsanaPosture"> | Date | string | null
+    created_on?: DateTimeNullableWithAggregatesFilter<"AsanaPosture"> | Date | string | null
+    updated_on?: DateTimeNullableWithAggregatesFilter<"AsanaPosture"> | Date | string | null
     acitivity_completed?: BoolNullableWithAggregatesFilter<"AsanaPosture"> | boolean | null
     acitivity_practice?: BoolNullableWithAggregatesFilter<"AsanaPosture"> | boolean | null
     posture_intent?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
@@ -7533,8 +7533,8 @@ export namespace Prisma {
 
   export type AsanaPostureCreateInput = {
     id?: string
-    english_names: string
-    sanskrit_names?: AsanaPostureCreatesanskrit_namesInput | InputJsonValue[]
+    english_names?: AsanaPostureCreateenglish_namesInput | string[]
+    sanskrit_names: string
     sort_english_name: string
     description: string
     benefits?: string | null
@@ -7550,8 +7550,8 @@ export namespace Prisma {
     preferred_side?: string | null
     sideways: boolean
     image?: string | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
+    created_on?: Date | string | null
+    updated_on?: Date | string | null
     acitivity_completed?: boolean | null
     acitivity_practice?: boolean | null
     posture_intent?: string | null
@@ -7570,8 +7570,8 @@ export namespace Prisma {
 
   export type AsanaPostureUncheckedCreateInput = {
     id?: string
-    english_names: string
-    sanskrit_names?: AsanaPostureCreatesanskrit_namesInput | InputJsonValue[]
+    english_names?: AsanaPostureCreateenglish_namesInput | string[]
+    sanskrit_names: string
     sort_english_name: string
     description: string
     benefits?: string | null
@@ -7587,8 +7587,8 @@ export namespace Prisma {
     preferred_side?: string | null
     sideways: boolean
     image?: string | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
+    created_on?: Date | string | null
+    updated_on?: Date | string | null
     acitivity_completed?: boolean | null
     acitivity_practice?: boolean | null
     posture_intent?: string | null
@@ -7606,8 +7606,8 @@ export namespace Prisma {
   }
 
   export type AsanaPostureUpdateInput = {
-    english_names?: StringFieldUpdateOperationsInput | string
-    sanskrit_names?: AsanaPostureUpdatesanskrit_namesInput | InputJsonValue[]
+    english_names?: AsanaPostureUpdateenglish_namesInput | string[]
+    sanskrit_names?: StringFieldUpdateOperationsInput | string
     sort_english_name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     benefits?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7623,8 +7623,8 @@ export namespace Prisma {
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
     sideways?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     acitivity_completed?: NullableBoolFieldUpdateOperationsInput | boolean | null
     acitivity_practice?: NullableBoolFieldUpdateOperationsInput | boolean | null
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7642,8 +7642,8 @@ export namespace Prisma {
   }
 
   export type AsanaPostureUncheckedUpdateInput = {
-    english_names?: StringFieldUpdateOperationsInput | string
-    sanskrit_names?: AsanaPostureUpdatesanskrit_namesInput | InputJsonValue[]
+    english_names?: AsanaPostureUpdateenglish_namesInput | string[]
+    sanskrit_names?: StringFieldUpdateOperationsInput | string
     sort_english_name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     benefits?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7659,8 +7659,8 @@ export namespace Prisma {
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
     sideways?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     acitivity_completed?: NullableBoolFieldUpdateOperationsInput | boolean | null
     acitivity_practice?: NullableBoolFieldUpdateOperationsInput | boolean | null
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7679,8 +7679,8 @@ export namespace Prisma {
 
   export type AsanaPostureCreateManyInput = {
     id?: string
-    english_names: string
-    sanskrit_names?: AsanaPostureCreatesanskrit_namesInput | InputJsonValue[]
+    english_names?: AsanaPostureCreateenglish_namesInput | string[]
+    sanskrit_names: string
     sort_english_name: string
     description: string
     benefits?: string | null
@@ -7696,8 +7696,8 @@ export namespace Prisma {
     preferred_side?: string | null
     sideways: boolean
     image?: string | null
-    created_at?: Date | string | null
-    updated_at?: Date | string | null
+    created_on?: Date | string | null
+    updated_on?: Date | string | null
     acitivity_completed?: boolean | null
     acitivity_practice?: boolean | null
     posture_intent?: string | null
@@ -7715,8 +7715,8 @@ export namespace Prisma {
   }
 
   export type AsanaPostureUpdateManyMutationInput = {
-    english_names?: StringFieldUpdateOperationsInput | string
-    sanskrit_names?: AsanaPostureUpdatesanskrit_namesInput | InputJsonValue[]
+    english_names?: AsanaPostureUpdateenglish_namesInput | string[]
+    sanskrit_names?: StringFieldUpdateOperationsInput | string
     sort_english_name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     benefits?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7732,8 +7732,8 @@ export namespace Prisma {
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
     sideways?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     acitivity_completed?: NullableBoolFieldUpdateOperationsInput | boolean | null
     acitivity_practice?: NullableBoolFieldUpdateOperationsInput | boolean | null
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7751,8 +7751,8 @@ export namespace Prisma {
   }
 
   export type AsanaPostureUncheckedUpdateManyInput = {
-    english_names?: StringFieldUpdateOperationsInput | string
-    sanskrit_names?: AsanaPostureUpdatesanskrit_namesInput | InputJsonValue[]
+    english_names?: AsanaPostureUpdateenglish_namesInput | string[]
+    sanskrit_names?: StringFieldUpdateOperationsInput | string
     sort_english_name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     benefits?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7768,8 +7768,8 @@ export namespace Prisma {
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
     sideways?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     acitivity_completed?: NullableBoolFieldUpdateOperationsInput | boolean | null
     acitivity_practice?: NullableBoolFieldUpdateOperationsInput | boolean | null
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8266,20 +8266,6 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
     isSet?: boolean
   }
-  export type JsonNullableListFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonNullableListFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableListFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableListFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableListFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableListFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel> | null
-    has?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    hasEvery?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel>
-    hasSome?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
 
   export type StringNullableListFilter<$PrismaModel = never> = {
     equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -8319,8 +8305,8 @@ export namespace Prisma {
     preferred_side?: SortOrder
     sideways?: SortOrder
     image?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    created_on?: SortOrder
+    updated_on?: SortOrder
     acitivity_completed?: SortOrder
     acitivity_practice?: SortOrder
     posture_intent?: SortOrder
@@ -8339,7 +8325,7 @@ export namespace Prisma {
 
   export type AsanaPostureMaxOrderByAggregateInput = {
     id?: SortOrder
-    english_names?: SortOrder
+    sanskrit_names?: SortOrder
     sort_english_name?: SortOrder
     description?: SortOrder
     benefits?: SortOrder
@@ -8351,8 +8337,8 @@ export namespace Prisma {
     preferred_side?: SortOrder
     sideways?: SortOrder
     image?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    created_on?: SortOrder
+    updated_on?: SortOrder
     acitivity_completed?: SortOrder
     acitivity_practice?: SortOrder
     posture_intent?: SortOrder
@@ -8370,7 +8356,7 @@ export namespace Prisma {
 
   export type AsanaPostureMinOrderByAggregateInput = {
     id?: SortOrder
-    english_names?: SortOrder
+    sanskrit_names?: SortOrder
     sort_english_name?: SortOrder
     description?: SortOrder
     benefits?: SortOrder
@@ -8382,8 +8368,8 @@ export namespace Prisma {
     preferred_side?: SortOrder
     sideways?: SortOrder
     image?: SortOrder
-    created_at?: SortOrder
-    updated_at?: SortOrder
+    created_on?: SortOrder
+    updated_on?: SortOrder
     acitivity_completed?: SortOrder
     acitivity_practice?: SortOrder
     posture_intent?: SortOrder
@@ -8446,6 +8432,20 @@ export namespace Prisma {
     image?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+  export type JsonNullableListFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableListFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableListFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableListFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableListFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableListFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel> | null
+    has?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    hasEvery?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel>
+    hasSome?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
   }
 
   export type AsanaSequenceCountOrderByAggregateInput = {
@@ -8565,8 +8565,8 @@ export namespace Prisma {
     update?: XOR<XOR<UserDataUpdateToOneWithWhereWithoutProviderAccountsInput, UserDataUpdateWithoutProviderAccountsInput>, UserDataUncheckedUpdateWithoutProviderAccountsInput>
   }
 
-  export type AsanaPostureCreatesanskrit_namesInput = {
-    set: InputJsonValue[]
+  export type AsanaPostureCreateenglish_namesInput = {
+    set: string[]
   }
 
   export type AsanaPostureCreatevariationsInput = {
@@ -8589,9 +8589,9 @@ export namespace Prisma {
     set: string[]
   }
 
-  export type AsanaPostureUpdatesanskrit_namesInput = {
-    set?: InputJsonValue[]
-    push?: InputJsonValue | InputJsonValue[]
+  export type AsanaPostureUpdateenglish_namesInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type AsanaPostureUpdatevariationsInput = {

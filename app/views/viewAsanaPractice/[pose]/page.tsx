@@ -7,7 +7,7 @@ import AsanaTimer from '@app/clientComponents/asanaTimer'
 import { useTimer } from '@context/timerContext'
 import { useRouter } from 'next/navigation'
 import HomeIcon from '@mui/icons-material/Home'
-import { PostureData } from '@app/context/AsanaPostureContext'
+import { FullAsanaData } from '@app/context/AsanaPostureContext'
 
 export default function ViewAsanaPractice({
   params,
@@ -17,7 +17,7 @@ export default function ViewAsanaPractice({
   // NOTES: include icons for more information like safety tips, focuse points, etc.
 
   /* call api/poses/?english_name=${pose} */
-  const [viewPose, setViewPose] = useState<PostureData>()
+  const [viewPose, setViewPose] = useState<FullAsanaData>()
   // eslint-disable-next-line no-unused-vars
   const [elapsedTime, setElapsedTime] = useState(0)
   // const [isPaused, setIsPaused] = useState(false)
@@ -92,7 +92,7 @@ export default function ViewAsanaPractice({
 
           <Grid item xs={6}>
             <Typography variant="subtitle1" color={'white'}>
-              {viewPose?.english_name}
+              {viewPose?.sort_english_name}
             </Typography>
           </Grid>
           {/* 

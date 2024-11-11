@@ -4,14 +4,14 @@ import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Image from 'next/image'
 import { Box, ButtonGroup, Chip, IconButton, Stack } from '@mui/material'
-import { PostureData } from '@context/AsanaPostureContext'
+import { FullAsanaData } from '@context/AsanaPostureContext'
 import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
 import yogaMatWoman from '@public/yogaMatWoman.svg'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 
 interface PostureCardProps {
-  postureCardProp: PostureData
+  postureCardProp: FullAsanaData
 }
 
 export default function PostureActivityDetail({
@@ -87,7 +87,7 @@ export default function PostureActivityDetail({
   }
 
   function handleClick() {
-    router.push(`../../views/viewAsanaPractice/${posture?.english_name}/`)
+    router.push(`../../views/viewAsanaPractice/${posture?.sort_english_name}/`)
   }
 
   return (
@@ -176,18 +176,15 @@ export default function PostureActivityDetail({
                 boxShadow: '0 2px 2px 2px rgba(211, 211, 211, 0.5)',
               }}
             >
-              {posture?.english_name}
+              {posture?.sort_english_name}
 
-              {(posture?.alternate_english_name || []).map((name) => (
-                <Typography
-                  variant="subtitle1"
-                  component={'p'}
-                  color={'primary.contrastText'}
-                  key={name}
-                >
-                  {name}
-                </Typography>
-              ))}
+              <Typography
+                variant="subtitle1"
+                component={'p'}
+                color={'primary.contrastText'}
+              >
+                {posture?.sanskrit_names}
+              </Typography>
             </Typography>
           </Stack>
         </Stack>
@@ -208,15 +205,12 @@ export default function PostureActivityDetail({
             }}
           />
           <AsanaDetails
-            details={
-              posture?.sanskrit_names?.[0]?.simplified ??
-              'Sanskrit Name not-found'
-            }
+            details={posture?.sanskrit_names ?? 'Sanskrit Name not-found'}
             label="Sanskrit Name"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={posture?.posture_meaning ?? 'Feel into the asana.'}
+            details={posture?.posture_intent ?? 'Feel into the asana.'}
             label="Meaning of Posture"
             sx={{ mb: '32px' }}
           />
@@ -226,7 +220,7 @@ export default function PostureActivityDetail({
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={posture?.breath ?? 'Inhale/Exhale'}
+            details={posture?.breath_direction_default ?? 'Inhale/Exhale'}
             label="Breath (default)"
             sx={{ mb: '32px' }}
           />
@@ -241,7 +235,7 @@ export default function PostureActivityDetail({
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={`${posture?.category}, ${posture?.subcategory}`}
+            details={`${posture?.category}, ${posture?.category}`}
             label="Category"
             sx={{ mb: '32px' }}
           />

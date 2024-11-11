@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   if (englishName) {
     try {
       const pose = await prisma.asanaPosture.findUnique({
-        where: { english_name: englishName },
+        where: { sort_english_name: englishName },
       })
 
       if (!pose) {
@@ -48,8 +48,8 @@ export async function GET(request: NextRequest) {
       throw new Error(`Error fetching data: ${response.status}`)
     }
     const data = await response.json()
-    const dataWithId: PostureData[] = data.map(
-      (item: PostureData, index: number) => ({
+    const dataWithId: FullAsanaData[] = data.map(
+      (item: FullAsanaData, index: number) => ({
         ...item,
         id: index + 1,
       })

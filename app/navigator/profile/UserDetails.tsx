@@ -76,10 +76,6 @@ export default function UserDetails() {
     dispatch,
   } = UseUser()
 
-  if (!session) {
-    return <div>Loading...</div>
-  }
-
   const [expanded, setExpanded] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -89,7 +85,6 @@ export default function UserDetails() {
   }
 
   useEffect(() => {
-    if (!session) return
     if (session?.user?.email && userData?.email !== session.user.email) {
       dispatch({
         type: 'SET_USER',
@@ -97,6 +92,10 @@ export default function UserDetails() {
       })
     }
   }, [session, dispatch, userData])
+
+  if (!session) {
+    return <div>Loading...</div>
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target

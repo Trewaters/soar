@@ -3,21 +3,21 @@ import React, { useState, useEffect, SyntheticEvent } from 'react'
 import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
-import { PostureData, useAsanaPosture } from '@context/AsanaPostureContext'
+import { FullAsanaData, useAsanaPosture } from '@context/AsanaPostureContext'
 import { useRouter } from 'next/navigation'
 import SearchIcon from '@mui/icons-material/Search'
 
 interface PostureSearchProps {
-  posturePropData: PostureData[]
+  posturePropData: FullAsanaData[]
 }
 
 export default function PostureSearch({ posturePropData }: PostureSearchProps) {
   const { state, dispatch } = useAsanaPosture()
-  const [postures, setPostures] = useState<PostureData[]>(posturePropData)
+  const [postures, setPostures] = useState<FullAsanaData[]>(posturePropData)
   const [cardPosture, setcardPosture] = useState<string | null>()
   const router = useRouter()
 
-  const defaultPosture = postures?.find((p) => p.english_name === '')
+  const defaultPosture = postures?.find((p) => p.sort_english_name === '')
 
   useEffect(() => {
     setPostures(posturePropData)
@@ -25,12 +25,12 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
 
   function handleChange(
     event: SyntheticEvent<Element, Event>,
-    value: PostureData | null
+    value: FullAsanaData | null
   ) {
     dispatch({ type: 'SET_POSTURES', payload: value ?? state.postures })
 
-    setcardPosture(value?.english_name || '')
-    router.push(`../navigator/asanaPostures/${value?.english_name}/`)
+    setcardPosture(value?.sort_english_name || '')
+    router.push(`../navigator/asanaPostures/${value?.sort_english_name}/`)
   }
 
   return (
@@ -72,16 +72,16 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
         )}
         filterOptions={(options, state) =>
           options.filter((option) =>
-            option.english_name
+            option.sort_english_name
               .toLowerCase()
               .includes(state.inputValue.toLowerCase())
           )
         }
         id="search-poses"
-        getOptionLabel={(option: PostureData) => option.english_name}
+        getOptionLabel={(option: FullAsanaData) => option.sort_english_name}
         renderOption={(props, option) => (
           <li {...props} key={option.id}>
-            {option.english_name}
+            {option.sort_english_name}
           </li>
         )}
         defaultValue={defaultPosture}

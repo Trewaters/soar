@@ -44,65 +44,125 @@ Abbreviated Posture 1
 •	Muscle action
 
 */
-export interface PostureData {
+
+export interface FullAsanaData {
   id: number
-
-  // aka: string[]
-  alternate_english_name: string[]
-
+  english_names: string[]
+  sanskrit_names: string
+  sort_english_name: string
+  description: string
   benefits: string
   category: string
-  description: string
   difficulty: string
-
-  // simplified_english_name: string
-  simplified_english_name: string
-
-  // name: string
-  english_name: string
-
-  next_poses: string[]
+  lore: string
+  breath_direction_default: string
+  dristi: string
+  variations: string[]
+  modifications: string[]
+  suggested_postures: string[]
+  preparatory_postures: string[]
   preferred_side: string
-  previous_poses: string[]
-  sanskrit_names: {
-    latin: string
-    devanagari: string
-    simplified: string
-    translation: {
-      latin: string
-      devanagari: string
-      simplified: string
-      description: string
-    }[]
-  }[]
   sideways: boolean
-
-  // sort_name: string
-  sort_english_name: string
-
-  // subcategory: string ('backbend', 'forward_bend', 'standing', 'seated', 'twist', 'neutral', 'balancing', 'inversion', 'mudra', 'bandha', 'lateral_bend')
-  subcategory: string
-
-  two_sided: boolean
-
-  // variations: null | any
-  variations_english_name: string[]
-
-  // visibility: ('primary', 'secondary', 'tertiary')
-  visibility: string
-  image?: string
-  createdAt?: string
-  updatedAt?: string
-  acitivity_completed?: boolean
-  acitivity_easy?: boolean
-  acitivity_difficult?: boolean
-  acitivity_practice?: boolean
-  posture_intent?: string
-  posture_meaning?: string
-  dristi?: string
-  breath?: string
-  // duration?: string
+  image: string
+  created_on: string
+  updated_on: string
+  activity_completed: boolean
+  activity_practice: boolean
+  posture_intent: string
+  breath_series: string[]
+  duration_asana: string
+  transition_cues_out: string
+  transition_cues_in: string
+  setup_cues: string
+  deepening_cues: string
+  customize_asana: string
+  additional_cues: string
+  joint_action: string
+  muscle_action: string
+  created_by: string
 }
+
+export interface displayAsanaPosture {
+  id: number
+  english_names: string[]
+  sanskrit_names: string
+  sort_english_name: string
+  description: string
+  benefits: string
+  category: string
+  difficulty: string
+  lore: string
+  dristi: string
+  preferred_side: string
+  sideways: boolean
+  created_on: string
+  updated_on: string
+  activity_completed: boolean
+  activity_practice: boolean
+  posture_intent: string
+  duration_asana: string
+  created_by: string
+}
+
+// export interface PostureData {
+//   id: number
+
+//   // aka: string[]
+//   alternate_english_name: string[]
+
+//   benefits: string
+//   category: string
+//   description: string
+//   difficulty: string
+
+//   // simplified_english_name: string
+//   simplified_english_name: string
+
+//   // name: string
+//   english_name: string
+
+//   next_poses: string[]
+//   preferred_side: string
+//   previous_poses: string[]
+//   sanskrit_names: {
+//     latin: string
+//     devanagari: string
+//     simplified: string
+//     translation: {
+//       latin: string
+//       devanagari: string
+//       simplified: string
+//       description: string
+//     }[]
+//   }[]
+//   sideways: boolean
+
+//   // sort_name: string
+//   sort_english_name: string
+
+//   // subcategory: string ('backbend', 'forward_bend', 'standing', 'seated', 'twist', 'neutral', 'balancing', 'inversion', 'mudra', 'bandha', 'lateral_bend')
+//   subcategory: string
+
+//   two_sided: boolean
+
+//   // variations: null | any
+//   variations_english_name: string[]
+
+//   // visibility: ('primary', 'secondary', 'tertiary')
+//   visibility: string
+//   image?: string
+//   createdAt?: string
+//   updatedAt?: string
+//   acitivity_completed?: boolean
+//   acitivity_easy?: boolean
+//   acitivity_difficult?: boolean
+//   acitivity_practice?: boolean
+//   posture_intent?: string
+//   posture_meaning?: string
+//   dristi?: string
+//   breath?: string
+//   // duration?: string
+// }
 
 //
 // Abbreviated Posture 1, display in Asanas > Postures
@@ -193,41 +253,48 @@ export interface PostureCardFields {
 }
 
 export interface AsanaPosturePageState {
-  postures: PostureData
-  // selectedPosture: PostureData | undefined
+  postures: FullAsanaData
+  // selectedPosture: FullAsanaData | undefined
 }
 
-type AsanaPostureAction = { type: 'SET_POSTURES'; payload: PostureData }
+type AsanaPostureAction = { type: 'SET_POSTURES'; payload: FullAsanaData }
 
 const initialState: AsanaPosturePageState = {
   postures: {
     id: 0,
-    alternate_english_name: [],
+    english_names: [],
+    sanskrit_names: '',
+    sort_english_name: '',
+    description: '',
     benefits: '',
     category: '',
-    description: '',
     difficulty: '',
-    simplified_english_name: '',
-    english_name: '',
-    next_poses: [],
+    lore: '',
+    breath_direction_default: '',
+    dristi: '',
+    variations: [],
+    modifications: [],
+    suggested_postures: [],
+    preparatory_postures: [],
     preferred_side: '',
-    previous_poses: [],
-    sanskrit_names: [
-      {
-        latin: '',
-        devanagari: '',
-        simplified: '',
-        translation: [
-          { latin: '', devanagari: '', simplified: '', description: '' },
-        ],
-      },
-    ],
     sideways: false,
-    sort_english_name: '',
-    subcategory: '',
-    two_sided: false,
-    variations_english_name: [],
-    visibility: '',
+    image: '',
+    created_on: '',
+    updated_on: '',
+    activity_completed: false,
+    activity_practice: false,
+    posture_intent: '',
+    breath_series: [],
+    duration_asana: '',
+    transition_cues_out: '',
+    transition_cues_in: '',
+    setup_cues: '',
+    deepening_cues: '',
+    customize_asana: '',
+    additional_cues: '',
+    joint_action: '',
+    muscle_action: '',
+    created_by: '',
   },
 }
 

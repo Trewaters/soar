@@ -31,7 +31,7 @@ import Looks3Icon from '@mui/icons-material/Looks3'
 import Looks4Icon from '@mui/icons-material/Looks4'
 import Looks5Icon from '@mui/icons-material/Looks5'
 import { useRouter } from 'next/navigation'
-import { PostureData } from '@context/AsanaPostureContext'
+import { FullAsanaData } from '@context/AsanaPostureContext'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SplashHeader from '@app/clientComponents/splash-header'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
@@ -43,7 +43,7 @@ export default function Page() {
   const { state, dispatch } = useFlowSeries()
   const { seriesName, seriesPostures, breath, description, duration, image } =
     state.flowSeries
-  const [postures, setPostures] = useState<PostureData[]>([])
+  const [postures, setPostures] = useState<FullAsanaData[]>([])
   const router = useRouter()
   const [open, setOpen] = React.useState(false)
   const [isDirty, setIsDirty] = useState(false)
@@ -88,7 +88,7 @@ export default function Page() {
 
   function handleSelect(
     event: React.SyntheticEvent<Element, Event>,
-    value: PostureData | null
+    value: FullAsanaData | null
   ) {
     event.preventDefault()
     if (value) {
@@ -103,7 +103,7 @@ export default function Page() {
           ...state.flowSeries,
           seriesPostures: [
             ...state.flowSeries.seriesPostures,
-            value.english_name + '; ' + simplifiedName,
+            value.sort_english_name + '; ' + simplifiedName,
           ],
         },
       })
@@ -210,19 +210,19 @@ export default function Page() {
               <AutocompleteComponent
                 options={postures}
                 getOptionLabel={(option) =>
-                  (option as PostureData).english_name
+                  (option as FullAsanaData).sort_english_name
                 }
                 renderOption={(props, option) => {
-                  const postureOption = option as PostureData
+                  const postureOption = option as FullAsanaData
                   return (
                     <li {...props} key={postureOption.id}>
-                      {postureOption.english_name}
+                      {postureOption.sort_english_name}
                     </li>
                   )
                 }}
                 placeholder="Add a pose to your series"
                 onChange={(event, value) =>
-                  handleSelect(event, value as PostureData | null)
+                  handleSelect(event, value as FullAsanaData | null)
                 }
                 renderInput={() => <TextField placeholder="Search..." />}
               />
