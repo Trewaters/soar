@@ -84,17 +84,14 @@ model ProviderAccount {
 model AsanaPosture {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
   english_names            String  @unique
-  // alternate_english_name  String[]
-  // simplified_english_name    String
   sanskrit_names  Json[]
   sort_english_name   String
-  // variations_english_name String[]
   description     String
   benefits        String?
   category        String
   difficulty      String
   lore            String?
-  breathDirectionDefault String
+  breath_direction_default String
   dristi            String?
   variations      String[]
   modifications   String[]
@@ -103,21 +100,21 @@ model AsanaPosture {
   preferred_side  String?
   sideways       Boolean
   image           String?
-  createdAt       DateTime? @default(now())
-  updatedAt       DateTime? @updatedAt
+  created_at       DateTime? @default(now())
+  updated_at       DateTime? @updatedAt
   acitivity_completed Boolean?
   acitivity_practice  Boolean?
   posture_intent    String?
-  breathSeries           String[]
-  durationAsana         String?
-  transitionCuesOut   String?
-  transitionCuesIn    String?
-  setupCues           String?
-  deepeningCues       String?
-  customizeAsana      String?
-  additionalCues      String?
-  jointAction         String?
-  muscleAction        String?
+  breath_series           String[]
+  duration_asana         String?
+  transition_cues_out   String?
+  transition_cues_in    String?
+  setup_cues           String?
+  deepening_cues       String?
+  customize_asana      String?
+  additional_cues      String?
+  joint_action         String?
+  muscle_action        String?
   created_by          String?
 }
 

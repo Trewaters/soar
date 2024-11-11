@@ -3431,180 +3431,202 @@ export namespace Prisma {
 
   export type AsanaPostureMinAggregateOutputType = {
     id: string | null
+    english_names: string | null
+    sort_english_name: string | null
+    description: string | null
     benefits: string | null
     category: string | null
-    description: string | null
     difficulty: string | null
-    simplified_english_name: string | null
-    english_name: string | null
+    lore: string | null
+    breath_direction_default: string | null
+    dristi: string | null
     preferred_side: string | null
     sideways: boolean | null
-    sort_english_name: string | null
-    subcategory: string | null
-    two_sided: boolean | null
-    visibility: string | null
     image: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
+    created_at: Date | null
+    updated_at: Date | null
     acitivity_completed: boolean | null
-    acitivity_easy: boolean | null
-    acitivity_difficult: boolean | null
     acitivity_practice: boolean | null
     posture_intent: string | null
-    posture_meaning: string | null
-    dristi: string | null
-    durationAsana: string | null
+    duration_asana: string | null
+    transition_cues_out: string | null
+    transition_cues_in: string | null
+    setup_cues: string | null
+    deepening_cues: string | null
+    customize_asana: string | null
+    additional_cues: string | null
+    joint_action: string | null
+    muscle_action: string | null
+    created_by: string | null
   }
 
   export type AsanaPostureMaxAggregateOutputType = {
     id: string | null
+    english_names: string | null
+    sort_english_name: string | null
+    description: string | null
     benefits: string | null
     category: string | null
-    description: string | null
     difficulty: string | null
-    simplified_english_name: string | null
-    english_name: string | null
+    lore: string | null
+    breath_direction_default: string | null
+    dristi: string | null
     preferred_side: string | null
     sideways: boolean | null
-    sort_english_name: string | null
-    subcategory: string | null
-    two_sided: boolean | null
-    visibility: string | null
     image: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
+    created_at: Date | null
+    updated_at: Date | null
     acitivity_completed: boolean | null
-    acitivity_easy: boolean | null
-    acitivity_difficult: boolean | null
     acitivity_practice: boolean | null
     posture_intent: string | null
-    posture_meaning: string | null
-    dristi: string | null
-    durationAsana: string | null
+    duration_asana: string | null
+    transition_cues_out: string | null
+    transition_cues_in: string | null
+    setup_cues: string | null
+    deepening_cues: string | null
+    customize_asana: string | null
+    additional_cues: string | null
+    joint_action: string | null
+    muscle_action: string | null
+    created_by: string | null
   }
 
   export type AsanaPostureCountAggregateOutputType = {
     id: number
-    alternate_english_name: number
+    english_names: number
+    sanskrit_names: number
+    sort_english_name: number
+    description: number
     benefits: number
     category: number
-    description: number
     difficulty: number
-    simplified_english_name: number
-    english_name: number
-    next_poses: number
+    lore: number
+    breath_direction_default: number
+    dristi: number
+    variations: number
+    modifications: number
+    suggested_postures: number
+    preparatory_postures: number
     preferred_side: number
-    previous_poses: number
-    sanskrit_names: number
     sideways: number
-    sort_english_name: number
-    subcategory: number
-    two_sided: number
-    variations_english_name: number
-    visibility: number
     image: number
-    createdAt: number
-    updatedAt: number
+    created_at: number
+    updated_at: number
     acitivity_completed: number
-    acitivity_easy: number
-    acitivity_difficult: number
     acitivity_practice: number
     posture_intent: number
-    posture_meaning: number
-    dristi: number
-    breathDefault: number
-    breathSeries: number
-    durationAsana: number
+    breath_series: number
+    duration_asana: number
+    transition_cues_out: number
+    transition_cues_in: number
+    setup_cues: number
+    deepening_cues: number
+    customize_asana: number
+    additional_cues: number
+    joint_action: number
+    muscle_action: number
+    created_by: number
     _all: number
   }
 
 
   export type AsanaPostureMinAggregateInputType = {
     id?: true
+    english_names?: true
+    sort_english_name?: true
+    description?: true
     benefits?: true
     category?: true
-    description?: true
     difficulty?: true
-    simplified_english_name?: true
-    english_name?: true
+    lore?: true
+    breath_direction_default?: true
+    dristi?: true
     preferred_side?: true
     sideways?: true
-    sort_english_name?: true
-    subcategory?: true
-    two_sided?: true
-    visibility?: true
     image?: true
-    createdAt?: true
-    updatedAt?: true
+    created_at?: true
+    updated_at?: true
     acitivity_completed?: true
-    acitivity_easy?: true
-    acitivity_difficult?: true
     acitivity_practice?: true
     posture_intent?: true
-    posture_meaning?: true
-    dristi?: true
-    durationAsana?: true
+    duration_asana?: true
+    transition_cues_out?: true
+    transition_cues_in?: true
+    setup_cues?: true
+    deepening_cues?: true
+    customize_asana?: true
+    additional_cues?: true
+    joint_action?: true
+    muscle_action?: true
+    created_by?: true
   }
 
   export type AsanaPostureMaxAggregateInputType = {
     id?: true
+    english_names?: true
+    sort_english_name?: true
+    description?: true
     benefits?: true
     category?: true
-    description?: true
     difficulty?: true
-    simplified_english_name?: true
-    english_name?: true
+    lore?: true
+    breath_direction_default?: true
+    dristi?: true
     preferred_side?: true
     sideways?: true
-    sort_english_name?: true
-    subcategory?: true
-    two_sided?: true
-    visibility?: true
     image?: true
-    createdAt?: true
-    updatedAt?: true
+    created_at?: true
+    updated_at?: true
     acitivity_completed?: true
-    acitivity_easy?: true
-    acitivity_difficult?: true
     acitivity_practice?: true
     posture_intent?: true
-    posture_meaning?: true
-    dristi?: true
-    durationAsana?: true
+    duration_asana?: true
+    transition_cues_out?: true
+    transition_cues_in?: true
+    setup_cues?: true
+    deepening_cues?: true
+    customize_asana?: true
+    additional_cues?: true
+    joint_action?: true
+    muscle_action?: true
+    created_by?: true
   }
 
   export type AsanaPostureCountAggregateInputType = {
     id?: true
-    alternate_english_name?: true
+    english_names?: true
+    sanskrit_names?: true
+    sort_english_name?: true
+    description?: true
     benefits?: true
     category?: true
-    description?: true
     difficulty?: true
-    simplified_english_name?: true
-    english_name?: true
-    next_poses?: true
+    lore?: true
+    breath_direction_default?: true
+    dristi?: true
+    variations?: true
+    modifications?: true
+    suggested_postures?: true
+    preparatory_postures?: true
     preferred_side?: true
-    previous_poses?: true
-    sanskrit_names?: true
     sideways?: true
-    sort_english_name?: true
-    subcategory?: true
-    two_sided?: true
-    variations_english_name?: true
-    visibility?: true
     image?: true
-    createdAt?: true
-    updatedAt?: true
+    created_at?: true
+    updated_at?: true
     acitivity_completed?: true
-    acitivity_easy?: true
-    acitivity_difficult?: true
     acitivity_practice?: true
     posture_intent?: true
-    posture_meaning?: true
-    dristi?: true
-    breathDefault?: true
-    breathSeries?: true
-    durationAsana?: true
+    breath_series?: true
+    duration_asana?: true
+    transition_cues_out?: true
+    transition_cues_in?: true
+    setup_cues?: true
+    deepening_cues?: true
+    customize_asana?: true
+    additional_cues?: true
+    joint_action?: true
+    muscle_action?: true
+    created_by?: true
     _all?: true
   }
 
@@ -3682,36 +3704,39 @@ export namespace Prisma {
 
   export type AsanaPostureGroupByOutputType = {
     id: string
-    alternate_english_name: string[]
+    english_names: string
+    sanskrit_names: JsonValue[]
+    sort_english_name: string
+    description: string
     benefits: string | null
     category: string
-    description: string
     difficulty: string
-    simplified_english_name: string
-    english_name: string
-    next_poses: string[]
+    lore: string | null
+    breath_direction_default: string
+    dristi: string | null
+    variations: string[]
+    modifications: string[]
+    suggested_postures: string[]
+    preparatory_postures: string[]
     preferred_side: string | null
-    previous_poses: string[]
-    sanskrit_names: JsonValue[]
     sideways: boolean
-    sort_english_name: string
-    subcategory: string
-    two_sided: boolean
-    variations_english_name: string[]
-    visibility: string
     image: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
+    created_at: Date | null
+    updated_at: Date | null
     acitivity_completed: boolean | null
-    acitivity_easy: boolean | null
-    acitivity_difficult: boolean | null
     acitivity_practice: boolean | null
     posture_intent: string | null
-    posture_meaning: string | null
-    dristi: string | null
-    breathDefault: string[]
-    breathSeries: string[]
-    durationAsana: string | null
+    breath_series: string[]
+    duration_asana: string | null
+    transition_cues_out: string | null
+    transition_cues_in: string | null
+    setup_cues: string | null
+    deepening_cues: string | null
+    customize_asana: string | null
+    additional_cues: string | null
+    joint_action: string | null
+    muscle_action: string | null
+    created_by: string | null
     _count: AsanaPostureCountAggregateOutputType | null
     _min: AsanaPostureMinAggregateOutputType | null
     _max: AsanaPostureMaxAggregateOutputType | null
@@ -3733,71 +3758,77 @@ export namespace Prisma {
 
   export type AsanaPostureSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    alternate_english_name?: boolean
+    english_names?: boolean
+    sanskrit_names?: boolean
+    sort_english_name?: boolean
+    description?: boolean
     benefits?: boolean
     category?: boolean
-    description?: boolean
     difficulty?: boolean
-    simplified_english_name?: boolean
-    english_name?: boolean
-    next_poses?: boolean
+    lore?: boolean
+    breath_direction_default?: boolean
+    dristi?: boolean
+    variations?: boolean
+    modifications?: boolean
+    suggested_postures?: boolean
+    preparatory_postures?: boolean
     preferred_side?: boolean
-    previous_poses?: boolean
-    sanskrit_names?: boolean
     sideways?: boolean
-    sort_english_name?: boolean
-    subcategory?: boolean
-    two_sided?: boolean
-    variations_english_name?: boolean
-    visibility?: boolean
     image?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
+    created_at?: boolean
+    updated_at?: boolean
     acitivity_completed?: boolean
-    acitivity_easy?: boolean
-    acitivity_difficult?: boolean
     acitivity_practice?: boolean
     posture_intent?: boolean
-    posture_meaning?: boolean
-    dristi?: boolean
-    breathDefault?: boolean
-    breathSeries?: boolean
-    durationAsana?: boolean
+    breath_series?: boolean
+    duration_asana?: boolean
+    transition_cues_out?: boolean
+    transition_cues_in?: boolean
+    setup_cues?: boolean
+    deepening_cues?: boolean
+    customize_asana?: boolean
+    additional_cues?: boolean
+    joint_action?: boolean
+    muscle_action?: boolean
+    created_by?: boolean
   }, ExtArgs["result"]["asanaPosture"]>
 
 
   export type AsanaPostureSelectScalar = {
     id?: boolean
-    alternate_english_name?: boolean
+    english_names?: boolean
+    sanskrit_names?: boolean
+    sort_english_name?: boolean
+    description?: boolean
     benefits?: boolean
     category?: boolean
-    description?: boolean
     difficulty?: boolean
-    simplified_english_name?: boolean
-    english_name?: boolean
-    next_poses?: boolean
+    lore?: boolean
+    breath_direction_default?: boolean
+    dristi?: boolean
+    variations?: boolean
+    modifications?: boolean
+    suggested_postures?: boolean
+    preparatory_postures?: boolean
     preferred_side?: boolean
-    previous_poses?: boolean
-    sanskrit_names?: boolean
     sideways?: boolean
-    sort_english_name?: boolean
-    subcategory?: boolean
-    two_sided?: boolean
-    variations_english_name?: boolean
-    visibility?: boolean
     image?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
+    created_at?: boolean
+    updated_at?: boolean
     acitivity_completed?: boolean
-    acitivity_easy?: boolean
-    acitivity_difficult?: boolean
     acitivity_practice?: boolean
     posture_intent?: boolean
-    posture_meaning?: boolean
-    dristi?: boolean
-    breathDefault?: boolean
-    breathSeries?: boolean
-    durationAsana?: boolean
+    breath_series?: boolean
+    duration_asana?: boolean
+    transition_cues_out?: boolean
+    transition_cues_in?: boolean
+    setup_cues?: boolean
+    deepening_cues?: boolean
+    customize_asana?: boolean
+    additional_cues?: boolean
+    joint_action?: boolean
+    muscle_action?: boolean
+    created_by?: boolean
   }
 
 
@@ -3806,36 +3837,39 @@ export namespace Prisma {
     objects: {}
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      alternate_english_name: string[]
+      english_names: string
+      sanskrit_names: Prisma.JsonValue[]
+      sort_english_name: string
+      description: string
       benefits: string | null
       category: string
-      description: string
       difficulty: string
-      simplified_english_name: string
-      english_name: string
-      next_poses: string[]
+      lore: string | null
+      breath_direction_default: string
+      dristi: string | null
+      variations: string[]
+      modifications: string[]
+      suggested_postures: string[]
+      preparatory_postures: string[]
       preferred_side: string | null
-      previous_poses: string[]
-      sanskrit_names: Prisma.JsonValue[]
       sideways: boolean
-      sort_english_name: string
-      subcategory: string
-      two_sided: boolean
-      variations_english_name: string[]
-      visibility: string
       image: string | null
-      createdAt: Date | null
-      updatedAt: Date | null
+      created_at: Date | null
+      updated_at: Date | null
       acitivity_completed: boolean | null
-      acitivity_easy: boolean | null
-      acitivity_difficult: boolean | null
       acitivity_practice: boolean | null
       posture_intent: string | null
-      posture_meaning: string | null
-      dristi: string | null
-      breathDefault: string[]
-      breathSeries: string[]
-      durationAsana: string | null
+      breath_series: string[]
+      duration_asana: string | null
+      transition_cues_out: string | null
+      transition_cues_in: string | null
+      setup_cues: string | null
+      deepening_cues: string | null
+      customize_asana: string | null
+      additional_cues: string | null
+      joint_action: string | null
+      muscle_action: string | null
+      created_by: string | null
     }, ExtArgs["result"]["asanaPosture"]>
     composites: {}
   }
@@ -4229,36 +4263,39 @@ export namespace Prisma {
    */ 
   interface AsanaPostureFieldRefs {
     readonly id: FieldRef<"AsanaPosture", 'String'>
-    readonly alternate_english_name: FieldRef<"AsanaPosture", 'String[]'>
+    readonly english_names: FieldRef<"AsanaPosture", 'String'>
+    readonly sanskrit_names: FieldRef<"AsanaPosture", 'Json[]'>
+    readonly sort_english_name: FieldRef<"AsanaPosture", 'String'>
+    readonly description: FieldRef<"AsanaPosture", 'String'>
     readonly benefits: FieldRef<"AsanaPosture", 'String'>
     readonly category: FieldRef<"AsanaPosture", 'String'>
-    readonly description: FieldRef<"AsanaPosture", 'String'>
     readonly difficulty: FieldRef<"AsanaPosture", 'String'>
-    readonly simplified_english_name: FieldRef<"AsanaPosture", 'String'>
-    readonly english_name: FieldRef<"AsanaPosture", 'String'>
-    readonly next_poses: FieldRef<"AsanaPosture", 'String[]'>
+    readonly lore: FieldRef<"AsanaPosture", 'String'>
+    readonly breath_direction_default: FieldRef<"AsanaPosture", 'String'>
+    readonly dristi: FieldRef<"AsanaPosture", 'String'>
+    readonly variations: FieldRef<"AsanaPosture", 'String[]'>
+    readonly modifications: FieldRef<"AsanaPosture", 'String[]'>
+    readonly suggested_postures: FieldRef<"AsanaPosture", 'String[]'>
+    readonly preparatory_postures: FieldRef<"AsanaPosture", 'String[]'>
     readonly preferred_side: FieldRef<"AsanaPosture", 'String'>
-    readonly previous_poses: FieldRef<"AsanaPosture", 'String[]'>
-    readonly sanskrit_names: FieldRef<"AsanaPosture", 'Json[]'>
     readonly sideways: FieldRef<"AsanaPosture", 'Boolean'>
-    readonly sort_english_name: FieldRef<"AsanaPosture", 'String'>
-    readonly subcategory: FieldRef<"AsanaPosture", 'String'>
-    readonly two_sided: FieldRef<"AsanaPosture", 'Boolean'>
-    readonly variations_english_name: FieldRef<"AsanaPosture", 'String[]'>
-    readonly visibility: FieldRef<"AsanaPosture", 'String'>
     readonly image: FieldRef<"AsanaPosture", 'String'>
-    readonly createdAt: FieldRef<"AsanaPosture", 'DateTime'>
-    readonly updatedAt: FieldRef<"AsanaPosture", 'DateTime'>
+    readonly created_at: FieldRef<"AsanaPosture", 'DateTime'>
+    readonly updated_at: FieldRef<"AsanaPosture", 'DateTime'>
     readonly acitivity_completed: FieldRef<"AsanaPosture", 'Boolean'>
-    readonly acitivity_easy: FieldRef<"AsanaPosture", 'Boolean'>
-    readonly acitivity_difficult: FieldRef<"AsanaPosture", 'Boolean'>
     readonly acitivity_practice: FieldRef<"AsanaPosture", 'Boolean'>
     readonly posture_intent: FieldRef<"AsanaPosture", 'String'>
-    readonly posture_meaning: FieldRef<"AsanaPosture", 'String'>
-    readonly dristi: FieldRef<"AsanaPosture", 'String'>
-    readonly breathDefault: FieldRef<"AsanaPosture", 'String[]'>
-    readonly breathSeries: FieldRef<"AsanaPosture", 'String[]'>
-    readonly durationAsana: FieldRef<"AsanaPosture", 'String'>
+    readonly breath_series: FieldRef<"AsanaPosture", 'String[]'>
+    readonly duration_asana: FieldRef<"AsanaPosture", 'String'>
+    readonly transition_cues_out: FieldRef<"AsanaPosture", 'String'>
+    readonly transition_cues_in: FieldRef<"AsanaPosture", 'String'>
+    readonly setup_cues: FieldRef<"AsanaPosture", 'String'>
+    readonly deepening_cues: FieldRef<"AsanaPosture", 'String'>
+    readonly customize_asana: FieldRef<"AsanaPosture", 'String'>
+    readonly additional_cues: FieldRef<"AsanaPosture", 'String'>
+    readonly joint_action: FieldRef<"AsanaPosture", 'String'>
+    readonly muscle_action: FieldRef<"AsanaPosture", 'String'>
+    readonly created_by: FieldRef<"AsanaPosture", 'String'>
   }
     
 
@@ -6453,36 +6490,39 @@ export namespace Prisma {
 
   export const AsanaPostureScalarFieldEnum: {
     id: 'id',
-    alternate_english_name: 'alternate_english_name',
+    english_names: 'english_names',
+    sanskrit_names: 'sanskrit_names',
+    sort_english_name: 'sort_english_name',
+    description: 'description',
     benefits: 'benefits',
     category: 'category',
-    description: 'description',
     difficulty: 'difficulty',
-    simplified_english_name: 'simplified_english_name',
-    english_name: 'english_name',
-    next_poses: 'next_poses',
+    lore: 'lore',
+    breath_direction_default: 'breath_direction_default',
+    dristi: 'dristi',
+    variations: 'variations',
+    modifications: 'modifications',
+    suggested_postures: 'suggested_postures',
+    preparatory_postures: 'preparatory_postures',
     preferred_side: 'preferred_side',
-    previous_poses: 'previous_poses',
-    sanskrit_names: 'sanskrit_names',
     sideways: 'sideways',
-    sort_english_name: 'sort_english_name',
-    subcategory: 'subcategory',
-    two_sided: 'two_sided',
-    variations_english_name: 'variations_english_name',
-    visibility: 'visibility',
     image: 'image',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
     acitivity_completed: 'acitivity_completed',
-    acitivity_easy: 'acitivity_easy',
-    acitivity_difficult: 'acitivity_difficult',
     acitivity_practice: 'acitivity_practice',
     posture_intent: 'posture_intent',
-    posture_meaning: 'posture_meaning',
-    dristi: 'dristi',
-    breathDefault: 'breathDefault',
-    breathSeries: 'breathSeries',
-    durationAsana: 'durationAsana'
+    breath_series: 'breath_series',
+    duration_asana: 'duration_asana',
+    transition_cues_out: 'transition_cues_out',
+    transition_cues_in: 'transition_cues_in',
+    setup_cues: 'setup_cues',
+    deepening_cues: 'deepening_cues',
+    customize_asana: 'customize_asana',
+    additional_cues: 'additional_cues',
+    joint_action: 'joint_action',
+    muscle_action: 'muscle_action',
+    created_by: 'created_by'
   };
 
   export type AsanaPostureScalarFieldEnum = (typeof AsanaPostureScalarFieldEnum)[keyof typeof AsanaPostureScalarFieldEnum]
@@ -6866,141 +6906,153 @@ export namespace Prisma {
     OR?: AsanaPostureWhereInput[]
     NOT?: AsanaPostureWhereInput | AsanaPostureWhereInput[]
     id?: StringFilter<"AsanaPosture"> | string
-    alternate_english_name?: StringNullableListFilter<"AsanaPosture">
+    english_names?: StringFilter<"AsanaPosture"> | string
+    sanskrit_names?: JsonNullableListFilter<"AsanaPosture">
+    sort_english_name?: StringFilter<"AsanaPosture"> | string
+    description?: StringFilter<"AsanaPosture"> | string
     benefits?: StringNullableFilter<"AsanaPosture"> | string | null
     category?: StringFilter<"AsanaPosture"> | string
-    description?: StringFilter<"AsanaPosture"> | string
     difficulty?: StringFilter<"AsanaPosture"> | string
-    simplified_english_name?: StringFilter<"AsanaPosture"> | string
-    english_name?: StringFilter<"AsanaPosture"> | string
-    next_poses?: StringNullableListFilter<"AsanaPosture">
+    lore?: StringNullableFilter<"AsanaPosture"> | string | null
+    breath_direction_default?: StringFilter<"AsanaPosture"> | string
+    dristi?: StringNullableFilter<"AsanaPosture"> | string | null
+    variations?: StringNullableListFilter<"AsanaPosture">
+    modifications?: StringNullableListFilter<"AsanaPosture">
+    suggested_postures?: StringNullableListFilter<"AsanaPosture">
+    preparatory_postures?: StringNullableListFilter<"AsanaPosture">
     preferred_side?: StringNullableFilter<"AsanaPosture"> | string | null
-    previous_poses?: StringNullableListFilter<"AsanaPosture">
-    sanskrit_names?: JsonNullableListFilter<"AsanaPosture">
     sideways?: BoolFilter<"AsanaPosture"> | boolean
-    sort_english_name?: StringFilter<"AsanaPosture"> | string
-    subcategory?: StringFilter<"AsanaPosture"> | string
-    two_sided?: BoolFilter<"AsanaPosture"> | boolean
-    variations_english_name?: StringNullableListFilter<"AsanaPosture">
-    visibility?: StringFilter<"AsanaPosture"> | string
     image?: StringNullableFilter<"AsanaPosture"> | string | null
-    createdAt?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
-    updatedAt?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
+    created_at?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
     acitivity_completed?: BoolNullableFilter<"AsanaPosture"> | boolean | null
-    acitivity_easy?: BoolNullableFilter<"AsanaPosture"> | boolean | null
-    acitivity_difficult?: BoolNullableFilter<"AsanaPosture"> | boolean | null
     acitivity_practice?: BoolNullableFilter<"AsanaPosture"> | boolean | null
     posture_intent?: StringNullableFilter<"AsanaPosture"> | string | null
-    posture_meaning?: StringNullableFilter<"AsanaPosture"> | string | null
-    dristi?: StringNullableFilter<"AsanaPosture"> | string | null
-    breathDefault?: StringNullableListFilter<"AsanaPosture">
-    breathSeries?: StringNullableListFilter<"AsanaPosture">
-    durationAsana?: StringNullableFilter<"AsanaPosture"> | string | null
+    breath_series?: StringNullableListFilter<"AsanaPosture">
+    duration_asana?: StringNullableFilter<"AsanaPosture"> | string | null
+    transition_cues_out?: StringNullableFilter<"AsanaPosture"> | string | null
+    transition_cues_in?: StringNullableFilter<"AsanaPosture"> | string | null
+    setup_cues?: StringNullableFilter<"AsanaPosture"> | string | null
+    deepening_cues?: StringNullableFilter<"AsanaPosture"> | string | null
+    customize_asana?: StringNullableFilter<"AsanaPosture"> | string | null
+    additional_cues?: StringNullableFilter<"AsanaPosture"> | string | null
+    joint_action?: StringNullableFilter<"AsanaPosture"> | string | null
+    muscle_action?: StringNullableFilter<"AsanaPosture"> | string | null
+    created_by?: StringNullableFilter<"AsanaPosture"> | string | null
   }
 
   export type AsanaPostureOrderByWithRelationInput = {
     id?: SortOrder
-    alternate_english_name?: SortOrder
+    english_names?: SortOrder
+    sanskrit_names?: SortOrder
+    sort_english_name?: SortOrder
+    description?: SortOrder
     benefits?: SortOrder
     category?: SortOrder
-    description?: SortOrder
     difficulty?: SortOrder
-    simplified_english_name?: SortOrder
-    english_name?: SortOrder
-    next_poses?: SortOrder
+    lore?: SortOrder
+    breath_direction_default?: SortOrder
+    dristi?: SortOrder
+    variations?: SortOrder
+    modifications?: SortOrder
+    suggested_postures?: SortOrder
+    preparatory_postures?: SortOrder
     preferred_side?: SortOrder
-    previous_poses?: SortOrder
-    sanskrit_names?: SortOrder
     sideways?: SortOrder
-    sort_english_name?: SortOrder
-    subcategory?: SortOrder
-    two_sided?: SortOrder
-    variations_english_name?: SortOrder
-    visibility?: SortOrder
     image?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
     acitivity_completed?: SortOrder
-    acitivity_easy?: SortOrder
-    acitivity_difficult?: SortOrder
     acitivity_practice?: SortOrder
     posture_intent?: SortOrder
-    posture_meaning?: SortOrder
-    dristi?: SortOrder
-    breathDefault?: SortOrder
-    breathSeries?: SortOrder
-    durationAsana?: SortOrder
+    breath_series?: SortOrder
+    duration_asana?: SortOrder
+    transition_cues_out?: SortOrder
+    transition_cues_in?: SortOrder
+    setup_cues?: SortOrder
+    deepening_cues?: SortOrder
+    customize_asana?: SortOrder
+    additional_cues?: SortOrder
+    joint_action?: SortOrder
+    muscle_action?: SortOrder
+    created_by?: SortOrder
   }
 
   export type AsanaPostureWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    english_name?: string
+    english_names?: string
     AND?: AsanaPostureWhereInput | AsanaPostureWhereInput[]
     OR?: AsanaPostureWhereInput[]
     NOT?: AsanaPostureWhereInput | AsanaPostureWhereInput[]
-    alternate_english_name?: StringNullableListFilter<"AsanaPosture">
+    sanskrit_names?: JsonNullableListFilter<"AsanaPosture">
+    sort_english_name?: StringFilter<"AsanaPosture"> | string
+    description?: StringFilter<"AsanaPosture"> | string
     benefits?: StringNullableFilter<"AsanaPosture"> | string | null
     category?: StringFilter<"AsanaPosture"> | string
-    description?: StringFilter<"AsanaPosture"> | string
     difficulty?: StringFilter<"AsanaPosture"> | string
-    simplified_english_name?: StringFilter<"AsanaPosture"> | string
-    next_poses?: StringNullableListFilter<"AsanaPosture">
+    lore?: StringNullableFilter<"AsanaPosture"> | string | null
+    breath_direction_default?: StringFilter<"AsanaPosture"> | string
+    dristi?: StringNullableFilter<"AsanaPosture"> | string | null
+    variations?: StringNullableListFilter<"AsanaPosture">
+    modifications?: StringNullableListFilter<"AsanaPosture">
+    suggested_postures?: StringNullableListFilter<"AsanaPosture">
+    preparatory_postures?: StringNullableListFilter<"AsanaPosture">
     preferred_side?: StringNullableFilter<"AsanaPosture"> | string | null
-    previous_poses?: StringNullableListFilter<"AsanaPosture">
-    sanskrit_names?: JsonNullableListFilter<"AsanaPosture">
     sideways?: BoolFilter<"AsanaPosture"> | boolean
-    sort_english_name?: StringFilter<"AsanaPosture"> | string
-    subcategory?: StringFilter<"AsanaPosture"> | string
-    two_sided?: BoolFilter<"AsanaPosture"> | boolean
-    variations_english_name?: StringNullableListFilter<"AsanaPosture">
-    visibility?: StringFilter<"AsanaPosture"> | string
     image?: StringNullableFilter<"AsanaPosture"> | string | null
-    createdAt?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
-    updatedAt?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
+    created_at?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
+    updated_at?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
     acitivity_completed?: BoolNullableFilter<"AsanaPosture"> | boolean | null
-    acitivity_easy?: BoolNullableFilter<"AsanaPosture"> | boolean | null
-    acitivity_difficult?: BoolNullableFilter<"AsanaPosture"> | boolean | null
     acitivity_practice?: BoolNullableFilter<"AsanaPosture"> | boolean | null
     posture_intent?: StringNullableFilter<"AsanaPosture"> | string | null
-    posture_meaning?: StringNullableFilter<"AsanaPosture"> | string | null
-    dristi?: StringNullableFilter<"AsanaPosture"> | string | null
-    breathDefault?: StringNullableListFilter<"AsanaPosture">
-    breathSeries?: StringNullableListFilter<"AsanaPosture">
-    durationAsana?: StringNullableFilter<"AsanaPosture"> | string | null
-  }, "id" | "english_name">
+    breath_series?: StringNullableListFilter<"AsanaPosture">
+    duration_asana?: StringNullableFilter<"AsanaPosture"> | string | null
+    transition_cues_out?: StringNullableFilter<"AsanaPosture"> | string | null
+    transition_cues_in?: StringNullableFilter<"AsanaPosture"> | string | null
+    setup_cues?: StringNullableFilter<"AsanaPosture"> | string | null
+    deepening_cues?: StringNullableFilter<"AsanaPosture"> | string | null
+    customize_asana?: StringNullableFilter<"AsanaPosture"> | string | null
+    additional_cues?: StringNullableFilter<"AsanaPosture"> | string | null
+    joint_action?: StringNullableFilter<"AsanaPosture"> | string | null
+    muscle_action?: StringNullableFilter<"AsanaPosture"> | string | null
+    created_by?: StringNullableFilter<"AsanaPosture"> | string | null
+  }, "id" | "english_names">
 
   export type AsanaPostureOrderByWithAggregationInput = {
     id?: SortOrder
-    alternate_english_name?: SortOrder
+    english_names?: SortOrder
+    sanskrit_names?: SortOrder
+    sort_english_name?: SortOrder
+    description?: SortOrder
     benefits?: SortOrder
     category?: SortOrder
-    description?: SortOrder
     difficulty?: SortOrder
-    simplified_english_name?: SortOrder
-    english_name?: SortOrder
-    next_poses?: SortOrder
+    lore?: SortOrder
+    breath_direction_default?: SortOrder
+    dristi?: SortOrder
+    variations?: SortOrder
+    modifications?: SortOrder
+    suggested_postures?: SortOrder
+    preparatory_postures?: SortOrder
     preferred_side?: SortOrder
-    previous_poses?: SortOrder
-    sanskrit_names?: SortOrder
     sideways?: SortOrder
-    sort_english_name?: SortOrder
-    subcategory?: SortOrder
-    two_sided?: SortOrder
-    variations_english_name?: SortOrder
-    visibility?: SortOrder
     image?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
     acitivity_completed?: SortOrder
-    acitivity_easy?: SortOrder
-    acitivity_difficult?: SortOrder
     acitivity_practice?: SortOrder
     posture_intent?: SortOrder
-    posture_meaning?: SortOrder
-    dristi?: SortOrder
-    breathDefault?: SortOrder
-    breathSeries?: SortOrder
-    durationAsana?: SortOrder
+    breath_series?: SortOrder
+    duration_asana?: SortOrder
+    transition_cues_out?: SortOrder
+    transition_cues_in?: SortOrder
+    setup_cues?: SortOrder
+    deepening_cues?: SortOrder
+    customize_asana?: SortOrder
+    additional_cues?: SortOrder
+    joint_action?: SortOrder
+    muscle_action?: SortOrder
+    created_by?: SortOrder
     _count?: AsanaPostureCountOrderByAggregateInput
     _max?: AsanaPostureMaxOrderByAggregateInput
     _min?: AsanaPostureMinOrderByAggregateInput
@@ -7011,36 +7063,39 @@ export namespace Prisma {
     OR?: AsanaPostureScalarWhereWithAggregatesInput[]
     NOT?: AsanaPostureScalarWhereWithAggregatesInput | AsanaPostureScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"AsanaPosture"> | string
-    alternate_english_name?: StringNullableListFilter<"AsanaPosture">
+    english_names?: StringWithAggregatesFilter<"AsanaPosture"> | string
+    sanskrit_names?: JsonNullableListFilter<"AsanaPosture">
+    sort_english_name?: StringWithAggregatesFilter<"AsanaPosture"> | string
+    description?: StringWithAggregatesFilter<"AsanaPosture"> | string
     benefits?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
     category?: StringWithAggregatesFilter<"AsanaPosture"> | string
-    description?: StringWithAggregatesFilter<"AsanaPosture"> | string
     difficulty?: StringWithAggregatesFilter<"AsanaPosture"> | string
-    simplified_english_name?: StringWithAggregatesFilter<"AsanaPosture"> | string
-    english_name?: StringWithAggregatesFilter<"AsanaPosture"> | string
-    next_poses?: StringNullableListFilter<"AsanaPosture">
+    lore?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    breath_direction_default?: StringWithAggregatesFilter<"AsanaPosture"> | string
+    dristi?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    variations?: StringNullableListFilter<"AsanaPosture">
+    modifications?: StringNullableListFilter<"AsanaPosture">
+    suggested_postures?: StringNullableListFilter<"AsanaPosture">
+    preparatory_postures?: StringNullableListFilter<"AsanaPosture">
     preferred_side?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
-    previous_poses?: StringNullableListFilter<"AsanaPosture">
-    sanskrit_names?: JsonNullableListFilter<"AsanaPosture">
     sideways?: BoolWithAggregatesFilter<"AsanaPosture"> | boolean
-    sort_english_name?: StringWithAggregatesFilter<"AsanaPosture"> | string
-    subcategory?: StringWithAggregatesFilter<"AsanaPosture"> | string
-    two_sided?: BoolWithAggregatesFilter<"AsanaPosture"> | boolean
-    variations_english_name?: StringNullableListFilter<"AsanaPosture">
-    visibility?: StringWithAggregatesFilter<"AsanaPosture"> | string
     image?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
-    createdAt?: DateTimeNullableWithAggregatesFilter<"AsanaPosture"> | Date | string | null
-    updatedAt?: DateTimeNullableWithAggregatesFilter<"AsanaPosture"> | Date | string | null
+    created_at?: DateTimeNullableWithAggregatesFilter<"AsanaPosture"> | Date | string | null
+    updated_at?: DateTimeNullableWithAggregatesFilter<"AsanaPosture"> | Date | string | null
     acitivity_completed?: BoolNullableWithAggregatesFilter<"AsanaPosture"> | boolean | null
-    acitivity_easy?: BoolNullableWithAggregatesFilter<"AsanaPosture"> | boolean | null
-    acitivity_difficult?: BoolNullableWithAggregatesFilter<"AsanaPosture"> | boolean | null
     acitivity_practice?: BoolNullableWithAggregatesFilter<"AsanaPosture"> | boolean | null
     posture_intent?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
-    posture_meaning?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
-    dristi?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
-    breathDefault?: StringNullableListFilter<"AsanaPosture">
-    breathSeries?: StringNullableListFilter<"AsanaPosture">
-    durationAsana?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    breath_series?: StringNullableListFilter<"AsanaPosture">
+    duration_asana?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    transition_cues_out?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    transition_cues_in?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    setup_cues?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    deepening_cues?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    customize_asana?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    additional_cues?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    joint_action?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    muscle_action?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    created_by?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
   }
 
   export type AsanaSeriesWhereInput = {
@@ -7478,236 +7533,257 @@ export namespace Prisma {
 
   export type AsanaPostureCreateInput = {
     id?: string
-    alternate_english_name?: AsanaPostureCreatealternate_english_nameInput | string[]
+    english_names: string
+    sanskrit_names?: AsanaPostureCreatesanskrit_namesInput | InputJsonValue[]
+    sort_english_name: string
+    description: string
     benefits?: string | null
     category: string
-    description: string
     difficulty: string
-    simplified_english_name: string
-    english_name: string
-    next_poses?: AsanaPostureCreatenext_posesInput | string[]
+    lore?: string | null
+    breath_direction_default: string
+    dristi?: string | null
+    variations?: AsanaPostureCreatevariationsInput | string[]
+    modifications?: AsanaPostureCreatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
     preferred_side?: string | null
-    previous_poses?: AsanaPostureCreateprevious_posesInput | string[]
-    sanskrit_names?: AsanaPostureCreatesanskrit_namesInput | InputJsonValue[]
     sideways: boolean
-    sort_english_name: string
-    subcategory: string
-    two_sided: boolean
-    variations_english_name?: AsanaPostureCreatevariations_english_nameInput | string[]
-    visibility: string
     image?: string | null
-    createdAt?: Date | string | null
-    updatedAt?: Date | string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
     acitivity_completed?: boolean | null
-    acitivity_easy?: boolean | null
-    acitivity_difficult?: boolean | null
     acitivity_practice?: boolean | null
     posture_intent?: string | null
-    posture_meaning?: string | null
-    dristi?: string | null
-    breathDefault?: AsanaPostureCreatebreathDefaultInput | string[]
-    breathSeries?: AsanaPostureCreatebreathSeriesInput | string[]
-    durationAsana?: string | null
+    breath_series?: AsanaPostureCreatebreath_seriesInput | string[]
+    duration_asana?: string | null
+    transition_cues_out?: string | null
+    transition_cues_in?: string | null
+    setup_cues?: string | null
+    deepening_cues?: string | null
+    customize_asana?: string | null
+    additional_cues?: string | null
+    joint_action?: string | null
+    muscle_action?: string | null
+    created_by?: string | null
   }
 
   export type AsanaPostureUncheckedCreateInput = {
     id?: string
-    alternate_english_name?: AsanaPostureCreatealternate_english_nameInput | string[]
+    english_names: string
+    sanskrit_names?: AsanaPostureCreatesanskrit_namesInput | InputJsonValue[]
+    sort_english_name: string
+    description: string
     benefits?: string | null
     category: string
-    description: string
     difficulty: string
-    simplified_english_name: string
-    english_name: string
-    next_poses?: AsanaPostureCreatenext_posesInput | string[]
+    lore?: string | null
+    breath_direction_default: string
+    dristi?: string | null
+    variations?: AsanaPostureCreatevariationsInput | string[]
+    modifications?: AsanaPostureCreatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
     preferred_side?: string | null
-    previous_poses?: AsanaPostureCreateprevious_posesInput | string[]
-    sanskrit_names?: AsanaPostureCreatesanskrit_namesInput | InputJsonValue[]
     sideways: boolean
-    sort_english_name: string
-    subcategory: string
-    two_sided: boolean
-    variations_english_name?: AsanaPostureCreatevariations_english_nameInput | string[]
-    visibility: string
     image?: string | null
-    createdAt?: Date | string | null
-    updatedAt?: Date | string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
     acitivity_completed?: boolean | null
-    acitivity_easy?: boolean | null
-    acitivity_difficult?: boolean | null
     acitivity_practice?: boolean | null
     posture_intent?: string | null
-    posture_meaning?: string | null
-    dristi?: string | null
-    breathDefault?: AsanaPostureCreatebreathDefaultInput | string[]
-    breathSeries?: AsanaPostureCreatebreathSeriesInput | string[]
-    durationAsana?: string | null
+    breath_series?: AsanaPostureCreatebreath_seriesInput | string[]
+    duration_asana?: string | null
+    transition_cues_out?: string | null
+    transition_cues_in?: string | null
+    setup_cues?: string | null
+    deepening_cues?: string | null
+    customize_asana?: string | null
+    additional_cues?: string | null
+    joint_action?: string | null
+    muscle_action?: string | null
+    created_by?: string | null
   }
 
   export type AsanaPostureUpdateInput = {
-    alternate_english_name?: AsanaPostureUpdatealternate_english_nameInput | string[]
+    english_names?: StringFieldUpdateOperationsInput | string
+    sanskrit_names?: AsanaPostureUpdatesanskrit_namesInput | InputJsonValue[]
+    sort_english_name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     benefits?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
     difficulty?: StringFieldUpdateOperationsInput | string
-    simplified_english_name?: StringFieldUpdateOperationsInput | string
-    english_name?: StringFieldUpdateOperationsInput | string
-    next_poses?: AsanaPostureUpdatenext_posesInput | string[]
+    lore?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_direction_default?: StringFieldUpdateOperationsInput | string
+    dristi?: NullableStringFieldUpdateOperationsInput | string | null
+    variations?: AsanaPostureUpdatevariationsInput | string[]
+    modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
-    previous_poses?: AsanaPostureUpdateprevious_posesInput | string[]
-    sanskrit_names?: AsanaPostureUpdatesanskrit_namesInput | InputJsonValue[]
     sideways?: BoolFieldUpdateOperationsInput | boolean
-    sort_english_name?: StringFieldUpdateOperationsInput | string
-    subcategory?: StringFieldUpdateOperationsInput | string
-    two_sided?: BoolFieldUpdateOperationsInput | boolean
-    variations_english_name?: AsanaPostureUpdatevariations_english_nameInput | string[]
-    visibility?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     acitivity_completed?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    acitivity_easy?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    acitivity_difficult?: NullableBoolFieldUpdateOperationsInput | boolean | null
     acitivity_practice?: NullableBoolFieldUpdateOperationsInput | boolean | null
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
-    posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
-    dristi?: NullableStringFieldUpdateOperationsInput | string | null
-    breathDefault?: AsanaPostureUpdatebreathDefaultInput | string[]
-    breathSeries?: AsanaPostureUpdatebreathSeriesInput | string[]
-    durationAsana?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_series?: AsanaPostureUpdatebreath_seriesInput | string[]
+    duration_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_out?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_in?: NullableStringFieldUpdateOperationsInput | string | null
+    setup_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    deepening_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    customize_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    additional_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    joint_action?: NullableStringFieldUpdateOperationsInput | string | null
+    muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AsanaPostureUncheckedUpdateInput = {
-    alternate_english_name?: AsanaPostureUpdatealternate_english_nameInput | string[]
+    english_names?: StringFieldUpdateOperationsInput | string
+    sanskrit_names?: AsanaPostureUpdatesanskrit_namesInput | InputJsonValue[]
+    sort_english_name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     benefits?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
     difficulty?: StringFieldUpdateOperationsInput | string
-    simplified_english_name?: StringFieldUpdateOperationsInput | string
-    english_name?: StringFieldUpdateOperationsInput | string
-    next_poses?: AsanaPostureUpdatenext_posesInput | string[]
+    lore?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_direction_default?: StringFieldUpdateOperationsInput | string
+    dristi?: NullableStringFieldUpdateOperationsInput | string | null
+    variations?: AsanaPostureUpdatevariationsInput | string[]
+    modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
-    previous_poses?: AsanaPostureUpdateprevious_posesInput | string[]
-    sanskrit_names?: AsanaPostureUpdatesanskrit_namesInput | InputJsonValue[]
     sideways?: BoolFieldUpdateOperationsInput | boolean
-    sort_english_name?: StringFieldUpdateOperationsInput | string
-    subcategory?: StringFieldUpdateOperationsInput | string
-    two_sided?: BoolFieldUpdateOperationsInput | boolean
-    variations_english_name?: AsanaPostureUpdatevariations_english_nameInput | string[]
-    visibility?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     acitivity_completed?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    acitivity_easy?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    acitivity_difficult?: NullableBoolFieldUpdateOperationsInput | boolean | null
     acitivity_practice?: NullableBoolFieldUpdateOperationsInput | boolean | null
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
-    posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
-    dristi?: NullableStringFieldUpdateOperationsInput | string | null
-    breathDefault?: AsanaPostureUpdatebreathDefaultInput | string[]
-    breathSeries?: AsanaPostureUpdatebreathSeriesInput | string[]
-    durationAsana?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_series?: AsanaPostureUpdatebreath_seriesInput | string[]
+    duration_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_out?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_in?: NullableStringFieldUpdateOperationsInput | string | null
+    setup_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    deepening_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    customize_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    additional_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    joint_action?: NullableStringFieldUpdateOperationsInput | string | null
+    muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AsanaPostureCreateManyInput = {
     id?: string
-    alternate_english_name?: AsanaPostureCreatealternate_english_nameInput | string[]
+    english_names: string
+    sanskrit_names?: AsanaPostureCreatesanskrit_namesInput | InputJsonValue[]
+    sort_english_name: string
+    description: string
     benefits?: string | null
     category: string
-    description: string
     difficulty: string
-    simplified_english_name: string
-    english_name: string
-    next_poses?: AsanaPostureCreatenext_posesInput | string[]
+    lore?: string | null
+    breath_direction_default: string
+    dristi?: string | null
+    variations?: AsanaPostureCreatevariationsInput | string[]
+    modifications?: AsanaPostureCreatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
     preferred_side?: string | null
-    previous_poses?: AsanaPostureCreateprevious_posesInput | string[]
-    sanskrit_names?: AsanaPostureCreatesanskrit_namesInput | InputJsonValue[]
     sideways: boolean
-    sort_english_name: string
-    subcategory: string
-    two_sided: boolean
-    variations_english_name?: AsanaPostureCreatevariations_english_nameInput | string[]
-    visibility: string
     image?: string | null
-    createdAt?: Date | string | null
-    updatedAt?: Date | string | null
+    created_at?: Date | string | null
+    updated_at?: Date | string | null
     acitivity_completed?: boolean | null
-    acitivity_easy?: boolean | null
-    acitivity_difficult?: boolean | null
     acitivity_practice?: boolean | null
     posture_intent?: string | null
-    posture_meaning?: string | null
-    dristi?: string | null
-    breathDefault?: AsanaPostureCreatebreathDefaultInput | string[]
-    breathSeries?: AsanaPostureCreatebreathSeriesInput | string[]
-    durationAsana?: string | null
+    breath_series?: AsanaPostureCreatebreath_seriesInput | string[]
+    duration_asana?: string | null
+    transition_cues_out?: string | null
+    transition_cues_in?: string | null
+    setup_cues?: string | null
+    deepening_cues?: string | null
+    customize_asana?: string | null
+    additional_cues?: string | null
+    joint_action?: string | null
+    muscle_action?: string | null
+    created_by?: string | null
   }
 
   export type AsanaPostureUpdateManyMutationInput = {
-    alternate_english_name?: AsanaPostureUpdatealternate_english_nameInput | string[]
+    english_names?: StringFieldUpdateOperationsInput | string
+    sanskrit_names?: AsanaPostureUpdatesanskrit_namesInput | InputJsonValue[]
+    sort_english_name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     benefits?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
     difficulty?: StringFieldUpdateOperationsInput | string
-    simplified_english_name?: StringFieldUpdateOperationsInput | string
-    english_name?: StringFieldUpdateOperationsInput | string
-    next_poses?: AsanaPostureUpdatenext_posesInput | string[]
+    lore?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_direction_default?: StringFieldUpdateOperationsInput | string
+    dristi?: NullableStringFieldUpdateOperationsInput | string | null
+    variations?: AsanaPostureUpdatevariationsInput | string[]
+    modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
-    previous_poses?: AsanaPostureUpdateprevious_posesInput | string[]
-    sanskrit_names?: AsanaPostureUpdatesanskrit_namesInput | InputJsonValue[]
     sideways?: BoolFieldUpdateOperationsInput | boolean
-    sort_english_name?: StringFieldUpdateOperationsInput | string
-    subcategory?: StringFieldUpdateOperationsInput | string
-    two_sided?: BoolFieldUpdateOperationsInput | boolean
-    variations_english_name?: AsanaPostureUpdatevariations_english_nameInput | string[]
-    visibility?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     acitivity_completed?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    acitivity_easy?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    acitivity_difficult?: NullableBoolFieldUpdateOperationsInput | boolean | null
     acitivity_practice?: NullableBoolFieldUpdateOperationsInput | boolean | null
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
-    posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
-    dristi?: NullableStringFieldUpdateOperationsInput | string | null
-    breathDefault?: AsanaPostureUpdatebreathDefaultInput | string[]
-    breathSeries?: AsanaPostureUpdatebreathSeriesInput | string[]
-    durationAsana?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_series?: AsanaPostureUpdatebreath_seriesInput | string[]
+    duration_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_out?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_in?: NullableStringFieldUpdateOperationsInput | string | null
+    setup_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    deepening_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    customize_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    additional_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    joint_action?: NullableStringFieldUpdateOperationsInput | string | null
+    muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AsanaPostureUncheckedUpdateManyInput = {
-    alternate_english_name?: AsanaPostureUpdatealternate_english_nameInput | string[]
+    english_names?: StringFieldUpdateOperationsInput | string
+    sanskrit_names?: AsanaPostureUpdatesanskrit_namesInput | InputJsonValue[]
+    sort_english_name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
     benefits?: NullableStringFieldUpdateOperationsInput | string | null
     category?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
     difficulty?: StringFieldUpdateOperationsInput | string
-    simplified_english_name?: StringFieldUpdateOperationsInput | string
-    english_name?: StringFieldUpdateOperationsInput | string
-    next_poses?: AsanaPostureUpdatenext_posesInput | string[]
+    lore?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_direction_default?: StringFieldUpdateOperationsInput | string
+    dristi?: NullableStringFieldUpdateOperationsInput | string | null
+    variations?: AsanaPostureUpdatevariationsInput | string[]
+    modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
-    previous_poses?: AsanaPostureUpdateprevious_posesInput | string[]
-    sanskrit_names?: AsanaPostureUpdatesanskrit_namesInput | InputJsonValue[]
     sideways?: BoolFieldUpdateOperationsInput | boolean
-    sort_english_name?: StringFieldUpdateOperationsInput | string
-    subcategory?: StringFieldUpdateOperationsInput | string
-    two_sided?: BoolFieldUpdateOperationsInput | boolean
-    variations_english_name?: AsanaPostureUpdatevariations_english_nameInput | string[]
-    visibility?: StringFieldUpdateOperationsInput | string
     image?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    created_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     acitivity_completed?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    acitivity_easy?: NullableBoolFieldUpdateOperationsInput | boolean | null
-    acitivity_difficult?: NullableBoolFieldUpdateOperationsInput | boolean | null
     acitivity_practice?: NullableBoolFieldUpdateOperationsInput | boolean | null
     posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
-    posture_meaning?: NullableStringFieldUpdateOperationsInput | string | null
-    dristi?: NullableStringFieldUpdateOperationsInput | string | null
-    breathDefault?: AsanaPostureUpdatebreathDefaultInput | string[]
-    breathSeries?: AsanaPostureUpdatebreathSeriesInput | string[]
-    durationAsana?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_series?: AsanaPostureUpdatebreath_seriesInput | string[]
+    duration_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_out?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_in?: NullableStringFieldUpdateOperationsInput | string | null
+    setup_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    deepening_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    customize_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    additional_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    joint_action?: NullableStringFieldUpdateOperationsInput | string | null
+    muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AsanaSeriesCreateInput = {
@@ -8190,14 +8266,6 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
     isSet?: boolean
   }
-
-  export type StringNullableListFilter<$PrismaModel = never> = {
-    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    has?: string | StringFieldRefInput<$PrismaModel> | null
-    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
-    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
-    isEmpty?: boolean
-  }
   export type JsonNullableListFilter<$PrismaModel = never> = 
     | PatchUndefined<
         Either<Required<JsonNullableListFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableListFilterBase<$PrismaModel>>, 'path'>>,
@@ -8210,6 +8278,14 @@ export namespace Prisma {
     has?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
     hasEvery?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel>
     hasSome?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
     isEmpty?: boolean
   }
 
@@ -8226,90 +8302,101 @@ export namespace Prisma {
 
   export type AsanaPostureCountOrderByAggregateInput = {
     id?: SortOrder
-    alternate_english_name?: SortOrder
+    english_names?: SortOrder
+    sanskrit_names?: SortOrder
+    sort_english_name?: SortOrder
+    description?: SortOrder
     benefits?: SortOrder
     category?: SortOrder
-    description?: SortOrder
     difficulty?: SortOrder
-    simplified_english_name?: SortOrder
-    english_name?: SortOrder
-    next_poses?: SortOrder
+    lore?: SortOrder
+    breath_direction_default?: SortOrder
+    dristi?: SortOrder
+    variations?: SortOrder
+    modifications?: SortOrder
+    suggested_postures?: SortOrder
+    preparatory_postures?: SortOrder
     preferred_side?: SortOrder
-    previous_poses?: SortOrder
-    sanskrit_names?: SortOrder
     sideways?: SortOrder
-    sort_english_name?: SortOrder
-    subcategory?: SortOrder
-    two_sided?: SortOrder
-    variations_english_name?: SortOrder
-    visibility?: SortOrder
     image?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
     acitivity_completed?: SortOrder
-    acitivity_easy?: SortOrder
-    acitivity_difficult?: SortOrder
     acitivity_practice?: SortOrder
     posture_intent?: SortOrder
-    posture_meaning?: SortOrder
-    dristi?: SortOrder
-    breathDefault?: SortOrder
-    breathSeries?: SortOrder
-    durationAsana?: SortOrder
+    breath_series?: SortOrder
+    duration_asana?: SortOrder
+    transition_cues_out?: SortOrder
+    transition_cues_in?: SortOrder
+    setup_cues?: SortOrder
+    deepening_cues?: SortOrder
+    customize_asana?: SortOrder
+    additional_cues?: SortOrder
+    joint_action?: SortOrder
+    muscle_action?: SortOrder
+    created_by?: SortOrder
   }
 
   export type AsanaPostureMaxOrderByAggregateInput = {
     id?: SortOrder
+    english_names?: SortOrder
+    sort_english_name?: SortOrder
+    description?: SortOrder
     benefits?: SortOrder
     category?: SortOrder
-    description?: SortOrder
     difficulty?: SortOrder
-    simplified_english_name?: SortOrder
-    english_name?: SortOrder
+    lore?: SortOrder
+    breath_direction_default?: SortOrder
+    dristi?: SortOrder
     preferred_side?: SortOrder
     sideways?: SortOrder
-    sort_english_name?: SortOrder
-    subcategory?: SortOrder
-    two_sided?: SortOrder
-    visibility?: SortOrder
     image?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
     acitivity_completed?: SortOrder
-    acitivity_easy?: SortOrder
-    acitivity_difficult?: SortOrder
     acitivity_practice?: SortOrder
     posture_intent?: SortOrder
-    posture_meaning?: SortOrder
-    dristi?: SortOrder
-    durationAsana?: SortOrder
+    duration_asana?: SortOrder
+    transition_cues_out?: SortOrder
+    transition_cues_in?: SortOrder
+    setup_cues?: SortOrder
+    deepening_cues?: SortOrder
+    customize_asana?: SortOrder
+    additional_cues?: SortOrder
+    joint_action?: SortOrder
+    muscle_action?: SortOrder
+    created_by?: SortOrder
   }
 
   export type AsanaPostureMinOrderByAggregateInput = {
     id?: SortOrder
+    english_names?: SortOrder
+    sort_english_name?: SortOrder
+    description?: SortOrder
     benefits?: SortOrder
     category?: SortOrder
-    description?: SortOrder
     difficulty?: SortOrder
-    simplified_english_name?: SortOrder
-    english_name?: SortOrder
+    lore?: SortOrder
+    breath_direction_default?: SortOrder
+    dristi?: SortOrder
     preferred_side?: SortOrder
     sideways?: SortOrder
-    sort_english_name?: SortOrder
-    subcategory?: SortOrder
-    two_sided?: SortOrder
-    visibility?: SortOrder
     image?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
+    created_at?: SortOrder
+    updated_at?: SortOrder
     acitivity_completed?: SortOrder
-    acitivity_easy?: SortOrder
-    acitivity_difficult?: SortOrder
     acitivity_practice?: SortOrder
     posture_intent?: SortOrder
-    posture_meaning?: SortOrder
-    dristi?: SortOrder
-    durationAsana?: SortOrder
+    duration_asana?: SortOrder
+    transition_cues_out?: SortOrder
+    transition_cues_in?: SortOrder
+    setup_cues?: SortOrder
+    deepening_cues?: SortOrder
+    customize_asana?: SortOrder
+    additional_cues?: SortOrder
+    joint_action?: SortOrder
+    muscle_action?: SortOrder
+    created_by?: SortOrder
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -8478,47 +8565,28 @@ export namespace Prisma {
     update?: XOR<XOR<UserDataUpdateToOneWithWhereWithoutProviderAccountsInput, UserDataUpdateWithoutProviderAccountsInput>, UserDataUncheckedUpdateWithoutProviderAccountsInput>
   }
 
-  export type AsanaPostureCreatealternate_english_nameInput = {
-    set: string[]
-  }
-
-  export type AsanaPostureCreatenext_posesInput = {
-    set: string[]
-  }
-
-  export type AsanaPostureCreateprevious_posesInput = {
-    set: string[]
-  }
-
   export type AsanaPostureCreatesanskrit_namesInput = {
     set: InputJsonValue[]
   }
 
-  export type AsanaPostureCreatevariations_english_nameInput = {
+  export type AsanaPostureCreatevariationsInput = {
     set: string[]
   }
 
-  export type AsanaPostureCreatebreathDefaultInput = {
+  export type AsanaPostureCreatemodificationsInput = {
     set: string[]
   }
 
-  export type AsanaPostureCreatebreathSeriesInput = {
+  export type AsanaPostureCreatesuggested_posturesInput = {
     set: string[]
   }
 
-  export type AsanaPostureUpdatealternate_english_nameInput = {
-    set?: string[]
-    push?: string | string[]
+  export type AsanaPostureCreatepreparatory_posturesInput = {
+    set: string[]
   }
 
-  export type AsanaPostureUpdatenext_posesInput = {
-    set?: string[]
-    push?: string | string[]
-  }
-
-  export type AsanaPostureUpdateprevious_posesInput = {
-    set?: string[]
-    push?: string | string[]
+  export type AsanaPostureCreatebreath_seriesInput = {
+    set: string[]
   }
 
   export type AsanaPostureUpdatesanskrit_namesInput = {
@@ -8526,13 +8594,28 @@ export namespace Prisma {
     push?: InputJsonValue | InputJsonValue[]
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type AsanaPostureUpdatevariations_english_nameInput = {
+  export type AsanaPostureUpdatevariationsInput = {
     set?: string[]
     push?: string | string[]
+  }
+
+  export type AsanaPostureUpdatemodificationsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type AsanaPostureUpdatesuggested_posturesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type AsanaPostureUpdatepreparatory_posturesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type NullableBoolFieldUpdateOperationsInput = {
@@ -8540,12 +8623,7 @@ export namespace Prisma {
     unset?: boolean
   }
 
-  export type AsanaPostureUpdatebreathDefaultInput = {
-    set?: string[]
-    push?: string | string[]
-  }
-
-  export type AsanaPostureUpdatebreathSeriesInput = {
+  export type AsanaPostureUpdatebreath_seriesInput = {
     set?: string[]
     push?: string | string[]
   }

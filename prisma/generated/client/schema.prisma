@@ -83,40 +83,40 @@ model ProviderAccount {
 }
 
 model AsanaPosture {
-  id                      String    @id @default(auto()) @map("_id") @db.ObjectId
-  alternate_english_name  String[]
-  benefits                String?
-  category                String
-  description             String
-  difficulty              String
-  simplified_english_name String
-  english_name            String    @unique
-  next_poses              String[]
-  preferred_side          String?
-  previous_poses          String[]
-  sanskrit_names          Json[]
-  sideways                Boolean
-  sort_english_name       String
-  subcategory             String
-  two_sided               Boolean
-  variations_english_name String[]
-  visibility              String
-  image                   String?
-  createdAt               DateTime? @default(now())
-  updatedAt               DateTime? @updatedAt
-  acitivity_completed     Boolean?
-  acitivity_easy          Boolean?
-  acitivity_difficult     Boolean?
-  acitivity_practice      Boolean?
-  posture_intent          String?
-  posture_meaning         String?
-  dristi                  String?
-  // breath consist of 3 parts: inhale, exhale, hold
-  // ["inhale/exhale", "how long to hold?s", "how many to breaths to take?"]
-  breathDefault           String[]
-  // added for the breath while in series
-  breathSeries            String[]
-  durationAsana           String?
+  id                       String    @id @default(auto()) @map("_id") @db.ObjectId
+  english_names            String    @unique
+  sanskrit_names           Json[]
+  sort_english_name        String
+  description              String
+  benefits                 String?
+  category                 String
+  difficulty               String
+  lore                     String?
+  breath_direction_default String
+  dristi                   String?
+  variations               String[]
+  modifications            String[]
+  suggested_postures       String[]
+  preparatory_postures     String[]
+  preferred_side           String?
+  sideways                 Boolean
+  image                    String?
+  created_at               DateTime? @default(now())
+  updated_at               DateTime? @updatedAt
+  acitivity_completed      Boolean?
+  acitivity_practice       Boolean?
+  posture_intent           String?
+  breath_series            String[]
+  duration_asana           String?
+  transition_cues_out      String?
+  transition_cues_in       String?
+  setup_cues               String?
+  deepening_cues           String?
+  customize_asana          String?
+  additional_cues          String?
+  joint_action             String?
+  muscle_action            String?
+  created_by               String?
 }
 
 model AsanaSeries {
