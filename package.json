@@ -16,7 +16,7 @@
     "mongod": "mongod --dbpath c:/data/db"
   },
   "dependencies": {
-    "@auth/core": "^0.34.1",
+    "@auth/core": "^0.37.3",
     "@auth/mongodb-adapter": "^3.4.1",
     "@auth/prisma-adapter": "^2.4.1",
     "@emotion/react": "^11.11.4",
@@ -28,7 +28,6 @@
     "@prisma/client": "^5.16.1",
     "@react-google-maps/api": "^2.19.3",
     "axios": "^1.7.2",
-    "bcrypt": "^5.1.1",
     "jwt-decode": "^4.0.0",
     "luxon": "^3.4.4",
     "mongodb": "^6.8.0",
@@ -53,6 +52,7 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "@vercel/nft": "^0.27.3",
+    "bcrypt": "^5.1.1",
     "concurrently": "^8.2.2",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.0.4",

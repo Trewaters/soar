@@ -1,18 +1,18 @@
-import { auth, signIn, signOut } from '@auth'
-import { Box, Button, Link, Stack, Typography } from '@mui/material'
+'use client'
+import React, { useEffect } from 'react'
+import { signIn } from '@auth'
+import { Box, Link, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
-import React, { useEffect } from 'react'
 
-export default async function SignOutPage({
-  provider,
-  ...props
-}: { provider?: string } & React.ComponentPropsWithRef<typeof Button>) {
-  const session = await auth()
+export default function SignOutPage() {
+  useEffect(() => {
+    async function handleSignIn() {
+      await signIn()
+    }
 
-  // useEffect(() => {
-  //   signOut()
-  // }, [])
+    handleSignIn()
+  }, [])
 
   return (
     <>
@@ -45,9 +45,9 @@ export default async function SignOutPage({
           }}
         >
           <Box sx={{ pt: 4, pb: 3 }}>
-            <Typography variant="h2">
+            {/* <Typography variant="h2">
               {session?.user.name} you&apos;re signed in 🔆
-            </Typography>
+            </Typography> */}
             <Typography variant="body1">
               If you don&apos;t get redirected. Click{' '}
               <Link href="http://localhost:3000/navigator">here</Link> to go to
@@ -55,10 +55,9 @@ export default async function SignOutPage({
             </Typography>
           </Box>
         </Stack>
-        <Stack textAlign={'center'} spacing={2} sx={{ my: 6 }}>
+        {/* <Stack textAlign={'center'} spacing={2} sx={{ my: 6 }}>
           <form
             action={async () => {
-              'use server'
               await signIn(provider)
             }}
           >
@@ -66,7 +65,7 @@ export default async function SignOutPage({
               Sign In
             </Button>
           </form>
-        </Stack>
+        </Stack> */}
       </Stack>
     </>
   )

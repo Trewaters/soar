@@ -1,4 +1,3 @@
-import Credentials from '@auth/core/providers/credentials'
 import type { NextAuthConfig } from 'next-auth'
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
@@ -6,6 +5,8 @@ import { PrismaClient } from '@prisma/generated/client'
 import { type Adapter } from '@auth/core/adapters'
 import { MongoDBAdapter } from '@auth/mongodb-adapter'
 import clientPromise from '@lib/db'
+import { hashPassword } from '@app/utils/password'
+import Credentials from 'next-auth/providers/credentials'
 
 const prisma = new PrismaClient()
 
@@ -25,19 +26,16 @@ export default {
         password: {},
       },
       authorize: async (credentials) => {
-        // let user = null
-
         // logic to salt and hash password
-        // const pwHash = saltAndHashPassword(credentials.password)
-        // const pwHash = credentials.password
+        // const pwHash = hashPassword(credentials.password as string)
+
+        const email = credentials.email as string
 
         // logic to verify if the user exists
         // user = await getUserFromDb(credentials.email, pwHash)
 
-        const email = credentials.email
-
         const existingUser = await prisma.userData.findUnique({
-          where: { email: typeof email === 'string' ? email : undefined },
+          where: { email: email ?? undefined },
         })
 
         // if (!existingUser) {
