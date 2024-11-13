@@ -77,21 +77,8 @@
       "import": "./generator-build/index.js",
       "default": "./generator-build/index.js"
     },
-    "./sql": {
-      "require": {
-        "types": "./sql.d.ts",
-        "node": "./sql.js",
-        "default": "./sql.js"
-      },
-      "import": {
-        "types": "./sql.d.ts",
-        "node": "./sql.mjs",
-        "default": "./sql.mjs"
-      },
-      "default": "./sql.js"
-    },
     "./*": "./*"
   },
-  "version": "5.22.0",
+  "version": "5.16.1",
   "sideEffects": false
 }
