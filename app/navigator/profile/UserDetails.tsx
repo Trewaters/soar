@@ -557,9 +557,9 @@ export default function UserDetails() {
               container
               spacing={3}
               sx={{ p: 4 }}
-              // component={'form'}
-              // onSubmit={handleSubmit}
-              // width={'100vw'}
+              component={'form'}
+              onSubmit={handleSubmit}
+              width={'100vw'}
             >
               <Grid size={6}>
                 <Typography variant="h2" color="primary.main">
