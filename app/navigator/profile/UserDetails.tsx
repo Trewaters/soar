@@ -164,12 +164,12 @@ export default function UserDetails() {
         </Grid>
       )}
       {!session && (
-        <Stack direction="column" spacing={2}>
+        <>
           <Typography variant="h2">Sign In</Typography>
           <Typography variant="body1">
             Please sign in to view your profile.
           </Typography>
-        </Stack>
+        </>
       )}
       {session && (
         <Box sx={{ flexGrow: 1, justifyItems: 'center' }}>
