@@ -67,8 +67,8 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 export default function UserDetails() {
   // ! disable session while working on the UI
-  const { data: session } = useSession()
-  // const session = React.useMemo(() => ({ user: { email: '' } }), [])
+  // const { data: session } = useSession()
+  const session = React.useMemo(() => ({ user: { email: '' } }), [])
 
   const {
     state: { userData },
@@ -437,7 +437,7 @@ export default function UserDetails() {
                 </FormControl>
               </Grid>
               <Grid size={12}>
-                <FormControl fullWidth>
+                <FormControl sx={{ width: '80%' }}>
                   <Typography variant="body1">
                     Email Address (primary/internal)
                   </Typography>
@@ -463,7 +463,7 @@ export default function UserDetails() {
                 </FormControl>
               </Grid>
               <Grid size={12}>
-                <FormControl fullWidth>
+                <FormControl sx={{ width: '80%' }}>
                   <Typography variant="body1">Headline</Typography>
                   <TextField
                     id="headline-text-input"
@@ -483,7 +483,7 @@ export default function UserDetails() {
                 </FormControl>
               </Grid>
               <Grid size={12}>
-                <FormControl fullWidth>
+                <FormControl sx={{ width: '80%' }}>
                   <Typography variant="body1">
                     Description/About/Bio:
                   </Typography>
@@ -505,7 +505,7 @@ export default function UserDetails() {
                 </FormControl>
               </Grid>
               <Grid size={6}>
-                <FormControl fullWidth>
+                <FormControl sx={{ width: '100%' }}>
                   <Typography variant="body1">Website URL</Typography>
                   <TextField
                     name="websiteURL"
@@ -524,7 +524,7 @@ export default function UserDetails() {
                 </FormControl>
               </Grid>
               <Grid size={6}>
-                <FormControl fullWidth>
+                <FormControl sx={{ width: '60%' }}>
                   <Typography variant="body1">My Location</Typography>
                   <TextField
                     name="location"
