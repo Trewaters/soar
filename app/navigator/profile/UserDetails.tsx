@@ -190,8 +190,8 @@ export default function UserDetails() {
               <Grid size={6}>
                 <Image
                   src={'/icons/profile/leaf-profile.svg'}
-                  width={50}
-                  height={50}
+                  width={100}
+                  height={100}
                   alt="Yoga Practitioner icon"
                 />
               </Grid>
