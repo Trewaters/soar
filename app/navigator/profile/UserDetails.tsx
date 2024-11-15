@@ -53,18 +53,6 @@ const yogaStyles = [
   'AcroYoga',
 ]
 
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  // eslint-disable-next-line no-unused-vars
-  const { expand, ...other } = props
-  return <IconButton {...other} />
-})(({ theme, expand }: { theme: any; expand: boolean }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}))
-
 export default function UserDetails() {
   // ! disable session while working on the UI
   const { data: session } = useSession()
@@ -182,42 +170,50 @@ export default function UserDetails() {
               onSubmit={handleSubmit}
               width={'100vw'}
             >
-              <Grid size={6}>
-                <Typography variant="h2" color="primary.main">
-                  Yoga Practitioner
-                </Typography>
+              <Grid size={{ xs: 8, sm: 8 }}>
+                <Box>
+                  <Typography variant="h2" color="primary.main">
+                    Yoga Practitioner
+                  </Typography>
+                </Box>
               </Grid>
-              <Grid size={6}>
-                <Image
-                  src={'/icons/profile/leaf-profile.svg'}
-                  width={100}
-                  height={100}
-                  alt="Yoga Practitioner icon"
-                />
+              <Grid size={{ xs: 4, md: 4 }}>
+                <Box>
+                  <Image
+                    src={'/icons/profile/leaf-profile.svg'}
+                    width={100}
+                    height={100}
+                    alt="Yoga Practitioner icon"
+                  />
+                </Box>
               </Grid>
-              <Grid size={1} sx={{ pt: 1 }}>
-                <Avatar
-                  sx={{ bgcolor: red[500] }}
-                  aria-label="name initial"
-                  src={userData?.image}
-                >
-                  {!userData?.image ? (
-                    <Image
-                      src={'/icons/profile/profile-person.svg'}
-                      width={50}
-                      height={50}
-                      alt="Generic profile image icon"
-                    />
-                  ) : undefined}
-                </Avatar>
+              <Grid size={2} sx={{ pt: 1 }}>
+                <Box>
+                  <Avatar
+                    sx={{ bgcolor: red[500] }}
+                    aria-label="name initial"
+                    src={userData?.image}
+                  >
+                    {!userData?.image ? (
+                      <Image
+                        src={'/icons/profile/profile-person.svg'}
+                        width={50}
+                        height={50}
+                        alt="Generic profile image icon"
+                      />
+                    ) : undefined}
+                  </Avatar>
+                </Box>
               </Grid>
-              <Grid size={11} sx={{ pb: 4 }}>
-                <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
-                  {userData?.name ?? 'Yogi Name'}
-                </Typography>
-                <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
-                  Member since {membershipDate ?? '6/9/2024'}
-                </Typography>
+              <Grid size={9} sx={{ pb: 4 }}>
+                <Box>
+                  <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+                    {userData?.name ?? 'Yogi Name'}
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+                    Member since {membershipDate ?? '6/9/2024'}
+                  </Typography>
+                </Box>
                 {/* 
                 <Card>
                  
