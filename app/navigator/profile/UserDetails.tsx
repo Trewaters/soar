@@ -55,8 +55,8 @@ const yogaStyles = [
 
 export default function UserDetails() {
   // ! disable session while working on the UI
-  const { data: session } = useSession()
-  // const session = React.useMemo(() => ({ user: { email: '' } }), [])
+  // const { data: session } = useSession()
+  const session = React.useMemo(() => ({ user: { email: '' } }), [])
 
   const {
     state: { userData },
@@ -161,23 +161,22 @@ export default function UserDetails() {
       )}
       {session && (
         <Box sx={{ flexGrow: 1, justifyItems: 'center' }}>
-          <Paper elevation={1} sx={{ p: 2, width: '80%' }}>
+          <Paper elevation={1} sx={{ mx: 3 }}>
             <Grid
               container
               spacing={3}
-              sx={{ p: 4 }}
+              sx={{ p: 3 }}
               component={'form'}
               onSubmit={handleSubmit}
-              width={'100vw'}
             >
-              <Grid size={{ xs: 8, sm: 8 }}>
+              <Grid size={{ xs: 8 }}>
                 <Box>
                   <Typography variant="h2" color="primary.main">
                     Yoga Practitioner
                   </Typography>
                 </Box>
               </Grid>
-              <Grid size={{ xs: 4, md: 4 }}>
+              <Grid size={{ xs: 4 }}>
                 <Box>
                   <Image
                     src={'/icons/profile/leaf-profile.svg'}
@@ -538,11 +537,13 @@ export default function UserDetails() {
                   />
                 </FormControl>
               </Grid>
-              <Grid
-                size={12}
-                sx={{ display: 'flex', justifyContent: 'flex-end' }}
-              >
-                <Button type="submit" disabled={loading} variant="contained">
+              <Grid size={9}>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  variant="contained"
+                  sx={{ display: 'flex', justifySelf: 'flex-end' }}
+                >
                   {loading ? <CircularProgress /> : 'Save'}
                 </Button>
               </Grid>

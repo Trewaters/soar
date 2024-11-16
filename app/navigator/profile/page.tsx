@@ -17,16 +17,16 @@ export default async function Page() {
       <SessionProvider basePath={'/auth'} session={session}>
         <Stack>
           <UserDetails />
+          {session ? (
+            <Stack>
+              <SignOut />
+            </Stack>
+          ) : (
+            <Stack>
+              <SignIn />
+            </Stack>
+          )}
         </Stack>
-        {session ? (
-          <Stack>
-            <SignOut />
-          </Stack>
-        ) : (
-          <Stack>
-            <SignIn />
-          </Stack>
-        )}
       </SessionProvider>
     </Box>
   )
