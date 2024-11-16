@@ -14,8 +14,8 @@ export default function middleware(request: NextRequest) {
   console.log('Middleware request:', request)
 
   // Access session data
-  const session = request.cookies.get('authjs.session-token') // the session cookie name
-  console.log('Session:', session)
+  // const session = request.cookies.get('authjs.session-token') // the session cookie name
+  // console.log('Middleware session-token:', session)
 
   if (process.env.NODE_ENV !== 'production') {
     return NextResponse.next()

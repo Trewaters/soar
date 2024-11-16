@@ -4,7 +4,6 @@ import { getSession, SessionProvider } from 'next-auth/react'
 import UserDetails from './UserDetails'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { get } from 'http'
 
 export default function Page() {
   let session: any
