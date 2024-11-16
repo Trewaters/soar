@@ -55,8 +55,8 @@ const yogaStyles = [
 
 export default function UserDetails() {
   // ! disable session while working on the UI
-  // const { data: session } = useSession()
-  const session = React.useMemo(() => ({ user: { email: '' } }), [])
+  const { data: session } = useSession()
+  // const session = React.useMemo(() => ({ user: { email: '' } }), [])
 
   const {
     state: { userData },
