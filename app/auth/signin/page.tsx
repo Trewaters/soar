@@ -1,19 +1,10 @@
-'use client'
-import React, { useEffect } from 'react'
-import { Box, Stack, Typography } from '@mui/material'
+import React from 'react'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
-import { signOut } from '@auth'
+import { signIn, signOut } from '@auth'
 
 export default function SignInPage() {
-  useEffect(() => {
-    async function handleSignOut() {
-      await signOut()
-    }
-
-    handleSignOut()
-  }, [])
-
   return (
     <>
       <nav>
@@ -66,6 +57,7 @@ export default function SignInPage() {
           </Stack>
           {/* <form
             action={async () => {
+              'use server'
               await signOut()
             }}
           >
@@ -73,6 +65,16 @@ export default function SignInPage() {
               Sign Out
             </Button>
           </form> */}
+          <form
+            action={async () => {
+              'use server'
+              await signIn()
+            }}
+          >
+            <Button type="submit" variant="contained">
+              Sign In
+            </Button>
+          </form>
         </Stack>
       </Stack>
     </>

@@ -14,7 +14,7 @@ interface PostureSearchProps {
 export default function PostureSearch({ posturePropData }: PostureSearchProps) {
   const { state, dispatch } = useAsanaPosture()
   const [postures, setPostures] = useState<FullAsanaData[]>(posturePropData)
-  const [cardPosture, setcardPosture] = useState<string | null>()
+  // const [cardPosture, setcardPosture] = useState<string | null>()
   const router = useRouter()
 
   const defaultPosture = postures?.find((p) => p.sort_english_name === '')
@@ -29,7 +29,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
   ) {
     dispatch({ type: 'SET_POSTURES', payload: value ?? state.postures })
 
-    setcardPosture(value?.sort_english_name || '')
+    // setcardPosture(value?.sort_english_name || '')
     router.push(`../navigator/asanaPostures/${value?.sort_english_name}/`)
   }
 

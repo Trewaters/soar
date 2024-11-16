@@ -6,6 +6,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 interface CustomPaginationProps {
   count: number
   page: number
+  // eslint-disable-next-line no-unused-vars
   onChange: (event: React.ChangeEvent<unknown>, value: number) => void
 }
 

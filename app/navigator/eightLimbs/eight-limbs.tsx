@@ -16,7 +16,6 @@ import LensBlurIcon from '@mui/icons-material/LensBlur'
 import MediationIcon from '@mui/icons-material/Mediation'
 import FlagIcon from '@mui/icons-material/Flag'
 import SpaIcon from '@mui/icons-material/Spa'
-import SensorOccupiedIcon from '@mui/icons-material/SensorOccupied'
 
 export default function EightLimbs() {
   const router = useRouter()

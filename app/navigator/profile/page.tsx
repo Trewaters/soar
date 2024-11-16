@@ -1,19 +1,24 @@
 'use client'
-import { auth } from '@auth'
 import { Box, Stack } from '@mui/material'
-import { SessionProvider } from 'next-auth/react'
+import { getSession, SessionProvider } from 'next-auth/react'
 import UserDetails from './UserDetails'
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { get } from 'http'
 
-export default async function Page() {
-  const session = await auth()
+export default function Page() {
+  let session: any
   const router = useRouter()
+
+  function assignSession() {
+    session = getSession()
+  }
 
   useEffect(() => {
     if (!session) {
       router.push('/auth/signin')
     }
+    assignSession()
   })
 
   return (

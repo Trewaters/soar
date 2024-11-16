@@ -112,7 +112,7 @@ export default {
   ],
   theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
   adapter: MyAdapter,
-  basePath: '/auth',
+  basePath: '/api/auth',
   callbacks: {
     async signIn({ user, account, profile }) {
       console.log('signIn user', user)
@@ -211,10 +211,10 @@ export default {
     enableWebAuthn: true,
   },
   debug: process.env.NODE_ENV !== 'production' ? true : false,
-  pages: {
-    signIn: '/auth/signin',
-    signOut: '/auth/signout',
-  },
+  // pages: {
+  //   signIn: '/auth/signin',
+  //   signOut: '/auth/signout',
+  // },
 } satisfies NextAuthConfig
 
 /*

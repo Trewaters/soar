@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material'
-import React, { Component, ComponentProps } from 'react'
+import React, { ComponentProps } from 'react'
 import Image from 'next/image'
 
 interface asanaDetailsProps {

@@ -100,7 +100,7 @@ export default function Page() {
     }
 
     getData()
-  }, [session])
+  }, [router, session])
 
   // Ensure postures are updated when a new series is added
   function handleSelect(event: ChangeEvent<{}>, value: FlowSeriesData | null) {
@@ -145,6 +145,7 @@ export default function Page() {
         throw new Error('Network response was not ok')
       }
       const data = await response.json()
+      console.log('create sequence response', data)
     } catch (error: Error | any) {
       error.message
     }

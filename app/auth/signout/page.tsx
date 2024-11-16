@@ -1,19 +1,10 @@
-'use client'
-import React, { useEffect } from 'react'
-import { signIn } from '@auth'
-import { Box, Link, Stack, Typography } from '@mui/material'
+import React from 'react'
+import { signIn, signOut } from '@auth'
+import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
 
 export default function SignOutPage() {
-  useEffect(() => {
-    async function handleSignIn() {
-      await signIn()
-    }
-
-    handleSignIn()
-  }, [])
-
   return (
     <>
       <nav>
@@ -50,22 +41,32 @@ export default function SignOutPage() {
             </Typography> */}
             <Typography variant="body1">
               If you don&apos;t get redirected. Click{' '}
-              <Link href="http://localhost:3000/navigator">here</Link> to go to
-              the home page.
+              <Link href="/navigator">here</Link> to go to the home page.
             </Typography>
           </Box>
         </Stack>
-        {/* <Stack textAlign={'center'} spacing={2} sx={{ my: 6 }}>
-          <form
+        <Stack textAlign={'center'} spacing={2} sx={{ my: 6 }}>
+          {/* <form
             action={async () => {
-              await signIn(provider)
+              'use server'
+              await signIn()
             }}
           >
-            <Button type="submit" variant="contained" {...props}>
+            <Button type="submit" variant="contained">
               Sign In
             </Button>
+          </form> */}
+          <form
+            action={async () => {
+              'use server'
+              await signOut()
+            }}
+          >
+            <Button type="submit" variant="contained">
+              Sign Out
+            </Button>
           </form>
-        </Stack> */}
+        </Stack>
       </Stack>
     </>
   )
