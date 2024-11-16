@@ -499,7 +499,7 @@ export default function UserDetails() {
                   />
                 </FormControl>
               </Grid>
-              <Grid size={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <FormControl sx={{ width: '100%' }}>
                   <Typography variant="body1">Website URL</Typography>
                   <TextField
@@ -518,7 +518,7 @@ export default function UserDetails() {
                   />
                 </FormControl>
               </Grid>
-              <Grid size={6}>
+              <Grid size={{ xs: 12, md: 6 }}>
                 <FormControl sx={{ width: '60%' }}>
                   <Typography variant="body1">My Location</Typography>
                   <TextField
