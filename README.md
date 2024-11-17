@@ -185,7 +185,7 @@ Prereqs to work on this project..._(wip)_
 
 ### Installing
 
-#### MongoDB
+#### MongoDB instructions
 
 Installed MongoD locally for development purposes. Use Cloud services for production.
 
@@ -234,6 +234,48 @@ processManagement:
 # Replica Set Config
 replication:
   replSetName: "rs0"
+```
+
+**Backup DB**
+
+[MongoDump](https://www.mongodb.com/docs/database-tools/mongodump/) creates files that can be used to restore database with Mongorestore.
+
+```
+mongodump --uri="mongodb://localhost:27017" --out=C:/data/mongoDumpLocalhost
+
+mongodump --uri="mongodb+srv://<USERNAME>:<PASSWORD>@<YOUR.DETAILS.mongodb.net>/yogadb?replicaSet=<REPLICA_SET_ID>&retryWrites=true&w=majority" --out=C:/data/mongoDumpProduction
+```
+
+**Restore DB**
+
+MongoRestore restores files created by mongoDump to a MongoDB instance. This command resotres from a directory to the local mongod instance.
+
+```
+mongorestore  C:/data/mongoDump/
+```
+
+**Export collection**
+
+```
+mongoexport --collection=<coll> <options> <connection-string> --jsonArray
+
+mongoexport --collection=AsanaPosture mongodb://localhost:27017/yogaDBSandbox
+```
+
+```
+mongoexport --collection=AsanaPosture mongodb://localhost:27017/yogaDBSandbox --out=C:/data/export/exported_AsanaPosture.json
+
+mongoexport --collection=AsanaSequence mongodb://localhost:27017/yogaDBSandbox --out=C:/data/export/exported_AsanaSequence.json
+
+mongoexport --collection=AsanaSeries mongodb://localhost:27017/yogaDBSandbox --out=C:/data/export/exported_AsanaSeries.json
+
+mongoexport --collection=ProviderAccount mongodb://localhost:27017/yogaDBSandbox --out=C:/data/export/exported_ProviderAccount.json
+
+mongoexport --collection=UserData mongodb://localhost:27017/yogaDBSandbox --out=C:/data/export/exported_UserData.json
+
+mongoexport --collection=accounts mongodb://localhost:27017/yogaDBSandbox --out=C:/data/export/exported_accounts.json
+
+mongoexport --collection=users mongodb://localhost:27017/yogaDBSandbox --out=C:/data/export/exported_users.json
 ```
 
 ### Tests

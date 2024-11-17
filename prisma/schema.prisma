@@ -81,6 +81,7 @@ model ProviderAccount {
   // @@unique([provider, providerAccountId])
 }
 
+/// Represents a yoga Asana in the app.
 model AsanaPosture {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
   english_names            String [] 
