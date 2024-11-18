@@ -201,7 +201,7 @@ install location:
 mongod --version
 ```
 
-**Starting MongoDB for local development**
+**Start MongoDB locally**
 
 1. Start app: `npm run dev`
 2. Run with replica set in config: `mongod --config C:/data/config/mongod.conf`

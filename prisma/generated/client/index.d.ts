@@ -25,7 +25,7 @@ export type UserData = $Result.DefaultSelection<Prisma.$UserDataPayload>
 export type ProviderAccount = $Result.DefaultSelection<Prisma.$ProviderAccountPayload>
 /**
  * Model AsanaPosture
- * 
+ * Represents a yoga Asana in the app.
  */
 export type AsanaPosture = $Result.DefaultSelection<Prisma.$AsanaPosturePayload>
 /**
