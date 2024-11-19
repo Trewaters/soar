@@ -1,5 +1,4 @@
 import React from 'react'
-import { signIn, signOut } from '@auth'
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
@@ -45,28 +44,7 @@ export default function SignOutPage() {
             </Typography>
           </Box>
         </Stack>
-        <Stack textAlign={'center'} spacing={2} sx={{ my: 6 }}>
-          {/* <form
-            action={async () => {
-              'use server'
-              await signIn()
-            }}
-          >
-            <Button type="submit" variant="contained">
-              Sign In
-            </Button>
-          </form> */}
-          <form
-            action={async () => {
-              'use server'
-              await signOut()
-            }}
-          >
-            <Button type="submit" variant="contained">
-              Sign Out
-            </Button>
-          </form>
-        </Stack>
+        <Stack textAlign={'center'} spacing={2} sx={{ my: 6 }}></Stack>
       </Stack>
     </>
   )

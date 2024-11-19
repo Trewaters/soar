@@ -3,11 +3,6 @@ datasource db {
   url      = env("MONGODB_URI")
 }
 
-// DbName_prod = "YogaDB"
-// DbName_dev = "yogaDBSandbox"
-
-// https://www.prisma.io/docs/orm/overview/databases/mongodb
-
 generator client {
   provider      = "prisma-client-js"
   output        = "./generated/client"

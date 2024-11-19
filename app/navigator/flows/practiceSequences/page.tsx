@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search'
-import Image from '@node_modules/next/image'
+import Image from 'next/image'
 import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
 
 export default function Page() {

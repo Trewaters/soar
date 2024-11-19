@@ -1,24 +1,10 @@
-'use client'
 import { Box, Stack } from '@mui/material'
-import { getSession, SessionProvider } from 'next-auth/react'
-import UserDetails from './UserDetails'
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { SessionProvider } from 'next-auth/react'
+import UserDetails from '@app/navigator/profile/UserDetails'
+import { auth } from '@auth'
 
-export default function Page() {
-  let session: any
-  const router = useRouter()
-
-  function assignSession() {
-    session = getSession()
-  }
-
-  useEffect(() => {
-    if (!session) {
-      router.push('/auth/signin')
-    }
-    assignSession()
-  })
+export default async function Page() {
+  const session = await auth()
 
   return (
     <Box
@@ -28,7 +14,7 @@ export default function Page() {
       flexDirection={'column'}
       marginTop={4}
     >
-      <SessionProvider basePath={'/auth'} session={session}>
+      <SessionProvider session={session}>
         <Stack>
           <UserDetails />
         </Stack>

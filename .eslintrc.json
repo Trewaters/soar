@@ -20,6 +20,11 @@
       "version": "detect"
     }
   },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2023": true
+  },
   "rules": {
     "prettier/prettier": [
       "warn",

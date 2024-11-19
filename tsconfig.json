@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2023",
     "baseUrl": "./",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -43,5 +43,5 @@
     ".next/types/**/*.ts",
     "jest"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist", "build"]
 }

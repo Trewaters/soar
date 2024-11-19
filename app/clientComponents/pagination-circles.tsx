@@ -1,4 +1,4 @@
-import { Box } from '@node_modules/@mui/material'
+import { Box } from '@mui/material'
 import React from 'react'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
