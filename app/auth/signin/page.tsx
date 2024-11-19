@@ -2,20 +2,7 @@ import React from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
-import { signIn, auth, providerMap } from '@auth'
-import { redirect } from 'next/navigation'
-// import { AuthError } from 'next-auth'
-
-// export default function SignInPage() {
-//   return (
-//     <>
-//       <nav>
-//         <Header />
-//       </nav>
-
-//     </>
-//   )
-// }
+import { signIn, providerMap, signOut } from '@auth'
 
 export default async function SignInPage(props: {
   searchParams: { callbackUrl: string | undefined }
@@ -138,6 +125,16 @@ export default async function SignInPage(props: {
               Signing in will automatically create an account for you.
             </Typography>
           </Stack>
+          <form
+            action={async () => {
+              'use server'
+              await signOut()
+            }}
+          >
+            <Button variant="contained" type="submit">
+              Sign out
+            </Button>
+          </form>
         </Stack>
       </Stack>
     </>
