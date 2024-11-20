@@ -46,7 +46,7 @@ export default function PostureActivityDetail({
   }
 
   const getAsanaIconUrl = (category: string) => {
-    switch (category) {
+    switch (category.toLowerCase()) {
       case 'prone':
         return '/icons/designImages/asana-standing.svg'
       case 'standing':
@@ -66,7 +66,7 @@ export default function PostureActivityDetail({
     }
   }
   const getAsanaBackgroundUrl = (category: string) => {
-    switch (category) {
+    switch (category.toLowerCase()) {
       case 'prone':
         return `url('/icons/designImages/asana-back-pattern 1.svg')`
       case 'standing':
