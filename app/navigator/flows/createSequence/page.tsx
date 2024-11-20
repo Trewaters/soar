@@ -91,10 +91,11 @@ export default function Page() {
     }
 
     if (
-      session === null ||
-      (session &&
-        session.status === 'resolved_model' &&
-        session.value === 'null')
+      session === null
+      // ||
+      // (session &&
+      //   session.status === 'resolved_model' &&
+      //   session.value === 'null')
     ) {
       router.push('/navigator/flows')
     }
