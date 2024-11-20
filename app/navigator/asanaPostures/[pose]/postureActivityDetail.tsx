@@ -55,7 +55,7 @@ export default function PostureActivityDetail({
         return '/icons/designImages/asana-supine.svg'
       case 'supine':
         return '/icons/designImages/asana-supine.svg'
-      case 'inverted':
+      case 'inversion':
         return '/icons/designImages/asana-inverted.svg'
       case 'arm_leg_support':
         return '/icons/designImages/asana-inverted.svg'
@@ -75,7 +75,7 @@ export default function PostureActivityDetail({
         return `url('/icons/designImages/asana-back-pattern 2.svg')`
       case 'supine':
         return `url('/icons/designImages/asana-back-pattern 2.svg')`
-      case 'inverted':
+      case 'inversion':
         return `url('/icons/designImages/asana-back-pattern 3.svg')`
       case 'arm_leg_support':
         return `url('/icons/designImages/asana-back-pattern 3.svg')`
@@ -238,7 +238,7 @@ export default function PostureActivityDetail({
           />
           */}
           <AsanaDetails
-            details={`${posture?.category}, ${posture?.category}`}
+            details={`${posture?.category}`}
             label="Category"
             sx={{ mb: '32px' }}
           />
