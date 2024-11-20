@@ -48,6 +48,20 @@ export default async function SignInPage(props: {
               We&apos;re happy you&apos;re here!
             </Typography>
           </Box>
+          {/* 
+           <Box
+              sx={{ pt: 4, pl: 4 }}
+              display={'flex'}
+              flexDirection={'column'}
+              alignItems={'flex-start'}
+            >
+              <Typography variant="h2">Welcome back 👋🏾</Typography>
+              <Typography variant="body1" component="p">
+                We&apos;re happy you&apos;re here!
+              </Typography>
+            </Box>
+          */}
+
           <Stack
             display={'flex'}
             alignItems={'center'}
@@ -91,8 +105,11 @@ export default async function SignInPage(props: {
                   'use server'
                   // eslint-disable-next-line no-useless-catch
                   try {
+                    // await signIn(provider.id, {
+                    //   redirectTo: props.searchParams?.callbackUrl ?? '',
+                    // })
                     await signIn(provider.id, {
-                      redirectTo: props.searchParams?.callbackUrl ?? '',
+                      redirectTo: '/navigator/profile',
                     })
                   } catch (error) {
                     // Signin can fail for a number of reasons, such as the user
@@ -128,7 +145,7 @@ export default async function SignInPage(props: {
           <form
             action={async () => {
               'use server'
-              await signOut()
+              await signOut({ redirectTo: '/navigator' })
             }}
           >
             <Button variant="contained" type="submit">
