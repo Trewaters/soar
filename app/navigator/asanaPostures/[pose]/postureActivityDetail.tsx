@@ -254,7 +254,7 @@ export default function PostureActivityDetail({
           />
           <AsanaDetails
             details={posture?.preferred_side ?? 'No preferred side'}
-            label="Breath (default)"
+            label="Preferred Side"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails

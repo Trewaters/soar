@@ -17,6 +17,8 @@ export default function Page() {
     category,
     difficulty,
     breath_direction_default,
+    preferred_side,
+    sideways,
   } = state.postures
   const [formData, setFormData] = useState<{
     sort_english_name: string
@@ -25,6 +27,8 @@ export default function Page() {
     category: string
     difficulty: string
     breath_direction_default: string
+    preferred_side: string
+    sideways: string
   }>({
     sort_english_name: '',
     english_names: [],
@@ -32,6 +36,8 @@ export default function Page() {
     category: '',
     difficulty: '',
     breath_direction_default: '',
+    preferred_side: '',
+    sideways: '',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,6 +65,8 @@ export default function Page() {
       category,
       difficulty,
       breath_direction_default,
+      preferred_side,
+      sideways,
     }
     dispatch({ type: 'SET_POSTURES', payload: updatedAsana })
 
@@ -80,6 +88,18 @@ export default function Page() {
       }
     } catch (error: Error | any) {
       error.message
+    } finally {
+      // clear the form
+      setFormData({
+        sort_english_name: '',
+        english_names: [],
+        description: '',
+        category: '',
+        difficulty: '',
+        breath_direction_default: '',
+        preferred_side: '',
+        sideways: '',
+      })
     }
   }
   const router = useRouter()
@@ -178,6 +198,43 @@ export default function Page() {
             </FormControl>
           </Grid>
           <Grid size={12}>
+            <FormControl sx={{ width: '100%', mb: 3 }}>
+              <TextField
+                label="Preferred Side"
+                name="preferred_side"
+                value={formData.preferred_side}
+                onChange={handleChange}
+                required
+              />
+            </FormControl>
+          </Grid>
+          <Grid size={12}>
+            <FormControl sx={{ width: '100%', mb: 3 }}>
+              <label>
+                <input
+                  type="checkbox"
+                  name="sideways"
+                  checked={formData.sideways === 'true'}
+                  onChange={(e) => {
+                    const { checked } = e.target
+                    setFormData({
+                      ...formData,
+                      sideways: checked ? 'true' : 'false',
+                    })
+                    dispatch({
+                      type: 'SET_POSTURES',
+                      payload: {
+                        ...state.postures,
+                        sideways: checked ? true : false,
+                      },
+                    })
+                  }}
+                />
+                Sideways?
+              </label>
+            </FormControl>
+          </Grid>
+          <Grid size={12}>
             <Button type="submit" variant="contained" color="primary">
               Create Asana
             </Button>
@@ -211,14 +268,6 @@ export default function Page() {
     //       <FormControl sx={{ width: '100%', mb: 3 }}>
     //         breath_direction_default
     //       </FormControl>
-    //     </Grid>
-    //     <Grid size={12}>
-    //       <FormControl sx={{ width: '100%', mb: 3 }}>
-    //         preferred_side
-    //       </FormControl>
-    //     </Grid>
-    //     <Grid size={12}>
-    //       <FormControl sx={{ width: '100%', mb: 3 }}>sideways</FormControl>
     //     </Grid>
     //   </Grid>
     // </Box>
