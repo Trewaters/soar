@@ -16,7 +16,7 @@ export default function ViewAsanaPractice({
 }) {
   // NOTES: include icons for more information like safety tips, focuse points, etc.
 
-  /* call api/poses/?english_name=${pose} */
+  /* call api/poses/?sort_english_name=${pose} */
   const [viewPose, setViewPose] = useState<FullAsanaData>()
   // eslint-disable-next-line no-unused-vars
   const [elapsedTime, setElapsedTime] = useState(0)
@@ -41,7 +41,9 @@ export default function ViewAsanaPractice({
 
   useEffect(() => {
     const getViewPose = async () => {
-      const response = await fetch(`/api/poses/?english_name=${params.pose}`)
+      const response = await fetch(
+        `/api/poses/?sort_english_name=${params.pose}`
+      )
       const responseData = await response.json()
       setViewPose(responseData)
       // return await response.json()
