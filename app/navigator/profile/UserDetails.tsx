@@ -487,7 +487,7 @@ export default function UserDetails() {
                   </Typography>
                   <TextField
                     id="biography-text-input"
-                    name="biography"
+                    name="bio"
                     placeholder="Enter...Biography"
                     value={userData?.bio ?? ''}
                     onChange={handleChange}
