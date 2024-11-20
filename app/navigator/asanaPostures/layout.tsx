@@ -1,10 +1,19 @@
+import { auth } from '@auth'
 import NavBottom from '@serverComponents/navBottom'
+import { SessionProvider } from 'next-auth/react'
 import React, { ReactNode } from 'react'
 
-export default function AsanaLayout({ children }: { children: ReactNode }) {
+export default async function AsanaLayout({
+  children,
+}: {
+  children: ReactNode
+}) {
+  const session = await auth()
   return (
     <>
-      {children}
+      <SessionProvider basePath={'/api/auth'} session={session}>
+        {children}
+      </SessionProvider>
       <nav>
         <NavBottom subRoute="/navigator/asanaPostures" />
       </nav>

@@ -4,9 +4,10 @@ import type { NextRequest } from 'next/server'
 export const config = {
   matcher: [
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
-    '/flows/:path*',
-    '/navigator/asanaPostures/createAsana/',
-    '/api/:path*', // API routes
+    // '/flows/:path*',
+    '/navigator/asanaPostures/createAsana/:path*',
+    // '/navigator/asanaPostures/:path*',
+    // '/api/:path*', // API routes
   ],
 }
 
@@ -25,5 +26,5 @@ export default function middleware(request: NextRequest) {
   if (!request.nextUrl.pathname.startsWith('/protected')) {
     return NextResponse.next()
   }
-  return NextResponse.redirect(new URL('/login', request.url), 401)
+  return NextResponse.redirect(new URL('/auth/signin', request.url), 401)
 }

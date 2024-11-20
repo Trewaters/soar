@@ -1,11 +1,14 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid2'
 import { Box, Button, FormControl, TextField } from '@mui/material'
 import { useAsanaPosture } from '@app/context/AsanaPostureContext'
+import { useSession } from 'next-auth/react'
+import { useRouter } from '@node_modules/next/navigation'
 
 export default function Page() {
+  const { data: session } = useSession()
   const { state, dispatch } = useAsanaPosture()
   const {
     sort_english_name,
@@ -79,6 +82,13 @@ export default function Page() {
       error.message
     }
   }
+  const router = useRouter()
+
+  useEffect(() => {
+    if (session === null) {
+      router.push('/navigator/asanaPostures')
+    }
+  }, [router, session])
   return (
     <Box sx={{ px: 2 }}>
       <Typography variant="h1">Create Asana</Typography>
