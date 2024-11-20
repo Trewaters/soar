@@ -9,7 +9,9 @@ export default function Page({ params }: { params: { pose: string } }) {
 
   useEffect(() => {
     const getViewPose = async () => {
-      const response = await fetch(`/api/poses/?english_name=${params.pose}`)
+      const response = await fetch(
+        `/api/poses/?sort_english_name=${params.pose}`
+      )
       const responseData = await response.json()
       setViewPose(responseData)
       // return await response.json()
