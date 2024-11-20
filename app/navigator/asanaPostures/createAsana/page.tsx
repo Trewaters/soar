@@ -99,23 +99,25 @@ export default function Page() {
               <TextField
                 label="English Names"
                 name="english_names"
-                value={formData.english_names.join(', ')}
+                value={formData.english_names.join(',')}
                 onChange={(e) => {
                   const { value } = e.target
                   setFormData({
                     ...formData,
-                    english_names: value.split(',').map((name) => name.trim()),
+                    english_names: value.split(',').map((name) => name),
                   })
+                }}
+                onBlur={(e) => {
+                  const { value } = e.target
                   dispatch({
                     type: 'SET_POSTURES',
                     payload: {
                       ...state.postures,
-                      english_names: value
-                        .split(',')
-                        .map((name) => name.trim()),
+                      english_names: value.split(',').map((name) => name),
                     },
                   })
                 }}
+                helperText="Separate names with commas"
                 required
               />
             </FormControl>
