@@ -1,14 +1,11 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid2'
 import { Box, Button, FormControl, TextField } from '@mui/material'
 import { useAsanaPosture } from '@app/context/AsanaPostureContext'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
 
 export default function Page() {
-  const { data: session } = useSession()
   const { state, dispatch } = useAsanaPosture()
   const {
     sort_english_name,
@@ -33,13 +30,6 @@ export default function Page() {
     difficulty: '',
     breath_direction_default: '',
   })
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!session) {
-      router.push('/')
-    }
-  }, [router, session])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -82,6 +72,9 @@ export default function Page() {
       }
       // eslint-disable-next-line no-unused-vars
       const data = await response.json()
+      if (!data || Object.keys(data).length === 0) {
+        throw new Error('Received empty data object')
+      }
     } catch (error: Error | any) {
       error.message
     }
