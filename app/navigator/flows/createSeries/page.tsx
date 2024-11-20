@@ -73,10 +73,11 @@ export default function Page() {
     console.log('create series session', session)
 
     if (
-      session === null ||
-      (session &&
-        session.status === 'resolved_model' &&
-        session.value === 'null')
+      session === null
+      // ||
+      // (session &&
+      //   session.status === 'resolved_model' &&
+      //   session.value === 'null')
     ) {
       router.push('/navigator/flows')
     }

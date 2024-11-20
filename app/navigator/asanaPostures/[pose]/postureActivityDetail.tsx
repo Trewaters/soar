@@ -198,6 +198,13 @@ export default function PostureActivityDetail({
       >
         <Stack direction={'column'}>
           <AsanaDetails
+            details={posture?.english_names.toString()}
+            label="English Variant Names"
+            sx={{
+              mb: '32px',
+            }}
+          />
+          <AsanaDetails
             details={posture?.description}
             label="Description"
             sx={{
@@ -208,7 +215,7 @@ export default function PostureActivityDetail({
             details={posture?.sanskrit_names[0] ?? 'Sanskrit Name not-found'}
             label="Sanskrit Name"
             sx={{ mb: '32px' }}
-          /> */}
+          /> 
           <AsanaDetails
             details={posture?.posture_intent ?? 'Feel into the asana.'}
             label="Meaning of Posture"
@@ -220,13 +227,19 @@ export default function PostureActivityDetail({
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={posture?.breath_direction_default ?? 'Inhale/Exhale'}
-            label="Breath (default)"
+            details={posture?.dristi ?? 'optimal gaze'}
+            label="Dristi"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
             details={posture?.dristi ?? 'optimal gaze'}
-            label="Dristi"
+            label="Activities"
+            sx={{ mb: '32px' }}
+          />
+          */}
+          <AsanaDetails
+            details={`${posture?.category}, ${posture?.category}`}
+            label="Category"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
@@ -235,13 +248,18 @@ export default function PostureActivityDetail({
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={`${posture?.category}, ${posture?.category}`}
-            label="Category"
+            details={posture?.breath_direction_default ?? 'Inhale/Exhale'}
+            label="Breath (default)"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={posture?.dristi ?? 'optimal gaze'}
-            label="Activities"
+            details={posture?.preferred_side ?? 'No preferred side'}
+            label="Breath (default)"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={posture?.sideways ? 'True' : 'False'}
+            label="Sideways"
             sx={{ mb: '32px' }}
           />
           <Stack

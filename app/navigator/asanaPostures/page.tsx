@@ -1,14 +1,16 @@
 'use client'
 import { useEffect, useState } from 'react'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Typography } from '@mui/material'
 import { FullAsanaData } from '@context/AsanaPostureContext'
 import SplashHeader from '@app/clientComponents/splash-header'
+import { useRouter } from 'next/navigation'
 
 export default function Page() {
   const [posturePropData, setPosturePropData] = useState<FullAsanaData[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const router = useRouter()
 
   const fetchData = async () => {
     setLoading(true)
@@ -51,6 +53,14 @@ export default function Page() {
         )}
         {error && <Typography>Error: {error}</Typography>}
       </Box>
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{ width: '30%', mb: 2, alignSelf: 'center' }}
+        onClick={() => router.push('/navigator/asanaPostures/createAsana')}
+      >
+        Add Asana
+      </Button>
     </Box>
   )
 }
