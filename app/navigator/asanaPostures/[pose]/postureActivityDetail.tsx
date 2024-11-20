@@ -198,7 +198,7 @@ export default function PostureActivityDetail({
       >
         <Stack direction={'column'}>
           <AsanaDetails
-            details={posture?.english_names.toString()}
+            details={posture?.sort_english_name}
             label="English Variant Names"
             sx={{
               mb: '32px',

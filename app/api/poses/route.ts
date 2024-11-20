@@ -5,12 +5,12 @@ const prisma = new PrismaClient()
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.nextUrl)
-  const englishName = searchParams.get('english_name')
+  const sortEnglishName = searchParams.get('sort_english_name')
 
-  if (englishName) {
+  if (sortEnglishName) {
     try {
       const pose = await prisma.asanaPosture.findUnique({
-        where: { sort_english_name: englishName },
+        where: { sort_english_name: sortEnglishName },
       })
 
       if (!pose) {
