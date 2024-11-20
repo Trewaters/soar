@@ -27,7 +27,7 @@ export async function POST(request: Request) {
         sideways,
         created_on: new Date().toISOString(),
         updated_on: null,
-        created_by: 'user',
+        created_by: 'alpha users',
       },
     })
     return Response.json({ message: 'Asana posture Data saved' })
