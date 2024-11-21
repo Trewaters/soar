@@ -13,7 +13,7 @@
     "cover": "jest --coverage",
     "pretty": "prettier --write .",
     "postinstall": "prisma generate && prisma db push",
-    "mongod": "mongod --dbpath c:/data/db"
+    "mongo": "mongod --config C:/data/config/mongod.conf"
   },
   "dependencies": {
     "@auth/core": "^0.37.3",

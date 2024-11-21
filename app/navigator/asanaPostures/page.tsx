@@ -20,7 +20,14 @@ export default function Page() {
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
-      setPosturePropData(await response.json())
+      // setPosturePropData(await response.json())
+      setPosturePropData(
+        (await response.json()).sort((a: FullAsanaData, b: FullAsanaData) => {
+          if (a.sort_english_name < b.sort_english_name) return -1
+          if (a.sort_english_name > b.sort_english_name) return 1
+          return 0
+        })
+      )
     } catch (error: Error | any) {
       setError(error.message)
     } finally {
