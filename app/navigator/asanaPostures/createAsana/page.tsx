@@ -244,7 +244,6 @@ export default function Page() {
                 label="Preferred Side"
                 name="preferred_side"
                 placeholder='e.g. "Right"'
-                defaultValue={'None'}
                 value={formData.preferred_side}
                 onChange={handleChange}
                 required

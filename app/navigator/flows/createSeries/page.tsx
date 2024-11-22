@@ -207,7 +207,9 @@ export default function Page() {
           <Box sx={{ px: 2 }}>
             <FormControl sx={{ width: '100%', mb: 3 }}>
               <AutocompleteComponent
-                options={postures}
+                options={postures.sort((a, b) =>
+                  a.sort_english_name.localeCompare(b.sort_english_name)
+                )}
                 getOptionLabel={(option) =>
                   (option as FullAsanaData).sort_english_name
                 }
