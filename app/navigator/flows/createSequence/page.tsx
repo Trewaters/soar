@@ -145,7 +145,7 @@ export default function Page() {
     } catch (error: Error | any) {
       error.message
     }
-    router.push('/navigator/flows')
+    handleCancel()
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
