@@ -61,7 +61,7 @@ export default function Page() {
       // const seriesData = Array.isArray(data) ? data : [data]
       // setSeries(JSON.parse(JSON.stringify(seriesData)))
       try {
-        const response = await fetch('/api/poses')
+        const response = await fetch('/api/poses', { cache: 'no-store' })
         if (!response.ok) {
           throw new Error('Network response was not ok')
         }
@@ -127,6 +127,7 @@ export default function Page() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          cache: 'no-store',
         },
         body: JSON.stringify(updatedSeries),
       })

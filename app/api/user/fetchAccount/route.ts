@@ -30,5 +30,10 @@ export async function GET(req: Request) {
     )
   }
 
-  return new Response(JSON.stringify({ data: account }), { status: 200 })
+  return new Response(JSON.stringify({ data: account }), {
+    status: 200,
+    headers: {
+      'Cache-Control': 'no-store',
+    },
+  })
 }

@@ -246,7 +246,8 @@ export default function UserStateProvider({
       let fetchUser: any
       try {
         const userResponse = await fetch(
-          `/api/user/?email=${encodeURIComponent(email)}`
+          `/api/user/?email=${encodeURIComponent(email)}`,
+          { cache: 'no-store' }
         )
         if (!userResponse.ok) {
           const errorText = await userResponse.text()
@@ -260,7 +261,8 @@ export default function UserStateProvider({
 
       try {
         const accountResponse = await fetch(
-          `/api/user/fetchAccount/?userId=${fetchUser.data.id}`
+          `/api/user/fetchAccount/?userId=${fetchUser.data.id}`,
+          { cache: 'no-store' }
         )
         const fetchAccount = await accountResponse.json()
         const profile = JSON.parse(fetchUser.data.profile)

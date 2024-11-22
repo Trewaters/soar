@@ -50,7 +50,7 @@ export default function Page() {
       //   process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
       // const url = new URL('/api/series/', baseUrl)
       // const response = await fetch(url)
-      const response = await fetch('/api/sequences')
+      const response = await fetch('/api/sequences', { cache: 'no-store' })
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }

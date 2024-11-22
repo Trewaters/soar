@@ -40,7 +40,7 @@ import Image from 'next/image'
 
 async function fetchSeries() {
   try {
-    const res = await fetch('/api/series')
+    const res = await fetch('/api/series', { cache: 'no-store' })
     if (!res.ok) {
       throw new Error('Network response was not ok')
     }
@@ -133,6 +133,7 @@ export default function Page() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          cache: 'no-store',
         },
         body: JSON.stringify(updatedSequence),
       })
