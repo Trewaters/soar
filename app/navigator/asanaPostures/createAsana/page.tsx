@@ -167,34 +167,75 @@ export default function Page() {
           <Grid size={12}>
             <FormControl sx={{ width: '100%', mb: 3 }}>
               <TextField
+                select
                 label="Category"
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
                 required
-              />
+                SelectProps={{
+                  native: true,
+                }}
+              >
+                <option value=""></option>
+                <option value="Supine">Supine</option>
+                <option value="Seated">Seated</option>
+                <option value="Inversion">Inversion</option>
+                <option value="Prone">Prone</option>
+                <option value="Standing">Standing</option>
+                <option value="Backbend">Backbend</option>
+                <option value="Forward Bend">Forward Bend</option>
+                <option value="Twist">Twist</option>
+                <option value="Core">Core</option>
+                <option value="Restorative">Restorative</option>
+                <option value="Hip Opener">Hip Opener</option>
+                <option value="Neutral">Neutral</option>
+                <option value="Balance">Balance</option>
+                <option value="Mudra">Mudra</option>
+                <option value="Bandha">Bandha</option>
+                <option value="Lateral Bend">Lateral Bend</option>
+                <option value="Arm Leg Support">Arm Leg Support</option>
+              </TextField>
             </FormControl>
           </Grid>
           <Grid size={12}>
             <FormControl sx={{ width: '100%', mb: 3 }}>
               <TextField
+                select
                 label="Difficulty"
                 name="difficulty"
                 value={formData.difficulty}
                 onChange={handleChange}
                 required
-              />
+                SelectProps={{
+                  native: true,
+                }}
+              >
+                <option value=""></option>
+                <option value="Easy">Easy</option>
+                <option value="Average">Average</option>
+                <option value="Difficult">Difficult</option>
+              </TextField>
             </FormControl>
           </Grid>
           <Grid size={12}>
             <FormControl sx={{ width: '100%', mb: 3 }}>
               <TextField
+                select
                 label="Breath Direction Default"
                 name="breath_direction_default"
                 value={formData.breath_direction_default}
                 onChange={handleChange}
                 required
-              />
+                SelectProps={{
+                  native: true,
+                }}
+              >
+                <option value=""></option>
+                <option value="Neutral">Neutral</option>
+                <option value="Inhale">Inhale</option>
+                <option value="Exhale">Exhale</option>
+              </TextField>
             </FormControl>
           </Grid>
           <Grid size={12}>
@@ -202,6 +243,7 @@ export default function Page() {
               <TextField
                 label="Preferred Side"
                 name="preferred_side"
+                defaultValue={'None'}
                 value={formData.preferred_side}
                 onChange={handleChange}
                 required
