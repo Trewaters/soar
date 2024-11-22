@@ -354,7 +354,7 @@ export default function Page() {
                               key={`${series}${index}`}
                             >
                               <ListItemText
-                                primary={series.split(',').map((item, idx) => (
+                                primary={series.split(';').map((item, idx) => (
                                   <Typography
                                     variant="body1"
                                     key={idx}
