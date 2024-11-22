@@ -13,7 +13,11 @@ export async function GET() {
         ? item.sequencesSeries
         : [],
     }))
-    return NextResponse.json(dataWithId)
+    return NextResponse.json(dataWithId, {
+      headers: {
+        'Cache-Control': 'no-store',
+      },
+    })
   } catch (error: unknown) {
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
