@@ -178,23 +178,23 @@ export default function Page() {
                 }}
               >
                 <option value=""></option>
-                <option value="Supine">Supine</option>
-                <option value="Seated">Seated</option>
-                <option value="Inversion">Inversion</option>
-                <option value="Prone">Prone</option>
-                <option value="Standing">Standing</option>
-                <option value="Backbend">Backbend</option>
-                <option value="Forward Bend">Forward Bend</option>
-                <option value="Twist">Twist</option>
-                <option value="Core">Core</option>
-                <option value="Restorative">Restorative</option>
-                <option value="Hip Opener">Hip Opener</option>
-                <option value="Neutral">Neutral</option>
-                <option value="Balance">Balance</option>
-                <option value="Mudra">Mudra</option>
-                <option value="Bandha">Bandha</option>
-                <option value="Lateral Bend">Lateral Bend</option>
                 <option value="Arm Leg Support">Arm Leg Support</option>
+                <option value="Backbend">Backbend</option>
+                <option value="Balance">Balance</option>
+                <option value="Bandha">Bandha</option>
+                <option value="Core">Core</option>
+                <option value="Forward Bend">Forward Bend</option>
+                <option value="Hip Opener">Hip Opener</option>
+                <option value="Inversion">Inversion</option>
+                <option value="Lateral Bend">Lateral Bend</option>
+                <option value="Mudra">Mudra</option>
+                <option value="Neutral">Neutral</option>
+                <option value="Prone">Prone</option>
+                <option value="Restorative">Restorative</option>
+                <option value="Seated">Seated</option>
+                <option value="Standing">Standing</option>
+                <option value="Supine">Supine</option>
+                <option value="Twist">Twist</option>
               </TextField>
             </FormControl>
           </Grid>
@@ -243,6 +243,7 @@ export default function Page() {
               <TextField
                 label="Preferred Side"
                 name="preferred_side"
+                placeholder='e.g. "Right"'
                 defaultValue={'None'}
                 value={formData.preferred_side}
                 onChange={handleChange}
