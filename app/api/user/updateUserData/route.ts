@@ -46,5 +46,7 @@ export async function POST(req: Request) {
     return Response.json({ message: 'User Data saved' })
   } catch (error) {
     return Response.json({ error: 'Error saving data' })
+  } finally {
+    await prisma.$disconnect()
   }
 }

@@ -243,6 +243,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
     signOut: async (message: any) => {
       console.log('signOut', message)
+      await prisma.$disconnect()
     },
   },
   // experimental: {

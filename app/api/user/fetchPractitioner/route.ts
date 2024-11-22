@@ -26,6 +26,8 @@ export async function GET(req: Request) {
       JSON.stringify({ error: 'Failed to create practitioner data' }),
       { status: 500 }
     )
+  } finally {
+    await prisma.$disconnect()
   }
   return new Response(JSON.stringify({ data: practitioner }), { status: 200 })
 }

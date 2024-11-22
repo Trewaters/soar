@@ -28,6 +28,8 @@ export async function GET(req: Request) {
       JSON.stringify({ error: 'Failed to fetch account data' }),
       { status: 500 }
     )
+  } finally {
+    await prisma.$disconnect()
   }
 
   return new Response(JSON.stringify({ data: account }), {

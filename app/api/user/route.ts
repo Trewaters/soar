@@ -31,6 +31,8 @@ export async function GET(req: Request) {
       JSON.stringify({ error: 'Failed to fetch user data' }),
       { status: 500 }
     )
+  } finally {
+    await prisma.$disconnect()
   }
 
   // try {
