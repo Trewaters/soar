@@ -148,10 +148,10 @@ export default function Page() {
                     <Box key={pose} className="lines">
                       <Box key={pose} className="journalLine">
                         <Typography textAlign={'left'} variant="body1">
-                          {pose.split(',')[0]}
+                          {pose.split(';')[0]}
                         </Typography>
                         <Typography textAlign={'left'} variant="body2">
-                          {pose.split(',')[1]}
+                          {pose.split(';')[1]}
                         </Typography>
                       </Box>
                     </Box>
