@@ -2,28 +2,26 @@ import React from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
-import { signIn, providerMap, signOut } from '@auth'
+import { signIn, providerMap, signOut, auth } from '@auth'
 
-export default async function SignInPage(props: {
-  searchParams: { callbackUrl: string | undefined }
-}) {
+export default async function SignInPage() {
+  const session = await auth()
   return (
     <>
       <nav>
         <Header />
       </nav>
-      <Stack display={'flex'} alignItems={'center'}>
-        <Stack flexDirection={'row'}>
-          <Typography variant={'h1'}>SOAR</Typography>
+      <Stack flexDirection={'row'} justifySelf={'center'} alignItems={'center'}>
+        <Stack>
+          <Typography variant={'subtitle1'}>A Happy Yoga App</Typography>
+        </Stack>
+        <Stack>
           <Image
             src={'/icons/asanas/leaf-1.svg'}
             alt={'SOAR logo'}
             width={100}
             height={100}
           />
-        </Stack>
-        <Stack>
-          <Typography variant={'subtitle1'}>A Happy Yoga App</Typography>
         </Stack>
       </Stack>
       <Stack justifyContent={'center'} alignItems={'center'} display={'flex'}>
@@ -68,7 +66,7 @@ export default async function SignInPage(props: {
             justifyContent={'center'}
             sx={{ mt: 4 }}
           >
-            <form
+            {/* <form
               action={async (formData) => {
                 'use server'
                 // eslint-disable-next-line no-useless-catch
@@ -97,7 +95,7 @@ export default async function SignInPage(props: {
                 </Stack>
               </Stack>
               <input type="submit" value="Sign In" />
-            </form>
+            </form> */}
             {Object.values(providerMap).map((provider, index) => (
               <form
                 key={index}
@@ -127,14 +125,29 @@ export default async function SignInPage(props: {
                   }
                 }}
               >
-                <Button type="submit" variant="contained" sx={{ my: 2 }}>
-                  <span>Sign in with {provider.name}</span>
+                <Button
+                  type="submit"
+                  variant="outlined"
+                  sx={{ my: 2, borderRadius: '12px' }}
+                  startIcon={
+                    <Image
+                      src={
+                        provider.name.toLowerCase() === 'google'
+                          ? '/icons/profile/auth-google.svg'
+                          : '/icons/profile/auth-github-mark.svg'
+                      }
+                      alt={provider.name}
+                      width={20}
+                      height={20}
+                    />
+                  }
+                >
+                  <Typography>Sign in with {provider.name}</Typography>
                 </Button>
               </form>
             ))}
           </Stack>
           <Stack>
-            <Typography variant="subtitle1">sign in again 🔓</Typography>
             <Typography variant="body1">
               Don&apos;t have an account yet❔
             </Typography>
@@ -142,16 +155,18 @@ export default async function SignInPage(props: {
               Signing in will automatically create an account for you.
             </Typography>
           </Stack>
-          <form
-            action={async () => {
-              'use server'
-              await signOut({ redirectTo: '/navigator' })
-            }}
-          >
-            <Button variant="contained" type="submit">
-              Sign out
-            </Button>
-          </form>
+          {session && (
+            <form
+              action={async () => {
+                'use server'
+                await signOut()
+              }}
+            >
+              <Button variant="contained" type="submit" sx={{ mb: 3 }}>
+                Sign out
+              </Button>
+            </form>
+          )}
         </Stack>
       </Stack>
     </>
