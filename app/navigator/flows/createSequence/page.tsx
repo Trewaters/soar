@@ -240,7 +240,9 @@ export default function Page() {
             <Autocomplete
               disablePortal
               id="combo-box-series-search"
-              options={flowSeries}
+              options={flowSeries.sort((a, b) =>
+                a.seriesName.localeCompare(b.seriesName)
+              )}
               getOptionLabel={(option: FlowSeriesData) => option.seriesName}
               renderOption={(props, option) => (
                 <li {...props} key={option.id}>
