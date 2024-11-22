@@ -75,7 +75,9 @@ export default function Page() {
             disablePortal
             freeSolo={false}
             id="combo-box-series-search"
-            options={series}
+            options={series.sort((a, b) =>
+              a.seriesName.localeCompare(b.seriesName)
+            )}
             getOptionLabel={(option: FlowSeriesData) => option.seriesName}
             renderOption={(props, option) => (
               <li {...props} key={option.id}>
