@@ -2,8 +2,12 @@ import React from 'react'
 import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
+import { auth } from '@auth'
+import { useRouter } from 'next/router'
 
-export default function SignOutPage() {
+export default async function SignOutPage() {
+  const session = await auth()
+  const router = useRouter()
   return (
     <>
       <nav>
@@ -11,7 +15,6 @@ export default function SignOutPage() {
       </nav>
       <Stack display={'flex'} alignItems={'center'}>
         <Stack flexDirection={'row'}>
-          <Typography variant={'h1'}>SOAR</Typography>
           <Image
             src={'/icons/asanas/leaf-1.svg'}
             alt={'SOAR logo'}
@@ -35,14 +38,33 @@ export default function SignOutPage() {
           }}
         >
           <Box sx={{ pt: 4, pb: 3 }}>
-            {/* <Typography variant="h2">
-              {session?.user.name} you&apos;re signed in 🔆
-            </Typography> */}
+            <Typography color="success.main" variant="h2">
+              {session?.user?.name} you&apos;re signed out!
+            </Typography>
             <Typography variant="body1">
-              If you don&apos;t get redirected. Click{' '}
-              <Link href="/navigator">here</Link> to go to the home page.
+              Come back soon to continue your yoga journey!
             </Typography>
           </Box>
+          <Button
+            type="submit"
+            variant="outlined"
+            sx={{ my: 2, borderRadius: '12px' }}
+            onClick={() => {
+              router.push('/')
+            }}
+          >
+            <Typography>Go back to the home page</Typography>
+          </Button>
+          <Button
+            type="submit"
+            variant="outlined"
+            sx={{ my: 2, borderRadius: '12px' }}
+            onClick={() => {
+              router.push('/auth/signin')
+            }}
+          >
+            <Typography>Sign in again!</Typography>
+          </Button>
         </Stack>
         <Stack textAlign={'center'} spacing={2} sx={{ my: 6 }}></Stack>
       </Stack>

@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid2'
 import { Box, Button, FormControl, TextField } from '@mui/material'
 import { useAsanaPosture } from '@app/context/AsanaPostureContext'
 import { useSession } from 'next-auth/react'
-import { useRouter } from '@node_modules/next/navigation'
+import { useRouter } from 'next/navigation'
 
 export default function Page() {
   const { data: session } = useSession()
