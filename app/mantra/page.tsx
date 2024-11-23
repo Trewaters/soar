@@ -1,3 +1,5 @@
+import { Box } from '@node_modules/@mui/material'
+
 export default function Page() {
-  return <div>Mantra</div>
+  return <Box>Mantra</Box>
 }
