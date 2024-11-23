@@ -70,16 +70,16 @@ export default async function SignInPage() {
             </form> 
  */}
           <Box
-            sx={{ pt: 4, pl: 4 }}
+            sx={{ p: 4 }}
             display={'flex'}
             flexDirection={'column'}
             alignItems={'flex-start'}
           >
             {!session && (
               <>
-                <Typography variant="h2">Welcome back 👋🏾</Typography>
+                <Typography variant="h2">Welcome back!</Typography>
                 <Typography variant="body1" component="p">
-                  We&apos;re happy you&apos;re here!
+                  We&apos;re happy you&apos;re here.
                 </Typography>
               </>
             )}
@@ -104,7 +104,6 @@ export default async function SignInPage() {
             display={'flex'}
             alignItems={'center'}
             justifyContent={'center'}
-            sx={{ mt: 4 }}
           >
             {!session &&
               Object.values(providerMap).map((provider, index) => (
@@ -139,7 +138,7 @@ export default async function SignInPage() {
                   <Button
                     type="submit"
                     variant="outlined"
-                    sx={{ my: 2, borderRadius: '12px' }}
+                    sx={{ m: 2, borderRadius: '12px' }}
                     startIcon={
                       <Image
                         src={
@@ -161,8 +160,8 @@ export default async function SignInPage() {
           <Stack>
             {!session && (
               <>
-                <Typography variant="body1">
-                  Don&apos;t have an account yet❔
+                <Typography margin={1} variant="body1">
+                  Don&apos;t have an account yet?
                 </Typography>
                 <Typography variant="body1">
                   Signing in will automatically create an account for you.

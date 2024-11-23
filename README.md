@@ -17,6 +17,7 @@ Looking for developers, testers, practitioners, and users.
 **Asana Postures**
 
 - View Yoga postures with details about the posture like name, description, etc.
+- Create Yoga postures.
 
 **Flows**
 
