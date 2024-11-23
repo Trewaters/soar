@@ -32,8 +32,8 @@ model UserData {
   company           String?
   socialURL         String?
   isLocationPublic  String?
+  role              String?
 
-  // pronouns          String
   // emailPublic       String
   // emailInternal     String
   // emailAlternate    String

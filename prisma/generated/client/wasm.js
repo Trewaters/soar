@@ -134,7 +134,8 @@ exports.Prisma.UserDataScalarFieldEnum = {
   yogaExperience: 'yogaExperience',
   company: 'company',
   socialURL: 'socialURL',
-  isLocationPublic: 'isLocationPublic'
+  isLocationPublic: 'isLocationPublic',
+  role: 'role'
 };
 
 exports.Prisma.ProviderAccountScalarFieldEnum = {

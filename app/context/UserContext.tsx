@@ -36,6 +36,7 @@ export type UserData = {
   company: string
   socialURL: string
   isLocationPublic: string
+  role: string
 
   emailVerified: Date
   profile: Record<string, any>
@@ -144,6 +145,7 @@ const initialState: UserProfilePageState = {
     company: '',
     socialURL: '',
     isLocationPublic: '',
+    role: 'user',
   },
   userGithubProfile: {
     login: '',

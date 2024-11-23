@@ -169,6 +169,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               company: '',
               socialURL: '',
               isLocationPublic: '',
+              role: 'user',
               providerAccounts: {
                 create: {
                   provider: account.provider,
@@ -193,6 +194,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               // },
             },
           })
+          console.log('newUser', newUser)
         } catch (error) {
           console.error('Error creating new user:', error)
           throw error

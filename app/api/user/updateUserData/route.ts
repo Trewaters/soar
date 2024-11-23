@@ -19,6 +19,7 @@ export async function POST(req: Request) {
     company,
     socialURL,
     isLocationPublic,
+    role,
   } = await req.json()
 
   const decodedId = email.toString().replace('%40', '@').replace('=', '')
@@ -41,6 +42,7 @@ export async function POST(req: Request) {
         company,
         socialURL,
         isLocationPublic,
+        role,
       },
     })
     return Response.json({ message: 'User Data saved' })

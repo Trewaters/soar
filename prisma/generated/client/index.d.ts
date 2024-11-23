@@ -1259,6 +1259,7 @@ export namespace Prisma {
     company: string | null
     socialURL: string | null
     isLocationPublic: string | null
+    role: string | null
   }
 
   export type UserDataMaxAggregateOutputType = {
@@ -1283,6 +1284,7 @@ export namespace Prisma {
     company: string | null
     socialURL: string | null
     isLocationPublic: string | null
+    role: string | null
   }
 
   export type UserDataCountAggregateOutputType = {
@@ -1308,6 +1310,7 @@ export namespace Prisma {
     company: number
     socialURL: number
     isLocationPublic: number
+    role: number
     _all: number
   }
 
@@ -1334,6 +1337,7 @@ export namespace Prisma {
     company?: true
     socialURL?: true
     isLocationPublic?: true
+    role?: true
   }
 
   export type UserDataMaxAggregateInputType = {
@@ -1358,6 +1362,7 @@ export namespace Prisma {
     company?: true
     socialURL?: true
     isLocationPublic?: true
+    role?: true
   }
 
   export type UserDataCountAggregateInputType = {
@@ -1383,6 +1388,7 @@ export namespace Prisma {
     company?: true
     socialURL?: true
     isLocationPublic?: true
+    role?: true
     _all?: true
   }
 
@@ -1481,6 +1487,7 @@ export namespace Prisma {
     company: string | null
     socialURL: string | null
     isLocationPublic: string | null
+    role: string | null
     _count: UserDataCountAggregateOutputType | null
     _min: UserDataMinAggregateOutputType | null
     _max: UserDataMaxAggregateOutputType | null
@@ -1523,6 +1530,7 @@ export namespace Prisma {
     company?: boolean
     socialURL?: boolean
     isLocationPublic?: boolean
+    role?: boolean
     providerAccounts?: boolean | UserData$providerAccountsArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userData"]>
@@ -1551,6 +1559,7 @@ export namespace Prisma {
     company?: boolean
     socialURL?: boolean
     isLocationPublic?: boolean
+    role?: boolean
   }
 
   export type UserDataInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1586,6 +1595,7 @@ export namespace Prisma {
       company: string | null
       socialURL: string | null
       isLocationPublic: string | null
+      role: string | null
     }, ExtArgs["result"]["userData"]>
     composites: {}
   }
@@ -2001,6 +2011,7 @@ export namespace Prisma {
     readonly company: FieldRef<"UserData", 'String'>
     readonly socialURL: FieldRef<"UserData", 'String'>
     readonly isLocationPublic: FieldRef<"UserData", 'String'>
+    readonly role: FieldRef<"UserData", 'String'>
   }
     
 
@@ -6458,7 +6469,8 @@ export namespace Prisma {
     yogaExperience: 'yogaExperience',
     company: 'company',
     socialURL: 'socialURL',
-    isLocationPublic: 'isLocationPublic'
+    isLocationPublic: 'isLocationPublic',
+    role: 'role'
   };
 
   export type UserDataScalarFieldEnum = (typeof UserDataScalarFieldEnum)[keyof typeof UserDataScalarFieldEnum]
@@ -6681,6 +6693,7 @@ export namespace Prisma {
     company?: StringNullableFilter<"UserData"> | string | null
     socialURL?: StringNullableFilter<"UserData"> | string | null
     isLocationPublic?: StringNullableFilter<"UserData"> | string | null
+    role?: StringNullableFilter<"UserData"> | string | null
     providerAccounts?: ProviderAccountListRelationFilter
   }
 
@@ -6707,6 +6720,7 @@ export namespace Prisma {
     company?: SortOrder
     socialURL?: SortOrder
     isLocationPublic?: SortOrder
+    role?: SortOrder
     providerAccounts?: ProviderAccountOrderByRelationAggregateInput
   }
 
@@ -6736,6 +6750,7 @@ export namespace Prisma {
     company?: StringNullableFilter<"UserData"> | string | null
     socialURL?: StringNullableFilter<"UserData"> | string | null
     isLocationPublic?: StringNullableFilter<"UserData"> | string | null
+    role?: StringNullableFilter<"UserData"> | string | null
     providerAccounts?: ProviderAccountListRelationFilter
   }, "id" | "provider_id" | "email">
 
@@ -6762,6 +6777,7 @@ export namespace Prisma {
     company?: SortOrder
     socialURL?: SortOrder
     isLocationPublic?: SortOrder
+    role?: SortOrder
     _count?: UserDataCountOrderByAggregateInput
     _max?: UserDataMaxOrderByAggregateInput
     _min?: UserDataMinOrderByAggregateInput
@@ -6793,6 +6809,7 @@ export namespace Prisma {
     company?: StringNullableWithAggregatesFilter<"UserData"> | string | null
     socialURL?: StringNullableWithAggregatesFilter<"UserData"> | string | null
     isLocationPublic?: StringNullableWithAggregatesFilter<"UserData"> | string | null
+    role?: StringNullableWithAggregatesFilter<"UserData"> | string | null
   }
 
   export type ProviderAccountWhereInput = {
@@ -7261,6 +7278,7 @@ export namespace Prisma {
     company?: string | null
     socialURL?: string | null
     isLocationPublic?: string | null
+    role?: string | null
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
   }
 
@@ -7287,6 +7305,7 @@ export namespace Prisma {
     company?: string | null
     socialURL?: string | null
     isLocationPublic?: string | null
+    role?: string | null
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -7312,6 +7331,7 @@ export namespace Prisma {
     company?: NullableStringFieldUpdateOperationsInput | string | null
     socialURL?: NullableStringFieldUpdateOperationsInput | string | null
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
   }
 
@@ -7337,6 +7357,7 @@ export namespace Prisma {
     company?: NullableStringFieldUpdateOperationsInput | string | null
     socialURL?: NullableStringFieldUpdateOperationsInput | string | null
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -7363,6 +7384,7 @@ export namespace Prisma {
     company?: string | null
     socialURL?: string | null
     isLocationPublic?: string | null
+    role?: string | null
   }
 
   export type UserDataUpdateManyMutationInput = {
@@ -7387,6 +7409,7 @@ export namespace Prisma {
     company?: NullableStringFieldUpdateOperationsInput | string | null
     socialURL?: NullableStringFieldUpdateOperationsInput | string | null
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserDataUncheckedUpdateManyInput = {
@@ -7411,6 +7434,7 @@ export namespace Prisma {
     company?: NullableStringFieldUpdateOperationsInput | string | null
     socialURL?: NullableStringFieldUpdateOperationsInput | string | null
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProviderAccountCreateInput = {
@@ -8041,6 +8065,7 @@ export namespace Prisma {
     company?: SortOrder
     socialURL?: SortOrder
     isLocationPublic?: SortOrder
+    role?: SortOrder
   }
 
   export type UserDataMaxOrderByAggregateInput = {
@@ -8065,6 +8090,7 @@ export namespace Prisma {
     company?: SortOrder
     socialURL?: SortOrder
     isLocationPublic?: SortOrder
+    role?: SortOrder
   }
 
   export type UserDataMinOrderByAggregateInput = {
@@ -8089,6 +8115,7 @@ export namespace Prisma {
     company?: SortOrder
     socialURL?: SortOrder
     isLocationPublic?: SortOrder
+    role?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -8927,6 +8954,7 @@ export namespace Prisma {
     company?: string | null
     socialURL?: string | null
     isLocationPublic?: string | null
+    role?: string | null
   }
 
   export type UserDataUncheckedCreateWithoutProviderAccountsInput = {
@@ -8952,6 +8980,7 @@ export namespace Prisma {
     company?: string | null
     socialURL?: string | null
     isLocationPublic?: string | null
+    role?: string | null
   }
 
   export type UserDataCreateOrConnectWithoutProviderAccountsInput = {
@@ -8992,6 +9021,7 @@ export namespace Prisma {
     company?: NullableStringFieldUpdateOperationsInput | string | null
     socialURL?: NullableStringFieldUpdateOperationsInput | string | null
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserDataUncheckedUpdateWithoutProviderAccountsInput = {
@@ -9016,6 +9046,7 @@ export namespace Prisma {
     company?: NullableStringFieldUpdateOperationsInput | string | null
     socialURL?: NullableStringFieldUpdateOperationsInput | string | null
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProviderAccountCreateManyUserInput = {
