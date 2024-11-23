@@ -1,12 +1,11 @@
+'use client'
 import React from 'react'
-import { Box, Button, Link, Stack, Typography } from '@mui/material'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
-import { auth } from '@auth'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
-export default async function SignOutPage() {
-  const session = await auth()
+export default function SignOutPage() {
   const router = useRouter()
   return (
     <>
@@ -39,7 +38,7 @@ export default async function SignOutPage() {
         >
           <Box sx={{ pt: 4, pb: 3 }}>
             <Typography color="success.main" variant="h2">
-              {session?.user?.name} you&apos;re signed out!
+              You&apos;re signed out!
             </Typography>
             <Typography variant="body1">
               Come back soon to continue your yoga journey!
