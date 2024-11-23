@@ -1,5 +1,6 @@
 'use client'
-import { Button, Grid, IconButton, Paper, Typography } from '@mui/material'
+import { Box, Button, IconButton, Paper, Typography } from '@mui/material'
+import Grid from '@mui/material/Grid2'
 import React, { useEffect, useState } from 'react'
 import PauseCircleIcon from '@mui/icons-material/PauseCircle'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
@@ -83,60 +84,60 @@ export default function ViewAsanaPractice({
   }
 
   return (
-    <div className="fullscreen-background">
+    <Box className="fullscreen-background">
       <Paper style={paperStyle}>
         <Grid container>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="h1" textAlign={'center'} color={'white'}>
               Asana Practice
             </Typography>
           </Grid>
 
-          <Grid item xs={6}>
+          <Grid size={12}>
             <Typography variant="subtitle1" color={'white'}>
               {viewPose?.sort_english_name}
             </Typography>
           </Grid>
           {/* 
-        <Grid item xs={6}>
+        <Grid size={6}>
         <Typography variant="subtitle1" color={'white'}>
         [PROGRESS_BAR]`
         </Typography>
         </Grid>
         
-        <Grid item xs={12}>
+        <Grid size={12}>
         <Typography variant="body1" color={'white'}>
         Next: {viewPose?.next_poses}
         </Typography>
         </Grid>
         
-        <Grid item xs={12}>
+        <Grid size={12}>
         <Typography variant="body1" color={'white'}>
         [SERIES NAME]
         </Typography>
         </Grid>
         
-        <Grid item xs={12}>
+        <Grid size={12}>
         <Typography variant="body1" color={'white'}>
         [TIMER... TIME REMAINING]
         </Typography>
         </Grid>
         
-        <Grid item xs={12}>
+        <Grid size={12}>
         <Typography variant="body1" color={'white'}>
         [TIMER... TOTAL TIME]
         </Typography>
         </Grid>
         */}
 
-          <Grid item xs={12}>
+          <Grid size={12}>
             <AsanaTimer
               onTimeUpdate={handleTimeUpdate}
               onPauseUpdate={handlePauseUpdate}
             />
           </Grid>
 
-          <Grid item xs={2}>
+          <Grid size={2}>
             <IconButton onClick={handleIconButtonClick}>
               {state.watch.isPaused ? (
                 <PlayCircleIcon
@@ -150,16 +151,16 @@ export default function ViewAsanaPractice({
             </IconButton>
           </Grid>
 
-          <Grid item xs={8}>
-            <Button>NEXT</Button>
+          <Grid size={8}>
+            <Button sx={{ color: 'white' }}>NEXT</Button>
           </Grid>
-          <Grid item xs={2}>
+          <Grid size={2}>
             <IconButton sx={{ color: 'white' }} onClick={handleBackClick}>
               <HomeIcon />
             </IconButton>
           </Grid>
         </Grid>
       </Paper>
-    </div>
+    </Box>
   )
 }

@@ -81,7 +81,7 @@ export default function UserDetails() {
   }, [session, dispatch, userData])
 
   if (!session) {
-    return <div>Loading...</div>
+    return <>Loading...</>
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
