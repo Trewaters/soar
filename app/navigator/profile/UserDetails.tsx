@@ -27,6 +27,7 @@ import { UseUser } from '@context/UserContext'
 import Link from 'next/link'
 import MyMap from '@app/clientComponents/googleMaps'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean
@@ -58,6 +59,7 @@ export default function UserDetails() {
   const { data: session } = useSession()
   // const session = React.useMemo(() => ({ user: { email: '' } }), [])
 
+  const router = useRouter()
   const {
     state: { userData },
     dispatch,
@@ -81,7 +83,11 @@ export default function UserDetails() {
   }, [session, dispatch, userData])
 
   if (!session) {
-    return <>Loading...</>
+    return (
+      <Button variant="outlined" onClick={() => router.push('/auth/signin')}>
+        Sign in to view your profile
+      </Button>
+    )
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
