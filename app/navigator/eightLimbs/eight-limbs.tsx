@@ -47,7 +47,13 @@ export default function EightLimbs() {
             <AdjustIcon />
           </ListItemIcon>
         </ListItem>
-        <ListItem>
+        <ListItem
+          sx={
+            {
+              // color: 'primary.main',
+            }
+          }
+        >
           <ListItemButton
             sx={{
               cursor: 'pointer',
@@ -62,8 +68,18 @@ export default function EightLimbs() {
               router.push('/navigator/asanaPostures')
             }}
           >
-            <ListItemText primary="Asana" secondary="Physical Postures" />
-            <ListItemIcon sx={{ pl: 3 }}>
+            <ListItemText
+              sx={{
+                color: 'primary.main',
+                // add secondary
+                '& .MuiListItemText-secondary': {
+                  color: 'primary.main',
+                },
+              }}
+              primary="Asana"
+              secondary="Physical Postures"
+            />
+            <ListItemIcon sx={{ color: 'primary.main', pl: 3 }}>
               <WaterDropOutlinedIcon />
             </ListItemIcon>
           </ListItemButton>
