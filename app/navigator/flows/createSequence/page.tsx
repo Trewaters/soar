@@ -264,6 +264,13 @@ export default function Page() {
                   borderColor: 'primary.main',
                   boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
                 },
+                '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                  {
+                    borderColor: 'primary.light', // Ensure border color does not change on hover
+                  },
+                '& .MuiAutocomplete-endAdornment': {
+                  display: 'none',
+                },
                 my: 3,
               }}
               renderInput={(params) => (

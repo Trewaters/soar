@@ -65,14 +65,13 @@ export default function Page() {
         <Button
           variant="contained"
           color="primary"
-          sx={{ width: '30%', mb: 3 }}
+          sx={{ mb: 3 }}
           onClick={() => router.push('/navigator/asanaPostures/createAsana')}
         >
-          Add Asana
+          <Typography whiteSpace={'nowrap'}>Create Asana Posture</Typography>
         </Button>
       </Box>
       <NavBottom subRoute="/navigator/asanaPostures" />
-      {/* <Stack sx={{ position: 'fixed', bottom: 0 }}></Stack> */}
     </>
   )
 }
