@@ -268,7 +268,7 @@ export default function Page() {
                   {
                     borderColor: 'primary.light', // Ensure border color does not change on hover
                   },
-                '& .MuiAutocomplete-endAdornment': {
+                '& .MuiAutocomplete-popupIndicator': {
                   display: 'none',
                 },
                 my: 3,
