@@ -27,7 +27,6 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
     value: FullAsanaData | null
   ) {
     dispatch({ type: 'SET_POSTURES', payload: value ?? state.postures })
-    console.log('posture-search > handleChange value', value)
     router.push(`../navigator/asanaPostures/${value?.sort_english_name}/`)
   }
 

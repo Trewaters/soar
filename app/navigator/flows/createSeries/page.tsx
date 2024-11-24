@@ -71,7 +71,7 @@ export default function Page() {
         error.message
       }
     }
-    console.log('create series session', session)
+    // console.log('create series session', session)
 
     if (
       session === null

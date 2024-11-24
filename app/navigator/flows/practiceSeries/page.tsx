@@ -63,7 +63,7 @@ export default function Page() {
         sx={{ marginX: 3, marginY: 3, mb: '1em', width: 'fit-content' }}
       >
         <SplashHeader
-          src={'/icons/designImages/splash-flows-2.png'}
+          src={'/icons/designImages/practice-series-color.png'}
           alt={'Practice Series'}
           title="Practice Series"
         />

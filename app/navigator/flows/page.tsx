@@ -22,15 +22,6 @@ const grey = {
   900: '#1C2025',
 }
 
-const blue = {
-  200: '#99CCFF',
-  300: '#66B2FF',
-  400: '#3399FF',
-  500: '#007FFF',
-  600: '#0072E5',
-  700: '#0066CC',
-}
-
 const PopupBody = styled('div')(
   ({ theme }) => `
   width: max-content;

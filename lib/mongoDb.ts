@@ -1,7 +1,7 @@
 // This approach is taken from https://github.com/vercel/next.js/tree/canary/examples/with-mongodb
 import { MongoClient, ServerApiVersion } from 'mongodb'
 
-console.log('MONGODB_URI_v2:', process.env.MONGODB_URI_v2)
+// console.log('MONGODB_URI_v2:', process.env.MONGODB_URI_v2)
 
 if (!process.env.MONGODB_URI_v2) {
   throw new Error('Invalid/Missing environment variable: "MONGODB_URI_v2"')

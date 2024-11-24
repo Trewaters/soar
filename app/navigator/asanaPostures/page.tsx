@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
-import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Typography } from '@mui/material'
 import { FullAsanaData } from '@context/AsanaPostureContext'
 import SplashHeader from '@app/clientComponents/splash-header'
 import { useRouter } from 'next/navigation'

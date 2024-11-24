@@ -2,8 +2,7 @@ import React from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
-import { signIn, providerMap, signOut, auth } from '@auth'
-import Link from 'next/link'
+import { signIn, providerMap, auth } from '@auth'
 
 export default async function SignUpPage() {
   const session = await auth()
