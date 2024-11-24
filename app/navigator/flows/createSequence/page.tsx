@@ -37,6 +37,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import { ArrowBack, ArrowForward } from '@mui/icons-material'
 import Image from 'next/image'
+import NavBottom from '@serverComponents/navBottom'
 
 async function fetchSeries() {
   try {
@@ -223,6 +224,7 @@ export default function Page() {
           justifyContent: 'center',
           alignItems: 'center',
           mt: 4,
+          mb: 4,
         }}
       >
         <Stack sx={{ marginX: 3, marginY: 3, mb: '1em' }}>
@@ -572,6 +574,9 @@ export default function Page() {
           </List>
         </Drawer>
       </Box>
+      <Stack sx={{ position: 'fixed', bottom: 0 }}>
+        <NavBottom subRoute="/navigator/flows" />
+      </Stack>
     </>
   )
 }

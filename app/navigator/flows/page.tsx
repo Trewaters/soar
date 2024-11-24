@@ -7,6 +7,7 @@ import SplashNavButton from '@app/clientComponents/splash-nav-button'
 import { useSession } from '@node_modules/next-auth/react'
 import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup'
 import { useState, MouseEvent } from 'react'
+import NavBottom from '@serverComponents/navBottom'
 
 const grey = {
   50: '#F3F6F9',
@@ -134,6 +135,7 @@ export default function Page() {
         }}
         onClick={handleCreateSequenceClick}
       />
+      <NavBottom subRoute="/navigator/flows" />
     </Box>
   )
 }

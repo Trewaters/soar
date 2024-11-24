@@ -15,6 +15,7 @@ import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
+import NavBottom from '@serverComponents/navBottom'
 
 export default function Page() {
   const theme = useTheme()
@@ -191,6 +192,9 @@ export default function Page() {
       >
         <Typography variant="body1">Pick a Series to practice.</Typography>
       </Drawer>
+      <Stack sx={{ position: 'fixed', bottom: 0 }}>
+        <NavBottom subRoute="/navigator/flows" />
+      </Stack>
     </Box>
   )
 }

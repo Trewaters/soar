@@ -10,7 +10,6 @@ export default async function Layout({ children }: { children: ReactNode }) {
       <SessionProvider basePath={'/api/auth'} session={session}>
         {children}
       </SessionProvider>
-      <NavBottom subRoute="/navigator/flows" />
     </>
   )
 }

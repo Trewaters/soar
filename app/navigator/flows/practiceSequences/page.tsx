@@ -18,6 +18,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search'
 import Image from 'next/image'
 import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
+import NavBottom from '@serverComponents/navBottom'
 
 export default function Page() {
   const [sequences, setSequences] = useState<SequenceData[]>([])
@@ -355,6 +356,9 @@ export default function Page() {
             </Box>
           </React.Fragment>
         </Stack>
+      </Stack>
+      <Stack sx={{ position: 'fixed', bottom: 0 }}>
+        <NavBottom subRoute="/navigator/flows" />
       </Stack>
     </Box>
   )

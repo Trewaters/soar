@@ -35,6 +35,7 @@ import SplashHeader from '@app/clientComponents/splash-header'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AutocompleteComponent from '@app/clientComponents/autocomplete-search'
 import Image from 'next/image'
+import NavBottom from '@serverComponents/navBottom'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -189,6 +190,7 @@ export default function Page() {
         justifyContent: 'center',
         alignItems: 'center',
         mt: 4,
+        mb: 4,
       }}
     >
       <Stack
@@ -551,6 +553,9 @@ export default function Page() {
           </List>
         </Stack>
       </Drawer>
+      <Stack sx={{ position: 'fixed', bottom: 0 }}>
+        <NavBottom subRoute="/navigator/flows" />
+      </Stack>
     </Box>
   )
 }
