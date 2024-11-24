@@ -8,7 +8,6 @@ export default function NavigatorLayout({ children }: { children: ReactNode }) {
         <Header />
       </nav>
       {children}
-      {/* <Footer /> */}
     </>
   )
 }

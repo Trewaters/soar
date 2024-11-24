@@ -40,30 +40,28 @@ export default function Page() {
   }, [])
 
   return (
-    <Box display={'flex'} flexDirection={'column'}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
       <SplashHeader
         src={
           '/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png'
         }
-        alt={'Asana Posture Search'}
+        alt={'Asanas'}
         title="Asanas"
       />
-      <Box
-        sx={{
-          alignSelf: 'center',
-          my: 4,
-        }}
-      >
-        <PostureSearch posturePropData={posturePropData} />
-        {loading && (
-          <CircularProgress sx={{ backgroundColor: 'transparent' }} />
-        )}
-        {error && <Typography>Error: {error}</Typography>}
-      </Box>
+      <Box height={'32px'} />
+      <PostureSearch posturePropData={posturePropData} />
+      {loading && <CircularProgress sx={{ backgroundColor: 'transparent' }} />}
+      {error && <Typography>Error: {error}</Typography>}
       <Button
         variant="contained"
         color="primary"
-        sx={{ width: '30%', mb: 2, alignSelf: 'center' }}
+        sx={{ width: '30%', mb: 3 }}
         onClick={() => router.push('/navigator/asanaPostures/createAsana')}
       >
         Add Asana

@@ -50,6 +50,7 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
           borderRadius: '8px',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
+          textTransform: 'uppercase',
         }}
       >
         {title}
