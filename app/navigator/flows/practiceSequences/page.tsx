@@ -312,7 +312,7 @@ export default function Page() {
                           >
                             <Link
                               underline="hover"
-                              href={`/navigator/asanaPostures/${asana.split(';')[2]}`}
+                              href={`/navigator/asanaPostures/${asana.split(';')[0]}`}
                             >
                               {asana.split(';')[0]}
                             </Link>

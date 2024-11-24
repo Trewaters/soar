@@ -147,7 +147,7 @@ export default function Page() {
                           <Link
                             underline="hover"
                             color="primary.contrastText"
-                            href={`/navigator/asanaPostures/${pose.split(';')[2]}`}
+                            href={`/navigator/asanaPostures/${pose.split(';')[0]}`}
                           >
                             {pose.split(';')[0]}
                           </Link>
