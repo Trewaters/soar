@@ -3,10 +3,6 @@ import { NextResponse } from 'next/server'
 
 const prisma = new PrismaClient()
 
-export const config = {
-  runtime: 'edge',
-}
-
 export async function GET() {
   try {
     const data = await prisma.asanaSeries.findMany()
