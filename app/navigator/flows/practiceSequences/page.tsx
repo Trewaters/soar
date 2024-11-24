@@ -201,148 +201,151 @@ export default function Page() {
                   {singleSequence.nameSequence}
                 </Typography>
               </Box>
-              <Stack rowGap={3} alignItems="center">
-                {paginatedData.map((seriesMini, i) => (
-                  <Card
-                    key={i}
-                    sx={{
-                      width: '85%',
-                      boxShadow: 3,
-                      textAlign: 'center',
-                      borderColor: 'primary.main',
-                      borderWidth: '1px',
-                      borderStyle: 'solid',
-                    }}
-                    className="journal"
-                  >
-                    <CardHeader
-                      className="journalTitle"
-                      title={
-                        <Box width={'100%'}>
-                          <Stack
-                            flexDirection={'row'}
-                            justifyContent={'space-between'}
-                          >
-                            <Stack>
-                              <Button
-                                disableRipple
-                                onClick={() =>
-                                  setPage((prev) => Math.max(prev - 1, 1))
-                                }
-                                disabled={page === 1}
-                                startIcon={
-                                  <Image
-                                    src="/icons/navigation/nav-practice-sequence-back-arrow.svg"
-                                    width={7}
-                                    height={7}
-                                    alt={'sequence-back-arrow'}
-                                  />
-                                }
-                                sx={{
-                                  '&:hover': {
-                                    backgroundColor: 'transparent',
-                                    boxShadow: 'none',
-                                  },
-                                }}
-                              >
-                                {singleSequence.sequencesSeries[page - 2]
-                                  ?.seriesName || 'Previous'}
-                              </Button>
-                            </Stack>
-                            <Stack>
-                              <Button
-                                disableRipple
-                                onClick={() =>
-                                  setPage((prev) =>
-                                    Math.min(
-                                      prev + 1,
-                                      Math.ceil(
-                                        singleSequence.sequencesSeries.length /
-                                          itemsPerPage
+              {singleSequence?.id ? (
+                <Stack rowGap={3} alignItems="center">
+                  {paginatedData.map((seriesMini, i) => (
+                    <Card
+                      key={i}
+                      sx={{
+                        width: '85%',
+                        boxShadow: 3,
+                        textAlign: 'center',
+                        borderColor: 'primary.main',
+                        borderWidth: '1px',
+                        borderStyle: 'solid',
+                      }}
+                      className="journal"
+                    >
+                      <CardHeader
+                        className="journalTitle"
+                        title={
+                          <Box width={'100%'}>
+                            <Stack
+                              flexDirection={'row'}
+                              justifyContent={'space-between'}
+                            >
+                              <Stack>
+                                <Button
+                                  disableRipple
+                                  onClick={() =>
+                                    setPage((prev) => Math.max(prev - 1, 1))
+                                  }
+                                  disabled={page === 1}
+                                  startIcon={
+                                    <Image
+                                      src="/icons/navigation/nav-practice-sequence-back-arrow.svg"
+                                      width={7}
+                                      height={7}
+                                      alt={'sequence-back-arrow'}
+                                    />
+                                  }
+                                  sx={{
+                                    '&:hover': {
+                                      backgroundColor: 'transparent',
+                                      boxShadow: 'none',
+                                    },
+                                  }}
+                                >
+                                  {singleSequence.sequencesSeries[page - 2]
+                                    ?.seriesName || 'Previous'}
+                                </Button>
+                              </Stack>
+                              <Stack>
+                                <Button
+                                  disableRipple
+                                  onClick={() =>
+                                    setPage((prev) =>
+                                      Math.min(
+                                        prev + 1,
+                                        Math.ceil(
+                                          singleSequence.sequencesSeries
+                                            .length / itemsPerPage
+                                        )
                                       )
                                     )
-                                  )
-                                }
-                                disabled={
-                                  page ===
-                                  Math.ceil(
-                                    singleSequence.sequencesSeries.length /
-                                      itemsPerPage
-                                  )
-                                }
-                                endIcon={
-                                  <Image
-                                    src="/icons/navigation/nav-practice-sequence-advance-arrow.svg"
-                                    width={7}
-                                    height={7}
-                                    alt={'sequence-back-arrow'}
-                                  />
-                                }
-                                sx={{
-                                  '&:hover': {
-                                    backgroundColor: 'transparent',
-                                    boxShadow: 'none',
-                                  },
-                                }}
+                                  }
+                                  disabled={
+                                    page ===
+                                    Math.ceil(
+                                      singleSequence.sequencesSeries.length /
+                                        itemsPerPage
+                                    )
+                                  }
+                                  endIcon={
+                                    <Image
+                                      src="/icons/navigation/nav-practice-sequence-advance-arrow.svg"
+                                      width={7}
+                                      height={7}
+                                      alt={'sequence-back-arrow'}
+                                    />
+                                  }
+                                  sx={{
+                                    '&:hover': {
+                                      backgroundColor: 'transparent',
+                                      boxShadow: 'none',
+                                    },
+                                  }}
+                                >
+                                  {singleSequence.sequencesSeries[page]
+                                    ?.seriesName || 'Next'}
+                                </Button>
+                              </Stack>
+                            </Stack>
+                            <Stack>
+                              <Typography variant="h6">
+                                {seriesMini.seriesName}
+                              </Typography>
+                            </Stack>
+                          </Box>
+                        }
+                      />
+                      <CardContent className="lines" sx={{ p: 0 }}>
+                        {seriesMini.seriesPostures.map((asana, asanaIndex) => (
+                          <Stack
+                            direction={'row'}
+                            key={asanaIndex}
+                            className="journalLine"
+                            alignItems="flex-start"
+                          >
+                            <Typography
+                              variant="body1"
+                              fontWeight="bold"
+                              sx={{ width: '30px', textAlign: 'right', mr: 2 }}
+                            >
+                              {asanaIndex + 1}.
+                            </Typography>
+                            <Stack direction={'column'}>
+                              <Typography
+                                textAlign={'left'}
+                                fontWeight={'bold'}
+                                variant="body1"
                               >
-                                {singleSequence.sequencesSeries[page]
-                                  ?.seriesName || 'Next'}
-                              </Button>
+                                <Link
+                                  underline="hover"
+                                  href={`/navigator/asanaPostures/${asana.split(';')[0]}`}
+                                >
+                                  {asana.split(';')[0]}
+                                </Link>
+                              </Typography>
+                              <Typography textAlign={'left'} variant="body2">
+                                {asana.split(';')[1]}
+                              </Typography>
                             </Stack>
                           </Stack>
-                          <Stack>
-                            <Typography variant="h6">
-                              {seriesMini.seriesName}
-                            </Typography>
-                          </Stack>
-                        </Box>
-                      }
-                    />
-                    <CardContent className="lines" sx={{ p: 0 }}>
-                      {seriesMini.seriesPostures.map((asana, asanaIndex) => (
-                        <Stack
-                          direction={'row'}
-                          key={asanaIndex}
-                          className="journalLine"
-                          alignItems="flex-start"
-                        >
-                          <Typography
-                            variant="body1"
-                            fontWeight="bold"
-                            sx={{ width: '30px', textAlign: 'right', mr: 2 }}
-                          >
-                            {asanaIndex + 1}.
-                          </Typography>
-                          <Stack direction={'column'}>
-                            <Typography
-                              textAlign={'left'}
-                              fontWeight={'bold'}
-                              variant="body1"
-                            >
-                              <Link
-                                underline="hover"
-                                href={`/navigator/asanaPostures/${asana.split(';')[0]}`}
-                              >
-                                {asana.split(';')[0]}
-                              </Link>
-                            </Typography>
-                            <Typography textAlign={'left'} variant="body2">
-                              {asana.split(';')[1]}
-                            </Typography>
-                          </Stack>
-                        </Stack>
-                      ))}
-                    </CardContent>
-                  </Card>
-                ))}
-                <CustomPaginationCircles
-                  count={Math.ceil(
-                    singleSequence.sequencesSeries.length / itemsPerPage
-                  )}
-                  page={page}
-                  onChange={handleChange}
-                />
-              </Stack>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  ))}
+                  <CustomPaginationCircles
+                    count={Math.ceil(
+                      singleSequence.sequencesSeries.length / itemsPerPage
+                    )}
+                    page={page}
+                    onChange={handleChange}
+                  />
+                </Stack>
+              ) : null}
+
               <Box
                 className={'journal'}
                 sx={{ marginTop: '32px', p: 4, color: 'primary.main' }}
