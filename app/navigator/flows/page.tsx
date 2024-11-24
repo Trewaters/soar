@@ -83,7 +83,7 @@ export default function Page() {
         <BasePopup id={id} open={open} anchor={anchor} placement={'top'}>
           <PopupBody>
             <Typography color="error.contrastText">
-              You MUST Sign In to access this feature.
+              Please sign-in to access this feature.
             </Typography>
           </PopupBody>
         </BasePopup>
