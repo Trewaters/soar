@@ -4,6 +4,7 @@ import {
   Autocomplete,
   Box,
   Drawer,
+  Link,
   Stack,
   TextField,
   Typography,
@@ -143,7 +144,13 @@ export default function Page() {
                     <Box key={pose} className="lines">
                       <Box key={pose} className="journalLine">
                         <Typography textAlign={'left'} variant="body1">
-                          {pose.split(';')[0]}
+                          <Link
+                            underline="hover"
+                            color="primary.contrastText"
+                            href={`/navigator/asanaPostures/${pose.split(';')[2]}`}
+                          >
+                            {pose.split(';')[0]}
+                          </Link>
                         </Typography>
                         <Typography textAlign={'left'} variant="body2">
                           {pose.split(';')[1]}

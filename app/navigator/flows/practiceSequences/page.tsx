@@ -9,6 +9,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Link,
   Stack,
   TextField,
   Typography,
@@ -309,7 +310,12 @@ export default function Page() {
                             fontWeight={'bold'}
                             variant="body1"
                           >
-                            {asana.split(';')[0]}
+                            <Link
+                              underline="hover"
+                              href={`/navigator/asanaPostures/${asana.split(';')[2]}`}
+                            >
+                              {asana.split(';')[0]}
+                            </Link>
                           </Typography>
                           <Typography textAlign={'left'} variant="body2">
                             {asana.split(';')[1]}
