@@ -27,8 +27,6 @@ export default function Page({ params }: { params: { pose: string } }) {
           pb: '60px',
         }}
       >
-        {/* removed the older posture card. Call it layout 1. My original attempt. */}
-        {/* <PostureCard postureCardProp={viewPose} /> */}
         <PostureActivityDetail postureCardProp={viewPose} />
       </Box>
       <NavBottom subRoute="/navigator/asanaPostures" />

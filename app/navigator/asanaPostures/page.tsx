@@ -50,9 +50,7 @@ export default function Page() {
         }}
       >
         <SplashHeader
-          src={
-            '/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png'
-          }
+          src={'/images/asana-postures-splash-header.png'}
           alt={'Asanas'}
           title="Asanas"
         />
