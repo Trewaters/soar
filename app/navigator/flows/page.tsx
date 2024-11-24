@@ -81,61 +81,64 @@ export default function Page() {
   const id = open ? 'simple-popup' : undefined
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <BasePopup id={id} open={open} anchor={anchor} placement={'top'}>
-        <PopupBody>
-          <Typography color="error.contrastText">
-            You MUST Sign In to access this feature.
-          </Typography>
-        </PopupBody>
-      </BasePopup>
-      <SplashHeader
-        src={'/icons/designImages/splash-flows-2.png'}
-        alt={'Flows'}
-        title="Flows"
-      />
-      <Box height={'32px'} />
-      <SplashNavButton
-        title="Practice Series"
-        description="Series are made up of asana poses."
+    <>
+      <Box
         sx={{
-          backgroundImage: "url('/images/practice-series-color.png')",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
-        onClick={handlePracticeSeriesClick}
-      />
-      <SplashNavButton
-        title="Create Series"
-        description="Create your own Series of asana poses."
-        sx={{
-          backgroundImage: "url('/images/create-series-bw.png')",
-        }}
-        onClick={handleCreateSeriesClick}
-      />
-      <SplashNavButton
-        title="Practice Sequence"
-        description="Sequences are ordered series."
-        sx={{
-          backgroundImage:
-            "url('/icons/designImages/beautiful-young-woman-practices-yoga-asana.png')",
-        }}
-        onClick={handlePracticeSequenceClick}
-      />
-      <SplashNavButton
-        title="Create Sequence"
-        description="Create your Sequences."
-        sx={{
-          backgroundImage:
-            "url('/icons/designImages/beautiful-young-woman-practices-yoga-create-sequence.png')",
-        }}
-        onClick={handleCreateSequenceClick}
-      />
+      >
+        <BasePopup id={id} open={open} anchor={anchor} placement={'top'}>
+          <PopupBody>
+            <Typography color="error.contrastText">
+              You MUST Sign In to access this feature.
+            </Typography>
+          </PopupBody>
+        </BasePopup>
+        <SplashHeader
+          src={'/icons/designImages/splash-flows-2.png'}
+          alt={'Flows'}
+          title="Flows"
+        />
+        <Box height={'32px'} />
+        <SplashNavButton
+          title="Practice Series"
+          description="Series are made up of asana poses."
+          sx={{
+            backgroundImage: "url('/images/practice-series-color.png')",
+          }}
+          onClick={handlePracticeSeriesClick}
+        />
+        <SplashNavButton
+          title="Create Series"
+          description="Create your own Series of asana poses."
+          sx={{
+            backgroundImage: "url('/images/create-series-bw.png')",
+          }}
+          onClick={handleCreateSeriesClick}
+        />
+        <SplashNavButton
+          title="Practice Sequence"
+          description="Sequences are ordered series."
+          sx={{
+            backgroundImage:
+              "url('/icons/designImages/beautiful-young-woman-practices-yoga-asana.png')",
+          }}
+          onClick={handlePracticeSequenceClick}
+        />
+        <SplashNavButton
+          title="Create Sequence"
+          description="Create your Sequences."
+          sx={{
+            backgroundImage:
+              "url('/icons/designImages/beautiful-young-woman-practices-yoga-create-sequence.png')",
+          }}
+          onClick={handleCreateSequenceClick}
+        />
+      </Box>
+      <Box height={'72px'} />
       <NavBottom subRoute="/navigator/flows" />
-    </Box>
+    </>
   )
 }

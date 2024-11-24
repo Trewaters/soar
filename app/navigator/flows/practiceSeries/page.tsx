@@ -192,9 +192,9 @@ export default function Page() {
       >
         <Typography variant="body1">Pick a Series to practice.</Typography>
       </Drawer>
-      <Stack sx={{ position: 'fixed', bottom: 0 }}>
-        <NavBottom subRoute="/navigator/flows" />
-      </Stack>
+      <Box height={'72px'} />
+
+      <NavBottom subRoute="/navigator/flows" />
     </Box>
   )
 }

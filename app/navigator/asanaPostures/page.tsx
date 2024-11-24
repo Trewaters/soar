@@ -71,9 +71,8 @@ export default function Page() {
           Add Asana
         </Button>
       </Box>
-      <Stack sx={{ position: 'fixed', bottom: 0 }}>
-        <NavBottom subRoute="/navigator/asanaPostures" />
-      </Stack>
+      <NavBottom subRoute="/navigator/asanaPostures" />
+      {/* <Stack sx={{ position: 'fixed', bottom: 0 }}></Stack> */}
     </>
   )
 }

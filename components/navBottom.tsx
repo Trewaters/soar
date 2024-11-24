@@ -10,14 +10,17 @@ export default function NavBottom(props: { subRoute: string }) {
       position="static"
       sx={{
         backgroundColor: 'info.contrastText',
-        borderTopRightRadius: { sm: 2, md: 0 },
-        borderTopLeftRadius: { sm: 2, md: 0 },
+        borderTopRightRadius: 0,
+        borderTopLeftRadius: 0,
         width: { sm: '100vw', md: '40vw' },
         flexDirection: 'row',
         justifyContent: 'space-between',
         px: 2,
         bottom: 0,
+        position: 'fixed',
         left: { sm: '0', md: '30vw' },
+        height: '66px',
+        justifySelf: 'center',
       }}
     >
       <IconButton

@@ -574,9 +574,9 @@ export default function Page() {
           </List>
         </Drawer>
       </Box>
-      <Stack sx={{ position: 'fixed', bottom: 0 }}>
-        <NavBottom subRoute="/navigator/flows" />
-      </Stack>
+      <Box height={'72px'} />
+
+      <NavBottom subRoute="/navigator/flows" />
     </>
   )
 }
