@@ -7,6 +7,7 @@ export default function NavBottom(props: { subRoute: string }) {
   const router = useRouter()
   return (
     <AppBar
+      position="static"
       sx={{
         backgroundColor: 'info.contrastText',
         borderTopRightRadius: { sm: 2, md: 0 },
@@ -15,7 +16,7 @@ export default function NavBottom(props: { subRoute: string }) {
         flexDirection: 'row',
         justifyContent: 'space-between',
         px: 2,
-        position: 'relative',
+        bottom: 0,
         left: { sm: '0', md: '30vw' },
       }}
     >

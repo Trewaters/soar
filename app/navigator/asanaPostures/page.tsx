@@ -1,10 +1,11 @@
 'use client'
 import { useEffect, useState } from 'react'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
-import { Box, Button, CircularProgress, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Stack, Typography } from '@mui/material'
 import { FullAsanaData } from '@context/AsanaPostureContext'
 import SplashHeader from '@app/clientComponents/splash-header'
 import { useRouter } from 'next/navigation'
+import NavBottom from '@serverComponents/navBottom'
 
 export default function Page() {
   const [posturePropData, setPosturePropData] = useState<FullAsanaData[]>([])
@@ -40,32 +41,39 @@ export default function Page() {
   }, [])
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <SplashHeader
-        src={
-          '/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png'
-        }
-        alt={'Asanas'}
-        title="Asanas"
-      />
-      <Box height={'32px'} />
-      <PostureSearch posturePropData={posturePropData} />
-      {loading && <CircularProgress sx={{ backgroundColor: 'transparent' }} />}
-      {error && <Typography>Error: {error}</Typography>}
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ width: '30%', mb: 3 }}
-        onClick={() => router.push('/navigator/asanaPostures/createAsana')}
+    <>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
       >
-        Add Asana
-      </Button>
-    </Box>
+        <SplashHeader
+          src={
+            '/icons/designImages/beautiful-woman-practices-yoga-asana-raja-bhujanga.png'
+          }
+          alt={'Asanas'}
+          title="Asanas"
+        />
+        <Box height={'32px'} />
+        <PostureSearch posturePropData={posturePropData} />
+        {loading && (
+          <CircularProgress sx={{ backgroundColor: 'transparent' }} />
+        )}
+        {error && <Typography>Error: {error}</Typography>}
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ width: '30%', mb: 3 }}
+          onClick={() => router.push('/navigator/asanaPostures/createAsana')}
+        >
+          Add Asana
+        </Button>
+      </Box>
+      <Stack sx={{ position: 'fixed', bottom: 0 }}>
+        <NavBottom subRoute="/navigator/asanaPostures" />
+      </Stack>
+    </>
   )
 }
