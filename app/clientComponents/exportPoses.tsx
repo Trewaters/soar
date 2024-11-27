@@ -25,6 +25,7 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
         text:
           postureData.description +
           '\n' +
+          '\n' +
           'Practice with us at Happy Yoga!' +
           '\n',
         url: window.location.href,
@@ -40,6 +41,7 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
             seriesData.seriesPostures
               .map((posture) => posture.replace(';', ','))
               .join('\n') +
+            '\n' +
             'Practice with us at Happy Yoga!' +
             '\n',
           url: 'https://www.happyyoga.app/navigator/flows/practiceSeries',
