@@ -9,6 +9,7 @@ import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
 import yogaMatWoman from '@public/yogaMatWoman.svg'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
+import PostureShareButton from '@app/clientComponents/exportPoses'
 
 interface PostureCardProps {
   postureCardProp: FullAsanaData
@@ -189,6 +190,11 @@ export default function PostureActivityDetail({
           </Stack>
         </Stack>
       </Box>
+      <PostureShareButton
+        postureName={posture?.sort_english_name}
+        description={posture?.description}
+        url={window.location.href}
+      />
       <Box
         sx={{
           display: 'flex',
