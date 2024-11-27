@@ -23,9 +23,8 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
       ? {
           title: seriesData.seriesName + '\n',
           text:
-            seriesData.seriesPostures
-              .map((posture) => posture + ',\n')
-              .join('') + '\n',
+            seriesData.seriesPostures.map((posture) => posture).join('\n') +
+            '\n',
           url: 'https://www.happyyoga.app/navigator/flows/practiceSeries',
         }
       : null
@@ -55,14 +54,14 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
     <Box>
       {shareAsanaData ? (
         <>
-          <Typography variant="h2">
+          {/* <Typography variant="h2">
             {postureData
               ? postureData.english_names.join(', ')
               : seriesData?.seriesName}
-          </Typography>
-          <Typography variant="body1">
+          </Typography> */}
+          {/* <Typography variant="body1">
             {postureData ? postureData.description : seriesData?.description}
-          </Typography>
+          </Typography> */}
           <Button endIcon={<IosShareIcon />} onClick={handleShare}>
             Share this {postureData ? 'Posture' : 'Series'}
           </Button>
