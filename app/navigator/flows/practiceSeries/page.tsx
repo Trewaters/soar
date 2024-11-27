@@ -16,6 +16,7 @@ import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
 import NavBottom from '@serverComponents/navBottom'
+import PostureShareButton from '@app/clientComponents/exportPoses'
 
 export default function Page() {
   const theme = useTheme()
@@ -187,6 +188,7 @@ export default function Page() {
                   {flow.description}
                 </Typography>
               </Box>
+              <PostureShareButton seriesData={flow} />
             </Box>
           </Box>
         )}

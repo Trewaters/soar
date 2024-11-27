@@ -1,34 +1,46 @@
-import { Box, Button, Typography } from '@node_modules/@mui/material'
 import React from 'react'
+import { Box, Button, Typography } from '@mui/material'
+import IosShareIcon from '@mui/icons-material/IosShare'
+import { FullAsanaData } from '@app/context/AsanaPostureContext'
+import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
 
-interface PostureShareProps {
-  postureName: string
-  description: string
-  url: string
+interface PostureShareButtonProps {
+  postureData?: FullAsanaData | null
+  seriesData?: FlowSeriesData | null
 }
 
-const PostureShareButton: React.FC<PostureShareProps> = ({
-  postureName,
-  description,
-  url,
+const PostureShareButton: React.FC<PostureShareButtonProps> = ({
+  postureData = null,
+  seriesData = null,
 }) => {
-  const shareData = {
-    title: postureName,
-    text: description,
-    url: url,
-  }
+  const shareAsanaData = postureData
+    ? {
+        title: postureData.english_names.join(', '),
+        text: postureData.description,
+        url: window.location.href,
+      }
+    : seriesData
+      ? {
+          title: seriesData.seriesName,
+          text: seriesData.seriesPostures.join(', '),
+          // url: window.location.href,
+          url: 'https://www.happyyoga.app/navigator/flows/practiceSeries',
+        }
+      : null
 
   const handleShare = async () => {
+    if (!shareAsanaData) return
+
     if (navigator.share) {
       try {
-        await navigator.share(shareData)
-        console.log('Posture shared successfully!')
+        await navigator.share(shareAsanaData)
+        console.log('Data shared successfully!')
       } catch (error) {
-        console.error('Error sharing posture:', error)
+        console.error('Error sharing data:', error)
       }
     } else {
       // Fallback: Copy to clipboard
-      const shareText = `${postureName}\n${description}\n${url}`
+      const shareText = `${shareAsanaData.title}\n${shareAsanaData.text}\n${shareAsanaData.url}`
       navigator.clipboard.writeText(shareText).then(() => {
         alert(
           'Sharing is not supported in your browser. The link has been copied to your clipboard.'
@@ -39,9 +51,23 @@ const PostureShareButton: React.FC<PostureShareProps> = ({
 
   return (
     <Box>
-      <Typography variant="h2">{postureName}</Typography>
-      <Typography variant="body1">{description}</Typography>
-      <Button onClick={handleShare}>Share this Posture</Button>
+      {shareAsanaData ? (
+        <>
+          <Typography variant="h2">
+            {postureData
+              ? postureData.english_names.join(', ')
+              : seriesData?.seriesName}
+          </Typography>
+          <Typography variant="body1">
+            {postureData ? postureData.description : seriesData?.description}
+          </Typography>
+          <Button endIcon={<IosShareIcon />} onClick={handleShare}>
+            Share this {postureData ? 'Posture' : 'Series'}
+          </Button>
+        </>
+      ) : (
+        <Typography variant="body1">No data available to share.</Typography>
+      )}
     </Box>
   )
 }

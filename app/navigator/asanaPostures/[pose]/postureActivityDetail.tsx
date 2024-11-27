@@ -190,11 +190,7 @@ export default function PostureActivityDetail({
           </Stack>
         </Stack>
       </Box>
-      <PostureShareButton
-        postureName={posture?.sort_english_name}
-        description={posture?.description}
-        url={window.location.href}
-      />
+      <PostureShareButton postureData={posture} />
       <Box
         sx={{
           display: 'flex',
