@@ -15,14 +15,17 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
 }) => {
   const shareAsanaData = postureData
     ? {
-        title: postureData.english_names.join(',\n '),
-        text: postureData.description,
+        title: postureData.sort_english_name + ',\n ',
+        text: postureData.description + '\n',
         url: window.location.href,
       }
     : seriesData
       ? {
-          title: seriesData.seriesName,
-          text: seriesData.seriesPostures.map((posture) => posture).join('\n '),
+          title: seriesData.seriesName + '\n',
+          text:
+            seriesData.seriesPostures
+              .map((posture) => posture + ',\n')
+              .join('') + '\n',
           url: 'https://www.happyyoga.app/navigator/flows/practiceSeries',
         }
       : null
