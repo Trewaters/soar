@@ -22,7 +22,7 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
     : seriesData
       ? {
           title: seriesData.seriesName,
-          text: seriesData.seriesPostures.join(', '),
+          text: seriesData.seriesPostures.join('\n '),
           // url: window.location.href,
           url: 'https://www.happyyoga.app/navigator/flows/practiceSeries',
         }
