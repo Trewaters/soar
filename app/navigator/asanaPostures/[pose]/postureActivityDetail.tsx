@@ -190,7 +190,6 @@ export default function PostureActivityDetail({
           </Stack>
         </Stack>
       </Box>
-      <PostureShareButton postureData={posture} />
       <Box
         sx={{
           display: 'flex',
@@ -331,6 +330,7 @@ export default function PostureActivityDetail({
               height={24}
             />
           </IconButton>
+          <PostureShareButton postureData={posture} />
         </ButtonGroup>
       )}
     </Paper>

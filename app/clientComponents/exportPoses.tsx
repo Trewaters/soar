@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, IconButton, Typography } from '@mui/material'
 import IosShareIcon from '@mui/icons-material/IosShare'
 import { FullAsanaData } from '@app/context/AsanaPostureContext'
 import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
@@ -15,16 +15,17 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
 }) => {
   const shareAsanaData = postureData
     ? {
-        title: postureData.sort_english_name + ',\n ',
+        title: postureData.sort_english_name + '\n ',
         text: postureData.description + '\n',
         url: window.location.href,
       }
     : seriesData
       ? {
           title: seriesData.seriesName + '\n',
-          text: seriesData.seriesPostures
-            .map((posture) => posture.replace(';', ','))
-            .join('\n'),
+          text:
+            seriesData.seriesPostures
+              .map((posture) => posture.replace(';', ','))
+              .join('\n') + '\n',
           url: 'https://www.happyyoga.app/navigator/flows/practiceSeries',
         }
       : null
@@ -62,9 +63,15 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
           {/* <Typography variant="body1">
             {postureData ? postureData.description : seriesData?.description}
           </Typography> */}
-          <Button endIcon={<IosShareIcon />} onClick={handleShare}>
-            Share this {postureData ? 'Posture' : 'Series'}
-          </Button>
+          <IconButton
+            disableRipple
+            sx={{ color: 'primary.contrastText' }}
+            onClick={handleShare}
+            aria-label={`Share this ${postureData ? 'Posture' : 'Series'}`}
+          >
+            <IosShareIcon />
+            {/* Share this {postureData ? 'Posture' : 'Series'} */}
+          </IconButton>
         </>
       ) : (
         <Typography variant="body1">No data available to share.</Typography>
