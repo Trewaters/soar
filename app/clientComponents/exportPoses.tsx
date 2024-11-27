@@ -7,11 +7,13 @@ import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
 interface PostureShareButtonProps {
   postureData?: FullAsanaData | null
   seriesData?: FlowSeriesData | null
+  showDetails?: boolean
 }
 
 const PostureShareButton: React.FC<PostureShareButtonProps> = ({
   postureData = null,
   seriesData = null,
+  showDetails = false,
 }) => {
   const shareAsanaData = postureData
     ? {
@@ -69,14 +71,20 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
     <Box>
       {shareAsanaData ? (
         <>
-          {/* <Typography variant="h2">
-            {postureData
-              ? postureData.english_names.join(', ')
-              : seriesData?.seriesName}
-          </Typography> */}
-          {/* <Typography variant="body1">
-            {postureData ? postureData.description : seriesData?.description}
-          </Typography> */}
+          {showDetails && (
+            <>
+              <Typography variant="h2">
+                {postureData
+                  ? postureData.english_names.join(', ')
+                  : seriesData?.seriesName}
+              </Typography>
+              <Typography variant="body1">
+                {postureData
+                  ? postureData.description
+                  : seriesData?.description}
+              </Typography>
+            </>
+          )}
           <IconButton
             disableRipple
             sx={{ color: 'primary.contrastText' }}
