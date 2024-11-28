@@ -38,6 +38,7 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
       ></Image>
       <Typography
         variant="splashTitle"
+        textAlign={'center'}
         sx={{
           position: 'absolute',
           top: '30%', // Center vertically
