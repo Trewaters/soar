@@ -28,6 +28,7 @@ import Link from 'next/link'
 import MyMap from '@app/clientComponents/googleMaps'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import EditIcon from '@mui/icons-material/Edit'
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean
@@ -65,13 +66,16 @@ export default function UserDetails() {
     dispatch,
   } = UseUser()
 
-  const [expanded, setExpanded] = useState(false)
+  // const [expanded, setExpanded] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [profileImageMode, setProfileImageMode] = useState<
+    'active' | 'inactive' | 'edit'
+  >('active')
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded)
-  }
+  // const handleExpandClick = () => {
+  //   setExpanded(!expanded)
+  // }
 
   useEffect(() => {
     if (session?.user?.email && userData?.email !== session.user.email) {
@@ -80,6 +84,7 @@ export default function UserDetails() {
         payload: { ...userData, email: session.user.email },
       })
     }
+    setProfileImageMode('active')
   }, [session, dispatch, userData])
 
   if (!session) {
@@ -126,32 +131,32 @@ export default function UserDetails() {
 
   const membershipDate = new Date(userData?.createdAt).toLocaleDateString()
 
-  const handleShare = async () => {
-    const shareData = {
-      title: 'Happy Yoga',
-      text: `Check out ${userData.firstName} ${userData.lastName}! ${userData.headline}; ${userData.shareQuick}; ${userData.yogaStyle}; ${userData.yogaExperience};  ${userData.company}; ${userData.websiteURL}; ${userData.location};`,
-      url: window.location.href,
-    }
-    const resultPara = document.querySelector('.result')
+  // const handleShare = async () => {
+  //   const shareData = {
+  //     title: 'Happy Yoga',
+  //     text: `Check out ${userData.firstName} ${userData.lastName}! ${userData.headline}; ${userData.shareQuick}; ${userData.yogaStyle}; ${userData.yogaExperience};  ${userData.company}; ${userData.websiteURL}; ${userData.location};`,
+  //     url: window.location.href,
+  //   }
+  //   const resultPara = document.querySelector('.result')
 
-    try {
-      await navigator.clipboard.writeText(JSON.stringify(shareData))
-      // console.log('Content copied to clipboard')
+  //   try {
+  //     await navigator.clipboard.writeText(JSON.stringify(shareData))
+  //     // console.log('Content copied to clipboard')
 
-      if (navigator.share) {
-        await navigator.share(shareData)
-        // console.log('Content shared successfully')
-      } else {
-        // console.log('Web Share API not supported in this browser.')
-        alert('Link copied to clipboard. Share it manually!')
-      }
-    } catch (error) {
-      // console.error('Error sharing content:', error)
-      if (resultPara) {
-        resultPara.textContent = `Error: ${error}`
-      }
-    }
-  }
+  //     if (navigator.share) {
+  //       await navigator.share(shareData)
+  //       // console.log('Content shared successfully')
+  //     } else {
+  //       // console.log('Web Share API not supported in this browser.')
+  //       alert('Link copied to clipboard. Share it manually!')
+  //     }
+  //   } catch (error) {
+  //     // console.error('Error sharing content:', error)
+  //     if (resultPara) {
+  //       resultPara.textContent = `Error: ${error}`
+  //     }
+  //   }
+  // }
 
   return (
     <>
@@ -159,14 +164,6 @@ export default function UserDetails() {
         <Grid size={12} textAlign={'center'}>
           <Typography color="error">{error}</Typography>
         </Grid>
-      )}
-      {!session && (
-        <>
-          <Typography variant="h2">Sign In</Typography>
-          <Typography variant="body1">
-            Please sign in to view your profile.
-          </Typography>
-        </>
       )}
       {session && (
         <Box sx={{ flexGrow: 1, justifyItems: 'center' }}>
@@ -179,49 +176,83 @@ export default function UserDetails() {
               onSubmit={handleSubmit}
             >
               <Grid size={{ xs: 8 }}>
-                <Box>
-                  <Typography variant="h2" color="primary.main">
-                    Yoga Practitioner
-                  </Typography>
-                </Box>
+                <Typography variant="h2" color="primary.main">
+                  Yoga Practitioner
+                </Typography>
               </Grid>
-              <Grid size={{ xs: 4 }}>
-                <Box>
+              <Grid display={'flex'} alignItems={'center'} size={{ xs: 4 }}>
+                <Image
+                  src={'/icons/profile/leaf-profile.svg'}
+                  width={50}
+                  height={50}
+                  alt="Yoga Practitioner icon"
+                />
+              </Grid>
+
+              <Grid size={3}>
+                <Avatar
+                  sx={{
+                    bgcolor: red[500],
+                    width: { xs: '100%', md: '100%' },
+                    height: { xs: '69%', md: '81%' },
+                  }}
+                  aria-label="name initial"
+                  src={userData?.image}
+                >
+                  {!userData?.image ? (
+                    <Image
+                      src={'/icons/profile/profile-person.svg'}
+                      width={50}
+                      height={50}
+                      alt="Generic profile image icon"
+                    />
+                  ) : undefined}
+                </Avatar>
+                {profileImageMode === 'active' && (
                   <Image
-                    src={'/icons/profile/leaf-profile.svg'}
-                    width={100}
-                    height={100}
-                    alt="Yoga Practitioner icon"
+                    src={'/icons/profile/profile-image-active.svg'}
+                    alt="Active profile image icon"
+                    width={27}
+                    height={27}
+                    style={{
+                      position: 'relative',
+                      bottom: '30%',
+                      left: '80%',
+                      cursor: 'pointer',
+                    }}
                   />
-                </Box>
+                )}
+                {profileImageMode === 'inactive' && (
+                  <Image
+                    src={'/icons/profile/profile-image-inactive.svg'}
+                    width={50}
+                    height={50}
+                    alt="Inactive profile image icon"
+                  />
+                )}
+                {profileImageMode === 'edit' && (
+                  <Image
+                    src={'/icons/profile/profile-image-edit.svg'}
+                    width={50}
+                    height={50}
+                    alt="Edit profile image icon"
+                  />
+                )}
               </Grid>
-              <Grid size={2} sx={{ pt: 1 }}>
-                <Box>
-                  <Avatar
-                    sx={{ bgcolor: red[500] }}
-                    aria-label="name initial"
-                    src={userData?.image}
-                  >
-                    {!userData?.image ? (
-                      <Image
-                        src={'/icons/profile/profile-person.svg'}
-                        width={50}
-                        height={50}
-                        alt="Generic profile image icon"
-                      />
-                    ) : undefined}
-                  </Avatar>
-                </Box>
-              </Grid>
-              <Grid size={9} sx={{ pb: 4 }}>
-                <Box>
+              <Grid
+                size={9}
+                pt={2}
+                // display={'flex'}
+                // justifyContent={'flex-start'}
+              >
+                <Stack justifyContent={'center'}>
                   <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
                     {userData?.name ?? 'Yogi Name'}
                   </Typography>
                   <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
                     Member since {membershipDate ?? '6/9/2024'}
                   </Typography>
-                </Box>
+                </Stack>
                 {/* 
                 <Card>
                  

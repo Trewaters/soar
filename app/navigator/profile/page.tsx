@@ -1,4 +1,4 @@
-import { Box, Stack } from '@mui/material'
+import { Box } from '@mui/material'
 import { SessionProvider } from 'next-auth/react'
 import UserDetails from '@app/navigator/profile/UserDetails'
 import { auth } from '@auth'
@@ -15,9 +15,7 @@ export default async function Page() {
       marginTop={4}
     >
       <SessionProvider session={session}>
-        <Stack>
-          <UserDetails />
-        </Stack>
+        <UserDetails />
       </SessionProvider>
     </Box>
   )
