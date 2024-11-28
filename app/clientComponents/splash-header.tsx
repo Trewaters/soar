@@ -49,8 +49,6 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
           padding: '8px',
           borderRadius: '8px',
           overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          textTransform: 'uppercase',
         }}
       >
         {title}
