@@ -361,7 +361,11 @@ export default function Page() {
                     width={21}
                   ></Image>
                 </Stack>
-                <Typography variant="body1" sx={{ whiteSpace: 'pre-line' }}>
+                <Typography
+                  color="primary.contrastText"
+                  variant="body1"
+                  sx={{ whiteSpace: 'pre-line' }}
+                >
                   {singleSequence.description}
                 </Typography>
               </Box>
