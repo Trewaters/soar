@@ -115,7 +115,10 @@ export default function Page() {
           mt: 4,
         }}
       >
-        <Stack sx={{ marginX: 3, marginY: 3, mb: '1em' }}>
+        <Stack
+          spacing={2}
+          sx={{ marginX: 3, marginY: 3, mb: '1em', width: '100%' }}
+        >
           <SplashHeader
             src={'/icons/designImages/header-practice-sequence.png'}
             alt={'Practice Sequence'}
@@ -126,7 +129,7 @@ export default function Page() {
             link="/navigator/flows"
             onClick={toggleDrawer(!open)}
           />
-          <Stack sx={{ px: 4, pb: 2 }}>
+          <Stack sx={{ px: 2 }}>
             <Autocomplete
               disablePortal
               id="combo-box-series-search"
