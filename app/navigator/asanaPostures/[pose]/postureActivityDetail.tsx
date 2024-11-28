@@ -318,19 +318,23 @@ export default function PostureActivityDetail({
       </Box>
       {posture && FEATURES.SHOW_PRACTICE_VIEW_ASANA && (
         <ButtonGroup
-          variant="contained"
+          variant="outlined"
           aria-label="Basic button group"
-          sx={{ m: 2 }}
+          sx={{ mx: 2, display: 'flex', justifyContent: 'space-around' }}
         >
-          <IconButton disableRipple onClick={handleClick}>
-            <Image
-              src={yogaMatWoman}
-              alt="practice view"
-              width={24}
-              height={24}
-            />
-          </IconButton>
-          <PostureShareButton postureData={posture} />
+          <Stack sx={{ m: 2, border: '1px solid black', borderRadius: '12px' }}>
+            <IconButton disableRipple onClick={handleClick}>
+              <Image
+                src={yogaMatWoman}
+                alt="practice view"
+                width={24}
+                height={24}
+              />
+            </IconButton>
+          </Stack>
+          <Stack sx={{ m: 2, border: '1px solid black', borderRadius: '12px' }}>
+            <PostureShareButton postureData={posture} />
+          </Stack>
         </ButtonGroup>
       )}
     </Paper>

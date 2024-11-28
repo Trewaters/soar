@@ -10,6 +10,25 @@ interface PostureShareButtonProps {
   showDetails?: boolean
 }
 
+/**
+ * A React functional component that renders a button for sharing yoga posture or series data.
+ *
+ * @component
+ * @param {PostureShareButtonProps} props - The properties for the component.
+ * @param {object|null} props.postureData - The data for a single yoga posture. Default is null.
+ * @param {object|null} props.seriesData - The data for a series of yoga postures. Default is null.
+ * @param {boolean} props.showDetails - Flag to indicate whether to show detailed information. Default is false.
+ *
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @example
+ * // Example usage:
+ * <PostureShareButton
+ *   postureData={postureData}
+ *   seriesData={seriesData}
+ *   showDetails={true}
+ * />
+ */
 const PostureShareButton: React.FC<PostureShareButtonProps> = ({
   postureData = null,
   seriesData = null,
