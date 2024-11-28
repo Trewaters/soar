@@ -56,15 +56,11 @@ export default function Page() {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        mt: 4,
       }}
     >
-      <Stack
-        spacing={2}
-        sx={{ marginX: 3, marginY: 3, mb: '1em', width: 'fit-content' }}
-      >
+      <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
         <SplashHeader
-          src={'/images/practice-series-color.png'}
+          src={'/images/series/series-practice-splash-header.png'}
           alt={'Practice Series'}
           title="Practice Series"
         />
@@ -73,7 +69,7 @@ export default function Page() {
           link="/navigator/flows"
           onClick={handleInfoClick}
         />
-        <Stack sx={{ px: 2 }}>
+        <Stack sx={{ px: 4 }}>
           <Autocomplete
             disablePortal
             freeSolo={false}

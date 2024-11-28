@@ -30,13 +30,20 @@ const SubNavHeader: React.FC<SubNavHeaderProps> = ({
   ...props
 }) => {
   return (
-    <Stack direction={'row'} justifyContent={'space-between'}>
+    <Stack
+      direction={'row'}
+      justifyContent={'space-between'}
+      sx={{
+        marginTop: 4,
+        paddingLeft: 4,
+        paddingRight: 4,
+      }}
+    >
       <Button
         variant="text"
         href={link}
         LinkComponent="a"
         sx={{
-          my: 3,
           alignSelf: 'flex-start',
           color: 'primary.contrastText',
           '&:hover': {

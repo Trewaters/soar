@@ -129,7 +129,7 @@ export default function Page() {
             link="/navigator/flows"
             onClick={toggleDrawer(!open)}
           />
-          <Stack sx={{ px: 2 }}>
+          <Stack sx={{ px: 4 }}>
             <Autocomplete
               disablePortal
               id="combo-box-series-search"

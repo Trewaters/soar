@@ -194,10 +194,7 @@ export default function Page() {
           mb: 4,
         }}
       >
-        <Stack
-          spacing={2}
-          sx={{ marginX: 3, marginY: 3, mb: '1em', width: 'fit-content' }}
-        >
+        <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
           <SplashHeader
             src={'/icons/designImages/header-create-series.png'}
             alt={'Create Series'}
