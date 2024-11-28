@@ -21,7 +21,9 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
   return (
     <Box
       sx={{
-        display: 'contents',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         position: 'relative',
         boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
       }}
@@ -42,8 +44,6 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
         sx={{
           position: 'absolute',
           top: '30%', // Center vertically
-          display: 'flex',
-          alignSelf: 'center',
           color: 'primary.main',
           backgroundColor: 'navSplash.light',
           width: 'fit-content',
