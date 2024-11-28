@@ -6,11 +6,11 @@ import Link from 'next/link'
 import { Button, Stack, Typography } from '@mui/material'
 
 const links = [
-  {
-    name: 'Asana Postures',
-    href: '/navigator/asanaPostures',
-    icon: <WaterDropOutlinedIcon />,
-  },
+  // {
+  //   name: 'Asana Postures',
+  //   href: '/navigator/asanaPostures',
+  //   icon: <WaterDropOutlinedIcon />,
+  // },
   { name: 'Flows', href: '/navigator/flows', icon: <WhatshotIcon /> },
 ]
 
