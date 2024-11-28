@@ -55,9 +55,10 @@ export default function Page() {
           title="Asanas"
         />
         <Box height={'32px'} />
-        <PostureSearch posturePropData={posturePropData} />
-        {loading && (
+        {loading ? (
           <CircularProgress sx={{ backgroundColor: 'transparent' }} />
+        ) : (
+          <PostureSearch posturePropData={posturePropData} />
         )}
         {error && <Typography>Error: {error}</Typography>}
         <Button
