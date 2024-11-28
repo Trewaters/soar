@@ -206,7 +206,7 @@ export default function Page() {
             onClick={toggleDrawer(!open)}
           />
           {FEATURES.SHOW_CREATE_SERIES && (
-            <Box sx={{ px: 2 }}>
+            <Box sx={{ px: 4 }}>
               <FormControl sx={{ width: '100%', mb: 3 }}>
                 <AutocompleteComponent
                   options={postures.sort((a, b) =>
