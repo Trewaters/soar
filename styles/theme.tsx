@@ -139,7 +139,7 @@ export const theme = createTheme({
     caption: { fontSize: '0.9rem' },
     label: { fontSize: '1.8rem' },
     splashTitle: {
-      fontSize: '2rem', // approx. 64px
+      fontSize: '3rem', // approx. 64px
       fontWeight: '900',
       letterSpacing: '0.1rem',
       wordSpacing: '0.1rem',
