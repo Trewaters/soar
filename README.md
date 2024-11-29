@@ -16,7 +16,7 @@ A specialized yoga exercise app that empowers users to add, view, and track thei
 
 ### Why Contribute?
 
-Improve a meaningful app that helps yogis worldwide. Collaborate on a [NextJS](https://nextjs.org/docs) tech stack, using Material MUI components, MongoDB, Prisma ODBC, Auth.js v5 Authentication (Google, Github, Twitter X), Google Maps API, and Google Analytics. Test written in Jest and Cypress.
+Improve a meaningful app that helps yogis worldwide. Collaborate on a [NextJS](https://nextjs.org/docs) tech stack, using [Material MUI] components, [MongoDB](https://www.mongodb.com/), [Prisma](https://www.prisma.io/) ODBC, [Auth.js](https://authjs.dev/getting-started/migrating-to-v5) v5 Authentication (Google, Github, Twitter X), [Google Maps](https://developers.google.com/maps/) API, and [Google Analytics](https://marketingplatform.google.com/about/analytics/). Test written in [Jest](https://jestjs.io/) and [Cypress](https://www.cypress.io/).
 
 ## Getting Started
 
