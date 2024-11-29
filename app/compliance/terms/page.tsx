@@ -12,8 +12,8 @@ const TermsOfService: React.FC = () => {
             {TermsService.LAST_UPDATED} [Date]
           </Typography>
           <Typography variant="body1">
-            Welcome to Happy Yoga Soar. These terms and conditions outline the
-            rules and regulations for the use of Happy Yoga Soar&apos;s Website,
+            Welcome to Uvuyoga Soar. These terms and conditions outline the
+            rules and regulations for the use of Uvuyoga Soar&apos;s Website,
             located at [Your Website URL].
           </Typography>
         </Stack>

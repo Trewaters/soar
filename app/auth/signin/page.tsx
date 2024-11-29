@@ -14,7 +14,7 @@ export default async function SignInPage() {
       </nav>
       <Stack flexDirection={'row'} justifySelf={'center'} alignItems={'center'}>
         <Stack>
-          <Typography variant={'subtitle1'}>A Happy Yoga App</Typography>
+          <Typography variant={'subtitle1'}>A Uvuyoga App</Typography>
         </Stack>
         <Stack>
           <Image

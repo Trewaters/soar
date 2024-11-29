@@ -10,7 +10,7 @@ Welcome everyone! Hello developers, qa team, app testers, yoga practitioners, an
 
 Exercise app for yoga beginners and experts. Created by a yoga instructor for yogis.
 
-### What is Happy Yoga
+### What is Uvuyoga
 
 A specialized yoga exercise app that empowers users to add, view, and track their yoga practices. The app's future vision includes supporting yoga entrepreneurs by providing tools for managing their businesses. These features will include event scheduling, hosting online classes, and integrated payment processing to streamline their operations.
 

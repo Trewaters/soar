@@ -15,7 +15,7 @@ declare global {
 }
 
 export const metadata: Metadata = {
-  title: 'Happy Yoga',
+  title: 'Uvuyoga',
   description: 'Soar like a leaf on the wind!',
 }
 

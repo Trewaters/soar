@@ -3,18 +3,18 @@ export abstract class TermsService {
   public static readonly LAST_UPDATED = 'Last updated:'
   public static readonly TERMS_HEADING = 'Terms'
   public static readonly TERMS_DETAILS =
-    'By accessing this website we assume you accept these terms and conditions. Do not continue to use Happy Yoga Soar if you do not agree to take all of the terms and conditions stated on this page.'
+    'By accessing this website we assume you accept these terms and conditions. Do not continue to use Uvuyoga Soar if you do not agree to take all of the terms and conditions stated on this page.'
   public static readonly COOKIES_HEADING = 'Cookies'
   public static readonly COOKIES_DETAILS =
-    "We employ the use of cookies. By accessing Happy Yoga Soar, you agreed to use cookies in agreement with the Happy Yoga Soar's Privacy Policy."
+    "We employ the use of cookies. By accessing Uvuyoga Soar, you agreed to use cookies in agreement with the Uvuyoga Soar's Privacy Policy."
 
   public static readonly LICENSE_HEADING = 'License'
   public static readonly LICENSE_DETAILS =
-    'Unless otherwise stated, Happy Yoga Soar and/or its licensors own the intellectual property rights for all material on Happy Yoga Soar. All intellectual property rights are reserved. You may access this from Happy Yoga Soar for your own personal use subjected to restrictions set in these terms and conditions.'
+    'Unless otherwise stated, Uvuyoga Soar and/or its licensors own the intellectual property rights for all material on Uvuyoga Soar. All intellectual property rights are reserved. You may access this from Uvuyoga Soar for your own personal use subjected to restrictions set in these terms and conditions.'
 
   public static readonly USER_COMMENTS_HEADING = 'User Comments'
   public static readonly USER_COMMENTS_DETAILS =
-    'Certain parts of this website offer the opportunity for users to post and exchange opinions and information in certain areas of the website. Happy Yoga Soar does not filter, edit, publish or review Comments prior to their presence on the website. Comments do not reflect the views and opinions of Happy Yoga Soar, its agents and/or affiliates. Comments reflect the views and opinions of the person who post their views and opinions.'
+    'Certain parts of this website offer the opportunity for users to post and exchange opinions and information in certain areas of the website. Uvuyoga Soar does not filter, edit, publish or review Comments prior to their presence on the website. Comments do not reflect the views and opinions of Uvuyoga Soar, its agents and/or affiliates. Comments reflect the views and opinions of the person who post their views and opinions.'
 
   public static readonly HYPERLINK_HEADING = 'Hyperlinking to our Content'
   public static readonly HYPERLINK_DETAILS =

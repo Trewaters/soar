@@ -133,7 +133,7 @@ export default function UserDetails() {
 
   // const handleShare = async () => {
   //   const shareData = {
-  //     title: 'Happy Yoga',
+  //     title: 'Uvuyoga',
   //     text: `Check out ${userData.firstName} ${userData.lastName}! ${userData.headline}; ${userData.shareQuick}; ${userData.yogaStyle}; ${userData.yogaExperience};  ${userData.company}; ${userData.websiteURL}; ${userData.location};`,
   //     url: window.location.href,
   //   }
