@@ -1,196 +1,109 @@
-# Soar with Happy Yoga, like a leaf on the wind.
+# Uvuyoga
+
+_"Soar like a leaf on the wind!"_
 
 version 1.1.0 or [version badge](https://badge.fury.io/)
 
-App used to find and track Yoga practice. Find poses, create flows, and track progress. For beginners and experts alike. Created by a yoga instructor for yoga instructors and students.
+Welcome everyone! Hello developers, qa team, app testers, yoga practitioners, and app users.
 
-Found yoga poses [here](https://www.pocketyoga.com/pose/)
+## Overview
+
+Exercise app for yoga beginners and experts. Created by a yoga instructor for yogis.
+
+### What is Happy Yoga
+
+A specialized yoga exercise app that empowers users to add, view, and track their yoga practices. The app's future vision includes supporting yoga entrepreneurs by providing tools for managing their businesses. These features will include event scheduling, hosting online classes, and integrated payment processing to streamline their operations.
+
+### Why Contribute?
+
+Improve a meaningful app that helps yogis worldwide. Collaborate on a [NextJS](https://nextjs.org/docs) tech stack, using Material MUI components, MongoDB, Prisma ODBC, Auth.js v5 Authentication (Google, Github, Twitter X), Google Maps API, and Google Analytics. Test written in Jest and Cypress.
 
 ## Getting Started
 
-Looking for developers, testers, practitioners, and users.
+### Who Should Use This App?
 
-### What the app should do?
+- Open-source contributors.
+- Yoga enthusiasts.
 
-#### App Sections
+### Sections of the App:
 
-**Asana Postures**
+_Asanas_
 
-- View Yoga postures with details about the posture like name, description, etc.
-- Create Yoga postures.
+- View Yoga postures details.
+- Create Yoga posture.
 
-**Flows**
+_Flows_
 
-- Series are multiple asanas done in order. Series are smaller pieces that combine to make a Full Sequences.
-- View series
-- View sequences
-- Create series
-- Create sequences
+Series are multiple asanas done in order. Series are smaller pieces that combine to make a Full Sequences.
 
-**Meditaiton**
+- Practice series
+- Practice sequences
+- Create series, must have a user profile to enable this feature.
+- Create sequences, must have a user profile to enable this feature.
 
-- TBD
+_Profile_
 
-**Mantra**
+- View, Edit user details.
+- Profile image from social login
 
-- TBD
+_8 Limb Path_
 
-**Breathwork**
+- Reference definitions for the 8 limbs of yoga.
 
-- TBD
+## How to Contribute?
 
-**Yoga Journal**
+_Ways to Help:_
 
-- TBD
+- Frontend Design: Make the UI intuitive and visually appealing.
+- Yoga Pose Images: Provide illustrations for various poses.
+- Bug Fixes: Help identify and fix bugs.
+- Testing: Write or improve Jest unit tests.
+- Documentation: Enhance this ReadMe and other app docs.
+- For Editing style guide use the [Bishop Fox - Cybersecurity Style Guide - v1.1] (https://www.bishopfox.com/blog/2018/02/hello-world-introducing-the-bishop-fox-cybersecurity-style-guide/)
 
-#### Planner page
+📖 READ [CONTRIBUTING.md](CONTRIBUTING.md) for our code of conduct, [based on this](https://gist.github.com/PurpleBooth/b24679402957c63ec426).
 
-- [in-progress] Goal: Goals (long term),
-- [in-progress] Today: Today's workout (present day),
-- [in-progress] History: Historical (past) practice
+🤩 Open an issue for any questions or suggestions.
 
-#### 8 Limb Path
+### "Pushing good code"
 
-- Reference area with definitions for the 8 limbs of yoga. Meant to be a resource for more information.
+**Q:** **_"Am I pushing good code?"_**
 
-#### Users
+_***Answer yes*** to the list below and you are pushing GREAT CODE!_
 
-- Login
-- Logout
-- View User details, profile image from social login.
-- Edit User details, profile image from social login.
+1. `npm run dev` and there aren't any errors in the server terminal or client (web browser) console.
+2. `npm run build` no breaking build errors. Warnings are acceptable but should be minimized. Errors are not acceptable.
+3. `npm run cover` to make sure no unit test are failing. Coverage goal is (A) 100%, (B) 90%, (C) 80%.
+4. Push `develop` branch to hosting. Verify that the build was Successful and show **Ready** in vercel hosting. Then check how the app works on the web. Test with desktop and mobile device. Again checking the client (web browser) console for errors. "Click things and navigate around the app" especially any features your code touches.
 
-### Why is this app useful?
-
-Used as an aid in anyones active yoga practice. This app won't get you started doing yoga but if you are a yogi, instructor, or student this app is for you.
-
-## CREDIT
-
-[Bishop Fox - Cybersecurity Style Guide - v1.1] (https://www.bishopfox.com/blog/2018/02/hello-world-introducing-the-bishop-fox-cybersecurity-style-guide/)
-
-### Built With
-
-- This project was generated with [NextJS](https://nextjs.org/docs)
-- Material MUI
-- MongoDB
-- Prisma
-- Auth.js v5 (Google, Github, Twitter X)
-- Google APIs
-- Google Analytics
-
-## CONTRIBUTIONS
-
-Solo project so far. Code and graphic design contributors are welcome and encouraged to help.
-
-**Please read** [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to me. (I will copy their instructions when I get time, but for now ditto to what they say)
-
-### How to Contribute?
-
-I NEED HELP WITH...
-
-1. **Frontend design**: Designing look and feel for pages is not my strength. I would love help laying out pages better. _Make the app pretty!_
-2. **Yoga Pose images**: I need images for the yoga poses. It should be a set of images.
-3. **Fix Bugs**: See something wrong fix it or create an issue identifying how to reproduce the bug.
-4. **Add Unit Test**: Using Jest for testing. Write test for anything that isn't covered currently.
-
-## Authors
-
-- **Tre' Grisby** - _Initial work_ - [trewaters](https://gitconnected.com/trewaters)
-
-See also the list of [contributors](https://github.com/) who participated in this project.
-
-## License
-
-This project is licensed under the _GNU Affero General Public License v3.0_ - see the [LICENSE.md](LICENSE.md) file for details.
-
-## Acknowledgments
+### Acknowledgments
 
 - "I tip my hat to anyone whose code was used!" npm gives me a lot of people to thank!
 - Special thank you to my mom, wife, and my daughters! Without their love and support this would have gone nowhere.
 - Gratitude is the attitude!
 
-## Journal
+## Developer Guide
 
-- I started this in July 2023. I hope to have a MVP by the end of the year. I am working on this in my spare time, so it may take longer. I am also learning NextJS as I go, so that will slow me down as well.
-- Soon I will be releasing a version 1 of the app. It snuck up on me. I have actually done what I marked as a milestone for v1! Congrats to me!
+### Prerequesites:
 
-### Current Goals
+Node.js >=18, npm, MongoDB.
 
-(2024-09-17 16:55:11) update Goals for MVP and beyond +1.
+### Setup Instructions:
 
-- **Record practice**, record personal yoga practice in app.
+- Clone the repository. `git clone https://github.com/Trewaters/soar.git`
+- Install dependencies: `npm install`
+- Set up a local MongoDB instance or use MongoDB Atlas.
+- Start the development server and local DB instance: `npm run concurrent`
 
-## Milestones
+Dev tip: sometimes I need to clear my npm cache so the library versions are installed correctly.
 
-(2024-09-17 16:55:34) update milestones so they match my current notes.
-
-- [x] 1.0.0 - MVP ( 2 sections - each with material, "Flows" and "Asana Postures").
-- [x] 2.0.0 - Create User Profiles (connect to db)
-- [ ] 2.1.0 - Routine/Practice Planner. Allow user to track progress and goals.
-- [ ] x.x.0 - Allow User Profiles to save their progress (connect to db)
-- [ ] x.x.0 - User Profile Customizations (Connect "Planner" buttons)
-- [ ] x.x.0 - User Profile Customizations
-- [ ] x.x.0 - Users can Add more poses, etc.
-- [x] x.x.0 - Users can create custom flows
-- [ ] x.x.0 - Users can create journal about Meditations
-- [ ] x.x.0 - Users can create custom Mantras
-- [ ] x.x.0 - Add section: Meditation, Mantra, Breathwork
-
-### Known Bugs
-
-**TITLE (as of DATE)**
-
-**Twitter Auth Forbidden (as of 2024-07-26 16:18:25)**
-
-Currently setup to use v5 of Auth.js. Provider must be tested from Vercel hosting due to TwitterX terms of use. When trying to login through provider I get a 403 error in the browser. No errors showing in Vercel. Just has redirect log to Twitter auth.
-
-```
-Jul 26 16:13:09.71
-POST
-302
-soar-pqzo6upmv-trewaters-projects.vercel.app
-/auth/signin/twitter
+```bash
+npm cache clean --force
 ```
 
-What you are experiencing is a feature 😉 ! Open a [github issue](https://github.com/Trewaters/soar/issues) if you disagree.
+### MongoDB instructions
 
-## Branches
-
-1. [`main`](https://soar-main.vercel.app/) – mostly stable branch. Used for production deployment (publised to Vercel).
-2. [`develop`](https://soar-develop.vercel.app/) - active work that is merged into main. Use this branch to check builds and pre-production deployment issues. Any work I started is a branch created from develop.
-3. [`version_stable`](https://soar-jade.vercel.app/) - stable version this is the stable build of the most current version I am working on.
-4. Feature/… - features I work on that could go merge into develop when complete.
-   `version_010` - release version 0.1.0.
-
-### Current internal "feature" branches
-
-I create branches with the name of the feature I plan to work on. This way I keep my work seperated. If I don't finish I can come back to it, but it won't interfere with any other work I want to do on the app. These have been created organically and are due to change without notice because I am currently working alone.
-
-- _"feature/app-theme-and-style":_ Update the app theme and style. Use professional themes as influence. [Link to "Style Guide" page](http://localhost:3000/styleGuide)
-- _"feature/flow":_ Flow portions of the app. Views (Practice view), edit, create Asanas, Series and Sequences.
-- _"feature/auth":_ Develop authentication, user roles, general app security, etc.
-- _"feature/nav":_ Application navigation elements
-- _"feature/profile":_ Work on the yogi user profile. Allow view, edit and shareable link of profile data.
-- _"feature/posture-cards":_ Work on asana features. Allow view, edit, and create postures.
-- _"feature/core":_ Core work in the app like data connections, env variables, etc.
-
-The "version" branches are locked after release.
-
-I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: _"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0._
-
-## DEVELOPER SECTION
-
-### Prerequesites
-
-Prereqs to work on this project..._(wip)_
-
-### Installing
-
-#### MongoDB instructions
-
-Installed MongoD locally for development purposes. Use Cloud services for production.
-
-**Details**
+Install MongoD locally for development purposes. Use Cloud services for production.
 
 install location:
 
@@ -202,14 +115,14 @@ install location:
 mongod --version
 ```
 
-**Start MongoDB locally**
+_Start MongoDB locally_
 
 1. Start app: `npm run dev`
 2. Run with replica set in config: `mongod --config C:/data/config/mongod.conf`
 
-**mongod.conf**
+_mongod.conf_
 
-details of my current config file as of 2024-07-20 06:55:53.
+Example details for my current config file.
 
 ```
 # mongod.conf
@@ -237,7 +150,7 @@ replication:
   replSetName: "rs0"
 ```
 
-**Backup DB**
+_Backup DB_
 
 [MongoDump](https://www.mongodb.com/docs/database-tools/mongodump/) creates files that can be used to restore database with Mongorestore.
 
@@ -247,7 +160,7 @@ mongodump --uri="mongodb://localhost:27017" --out=C:/data/mongoDumpLocalhost
 mongodump --uri="mongodb+srv://<USERNAME>:<PASSWORD>@<YOUR.DETAILS.mongodb.net>/yogadb?replicaSet=<REPLICA_SET_ID>&retryWrites=true&w=majority" --out=C:/data/mongoDumpProduction
 ```
 
-**Restore DB**
+_Restore DB_
 
 MongoRestore restores files created by mongoDump to a MongoDB instance. This command resotres from a directory to the local mongod instance.
 
@@ -255,7 +168,7 @@ MongoRestore restores files created by mongoDump to a MongoDB instance. This com
 mongorestore  C:/data/mongoDump/
 ```
 
-**Export collection**
+_Export collection_
 
 ```
 mongoexport --collection=<coll> <options> <connection-string> --jsonArray
@@ -281,17 +194,31 @@ mongoexport --collection=users mongodb://localhost:27017/yogaDBSandbox --out=C:/
 
 ### Tests
 
-Using Jest.
+_Jest unit test_
+
+- Jest for unit tests. Run: npm run test.
+- End-to-end tests (WIP).
 
 My current excuse is to wait until MVP before creating test around features.
 
-..._(wip)_
+_Running unit tests_
 
-### Style Guide (look & feel)
+execute the unit tests via **Jest** [Jest](https://jestjs.io/).
 
-[Style Guide](http://localhost:3000/styleGuide) for Happy Yoga. View this page to see fonts, colors, and letter sizing across the website.
+_Running end-to-end tests_
 
-### Coding Style
+execute the end-to-end tests via **?Test Kit** [Protractor](http://www.protractortest.org/).
+
+Originally Found yoga poses [here](https://www.pocketyoga.com/pose/). Currently used for test data. Final version of the application will have user generated data for postures.
+
+### Visual/UI Style Guide
+
+View the style guide page to see fonts, colors, and letter sizing across the website. Includes some buttons and common components.
+
+[dev Style Guide](http://localhost:3000/styleGuide)
+[prod Style Guide](https://www.happyyoga.app/styleGuide)
+
+### Coding Style Guide
 
 1. Prettier
 2. Eslint
@@ -300,7 +227,7 @@ My current excuse is to wait until MVP before creating test around features.
 
 **Deployed on Vercel**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+An easy way to deploy your Next.js app is with [Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
@@ -316,23 +243,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - `SECURITY`: in case of vulnerabilities.
 - `AUDIT`: code clean up. Carefully removing unnecessary files.
 
-### Development server
-
-First, run the development server:
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-Dev tip: sometimes I need to clear my npm cache so the versions are installed correctly
-
-```bash
-npm cache clean --force
-```
-
-**Prisma Databse**
+### Prisma Database
 
 Start using Prisma Client in Node.js (See: https://pris.ly/d/client)
 
@@ -362,28 +273,57 @@ This is failing for mongodb at the moment (2024-08-09 06:22:38)
 npm exec prisma migrate dev
 ```
 
-### Running unit tests
+## Authors
 
-execute the unit tests via **Jest** [Jest](https://jestjs.io/).
+- **Tre' Grisby** - _Initial work_ - [trewaters](https://gitconnected.com/trewaters)
 
-### Running end-to-end tests
+See also the list of [contributors](https://github.com/) who participated in this project.
 
-execute the end-to-end tests via **?Test Kit** [Protractor](http://www.protractortest.org/).
+## License
 
-### Linting
+This project is licensed under the _GNU Affero General Public License v3.0_ - see the [LICENSE.md](LICENSE.md) file for details.
 
-1. Eslint rules
+### Known Bugs
 
-### "Pushing good code"
+**TITLE (as of DATE)**
 
-QUESTION: "Am I pushing good code?"
+**Twitter Auth Forbidden (as of 2024-07-26 16:18:25)**
 
-_If you *Answer yes* to everything on the list below then you are pushing GREAT CODE!_
+Currently setup to use v5 of Auth.js. Provider must be tested from Vercel hosting due to TwitterX terms of use. When trying to login through provider I get a 403 error in the browser. No errors showing in Vercel. Just has redirect log to Twitter auth.
 
-1. `npm run dev` and there aren't any errors in the server terminal or client (web browser) console.
-2. `npm run build` no breaking build errors. Warnings are acceptable but should be minimized. Errors are not acceptable.
-3. `npm run cover` to make sure no unit test are failing. Coverage goal is (A) 100%, (B) 90%, (C) 80%.
-4. Push `develop` branch to hosting. Verify that the build was Successful and show **Ready** in vercel hosting. Then check how the app works on the web. Test with desktop and mobile device. Again checking the client (web browser) console for errors. "Click things and navigate around the app" especially any features your code touches.
+```
+Jul 26 16:13:09.71
+POST
+302
+soar-pqzo6upmv-trewaters-projects.vercel.app
+/auth/signin/twitter
+```
+
+What you are experiencing is a feature 😉 ! Open a [github issue](https://github.com/Trewaters/soar/issues) if you disagree.
+
+## Branching Strategy
+
+1. [`main`](https://soar-main.vercel.app/): production ready, mostly stable branch. Used for production deployment (publised to Vercel).
+2. [`develop`](https://soar-develop.vercel.app/): active development, active work that is merged into main. Use this branch to check builds and pre-production deployment issues. Any work I started is a branch created from develop.
+3. [`version_stable`](https://soar-jade.vercel.app/) - stable version this is the stable build of the most current version I am working on.
+4. Feature branches: `feature/<feature-name>` - features I work on that could go merge into develop when complete.
+   `version_010` - release version 0.1.0.
+
+### Current internal "feature" branches
+
+I create branches with the name of the feature I plan to work on. This way I keep my work seperated. If I don't finish I can come back to it, but it won't interfere with any other work I want to do on the app. These have been created organically and are due to change without notice because I am currently working alone.
+
+- _"feature/app-theme-and-style":_ Update the app theme and style. Use professional themes as influence. [Link to "Style Guide" page](http://localhost:3000/styleGuide)
+- _"feature/flow":_ Flow portions of the app. Views (Practice view), edit, create Asanas, Series and Sequences.
+- _"feature/auth":_ Develop authentication, user roles, general app security, etc.
+- _"feature/nav":_ Application navigation elements
+- _"feature/profile":_ Work on the yogi user profile. Allow view, edit and shareable link of profile data.
+- _"feature/posture-cards":_ Work on asana features. Allow view, edit, and create postures.
+- _"feature/core":_ Core work in the app like data connections, env variables, etc.
+
+The "version" branches are locked after release.
+
+I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: _"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0._
 
 ## TO DO
 
