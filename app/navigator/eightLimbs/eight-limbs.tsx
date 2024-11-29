@@ -23,30 +23,6 @@ export default function EightLimbs() {
     <>
       <Typography variant="h2">Eight Limbs</Typography>
       <List>
-        <ListItem>
-          <ListItemText primary="Niyama" secondary="Observances" />
-          <ListItemIcon>
-            <FlagIcon />
-          </ListItemIcon>
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="Yama" secondary="Moral Restraints" />
-          <ListItemIcon>
-            <MediationIcon />
-          </ListItemIcon>
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="Pranayama" secondary="Breath Control" />
-          <ListItemIcon>
-            <AirIcon />
-          </ListItemIcon>
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="Dharana" secondary="Concentration" />
-          <ListItemIcon>
-            <AdjustIcon />
-          </ListItemIcon>
-        </ListItem>
         <ListItem
           sx={
             {
@@ -83,6 +59,30 @@ export default function EightLimbs() {
               <WaterDropOutlinedIcon />
             </ListItemIcon>
           </ListItemButton>
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Niyama" secondary="Observances" />
+          <ListItemIcon>
+            <FlagIcon />
+          </ListItemIcon>
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Yama" secondary="Moral Restraints" />
+          <ListItemIcon>
+            <MediationIcon />
+          </ListItemIcon>
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Pranayama" secondary="Breath Control" />
+          <ListItemIcon>
+            <AirIcon />
+          </ListItemIcon>
+        </ListItem>
+        <ListItem>
+          <ListItemText primary="Dharana" secondary="Concentration" />
+          <ListItemIcon>
+            <AdjustIcon />
+          </ListItemIcon>
         </ListItem>
         <ListItem>
           <ListItemText primary="Dhyana" secondary="Meditation" />
