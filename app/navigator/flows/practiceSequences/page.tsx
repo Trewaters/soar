@@ -348,7 +348,12 @@ export default function Page() {
                   />
                   <Box
                     className={'journal'}
-                    sx={{ marginTop: '32px', p: 4, color: 'primary.main' }}
+                    sx={{
+                      marginTop: '32px',
+                      p: 4,
+                      color: 'primary.main',
+                      backgroundColor: 'navSplash.dark',
+                    }}
                   >
                     <Stack flexDirection={'row'} alignItems={'center'}>
                       <Typography variant="h3" sx={{ mr: 2 }}>
