@@ -346,32 +346,31 @@ export default function Page() {
                     page={page}
                     onChange={handleChange}
                   />
+                  <Box
+                    className={'journal'}
+                    sx={{ marginTop: '32px', p: 4, color: 'primary.main' }}
+                  >
+                    <Stack flexDirection={'row'} alignItems={'center'}>
+                      <Typography variant="h3" sx={{ mr: 2 }}>
+                        Description
+                      </Typography>
+                      <Image
+                        src={'/icons/flows/leaf-3.svg'}
+                        alt={'leaf icon'}
+                        height={21}
+                        width={21}
+                      ></Image>
+                    </Stack>
+                    <Typography
+                      color="primary.contrastText"
+                      variant="body1"
+                      sx={{ whiteSpace: 'pre-line' }}
+                    >
+                      {singleSequence.description}
+                    </Typography>
+                  </Box>
                 </Stack>
               ) : null}
-
-              <Box
-                className={'journal'}
-                sx={{ marginTop: '32px', p: 4, color: 'primary.main' }}
-              >
-                <Stack flexDirection={'row'} alignItems={'center'}>
-                  <Typography variant="h3" sx={{ mr: 2 }}>
-                    Description
-                  </Typography>
-                  <Image
-                    src={'/icons/flows/leaf-3.svg'}
-                    alt={'leaf icon'}
-                    height={21}
-                    width={21}
-                  ></Image>
-                </Stack>
-                <Typography
-                  color="primary.contrastText"
-                  variant="body1"
-                  sx={{ whiteSpace: 'pre-line' }}
-                >
-                  {singleSequence.description}
-                </Typography>
-              </Box>
             </React.Fragment>
           </Stack>
         </Stack>
