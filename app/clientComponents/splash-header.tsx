@@ -47,7 +47,8 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
           color: 'primary.main',
           backgroundColor: 'navSplash.light',
           width: 'fit-content',
-          padding: '8px',
+          px: 2,
+          py: 1,
           borderRadius: '8px',
           overflow: 'hidden',
         }}
