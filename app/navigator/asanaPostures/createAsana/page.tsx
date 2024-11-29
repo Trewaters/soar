@@ -20,6 +20,7 @@ export default function Page() {
     breath_direction_default,
     preferred_side,
     sideways,
+    created_by,
   } = state.postures
   const [formData, setFormData] = useState<{
     sort_english_name: string
@@ -30,6 +31,7 @@ export default function Page() {
     breath_direction_default: string
     preferred_side: string
     sideways: string
+    created_by: string
   }>({
     sort_english_name: '',
     english_names: [],
@@ -39,6 +41,7 @@ export default function Page() {
     breath_direction_default: '',
     preferred_side: '',
     sideways: '',
+    created_by: 'alpha users',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,6 +71,7 @@ export default function Page() {
       breath_direction_default,
       preferred_side,
       sideways,
+      created_by: session?.user?.email ?? 'unknown',
     }
     dispatch({ type: 'SET_POSTURES', payload: updatedAsana })
 
@@ -101,6 +105,7 @@ export default function Page() {
         breath_direction_default: '',
         preferred_side: '',
         sideways: '',
+        created_by: 'alpha users',
       })
     }
   }

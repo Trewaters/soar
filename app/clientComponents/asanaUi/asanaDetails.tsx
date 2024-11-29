@@ -24,7 +24,7 @@ export default function AsanaDetails(props: AsanaDetailsProps) {
       }}
       alignSelf={'center'}
     >
-      <Stack direction={'row'}>
+      <Stack direction={'row'} display={'flex'} alignItems={'center'}>
         <Typography
           variant="subtitle1"
           sx={{

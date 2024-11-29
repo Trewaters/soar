@@ -12,6 +12,7 @@ export async function POST(request: Request) {
     breath_direction_default,
     preferred_side,
     sideways,
+    created_by,
   } = await request.json()
 
   try {
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
         sideways,
         created_on: new Date().toISOString(),
         updated_on: null,
-        created_by: 'alpha users',
+        created_by,
       },
     })
     return Response.json({ message: 'Asana posture Data saved' })

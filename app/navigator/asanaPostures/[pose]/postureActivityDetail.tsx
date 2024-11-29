@@ -95,6 +95,7 @@ export default function PostureActivityDetail({
     <Paper
       sx={{
         mt: '-2.2px',
+        backgroundColor: 'navSplash.dark',
       }}
     >
       <Box
