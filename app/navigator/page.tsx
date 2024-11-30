@@ -5,8 +5,15 @@ import { Box, Typography } from '@mui/material'
 export default function Page() {
   return (
     <>
-      <Box textAlign="center" sx={{ marginTop: 4 }}>
-        <Typography variant="body1">Like a leaf on the Wind</Typography>
+      <Box
+        textAlign="center"
+        sx={{ marginTop: 4 }}
+        role="main"
+        aria-labelledby="page-title"
+      >
+        <Typography variant="body1" id="page-title">
+          Like a leaf on the Wind
+        </Typography>
         <CurrentTime />
       </Box>
       <TabHeader />
