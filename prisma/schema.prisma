@@ -68,6 +68,7 @@ model ProviderAccount {
   scope             String?
   id_token          String?
   session_state     Json?
+  credentials_password       String?
 
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt

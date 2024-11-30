@@ -3,9 +3,12 @@ import { Box, Button, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
 import { signIn, providerMap, signOut, auth } from '@auth'
-import Link from 'next/link'
+import { AuthError } from '@node_modules/next-auth'
+import { redirect } from '@node_modules/next/navigation'
 
-export default async function SignInPage() {
+export default async function SignInPage(props: {
+  searchParams: { callbackUrl: string | undefined }
+}) {
   const session = await auth()
   return (
     <>
@@ -14,7 +17,7 @@ export default async function SignInPage() {
       </nav>
       <Stack flexDirection={'row'} justifySelf={'center'} alignItems={'center'}>
         <Stack>
-          <Typography variant={'subtitle1'}>A Uvuyoga App</Typography>
+          <Typography variant={'subtitle1'}>An Uvuyoga App</Typography>
         </Stack>
         <Stack>
           <Image
@@ -36,18 +39,36 @@ export default async function SignInPage() {
             borderRadius: '12px',
           }}
         >
-          {/* 
-          // ! add credentials once it is correctly set up
-           <form
+          <Box
+            sx={{ pt: 4, pl: 4 }}
+            display={'flex'}
+            flexDirection={'column'}
+            alignItems={'flex-start'}
+          >
+            <Typography variant="h2">Welcome back!</Typography>
+            <Typography variant="body1" component="p">
+              We&apos;re happy you&apos;re here!
+            </Typography>
+          </Box>
+
+          <Stack
+            display={'flex'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            sx={{ mt: 4 }}
+          >
+            <form
               action={async (formData) => {
                 'use server'
                 // eslint-disable-next-line no-useless-catch
                 try {
                   await signIn('credentials', formData)
                 } catch (error) {
-                  // if (error instanceof AuthError) {
-                  //   return redirect(`${SIGNIN_ERROR_URL}?error=${error.type}`)
-                  // }
+                  if (error instanceof AuthError) {
+                    return redirect(
+                      `${process.env.SIGNIN_ERROR_URL}?error=${error.type}`
+                    )
+                  }
                   throw error
                 }
               }}
@@ -66,96 +87,60 @@ export default async function SignInPage() {
                   </label>
                 </Stack>
               </Stack>
-              <input type="submit" value="Sign In" />
-            </form> 
- */}
-          <Box
-            sx={{ p: 4 }}
-            display={'flex'}
-            flexDirection={'column'}
-            alignItems={'flex-start'}
-          >
-            {!session && (
-              <>
-                <Typography variant="h2">Welcome back!</Typography>
-                <Typography variant="body1" component="p">
-                  We&apos;re happy you&apos;re here.
-                </Typography>
-              </>
-            )}
-            {session && (
-              <>
-                <Typography
-                  color="success.main"
-                  alignSelf={'center'}
-                  variant="h2"
-                >
-                  You&apos;re signed in!
-                </Typography>
-                <Typography variant="body1" component="p">
-                  If you don&apos;t get redirected,{' '}
-                  <Link href={'/navigator'}>click here</Link> to go to the home
-                  page.
-                </Typography>
-              </>
-            )}
-          </Box>
-          <Stack
-            display={'flex'}
-            alignItems={'center'}
-            justifyContent={'center'}
-          >
-            {!session &&
-              Object.values(providerMap).map((provider, index) => (
-                <form
-                  key={index}
-                  action={async () => {
-                    'use server'
-                    // eslint-disable-next-line no-useless-catch
-                    try {
-                      // await signIn(provider.id, {
-                      //   redirectTo: props.searchParams?.callbackUrl ?? '',
-                      // })
-                      await signIn(provider.id, {
-                        redirectTo: '/navigator/profile',
-                      })
-                    } catch (error) {
-                      // Signin can fail for a number of reasons, such as the user
-                      // not existing, or the user not having the correct role.
-                      // In some cases, you may want to redirect to a custom error
-                      // if (error instanceof AuthError) {
-                      //   return redirect(`${SIGNIN_ERROR_URL}?error=${error.type}`)
-                      // }
+              <input type="submit" value="Sign In" disabled />
+            </form>
+            {Object.values(providerMap).map((provider, index) => (
+              <form
+                key={index}
+                action={async () => {
+                  'use server'
+                  // eslint-disable-next-line no-useless-catch
+                  try {
+                    await signIn(provider.id, {
+                      redirectTo: props.searchParams?.callbackUrl ?? '',
+                    })
+                    // await signIn(provider.id, {
+                    // redirectTo: '/navigator/profile',
+                    // })
+                  } catch (error) {
+                    // Signin can fail for a number of reasons, such as the user
+                    // not existing, or the user not having the correct role.
+                    // In some cases, you may want to redirect to a custom error
+                    if (error instanceof AuthError) {
+                      return redirect(
+                        `${process.env.SIGNIN_ERROR_URL}?error=${error.type}`
+                      )
+                    }
 
-                      // Otherwise if a redirects happens Next.js can handle it
-                      // so you can just re-thrown the error and let Next.js handle it.
-                      // Docs:
-                      // https://nextjs.org/docs/app/api-reference/functions/redirect#server-component
-                      throw error
-                    }
-                  }}
+                    // Otherwise if a redirects happens Next.js can handle it
+                    // so you can just re-thrown the error and let Next.js handle it.
+                    // Docs:
+                    // https://nextjs.org/docs/app/api-reference/functions/redirect#server-component
+                    throw error
+                  }
+                }}
+              >
+                <Button
+                  type="submit"
+                  variant="outlined"
+                  sx={{ m: 2, borderRadius: '12px' }}
+                  startIcon={
+                    <Image
+                      src={
+                        provider.name.toLowerCase() === 'google'
+                          ? '/icons/profile/auth-google.svg'
+                          : '/icons/profile/auth-github-mark.svg'
+                      }
+                      alt={provider.name}
+                      width={20}
+                      height={20}
+                    />
+                  }
                 >
-                  <Button
-                    type="submit"
-                    variant="outlined"
-                    sx={{ m: 2, borderRadius: '12px' }}
-                    startIcon={
-                      <Image
-                        src={
-                          provider.name.toLowerCase() === 'google'
-                            ? '/icons/profile/auth-google.svg'
-                            : '/icons/profile/auth-github-mark.svg'
-                        }
-                        alt={provider.name}
-                        width={20}
-                        height={20}
-                      />
-                    }
-                  >
-                    <Typography>Sign in with {provider.name}</Typography>
-                  </Button>
-                </form>
-              ))}
+                  <Typography>Sign in with {provider.name}</Typography>
+                </Button>
+              </form>
+            ))}
           </Stack>
           <Stack>
             {!session && (

@@ -6,7 +6,7 @@ import Credentials from 'next-auth/providers/credentials'
 import { PrismaClient } from '@prisma/generated/client'
 import { MongoDBAdapter } from '@auth/mongodb-adapter'
 import client from '@lib/mongoDb'
-import { hashPassword } from '@app/utils/password'
+import { comparePassword, hashPassword } from '@app/utils/password'
 
 /*
  * use auth/core Facebook, https://authjs.dev/reference/core/providers/facebook
@@ -19,95 +19,73 @@ const providers: Provider[] = [
   GitHub,
   Google,
   Credentials({
-    // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-    // e.g. domain, username, password, 2FA token, etc.
     credentials: {
-      email: {},
-      password: {},
+      email: { label: 'Email', type: 'email' },
+      password: { label: 'Password', type: 'password' },
     },
-    // authorize: async (credentials) => {
-    //   // logic to salt and hash password
-    //   // const pwHash = hashPassword(credentials.password as string)
+    authorize: async (credentials) => {
+      if (!credentials) return null
 
-    //   const email = credentials.email as string
+      let user = await prisma.userData.findUnique({
+        where: { email: credentials.email as string },
+      })
 
-    //   // logic to verify if the user exists
-    //   // user = await getUserFromDb(credentials.email, pwHash)
+      if (credentials.password === 'new account' && !user) {
+        user = await prisma.userData.create({
+          data: {
+            email: credentials.email as string,
+            name:
+              typeof credentials.email === 'string' ? credentials.email : '',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            firstName: 'New Account',
+            lastName: 'New Account',
+            bio: '',
+            headline: '',
+            location: '',
+            websiteURL: '',
+          },
+        })
+      }
 
-    //   const existingUser = await prisma.userData.findUnique({
-    //     where: { email: email ?? undefined },
-    //   })
+      if (!user) return null
 
-    //   // if (!existingUser) {
-    //   //   try {
-    //   //     const newUser = await prisma.userData.create({
-    //   //       data: {
-    //   //         provider_id: user.id,
-    //   //         name: user.name,
-    //   //         email: user.email,
-    //   //         emailVerified: new Date(),
-    //   //         image: user.image,
-    //   //         pronouns: '',
-    //   //         profile: JSON.stringify(profile),
-    //   //         createdAt: new Date(),
-    //   //         updatedAt: new Date(),
-    //   //         firstName: '',
-    //   //         lastName: '',
-    //   //         bio: '',
-    //   //         headline: '',
-    //   //         location: '',
-    //   //         websiteURL: '',
-    //   //         shareQuick: '',
-    //   //         yogaStyle: '',
-    //   //         yogaExperience: '',
-    //   //         company: '',
-    //   //         socialURL: '',
-    //   //         isLocationPublic: '',
-    //   //         providerAccounts: {
-    //   //           create: {
-    //   //             provider: account.provider,
-    //   //             providerAccountId: account.providerAccountId,
-    //   //             refresh_token: account.refresh_token ?? undefined,
-    //   //             access_token: account.access_token ?? undefined,
-    //   //             expires_at: account.expires_at ?? undefined,
-    //   //             // add to schema
-    //   //             // expires_in: account.expires_in ?? undefined,
-    //   //             token_type: account.token_type ?? undefined,
-    //   //             scope: account.scope ?? undefined,
-    //   //             id_token: account.id_token ?? undefined,
-    //   //             session_state: JSON.stringify(account.session_state),
-    //   //             type: account.type,
-    //   //             createdAt: new Date(),
-    //   //             updatedAt: new Date(),
-    //   //           },
-    //   //         },
-    //   //         // create a way to add generic profile schema for unknown providers
-    //   //         // profile: {
-    //   //         //   create: { ...profile },
-    //   //         // },
-    //   //       },
-    //   //     })
-    //   //   } catch (error) {
-    //   //     console.error('Error creating new user:', error)
-    //   //     throw error
-    //   //   }
-    //   // }
+      let providerAccount = await prisma.providerAccount.findUnique({
+        where: { userId: user.id },
+      })
 
-    //   //     if (!existingUser) {
-    //   // No user found, so this is their first attempt to login
-    //   // Optionally, this is also the place you could do a user registration
-    //   //       throw new Error('Invalid credentials.')
-    //   //     }
-    //   //     /*         if (!user) {
-    //   // No user found, so this is their first attempt to login
-    //   // Optionally, this is also the place you could do a user registration
-    //   //       throw new Error('Invalid credentials.')
-    //   //     } */
+      if (!providerAccount) {
+        providerAccount = await prisma.providerAccount.create({
+          data: {
+            userId: user.id,
+            provider: 'credentials',
+            providerAccountId: user.id,
+            type: 'credentials',
+            credentials_password:
+              typeof credentials.password === 'string'
+                ? await hashPassword(credentials.password)
+                : null,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        })
+      }
 
-    //   // return user object with their profile data
-    //   // return user
-    //   //     return existingUser
-    // },
+      if (!providerAccount.credentials_password) return null
+
+      const isValidPassword = await comparePassword(
+        credentials.password as string,
+        providerAccount.credentials_password
+      )
+
+      if (!isValidPassword) return null
+
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      }
+    },
   }),
 ]
 

@@ -2404,6 +2404,7 @@ export namespace Prisma {
     token_type: string | null
     scope: string | null
     id_token: string | null
+    credentials_password: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2420,6 +2421,7 @@ export namespace Prisma {
     token_type: string | null
     scope: string | null
     id_token: string | null
+    credentials_password: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2437,6 +2439,7 @@ export namespace Prisma {
     scope: number
     id_token: number
     session_state: number
+    credentials_password: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2463,6 +2466,7 @@ export namespace Prisma {
     token_type?: true
     scope?: true
     id_token?: true
+    credentials_password?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2479,6 +2483,7 @@ export namespace Prisma {
     token_type?: true
     scope?: true
     id_token?: true
+    credentials_password?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2496,6 +2501,7 @@ export namespace Prisma {
     scope?: true
     id_token?: true
     session_state?: true
+    credentials_password?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2600,6 +2606,7 @@ export namespace Prisma {
     scope: string | null
     id_token: string | null
     session_state: JsonValue | null
+    credentials_password: string | null
     createdAt: Date
     updatedAt: Date
     _count: ProviderAccountCountAggregateOutputType | null
@@ -2636,6 +2643,7 @@ export namespace Prisma {
     scope?: boolean
     id_token?: boolean
     session_state?: boolean
+    credentials_password?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDataDefaultArgs<ExtArgs>
@@ -2655,6 +2663,7 @@ export namespace Prisma {
     scope?: boolean
     id_token?: boolean
     session_state?: boolean
+    credentials_password?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -2681,6 +2690,7 @@ export namespace Prisma {
       scope: string | null
       id_token: string | null
       session_state: Prisma.JsonValue | null
+      credentials_password: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["providerAccount"]>
@@ -3088,6 +3098,7 @@ export namespace Prisma {
     readonly scope: FieldRef<"ProviderAccount", 'String'>
     readonly id_token: FieldRef<"ProviderAccount", 'String'>
     readonly session_state: FieldRef<"ProviderAccount", 'Json'>
+    readonly credentials_password: FieldRef<"ProviderAccount", 'String'>
     readonly createdAt: FieldRef<"ProviderAccount", 'DateTime'>
     readonly updatedAt: FieldRef<"ProviderAccount", 'DateTime'>
   }
@@ -6489,6 +6500,7 @@ export namespace Prisma {
     scope: 'scope',
     id_token: 'id_token',
     session_state: 'session_state',
+    credentials_password: 'credentials_password',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -6828,6 +6840,7 @@ export namespace Prisma {
     scope?: StringNullableFilter<"ProviderAccount"> | string | null
     id_token?: StringNullableFilter<"ProviderAccount"> | string | null
     session_state?: JsonNullableFilter<"ProviderAccount">
+    credentials_password?: StringNullableFilter<"ProviderAccount"> | string | null
     createdAt?: DateTimeFilter<"ProviderAccount"> | Date | string
     updatedAt?: DateTimeFilter<"ProviderAccount"> | Date | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
@@ -6846,6 +6859,7 @@ export namespace Prisma {
     scope?: SortOrder
     id_token?: SortOrder
     session_state?: SortOrder
+    credentials_password?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserDataOrderByWithRelationInput
@@ -6867,6 +6881,7 @@ export namespace Prisma {
     scope?: StringNullableFilter<"ProviderAccount"> | string | null
     id_token?: StringNullableFilter<"ProviderAccount"> | string | null
     session_state?: JsonNullableFilter<"ProviderAccount">
+    credentials_password?: StringNullableFilter<"ProviderAccount"> | string | null
     createdAt?: DateTimeFilter<"ProviderAccount"> | Date | string
     updatedAt?: DateTimeFilter<"ProviderAccount"> | Date | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
@@ -6885,6 +6900,7 @@ export namespace Prisma {
     scope?: SortOrder
     id_token?: SortOrder
     session_state?: SortOrder
+    credentials_password?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProviderAccountCountOrderByAggregateInput
@@ -6910,6 +6926,7 @@ export namespace Prisma {
     scope?: StringNullableWithAggregatesFilter<"ProviderAccount"> | string | null
     id_token?: StringNullableWithAggregatesFilter<"ProviderAccount"> | string | null
     session_state?: JsonNullableWithAggregatesFilter<"ProviderAccount">
+    credentials_password?: StringNullableWithAggregatesFilter<"ProviderAccount"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ProviderAccount"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ProviderAccount"> | Date | string
   }
@@ -7449,6 +7466,7 @@ export namespace Prisma {
     scope?: string | null
     id_token?: string | null
     session_state?: InputJsonValue | null
+    credentials_password?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserDataCreateNestedOneWithoutProviderAccountsInput
@@ -7467,6 +7485,7 @@ export namespace Prisma {
     scope?: string | null
     id_token?: string | null
     session_state?: InputJsonValue | null
+    credentials_password?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7482,6 +7501,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: InputJsonValue | InputJsonValue | null
+    credentials_password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserDataUpdateOneRequiredWithoutProviderAccountsNestedInput
@@ -7499,6 +7519,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: InputJsonValue | InputJsonValue | null
+    credentials_password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7516,6 +7537,7 @@ export namespace Prisma {
     scope?: string | null
     id_token?: string | null
     session_state?: InputJsonValue | null
+    credentials_password?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7531,6 +7553,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: InputJsonValue | InputJsonValue | null
+    credentials_password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7547,6 +7570,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: InputJsonValue | InputJsonValue | null
+    credentials_password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8229,6 +8253,7 @@ export namespace Prisma {
     scope?: SortOrder
     id_token?: SortOrder
     session_state?: SortOrder
+    credentials_password?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8249,6 +8274,7 @@ export namespace Prisma {
     token_type?: SortOrder
     scope?: SortOrder
     id_token?: SortOrder
+    credentials_password?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8265,6 +8291,7 @@ export namespace Prisma {
     token_type?: SortOrder
     scope?: SortOrder
     id_token?: SortOrder
+    credentials_password?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -8866,6 +8893,7 @@ export namespace Prisma {
     scope?: string | null
     id_token?: string | null
     session_state?: InputJsonValue | null
+    credentials_password?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8882,6 +8910,7 @@ export namespace Prisma {
     scope?: string | null
     id_token?: string | null
     session_state?: InputJsonValue | null
+    credentials_password?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -8927,6 +8956,7 @@ export namespace Prisma {
     scope?: StringNullableFilter<"ProviderAccount"> | string | null
     id_token?: StringNullableFilter<"ProviderAccount"> | string | null
     session_state?: JsonNullableFilter<"ProviderAccount">
+    credentials_password?: StringNullableFilter<"ProviderAccount"> | string | null
     createdAt?: DateTimeFilter<"ProviderAccount"> | Date | string
     updatedAt?: DateTimeFilter<"ProviderAccount"> | Date | string
   }
@@ -9061,6 +9091,7 @@ export namespace Prisma {
     scope?: string | null
     id_token?: string | null
     session_state?: InputJsonValue | null
+    credentials_password?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9076,6 +9107,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: InputJsonValue | InputJsonValue | null
+    credentials_password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9091,6 +9123,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: InputJsonValue | InputJsonValue | null
+    credentials_password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9106,6 +9139,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: InputJsonValue | InputJsonValue | null
+    credentials_password?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

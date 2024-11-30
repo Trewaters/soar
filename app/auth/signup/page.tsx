@@ -13,7 +13,7 @@ export default async function SignUpPage() {
       </nav>
       <Stack flexDirection={'row'} justifySelf={'center'} alignItems={'center'}>
         <Stack>
-          <Typography variant={'subtitle1'}>A Uvuyoga App</Typography>
+          <Typography variant={'subtitle1'}>An Uvuyoga App</Typography>
         </Stack>
         <Stack>
           <Image

@@ -56,18 +56,19 @@ model UserData {
 }
 
 model ProviderAccount {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @unique @db.ObjectId
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     Json?
+  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId               String  @unique @db.ObjectId
+  type                 String
+  provider             String
+  providerAccountId    String
+  refresh_token        String?
+  access_token         String?
+  expires_at           Int?
+  token_type           String?
+  scope                String?
+  id_token             String?
+  session_state        Json?
+  credentials_password String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
