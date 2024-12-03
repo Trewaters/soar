@@ -1,10 +1,11 @@
 import React from 'react'
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
 import { signIn, providerMap, signOut, auth } from '@auth'
 import { AuthError } from '@node_modules/next-auth'
 import { redirect } from '@node_modules/next/navigation'
+import CredentialsInput from './credentialsInput'
 
 export default async function SignInPage(props: {
   searchParams: { callbackUrl: string | undefined }
@@ -57,38 +58,7 @@ export default async function SignInPage(props: {
             justifyContent={'center'}
             sx={{ mt: 4 }}
           >
-            <form
-              action={async (formData) => {
-                'use server'
-                // eslint-disable-next-line no-useless-catch
-                try {
-                  await signIn('credentials', formData)
-                } catch (error) {
-                  if (error instanceof AuthError) {
-                    return redirect(
-                      `${process.env.SIGNIN_ERROR_URL}?error=${error.type}`
-                    )
-                  }
-                  throw error
-                }
-              }}
-            >
-              <Stack display={'flex'} alignItems={'flex-start'}>
-                <Stack>
-                  <label htmlFor="email">
-                    Email
-                    <input name="email" id="email" />
-                  </label>
-                </Stack>
-                <Stack>
-                  <label htmlFor="password">
-                    Password
-                    <input name="password" id="password" />
-                  </label>
-                </Stack>
-              </Stack>
-              <input type="submit" value="Sign In" disabled />
-            </form>
+            <CredentialsInput />
             {Object.values(providerMap).map((provider, index) => (
               <form
                 key={index}
