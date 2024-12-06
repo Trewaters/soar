@@ -84,6 +84,13 @@ const CredentialsInput: React.FC = () => {
             Sign Up
           </Button>
         )}
+        <Button
+          variant="text"
+          color="secondary"
+          onClick={() => router.push('/auth/passwordRecovery')}
+        >
+          Forgot Password?
+        </Button>
       </Stack>
     </Box>
   )

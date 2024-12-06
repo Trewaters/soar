@@ -58,7 +58,13 @@ export default async function SignInPage(props: {
             justifyContent={'center'}
             sx={{ mt: 4 }}
           >
-            <CredentialsInput />
+            {/*             
+// ! Remove until I can fix the following.
+1) password recovery
+2) do not show error page when user is not found
+            <CredentialsInput /> 
+            */}
+
             {Object.values(providerMap).map((provider, index) => (
               <form
                 key={index}
