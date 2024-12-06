@@ -219,7 +219,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   session: { strategy: 'jwt' },
   events: {
     signIn: async (message: any) => {
-      console.log('signIn', message)
+      // console.log('signIn', message)
     },
     signOut: async (message: any) => {
       console.log('signOut', message)

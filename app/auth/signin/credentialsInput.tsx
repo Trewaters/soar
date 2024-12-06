@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { Box, Stack, TextField, Button } from '@mui/material'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -8,6 +8,21 @@ const CredentialsInput: React.FC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const router = useRouter()
+  const [isEmailValid, setIsEmailValid] = useState(false)
+
+  const checkEmailExists = async (email: string) => {
+    const response = await fetch(
+      `/api/user/fetchAccount?email=${encodeURIComponent(email)}`
+    )
+    const user = await response.json()
+    // console.log('user:', user)
+    if (user.error) setIsEmailValid(false)
+    else setIsEmailValid(true)
+  }
+  useEffect(() => {
+    checkEmailExists(email)
+    console.log('email exists:', isEmailValid)
+  }, [email, isEmailValid])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,21 +48,26 @@ const CredentialsInput: React.FC = () => {
       noValidate
       autoComplete={'off'}
       onSubmit={handleSubmit}
+      my={3}
     >
       <Stack spacing={2}>
         <TextField
-          id="outlined-email-input"
+          onChange={async (e) => {
+            const email = e.target.value
+            setEmail(email)
+            await checkEmailExists(email)
+          }}
           label="Email"
           type="email"
           autoComplete="current-email"
           error={!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)}
-          helperText={
-            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)
-              ? 'Invalid email address'
-              : ''
-          }
-          onChange={(e) => setEmail(e.target.value)}
         />
+
+        {/* 
+        Change button to Sign Up if the user doesn't exist.
+        Allow user to input password. 
+        Pass the password to the Auth provider.
+        */}
         <TextField
           id="outlined-password-input"
           label="Password"
@@ -55,9 +75,15 @@ const CredentialsInput: React.FC = () => {
           autoComplete="current-password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button type="submit" variant="contained" color="primary" disabled>
-          Sign In
-        </Button>
+        {isEmailValid ? (
+          <Button type="submit" variant="contained" color="primary">
+            Sign In
+          </Button>
+        ) : (
+          <Button type="submit" variant="contained" color="primary">
+            Sign Up
+          </Button>
+        )}
       </Stack>
     </Box>
   )
