@@ -36,7 +36,10 @@ export default function Page() {
     fetchData()
   }, [])
 
-  function handleSelect(event: ChangeEvent<{}>, value: FlowSeriesData | null) {
+  function handleSelect(
+    event: ChangeEvent<object>,
+    value: FlowSeriesData | null
+  ) {
     // Logs the type of event (e.g., 'click')
     // Logs the element that triggered the event
     event.preventDefault()

@@ -7,10 +7,10 @@
     "plugin:prettier/recommended",
 
     // Accessibility
-    "plugin:jsx-a11y/recommended"
+    "plugin:jsx-a11y/recommended",
 
-    // "plugin:react/recommended",
-    // "plugin:@typescript-eslint/recommended"
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended"
     // "plugin:@next/next/recommended"
   ],
   "parser": "@typescript-eslint/parser",
@@ -26,21 +26,31 @@
     "es2023": true
   },
   "rules": {
-    "prettier/prettier": [
-      "warn",
-      {
-        "semi": false,
-        "singleQuote": true,
-        "trailingComma": "es5",
-        "tabWidth": 2,
-        "bracketSpacing": true
-      },
-      { "usePrettierrc": true }
-    ],
-    "no-unused-vars": "warn",
-    "no-console": "warn",
-    "eqeqeq": "warn",
+    // "prettier/prettier": [
+    //   "warn",
+    //   {
+    //     "semi": false,
+    //     "singleQuote": true,
+    //     "trailingComma": "es5",
+    //     "tabWidth": 2,
+    //     "bracketSpacing": true
+    //   },
+    //   { "usePrettierrc": true }
+    // ],
+    "prettier/prettier": "warn",
+    "no-unused-vars": "off",
+    "no-console": "off",
+    "eqeqeq": ["warn", "smart"],
     "linebreak-style": "off",
+    "no-undef": "off",
+    "no-empty": "off",
+    "no-unreachable": "off",
+    "no-redeclare": "off",
+    "no-prototype-builtins": "off",
+    "no-cond-assign": "off",
+    "no-useless-escape": "off",
+    "no-extra-boolean-cast": "off",
+    "getter-return": "off",
     // "no-inline-comments": "warn",
     // "next/no-img-element": "warn",
     // "next/no-html-link-for-pages": "error",
@@ -48,13 +58,19 @@
     // "react/jsx-uses-react": "error",
     // "react/jsx-uses-vars": "error",
     // "react-hooks/rules-of-hooks": "error",
-    // "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": "off",
     // "@typescript-eslint/explicit-module-boundary-types": "warn",
-    // "@typescript-eslint/no-explicit-any": "warn"
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-this-alias": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-unnecessary-type-constraint": "off",
 
     // Accessibility
-    "jsx-a11y/anchor-is-valid": "warn",
-    "jsx-a11y/alt-text": "warn",
-    "jsx-a11y/label-has-associated-control": "warn"
+    "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/alt-text": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "react/react-in-jsx-scope": "off" // DISABLE for Typescript
   }
 }

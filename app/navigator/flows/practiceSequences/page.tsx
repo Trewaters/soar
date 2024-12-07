@@ -62,7 +62,10 @@ export default function Page() {
     fetchData()
   }, [])
 
-  function handleSelect(event: ChangeEvent<{}>, value: SequenceData | null) {
+  function handleSelect(
+    event: ChangeEvent<object>,
+    value: SequenceData | null
+  ) {
     // Logs the type of event (e.g., 'click')
     // Logs the element that triggered the event
     event.preventDefault()

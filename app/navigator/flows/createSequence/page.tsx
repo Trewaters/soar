@@ -99,7 +99,10 @@ export default function Page() {
   }, [router, session])
 
   // Ensure postures are updated when a new series is added
-  function handleSelect(event: ChangeEvent<{}>, value: FlowSeriesData | null) {
+  function handleSelect(
+    event: ChangeEvent<object>,
+    value: FlowSeriesData | null
+  ) {
     event.preventDefault()
     if (value) {
       setSeriesNameSet((prevSeriesNameSet) => [
