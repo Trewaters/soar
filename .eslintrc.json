@@ -26,21 +26,21 @@
     "es2023": true
   },
   "rules": {
-    // "prettier/prettier": [
-    //   "warn",
-    //   {
-    //     "semi": false,
-    //     "singleQuote": true,
-    //     "trailingComma": "es5",
-    //     "tabWidth": 2,
-    //     "bracketSpacing": true
-    //   },
-    //   { "usePrettierrc": true }
-    // ],
-    "prettier/prettier": "warn",
+    "prettier/prettier": [
+      "warn",
+      {
+        "semi": false,
+        "singleQuote": false,
+        "trailingComma": "es5",
+        "tabWidth": 2,
+        "bracketSpacing": true,
+        "endOfLine": "lf"
+      },
+      { "usePrettierrc": true }
+    ],
     "no-unused-vars": "off",
     "no-console": "off",
-    "eqeqeq": ["warn", "smart"],
+    "eqeqeq": ["warn", "smart"], // auto fix doesn't work for this too many errors
     "linebreak-style": "off",
     "no-undef": "off",
     "no-empty": "off",
