@@ -1,7 +1,6 @@
 import React from "react"
 import Box from "@mui/material/Box"
 import WhatshotIcon from "@mui/icons-material/Whatshot"
-import WaterDropOutlinedIcon from "@mui/icons-material/WaterDropOutlined"
 import Link from "next/link"
 import { Button, Stack, Typography } from "@mui/material"
 

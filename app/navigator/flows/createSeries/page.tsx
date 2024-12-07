@@ -137,6 +137,7 @@ export default function Page() {
       }
       // eslint-disable-next-line no-unused-vars
       const data = await response.json()
+      return data
     } catch (error: Error | any) {
       error.message
     }

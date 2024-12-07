@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react"
 import { FullAsanaData } from "@app/context/AsanaPostureContext"
 import PostureActivityDetail from "./postureActivityDetail"
-import { Box, Stack } from "@mui/material"
+import { Box } from "@mui/material"
 import NavBottom from "@serverComponents/navBottom"
 
 export default function Page({ params }: { params: { pose: string } }) {

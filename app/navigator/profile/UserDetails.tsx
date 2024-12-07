@@ -4,56 +4,45 @@ import {
   Avatar,
   Button,
   FormControl,
-  IconButton,
   Stack,
   TextField,
   Typography,
   CircularProgress,
-  IconButtonProps,
-  styled,
-  Autocomplete,
-  Tooltip,
   Paper,
   Box,
   FormHelperText,
 } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import { red } from "@mui/material/colors"
-import ShareIcon from "@mui/icons-material/Share"
-import MapIcon from "@mui/icons-material/Map"
-import LinkIcon from "@mui/icons-material/Link"
 import { useSession } from "next-auth/react"
 import { UseUser } from "@context/UserContext"
-import Link from "next/link"
-import MyMap from "@app/clientComponents/googleMaps"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import EditIcon from "@mui/icons-material/Edit"
 
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean
-}
+// interface ExpandMoreProps extends IconButtonProps {
+//   expand: boolean
+// }
 
-const yogaStyles = [
-  "Ashtanga",
-  "Vinyasa Flow",
-  "Hatha",
-  "Yin",
-  "Restorative",
-  "Nidra",
-  "Hot yoga",
-  "Kundalini",
-  "Iyengar",
-  "Power Yoga",
-  "Bikram Yoga",
-  "Anusara",
-  "Sivananda",
-  "Jivamukti",
-  "Aerial Yoga",
-  "Prenatal Yoga",
-  "Kripalu",
-  "AcroYoga",
-]
+// const yogaStyles = [
+//   "Ashtanga",
+//   "Vinyasa Flow",
+//   "Hatha",
+//   "Yin",
+//   "Restorative",
+//   "Nidra",
+//   "Hot yoga",
+//   "Kundalini",
+//   "Iyengar",
+//   "Power Yoga",
+//   "Bikram Yoga",
+//   "Anusara",
+//   "Sivananda",
+//   "Jivamukti",
+//   "Aerial Yoga",
+//   "Prenatal Yoga",
+//   "Kripalu",
+//   "AcroYoga",
+// ]
 
 export default function UserDetails() {
   // ! disable session while working on the UI

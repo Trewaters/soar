@@ -19,8 +19,8 @@ export default function ViewAsanaPractice({
 
   /* call api/poses/?sort_english_name=${pose} */
   const [viewPose, setViewPose] = useState<FullAsanaData>()
-  // eslint-disable-next-line no-unused-vars
   const [elapsedTime, setElapsedTime] = useState(0)
+  console.log("elapsedTime", elapsedTime)
   // const [isPaused, setIsPaused] = useState(false)
   const { state, dispatch } = useTimer()
   const router = useRouter()

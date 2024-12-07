@@ -38,7 +38,7 @@
       },
       { "usePrettierrc": true }
     ],
-    "no-unused-vars": "off",
+    "no-unused-vars": "warn",
     "no-console": "off",
     "eqeqeq": ["warn", "smart"], // auto fix doesn't work for this too many errors
     "linebreak-style": "off",
@@ -58,7 +58,7 @@
     // "react/jsx-uses-react": "error",
     // "react/jsx-uses-vars": "error",
     // "react-hooks/rules-of-hooks": "error",
-    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "warn",
     // "@typescript-eslint/explicit-module-boundary-types": "warn",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-namespace": "off",

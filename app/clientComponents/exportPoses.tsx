@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Button, IconButton, Typography } from "@mui/material"
+import { Box, IconButton, Typography } from "@mui/material"
 import IosShareIcon from "@mui/icons-material/IosShare"
 import { FullAsanaData } from "@app/context/AsanaPostureContext"
 import { FlowSeriesData } from "@app/context/AsanaSeriesContext"

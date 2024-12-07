@@ -1,11 +1,10 @@
 import React from "react"
-import { Box, Button, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, Stack, Typography } from "@mui/material"
 import Header from "@serverComponents/header"
 import Image from "next/image"
 import { signIn, providerMap, signOut, auth } from "@auth"
 import { AuthError } from "@node_modules/next-auth"
 import { redirect } from "@node_modules/next/navigation"
-import CredentialsInput from "./credentialsInput"
 
 export default async function SignInPage(props: {
   searchParams: { callbackUrl: string | undefined }

@@ -20,7 +20,6 @@ export default function Page() {
     breath_direction_default,
     preferred_side,
     sideways,
-    created_by,
   } = state.postures
   const [formData, setFormData] = useState<{
     sort_english_name: string
@@ -41,7 +40,8 @@ export default function Page() {
     breath_direction_default: "",
     preferred_side: "",
     sideways: "",
-    created_by: "alpha users",
+    created_by: session?.user?.email ?? "error-undefined-user",
+    // created_by: "alpha users",
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
