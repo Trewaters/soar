@@ -1,14 +1,14 @@
-import { memo, useCallback, useState } from 'react'
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
+import { memo, useCallback, useState } from "react"
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api"
 
 const containerStyle = {
-  width: '100vw',
-  height: '300px',
+  width: "100vw",
+  height: "300px",
 }
 
 function MyComponent() {
   const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
+    id: "google-map-script",
     googleMapsApiKey: `${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`,
   })
 

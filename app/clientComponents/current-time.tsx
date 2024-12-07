@@ -1,11 +1,11 @@
-'use client'
-import { useState, useEffect } from 'react'
-import { DateTime } from 'luxon'
-import Typography from '@mui/material/Typography'
-import { Box, Skeleton } from '@mui/material'
+"use client"
+import { useState, useEffect } from "react"
+import { DateTime } from "luxon"
+import Typography from "@mui/material/Typography"
+import { Box, Skeleton } from "@mui/material"
 
 export default function CurrentTime() {
-  const [time, setTime] = useState('')
+  const [time, setTime] = useState("")
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -21,21 +21,21 @@ export default function CurrentTime() {
     return (
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          height: '2em',
+          display: "flex",
+          justifyContent: "center",
+          height: "2em",
         }}
       >
         <Typography variant="body1">
-          <Skeleton variant="text" sx={{ width: '10em' }} />
+          <Skeleton variant="text" sx={{ width: "10em" }} />
         </Typography>
       </Box>
     )
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', height: '2em' }}>
+    <Box sx={{ display: "flex", justifyContent: "center", height: "2em" }}>
       <Typography variant="body1">
-        {time || <Skeleton variant="text" sx={{ width: '10em' }} />}
+        {time || <Skeleton variant="text" sx={{ width: "10em" }} />}
       </Typography>
     </Box>
   )

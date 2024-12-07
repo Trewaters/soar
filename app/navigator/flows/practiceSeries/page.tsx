@@ -1,5 +1,5 @@
-'use client'
-import { FlowSeriesData } from '@context/AsanaSeriesContext'
+"use client"
+import { FlowSeriesData } from "@context/AsanaSeriesContext"
 import {
   Autocomplete,
   Box,
@@ -9,14 +9,14 @@ import {
   TextField,
   Typography,
   useTheme,
-} from '@mui/material'
-import { ChangeEvent, useEffect, useState } from 'react'
-import SplashHeader from '@app/clientComponents/splash-header'
-import Image from 'next/image'
-import SubNavHeader from '@app/clientComponents/sub-nav-header'
-import SearchIcon from '@mui/icons-material/Search'
-import NavBottom from '@serverComponents/navBottom'
-import PostureShareButton from '@app/clientComponents/exportPoses'
+} from "@mui/material"
+import { ChangeEvent, useEffect, useState } from "react"
+import SplashHeader from "@app/clientComponents/splash-header"
+import Image from "next/image"
+import SubNavHeader from "@app/clientComponents/sub-nav-header"
+import SearchIcon from "@mui/icons-material/Search"
+import NavBottom from "@serverComponents/navBottom"
+import PostureShareButton from "@app/clientComponents/exportPoses"
 
 export default function Page() {
   const theme = useTheme()
@@ -26,9 +26,9 @@ export default function Page() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch('/api/series', { cache: 'no-store' })
+      const response = await fetch("/api/series", { cache: "no-store" })
       if (!response.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok")
       }
       setSeries(await response.json())
     }
@@ -55,16 +55,16 @@ export default function Page() {
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
+      <Stack spacing={2} sx={{ marginX: 3, mb: "1em", width: "fit-content" }}>
         <SplashHeader
-          src={'/images/series/series-practice-splash-header.png'}
-          alt={'Practice Series'}
+          src={"/images/series/series-practice-splash-header.png"}
+          alt={"Practice Series"}
           title="Practice Series"
         />
         <SubNavHeader
@@ -94,22 +94,22 @@ export default function Page() {
               )
             }
             sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: '12px',
-                borderColor: 'primary.main',
-                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderRadius: "12px",
+                borderColor: "primary.main",
+                boxShadow: "0 4px 4px 0 rgba(0, 0, 0, 0.25)",
               },
-              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+              "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
                 {
-                  borderColor: 'primary.light', // Ensure border color does not change on hover
+                  borderColor: "primary.light", // Ensure border color does not change on hover
                 },
-              '& .MuiAutocomplete-endAdornment': {
-                display: 'none',
+              "& .MuiAutocomplete-endAdornment": {
+                display: "none",
               },
             }}
             renderInput={(params) => (
               <TextField
-                sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+                sx={{ "& .MuiInputBase-input": { color: "primary.main" } }}
                 {...params}
                 placeholder="Search for a Series"
                 slotProps={{
@@ -117,7 +117,7 @@ export default function Page() {
                     ...params.InputProps,
                     startAdornment: (
                       <>
-                        <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
+                        <SearchIcon sx={{ color: "primary.main", mr: 1 }} />
                         {params.InputProps.startAdornment}
                       </>
                     ),
@@ -131,15 +131,15 @@ export default function Page() {
         {flow && (
           <Box width="100%" sx={{ p: 2 }} key={flow.id}>
             <Box
-              display={'flex'}
-              flexDirection={'column'}
-              alignItems={'center'}
+              display={"flex"}
+              flexDirection={"column"}
+              alignItems={"center"}
             >
               <Box className="journal">
                 <Typography
                   variant="h3"
                   className="journalTitle"
-                  textAlign={'center'}
+                  textAlign={"center"}
                   sx={{
                     marginTop: 2,
                     color: `${theme.palette.primary.main}`,
@@ -151,17 +151,17 @@ export default function Page() {
                   {flow.seriesPostures.map((pose) => (
                     <Box key={pose} className="lines">
                       <Box key={pose} className="journalLine">
-                        <Typography textAlign={'left'} variant="body1">
+                        <Typography textAlign={"left"} variant="body1">
                           <Link
                             underline="hover"
                             color="primary.contrastText"
-                            href={`/navigator/asanaPostures/${pose.split(';')[0]}`}
+                            href={`/navigator/asanaPostures/${pose.split(";")[0]}`}
                           >
-                            {pose.split(';')[0]}
+                            {pose.split(";")[0]}
                           </Link>
                         </Typography>
-                        <Typography textAlign={'left'} variant="body2">
-                          {pose.split(';')[1]}
+                        <Typography textAlign={"left"} variant="body2">
+                          {pose.split(";")[1]}
                         </Typography>
                       </Box>
                     </Box>
@@ -169,21 +169,21 @@ export default function Page() {
                 </Stack>
               </Box>
               <Box
-                className={'journal'}
+                className={"journal"}
                 sx={{
-                  marginTop: '32px',
+                  marginTop: "32px",
                   p: 4,
-                  color: 'primary.main',
-                  backgroundColor: 'navSplash.dark',
+                  color: "primary.main",
+                  backgroundColor: "navSplash.dark",
                 }}
               >
-                <Stack flexDirection={'row'} alignItems={'center'}>
+                <Stack flexDirection={"row"} alignItems={"center"}>
                   <Typography variant="h3" sx={{ mr: 2 }}>
                     Description
                   </Typography>
                   <Image
-                    src={'/icons/designImages/leaf-2.svg'}
-                    alt={'leaf icon'}
+                    src={"/icons/designImages/leaf-2.svg"}
+                    alt={"leaf icon"}
                     height={21}
                     width={21}
                   ></Image>
@@ -191,7 +191,7 @@ export default function Page() {
                 <Typography
                   color="primary.contrastText"
                   variant="body1"
-                  sx={{ whiteSpace: 'pre-line' }}
+                  sx={{ whiteSpace: "pre-line" }}
                 >
                   {flow.description}
                 </Typography>
@@ -209,7 +209,7 @@ export default function Page() {
       >
         <Typography variant="body1">Pick a Series to practice.</Typography>
       </Drawer>
-      <Box height={'72px'} />
+      <Box height={"72px"} />
 
       <NavBottom subRoute="/navigator/flows" />
     </Box>

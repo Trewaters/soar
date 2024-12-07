@@ -1,8 +1,8 @@
-import React from 'react'
-import { Box, Button, Stack, Typography } from '@mui/material'
-import Header from '@serverComponents/header'
-import Image from 'next/image'
-import { signIn, providerMap, auth } from '@auth'
+import React from "react"
+import { Box, Button, Stack, Typography } from "@mui/material"
+import Header from "@serverComponents/header"
+import Image from "next/image"
+import { signIn, providerMap, auth } from "@auth"
 
 export default async function SignUpPage() {
   const session = await auth()
@@ -11,28 +11,28 @@ export default async function SignUpPage() {
       <nav>
         <Header />
       </nav>
-      <Stack flexDirection={'row'} justifySelf={'center'} alignItems={'center'}>
+      <Stack flexDirection={"row"} justifySelf={"center"} alignItems={"center"}>
         <Stack>
-          <Typography variant={'subtitle1'}>An Uvuyoga App</Typography>
+          <Typography variant={"subtitle1"}>An Uvuyoga App</Typography>
         </Stack>
         <Stack>
           <Image
-            src={'/icons/asanas/leaf-1.svg'}
-            alt={'SOAR logo'}
+            src={"/icons/asanas/leaf-1.svg"}
+            alt={"SOAR logo"}
             width={100}
             height={100}
           />
         </Stack>
       </Stack>
-      <Stack justifyContent={'center'} alignItems={'center'} display={'flex'}>
+      <Stack justifyContent={"center"} alignItems={"center"} display={"flex"}>
         <Stack
-          textAlign={'center'}
+          textAlign={"center"}
           spacing={2}
           sx={{
             my: 6,
-            border: '1px solid black',
-            width: '50%',
-            borderRadius: '12px',
+            border: "1px solid black",
+            width: "50%",
+            borderRadius: "12px",
           }}
         >
           {/* 
@@ -70,9 +70,9 @@ export default async function SignUpPage() {
  */}
           <Box
             sx={{ pt: 4, pl: 4 }}
-            display={'flex'}
-            flexDirection={'column'}
-            alignItems={'flex-start'}
+            display={"flex"}
+            flexDirection={"column"}
+            alignItems={"flex-start"}
           >
             {!session && (
               <>
@@ -87,9 +87,9 @@ export default async function SignUpPage() {
             )}
           </Box>
           <Stack
-            display={'flex'}
-            alignItems={'center'}
-            justifyContent={'center'}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
             sx={{ mt: 4 }}
           >
             {!session &&
@@ -97,14 +97,14 @@ export default async function SignUpPage() {
                 <form
                   key={index}
                   action={async () => {
-                    'use server'
+                    "use server"
                     // eslint-disable-next-line no-useless-catch
                     try {
                       // await signIn(provider.id, {
                       //   redirectTo: props.searchParams?.callbackUrl ?? '',
                       // })
                       await signIn(provider.id, {
-                        redirectTo: '/navigator/profile',
+                        redirectTo: "/navigator/profile",
                       })
                     } catch (error) {
                       // Signin can fail for a number of reasons, such as the user
@@ -125,13 +125,13 @@ export default async function SignUpPage() {
                   <Button
                     type="submit"
                     variant="outlined"
-                    sx={{ my: 2, borderRadius: '12px' }}
+                    sx={{ my: 2, borderRadius: "12px" }}
                     startIcon={
                       <Image
                         src={
-                          provider.name.toLowerCase() === 'google'
-                            ? '/icons/profile/auth-google.svg'
-                            : '/icons/profile/auth-github-mark.svg'
+                          provider.name.toLowerCase() === "google"
+                            ? "/icons/profile/auth-google.svg"
+                            : "/icons/profile/auth-github-mark.svg"
                         }
                         alt={provider.name}
                         width={20}

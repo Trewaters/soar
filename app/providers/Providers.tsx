@@ -1,12 +1,12 @@
-'use client'
+"use client"
 
-import { ReactNode } from 'react'
-import { ThemeProvider } from '@mui/material/styles'
-import { theme } from '@/styles/theme'
-import { CssBaseline } from '@mui/material'
-import UserStateProvider from '@context/UserContext'
-import FlowSeriesProvider from '@context/AsanaSeriesContext'
-import AsanaPostureProvider from '@context/AsanaPostureContext'
+import { ReactNode } from "react"
+import { ThemeProvider } from "@mui/material/styles"
+import { theme } from "@/styles/theme"
+import { CssBaseline } from "@mui/material"
+import UserStateProvider from "@context/UserContext"
+import FlowSeriesProvider from "@context/AsanaSeriesContext"
+import AsanaPostureProvider from "@context/AsanaPostureContext"
 
 export function Providers({ children }: { children: ReactNode }) {
   return (

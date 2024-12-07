@@ -1,5 +1,5 @@
-import EightLimbs from '@app/navigator/eightLimbs/eight-limbs'
-import { Box } from '@mui/material'
+import EightLimbs from "@app/navigator/eightLimbs/eight-limbs"
+import { Box } from "@mui/material"
 
 export default function Page() {
   return (

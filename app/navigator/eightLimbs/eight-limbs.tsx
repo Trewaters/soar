@@ -1,4 +1,4 @@
-'use client'
+"use client"
 // import { WaterDropOutlined } from '@mui/icons-material'
 import {
   List,
@@ -7,15 +7,15 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-} from '@mui/material'
-import { useRouter } from 'next/navigation'
-import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
-import AirIcon from '@mui/icons-material/Air'
-import AdjustIcon from '@mui/icons-material/Adjust'
-import LensBlurIcon from '@mui/icons-material/LensBlur'
-import MediationIcon from '@mui/icons-material/Mediation'
-import FlagIcon from '@mui/icons-material/Flag'
-import SpaIcon from '@mui/icons-material/Spa'
+} from "@mui/material"
+import { useRouter } from "next/navigation"
+import WaterDropOutlinedIcon from "@mui/icons-material/WaterDropOutlined"
+import AirIcon from "@mui/icons-material/Air"
+import AdjustIcon from "@mui/icons-material/Adjust"
+import LensBlurIcon from "@mui/icons-material/LensBlur"
+import MediationIcon from "@mui/icons-material/Mediation"
+import FlagIcon from "@mui/icons-material/Flag"
+import SpaIcon from "@mui/icons-material/Spa"
 
 export default function EightLimbs() {
   const router = useRouter()
@@ -32,30 +32,30 @@ export default function EightLimbs() {
         >
           <ListItemButton
             sx={{
-              cursor: 'pointer',
+              cursor: "pointer",
               pl: 0,
               py: 0,
-              '&:hover': {
-                backgroundColor: 'transparent',
-                textDecoration: 'none',
+              "&:hover": {
+                backgroundColor: "transparent",
+                textDecoration: "none",
               },
             }}
             onClick={() => {
-              router.push('/navigator/asanaPostures')
+              router.push("/navigator/asanaPostures")
             }}
           >
             <ListItemText
               sx={{
-                color: 'primary.main',
+                color: "primary.main",
                 // add secondary
-                '& .MuiListItemText-secondary': {
-                  color: 'primary.main',
+                "& .MuiListItemText-secondary": {
+                  color: "primary.main",
                 },
               }}
               primary="Asana"
               secondary="Physical Postures"
             />
-            <ListItemIcon sx={{ color: 'primary.main', pl: 3 }}>
+            <ListItemIcon sx={{ color: "primary.main", pl: 3 }}>
               <WaterDropOutlinedIcon />
             </ListItemIcon>
           </ListItemButton>

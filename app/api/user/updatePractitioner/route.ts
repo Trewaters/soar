@@ -1,10 +1,10 @@
-import { PrismaClient } from '@prisma/generated/client'
+import { PrismaClient } from "@prisma/generated/client"
 
 const prisma = new PrismaClient()
 
 export async function POST(req: Request) {
   const { email, practitionerData } = await req.json()
-  const decodedId = email.toString().replace('%40', '@').replace('=', '')
+  const decodedId = email.toString().replace("%40", "@").replace("=", "")
   let getPrismaUser
 
   try {
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     if (!getPrismaUser) {
       await prisma.$disconnect()
       return new Response(
-        JSON.stringify({ error: 'User for Practitioner Data not found' }),
+        JSON.stringify({ error: "User for Practitioner Data not found" }),
         {
           status: 404,
         }
@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     await prisma.$disconnect()
     return new Response(
       JSON.stringify({
-        error: 'Error updating practitioner data!',
+        error: "Error updating practitioner data!",
       }),
       { status: 500 }
     )
@@ -46,14 +46,14 @@ export async function POST(req: Request) {
     // If update fails, create a new practitioner record
     return new Response(
       JSON.stringify({
-        error: 'Error updating practitioner data!',
+        error: "Error updating practitioner data!",
       }),
       { status: 500 }
     )
   }
   await prisma.$disconnect()
   return new Response(
-    JSON.stringify({ message: 'Practitioner data updated successfully' }),
+    JSON.stringify({ message: "Practitioner data updated successfully" }),
     { status: 200 }
   )
 }

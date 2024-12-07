@@ -248,14 +248,14 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 Start using Prisma Client in Node.js (See: https://pris.ly/d/client)
 
 ```js
-import { PrismaClient } from './prisma/generated/client'
+import { PrismaClient } from "./prisma/generated/client"
 const prisma = new PrismaClient()
 ```
 
 or start using Prisma Client at the edge (See: https://pris.ly/d/accelerate)
 
 ```js
-import { PrismaClient } from './prisma/generated/client/edge'
+import { PrismaClient } from "./prisma/generated/client/edge"
 const prisma = new PrismaClient()
 ```
 

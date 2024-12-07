@@ -1,22 +1,22 @@
-import Grid from '@mui/material/Grid'
-import Typography from '@mui/material/Typography'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
-import CardMedia from '@mui/material/CardMedia'
-import Paper from '@mui/material/Paper'
-import Image from 'next/image'
+import Grid from "@mui/material/Grid"
+import Typography from "@mui/material/Typography"
+import Card from "@mui/material/Card"
+import CardContent from "@mui/material/CardContent"
+import CardHeader from "@mui/material/CardHeader"
+import CardMedia from "@mui/material/CardMedia"
+import Paper from "@mui/material/Paper"
+import Image from "next/image"
 import {
   ButtonGroup,
   Checkbox,
   FormControlLabel,
   FormGroup,
   IconButton,
-} from '@mui/material'
-import { FullAsanaData } from '@context/AsanaPostureContext'
-import { FEATURES } from '@app/FEATURES'
-import { useRouter } from 'next/navigation'
-import yogaMatWoman from '@public/yogaMatWoman.svg'
+} from "@mui/material"
+import { FullAsanaData } from "@context/AsanaPostureContext"
+import { FEATURES } from "@app/FEATURES"
+import { useRouter } from "next/navigation"
+import yogaMatWoman from "@public/yogaMatWoman.svg"
 
 interface PostureCardProps {
   postureCardProp: FullAsanaData
@@ -35,22 +35,22 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
       <Card>
         <CardHeader
           sx={{
-            textAlign: 'center',
-            backgroundColor: 'primary.main',
+            textAlign: "center",
+            backgroundColor: "primary.main",
             padding: 3,
             marginBottom: 2,
-            '& .MuiCardHeader-title': {
-              fontWeight: 'bold',
+            "& .MuiCardHeader-title": {
+              fontWeight: "bold",
             },
-            '& .MuiCardHeader-subheader': {
-              fontWeight: 'light',
-              color: 'primary.contrastText',
+            "& .MuiCardHeader-subheader": {
+              fontWeight: "light",
+              color: "primary.contrastText",
             },
           }}
           title={posture?.sort_english_name}
           subheader={posture?.sanskrit_names}
         />
-        <CardMedia sx={{ width: '50%', margin: 'auto' }}>
+        <CardMedia sx={{ width: "50%", margin: "auto" }}>
           <Image
             src="/resized-posture card - generic.jpg"
             alt="Yoga Posture Image"
@@ -66,7 +66,7 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               xs={12}
               sm={3}
               sx={{
-                border: '1px solid',
+                border: "1px solid",
                 marginLeft: 2,
                 marginTop: 2,
               }}
@@ -74,8 +74,8 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               <Typography
                 variant="overline"
                 sx={{
-                  fontWeight: 'bold',
-                  color: '#555',
+                  fontWeight: "bold",
+                  color: "#555",
                 }}
               >
                 Description:
@@ -86,12 +86,12 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               <Typography
                 variant="body1"
                 sx={{
-                  backgroundColor: '#fef3eb',
+                  backgroundColor: "#fef3eb",
                   padding: 4,
-                  color: '#333',
+                  color: "#333",
                   borderTopRightRadius: { xs: 0, sm: 75 },
                   borderBottomRightRadius: { xs: 0, sm: 75 },
-                  whiteSpace: 'pre-line',
+                  whiteSpace: "pre-line",
                 }}
               >
                 {posture?.description}
@@ -102,14 +102,14 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               xs={12}
               sm={3}
               sx={{
-                border: '1px solid',
+                border: "1px solid",
                 marginLeft: 2,
                 marginTop: 2,
               }}
             >
               <Typography
                 variant="overline"
-                sx={{ fontWeight: 'bold', color: '#555' }}
+                sx={{ fontWeight: "bold", color: "#555" }}
               >
                 Sanskrit Name:
               </Typography>
@@ -118,15 +118,15 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               <Typography
                 variant="body1"
                 sx={{
-                  backgroundColor: '#fef3eb',
+                  backgroundColor: "#fef3eb",
                   padding: 4,
                   marginTop: 2,
-                  color: '#333',
+                  color: "#333",
                   borderTopRightRadius: { xs: 0, sm: 75 },
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
-                {posture?.sanskrit_names ?? 'Sanskrit Name not-found'}
+                {posture?.sanskrit_names ?? "Sanskrit Name not-found"}
               </Typography>
             </Grid>
             {/* 
@@ -168,14 +168,14 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               xs={12}
               sm={3}
               sx={{
-                border: '1px solid',
+                border: "1px solid",
                 marginLeft: 2,
                 marginTop: 2,
               }}
             >
               <Typography
                 variant="overline"
-                sx={{ fontWeight: 'bold', color: '#555' }}
+                sx={{ fontWeight: "bold", color: "#555" }}
               >
                 Meaning of Posture:
               </Typography>
@@ -185,10 +185,10 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               <Typography
                 variant="body1"
                 sx={{
-                  backgroundColor: '#fef3eb',
+                  backgroundColor: "#fef3eb",
                   padding: 4,
                   marginTop: 2,
-                  color: '#333',
+                  color: "#333",
                   borderTopRightRadius: { xs: 0, sm: 75 },
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
@@ -202,14 +202,14 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               xs={12}
               sm={3}
               sx={{
-                border: '1px solid',
+                border: "1px solid",
                 marginLeft: 2,
                 marginTop: 2,
               }}
             >
               <Typography
                 variant="overline"
-                sx={{ fontWeight: 'bold', color: '#555' }}
+                sx={{ fontWeight: "bold", color: "#555" }}
               >
                 Benefits:
               </Typography>
@@ -219,10 +219,10 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               <Typography
                 variant="body1"
                 sx={{
-                  backgroundColor: '#fef3eb',
+                  backgroundColor: "#fef3eb",
                   padding: 4,
                   marginTop: 2,
-                  color: '#333',
+                  color: "#333",
                   borderTopRightRadius: { xs: 0, sm: 75 },
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
@@ -239,14 +239,14 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               xs={12}
               sm={3}
               sx={{
-                border: '1px solid',
+                border: "1px solid",
                 marginLeft: 2,
                 marginTop: 2,
               }}
             >
               <Typography
                 variant="overline"
-                sx={{ fontWeight: 'bold', color: '#555' }}
+                sx={{ fontWeight: "bold", color: "#555" }}
               >
                 Breath (default):
               </Typography>
@@ -256,10 +256,10 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               <Typography
                 variant="body1"
                 sx={{
-                  backgroundColor: '#fef3eb',
+                  backgroundColor: "#fef3eb",
                   padding: 4,
                   marginTop: 2,
-                  color: '#333',
+                  color: "#333",
                   borderTopRightRadius: { xs: 0, sm: 75 },
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
@@ -273,14 +273,14 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               xs={12}
               sm={3}
               sx={{
-                border: '1px solid',
+                border: "1px solid",
                 marginLeft: 2,
                 marginTop: 2,
               }}
             >
               <Typography
                 variant="overline"
-                sx={{ fontWeight: 'bold', color: '#555' }}
+                sx={{ fontWeight: "bold", color: "#555" }}
               >
                 Dristi:
               </Typography>
@@ -290,10 +290,10 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               <Typography
                 variant="body1"
                 sx={{
-                  backgroundColor: '#fef3eb',
+                  backgroundColor: "#fef3eb",
                   padding: 4,
                   marginTop: 2,
-                  color: '#333',
+                  color: "#333",
                   borderTopRightRadius: { xs: 0, sm: 75 },
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
@@ -307,14 +307,14 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               xs={12}
               sm={3}
               sx={{
-                border: '1px solid',
+                border: "1px solid",
                 marginLeft: 2,
                 marginTop: 2,
               }}
             >
               <Typography
                 variant="overline"
-                sx={{ fontWeight: 'bold', color: '#555' }}
+                sx={{ fontWeight: "bold", color: "#555" }}
               >
                 Difficulty:
               </Typography>
@@ -324,10 +324,10 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               <Typography
                 variant="body1"
                 sx={{
-                  backgroundColor: '#fef3eb',
+                  backgroundColor: "#fef3eb",
                   padding: 4,
                   marginTop: 2,
-                  color: '#333',
+                  color: "#333",
                   borderTopRightRadius: { xs: 0, sm: 75 },
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
@@ -341,14 +341,14 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               xs={12}
               sm={3}
               sx={{
-                border: '1px solid',
+                border: "1px solid",
                 marginLeft: 2,
                 marginTop: 2,
               }}
             >
               <Typography
                 variant="overline"
-                sx={{ fontWeight: 'bold', color: '#555' }}
+                sx={{ fontWeight: "bold", color: "#555" }}
               >
                 Category:
               </Typography>
@@ -358,10 +358,10 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               <Typography
                 variant="body1"
                 sx={{
-                  backgroundColor: '#fef3eb',
+                  backgroundColor: "#fef3eb",
                   padding: 4,
                   marginTop: 2,
-                  color: '#333',
+                  color: "#333",
                   borderTopRightRadius: { xs: 0, sm: 75 },
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
@@ -375,14 +375,14 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               xs={12}
               sm={3}
               sx={{
-                border: '1px solid',
+                border: "1px solid",
                 marginLeft: 2,
                 marginTop: 2,
               }}
             >
               <Typography
                 variant="overline"
-                sx={{ fontWeight: 'bold', color: '#555' }}
+                sx={{ fontWeight: "bold", color: "#555" }}
               >
                 Activities:
               </Typography>
@@ -392,10 +392,10 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
               <Typography
                 variant="body1"
                 sx={{
-                  backgroundColor: '#fef3eb',
+                  backgroundColor: "#fef3eb",
                   padding: 4,
                   marginTop: 2,
-                  color: '#333',
+                  color: "#333",
                   borderTopRightRadius: { xs: 0, sm: 75 },
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}

@@ -6,7 +6,7 @@ import {
   useContext,
   useEffect,
   useReducer,
-} from 'react'
+} from "react"
 
 // Full Posture Data Interface
 // ! udpate name to 'FullAsanaData' ( 2024-11-10 12:27:15 )
@@ -257,44 +257,44 @@ export interface AsanaPosturePageState {
   // selectedPosture: FullAsanaData | undefined
 }
 
-type AsanaPostureAction = { type: 'SET_POSTURES'; payload: FullAsanaData }
+type AsanaPostureAction = { type: "SET_POSTURES"; payload: FullAsanaData }
 
 const initialState: AsanaPosturePageState = {
   postures: {
     id: 0,
     english_names: [],
-    sanskrit_names: '',
-    sort_english_name: '',
-    description: '',
-    benefits: '',
-    category: '',
-    difficulty: '',
-    lore: '',
-    breath_direction_default: '',
-    dristi: '',
+    sanskrit_names: "",
+    sort_english_name: "",
+    description: "",
+    benefits: "",
+    category: "",
+    difficulty: "",
+    lore: "",
+    breath_direction_default: "",
+    dristi: "",
     variations: [],
     modifications: [],
     suggested_postures: [],
     preparatory_postures: [],
-    preferred_side: '',
+    preferred_side: "",
     sideways: false,
-    image: '',
-    created_on: '',
-    updated_on: '',
+    image: "",
+    created_on: "",
+    updated_on: "",
     activity_completed: false,
     activity_practice: false,
-    posture_intent: '',
+    posture_intent: "",
     breath_series: [],
-    duration_asana: '',
-    transition_cues_out: '',
-    transition_cues_in: '',
-    setup_cues: '',
-    deepening_cues: '',
-    customize_asana: '',
-    additional_cues: '',
-    joint_action: '',
-    muscle_action: '',
-    created_by: '',
+    duration_asana: "",
+    transition_cues_out: "",
+    transition_cues_in: "",
+    setup_cues: "",
+    deepening_cues: "",
+    customize_asana: "",
+    additional_cues: "",
+    joint_action: "",
+    muscle_action: "",
+    created_by: "",
   },
 }
 
@@ -313,7 +313,7 @@ function AsanaPostureReducer(
   action: AsanaPostureAction
 ): AsanaPosturePageState {
   switch (action.type) {
-    case 'SET_POSTURES':
+    case "SET_POSTURES":
       return { ...state, postures: action.payload }
     default:
       return state
@@ -340,7 +340,7 @@ export function useAsanaPosture() {
   const context = useContext(AsanaPostureContext)
   if (context === undefined) {
     throw new Error(
-      'useAsanaPosture must be used within an AsanaPostureProvider'
+      "useAsanaPosture must be used within an AsanaPostureProvider"
     )
   }
   return context

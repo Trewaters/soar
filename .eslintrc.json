@@ -68,9 +68,9 @@
     "@typescript-eslint/no-unnecessary-type-constraint": "off",
 
     // Accessibility
-    "jsx-a11y/anchor-is-valid": "off",
-    "jsx-a11y/alt-text": "off",
-    "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/anchor-is-valid": "warn",
+    "jsx-a11y/alt-text": "warn",
+    "jsx-a11y/label-has-associated-control": "warn",
     "react/react-in-jsx-scope": "off" // DISABLE for Typescript
   }
 }

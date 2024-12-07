@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/generated/client'
+import { PrismaClient } from "@prisma/generated/client"
 
 const prisma = new PrismaClient()
 
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
         updatedAt: new Date().toISOString(),
       },
     })
-    return Response.json({ message: 'Sequence Data saved' })
+    return Response.json({ message: "Sequence Data saved" })
   } catch (error: any) {
     return Response.json({ error: error.message }, { status: 500 })
   } finally {

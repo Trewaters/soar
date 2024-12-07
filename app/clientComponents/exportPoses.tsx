@@ -1,8 +1,8 @@
-import React from 'react'
-import { Box, Button, IconButton, Typography } from '@mui/material'
-import IosShareIcon from '@mui/icons-material/IosShare'
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
-import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
+import React from "react"
+import { Box, Button, IconButton, Typography } from "@mui/material"
+import IosShareIcon from "@mui/icons-material/IosShare"
+import { FullAsanaData } from "@app/context/AsanaPostureContext"
+import { FlowSeriesData } from "@app/context/AsanaSeriesContext"
 
 interface PostureShareButtonProps {
   postureData?: FullAsanaData | null
@@ -40,14 +40,14 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
           'The yoga posture "' +
           postureData.sort_english_name +
           '" was shared with you. Below is the description:' +
-          '\n ',
+          "\n ",
         text:
           postureData.description +
-          '\n' +
-          '\n' +
-          '\n' +
-          'Practice with us at Uvuyoga!' +
-          '\n',
+          "\n" +
+          "\n" +
+          "\n" +
+          "Practice with us at Uvuyoga!" +
+          "\n",
         url: window.location.href,
       }
     : seriesData
@@ -56,16 +56,16 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
             'The yoga series "' +
             seriesData.seriesName +
             '" was shared with you. Below are the postures:' +
-            '\n',
+            "\n",
           text:
             seriesData.seriesPostures
-              .map((posture) => posture.replace(';', ','))
-              .join('\n') +
-            '\n' +
-            '\n' +
-            'Practice with us at Uvuyoga!' +
-            '\n',
-          url: 'https://www.happyyoga.app/navigator/flows/practiceSeries',
+              .map((posture) => posture.replace(";", ","))
+              .join("\n") +
+            "\n" +
+            "\n" +
+            "Practice with us at Uvuyoga!" +
+            "\n",
+          url: "https://www.happyyoga.app/navigator/flows/practiceSeries",
         }
       : null
 
@@ -75,16 +75,16 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
     if (navigator.share) {
       try {
         await navigator.share(shareAsanaData)
-        console.log('Data shared successfully!')
+        console.log("Data shared successfully!")
       } catch (error) {
-        console.error('Error sharing data:', error)
+        console.error("Error sharing data:", error)
       }
     } else {
       // Fallback: Copy to clipboard
       const shareText = `${shareAsanaData.title}\n${shareAsanaData.text}\n${shareAsanaData.url}`
       navigator.clipboard.writeText(shareText).then(() => {
         alert(
-          'Sharing is not supported in your browser. The link has been copied to your clipboard.'
+          "Sharing is not supported in your browser. The link has been copied to your clipboard."
         )
       })
     }
@@ -98,7 +98,7 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
             <>
               <Typography variant="h2">
                 {postureData
-                  ? postureData.english_names.join(', ')
+                  ? postureData.english_names.join(", ")
                   : seriesData?.seriesName}
               </Typography>
               <Typography variant="body1">
@@ -110,9 +110,9 @@ const PostureShareButton: React.FC<PostureShareButtonProps> = ({
           )}
           <IconButton
             disableRipple
-            sx={{ color: 'primary.contrastText' }}
+            sx={{ color: "primary.contrastText" }}
             onClick={handleShare}
-            aria-label={`Share this ${postureData ? 'Posture' : 'Series'}`}
+            aria-label={`Share this ${postureData ? "Posture" : "Series"}`}
           >
             <IosShareIcon />
             {/* Share this {postureData ? 'Posture' : 'Series'} */}

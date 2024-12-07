@@ -1,4 +1,4 @@
-import { FlowSeriesSequence } from '@context/AsanaSeriesContext'
+import { FlowSeriesSequence } from "@context/AsanaSeriesContext"
 import {
   createContext,
   Dispatch,
@@ -6,7 +6,7 @@ import {
   useContext,
   useEffect,
   useReducer,
-} from 'react'
+} from "react"
 
 export interface SequenceData {
   id: number
@@ -24,20 +24,20 @@ export type SequencePageState = {
   sequences: SequenceData
 }
 
-type SequenceAction = { type: 'SET_SEQUENCES'; payload: SequenceData }
+type SequenceAction = { type: "SET_SEQUENCES"; payload: SequenceData }
 
 const initialState: SequencePageState = {
   sequences: {
     id: 0,
-    nameSequence: '',
+    nameSequence: "",
     sequencesSeries: [],
-    description: '',
-    duration: '',
-    image: '',
+    description: "",
+    duration: "",
+    image: "",
     // ! REMOVE: breath_direction is not need. (2024-08-27 16:49:10)
-    breath_direction: '',
-    createdAt: '',
-    updatedAt: '',
+    breath_direction: "",
+    createdAt: "",
+    updatedAt: "",
   },
 }
 
@@ -56,7 +56,7 @@ export function SequenceReducer(
   action: SequenceAction
 ): SequencePageState {
   switch (action.type) {
-    case 'SET_SEQUENCES':
+    case "SET_SEQUENCES":
       return { ...state, sequences: action.payload }
     default:
       return state
@@ -91,7 +91,7 @@ export default function SequenceProvider({
 export function useSequence() {
   const context = useContext(SequenceContext)
   if (context === undefined) {
-    throw new Error('useSequence must be used within a SequenceProvider')
+    throw new Error("useSequence must be used within a SequenceProvider")
   }
   return context
 }

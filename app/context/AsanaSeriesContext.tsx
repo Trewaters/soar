@@ -5,7 +5,7 @@ import {
   useContext,
   useEffect,
   useReducer,
-} from 'react'
+} from "react"
 
 // used for the series page data
 export interface FlowSeriesData {
@@ -37,18 +37,18 @@ export type FlowSeriesPageState = {
   flowSeries: FlowSeriesData
 }
 
-type FlowSeriesAction = { type: 'SET_FLOW_SERIES'; payload: FlowSeriesData }
+type FlowSeriesAction = { type: "SET_FLOW_SERIES"; payload: FlowSeriesData }
 
 const initialState: FlowSeriesPageState = {
   flowSeries: {
-    seriesName: '',
+    seriesName: "",
     seriesPostures: [],
-    breath: '',
-    description: '',
-    duration: '',
-    image: '',
-    createdAt: '',
-    updatedAt: '',
+    breath: "",
+    description: "",
+    duration: "",
+    image: "",
+    createdAt: "",
+    updatedAt: "",
   },
 }
 
@@ -67,7 +67,7 @@ function FlowSeriesReducer(
   action: FlowSeriesAction
 ): FlowSeriesPageState {
   switch (action.type) {
-    case 'SET_FLOW_SERIES':
+    case "SET_FLOW_SERIES":
       return { ...state, flowSeries: action.payload }
     default:
       return state
@@ -108,7 +108,7 @@ export default function FlowSeriesProvider({
 export function useFlowSeries() {
   const context = useContext(FlowSeriesContext)
   if (context === undefined) {
-    throw new Error('useFlowSeries must be used within a FlowSeriesProvider')
+    throw new Error("useFlowSeries must be used within a FlowSeriesProvider")
   }
   return context
 }

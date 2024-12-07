@@ -1,7 +1,7 @@
-'use client'
-import React, { AppBar, IconButton } from '@mui/material'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+"use client"
+import React, { AppBar, IconButton } from "@mui/material"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 export default function NavBottom(props: { subRoute: string }) {
   const router = useRouter()
@@ -9,24 +9,24 @@ export default function NavBottom(props: { subRoute: string }) {
     <AppBar
       position="static"
       sx={{
-        backgroundColor: 'info.contrastText',
+        backgroundColor: "info.contrastText",
         borderTopRightRadius: 0,
         borderTopLeftRadius: 0,
-        width: { sm: '100vw', md: '40vw' },
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        width: { sm: "100vw", md: "40vw" },
+        flexDirection: "row",
+        justifyContent: "space-between",
         px: 2,
         bottom: 0,
-        position: 'fixed',
-        left: { sm: '0', md: '30vw' },
-        height: '66px',
-        justifySelf: 'center',
+        position: "fixed",
+        left: { sm: "0", md: "30vw" },
+        height: "66px",
+        justifySelf: "center",
       }}
     >
       <IconButton
         disableRipple
         onClick={() => {
-          router.push('/')
+          router.push("/")
         }}
       >
         <Image
@@ -39,7 +39,7 @@ export default function NavBottom(props: { subRoute: string }) {
       <IconButton
         disableRipple
         onClick={() => {
-          router.push('/navigator/profile')
+          router.push("/navigator/profile")
         }}
       >
         <Image

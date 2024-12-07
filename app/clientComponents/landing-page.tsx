@@ -1,9 +1,9 @@
-import React from 'react'
-import Box from '@mui/material/Box'
-import WhatshotIcon from '@mui/icons-material/Whatshot'
-import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
-import Link from 'next/link'
-import { Button, Stack, Typography } from '@mui/material'
+import React from "react"
+import Box from "@mui/material/Box"
+import WhatshotIcon from "@mui/icons-material/Whatshot"
+import WaterDropOutlinedIcon from "@mui/icons-material/WaterDropOutlined"
+import Link from "next/link"
+import { Button, Stack, Typography } from "@mui/material"
 
 const links = [
   // {
@@ -11,7 +11,7 @@ const links = [
   //   href: '/navigator/asanaPostures',
   //   icon: <WaterDropOutlinedIcon />,
   // },
-  { name: 'Flows', href: '/navigator/flows', icon: <WhatshotIcon /> },
+  { name: "Flows", href: "/navigator/flows", icon: <WhatshotIcon /> },
 ]
 
 export default function LandingPage() {
@@ -24,8 +24,8 @@ export default function LandingPage() {
               <Link href={link.href} passHref>
                 <Button
                   sx={{
-                    '&:hover': {
-                      backgroundColor: 'transparent',
+                    "&:hover": {
+                      backgroundColor: "transparent",
                     },
                   }}
                   startIcon={link.icon}

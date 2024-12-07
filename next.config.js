@@ -1,9 +1,9 @@
 /** @type {import("next").NextConfig} */
 // fix prisma Query engine issues
-const { PrismaPlugin } = require('@prisma/nextjs-monorepo-workaround-plugin')
+const { PrismaPlugin } = require("@prisma/nextjs-monorepo-workaround-plugin")
 
 const nextConfig = {
-  output: 'standalone',
+  output: "standalone",
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.plugins = [...config.plugins, new PrismaPlugin()]
@@ -16,7 +16,7 @@ const nextConfig = {
       child_process: false,
       dns: false,
       tls: false,
-      'timers/promises': false,
+      "timers/promises": false,
       net: false,
     }
 

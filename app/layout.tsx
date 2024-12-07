@@ -1,22 +1,22 @@
-import '@styles/globals.css'
-import { ReactNode } from 'react'
-import type { Metadata } from 'next'
-import { Providers } from '@providers/Providers'
+import "@styles/globals.css"
+import { ReactNode } from "react"
+import type { Metadata } from "next"
+import { Providers } from "@providers/Providers"
 
 declare global {
   // eslint-disable-next-line no-unused-vars
   namespace JSX {
     // eslint-disable-next-line no-unused-vars
     interface IntrinsicElements {
-      'gmp-map': any
-      'gmp-advanced-marker': any
+      "gmp-map": any
+      "gmp-advanced-marker": any
     }
   }
 }
 
 export const metadata: Metadata = {
-  title: 'Uvuyoga',
-  description: 'Soar like a leaf on the wind!',
+  title: "Uvuyoga",
+  description: "Soar like a leaf on the wind!",
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {

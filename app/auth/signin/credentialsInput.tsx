@@ -1,12 +1,12 @@
-'use client'
-import React, { use, useEffect, useState } from 'react'
-import { Box, Stack, TextField, Button } from '@mui/material'
-import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+"use client"
+import React, { use, useEffect, useState } from "react"
+import { Box, Stack, TextField, Button } from "@mui/material"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/navigation"
 
 const CredentialsInput: React.FC = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const router = useRouter()
   const [isEmailValid, setIsEmailValid] = useState(false)
 
@@ -21,13 +21,13 @@ const CredentialsInput: React.FC = () => {
   }
   useEffect(() => {
     checkEmailExists(email)
-    console.log('email exists:', isEmailValid)
+    console.log("email exists:", isEmailValid)
   }, [email, isEmailValid])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const result = await signIn('credentials', {
+      const result = await signIn("credentials", {
         redirect: false,
         email,
         password,
@@ -35,18 +35,18 @@ const CredentialsInput: React.FC = () => {
       if (result?.error) {
         router.push(`${process.env.SIGNIN_ERROR_URL}?error=${result.error}`)
       } else {
-        router.push('/')
+        router.push("/")
       }
     } catch (error) {
-      console.error('An unexpected error happened:', error)
+      console.error("An unexpected error happened:", error)
     }
   }
 
   return (
     <Box
-      component={'form'}
+      component={"form"}
       noValidate
-      autoComplete={'off'}
+      autoComplete={"off"}
       onSubmit={handleSubmit}
       my={3}
     >
@@ -87,7 +87,7 @@ const CredentialsInput: React.FC = () => {
         <Button
           variant="text"
           color="secondary"
-          onClick={() => router.push('/auth/passwordRecovery')}
+          onClick={() => router.push("/auth/passwordRecovery")}
         >
           Forgot Password?
         </Button>

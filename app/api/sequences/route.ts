@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/generated/client'
-import { NextResponse } from 'next/server'
+import { PrismaClient } from "@prisma/generated/client"
+import { NextResponse } from "next/server"
 
 const prisma = new PrismaClient()
 
@@ -15,7 +15,7 @@ export async function GET() {
     }))
     return NextResponse.json(dataWithId, {
       headers: {
-        'Cache-Control': 'no-store',
+        "Cache-Control": "no-store",
       },
     })
   } catch (error: unknown) {
@@ -23,7 +23,7 @@ export async function GET() {
       return NextResponse.json({ error: error.message }, { status: 500 })
     } else {
       return NextResponse.json(
-        { error: 'An unknown error occurred.' },
+        { error: "An unknown error occurred." },
         { status: 500 }
       )
     }

@@ -1,6 +1,6 @@
-import { DefaultSession, DefaultUser } from 'next-auth'
+import { DefaultSession, DefaultUser } from "next-auth"
 
-declare module 'next-auth' {
+declare module "next-auth" {
   interface User extends DefaultUser {
     id: string
     role?: string
@@ -14,7 +14,7 @@ declare module 'next-auth' {
       status?: string | null
       value?: string | null
       expires?: string | null
-    } & DefaultSession['user']
+    } & DefaultSession["user"]
     lastLogin?: string | null
   }
 }

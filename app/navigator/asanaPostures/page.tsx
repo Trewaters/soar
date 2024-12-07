@@ -1,11 +1,11 @@
-'use client'
-import { useEffect, useState } from 'react'
-import PostureSearch from '@app/navigator/asanaPostures/posture-search'
-import { Box, Button, CircularProgress, Typography } from '@mui/material'
-import { FullAsanaData } from '@context/AsanaPostureContext'
-import SplashHeader from '@app/clientComponents/splash-header'
-import { useRouter } from 'next/navigation'
-import NavBottom from '@serverComponents/navBottom'
+"use client"
+import { useEffect, useState } from "react"
+import PostureSearch from "@app/navigator/asanaPostures/posture-search"
+import { Box, Button, CircularProgress, Typography } from "@mui/material"
+import { FullAsanaData } from "@context/AsanaPostureContext"
+import SplashHeader from "@app/clientComponents/splash-header"
+import { useRouter } from "next/navigation"
+import NavBottom from "@serverComponents/navBottom"
 
 export default function Page() {
   const [posturePropData, setPosturePropData] = useState<FullAsanaData[]>([])
@@ -17,9 +17,9 @@ export default function Page() {
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch('../api/poses', { cache: 'no-store' })
+      const response = await fetch("../api/poses", { cache: "no-store" })
       if (!response.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error("Network response was not ok")
       }
       // setPosturePropData(await response.json())
       setPosturePropData(
@@ -44,19 +44,19 @@ export default function Page() {
     <>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
         <SplashHeader
-          src={'/images/asana-postures-splash-header.png'}
-          alt={'Asanas'}
+          src={"/images/asana-postures-splash-header.png"}
+          alt={"Asanas"}
           title="Asanas"
         />
-        <Box height={'32px'} />
+        <Box height={"32px"} />
         {loading ? (
-          <CircularProgress sx={{ backgroundColor: 'transparent' }} />
+          <CircularProgress sx={{ backgroundColor: "transparent" }} />
         ) : (
           <PostureSearch posturePropData={posturePropData} />
         )}
@@ -65,9 +65,9 @@ export default function Page() {
           variant="contained"
           color="primary"
           sx={{ mb: 3 }}
-          onClick={() => router.push('/navigator/asanaPostures/createAsana')}
+          onClick={() => router.push("/navigator/asanaPostures/createAsana")}
         >
-          <Typography whiteSpace={'nowrap'}>Create Asana Posture</Typography>
+          <Typography whiteSpace={"nowrap"}>Create Asana Posture</Typography>
         </Button>
       </Box>
       <NavBottom subRoute="/navigator/asanaPostures" />

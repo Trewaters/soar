@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
-import axios from 'axios'
-import { useRouter } from 'next/navigation'
-import { jwtDecode } from 'jwt-decode'
+import React, { createContext, useContext, useState, useEffect } from "react"
+import axios from "axios"
+import { useRouter } from "next/navigation"
+import { jwtDecode } from "jwt-decode"
 
 interface AuthContextType {
   user: any
@@ -15,11 +15,11 @@ type AuthProviderProps = {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<string>('')
+  const [user, setUser] = useState<string>("")
   const router = useRouter()
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem("token")
     if (token) {
       const decoded = jwtDecode(token) as { userId: string }
       axios.get(`/api/user/${decoded.userId}`).then((res) => {
@@ -29,9 +29,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [])
 
   const logout = () => {
-    localStorage.removeItem('token')
-    setUser('')
-    router.push('/')
+    localStorage.removeItem("token")
+    setUser("")
+    router.push("/")
   }
 
   return (
@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
+    throw new Error("useAuth must be used within an AuthProvider")
   }
   return context
 }

@@ -5,7 +5,7 @@ import {
   use,
   useEffect,
   useReducer,
-} from 'react'
+} from "react"
 
 export interface TimerWatch {
   isPaused: boolean
@@ -35,7 +35,7 @@ export type TimerPageState = {
   watch: TimerWatch
 }
 
-type TimerAction = { type: 'SET_TIMER'; payload: TimerWatch }
+type TimerAction = { type: "SET_TIMER"; payload: TimerWatch }
 
 const initialState: TimerPageState = {
   watch: {
@@ -59,7 +59,7 @@ function TimerReducer(
   action: TimerAction
 ): TimerPageState {
   switch (action.type) {
-    case 'SET_TIMER':
+    case "SET_TIMER":
       return {
         ...state,
         watch: action.payload,
@@ -112,7 +112,7 @@ export default function TimerProvider({ children }: { children: ReactNode }) {
 export function useTimer() {
   const context = use(TimerContext)
   if (!context) {
-    throw new Error('useTimer must be used within a TimerProvider')
+    throw new Error("useTimer must be used within a TimerProvider")
   }
   return context
 }

@@ -1,7 +1,7 @@
-import { Stack, Button, IconButton } from '@mui/material'
-import React, { ComponentProps } from 'react'
-import HelpIcon from '@mui/icons-material/Help'
-import Image from 'next/image'
+import { Stack, Button, IconButton } from "@mui/material"
+import React, { ComponentProps } from "react"
+import HelpIcon from "@mui/icons-material/Help"
+import Image from "next/image"
 
 interface SubNavHeaderProps extends ComponentProps<typeof IconButton> {
   title: string
@@ -31,8 +31,8 @@ const SubNavHeader: React.FC<SubNavHeaderProps> = ({
 }) => {
   return (
     <Stack
-      direction={'row'}
-      justifyContent={'space-between'}
+      direction={"row"}
+      justifyContent={"space-between"}
       sx={{
         marginTop: 4,
         paddingLeft: 4,
@@ -44,11 +44,11 @@ const SubNavHeader: React.FC<SubNavHeaderProps> = ({
         href={link}
         LinkComponent="a"
         sx={{
-          alignSelf: 'flex-start',
-          color: 'primary.contrastText',
-          '&:hover': {
-            backgroundColor: 'transparent',
-            boxShadow: 'none',
+          alignSelf: "flex-start",
+          color: "primary.contrastText",
+          "&:hover": {
+            backgroundColor: "transparent",
+            boxShadow: "none",
           },
         }}
         startIcon={
@@ -66,7 +66,7 @@ const SubNavHeader: React.FC<SubNavHeaderProps> = ({
         Back to {title}
       </Button>
       <IconButton disableRipple onClick={props.onClick}>
-        <HelpIcon sx={{ color: 'success.light' }} />
+        <HelpIcon sx={{ color: "success.light" }} />
       </IconButton>
     </Stack>
   )
