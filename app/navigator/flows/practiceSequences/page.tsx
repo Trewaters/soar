@@ -121,8 +121,8 @@ export default function Page() {
         >
           <SplashHeader
             src={'/icons/designImages/header-practice-sequence.png'}
-            alt={'Practice Sequence'}
-            title="Practice Sequence"
+            alt={'Practice Sequences'}
+            title="Practice Sequences"
           />
           <SubNavHeader
             title="Flows"

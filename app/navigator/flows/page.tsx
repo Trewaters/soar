@@ -110,7 +110,7 @@ export default function Page() {
           onClick={handleCreateSeriesClick}
         />
         <SplashNavButton
-          title="Practice Sequence"
+          title="Practice Sequences"
           description="Sequences are ordered series."
           sx={{
             backgroundImage:
