@@ -5,6 +5,7 @@ import Image from "next/image"
 import { signIn, providerMap, signOut, auth } from "@auth"
 import { AuthError } from "@node_modules/next-auth"
 import { redirect } from "@node_modules/next/navigation"
+import Link from "@node_modules/next/link"
 
 export default async function SignInPage(props: {
   searchParams: { callbackUrl: string | undefined }
@@ -37,6 +38,7 @@ export default async function SignInPage(props: {
             border: "1px solid black",
             width: "50%",
             borderRadius: "12px",
+            pb: 3,
           }}
         >
           <Box
@@ -45,10 +47,28 @@ export default async function SignInPage(props: {
             flexDirection={"column"}
             alignItems={"flex-start"}
           >
-            <Typography variant="h2">Welcome back!</Typography>
-            <Typography variant="body1" component="p">
-              We&apos;re happy you&apos;re here!
-            </Typography>
+            {session ? (
+              <>
+                <Typography
+                  alignSelf={"center"}
+                  variant="h2"
+                  color="success.main"
+                >
+                  You&apos;re signed in!
+                </Typography>
+                <Typography alignSelf={"center"} variant="body1">
+                  <Link href="/">Click here</Link>
+                  &nbsp;to go to the home page.
+                </Typography>
+              </>
+            ) : (
+              <>
+                <Typography variant="h2">Welcome back!</Typography>
+                <Typography variant="body1" component="p">
+                  We&apos;re happy you&apos;re here!
+                </Typography>
+              </>
+            )}
           </Box>
 
           <Stack
@@ -58,10 +78,12 @@ export default async function SignInPage(props: {
             sx={{ mt: 4 }}
           >
             {/*             
-// ! Remove until I can fix the following.
-1) password recovery
-2) do not show error page when user is not found
+              // ! Remove until I can fix the following.
+              // 1) password recovery
+              // 2) do not show error page when user is not found
+
             <CredentialsInput /> 
+
             */}
 
             {Object.values(providerMap).map((provider, index) => (
@@ -117,14 +139,14 @@ export default async function SignInPage(props: {
               </form>
             ))}
           </Stack>
-          <Stack>
+          <Stack display={"flex"} textAlign={"left"} sx={{ pl: 4, pb: 2 }}>
             {!session && (
               <>
                 <Typography margin={1} variant="body1">
                   Don&apos;t have an account yet?
                 </Typography>
                 <Typography variant="body1">
-                  Signing in will automatically create an account for you.
+                  ✨ Signing in will automatically create an account for you.
                 </Typography>
               </>
             )}
@@ -133,10 +155,14 @@ export default async function SignInPage(props: {
             <form
               action={async () => {
                 "use server"
-                await signOut()
+                await signOut({ redirect: true, redirectTo: "/auth/signout" })
               }}
             >
-              <Button variant="contained" type="submit" sx={{ mb: 3 }}>
+              <Button
+                variant="contained"
+                type="submit"
+                sx={{ width: "50%", alignSelf: "center" }}
+              >
                 Sign out
               </Button>
             </form>
