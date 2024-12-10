@@ -31,12 +31,14 @@ export default function SignOutPage() {
           spacing={2}
           sx={{
             my: 6,
+            pb: 3,
+            px: 1,
             border: "1px solid black",
             width: "50%",
             borderRadius: "12px",
           }}
         >
-          <Box sx={{ pt: 4, pb: 3 }}>
+          <Box sx={{ pt: 4, pb: 2 }}>
             <Typography color="success.main" variant="h2">
               You&apos;re signed out!
             </Typography>
@@ -46,8 +48,8 @@ export default function SignOutPage() {
           </Box>
           <Button
             type="submit"
-            variant="outlined"
-            sx={{ my: 2, borderRadius: "12px" }}
+            variant="contained"
+            sx={{ borderRadius: "12px" }}
             onClick={() => {
               router.push("/")
             }}
@@ -56,8 +58,8 @@ export default function SignOutPage() {
           </Button>
           <Button
             type="submit"
-            variant="outlined"
-            sx={{ my: 2, borderRadius: "12px" }}
+            variant="contained"
+            sx={{ borderRadius: "12px" }}
             onClick={() => {
               router.push("/auth/signin")
             }}
@@ -65,7 +67,6 @@ export default function SignOutPage() {
             <Typography>Sign in again!</Typography>
           </Button>
         </Stack>
-        <Stack textAlign={"center"} spacing={2} sx={{ my: 6 }}></Stack>
       </Stack>
     </>
   )

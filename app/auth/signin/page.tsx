@@ -42,10 +42,10 @@ export default async function SignInPage(props: {
           }}
         >
           <Box
-            sx={{ pt: 4, pl: 4 }}
+            sx={{ pt: 4 }}
             display={"flex"}
             flexDirection={"column"}
-            alignItems={"flex-start"}
+            alignItems={"center"}
           >
             {session ? (
               <>
@@ -139,10 +139,10 @@ export default async function SignInPage(props: {
               </form>
             ))}
           </Stack>
-          <Stack display={"flex"} textAlign={"left"} sx={{ pl: 4, pb: 2 }}>
+          <Stack display={"flex"} textAlign={"center"} sx={{ pb: 2 }}>
             {!session && (
               <>
-                <Typography margin={1} variant="body1">
+                <Typography variant="body1">
                   Don&apos;t have an account yet?
                 </Typography>
                 <Typography variant="body1">
