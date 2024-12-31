@@ -12,18 +12,9 @@ export default function Page() {
         // aria-labelledby="page-title"
       >
         <Typography variant="body1" id="page-title" sx={{ marginBottom: 2 }}>
-          Yoga exercise app allowing you to view and create yoga exercises.
+          Yoga exercise app
         </Typography>
 
-        <Typography variant="h6" component="h2">
-          Highlighting progress and future plans
-        </Typography>
-        <Typography variant="body1" sx={{ marginBottom: 2 }}>
-          Below is a sample About Page description that highlights what uvuyoga
-          is all about, along with a concise overview of each major section’s
-          current status (Completed vs. To Do). Feel free to adjust length,
-          wording, or emphasis as needed for your app.
-        </Typography>
         <Typography variant="h6" component="h2">
           About uvuyoga
         </Typography>
