@@ -11,12 +11,12 @@ export default function Page() {
         role="main"
         aria-labelledby="page-title"
       >
-        <Typography variant="body1" id="page-title">
-          Like a leaf on the Wind
-        </Typography>
         {/* <Typography variant="body1" id="page-title">
-          Yoga exercise app allowing you to view and create yoga exercises.
+          Like a leaf on the Wind
         </Typography> */}
+        <Typography variant="body1" id="page-title">
+          a yoga exercise app
+        </Typography>
         <CurrentTime />
       </Box>
       <TabHeader />
