@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/generated/client"
+import { NextRequest, NextResponse } from 'next/server'
+import { PrismaClient } from '@prisma/generated/client'
 
 const prisma = new PrismaClient()
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.nextUrl)
-  const sortEnglishName = searchParams.get("sort_english_name")
+  const sortEnglishName = searchParams.get('sort_english_name')
 
   if (sortEnglishName) {
     try {
@@ -14,11 +14,11 @@ export async function GET(request: NextRequest) {
       })
 
       if (!pose) {
-        return NextResponse.json({ error: "Pose not found" }, { status: 404 })
+        return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
       }
 
       if (pose.breath_direction_default === null) {
-        pose.breath_direction_default = ""
+        pose.breath_direction_default = ''
       }
 
       return NextResponse.json(pose)
@@ -37,12 +37,12 @@ export async function GET(request: NextRequest) {
       // Ensure breath_direction_default is not null
       breath_direction_default:
         item.breath_direction_default === null
-          ? "neutral"
+          ? 'neutral'
           : item.breath_direction_default,
     }))
     return NextResponse.json(dataWithId, {
       headers: {
-        "Cache-Control": "no-store",
+        'Cache-Control': 'no-store',
       },
     })
   } catch (error: any) {

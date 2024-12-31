@@ -1,15 +1,15 @@
-import { PrismaClient } from "@prisma/generated/client"
+import { PrismaClient } from '@prisma/generated/client'
 
 const prisma = new PrismaClient()
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const id = searchParams.get("id")
+  const id = searchParams.get('id')
   let practitioner
 
   if (!id) {
     return new Response(
-      JSON.stringify({ error: "Practitioner id not found" }),
+      JSON.stringify({ error: 'Practitioner id not found' }),
       {
         status: 404,
       }
@@ -23,7 +23,7 @@ export async function GET(req: Request) {
     })
   } catch (error) {
     return new Response(
-      JSON.stringify({ error: "Failed to create practitioner data" }),
+      JSON.stringify({ error: 'Failed to create practitioner data' }),
       { status: 500 }
     )
   } finally {

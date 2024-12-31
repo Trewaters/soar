@@ -1,14 +1,14 @@
-"use client"
-import { Box, Button, IconButton, Paper, Typography } from "@mui/material"
-import Grid from "@mui/material/Grid2"
-import React, { useEffect, useState } from "react"
-import PauseCircleIcon from "@mui/icons-material/PauseCircle"
-import PlayCircleIcon from "@mui/icons-material/PlayCircle"
-import AsanaTimer from "@app/clientComponents/asanaTimer"
-import { useTimer } from "@context/timerContext"
-import { useRouter } from "next/navigation"
-import HomeIcon from "@mui/icons-material/Home"
-import { FullAsanaData } from "@app/context/AsanaPostureContext"
+'use client'
+import { Box, Button, IconButton, Paper, Typography } from '@mui/material'
+import Grid from '@mui/material/Grid2'
+import React, { useEffect, useState } from 'react'
+import PauseCircleIcon from '@mui/icons-material/PauseCircle'
+import PlayCircleIcon from '@mui/icons-material/PlayCircle'
+import AsanaTimer from '@app/clientComponents/asanaTimer'
+import { useTimer } from '@context/timerContext'
+import { useRouter } from 'next/navigation'
+import HomeIcon from '@mui/icons-material/Home'
+import { FullAsanaData } from '@app/context/AsanaPostureContext'
 
 export default function ViewAsanaPractice({
   params,
@@ -20,7 +20,7 @@ export default function ViewAsanaPractice({
   /* call api/poses/?sort_english_name=${pose} */
   const [viewPose, setViewPose] = useState<FullAsanaData>()
   const [elapsedTime, setElapsedTime] = useState(0)
-  console.log("elapsedTime", elapsedTime)
+  console.log('elapsedTime', elapsedTime)
   // const [isPaused, setIsPaused] = useState(false)
   const { state, dispatch } = useTimer()
   const router = useRouter()
@@ -31,7 +31,7 @@ export default function ViewAsanaPractice({
 
   const handlePauseUpdate = (paused: boolean) => {
     dispatch({
-      type: "SET_TIMER",
+      type: 'SET_TIMER',
       payload: {
         ...state.watch,
         isPaused: paused,
@@ -53,14 +53,14 @@ export default function ViewAsanaPractice({
   }, [params.pose])
 
   const paperStyle: React.CSSProperties = {
-    padding: "20px",
-    backgroundImage: "url(/PismoBeachSunset-2020-03-19.JPG)",
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: "center",
-    width: "100vw",
-    height: "100vh",
-    position: "fixed",
+    padding: '20px',
+    backgroundImage: 'url(/PismoBeachSunset-2020-03-19.JPG)',
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    width: '100vw',
+    height: '100vh',
+    position: 'fixed',
     top: 0,
     left: 0,
   }
@@ -68,7 +68,7 @@ export default function ViewAsanaPractice({
   const handleIconButtonClick = () => {
     const newPauseState = !state.watch.isPaused
     dispatch({
-      type: "SET_TIMER",
+      type: 'SET_TIMER',
       payload: {
         ...state.watch,
         isPaused: !newPauseState,
@@ -80,7 +80,7 @@ export default function ViewAsanaPractice({
 
   const handleBackClick = () => {
     // console.log('Back Clicked')
-    router.push("/navigator/asanaPostures")
+    router.push('/navigator/asanaPostures')
   }
 
   return (
@@ -88,13 +88,13 @@ export default function ViewAsanaPractice({
       <Paper style={paperStyle}>
         <Grid container>
           <Grid size={12}>
-            <Typography variant="h1" textAlign={"center"} color={"white"}>
+            <Typography variant="h1" textAlign={'center'} color={'white'}>
               Asana Practice
             </Typography>
           </Grid>
 
           <Grid size={12}>
-            <Typography variant="subtitle1" color={"white"}>
+            <Typography variant="subtitle1" color={'white'}>
               {viewPose?.sort_english_name}
             </Typography>
           </Grid>
@@ -141,21 +141,21 @@ export default function ViewAsanaPractice({
             <IconButton onClick={handleIconButtonClick}>
               {state.watch.isPaused ? (
                 <PlayCircleIcon
-                  sx={{ color: "white", height: 40, width: 40 }}
+                  sx={{ color: 'white', height: 40, width: 40 }}
                 />
               ) : (
                 <PauseCircleIcon
-                  sx={{ color: "white", height: 40, width: 40 }}
+                  sx={{ color: 'white', height: 40, width: 40 }}
                 />
               )}
             </IconButton>
           </Grid>
 
           <Grid size={8}>
-            <Button sx={{ color: "white" }}>NEXT</Button>
+            <Button sx={{ color: 'white' }}>NEXT</Button>
           </Grid>
           <Grid size={2}>
-            <IconButton sx={{ color: "white" }} onClick={handleBackClick}>
+            <IconButton sx={{ color: 'white' }} onClick={handleBackClick}>
               <HomeIcon />
             </IconButton>
           </Grid>

@@ -1,11 +1,11 @@
-import { Box, Stack, Typography } from "@mui/material"
-import React from "react"
-import { TermsService } from "./constants/Strings"
+import { Box, Stack, Typography } from '@mui/material'
+import React from 'react'
+import { TermsService } from './constants/Strings'
 
 const TermsOfService: React.FC = () => {
   return (
-    <Box style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
-      <Stack spacing={"64px"}>
+    <Box style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+      <Stack spacing={'64px'}>
         <Stack>
           <Typography variant="h1">{TermsService.TITLE}</Typography>
           <Typography variant="body1">

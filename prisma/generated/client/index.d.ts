@@ -2,7 +2,7 @@
  * Client
  **/
 
-import * as runtime from "./runtime/library.js"
+import * as runtime from './runtime/library.js'
 import $Types = runtime.Types // general types
 import $Public = runtime.Types.Public
 import $Utils = runtime.Types.Utils
@@ -55,14 +55,14 @@ export type AsanaSequence =
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  U = "log" extends keyof ClientOptions
-    ? ClientOptions["log"] extends Array<Prisma.LogLevel | Prisma.LogDefinition>
-      ? Prisma.GetEvents<ClientOptions["log"]>
+  U = 'log' extends keyof ClientOptions
+    ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition>
+      ? Prisma.GetEvents<ClientOptions['log']>
       : never
     : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
 > {
-  [K: symbol]: { types: Prisma.TypeMap<ExtArgs>["other"] }
+  [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
 
   /**
    * ##  Prisma Client ʲˢ
@@ -85,7 +85,7 @@ export class PrismaClient<
   $on<V extends U>(
     eventType: V,
     callback: (
-      event: V extends "query" ? Prisma.QueryEvent : Prisma.LogEvent
+      event: V extends 'query' ? Prisma.QueryEvent : Prisma.LogEvent
     ) => void
   ): void
 
@@ -147,7 +147,7 @@ export class PrismaClient<
     command: Prisma.InputJsonObject
   ): Prisma.PrismaPromise<Prisma.JsonObject>
 
-  $extends: $Extensions.ExtendsHook<"extends", Prisma.TypeMapCb, ExtArgs>
+  $extends: $Extensions.ExtendsHook<'extends', Prisma.TypeMapCb, ExtArgs>
 
   /**
    * `prisma.userData`: Exposes CRUD operations for the **UserData** model.
@@ -451,9 +451,9 @@ export namespace Prisma {
   export type SelectSubset<T, U> = {
     [key in keyof T]: key extends keyof U ? T[key] : never
   } & (T extends SelectAndInclude
-    ? "Please either choose `select` or `include`."
+    ? 'Please either choose `select` or `include`.'
     : T extends SelectAndOmit
-      ? "Please either choose `select` or `omit`."
+      ? 'Please either choose `select` or `omit`.'
       : {})
 
   /**
@@ -659,13 +659,13 @@ export namespace Prisma {
 
   type FieldPaths<
     T,
-    U = Omit<T, "_avg" | "_sum" | "_count" | "_min" | "_max">,
+    U = Omit<T, '_avg' | '_sum' | '_count' | '_min' | '_max'>,
   > = IsObject<T> extends True ? U : T
 
   type GetHavingFields<T> = {
     [K in keyof T]: Or<
-      Or<Extends<"OR", K>, Extends<"AND", K>>,
-      Extends<"NOT", K>
+      Or<Extends<'OR', K>, Extends<'AND', K>>,
+      Extends<'NOT', K>
     > extends True
       ? // infer is only needed to not hit TS limit
         // based on the brilliant idea of Pierre-Antoine Mills
@@ -709,11 +709,11 @@ export namespace Prisma {
     : FieldRef<Model, FieldType>
 
   export const ModelName: {
-    UserData: "UserData"
-    ProviderAccount: "ProviderAccount"
-    AsanaPosture: "AsanaPosture"
-    AsanaSeries: "AsanaSeries"
-    AsanaSequence: "AsanaSequence"
+    UserData: 'UserData'
+    ProviderAccount: 'ProviderAccount'
+    AsanaPosture: 'AsanaPosture'
+    AsanaSeries: 'AsanaSeries'
+    AsanaSequence: 'AsanaSequence'
   }
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -728,8 +728,8 @@ export namespace Prisma {
       $Utils.Record<string, any>
     > {
     returns: Prisma.TypeMap<
-      this["params"]["extArgs"],
-      this["params"]["clientOptions"]
+      this['params']['extArgs'],
+      this['params']['clientOptions']
     >
   }
 
@@ -739,11 +739,11 @@ export namespace Prisma {
   > = {
     meta: {
       modelProps:
-        | "userData"
-        | "providerAccount"
-        | "asanaPosture"
-        | "asanaSeries"
-        | "asanaSequence"
+        | 'userData'
+        | 'providerAccount'
+        | 'asanaPosture'
+        | 'asanaSeries'
+        | 'asanaSequence'
       txIsolationLevel: never
     }
     model: {
@@ -1138,12 +1138,12 @@ export namespace Prisma {
     }
   }
   export const defineExtension: $Extensions.ExtendsHook<
-    "define",
+    'define',
     Prisma.TypeMapCb,
     $Extensions.DefaultArgs
   >
   export type DefaultPrismaClient = PrismaClient
-  export type ErrorFormat = "pretty" | "colorless" | "minimal"
+  export type ErrorFormat = 'pretty' | 'colorless' | 'minimal'
   export interface PrismaClientOptions {
     /**
      * Overwrites the datasource url from your schema.prisma file
@@ -1186,16 +1186,16 @@ export namespace Prisma {
   }
 
   /* Types for Logging */
-  export type LogLevel = "info" | "query" | "warn" | "error"
+  export type LogLevel = 'info' | 'query' | 'warn' | 'error'
   export type LogDefinition = {
     level: LogLevel
-    emit: "stdout" | "event"
+    emit: 'stdout' | 'event'
   }
 
   export type GetLogType<T extends LogLevel | LogDefinition> =
     T extends LogDefinition
-      ? T["emit"] extends "event"
-        ? T["level"]
+      ? T['emit'] extends 'event'
+        ? T['level']
         : never
       : never
   export type GetEvents<T extends any> =
@@ -1223,26 +1223,26 @@ export namespace Prisma {
   /* End Types for Logging */
 
   export type PrismaAction =
-    | "findUnique"
-    | "findUniqueOrThrow"
-    | "findMany"
-    | "findFirst"
-    | "findFirstOrThrow"
-    | "create"
-    | "createMany"
-    | "createManyAndReturn"
-    | "update"
-    | "updateMany"
-    | "upsert"
-    | "delete"
-    | "deleteMany"
-    | "executeRaw"
-    | "queryRaw"
-    | "aggregate"
-    | "count"
-    | "runCommandRaw"
-    | "findRaw"
-    | "groupBy"
+    | 'findUnique'
+    | 'findUniqueOrThrow'
+    | 'findMany'
+    | 'findFirst'
+    | 'findFirstOrThrow'
+    | 'create'
+    | 'createMany'
+    | 'createManyAndReturn'
+    | 'update'
+    | 'updateMany'
+    | 'upsert'
+    | 'delete'
+    | 'deleteMany'
+    | 'executeRaw'
+    | 'queryRaw'
+    | 'aggregate'
+    | 'count'
+    | 'runCommandRaw'
+    | 'findRaw'
+    | 'groupBy'
 
   /**
    * These options are being passed into the middleware as "params"
@@ -1544,7 +1544,7 @@ export namespace Prisma {
   }
 
   export type GetUserDataAggregateType<T extends UserDataAggregateArgs> = {
-    [P in keyof T & keyof AggregateUserData]: P extends "_count" | "count"
+    [P in keyof T & keyof AggregateUserData]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
         : GetScalarType<T[P], AggregateUserData[P]>
@@ -1599,8 +1599,8 @@ export namespace Prisma {
   type GetUserDataGroupByPayload<T extends UserDataGroupByArgs> =
     Prisma.PrismaPromise<
       Array<
-        PickEnumerable<UserDataGroupByOutputType, T["by"]> & {
-          [P in keyof T & keyof UserDataGroupByOutputType]: P extends "_count"
+        PickEnumerable<UserDataGroupByOutputType, T['by']> & {
+          [P in keyof T & keyof UserDataGroupByOutputType]: P extends '_count'
             ? T[P] extends boolean
               ? number
               : GetScalarType<T[P], UserDataGroupByOutputType[P]>
@@ -1639,7 +1639,7 @@ export namespace Prisma {
       providerAccounts?: boolean | UserData$providerAccountsArgs<ExtArgs>
       _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
     },
-    ExtArgs["result"]["userData"]
+    ExtArgs['result']['userData']
   >
 
   export type UserDataSelectScalar = {
@@ -1678,7 +1678,7 @@ export namespace Prisma {
   export type $UserDataPayload<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    name: "UserData"
+    name: 'UserData'
     objects: {
       providerAccounts: Prisma.$ProviderAccountPayload<ExtArgs>[]
     }
@@ -1708,7 +1708,7 @@ export namespace Prisma {
         isLocationPublic: string | null
         role: string | null
       },
-      ExtArgs["result"]["userData"]
+      ExtArgs['result']['userData']
     >
     composites: {}
   }
@@ -1719,7 +1719,7 @@ export namespace Prisma {
 
   type UserDataCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<UserDataFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<UserDataFindManyArgs, 'select' | 'include' | 'distinct'> & {
     select?: UserDataCountAggregateInputType | true
   }
 
@@ -1727,8 +1727,8 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > {
     [K: symbol]: {
-      types: Prisma.TypeMap<ExtArgs>["model"]["UserData"]
-      meta: { name: "UserData" }
+      types: Prisma.TypeMap<ExtArgs>['model']['UserData']
+      meta: { name: 'UserData' }
     }
     /**
      * Find zero or one UserData that matches the filter.
@@ -1747,7 +1747,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$UserDataPayload<ExtArgs>,
         T,
-        "findUnique"
+        'findUnique'
       > | null,
       null,
       ExtArgs
@@ -1771,7 +1771,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$UserDataPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        'findUniqueOrThrow'
       >,
       never,
       ExtArgs
@@ -1796,7 +1796,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$UserDataPayload<ExtArgs>,
         T,
-        "findFirst"
+        'findFirst'
       > | null,
       null,
       ExtArgs
@@ -1822,7 +1822,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$UserDataPayload<ExtArgs>,
         T,
-        "findFirstOrThrow"
+        'findFirstOrThrow'
       >,
       never,
       ExtArgs
@@ -1847,7 +1847,7 @@ export namespace Prisma {
     findMany<T extends UserDataFindManyArgs>(
       args?: SelectSubset<T, UserDataFindManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, 'findMany'>
     >
 
     /**
@@ -1865,7 +1865,7 @@ export namespace Prisma {
     create<T extends UserDataCreateArgs>(
       args: SelectSubset<T, UserDataCreateArgs<ExtArgs>>
     ): Prisma__UserDataClient<
-      $Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, 'create'>,
       never,
       ExtArgs
     >
@@ -1901,7 +1901,7 @@ export namespace Prisma {
     delete<T extends UserDataDeleteArgs>(
       args: SelectSubset<T, UserDataDeleteArgs<ExtArgs>>
     ): Prisma__UserDataClient<
-      $Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, 'delete'>,
       never,
       ExtArgs
     >
@@ -1924,7 +1924,7 @@ export namespace Prisma {
     update<T extends UserDataUpdateArgs>(
       args: SelectSubset<T, UserDataUpdateArgs<ExtArgs>>
     ): Prisma__UserDataClient<
-      $Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, 'update'>,
       never,
       ExtArgs
     >
@@ -1986,7 +1986,7 @@ export namespace Prisma {
     upsert<T extends UserDataUpsertArgs>(
       args: SelectSubset<T, UserDataUpsertArgs<ExtArgs>>
     ): Prisma__UserDataClient<
-      $Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, 'upsert'>,
       never,
       ExtArgs
     >
@@ -2032,10 +2032,10 @@ export namespace Prisma {
     count<T extends UserDataCountArgs>(
       args?: Subset<T, UserDataCountArgs>
     ): Prisma.PrismaPromise<
-      T extends $Utils.Record<"select", any>
-        ? T["select"] extends true
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
           ? number
-          : GetScalarType<T["select"], UserDataCountAggregateOutputType>
+          : GetScalarType<T['select'], UserDataCountAggregateOutputType>
         : number
     >
 
@@ -2088,20 +2088,20 @@ export namespace Prisma {
     groupBy<
       T extends UserDataGroupByArgs,
       HasSelectOrTake extends Or<
-        Extends<"skip", Keys<T>>,
-        Extends<"take", Keys<T>>
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: UserDataGroupByArgs["orderBy"] }
-        : { orderBy?: UserDataGroupByArgs["orderBy"] },
+        ? { orderBy: UserDataGroupByArgs['orderBy'] }
+        : { orderBy?: UserDataGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<
-        Keys<MaybeTupleToUnion<T["orderBy"]>>
+        Keys<MaybeTupleToUnion<T['orderBy']>>
       >,
-      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T["having"]>,
+      HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T["by"] extends never[] ? True : False,
+      ByEmpty extends T['by'] extends never[] ? True : False,
       InputErrors extends ByEmpty extends True
         ? `Error: "by" must not be empty.`
         : HavingValid extends False
@@ -2112,13 +2112,13 @@ export namespace Prisma {
                   ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
                   : [
                       Error,
-                      "Field ",
+                      'Field ',
                       P,
                       ` in "having" needs to be provided in "by"`,
                     ]
             }[HavingFields]
-          : "take" extends Keys<T>
-            ? "orderBy" extends Keys<T>
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
               ? ByValid extends True
                 ? {}
                 : {
@@ -2127,8 +2127,8 @@ export namespace Prisma {
                       : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
                   }[OrderFields]
               : 'Error: If you provide "take", you also need to provide "orderBy"'
-            : "skip" extends Keys<T>
-              ? "orderBy" extends Keys<T>
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
                 ? ByValid extends True
                   ? {}
                   : {
@@ -2166,14 +2166,14 @@ export namespace Prisma {
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
+    readonly [Symbol.toStringTag]: 'PrismaPromise'
     providerAccounts<T extends UserData$providerAccountsArgs<ExtArgs> = {}>(
       args?: Subset<T, UserData$providerAccountsArgs<ExtArgs>>
     ): Prisma.PrismaPromise<
       | $Result.GetResult<
           Prisma.$ProviderAccountPayload<ExtArgs>,
           T,
-          "findMany"
+          'findMany'
         >
       | Null
     >
@@ -2217,29 +2217,29 @@ export namespace Prisma {
    * Fields of the UserData model
    */
   interface UserDataFieldRefs {
-    readonly id: FieldRef<"UserData", "String">
-    readonly provider_id: FieldRef<"UserData", "String">
-    readonly name: FieldRef<"UserData", "String">
-    readonly email: FieldRef<"UserData", "String">
-    readonly emailVerified: FieldRef<"UserData", "DateTime">
-    readonly image: FieldRef<"UserData", "String">
-    readonly pronouns: FieldRef<"UserData", "String">
-    readonly profile: FieldRef<"UserData", "Json">
-    readonly createdAt: FieldRef<"UserData", "DateTime">
-    readonly updatedAt: FieldRef<"UserData", "DateTime">
-    readonly firstName: FieldRef<"UserData", "String">
-    readonly lastName: FieldRef<"UserData", "String">
-    readonly bio: FieldRef<"UserData", "String">
-    readonly headline: FieldRef<"UserData", "String">
-    readonly location: FieldRef<"UserData", "String">
-    readonly websiteURL: FieldRef<"UserData", "String">
-    readonly shareQuick: FieldRef<"UserData", "String">
-    readonly yogaStyle: FieldRef<"UserData", "String">
-    readonly yogaExperience: FieldRef<"UserData", "String">
-    readonly company: FieldRef<"UserData", "String">
-    readonly socialURL: FieldRef<"UserData", "String">
-    readonly isLocationPublic: FieldRef<"UserData", "String">
-    readonly role: FieldRef<"UserData", "String">
+    readonly id: FieldRef<'UserData', 'String'>
+    readonly provider_id: FieldRef<'UserData', 'String'>
+    readonly name: FieldRef<'UserData', 'String'>
+    readonly email: FieldRef<'UserData', 'String'>
+    readonly emailVerified: FieldRef<'UserData', 'DateTime'>
+    readonly image: FieldRef<'UserData', 'String'>
+    readonly pronouns: FieldRef<'UserData', 'String'>
+    readonly profile: FieldRef<'UserData', 'Json'>
+    readonly createdAt: FieldRef<'UserData', 'DateTime'>
+    readonly updatedAt: FieldRef<'UserData', 'DateTime'>
+    readonly firstName: FieldRef<'UserData', 'String'>
+    readonly lastName: FieldRef<'UserData', 'String'>
+    readonly bio: FieldRef<'UserData', 'String'>
+    readonly headline: FieldRef<'UserData', 'String'>
+    readonly location: FieldRef<'UserData', 'String'>
+    readonly websiteURL: FieldRef<'UserData', 'String'>
+    readonly shareQuick: FieldRef<'UserData', 'String'>
+    readonly yogaStyle: FieldRef<'UserData', 'String'>
+    readonly yogaExperience: FieldRef<'UserData', 'String'>
+    readonly company: FieldRef<'UserData', 'String'>
+    readonly socialURL: FieldRef<'UserData', 'String'>
+    readonly isLocationPublic: FieldRef<'UserData', 'String'>
+    readonly role: FieldRef<'UserData', 'String'>
   }
 
   // Custom InputTypes
@@ -2841,8 +2841,8 @@ export namespace Prisma {
     T extends ProviderAccountAggregateArgs,
   > = {
     [P in keyof T & keyof AggregateProviderAccount]: P extends
-      | "_count"
-      | "count"
+      | '_count'
+      | 'count'
       ? T[P] extends true
         ? number
         : GetScalarType<T[P], AggregateProviderAccount[P]>
@@ -2893,9 +2893,9 @@ export namespace Prisma {
   type GetProviderAccountGroupByPayload<T extends ProviderAccountGroupByArgs> =
     Prisma.PrismaPromise<
       Array<
-        PickEnumerable<ProviderAccountGroupByOutputType, T["by"]> & {
+        PickEnumerable<ProviderAccountGroupByOutputType, T['by']> & {
           [P in keyof T &
-            keyof ProviderAccountGroupByOutputType]: P extends "_count"
+            keyof ProviderAccountGroupByOutputType]: P extends '_count'
             ? T[P] extends boolean
               ? number
               : GetScalarType<T[P], ProviderAccountGroupByOutputType[P]>
@@ -2925,7 +2925,7 @@ export namespace Prisma {
       updatedAt?: boolean
       user?: boolean | UserDataDefaultArgs<ExtArgs>
     },
-    ExtArgs["result"]["providerAccount"]
+    ExtArgs['result']['providerAccount']
   >
 
   export type ProviderAccountSelectScalar = {
@@ -2955,7 +2955,7 @@ export namespace Prisma {
   export type $ProviderAccountPayload<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    name: "ProviderAccount"
+    name: 'ProviderAccount'
     objects: {
       user: Prisma.$UserDataPayload<ExtArgs>
     }
@@ -2977,7 +2977,7 @@ export namespace Prisma {
         createdAt: Date
         updatedAt: Date
       },
-      ExtArgs["result"]["providerAccount"]
+      ExtArgs['result']['providerAccount']
     >
     composites: {}
   }
@@ -2988,7 +2988,7 @@ export namespace Prisma {
 
   type ProviderAccountCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<ProviderAccountFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<ProviderAccountFindManyArgs, 'select' | 'include' | 'distinct'> & {
     select?: ProviderAccountCountAggregateInputType | true
   }
 
@@ -2996,8 +2996,8 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > {
     [K: symbol]: {
-      types: Prisma.TypeMap<ExtArgs>["model"]["ProviderAccount"]
-      meta: { name: "ProviderAccount" }
+      types: Prisma.TypeMap<ExtArgs>['model']['ProviderAccount']
+      meta: { name: 'ProviderAccount' }
     }
     /**
      * Find zero or one ProviderAccount that matches the filter.
@@ -3016,7 +3016,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ProviderAccountPayload<ExtArgs>,
         T,
-        "findUnique"
+        'findUnique'
       > | null,
       null,
       ExtArgs
@@ -3040,7 +3040,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ProviderAccountPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        'findUniqueOrThrow'
       >,
       never,
       ExtArgs
@@ -3065,7 +3065,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ProviderAccountPayload<ExtArgs>,
         T,
-        "findFirst"
+        'findFirst'
       > | null,
       null,
       ExtArgs
@@ -3091,7 +3091,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$ProviderAccountPayload<ExtArgs>,
         T,
-        "findFirstOrThrow"
+        'findFirstOrThrow'
       >,
       never,
       ExtArgs
@@ -3116,7 +3116,7 @@ export namespace Prisma {
     findMany<T extends ProviderAccountFindManyArgs>(
       args?: SelectSubset<T, ProviderAccountFindManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, 'findMany'>
     >
 
     /**
@@ -3134,7 +3134,7 @@ export namespace Prisma {
     create<T extends ProviderAccountCreateArgs>(
       args: SelectSubset<T, ProviderAccountCreateArgs<ExtArgs>>
     ): Prisma__ProviderAccountClient<
-      $Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, 'create'>,
       never,
       ExtArgs
     >
@@ -3170,7 +3170,7 @@ export namespace Prisma {
     delete<T extends ProviderAccountDeleteArgs>(
       args: SelectSubset<T, ProviderAccountDeleteArgs<ExtArgs>>
     ): Prisma__ProviderAccountClient<
-      $Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, 'delete'>,
       never,
       ExtArgs
     >
@@ -3193,7 +3193,7 @@ export namespace Prisma {
     update<T extends ProviderAccountUpdateArgs>(
       args: SelectSubset<T, ProviderAccountUpdateArgs<ExtArgs>>
     ): Prisma__ProviderAccountClient<
-      $Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, 'update'>,
       never,
       ExtArgs
     >
@@ -3255,7 +3255,7 @@ export namespace Prisma {
     upsert<T extends ProviderAccountUpsertArgs>(
       args: SelectSubset<T, ProviderAccountUpsertArgs<ExtArgs>>
     ): Prisma__ProviderAccountClient<
-      $Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, 'upsert'>,
       never,
       ExtArgs
     >
@@ -3301,10 +3301,10 @@ export namespace Prisma {
     count<T extends ProviderAccountCountArgs>(
       args?: Subset<T, ProviderAccountCountArgs>
     ): Prisma.PrismaPromise<
-      T extends $Utils.Record<"select", any>
-        ? T["select"] extends true
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
           ? number
-          : GetScalarType<T["select"], ProviderAccountCountAggregateOutputType>
+          : GetScalarType<T['select'], ProviderAccountCountAggregateOutputType>
         : number
     >
 
@@ -3357,20 +3357,20 @@ export namespace Prisma {
     groupBy<
       T extends ProviderAccountGroupByArgs,
       HasSelectOrTake extends Or<
-        Extends<"skip", Keys<T>>,
-        Extends<"take", Keys<T>>
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ProviderAccountGroupByArgs["orderBy"] }
-        : { orderBy?: ProviderAccountGroupByArgs["orderBy"] },
+        ? { orderBy: ProviderAccountGroupByArgs['orderBy'] }
+        : { orderBy?: ProviderAccountGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<
-        Keys<MaybeTupleToUnion<T["orderBy"]>>
+        Keys<MaybeTupleToUnion<T['orderBy']>>
       >,
-      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T["having"]>,
+      HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T["by"] extends never[] ? True : False,
+      ByEmpty extends T['by'] extends never[] ? True : False,
       InputErrors extends ByEmpty extends True
         ? `Error: "by" must not be empty.`
         : HavingValid extends False
@@ -3381,13 +3381,13 @@ export namespace Prisma {
                   ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
                   : [
                       Error,
-                      "Field ",
+                      'Field ',
                       P,
                       ` in "having" needs to be provided in "by"`,
                     ]
             }[HavingFields]
-          : "take" extends Keys<T>
-            ? "orderBy" extends Keys<T>
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
               ? ByValid extends True
                 ? {}
                 : {
@@ -3396,8 +3396,8 @@ export namespace Prisma {
                       : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
                   }[OrderFields]
               : 'Error: If you provide "take", you also need to provide "orderBy"'
-            : "skip" extends Keys<T>
-              ? "orderBy" extends Keys<T>
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
                 ? ByValid extends True
                   ? {}
                   : {
@@ -3436,14 +3436,14 @@ export namespace Prisma {
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
+    readonly [Symbol.toStringTag]: 'PrismaPromise'
     user<T extends UserDataDefaultArgs<ExtArgs> = {}>(
       args?: Subset<T, UserDataDefaultArgs<ExtArgs>>
     ): Prisma__UserDataClient<
       | $Result.GetResult<
           Prisma.$UserDataPayload<ExtArgs>,
           T,
-          "findUniqueOrThrow"
+          'findUniqueOrThrow'
         >
       | Null,
       Null,
@@ -3489,21 +3489,21 @@ export namespace Prisma {
    * Fields of the ProviderAccount model
    */
   interface ProviderAccountFieldRefs {
-    readonly id: FieldRef<"ProviderAccount", "String">
-    readonly userId: FieldRef<"ProviderAccount", "String">
-    readonly type: FieldRef<"ProviderAccount", "String">
-    readonly provider: FieldRef<"ProviderAccount", "String">
-    readonly providerAccountId: FieldRef<"ProviderAccount", "String">
-    readonly refresh_token: FieldRef<"ProviderAccount", "String">
-    readonly access_token: FieldRef<"ProviderAccount", "String">
-    readonly expires_at: FieldRef<"ProviderAccount", "Int">
-    readonly token_type: FieldRef<"ProviderAccount", "String">
-    readonly scope: FieldRef<"ProviderAccount", "String">
-    readonly id_token: FieldRef<"ProviderAccount", "String">
-    readonly session_state: FieldRef<"ProviderAccount", "Json">
-    readonly credentials_password: FieldRef<"ProviderAccount", "String">
-    readonly createdAt: FieldRef<"ProviderAccount", "DateTime">
-    readonly updatedAt: FieldRef<"ProviderAccount", "DateTime">
+    readonly id: FieldRef<'ProviderAccount', 'String'>
+    readonly userId: FieldRef<'ProviderAccount', 'String'>
+    readonly type: FieldRef<'ProviderAccount', 'String'>
+    readonly provider: FieldRef<'ProviderAccount', 'String'>
+    readonly providerAccountId: FieldRef<'ProviderAccount', 'String'>
+    readonly refresh_token: FieldRef<'ProviderAccount', 'String'>
+    readonly access_token: FieldRef<'ProviderAccount', 'String'>
+    readonly expires_at: FieldRef<'ProviderAccount', 'Int'>
+    readonly token_type: FieldRef<'ProviderAccount', 'String'>
+    readonly scope: FieldRef<'ProviderAccount', 'String'>
+    readonly id_token: FieldRef<'ProviderAccount', 'String'>
+    readonly session_state: FieldRef<'ProviderAccount', 'Json'>
+    readonly credentials_password: FieldRef<'ProviderAccount', 'String'>
+    readonly createdAt: FieldRef<'ProviderAccount', 'DateTime'>
+    readonly updatedAt: FieldRef<'ProviderAccount', 'DateTime'>
   }
 
   // Custom InputTypes
@@ -4143,7 +4143,7 @@ export namespace Prisma {
   export type GetAsanaPostureAggregateType<
     T extends AsanaPostureAggregateArgs,
   > = {
-    [P in keyof T & keyof AggregateAsanaPosture]: P extends "_count" | "count"
+    [P in keyof T & keyof AggregateAsanaPosture]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
         : GetScalarType<T[P], AggregateAsanaPosture[P]>
@@ -4209,9 +4209,9 @@ export namespace Prisma {
   type GetAsanaPostureGroupByPayload<T extends AsanaPostureGroupByArgs> =
     Prisma.PrismaPromise<
       Array<
-        PickEnumerable<AsanaPostureGroupByOutputType, T["by"]> & {
+        PickEnumerable<AsanaPostureGroupByOutputType, T['by']> & {
           [P in keyof T &
-            keyof AsanaPostureGroupByOutputType]: P extends "_count"
+            keyof AsanaPostureGroupByOutputType]: P extends '_count'
             ? T[P] extends boolean
               ? number
               : GetScalarType<T[P], AsanaPostureGroupByOutputType[P]>
@@ -4259,7 +4259,7 @@ export namespace Prisma {
       muscle_action?: boolean
       created_by?: boolean
     },
-    ExtArgs["result"]["asanaPosture"]
+    ExtArgs['result']['asanaPosture']
   >
 
   export type AsanaPostureSelectScalar = {
@@ -4302,7 +4302,7 @@ export namespace Prisma {
   export type $AsanaPosturePayload<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    name: "AsanaPosture"
+    name: 'AsanaPosture'
     objects: {}
     scalars: $Extensions.GetPayloadResult<
       {
@@ -4341,7 +4341,7 @@ export namespace Prisma {
         muscle_action: string | null
         created_by: string | null
       },
-      ExtArgs["result"]["asanaPosture"]
+      ExtArgs['result']['asanaPosture']
     >
     composites: {}
   }
@@ -4352,7 +4352,7 @@ export namespace Prisma {
 
   type AsanaPostureCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<AsanaPostureFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<AsanaPostureFindManyArgs, 'select' | 'include' | 'distinct'> & {
     select?: AsanaPostureCountAggregateInputType | true
   }
 
@@ -4360,8 +4360,8 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > {
     [K: symbol]: {
-      types: Prisma.TypeMap<ExtArgs>["model"]["AsanaPosture"]
-      meta: { name: "AsanaPosture" }
+      types: Prisma.TypeMap<ExtArgs>['model']['AsanaPosture']
+      meta: { name: 'AsanaPosture' }
     }
     /**
      * Find zero or one AsanaPosture that matches the filter.
@@ -4380,7 +4380,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AsanaPosturePayload<ExtArgs>,
         T,
-        "findUnique"
+        'findUnique'
       > | null,
       null,
       ExtArgs
@@ -4404,7 +4404,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AsanaPosturePayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        'findUniqueOrThrow'
       >,
       never,
       ExtArgs
@@ -4429,7 +4429,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AsanaPosturePayload<ExtArgs>,
         T,
-        "findFirst"
+        'findFirst'
       > | null,
       null,
       ExtArgs
@@ -4455,7 +4455,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AsanaPosturePayload<ExtArgs>,
         T,
-        "findFirstOrThrow"
+        'findFirstOrThrow'
       >,
       never,
       ExtArgs
@@ -4480,7 +4480,7 @@ export namespace Prisma {
     findMany<T extends AsanaPostureFindManyArgs>(
       args?: SelectSubset<T, AsanaPostureFindManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$AsanaPosturePayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<Prisma.$AsanaPosturePayload<ExtArgs>, T, 'findMany'>
     >
 
     /**
@@ -4498,7 +4498,7 @@ export namespace Prisma {
     create<T extends AsanaPostureCreateArgs>(
       args: SelectSubset<T, AsanaPostureCreateArgs<ExtArgs>>
     ): Prisma__AsanaPostureClient<
-      $Result.GetResult<Prisma.$AsanaPosturePayload<ExtArgs>, T, "create">,
+      $Result.GetResult<Prisma.$AsanaPosturePayload<ExtArgs>, T, 'create'>,
       never,
       ExtArgs
     >
@@ -4534,7 +4534,7 @@ export namespace Prisma {
     delete<T extends AsanaPostureDeleteArgs>(
       args: SelectSubset<T, AsanaPostureDeleteArgs<ExtArgs>>
     ): Prisma__AsanaPostureClient<
-      $Result.GetResult<Prisma.$AsanaPosturePayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<Prisma.$AsanaPosturePayload<ExtArgs>, T, 'delete'>,
       never,
       ExtArgs
     >
@@ -4557,7 +4557,7 @@ export namespace Prisma {
     update<T extends AsanaPostureUpdateArgs>(
       args: SelectSubset<T, AsanaPostureUpdateArgs<ExtArgs>>
     ): Prisma__AsanaPostureClient<
-      $Result.GetResult<Prisma.$AsanaPosturePayload<ExtArgs>, T, "update">,
+      $Result.GetResult<Prisma.$AsanaPosturePayload<ExtArgs>, T, 'update'>,
       never,
       ExtArgs
     >
@@ -4619,7 +4619,7 @@ export namespace Prisma {
     upsert<T extends AsanaPostureUpsertArgs>(
       args: SelectSubset<T, AsanaPostureUpsertArgs<ExtArgs>>
     ): Prisma__AsanaPostureClient<
-      $Result.GetResult<Prisma.$AsanaPosturePayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<Prisma.$AsanaPosturePayload<ExtArgs>, T, 'upsert'>,
       never,
       ExtArgs
     >
@@ -4665,10 +4665,10 @@ export namespace Prisma {
     count<T extends AsanaPostureCountArgs>(
       args?: Subset<T, AsanaPostureCountArgs>
     ): Prisma.PrismaPromise<
-      T extends $Utils.Record<"select", any>
-        ? T["select"] extends true
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
           ? number
-          : GetScalarType<T["select"], AsanaPostureCountAggregateOutputType>
+          : GetScalarType<T['select'], AsanaPostureCountAggregateOutputType>
         : number
     >
 
@@ -4721,20 +4721,20 @@ export namespace Prisma {
     groupBy<
       T extends AsanaPostureGroupByArgs,
       HasSelectOrTake extends Or<
-        Extends<"skip", Keys<T>>,
-        Extends<"take", Keys<T>>
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AsanaPostureGroupByArgs["orderBy"] }
-        : { orderBy?: AsanaPostureGroupByArgs["orderBy"] },
+        ? { orderBy: AsanaPostureGroupByArgs['orderBy'] }
+        : { orderBy?: AsanaPostureGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<
-        Keys<MaybeTupleToUnion<T["orderBy"]>>
+        Keys<MaybeTupleToUnion<T['orderBy']>>
       >,
-      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T["having"]>,
+      HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T["by"] extends never[] ? True : False,
+      ByEmpty extends T['by'] extends never[] ? True : False,
       InputErrors extends ByEmpty extends True
         ? `Error: "by" must not be empty.`
         : HavingValid extends False
@@ -4745,13 +4745,13 @@ export namespace Prisma {
                   ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
                   : [
                       Error,
-                      "Field ",
+                      'Field ',
                       P,
                       ` in "having" needs to be provided in "by"`,
                     ]
             }[HavingFields]
-          : "take" extends Keys<T>
-            ? "orderBy" extends Keys<T>
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
               ? ByValid extends True
                 ? {}
                 : {
@@ -4760,8 +4760,8 @@ export namespace Prisma {
                       : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
                   }[OrderFields]
               : 'Error: If you provide "take", you also need to provide "orderBy"'
-            : "skip" extends Keys<T>
-              ? "orderBy" extends Keys<T>
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
                 ? ByValid extends True
                   ? {}
                   : {
@@ -4800,7 +4800,7 @@ export namespace Prisma {
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
+    readonly [Symbol.toStringTag]: 'PrismaPromise'
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4841,40 +4841,40 @@ export namespace Prisma {
    * Fields of the AsanaPosture model
    */
   interface AsanaPostureFieldRefs {
-    readonly id: FieldRef<"AsanaPosture", "String">
-    readonly english_names: FieldRef<"AsanaPosture", "String[]">
-    readonly sanskrit_names: FieldRef<"AsanaPosture", "Json">
-    readonly sort_english_name: FieldRef<"AsanaPosture", "String">
-    readonly description: FieldRef<"AsanaPosture", "String">
-    readonly benefits: FieldRef<"AsanaPosture", "String">
-    readonly category: FieldRef<"AsanaPosture", "String">
-    readonly difficulty: FieldRef<"AsanaPosture", "String">
-    readonly lore: FieldRef<"AsanaPosture", "String">
-    readonly breath_direction_default: FieldRef<"AsanaPosture", "String">
-    readonly dristi: FieldRef<"AsanaPosture", "String">
-    readonly variations: FieldRef<"AsanaPosture", "String[]">
-    readonly modifications: FieldRef<"AsanaPosture", "String[]">
-    readonly suggested_postures: FieldRef<"AsanaPosture", "String[]">
-    readonly preparatory_postures: FieldRef<"AsanaPosture", "String[]">
-    readonly preferred_side: FieldRef<"AsanaPosture", "String">
-    readonly sideways: FieldRef<"AsanaPosture", "Boolean">
-    readonly image: FieldRef<"AsanaPosture", "String">
-    readonly created_on: FieldRef<"AsanaPosture", "DateTime">
-    readonly updated_on: FieldRef<"AsanaPosture", "DateTime">
-    readonly acitivity_completed: FieldRef<"AsanaPosture", "Boolean">
-    readonly acitivity_practice: FieldRef<"AsanaPosture", "Boolean">
-    readonly posture_intent: FieldRef<"AsanaPosture", "String">
-    readonly breath_series: FieldRef<"AsanaPosture", "String[]">
-    readonly duration_asana: FieldRef<"AsanaPosture", "String">
-    readonly transition_cues_out: FieldRef<"AsanaPosture", "String">
-    readonly transition_cues_in: FieldRef<"AsanaPosture", "String">
-    readonly setup_cues: FieldRef<"AsanaPosture", "String">
-    readonly deepening_cues: FieldRef<"AsanaPosture", "String">
-    readonly customize_asana: FieldRef<"AsanaPosture", "String">
-    readonly additional_cues: FieldRef<"AsanaPosture", "String">
-    readonly joint_action: FieldRef<"AsanaPosture", "String">
-    readonly muscle_action: FieldRef<"AsanaPosture", "String">
-    readonly created_by: FieldRef<"AsanaPosture", "String">
+    readonly id: FieldRef<'AsanaPosture', 'String'>
+    readonly english_names: FieldRef<'AsanaPosture', 'String[]'>
+    readonly sanskrit_names: FieldRef<'AsanaPosture', 'Json'>
+    readonly sort_english_name: FieldRef<'AsanaPosture', 'String'>
+    readonly description: FieldRef<'AsanaPosture', 'String'>
+    readonly benefits: FieldRef<'AsanaPosture', 'String'>
+    readonly category: FieldRef<'AsanaPosture', 'String'>
+    readonly difficulty: FieldRef<'AsanaPosture', 'String'>
+    readonly lore: FieldRef<'AsanaPosture', 'String'>
+    readonly breath_direction_default: FieldRef<'AsanaPosture', 'String'>
+    readonly dristi: FieldRef<'AsanaPosture', 'String'>
+    readonly variations: FieldRef<'AsanaPosture', 'String[]'>
+    readonly modifications: FieldRef<'AsanaPosture', 'String[]'>
+    readonly suggested_postures: FieldRef<'AsanaPosture', 'String[]'>
+    readonly preparatory_postures: FieldRef<'AsanaPosture', 'String[]'>
+    readonly preferred_side: FieldRef<'AsanaPosture', 'String'>
+    readonly sideways: FieldRef<'AsanaPosture', 'Boolean'>
+    readonly image: FieldRef<'AsanaPosture', 'String'>
+    readonly created_on: FieldRef<'AsanaPosture', 'DateTime'>
+    readonly updated_on: FieldRef<'AsanaPosture', 'DateTime'>
+    readonly acitivity_completed: FieldRef<'AsanaPosture', 'Boolean'>
+    readonly acitivity_practice: FieldRef<'AsanaPosture', 'Boolean'>
+    readonly posture_intent: FieldRef<'AsanaPosture', 'String'>
+    readonly breath_series: FieldRef<'AsanaPosture', 'String[]'>
+    readonly duration_asana: FieldRef<'AsanaPosture', 'String'>
+    readonly transition_cues_out: FieldRef<'AsanaPosture', 'String'>
+    readonly transition_cues_in: FieldRef<'AsanaPosture', 'String'>
+    readonly setup_cues: FieldRef<'AsanaPosture', 'String'>
+    readonly deepening_cues: FieldRef<'AsanaPosture', 'String'>
+    readonly customize_asana: FieldRef<'AsanaPosture', 'String'>
+    readonly additional_cues: FieldRef<'AsanaPosture', 'String'>
+    readonly joint_action: FieldRef<'AsanaPosture', 'String'>
+    readonly muscle_action: FieldRef<'AsanaPosture', 'String'>
+    readonly created_by: FieldRef<'AsanaPosture', 'String'>
   }
 
   // Custom InputTypes
@@ -5343,7 +5343,7 @@ export namespace Prisma {
 
   export type GetAsanaSeriesAggregateType<T extends AsanaSeriesAggregateArgs> =
     {
-      [P in keyof T & keyof AggregateAsanaSeries]: P extends "_count" | "count"
+      [P in keyof T & keyof AggregateAsanaSeries]: P extends '_count' | 'count'
         ? T[P] extends true
           ? number
           : GetScalarType<T[P], AggregateAsanaSeries[P]>
@@ -5384,9 +5384,9 @@ export namespace Prisma {
   type GetAsanaSeriesGroupByPayload<T extends AsanaSeriesGroupByArgs> =
     Prisma.PrismaPromise<
       Array<
-        PickEnumerable<AsanaSeriesGroupByOutputType, T["by"]> & {
+        PickEnumerable<AsanaSeriesGroupByOutputType, T['by']> & {
           [P in keyof T &
-            keyof AsanaSeriesGroupByOutputType]: P extends "_count"
+            keyof AsanaSeriesGroupByOutputType]: P extends '_count'
             ? T[P] extends boolean
               ? number
               : GetScalarType<T[P], AsanaSeriesGroupByOutputType[P]>
@@ -5409,7 +5409,7 @@ export namespace Prisma {
       createdAt?: boolean
       updatedAt?: boolean
     },
-    ExtArgs["result"]["asanaSeries"]
+    ExtArgs['result']['asanaSeries']
   >
 
   export type AsanaSeriesSelectScalar = {
@@ -5427,7 +5427,7 @@ export namespace Prisma {
   export type $AsanaSeriesPayload<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    name: "AsanaSeries"
+    name: 'AsanaSeries'
     objects: {}
     scalars: $Extensions.GetPayloadResult<
       {
@@ -5441,7 +5441,7 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
       },
-      ExtArgs["result"]["asanaSeries"]
+      ExtArgs['result']['asanaSeries']
     >
     composites: {}
   }
@@ -5452,7 +5452,7 @@ export namespace Prisma {
 
   type AsanaSeriesCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<AsanaSeriesFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<AsanaSeriesFindManyArgs, 'select' | 'include' | 'distinct'> & {
     select?: AsanaSeriesCountAggregateInputType | true
   }
 
@@ -5460,8 +5460,8 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > {
     [K: symbol]: {
-      types: Prisma.TypeMap<ExtArgs>["model"]["AsanaSeries"]
-      meta: { name: "AsanaSeries" }
+      types: Prisma.TypeMap<ExtArgs>['model']['AsanaSeries']
+      meta: { name: 'AsanaSeries' }
     }
     /**
      * Find zero or one AsanaSeries that matches the filter.
@@ -5480,7 +5480,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AsanaSeriesPayload<ExtArgs>,
         T,
-        "findUnique"
+        'findUnique'
       > | null,
       null,
       ExtArgs
@@ -5504,7 +5504,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AsanaSeriesPayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        'findUniqueOrThrow'
       >,
       never,
       ExtArgs
@@ -5529,7 +5529,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AsanaSeriesPayload<ExtArgs>,
         T,
-        "findFirst"
+        'findFirst'
       > | null,
       null,
       ExtArgs
@@ -5555,7 +5555,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AsanaSeriesPayload<ExtArgs>,
         T,
-        "findFirstOrThrow"
+        'findFirstOrThrow'
       >,
       never,
       ExtArgs
@@ -5580,7 +5580,7 @@ export namespace Prisma {
     findMany<T extends AsanaSeriesFindManyArgs>(
       args?: SelectSubset<T, AsanaSeriesFindManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, 'findMany'>
     >
 
     /**
@@ -5598,7 +5598,7 @@ export namespace Prisma {
     create<T extends AsanaSeriesCreateArgs>(
       args: SelectSubset<T, AsanaSeriesCreateArgs<ExtArgs>>
     ): Prisma__AsanaSeriesClient<
-      $Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "create">,
+      $Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, 'create'>,
       never,
       ExtArgs
     >
@@ -5634,7 +5634,7 @@ export namespace Prisma {
     delete<T extends AsanaSeriesDeleteArgs>(
       args: SelectSubset<T, AsanaSeriesDeleteArgs<ExtArgs>>
     ): Prisma__AsanaSeriesClient<
-      $Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, 'delete'>,
       never,
       ExtArgs
     >
@@ -5657,7 +5657,7 @@ export namespace Prisma {
     update<T extends AsanaSeriesUpdateArgs>(
       args: SelectSubset<T, AsanaSeriesUpdateArgs<ExtArgs>>
     ): Prisma__AsanaSeriesClient<
-      $Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "update">,
+      $Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, 'update'>,
       never,
       ExtArgs
     >
@@ -5719,7 +5719,7 @@ export namespace Prisma {
     upsert<T extends AsanaSeriesUpsertArgs>(
       args: SelectSubset<T, AsanaSeriesUpsertArgs<ExtArgs>>
     ): Prisma__AsanaSeriesClient<
-      $Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<Prisma.$AsanaSeriesPayload<ExtArgs>, T, 'upsert'>,
       never,
       ExtArgs
     >
@@ -5765,10 +5765,10 @@ export namespace Prisma {
     count<T extends AsanaSeriesCountArgs>(
       args?: Subset<T, AsanaSeriesCountArgs>
     ): Prisma.PrismaPromise<
-      T extends $Utils.Record<"select", any>
-        ? T["select"] extends true
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
           ? number
-          : GetScalarType<T["select"], AsanaSeriesCountAggregateOutputType>
+          : GetScalarType<T['select'], AsanaSeriesCountAggregateOutputType>
         : number
     >
 
@@ -5821,20 +5821,20 @@ export namespace Prisma {
     groupBy<
       T extends AsanaSeriesGroupByArgs,
       HasSelectOrTake extends Or<
-        Extends<"skip", Keys<T>>,
-        Extends<"take", Keys<T>>
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AsanaSeriesGroupByArgs["orderBy"] }
-        : { orderBy?: AsanaSeriesGroupByArgs["orderBy"] },
+        ? { orderBy: AsanaSeriesGroupByArgs['orderBy'] }
+        : { orderBy?: AsanaSeriesGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<
-        Keys<MaybeTupleToUnion<T["orderBy"]>>
+        Keys<MaybeTupleToUnion<T['orderBy']>>
       >,
-      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T["having"]>,
+      HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T["by"] extends never[] ? True : False,
+      ByEmpty extends T['by'] extends never[] ? True : False,
       InputErrors extends ByEmpty extends True
         ? `Error: "by" must not be empty.`
         : HavingValid extends False
@@ -5845,13 +5845,13 @@ export namespace Prisma {
                   ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
                   : [
                       Error,
-                      "Field ",
+                      'Field ',
                       P,
                       ` in "having" needs to be provided in "by"`,
                     ]
             }[HavingFields]
-          : "take" extends Keys<T>
-            ? "orderBy" extends Keys<T>
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
               ? ByValid extends True
                 ? {}
                 : {
@@ -5860,8 +5860,8 @@ export namespace Prisma {
                       : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
                   }[OrderFields]
               : 'Error: If you provide "take", you also need to provide "orderBy"'
-            : "skip" extends Keys<T>
-              ? "orderBy" extends Keys<T>
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
                 ? ByValid extends True
                   ? {}
                   : {
@@ -5900,7 +5900,7 @@ export namespace Prisma {
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
+    readonly [Symbol.toStringTag]: 'PrismaPromise'
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5941,15 +5941,15 @@ export namespace Prisma {
    * Fields of the AsanaSeries model
    */
   interface AsanaSeriesFieldRefs {
-    readonly id: FieldRef<"AsanaSeries", "String">
-    readonly seriesName: FieldRef<"AsanaSeries", "String">
-    readonly seriesPostures: FieldRef<"AsanaSeries", "String[]">
-    readonly breathSeries: FieldRef<"AsanaSeries", "String[]">
-    readonly description: FieldRef<"AsanaSeries", "String">
-    readonly durationSeries: FieldRef<"AsanaSeries", "String">
-    readonly image: FieldRef<"AsanaSeries", "String">
-    readonly createdAt: FieldRef<"AsanaSeries", "DateTime">
-    readonly updatedAt: FieldRef<"AsanaSeries", "DateTime">
+    readonly id: FieldRef<'AsanaSeries', 'String'>
+    readonly seriesName: FieldRef<'AsanaSeries', 'String'>
+    readonly seriesPostures: FieldRef<'AsanaSeries', 'String[]'>
+    readonly breathSeries: FieldRef<'AsanaSeries', 'String[]'>
+    readonly description: FieldRef<'AsanaSeries', 'String'>
+    readonly durationSeries: FieldRef<'AsanaSeries', 'String'>
+    readonly image: FieldRef<'AsanaSeries', 'String'>
+    readonly createdAt: FieldRef<'AsanaSeries', 'DateTime'>
+    readonly updatedAt: FieldRef<'AsanaSeries', 'DateTime'>
   }
 
   // Custom InputTypes
@@ -6423,7 +6423,7 @@ export namespace Prisma {
   export type GetAsanaSequenceAggregateType<
     T extends AsanaSequenceAggregateArgs,
   > = {
-    [P in keyof T & keyof AggregateAsanaSequence]: P extends "_count" | "count"
+    [P in keyof T & keyof AggregateAsanaSequence]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
         : GetScalarType<T[P], AggregateAsanaSequence[P]>
@@ -6464,9 +6464,9 @@ export namespace Prisma {
   type GetAsanaSequenceGroupByPayload<T extends AsanaSequenceGroupByArgs> =
     Prisma.PrismaPromise<
       Array<
-        PickEnumerable<AsanaSequenceGroupByOutputType, T["by"]> & {
+        PickEnumerable<AsanaSequenceGroupByOutputType, T['by']> & {
           [P in keyof T &
-            keyof AsanaSequenceGroupByOutputType]: P extends "_count"
+            keyof AsanaSequenceGroupByOutputType]: P extends '_count'
             ? T[P] extends boolean
               ? number
               : GetScalarType<T[P], AsanaSequenceGroupByOutputType[P]>
@@ -6489,7 +6489,7 @@ export namespace Prisma {
       createdAt?: boolean
       updatedAt?: boolean
     },
-    ExtArgs["result"]["asanaSequence"]
+    ExtArgs['result']['asanaSequence']
   >
 
   export type AsanaSequenceSelectScalar = {
@@ -6507,7 +6507,7 @@ export namespace Prisma {
   export type $AsanaSequencePayload<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
-    name: "AsanaSequence"
+    name: 'AsanaSequence'
     objects: {}
     scalars: $Extensions.GetPayloadResult<
       {
@@ -6521,7 +6521,7 @@ export namespace Prisma {
         createdAt: Date | null
         updatedAt: Date | null
       },
-      ExtArgs["result"]["asanaSequence"]
+      ExtArgs['result']['asanaSequence']
     >
     composites: {}
   }
@@ -6532,7 +6532,7 @@ export namespace Prisma {
 
   type AsanaSequenceCountArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<AsanaSequenceFindManyArgs, "select" | "include" | "distinct"> & {
+  > = Omit<AsanaSequenceFindManyArgs, 'select' | 'include' | 'distinct'> & {
     select?: AsanaSequenceCountAggregateInputType | true
   }
 
@@ -6540,8 +6540,8 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > {
     [K: symbol]: {
-      types: Prisma.TypeMap<ExtArgs>["model"]["AsanaSequence"]
-      meta: { name: "AsanaSequence" }
+      types: Prisma.TypeMap<ExtArgs>['model']['AsanaSequence']
+      meta: { name: 'AsanaSequence' }
     }
     /**
      * Find zero or one AsanaSequence that matches the filter.
@@ -6560,7 +6560,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AsanaSequencePayload<ExtArgs>,
         T,
-        "findUnique"
+        'findUnique'
       > | null,
       null,
       ExtArgs
@@ -6584,7 +6584,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AsanaSequencePayload<ExtArgs>,
         T,
-        "findUniqueOrThrow"
+        'findUniqueOrThrow'
       >,
       never,
       ExtArgs
@@ -6609,7 +6609,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AsanaSequencePayload<ExtArgs>,
         T,
-        "findFirst"
+        'findFirst'
       > | null,
       null,
       ExtArgs
@@ -6635,7 +6635,7 @@ export namespace Prisma {
       $Result.GetResult<
         Prisma.$AsanaSequencePayload<ExtArgs>,
         T,
-        "findFirstOrThrow"
+        'findFirstOrThrow'
       >,
       never,
       ExtArgs
@@ -6660,7 +6660,7 @@ export namespace Prisma {
     findMany<T extends AsanaSequenceFindManyArgs>(
       args?: SelectSubset<T, AsanaSequenceFindManyArgs<ExtArgs>>
     ): Prisma.PrismaPromise<
-      $Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "findMany">
+      $Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, 'findMany'>
     >
 
     /**
@@ -6678,7 +6678,7 @@ export namespace Prisma {
     create<T extends AsanaSequenceCreateArgs>(
       args: SelectSubset<T, AsanaSequenceCreateArgs<ExtArgs>>
     ): Prisma__AsanaSequenceClient<
-      $Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "create">,
+      $Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, 'create'>,
       never,
       ExtArgs
     >
@@ -6714,7 +6714,7 @@ export namespace Prisma {
     delete<T extends AsanaSequenceDeleteArgs>(
       args: SelectSubset<T, AsanaSequenceDeleteArgs<ExtArgs>>
     ): Prisma__AsanaSequenceClient<
-      $Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "delete">,
+      $Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, 'delete'>,
       never,
       ExtArgs
     >
@@ -6737,7 +6737,7 @@ export namespace Prisma {
     update<T extends AsanaSequenceUpdateArgs>(
       args: SelectSubset<T, AsanaSequenceUpdateArgs<ExtArgs>>
     ): Prisma__AsanaSequenceClient<
-      $Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "update">,
+      $Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, 'update'>,
       never,
       ExtArgs
     >
@@ -6799,7 +6799,7 @@ export namespace Prisma {
     upsert<T extends AsanaSequenceUpsertArgs>(
       args: SelectSubset<T, AsanaSequenceUpsertArgs<ExtArgs>>
     ): Prisma__AsanaSequenceClient<
-      $Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, "upsert">,
+      $Result.GetResult<Prisma.$AsanaSequencePayload<ExtArgs>, T, 'upsert'>,
       never,
       ExtArgs
     >
@@ -6845,10 +6845,10 @@ export namespace Prisma {
     count<T extends AsanaSequenceCountArgs>(
       args?: Subset<T, AsanaSequenceCountArgs>
     ): Prisma.PrismaPromise<
-      T extends $Utils.Record<"select", any>
-        ? T["select"] extends true
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
           ? number
-          : GetScalarType<T["select"], AsanaSequenceCountAggregateOutputType>
+          : GetScalarType<T['select'], AsanaSequenceCountAggregateOutputType>
         : number
     >
 
@@ -6901,20 +6901,20 @@ export namespace Prisma {
     groupBy<
       T extends AsanaSequenceGroupByArgs,
       HasSelectOrTake extends Or<
-        Extends<"skip", Keys<T>>,
-        Extends<"take", Keys<T>>
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: AsanaSequenceGroupByArgs["orderBy"] }
-        : { orderBy?: AsanaSequenceGroupByArgs["orderBy"] },
+        ? { orderBy: AsanaSequenceGroupByArgs['orderBy'] }
+        : { orderBy?: AsanaSequenceGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<
-        Keys<MaybeTupleToUnion<T["orderBy"]>>
+        Keys<MaybeTupleToUnion<T['orderBy']>>
       >,
-      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T["having"]>,
+      HavingFields extends GetHavingFields<T['having']>,
       HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T["by"] extends never[] ? True : False,
+      ByEmpty extends T['by'] extends never[] ? True : False,
       InputErrors extends ByEmpty extends True
         ? `Error: "by" must not be empty.`
         : HavingValid extends False
@@ -6925,13 +6925,13 @@ export namespace Prisma {
                   ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
                   : [
                       Error,
-                      "Field ",
+                      'Field ',
                       P,
                       ` in "having" needs to be provided in "by"`,
                     ]
             }[HavingFields]
-          : "take" extends Keys<T>
-            ? "orderBy" extends Keys<T>
+          : 'take' extends Keys<T>
+            ? 'orderBy' extends Keys<T>
               ? ByValid extends True
                 ? {}
                 : {
@@ -6940,8 +6940,8 @@ export namespace Prisma {
                       : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
                   }[OrderFields]
               : 'Error: If you provide "take", you also need to provide "orderBy"'
-            : "skip" extends Keys<T>
-              ? "orderBy" extends Keys<T>
+            : 'skip' extends Keys<T>
+              ? 'orderBy' extends Keys<T>
                 ? ByValid extends True
                   ? {}
                   : {
@@ -6980,7 +6980,7 @@ export namespace Prisma {
     Null = never,
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
+    readonly [Symbol.toStringTag]: 'PrismaPromise'
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7021,15 +7021,15 @@ export namespace Prisma {
    * Fields of the AsanaSequence model
    */
   interface AsanaSequenceFieldRefs {
-    readonly id: FieldRef<"AsanaSequence", "String">
-    readonly nameSequence: FieldRef<"AsanaSequence", "String">
-    readonly sequencesSeries: FieldRef<"AsanaSequence", "Json[]">
-    readonly description: FieldRef<"AsanaSequence", "String">
-    readonly durationSequence: FieldRef<"AsanaSequence", "String">
-    readonly image: FieldRef<"AsanaSequence", "String">
-    readonly breath_direction: FieldRef<"AsanaSequence", "String">
-    readonly createdAt: FieldRef<"AsanaSequence", "DateTime">
-    readonly updatedAt: FieldRef<"AsanaSequence", "DateTime">
+    readonly id: FieldRef<'AsanaSequence', 'String'>
+    readonly nameSequence: FieldRef<'AsanaSequence', 'String'>
+    readonly sequencesSeries: FieldRef<'AsanaSequence', 'Json[]'>
+    readonly description: FieldRef<'AsanaSequence', 'String'>
+    readonly durationSequence: FieldRef<'AsanaSequence', 'String'>
+    readonly image: FieldRef<'AsanaSequence', 'String'>
+    readonly breath_direction: FieldRef<'AsanaSequence', 'String'>
+    readonly createdAt: FieldRef<'AsanaSequence', 'DateTime'>
+    readonly updatedAt: FieldRef<'AsanaSequence', 'DateTime'>
   }
 
   // Custom InputTypes
@@ -7372,135 +7372,135 @@ export namespace Prisma {
    */
 
   export const UserDataScalarFieldEnum: {
-    id: "id"
-    provider_id: "provider_id"
-    name: "name"
-    email: "email"
-    emailVerified: "emailVerified"
-    image: "image"
-    pronouns: "pronouns"
-    profile: "profile"
-    createdAt: "createdAt"
-    updatedAt: "updatedAt"
-    firstName: "firstName"
-    lastName: "lastName"
-    bio: "bio"
-    headline: "headline"
-    location: "location"
-    websiteURL: "websiteURL"
-    shareQuick: "shareQuick"
-    yogaStyle: "yogaStyle"
-    yogaExperience: "yogaExperience"
-    company: "company"
-    socialURL: "socialURL"
-    isLocationPublic: "isLocationPublic"
-    role: "role"
+    id: 'id'
+    provider_id: 'provider_id'
+    name: 'name'
+    email: 'email'
+    emailVerified: 'emailVerified'
+    image: 'image'
+    pronouns: 'pronouns'
+    profile: 'profile'
+    createdAt: 'createdAt'
+    updatedAt: 'updatedAt'
+    firstName: 'firstName'
+    lastName: 'lastName'
+    bio: 'bio'
+    headline: 'headline'
+    location: 'location'
+    websiteURL: 'websiteURL'
+    shareQuick: 'shareQuick'
+    yogaStyle: 'yogaStyle'
+    yogaExperience: 'yogaExperience'
+    company: 'company'
+    socialURL: 'socialURL'
+    isLocationPublic: 'isLocationPublic'
+    role: 'role'
   }
 
   export type UserDataScalarFieldEnum =
     (typeof UserDataScalarFieldEnum)[keyof typeof UserDataScalarFieldEnum]
 
   export const ProviderAccountScalarFieldEnum: {
-    id: "id"
-    userId: "userId"
-    type: "type"
-    provider: "provider"
-    providerAccountId: "providerAccountId"
-    refresh_token: "refresh_token"
-    access_token: "access_token"
-    expires_at: "expires_at"
-    token_type: "token_type"
-    scope: "scope"
-    id_token: "id_token"
-    session_state: "session_state"
-    credentials_password: "credentials_password"
-    createdAt: "createdAt"
-    updatedAt: "updatedAt"
+    id: 'id'
+    userId: 'userId'
+    type: 'type'
+    provider: 'provider'
+    providerAccountId: 'providerAccountId'
+    refresh_token: 'refresh_token'
+    access_token: 'access_token'
+    expires_at: 'expires_at'
+    token_type: 'token_type'
+    scope: 'scope'
+    id_token: 'id_token'
+    session_state: 'session_state'
+    credentials_password: 'credentials_password'
+    createdAt: 'createdAt'
+    updatedAt: 'updatedAt'
   }
 
   export type ProviderAccountScalarFieldEnum =
     (typeof ProviderAccountScalarFieldEnum)[keyof typeof ProviderAccountScalarFieldEnum]
 
   export const AsanaPostureScalarFieldEnum: {
-    id: "id"
-    english_names: "english_names"
-    sanskrit_names: "sanskrit_names"
-    sort_english_name: "sort_english_name"
-    description: "description"
-    benefits: "benefits"
-    category: "category"
-    difficulty: "difficulty"
-    lore: "lore"
-    breath_direction_default: "breath_direction_default"
-    dristi: "dristi"
-    variations: "variations"
-    modifications: "modifications"
-    suggested_postures: "suggested_postures"
-    preparatory_postures: "preparatory_postures"
-    preferred_side: "preferred_side"
-    sideways: "sideways"
-    image: "image"
-    created_on: "created_on"
-    updated_on: "updated_on"
-    acitivity_completed: "acitivity_completed"
-    acitivity_practice: "acitivity_practice"
-    posture_intent: "posture_intent"
-    breath_series: "breath_series"
-    duration_asana: "duration_asana"
-    transition_cues_out: "transition_cues_out"
-    transition_cues_in: "transition_cues_in"
-    setup_cues: "setup_cues"
-    deepening_cues: "deepening_cues"
-    customize_asana: "customize_asana"
-    additional_cues: "additional_cues"
-    joint_action: "joint_action"
-    muscle_action: "muscle_action"
-    created_by: "created_by"
+    id: 'id'
+    english_names: 'english_names'
+    sanskrit_names: 'sanskrit_names'
+    sort_english_name: 'sort_english_name'
+    description: 'description'
+    benefits: 'benefits'
+    category: 'category'
+    difficulty: 'difficulty'
+    lore: 'lore'
+    breath_direction_default: 'breath_direction_default'
+    dristi: 'dristi'
+    variations: 'variations'
+    modifications: 'modifications'
+    suggested_postures: 'suggested_postures'
+    preparatory_postures: 'preparatory_postures'
+    preferred_side: 'preferred_side'
+    sideways: 'sideways'
+    image: 'image'
+    created_on: 'created_on'
+    updated_on: 'updated_on'
+    acitivity_completed: 'acitivity_completed'
+    acitivity_practice: 'acitivity_practice'
+    posture_intent: 'posture_intent'
+    breath_series: 'breath_series'
+    duration_asana: 'duration_asana'
+    transition_cues_out: 'transition_cues_out'
+    transition_cues_in: 'transition_cues_in'
+    setup_cues: 'setup_cues'
+    deepening_cues: 'deepening_cues'
+    customize_asana: 'customize_asana'
+    additional_cues: 'additional_cues'
+    joint_action: 'joint_action'
+    muscle_action: 'muscle_action'
+    created_by: 'created_by'
   }
 
   export type AsanaPostureScalarFieldEnum =
     (typeof AsanaPostureScalarFieldEnum)[keyof typeof AsanaPostureScalarFieldEnum]
 
   export const AsanaSeriesScalarFieldEnum: {
-    id: "id"
-    seriesName: "seriesName"
-    seriesPostures: "seriesPostures"
-    breathSeries: "breathSeries"
-    description: "description"
-    durationSeries: "durationSeries"
-    image: "image"
-    createdAt: "createdAt"
-    updatedAt: "updatedAt"
+    id: 'id'
+    seriesName: 'seriesName'
+    seriesPostures: 'seriesPostures'
+    breathSeries: 'breathSeries'
+    description: 'description'
+    durationSeries: 'durationSeries'
+    image: 'image'
+    createdAt: 'createdAt'
+    updatedAt: 'updatedAt'
   }
 
   export type AsanaSeriesScalarFieldEnum =
     (typeof AsanaSeriesScalarFieldEnum)[keyof typeof AsanaSeriesScalarFieldEnum]
 
   export const AsanaSequenceScalarFieldEnum: {
-    id: "id"
-    nameSequence: "nameSequence"
-    sequencesSeries: "sequencesSeries"
-    description: "description"
-    durationSequence: "durationSequence"
-    image: "image"
-    breath_direction: "breath_direction"
-    createdAt: "createdAt"
-    updatedAt: "updatedAt"
+    id: 'id'
+    nameSequence: 'nameSequence'
+    sequencesSeries: 'sequencesSeries'
+    description: 'description'
+    durationSequence: 'durationSequence'
+    image: 'image'
+    breath_direction: 'breath_direction'
+    createdAt: 'createdAt'
+    updatedAt: 'updatedAt'
   }
 
   export type AsanaSequenceScalarFieldEnum =
     (typeof AsanaSequenceScalarFieldEnum)[keyof typeof AsanaSequenceScalarFieldEnum]
 
   export const SortOrder: {
-    asc: "asc"
-    desc: "desc"
+    asc: 'asc'
+    desc: 'desc'
   }
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
   export const QueryMode: {
-    default: "default"
-    insensitive: "insensitive"
+    default: 'default'
+    insensitive: 'insensitive'
   }
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
@@ -7514,7 +7514,7 @@ export namespace Prisma {
    */
   export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
-    "String"
+    'String'
   >
 
   /**
@@ -7522,7 +7522,7 @@ export namespace Prisma {
    */
   export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
-    "String[]"
+    'String[]'
   >
 
   /**
@@ -7530,7 +7530,7 @@ export namespace Prisma {
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
-    "DateTime"
+    'DateTime'
   >
 
   /**
@@ -7538,7 +7538,7 @@ export namespace Prisma {
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
-    "DateTime[]"
+    'DateTime[]'
   >
 
   /**
@@ -7546,7 +7546,7 @@ export namespace Prisma {
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
-    "Json"
+    'Json'
   >
 
   /**
@@ -7554,7 +7554,7 @@ export namespace Prisma {
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
-    "Int"
+    'Int'
   >
 
   /**
@@ -7562,7 +7562,7 @@ export namespace Prisma {
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
-    "Int[]"
+    'Int[]'
   >
 
   /**
@@ -7570,7 +7570,7 @@ export namespace Prisma {
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
-    "Boolean"
+    'Boolean'
   >
 
   /**
@@ -7578,7 +7578,7 @@ export namespace Prisma {
    */
   export type ListJsonFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
-    "Json[]"
+    'Json[]'
   >
 
   /**
@@ -7586,7 +7586,7 @@ export namespace Prisma {
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
-    "Float"
+    'Float'
   >
 
   /**
@@ -7594,7 +7594,7 @@ export namespace Prisma {
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
-    "Float[]"
+    'Float[]'
   >
 
   /**
@@ -7605,29 +7605,29 @@ export namespace Prisma {
     AND?: UserDataWhereInput | UserDataWhereInput[]
     OR?: UserDataWhereInput[]
     NOT?: UserDataWhereInput | UserDataWhereInput[]
-    id?: StringFilter<"UserData"> | string
-    provider_id?: StringNullableFilter<"UserData"> | string | null
-    name?: StringNullableFilter<"UserData"> | string | null
-    email?: StringNullableFilter<"UserData"> | string | null
-    emailVerified?: DateTimeNullableFilter<"UserData"> | Date | string | null
-    image?: StringNullableFilter<"UserData"> | string | null
-    pronouns?: StringNullableFilter<"UserData"> | string | null
-    profile?: JsonNullableFilter<"UserData">
-    createdAt?: DateTimeFilter<"UserData"> | Date | string
-    updatedAt?: DateTimeFilter<"UserData"> | Date | string
-    firstName?: StringFilter<"UserData"> | string
-    lastName?: StringFilter<"UserData"> | string
-    bio?: StringFilter<"UserData"> | string
-    headline?: StringFilter<"UserData"> | string
-    location?: StringFilter<"UserData"> | string
-    websiteURL?: StringFilter<"UserData"> | string
-    shareQuick?: StringNullableFilter<"UserData"> | string | null
-    yogaStyle?: StringNullableFilter<"UserData"> | string | null
-    yogaExperience?: StringNullableFilter<"UserData"> | string | null
-    company?: StringNullableFilter<"UserData"> | string | null
-    socialURL?: StringNullableFilter<"UserData"> | string | null
-    isLocationPublic?: StringNullableFilter<"UserData"> | string | null
-    role?: StringNullableFilter<"UserData"> | string | null
+    id?: StringFilter<'UserData'> | string
+    provider_id?: StringNullableFilter<'UserData'> | string | null
+    name?: StringNullableFilter<'UserData'> | string | null
+    email?: StringNullableFilter<'UserData'> | string | null
+    emailVerified?: DateTimeNullableFilter<'UserData'> | Date | string | null
+    image?: StringNullableFilter<'UserData'> | string | null
+    pronouns?: StringNullableFilter<'UserData'> | string | null
+    profile?: JsonNullableFilter<'UserData'>
+    createdAt?: DateTimeFilter<'UserData'> | Date | string
+    updatedAt?: DateTimeFilter<'UserData'> | Date | string
+    firstName?: StringFilter<'UserData'> | string
+    lastName?: StringFilter<'UserData'> | string
+    bio?: StringFilter<'UserData'> | string
+    headline?: StringFilter<'UserData'> | string
+    location?: StringFilter<'UserData'> | string
+    websiteURL?: StringFilter<'UserData'> | string
+    shareQuick?: StringNullableFilter<'UserData'> | string | null
+    yogaStyle?: StringNullableFilter<'UserData'> | string | null
+    yogaExperience?: StringNullableFilter<'UserData'> | string | null
+    company?: StringNullableFilter<'UserData'> | string | null
+    socialURL?: StringNullableFilter<'UserData'> | string | null
+    isLocationPublic?: StringNullableFilter<'UserData'> | string | null
+    role?: StringNullableFilter<'UserData'> | string | null
     providerAccounts?: ProviderAccountListRelationFilter
   }
 
@@ -7666,29 +7666,29 @@ export namespace Prisma {
       AND?: UserDataWhereInput | UserDataWhereInput[]
       OR?: UserDataWhereInput[]
       NOT?: UserDataWhereInput | UserDataWhereInput[]
-      name?: StringNullableFilter<"UserData"> | string | null
-      emailVerified?: DateTimeNullableFilter<"UserData"> | Date | string | null
-      image?: StringNullableFilter<"UserData"> | string | null
-      pronouns?: StringNullableFilter<"UserData"> | string | null
-      profile?: JsonNullableFilter<"UserData">
-      createdAt?: DateTimeFilter<"UserData"> | Date | string
-      updatedAt?: DateTimeFilter<"UserData"> | Date | string
-      firstName?: StringFilter<"UserData"> | string
-      lastName?: StringFilter<"UserData"> | string
-      bio?: StringFilter<"UserData"> | string
-      headline?: StringFilter<"UserData"> | string
-      location?: StringFilter<"UserData"> | string
-      websiteURL?: StringFilter<"UserData"> | string
-      shareQuick?: StringNullableFilter<"UserData"> | string | null
-      yogaStyle?: StringNullableFilter<"UserData"> | string | null
-      yogaExperience?: StringNullableFilter<"UserData"> | string | null
-      company?: StringNullableFilter<"UserData"> | string | null
-      socialURL?: StringNullableFilter<"UserData"> | string | null
-      isLocationPublic?: StringNullableFilter<"UserData"> | string | null
-      role?: StringNullableFilter<"UserData"> | string | null
+      name?: StringNullableFilter<'UserData'> | string | null
+      emailVerified?: DateTimeNullableFilter<'UserData'> | Date | string | null
+      image?: StringNullableFilter<'UserData'> | string | null
+      pronouns?: StringNullableFilter<'UserData'> | string | null
+      profile?: JsonNullableFilter<'UserData'>
+      createdAt?: DateTimeFilter<'UserData'> | Date | string
+      updatedAt?: DateTimeFilter<'UserData'> | Date | string
+      firstName?: StringFilter<'UserData'> | string
+      lastName?: StringFilter<'UserData'> | string
+      bio?: StringFilter<'UserData'> | string
+      headline?: StringFilter<'UserData'> | string
+      location?: StringFilter<'UserData'> | string
+      websiteURL?: StringFilter<'UserData'> | string
+      shareQuick?: StringNullableFilter<'UserData'> | string | null
+      yogaStyle?: StringNullableFilter<'UserData'> | string | null
+      yogaExperience?: StringNullableFilter<'UserData'> | string | null
+      company?: StringNullableFilter<'UserData'> | string | null
+      socialURL?: StringNullableFilter<'UserData'> | string | null
+      isLocationPublic?: StringNullableFilter<'UserData'> | string | null
+      role?: StringNullableFilter<'UserData'> | string | null
       providerAccounts?: ProviderAccountListRelationFilter
     },
-    "id" | "provider_id" | "email"
+    'id' | 'provider_id' | 'email'
   >
 
   export type UserDataOrderByWithAggregationInput = {
@@ -7728,63 +7728,63 @@ export namespace Prisma {
     NOT?:
       | UserDataScalarWhereWithAggregatesInput
       | UserDataScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"UserData"> | string
-    provider_id?: StringNullableWithAggregatesFilter<"UserData"> | string | null
-    name?: StringNullableWithAggregatesFilter<"UserData"> | string | null
-    email?: StringNullableWithAggregatesFilter<"UserData"> | string | null
+    id?: StringWithAggregatesFilter<'UserData'> | string
+    provider_id?: StringNullableWithAggregatesFilter<'UserData'> | string | null
+    name?: StringNullableWithAggregatesFilter<'UserData'> | string | null
+    email?: StringNullableWithAggregatesFilter<'UserData'> | string | null
     emailVerified?:
-      | DateTimeNullableWithAggregatesFilter<"UserData">
+      | DateTimeNullableWithAggregatesFilter<'UserData'>
       | Date
       | string
       | null
-    image?: StringNullableWithAggregatesFilter<"UserData"> | string | null
-    pronouns?: StringNullableWithAggregatesFilter<"UserData"> | string | null
-    profile?: JsonNullableWithAggregatesFilter<"UserData">
-    createdAt?: DateTimeWithAggregatesFilter<"UserData"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"UserData"> | Date | string
-    firstName?: StringWithAggregatesFilter<"UserData"> | string
-    lastName?: StringWithAggregatesFilter<"UserData"> | string
-    bio?: StringWithAggregatesFilter<"UserData"> | string
-    headline?: StringWithAggregatesFilter<"UserData"> | string
-    location?: StringWithAggregatesFilter<"UserData"> | string
-    websiteURL?: StringWithAggregatesFilter<"UserData"> | string
-    shareQuick?: StringNullableWithAggregatesFilter<"UserData"> | string | null
-    yogaStyle?: StringNullableWithAggregatesFilter<"UserData"> | string | null
+    image?: StringNullableWithAggregatesFilter<'UserData'> | string | null
+    pronouns?: StringNullableWithAggregatesFilter<'UserData'> | string | null
+    profile?: JsonNullableWithAggregatesFilter<'UserData'>
+    createdAt?: DateTimeWithAggregatesFilter<'UserData'> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<'UserData'> | Date | string
+    firstName?: StringWithAggregatesFilter<'UserData'> | string
+    lastName?: StringWithAggregatesFilter<'UserData'> | string
+    bio?: StringWithAggregatesFilter<'UserData'> | string
+    headline?: StringWithAggregatesFilter<'UserData'> | string
+    location?: StringWithAggregatesFilter<'UserData'> | string
+    websiteURL?: StringWithAggregatesFilter<'UserData'> | string
+    shareQuick?: StringNullableWithAggregatesFilter<'UserData'> | string | null
+    yogaStyle?: StringNullableWithAggregatesFilter<'UserData'> | string | null
     yogaExperience?:
-      | StringNullableWithAggregatesFilter<"UserData">
+      | StringNullableWithAggregatesFilter<'UserData'>
       | string
       | null
-    company?: StringNullableWithAggregatesFilter<"UserData"> | string | null
-    socialURL?: StringNullableWithAggregatesFilter<"UserData"> | string | null
+    company?: StringNullableWithAggregatesFilter<'UserData'> | string | null
+    socialURL?: StringNullableWithAggregatesFilter<'UserData'> | string | null
     isLocationPublic?:
-      | StringNullableWithAggregatesFilter<"UserData">
+      | StringNullableWithAggregatesFilter<'UserData'>
       | string
       | null
-    role?: StringNullableWithAggregatesFilter<"UserData"> | string | null
+    role?: StringNullableWithAggregatesFilter<'UserData'> | string | null
   }
 
   export type ProviderAccountWhereInput = {
     AND?: ProviderAccountWhereInput | ProviderAccountWhereInput[]
     OR?: ProviderAccountWhereInput[]
     NOT?: ProviderAccountWhereInput | ProviderAccountWhereInput[]
-    id?: StringFilter<"ProviderAccount"> | string
-    userId?: StringFilter<"ProviderAccount"> | string
-    type?: StringFilter<"ProviderAccount"> | string
-    provider?: StringFilter<"ProviderAccount"> | string
-    providerAccountId?: StringFilter<"ProviderAccount"> | string
-    refresh_token?: StringNullableFilter<"ProviderAccount"> | string | null
-    access_token?: StringNullableFilter<"ProviderAccount"> | string | null
-    expires_at?: IntNullableFilter<"ProviderAccount"> | number | null
-    token_type?: StringNullableFilter<"ProviderAccount"> | string | null
-    scope?: StringNullableFilter<"ProviderAccount"> | string | null
-    id_token?: StringNullableFilter<"ProviderAccount"> | string | null
-    session_state?: JsonNullableFilter<"ProviderAccount">
+    id?: StringFilter<'ProviderAccount'> | string
+    userId?: StringFilter<'ProviderAccount'> | string
+    type?: StringFilter<'ProviderAccount'> | string
+    provider?: StringFilter<'ProviderAccount'> | string
+    providerAccountId?: StringFilter<'ProviderAccount'> | string
+    refresh_token?: StringNullableFilter<'ProviderAccount'> | string | null
+    access_token?: StringNullableFilter<'ProviderAccount'> | string | null
+    expires_at?: IntNullableFilter<'ProviderAccount'> | number | null
+    token_type?: StringNullableFilter<'ProviderAccount'> | string | null
+    scope?: StringNullableFilter<'ProviderAccount'> | string | null
+    id_token?: StringNullableFilter<'ProviderAccount'> | string | null
+    session_state?: JsonNullableFilter<'ProviderAccount'>
     credentials_password?:
-      | StringNullableFilter<"ProviderAccount">
+      | StringNullableFilter<'ProviderAccount'>
       | string
       | null
-    createdAt?: DateTimeFilter<"ProviderAccount"> | Date | string
-    updatedAt?: DateTimeFilter<"ProviderAccount"> | Date | string
+    createdAt?: DateTimeFilter<'ProviderAccount'> | Date | string
+    updatedAt?: DateTimeFilter<'ProviderAccount'> | Date | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
   }
 
@@ -7814,25 +7814,25 @@ export namespace Prisma {
       AND?: ProviderAccountWhereInput | ProviderAccountWhereInput[]
       OR?: ProviderAccountWhereInput[]
       NOT?: ProviderAccountWhereInput | ProviderAccountWhereInput[]
-      type?: StringFilter<"ProviderAccount"> | string
-      provider?: StringFilter<"ProviderAccount"> | string
-      providerAccountId?: StringFilter<"ProviderAccount"> | string
-      refresh_token?: StringNullableFilter<"ProviderAccount"> | string | null
-      access_token?: StringNullableFilter<"ProviderAccount"> | string | null
-      expires_at?: IntNullableFilter<"ProviderAccount"> | number | null
-      token_type?: StringNullableFilter<"ProviderAccount"> | string | null
-      scope?: StringNullableFilter<"ProviderAccount"> | string | null
-      id_token?: StringNullableFilter<"ProviderAccount"> | string | null
-      session_state?: JsonNullableFilter<"ProviderAccount">
+      type?: StringFilter<'ProviderAccount'> | string
+      provider?: StringFilter<'ProviderAccount'> | string
+      providerAccountId?: StringFilter<'ProviderAccount'> | string
+      refresh_token?: StringNullableFilter<'ProviderAccount'> | string | null
+      access_token?: StringNullableFilter<'ProviderAccount'> | string | null
+      expires_at?: IntNullableFilter<'ProviderAccount'> | number | null
+      token_type?: StringNullableFilter<'ProviderAccount'> | string | null
+      scope?: StringNullableFilter<'ProviderAccount'> | string | null
+      id_token?: StringNullableFilter<'ProviderAccount'> | string | null
+      session_state?: JsonNullableFilter<'ProviderAccount'>
       credentials_password?:
-        | StringNullableFilter<"ProviderAccount">
+        | StringNullableFilter<'ProviderAccount'>
         | string
         | null
-      createdAt?: DateTimeFilter<"ProviderAccount"> | Date | string
-      updatedAt?: DateTimeFilter<"ProviderAccount"> | Date | string
+      createdAt?: DateTimeFilter<'ProviderAccount'> | Date | string
+      updatedAt?: DateTimeFilter<'ProviderAccount'> | Date | string
       user?: XOR<UserDataRelationFilter, UserDataWhereInput>
     },
-    "id" | "userId"
+    'id' | 'userId'
   >
 
   export type ProviderAccountOrderByWithAggregationInput = {
@@ -7866,85 +7866,85 @@ export namespace Prisma {
     NOT?:
       | ProviderAccountScalarWhereWithAggregatesInput
       | ProviderAccountScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"ProviderAccount"> | string
-    userId?: StringWithAggregatesFilter<"ProviderAccount"> | string
-    type?: StringWithAggregatesFilter<"ProviderAccount"> | string
-    provider?: StringWithAggregatesFilter<"ProviderAccount"> | string
-    providerAccountId?: StringWithAggregatesFilter<"ProviderAccount"> | string
+    id?: StringWithAggregatesFilter<'ProviderAccount'> | string
+    userId?: StringWithAggregatesFilter<'ProviderAccount'> | string
+    type?: StringWithAggregatesFilter<'ProviderAccount'> | string
+    provider?: StringWithAggregatesFilter<'ProviderAccount'> | string
+    providerAccountId?: StringWithAggregatesFilter<'ProviderAccount'> | string
     refresh_token?:
-      | StringNullableWithAggregatesFilter<"ProviderAccount">
+      | StringNullableWithAggregatesFilter<'ProviderAccount'>
       | string
       | null
     access_token?:
-      | StringNullableWithAggregatesFilter<"ProviderAccount">
+      | StringNullableWithAggregatesFilter<'ProviderAccount'>
       | string
       | null
     expires_at?:
-      | IntNullableWithAggregatesFilter<"ProviderAccount">
+      | IntNullableWithAggregatesFilter<'ProviderAccount'>
       | number
       | null
     token_type?:
-      | StringNullableWithAggregatesFilter<"ProviderAccount">
+      | StringNullableWithAggregatesFilter<'ProviderAccount'>
       | string
       | null
     scope?:
-      | StringNullableWithAggregatesFilter<"ProviderAccount">
+      | StringNullableWithAggregatesFilter<'ProviderAccount'>
       | string
       | null
     id_token?:
-      | StringNullableWithAggregatesFilter<"ProviderAccount">
+      | StringNullableWithAggregatesFilter<'ProviderAccount'>
       | string
       | null
-    session_state?: JsonNullableWithAggregatesFilter<"ProviderAccount">
+    session_state?: JsonNullableWithAggregatesFilter<'ProviderAccount'>
     credentials_password?:
-      | StringNullableWithAggregatesFilter<"ProviderAccount">
+      | StringNullableWithAggregatesFilter<'ProviderAccount'>
       | string
       | null
-    createdAt?: DateTimeWithAggregatesFilter<"ProviderAccount"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"ProviderAccount"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<'ProviderAccount'> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<'ProviderAccount'> | Date | string
   }
 
   export type AsanaPostureWhereInput = {
     AND?: AsanaPostureWhereInput | AsanaPostureWhereInput[]
     OR?: AsanaPostureWhereInput[]
     NOT?: AsanaPostureWhereInput | AsanaPostureWhereInput[]
-    id?: StringFilter<"AsanaPosture"> | string
-    english_names?: StringNullableListFilter<"AsanaPosture">
-    sanskrit_names?: JsonNullableFilter<"AsanaPosture">
-    sort_english_name?: StringFilter<"AsanaPosture"> | string
-    description?: StringNullableFilter<"AsanaPosture"> | string | null
-    benefits?: StringNullableFilter<"AsanaPosture"> | string | null
-    category?: StringNullableFilter<"AsanaPosture"> | string | null
-    difficulty?: StringNullableFilter<"AsanaPosture"> | string | null
-    lore?: StringNullableFilter<"AsanaPosture"> | string | null
+    id?: StringFilter<'AsanaPosture'> | string
+    english_names?: StringNullableListFilter<'AsanaPosture'>
+    sanskrit_names?: JsonNullableFilter<'AsanaPosture'>
+    sort_english_name?: StringFilter<'AsanaPosture'> | string
+    description?: StringNullableFilter<'AsanaPosture'> | string | null
+    benefits?: StringNullableFilter<'AsanaPosture'> | string | null
+    category?: StringNullableFilter<'AsanaPosture'> | string | null
+    difficulty?: StringNullableFilter<'AsanaPosture'> | string | null
+    lore?: StringNullableFilter<'AsanaPosture'> | string | null
     breath_direction_default?:
-      | StringNullableFilter<"AsanaPosture">
+      | StringNullableFilter<'AsanaPosture'>
       | string
       | null
-    dristi?: StringNullableFilter<"AsanaPosture"> | string | null
-    variations?: StringNullableListFilter<"AsanaPosture">
-    modifications?: StringNullableListFilter<"AsanaPosture">
-    suggested_postures?: StringNullableListFilter<"AsanaPosture">
-    preparatory_postures?: StringNullableListFilter<"AsanaPosture">
-    preferred_side?: StringNullableFilter<"AsanaPosture"> | string | null
-    sideways?: BoolNullableFilter<"AsanaPosture"> | boolean | null
-    image?: StringNullableFilter<"AsanaPosture"> | string | null
-    created_on?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
-    updated_on?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
-    acitivity_completed?: BoolNullableFilter<"AsanaPosture"> | boolean | null
-    acitivity_practice?: BoolNullableFilter<"AsanaPosture"> | boolean | null
-    posture_intent?: StringNullableFilter<"AsanaPosture"> | string | null
-    breath_series?: StringNullableListFilter<"AsanaPosture">
-    duration_asana?: StringNullableFilter<"AsanaPosture"> | string | null
-    transition_cues_out?: StringNullableFilter<"AsanaPosture"> | string | null
-    transition_cues_in?: StringNullableFilter<"AsanaPosture"> | string | null
-    setup_cues?: StringNullableFilter<"AsanaPosture"> | string | null
-    deepening_cues?: StringNullableFilter<"AsanaPosture"> | string | null
-    customize_asana?: StringNullableFilter<"AsanaPosture"> | string | null
-    additional_cues?: StringNullableFilter<"AsanaPosture"> | string | null
-    joint_action?: StringNullableFilter<"AsanaPosture"> | string | null
-    muscle_action?: StringNullableFilter<"AsanaPosture"> | string | null
-    created_by?: StringNullableFilter<"AsanaPosture"> | string | null
+    dristi?: StringNullableFilter<'AsanaPosture'> | string | null
+    variations?: StringNullableListFilter<'AsanaPosture'>
+    modifications?: StringNullableListFilter<'AsanaPosture'>
+    suggested_postures?: StringNullableListFilter<'AsanaPosture'>
+    preparatory_postures?: StringNullableListFilter<'AsanaPosture'>
+    preferred_side?: StringNullableFilter<'AsanaPosture'> | string | null
+    sideways?: BoolNullableFilter<'AsanaPosture'> | boolean | null
+    image?: StringNullableFilter<'AsanaPosture'> | string | null
+    created_on?: DateTimeNullableFilter<'AsanaPosture'> | Date | string | null
+    updated_on?: DateTimeNullableFilter<'AsanaPosture'> | Date | string | null
+    acitivity_completed?: BoolNullableFilter<'AsanaPosture'> | boolean | null
+    acitivity_practice?: BoolNullableFilter<'AsanaPosture'> | boolean | null
+    posture_intent?: StringNullableFilter<'AsanaPosture'> | string | null
+    breath_series?: StringNullableListFilter<'AsanaPosture'>
+    duration_asana?: StringNullableFilter<'AsanaPosture'> | string | null
+    transition_cues_out?: StringNullableFilter<'AsanaPosture'> | string | null
+    transition_cues_in?: StringNullableFilter<'AsanaPosture'> | string | null
+    setup_cues?: StringNullableFilter<'AsanaPosture'> | string | null
+    deepening_cues?: StringNullableFilter<'AsanaPosture'> | string | null
+    customize_asana?: StringNullableFilter<'AsanaPosture'> | string | null
+    additional_cues?: StringNullableFilter<'AsanaPosture'> | string | null
+    joint_action?: StringNullableFilter<'AsanaPosture'> | string | null
+    muscle_action?: StringNullableFilter<'AsanaPosture'> | string | null
+    created_by?: StringNullableFilter<'AsanaPosture'> | string | null
   }
 
   export type AsanaPostureOrderByWithRelationInput = {
@@ -7991,43 +7991,43 @@ export namespace Prisma {
       AND?: AsanaPostureWhereInput | AsanaPostureWhereInput[]
       OR?: AsanaPostureWhereInput[]
       NOT?: AsanaPostureWhereInput | AsanaPostureWhereInput[]
-      english_names?: StringNullableListFilter<"AsanaPosture">
-      sanskrit_names?: JsonNullableFilter<"AsanaPosture">
-      description?: StringNullableFilter<"AsanaPosture"> | string | null
-      benefits?: StringNullableFilter<"AsanaPosture"> | string | null
-      category?: StringNullableFilter<"AsanaPosture"> | string | null
-      difficulty?: StringNullableFilter<"AsanaPosture"> | string | null
-      lore?: StringNullableFilter<"AsanaPosture"> | string | null
+      english_names?: StringNullableListFilter<'AsanaPosture'>
+      sanskrit_names?: JsonNullableFilter<'AsanaPosture'>
+      description?: StringNullableFilter<'AsanaPosture'> | string | null
+      benefits?: StringNullableFilter<'AsanaPosture'> | string | null
+      category?: StringNullableFilter<'AsanaPosture'> | string | null
+      difficulty?: StringNullableFilter<'AsanaPosture'> | string | null
+      lore?: StringNullableFilter<'AsanaPosture'> | string | null
       breath_direction_default?:
-        | StringNullableFilter<"AsanaPosture">
+        | StringNullableFilter<'AsanaPosture'>
         | string
         | null
-      dristi?: StringNullableFilter<"AsanaPosture"> | string | null
-      variations?: StringNullableListFilter<"AsanaPosture">
-      modifications?: StringNullableListFilter<"AsanaPosture">
-      suggested_postures?: StringNullableListFilter<"AsanaPosture">
-      preparatory_postures?: StringNullableListFilter<"AsanaPosture">
-      preferred_side?: StringNullableFilter<"AsanaPosture"> | string | null
-      sideways?: BoolNullableFilter<"AsanaPosture"> | boolean | null
-      image?: StringNullableFilter<"AsanaPosture"> | string | null
-      created_on?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
-      updated_on?: DateTimeNullableFilter<"AsanaPosture"> | Date | string | null
-      acitivity_completed?: BoolNullableFilter<"AsanaPosture"> | boolean | null
-      acitivity_practice?: BoolNullableFilter<"AsanaPosture"> | boolean | null
-      posture_intent?: StringNullableFilter<"AsanaPosture"> | string | null
-      breath_series?: StringNullableListFilter<"AsanaPosture">
-      duration_asana?: StringNullableFilter<"AsanaPosture"> | string | null
-      transition_cues_out?: StringNullableFilter<"AsanaPosture"> | string | null
-      transition_cues_in?: StringNullableFilter<"AsanaPosture"> | string | null
-      setup_cues?: StringNullableFilter<"AsanaPosture"> | string | null
-      deepening_cues?: StringNullableFilter<"AsanaPosture"> | string | null
-      customize_asana?: StringNullableFilter<"AsanaPosture"> | string | null
-      additional_cues?: StringNullableFilter<"AsanaPosture"> | string | null
-      joint_action?: StringNullableFilter<"AsanaPosture"> | string | null
-      muscle_action?: StringNullableFilter<"AsanaPosture"> | string | null
-      created_by?: StringNullableFilter<"AsanaPosture"> | string | null
+      dristi?: StringNullableFilter<'AsanaPosture'> | string | null
+      variations?: StringNullableListFilter<'AsanaPosture'>
+      modifications?: StringNullableListFilter<'AsanaPosture'>
+      suggested_postures?: StringNullableListFilter<'AsanaPosture'>
+      preparatory_postures?: StringNullableListFilter<'AsanaPosture'>
+      preferred_side?: StringNullableFilter<'AsanaPosture'> | string | null
+      sideways?: BoolNullableFilter<'AsanaPosture'> | boolean | null
+      image?: StringNullableFilter<'AsanaPosture'> | string | null
+      created_on?: DateTimeNullableFilter<'AsanaPosture'> | Date | string | null
+      updated_on?: DateTimeNullableFilter<'AsanaPosture'> | Date | string | null
+      acitivity_completed?: BoolNullableFilter<'AsanaPosture'> | boolean | null
+      acitivity_practice?: BoolNullableFilter<'AsanaPosture'> | boolean | null
+      posture_intent?: StringNullableFilter<'AsanaPosture'> | string | null
+      breath_series?: StringNullableListFilter<'AsanaPosture'>
+      duration_asana?: StringNullableFilter<'AsanaPosture'> | string | null
+      transition_cues_out?: StringNullableFilter<'AsanaPosture'> | string | null
+      transition_cues_in?: StringNullableFilter<'AsanaPosture'> | string | null
+      setup_cues?: StringNullableFilter<'AsanaPosture'> | string | null
+      deepening_cues?: StringNullableFilter<'AsanaPosture'> | string | null
+      customize_asana?: StringNullableFilter<'AsanaPosture'> | string | null
+      additional_cues?: StringNullableFilter<'AsanaPosture'> | string | null
+      joint_action?: StringNullableFilter<'AsanaPosture'> | string | null
+      muscle_action?: StringNullableFilter<'AsanaPosture'> | string | null
+      created_by?: StringNullableFilter<'AsanaPosture'> | string | null
     },
-    "id" | "sort_english_name"
+    'id' | 'sort_english_name'
   >
 
   export type AsanaPostureOrderByWithAggregationInput = {
@@ -8078,103 +8078,103 @@ export namespace Prisma {
     NOT?:
       | AsanaPostureScalarWhereWithAggregatesInput
       | AsanaPostureScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"AsanaPosture"> | string
-    english_names?: StringNullableListFilter<"AsanaPosture">
-    sanskrit_names?: JsonNullableWithAggregatesFilter<"AsanaPosture">
-    sort_english_name?: StringWithAggregatesFilter<"AsanaPosture"> | string
+    id?: StringWithAggregatesFilter<'AsanaPosture'> | string
+    english_names?: StringNullableListFilter<'AsanaPosture'>
+    sanskrit_names?: JsonNullableWithAggregatesFilter<'AsanaPosture'>
+    sort_english_name?: StringWithAggregatesFilter<'AsanaPosture'> | string
     description?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
     benefits?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
     category?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
     difficulty?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
-    lore?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    lore?: StringNullableWithAggregatesFilter<'AsanaPosture'> | string | null
     breath_direction_default?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
-    dristi?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
-    variations?: StringNullableListFilter<"AsanaPosture">
-    modifications?: StringNullableListFilter<"AsanaPosture">
-    suggested_postures?: StringNullableListFilter<"AsanaPosture">
-    preparatory_postures?: StringNullableListFilter<"AsanaPosture">
+    dristi?: StringNullableWithAggregatesFilter<'AsanaPosture'> | string | null
+    variations?: StringNullableListFilter<'AsanaPosture'>
+    modifications?: StringNullableListFilter<'AsanaPosture'>
+    suggested_postures?: StringNullableListFilter<'AsanaPosture'>
+    preparatory_postures?: StringNullableListFilter<'AsanaPosture'>
     preferred_side?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
-    sideways?: BoolNullableWithAggregatesFilter<"AsanaPosture"> | boolean | null
-    image?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
+    sideways?: BoolNullableWithAggregatesFilter<'AsanaPosture'> | boolean | null
+    image?: StringNullableWithAggregatesFilter<'AsanaPosture'> | string | null
     created_on?:
-      | DateTimeNullableWithAggregatesFilter<"AsanaPosture">
+      | DateTimeNullableWithAggregatesFilter<'AsanaPosture'>
       | Date
       | string
       | null
     updated_on?:
-      | DateTimeNullableWithAggregatesFilter<"AsanaPosture">
+      | DateTimeNullableWithAggregatesFilter<'AsanaPosture'>
       | Date
       | string
       | null
     acitivity_completed?:
-      | BoolNullableWithAggregatesFilter<"AsanaPosture">
+      | BoolNullableWithAggregatesFilter<'AsanaPosture'>
       | boolean
       | null
     acitivity_practice?:
-      | BoolNullableWithAggregatesFilter<"AsanaPosture">
+      | BoolNullableWithAggregatesFilter<'AsanaPosture'>
       | boolean
       | null
     posture_intent?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
-    breath_series?: StringNullableListFilter<"AsanaPosture">
+    breath_series?: StringNullableListFilter<'AsanaPosture'>
     duration_asana?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
     transition_cues_out?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
     transition_cues_in?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
     setup_cues?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
     deepening_cues?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
     customize_asana?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
     additional_cues?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
     joint_action?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
     muscle_action?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
     created_by?:
-      | StringNullableWithAggregatesFilter<"AsanaPosture">
+      | StringNullableWithAggregatesFilter<'AsanaPosture'>
       | string
       | null
   }
@@ -8183,15 +8183,15 @@ export namespace Prisma {
     AND?: AsanaSeriesWhereInput | AsanaSeriesWhereInput[]
     OR?: AsanaSeriesWhereInput[]
     NOT?: AsanaSeriesWhereInput | AsanaSeriesWhereInput[]
-    id?: StringFilter<"AsanaSeries"> | string
-    seriesName?: StringFilter<"AsanaSeries"> | string
-    seriesPostures?: StringNullableListFilter<"AsanaSeries">
-    breathSeries?: StringNullableListFilter<"AsanaSeries">
-    description?: StringNullableFilter<"AsanaSeries"> | string | null
-    durationSeries?: StringNullableFilter<"AsanaSeries"> | string | null
-    image?: StringNullableFilter<"AsanaSeries"> | string | null
-    createdAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
-    updatedAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
+    id?: StringFilter<'AsanaSeries'> | string
+    seriesName?: StringFilter<'AsanaSeries'> | string
+    seriesPostures?: StringNullableListFilter<'AsanaSeries'>
+    breathSeries?: StringNullableListFilter<'AsanaSeries'>
+    description?: StringNullableFilter<'AsanaSeries'> | string | null
+    durationSeries?: StringNullableFilter<'AsanaSeries'> | string | null
+    image?: StringNullableFilter<'AsanaSeries'> | string | null
+    createdAt?: DateTimeNullableFilter<'AsanaSeries'> | Date | string | null
+    updatedAt?: DateTimeNullableFilter<'AsanaSeries'> | Date | string | null
   }
 
   export type AsanaSeriesOrderByWithRelationInput = {
@@ -8212,16 +8212,16 @@ export namespace Prisma {
       AND?: AsanaSeriesWhereInput | AsanaSeriesWhereInput[]
       OR?: AsanaSeriesWhereInput[]
       NOT?: AsanaSeriesWhereInput | AsanaSeriesWhereInput[]
-      seriesName?: StringFilter<"AsanaSeries"> | string
-      seriesPostures?: StringNullableListFilter<"AsanaSeries">
-      breathSeries?: StringNullableListFilter<"AsanaSeries">
-      description?: StringNullableFilter<"AsanaSeries"> | string | null
-      durationSeries?: StringNullableFilter<"AsanaSeries"> | string | null
-      image?: StringNullableFilter<"AsanaSeries"> | string | null
-      createdAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
-      updatedAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
+      seriesName?: StringFilter<'AsanaSeries'> | string
+      seriesPostures?: StringNullableListFilter<'AsanaSeries'>
+      breathSeries?: StringNullableListFilter<'AsanaSeries'>
+      description?: StringNullableFilter<'AsanaSeries'> | string | null
+      durationSeries?: StringNullableFilter<'AsanaSeries'> | string | null
+      image?: StringNullableFilter<'AsanaSeries'> | string | null
+      createdAt?: DateTimeNullableFilter<'AsanaSeries'> | Date | string | null
+      updatedAt?: DateTimeNullableFilter<'AsanaSeries'> | Date | string | null
     },
-    "id"
+    'id'
   >
 
   export type AsanaSeriesOrderByWithAggregationInput = {
@@ -8247,26 +8247,26 @@ export namespace Prisma {
     NOT?:
       | AsanaSeriesScalarWhereWithAggregatesInput
       | AsanaSeriesScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"AsanaSeries"> | string
-    seriesName?: StringWithAggregatesFilter<"AsanaSeries"> | string
-    seriesPostures?: StringNullableListFilter<"AsanaSeries">
-    breathSeries?: StringNullableListFilter<"AsanaSeries">
+    id?: StringWithAggregatesFilter<'AsanaSeries'> | string
+    seriesName?: StringWithAggregatesFilter<'AsanaSeries'> | string
+    seriesPostures?: StringNullableListFilter<'AsanaSeries'>
+    breathSeries?: StringNullableListFilter<'AsanaSeries'>
     description?:
-      | StringNullableWithAggregatesFilter<"AsanaSeries">
+      | StringNullableWithAggregatesFilter<'AsanaSeries'>
       | string
       | null
     durationSeries?:
-      | StringNullableWithAggregatesFilter<"AsanaSeries">
+      | StringNullableWithAggregatesFilter<'AsanaSeries'>
       | string
       | null
-    image?: StringNullableWithAggregatesFilter<"AsanaSeries"> | string | null
+    image?: StringNullableWithAggregatesFilter<'AsanaSeries'> | string | null
     createdAt?:
-      | DateTimeNullableWithAggregatesFilter<"AsanaSeries">
+      | DateTimeNullableWithAggregatesFilter<'AsanaSeries'>
       | Date
       | string
       | null
     updatedAt?:
-      | DateTimeNullableWithAggregatesFilter<"AsanaSeries">
+      | DateTimeNullableWithAggregatesFilter<'AsanaSeries'>
       | Date
       | string
       | null
@@ -8276,15 +8276,15 @@ export namespace Prisma {
     AND?: AsanaSequenceWhereInput | AsanaSequenceWhereInput[]
     OR?: AsanaSequenceWhereInput[]
     NOT?: AsanaSequenceWhereInput | AsanaSequenceWhereInput[]
-    id?: StringFilter<"AsanaSequence"> | string
-    nameSequence?: StringFilter<"AsanaSequence"> | string
-    sequencesSeries?: JsonNullableListFilter<"AsanaSequence">
-    description?: StringNullableFilter<"AsanaSequence"> | string | null
-    durationSequence?: StringNullableFilter<"AsanaSequence"> | string | null
-    image?: StringNullableFilter<"AsanaSequence"> | string | null
-    breath_direction?: StringNullableFilter<"AsanaSequence"> | string | null
-    createdAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
-    updatedAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
+    id?: StringFilter<'AsanaSequence'> | string
+    nameSequence?: StringFilter<'AsanaSequence'> | string
+    sequencesSeries?: JsonNullableListFilter<'AsanaSequence'>
+    description?: StringNullableFilter<'AsanaSequence'> | string | null
+    durationSequence?: StringNullableFilter<'AsanaSequence'> | string | null
+    image?: StringNullableFilter<'AsanaSequence'> | string | null
+    breath_direction?: StringNullableFilter<'AsanaSequence'> | string | null
+    createdAt?: DateTimeNullableFilter<'AsanaSequence'> | Date | string | null
+    updatedAt?: DateTimeNullableFilter<'AsanaSequence'> | Date | string | null
   }
 
   export type AsanaSequenceOrderByWithRelationInput = {
@@ -8305,16 +8305,16 @@ export namespace Prisma {
       AND?: AsanaSequenceWhereInput | AsanaSequenceWhereInput[]
       OR?: AsanaSequenceWhereInput[]
       NOT?: AsanaSequenceWhereInput | AsanaSequenceWhereInput[]
-      nameSequence?: StringFilter<"AsanaSequence"> | string
-      sequencesSeries?: JsonNullableListFilter<"AsanaSequence">
-      description?: StringNullableFilter<"AsanaSequence"> | string | null
-      durationSequence?: StringNullableFilter<"AsanaSequence"> | string | null
-      image?: StringNullableFilter<"AsanaSequence"> | string | null
-      breath_direction?: StringNullableFilter<"AsanaSequence"> | string | null
-      createdAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
-      updatedAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
+      nameSequence?: StringFilter<'AsanaSequence'> | string
+      sequencesSeries?: JsonNullableListFilter<'AsanaSequence'>
+      description?: StringNullableFilter<'AsanaSequence'> | string | null
+      durationSequence?: StringNullableFilter<'AsanaSequence'> | string | null
+      image?: StringNullableFilter<'AsanaSequence'> | string | null
+      breath_direction?: StringNullableFilter<'AsanaSequence'> | string | null
+      createdAt?: DateTimeNullableFilter<'AsanaSequence'> | Date | string | null
+      updatedAt?: DateTimeNullableFilter<'AsanaSequence'> | Date | string | null
     },
-    "id"
+    'id'
   >
 
   export type AsanaSequenceOrderByWithAggregationInput = {
@@ -8340,29 +8340,29 @@ export namespace Prisma {
     NOT?:
       | AsanaSequenceScalarWhereWithAggregatesInput
       | AsanaSequenceScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"AsanaSequence"> | string
-    nameSequence?: StringWithAggregatesFilter<"AsanaSequence"> | string
-    sequencesSeries?: JsonNullableListFilter<"AsanaSequence">
+    id?: StringWithAggregatesFilter<'AsanaSequence'> | string
+    nameSequence?: StringWithAggregatesFilter<'AsanaSequence'> | string
+    sequencesSeries?: JsonNullableListFilter<'AsanaSequence'>
     description?:
-      | StringNullableWithAggregatesFilter<"AsanaSequence">
+      | StringNullableWithAggregatesFilter<'AsanaSequence'>
       | string
       | null
     durationSequence?:
-      | StringNullableWithAggregatesFilter<"AsanaSequence">
+      | StringNullableWithAggregatesFilter<'AsanaSequence'>
       | string
       | null
-    image?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
+    image?: StringNullableWithAggregatesFilter<'AsanaSequence'> | string | null
     breath_direction?:
-      | StringNullableWithAggregatesFilter<"AsanaSequence">
+      | StringNullableWithAggregatesFilter<'AsanaSequence'>
       | string
       | null
     createdAt?:
-      | DateTimeNullableWithAggregatesFilter<"AsanaSequence">
+      | DateTimeNullableWithAggregatesFilter<'AsanaSequence'>
       | Date
       | string
       | null
     updatedAt?:
-      | DateTimeNullableWithAggregatesFilter<"AsanaSequence">
+      | DateTimeNullableWithAggregatesFilter<'AsanaSequence'>
       | Date
       | string
       | null
@@ -9318,11 +9318,11 @@ export namespace Prisma {
     | PatchUndefined<
         Either<
           Required<JsonNullableFilterBase<$PrismaModel>>,
-          Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, "path">
+          Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>
         >,
         Required<JsonNullableFilterBase<$PrismaModel>>
       >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, "path">>
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
 
   export type JsonNullableFilterBase<$PrismaModel = never> = {
     equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
@@ -9488,7 +9488,7 @@ export namespace Prisma {
           Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
           Exclude<
             keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
-            "path"
+            'path'
           >
         >,
         Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
@@ -9496,7 +9496,7 @@ export namespace Prisma {
     | OptionalFlat<
         Omit<
           Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
-          "path"
+          'path'
         >
       >
 
@@ -9774,13 +9774,13 @@ export namespace Prisma {
           Required<JsonNullableListFilterBase<$PrismaModel>>,
           Exclude<
             keyof Required<JsonNullableListFilterBase<$PrismaModel>>,
-            "path"
+            'path'
           >
         >,
         Required<JsonNullableListFilterBase<$PrismaModel>>
       >
     | OptionalFlat<
-        Omit<Required<JsonNullableListFilterBase<$PrismaModel>>, "path">
+        Omit<Required<JsonNullableListFilterBase<$PrismaModel>>, 'path'>
       >
 
   export type JsonNullableListFilterBase<$PrismaModel = never> = {
@@ -10201,13 +10201,13 @@ export namespace Prisma {
           Required<NestedJsonNullableFilterBase<$PrismaModel>>,
           Exclude<
             keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>,
-            "path"
+            'path'
           >
         >,
         Required<NestedJsonNullableFilterBase<$PrismaModel>>
       >
     | OptionalFlat<
-        Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, "path">
+        Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>
       >
 
   export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
@@ -10354,24 +10354,24 @@ export namespace Prisma {
     AND?: ProviderAccountScalarWhereInput | ProviderAccountScalarWhereInput[]
     OR?: ProviderAccountScalarWhereInput[]
     NOT?: ProviderAccountScalarWhereInput | ProviderAccountScalarWhereInput[]
-    id?: StringFilter<"ProviderAccount"> | string
-    userId?: StringFilter<"ProviderAccount"> | string
-    type?: StringFilter<"ProviderAccount"> | string
-    provider?: StringFilter<"ProviderAccount"> | string
-    providerAccountId?: StringFilter<"ProviderAccount"> | string
-    refresh_token?: StringNullableFilter<"ProviderAccount"> | string | null
-    access_token?: StringNullableFilter<"ProviderAccount"> | string | null
-    expires_at?: IntNullableFilter<"ProviderAccount"> | number | null
-    token_type?: StringNullableFilter<"ProviderAccount"> | string | null
-    scope?: StringNullableFilter<"ProviderAccount"> | string | null
-    id_token?: StringNullableFilter<"ProviderAccount"> | string | null
-    session_state?: JsonNullableFilter<"ProviderAccount">
+    id?: StringFilter<'ProviderAccount'> | string
+    userId?: StringFilter<'ProviderAccount'> | string
+    type?: StringFilter<'ProviderAccount'> | string
+    provider?: StringFilter<'ProviderAccount'> | string
+    providerAccountId?: StringFilter<'ProviderAccount'> | string
+    refresh_token?: StringNullableFilter<'ProviderAccount'> | string | null
+    access_token?: StringNullableFilter<'ProviderAccount'> | string | null
+    expires_at?: IntNullableFilter<'ProviderAccount'> | number | null
+    token_type?: StringNullableFilter<'ProviderAccount'> | string | null
+    scope?: StringNullableFilter<'ProviderAccount'> | string | null
+    id_token?: StringNullableFilter<'ProviderAccount'> | string | null
+    session_state?: JsonNullableFilter<'ProviderAccount'>
     credentials_password?:
-      | StringNullableFilter<"ProviderAccount">
+      | StringNullableFilter<'ProviderAccount'>
       | string
       | null
-    createdAt?: DateTimeFilter<"ProviderAccount"> | Date | string
-    updatedAt?: DateTimeFilter<"ProviderAccount"> | Date | string
+    createdAt?: DateTimeFilter<'ProviderAccount'> | Date | string
+    updatedAt?: DateTimeFilter<'ProviderAccount'> | Date | string
   }
 
   export type UserDataCreateWithoutProviderAccountsInput = {

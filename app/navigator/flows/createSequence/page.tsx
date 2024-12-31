@@ -1,7 +1,7 @@
-"use client"
-import { FlowSeriesData } from "@context/AsanaSeriesContext"
-import { SequenceData } from "@context/SequenceContext"
-import { FEATURES } from "@app/FEATURES"
+'use client'
+import { FlowSeriesData } from '@context/AsanaSeriesContext'
+import { SequenceData } from '@context/SequenceContext'
+import { FEATURES } from '@app/FEATURES'
 import {
   Autocomplete,
   Avatar,
@@ -22,33 +22,33 @@ import {
   Typography,
   ListItemIcon,
   Checkbox,
-} from "@mui/material"
-import { useSession } from "next-auth/react"
-import { ChangeEvent, FormEvent, useEffect, useState } from "react"
-import { LooksOne } from "@mui/icons-material"
-import LooksTwoIcon from "@mui/icons-material/LooksTwo"
-import Looks3Icon from "@mui/icons-material/Looks3"
-import Looks4Icon from "@mui/icons-material/Looks4"
-import Looks5Icon from "@mui/icons-material/Looks5"
-import { useRouter } from "next/navigation"
-import SplashHeader from "@app/clientComponents/splash-header"
-import SubNavHeader from "@app/clientComponents/sub-nav-header"
-import SearchIcon from "@mui/icons-material/Search"
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
-import { ArrowBack, ArrowForward } from "@mui/icons-material"
-import Image from "next/image"
-import NavBottom from "@serverComponents/navBottom"
+} from '@mui/material'
+import { useSession } from 'next-auth/react'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { LooksOne } from '@mui/icons-material'
+import LooksTwoIcon from '@mui/icons-material/LooksTwo'
+import Looks3Icon from '@mui/icons-material/Looks3'
+import Looks4Icon from '@mui/icons-material/Looks4'
+import Looks5Icon from '@mui/icons-material/Looks5'
+import { useRouter } from 'next/navigation'
+import SplashHeader from '@app/clientComponents/splash-header'
+import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import SearchIcon from '@mui/icons-material/Search'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import { ArrowBack, ArrowForward } from '@mui/icons-material'
+import Image from 'next/image'
+import NavBottom from '@serverComponents/navBottom'
 
 async function fetchSeries() {
   try {
-    const res = await fetch("/api/series", { cache: "no-store" })
+    const res = await fetch('/api/series', { cache: 'no-store' })
     if (!res.ok) {
-      throw new Error("Network response was not ok")
+      throw new Error('Network response was not ok')
     }
     const data = await res.json()
     return data
   } catch (error) {
-    throw new Error("Error fetching sequence data")
+    throw new Error('Error fetching sequence data')
   }
 }
 
@@ -57,19 +57,19 @@ export default function Page() {
 
   const [sequences, setSequences] = useState<SequenceData>({
     id: 0,
-    nameSequence: "",
+    nameSequence: '',
     sequencesSeries: [],
-    description: "",
-    duration: "",
-    image: "",
-    breath_direction: "",
+    description: '',
+    duration: '',
+    image: '',
+    breath_direction: '',
   })
 
-  const [nameSequence, setNameSequence] = useState("")
-  const [description, setDescription] = useState("")
-  const [duration, setDuration] = useState("")
-  const [image, setImage] = useState("")
-  const [breath_direction, setBreathDirection] = useState("")
+  const [nameSequence, setNameSequence] = useState('')
+  const [description, setDescription] = useState('')
+  const [duration, setDuration] = useState('')
+  const [image, setImage] = useState('')
+  const [breath_direction, setBreathDirection] = useState('')
 
   const [flowSeries, setFlowSeries] = useState<FlowSeriesData[]>([])
   const [seriesNameSet, setSeriesNameSet] = useState<string[]>([])
@@ -92,7 +92,7 @@ export default function Page() {
     }
 
     if (session === null) {
-      router.push("/navigator/flows")
+      router.push('/navigator/flows')
     }
 
     getData()
@@ -133,19 +133,19 @@ export default function Page() {
     }
 
     try {
-      const response = await fetch("/api/sequences/createSequence", {
-        method: "POST",
+      const response = await fetch('/api/sequences/createSequence', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          cache: "no-store",
+          'Content-Type': 'application/json',
+          cache: 'no-store',
         },
         body: JSON.stringify(updatedSequence),
       })
       if (!response.ok) {
-        throw new Error("Network response was not ok")
+        throw new Error('Network response was not ok')
       }
       const data = await response.json()
-      console.log("create sequence response", data)
+      console.log('create sequence response', data)
     } catch (error: Error | any) {
       error.message
     }
@@ -155,31 +155,31 @@ export default function Page() {
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target
     switch (name) {
-      case "nameSequence":
+      case 'nameSequence':
         setNameSequence(value)
         break
-      case "seriesName":
+      case 'seriesName':
         setSeriesNameSet((prev) => [...prev, value])
         break
-      case "description":
+      case 'description':
         setDescription(value)
         setIsDirtyDescription(event.target.value.length > 0)
         break
-      case "duration":
+      case 'duration':
         setDuration(value)
         break
-      case "image":
+      case 'image':
         setImage(value)
         break
-      case "breath_direction":
+      case 'breath_direction':
         setBreathDirection(value)
         break
     }
   }
 
   function handleCancel() {
-    setNameSequence("")
-    setDescription("")
+    setNameSequence('')
+    setDescription('')
     setSeriesNameSet([])
     setIsDirtyDescription(false)
   }
@@ -215,25 +215,25 @@ export default function Page() {
     })
   }
 
-  const currentSeriesName = seriesNameSet[currentSeriesIndex] || ""
+  const currentSeriesName = seriesNameSet[currentSeriesIndex] || ''
   const [isDirtyDescription, setIsDirtyDescription] = useState(false)
 
   return (
     <>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
           mt: 4,
           mb: 4,
         }}
       >
-        <Stack sx={{ marginX: 3, marginY: 3, mb: "1em" }}>
+        <Stack sx={{ marginX: 3, marginY: 3, mb: '1em' }}>
           <SplashHeader
-            src={"/images/header-create-sequences.png"}
-            alt={"Create Sequences"}
+            src={'/images/header-create-sequences.png'}
+            alt={'Create Sequences'}
             title="Create Sequences"
           />
           <SubNavHeader
@@ -262,17 +262,17 @@ export default function Page() {
                 )
               }
               sx={{
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderRadius: "12px",
-                  borderColor: "primary.main",
-                  boxShadow: "0 4px 4px 0 rgba(0, 0, 0, 0.25)",
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderRadius: '12px',
+                  borderColor: 'primary.main',
+                  boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
                 },
-                "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
                   {
-                    borderColor: "primary.light", // Ensure border color does not change on hover
+                    borderColor: 'primary.light', // Ensure border color does not change on hover
                   },
-                "& .MuiAutocomplete-popupIndicator": {
-                  display: "none",
+                '& .MuiAutocomplete-popupIndicator': {
+                  display: 'none',
                 },
                 my: 3,
               }}
@@ -280,14 +280,14 @@ export default function Page() {
                 <TextField
                   {...params}
                   sx={{
-                    "& .MuiInputBase-input": { color: "primary.main" },
+                    '& .MuiInputBase-input': { color: 'primary.main' },
                   }}
                   placeholder="Add a Series to your Sequence..."
                   InputProps={{
                     ...params.InputProps,
                     startAdornment: (
                       <>
-                        <SearchIcon sx={{ color: "primary.main", mr: 1 }} />
+                        <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
                         {params.InputProps.startAdornment}
                       </>
                     ),
@@ -310,17 +310,17 @@ export default function Page() {
                       onChange={handleChange}
                       placeholder="Give your Sequence a name"
                       sx={{
-                        backgroundColor: "primary.main",
-                        borderTopLeftRadius: "12px",
-                        borderTopRightRadius: "12px",
-                        width: "80%",
-                        height: "2em",
+                        backgroundColor: 'primary.main',
+                        borderTopLeftRadius: '12px',
+                        borderTopRightRadius: '12px',
+                        width: '80%',
+                        height: '2em',
                         ml: 5,
                         pr: 7,
                         pl: 2,
-                        fontWeight: "bold",
-                        "& .MuiInputBase-input": {
-                          padding: "0.5em 0 0 0",
+                        fontWeight: 'bold',
+                        '& .MuiInputBase-input': {
+                          padding: '0.5em 0 0 0',
                         },
                       }}
                     />
@@ -340,7 +340,7 @@ export default function Page() {
                       {seriesNameSet.map((series, index) => (
                         <Box
                           key={`${series}+${index}`}
-                          display={"flex"}
+                          display={'flex'}
                           sx={{ pl: 4 }}
                           className="journalLine"
                         >
@@ -364,17 +364,17 @@ export default function Page() {
                           {postures.map((series, index) => (
                             <ListItem
                               className="journalLine"
-                              sx={{ whiteSpace: "collapse" }}
+                              sx={{ whiteSpace: 'collapse' }}
                               key={`${series}${index}`}
                             >
                               <ListItemText
-                                primary={series.split(";").map((item, idx) => (
+                                primary={series.split(';').map((item, idx) => (
                                   <Typography
                                     variant="body1"
                                     key={idx}
                                     sx={{
                                       fontStyle:
-                                        idx === 1 ? "italic" : "normal",
+                                        idx === 1 ? 'italic' : 'normal',
                                     }}
                                   >
                                     {item}
@@ -388,7 +388,7 @@ export default function Page() {
                           <Stack>
                             <Stack>
                               <ListItemIcon
-                                sx={{ color: "error.light" }}
+                                sx={{ color: 'error.light' }}
                                 onClick={() =>
                                   setSeriesNameSet((prev) => prev.slice(0, -1))
                                 }
@@ -397,11 +397,11 @@ export default function Page() {
                                 <ListItemText primary="Remove series" />
                               </ListItemIcon>
                             </Stack>
-                            <Stack flexDirection={"row"} alignItems={"center"}>
+                            <Stack flexDirection={'row'} alignItems={'center'}>
                               <Typography>
                                 {currentSeriesIndex > 0
                                   ? seriesNameSet[currentSeriesIndex - 1]
-                                  : ""}
+                                  : ''}
                               </Typography>
                               <IconButton
                                 onClick={handlePreviousSeries}
@@ -422,7 +422,7 @@ export default function Page() {
                               <Typography>
                                 {currentSeriesIndex < seriesNameSet.length - 1
                                   ? seriesNameSet[currentSeriesIndex + 1]
-                                  : ""}
+                                  : ''}
                               </Typography>
                             </Stack>
                           </Stack>
@@ -448,7 +448,7 @@ export default function Page() {
                     <Button
                       variant="outlined"
                       color="inherit"
-                      sx={{ color: "primary.contrastText" }}
+                      sx={{ color: 'primary.contrastText' }}
                       onClick={handleCancel}
                     >
                       Start Over
@@ -456,20 +456,20 @@ export default function Page() {
                   </Stack>
                   <FormControl
                     sx={{
-                      width: "100%",
+                      width: '100%',
                       mt: 3,
-                      border: "1px solid black",
-                      borderRadius: "12px",
+                      border: '1px solid black',
+                      borderRadius: '12px',
                       p: 2,
                     }}
                   >
-                    <Stack gap={2} flexDirection={"row"} alignItems={"center"}>
-                      <Typography color={"primary.main"} variant="h3">
+                    <Stack gap={2} flexDirection={'row'} alignItems={'center'}>
+                      <Typography color={'primary.main'} variant="h3">
                         Description
                       </Typography>
                       <Image
-                        src={"/icons/flows/leaf-3.svg"}
-                        alt={"leaf icon"}
+                        src={'/icons/flows/leaf-3.svg'}
+                        alt={'leaf icon'}
                         height={21}
                         width={21}
                       ></Image>
@@ -485,11 +485,11 @@ export default function Page() {
                       value={description}
                       onChange={handleChange}
                       sx={{
-                        "& .MuiInputBase-input": { color: "primary.main" },
-                        width: "100%",
-                        alignSelf: "center",
-                        color: "primary.main",
-                        backgroundColor: "navSplash.dark",
+                        '& .MuiInputBase-input': { color: 'primary.main' },
+                        width: '100%',
+                        alignSelf: 'center',
+                        color: 'primary.main',
+                        backgroundColor: 'navSplash.dark',
                       }}
                       InputProps={{
                         endAdornment: (
@@ -497,12 +497,12 @@ export default function Page() {
                             checked={isDirtyDescription}
                             onChange={handleChange}
                             sx={{
-                              position: "absolute",
+                              position: 'absolute',
                               top: 0,
                               right: 0,
-                              color: "primary.main",
-                              "&.Mui-checked": {
-                                color: "primary.main",
+                              color: 'primary.main',
+                              '&.Mui-checked': {
+                                color: 'primary.main',
                               },
                             }}
                           />
@@ -523,15 +523,15 @@ export default function Page() {
         >
           <List
             sx={{
-              width: "auto",
-              bgcolor: "background.helper",
-              alignSelf: "center",
+              width: 'auto',
+              bgcolor: 'background.helper',
+              alignSelf: 'center',
               borderRadius: 4,
               my: 3,
             }}
           >
             <ListSubheader
-              sx={{ bgcolor: "background.helper", textAlign: "center" }}
+              sx={{ bgcolor: 'background.helper', textAlign: 'center' }}
               component="h3"
               id="nested-list-subheader"
             >
@@ -584,7 +584,7 @@ export default function Page() {
           </List>
         </Drawer>
       </Box>
-      <Box height={"72px"} />
+      <Box height={'72px'} />
 
       <NavBottom subRoute="/navigator/flows" />
     </>

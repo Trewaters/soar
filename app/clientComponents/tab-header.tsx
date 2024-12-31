@@ -1,8 +1,8 @@
-"use client"
-import React, { useState } from "react"
-import { Box, Tab, Tabs } from "@mui/material"
-import LandingPage from "@components/landing-page"
-import EightLimbs from "@app/navigator/eightLimbs/eight-limbs"
+'use client'
+import React, { useState } from 'react'
+import { Box, Tab, Tabs } from '@mui/material'
+import LandingPage from '@components/landing-page'
+import EightLimbs from '@app/navigator/eightLimbs/eight-limbs'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -29,7 +29,7 @@ function CustomTabPanel(props: TabPanelProps) {
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
   }
 }
 
@@ -43,19 +43,19 @@ export default function TabHeader() {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
       }}
     >
       <Box
         sx={{
-          width: "100%",
+          width: '100%',
           maxWidth: 360,
           borderBottom: 1,
-          borderColor: "divider",
+          borderColor: 'divider',
         }}
       >
         <Tabs

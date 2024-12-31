@@ -11,7 +11,7 @@ declare type Args<T, F extends Operation> = T extends {
     }
   }
 }
-  ? T[symbol]["types"]["operations"][F]["args"]
+  ? T[symbol]['types']['operations'][F]['args']
   : any
 
 declare class DbNull extends NullTypesEnumValue {}
@@ -360,29 +360,29 @@ export declare const objectEnumValues: {
 }
 
 declare type Operation =
-  | "findFirst"
-  | "findFirstOrThrow"
-  | "findUnique"
-  | "findUniqueOrThrow"
-  | "findMany"
-  | "create"
-  | "createMany"
-  | "createManyAndReturn"
-  | "update"
-  | "updateMany"
-  | "upsert"
-  | "delete"
-  | "deleteMany"
-  | "aggregate"
-  | "count"
-  | "groupBy"
-  | "$queryRaw"
-  | "$executeRaw"
-  | "$queryRawUnsafe"
-  | "$executeRawUnsafe"
-  | "findRaw"
-  | "aggregateRaw"
-  | "$runCommandRaw"
+  | 'findFirst'
+  | 'findFirstOrThrow'
+  | 'findUnique'
+  | 'findUniqueOrThrow'
+  | 'findMany'
+  | 'create'
+  | 'createMany'
+  | 'createManyAndReturn'
+  | 'update'
+  | 'updateMany'
+  | 'upsert'
+  | 'delete'
+  | 'deleteMany'
+  | 'aggregate'
+  | 'count'
+  | 'groupBy'
+  | '$queryRaw'
+  | '$executeRaw'
+  | '$queryRawUnsafe'
+  | '$executeRawUnsafe'
+  | 'findRaw'
+  | 'aggregateRaw'
+  | '$runCommandRaw'
 
 declare namespace Public {
   export { validator }
@@ -390,18 +390,18 @@ declare namespace Public {
 export { Public }
 
 declare type Runtime =
-  | "edge-routine"
-  | "workerd"
-  | "deno"
-  | "lagon"
-  | "react-native"
-  | "netlify"
-  | "electron"
-  | "node"
-  | "bun"
-  | "edge-light"
-  | "fastly"
-  | "unknown"
+  | 'edge-routine'
+  | 'workerd'
+  | 'deno'
+  | 'lagon'
+  | 'react-native'
+  | 'netlify'
+  | 'electron'
+  | 'node'
+  | 'bun'
+  | 'edge-light'
+  | 'fastly'
+  | 'unknown'
 
 declare function validator<V>(): <S>(select: Exact<S, V>) => S
 

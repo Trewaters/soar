@@ -1,5 +1,5 @@
-"use client"
-import React, { useEffect, useState } from "react"
+'use client'
+import React, { useEffect, useState } from 'react'
 import {
   Avatar,
   Button,
@@ -11,13 +11,13 @@ import {
   Paper,
   Box,
   FormHelperText,
-} from "@mui/material"
-import Grid from "@mui/material/Grid2"
-import { red } from "@mui/material/colors"
-import { useSession } from "next-auth/react"
-import { UseUser } from "@context/UserContext"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
+} from '@mui/material'
+import Grid from '@mui/material/Grid2'
+import { red } from '@mui/material/colors'
+import { useSession } from 'next-auth/react'
+import { UseUser } from '@context/UserContext'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 // interface ExpandMoreProps extends IconButtonProps {
 //   expand: boolean
@@ -59,8 +59,8 @@ export default function UserDetails() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [profileImageMode, setProfileImageMode] = useState<
-    "active" | "inactive" | "edit"
-  >("active")
+    'active' | 'inactive' | 'edit'
+  >('active')
 
   // const handleExpandClick = () => {
   //   setExpanded(!expanded)
@@ -69,16 +69,16 @@ export default function UserDetails() {
   useEffect(() => {
     if (session?.user?.email && userData?.email !== session.user.email) {
       dispatch({
-        type: "SET_USER",
+        type: 'SET_USER',
         payload: { ...userData, email: session.user.email },
       })
     }
-    setProfileImageMode("active")
+    setProfileImageMode('active')
   }, [session, dispatch, userData])
 
   if (!session) {
     return (
-      <Button variant="outlined" onClick={() => router.push("/auth/signin")}>
+      <Button variant="outlined" onClick={() => router.push('/auth/signin')}>
         Sign in to view your profile
       </Button>
     )
@@ -86,7 +86,7 @@ export default function UserDetails() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    dispatch({ type: "SET_USER", payload: { ...userData, [name]: value } })
+    dispatch({ type: 'SET_USER', payload: { ...userData, [name]: value } })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -97,20 +97,20 @@ export default function UserDetails() {
       const response = await fetch(
         `/api/user/updateUserData/?email=${userData.email}`,
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(userData),
         }
       )
 
       if (!response.ok) {
-        throw new Error("Failed to update user data")
+        throw new Error('Failed to update user data')
       }
 
       const updatedUser = await response.json()
-      dispatch({ type: "SET_USER", payload: updatedUser })
+      dispatch({ type: 'SET_USER', payload: updatedUser })
     } catch (error) {
       setError(`Error updating user data: ${(error as Error).message}`)
     } finally {
@@ -150,18 +150,18 @@ export default function UserDetails() {
   return (
     <>
       {error && (
-        <Grid size={12} textAlign={"center"}>
+        <Grid size={12} textAlign={'center'}>
           <Typography color="error">{error}</Typography>
         </Grid>
       )}
       {session && (
-        <Box sx={{ flexGrow: 1, justifyItems: "center" }}>
+        <Box sx={{ flexGrow: 1, justifyItems: 'center' }}>
           <Paper elevation={1} sx={{ mx: 3 }}>
             <Grid
               container
               spacing={3}
               sx={{ p: 3 }}
-              component={"form"}
+              component={'form'}
               onSubmit={handleSubmit}
             >
               <Grid size={{ xs: 8 }}>
@@ -169,9 +169,9 @@ export default function UserDetails() {
                   Yoga Practitioner
                 </Typography>
               </Grid>
-              <Grid display={"flex"} alignItems={"center"} size={{ xs: 4 }}>
+              <Grid display={'flex'} alignItems={'center'} size={{ xs: 4 }}>
                 <Image
-                  src={"/icons/profile/leaf-profile.svg"}
+                  src={'/icons/profile/leaf-profile.svg'}
                   width={50}
                   height={50}
                   alt="Yoga Practitioner icon"
@@ -182,46 +182,46 @@ export default function UserDetails() {
                 <Avatar
                   sx={{
                     bgcolor: red[500],
-                    width: { xs: "100%", md: "100%" },
-                    height: { xs: "69%", md: "81%" },
+                    width: { xs: '100%', md: '100%' },
+                    height: { xs: '69%', md: '81%' },
                   }}
                   aria-label="name initial"
                   src={userData?.image}
                 >
                   {!userData?.image ? (
                     <Image
-                      src={"/icons/profile/profile-person.svg"}
+                      src={'/icons/profile/profile-person.svg'}
                       width={50}
                       height={50}
                       alt="Generic profile image icon"
                     />
                   ) : undefined}
                 </Avatar>
-                {profileImageMode === "active" && (
+                {profileImageMode === 'active' && (
                   <Image
-                    src={"/icons/profile/profile-image-active.svg"}
+                    src={'/icons/profile/profile-image-active.svg'}
                     alt="Active profile image icon"
                     width={27}
                     height={27}
                     style={{
-                      position: "relative",
-                      bottom: "30%",
-                      left: "80%",
-                      cursor: "pointer",
+                      position: 'relative',
+                      bottom: '30%',
+                      left: '80%',
+                      cursor: 'pointer',
                     }}
                   />
                 )}
-                {profileImageMode === "inactive" && (
+                {profileImageMode === 'inactive' && (
                   <Image
-                    src={"/icons/profile/profile-image-inactive.svg"}
+                    src={'/icons/profile/profile-image-inactive.svg'}
                     width={50}
                     height={50}
                     alt="Inactive profile image icon"
                   />
                 )}
-                {profileImageMode === "edit" && (
+                {profileImageMode === 'edit' && (
                   <Image
-                    src={"/icons/profile/profile-image-edit.svg"}
+                    src={'/icons/profile/profile-image-edit.svg'}
                     width={50}
                     height={50}
                     alt="Edit profile image icon"
@@ -234,12 +234,12 @@ export default function UserDetails() {
                 // display={'flex'}
                 // justifyContent={'flex-start'}
               >
-                <Stack justifyContent={"center"}>
-                  <Typography variant="body1" sx={{ fontStyle: "italic" }}>
-                    {userData?.name ?? "Yogi Name"}
+                <Stack justifyContent={'center'}>
+                  <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+                    {userData?.name ?? 'Yogi Name'}
                   </Typography>
-                  <Typography variant="body1" sx={{ fontStyle: "italic" }}>
-                    Member since {membershipDate ?? "6/9/2024"}
+                  <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+                    Member since {membershipDate ?? '6/9/2024'}
                   </Typography>
                 </Stack>
                 {/* 
@@ -384,9 +384,9 @@ export default function UserDetails() {
                     name="username"
                     id="username text input"
                     sx={{
-                      "& .MuiInputBase-root ": {
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 4px 0 #CBCBCB",
+                      '& .MuiInputBase-root ': {
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 4px 0 #CBCBCB',
                       },
                     }}
                     value={userData?.name ?? undefined}
@@ -403,16 +403,16 @@ export default function UserDetails() {
                     name="firstName"
                     id="first name text input"
                     placeholder='Enter "First Name"'
-                    value={userData.firstName ?? ""}
+                    value={userData.firstName ?? ''}
                     onChange={handleChange}
                     variant="outlined"
                     required
                     sx={{
-                      "& .MuiInputBase-root ": {
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 4px 0 #CBCBCB",
-                        "&:hover .MuiInputBase-input": {
-                          borderColor: "2024-11-13 15:47:20",
+                      '& .MuiInputBase-root ': {
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 4px 0 #CBCBCB',
+                        '&:hover .MuiInputBase-input': {
+                          borderColor: '2024-11-13 15:47:20',
                           // backgroundColor: 'lime',
                         },
                       },
@@ -428,14 +428,14 @@ export default function UserDetails() {
                     name="lastName"
                     id="last name text input"
                     placeholder='Enter "Last Name"'
-                    value={userData.lastName ?? ""}
+                    value={userData.lastName ?? ''}
                     onChange={handleChange}
                     variant="outlined"
                     type="text"
                     sx={{
-                      "& .MuiInputBase-root ": {
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 4px 0 #CBCBCB",
+                      '& .MuiInputBase-root ': {
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 4px 0 #CBCBCB',
                       },
                     }}
                   />
@@ -449,19 +449,19 @@ export default function UserDetails() {
                     id="pronouns"
                     placeholder='Enter "Pronouns"'
                     variant="outlined"
-                    value={userData?.pronouns ?? ""}
+                    value={userData?.pronouns ?? ''}
                     onChange={handleChange}
                     sx={{
-                      "& .MuiInputBase-root ": {
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 4px 0 #CBCBCB",
+                      '& .MuiInputBase-root ': {
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 4px 0 #CBCBCB',
                       },
                     }}
                   />
                 </FormControl>
               </Grid>
               <Grid size={12}>
-                <FormControl sx={{ width: "80%" }}>
+                <FormControl sx={{ width: '80%' }}>
                   <Typography variant="body1">
                     Email Address (primary/internal)
                   </Typography>
@@ -469,14 +469,14 @@ export default function UserDetails() {
                     id="email-text-input"
                     name="email"
                     placeholder="xyz@ABC.com"
-                    value={userData?.email ?? ""}
+                    value={userData?.email ?? ''}
                     variant="outlined"
                     type="email"
                     disabled
                     sx={{
-                      "& .MuiInputBase-root ": {
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 4px 0 #CBCBCB",
+                      '& .MuiInputBase-root ': {
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 4px 0 #CBCBCB',
                       },
                     }}
                   />
@@ -487,27 +487,27 @@ export default function UserDetails() {
                 </FormControl>
               </Grid>
               <Grid size={12}>
-                <FormControl sx={{ width: "80%" }}>
+                <FormControl sx={{ width: '80%' }}>
                   <Typography variant="body1">Headline</Typography>
                   <TextField
                     id="headline-text-input"
                     name="headline"
                     placeholder="Enter...2 sentences"
-                    value={userData?.headline ?? "I am a Yoga instructor."}
+                    value={userData?.headline ?? 'I am a Yoga instructor.'}
                     onChange={handleChange}
                     multiline
                     maxRows={2}
                     sx={{
-                      "& .MuiInputBase-root ": {
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 4px 0 #CBCBCB",
+                      '& .MuiInputBase-root ': {
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 4px 0 #CBCBCB',
                       },
                     }}
                   />
                 </FormControl>
               </Grid>
               <Grid size={12}>
-                <FormControl sx={{ width: "80%" }}>
+                <FormControl sx={{ width: '80%' }}>
                   <Typography variant="body1">
                     Description/About/Bio:
                   </Typography>
@@ -515,52 +515,52 @@ export default function UserDetails() {
                     id="biography-text-input"
                     name="bio"
                     placeholder="Enter...Biography"
-                    value={userData?.bio ?? ""}
+                    value={userData?.bio ?? ''}
                     onChange={handleChange}
                     multiline
                     maxRows={4}
                     sx={{
-                      "& .MuiInputBase-root ": {
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 4px 0 #CBCBCB",
+                      '& .MuiInputBase-root ': {
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 4px 0 #CBCBCB',
                       },
                     }}
                   />
                 </FormControl>
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <FormControl sx={{ width: "100%" }}>
+                <FormControl sx={{ width: '100%' }}>
                   <Typography variant="body1">Website URL</Typography>
                   <TextField
                     name="websiteURL"
                     id="webisite-url-text-input"
                     placeholder="Enter website URL"
-                    value={userData?.websiteURL ?? ""}
+                    value={userData?.websiteURL ?? ''}
                     onChange={handleChange}
                     variant="outlined"
                     sx={{
-                      "& .MuiInputBase-root ": {
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 4px 0 #CBCBCB",
+                      '& .MuiInputBase-root ': {
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 4px 0 #CBCBCB',
                       },
                     }}
                   />
                 </FormControl>
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
-                <FormControl sx={{ width: "60%" }}>
+                <FormControl sx={{ width: '60%' }}>
                   <Typography variant="body1">My Location</Typography>
                   <TextField
                     name="location"
                     id="location-text-input"
                     placeholder='Enter "your location"'
-                    value={userData?.location ?? ""}
+                    value={userData?.location ?? ''}
                     onChange={handleChange}
                     variant="outlined"
                     sx={{
-                      "& .MuiInputBase-root ": {
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 4px 0 #CBCBCB",
+                      '& .MuiInputBase-root ': {
+                        borderRadius: '12px',
+                        boxShadow: '0 4px 4px 0 #CBCBCB',
                       },
                     }}
                   />
@@ -571,9 +571,9 @@ export default function UserDetails() {
                   type="submit"
                   disabled={loading}
                   variant="contained"
-                  sx={{ display: "flex", justifySelf: "flex-end" }}
+                  sx={{ display: 'flex', justifySelf: 'flex-end' }}
                 >
-                  {loading ? <CircularProgress /> : "Save"}
+                  {loading ? <CircularProgress /> : 'Save'}
                 </Button>
               </Grid>
             </Grid>

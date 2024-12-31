@@ -1,12 +1,12 @@
-import NextAuth from "@node_modules/next-auth"
-import type { Provider } from "next-auth/providers"
-import GitHub from "next-auth/providers/github"
-import Google from "next-auth/providers/google"
-import Credentials from "next-auth/providers/credentials"
-import { PrismaClient } from "@prisma/generated/client"
-import { MongoDBAdapter } from "@auth/mongodb-adapter"
-import client from "@lib/mongoDb"
-import { comparePassword, hashPassword } from "@app/utils/password"
+import NextAuth from '@node_modules/next-auth'
+import type { Provider } from 'next-auth/providers'
+import GitHub from 'next-auth/providers/github'
+import Google from 'next-auth/providers/google'
+import Credentials from 'next-auth/providers/credentials'
+import { PrismaClient } from '@prisma/generated/client'
+import { MongoDBAdapter } from '@auth/mongodb-adapter'
+import client from '@lib/mongoDb'
+import { comparePassword, hashPassword } from '@app/utils/password'
 
 /*
  * use auth/core Facebook, https://authjs.dev/reference/core/providers/facebook
@@ -20,8 +20,8 @@ const providers: Provider[] = [
   Google,
   Credentials({
     credentials: {
-      email: { label: "Email", type: "email" },
-      password: { label: "Password", type: "password" },
+      email: { label: 'Email', type: 'email' },
+      password: { label: 'Password', type: 'password' },
     },
     authorize: async (credentials) => {
       if (!credentials) return null
@@ -30,20 +30,20 @@ const providers: Provider[] = [
         where: { email: credentials.email as string },
       })
 
-      if (credentials.password === "new account" && !user) {
+      if (credentials.password === 'new account' && !user) {
         user = await prisma.userData.create({
           data: {
             email: credentials.email as string,
             name:
-              typeof credentials.email === "string" ? credentials.email : "",
+              typeof credentials.email === 'string' ? credentials.email : '',
             createdAt: new Date(),
             updatedAt: new Date(),
-            firstName: "New Account",
-            lastName: "New Account",
-            bio: "",
-            headline: "",
-            location: "",
-            websiteURL: "",
+            firstName: 'New Account',
+            lastName: 'New Account',
+            bio: '',
+            headline: '',
+            location: '',
+            websiteURL: '',
           },
         })
       }
@@ -58,11 +58,11 @@ const providers: Provider[] = [
         providerAccount = await prisma.providerAccount.create({
           data: {
             userId: user.id,
-            provider: "credentials",
+            provider: 'credentials',
             providerAccountId: user.id,
-            type: "credentials",
+            type: 'credentials',
             credentials_password:
-              typeof credentials.password === "string"
+              typeof credentials.password === 'string'
                 ? await hashPassword(credentials.password)
                 : null,
             createdAt: new Date(),
@@ -91,20 +91,20 @@ const providers: Provider[] = [
 
 export const providerMap = providers
   .map((provider) => {
-    if (typeof provider === "function") {
+    if (typeof provider === 'function') {
       const providerData = provider()
       return { id: providerData.id, name: providerData.name }
     } else {
       return { id: provider.id, name: provider.name }
     }
   })
-  .filter((provider) => provider.id !== "credentials")
+  .filter((provider) => provider.id !== 'credentials')
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   providers,
-  theme: { logo: "https://authjs.dev/img/logo-sm.png" },
+  theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
   adapter: MongoDBAdapter(client),
-  basePath: "/api/auth",
+  basePath: '/api/auth',
   callbacks: {
     async signIn({
       user,
@@ -115,7 +115,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       account: any
       profile?: any
     }) {
-      console.log("signIn user", user)
+      console.log('signIn user', user)
       const email = user.email
 
       const existingUser = await prisma.userData.findUnique({
@@ -131,23 +131,23 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               email: user.email,
               emailVerified: new Date(),
               image: user.image,
-              pronouns: "",
+              pronouns: '',
               profile: JSON.stringify(profile),
               createdAt: new Date(),
               updatedAt: new Date(),
-              firstName: "",
-              lastName: "",
-              bio: "",
-              headline: "",
-              location: "",
-              websiteURL: "",
-              shareQuick: "",
-              yogaStyle: "",
-              yogaExperience: "",
-              company: "",
-              socialURL: "",
-              isLocationPublic: "",
-              role: "user",
+              firstName: '',
+              lastName: '',
+              bio: '',
+              headline: '',
+              location: '',
+              websiteURL: '',
+              shareQuick: '',
+              yogaStyle: '',
+              yogaExperience: '',
+              company: '',
+              socialURL: '',
+              isLocationPublic: '',
+              role: 'user',
               providerAccounts: {
                 create: {
                   provider: account.provider,
@@ -172,16 +172,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               // },
             },
           })
-          console.log("newUser", newUser)
+          console.log('newUser', newUser)
         } catch (error) {
-          console.error("Error creating new user:", error)
+          console.error('Error creating new user:', error)
           throw error
         }
       }
       return true
     },
     async session({ session, token }: { session: any; token: any }) {
-      console.log("session token", token)
+      console.log('session token', token)
       if (token) {
         session.user.id = token.id as string
       }
@@ -194,16 +194,16 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       account,
     }: {
       token: any
-      trigger?: "signIn" | "signUp" | "update"
+      trigger?: 'signIn' | 'signUp' | 'update'
       session?: any
       account?: any
     }) {
-      console.log("jwt token", token)
-      if (trigger === "update") token.name = session.user.name
-      if (account?.provider === "google") {
+      console.log('jwt token', token)
+      if (trigger === 'update') token.name = session.user.name
+      if (account?.provider === 'google') {
         return { ...token, accessToken: account.access_token }
       }
-      if (account?.provider === "github") {
+      if (account?.provider === 'github') {
         return { ...token, accessToken: account.access_token }
       }
       return token
@@ -211,28 +211,28 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
       // Ensure the redirect is to a valid location
       if (url.startsWith(baseUrl)) return url
-      else if (url.startsWith("/")) return `${baseUrl}${url}`
+      else if (url.startsWith('/')) return `${baseUrl}${url}`
       return baseUrl
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-  session: { strategy: "jwt" },
+  session: { strategy: 'jwt' },
   events: {
     signIn: async (message: any) => {
       // console.log('signIn', message)
     },
     signOut: async (message: any) => {
-      console.log("signOut", message)
+      console.log('signOut', message)
       await prisma.$disconnect()
     },
   },
   // experimental: {
   //   enableWebAuthn: true,
   // },
-  debug: process.env.NODE_ENV !== "production" ? true : false,
+  debug: process.env.NODE_ENV !== 'production' ? true : false,
   pages: {
-    signIn: "/auth/signin", // Custom sign-in page
-    signOut: "/auth/signout", // Custom sign-out page
+    signIn: '/auth/signin', // Custom sign-in page
+    signOut: '/auth/signout', // Custom sign-out page
     /*  
     error: "/auth/error", // Error page
     verifyRequest: "/auth/verify-request", // Verification request (email login)

@@ -1,9 +1,9 @@
-"use client"
-import React from "react"
-import { Box, Button, Stack, Typography } from "@mui/material"
-import Header from "@serverComponents/header"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
+'use client'
+import React from 'react'
+import { Box, Button, Stack, Typography } from '@mui/material'
+import Header from '@serverComponents/header'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 export default function SignOutPage() {
   const router = useRouter()
@@ -12,30 +12,30 @@ export default function SignOutPage() {
       <nav>
         <Header />
       </nav>
-      <Stack display={"flex"} alignItems={"center"}>
-        <Stack flexDirection={"row"}>
+      <Stack display={'flex'} alignItems={'center'}>
+        <Stack flexDirection={'row'}>
           <Image
-            src={"/icons/asanas/leaf-1.svg"}
-            alt={"SOAR logo"}
+            src={'/icons/asanas/leaf-1.svg'}
+            alt={'SOAR logo'}
             width={100}
             height={100}
           />
         </Stack>
         <Stack>
-          <Typography variant={"subtitle1"}>An Uvuyoga App</Typography>
+          <Typography variant={'subtitle1'}>An Uvuyoga App</Typography>
         </Stack>
       </Stack>
-      <Stack justifyContent={"center"} alignItems={"center"} display={"flex"}>
+      <Stack justifyContent={'center'} alignItems={'center'} display={'flex'}>
         <Stack
-          textAlign={"center"}
+          textAlign={'center'}
           spacing={2}
           sx={{
             my: 6,
             pb: 3,
             px: 1,
-            border: "1px solid black",
-            width: "50%",
-            borderRadius: "12px",
+            border: '1px solid black',
+            width: '50%',
+            borderRadius: '12px',
           }}
         >
           <Box sx={{ pt: 4, pb: 2 }}>
@@ -49,9 +49,9 @@ export default function SignOutPage() {
           <Button
             type="submit"
             variant="contained"
-            sx={{ borderRadius: "12px" }}
+            sx={{ borderRadius: '12px' }}
             onClick={() => {
-              router.push("/")
+              router.push('/')
             }}
           >
             <Typography>Go back to the home page</Typography>
@@ -59,9 +59,9 @@ export default function SignOutPage() {
           <Button
             type="submit"
             variant="contained"
-            sx={{ borderRadius: "12px" }}
+            sx={{ borderRadius: '12px' }}
             onClick={() => {
-              router.push("/auth/signin")
+              router.push('/auth/signin')
             }}
           >
             <Typography>Sign in again!</Typography>

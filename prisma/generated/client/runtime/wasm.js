@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 var Io = Object.create
 var At = Object.defineProperty
 var _o = Object.getOwnPropertyDescriptor
@@ -11,7 +11,7 @@ var Ce = (e, t) => () => (t || e((t = { exports: {} }).exports, t), t.exports),
     for (var r in t) At(e, r, { get: t[r], enumerable: !0 })
   },
   zr = (e, t, r, n) => {
-    if ((t && typeof t == "object") || typeof t == "function")
+    if ((t && typeof t == 'object') || typeof t == 'function')
       for (let i of Do(t))
         !No.call(e, i) &&
           i !== r &&
@@ -25,30 +25,30 @@ var _e = (e, t, r) => (
     (r = e != null ? Io(Fo(e)) : {}),
     zr(
       t || !e || !e.__esModule
-        ? At(r, "default", { value: e, enumerable: !0 })
+        ? At(r, 'default', { value: e, enumerable: !0 })
         : r,
       e
     )
   ),
-  cr = (e) => zr(At({}, "__esModule", { value: !0 }), e)
+  cr = (e) => zr(At({}, '__esModule', { value: !0 }), e)
 function mr(e, t) {
-  if (((t = t.toLowerCase()), t === "utf8" || t === "utf-8"))
+  if (((t = t.toLowerCase()), t === 'utf8' || t === 'utf-8'))
     return new h(Vo.encode(e))
-  if (t === "base64" || t === "base64url")
+  if (t === 'base64' || t === 'base64url')
     return (
-      (e = e.replace(/-/g, "+").replace(/_/g, "/")),
-      (e = e.replace(/[^A-Za-z0-9+/]/g, "")),
+      (e = e.replace(/-/g, '+').replace(/_/g, '/')),
+      (e = e.replace(/[^A-Za-z0-9+/]/g, '')),
       new h([...atob(e)].map((r) => r.charCodeAt(0)))
     )
-  if (t === "binary" || t === "ascii" || t === "latin1" || t === "latin-1")
+  if (t === 'binary' || t === 'ascii' || t === 'latin1' || t === 'latin-1')
     return new h([...e].map((r) => r.charCodeAt(0)))
-  if (t === "ucs2" || t === "ucs-2" || t === "utf16le" || t === "utf-16le") {
+  if (t === 'ucs2' || t === 'ucs-2' || t === 'utf16le' || t === 'utf-16le') {
     let r = new h(e.length * 2),
       n = new DataView(r.buffer)
     for (let i = 0; i < e.length; i++) n.setUint16(i * 2, e.charCodeAt(i), !0)
     return r
   }
-  if (t === "hex") {
+  if (t === 'hex') {
     let r = new h(e.length / 2)
     for (let n = 0, i = 0; i < e.length; i += 2, n++)
       r[n] = parseInt(e.slice(i, i + 2), 16)
@@ -58,15 +58,15 @@ function mr(e, t) {
 }
 function Uo(e) {
   let r = Object.getOwnPropertyNames(DataView.prototype).filter(
-      (a) => a.startsWith("get") || a.startsWith("set")
+      (a) => a.startsWith('get') || a.startsWith('set')
     ),
-    n = r.map((a) => a.replace("get", "read").replace("set", "write")),
+    n = r.map((a) => a.replace('get', 'read').replace('set', 'write')),
     i = (a, f) =>
       function (b = 0) {
         return (
-          $(b, "offset"),
-          Y(b, "offset"),
-          q(b, "offset", this.length - 1),
+          $(b, 'offset'),
+          Y(b, 'offset'),
+          q(b, 'offset', this.length - 1),
           new DataView(this.buffer)[r[a]](b, f)
         )
       },
@@ -75,27 +75,27 @@ function Uo(e) {
         let C = r[a].match(/set(\w+\d+)/)[1].toLowerCase(),
           O = $o[C]
         return (
-          $(T, "offset"),
-          Y(T, "offset"),
-          q(T, "offset", this.length - 1),
-          Bo(b, "value", O[0], O[1]),
+          $(T, 'offset'),
+          Y(T, 'offset'),
+          q(T, 'offset', this.length - 1),
+          Bo(b, 'value', O[0], O[1]),
           new DataView(this.buffer)[r[a]](T, b, f),
           T + parseInt(r[a].match(/\d+/)[0]) / 8
         )
       },
     s = (a) => {
       a.forEach((f) => {
-        f.includes("Uint") && (e[f.replace("Uint", "UInt")] = e[f]),
-          f.includes("Float64") && (e[f.replace("Float64", "Double")] = e[f]),
-          f.includes("Float32") && (e[f.replace("Float32", "Float")] = e[f])
+        f.includes('Uint') && (e[f.replace('Uint', 'UInt')] = e[f]),
+          f.includes('Float64') && (e[f.replace('Float64', 'Double')] = e[f]),
+          f.includes('Float32') && (e[f.replace('Float32', 'Float')] = e[f])
       })
     }
   n.forEach((a, f) => {
-    a.startsWith("read") &&
-      ((e[a] = i(f, !1)), (e[a + "LE"] = i(f, !0)), (e[a + "BE"] = i(f, !1))),
-      a.startsWith("write") &&
-        ((e[a] = o(f, !1)), (e[a + "LE"] = o(f, !0)), (e[a + "BE"] = o(f, !1))),
-      s([a, a + "LE", a + "BE"])
+    a.startsWith('read') &&
+      ((e[a] = i(f, !1)), (e[a + 'LE'] = i(f, !0)), (e[a + 'BE'] = i(f, !1))),
+      a.startsWith('write') &&
+        ((e[a] = o(f, !1)), (e[a + 'LE'] = o(f, !0)), (e[a + 'BE'] = o(f, !1))),
+      s([a, a + 'LE', a + 'BE'])
   })
 }
 function Xr(e) {
@@ -112,15 +112,15 @@ function q(e, t, r = Qo + 1) {
     let n = new RangeError(
       `The value of "${t}" is out of range. It must be >= 0 && <= ${r}. Received ${e}`
     )
-    throw ((n.code = "ERR_OUT_OF_RANGE"), n)
+    throw ((n.code = 'ERR_OUT_OF_RANGE'), n)
   }
 }
 function $(e, t) {
-  if (typeof e != "number") {
+  if (typeof e != 'number') {
     let r = new TypeError(
       `The "${t}" argument must be of type number. Received type ${typeof e}.`
     )
-    throw ((r.code = "ERR_INVALID_ARG_TYPE"), r)
+    throw ((r.code = 'ERR_INVALID_ARG_TYPE'), r)
   }
 }
 function Y(e, t) {
@@ -128,7 +128,7 @@ function Y(e, t) {
     let r = new RangeError(
       `The value of "${t}" is out of range. It must be an integer. Received ${e}`
     )
-    throw ((r.code = "ERR_OUT_OF_RANGE"), r)
+    throw ((r.code = 'ERR_OUT_OF_RANGE'), r)
   }
 }
 function Bo(e, t, r, n) {
@@ -136,18 +136,18 @@ function Bo(e, t, r, n) {
     let i = new RangeError(
       `The value of "${t}" is out of range. It must be >= ${r} and <= ${n}. Received ${e}`
     )
-    throw ((i.code = "ERR_OUT_OF_RANGE"), i)
+    throw ((i.code = 'ERR_OUT_OF_RANGE'), i)
   }
 }
 function Yr(e, t) {
-  if (typeof e != "string") {
+  if (typeof e != 'string') {
     let r = new TypeError(
       `The "${t}" argument must be of type string. Received type ${typeof e}`
     )
-    throw ((r.code = "ERR_INVALID_ARG_TYPE"), r)
+    throw ((r.code = 'ERR_INVALID_ARG_TYPE'), r)
   }
 }
-function Jo(e, t = "utf8") {
+function Jo(e, t = 'utf8') {
   return h.from(e, t)
 }
 var h,
@@ -159,7 +159,7 @@ var h,
   y,
   pr,
   u = oe(() => {
-    "use strict"
+    'use strict'
     h = class e extends Uint8Array {
       constructor() {
         super(...arguments)
@@ -168,8 +168,8 @@ var h,
       get offset() {
         return this.byteOffset
       }
-      static alloc(r, n = 0, i = "utf8") {
-        return Yr(i, "encoding"), e.allocUnsafe(r).fill(n, i)
+      static alloc(r, n = 0, i = 'utf8') {
+        return Yr(i, 'encoding'), e.allocUnsafe(r).fill(n, i)
       }
       static allocUnsafe(r) {
         return e.from(r)
@@ -180,33 +180,33 @@ var h,
       static isBuffer(r) {
         return r && !!r._isBuffer
       }
-      static byteLength(r, n = "utf8") {
-        if (typeof r == "string") return mr(r, n).byteLength
+      static byteLength(r, n = 'utf8') {
+        if (typeof r == 'string') return mr(r, n).byteLength
         if (r && r.byteLength) return r.byteLength
         let i = new TypeError(
           'The "string" argument must be of type string or an instance of Buffer or ArrayBuffer.'
         )
-        throw ((i.code = "ERR_INVALID_ARG_TYPE"), i)
+        throw ((i.code = 'ERR_INVALID_ARG_TYPE'), i)
       }
       static isEncoding(r) {
         return jo.includes(r)
       }
       static compare(r, n) {
-        Rt(r, "buff1"), Rt(n, "buff2")
+        Rt(r, 'buff1'), Rt(n, 'buff2')
         for (let i = 0; i < r.length; i++) {
           if (r[i] < n[i]) return -1
           if (r[i] > n[i]) return 1
         }
         return r.length === n.length ? 0 : r.length > n.length ? 1 : -1
       }
-      static from(r, n = "utf8") {
-        if (r && typeof r == "object" && r.type === "Buffer")
+      static from(r, n = 'utf8') {
+        if (r && typeof r == 'object' && r.type === 'Buffer')
           return new e(r.data)
-        if (typeof r == "number") return new e(new Uint8Array(r))
-        if (typeof r == "string") return mr(r, n)
+        if (typeof r == 'number') return new e(new Uint8Array(r))
+        if (typeof r == 'string') return mr(r, n)
         if (ArrayBuffer.isView(r)) {
           let { byteOffset: i, byteLength: o, buffer: s } = r
-          return "map" in r && typeof r.map == "function"
+          return 'map' in r && typeof r.map == 'function'
             ? new e(
                 r.map((a) => a % 256),
                 i,
@@ -216,12 +216,12 @@ var h,
         }
         if (
           r &&
-          typeof r == "object" &&
-          ("length" in r || "byteLength" in r || "buffer" in r)
+          typeof r == 'object' &&
+          ('length' in r || 'byteLength' in r || 'buffer' in r)
         )
           return new e(r)
         throw new TypeError(
-          "First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object."
+          'First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.'
         )
       }
       static concat(r, n) {
@@ -240,33 +240,33 @@ var h,
         return super.reverse(), this
       }
       readIntBE(r, n) {
-        $(r, "offset"),
-          Y(r, "offset"),
-          q(r, "offset", this.length - 1),
-          $(n, "byteLength"),
-          Y(n, "byteLength")
+        $(r, 'offset'),
+          Y(r, 'offset'),
+          q(r, 'offset', this.length - 1),
+          $(n, 'byteLength'),
+          Y(n, 'byteLength')
         let i = new DataView(this.buffer, r, n),
           o = 0
         for (let s = 0; s < n; s++) o = o * 256 + i.getUint8(s)
         return i.getUint8(0) & 128 && (o -= Math.pow(256, n)), o
       }
       readIntLE(r, n) {
-        $(r, "offset"),
-          Y(r, "offset"),
-          q(r, "offset", this.length - 1),
-          $(n, "byteLength"),
-          Y(n, "byteLength")
+        $(r, 'offset'),
+          Y(r, 'offset'),
+          q(r, 'offset', this.length - 1),
+          $(n, 'byteLength'),
+          Y(n, 'byteLength')
         let i = new DataView(this.buffer, r, n),
           o = 0
         for (let s = 0; s < n; s++) o += i.getUint8(s) * Math.pow(256, s)
         return i.getUint8(n - 1) & 128 && (o -= Math.pow(256, n)), o
       }
       readUIntBE(r, n) {
-        $(r, "offset"),
-          Y(r, "offset"),
-          q(r, "offset", this.length - 1),
-          $(n, "byteLength"),
-          Y(n, "byteLength")
+        $(r, 'offset'),
+          Y(r, 'offset'),
+          q(r, 'offset', this.length - 1),
+          $(n, 'byteLength'),
+          Y(n, 'byteLength')
         let i = new DataView(this.buffer, r, n),
           o = 0
         for (let s = 0; s < n; s++) o = o * 256 + i.getUint8(s)
@@ -276,11 +276,11 @@ var h,
         return this.readUIntBE(r, n)
       }
       readUIntLE(r, n) {
-        $(r, "offset"),
-          Y(r, "offset"),
-          q(r, "offset", this.length - 1),
-          $(n, "byteLength"),
-          Y(n, "byteLength")
+        $(r, 'offset'),
+          Y(r, 'offset'),
+          q(r, 'offset', this.length - 1),
+          $(n, 'byteLength'),
+          Y(n, 'byteLength')
         let i = new DataView(this.buffer, r, n),
           o = 0
         for (let s = 0; s < n; s++) o += i.getUint8(s) * Math.pow(256, s)
@@ -296,11 +296,11 @@ var h,
         return (r = r < 0 ? r + Math.pow(256, i) : r), this.writeUIntLE(r, n, i)
       }
       writeUIntBE(r, n, i) {
-        $(n, "offset"),
-          Y(n, "offset"),
-          q(n, "offset", this.length - 1),
-          $(i, "byteLength"),
-          Y(i, "byteLength")
+        $(n, 'offset'),
+          Y(n, 'offset'),
+          q(n, 'offset', this.length - 1),
+          $(i, 'byteLength'),
+          Y(i, 'byteLength')
         let o = new DataView(this.buffer, n, i)
         for (let s = i - 1; s >= 0; s--) o.setUint8(s, r & 255), (r = r / 256)
         return n + i
@@ -309,11 +309,11 @@ var h,
         return this.writeUIntBE(r, n, i)
       }
       writeUIntLE(r, n, i) {
-        $(n, "offset"),
-          Y(n, "offset"),
-          q(n, "offset", this.length - 1),
-          $(i, "byteLength"),
-          Y(i, "byteLength")
+        $(n, 'offset'),
+          Y(n, 'offset'),
+          q(n, 'offset', this.length - 1),
+          $(i, 'byteLength'),
+          Y(i, 'byteLength')
         let o = new DataView(this.buffer, n, i)
         for (let s = 0; s < i; s++) o.setUint8(s, r & 255), (r = r / 256)
         return n + i
@@ -322,7 +322,7 @@ var h,
         return this.writeUIntLE(r, n, i)
       }
       toJSON() {
-        return { type: "Buffer", data: Array.from(this) }
+        return { type: 'Buffer', data: Array.from(this) }
       }
       swap16() {
         let r = new DataView(this.buffer, this.byteOffset, this.byteLength)
@@ -344,28 +344,28 @@ var h,
       }
       compare(r, n = 0, i = r.length, o = 0, s = this.length) {
         return (
-          Rt(r, "target"),
-          $(n, "targetStart"),
-          $(i, "targetEnd"),
-          $(o, "sourceStart"),
-          $(s, "sourceEnd"),
-          q(n, "targetStart"),
-          q(i, "targetEnd", r.length),
-          q(o, "sourceStart"),
-          q(s, "sourceEnd", this.length),
+          Rt(r, 'target'),
+          $(n, 'targetStart'),
+          $(i, 'targetEnd'),
+          $(o, 'sourceStart'),
+          $(s, 'sourceEnd'),
+          q(n, 'targetStart'),
+          q(i, 'targetEnd', r.length),
+          q(o, 'sourceStart'),
+          q(s, 'sourceEnd', this.length),
           e.compare(this.slice(o, s), r.slice(n, i))
         )
       }
       equals(r) {
         return (
-          Rt(r, "otherBuffer"),
+          Rt(r, 'otherBuffer'),
           this.length === r.length && this.every((n, i) => n === r[i])
         )
       }
       copy(r, n = 0, i = 0, o = this.length) {
-        q(n, "targetStart"),
-          q(i, "sourceStart", this.length),
-          q(o, "sourceEnd"),
+        q(n, 'targetStart'),
+          q(i, 'sourceStart', this.length),
+          q(o, 'sourceEnd'),
           (n >>>= 0),
           (i >>>= 0),
           (o >>>= 0)
@@ -374,32 +374,32 @@ var h,
           (r[n] = this[i]), s++, i++, n++
         return s
       }
-      write(r, n, i, o = "utf8") {
-        let s = typeof n == "string" ? 0 : n ?? 0,
-          a = typeof i == "string" ? this.length - s : i ?? this.length - s
+      write(r, n, i, o = 'utf8') {
+        let s = typeof n == 'string' ? 0 : n ?? 0,
+          a = typeof i == 'string' ? this.length - s : i ?? this.length - s
         return (
-          (o = typeof n == "string" ? n : typeof i == "string" ? i : o),
-          $(s, "offset"),
-          $(a, "length"),
-          q(s, "offset", this.length),
-          q(a, "length", this.length),
-          (o === "ucs2" ||
-            o === "ucs-2" ||
-            o === "utf16le" ||
-            o === "utf-16le") &&
+          (o = typeof n == 'string' ? n : typeof i == 'string' ? i : o),
+          $(s, 'offset'),
+          $(a, 'length'),
+          q(s, 'offset', this.length),
+          q(a, 'length', this.length),
+          (o === 'ucs2' ||
+            o === 'ucs-2' ||
+            o === 'utf16le' ||
+            o === 'utf-16le') &&
             (a = a - (a % 2)),
           mr(r, o).copy(this, s, 0, a)
         )
       }
-      fill(r = 0, n = 0, i = this.length, o = "utf-8") {
-        let s = typeof n == "string" ? 0 : n,
-          a = typeof i == "string" ? this.length : i
+      fill(r = 0, n = 0, i = this.length, o = 'utf-8') {
+        let s = typeof n == 'string' ? 0 : n,
+          a = typeof i == 'string' ? this.length : i
         if (
-          ((o = typeof n == "string" ? n : typeof i == "string" ? i : o),
-          (r = e.from(typeof r == "number" ? [r] : r ?? [], o)),
-          Yr(o, "encoding"),
-          q(s, "offset", this.length),
-          q(a, "end", this.length),
+          ((o = typeof n == 'string' ? n : typeof i == 'string' ? i : o),
+          (r = e.from(typeof r == 'number' ? [r] : r ?? [], o)),
+          Yr(o, 'encoding'),
+          q(s, 'offset', this.length),
+          q(a, 'end', this.length),
           r.length !== 0)
         )
           for (let f = s; f < a; f += r.length)
@@ -412,19 +412,19 @@ var h,
             )
         return this
       }
-      includes(r, n = null, i = "utf-8") {
+      includes(r, n = null, i = 'utf-8') {
         return this.indexOf(r, n, i) !== -1
       }
-      lastIndexOf(r, n = null, i = "utf-8") {
+      lastIndexOf(r, n = null, i = 'utf-8') {
         return this.indexOf(r, n, i, !0)
       }
-      indexOf(r, n = null, i = "utf-8", o = !1) {
+      indexOf(r, n = null, i = 'utf-8', o = !1) {
         let s = o ? this.findLastIndex.bind(this) : this.findIndex.bind(this)
-        i = typeof n == "string" ? n : i
-        let a = e.from(typeof r == "number" ? [r] : r, i),
-          f = typeof n == "string" ? 0 : n
+        i = typeof n == 'string' ? n : i
+        let a = e.from(typeof r == 'number' ? [r] : r, i),
+          f = typeof n == 'string' ? 0 : n
         return (
-          (f = typeof n == "number" ? f : null),
+          (f = typeof n == 'number' ? f : null),
           (f = Number.isNaN(f) ? null : f),
           (f ??= o ? this.length : 0),
           (f = f < 0 ? this.length + f : f),
@@ -442,41 +442,41 @@ var h,
                 )
         )
       }
-      toString(r = "utf8", n = 0, i = this.length) {
+      toString(r = 'utf8', n = 0, i = this.length) {
         if (((n = n < 0 ? 0 : n), (r = r.toString().toLowerCase()), i <= 0))
-          return ""
-        if (r === "utf8" || r === "utf-8") return qo.decode(this.slice(n, i))
-        if (r === "base64" || r === "base64url") {
-          let o = btoa(this.reduce((s, a) => s + pr(a), ""))
-          return r === "base64url"
-            ? o.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")
+          return ''
+        if (r === 'utf8' || r === 'utf-8') return qo.decode(this.slice(n, i))
+        if (r === 'base64' || r === 'base64url') {
+          let o = btoa(this.reduce((s, a) => s + pr(a), ''))
+          return r === 'base64url'
+            ? o.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
             : o
         }
         if (
-          r === "binary" ||
-          r === "ascii" ||
-          r === "latin1" ||
-          r === "latin-1"
+          r === 'binary' ||
+          r === 'ascii' ||
+          r === 'latin1' ||
+          r === 'latin-1'
         )
           return this.slice(n, i).reduce(
-            (o, s) => o + pr(s & (r === "ascii" ? 127 : 255)),
-            ""
+            (o, s) => o + pr(s & (r === 'ascii' ? 127 : 255)),
+            ''
           )
         if (
-          r === "ucs2" ||
-          r === "ucs-2" ||
-          r === "utf16le" ||
-          r === "utf-16le"
+          r === 'ucs2' ||
+          r === 'ucs-2' ||
+          r === 'utf16le' ||
+          r === 'utf-16le'
         ) {
           let o = new DataView(this.buffer.slice(n, i))
           return Array.from({ length: o.byteLength / 2 }, (s, a) =>
-            a * 2 + 1 < o.byteLength ? pr(o.getUint16(a * 2, !0)) : ""
-          ).join("")
+            a * 2 + 1 < o.byteLength ? pr(o.getUint16(a * 2, !0)) : ''
+          ).join('')
         }
-        if (r === "hex")
+        if (r === 'hex')
           return this.slice(n, i).reduce(
-            (o, s) => o + s.toString(16).padStart(2, "0"),
-            ""
+            (o, s) => o + s.toString(16).padStart(2, '0'),
+            ''
           )
         Xr(`encoding "${r}"`)
       }
@@ -484,9 +484,9 @@ var h,
         return this.toString()
       }
       inspect() {
-        return `<Buffer ${this.toString("hex")
+        return `<Buffer ${this.toString('hex')
           .match(/.{1,2}/g)
-          .join(" ")}>`
+          .join(' ')}>`
       }
     }
     ;($o = {
@@ -504,19 +504,19 @@ var h,
       (Vo = new TextEncoder()),
       (qo = new TextDecoder()),
       (jo = [
-        "utf8",
-        "utf-8",
-        "hex",
-        "base64",
-        "ascii",
-        "binary",
-        "base64url",
-        "ucs2",
-        "ucs-2",
-        "utf16le",
-        "utf-16le",
-        "latin1",
-        "latin-1",
+        'utf8',
+        'utf-8',
+        'hex',
+        'base64',
+        'ascii',
+        'binary',
+        'base64url',
+        'ucs2',
+        'ucs-2',
+        'utf16le',
+        'utf-16le',
+        'latin1',
+        'latin-1',
       ]),
       (Qo = 4294967295)
     Uo(h.prototype)
@@ -532,7 +532,7 @@ var h,
   })
 var g,
   c = oe(() => {
-    "use strict"
+    'use strict'
     g = {
       nextTick: (e, ...t) => {
         setTimeout(() => {
@@ -540,15 +540,15 @@ var g,
         }, 0)
       },
       env: {},
-      version: "",
-      cwd: () => "/",
+      version: '',
+      cwd: () => '/',
       stderr: {},
-      argv: ["/bin/node"],
+      argv: ['/bin/node'],
     }
   })
 var x,
   m = oe(() => {
-    "use strict"
+    'use strict'
     x =
       globalThis.performance ??
       (() => {
@@ -558,13 +558,13 @@ var x,
   })
 var E,
   p = oe(() => {
-    "use strict"
+    'use strict'
     E = () => {}
     E.prototype = E
   })
 var w,
   d = oe(() => {
-    "use strict"
+    'use strict'
     w = class {
       constructor(t) {
         this.value = t
@@ -629,13 +629,13 @@ function ae(e) {
     r,
     n,
     i = e.length - 1,
-    o = "",
+    o = '',
     s = e[0]
   if (i > 0) {
     for (o += s, t = 1; t < i; t++)
-      (n = e[t] + ""), (r = N - n.length), r && (o += we(r)), (o += n)
-    ;(s = e[t]), (n = s + ""), (r = N - n.length), r && (o += we(r))
-  } else if (s === 0) return "0"
+      (n = e[t] + ''), (r = N - n.length), r && (o += we(r)), (o += n)
+    ;(s = e[t]), (n = s + ''), (r = N - n.length), r && (o += we(r))
+  } else if (s === 0) return '0'
   for (; s % 10 === 0; ) s /= 10
   return o + s
 }
@@ -687,12 +687,12 @@ function dr(e, t, r) {
     throw (
       ((U = !0),
       r && (e.precision = r),
-      Error(re + "LN10 precision limit exceeded"))
+      Error(re + 'LN10 precision limit exceeded'))
     )
   return D(new e(e.LN10), t)
 }
 function we(e) {
-  for (var t = ""; e--; ) t += "0"
+  for (var t = ''; e--; ) t += '0'
   return t
 }
 function et(e, t) {
@@ -711,7 +711,7 @@ function et(e, t) {
     M = R.d,
     S = R.constructor,
     L = S.precision
-  if (R.s < 1) throw Error(re + (R.s ? "NaN" : "-Infinity"))
+  if (R.s < 1) throw Error(re + (R.s ? 'NaN' : '-Infinity'))
   if (R.eq(Z)) return new S(0)
   if ((t == null ? ((U = !1), (b = L)) : (b = t), R.eq(10)))
     return t == null && (U = !0), dr(S, b)
@@ -726,11 +726,11 @@ function et(e, t) {
     for (; (n < 7 && n != 1) || (n == 1 && r.charAt(1) > 3); )
       (R = R.times(e)), (r = ae(R.d)), (n = r.charAt(0)), C++
     ;(o = V(R)),
-      n > 1 ? ((R = new S("0." + r)), o++) : (R = new S(n + "." + r.slice(1)))
+      n > 1 ? ((R = new S('0.' + r)), o++) : (R = new S(n + '.' + r.slice(1)))
   } else
     return (
-      (f = dr(S, b + 2, L).times(o + "")),
-      (R = et(new S(n + "." + r.slice(1)), b - O).plus(f)),
+      (f = dr(S, b + 2, L).times(o + '')),
+      (R = et(new S(n + '.' + r.slice(1)), b - O).plus(f)),
       (S.precision = L),
       t == null ? ((U = !0), D(R, L)) : R
     )
@@ -746,7 +746,7 @@ function et(e, t) {
     )
       return (
         (a = a.times(2)),
-        o !== 0 && (a = a.plus(dr(S, b + 2, L).times(o + ""))),
+        o !== 0 && (a = a.plus(dr(S, b + 2, L).times(o + ''))),
         (a = ge(a, new S(C), b)),
         (S.precision = L),
         t == null ? ((U = !0), D(a, L)) : a
@@ -757,7 +757,7 @@ function et(e, t) {
 function Zr(e, t) {
   var r, n, i
   for (
-    (r = t.indexOf(".")) > -1 && (t = t.replace(".", "")),
+    (r = t.indexOf('.')) > -1 && (t = t.replace('.', '')),
       (n = t.search(/e/i)) > 0
         ? (r < 0 && (r = n), (r += +t.slice(n + 1)), (t = t.substring(0, n)))
         : r < 0 && (r = t.length),
@@ -781,7 +781,7 @@ function Zr(e, t) {
         e.d.push(+t.slice(n, (n += N)))
       ;(t = t.slice(n)), (n = N - t.length)
     } else n -= i
-    for (; n--; ) t += "0"
+    for (; n--; ) t += '0'
     if ((e.d.push(+t), U && (e.e > St || e.e < -St))) throw Error(fr + r)
   } else (e.s = 0), (e.e = 0), (e.d = [0])
   return e
@@ -923,17 +923,17 @@ function Se(e, t, r) {
   return (
     t
       ? (r && (n = r - s) > 0
-          ? (o = o.charAt(0) + "." + o.slice(1) + we(n))
-          : s > 1 && (o = o.charAt(0) + "." + o.slice(1)),
-        (o = o + (i < 0 ? "e" : "e+") + i))
+          ? (o = o.charAt(0) + '.' + o.slice(1) + we(n))
+          : s > 1 && (o = o.charAt(0) + '.' + o.slice(1)),
+        (o = o + (i < 0 ? 'e' : 'e+') + i))
       : i < 0
-        ? ((o = "0." + we(-i - 1) + o), r && (n = r - s) > 0 && (o += we(n)))
+        ? ((o = '0.' + we(-i - 1) + o), r && (n = r - s) > 0 && (o += we(n)))
         : i >= s
           ? ((o += we(i + 1 - s)),
-            r && (n = r - i - 1) > 0 && (o = o + "." + we(n)))
-          : ((n = i + 1) < s && (o = o.slice(0, n) + "." + o.slice(n)),
-            r && (n = r - s) > 0 && (i + 1 === s && (o += "."), (o += we(n)))),
-    e.s < 0 ? "-" + o : o
+            r && (n = r - i - 1) > 0 && (o = o + '.' + we(n)))
+          : ((n = i + 1) < s && (o = o.slice(0, n) + '.' + o.slice(n)),
+            r && (n = r - s) > 0 && (i + 1 === s && (o += '.'), (o += we(n)))),
+    e.s < 0 ? '-' + o : o
   )
 }
 function en(e, t) {
@@ -948,7 +948,7 @@ function sn(e) {
       ;(s.s = o.s), (s.e = o.e), (s.d = (o = o.d) ? o.slice() : o)
       return
     }
-    if (typeof o == "number") {
+    if (typeof o == 'number') {
       if (o * 0 !== 0) throw Error(Re + o)
       if (o > 0) s.s = 1
       else if (o < 0) (o = -o), (s.s = -1)
@@ -961,7 +961,7 @@ function sn(e) {
         return
       }
       return Zr(s, o.toString())
-    } else if (typeof o != "string") throw Error(Re + o)
+    } else if (typeof o != 'string') throw Error(Re + o)
     if (
       (o.charCodeAt(0) === 45 ? ((o = o.slice(1)), (s.s = -1)) : (s.s = 1),
       Wo.test(o))
@@ -986,7 +986,7 @@ function sn(e) {
     e)
   )
     for (
-      n = ["precision", "rounding", "toExpNeg", "toExpPos", "LN10"], t = 0;
+      n = ['precision', 'rounding', 'toExpNeg', 'toExpPos', 'LN10'], t = 0;
       t < n.length;
 
     )
@@ -994,31 +994,31 @@ function sn(e) {
   return i.config(e), i
 }
 function Ko(e) {
-  if (!e || typeof e != "object") throw Error(re + "Object expected")
+  if (!e || typeof e != 'object') throw Error(re + 'Object expected')
   var t,
     r,
     n,
     i = [
-      "precision",
+      'precision',
       1,
       De,
-      "rounding",
+      'rounding',
       0,
       8,
-      "toExpNeg",
+      'toExpNeg',
       -1 / 0,
       0,
-      "toExpPos",
+      'toExpPos',
       0,
       1 / 0,
     ]
   for (t = 0; t < i.length; t += 3)
     if ((n = e[(r = i[t])]) !== void 0)
       if (Fe(n) === n && n >= i[t + 1] && n <= i[t + 2]) this[r] = n
-      else throw Error(Re + r + ": " + n)
-  if ((n = e[(r = "LN10")]) !== void 0)
+      else throw Error(Re + r + ': ' + n)
+  if ((n = e[(r = 'LN10')]) !== void 0)
     if (n == Math.LN10) this[r] = new this(n)
-    else throw Error(Re + r + ": " + n)
+    else throw Error(Re + r + ': ' + n)
   return this
 }
 var De,
@@ -1041,7 +1041,7 @@ var De,
   gr,
   Ot,
   an = oe(() => {
-    "use strict"
+    'use strict'
     u()
     c()
     m()
@@ -1054,12 +1054,12 @@ var De,
         rounding: 4,
         toExpNeg: -7,
         toExpPos: 21,
-        LN10: "2.302585092994045684017991454684364207601101488628772976033327900967572609677352480235997205089598298341967784042286",
+        LN10: '2.302585092994045684017991454684364207601101488628772976033327900967572609677352480235997205089598298341967784042286',
       }),
       (U = !0),
-      (re = "[DecimalError] "),
-      (Re = re + "Invalid argument: "),
-      (fr = re + "Exponent out of range: "),
+      (re = '[DecimalError] '),
+      (Re = re + 'Invalid argument: '),
+      (fr = re + 'Exponent out of range: '),
       (Fe = Math.floor),
       (Ae = Math.pow),
       (Wo = /^(\d+(\.\d*)?|\.\d+)(e[+-]?\d+)?$/i),
@@ -1136,8 +1136,8 @@ var De,
         i = n.precision,
         o = i + 5
       if (e === void 0) e = new n(10)
-      else if (((e = new n(e)), e.s < 1 || e.eq(Z))) throw Error(re + "NaN")
-      if (r.s < 1) throw Error(re + (r.s ? "NaN" : "-Infinity"))
+      else if (((e = new n(e)), e.s < 1 || e.eq(Z))) throw Error(re + 'NaN')
+      if (r.s < 1) throw Error(re + (r.s ? 'NaN' : '-Infinity'))
       return r.eq(Z)
         ? new n(0)
         : ((U = !1), (t = ge(et(r, o), et(e, o), o)), (U = !0), D(t, i))
@@ -1154,7 +1154,7 @@ var De,
         r = this,
         n = r.constructor,
         i = n.precision
-      if (((e = new n(e)), !e.s)) throw Error(re + "NaN")
+      if (((e = new n(e)), !e.s)) throw Error(re + 'NaN')
       return r.s
         ? ((U = !1), (t = ge(r, e, 0, 1).times(e)), (U = !0), r.minus(t))
         : D(new n(r), i)
@@ -1202,7 +1202,7 @@ var De,
         f = a.constructor
       if (a.s < 1) {
         if (!a.s) return new f(0)
-        throw Error(re + "NaN")
+        throw Error(re + 'NaN')
       }
       for (
         e = V(a),
@@ -1210,13 +1210,13 @@ var De,
           i = Math.sqrt(+a),
           i == 0 || i == 1 / 0
             ? ((t = ae(a.d)),
-              (t.length + e) % 2 == 0 && (t += "0"),
+              (t.length + e) % 2 == 0 && (t += '0'),
               (i = Math.sqrt(t)),
               (e = Fe((e + 1) / 2) - (e < 0 || e % 2)),
               i == 1 / 0
-                ? (t = "5e" + e)
+                ? (t = '5e' + e)
                 : ((t = i.toExponential()),
-                  (t = t.slice(0, t.indexOf("e") + 1) + e)),
+                  (t = t.slice(0, t.indexOf('e') + 1) + e)),
               (n = new f(t)))
             : (n = new f(i.toString())),
           r = f.precision,
@@ -1229,12 +1229,12 @@ var De,
           (n = o.plus(ge(a, o, s + 2)).times(0.5)),
           ae(o.d).slice(0, s) === (t = ae(n.d)).slice(0, s))
         ) {
-          if (((t = t.slice(s - 3, s + 1)), i == s && t == "4999")) {
+          if (((t = t.slice(s - 3, s + 1)), i == s && t == '4999')) {
             if ((D(o, r + 1, 0), o.times(o).eq(a))) {
               n = o
               break
             }
-          } else if (t != "9999") break
+          } else if (t != '9999') break
           s += 4
         }
       return (U = !0), D(n, r)
@@ -1316,7 +1316,7 @@ var De,
           t === void 0 ? (t = o.rounding) : le(t, 0, 8),
           (n = D(new o(i), e + V(i) + 1, t)),
           (r = Se(n.abs(), !1, e + V(n) + 1)),
-          i.isneg() && !i.isZero() ? "-" + r : r)
+          i.isneg() && !i.isZero() ? '-' + r : r)
     }
     A.toInteger = A.toint = function () {
       var e = this,
@@ -1339,7 +1339,7 @@ var De,
         T = +(e = new f(e))
       if (!e.s) return new f(Z)
       if (((a = new f(a)), !a.s)) {
-        if (e.s < 1) throw Error(re + "Infinity")
+        if (e.s < 1) throw Error(re + 'Infinity')
         return a
       }
       if (a.eq(Z)) return a
@@ -1354,7 +1354,7 @@ var De,
             (a = a.times(a)), en(a.d, t)
           return (U = !0), e.s < 0 ? new f(Z).div(i) : D(i, n)
         }
-      } else if (o < 0) throw Error(re + "NaN")
+      } else if (o < 0) throw Error(re + 'NaN')
       return (
         (o = o < 0 && e.d[Math.max(t, r)] & 1 ? -1 : 1),
         (a.s = 1),
@@ -1396,7 +1396,7 @@ var De,
       A.valueOf =
       A.val =
       A.toJSON =
-      A[Symbol.for("nodejs.util.inspect.custom")] =
+      A[Symbol.for('nodejs.util.inspect.custom')] =
         function () {
           var e = this,
             t = V(e),
@@ -1452,7 +1452,7 @@ var De,
           se = n.d,
           B = i.d
         if (!n.s) return new Ct(n)
-        if (!i.s) throw Error(re + "Division by zero")
+        if (!i.s) throw Error(re + 'Division by zero')
         for (
           f = n.e - i.e,
             ie = B.length,
@@ -1531,7 +1531,7 @@ var De,
 var v,
   ue,
   l = oe(() => {
-    "use strict"
+    'use strict'
     an()
     ;(v = class extends Ot {
       static isDecimal(t) {
@@ -1541,7 +1541,7 @@ var v,
         {
           let n = crypto
             .getRandomValues(new Uint8Array(t))
-            .reduce((i, o) => i + o, "")
+            .reduce((i, o) => i + o, '')
           return new Ot(`0.${n.slice(0, t)}`)
         }
       }
@@ -1555,7 +1555,7 @@ var zo,
   Yo,
   mn,
   pn = oe(() => {
-    "use strict"
+    'use strict'
     u()
     c()
     m()
@@ -1565,7 +1565,7 @@ var zo,
     ;(zo = {}), (Yo = { existsSync: Ho, promises: zo }), (mn = Yo)
   })
 var vn = Ce((Lu, Pn) => {
-  "use strict"
+  'use strict'
   u()
   c()
   m()
@@ -1595,9 +1595,9 @@ function Cn(e, t) {
 }
 function An(e) {
   return JSON.stringify(e, (t, r) =>
-    typeof r == "function"
+    typeof r == 'function'
       ? r.toString()
-      : typeof r == "bigint"
+      : typeof r == 'bigint'
         ? `${r}n`
         : r instanceof Error
           ? { ...r, message: r.message, stack: r.stack }
@@ -1608,7 +1608,7 @@ var Rn,
   Zo,
   es,
   Er = oe(() => {
-    "use strict"
+    'use strict'
     u()
     c()
     m()
@@ -1620,31 +1620,31 @@ var Rn,
       (es = Zo)
   })
 function os(...e) {
-  return e.join("/")
+  return e.join('/')
 }
 function ss(...e) {
-  return e.join("/")
+  return e.join('/')
 }
 var Mn,
   as,
   ls,
   rt,
   Ln = oe(() => {
-    "use strict"
+    'use strict'
     u()
     c()
     m()
     p()
     d()
     l()
-    ;(Mn = "/"),
+    ;(Mn = '/'),
       (as = { sep: Mn }),
       (ls = { resolve: os, posix: as, join: ss, sep: Mn }),
       (rt = ls)
   })
 var _t,
   _n = oe(() => {
-    "use strict"
+    'use strict'
     u()
     c()
     m()
@@ -1671,7 +1671,7 @@ var _t,
     }
   })
 var Fn = Ce((em, Dn) => {
-  "use strict"
+  'use strict'
   u()
   c()
   m()
@@ -1680,16 +1680,16 @@ var Fn = Ce((em, Dn) => {
   l()
   Dn.exports = (e, t = 1, r) => {
     if (
-      ((r = { indent: " ", includeEmptyLines: !1, ...r }), typeof e != "string")
+      ((r = { indent: ' ', includeEmptyLines: !1, ...r }), typeof e != 'string')
     )
       throw new TypeError(
         `Expected \`input\` to be a \`string\`, got \`${typeof e}\``
       )
-    if (typeof t != "number")
+    if (typeof t != 'number')
       throw new TypeError(
         `Expected \`count\` to be a \`number\`, got \`${typeof t}\``
       )
-    if (typeof r.indent != "string")
+    if (typeof r.indent != 'string')
       throw new TypeError(
         `Expected \`options.indent\` to be a \`string\`, got \`${typeof r.indent}\``
       )
@@ -1699,7 +1699,7 @@ var Fn = Ce((em, Dn) => {
   }
 })
 var Bn = Ce((fm, Un) => {
-  "use strict"
+  'use strict'
   u()
   c()
   m()
@@ -1708,14 +1708,14 @@ var Bn = Ce((fm, Un) => {
   l()
   Un.exports = ({ onlyFirst: e = !1 } = {}) => {
     let t = [
-      "[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)",
-      "(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))",
-    ].join("|")
-    return new RegExp(t, e ? void 0 : "g")
+      '[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
+      '(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))',
+    ].join('|')
+    return new RegExp(t, e ? void 0 : 'g')
   }
 })
 var Vn = Ce((xm, $n) => {
-  "use strict"
+  'use strict'
   u()
   c()
   m()
@@ -1723,29 +1723,29 @@ var Vn = Ce((xm, $n) => {
   d()
   l()
   var fs = Bn()
-  $n.exports = (e) => (typeof e == "string" ? e.replace(fs(), "") : e)
+  $n.exports = (e) => (typeof e == 'string' ? e.replace(fs(), '') : e)
 })
 var Jn = Ce((Yf, bs) => {
   bs.exports = {
-    name: "@prisma/engines-version",
-    version: "5.16.0-24.34ace0eb2704183d2c05b60b52fba5c43c13f303",
-    main: "index.js",
-    types: "index.d.ts",
-    license: "Apache-2.0",
-    author: "Tim Suchanek <suchanek@prisma.io>",
-    prisma: { enginesVersion: "34ace0eb2704183d2c05b60b52fba5c43c13f303" },
+    name: '@prisma/engines-version',
+    version: '5.16.0-24.34ace0eb2704183d2c05b60b52fba5c43c13f303',
+    main: 'index.js',
+    types: 'index.d.ts',
+    license: 'Apache-2.0',
+    author: 'Tim Suchanek <suchanek@prisma.io>',
+    prisma: { enginesVersion: '34ace0eb2704183d2c05b60b52fba5c43c13f303' },
     repository: {
-      type: "git",
-      url: "https://github.com/prisma/engines-wrapper.git",
-      directory: "packages/engines-version",
+      type: 'git',
+      url: 'https://github.com/prisma/engines-wrapper.git',
+      directory: 'packages/engines-version',
     },
-    devDependencies: { "@types/node": "18.19.34", typescript: "4.9.5" },
-    files: ["index.js", "index.d.ts"],
-    scripts: { build: "tsc -d" },
+    devDependencies: { '@types/node': '18.19.34', typescript: '4.9.5' },
+    files: ['index.js', 'index.d.ts'],
+    scripts: { build: 'tsc -d' },
   }
 })
 var Gn = Ce(() => {
-  "use strict"
+  'use strict'
   u()
   c()
   m()
@@ -1754,7 +1754,7 @@ var Gn = Ce(() => {
   l()
 })
 var qr = Ce((GC, Ui) => {
-  "use strict"
+  'use strict'
   u()
   c()
   m()
@@ -1871,7 +1871,7 @@ p()
 d()
 l()
 function ln(e) {
-  return typeof e == "function" ? e : (t) => t.$extends(e)
+  return typeof e == 'function' ? e : (t) => t.$extends(e)
 }
 u()
 c()
@@ -1922,7 +1922,7 @@ var br,
   fn,
   gn,
   hn = !0
-typeof g < "u" &&
+typeof g < 'u' &&
   (({
     FORCE_COLOR: br,
     NODE_DISABLE_COLORS: dn,
@@ -1932,16 +1932,16 @@ typeof g < "u" &&
   (hn = g.stdout && g.stdout.isTTY))
 var Xo = {
   enabled:
-    !dn && fn == null && gn !== "dumb" && ((br != null && br !== "0") || hn),
+    !dn && fn == null && gn !== 'dumb' && ((br != null && br !== '0') || hn),
 }
 function F(e, t) {
-  let r = new RegExp(`\\x1b\\[${t}m`, "g"),
+  let r = new RegExp(`\\x1b\\[${t}m`, 'g'),
     n = `\x1B[${e}m`,
     i = `\x1B[${t}m`
   return function (o) {
     return !Xo.enabled || o == null
       ? o
-      : n + (~("" + o).indexOf(i) ? o.replace(r, i + n) : o) + i
+      : n + (~('' + o).indexOf(i) ? o.replace(r, i + n) : o) + i
   }
 }
 var lu = F(0, 0),
@@ -1977,44 +1977,44 @@ p()
 d()
 l()
 var ts = 100,
-  Sn = ["green", "yellow", "blue", "magenta", "cyan", "red"],
+  Sn = ['green', 'yellow', 'blue', 'magenta', 'cyan', 'red'],
   It = [],
   On = Date.now(),
   rs = 0,
-  xr = typeof g < "u" ? g.env : {}
-globalThis.DEBUG ??= xr.DEBUG ?? ""
-globalThis.DEBUG_COLORS ??= xr.DEBUG_COLORS ? xr.DEBUG_COLORS === "true" : !0
+  xr = typeof g < 'u' ? g.env : {}
+globalThis.DEBUG ??= xr.DEBUG ?? ''
+globalThis.DEBUG_COLORS ??= xr.DEBUG_COLORS ? xr.DEBUG_COLORS === 'true' : !0
 var tt = {
   enable(e) {
-    typeof e == "string" && (globalThis.DEBUG = e)
+    typeof e == 'string' && (globalThis.DEBUG = e)
   },
   disable() {
     let e = globalThis.DEBUG
-    return (globalThis.DEBUG = ""), e
+    return (globalThis.DEBUG = ''), e
   },
   enabled(e) {
-    let t = globalThis.DEBUG.split(",").map((i) =>
-        i.replace(/[.+?^${}()|[\]\\]/g, "\\$&")
+    let t = globalThis.DEBUG.split(',').map((i) =>
+        i.replace(/[.+?^${}()|[\]\\]/g, '\\$&')
       ),
       r = t.some((i) =>
-        i === "" || i[0] === "-"
+        i === '' || i[0] === '-'
           ? !1
-          : e.match(RegExp(i.split("*").join(".*") + "$"))
+          : e.match(RegExp(i.split('*').join('.*') + '$'))
       ),
       n = t.some((i) =>
-        i === "" || i[0] !== "-"
+        i === '' || i[0] !== '-'
           ? !1
-          : e.match(RegExp(i.slice(1).split("*").join(".*") + "$"))
+          : e.match(RegExp(i.slice(1).split('*').join('.*') + '$'))
       )
     return r && !n
   },
   log: (...e) => {
     let [t, r, ...n] = e,
       i
-    typeof require == "function" &&
-    typeof g < "u" &&
-    typeof g.stderr < "u" &&
-    typeof g.stderr.write == "function"
+    typeof require == 'function' &&
+    typeof g < 'u' &&
+    typeof g.stderr < 'u' &&
+    typeof g.stderr.write == 'function'
       ? (i = (...o) => {
           try {
             let s = (Er(), cr(wr))
@@ -2047,7 +2047,7 @@ function ns(e) {
         It.length > ts && It.shift(),
         tt.enabled(o) || i)
       ) {
-        let f = n.map((T) => (typeof T == "string" ? T : is(T))),
+        let f = n.map((T) => (typeof T == 'string' ? T : is(T))),
           b = `+${Date.now() - On}ms`
         ;(On = Date.now()), a(o, ...f, b)
       }
@@ -2060,10 +2060,10 @@ function is(e, t = 2) {
   return JSON.stringify(
     e,
     (n, i) => {
-      if (typeof i == "object" && i !== null) {
-        if (r.has(i)) return "[Circular *]"
+      if (typeof i == 'object' && i !== null) {
+        if (r.has(i)) return '[Circular *]'
         r.add(i)
-      } else if (typeof i == "bigint") return i.toString()
+      } else if (typeof i == 'bigint') return i.toString()
       return i
     },
     t
@@ -2086,36 +2086,36 @@ p()
 d()
 l()
 var vr = [
-  "darwin",
-  "darwin-arm64",
-  "debian-openssl-1.0.x",
-  "debian-openssl-1.1.x",
-  "debian-openssl-3.0.x",
-  "rhel-openssl-1.0.x",
-  "rhel-openssl-1.1.x",
-  "rhel-openssl-3.0.x",
-  "linux-arm64-openssl-1.1.x",
-  "linux-arm64-openssl-1.0.x",
-  "linux-arm64-openssl-3.0.x",
-  "linux-arm-openssl-1.1.x",
-  "linux-arm-openssl-1.0.x",
-  "linux-arm-openssl-3.0.x",
-  "linux-musl",
-  "linux-musl-openssl-3.0.x",
-  "linux-musl-arm64-openssl-1.1.x",
-  "linux-musl-arm64-openssl-3.0.x",
-  "linux-nixos",
-  "linux-static-x64",
-  "linux-static-arm64",
-  "windows",
-  "freebsd11",
-  "freebsd12",
-  "freebsd13",
-  "freebsd14",
-  "freebsd15",
-  "openbsd",
-  "netbsd",
-  "arm",
+  'darwin',
+  'darwin-arm64',
+  'debian-openssl-1.0.x',
+  'debian-openssl-1.1.x',
+  'debian-openssl-3.0.x',
+  'rhel-openssl-1.0.x',
+  'rhel-openssl-1.1.x',
+  'rhel-openssl-3.0.x',
+  'linux-arm64-openssl-1.1.x',
+  'linux-arm64-openssl-1.0.x',
+  'linux-arm64-openssl-3.0.x',
+  'linux-arm-openssl-1.1.x',
+  'linux-arm-openssl-1.0.x',
+  'linux-arm-openssl-3.0.x',
+  'linux-musl',
+  'linux-musl-openssl-3.0.x',
+  'linux-musl-arm64-openssl-1.1.x',
+  'linux-musl-arm64-openssl-3.0.x',
+  'linux-nixos',
+  'linux-static-x64',
+  'linux-static-arm64',
+  'windows',
+  'freebsd11',
+  'freebsd12',
+  'freebsd13',
+  'freebsd14',
+  'freebsd15',
+  'openbsd',
+  'netbsd',
+  'arm',
 ]
 u()
 c()
@@ -2123,21 +2123,21 @@ m()
 p()
 d()
 l()
-var In = "library"
+var In = 'library'
 function nt(e) {
   let t = us()
   return (
     t ||
-    (e?.config.engineType === "library"
-      ? "library"
-      : e?.config.engineType === "binary"
-        ? "binary"
+    (e?.config.engineType === 'library'
+      ? 'library'
+      : e?.config.engineType === 'binary'
+        ? 'binary'
         : In)
   )
 }
 function us() {
   let e = g.env.PRISMA_CLIENT_ENGINE_TYPE
-  return e === "library" ? "library" : e === "binary" ? "binary" : void 0
+  return e === 'library' ? 'library' : e === 'binary' ? 'binary' : void 0
 }
 u()
 c()
@@ -2155,24 +2155,24 @@ var Oe
 ;((t) => {
   let e
   ;((k) => (
-    (k.findUnique = "findUnique"),
-    (k.findUniqueOrThrow = "findUniqueOrThrow"),
-    (k.findFirst = "findFirst"),
-    (k.findFirstOrThrow = "findFirstOrThrow"),
-    (k.findMany = "findMany"),
-    (k.create = "create"),
-    (k.createMany = "createMany"),
-    (k.createManyAndReturn = "createManyAndReturn"),
-    (k.update = "update"),
-    (k.updateMany = "updateMany"),
-    (k.upsert = "upsert"),
-    (k.delete = "delete"),
-    (k.deleteMany = "deleteMany"),
-    (k.groupBy = "groupBy"),
-    (k.count = "count"),
-    (k.aggregate = "aggregate"),
-    (k.findRaw = "findRaw"),
-    (k.aggregateRaw = "aggregateRaw")
+    (k.findUnique = 'findUnique'),
+    (k.findUniqueOrThrow = 'findUniqueOrThrow'),
+    (k.findFirst = 'findFirst'),
+    (k.findFirstOrThrow = 'findFirstOrThrow'),
+    (k.findMany = 'findMany'),
+    (k.create = 'create'),
+    (k.createMany = 'createMany'),
+    (k.createManyAndReturn = 'createManyAndReturn'),
+    (k.update = 'update'),
+    (k.updateMany = 'updateMany'),
+    (k.upsert = 'upsert'),
+    (k.delete = 'delete'),
+    (k.deleteMany = 'deleteMany'),
+    (k.groupBy = 'groupBy'),
+    (k.count = 'count'),
+    (k.aggregate = 'aggregate'),
+    (k.findRaw = 'findRaw'),
+    (k.aggregateRaw = 'aggregateRaw')
   ))((e = t.ModelAction ||= {}))
 })((Oe ||= {}))
 var ot = {}
@@ -2192,10 +2192,10 @@ p()
 d()
 l()
 var it = {
-    error: Ne("prisma:error"),
-    warn: Lt("prisma:warn"),
-    info: En("prisma:info"),
-    query: wn("prisma:query"),
+    error: Ne('prisma:error'),
+    warn: Lt('prisma:warn'),
+    info: En('prisma:info'),
+    query: wn('prisma:query'),
   },
   Nn = { warn: () => !g.env.PRISMA_DISABLE_WARNINGS }
 function cs(...e) {
@@ -2280,7 +2280,7 @@ p()
 d()
 l()
 function K(e, t) {
-  Object.defineProperty(e, "name", { value: t, configurable: !0 })
+  Object.defineProperty(e, 'name', { value: t, configurable: !0 })
 }
 u()
 c()
@@ -2301,27 +2301,27 @@ l()
 var Q = class extends Error {
   constructor(t, { code: r, clientVersion: n, meta: i, batchRequestIdx: o }) {
     super(t),
-      (this.name = "PrismaClientKnownRequestError"),
+      (this.name = 'PrismaClientKnownRequestError'),
       (this.code = r),
       (this.clientVersion = n),
       (this.meta = i),
-      Object.defineProperty(this, "batchRequestIdx", {
+      Object.defineProperty(this, 'batchRequestIdx', {
         value: o,
         enumerable: !1,
         writable: !0,
       })
   }
   get [Symbol.toStringTag]() {
-    return "PrismaClientKnownRequestError"
+    return 'PrismaClientKnownRequestError'
   }
 }
-K(Q, "PrismaClientKnownRequestError")
+K(Q, 'PrismaClientKnownRequestError')
 var he = class extends Q {
   constructor(t, r) {
-    super(t, { code: "P2025", clientVersion: r }), (this.name = "NotFoundError")
+    super(t, { code: 'P2025', clientVersion: r }), (this.name = 'NotFoundError')
   }
 }
-K(he, "NotFoundError")
+K(he, 'NotFoundError')
 u()
 c()
 m()
@@ -2331,16 +2331,16 @@ l()
 var I = class e extends Error {
   constructor(t, r, n) {
     super(t),
-      (this.name = "PrismaClientInitializationError"),
+      (this.name = 'PrismaClientInitializationError'),
       (this.clientVersion = r),
       (this.errorCode = n),
       Error.captureStackTrace(e)
   }
   get [Symbol.toStringTag]() {
-    return "PrismaClientInitializationError"
+    return 'PrismaClientInitializationError'
   }
 }
-K(I, "PrismaClientInitializationError")
+K(I, 'PrismaClientInitializationError')
 u()
 c()
 m()
@@ -2350,14 +2350,14 @@ l()
 var ye = class extends Error {
   constructor(t, r) {
     super(t),
-      (this.name = "PrismaClientRustPanicError"),
+      (this.name = 'PrismaClientRustPanicError'),
       (this.clientVersion = r)
   }
   get [Symbol.toStringTag]() {
-    return "PrismaClientRustPanicError"
+    return 'PrismaClientRustPanicError'
   }
 }
-K(ye, "PrismaClientRustPanicError")
+K(ye, 'PrismaClientRustPanicError')
 u()
 c()
 m()
@@ -2367,19 +2367,19 @@ l()
 var J = class extends Error {
   constructor(t, { clientVersion: r, batchRequestIdx: n }) {
     super(t),
-      (this.name = "PrismaClientUnknownRequestError"),
+      (this.name = 'PrismaClientUnknownRequestError'),
       (this.clientVersion = r),
-      Object.defineProperty(this, "batchRequestIdx", {
+      Object.defineProperty(this, 'batchRequestIdx', {
         value: n,
         writable: !0,
         enumerable: !1,
       })
   }
   get [Symbol.toStringTag]() {
-    return "PrismaClientUnknownRequestError"
+    return 'PrismaClientUnknownRequestError'
   }
 }
-K(J, "PrismaClientUnknownRequestError")
+K(J, 'PrismaClientUnknownRequestError')
 u()
 c()
 m()
@@ -2389,14 +2389,14 @@ l()
 var G = class extends Error {
   constructor(r, { clientVersion: n }) {
     super(r)
-    this.name = "PrismaClientValidationError"
+    this.name = 'PrismaClientValidationError'
     this.clientVersion = n
   }
   get [Symbol.toStringTag]() {
-    return "PrismaClientValidationError"
+    return 'PrismaClientValidationError'
   }
 }
-K(G, "PrismaClientValidationError")
+K(G, 'PrismaClientValidationError')
 u()
 c()
 m()
@@ -2408,10 +2408,10 @@ var Be = class {
     this._engine = t
   }
   prometheus(t) {
-    return this._engine.metrics({ format: "prometheus", ...t })
+    return this._engine.metrics({ format: 'prometheus', ...t })
   }
   json(t) {
-    return this._engine.metrics({ format: "json", ...t })
+    return this._engine.metrics({ format: 'json', ...t })
   }
 }
 u()
@@ -2436,10 +2436,10 @@ function at(e) {
 }
 function Qn(e, t) {
   let r = at(() => gs(t))
-  Object.defineProperty(e, "dmmf", { get: () => r.get() })
+  Object.defineProperty(e, 'dmmf', { get: () => r.get() })
 }
 function gs(e) {
-  throw new Error("Prisma.dmmf is not available when running in edge runtimes.")
+  throw new Error('Prisma.dmmf is not available when running in edge runtimes.')
 }
 function Sr(e) {
   return Object.entries(e).map(([t, r]) => ({ name: t, ...r }))
@@ -2470,21 +2470,21 @@ var Ft = Symbol(),
   },
   lt = class extends be {
     _getNamespace() {
-      return "NullTypes"
+      return 'NullTypes'
     }
   },
   ut = class extends lt {}
-kr(ut, "DbNull")
+kr(ut, 'DbNull')
 var ct = class extends lt {}
-kr(ct, "JsonNull")
+kr(ct, 'JsonNull')
 var mt = class extends lt {}
-kr(mt, "AnyNull")
+kr(mt, 'AnyNull')
 var Nt = {
   classes: { DbNull: ut, JsonNull: ct, AnyNull: mt },
   instances: { DbNull: new ut(Ft), JsonNull: new ct(Ft), AnyNull: new mt(Ft) },
 }
 function kr(e, t) {
-  Object.defineProperty(e, "name", { value: t, configurable: !0 })
+  Object.defineProperty(e, 'name', { value: t, configurable: !0 })
 }
 u()
 c()
@@ -2567,7 +2567,7 @@ function Me(e, t) {
       return await t(...r)
     } catch (n) {
       let i = e.registerNewError(n)
-      return pt({ kind: "GenericJs", id: i })
+      return pt({ kind: 'GenericJs', id: i })
     }
   }
 }
@@ -2577,7 +2577,7 @@ function ys(e, t) {
       return t(...r)
     } catch (n) {
       let i = e.registerNewError(n)
-      return pt({ kind: "GenericJs", id: i })
+      return pt({ kind: 'GenericJs', id: i })
     }
   }
 }
@@ -2596,7 +2596,7 @@ var X = class e {
   constructor(t, r) {
     if (t.length - 1 !== r.length)
       throw t.length === 0
-        ? new TypeError("Expected at least 1 string")
+        ? new TypeError('Expected at least 1 string')
         : new TypeError(
             `Expected ${t.length} strings to have ${t.length - 1} values`
           )
@@ -2648,17 +2648,17 @@ var X = class e {
     }
   }
 }
-function Wn(e, t = ",", r = "", n = "") {
+function Wn(e, t = ',', r = '', n = '') {
   if (e.length === 0)
     throw new TypeError(
-      "Expected `join([])` to be called with an array of multiple elements, but got an empty array"
+      'Expected `join([])` to be called with an array of multiple elements, but got an empty array'
     )
   return new X([r, ...Array(e.length - 1).fill(t), n], e)
 }
 function Ir(e) {
   return new X([e], [])
 }
-var Kn = Ir("")
+var Kn = Ir('')
 function _r(e, ...t) {
   return new X(e, t)
 }
@@ -2765,7 +2765,7 @@ function Bt(e) {
     ownKeys: () => [...t],
   }
 }
-var Hn = Symbol.for("nodejs.util.inspect.custom")
+var Hn = Symbol.for('nodejs.util.inspect.custom')
 function me(e, t) {
   let r = ws(t),
     n = new Set(),
@@ -2850,7 +2850,7 @@ function $t(e, t) {
   return {
     batch: e,
     transaction:
-      t?.kind === "batch"
+      t?.kind === 'batch'
         ? { isolationLevel: t.options.isolationLevel }
         : void 0,
   }
@@ -2871,12 +2871,12 @@ var Ve = class {
   constructor(t = 0, r) {
     this.context = r
     this.lines = []
-    this.currentLine = ""
+    this.currentLine = ''
     this.currentIndent = 0
     this.currentIndent = t
   }
   write(t) {
-    return typeof t == "string" ? (this.currentLine += t) : t.write(this), this
+    return typeof t == 'string' ? (this.currentLine += t) : t.write(this), this
   }
   writeJoined(t, r, n = (i, o) => o.write(i)) {
     let i = r.length - 1
@@ -2888,7 +2888,7 @@ var Ve = class {
   }
   newLine() {
     this.lines.push(this.indentedCurrentLine()),
-      (this.currentLine = ""),
+      (this.currentLine = ''),
       (this.marginSymbol = void 0)
     let t = this.afterNextNewLineCallback
     return (this.afterNextNewLineCallback = void 0), t?.(), this
@@ -2945,11 +2945,11 @@ d()
 l()
 function qe(e) {
   return (
-    e instanceof Date || Object.prototype.toString.call(e) === "[object Date]"
+    e instanceof Date || Object.prototype.toString.call(e) === '[object Date]'
   )
 }
 function Vt(e) {
-  return e.toString() !== "Invalid Date"
+  return e.toString() !== 'Invalid Date'
 }
 u()
 c()
@@ -2962,10 +2962,10 @@ function je(e) {
   return v.isDecimal(e)
     ? !0
     : e !== null &&
-        typeof e == "object" &&
-        typeof e.s == "number" &&
-        typeof e.e == "number" &&
-        typeof e.toFixed == "function" &&
+        typeof e == 'object' &&
+        typeof e.s == 'number' &&
+        typeof e.e == 'number' &&
+        typeof e.toFixed == 'function' &&
         Array.isArray(e.d)
 }
 u()
@@ -2983,8 +2983,8 @@ var ft = class {
       (this.isEnum = o)
   }
   _toGraphQLInputType() {
-    let t = this.isList ? "List" : "",
-      r = this.isEnum ? "Enum" : ""
+    let t = this.isList ? 'List' : '',
+      r = this.isEnum ? 'Enum' : ''
     return `${t}${r}${this.typeName}FieldRefInput<${this.modelName}>`
   }
 }
@@ -3025,7 +3025,7 @@ var jt = (e) => e,
   Xn = { bold: kt, red: Ne, green: bn, dim: Mt, enabled: !0 },
   Je = {
     write(e) {
-      e.writeLine(",")
+      e.writeLine(',')
     },
   }
 u()
@@ -3051,8 +3051,8 @@ var pe = class {
     t.write(this.color(this.contents)),
       this.isUnderlined &&
         t.afterNextNewline(() => {
-          t.write(" ".repeat(r)).writeLine(
-            this.color("~".repeat(this.contents.length))
+          t.write(' '.repeat(r)).writeLine(
+            this.color('~'.repeat(this.contents.length))
           )
         })
   }
@@ -3095,18 +3095,18 @@ var Ge = class extends Ee {
     this.writeWithItems(r)
   }
   writeEmpty(r) {
-    let n = new pe("[]")
+    let n = new pe('[]')
     this.hasError && n.setColor(r.context.colors.red).underline(), r.write(n)
   }
   writeWithItems(r) {
     let { colors: n } = r.context
     r
-      .writeLine("[")
+      .writeLine('[')
       .withIndent(() => r.writeJoined(Je, this.items).newLine())
-      .write("]"),
+      .write(']'),
       this.hasError &&
         r.afterNextNewline(() => {
-          r.writeLine(n.red("~".repeat(this.getPrintWidth())))
+          r.writeLine(n.red('~'.repeat(this.getPrintWidth())))
         })
   }
   asObject() {}
@@ -3117,7 +3117,7 @@ m()
 p()
 d()
 l()
-var Zn = ": ",
+var Zn = ': ',
   Jt = class {
     constructor(t, r) {
       this.name = t
@@ -3220,10 +3220,10 @@ var We = class e extends Ee {
     return i
   }
   getSelectionParent() {
-    let r = this.getField("select")?.value.asObject()
-    if (r) return { kind: "select", value: r }
-    let n = this.getField("include")?.value.asObject()
-    if (n) return { kind: "include", value: n }
+    let r = this.getField('select')?.value.asObject()
+    if (r) return { kind: 'select', value: r }
+    let n = this.getField('include')?.value.asObject()
+    if (n) return { kind: 'include', value: n }
   }
   getSubSelectionValue(r) {
     return this.getSelectionParent()?.value.fields[r].value
@@ -3244,17 +3244,17 @@ var We = class e extends Ee {
     return this
   }
   writeEmpty(r) {
-    let n = new pe("{}")
+    let n = new pe('{}')
     this.hasError && n.setColor(r.context.colors.red).underline(), r.write(n)
   }
   writeWithContents(r, n) {
-    r.writeLine("{").withIndent(() => {
+    r.writeLine('{').withIndent(() => {
       r.writeJoined(Je, [...n, ...this.suggestions]).newLine()
     }),
-      r.write("}"),
+      r.write('}'),
       this.hasError &&
         r.afterNextNewline(() => {
-          r.writeLine(r.context.colors.red("~".repeat(this.getPrintWidth())))
+          r.writeLine(r.context.colors.red('~'.repeat(this.getPrintWidth())))
         })
   }
 }
@@ -3306,18 +3306,18 @@ function ei(e) {
   return t
 }
 function ti(e) {
-  if (typeof e == "string") return new W(JSON.stringify(e))
-  if (typeof e == "number" || typeof e == "boolean") return new W(String(e))
-  if (typeof e == "bigint") return new W(`${e}n`)
-  if (e === null) return new W("null")
-  if (e === void 0) return new W("undefined")
+  if (typeof e == 'string') return new W(JSON.stringify(e))
+  if (typeof e == 'number' || typeof e == 'boolean') return new W(String(e))
+  if (typeof e == 'bigint') return new W(`${e}n`)
+  if (e === null) return new W('null')
+  if (e === void 0) return new W('undefined')
   if (je(e)) return new W(`new Prisma.Decimal("${e.toFixed()}")`)
   if (e instanceof Uint8Array)
     return y.isBuffer(e)
       ? new W(`Buffer.alloc(${e.byteLength})`)
       : new W(`new Uint8Array(${e.byteLength})`)
   if (e instanceof Date) {
-    let t = Vt(e) ? e.toISOString() : "Invalid Date"
+    let t = Vt(e) ? e.toISOString() : 'Invalid Date'
     return new W(`new Date("${t}")`)
   }
   return e instanceof be
@@ -3326,7 +3326,7 @@ function ti(e) {
       ? new W(`prisma.${Yn(e.modelName)}.$fields.${e.name}`)
       : Array.isArray(e)
         ? xs(e)
-        : typeof e == "object"
+        : typeof e == 'object'
           ? ei(e)
           : new W(Object.prototype.toString.call(e))
 }
@@ -3336,13 +3336,13 @@ function xs(e) {
   return t
 }
 function Gt(e, t) {
-  let r = t === "pretty" ? Xn : Qt,
+  let r = t === 'pretty' ? Xn : Qt,
     n = e.renderAllMessages(r),
     i = new Ve(0, { colors: r }).write(e).toString()
   return { message: n, args: i }
 }
 function ri(e) {
-  if (e === void 0) return ""
+  if (e === void 0) return ''
   let t = Ke(e)
   return new Ve(0, { colors: Qt }).write(t).toString()
 }
@@ -3352,7 +3352,7 @@ m()
 p()
 d()
 l()
-var Ps = "P2037"
+var Ps = 'P2037'
 function Wt({ error: e, user_facing_error: t }, r, n) {
   return t.error_code
     ? new Q(vs(t, n), {
@@ -3366,7 +3366,7 @@ function Wt({ error: e, user_facing_error: t }, r, n) {
 function vs(e, t) {
   let r = e.message
   return (
-    (t === "postgresql" || t === "postgres" || t === "mysql") &&
+    (t === 'postgresql' || t === 'postgres' || t === 'mysql') &&
       e.error_code === Ps &&
       (r += `
 Prisma Accelerate has built-in connection pooling to prevent such errors: https://pris.ly/client/error-accelerate`),
@@ -3409,7 +3409,7 @@ var Fr = class {
   }
 }
 function xe(e) {
-  return typeof $EnabledCallSite == "function" && e !== "minimal"
+  return typeof $EnabledCallSite == 'function' && e !== 'minimal'
     ? new $EnabledCallSite()
     : new Fr()
 }
@@ -3442,14 +3442,14 @@ function He(e = {}) {
   )
 }
 function Cs(e = {}) {
-  return typeof e._count == "boolean" ? { ...e, _count: { _all: e._count } } : e
+  return typeof e._count == 'boolean' ? { ...e, _count: { _all: e._count } } : e
 }
 function Kt(e = {}) {
-  return (t) => (typeof e._count == "boolean" && (t._count = t._count._all), t)
+  return (t) => (typeof e._count == 'boolean' && (t._count = t._count._all), t)
 }
 function ii(e, t) {
   let r = Kt(e)
-  return t({ action: "aggregate", unpacker: r, argsMapper: He })(e)
+  return t({ action: 'aggregate', unpacker: r, argsMapper: He })(e)
 }
 u()
 c()
@@ -3459,17 +3459,17 @@ d()
 l()
 function As(e = {}) {
   let { select: t, ...r } = e
-  return typeof t == "object"
+  return typeof t == 'object'
     ? He({ ...r, _count: t })
     : He({ ...r, _count: { _all: !0 } })
 }
 function Rs(e = {}) {
-  return typeof e.select == "object"
+  return typeof e.select == 'object'
     ? (t) => Kt(e)(t)._count
     : (t) => Kt(e)(t)._count._all
 }
 function oi(e, t) {
-  return t({ action: "count", unpacker: Rs(e), argsMapper: As })(e)
+  return t({ action: 'count', unpacker: Rs(e), argsMapper: As })(e)
 }
 u()
 c()
@@ -3480,13 +3480,13 @@ l()
 function Ss(e = {}) {
   let t = He(e)
   if (Array.isArray(t.by))
-    for (let r of t.by) typeof r == "string" && (t.select[r] = !0)
-  else typeof t.by == "string" && (t.select[t.by] = !0)
+    for (let r of t.by) typeof r == 'string' && (t.select[r] = !0)
+  else typeof t.by == 'string' && (t.select[t.by] = !0)
   return t
 }
 function Os(e = {}) {
   return (t) => (
-    typeof e?._count == "boolean" &&
+    typeof e?._count == 'boolean' &&
       t.forEach((r) => {
         r._count = r._count._all
       }),
@@ -3494,12 +3494,12 @@ function Os(e = {}) {
   )
 }
 function si(e, t) {
-  return t({ action: "groupBy", unpacker: Os(e), argsMapper: Ss })(e)
+  return t({ action: 'groupBy', unpacker: Os(e), argsMapper: Ss })(e)
 }
 function ai(e, t, r) {
-  if (t === "aggregate") return (n) => ii(n, r)
-  if (t === "count") return (n) => oi(n, r)
-  if (t === "groupBy") return (n) => si(n, r)
+  if (t === 'aggregate') return (n) => ii(n, r)
+  if (t === 'count') return (n) => oi(n, r)
+  if (t === 'groupBy') return (n) => si(n, r)
 }
 u()
 c()
@@ -3514,9 +3514,9 @@ function li(e, t) {
     {},
     {
       get(i, o) {
-        if (o in i || typeof o == "symbol") return i[o]
+        if (o in i || typeof o == 'symbol') return i[o]
         let s = n[o]
-        if (s) return new ft(e, o, s.type, s.isList, s.kind === "enum")
+        if (s) return new ft(e, o, s.type, s.isList, s.kind === 'enum')
       },
       ...Bt(Object.keys(n)),
     }
@@ -3534,7 +3534,7 @@ m()
 p()
 d()
 l()
-var ui = (e) => (Array.isArray(e) ? e : e.split(".")),
+var ui = (e) => (Array.isArray(e) ? e : e.split('.')),
   Nr = (e, t) => ui(t).reduce((r, n) => r && r[n], e),
   ci = (e, t, r) =>
     ui(t).reduceRight(
@@ -3542,7 +3542,7 @@ var ui = (e) => (Array.isArray(e) ? e : e.split(".")),
       r
     )
 function ks(e, t) {
-  return e === void 0 || t === void 0 ? [] : [...t, "select", e]
+  return e === void 0 || t === void 0 ? [] : [...t, 'select', e]
 }
 function Ms(e, t, r) {
   return t === void 0 ? e ?? {} : ci(t, r, e || !0)
@@ -3571,7 +3571,7 @@ function Ur(e, t, r, n, i, o) {
 }
 function Ls(e, t) {
   return e._runtimeDataModel.models[t].fields
-    .filter((r) => r.kind === "object")
+    .filter((r) => r.kind === 'object')
     .map((r) => r.name)
 }
 u()
@@ -3622,13 +3622,13 @@ function Ns(
   },
   s
 ) {
-  let a = [""],
-    f = t ? " in" : ":"
+  let a = [''],
+    f = t ? ' in' : ':'
   if (
     (n
       ? (a.push(
           s.red(
-            `Oops, an unknown error occurred! This is ${s.bold("on us")}, you did nothing wrong.`
+            `Oops, an unknown error occurred! This is ${s.bold('on us')}, you did nothing wrong.`
           )
         ),
         a.push(
@@ -3638,10 +3638,10 @@ function Ns(
     t && a.push(s.underline(Us(t))),
     i)
   ) {
-    a.push("")
+    a.push('')
     let b = [i.toString()]
-    o && (b.push(o), b.push(s.dim(")"))), a.push(b.join("")), o && a.push("")
-  } else a.push(""), o && a.push(o), a.push("")
+    o && (b.push(o), b.push(s.dim(')'))), a.push(b.join('')), o && a.push('')
+  } else a.push(''), o && a.push(o), a.push('')
   return (
     a.push(r),
     a.join(`
@@ -3653,14 +3653,14 @@ function Us(e) {
   return (
     e.lineNumber && t.push(String(e.lineNumber)),
     e.columnNumber && t.push(String(e.columnNumber)),
-    t.join(":")
+    t.join(':')
   )
 }
 function ze(e) {
   let t = e.showColors ? _s : Ds,
     r
   return (
-    typeof $getTemplateParameters < "u"
+    typeof $getTemplateParameters < 'u'
       ? (r = $getTemplateParameters(e, t))
       : (r = Fs(e)),
     Ns(r, t)
@@ -3674,7 +3674,7 @@ function mi(e, t, r, n) {
 }
 function Bs(e, t, r) {
   return async (n) => {
-    if ("rejectOnNotFound" in n.args) {
+    if ('rejectOnNotFound' in n.args) {
       let o = ze({
         originalMethod: n.clientMethod,
         callsite: n.callsite,
@@ -3683,7 +3683,7 @@ function Bs(e, t, r) {
       throw new G(o, { clientVersion: t })
     }
     return await r(n).catch((o) => {
-      throw o instanceof Q && o.code === "P2025"
+      throw o instanceof Q && o.code === 'P2025'
         ? new he(`No ${e} found`, t)
         : o
     })
@@ -3699,31 +3699,31 @@ function de(e) {
   return e.replace(/^./, (t) => t.toLowerCase())
 }
 var $s = [
-    "findUnique",
-    "findUniqueOrThrow",
-    "findFirst",
-    "findFirstOrThrow",
-    "create",
-    "update",
-    "upsert",
-    "delete",
+    'findUnique',
+    'findUniqueOrThrow',
+    'findFirst',
+    'findFirstOrThrow',
+    'create',
+    'update',
+    'upsert',
+    'delete',
   ],
-  Vs = ["aggregate", "count", "groupBy"]
+  Vs = ['aggregate', 'count', 'groupBy']
 function Br(e, t) {
   let r = e._extensions.getAllModelExtensions(t) ?? {},
     n = [
       qs(e, t),
       Qs(e, t),
       dt(r),
-      H("name", () => t),
-      H("$name", () => t),
-      H("$parent", () => e._appliedParent),
+      H('name', () => t),
+      H('$name', () => t),
+      H('$parent', () => e._appliedParent),
     ]
   return me({}, n)
 }
 function qs(e, t) {
   let r = de(t),
-    n = Object.keys(Oe.ModelAction).concat("count")
+    n = Object.keys(Oe.ModelAction).concat('count')
   return {
     getKeys() {
       return n
@@ -3757,7 +3757,7 @@ function js(e) {
 }
 function Qs(e, t) {
   return Le(
-    H("fields", () => {
+    H('fields', () => {
       let r = e._runtimeDataModel.models[t]
       return li(t, r)
     })
@@ -3774,7 +3774,7 @@ function pi(e) {
 }
 var $r = Symbol()
 function gt(e) {
-  let t = [Js(e), H($r, () => e), H("$parent", () => e._appliedParent)],
+  let t = [Js(e), H($r, () => e), H('$parent', () => e._appliedParent)],
     r = e._extensions.getAllClientExtensions()
   return r && t.push(dt(r)), me(e, t)
 }
@@ -3800,7 +3800,7 @@ function di(e) {
   return e[$r] ? e[$r] : e
 }
 function fi(e) {
-  if (typeof e == "function") return e(this)
+  if (typeof e == 'function') return e(this)
   if (e.client?.__AccelerateEngine) {
     let r = e.client.__AccelerateEngine
     this._originalClient._engine = new r(
@@ -3907,8 +3907,8 @@ function hi({
   for (let [o, s] of Object.entries(e)) {
     if (!s || t[o] == null) continue
     let f = n.models[r].fields.find((T) => T.name === o)
-    if (!f || f.kind !== "object" || !f.relationName) continue
-    let b = typeof s == "object" ? s : {}
+    if (!f || f.kind !== 'object' || !f.relationName) continue
+    let b = typeof s == 'object' ? s : {}
     t[o] = Ht({
       visitor: i,
       result: t[o],
@@ -3926,7 +3926,7 @@ function yi({
   runtimeDataModel: i,
   globalOmit: o,
 }) {
-  return n.isEmpty() || e == null || typeof e != "object" || !i.models[t]
+  return n.isEmpty() || e == null || typeof e != 'object' || !i.models[t]
     ? e
     : Ht({
         result: e,
@@ -3973,7 +3973,7 @@ function Ks(e) {
   return new X(e.strings, e.values)
 }
 function ht(e) {
-  if (typeof e != "object" || e == null || e instanceof be || Qe(e)) return e
+  if (typeof e != 'object' || e == null || e instanceof be || Qe(e)) return e
   if (je(e)) return new ue(e.toFixed())
   if (qe(e)) return new Date(+e)
   if (ArrayBuffer.isView(e)) return e.slice(0)
@@ -3983,10 +3983,10 @@ function ht(e) {
     for (r = Array(t); t--; ) r[t] = ht(e[t])
     return r
   }
-  if (typeof e == "object") {
+  if (typeof e == 'object') {
     let t = {}
     for (let r in e)
-      r === "__proto__"
+      r === '__proto__'
         ? Object.defineProperty(t, r, {
             value: ht(e[r]),
             configurable: !0,
@@ -3996,15 +3996,15 @@ function ht(e) {
         : (t[r] = ht(e[r]))
     return t
   }
-  ke(e, "Unknown value")
+  ke(e, 'Unknown value')
 }
 function Ei(e, t, r, n = 0) {
   return e._createPrismaPromise((i) => {
     let o = t.customDataProxyFetch
     return (
-      "transaction" in t &&
+      'transaction' in t &&
         i !== void 0 &&
-        (t.transaction?.kind === "batch" && t.transaction.lock.then(),
+        (t.transaction?.kind === 'batch' && t.transaction.lock.then(),
         (t.transaction = i)),
       n === r.length
         ? e._executeRequest(t)
@@ -4029,7 +4029,7 @@ function xi(e, t) {
   let { jsModelName: r, action: n, clientMethod: i } = t,
     o = r ? n : i
   if (e._extensions.isEmpty()) return e._executeRequest(t)
-  let s = e._extensions.getAllQueryCallbacks(r ?? "$none", o)
+  let s = e._extensions.getAllQueryCallbacks(r ?? '$none', o)
   return Ei(e, t, s)
 }
 function Pi(e) {
@@ -4051,7 +4051,7 @@ function vi(e, t, r, n) {
         args: s.args,
       })),
       transaction: o
-        ? { isolationLevel: o.kind === "batch" ? o.isolationLevel : void 0 }
+        ? { isolationLevel: o.kind === 'batch' ? o.isolationLevel : void 0 }
         : void 0,
     },
     __internalParams: e,
@@ -4176,7 +4176,7 @@ var zt = class {
           : (o[t] !== void 0 &&
               (o[t][r] !== void 0 && i.push(o[t][r]),
               o[t].$allOperations !== void 0 && i.push(o[t].$allOperations)),
-            t !== "$none" &&
+            t !== '$none' &&
               o.$allModels !== void 0 &&
               (o.$allModels[r] !== void 0 && i.push(o.$allModels[r]),
               o.$allModels.$allOperations !== void 0 &&
@@ -4228,12 +4228,12 @@ m()
 p()
 d()
 l()
-var Oi = ee("prisma:client"),
-  ki = { Vercel: "vercel", "Netlify CI": "netlify" }
+var Oi = ee('prisma:client'),
+  ki = { Vercel: 'vercel', 'Netlify CI': 'netlify' }
 function Mi({ postinstall: e, ciName: t, clientVersion: r }) {
   if (
-    (Oi("checkPlatformCaching:postinstall", e),
-    Oi("checkPlatformCaching:ciName", t),
+    (Oi('checkPlatformCaching:postinstall', e),
+    Oi('checkPlatformCaching:ciName', t),
     e === !0 && t && t in ki)
   ) {
     let n = `Prisma has detected that this project was built on ${t}, which caches dependencies. This leads to an outdated Prisma Client because Prisma's auto-generation isn't triggered. To fix this, make sure to run the \`prisma generate\` command during the build process.
@@ -4275,41 +4275,41 @@ m()
 p()
 d()
 l()
-var Ys = "Cloudflare-Workers",
-  Xs = "node"
+var Ys = 'Cloudflare-Workers',
+  Xs = 'node'
 function Ii() {
-  return typeof Netlify == "object"
-    ? "netlify"
-    : typeof EdgeRuntime == "string"
-      ? "edge-light"
+  return typeof Netlify == 'object'
+    ? 'netlify'
+    : typeof EdgeRuntime == 'string'
+      ? 'edge-light'
       : globalThis.navigator?.userAgent === Ys
-        ? "workerd"
+        ? 'workerd'
         : globalThis.Deno
-          ? "deno"
+          ? 'deno'
           : globalThis.__lagon__
-            ? "lagon"
+            ? 'lagon'
             : globalThis.process?.release?.name === Xs
-              ? "node"
+              ? 'node'
               : globalThis.Bun
-                ? "bun"
+                ? 'bun'
                 : globalThis.fastly
-                  ? "fastly"
-                  : "unknown"
+                  ? 'fastly'
+                  : 'unknown'
 }
 var Zs = {
-  node: "Node.js",
-  workerd: "Cloudflare Workers",
-  deno: "Deno and Deno Deploy",
-  netlify: "Netlify Edge Functions",
-  "edge-light":
-    "Edge Runtime (Vercel Edge Functions, Vercel Edge Middleware, Next.js (Pages Router) Edge API Routes, Next.js (App Router) Edge Route Handlers or Next.js Middleware)",
+  node: 'Node.js',
+  workerd: 'Cloudflare Workers',
+  deno: 'Deno and Deno Deploy',
+  netlify: 'Netlify Edge Functions',
+  'edge-light':
+    'Edge Runtime (Vercel Edge Functions, Vercel Edge Middleware, Next.js (Pages Router) Edge API Routes, Next.js (App Router) Edge Route Handlers or Next.js Middleware)',
 }
 function Pe() {
   let e = Ii()
   return {
     id: e,
     prettyName: Zs[e] || e,
-    isEdge: ["workerd", "deno", "netlify", "edge-light"].includes(e),
+    isEdge: ['workerd', 'deno', 'netlify', 'edge-light'].includes(e),
   }
 }
 u()
@@ -4344,7 +4344,7 @@ function Xt({
           : s?.fromEnvVar && (i = r[s.fromEnvVar]),
     s?.fromEnvVar !== void 0 && i === void 0)
   )
-    throw Pe().id === "workerd"
+    throw Pe().id === 'workerd'
       ? new I(
           `error: Environment variable not found: ${s.fromEnvVar}.
 
@@ -4355,7 +4355,7 @@ To solve this, provide the connection string directly: https://pris.ly/d/cloudfl
       : new I(`error: Environment variable not found: ${s.fromEnvVar}.`, n)
   if (i === void 0)
     throw new I(
-      "error: Missing URL environment variable, value, or override.",
+      'error: Missing URL environment variable, value, or override.',
       n
     )
   return i
@@ -4373,7 +4373,7 @@ p()
 d()
 l()
 function _i(e) {
-  if (e?.kind === "itx") return e.options.id
+  if (e?.kind === 'itx') return e.options.id
 }
 u()
 c()
@@ -4391,56 +4391,56 @@ var Vr,
           t
         )
       if (n === void 0)
-        throw new I("WASM engine was unexpectedly `undefined`", t)
+        throw new I('WASM engine was unexpectedly `undefined`', t)
       Vr === void 0 &&
         (Vr = (async () => {
           let o = n.getRuntime(),
             s = await n.getQueryEngineWasmModule()
           if (s == null)
             throw new I(
-              "The loaded wasm module was unexpectedly `undefined` or `null` once loaded",
+              'The loaded wasm module was unexpectedly `undefined` or `null` once loaded',
               t
             )
-          let a = { "./query_engine_bg.js": o },
+          let a = { './query_engine_bg.js': o },
             f = new WebAssembly.Instance(s, a)
           return o.__wbg_set_wasm(f.exports), o.QueryEngine
         })())
       let i = await Vr
       return {
         debugPanic() {
-          return Promise.reject("{}")
+          return Promise.reject('{}')
         },
         dmmf() {
-          return Promise.resolve("{}")
+          return Promise.resolve('{}')
         },
         version() {
-          return { commit: "unknown", version: "unknown" }
+          return { commit: 'unknown', version: 'unknown' }
         },
         QueryEngine: i,
       }
     },
   }
-var ea = "P2036",
-  fe = ee("prisma:client:libraryEngine")
+var ea = 'P2036',
+  fe = ee('prisma:client:libraryEngine')
 function ta(e) {
-  return e.item_type === "query" && "query" in e
+  return e.item_type === 'query' && 'query' in e
 }
 function ra(e) {
-  return "level" in e ? e.level === "error" && e.message === "PANIC" : !1
+  return 'level' in e ? e.level === 'error' && e.message === 'PANIC' : !1
 }
-var jT = [...vr, "native"],
+var jT = [...vr, 'native'],
   Fi = 0,
   yt = class {
     constructor(t, r) {
-      this.name = "LibraryEngine"
+      this.name = 'LibraryEngine'
       ;(this.libraryLoader = r ?? Di),
         (this.config = t),
         (this.libraryStarted = !1),
         (this.logQueries = t.logQueries ?? !1),
-        (this.logLevel = t.logLevel ?? "error"),
+        (this.logLevel = t.logLevel ?? 'error'),
         (this.logEmitter = t.logEmitter),
         (this.datamodel = t.inlineSchema),
-        t.enableDebugLogs && (this.logLevel = "debug")
+        t.enableDebugLogs && (this.logLevel = 'debug')
       let n = Object.keys(t.overrideDatasources)[0],
         i = t.overrideDatasources[n]?.url
       n !== void 0 && i !== void 0 && (this.datasourceOverrides = { [n]: i }),
@@ -4448,22 +4448,22 @@ var jT = [...vr, "native"],
         this.checkForTooManyEngines()
     }
     checkForTooManyEngines() {
-      ;(this.config.adapter && ["wasm"].includes("wasm")) ||
+      ;(this.config.adapter && ['wasm'].includes('wasm')) ||
         (Fi === 10 &&
           console.warn(
-            `${Lt("warn(prisma-client)")} This is the 10th instance of Prisma Client being started. Make sure this is intentional.`
+            `${Lt('warn(prisma-client)')} This is the 10th instance of Prisma Client being started. Make sure this is intentional.`
           ))
     }
     async applyPendingMigrations() {
       throw new Error(
-        "Cannot call this method from this type of engine instance"
+        'Cannot call this method from this type of engine instance'
       )
     }
     async transaction(t, r, n) {
       await this.start()
       let i = JSON.stringify(r),
         o
-      if (t === "start") {
+      if (t === 'start') {
         let a = JSON.stringify({
           max_wait: n.maxWait,
           timeout: n.timeout,
@@ -4471,9 +4471,9 @@ var jT = [...vr, "native"],
         })
         o = await this.engine?.startTransaction(a, i)
       } else
-        t === "commit"
+        t === 'commit'
           ? (o = await this.engine?.commitTransaction(n.id, i))
-          : t === "rollback" &&
+          : t === 'rollback' &&
             (o = await this.engine?.rollbackTransaction(n.id, i))
       let s = this.parseEngineResponse(o)
       if (na(s)) {
@@ -4489,7 +4489,7 @@ var jT = [...vr, "native"],
       return s
     }
     async instantiateLibrary() {
-      if ((fe("internalSetup"), this.libraryInstantiationPromise))
+      if ((fe('internalSetup'), this.libraryInstantiationPromise))
         return this.libraryInstantiationPromise
       ;(this.binaryTarget = await this.getCurrentBinaryTarget()),
         await this.loadEngine(),
@@ -4498,13 +4498,13 @@ var jT = [...vr, "native"],
     async getCurrentBinaryTarget() {}
     parseEngineResponse(t) {
       if (!t)
-        throw new J("Response from the Engine was empty", {
+        throw new J('Response from the Engine was empty', {
           clientVersion: this.config.clientVersion,
         })
       try {
         return JSON.parse(t)
       } catch {
-        throw new J("Unable to JSON.parse response from engine", {
+        throw new J('Unable to JSON.parse response from engine', {
           clientVersion: this.config.clientVersion,
         })
       }
@@ -4517,7 +4517,7 @@ var jT = [...vr, "native"],
         try {
           let t = new w(this),
             { adapter: r } = this.config
-          r && fe("Using driver adapter: %O", r),
+          r && fe('Using driver adapter: %O', r),
             (this.engine = new this.QueryEngineConstructor(
               {
                 datamodel: this.datamodel,
@@ -4527,7 +4527,7 @@ var jT = [...vr, "native"],
                 datasourceOverrides: this.datasourceOverrides ?? {},
                 logLevel: this.logLevel,
                 configDir: this.config.cwd,
-                engineProtocol: "json",
+                engineProtocol: 'json',
               },
               (n) => {
                 t.deref()?.logger(n)
@@ -4538,7 +4538,7 @@ var jT = [...vr, "native"],
         } catch (t) {
           let r = t,
             n = this.parseInitError(r.message)
-          throw typeof n == "string"
+          throw typeof n == 'string'
             ? r
             : new I(n.message, this.config.clientVersion, n.error_code)
         }
@@ -4547,13 +4547,13 @@ var jT = [...vr, "native"],
     logger(t) {
       let r = this.parseEngineResponse(t)
       if (r) {
-        if ("span" in r) {
+        if ('span' in r) {
           this.config.tracingHelper.createEngineSpan(r)
           return
         }
-        ;(r.level = r?.level.toLowerCase() ?? "unknown"),
+        ;(r.level = r?.level.toLowerCase() ?? 'unknown'),
           ta(r)
-            ? this.logEmitter.emit("query", {
+            ? this.logEmitter.emit('query', {
                 timestamp: new Date(),
                 query: r.query,
                 params: r.params,
@@ -4599,15 +4599,15 @@ var jT = [...vr, "native"],
         )
       if (this.libraryStarted) return
       let t = async () => {
-        fe("library starting")
+        fe('library starting')
         try {
           let r = { traceparent: this.config.tracingHelper.getTraceParent() }
           await this.engine?.connect(JSON.stringify(r)),
             (this.libraryStarted = !0),
-            fe("library started")
+            fe('library started')
         } catch (r) {
           let n = this.parseInitError(r.message)
-          throw typeof n == "string"
+          throw typeof n == 'string'
             ? r
             : new I(n.message, this.config.clientVersion, n.error_code)
         } finally {
@@ -4616,7 +4616,7 @@ var jT = [...vr, "native"],
       }
       return (
         (this.libraryStartingPromise = this.config.tracingHelper.runInChildSpan(
-          "connect",
+          'connect',
           t
         )),
         this.libraryStartingPromise
@@ -4628,19 +4628,19 @@ var jT = [...vr, "native"],
         await this.executingQueryPromise,
         this.libraryStoppingPromise)
       )
-        return fe("library is already stopping"), this.libraryStoppingPromise
+        return fe('library is already stopping'), this.libraryStoppingPromise
       if (!this.libraryStarted) return
       let t = async () => {
-        await new Promise((n) => setTimeout(n, 5)), fe("library stopping")
+        await new Promise((n) => setTimeout(n, 5)), fe('library stopping')
         let r = { traceparent: this.config.tracingHelper.getTraceParent() }
         await this.engine?.disconnect(JSON.stringify(r)),
           (this.libraryStarted = !1),
           (this.libraryStoppingPromise = void 0),
-          fe("library stopped")
+          fe('library stopped')
       }
       return (
         (this.libraryStoppingPromise = this.config.tracingHelper.runInChildSpan(
-          "disconnect",
+          'disconnect',
           t
         )),
         this.libraryStoppingPromise
@@ -4649,7 +4649,7 @@ var jT = [...vr, "native"],
     version() {
       return (
         (this.versionInfo = this.library?.version()),
-        this.versionInfo?.version ?? "unknown"
+        this.versionInfo?.version ?? 'unknown'
       )
     }
     debugPanic(t) {
@@ -4674,9 +4674,9 @@ var jT = [...vr, "native"],
         return { data: s, elapsed: 0 }
       } catch (s) {
         if (s instanceof I) throw s
-        s.code === "GenericFailure" && s.message?.startsWith("PANIC:")
+        s.code === 'GenericFailure' && s.message?.startsWith('PANIC:')
         let a = this.parseRequestError(s.message)
-        throw typeof a == "string"
+        throw typeof a == 'string'
           ? s
           : new J(
               `${a.message}
@@ -4686,7 +4686,7 @@ ${a.backtrace}`,
       }
     }
     async requestBatch(t, { transaction: r, traceparent: n }) {
-      fe("requestBatch")
+      fe('requestBatch')
       let i = $t(t, r)
       await this.start(),
         (this.lastQuery = JSON.stringify(i)),
@@ -4725,21 +4725,21 @@ ${a.backtrace}`,
       if (t.error_code === ea && this.config.adapter) {
         let r = t.meta?.id
         Dt(
-          typeof r == "number",
-          "Malformed external JS error received from the engine"
+          typeof r == 'number',
+          'Malformed external JS error received from the engine'
         )
         let n = this.config.adapter.errorRegistry.consumeError(r)
-        return Dt(n, "External error with reported id was not registered"), n
+        return Dt(n, 'External error with reported id was not registered'), n
       }
     }
     async metrics(t) {
       await this.start()
       let r = await this.engine.metrics(JSON.stringify(t))
-      return t.format === "prometheus" ? r : this.parseEngineResponse(r)
+      return t.format === 'prometheus' ? r : this.parseEngineResponse(r)
     }
   }
 function na(e) {
-  return typeof e == "object" && e !== null && e.error_code !== void 0
+  return typeof e == 'object' && e !== null && e.error_code !== void 0
 }
 u()
 c()
@@ -4748,11 +4748,11 @@ p()
 d()
 l()
 var bt =
-    "Accelerate has not been setup correctly. Make sure your client is using `.$extends(withAccelerate())`. See https://pris.ly/d/accelerate-getting-started",
+    'Accelerate has not been setup correctly. Make sure your client is using `.$extends(withAccelerate())`. See https://pris.ly/d/accelerate-getting-started',
   Zt = class {
     constructor(t) {
       this.config = t
-      this.name = "AccelerateEngine"
+      this.name = 'AccelerateEngine'
       this.resolveDatasourceUrl =
         this.config.accelerateUtils?.resolveDatasourceUrl
       this.getBatchRequestPayload =
@@ -4773,7 +4773,7 @@ var bt =
     async start() {}
     async stop() {}
     version(t) {
-      return "unknown"
+      return 'unknown'
     }
     transaction(t, r, n) {
       throw new I(bt, this.config.clientVersion)
@@ -4802,31 +4802,31 @@ function Ni({ copyEngine: e = !0 }, t) {
     })
   } catch {}
   e &&
-    r?.startsWith("prisma://") &&
+    r?.startsWith('prisma://') &&
     st(
-      "recommend--no-engine",
-      "In production, we recommend using `prisma generate --no-engine` (See: `prisma generate --help`)"
+      'recommend--no-engine',
+      'In production, we recommend using `prisma generate --no-engine` (See: `prisma generate --help`)'
     )
   let n = nt(t.generator),
-    i = !!(r?.startsWith("prisma://") || !e),
+    i = !!(r?.startsWith('prisma://') || !e),
     o = !!t.adapter,
-    s = n === "library",
-    a = n === "binary"
+    s = n === 'library',
+    a = n === 'binary'
   if ((i && o) || (o && !1)) {
     let f
     throw (
       (e
-        ? r?.startsWith("prisma://")
+        ? r?.startsWith('prisma://')
           ? (f = [
-              "Prisma Client was configured to use the `adapter` option but the URL was a `prisma://` URL.",
-              "Please either use the `prisma://` URL or remove the `adapter` from the Prisma Client constructor.",
+              'Prisma Client was configured to use the `adapter` option but the URL was a `prisma://` URL.',
+              'Please either use the `prisma://` URL or remove the `adapter` from the Prisma Client constructor.',
             ])
           : (f = [
-              "Prisma Client was configured to use both the `adapter` and Accelerate, please chose one.",
+              'Prisma Client was configured to use both the `adapter` and Accelerate, please chose one.',
             ])
         : (f = [
-            "Prisma Client was configured to use the `adapter` option but `prisma generate` was run with `--no-engine`.",
-            "Please run `prisma generate` without `--no-engine` to be able to use Prisma Client with the adapter.",
+            'Prisma Client was configured to use the `adapter` option but `prisma generate` was run with `--no-engine`.',
+            'Please run `prisma generate` without `--no-engine` to be able to use Prisma Client with the adapter.',
           ]),
       new G(
         f.join(`
@@ -4840,9 +4840,9 @@ function Ni({ copyEngine: e = !0 }, t) {
   {
     let f = [
       `PrismaClient failed to initialize because it wasn't configured to run in this environment (${Pe().prettyName}).`,
-      "In order to run Prisma Client in an edge runtime, you will need to configure one of the following options:",
-      "- Enable Driver Adapters: https://pris.ly/d/driver-adapters",
-      "- Enable Accelerate: https://pris.ly/d/accelerate",
+      'In order to run Prisma Client in an edge runtime, you will need to configure one of the following options:',
+      '- Enable Driver Adapters: https://pris.ly/d/driver-adapters',
+      '- Enable Accelerate: https://pris.ly/d/accelerate',
     ]
     throw new G(
       f.join(`
@@ -4850,7 +4850,7 @@ function Ni({ copyEngine: e = !0 }, t) {
       { clientVersion: t.clientVersion }
     )
   }
-  throw new G("Invalid client engine type, please use `library` or `binary`", {
+  throw new G('Invalid client engine type, please use `library` or `binary`', {
     clientVersion: t.clientVersion,
   })
 }
@@ -4901,20 +4901,20 @@ function Vi(e, t, r) {
   let n = qi(e),
     i = ia(n),
     o = sa(i)
-  o ? tr(o, t, r) : t.addErrorMessage(() => "Unknown error")
+  o ? tr(o, t, r) : t.addErrorMessage(() => 'Unknown error')
 }
 function qi(e) {
-  return e.errors.flatMap((t) => (t.kind === "Union" ? qi(t) : [t]))
+  return e.errors.flatMap((t) => (t.kind === 'Union' ? qi(t) : [t]))
 }
 function ia(e) {
   let t = new Map(),
     r = []
   for (let n of e) {
-    if (n.kind !== "InvalidArgumentType") {
+    if (n.kind !== 'InvalidArgumentType') {
       r.push(n)
       continue
     }
-    let i = `${n.selectionPath.join(".")}:${n.argumentPath.join(".")}`,
+    let i = `${n.selectionPath.join('.')}:${n.argumentPath.join('.')}`,
       o = t.get(i)
     o
       ? t.set(i, {
@@ -4948,12 +4948,12 @@ function Bi(e) {
 }
 function $i(e) {
   switch (e.kind) {
-    case "InvalidArgumentValue":
-    case "ValueTooLarge":
+    case 'InvalidArgumentValue':
+    case 'ValueTooLarge':
       return 20
-    case "InvalidArgumentType":
+    case 'InvalidArgumentType':
       return 10
-    case "RequiredArgumentMissing":
+    case 'RequiredArgumentMissing':
       return -10
     default:
       return 0
@@ -4978,11 +4978,11 @@ var te = class {
     let {
       colors: { green: r },
     } = t.context
-    t.addMarginSymbol(r(this.isRequired ? "+" : "?")),
+    t.addMarginSymbol(r(this.isRequired ? '+' : '?')),
       t.write(r(this.name)),
-      this.isRequired || t.write(r("?")),
-      t.write(r(": ")),
-      typeof this.value == "string"
+      this.isRequired || t.write(r('?')),
+      t.write(r(': ')),
+      typeof this.value == 'string'
         ? t.write(r(this.value))
         : t.write(this.value)
   }
@@ -5002,7 +5002,7 @@ var wt = class {
       this.fields.push({
         write(n) {
           let { green: i, dim: o } = n.context.colors
-          n.write(i(o(`${t}: ${r}`))).addMarginSymbol(i(o("+")))
+          n.write(i(o(`${t}: ${r}`))).addMarginSymbol(i(o('+')))
         },
       }),
       this
@@ -5012,57 +5012,57 @@ var wt = class {
     let {
       colors: { green: r },
     } = t.context
-    t.writeLine(r("{"))
+    t.writeLine(r('{'))
       .withIndent(() => {
         t.writeJoined(Je, this.fields).newLine()
       })
-      .write(r("}"))
-      .addMarginSymbol(r("+"))
+      .write(r('}'))
+      .addMarginSymbol(r('+'))
   }
 }
 function tr(e, t, r) {
   switch (e.kind) {
-    case "MutuallyExclusiveFields":
+    case 'MutuallyExclusiveFields':
       aa(e, t)
       break
-    case "IncludeOnScalar":
+    case 'IncludeOnScalar':
       la(e, t)
       break
-    case "EmptySelection":
+    case 'EmptySelection':
       ua(e, t, r)
       break
-    case "UnknownSelectionField":
+    case 'UnknownSelectionField':
       da(e, t)
       break
-    case "UnknownArgument":
+    case 'UnknownArgument':
       fa(e, t)
       break
-    case "UnknownInputField":
+    case 'UnknownInputField':
       ga(e, t)
       break
-    case "RequiredArgumentMissing":
+    case 'RequiredArgumentMissing':
       ha(e, t)
       break
-    case "InvalidArgumentType":
+    case 'InvalidArgumentType':
       ya(e, t)
       break
-    case "InvalidArgumentValue":
+    case 'InvalidArgumentValue':
       ba(e, t)
       break
-    case "ValueTooLarge":
+    case 'ValueTooLarge':
       wa(e, t)
       break
-    case "SomeFieldsMissing":
+    case 'SomeFieldsMissing':
       Ea(e, t)
       break
-    case "TooManyFieldsGiven":
+    case 'TooManyFieldsGiven':
       xa(e, t)
       break
-    case "Union":
+    case 'Union':
       Vi(e, t, r)
       break
     default:
-      throw new Error("not implemented: " + e.kind)
+      throw new Error('not implemented: ' + e.kind)
   }
 }
 function aa(e, t) {
@@ -5072,7 +5072,7 @@ function aa(e, t) {
     r.getField(e.secondField)?.markAsError()),
     t.addErrorMessage(
       (n) =>
-        `Please ${n.bold("either")} use ${n.green(`\`${e.firstField}\``)} or ${n.green(`\`${e.secondField}\``)}, but ${n.red("not both")} at the same time.`
+        `Please ${n.bold('either')} use ${n.green(`\`${e.firstField}\``)} or ${n.green(`\`${e.secondField}\``)}, but ${n.red('not both')} at the same time.`
     )
 }
 function la(e, t) {
@@ -5081,13 +5081,13 @@ function la(e, t) {
     o = t.arguments.getDeepSelectionParent(r)?.value
   if (o && (o.getField(n)?.markAsError(), i))
     for (let s of i.fields)
-      s.isRelation && o.addSuggestion(new te(s.name, "true"))
+      s.isRelation && o.addSuggestion(new te(s.name, 'true'))
   t.addErrorMessage((s) => {
-    let a = `Invalid scalar field ${s.red(`\`${n}\``)} for ${s.bold("include")} statement`
+    let a = `Invalid scalar field ${s.red(`\`${n}\``)} for ${s.bold('include')} statement`
     return (
-      i ? (a += ` on model ${s.bold(i.name)}. ${xt(s)}`) : (a += "."),
+      i ? (a += ` on model ${s.bold(i.name)}. ${xt(s)}`) : (a += '.'),
       (a += `
-Note that ${s.bold("include")} statements only accept relation fields.`),
+Note that ${s.bold('include')} statements only accept relation fields.`),
       a
     )
   })
@@ -5095,12 +5095,12 @@ Note that ${s.bold("include")} statements only accept relation fields.`),
 function ua(e, t, r) {
   let n = t.arguments.getDeepSubSelectionValue(e.selectionPath)?.asObject()
   if (n) {
-    let i = n.getField("omit")?.value.asObject()
+    let i = n.getField('omit')?.value.asObject()
     if (i) {
       ca(e, t, i)
       return
     }
-    if (n.hasField("select")) {
+    if (n.hasField('select')) {
       ma(e, t)
       return
     }
@@ -5110,15 +5110,15 @@ function ua(e, t, r) {
     return
   }
   t.addErrorMessage(
-    () => `Unknown field at "${e.selectionPath.join(".")} selection"`
+    () => `Unknown field at "${e.selectionPath.join('.')} selection"`
   )
 }
 function ca(e, t, r) {
   r.removeAllFields()
-  for (let n of e.outputType.fields) r.addSuggestion(new te(n.name, "false"))
+  for (let n of e.outputType.fields) r.addSuggestion(new te(n.name, 'false'))
   t.addErrorMessage(
     (n) =>
-      `The ${n.red("omit")} statement includes every field of the model ${n.bold(e.outputType.name)}. At least one field must be included in the result`
+      `The ${n.red('omit')} statement includes every field of the model ${n.bold(e.outputType.name)}. At least one field must be included in the result`
   )
 }
 function ma(e, t) {
@@ -5128,14 +5128,14 @@ function ma(e, t) {
   n && (n.removeAllFields(), Gi(n, r)),
     t.addErrorMessage((o) =>
       i
-        ? `The ${o.red("`select`")} statement for type ${o.bold(r.name)} must not be empty. ${xt(o)}`
-        : `The ${o.red("`select`")} statement for type ${o.bold(r.name)} needs ${o.bold("at least one truthy value")}.`
+        ? `The ${o.red('`select`')} statement for type ${o.bold(r.name)} must not be empty. ${xt(o)}`
+        : `The ${o.red('`select`')} statement for type ${o.bold(r.name)} needs ${o.bold('at least one truthy value')}.`
     )
 }
 function pa(e, t) {
   let r = new wt()
-  for (let i of e.outputType.fields) i.isRelation || r.addField(i.name, "false")
-  let n = new te("omit", r).makeRequired()
+  for (let i of e.outputType.fields) i.isRelation || r.addField(i.name, 'false')
+  let n = new te('omit', r).makeRequired()
   if (e.selectionPath.length === 0) t.arguments.addSuggestion(n)
   else {
     let [i, o] = Et(e.selectionPath),
@@ -5147,7 +5147,7 @@ function pa(e, t) {
   }
   t.addErrorMessage(
     (i) =>
-      `The global ${i.red("omit")} configuration excludes every field of the model ${i.bold(e.outputType.name)}. At least one field must be included in the result`
+      `The global ${i.red('omit')} configuration excludes every field of the model ${i.bold(e.outputType.name)}. At least one field must be included in the result`
   )
 }
 function da(e, t) {
@@ -5155,15 +5155,15 @@ function da(e, t) {
     i = t.arguments.getDeepSubSelectionValue(r)?.asObject(),
     o
   if (i) {
-    let s = i.getFieldValue("select")?.asObject(),
-      a = i.getFieldValue("include")?.asObject(),
-      f = i.getFieldValue("omit")?.asObject()
+    let s = i.getFieldValue('select')?.asObject(),
+      a = i.getFieldValue('include')?.asObject(),
+      f = i.getFieldValue('omit')?.asObject()
     s?.hasField(n)
-      ? ((o = "select"), s.getField(n)?.markAsError(), Gi(s, e.outputType))
+      ? ((o = 'select'), s.getField(n)?.markAsError(), Gi(s, e.outputType))
       : a?.hasField(n)
-        ? ((o = "include"), a.getField(n)?.markAsError(), Pa(a, e.outputType))
+        ? ((o = 'include'), a.getField(n)?.markAsError(), Pa(a, e.outputType))
         : f?.hasField(n) &&
-          ((o = "omit"), f.getField(n)?.markAsError(), va(f, e.outputType))
+          ((o = 'omit'), f.getField(n)?.markAsError(), va(f, e.outputType))
   }
   t.addErrorMessage((s) => {
     let a = [`Unknown field ${s.red(`\`${n}\``)}`]
@@ -5171,7 +5171,7 @@ function da(e, t) {
       o && a.push(`for ${s.bold(o)} statement`),
       a.push(`on model ${s.bold(`\`${e.outputType.name}\``)}.`),
       a.push(xt(s)),
-      a.join(" ")
+      a.join(' ')
     )
   })
 }
@@ -5209,14 +5209,14 @@ function Qi(e, t, r) {
   return (
     i && n.push(`Did you mean \`${e.green(i)}\`?`),
     r.length > 0 && n.push(xt(e)),
-    n.join(" ")
+    n.join(' ')
   )
 }
 function ha(e, t) {
   let r
   t.addErrorMessage((f) =>
-    r?.value instanceof W && r.value.text === "null"
-      ? `Argument \`${f.green(o)}\` must not be ${f.red("null")}.`
+    r?.value instanceof W && r.value.text === 'null'
+      ? `Argument \`${f.green(o)}\` must not be ${f.red('null')}.`
       : `Argument \`${f.green(o)}\` is missing.`
   )
   let n = t.arguments.getDeepSubSelectionValue(e.selectionPath)?.asObject()
@@ -5228,18 +5228,18 @@ function ha(e, t) {
     if (
       ((r = a.getField(o)),
       r && a.removeField(o),
-      e.inputTypes.length === 1 && e.inputTypes[0].kind === "object")
+      e.inputTypes.length === 1 && e.inputTypes[0].kind === 'object')
     ) {
       for (let f of e.inputTypes[0].fields)
-        s.addField(f.name, f.typeNames.join(" | "))
+        s.addField(f.name, f.typeNames.join(' | '))
       a.addSuggestion(new te(o, s).makeRequired())
     } else {
-      let f = e.inputTypes.map(Ji).join(" | ")
+      let f = e.inputTypes.map(Ji).join(' | ')
       a.addSuggestion(new te(o, f).makeRequired())
     }
 }
 function Ji(e) {
-  return e.kind === "list" ? `${Ji(e.elementType)}[]` : e.name
+  return e.kind === 'list' ? `${Ji(e.elementType)}[]` : e.name
 }
 function ya(e, t) {
   let r = e.argument.name,
@@ -5247,7 +5247,7 @@ function ya(e, t) {
   n && n.getDeepFieldValue(e.argumentPath)?.markAsError(),
     t.addErrorMessage((i) => {
       let o = rr(
-        "or",
+        'or',
         e.argument.typeNames.map((s) => i.green(s))
       )
       return `Argument \`${i.bold(r)}\`: Invalid value provided. Expected ${o}, provided ${i.red(e.inferredType)}.`
@@ -5261,16 +5261,16 @@ function ba(e, t) {
       let o = [`Invalid value for argument \`${i.bold(r)}\``]
       if (
         (e.underlyingError && o.push(`: ${e.underlyingError}`),
-        o.push("."),
+        o.push('.'),
         e.argument.typeNames.length > 0)
       ) {
         let s = rr(
-          "or",
+          'or',
           e.argument.typeNames.map((a) => i.green(a))
         )
         o.push(` Expected ${s}.`)
       }
-      return o.join("")
+      return o.join('')
     })
 }
 function wa(e, t) {
@@ -5282,11 +5282,11 @@ function wa(e, t) {
     s?.markAsError(), s instanceof W && (i = s.text)
   }
   t.addErrorMessage((o) => {
-    let s = ["Unable to fit value"]
+    let s = ['Unable to fit value']
     return (
       i && s.push(o.red(i)),
       s.push(`into a 64-bit signed integer for field \`${o.bold(r)}\``),
-      s.join(" ")
+      s.join(' ')
     )
   })
 }
@@ -5305,17 +5305,17 @@ function Ea(e, t) {
       e.constraints.minFieldCount === 1
         ? e.constraints.requiredFields
           ? o.push(
-              `${i.green("at least one of")} ${rr(
-                "or",
+              `${i.green('at least one of')} ${rr(
+                'or',
                 e.constraints.requiredFields.map((s) => `\`${i.bold(s)}\``)
               )} arguments.`
             )
-          : o.push(`${i.green("at least one")} argument.`)
+          : o.push(`${i.green('at least one')} argument.`)
         : o.push(
             `${i.green(`at least ${e.constraints.minFieldCount}`)} arguments.`
           ),
       o.push(xt(i)),
-      o.join(" ")
+      o.join(' ')
     )
   })
 }
@@ -5333,70 +5333,70 @@ function xa(e, t) {
     ]
     return (
       e.constraints.minFieldCount === 1 && e.constraints.maxFieldCount == 1
-        ? s.push(`${o.green("exactly one")} argument,`)
+        ? s.push(`${o.green('exactly one')} argument,`)
         : e.constraints.maxFieldCount == 1
-          ? s.push(`${o.green("at most one")} argument,`)
+          ? s.push(`${o.green('at most one')} argument,`)
           : s.push(
               `${o.green(`at most ${e.constraints.maxFieldCount}`)} arguments,`
             ),
       s.push(
         `but you provided ${rr(
-          "and",
+          'and',
           i.map((a) => o.red(a))
         )}. Please choose`
       ),
       e.constraints.maxFieldCount === 1
-        ? s.push("one.")
+        ? s.push('one.')
         : s.push(`${e.constraints.maxFieldCount}.`),
-      s.join(" ")
+      s.join(' ')
     )
   })
 }
 function Gi(e, t) {
   for (let r of t.fields)
-    e.hasField(r.name) || e.addSuggestion(new te(r.name, "true"))
+    e.hasField(r.name) || e.addSuggestion(new te(r.name, 'true'))
 }
 function Pa(e, t) {
   for (let r of t.fields)
     r.isRelation &&
       !e.hasField(r.name) &&
-      e.addSuggestion(new te(r.name, "true"))
+      e.addSuggestion(new te(r.name, 'true'))
 }
 function va(e, t) {
   for (let r of t.fields)
     !e.hasField(r.name) &&
       !r.isRelation &&
-      e.addSuggestion(new te(r.name, "true"))
+      e.addSuggestion(new te(r.name, 'true'))
 }
 function Ta(e, t) {
   for (let r of t)
     e.hasField(r.name) ||
-      e.addSuggestion(new te(r.name, r.typeNames.join(" | ")))
+      e.addSuggestion(new te(r.name, r.typeNames.join(' | ')))
 }
 function Wi(e, t) {
-  if (t.kind === "object")
+  if (t.kind === 'object')
     for (let r of t.fields)
       e.hasField(r.name) ||
-        e.addSuggestion(new te(r.name, r.typeNames.join(" | ")))
+        e.addSuggestion(new te(r.name, r.typeNames.join(' | ')))
 }
 function Et(e) {
   let t = [...e],
     r = t.pop()
-  if (!r) throw new Error("unexpected empty path")
+  if (!r) throw new Error('unexpected empty path')
   return [t, r]
 }
 function xt({ green: e, enabled: t }) {
   return (
-    "Available options are " +
-    (t ? `listed in ${e("green")}` : "marked with ?") +
-    "."
+    'Available options are ' +
+    (t ? `listed in ${e('green')}` : 'marked with ?') +
+    '.'
   )
 }
 function rr(e, t) {
   if (t.length === 1) return t[0]
   let r = [...t],
     n = r.pop()
-  return `${r.join(", ")} ${e} ${n}`
+  return `${r.join(', ')} ${e} ${n}`
 }
 var Ca = 3
 function Aa(e, t) {
@@ -5424,33 +5424,33 @@ function nr({
       message: f,
       callsite: n,
       originalMethod: i,
-      showColors: r === "pretty",
+      showColors: r === 'pretty',
       callArguments: b,
     })
   throw new G(T, { clientVersion: o })
 }
 var Ra = {
-  findUnique: "findUnique",
-  findUniqueOrThrow: "findUniqueOrThrow",
-  findFirst: "findFirst",
-  findFirstOrThrow: "findFirstOrThrow",
-  findMany: "findMany",
-  count: "aggregate",
-  create: "createOne",
-  createMany: "createMany",
-  createManyAndReturn: "createManyAndReturn",
-  update: "updateOne",
-  updateMany: "updateMany",
-  upsert: "upsertOne",
-  delete: "deleteOne",
-  deleteMany: "deleteMany",
-  executeRaw: "executeRaw",
-  queryRaw: "queryRaw",
-  aggregate: "aggregate",
-  groupBy: "groupBy",
-  runCommandRaw: "runCommandRaw",
-  findRaw: "findRaw",
-  aggregateRaw: "aggregateRaw",
+  findUnique: 'findUnique',
+  findUniqueOrThrow: 'findUniqueOrThrow',
+  findFirst: 'findFirst',
+  findFirstOrThrow: 'findFirstOrThrow',
+  findMany: 'findMany',
+  count: 'aggregate',
+  create: 'createOne',
+  createMany: 'createMany',
+  createManyAndReturn: 'createManyAndReturn',
+  update: 'updateOne',
+  updateMany: 'updateMany',
+  upsert: 'upsertOne',
+  delete: 'deleteOne',
+  deleteMany: 'deleteMany',
+  executeRaw: 'executeRaw',
+  queryRaw: 'queryRaw',
+  aggregate: 'aggregate',
+  groupBy: 'groupBy',
+  runCommandRaw: 'runCommandRaw',
+  findRaw: 'findRaw',
+  aggregateRaw: 'aggregateRaw',
 }
 function Ki({
   modelName: e,
@@ -5485,7 +5485,7 @@ function Ki({
 function Pt({ select: e, include: t, ...r } = {}, n) {
   let i
   return (
-    n.isPreviewFeatureOn("omitApi") && ((i = r.omit), delete r.omit),
+    n.isPreviewFeatureOn('omitApi') && ((i = r.omit), delete r.omit),
     { arguments: zi(r, n), selection: Sa(e, t, i, n) }
   )
 }
@@ -5493,17 +5493,17 @@ function Sa(e, t, r, n) {
   return e
     ? (t
         ? n.throwValidationError({
-            kind: "MutuallyExclusiveFields",
-            firstField: "include",
-            secondField: "select",
+            kind: 'MutuallyExclusiveFields',
+            firstField: 'include',
+            secondField: 'select',
             selectionPath: n.getSelectionPath(),
           })
         : r &&
-          n.isPreviewFeatureOn("omitApi") &&
+          n.isPreviewFeatureOn('omitApi') &&
           n.throwValidationError({
-            kind: "MutuallyExclusiveFields",
-            firstField: "omit",
-            secondField: "select",
+            kind: 'MutuallyExclusiveFields',
+            firstField: 'omit',
+            secondField: 'select',
             selectionPath: n.getSelectionPath(),
           }),
       La(e, n))
@@ -5516,7 +5516,7 @@ function Oa(e, t, r) {
       !e.isRawAction() &&
       ((n.$composites = !0), (n.$scalars = !0)),
     t && ka(n, t, e),
-    e.isPreviewFeatureOn("omitApi") && Ma(n, r, e),
+    e.isPreviewFeatureOn('omitApi') && Ma(n, r, e),
     n
   )
 }
@@ -5529,9 +5529,9 @@ function ka(e, t, r) {
     let o = r.findField(n)
     if (
       (o &&
-        o.kind !== "object" &&
+        o.kind !== 'object' &&
         r.throwValidationError({
-          kind: "IncludeOnScalar",
+          kind: 'IncludeOnScalar',
           selectionPath: r.getSelectionPath().concat(n),
           outputType: r.getOutputTypeDescription(),
         }),
@@ -5568,7 +5568,7 @@ function La(e, t) {
         continue
       }
       if (s === !0) {
-        a?.kind === "object" ? (r[o] = Pt({}, t.nestSelection(o))) : (r[o] = !0)
+        a?.kind === 'object' ? (r[o] = Pt({}, t.nestSelection(o))) : (r[o] = !0)
         continue
       }
       r[o] = Pt(s, t.nestSelection(o))
@@ -5578,38 +5578,38 @@ function La(e, t) {
 }
 function Hi(e, t) {
   if (e === null) return null
-  if (typeof e == "string" || typeof e == "number" || typeof e == "boolean")
+  if (typeof e == 'string' || typeof e == 'number' || typeof e == 'boolean')
     return e
-  if (typeof e == "bigint") return { $type: "BigInt", value: String(e) }
+  if (typeof e == 'bigint') return { $type: 'BigInt', value: String(e) }
   if (qe(e)) {
-    if (Vt(e)) return { $type: "DateTime", value: e.toISOString() }
+    if (Vt(e)) return { $type: 'DateTime', value: e.toISOString() }
     t.throwValidationError({
-      kind: "InvalidArgumentValue",
+      kind: 'InvalidArgumentValue',
       selectionPath: t.getSelectionPath(),
       argumentPath: t.getArgumentPath(),
-      argument: { name: t.getArgumentName(), typeNames: ["Date"] },
-      underlyingError: "Provided Date object is invalid",
+      argument: { name: t.getArgumentName(), typeNames: ['Date'] },
+      underlyingError: 'Provided Date object is invalid',
     })
   }
   if (Qe(e))
     return {
-      $type: "FieldRef",
+      $type: 'FieldRef',
       value: { _ref: e.name, _container: e.modelName },
     }
   if (Array.isArray(e)) return Ia(e, t)
   if (ArrayBuffer.isView(e))
-    return { $type: "Bytes", value: y.from(e).toString("base64") }
+    return { $type: 'Bytes', value: y.from(e).toString('base64') }
   if (_a(e)) return e.values
-  if (je(e)) return { $type: "Decimal", value: e.toFixed() }
+  if (je(e)) return { $type: 'Decimal', value: e.toFixed() }
   if (e instanceof be) {
     if (e !== Nt.instances[e._getName()])
-      throw new Error("Invalid ObjectEnumValue")
-    return { $type: "Enum", value: e._getName() }
+      throw new Error('Invalid ObjectEnumValue')
+    return { $type: 'Enum', value: e._getName() }
   }
   if (Da(e)) return e.toJSON()
-  if (typeof e == "object") return zi(e, t)
+  if (typeof e == 'object') return zi(e, t)
   t.throwValidationError({
-    kind: "InvalidArgumentValue",
+    kind: 'InvalidArgumentValue',
     selectionPath: t.getSelectionPath(),
     argumentPath: t.getArgumentPath(),
     argument: { name: t.getArgumentName(), typeNames: [] },
@@ -5617,7 +5617,7 @@ function Hi(e, t) {
   })
 }
 function zi(e, t) {
-  if (e.$type) return { $type: "Raw", value: e }
+  if (e.$type) return { $type: 'Raw', value: e }
   let r = {}
   for (let n in e) {
     let i = e[n]
@@ -5632,22 +5632,22 @@ function Ia(e, t) {
       o = e[n]
     o === void 0 &&
       t.throwValidationError({
-        kind: "InvalidArgumentValue",
+        kind: 'InvalidArgumentValue',
         selectionPath: i.getSelectionPath(),
         argumentPath: i.getArgumentPath(),
         argument: { name: `${t.getArgumentName()}[${n}]`, typeNames: [] },
         underlyingError:
-          "Can not use `undefined` value within array. Use `null` or filter out `undefined` values",
+          'Can not use `undefined` value within array. Use `null` or filter out `undefined` values',
       }),
       r.push(Hi(o, i))
   }
   return r
 }
 function _a(e) {
-  return typeof e == "object" && e !== null && e.__prismaRawParameters__ === !0
+  return typeof e == 'object' && e !== null && e.__prismaRawParameters__ === !0
 }
 function Da(e) {
-  return typeof e == "object" && e !== null && typeof e.toJSON == "function"
+  return typeof e == 'object' && e !== null && typeof e.toJSON == 'function'
 }
 var jr = class e {
   constructor(t) {
@@ -5683,18 +5683,18 @@ var jr = class e {
         name: this.params.modelName,
         fields: this.modelOrType.fields.map((t) => ({
           name: t.name,
-          typeName: "boolean",
-          isRelation: t.kind === "object",
+          typeName: 'boolean',
+          isRelation: t.kind === 'object',
         })),
       }
   }
   isRawAction() {
     return [
-      "executeRaw",
-      "queryRaw",
-      "runCommandRaw",
-      "findRaw",
-      "aggregateRaw",
+      'executeRaw',
+      'queryRaw',
+      'runCommandRaw',
+      'findRaw',
+      'aggregateRaw',
     ].includes(this.params.action)
   }
   isPreviewFeatureOn(t) {
@@ -5709,7 +5709,7 @@ var jr = class e {
   }
   nestSelection(t) {
     let r = this.findField(t),
-      n = r?.kind === "object" ? r.type : void 0
+      n = r?.kind === 'object' ? r.type : void 0
     return new e({
       ...this.params,
       modelName: n,
@@ -5757,56 +5757,56 @@ l()
 l()
 function vt(e) {
   try {
-    return Zi(e, "fast")
+    return Zi(e, 'fast')
   } catch {
-    return Zi(e, "slow")
+    return Zi(e, 'slow')
   }
 }
 function Zi(e, t) {
   return JSON.stringify(e.map((r) => Fa(r, t)))
 }
 function Fa(e, t) {
-  return typeof e == "bigint"
-    ? { prisma__type: "bigint", prisma__value: e.toString() }
+  return typeof e == 'bigint'
+    ? { prisma__type: 'bigint', prisma__value: e.toString() }
     : qe(e)
-      ? { prisma__type: "date", prisma__value: e.toJSON() }
+      ? { prisma__type: 'date', prisma__value: e.toJSON() }
       : ue.isDecimal(e)
-        ? { prisma__type: "decimal", prisma__value: e.toJSON() }
+        ? { prisma__type: 'decimal', prisma__value: e.toJSON() }
         : y.isBuffer(e)
-          ? { prisma__type: "bytes", prisma__value: e.toString("base64") }
+          ? { prisma__type: 'bytes', prisma__value: e.toString('base64') }
           : Na(e) || ArrayBuffer.isView(e)
             ? {
-                prisma__type: "bytes",
-                prisma__value: y.from(e).toString("base64"),
+                prisma__type: 'bytes',
+                prisma__value: y.from(e).toString('base64'),
               }
-            : typeof e == "object" && t === "slow"
+            : typeof e == 'object' && t === 'slow'
               ? to(e)
               : e
 }
 function Na(e) {
   return e instanceof ArrayBuffer || e instanceof SharedArrayBuffer
     ? !0
-    : typeof e == "object" && e !== null
-      ? e[Symbol.toStringTag] === "ArrayBuffer" ||
-        e[Symbol.toStringTag] === "SharedArrayBuffer"
+    : typeof e == 'object' && e !== null
+      ? e[Symbol.toStringTag] === 'ArrayBuffer' ||
+        e[Symbol.toStringTag] === 'SharedArrayBuffer'
       : !1
 }
 function to(e) {
-  if (typeof e != "object" || e === null) return e
-  if (typeof e.toJSON == "function") return e.toJSON()
+  if (typeof e != 'object' || e === null) return e
+  if (typeof e.toJSON == 'function') return e.toJSON()
   if (Array.isArray(e)) return e.map(eo)
   let t = {}
   for (let r of Object.keys(e)) t[r] = eo(e[r])
   return t
 }
 function eo(e) {
-  return typeof e == "bigint" ? e.toString() : to(e)
+  return typeof e == 'bigint' ? e.toString() : to(e)
 }
 var Ua = /^(\s*alter\s)/i,
-  ro = ee("prisma:client")
+  ro = ee('prisma:client')
 function Qr(e, t, r, n) {
   if (
-    !(e !== "postgresql" && e !== "cockroachdb") &&
+    !(e !== 'postgresql' && e !== 'cockroachdb') &&
     r.length > 0 &&
     Ua.exec(t)
   )
@@ -5822,27 +5822,27 @@ More Information: https://pris.ly/d/execute-raw
 var Jr =
     ({ clientMethod: e, activeProvider: t }) =>
     (r) => {
-      let n = "",
+      let n = '',
         i
       if (Array.isArray(r)) {
         let [o, ...s] = r
         ;(n = o), (i = { values: vt(s || []), __prismaRawParameters__: !0 })
       } else
         switch (t) {
-          case "sqlite":
-          case "mysql": {
+          case 'sqlite':
+          case 'mysql': {
             ;(n = r.sql),
               (i = { values: vt(r.values), __prismaRawParameters__: !0 })
             break
           }
-          case "cockroachdb":
-          case "postgresql":
-          case "postgres": {
+          case 'cockroachdb':
+          case 'postgresql':
+          case 'postgres': {
             ;(n = r.text),
               (i = { values: vt(r.values), __prismaRawParameters__: !0 })
             break
           }
-          case "sqlserver": {
+          case 'sqlserver': {
             ;(n = Xi(r)),
               (i = { values: vt(r.values), __prismaRawParameters__: !0 })
             break
@@ -5885,7 +5885,7 @@ function Gr(e) {
     let n,
       i = (o = e) => {
         try {
-          return o === void 0 || o?.kind === "itx" ? (n ??= oo(r(o))) : oo(r(o))
+          return o === void 0 || o?.kind === 'itx' ? (n ??= oo(r(o))) : oo(r(o))
         } catch (s) {
           return Promise.reject(s)
         }
@@ -5904,12 +5904,12 @@ function Gr(e) {
         let s = i(o)
         return s.requestTransaction ? s.requestTransaction(o) : s
       },
-      [Symbol.toStringTag]: "PrismaPromise",
+      [Symbol.toStringTag]: 'PrismaPromise',
     }
   }
 }
 function oo(e) {
-  return typeof e.then == "function" ? e : Promise.resolve(e)
+  return typeof e.then == 'function' ? e : Promise.resolve(e)
 }
 u()
 c()
@@ -5922,7 +5922,7 @@ var so = {
       return !1
     },
     getTraceParent() {
-      return "00-10-10-00"
+      return '00-10-10-00'
     },
     async createEngineSpan() {},
     getActiveContext() {},
@@ -5951,7 +5951,7 @@ var so = {
     }
   }
 function ao(e) {
-  return e.includes("tracing") ? new Wr() : so
+  return e.includes('tracing') ? new Wr() : so
 }
 u()
 c()
@@ -5974,7 +5974,7 @@ m()
 p()
 d()
 l()
-var Ba = ["$connect", "$disconnect", "$on", "$transaction", "$use", "$extends"],
+var Ba = ['$connect', '$disconnect', '$on', '$transaction', '$use', '$extends'],
   uo = Ba
 u()
 c()
@@ -5983,15 +5983,15 @@ p()
 d()
 l()
 function co(e) {
-  return typeof e == "string"
+  return typeof e == 'string'
     ? e
     : e.reduce(
         (t, r) => {
-          let n = typeof r == "string" ? r : r.level
-          return n === "query"
+          let n = typeof r == 'string' ? r : r.level
+          return n === 'query'
             ? t
-            : t && (r === "info" || t === "info")
-              ? "info"
+            : t && (r === 'info' || t === 'info')
+              ? 'info'
               : n
         },
         void 0
@@ -6034,7 +6034,7 @@ p()
 d()
 l()
 function or(e) {
-  return typeof e.batchRequestIdx == "number"
+  return typeof e.batchRequestIdx == 'number'
 }
 u()
 c()
@@ -6048,29 +6048,29 @@ function sr(e) {
     ? e
     : Array.isArray(e)
       ? e.map(sr)
-      : typeof e == "object"
+      : typeof e == 'object'
         ? $a(e)
           ? Va(e)
           : Ue(e, sr)
         : e
 }
 function $a(e) {
-  return e !== null && typeof e == "object" && typeof e.$type == "string"
+  return e !== null && typeof e == 'object' && typeof e.$type == 'string'
 }
 function Va({ $type: e, value: t }) {
   switch (e) {
-    case "BigInt":
+    case 'BigInt':
       return BigInt(t)
-    case "Bytes":
-      return y.from(t, "base64")
-    case "DateTime":
+    case 'Bytes':
+      return y.from(t, 'base64')
+    case 'DateTime':
       return new Date(t)
-    case "Decimal":
+    case 'Decimal':
       return new ue(t)
-    case "Json":
+    case 'Json':
       return JSON.parse(t)
     default:
-      ke(t, "Unknown tagged value")
+      ke(t, 'Unknown tagged value')
   }
 }
 u()
@@ -6080,13 +6080,13 @@ p()
 d()
 l()
 function mo(e) {
-  if (e.action !== "findUnique" && e.action !== "findUniqueOrThrow") return
+  if (e.action !== 'findUnique' && e.action !== 'findUniqueOrThrow') return
   let t = []
   return (
     e.modelName && t.push(e.modelName),
     e.query.arguments && t.push(Kr(e.query.arguments)),
     t.push(Kr(e.query.selection)),
-    t.join("")
+    t.join('')
   )
 }
 function Kr(e) {
@@ -6094,9 +6094,9 @@ function Kr(e) {
     .sort()
     .map((r) => {
       let n = e[r]
-      return typeof n == "object" && n !== null ? `(${r} ${Kr(n)})` : r
+      return typeof n == 'object' && n !== null ? `(${r} ${Kr(n)})` : r
     })
-    .join(" ")})`
+    .join(' ')})`
 }
 u()
 c()
@@ -6187,10 +6187,10 @@ var ar = class {
     }
   }
   get [Symbol.toStringTag]() {
-    return "DataLoader"
+    return 'DataLoader'
   }
 }
-var ja = ee("prisma:client:request_handler"),
+var ja = ee('prisma:client:request_handler'),
   lr = class {
     constructor(t, r) {
       ;(this.logEmitter = r),
@@ -6218,7 +6218,7 @@ var ja = ee("prisma:client:request_handler"),
             })
           }),
           singleLoader: async (n) => {
-            let i = n.transaction?.kind === "itx" ? fo(n.transaction) : void 0,
+            let i = n.transaction?.kind === 'itx' ? fo(n.transaction) : void 0,
               o = await this.client._engine.request(n.protocolQuery, {
                 traceparent: this.client._tracingHelper.getTraceParent(),
                 interactiveTransaction: i,
@@ -6232,8 +6232,8 @@ var ja = ee("prisma:client:request_handler"),
               ? `transaction-${n.transaction.id}`
               : mo(n.protocolQuery),
           batchOrder(n, i) {
-            return n.transaction?.kind === "batch" &&
-              i.transaction?.kind === "batch"
+            return n.transaction?.kind === 'batch' &&
+              i.transaction?.kind === 'batch'
               ? n.transaction.index - i.transaction.index
               : 0
           },
@@ -6273,7 +6273,7 @@ var ja = ee("prisma:client:request_handler"),
       } catch (r) {
         throw (
           (this.logEmitter &&
-            this.logEmitter.emit("error", {
+            this.logEmitter.emit('error', {
               message: r.message,
               target: t.clientMethod,
               timestamp: new Date(),
@@ -6311,7 +6311,7 @@ var ja = ee("prisma:client:request_handler"),
             callsite: n,
             originalMethod: r,
             isPanic: t.isPanic,
-            showColors: this.client._errorFormat === "pretty",
+            showColors: this.client._errorFormat === 'pretty',
             message: f,
           })),
         (f = this.sanitizeMessage(f)),
@@ -6337,40 +6337,40 @@ var ja = ee("prisma:client:request_handler"),
       throw ((t.clientVersion = this.client._clientVersion), t)
     }
     sanitizeMessage(t) {
-      return this.client._errorFormat && this.client._errorFormat !== "pretty"
+      return this.client._errorFormat && this.client._errorFormat !== 'pretty'
         ? (0, po.default)(t)
         : t
     }
     unpack(t, r, n) {
       if (!t || (t.data && (t = t.data), !t)) return t
       let i = Object.values(t)[0],
-        o = r.filter((a) => a !== "select" && a !== "include"),
+        o = r.filter((a) => a !== 'select' && a !== 'include'),
         s = sr(Nr(i, o))
       return n ? n(s) : s
     }
     get [Symbol.toStringTag]() {
-      return "RequestHandler"
+      return 'RequestHandler'
     }
   }
 function Qa(e) {
   if (e) {
-    if (e.kind === "batch")
-      return { kind: "batch", options: { isolationLevel: e.isolationLevel } }
-    if (e.kind === "itx") return { kind: "itx", options: fo(e) }
-    ke(e, "Unknown transaction kind")
+    if (e.kind === 'batch')
+      return { kind: 'batch', options: { isolationLevel: e.isolationLevel } }
+    if (e.kind === 'itx') return { kind: 'itx', options: fo(e) }
+    ke(e, 'Unknown transaction kind')
   }
 }
 function fo(e) {
   return { id: e.id, payload: e.payload }
 }
 function Ja(e, t) {
-  return or(e) && t?.kind === "batch" && e.batchRequestIdx !== t.index
+  return or(e) && t?.kind === 'batch' && e.batchRequestIdx !== t.index
 }
 function Ga(e) {
-  return e.code === "P2009" || e.code === "P2012"
+  return e.code === 'P2009' || e.code === 'P2012'
 }
 function go(e) {
-  if (e.kind === "Union") return { kind: "Union", errors: e.errors.map(go) }
+  if (e.kind === 'Union') return { kind: 'Union', errors: e.errors.map(go) }
   if (Array.isArray(e.selectionPath)) {
     let [, ...t] = e.selectionPath
     return { ...e, selectionPath: t }
@@ -6383,7 +6383,7 @@ m()
 p()
 d()
 l()
-var ho = "5.16.1"
+var ho = '5.16.1'
 var yo = ho
 u()
 c()
@@ -6401,18 +6401,18 @@ function bo(e) {
 }
 function wo({ prisma__type: e, prisma__value: t }) {
   switch (e) {
-    case "bigint":
+    case 'bigint':
       return BigInt(t)
-    case "bytes":
-      return y.from(t, "base64")
-    case "decimal":
+    case 'bytes':
+      return y.from(t, 'base64')
+    case 'decimal':
       return new ue(t)
-    case "datetime":
-    case "date":
+    case 'datetime':
+    case 'date':
       return new Date(t)
-    case "time":
+    case 'time':
       return new Date(`1970-01-01T${t}Z`)
-    case "array":
+    case 'array':
       return t.map(wo)
     default:
       return t
@@ -6438,48 +6438,48 @@ var _ = class extends Error {
         `
 Read more at https://pris.ly/d/client-constructor`
     ),
-      (this.name = "PrismaClientConstructorValidationError")
+      (this.name = 'PrismaClientConstructorValidationError')
   }
   get [Symbol.toStringTag]() {
-    return "PrismaClientConstructorValidationError"
+    return 'PrismaClientConstructorValidationError'
   }
 }
-K(_, "PrismaClientConstructorValidationError")
+K(_, 'PrismaClientConstructorValidationError')
 var Eo = [
-    "datasources",
-    "datasourceUrl",
-    "errorFormat",
-    "adapter",
-    "log",
-    "transactionOptions",
-    "omit",
-    "__internal",
+    'datasources',
+    'datasourceUrl',
+    'errorFormat',
+    'adapter',
+    'log',
+    'transactionOptions',
+    'omit',
+    '__internal',
   ],
-  xo = ["pretty", "colorless", "minimal"],
-  Po = ["info", "query", "warn", "error"],
+  xo = ['pretty', 'colorless', 'minimal'],
+  Po = ['info', 'query', 'warn', 'error'],
   Ka = {
     datasources: (e, { datasourceNames: t }) => {
       if (e) {
-        if (typeof e != "object" || Array.isArray(e))
+        if (typeof e != 'object' || Array.isArray(e))
           throw new _(
             `Invalid value ${JSON.stringify(e)} for "datasources" provided to PrismaClient constructor`
           )
         for (let [r, n] of Object.entries(e)) {
           if (!t.includes(r)) {
-            let i = Xe(r, t) || ` Available datasources: ${t.join(", ")}`
+            let i = Xe(r, t) || ` Available datasources: ${t.join(', ')}`
             throw new _(
               `Unknown datasource ${r} provided to PrismaClient constructor.${i}`
             )
           }
-          if (typeof n != "object" || Array.isArray(n))
+          if (typeof n != 'object' || Array.isArray(n))
             throw new _(`Invalid value ${JSON.stringify(e)} for datasource "${r}" provided to PrismaClient constructor.
 It should have this form: { url: "CONNECTION_STRING" }`)
-          if (n && typeof n == "object")
+          if (n && typeof n == 'object')
             for (let [i, o] of Object.entries(n)) {
-              if (i !== "url")
+              if (i !== 'url')
                 throw new _(`Invalid value ${JSON.stringify(e)} for datasource "${r}" provided to PrismaClient constructor.
 It should have this form: { url: "CONNECTION_STRING" }`)
-              if (typeof o != "string")
+              if (typeof o != 'string')
                 throw new _(`Invalid value ${JSON.stringify(o)} for datasource "${r}" provided to PrismaClient constructor.
 It should have this form: { url: "CONNECTION_STRING" }`)
             }
@@ -6492,23 +6492,23 @@ It should have this form: { url: "CONNECTION_STRING" }`)
         throw new _(
           '"adapter" property must not be undefined, use null to conditionally disable driver adapters.'
         )
-      if (!er(t).includes("driverAdapters"))
+      if (!er(t).includes('driverAdapters'))
         throw new _(
           '"adapter" property can only be provided to PrismaClient constructor when "driverAdapters" preview feature is enabled.'
         )
-      if (nt() === "binary")
+      if (nt() === 'binary')
         throw new _(
           'Cannot use a driver adapter with the "binary" Query Engine. Please use the "library" Query Engine.'
         )
     },
     datasourceUrl: (e) => {
-      if (typeof e < "u" && typeof e != "string")
+      if (typeof e < 'u' && typeof e != 'string')
         throw new _(`Invalid value ${JSON.stringify(e)} for "datasourceUrl" provided to PrismaClient constructor.
 Expected string or undefined.`)
     },
     errorFormat: (e) => {
       if (e) {
-        if (typeof e != "string")
+        if (typeof e != 'string')
           throw new _(
             `Invalid value ${JSON.stringify(e)} for "errorFormat" provided to PrismaClient constructor.`
           )
@@ -6527,7 +6527,7 @@ Expected string or undefined.`)
           `Invalid value ${JSON.stringify(e)} for "log" provided to PrismaClient constructor.`
         )
       function t(r) {
-        if (typeof r == "string" && !Po.includes(r)) {
+        if (typeof r == 'string' && !Po.includes(r)) {
           let n = Xe(r, Po)
           throw new _(
             `Invalid log level "${r}" provided to PrismaClient constructor.${n}`
@@ -6539,7 +6539,7 @@ Expected string or undefined.`)
         let n = {
           level: t,
           emit: (i) => {
-            let o = ["stdout", "event"]
+            let o = ['stdout', 'event']
             if (!o.includes(i)) {
               let s = Xe(i, o)
               throw new _(
@@ -6548,7 +6548,7 @@ Expected string or undefined.`)
             }
           },
         }
-        if (r && typeof r == "object")
+        if (r && typeof r == 'object')
           for (let [i, o] of Object.entries(r))
             if (n[i]) n[i](o)
             else
@@ -6571,36 +6571,36 @@ Expected string or undefined.`)
         )
     },
     omit: (e, t) => {
-      if (typeof e != "object")
+      if (typeof e != 'object')
         throw new _('"omit" option is expected to be an object.')
       if (e === null) throw new _('"omit" option can not be `null`')
       let r = []
       for (let [n, i] of Object.entries(e)) {
         let o = za(n, t.runtimeDataModel)
         if (!o) {
-          r.push({ kind: "UnknownModel", modelKey: n })
+          r.push({ kind: 'UnknownModel', modelKey: n })
           continue
         }
         for (let [s, a] of Object.entries(i)) {
           let f = o.fields.find((b) => b.name === s)
           if (!f) {
-            r.push({ kind: "UnknownField", modelKey: n, fieldName: s })
+            r.push({ kind: 'UnknownField', modelKey: n, fieldName: s })
             continue
           }
           if (f.relationName) {
-            r.push({ kind: "RelationInOmit", modelKey: n, fieldName: s })
+            r.push({ kind: 'RelationInOmit', modelKey: n, fieldName: s })
             continue
           }
-          typeof a != "boolean" &&
-            r.push({ kind: "InvalidFieldValue", modelKey: n, fieldName: s })
+          typeof a != 'boolean' &&
+            r.push({ kind: 'InvalidFieldValue', modelKey: n, fieldName: s })
         }
       }
       if (r.length > 0) throw new _(Ya(e, r))
     },
     __internal: (e) => {
       if (!e) return
-      let t = ["debug", "engine", "configOverride"]
-      if (typeof e != "object")
+      let t = ['debug', 'engine', 'configOverride']
+      if (typeof e != 'object')
         throw new _(
           `Invalid value ${JSON.stringify(e)} for "__internal" to PrismaClient constructor`
         )
@@ -6629,9 +6629,9 @@ function Co(e, t) {
     )
 }
 function Xe(e, t) {
-  if (t.length === 0 || typeof e != "string") return ""
+  if (t.length === 0 || typeof e != 'string') return ''
   let r = Ha(e, t)
-  return r ? ` Did you mean "${r}"?` : ""
+  return r ? ` Did you mean "${r}"?` : ''
 }
 function Ha(e, t) {
   if (t.length === 0) return null
@@ -6651,30 +6651,30 @@ function Ya(e, t) {
   let r = Ke(e)
   for (let o of t)
     switch (o.kind) {
-      case "UnknownModel":
+      case 'UnknownModel':
         r.arguments.getField(o.modelKey)?.markAsError(),
           r.addErrorMessage(() => `Unknown model name: ${o.modelKey}.`)
         break
-      case "UnknownField":
+      case 'UnknownField':
         r.arguments.getDeepField([o.modelKey, o.fieldName])?.markAsError(),
           r.addErrorMessage(
             () =>
               `Model "${o.modelKey}" does not have a field named "${o.fieldName}".`
           )
         break
-      case "RelationInOmit":
+      case 'RelationInOmit':
         r.arguments.getDeepField([o.modelKey, o.fieldName])?.markAsError(),
           r.addErrorMessage(
             () =>
               'Relations are already excluded by default and can not be specified in "omit".'
           )
         break
-      case "InvalidFieldValue":
+      case 'InvalidFieldValue':
         r.arguments.getDeepFieldValue([o.modelKey, o.fieldName])?.markAsError(),
-          r.addErrorMessage(() => "Omit field option value must be a boolean.")
+          r.addErrorMessage(() => 'Omit field option value must be a boolean.')
         break
     }
-  let { message: n, args: i } = Gt(r, "colorless")
+  let { message: n, args: i } = Gt(r, 'colorless')
   return `Error validating "omit" option:
 
 ${i}
@@ -6716,13 +6716,13 @@ function Ao(e) {
           )
       })
 }
-var ve = ee("prisma:client")
-typeof globalThis == "object" && (globalThis.NODE_CLIENT = !0)
+var ve = ee('prisma:client')
+typeof globalThis == 'object' && (globalThis.NODE_CLIENT = !0)
 var Xa = {
     requestArgsToMiddlewareArgs: (e) => e,
     middlewareArgsToRequestArgs: (e) => e,
   },
-  Za = Symbol.for("prisma.client.transaction.id"),
+  Za = Symbol.for('prisma.client.transaction.id'),
   el = {
     id: 0,
     nextId() {
@@ -6737,7 +6737,7 @@ function Oo(e) {
       this._createPrismaPromise = Gr()
       this.$extends = fi
       ;(e = n?.__internal?.configOverride?.(e) ?? e), Mi(e), n && Co(n, e)
-      let i = new _t().on("error", () => {})
+      let i = new _t().on('error', () => {})
       ;(this._extensions = Yt.empty()),
         (this._previewFeatures = er(e)),
         (this._clientVersion = e.clientVersion ?? yo),
@@ -6756,7 +6756,7 @@ function Oo(e) {
       if (n?.adapter) {
         s = Lr(n.adapter)
         let f =
-          e.activeProvider === "postgresql" ? "postgres" : e.activeProvider
+          e.activeProvider === 'postgresql' ? 'postgres' : e.activeProvider
         if (s.provider !== f)
           throw new I(
             `The Driver Adapter \`${s.adapterName}\`, based on \`${s.provider}\`, is not compatible with the provider \`${f}\` specified in the Prisma schema.`,
@@ -6768,39 +6768,39 @@ function Oo(e) {
         let f = n ?? {},
           b = f.__internal ?? {},
           T = b.debug === !0
-        T && ee.enable("prisma:client")
+        T && ee.enable('prisma:client')
         let C = rt.resolve(e.dirname, e.relativePath)
         mn.existsSync(C) || (C = e.dirname),
-          ve("dirname", e.dirname),
-          ve("relativePath", e.relativePath),
-          ve("cwd", C)
+          ve('dirname', e.dirname),
+          ve('relativePath', e.relativePath),
+          ve('cwd', C)
         let O = b.engine || {}
         if (
           (f.errorFormat
             ? (this._errorFormat = f.errorFormat)
-            : g.env.NODE_ENV === "production"
-              ? (this._errorFormat = "minimal")
+            : g.env.NODE_ENV === 'production'
+              ? (this._errorFormat = 'minimal')
               : g.env.NO_COLOR
-                ? (this._errorFormat = "colorless")
-                : (this._errorFormat = "colorless"),
+                ? (this._errorFormat = 'colorless')
+                : (this._errorFormat = 'colorless'),
           (this._runtimeDataModel = e.runtimeDataModel),
           (this._engineConfig = {
             cwd: C,
             dirname: e.dirname,
             enableDebugLogs: T,
             allowTriggerPanic: O.allowTriggerPanic,
-            datamodelPath: rt.join(e.dirname, e.filename ?? "schema.prisma"),
+            datamodelPath: rt.join(e.dirname, e.filename ?? 'schema.prisma'),
             prismaPath: O.binaryPath ?? void 0,
             engineEndpoint: O.endpoint,
             generator: e.generator,
-            showColors: this._errorFormat === "pretty",
+            showColors: this._errorFormat === 'pretty',
             logLevel: f.log && co(f.log),
             logQueries:
               f.log &&
-              !!(typeof f.log == "string"
-                ? f.log === "query"
+              !!(typeof f.log == 'string'
+                ? f.log === 'query'
                 : f.log.find((R) =>
-                    typeof R == "string" ? R === "query" : R.level === "query"
+                    typeof R == 'string' ? R === 'query' : R.level === 'query'
                   )),
             env: a?.parsed ?? {},
             flags: [],
@@ -6832,22 +6832,22 @@ function Oo(e) {
               PrismaClientUnknownRequestError: J,
               PrismaClientInitializationError: I,
               PrismaClientKnownRequestError: Q,
-              debug: ee("prisma:client:accelerateEngine"),
+              debug: ee('prisma:client:accelerateEngine'),
               engineVersion: So.version,
               clientVersion: e.clientVersion,
             },
           }),
-          ve("clientVersion", e.clientVersion),
+          ve('clientVersion', e.clientVersion),
           (this._engine = Ni(e, this._engineConfig)),
           (this._requestHandler = new lr(this, i)),
           f.log)
         )
           for (let R of f.log) {
             let M =
-              typeof R == "string" ? R : R.emit === "stdout" ? R.level : null
+              typeof R == 'string' ? R : R.emit === 'stdout' ? R.level : null
             M &&
               this.$on(M, (S) => {
-                ot.log(`${ot.tags[M] ?? ""}`, S.message || S.query)
+                ot.log(`${ot.tags[M] ?? ''}`, S.message || S.query)
               })
           }
         this._metrics = new Be(this._engine)
@@ -6857,13 +6857,13 @@ function Oo(e) {
       return (this._appliedParent = gt(this))
     }
     get [Symbol.toStringTag]() {
-      return "PrismaClient"
+      return 'PrismaClient'
     }
     $use(n) {
       this._middlewares.use(n)
     }
     $on(n, i) {
-      n === "beforeExit"
+      n === 'beforeExit'
         ? this._engine.onBeforeExit(i)
         : n && this._engineConfig.logEmitter.on(n, i)
     }
@@ -6886,7 +6886,7 @@ function Oo(e) {
     $executeRawInternal(n, i, o, s) {
       let a = this._activeProvider
       return this._request({
-        action: "executeRaw",
+        action: 'executeRaw',
         args: o,
         transaction: n,
         clientMethod: i,
@@ -6906,10 +6906,10 @@ function Oo(e) {
               s.text,
               s.values,
               Array.isArray(n)
-                ? "prisma.$executeRaw`<SQL>`"
-                : "prisma.$executeRaw(sql`<SQL>`)"
+                ? 'prisma.$executeRaw`<SQL>`'
+                : 'prisma.$executeRaw(sql`<SQL>`)'
             ),
-            this.$executeRawInternal(o, "$executeRaw", s, a)
+            this.$executeRawInternal(o, '$executeRaw', s, a)
           )
         }
         throw new G(
@@ -6925,14 +6925,14 @@ function Oo(e) {
             this._activeProvider,
             n,
             i,
-            "prisma.$executeRawUnsafe(<SQL>, [...values])"
+            'prisma.$executeRawUnsafe(<SQL>, [...values])'
           ),
-          this.$executeRawInternal(o, "$executeRawUnsafe", [n, ...i])
+          this.$executeRawInternal(o, '$executeRawUnsafe', [n, ...i])
         )
       )
     }
     $runCommandRaw(n) {
-      if (e.activeProvider !== "mongodb")
+      if (e.activeProvider !== 'mongodb')
         throw new G(
           `The ${e.activeProvider} provider does not support $runCommandRaw. Use the mongodb provider.`,
           { clientVersion: this._clientVersion }
@@ -6940,9 +6940,9 @@ function Oo(e) {
       return this._createPrismaPromise((i) =>
         this._request({
           args: n,
-          clientMethod: "$runCommandRaw",
+          clientMethod: '$runCommandRaw',
           dataPath: [],
-          action: "runCommandRaw",
+          action: 'runCommandRaw',
           argsMapper: Yi,
           callsite: xe(this._errorFormat),
           transaction: i,
@@ -6952,7 +6952,7 @@ function Oo(e) {
     async $queryRawInternal(n, i, o, s) {
       let a = this._activeProvider
       return this._request({
-        action: "queryRaw",
+        action: 'queryRaw',
         args: o,
         transaction: n,
         clientMethod: i,
@@ -6965,7 +6965,7 @@ function Oo(e) {
     $queryRaw(n, ...i) {
       return this._createPrismaPromise((o) => {
         if (n.raw !== void 0 || n.sql !== void 0)
-          return this.$queryRawInternal(o, "$queryRaw", ...Ro(n, i))
+          return this.$queryRawInternal(o, '$queryRaw', ...Ro(n, i))
         throw new G(
           "`$queryRaw` is a tag function, please use it like the following:\n```\nconst result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${1} OR email = ${'user@email.com'};`\n```\n\nOr read our docs at https://www.prisma.io/docs/concepts/components/prisma-client/raw-database-access#queryraw\n",
           { clientVersion: this._clientVersion }
@@ -6974,21 +6974,21 @@ function Oo(e) {
     }
     $queryRawUnsafe(n, ...i) {
       return this._createPrismaPromise((o) =>
-        this.$queryRawInternal(o, "$queryRawUnsafe", [n, ...i])
+        this.$queryRawInternal(o, '$queryRawUnsafe', [n, ...i])
       )
     }
     _transactionWithArray({ promises: n, options: i }) {
       let o = el.nextId(),
         s = lo(n.length),
         a = n.map((f, b) => {
-          if (f?.[Symbol.toStringTag] !== "PrismaPromise")
+          if (f?.[Symbol.toStringTag] !== 'PrismaPromise')
             throw new Error(
-              "All elements of the array need to be Prisma Client promises. Hint: Please make sure you are not awaiting the Prisma client calls you intended to pass in the $transaction function."
+              'All elements of the array need to be Prisma Client promises. Hint: Please make sure you are not awaiting the Prisma client calls you intended to pass in the $transaction function.'
             )
           let T =
               i?.isolationLevel ??
               this._engineConfig.transactionOptions.isolationLevel,
-            C = { kind: "batch", id: o, index: b, isolationLevel: T, lock: s }
+            C = { kind: 'batch', id: o, index: b, isolationLevel: T, lock: s }
           return f.requestTransaction?.(C) ?? f
         })
       return Ao(a)
@@ -7002,15 +7002,15 @@ function Oo(e) {
             i?.isolationLevel ??
             this._engineConfig.transactionOptions.isolationLevel,
         },
-        a = await this._engine.transaction("start", o, s),
+        a = await this._engine.transaction('start', o, s),
         f
       try {
-        let b = { kind: "itx", ...a }
+        let b = { kind: 'itx', ...a }
         ;(f = await n(this._createItxClient(b))),
-          await this._engine.transaction("commit", o, a)
+          await this._engine.transaction('commit', o, a)
       } catch (b) {
         throw (
-          (await this._engine.transaction("rollback", o, a).catch(() => {}), b)
+          (await this._engine.transaction('rollback', o, a).catch(() => {}), b)
         )
       }
       return f
@@ -7018,8 +7018,8 @@ function Oo(e) {
     _createItxClient(n) {
       return gt(
         me(di(this), [
-          H("_appliedParent", () => this._appliedParent._createItxClient(n)),
-          H("_createPrismaPromise", () => Gr(n)),
+          H('_appliedParent', () => this._appliedParent._createItxClient(n)),
+          H('_createPrismaPromise', () => Gr(n)),
           H(Za, () => n.id),
           $e(uo),
         ])
@@ -7027,17 +7027,17 @@ function Oo(e) {
     }
     $transaction(n, i) {
       let o
-      typeof n == "function"
-        ? this._engineConfig.adapter?.adapterName === "@prisma/adapter-d1"
+      typeof n == 'function'
+        ? this._engineConfig.adapter?.adapterName === '@prisma/adapter-d1'
           ? (o = () => {
               throw new Error(
-                "Cloudflare D1 does not support interactive transactions. We recommend you to refactor your queries with that limitation in mind, and use batch transactions with `prisma.$transactions([])` where applicable."
+                'Cloudflare D1 does not support interactive transactions. We recommend you to refactor your queries with that limitation in mind, and use batch transactions with `prisma.$transactions([])` where applicable.'
               )
             })
           : (o = () =>
               this._transactionWithCallback({ callback: n, options: i }))
         : (o = () => this._transactionWithArray({ promises: n, options: i }))
-      let s = { name: "transaction", attributes: { method: "$transaction" } }
+      let s = { name: 'transaction', attributes: { method: '$transaction' } }
       return this._tracingHelper.runInChildSpan(s, o)
     }
     _request(n) {
@@ -7052,13 +7052,13 @@ function Oo(e) {
         },
         s = {
           middleware: {
-            name: "middleware",
+            name: 'middleware',
             middleware: !0,
-            attributes: { method: "$use" },
+            attributes: { method: '$use' },
             active: !1,
           },
           operation: {
-            name: "operation",
+            name: 'operation',
             attributes: {
               method: o.action,
               model: o.model,
@@ -7106,7 +7106,7 @@ function Oo(e) {
     }) {
       try {
         n = b ? b(n) : n
-        let M = { name: "serialize" },
+        let M = { name: 'serialize' },
           S = this._tracingHelper.runInChildSpan(M, () =>
             Ki({
               modelName: f,
@@ -7123,16 +7123,16 @@ function Oo(e) {
             })
           )
         return (
-          ee.enabled("prisma:client") &&
-            (ve("Prisma Client call:"),
+          ee.enabled('prisma:client') &&
+            (ve('Prisma Client call:'),
             ve(`prisma.${i}(${ri(n)})`),
-            ve("Generated request:"),
+            ve('Generated request:'),
             ve(
               JSON.stringify(S, null, 2) +
                 `
 `
             )),
-          T?.kind === "batch" && (await T.lock),
+          T?.kind === 'batch' && (await T.lock),
           this._requestHandler.request({
             protocolQuery: S,
             modelName: f,
@@ -7155,9 +7155,9 @@ function Oo(e) {
       }
     }
     get $metrics() {
-      if (!this._hasPreviewFlag("metrics"))
+      if (!this._hasPreviewFlag('metrics'))
         throw new G(
-          "`metrics` preview feature must be enabled in order to access metrics API",
+          '`metrics` preview feature must be enabled in order to access metrics API',
           { clientVersion: this._clientVersion }
         )
       return this._metrics
@@ -7184,9 +7184,9 @@ p()
 d()
 l()
 var rl = new Set([
-  "toJSON",
-  "$$typeof",
-  "asymmetricMatch",
+  'toJSON',
+  '$$typeof',
+  'asymmetricMatch',
   Symbol.iterator,
   Symbol.toStringTag,
   Symbol.isConcatSpreadable,

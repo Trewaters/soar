@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/generated/client"
+import { PrismaClient } from '@prisma/generated/client'
 
 const prisma = new PrismaClient()
 
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     role,
   } = await req.json()
 
-  const decodedId = email.toString().replace("%40", "@").replace("=", "")
+  const decodedId = email.toString().replace('%40', '@').replace('=', '')
 
   try {
     await prisma.userData.update({
@@ -45,9 +45,9 @@ export async function POST(req: Request) {
         role,
       },
     })
-    return Response.json({ message: "User Data saved" })
+    return Response.json({ message: 'User Data saved' })
   } catch (error) {
-    return Response.json({ error: "Error saving data" })
+    return Response.json({ error: 'Error saving data' })
   } finally {
     await prisma.$disconnect()
   }

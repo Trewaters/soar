@@ -1,37 +1,37 @@
-"use client"
-import { Box, Typography } from "@mui/material"
-import { styled } from "@mui/system"
-import SplashHeader from "@app/clientComponents/splash-header"
-import { useRouter } from "next/navigation"
-import SplashNavButton from "@app/clientComponents/splash-nav-button"
-import { useSession } from "@node_modules/next-auth/react"
-import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup"
-import { useState, MouseEvent } from "react"
-import NavBottom from "@serverComponents/navBottom"
+'use client'
+import { Box, Typography } from '@mui/material'
+import { styled } from '@mui/system'
+import SplashHeader from '@app/clientComponents/splash-header'
+import { useRouter } from 'next/navigation'
+import SplashNavButton from '@app/clientComponents/splash-nav-button'
+import { useSession } from '@node_modules/next-auth/react'
+import { Unstable_Popup as BasePopup } from '@mui/base/Unstable_Popup'
+import { useState, MouseEvent } from 'react'
+import NavBottom from '@serverComponents/navBottom'
 
 const grey = {
-  50: "#F3F6F9",
-  100: "#E5EAF2",
-  200: "#DAE2ED",
-  300: "#C7D0DD",
-  400: "#B0B8C4",
-  500: "#9DA8B7",
-  600: "#6B7A90",
-  700: "#434D5B",
-  800: "#303740",
-  900: "#1C2025",
+  50: '#F3F6F9',
+  100: '#E5EAF2',
+  200: '#DAE2ED',
+  300: '#C7D0DD',
+  400: '#B0B8C4',
+  500: '#9DA8B7',
+  600: '#6B7A90',
+  700: '#434D5B',
+  800: '#303740',
+  900: '#1C2025',
 }
 
-const PopupBody = styled("div")(
+const PopupBody = styled('div')(
   ({ theme }) => `
   width: max-content;
   padding: 12px 16px;
   margin: 8px;
   border-radius: 8px;
-  border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]};
-  background-color: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
+  border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+  background-color: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
   box-shadow: ${
-    theme.palette.mode === "dark"
+    theme.palette.mode === 'dark'
       ? `0px 4px 8px rgb(0 0 0 / 0.7)`
       : `0px 4px 8px rgb(0 0 0 / 0.1)`
   };
@@ -48,39 +48,39 @@ export default function Page() {
   const [anchor, setAnchor] = useState<null | HTMLElement>(null)
 
   const handlePracticeSeriesClick = () => {
-    router.push("/navigator/flows/practiceSeries")
+    router.push('/navigator/flows/practiceSeries')
   }
   const handleCreateSeriesClick = (event: MouseEvent<HTMLElement>) => {
     if (!session) {
       setAnchor(anchor ? null : event.currentTarget)
     } else {
-      router.push("/navigator/flows/createSeries")
+      router.push('/navigator/flows/createSeries')
     }
   }
   const handlePracticeSequenceClick = () => {
-    router.push("/navigator/flows/practiceSequences")
+    router.push('/navigator/flows/practiceSequences')
   }
   const handleCreateSequenceClick = (event: MouseEvent<HTMLElement>) => {
     if (!session) {
       setAnchor(anchor ? null : event.currentTarget)
     } else {
-      router.push("/navigator/flows/createSequence")
+      router.push('/navigator/flows/createSequence')
     }
   }
 
   const open = Boolean(anchor)
-  const id = open ? "simple-popup" : undefined
+  const id = open ? 'simple-popup' : undefined
 
   return (
     <>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
-        <BasePopup id={id} open={open} anchor={anchor} placement={"top"}>
+        <BasePopup id={id} open={open} anchor={anchor} placement={'top'}>
           <PopupBody>
             <Typography color="error.contrastText">
               Please sign-in to access this feature.
@@ -88,11 +88,11 @@ export default function Page() {
           </PopupBody>
         </BasePopup>
         <SplashHeader
-          src={"/icons/designImages/splash-flows-2.png"}
-          alt={"Flows"}
+          src={'/icons/designImages/splash-flows-2.png'}
+          alt={'Flows'}
           title="Flows"
         />
-        <Box height={"32px"} />
+        <Box height={'32px'} />
         <SplashNavButton
           title="Practice Series"
           description="Series are made up of asana poses."
@@ -128,7 +128,7 @@ export default function Page() {
           onClick={handleCreateSequenceClick}
         />
       </Box>
-      <Box height={"72px"} />
+      <Box height={'72px'} />
       <NavBottom subRoute="/navigator/flows" />
     </>
   )

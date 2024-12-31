@@ -1,7 +1,7 @@
-"use client"
-import SplashHeader from "@app/clientComponents/splash-header"
-import SubNavHeader from "@app/clientComponents/sub-nav-header"
-import { SequenceData } from "@context/SequenceContext"
+'use client'
+import SplashHeader from '@app/clientComponents/splash-header'
+import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import { SequenceData } from '@context/SequenceContext'
 import {
   Autocomplete,
   Box,
@@ -13,25 +13,25 @@ import {
   Stack,
   TextField,
   Typography,
-} from "@mui/material"
-import React, { ChangeEvent, useEffect, useState } from "react"
-import SearchIcon from "@mui/icons-material/Search"
-import Image from "next/image"
-import CustomPaginationCircles from "@app/clientComponents/pagination-circles"
-import NavBottom from "@serverComponents/navBottom"
+} from '@mui/material'
+import React, { ChangeEvent, useEffect, useState } from 'react'
+import SearchIcon from '@mui/icons-material/Search'
+import Image from 'next/image'
+import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
+import NavBottom from '@serverComponents/navBottom'
 
 export default function Page() {
   const [sequences, setSequences] = useState<SequenceData[]>([])
   const [singleSequence, setSingleSequence] = useState<SequenceData>({
     id: 0,
-    nameSequence: "",
+    nameSequence: '',
     sequencesSeries: [],
-    description: "",
-    duration: "",
-    image: "",
-    breath_direction: "",
-    createdAt: "",
-    updatedAt: "",
+    description: '',
+    duration: '',
+    image: '',
+    breath_direction: '',
+    createdAt: '',
+    updatedAt: '',
   })
 
   const [page, setPage] = useState(1)
@@ -52,9 +52,9 @@ export default function Page() {
       //   process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
       // const url = new URL('/api/series/', baseUrl)
       // const response = await fetch(url)
-      const response = await fetch("/api/sequences", { cache: "no-store" })
+      const response = await fetch('/api/sequences', { cache: 'no-store' })
       if (!response.ok) {
-        throw new Error("Network response was not ok")
+        throw new Error('Network response was not ok')
       }
       setSequences(await response.json())
     }
@@ -111,20 +111,20 @@ export default function Page() {
     <>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
           mt: 4,
         }}
       >
         <Stack
           spacing={2}
-          sx={{ marginX: 3, marginY: 3, mb: "1em", width: "100%" }}
+          sx={{ marginX: 3, marginY: 3, mb: '1em', width: '100%' }}
         >
           <SplashHeader
-            src={"/icons/designImages/header-practice-sequence.png"}
-            alt={"Practice Sequences"}
+            src={'/icons/designImages/header-practice-sequence.png'}
+            alt={'Practice Sequences'}
             title="Practice Sequences"
           />
           <SubNavHeader
@@ -151,29 +151,29 @@ export default function Page() {
                 </li>
               )}
               sx={{
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderRadius: "12px",
-                  borderColor: "primary.main",
-                  boxShadow: "0 4px 4px 0 rgba(0, 0, 0, 0.25)",
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderRadius: '12px',
+                  borderColor: 'primary.main',
+                  boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
                 },
-                "& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline":
+                '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
                   {
-                    borderColor: "primary.light", // Ensure border color does not change on hover
+                    borderColor: 'primary.light', // Ensure border color does not change on hover
                   },
-                "& .MuiAutocomplete-endAdornment": {
-                  display: "none",
+                '& .MuiAutocomplete-endAdornment': {
+                  display: 'none',
                 },
               }}
               renderInput={(params) => (
                 <TextField
-                  sx={{ "& .MuiInputBase-input": { color: "primary.main" } }}
+                  sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
                   {...params}
                   placeholder="Search for a Sequence"
                   InputProps={{
                     ...params.InputProps,
                     startAdornment: (
                       <>
-                        <SearchIcon sx={{ color: "primary.main", mr: 1 }} />
+                        <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
                         {params.InputProps.startAdornment}
                       </>
                     ),
@@ -194,14 +194,14 @@ export default function Page() {
                   component="h3"
                   textAlign="center"
                   sx={{
-                    backgroundColor: "primary.main",
-                    borderTopLeftRadius: "12px",
-                    borderTopRightRadius: "12px",
-                    width: "fit-content",
+                    backgroundColor: 'primary.main',
+                    borderTopLeftRadius: '12px',
+                    borderTopRightRadius: '12px',
+                    width: 'fit-content',
                     ml: 5,
                     pr: 7,
                     pl: 2,
-                    fontWeight: "bold",
+                    fontWeight: 'bold',
                   }}
                 >
                   {singleSequence.nameSequence}
@@ -213,22 +213,22 @@ export default function Page() {
                     <Card
                       key={i}
                       sx={{
-                        width: "85%",
+                        width: '85%',
                         boxShadow: 3,
-                        textAlign: "center",
-                        borderColor: "primary.main",
-                        borderWidth: "1px",
-                        borderStyle: "solid",
+                        textAlign: 'center',
+                        borderColor: 'primary.main',
+                        borderWidth: '1px',
+                        borderStyle: 'solid',
                       }}
                       className="journal"
                     >
                       <CardHeader
                         className="journalTitle"
                         title={
-                          <Box width={"100%"}>
+                          <Box width={'100%'}>
                             <Stack
-                              flexDirection={"row"}
-                              justifyContent={"space-between"}
+                              flexDirection={'row'}
+                              justifyContent={'space-between'}
                             >
                               <Stack>
                                 <Button
@@ -242,18 +242,18 @@ export default function Page() {
                                       src="/icons/navigation/nav-practice-sequence-back-arrow.svg"
                                       width={7}
                                       height={7}
-                                      alt={"sequence-back-arrow"}
+                                      alt={'sequence-back-arrow'}
                                     />
                                   }
                                   sx={{
-                                    "&:hover": {
-                                      backgroundColor: "transparent",
-                                      boxShadow: "none",
+                                    '&:hover': {
+                                      backgroundColor: 'transparent',
+                                      boxShadow: 'none',
                                     },
                                   }}
                                 >
                                   {singleSequence.sequencesSeries[page - 2]
-                                    ?.seriesName || "Previous"}
+                                    ?.seriesName || 'Previous'}
                                 </Button>
                               </Stack>
                               <Stack>
@@ -282,18 +282,18 @@ export default function Page() {
                                       src="/icons/navigation/nav-practice-sequence-advance-arrow.svg"
                                       width={7}
                                       height={7}
-                                      alt={"sequence-back-arrow"}
+                                      alt={'sequence-back-arrow'}
                                     />
                                   }
                                   sx={{
-                                    "&:hover": {
-                                      backgroundColor: "transparent",
-                                      boxShadow: "none",
+                                    '&:hover': {
+                                      backgroundColor: 'transparent',
+                                      boxShadow: 'none',
                                     },
                                   }}
                                 >
                                   {singleSequence.sequencesSeries[page]
-                                    ?.seriesName || "Next"}
+                                    ?.seriesName || 'Next'}
                                 </Button>
                               </Stack>
                             </Stack>
@@ -308,7 +308,7 @@ export default function Page() {
                       <CardContent className="lines" sx={{ p: 0 }}>
                         {seriesMini.seriesPostures.map((asana, asanaIndex) => (
                           <Stack
-                            direction={"row"}
+                            direction={'row'}
                             key={asanaIndex}
                             className="journalLine"
                             alignItems="flex-start"
@@ -316,25 +316,25 @@ export default function Page() {
                             <Typography
                               variant="body1"
                               fontWeight="bold"
-                              sx={{ width: "30px", textAlign: "right", mr: 2 }}
+                              sx={{ width: '30px', textAlign: 'right', mr: 2 }}
                             >
                               {asanaIndex + 1}.
                             </Typography>
-                            <Stack direction={"column"}>
+                            <Stack direction={'column'}>
                               <Typography
-                                textAlign={"left"}
-                                fontWeight={"bold"}
+                                textAlign={'left'}
+                                fontWeight={'bold'}
                                 variant="body1"
                               >
                                 <Link
                                   underline="hover"
-                                  href={`/navigator/asanaPostures/${asana.split(";")[0]}`}
+                                  href={`/navigator/asanaPostures/${asana.split(';')[0]}`}
                                 >
-                                  {asana.split(";")[0]}
+                                  {asana.split(';')[0]}
                                 </Link>
                               </Typography>
-                              <Typography textAlign={"left"} variant="body2">
-                                {asana.split(";")[1]}
+                              <Typography textAlign={'left'} variant="body2">
+                                {asana.split(';')[1]}
                               </Typography>
                             </Stack>
                           </Stack>
@@ -350,21 +350,21 @@ export default function Page() {
                     onChange={handleChange}
                   />
                   <Box
-                    className={"journal"}
+                    className={'journal'}
                     sx={{
-                      marginTop: "32px",
+                      marginTop: '32px',
                       p: 4,
-                      color: "primary.main",
-                      backgroundColor: "navSplash.dark",
+                      color: 'primary.main',
+                      backgroundColor: 'navSplash.dark',
                     }}
                   >
-                    <Stack flexDirection={"row"} alignItems={"center"}>
+                    <Stack flexDirection={'row'} alignItems={'center'}>
                       <Typography variant="h3" sx={{ mr: 2 }}>
                         Description
                       </Typography>
                       <Image
-                        src={"/icons/flows/leaf-3.svg"}
-                        alt={"leaf icon"}
+                        src={'/icons/flows/leaf-3.svg'}
+                        alt={'leaf icon'}
                         height={21}
                         width={21}
                       ></Image>
@@ -372,7 +372,7 @@ export default function Page() {
                     <Typography
                       color="primary.contrastText"
                       variant="body1"
-                      sx={{ whiteSpace: "pre-line" }}
+                      sx={{ whiteSpace: 'pre-line' }}
                     >
                       {singleSequence.description}
                     </Typography>
@@ -383,7 +383,7 @@ export default function Page() {
           </Stack>
         </Stack>
       </Box>
-      <Box height={"72px"} />
+      <Box height={'72px'} />
 
       <NavBottom subRoute="/navigator/flows" />
     </>

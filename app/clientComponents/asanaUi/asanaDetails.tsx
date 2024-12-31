@@ -1,6 +1,6 @@
-import { Box, Stack, Typography } from "@mui/material"
-import React, { ComponentProps } from "react"
-import Image from "next/image"
+import { Box, Stack, Typography } from '@mui/material'
+import React, { ComponentProps } from 'react'
+import Image from 'next/image'
 
 interface asanaDetailsProps {
   details: string
@@ -17,25 +17,25 @@ export default function AsanaDetails(props: AsanaDetailsProps) {
     <Box
       sx={{
         width: {
-          xs: "100vw",
-          md: "50vw",
+          xs: '100vw',
+          md: '50vw',
         },
-        px: { xs: "8px" },
+        px: { xs: '8px' },
       }}
-      alignSelf={"center"}
+      alignSelf={'center'}
     >
-      <Stack direction={"row"} display={"flex"} alignItems={"center"}>
+      <Stack direction={'row'} display={'flex'} alignItems={'center'}>
         <Typography
           variant="subtitle1"
           sx={{
-            fontWeight: "bold",
+            fontWeight: 'bold',
             mr: 2,
           }}
         >
           {props.label}:
         </Typography>
         <Image
-          src={"/icons/designImages/leaf-1.svg"}
+          src={'/icons/designImages/leaf-1.svg'}
           alt="leaf-icon"
           width={21}
           height={21}
@@ -45,10 +45,10 @@ export default function AsanaDetails(props: AsanaDetailsProps) {
         <Typography
           variant="body1"
           sx={{
-            color: "primary.contrastText",
+            color: 'primary.contrastText',
             borderTopRightRadius: { xs: 0, sm: 75 },
             borderBottomRightRadius: { xs: 0, sm: 75 },
-            whiteSpace: "pre-line",
+            whiteSpace: 'pre-line',
             ...props.sx,
           }}
         >

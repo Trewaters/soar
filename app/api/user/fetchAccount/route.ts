@@ -1,14 +1,14 @@
-import { PrismaClient } from "@prisma/generated/client"
+import { PrismaClient } from '@prisma/generated/client'
 
 const prisma = new PrismaClient()
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const userId = searchParams.get("userId")
-  const userEmail = searchParams.get("email") || undefined
+  const userId = searchParams.get('userId')
+  const userEmail = searchParams.get('email') || undefined
   let account, providerAccount
 
-  console.log("email:", userEmail)
+  console.log('email:', userEmail)
 
   if (!userId) {
     if (userEmail) {
@@ -16,11 +16,11 @@ export async function GET(req: Request) {
         account = await prisma.userData.findUnique({
           where: { email: userEmail },
         })
-        console.log("account:", account)
+        console.log('account:', account)
 
         if (!account) {
           return new Response(
-            JSON.stringify({ error: "Email Account not found" }),
+            JSON.stringify({ error: 'Email Account not found' }),
             {
               status: 404,
             }
@@ -33,19 +33,19 @@ export async function GET(req: Request) {
         return new Response(JSON.stringify({ data: providerAccount }), {
           status: 200,
           headers: {
-            "Cache-Control": "no-store",
+            'Cache-Control': 'no-store',
           },
         })
       } catch (error) {
         return new Response(
-          JSON.stringify({ error: "Failed to fetch account data" }),
+          JSON.stringify({ error: 'Failed to fetch account data' }),
           { status: 500 }
         )
       } finally {
         await prisma.$disconnect()
       }
     }
-    return new Response(JSON.stringify({ error: "Account not provided" }), {
+    return new Response(JSON.stringify({ error: 'Account not provided' }), {
       status: 404,
     })
   }
@@ -56,13 +56,13 @@ export async function GET(req: Request) {
     })
 
     if (!account) {
-      return new Response(JSON.stringify({ error: "Account not found" }), {
+      return new Response(JSON.stringify({ error: 'Account not found' }), {
         status: 404,
       })
     }
   } catch (error) {
     return new Response(
-      JSON.stringify({ error: "Failed to fetch account data" }),
+      JSON.stringify({ error: 'Failed to fetch account data' }),
       { status: 500 }
     )
   } finally {
@@ -72,7 +72,7 @@ export async function GET(req: Request) {
   return new Response(JSON.stringify({ data: account }), {
     status: 200,
     headers: {
-      "Cache-Control": "no-store",
+      'Cache-Control': 'no-store',
     },
   })
 }

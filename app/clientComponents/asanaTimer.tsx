@@ -67,9 +67,9 @@ export default function AsanaTimer() {
 }
  */
 
-import { AsanaTimerProps, useTimer } from "@context/timerContext"
-import { Box, Typography } from "@node_modules/@mui/material"
-import { useEffect, useState } from "react"
+import { AsanaTimerProps, useTimer } from '@context/timerContext'
+import { Box, Typography } from '@node_modules/@mui/material'
+import { useEffect, useState } from 'react'
 
 export default function AsanaTimer({
   onTimeUpdate,
@@ -101,7 +101,7 @@ export default function AsanaTimer({
 
   return (
     <Box>
-      <Typography sx={{ color: "white" }}>
+      <Typography sx={{ color: 'white' }}>
         Elapsed Time: {totalTime} seconds
       </Typography>
     </Box>

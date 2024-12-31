@@ -1,12 +1,12 @@
-"use client"
-import React, { useState, useEffect } from "react"
-import Typography from "@mui/material/Typography"
-import Grid from "@mui/material/Grid2"
-import { Box, Button, FormControl, Stack, TextField } from "@mui/material"
-import { useAsanaPosture } from "@app/context/AsanaPostureContext"
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import NavBottom from "@serverComponents/navBottom"
+'use client'
+import React, { useState, useEffect } from 'react'
+import Typography from '@mui/material/Typography'
+import Grid from '@mui/material/Grid2'
+import { Box, Button, FormControl, Stack, TextField } from '@mui/material'
+import { useAsanaPosture } from '@app/context/AsanaPostureContext'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import NavBottom from '@serverComponents/navBottom'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -32,15 +32,15 @@ export default function Page() {
     sideways: string
     created_by: string
   }>({
-    sort_english_name: "",
+    sort_english_name: '',
     english_names: [],
-    description: "",
-    category: "",
-    difficulty: "",
-    breath_direction_default: "",
-    preferred_side: "",
-    sideways: "",
-    created_by: session?.user?.email ?? "error-undefined-user",
+    description: '',
+    category: '',
+    difficulty: '',
+    breath_direction_default: '',
+    preferred_side: '',
+    sideways: '',
+    created_by: session?.user?.email ?? 'error-undefined-user',
     // created_by: "alpha users",
   })
 
@@ -51,7 +51,7 @@ export default function Page() {
       [name]: value,
     })
     dispatch({
-      type: "SET_POSTURES",
+      type: 'SET_POSTURES',
       payload: {
         ...state.postures,
         [name]: value,
@@ -71,41 +71,41 @@ export default function Page() {
       breath_direction_default,
       preferred_side,
       sideways,
-      created_by: session?.user?.email ?? "unknown",
+      created_by: session?.user?.email ?? 'unknown',
     }
-    dispatch({ type: "SET_POSTURES", payload: updatedAsana })
+    dispatch({ type: 'SET_POSTURES', payload: updatedAsana })
 
     try {
-      const response = await fetch("/api/poses/createAsana", {
-        method: "POST",
+      const response = await fetch('/api/poses/createAsana', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          cache: "no-store",
+          'Content-Type': 'application/json',
+          cache: 'no-store',
         },
         body: JSON.stringify(updatedAsana),
       })
       if (!response.ok) {
-        throw new Error("Network response was not ok")
+        throw new Error('Network response was not ok')
       }
       // eslint-disable-next-line no-unused-vars
       const data = await response.json()
       if (!data || Object.keys(data).length === 0) {
-        throw new Error("Received empty data object")
+        throw new Error('Received empty data object')
       }
     } catch (error: Error | any) {
       error.message
     } finally {
       // clear the form
       setFormData({
-        sort_english_name: "",
+        sort_english_name: '',
         english_names: [],
-        description: "",
-        category: "",
-        difficulty: "",
-        breath_direction_default: "",
-        preferred_side: "",
-        sideways: "",
-        created_by: "alpha users",
+        description: '',
+        category: '',
+        difficulty: '',
+        breath_direction_default: '',
+        preferred_side: '',
+        sideways: '',
+        created_by: 'alpha users',
       })
     }
   }
@@ -113,7 +113,7 @@ export default function Page() {
 
   useEffect(() => {
     if (session === null) {
-      router.push("/navigator/asanaPostures")
+      router.push('/navigator/asanaPostures')
     }
   }, [router, session])
   return (
@@ -123,7 +123,7 @@ export default function Page() {
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid size={12}>
-              <FormControl sx={{ width: "100%", mb: 3 }}>
+              <FormControl sx={{ width: '100%', mb: 3 }}>
                 <TextField
                   label="Sort English Name"
                   name="sort_english_name"
@@ -134,25 +134,25 @@ export default function Page() {
               </FormControl>
             </Grid>
             <Grid size={12}>
-              <FormControl sx={{ width: "100%", mb: 3 }}>
+              <FormControl sx={{ width: '100%', mb: 3 }}>
                 <TextField
                   label="English Names"
                   name="english_names"
-                  value={formData.english_names.join(",")}
+                  value={formData.english_names.join(',')}
                   onChange={(e) => {
                     const { value } = e.target
                     setFormData({
                       ...formData,
-                      english_names: value.split(",").map((name) => name),
+                      english_names: value.split(',').map((name) => name),
                     })
                   }}
                   onBlur={(e) => {
                     const { value } = e.target
                     dispatch({
-                      type: "SET_POSTURES",
+                      type: 'SET_POSTURES',
                       payload: {
                         ...state.postures,
-                        english_names: value.split(",").map((name) => name),
+                        english_names: value.split(',').map((name) => name),
                       },
                     })
                   }}
@@ -162,7 +162,7 @@ export default function Page() {
               </FormControl>
             </Grid>
             <Grid size={12}>
-              <FormControl sx={{ width: "100%", mb: 3 }}>
+              <FormControl sx={{ width: '100%', mb: 3 }}>
                 <TextField
                   label="Description"
                   name="description"
@@ -173,7 +173,7 @@ export default function Page() {
               </FormControl>
             </Grid>
             <Grid size={12}>
-              <FormControl sx={{ width: "100%", mb: 3 }}>
+              <FormControl sx={{ width: '100%', mb: 3 }}>
                 <TextField
                   select
                   label="Category"
@@ -207,7 +207,7 @@ export default function Page() {
               </FormControl>
             </Grid>
             <Grid size={12}>
-              <FormControl sx={{ width: "100%", mb: 3 }}>
+              <FormControl sx={{ width: '100%', mb: 3 }}>
                 <TextField
                   select
                   label="Difficulty"
@@ -227,7 +227,7 @@ export default function Page() {
               </FormControl>
             </Grid>
             <Grid size={12}>
-              <FormControl sx={{ width: "100%", mb: 3 }}>
+              <FormControl sx={{ width: '100%', mb: 3 }}>
                 <TextField
                   select
                   label="Breath Direction Default"
@@ -247,7 +247,7 @@ export default function Page() {
               </FormControl>
             </Grid>
             <Grid size={12}>
-              <FormControl sx={{ width: "100%", mb: 3 }}>
+              <FormControl sx={{ width: '100%', mb: 3 }}>
                 <TextField
                   label="Preferred Side"
                   name="preferred_side"
@@ -259,20 +259,20 @@ export default function Page() {
               </FormControl>
             </Grid>
             <Grid size={12}>
-              <FormControl sx={{ width: "100%", mb: 3 }}>
+              <FormControl sx={{ width: '100%', mb: 3 }}>
                 <label>
                   <input
                     type="checkbox"
                     name="sideways"
-                    checked={formData.sideways === "true"}
+                    checked={formData.sideways === 'true'}
                     onChange={(e) => {
                       const { checked } = e.target
                       setFormData({
                         ...formData,
-                        sideways: checked ? "true" : "false",
+                        sideways: checked ? 'true' : 'false',
                       })
                       dispatch({
-                        type: "SET_POSTURES",
+                        type: 'SET_POSTURES',
                         payload: {
                           ...state.postures,
                           sideways: checked ? true : false,
@@ -292,7 +292,7 @@ export default function Page() {
           </Grid>
         </form>
       </Box>
-      <Stack sx={{ position: "fixed", bottom: 0 }}>
+      <Stack sx={{ position: 'fixed', bottom: 0 }}>
         <NavBottom subRoute="/navigator/asanaPostures" />
       </Stack>
     </>

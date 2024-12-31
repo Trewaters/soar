@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 var de = Object.defineProperty
 var We = Object.getOwnPropertyDescriptor
 var Ge = Object.getOwnPropertyNames
@@ -7,7 +7,7 @@ var Me = (e, n) => {
     for (var i in n) de(e, i, { get: n[i], enumerable: !0 })
   },
   Xe = (e, n, i, t) => {
-    if ((n && typeof n == "object") || typeof n == "function")
+    if ((n && typeof n == 'object') || typeof n == 'function')
       for (let r of Ge(n))
         !Je.call(e, r) &&
           r !== i &&
@@ -17,7 +17,7 @@ var Me = (e, n) => {
           })
     return e
   }
-var Ke = (e) => Xe(de({}, "__esModule", { value: !0 }), e)
+var Ke = (e) => Xe(de({}, '__esModule', { value: !0 }), e)
 var Xn = {}
 Me(Xn, {
   Decimal: () => je,
@@ -37,12 +37,12 @@ var ne = Symbol(),
   ge = class {
     constructor(n) {
       n === ne
-        ? pe.set(this, "Prisma.".concat(this._getName()))
+        ? pe.set(this, 'Prisma.'.concat(this._getName()))
         : pe.set(
             this,
-            "new Prisma."
-              .concat(this._getNamespace(), ".")
-              .concat(this._getName(), "()")
+            'new Prisma.'
+              .concat(this._getNamespace(), '.')
+              .concat(this._getName(), '()')
           )
     }
     _getName() {
@@ -54,26 +54,26 @@ var ne = Symbol(),
   },
   G = class extends ge {
     _getNamespace() {
-      return "NullTypes"
+      return 'NullTypes'
     }
   },
   J = class extends G {}
-me(J, "DbNull")
+me(J, 'DbNull')
 var X = class extends G {}
-me(X, "JsonNull")
+me(X, 'JsonNull')
 var K = class extends G {}
-me(K, "AnyNull")
+me(K, 'AnyNull')
 var Oe = {
   classes: { DbNull: J, JsonNull: X, AnyNull: K },
   instances: { DbNull: new J(ne), JsonNull: new X(ne), AnyNull: new K(ne) },
 }
 function me(e, n) {
-  Object.defineProperty(e, "name", { value: n, configurable: !0 })
+  Object.defineProperty(e, 'name', { value: n, configurable: !0 })
 }
 var xe = new Set([
-  "toJSON",
-  "$$typeof",
-  "asymmetricMatch",
+  'toJSON',
+  '$$typeof',
+  'asymmetricMatch',
   Symbol.iterator,
   Symbol.toStringTag,
   Symbol.isConcatSpreadable,
@@ -84,58 +84,58 @@ function Pe(e) {
     get(n, i) {
       if (i in n) return n[i]
       if (!xe.has(i))
-        throw new TypeError("Invalid enum value: ".concat(String(i)))
+        throw new TypeError('Invalid enum value: '.concat(String(i)))
     },
   })
 }
-var Qe = "Cloudflare-Workers",
-  Ye = "node"
+var Qe = 'Cloudflare-Workers',
+  Ye = 'node'
 function Re() {
   var e, n, i
-  return typeof Netlify == "object"
-    ? "netlify"
-    : typeof EdgeRuntime == "string"
-      ? "edge-light"
+  return typeof Netlify == 'object'
+    ? 'netlify'
+    : typeof EdgeRuntime == 'string'
+      ? 'edge-light'
       : ((e = globalThis.navigator) == null ? void 0 : e.userAgent) === Qe
-        ? "workerd"
+        ? 'workerd'
         : globalThis.Deno
-          ? "deno"
+          ? 'deno'
           : globalThis.__lagon__
-            ? "lagon"
+            ? 'lagon'
             : ((i = (n = globalThis.process) == null ? void 0 : n.release) ==
                 null
                   ? void 0
                   : i.name) === Ye
-              ? "node"
+              ? 'node'
               : globalThis.Bun
-                ? "bun"
+                ? 'bun'
                 : globalThis.fastly
-                  ? "fastly"
-                  : "unknown"
+                  ? 'fastly'
+                  : 'unknown'
 }
 var ze = {
-  node: "Node.js",
-  workerd: "Cloudflare Workers",
-  deno: "Deno and Deno Deploy",
-  netlify: "Netlify Edge Functions",
-  "edge-light":
-    "Edge Runtime (Vercel Edge Functions, Vercel Edge Middleware, Next.js (Pages Router) Edge API Routes, Next.js (App Router) Edge Route Handlers or Next.js Middleware)",
+  node: 'Node.js',
+  workerd: 'Cloudflare Workers',
+  deno: 'Deno and Deno Deploy',
+  netlify: 'Netlify Edge Functions',
+  'edge-light':
+    'Edge Runtime (Vercel Edge Functions, Vercel Edge Middleware, Next.js (Pages Router) Edge API Routes, Next.js (App Router) Edge Route Handlers or Next.js Middleware)',
 }
 function be() {
   let e = Re()
   return {
     id: e,
     prettyName: ze[e] || e,
-    isEdge: ["workerd", "deno", "netlify", "edge-light"].includes(e),
+    isEdge: ['workerd', 'deno', 'netlify', 'edge-light'].includes(e),
   }
 }
 var H = 9e15,
   $ = 1e9,
-  we = "0123456789abcdef",
+  we = '0123456789abcdef',
   te =
-    "2.3025850929940456840179914546843642076011014886287729760333279009675726096773524802359972050895982983419677840422862486334095254650828067566662873690987816894829072083255546808437998948262331985283935053089653777326288461633662222876982198867465436674744042432743651550489343149393914796194044002221051017141748003688084012647080685567743216228355220114804663715659121373450747856947683463616792101806445070648000277502684916746550586856935673420670581136429224554405758925724208241314695689016758940256776311356919292033376587141660230105703089634572075440370847469940168269282808481184289314848524948644871927809676271275775397027668605952496716674183485704422507197965004714951050492214776567636938662976979522110718264549734772662425709429322582798502585509785265383207606726317164309505995087807523710333101197857547331541421808427543863591778117054309827482385045648019095610299291824318237525357709750539565187697510374970888692180205189339507238539205144634197265287286965110862571492198849978748873771345686209167058",
+    '2.3025850929940456840179914546843642076011014886287729760333279009675726096773524802359972050895982983419677840422862486334095254650828067566662873690987816894829072083255546808437998948262331985283935053089653777326288461633662222876982198867465436674744042432743651550489343149393914796194044002221051017141748003688084012647080685567743216228355220114804663715659121373450747856947683463616792101806445070648000277502684916746550586856935673420670581136429224554405758925724208241314695689016758940256776311356919292033376587141660230105703089634572075440370847469940168269282808481184289314848524948644871927809676271275775397027668605952496716674183485704422507197965004714951050492214776567636938662976979522110718264549734772662425709429322582798502585509785265383207606726317164309505995087807523710333101197857547331541421808427543863591778117054309827482385045648019095610299291824318237525357709750539565187697510374970888692180205189339507238539205144634197265287286965110862571492198849978748873771345686209167058',
   re =
-    "3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091456485669234603486104543266482133936072602491412737245870066063155881748815209209628292540917153643678925903600113305305488204665213841469519415116094330572703657595919530921861173819326117931051185480744623799627495673518857527248912279381830119491298336733624406566430860213949463952247371907021798609437027705392171762931767523846748184676694051320005681271452635608277857713427577896091736371787214684409012249534301465495853710507922796892589235420199561121290219608640344181598136297747713099605187072113499999983729780499510597317328160963185950244594553469083026425223082533446850352619311881710100031378387528865875332083814206171776691473035982534904287554687311595628638823537875937519577818577805321712268066130019278766111959092164201989380952572010654858632789",
+    '3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303819644288109756659334461284756482337867831652712019091456485669234603486104543266482133936072602491412737245870066063155881748815209209628292540917153643678925903600113305305488204665213841469519415116094330572703657595919530921861173819326117931051185480744623799627495673518857527248912279381830119491298336733624406566430860213949463952247371907021798609437027705392171762931767523846748184676694051320005681271452635608277857713427577896091736371787214684409012249534301465495853710507922796892589235420199561121290219608640344181598136297747713099605187072113499999983729780499510597317328160963185950244594553469083026425223082533446850352619311881710100031378387528865875332083814206171776691473035982534904287554687311595628638823537875937519577818577805321712268066130019278766111959092164201989380952572010654858632789',
   Ne = {
     precision: 20,
     rounding: 4,
@@ -149,11 +149,11 @@ var H = 9e15,
   Te,
   Z,
   w = !0,
-  oe = "[DecimalError] ",
-  V = oe + "Invalid argument: ",
-  Le = oe + "Precision limit exceeded",
-  De = oe + "crypto unavailable",
-  Fe = "[object Decimal]",
+  oe = '[DecimalError] ',
+  V = oe + 'Invalid argument: ',
+  Le = oe + 'Precision limit exceeded',
+  De = oe + 'crypto unavailable',
+  Fe = '[object Decimal]',
   b = Math.floor,
   C = Math.pow,
   ye = /^0b([01]+(\.[01]*)?|\.[01]+)(p[+-]?\d+)?$/i,
@@ -238,13 +238,13 @@ h.cubeRoot = h.cbrt = function () {
       !s || Math.abs(s) == 1 / 0
         ? ((i = O(c.d)),
           (e = c.e),
-          (s = (e - i.length + 1) % 3) && (i += s == 1 || s == -2 ? "0" : "00"),
+          (s = (e - i.length + 1) % 3) && (i += s == 1 || s == -2 ? '0' : '00'),
           (s = C(i, 1 / 3)),
           (e = b((e + 1) / 3) - (e % 3 == (e < 0 ? -1 : 2))),
           s == 1 / 0
-            ? (i = "5e" + e)
+            ? (i = '5e' + e)
             : ((i = s.toExponential()),
-              (i = i.slice(0, i.indexOf("e") + 1) + e)),
+              (i = i.slice(0, i.indexOf('e') + 1) + e)),
           (t = new a(i)),
           (t.s = c.s))
         : (t = new a(s.toString())),
@@ -259,14 +259,14 @@ h.cubeRoot = h.cbrt = function () {
       (t = S(f.plus(c).times(u), f.plus(l), o + 2, 1)),
       O(u.d).slice(0, o) === (i = O(t.d)).slice(0, o))
     )
-      if (((i = i.slice(o - 3, o + 1)), i == "9999" || (!r && i == "4999"))) {
+      if (((i = i.slice(o - 3, o + 1)), i == '9999' || (!r && i == '4999'))) {
         if (!r && (p(u, e + 1, 0), u.times(u).times(u).eq(c))) {
           t = u
           break
         }
         ;(o += 4), (r = 1)
       } else {
-        ;(!+i || (!+i.slice(1) && i.charAt(0) == "5")) &&
+        ;(!+i || (!+i.slice(1) && i.charAt(0) == '5')) &&
           (p(t, e + 1, 1), (n = !t.times(t).times(t).eq(c)))
         break
       }
@@ -322,7 +322,7 @@ h.hyperbolicCosine = h.cosh = function () {
     (r = s.d.length),
     r < 32
       ? ((e = Math.ceil(r / 3)), (n = (1 / fe(4, e)).toString()))
-      : ((e = 16), (n = "2.3283064365386962890625e-10")),
+      : ((e = 16), (n = '2.3283064365386962890625e-10')),
     (s = j(o, 1, s.times(n), new o(1), !0))
   for (var l, f = e, c = new o(8); f--; )
     (l = s.times(s)), (s = u.minus(l.times(c.minus(l.times(c)))))
@@ -809,13 +809,13 @@ h.squareRoot = h.sqrt = function () {
       f = Math.sqrt(+o),
       f == 0 || f == 1 / 0
         ? ((n = O(u)),
-          (n.length + l) % 2 == 0 && (n += "0"),
+          (n.length + l) % 2 == 0 && (n += '0'),
           (f = Math.sqrt(n)),
           (l = b((l + 1) / 2) - (l < 0 || l % 2)),
           f == 1 / 0
-            ? (n = "5e" + l)
+            ? (n = '5e' + l)
             : ((n = f.toExponential()),
-              (n = n.slice(0, n.indexOf("e") + 1) + l)),
+              (n = n.slice(0, n.indexOf('e') + 1) + l)),
           (t = new c(n)))
         : (t = new c(f.toString())),
       i = (l = c.precision) + 3;
@@ -827,14 +827,14 @@ h.squareRoot = h.sqrt = function () {
       (t = s.plus(S(o, s, i + 2, 1)).times(0.5)),
       O(s.d).slice(0, i) === (n = O(t.d)).slice(0, i))
     )
-      if (((n = n.slice(i - 3, i + 1)), n == "9999" || (!r && n == "4999"))) {
+      if (((n = n.slice(i - 3, i + 1)), n == '9999' || (!r && n == '4999'))) {
         if (!r && (p(s, l + 1, 0), s.times(s).eq(o))) {
           t = s
           break
         }
         ;(i += 4), (r = 1)
       } else {
-        ;(!+n || (!+n.slice(1) && n.charAt(0) == "5")) &&
+        ;(!+n || (!+n.slice(1) && n.charAt(0) == '5')) &&
           (p(t, l + 1, 1), (e = !t.times(t).eq(o)))
         break
       }
@@ -935,7 +935,7 @@ h.toExponential = function (e, n) {
         n === void 0 ? (n = r.rounding) : _(n, 0, 8),
         (t = p(new r(t), e + 1, n)),
         (i = F(t, !0, e + 1))),
-    t.isNeg() && !t.isZero() ? "-" + i : i
+    t.isNeg() && !t.isZero() ? '-' + i : i
   )
 }
 h.toFixed = function (e, n) {
@@ -950,7 +950,7 @@ h.toFixed = function (e, n) {
         n === void 0 ? (n = s.rounding) : _(n, 0, 8),
         (t = p(new s(r), e + r.e + 1, n)),
         (i = F(t, !1, e + t.e + 1))),
-    r.isNeg() && !r.isZero() ? "-" + i : i
+    r.isNeg() && !r.isZero() ? '-' + i : i
   )
 }
 h.toFraction = function (e) {
@@ -1068,13 +1068,13 @@ h.toPower = h.pow = function (e) {
     (i = C(+u, f)),
     (n =
       i == 0 || !isFinite(i)
-        ? b(f * (Math.log("0." + O(u.d)) / Math.LN10 + u.e + 1))
-        : new l(i + "").e),
+        ? b(f * (Math.log('0.' + O(u.d)) / Math.LN10 + u.e + 1))
+        : new l(i + '').e),
     n > l.maxE + 1 || n < l.minE - 1
       ? new l(n > 0 ? o / 0 : 0)
       : ((w = !1),
         (l.rounding = u.s = 1),
-        (i = Math.min(12, (n + "").length)),
+        (i = Math.min(12, (n + '').length)),
         (r = Ee(e.times(B(u, t + i)), t)),
         r.d &&
           ((r = p(r, t + 5, 1)),
@@ -1099,7 +1099,7 @@ h.toPrecision = function (e, n) {
         n === void 0 ? (n = r.rounding) : _(n, 0, 8),
         (t = p(new r(t), e, n)),
         (i = F(t, e <= t.e || t.e <= r.toExpNeg, e))),
-    t.isNeg() && !t.isZero() ? "-" + i : i
+    t.isNeg() && !t.isZero() ? '-' + i : i
   )
 }
 h.toSignificantDigits = h.toSD = function (e, n) {
@@ -1116,7 +1116,7 @@ h.toString = function () {
   var e = this,
     n = e.constructor,
     i = F(e, e.e <= n.toExpNeg || e.e >= n.toExpPos)
-  return e.isNeg() && !e.isZero() ? "-" + i : i
+  return e.isNeg() && !e.isZero() ? '-' + i : i
 }
 h.truncated = h.trunc = function () {
   return p(new this.constructor(this), this.e + 1, 1)
@@ -1125,20 +1125,20 @@ h.valueOf = h.toJSON = function () {
   var e = this,
     n = e.constructor,
     i = F(e, e.e <= n.toExpNeg || e.e >= n.toExpPos)
-  return e.isNeg() ? "-" + i : i
+  return e.isNeg() ? '-' + i : i
 }
 function O(e) {
   var n,
     i,
     t,
     r = e.length - 1,
-    s = "",
+    s = '',
     o = e[0]
   if (r > 0) {
     for (s += o, n = 1; n < r; n++)
-      (t = e[n] + ""), (i = m - t.length), i && (s += U(i)), (s += t)
-    ;(o = e[n]), (t = o + ""), (i = m - t.length), i && (s += U(i))
-  } else if (o === 0) return "0"
+      (t = e[n] + ''), (i = m - t.length), i && (s += U(i)), (s += t)
+    ;(o = e[n]), (t = o + ''), (i = m - t.length), i && (s += U(i))
+  } else if (o === 0) return '0'
   for (; o % 10 === 0; ) o /= 10
   return s + o
 }
@@ -1194,7 +1194,7 @@ function sn(e, n) {
   ;(t = n.d.length),
     t < 32
       ? ((i = Math.ceil(t / 3)), (r = (1 / fe(4, i)).toString()))
-      : ((i = 16), (r = "2.3283064365386962890625e-10")),
+      : ((i = 16), (r = '2.3283064365386962890625e-10')),
     (e.precision += i),
     (n = j(e, 1, n.times(r), new e(1)))
   for (var s = i; s--; ) {
@@ -1433,16 +1433,16 @@ function F(e, n, i) {
   return (
     n
       ? (i && (t = i - o) > 0
-          ? (s = s.charAt(0) + "." + s.slice(1) + U(t))
-          : o > 1 && (s = s.charAt(0) + "." + s.slice(1)),
-        (s = s + (e.e < 0 ? "e" : "e+") + e.e))
+          ? (s = s.charAt(0) + '.' + s.slice(1) + U(t))
+          : o > 1 && (s = s.charAt(0) + '.' + s.slice(1)),
+        (s = s + (e.e < 0 ? 'e' : 'e+') + e.e))
       : r < 0
-        ? ((s = "0." + U(-r - 1) + s), i && (t = i - o) > 0 && (s += U(t)))
+        ? ((s = '0.' + U(-r - 1) + s), i && (t = i - o) > 0 && (s += U(t)))
         : r >= o
           ? ((s += U(r + 1 - o)),
-            i && (t = i - r - 1) > 0 && (s = s + "." + U(t)))
-          : ((t = r + 1) < o && (s = s.slice(0, t) + "." + s.slice(t)),
-            i && (t = i - o) > 0 && (r + 1 === o && (s += "."), (s += U(t)))),
+            i && (t = i - r - 1) > 0 && (s = s + '.' + U(t)))
+          : ((t = r + 1) < o && (s = s.slice(0, t) + '.' + s.slice(t)),
+            i && (t = i - o) > 0 && (r + 1 === o && (s += '.'), (s += U(t)))),
     s
   )
 }
@@ -1469,7 +1469,7 @@ function Ze(e) {
   return i
 }
 function U(e) {
-  for (var n = ""; e--; ) n += "0"
+  for (var n = ''; e--; ) n += '0'
   return n
 }
 function Ue(e, n, i, t) {
@@ -1580,11 +1580,11 @@ function B(e, n) {
     for (; (t < 7 && t != 1) || (t == 1 && i.charAt(1) > 3); )
       (N = N.times(e)), (i = O(N.d)), (t = i.charAt(0)), g++
     ;(s = N.e),
-      t > 1 ? ((N = new M("0." + i)), s++) : (N = new M(t + "." + i.slice(1)))
+      t > 1 ? ((N = new M('0.' + i)), s++) : (N = new M(t + '.' + i.slice(1)))
   } else
     return (
-      (f = se(M, c + 2, E).times(s + "")),
-      (N = B(new M(t + "." + i.slice(1)), c - v).plus(f)),
+      (f = se(M, c + 2, E).times(s + '')),
+      (N = B(new M(t + '.' + i.slice(1)), c - v).plus(f)),
       (M.precision = E),
       n == null ? p(N, E, q, (w = !0)) : N
     )
@@ -1603,7 +1603,7 @@ function B(e, n) {
     )
       if (
         ((l = l.times(2)),
-        s !== 0 && (l = l.plus(se(M, c + 2, E).times(s + ""))),
+        s !== 0 && (l = l.plus(se(M, c + 2, E).times(s + ''))),
         (l = S(l, new M(g), c, 1)),
         n == null)
       )
@@ -1623,7 +1623,7 @@ function Ve(e) {
 function Se(e, n) {
   var i, t, r
   for (
-    (i = n.indexOf(".")) > -1 && (n = n.replace(".", "")),
+    (i = n.indexOf('.')) > -1 && (n = n.replace('.', '')),
       (t = n.search(/e/i)) > 0
         ? (i < 0 && (i = t), (i += +n.slice(t + 1)), (n = n.substring(0, t)))
         : i < 0 && (i = n.length),
@@ -1645,7 +1645,7 @@ function Se(e, n) {
         e.d.push(+n.slice(t, (t += m)))
       ;(n = n.slice(t)), (t = m - n.length)
     } else t -= r
-    for (; t--; ) n += "0"
+    for (; t--; ) n += '0'
     e.d.push(+n),
       w &&
         (e.e > e.constructor.maxE
@@ -1656,9 +1656,9 @@ function Se(e, n) {
 }
 function on(e, n) {
   var i, t, r, s, o, u, l, f, c
-  if (n.indexOf("_") > -1) {
-    if (((n = n.replace(/(\d)_(?=\d)/g, "$1")), Ie.test(n))) return Se(e, n)
-  } else if (n === "Infinity" || n === "NaN")
+  if (n.indexOf('_') > -1) {
+    if (((n = n.replace(/(\d)_(?=\d)/g, '$1')), Ie.test(n))) return Se(e, n)
+  } else if (n === 'Infinity' || n === 'NaN')
     return +n || (e.s = NaN), (e.e = NaN), (e.d = null), e
   if (en.test(n)) (i = 16), (n = n.toLowerCase())
   else if (ye.test(n)) i = 2
@@ -1669,11 +1669,11 @@ function on(e, n) {
       s > 0
         ? ((l = +n.slice(s + 1)), (n = n.substring(2, s)))
         : (n = n.slice(2)),
-      s = n.indexOf("."),
+      s = n.indexOf('.'),
       o = s >= 0,
       t = e.constructor,
       o &&
-        ((n = n.replace(".", "")),
+        ((n = n.replace('.', '')),
         (u = n.length),
         (s = u - s),
         (r = Ue(t, new t(i), s, s * 2))),
@@ -1769,12 +1769,12 @@ function ke(e, n, i, t) {
   else {
     for (
       c = F(e),
-        o = c.indexOf("."),
+        o = c.indexOf('.'),
         v
           ? ((r = 2), n == 16 ? (i = i * 4 - 3) : n == 8 && (i = i * 3 - 2))
           : (r = n),
         o >= 0 &&
-          ((c = c.replace(".", "")),
+          ((c = c.replace('.', '')),
           (d = new g(1)),
           (d.e = c.length - o),
           (d.d = ie(F(d), 10, r)),
@@ -1785,7 +1785,7 @@ function ke(e, n, i, t) {
 
     )
       a.pop()
-    if (!a[0]) c = v ? "0p+0" : "0"
+    if (!a[0]) c = v ? '0p+0' : '0'
     else {
       if (
         (o < 0
@@ -1814,24 +1814,24 @@ function ke(e, n, i, t) {
       )
         for (; ++a[--i] > r - 1; ) (a[i] = 0), i || (++s, a.unshift(1))
       for (l = a.length; !a[l - 1]; --l);
-      for (o = 0, c = ""; o < l; o++) c += we.charAt(a[o])
+      for (o = 0, c = ''; o < l; o++) c += we.charAt(a[o])
       if (v) {
         if (l > 1)
           if (n == 16 || n == 8) {
-            for (o = n == 16 ? 4 : 3, --l; l % o; l++) c += "0"
+            for (o = n == 16 ? 4 : 3, --l; l % o; l++) c += '0'
             for (a = ie(c, r, n), l = a.length; !a[l - 1]; --l);
-            for (o = 1, c = "1."; o < l; o++) c += we.charAt(a[o])
-          } else c = c.charAt(0) + "." + c.slice(1)
-        c = c + (s < 0 ? "p" : "p+") + s
+            for (o = 1, c = '1.'; o < l; o++) c += we.charAt(a[o])
+          } else c = c.charAt(0) + '.' + c.slice(1)
+        c = c + (s < 0 ? 'p' : 'p+') + s
       } else if (s < 0) {
-        for (; ++s; ) c = "0" + c
-        c = "0." + c
-      } else if (++s > l) for (s -= l; s--; ) c += "0"
-      else s < l && (c = c.slice(0, s) + "." + c.slice(s))
+        for (; ++s; ) c = '0' + c
+        c = '0.' + c
+      } else if (++s > l) for (s -= l; s--; ) c += '0'
+      else s < l && (c = c.slice(0, s) + '.' + c.slice(s))
     }
-    c = (n == 16 ? "0x" : n == 2 ? "0b" : n == 8 ? "0o" : "") + c
+    c = (n == 16 ? '0x' : n == 2 ? '0b' : n == 8 ? '0o' : '') + c
   }
-  return e.s < 0 ? "-" + c : c
+  return e.s < 0 ? '-' + c : c
 }
 function _e(e, n) {
   if (e.length > n) return (e.length = n), !0
@@ -1897,50 +1897,50 @@ function vn(e, n, i) {
   return new this(e).clamp(n, i)
 }
 function En(e) {
-  if (!e || typeof e != "object") throw Error(oe + "Object expected")
+  if (!e || typeof e != 'object') throw Error(oe + 'Object expected')
   var n,
     i,
     t,
     r = e.defaults === !0,
     s = [
-      "precision",
+      'precision',
       1,
       $,
-      "rounding",
+      'rounding',
       0,
       8,
-      "toExpNeg",
+      'toExpNeg',
       -H,
       0,
-      "toExpPos",
+      'toExpPos',
       0,
       H,
-      "maxE",
+      'maxE',
       0,
       H,
-      "minE",
+      'minE',
       -H,
       0,
-      "modulo",
+      'modulo',
       0,
       9,
     ]
   for (n = 0; n < s.length; n += 3)
     if (((i = s[n]), r && (this[i] = Ne[i]), (t = e[i]) !== void 0))
       if (b(t) === t && t >= s[n + 1] && t <= s[n + 2]) this[i] = t
-      else throw Error(V + i + ": " + t)
-  if (((i = "crypto"), r && (this[i] = Ne[i]), (t = e[i]) !== void 0))
+      else throw Error(V + i + ': ' + t)
+  if (((i = 'crypto'), r && (this[i] = Ne[i]), (t = e[i]) !== void 0))
     if (t === !0 || t === !1 || t === 0 || t === 1)
       if (t)
         if (
-          typeof crypto < "u" &&
+          typeof crypto < 'u' &&
           crypto &&
           (crypto.getRandomValues || crypto.randomBytes)
         )
           this[i] = !0
         else throw Error(De)
       else this[i] = !1
-    else throw Error(V + i + ": " + t)
+    else throw Error(V + i + ': ' + t)
   return this
 }
 function Sn(e) {
@@ -1968,7 +1968,7 @@ function He(e) {
           : ((f.e = s.e), (f.d = s.d ? s.d.slice() : s.d))
       return
     }
-    if (((l = typeof s), l === "number")) {
+    if (((l = typeof s), l === 'number')) {
       if (s === 0) {
         ;(f.s = 1 / s < 0 ? -1 : 1), (f.e = 0), (f.d = [0])
         return
@@ -1988,7 +1988,7 @@ function He(e) {
         return
       }
       return Se(f, s.toString())
-    } else if (l !== "string") throw Error(V + s)
+    } else if (l !== 'string') throw Error(V + s)
     return (
       (u = s.charCodeAt(0)) === 45
         ? ((s = s.slice(1)), (f.s = -1))
@@ -2054,14 +2054,14 @@ function He(e) {
   )
     for (
       t = [
-        "precision",
-        "rounding",
-        "toExpNeg",
-        "toExpPos",
-        "maxE",
-        "minE",
-        "modulo",
-        "crypto",
+        'precision',
+        'rounding',
+        'toExpNeg',
+        'toExpPos',
+        'maxE',
+        'minE',
+        'modulo',
+        'crypto',
       ],
         n = 0;
       n < t.length;
@@ -2107,10 +2107,10 @@ function _n(e) {
   return new this(e).log(10)
 }
 function qn() {
-  return Be(this, arguments, "lt")
+  return Be(this, arguments, 'lt')
 }
 function Tn() {
-  return Be(this, arguments, "gt")
+  return Be(this, arguments, 'gt')
 }
 function Ln(e, n) {
   return new this(e).mod(n)
@@ -2200,8 +2200,8 @@ function Gn(e) {
 function Jn(e) {
   return p((e = new this(e)), e.e + 1, 1)
 }
-h[Symbol.for("nodejs.util.inspect.custom")] = h.toString
-h[Symbol.toStringTag] = "Decimal"
+h[Symbol.for('nodejs.util.inspect.custom')] = h.toString
+h[Symbol.toStringTag] = 'Decimal'
 var Q = (h.constructor = He(Ne))
 te = new Q(te)
 re = new Q(re)

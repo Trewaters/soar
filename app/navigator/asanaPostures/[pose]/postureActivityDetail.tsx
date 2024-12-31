@@ -1,15 +1,15 @@
-"use client"
-import React, { useState } from "react"
-import Typography from "@mui/material/Typography"
-import Paper from "@mui/material/Paper"
-import Image from "next/image"
-import { Box, ButtonGroup, Chip, IconButton, Stack } from "@mui/material"
-import { FullAsanaData } from "@context/AsanaPostureContext"
-import { FEATURES } from "@app/FEATURES"
-import { useRouter } from "next/navigation"
-import yogaMatWoman from "@public/yogaMatWoman.svg"
-import AsanaDetails from "@app/clientComponents/asanaUi/asanaDetails"
-import PostureShareButton from "@app/clientComponents/exportPoses"
+'use client'
+import React, { useState } from 'react'
+import Typography from '@mui/material/Typography'
+import Paper from '@mui/material/Paper'
+import Image from 'next/image'
+import { Box, ButtonGroup, Chip, IconButton, Stack } from '@mui/material'
+import { FullAsanaData } from '@context/AsanaPostureContext'
+import { FEATURES } from '@app/FEATURES'
+import { useRouter } from 'next/navigation'
+import yogaMatWoman from '@public/yogaMatWoman.svg'
+import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
+import PostureShareButton from '@app/clientComponents/exportPoses'
 
 interface PostureCardProps {
   postureCardProp: FullAsanaData
@@ -20,70 +20,70 @@ export default function PostureActivityDetail({
 }: PostureCardProps) {
   const posture = postureCardProp
   const router = useRouter()
-  const [easyChipVariant, setEasyChipVariant] = useState<"filled" | "outlined">(
-    "outlined"
+  const [easyChipVariant, setEasyChipVariant] = useState<'filled' | 'outlined'>(
+    'outlined'
   )
   const [averageChipVariant, setAverageChipVariant] = useState<
-    "filled" | "outlined"
-  >("outlined")
+    'filled' | 'outlined'
+  >('outlined')
   const [difficultChipVariant, setDifficultChipVariant] = useState<
-    "filled" | "outlined"
-  >("outlined")
+    'filled' | 'outlined'
+  >('outlined')
 
   const handleEasyChipClick = () => {
-    setEasyChipVariant((prev) => (prev === "outlined" ? "filled" : "outlined"))
+    setEasyChipVariant((prev) => (prev === 'outlined' ? 'filled' : 'outlined'))
   }
 
   const handleAverageChipClick = () => {
     setAverageChipVariant((prev) =>
-      prev === "outlined" ? "filled" : "outlined"
+      prev === 'outlined' ? 'filled' : 'outlined'
     )
   }
 
   const handleDifficultChipClick = () => {
     setDifficultChipVariant((prev) =>
-      prev === "outlined" ? "filled" : "outlined"
+      prev === 'outlined' ? 'filled' : 'outlined'
     )
   }
 
   const getAsanaIconUrl = (category: string) => {
     switch (category?.toLowerCase()) {
-      case "prone":
-        return "/icons/designImages/asana-standing.svg"
-      case "standing":
-        return "/icons/designImages/asana-standing.svg"
-      case "seated":
-        return "/icons/designImages/asana-supine.svg"
-      case "supine":
-        return "/icons/designImages/asana-supine.svg"
-      case "inversion":
-        return "/icons/designImages/asana-inverted.svg"
-      case "arm_leg_support":
-        return "/icons/designImages/asana-inverted.svg"
-      case "arm_balance_and_inversion":
-        return "/icons/designImages/asana-inverted.svg"
+      case 'prone':
+        return '/icons/designImages/asana-standing.svg'
+      case 'standing':
+        return '/icons/designImages/asana-standing.svg'
+      case 'seated':
+        return '/icons/designImages/asana-supine.svg'
+      case 'supine':
+        return '/icons/designImages/asana-supine.svg'
+      case 'inversion':
+        return '/icons/designImages/asana-inverted.svg'
+      case 'arm_leg_support':
+        return '/icons/designImages/asana-inverted.svg'
+      case 'arm_balance_and_inversion':
+        return '/icons/designImages/asana-inverted.svg'
       default:
-        return "/stick-tree-pose-400x400.png"
+        return '/stick-tree-pose-400x400.png'
     }
   }
   const getAsanaBackgroundUrl = (category: string) => {
     switch (category?.toLowerCase()) {
-      case "prone":
+      case 'prone':
         return `url('/icons/designImages/asana-back-pattern 1.svg')`
-      case "standing":
+      case 'standing':
         return `url('/icons/designImages/asana-back-pattern 1.svg')`
-      case "seated":
+      case 'seated':
         return `url('/icons/designImages/asana-back-pattern 2.svg')`
-      case "supine":
+      case 'supine':
         return `url('/icons/designImages/asana-back-pattern 2.svg')`
-      case "inversion":
+      case 'inversion':
         return `url('/icons/designImages/asana-back-pattern 3.svg')`
-      case "arm_leg_support":
+      case 'arm_leg_support':
         return `url('/icons/designImages/asana-back-pattern 3.svg')`
-      case "arm_balance_and_inversion":
+      case 'arm_balance_and_inversion':
         return `url('/icons/designImages/asana-back-pattern 3.svg')`
       default:
-        return "/stick-tree-pose-400x400.png"
+        return '/stick-tree-pose-400x400.png'
     }
   }
 
@@ -94,67 +94,67 @@ export default function PostureActivityDetail({
   return (
     <Paper
       sx={{
-        mt: "-2.2px",
-        backgroundColor: "navSplash.dark",
+        mt: '-2.2px',
+        backgroundColor: 'navSplash.dark',
       }}
     >
       <Box
         sx={{
-          textAlign: "center",
+          textAlign: 'center',
           backgroundImage: `${getAsanaBackgroundUrl(posture?.category)}`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          alignContent: "space-around",
-          display: "flex",
-          flexDirection: "column",
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          alignContent: 'space-around',
+          display: 'flex',
+          flexDirection: 'column',
           pb: 4,
         }}
       >
-        <Stack direction={"column"} alignSelf={"center"}>
+        <Stack direction={'column'} alignSelf={'center'}>
           <Stack>
             <Paper
               elevation={1}
               sx={{
-                borderRadius: "16px",
-                backgroundColor: "info.contrastText",
+                borderRadius: '16px',
+                backgroundColor: 'info.contrastText',
                 mt: 3,
-                mb: "-24px",
-                mx: "25%",
+                mb: '-24px',
+                mx: '25%',
                 zIndex: 1,
               }}
             >
               <Box
                 sx={{
-                  borderRadius: "16px",
-                  height: "50%",
-                  display: "flex",
-                  flexDirection: "row",
+                  borderRadius: '16px',
+                  height: '50%',
+                  display: 'flex',
+                  flexDirection: 'row',
                   px: 4,
                   py: 1,
-                  overflow: "hidden", // Ensure the box does not overflow
+                  overflow: 'hidden', // Ensure the box does not overflow
                 }}
-                justifyContent={"space-around"}
-                alignItems={"center"}
+                justifyContent={'space-around'}
+                alignItems={'center'}
               >
                 <Image
                   alt="Asana Standing"
                   height={36}
                   width={36}
                   style={{
-                    alignContent: "center",
+                    alignContent: 'center',
                   }}
                   src={getAsanaIconUrl(posture?.category)}
                 ></Image>
                 <Typography
                   variant="h5"
-                  component={"p"}
+                  component={'p'}
                   sx={{
-                    color: "secondary.contrastText",
+                    color: 'secondary.contrastText',
                     flexShrink: 1, // Prevent the text from growing beyond the container
-                    overflow: "hidden", // Hide overflow text
-                    textOverflow: "ellipsis", // Add ellipsis for overflow text
-                    whiteSpace: "nowrap", // Prevent text from wrapping
+                    overflow: 'hidden', // Hide overflow text
+                    textOverflow: 'ellipsis', // Add ellipsis for overflow text
+                    whiteSpace: 'nowrap', // Prevent text from wrapping
                   }}
                 >
                   {posture?.category}
@@ -165,17 +165,17 @@ export default function PostureActivityDetail({
           <Stack>
             <Typography
               variant="h1"
-              component={"h2"}
+              component={'h2'}
               sx={{
                 pl: 2,
                 pt: 2,
-                height: "200px",
-                width: "400px",
-                backgroundColor: "info.contrastText",
-                color: "primary.main",
-                borderRadius: "12px",
-                alignContent: "center",
-                boxShadow: "0 2px 2px 2px rgba(211, 211, 211, 0.5)",
+                height: '200px',
+                width: '400px',
+                backgroundColor: 'info.contrastText',
+                color: 'primary.main',
+                borderRadius: '12px',
+                alignContent: 'center',
+                boxShadow: '0 2px 2px 2px rgba(211, 211, 211, 0.5)',
               }}
             >
               {posture?.sort_english_name}
@@ -193,24 +193,24 @@ export default function PostureActivityDetail({
       </Box>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
+          display: 'flex',
+          flexDirection: 'column',
           mt: 3,
         }}
       >
-        <Stack direction={"column"}>
+        <Stack direction={'column'}>
           <AsanaDetails
             details={posture?.sort_english_name}
             label="English Variant Names"
             sx={{
-              mb: "32px",
+              mb: '32px',
             }}
           />
           <AsanaDetails
             details={posture?.description}
             label="Description"
             sx={{
-              mb: "32px",
+              mb: '32px',
             }}
           />
           {/* <AsanaDetails
@@ -242,40 +242,40 @@ export default function PostureActivityDetail({
           <AsanaDetails
             details={`${posture?.category}`}
             label="Category"
-            sx={{ mb: "32px" }}
+            sx={{ mb: '32px' }}
           />
           <AsanaDetails
             details={posture?.difficulty}
             label="Difficulty"
-            sx={{ mb: "32px" }}
+            sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={posture?.breath_direction_default ?? "Inhale/Exhale"}
+            details={posture?.breath_direction_default ?? 'Inhale/Exhale'}
             label="Breath (default)"
-            sx={{ mb: "32px" }}
+            sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={posture?.preferred_side ?? "No preferred side"}
+            details={posture?.preferred_side ?? 'No preferred side'}
             label="Preferred Side"
-            sx={{ mb: "32px" }}
+            sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={posture?.sideways ? "True" : "False"}
+            details={posture?.sideways ? 'True' : 'False'}
             label="Sideways"
             // sx={{ mb: '32px' }}
           />
           <Stack
-            flexDirection={"row"}
+            flexDirection={'row'}
             gap={2}
             sx={{
               p: 2,
-              ml: { xs: 2, md: "23%" },
+              ml: { xs: 2, md: '23%' },
               opacity: 0.75, // 25% transparency
-              width: "auto", // Make the width responsive
-              borderRadius: "12px",
-              backdropFilter: "blur(48%)", // Add blur effect
-              overflow: "hidden", // Prevent overflow
-              justifyContent: "center",
+              width: 'auto', // Make the width responsive
+              borderRadius: '12px',
+              backdropFilter: 'blur(48%)', // Add blur effect
+              overflow: 'hidden', // Prevent overflow
+              justifyContent: 'center',
             }}
           >
             <Stack>
@@ -321,9 +321,9 @@ export default function PostureActivityDetail({
         <ButtonGroup
           variant="outlined"
           aria-label="Basic button group"
-          sx={{ mx: 2, display: "flex", justifyContent: "space-around" }}
+          sx={{ mx: 2, display: 'flex', justifyContent: 'space-around' }}
         >
-          <Stack sx={{ m: 2, border: "1px solid black", borderRadius: "12px" }}>
+          <Stack sx={{ m: 2, border: '1px solid black', borderRadius: '12px' }}>
             <IconButton disableRipple onClick={handleClick}>
               <Image
                 src={yogaMatWoman}
@@ -333,7 +333,7 @@ export default function PostureActivityDetail({
               />
             </IconButton>
           </Stack>
-          <Stack sx={{ m: 2, border: "1px solid black", borderRadius: "12px" }}>
+          <Stack sx={{ m: 2, border: '1px solid black', borderRadius: '12px' }}>
             <PostureShareButton postureData={posture} />
           </Stack>
         </ButtonGroup>

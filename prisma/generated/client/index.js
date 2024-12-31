@@ -1,4 +1,4 @@
-Object.defineProperty(exports, "__esModule", { value: true })
+Object.defineProperty(exports, '__esModule', { value: true })
 
 const {
   PrismaClientKnownRequestError,
@@ -21,7 +21,7 @@ const {
   defineDmmfProperty,
   Public,
   getRuntime,
-} = require("./runtime/library.js")
+} = require('./runtime/library.js')
 
 const Prisma = {}
 
@@ -33,8 +33,8 @@ exports.$Enums = {}
  * Query Engine version: 34ace0eb2704183d2c05b60b52fba5c43c13f303
  */
 Prisma.prismaVersion = {
-  client: "5.16.1",
-  engine: "34ace0eb2704183d2c05b60b52fba5c43c13f303",
+  client: '5.16.1',
+  engine: '34ace0eb2704183d2c05b60b52fba5c43c13f303',
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError
@@ -73,180 +73,180 @@ Prisma.NullTypes = {
   AnyNull: objectEnumValues.classes.AnyNull,
 }
 
-const path = require("path")
+const path = require('path')
 
 /**
  * Enums
  */
 exports.Prisma.UserDataScalarFieldEnum = {
-  id: "id",
-  provider_id: "provider_id",
-  name: "name",
-  email: "email",
-  emailVerified: "emailVerified",
-  image: "image",
-  pronouns: "pronouns",
-  profile: "profile",
-  createdAt: "createdAt",
-  updatedAt: "updatedAt",
-  firstName: "firstName",
-  lastName: "lastName",
-  bio: "bio",
-  headline: "headline",
-  location: "location",
-  websiteURL: "websiteURL",
-  shareQuick: "shareQuick",
-  yogaStyle: "yogaStyle",
-  yogaExperience: "yogaExperience",
-  company: "company",
-  socialURL: "socialURL",
-  isLocationPublic: "isLocationPublic",
-  role: "role",
+  id: 'id',
+  provider_id: 'provider_id',
+  name: 'name',
+  email: 'email',
+  emailVerified: 'emailVerified',
+  image: 'image',
+  pronouns: 'pronouns',
+  profile: 'profile',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  bio: 'bio',
+  headline: 'headline',
+  location: 'location',
+  websiteURL: 'websiteURL',
+  shareQuick: 'shareQuick',
+  yogaStyle: 'yogaStyle',
+  yogaExperience: 'yogaExperience',
+  company: 'company',
+  socialURL: 'socialURL',
+  isLocationPublic: 'isLocationPublic',
+  role: 'role',
 }
 
 exports.Prisma.ProviderAccountScalarFieldEnum = {
-  id: "id",
-  userId: "userId",
-  type: "type",
-  provider: "provider",
-  providerAccountId: "providerAccountId",
-  refresh_token: "refresh_token",
-  access_token: "access_token",
-  expires_at: "expires_at",
-  token_type: "token_type",
-  scope: "scope",
-  id_token: "id_token",
-  session_state: "session_state",
-  credentials_password: "credentials_password",
-  createdAt: "createdAt",
-  updatedAt: "updatedAt",
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  provider: 'provider',
+  providerAccountId: 'providerAccountId',
+  refresh_token: 'refresh_token',
+  access_token: 'access_token',
+  expires_at: 'expires_at',
+  token_type: 'token_type',
+  scope: 'scope',
+  id_token: 'id_token',
+  session_state: 'session_state',
+  credentials_password: 'credentials_password',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
 }
 
 exports.Prisma.AsanaPostureScalarFieldEnum = {
-  id: "id",
-  english_names: "english_names",
-  sanskrit_names: "sanskrit_names",
-  sort_english_name: "sort_english_name",
-  description: "description",
-  benefits: "benefits",
-  category: "category",
-  difficulty: "difficulty",
-  lore: "lore",
-  breath_direction_default: "breath_direction_default",
-  dristi: "dristi",
-  variations: "variations",
-  modifications: "modifications",
-  suggested_postures: "suggested_postures",
-  preparatory_postures: "preparatory_postures",
-  preferred_side: "preferred_side",
-  sideways: "sideways",
-  image: "image",
-  created_on: "created_on",
-  updated_on: "updated_on",
-  acitivity_completed: "acitivity_completed",
-  acitivity_practice: "acitivity_practice",
-  posture_intent: "posture_intent",
-  breath_series: "breath_series",
-  duration_asana: "duration_asana",
-  transition_cues_out: "transition_cues_out",
-  transition_cues_in: "transition_cues_in",
-  setup_cues: "setup_cues",
-  deepening_cues: "deepening_cues",
-  customize_asana: "customize_asana",
-  additional_cues: "additional_cues",
-  joint_action: "joint_action",
-  muscle_action: "muscle_action",
-  created_by: "created_by",
+  id: 'id',
+  english_names: 'english_names',
+  sanskrit_names: 'sanskrit_names',
+  sort_english_name: 'sort_english_name',
+  description: 'description',
+  benefits: 'benefits',
+  category: 'category',
+  difficulty: 'difficulty',
+  lore: 'lore',
+  breath_direction_default: 'breath_direction_default',
+  dristi: 'dristi',
+  variations: 'variations',
+  modifications: 'modifications',
+  suggested_postures: 'suggested_postures',
+  preparatory_postures: 'preparatory_postures',
+  preferred_side: 'preferred_side',
+  sideways: 'sideways',
+  image: 'image',
+  created_on: 'created_on',
+  updated_on: 'updated_on',
+  acitivity_completed: 'acitivity_completed',
+  acitivity_practice: 'acitivity_practice',
+  posture_intent: 'posture_intent',
+  breath_series: 'breath_series',
+  duration_asana: 'duration_asana',
+  transition_cues_out: 'transition_cues_out',
+  transition_cues_in: 'transition_cues_in',
+  setup_cues: 'setup_cues',
+  deepening_cues: 'deepening_cues',
+  customize_asana: 'customize_asana',
+  additional_cues: 'additional_cues',
+  joint_action: 'joint_action',
+  muscle_action: 'muscle_action',
+  created_by: 'created_by',
 }
 
 exports.Prisma.AsanaSeriesScalarFieldEnum = {
-  id: "id",
-  seriesName: "seriesName",
-  seriesPostures: "seriesPostures",
-  breathSeries: "breathSeries",
-  description: "description",
-  durationSeries: "durationSeries",
-  image: "image",
-  createdAt: "createdAt",
-  updatedAt: "updatedAt",
+  id: 'id',
+  seriesName: 'seriesName',
+  seriesPostures: 'seriesPostures',
+  breathSeries: 'breathSeries',
+  description: 'description',
+  durationSeries: 'durationSeries',
+  image: 'image',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
 }
 
 exports.Prisma.AsanaSequenceScalarFieldEnum = {
-  id: "id",
-  nameSequence: "nameSequence",
-  sequencesSeries: "sequencesSeries",
-  description: "description",
-  durationSequence: "durationSequence",
-  image: "image",
-  breath_direction: "breath_direction",
-  createdAt: "createdAt",
-  updatedAt: "updatedAt",
+  id: 'id',
+  nameSequence: 'nameSequence',
+  sequencesSeries: 'sequencesSeries',
+  description: 'description',
+  durationSequence: 'durationSequence',
+  image: 'image',
+  breath_direction: 'breath_direction',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
 }
 
 exports.Prisma.SortOrder = {
-  asc: "asc",
-  desc: "desc",
+  asc: 'asc',
+  desc: 'desc',
 }
 
 exports.Prisma.QueryMode = {
-  default: "default",
-  insensitive: "insensitive",
+  default: 'default',
+  insensitive: 'insensitive',
 }
 
 exports.Prisma.ModelName = {
-  UserData: "UserData",
-  ProviderAccount: "ProviderAccount",
-  AsanaPosture: "AsanaPosture",
-  AsanaSeries: "AsanaSeries",
-  AsanaSequence: "AsanaSequence",
+  UserData: 'UserData',
+  ProviderAccount: 'ProviderAccount',
+  AsanaPosture: 'AsanaPosture',
+  AsanaSeries: 'AsanaSeries',
+  AsanaSequence: 'AsanaSequence',
 }
 /**
  * Create the Client
  */
 const config = {
   generator: {
-    name: "client",
+    name: 'client',
     provider: {
       fromEnvVar: null,
-      value: "prisma-client-js",
+      value: 'prisma-client-js',
     },
     output: {
       value:
-        "C:\\Users\\trewa\\Documents\\Github\\NextJS tutorials\\soar\\prisma\\generated\\client",
+        'C:\\Users\\trewa\\Documents\\Github\\NextJS tutorials\\soar\\prisma\\generated\\client',
       fromEnvVar: null,
     },
     config: {
-      engineType: "library",
+      engineType: 'library',
     },
     binaryTargets: [
       {
         fromEnvVar: null,
-        value: "windows",
+        value: 'windows',
         native: true,
       },
       {
         fromEnvVar: null,
-        value: "rhel-openssl-3.0.x",
+        value: 'rhel-openssl-3.0.x',
       },
     ],
     previewFeatures: [],
     sourceFilePath:
-      "C:\\Users\\trewa\\Documents\\Github\\NextJS tutorials\\soar\\prisma\\schema.prisma",
+      'C:\\Users\\trewa\\Documents\\Github\\NextJS tutorials\\soar\\prisma\\schema.prisma',
     isCustomOutput: true,
   },
   relativeEnvPaths: {
     rootEnvPath: null,
-    schemaEnvPath: "../../../.env",
+    schemaEnvPath: '../../../.env',
   },
-  relativePath: "../..",
-  clientVersion: "5.16.1",
-  engineVersion: "34ace0eb2704183d2c05b60b52fba5c43c13f303",
-  datasourceNames: ["db"],
-  activeProvider: "mongodb",
+  relativePath: '../..',
+  clientVersion: '5.16.1',
+  engineVersion: '34ace0eb2704183d2c05b60b52fba5c43c13f303',
+  datasourceNames: ['db'],
+  activeProvider: 'mongodb',
   inlineDatasources: {
     db: {
       url: {
-        fromEnvVar: "MONGODB_URI_v2",
+        fromEnvVar: 'MONGODB_URI_v2',
         value: null,
       },
     },
@@ -254,19 +254,19 @@ const config = {
   inlineSchema:
     'datasource db {\n  provider = "mongodb"\n  url      = env("MONGODB_URI_v2")\n}\n\ngenerator client {\n  provider      = "prisma-client-js"\n  output        = "./generated/client"\n  binaryTargets = ["native", "rhel-openssl-3.0.x"]\n}\n\nmodel UserData {\n  id               String    @id @default(auto()) @map("_id") @db.ObjectId\n  provider_id      String?   @unique\n  name             String?\n  email            String?   @unique\n  emailVerified    DateTime?\n  image            String?\n  pronouns         String?\n  profile          Json?\n  createdAt        DateTime  @default(now())\n  updatedAt        DateTime  @updatedAt\n  firstName        String\n  lastName         String\n  bio              String\n  headline         String\n  location         String\n  websiteURL       String\n  shareQuick       String?\n  yogaStyle        String?\n  yogaExperience   String?\n  company          String?\n  socialURL        String?\n  isLocationPublic String?\n  role             String?\n\n  // emailPublic       String\n  // emailInternal     String\n  // emailAlternate    String\n  // phoneContact      String\n  // Facebook          String\n  // Google            String\n  // Patreon           String\n  // Twitch            String\n  // Twitter           String\n  // blogURL           String\n  // streamingURL      String\n  // isInstructor      String\n  // isStudent         String\n  // isPrivate         String\n  // calendar          String\n  // timezone          String\n  // exportAccountInfo String\n  // deleteAccountInfo String\n  providerAccounts ProviderAccount[]\n}\n\nmodel ProviderAccount {\n  id                   String  @id @default(auto()) @map("_id") @db.ObjectId\n  userId               String  @unique @db.ObjectId\n  type                 String\n  provider             String\n  providerAccountId    String\n  refresh_token        String?\n  access_token         String?\n  expires_at           Int?\n  token_type           String?\n  scope                String?\n  id_token             String?\n  session_state        Json?\n  credentials_password String?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  user UserData @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  // @@unique([provider, providerAccountId])\n}\n\n/// Represents a yoga Asana in the app.\nmodel AsanaPosture {\n  id                       String    @id @default(auto()) @map("_id") @db.ObjectId\n  english_names            String[]\n  sanskrit_names           Json?\n  sort_english_name        String    @unique\n  description              String?\n  benefits                 String?\n  category                 String?\n  difficulty               String?\n  lore                     String?\n  breath_direction_default String?\n  dristi                   String?\n  variations               String[]\n  modifications            String[]\n  suggested_postures       String[]\n  preparatory_postures     String[]\n  preferred_side           String?\n  sideways                 Boolean?\n  image                    String?\n  created_on               DateTime? @default(now())\n  updated_on               DateTime? @updatedAt\n  acitivity_completed      Boolean?\n  acitivity_practice       Boolean?\n  posture_intent           String?\n  breath_series            String[]\n  duration_asana           String?\n  transition_cues_out      String?\n  transition_cues_in       String?\n  setup_cues               String?\n  deepening_cues           String?\n  customize_asana          String?\n  additional_cues          String?\n  joint_action             String?\n  muscle_action            String?\n  created_by               String?\n}\n\nmodel AsanaSeries {\n  id             String    @id @default(auto()) @map("_id") @db.ObjectId\n  seriesName     String\n  seriesPostures String[]\n  // breath           String?\n  // breath specified for the series\n  breathSeries   String[]\n  description    String?\n  durationSeries String?\n  image          String?\n  createdAt      DateTime? @default(now())\n  updatedAt      DateTime? @updatedAt\n}\n\nmodel AsanaSequence {\n  id               String    @id @default(auto()) @map("_id") @db.ObjectId\n  nameSequence     String\n  sequencesSeries  Json[]\n  description      String?\n  durationSequence String?\n  image            String?\n  breath_direction String?\n  createdAt        DateTime? @default(now())\n  updatedAt        DateTime? @updatedAt\n}\n',
   inlineSchemaHash:
-    "bd099632b3c93ab418cc79e84acdda715e9c02768cc02e30635dd7790423537a",
+    'bd099632b3c93ab418cc79e84acdda715e9c02768cc02e30635dd7790423537a',
   copyEngine: true,
 }
 
-const fs = require("fs")
+const fs = require('fs')
 
 config.dirname = __dirname
-if (!fs.existsSync(path.join(__dirname, "schema.prisma"))) {
-  const alternativePaths = ["prisma/generated/client", "generated/client"]
+if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
+  const alternativePaths = ['prisma/generated/client', 'generated/client']
 
   const alternativePath =
     alternativePaths.find((altPath) => {
-      return fs.existsSync(path.join(process.cwd(), altPath, "schema.prisma"))
+      return fs.existsSync(path.join(process.cwd(), altPath, 'schema.prisma'))
     }) ?? alternativePaths[0]
 
   config.dirname = path.join(process.cwd(), alternativePath)
@@ -279,7 +279,7 @@ config.runtimeDataModel = JSON.parse(
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = undefined
 
-const { warnEnvConflicts } = require("./runtime/library.js")
+const { warnEnvConflicts } = require('./runtime/library.js')
 
 warnEnvConflicts({
   rootEnvPath:
@@ -295,18 +295,18 @@ exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "query_engine-windows.dll.node")
+path.join(__dirname, 'query_engine-windows.dll.node')
 path.join(
   process.cwd(),
-  "prisma/generated/client/query_engine-windows.dll.node"
+  'prisma/generated/client/query_engine-windows.dll.node'
 )
 
 // file annotations for bundling tools to include these files
-path.join(__dirname, "libquery_engine-rhel-openssl-3.0.x.so.node")
+path.join(__dirname, 'libquery_engine-rhel-openssl-3.0.x.so.node')
 path.join(
   process.cwd(),
-  "prisma/generated/client/libquery_engine-rhel-openssl-3.0.x.so.node"
+  'prisma/generated/client/libquery_engine-rhel-openssl-3.0.x.so.node'
 )
 // file annotations for bundling tools to include these files
-path.join(__dirname, "schema.prisma")
-path.join(process.cwd(), "prisma/generated/client/schema.prisma")
+path.join(__dirname, 'schema.prisma')
+path.join(process.cwd(), 'prisma/generated/client/schema.prisma')

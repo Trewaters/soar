@@ -1,15 +1,15 @@
-import { PrismaClient } from "@prisma/generated/client"
+import { PrismaClient } from '@prisma/generated/client'
 
 const prisma = new PrismaClient()
 // const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
-  const email = searchParams.get("email")
+  const email = searchParams.get('email')
   let user
 
   if (!email) {
-    return new Response(JSON.stringify({ error: "User not found" }), {
+    return new Response(JSON.stringify({ error: 'User not found' }), {
       status: 404,
     })
   }
@@ -22,13 +22,13 @@ export async function GET(req: Request) {
     })
 
     if (!user) {
-      return new Response(JSON.stringify({ error: "User not found" }), {
+      return new Response(JSON.stringify({ error: 'User not found' }), {
         status: 404,
       })
     }
   } catch (error) {
     return new Response(
-      JSON.stringify({ error: "Failed to fetch user data" }),
+      JSON.stringify({ error: 'Failed to fetch user data' }),
       { status: 500 }
     )
   } finally {
@@ -51,7 +51,7 @@ export async function GET(req: Request) {
   return new Response(JSON.stringify({ data: user }), {
     status: 200,
     headers: {
-      "Cache-Control": "no-store",
+      'Cache-Control': 'no-store',
     },
   })
 }

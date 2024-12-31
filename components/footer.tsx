@@ -1,21 +1,21 @@
-import { Box, Stack, Typography } from "@mui/material"
-import Link from "next/link"
+import { Box, Stack, Typography } from '@mui/material'
+import Link from 'next/link'
 
 export default function Footer() {
   return (
     <footer>
       <Box
         sx={{
-          position: "absolute",
+          position: 'absolute',
           bottom: 0,
           // marginTop: '620%',
-          width: "100%",
-          p: "2rem",
-          color: "text.secondary",
+          width: '100%',
+          p: '2rem',
+          color: 'text.secondary',
         }}
-        textAlign={"center"}
+        textAlign={'center'}
       >
-        <Stack display={"flex"} justifyContent={"space-between"} flex={"wrap"}>
+        <Stack display={'flex'} justifyContent={'space-between'} flex={'wrap'}>
           <Stack>
             <Typography variant="body2">
               © copyright 2023 - {new Date().getFullYear()} Uvuyoga Soar App.
@@ -33,7 +33,7 @@ export default function Footer() {
           </Stack>
           <Stack>
             <Typography variant="body2">
-              View our&nbsp;{" "}
+              View our&nbsp;{' '}
               <Link href="/compliance/terms">Terms of Service</Link>
               .&nbsp;By using this website and mobile application, you agree to
               comply with and be bound by the following terms and conditions.

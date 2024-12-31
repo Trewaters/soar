@@ -1,7 +1,7 @@
-"use client"
-import React from "react"
-import { useFlowSeries } from "@context/AsanaSeriesContext"
-import { FEATURES } from "@app/FEATURES"
+'use client'
+import React from 'react'
+import { useFlowSeries } from '@context/AsanaSeriesContext'
+import { FEATURES } from '@app/FEATURES'
 import {
   Avatar,
   Box,
@@ -20,22 +20,22 @@ import {
   Stack,
   TextField,
   Typography,
-} from "@mui/material"
-import { ChangeEvent, useEffect, useState } from "react"
-import { useSession } from "next-auth/react"
-import { LooksOne } from "@mui/icons-material"
-import LooksTwoIcon from "@mui/icons-material/LooksTwo"
-import Looks3Icon from "@mui/icons-material/Looks3"
-import Looks4Icon from "@mui/icons-material/Looks4"
-import Looks5Icon from "@mui/icons-material/Looks5"
-import { useRouter } from "next/navigation"
-import { FullAsanaData } from "@context/AsanaPostureContext"
-import SubNavHeader from "@app/clientComponents/sub-nav-header"
-import SplashHeader from "@app/clientComponents/splash-header"
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
-import AutocompleteComponent from "@app/clientComponents/autocomplete-search"
-import Image from "next/image"
-import NavBottom from "@serverComponents/navBottom"
+} from '@mui/material'
+import { ChangeEvent, useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { LooksOne } from '@mui/icons-material'
+import LooksTwoIcon from '@mui/icons-material/LooksTwo'
+import Looks3Icon from '@mui/icons-material/Looks3'
+import Looks4Icon from '@mui/icons-material/Looks4'
+import Looks5Icon from '@mui/icons-material/Looks5'
+import { useRouter } from 'next/navigation'
+import { FullAsanaData } from '@context/AsanaPostureContext'
+import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import SplashHeader from '@app/clientComponents/splash-header'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import AutocompleteComponent from '@app/clientComponents/autocomplete-search'
+import Image from 'next/image'
+import NavBottom from '@serverComponents/navBottom'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -62,9 +62,9 @@ export default function Page() {
       // const seriesData = Array.isArray(data) ? data : [data]
       // setSeries(JSON.parse(JSON.stringify(seriesData)))
       try {
-        const response = await fetch("/api/poses", { cache: "no-store" })
+        const response = await fetch('/api/poses', { cache: 'no-store' })
         if (!response.ok) {
-          throw new Error("Network response was not ok")
+          throw new Error('Network response was not ok')
         }
         setPostures(await response.json())
       } catch (error: Error | any) {
@@ -80,7 +80,7 @@ export default function Page() {
       //   session.status === 'resolved_model' &&
       //   session.value === 'null')
     ) {
-      router.push("/navigator/flows")
+      router.push('/navigator/flows')
     }
 
     fetchData()
@@ -96,14 +96,14 @@ export default function Page() {
         Array.isArray(value.sanskrit_names) &&
         value.sanskrit_names[0]?.simplified
           ? value.sanskrit_names[0].simplified
-          : ""
+          : ''
       dispatch({
-        type: "SET_FLOW_SERIES",
+        type: 'SET_FLOW_SERIES',
         payload: {
           ...state.flowSeries,
           seriesPostures: [
             ...state.flowSeries.seriesPostures,
-            value.sort_english_name + "; " + simplifiedName,
+            value.sort_english_name + '; ' + simplifiedName,
           ],
         },
       })
@@ -121,19 +121,19 @@ export default function Page() {
       duration,
       image,
     }
-    dispatch({ type: "SET_FLOW_SERIES", payload: updatedSeries })
+    dispatch({ type: 'SET_FLOW_SERIES', payload: updatedSeries })
 
     try {
-      const response = await fetch("/api/series/createSeries", {
-        method: "POST",
+      const response = await fetch('/api/series/createSeries', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          cache: "no-store",
+          'Content-Type': 'application/json',
+          cache: 'no-store',
         },
         body: JSON.stringify(updatedSeries),
       })
       if (!response.ok) {
-        throw new Error("Network response was not ok")
+        throw new Error('Network response was not ok')
       }
       // eslint-disable-next-line no-unused-vars
       const data = await response.json()
@@ -148,18 +148,18 @@ export default function Page() {
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target
     dispatch({
-      type: "SET_FLOW_SERIES",
+      type: 'SET_FLOW_SERIES',
       payload: {
         ...state.flowSeries,
         [name]: value,
       },
     })
     switch (name) {
-      case "seriesName":
+      case 'seriesName':
         setIsDirty(value.length > 0)
 
         break
-      case "description":
+      case 'description':
         setIsDirtyDescription(event.target.value.length > 0)
 
         break
@@ -170,15 +170,15 @@ export default function Page() {
 
   function handleCancel() {
     dispatch({
-      type: "SET_FLOW_SERIES",
+      type: 'SET_FLOW_SERIES',
       payload: {
         ...state.flowSeries,
-        seriesName: "",
+        seriesName: '',
         seriesPostures: [],
-        breath: "",
-        description: "",
-        duration: "",
-        image: "",
+        breath: '',
+        description: '',
+        duration: '',
+        image: '',
       },
     })
   }
@@ -187,18 +187,18 @@ export default function Page() {
     <>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
           mt: 4,
           mb: 4,
         }}
       >
-        <Stack spacing={2} sx={{ marginX: 3, mb: "1em", width: "fit-content" }}>
+        <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
           <SplashHeader
-            src={"/icons/designImages/header-create-series.png"}
-            alt={"Create Series"}
+            src={'/icons/designImages/header-create-series.png'}
+            alt={'Create Series'}
             title="Create Series"
           />
           <SubNavHeader
@@ -208,7 +208,7 @@ export default function Page() {
           />
           {FEATURES.SHOW_CREATE_SERIES && (
             <Box sx={{ px: 4 }}>
-              <FormControl sx={{ width: "100%", mb: 3 }}>
+              <FormControl sx={{ width: '100%', mb: 3 }}>
                 <AutocompleteComponent
                   options={postures.sort((a, b) =>
                     a.sort_english_name.localeCompare(b.sort_english_name)
@@ -238,13 +238,13 @@ export default function Page() {
                       item
                       xs={12}
                       className="journalTitle"
-                      display={"flex"}
-                      direction={"row"}
+                      display={'flex'}
+                      direction={'row'}
                     >
                       <TextField
                         sx={{
-                          "& .MuiInputBase-input": { color: "primary.main" },
-                          width: "100%",
+                          '& .MuiInputBase-input': { color: 'primary.main' },
+                          width: '100%',
                         }}
                         variant="standard"
                         id="series-name"
@@ -253,16 +253,16 @@ export default function Page() {
                         value={seriesName}
                         onChange={handleChange}
                         InputProps={{
-                          style: { color: "primary.main" },
+                          style: { color: 'primary.main' },
                         }}
                       />
                       <>
                         <Checkbox
                           checked={isDirty}
                           sx={{
-                            color: "primary.main",
-                            "&.Mui-checked": {
-                              color: "primary.main",
+                            color: 'primary.main',
+                            '&.Mui-checked': {
+                              color: 'primary.main',
                             },
                           }}
                         />
@@ -306,18 +306,18 @@ export default function Page() {
                           className="journalLine"
                           key={`${word}+${index}`}
                           sx={{
-                            alignItems: "center",
-                            display: "flex",
-                            flexDirection: "row",
+                            alignItems: 'center',
+                            display: 'flex',
+                            flexDirection: 'row',
                           }}
                         >
                           <Stack>
                             <IconButton
                               disableRipple
-                              sx={{ color: "error.light" }}
+                              sx={{ color: 'error.light' }}
                               onClick={() =>
                                 dispatch({
-                                  type: "SET_FLOW_SERIES",
+                                  type: 'SET_FLOW_SERIES',
                                   payload: {
                                     ...state.flowSeries,
                                     seriesPostures:
@@ -332,16 +332,16 @@ export default function Page() {
                             </IconButton>
                           </Stack>
                           <Stack>
-                            {word.split(";").map((splitWord, idx) => (
+                            {word.split(';').map((splitWord, idx) => (
                               <Typography
                                 key={`${word}-${idx}`}
-                                variant={idx === 1 ? "body2" : "body1"}
+                                variant={idx === 1 ? 'body2' : 'body1'}
                                 sx={{
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
+                                  textOverflow: 'ellipsis',
+                                  whiteSpace: 'nowrap',
                                   ...(idx === 1 && {
-                                    fontWeight: "bold",
-                                    fontStyle: "italic",
+                                    fontWeight: 'bold',
+                                    fontStyle: 'italic',
                                   }), // Add emphasis styles here
                                 }}
                               >
@@ -400,7 +400,7 @@ export default function Page() {
                         color="primary"
                         onClick={handleSubmit}
                         disabled={session === null}
-                        sx={{ borderRadius: "12px" }}
+                        sx={{ borderRadius: '12px' }}
                       >
                         Submit
                       </Button>
@@ -408,8 +408,8 @@ export default function Page() {
                         variant="outlined"
                         color="inherit"
                         sx={{
-                          color: "primary.contrastText",
-                          borderRadius: "12px",
+                          color: 'primary.contrastText',
+                          borderRadius: '12px',
                         }}
                         onClick={handleCancel}
                       >
@@ -421,23 +421,23 @@ export default function Page() {
                   <Grid item xs={12} sx={{ mb: 2, mx: 2 }}>
                     <FormControl
                       sx={{
-                        width: "100%",
-                        border: "1px solid black",
-                        borderRadius: "12px",
+                        width: '100%',
+                        border: '1px solid black',
+                        borderRadius: '12px',
                         p: 2,
                       }}
                     >
                       <Stack
                         gap={2}
-                        flexDirection={"row"}
-                        alignItems={"center"}
+                        flexDirection={'row'}
+                        alignItems={'center'}
                       >
-                        <Typography color={"primary.main"} variant="h3">
+                        <Typography color={'primary.main'} variant="h3">
                           Description
                         </Typography>
                         <Image
-                          src={"/icons/designImages/leaf-2.svg"}
-                          alt={"leaf icon"}
+                          src={'/icons/designImages/leaf-2.svg'}
+                          alt={'leaf icon'}
                           height={21}
                           width={21}
                         ></Image>
@@ -453,8 +453,8 @@ export default function Page() {
                         value={description}
                         onChange={handleChange}
                         sx={{
-                          "& .MuiInputBase-input": { color: "primary.main" },
-                          width: "100%",
+                          '& .MuiInputBase-input': { color: 'primary.main' },
+                          width: '100%',
                         }}
                         InputProps={{
                           endAdornment: (
@@ -462,12 +462,12 @@ export default function Page() {
                               checked={isDirtyDescription}
                               onChange={handleChange}
                               sx={{
-                                position: "absolute",
+                                position: 'absolute',
                                 top: 0,
                                 right: 0,
-                                color: "primary.main",
-                                "&.Mui-checked": {
-                                  color: "primary.main",
+                                color: 'primary.main',
+                                '&.Mui-checked': {
+                                  color: 'primary.main',
                                 },
                               }}
                             />
@@ -488,7 +488,7 @@ export default function Page() {
           onClose={toggleDrawer(false)}
           anchor="bottom"
         >
-          <Stack flexDirection={"column"}>
+          <Stack flexDirection={'column'}>
             <Typography variant="h2" textAlign="center">
               Create a Series
             </Typography>
@@ -496,14 +496,14 @@ export default function Page() {
               sx={{
                 // width: 'auto',
                 // maxWidth: 360,
-                bgcolor: "background.helper",
-                alignSelf: "center",
+                bgcolor: 'background.helper',
+                alignSelf: 'center',
                 borderRadius: 4,
                 my: 3,
               }}
             >
               <ListSubheader
-                sx={{ bgcolor: "background.helper", textAlign: "center" }}
+                sx={{ bgcolor: 'background.helper', textAlign: 'center' }}
                 component="h3"
                 id="nested-list-subheader"
               >
@@ -557,7 +557,7 @@ export default function Page() {
           </Stack>
         </Drawer>
       </Box>
-      <Box height={"72px"} />
+      <Box height={'72px'} />
       <NavBottom subRoute="/navigator/flows" />
     </>
   )

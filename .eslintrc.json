@@ -30,7 +30,7 @@
       "warn",
       {
         "semi": false,
-        "singleQuote": false,
+        "singleQuote": true,
         "trailingComma": "es5",
         "tabWidth": 2,
         "bracketSpacing": true,

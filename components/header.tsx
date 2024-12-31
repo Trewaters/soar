@@ -1,14 +1,14 @@
-"use client"
-import React from "react"
-import Box from "@mui/material/Box"
-import IconButton from "@mui/material/IconButton"
-import HomeIcon from "@mui/icons-material/Home"
-import MenuIcon from "@mui/icons-material/Menu"
-import FlareIcon from "@mui/icons-material/Flare"
-import WaterDropOutlinedIcon from "@mui/icons-material/WaterDropOutlined"
-import WhatshotIcon from "@mui/icons-material/Whatshot"
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings"
+'use client'
+import React from 'react'
+import Box from '@mui/material/Box'
+import IconButton from '@mui/material/IconButton'
+import HomeIcon from '@mui/icons-material/Home'
+import MenuIcon from '@mui/icons-material/Menu'
+import FlareIcon from '@mui/icons-material/Flare'
+import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
+import WhatshotIcon from '@mui/icons-material/Whatshot'
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import {
   AppBar,
   Button,
@@ -22,41 +22,41 @@ import {
   Paper,
   Stack,
   Typography,
-} from "@mui/material"
+} from '@mui/material'
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const navLinks = [
   {
-    name: "Home",
-    href: "/",
+    name: 'Home',
+    href: '/',
     icon: <HomeIcon />,
   },
   {
-    name: "8 Limbs",
-    href: "/navigator/eightLimbs",
+    name: '8 Limbs',
+    href: '/navigator/eightLimbs',
     icon: <FlareIcon />,
   },
   {
-    name: "Asanas",
-    href: "/navigator/asanaPostures",
+    name: 'Asanas',
+    href: '/navigator/asanaPostures',
     icon: <WaterDropOutlinedIcon />,
   },
   {
-    name: "Flows",
-    href: "/navigator/flows",
+    name: 'Flows',
+    href: '/navigator/flows',
     icon: <WhatshotIcon />,
   },
   {
-    name: "Profile",
-    href: "/navigator/profile",
+    name: 'Profile',
+    href: '/navigator/profile',
     icon: <ManageAccountsIcon />,
   },
   // final item will have a divider above it
   {
-    name: "Sign In",
-    href: "/auth/signin",
+    name: 'Sign In',
+    href: '/auth/signin',
     icon: <AdminPanelSettingsIcon />,
   },
 ]
@@ -87,14 +87,14 @@ export default function Header() {
               <ListItem disablePadding>
                 <Link href={navItem.href} passHref>
                   <ListItemButton
-                    sx={{ width: "250px" }}
+                    sx={{ width: '250px' }}
                     onClick={() => {
                       setOpenDrawer(false)
                     }}
                   >
                     <ListItemIcon>{navItem.icon}</ListItemIcon>
                     <ListItemText>
-                      {navItem.name === "Sign In" ? (
+                      {navItem.name === 'Sign In' ? (
                         /* ! TO DO:
                          * access session to get session status and flip text based on that.
                          * Add the Sign in button here outside the list.
@@ -131,51 +131,51 @@ export default function Header() {
       position="static"
       sx={{
         pr: 2,
-        height: "69px",
+        height: '69px',
       }}
       elevation={0}
     >
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          height: "100%",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          height: '100%',
         }}
       >
-        <Stack direction="row" justifyContent={"space-between"}>
+        <Stack direction="row" justifyContent={'space-between'}>
           <IconButton disableRipple onClick={toggleDrawer(true)}>
-            <MenuIcon sx={{ height: "2em", width: "2em" }} />
+            <MenuIcon sx={{ height: '2em', width: '2em' }} />
           </IconButton>
           <Box
             sx={{
-              position: "absolute",
-              left: "50%",
-              transform: "translateX(-50%)",
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)',
             }}
           >
             <Link href="/" passHref legacyBehavior>
               <Button
                 sx={{
-                  background: "none",
-                  border: "none",
+                  background: 'none',
+                  border: 'none',
                   padding: 0,
                   margin: 0,
-                  textDecoration: "none",
-                  color: "inherit",
-                  cursor: "pointer",
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  cursor: 'pointer',
                 }}
                 onClick={() => {
-                  router.push("/")
+                  router.push('/')
                 }}
               >
                 <Typography
                   variant="h3"
                   sx={{
                     pt: 3,
-                    textDecoration: "none",
-                    textTransform: "uppercase",
-                    "& :hover:": { textDecoration: "none" },
+                    textDecoration: 'none',
+                    textTransform: 'uppercase',
+                    '& :hover:': { textDecoration: 'none' },
                   }}
                 >
                   Soar
@@ -186,7 +186,7 @@ export default function Header() {
         </Stack>
       </Box>
       <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
-        <Paper onClick={handleClick} sx={{ height: "100%" }}>
+        <Paper onClick={handleClick} sx={{ height: '100%' }}>
           {DrawerList}
         </Paper>
       </Drawer>
