@@ -9,6 +9,7 @@ import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
+import InfoIcon from '@mui/icons-material/Info'
 import {
   AppBar,
   Button,
@@ -28,6 +29,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 const navLinks = [
+  {
+    name: 'About',
+    href: '/navigator/about',
+    icon: <InfoIcon />,
+  },
   {
     name: 'Home',
     href: '/',

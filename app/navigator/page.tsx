@@ -14,6 +14,9 @@ export default function Page() {
         <Typography variant="body1" id="page-title">
           Like a leaf on the Wind
         </Typography>
+        {/* <Typography variant="body1" id="page-title">
+          Yoga exercise app allowing you to view and create yoga exercises.
+        </Typography> */}
         <CurrentTime />
       </Box>
       <TabHeader />
