@@ -10,6 +10,7 @@ import WhatshotIcon from '@mui/icons-material/Whatshot'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import InfoIcon from '@mui/icons-material/Info'
+import MenuBookIcon from '@mui/icons-material/MenuBook'
 import {
   AppBar,
   Button,
@@ -29,11 +30,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 const navLinks = [
-  {
-    name: 'About',
-    href: '/navigator/about',
-    icon: <InfoIcon />,
-  },
   {
     name: 'Home',
     href: '/',
@@ -55,9 +51,19 @@ const navLinks = [
     icon: <WhatshotIcon />,
   },
   {
+    name: 'About',
+    href: '/navigator/about',
+    icon: <InfoIcon />,
+  },
+  {
     name: 'Profile',
     href: '/navigator/profile',
     icon: <ManageAccountsIcon />,
+  },
+  {
+    name: 'Glossary',
+    href: '/navigator/glossary',
+    icon: <MenuBookIcon />,
   },
   // final item will have a divider above it
   {

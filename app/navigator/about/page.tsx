@@ -1,4 +1,3 @@
-import TabHeader from '@app/clientComponents/tab-header'
 import Typography from '@mui/material/Typography'
 import { Box } from '@node_modules/@mui/material'
 
@@ -6,12 +5,15 @@ export default function Page() {
   return (
     <>
       <Box
-        // textAlign="center"
         sx={{ marginTop: 4, mx: 4 }}
         // role="main"
-        // aria-labelledby="page-title"
+        aria-labelledby="about"
       >
-        <Typography variant="body1" id="page-title" sx={{ marginBottom: 2 }}>
+        <Typography
+          variant="body1"
+          id="page-title"
+          sx={{ marginBottom: 2, textAlign: 'center' }}
+        >
           Yoga exercise app
         </Typography>
 
