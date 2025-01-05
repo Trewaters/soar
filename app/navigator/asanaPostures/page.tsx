@@ -60,7 +60,14 @@ export default function Page() {
         ) : (
           <PostureSearch posturePropData={posturePropData} />
         )}
-        {error && <Typography>Error: {error}</Typography>}
+        {error && (
+          <Typography>
+            Error:{' '}
+            {error === 'Failed to fetch'
+              ? 'Failed, please refresh page.'
+              : error}
+          </Typography>
+        )}
         <Button
           variant="contained"
           color="primary"
