@@ -16,7 +16,7 @@ export default async function SignInPage(props: {
       <nav>
         <Header />
       </nav>
-      <Stack justifySelf={'center'} alignItems={'center'}>
+      {/* <Stack justifySelf={'center'} alignItems={'center'}>
         <Stack>
           <Image
             src={'/icons/asanas/leaf-1.svg'}
@@ -28,7 +28,7 @@ export default async function SignInPage(props: {
         <Stack>
           <Typography variant={'subtitle1'}>An Uvuyoga App</Typography>
         </Stack>
-      </Stack>
+      </Stack> */}
       <Stack justifyContent={'center'} alignItems={'center'} display={'flex'}>
         <Stack
           textAlign={'center'}

@@ -12,7 +12,7 @@ export default function SignOutPage() {
       <nav>
         <Header />
       </nav>
-      <Stack display={'flex'} alignItems={'center'}>
+      {/* <Stack display={'flex'} alignItems={'center'}>
         <Stack flexDirection={'row'}>
           <Image
             src={'/icons/asanas/leaf-1.svg'}
@@ -24,7 +24,7 @@ export default function SignOutPage() {
         <Stack>
           <Typography variant={'subtitle1'}>An Uvuyoga App</Typography>
         </Stack>
-      </Stack>
+      </Stack> */}
       <Stack justifyContent={'center'} alignItems={'center'} display={'flex'}>
         <Stack
           textAlign={'center'}

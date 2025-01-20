@@ -17,7 +17,7 @@ export default function Page() {
         <Typography variant="body1" id="page-title">
           a yoga exercise app
         </Typography>
-        <CurrentTime />
+        {/* <CurrentTime /> */}
       </Box>
       <TabHeader />
     </>

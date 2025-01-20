@@ -28,6 +28,7 @@ import {
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import Image from '@node_modules/next/image'
 
 const navLinks = [
   {
@@ -167,7 +168,7 @@ export default function Header() {
             }}
           >
             <Link href="/" passHref legacyBehavior>
-              <Button
+              {/* <Button
                 sx={{
                   background: 'none',
                   border: 'none',
@@ -192,7 +193,14 @@ export default function Header() {
                 >
                   Soar
                 </Typography>
-              </Button>
+              </Button> */}
+              <Image
+                src="/logo/Main Logo in Contrast Light150px.png"
+                alt="Soar Logo"
+                width="150"
+                height="20"
+                style={{ marginTop: '15%' }}
+              />
             </Link>
           </Box>
         </Stack>
