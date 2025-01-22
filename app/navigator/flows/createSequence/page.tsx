@@ -38,6 +38,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import { ArrowBack, ArrowForward } from '@mui/icons-material'
 import Image from 'next/image'
 import NavBottom from '@serverComponents/navBottom'
+import { AppText } from '@app/navigator/constants/Strings'
 
 async function fetchSeries() {
   try {
@@ -443,7 +444,7 @@ export default function Page() {
                       onClick={handleSubmit}
                       disabled={session === null}
                     >
-                      Submit
+                      {AppText.APP_BUTTON_SUBMIT}
                     </Button>
                     <Button
                       variant="outlined"
@@ -579,7 +580,9 @@ export default function Page() {
                   <Looks5Icon />
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary='Click "Submit" when you are done.' />
+              <ListItemText
+                primary={`Click "${AppText.APP_BUTTON_SUBMIT}" when you are done.`}
+              />
             </ListItem>
           </List>
         </Drawer>
