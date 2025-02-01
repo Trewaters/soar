@@ -37,7 +37,10 @@ export type FlowSeriesPageState = {
   flowSeries: FlowSeriesData
 }
 
-type FlowSeriesAction = { type: 'SET_FLOW_SERIES'; payload: FlowSeriesData }
+type FlowSeriesAction = {
+  type: 'SET_FLOW_SERIES' | 'RESET_FLOW_SERIES'
+  payload: FlowSeriesData
+}
 
 const initialState: FlowSeriesPageState = {
   flowSeries: {
@@ -69,6 +72,20 @@ function FlowSeriesReducer(
   switch (action.type) {
     case 'SET_FLOW_SERIES':
       return { ...state, flowSeries: action.payload }
+    case 'RESET_FLOW_SERIES':
+      return {
+        ...state,
+        flowSeries: {
+          seriesName: '',
+          seriesPostures: [],
+          breath: '',
+          description: '',
+          duration: '',
+          image: '',
+          createdAt: '',
+          updatedAt: '',
+        },
+      }
     default:
       return state
   }

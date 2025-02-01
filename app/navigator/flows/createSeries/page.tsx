@@ -9,8 +9,7 @@ import {
   Checkbox,
   Drawer,
   FormControl,
-  FormGroup,
-  Grid,
+  Grid2,
   IconButton,
   List,
   ListItem,
@@ -36,7 +35,6 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AutocompleteComponent from '@app/clientComponents/autocomplete-search'
 import Image from 'next/image'
 import NavBottom from '@serverComponents/navBottom'
-import App from '@node_modules/next/app'
 import { AppText } from '@app/navigator/constants/Strings'
 
 export default function Page() {
@@ -172,15 +170,10 @@ export default function Page() {
 
   function handleCancel() {
     dispatch({
-      type: 'SET_FLOW_SERIES',
+      type: 'RESET_FLOW_SERIES',
       payload: {
-        ...state.flowSeries,
         seriesName: '',
         seriesPostures: [],
-        breath: '',
-        description: '',
-        duration: '',
-        image: '',
       },
     })
   }
@@ -209,36 +202,35 @@ export default function Page() {
             onClick={toggleDrawer(!open)}
           />
           {FEATURES.SHOW_CREATE_SERIES && (
-            <Box sx={{ px: 4 }}>
-              <FormControl sx={{ width: '100%', mb: 3 }}>
-                <AutocompleteComponent
-                  options={postures.sort((a, b) =>
-                    a.sort_english_name.localeCompare(b.sort_english_name)
-                  )}
-                  getOptionLabel={(option) =>
-                    (option as FullAsanaData).sort_english_name
-                  }
-                  renderOption={(props, option) => {
-                    const postureOption = option as FullAsanaData
-                    return (
-                      <li {...props} key={postureOption.id}>
-                        {postureOption.sort_english_name}
-                      </li>
-                    )
-                  }}
-                  placeholder="Add a pose to your series"
-                  onChange={(event, value) =>
-                    handleSelect(event, value as FullAsanaData | null)
-                  }
-                  renderInput={() => <TextField placeholder="Search..." />}
-                />
-              </FormControl>
-              <Box className="journal">
-                <FormGroup>
+            <form onSubmit={handleSubmit}>
+              <Box sx={{ px: 4 }}>
+                <FormControl sx={{ width: '100%', mb: 3 }}>
+                  <AutocompleteComponent
+                    options={postures.sort((a, b) =>
+                      a.sort_english_name.localeCompare(b.sort_english_name)
+                    )}
+                    getOptionLabel={(option) =>
+                      (option as FullAsanaData).sort_english_name
+                    }
+                    renderOption={(props, option) => {
+                      const postureOption = option as FullAsanaData
+                      return (
+                        <li {...props} key={postureOption.id}>
+                          {postureOption.sort_english_name}
+                        </li>
+                      )
+                    }}
+                    placeholder="Add a pose to your series"
+                    onChange={(event, value) =>
+                      handleSelect(event, value as FullAsanaData | null)
+                    }
+                    renderInput={() => <TextField placeholder="Search..." />}
+                  />
+                </FormControl>
+                <Box className="journal">
                   <FormControl>
-                    <Grid
-                      item
-                      xs={12}
+                    <Grid2
+                      size={12}
                       className="journalTitle"
                       display={'flex'}
                       direction={'row'}
@@ -269,8 +261,8 @@ export default function Page() {
                           }}
                         />
                       </>
-                    </Grid>
-                    {/* <Grid item xs={12}>
+                    </Grid2>
+                    {/* <Grid2 size={12}>
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -285,22 +277,15 @@ export default function Page() {
                       }
                       label="Text field is dirty"
                     />
-                  </Grid> */}
+                  </Grid2> */}
                   </FormControl>
 
                   <FormControl>
                     <Stack
                       className="lines"
                       spacing={1}
-                      // display={'flex'}
-                      // flexDirection={'column'}
-                      // flexWrap={'wrap'}
-                      // alignItems={'center'}
-                      // justifyContent={'space-between'}
                       sx={{
                         mx: 4,
-                        mb: 2,
-                        pl: 2,
                       }}
                     >
                       {seriesPostures.map((word, index) => (
@@ -395,7 +380,7 @@ export default function Page() {
                     </Button> */}
                     </Stack>
                   </FormControl>
-                  <Grid item xs={12} sx={{ mb: 3 }}>
+                  <Grid2 size={12} sx={{ mb: 3 }}>
                     <Stack direction="row" spacing={2} justifyContent="center">
                       <Button
                         variant="contained"
@@ -418,9 +403,9 @@ export default function Page() {
                         Start Over
                       </Button>
                     </Stack>
-                  </Grid>
+                  </Grid2>
 
-                  <Grid item xs={12} sx={{ mb: 2, mx: 2 }}>
+                  <Grid2 size={12} sx={{ mb: 2, mx: 2 }}>
                     <FormControl
                       sx={{
                         width: '100%',
@@ -477,10 +462,10 @@ export default function Page() {
                         }}
                       />
                     </FormControl>
-                  </Grid>
-                </FormGroup>
+                  </Grid2>
+                </Box>
               </Box>
-            </Box>
+            </form>
           )}
         </Stack>
         {/* information drawer */}
@@ -562,6 +547,9 @@ export default function Page() {
         </Drawer>
       </Box>
       <Box height={'72px'} />
+      {/* 
+      TODO: add snackbar message for success/failure no
+      */}
       <NavBottom subRoute="/navigator/flows" />
     </>
   )
