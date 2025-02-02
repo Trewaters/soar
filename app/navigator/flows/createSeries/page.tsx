@@ -122,6 +122,17 @@ export default function Page() {
       image,
     }
     dispatch({ type: 'SET_FLOW_SERIES', payload: updatedSeries })
+    dispatch({
+      type: 'RESET_FLOW_SERIES',
+      payload: {
+        seriesName: '',
+        seriesPostures: [],
+        breath: '',
+        description: '',
+        duration: '',
+        image: '',
+      },
+    })
 
     try {
       const response = await fetch('/api/series/createSeries', {
@@ -385,7 +396,7 @@ export default function Page() {
                       <Button
                         variant="contained"
                         color="primary"
-                        onClick={handleSubmit}
+                        type="submit"
                         disabled={session === null}
                         sx={{ borderRadius: '12px' }}
                       >
