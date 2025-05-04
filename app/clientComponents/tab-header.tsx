@@ -65,8 +65,8 @@ export default function TabHeader() {
           scrollButtons="auto"
           centered
         >
-          <Tab label="Practice" {...a11yProps(0)} />
-          <Tab label="Reference" {...a11yProps(1)} />
+          <Tab label="Start your practice" {...a11yProps(0)} />
+          <Tab label="Learn about yoga" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
