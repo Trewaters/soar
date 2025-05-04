@@ -33,8 +33,10 @@ export default function CurrentTime() {
     )
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', height: '2em' }}>
-      <Typography variant="body1">
+    <Box
+      sx={{ display: 'flex', justifyContent: 'center', height: '2em', mt: 2 }}
+    >
+      <Typography variant="body2" color="primary.main">
         {time || <Skeleton variant="text" sx={{ width: '10em' }} />}
       </Typography>
     </Box>
