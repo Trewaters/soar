@@ -1,8 +1,7 @@
 // import CurrentTime from '@app/clientComponents/current-time'
 import TabHeader from '@app/clientComponents/tab-header'
 import { Box, Typography } from '@mui/material'
-import Image from '@node_modules/next/image'
-
+import Image from 'next/image'
 export default function Page() {
   return (
     <>
@@ -15,8 +14,9 @@ export default function Page() {
         <Image
           src={'/images/primary/Home-page-yogi.png'}
           alt="Home page yogi"
-          width={200}
-          height={200}
+          width={207}
+          height={207}
+          quality={100}
         />
         {/* <Typography variant="body1" id="page-title">
           Like a leaf on the Wind
