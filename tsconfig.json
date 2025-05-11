@@ -41,7 +41,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "jest"
+    "jest",
+    "jest.setup.ts"
   ],
   "exclude": ["node_modules", "dist", "build"]
 }
