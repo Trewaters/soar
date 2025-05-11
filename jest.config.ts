@@ -23,6 +23,7 @@ const config: Config = {
       },
     ],
   },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
 }
 
 export default config
