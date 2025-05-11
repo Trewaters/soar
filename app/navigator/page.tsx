@@ -1,10 +1,12 @@
+import React from 'react'
 import CurrentTime from '@app/clientComponents/current-time'
 import TabHeader from '@app/clientComponents/tab-header'
 import { Box, Typography } from '@mui/material'
 import Image from 'next/image'
+
 export default function Page() {
   return (
-    <>
+    <React.Fragment>
       <Box
         textAlign="center"
         sx={{ marginTop: 4 }}
@@ -24,6 +26,6 @@ export default function Page() {
         <CurrentTime />
       </Box>
       <TabHeader />
-    </>
+    </React.Fragment>
   )
 }

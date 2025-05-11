@@ -1,10 +1,12 @@
+import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
-// FIXME: Replace 'YOUR_MODULE_PATH/navigator/page' with the actual path to the Page component
 import Page from '@app/navigator/page'
 
 jest.mock('@app/clientComponents/current-time', () => {
-  const MockedCurrentTime = () => <div>Mocked CurrentTime</div>
+  const MockedCurrentTime = () => (
+    <div data-testid="current-time">Mocked CurrentTime</div>
+  )
   MockedCurrentTime.displayName = 'MockedCurrentTime'
   return MockedCurrentTime
 })
@@ -60,5 +62,31 @@ describe('Page Component', () => {
     expect(typography).toBeInTheDocument()
     expect(typography).toHaveAttribute('id', 'page-title')
     expect(typography).toHaveStyle({ color: 'rgb(25, 118, 210)' }) // Use resolved color value
+  })
+
+  it('renders the CurrentTime component', () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <Page />
+      </ThemeProvider>
+    )
+    expect(screen.getByTestId('current-time')).toBeInTheDocument()
+  })
+
+  it('renders the page title "yoga exercise"', () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <Page />
+      </ThemeProvider>
+    )
+    expect(screen.getByText('yoga exercise')).toBeInTheDocument()
+    expect(screen.getByRole('main')).toHaveAttribute(
+      'aria-labelledby',
+      'page-title'
+    )
+    expect(screen.getByText('yoga exercise')).toHaveAttribute(
+      'id',
+      'page-title'
+    )
   })
 })
