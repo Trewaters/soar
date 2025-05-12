@@ -18,14 +18,16 @@ export default function Page() {
           width={207}
           height={207}
           quality={100}
-          alt="Like a leaf on the Wind"
+          alt="Illustration of a person practicing yoga"
         />
         <Typography variant="body1" id="page-title" color="primary.main">
-          yoga exercise
+          Yoga Exercise
         </Typography>
         <CurrentTime />
       </Box>
-      <TabHeader />
+      <nav aria-label="Tab Navigation">
+        <TabHeader />
+      </nav>
     </React.Fragment>
   )
 }

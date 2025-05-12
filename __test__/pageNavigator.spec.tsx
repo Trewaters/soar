@@ -45,7 +45,9 @@ describe('Page Component', () => {
         <Page />
       </ThemeProvider>
     )
-    const image = screen.getByAltText('Like a leaf on the Wind')
+    const image = screen.getByAltText(
+      'Illustration of a person practicing yoga'
+    )
     expect(image).toBeInTheDocument()
     expect(image).toHaveAttribute('src', '/images/primary/Home-page-yogi.png')
     expect(image).toHaveAttribute('width', '207')
@@ -58,7 +60,7 @@ describe('Page Component', () => {
         <Page />
       </ThemeProvider>
     )
-    const typography = screen.getByText('yoga exercise')
+    const typography = screen.getByText('Yoga Exercise')
     expect(typography).toBeInTheDocument()
     expect(typography).toHaveAttribute('id', 'page-title')
     expect(typography).toHaveStyle({ color: 'rgb(25, 118, 210)' }) // Use resolved color value
@@ -73,20 +75,40 @@ describe('Page Component', () => {
     expect(screen.getByTestId('current-time')).toBeInTheDocument()
   })
 
-  it('renders the page title "yoga exercise"', () => {
+  it('renders the page title "Yoga Exercise"', () => {
     render(
       <ThemeProvider theme={theme}>
         <Page />
       </ThemeProvider>
     )
-    expect(screen.getByText('yoga exercise')).toBeInTheDocument()
+    expect(screen.getByText('Yoga Exercise')).toBeInTheDocument()
     expect(screen.getByRole('main')).toHaveAttribute(
       'aria-labelledby',
       'page-title'
     )
-    expect(screen.getByText('yoga exercise')).toHaveAttribute(
+    expect(screen.getByText('Yoga Exercise')).toHaveAttribute(
       'id',
       'page-title'
     )
+  })
+
+  it('uses semantic HTML and ARIA roles correctly', () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <Page />
+      </ThemeProvider>
+    )
+    const main = screen.getByRole('main')
+    expect(main).toBeInTheDocument()
+    expect(main).toHaveAttribute('aria-labelledby', 'page-title')
+
+    const nav = screen.getByRole('navigation', { name: 'Tab Navigation' })
+    expect(nav).toBeInTheDocument()
+
+    const image = screen.getByAltText(
+      'Illustration of a person practicing yoga'
+    )
+    expect(image).toBeInTheDocument()
+    expect(image).toHaveAttribute('src', '/images/primary/Home-page-yogi.png')
   })
 })
