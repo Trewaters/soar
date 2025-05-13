@@ -4,10 +4,12 @@ import { ReactNode } from 'react'
 export default function NavigatorLayout({ children }: { children: ReactNode }) {
   return (
     <>
-      <nav>
+      <header>
         <Header />
-      </nav>
-      {children}
+      </header>
+      <main id="main-content" role="main">
+        {children}
+      </main>
     </>
   )
 }
