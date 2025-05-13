@@ -11,6 +11,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint-fix": "eslint . --ext .ts,.tsx --fix",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "cover": "jest --coverage",
     "pretty": "prettier --l .",
     "pretty-fix": "prettier --write . && prettier --list-different .",

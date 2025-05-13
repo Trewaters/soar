@@ -42,6 +42,7 @@ export default function TabHeader() {
 
   return (
     <Box
+      data-testid="tab-header"
       sx={{
         display: 'flex',
         flexDirection: 'column',
