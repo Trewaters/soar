@@ -92,7 +92,7 @@ export default function Header() {
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-      <nav aria-label="quick menu">
+      <nav aria-label="main navigation menu">
         <List>
           {navLinks.map((navItem, index) => (
             <React.Fragment key={navItem.name}>
@@ -157,7 +157,12 @@ export default function Header() {
         }}
       >
         <Stack direction="row" justifyContent={'space-between'}>
-          <IconButton disableRipple onClick={toggleDrawer(true)}>
+          <IconButton
+            disableRipple
+            onClick={toggleDrawer(true)}
+            aria-label="Open main navigation"
+            aria-controls="main-navigation"
+          >
             <MenuIcon sx={{ height: '2em', width: '2em' }} />
           </IconButton>
           <Box

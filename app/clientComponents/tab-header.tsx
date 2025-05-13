@@ -62,12 +62,25 @@ export default function TabHeader() {
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label="tab menu"
+          aria-label="Tab menu group for navigating yoga content"
+          role="tablist"
           scrollButtons="auto"
           centered
         >
-          <Tab label="Start your practice" {...a11yProps(0)} />
-          <Tab label="Learn about yoga" {...a11yProps(1)} />
+          <Tab
+            label="Start your practice"
+            aria-label="Start your practice tab"
+            aria-selected={value === 0}
+            role="tab"
+            {...a11yProps(0)}
+          />
+          <Tab
+            label="Learn about yoga"
+            aria-label="Learn about yoga tab"
+            aria-selected={value === 1}
+            {...a11yProps(1)}
+            role="tab"
+          />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
