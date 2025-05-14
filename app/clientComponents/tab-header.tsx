@@ -48,41 +48,34 @@ export default function TabHeader() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
       }}
     >
-      <Box
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        aria-label="Tab menu group for navigating yoga content"
+        role="tablist"
+        scrollButtons="auto"
+        centered
         sx={{
-          width: '100%',
-          maxWidth: 360,
-          borderBottom: 1,
-          borderColor: 'divider',
+          minHeight: 48,
+          height: 48,
+          '.MuiTabs-indicator': { height: 3 },
         }}
       >
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="Tab menu group for navigating yoga content"
-          role="tablist"
-          scrollButtons="auto"
-          centered
-        >
-          <Tab
-            label="Start your practice"
-            aria-label="Start your practice tab"
-            aria-selected={value === 0}
-            role="tab"
-            {...a11yProps(0)}
-          />
-          <Tab
-            label="Learn about yoga"
-            aria-label="Learn about yoga tab"
-            aria-selected={value === 1}
-            {...a11yProps(1)}
-            role="tab"
-          />
-        </Tabs>
-      </Box>
+        <Tab
+          label="Start your practice"
+          aria-label="Start your practice tab"
+          {...a11yProps(0)}
+          sx={{ minHeight: 48, height: 48 }}
+        />
+        <Tab
+          label="Learn about yoga"
+          aria-label="Learn about yoga tab"
+          {...a11yProps(1)}
+          sx={{ minHeight: 48, height: 48 }}
+        />
+      </Tabs>
       <CustomTabPanel value={value} index={0}>
         <LandingPage />
       </CustomTabPanel>

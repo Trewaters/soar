@@ -4,11 +4,7 @@ import { Box } from '@node_modules/@mui/material'
 export default function Page() {
   return (
     <>
-      <Box
-        sx={{ marginTop: 4, mx: 4 }}
-        // role="main"
-        aria-labelledby="about"
-      >
+      <Box sx={{ marginTop: 4, mx: 4 }} aria-labelledby="about">
         <Typography
           variant="body1"
           id="page-title"
