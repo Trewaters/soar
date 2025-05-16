@@ -17,6 +17,17 @@ declare global {
 export const metadata: Metadata = {
   title: 'Uvuyoga',
   description: 'Soar like a leaf on the wind!',
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/icon-192x192.png',
+  },
+  themeColor: '#ffffff',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Uvuyoga',
+  },
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
