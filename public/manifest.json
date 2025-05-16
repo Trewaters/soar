@@ -1,7 +1,7 @@
 {
   "name": "Uvuyoga",
   "short_name": "Uvuyoga",
-  "start_url": "/",
+  "start_url": "/navigator/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
