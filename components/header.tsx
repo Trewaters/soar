@@ -13,7 +13,6 @@ import InfoIcon from '@mui/icons-material/Info'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import {
   AppBar,
-  Button,
   Divider,
   Drawer,
   List,
@@ -27,7 +26,6 @@ import {
 } from '@mui/material'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import Image from '@node_modules/next/image'
 
 const navLinks = [
@@ -79,16 +77,6 @@ export default function Header() {
   const toggleDrawer = (open: boolean) => () => {
     setOpenDrawer(open)
   }
-  const router = useRouter()
-  // const session = auth()
-
-  // useEffect(() => {
-  //   // get session
-  //   async function checkSession() {
-  //     const session = await auth()
-  //   }
-  //   checkSession()
-  // }, [])
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
