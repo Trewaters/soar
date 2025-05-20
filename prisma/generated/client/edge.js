@@ -214,7 +214,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\trewa\\Documents\\Github\\NextJS tutorials\\soar\\prisma\\generated\\client",
+      "value": "C:\\Users\\trewa\\Documents\\GitHub\\soar\\prisma\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -232,7 +232,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\trewa\\Documents\\Github\\NextJS tutorials\\soar\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\trewa\\Documents\\GitHub\\soar\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

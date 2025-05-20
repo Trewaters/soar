@@ -1,5 +1,6 @@
 'use client'
-import React from 'react'
+import React, { MouseEvent } from 'react'
+import { useSession } from 'next-auth/react'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import HomeIcon from '@mui/icons-material/Home'
@@ -13,7 +14,6 @@ import InfoIcon from '@mui/icons-material/Info'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import {
   AppBar,
-  Button,
   Divider,
   Drawer,
   List,
@@ -25,10 +25,9 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import Image from '@node_modules/next/image'
+import Image from 'next/image'
 
 const navLinks = [
   {
@@ -75,11 +74,12 @@ const navLinks = [
 ]
 
 export default function Header() {
+  const { data: session } = useSession()
   const [openDrawer, setOpenDrawer] = React.useState(false)
   const toggleDrawer = (open: boolean) => () => {
     setOpenDrawer(open)
   }
-  const router = useRouter()
+  // const router = useRouter()
   // const session = auth()
 
   // useEffect(() => {
@@ -92,7 +92,7 @@ export default function Header() {
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-      <nav aria-label="main navigation menu">
+      <nav aria-label="site navigation menu">
         <List>
           {navLinks.map((navItem, index) => (
             <React.Fragment key={navItem.name}>
@@ -107,7 +107,8 @@ export default function Header() {
                   >
                     <ListItemIcon>{navItem.icon}</ListItemIcon>
                     <ListItemText>
-                      {navItem.name === 'Sign In' ? (
+                      {/* {navItem.name === 'Sign In' ? ( */}
+                      {session ? (
                         /* ! TO DO:
                          * access session to get session status and flip text based on that.
                          * Add the Sign in button here outside the list.
@@ -118,6 +119,7 @@ export default function Header() {
                         // ):(
                         //   <Typography variant="button">Logout</Typography>
                         // )}
+
                         <Typography variant="button">Login/Logout</Typography>
                       ) : (
                         <Typography variant="button">{navItem.name}</Typography>
@@ -134,7 +136,7 @@ export default function Header() {
     </Box>
   )
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = (event: MouseEvent<HTMLDivElement>) => {
     event.stopPropagation()
     setOpenDrawer(false)
   }
@@ -173,32 +175,6 @@ export default function Header() {
             }}
           >
             <Link href="/" passHref legacyBehavior>
-              {/* <Button
-                sx={{
-                  background: 'none',
-                  border: 'none',
-                  padding: 0,
-                  margin: 0,
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  cursor: 'pointer',
-                }}
-                onClick={() => {
-                  router.push('/')
-                }}
-              >
-                <Typography
-                  variant="h3"
-                  sx={{
-                    pt: 3,
-                    textDecoration: 'none',
-                    textTransform: 'uppercase',
-                    '& :hover:': { textDecoration: 'none' },
-                  }}
-                >
-                  Soar
-                </Typography>
-              </Button> */}
               <Image
                 src="/logo/Main Logo in Contrast Light150px.png"
                 alt="Soar Logo"
