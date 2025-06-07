@@ -13,16 +13,22 @@ const config: Config = {
     '^@app/(.*)$': '<rootDir>/app/$1',
     '^@components/(.*)$': '<rootDir>/app/clientComponents/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   transform: {
     '^.+\\.(ts|tsx)$': [
       'ts-jest',
       {
-        tsconfig: 'tsconfig.json',
+        tsconfig: {
+          jsx: 'react-jsx',
+          esModuleInterop: true,
+          allowSyntheticDefaultImports: true,
+        },
       },
     ],
   },
+  transformIgnorePatterns: ['/node_modules/(?!(@testing-library|@auth)/)'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
 }
 

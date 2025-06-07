@@ -1,5 +1,4 @@
 'use client'
-// import { WaterDropOutlined } from '@mui/icons-material'
 import {
   List,
   ListItem,
@@ -17,91 +16,97 @@ import MediationIcon from '@mui/icons-material/Mediation'
 import FlagIcon from '@mui/icons-material/Flag'
 import SpaIcon from '@mui/icons-material/Spa'
 
+export const eightLimbsData = [
+  {
+    primary: 'Asana',
+    secondary: 'Physical Postures',
+    icon: <WaterDropOutlinedIcon />,
+    onClick: (router: ReturnType<typeof useRouter>) =>
+      router.push('/navigator/asanaPostures'),
+    iconSx: { color: 'primary.main', pl: 3 },
+    textSx: {
+      color: 'primary.main',
+      '& .MuiListItemText-secondary': { color: 'primary.main' },
+    },
+    button: true,
+  },
+  {
+    primary: 'Niyama',
+    secondary: 'Observances',
+    icon: <FlagIcon />,
+  },
+  {
+    primary: 'Yama',
+    secondary: 'Moral Restraints',
+    icon: <MediationIcon />,
+  },
+  {
+    primary: 'Pranayama',
+    secondary: 'Breath Control',
+    icon: <AirIcon />,
+  },
+  {
+    primary: 'Dharana',
+    secondary: 'Concentration',
+    icon: <AdjustIcon />,
+  },
+  {
+    primary: 'Dhyana',
+    secondary: 'Meditation',
+    icon: <SpaIcon />,
+  },
+  {
+    primary: 'Pratyahara',
+    secondary: 'Withdrawal of the Senses',
+  },
+  {
+    primary: 'Samadhi',
+    secondary: 'Absorption',
+    icon: <LensBlurIcon />,
+  },
+]
+
 export default function EightLimbs() {
   const router = useRouter()
   return (
     <>
       <Typography variant="h2">Eight Limbs</Typography>
       <List>
-        <ListItem
-          sx={
-            {
-              // color: 'primary.main',
-            }
-          }
-        >
-          <ListItemButton
-            sx={{
-              cursor: 'pointer',
-              pl: 0,
-              py: 0,
-              '&:hover': {
-                backgroundColor: 'transparent',
-                textDecoration: 'none',
-              },
-            }}
-            onClick={() => {
-              router.push('/navigator/asanaPostures')
-            }}
-          >
-            <ListItemText
-              sx={{
-                color: 'primary.main',
-                // add secondary
-                '& .MuiListItemText-secondary': {
-                  color: 'primary.main',
-                },
-              }}
-              primary="Asana"
-              secondary="Physical Postures"
-            />
-            <ListItemIcon sx={{ color: 'primary.main', pl: 3 }}>
-              <WaterDropOutlinedIcon />
-            </ListItemIcon>
-          </ListItemButton>
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="Niyama" secondary="Observances" />
-          <ListItemIcon>
-            <FlagIcon />
-          </ListItemIcon>
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="Yama" secondary="Moral Restraints" />
-          <ListItemIcon>
-            <MediationIcon />
-          </ListItemIcon>
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="Pranayama" secondary="Breath Control" />
-          <ListItemIcon>
-            <AirIcon />
-          </ListItemIcon>
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="Dharana" secondary="Concentration" />
-          <ListItemIcon>
-            <AdjustIcon />
-          </ListItemIcon>
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="Dhyana" secondary="Meditation" />
-          <ListItemIcon>
-            <SpaIcon />
-          </ListItemIcon>
-        </ListItem>
-        <ListItem>
-          <ListItemText
-            primary="Pratyahara"
-            secondary="Withdrawal of the Senses"
-          />
-        </ListItem>
-        <ListItem>
-          <ListItemText primary="Samadhi" secondary="Absorption" />
-          <ListItemIcon>
-            <LensBlurIcon />
-          </ListItemIcon>
-        </ListItem>
+        {eightLimbsData.map((item, idx) => (
+          <ListItem key={item.primary} data-testid={`eight-limbs-item-${idx}`}>
+            {item.button ? (
+              <ListItemButton
+                sx={{
+                  cursor: 'pointer',
+                  pl: 0,
+                  py: 0,
+                  '&:hover': {
+                    backgroundColor: 'transparent',
+                    textDecoration: 'none',
+                  },
+                }}
+                onClick={() => item.onClick && item.onClick(router)}
+              >
+                <ListItemText
+                  sx={item.textSx}
+                  primary={item.primary}
+                  secondary={item.secondary}
+                />
+                {item.icon && (
+                  <ListItemIcon sx={item.iconSx}>{item.icon}</ListItemIcon>
+                )}
+              </ListItemButton>
+            ) : (
+              <>
+                <ListItemText
+                  primary={item.primary}
+                  secondary={item.secondary}
+                />
+                {item.icon && <ListItemIcon>{item.icon}</ListItemIcon>}
+              </>
+            )}
+          </ListItem>
+        ))}
       </List>
     </>
   )
