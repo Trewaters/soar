@@ -70,8 +70,13 @@ export default function EightLimbs() {
   const router = useRouter()
   return (
     <>
-      <Typography variant="h2">Eight Limbs</Typography>
-      <List>
+      <Typography variant="h2" id="eight-limbs-of-yoga">
+        Eight Limbs
+      </Typography>
+      <List
+        aria-labelledby="eight-limbs-of-yoga"
+        data-testid={`eight-limbs-list`}
+      >
         {eightLimbsData.map((item, idx) => (
           <ListItem key={item.primary} data-testid={`eight-limbs-item-${idx}`}>
             {item.button ? (
