@@ -27,9 +27,7 @@ export default function NavigatorLayout({ children }: { children: ReactNode }) {
         Skip to main content
       </a>
 
-      <header>
-        <Header />
-      </header>
+      <Header />
       <main id="main-content" role="main">
         {children}
       </main>

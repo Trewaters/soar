@@ -2,11 +2,7 @@
   "compilerOptions": {
     "target": "ES2023",
     "baseUrl": "./",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -25,45 +21,19 @@
       }
     ],
     "paths": {
-      "@*": [
-        "./*"
-      ],
-      "@app/*": [
-        "./app/*"
-      ],
-      "@auth": [
-        "./auth"
-      ],
-      "@client-api/*": [
-        "./app/api/*"
-      ],
-      "@components/*": [
-        "./app/clientComponents/*"
-      ],
-      "@context/*": [
-        "./app/context/*"
-      ],
-      "@interfaces/*": [
-        "./app/interfaces/*"
-      ],
-      "@lib/*": [
-        "./lib/*"
-      ],
-      "@postures/*": [
-        "./app/navigator/asanaPostures/*"
-      ],
-      "@prismaSchema/*": [
-        "./prisma/*"
-      ],
-      "@providers/*": [
-        "./app/providers/*"
-      ],
-      "@serverComponents/*": [
-        "./components/*"
-      ],
-      "@styles/*": [
-        "./styles/*"
-      ]
+      "@*": ["./*"],
+      "@app/*": ["./app/*"],
+      "@auth": ["./auth"],
+      "@client-api/*": ["./app/api/*"],
+      "@clientComponents/*": ["./app/clientComponents/*"],
+      "@context/*": ["./app/context/*"],
+      "@interfaces/*": ["./app/interfaces/*"],
+      "@lib/*": ["./lib/*"],
+      "@postures/*": ["./app/navigator/asanaPostures/*"],
+      "@prismaSchema/*": ["./prisma/*"],
+      "@providers/*": ["./app/providers/*"],
+      "@serverComponents/*": ["./components/*"],
+      "@styles/*": ["./styles/*"]
     }
   },
   "include": [
@@ -74,9 +44,5 @@
     "jest",
     "jest.setup.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build"
-  ]
+  "exclude": ["node_modules", "dist", "build"]
 }
