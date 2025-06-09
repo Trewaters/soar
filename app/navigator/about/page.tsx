@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography'
-import { Box } from '@node_modules/@mui/material'
+import { Box } from '@mui/material'
 
 export default function Page() {
   return (

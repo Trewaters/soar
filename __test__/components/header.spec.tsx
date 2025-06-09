@@ -241,9 +241,13 @@ describe('Header Component', () => {
       const menuButton = screen.getByRole('button', {
         name: /open main navigation/i,
       })
-      expect(menuButton).toHaveAttribute('aria-controls', 'main-navigation')
+      // Initially, aria-controls should not be present since drawer is closed
+      expect(menuButton).not.toHaveAttribute('aria-controls')
 
       fireEvent.click(menuButton)
+
+      // After clicking, aria-controls should be present since drawer is open
+      expect(menuButton).toHaveAttribute('aria-controls', 'main-navigation')
 
       const navigation = screen.getByRole('navigation', {
         name: /main navigation menu/i,

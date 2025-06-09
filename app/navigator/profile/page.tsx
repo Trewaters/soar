@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import { SessionProvider } from 'next-auth/react'
 import UserDetails from '@app/navigator/profile/UserDetails'
-import { auth } from '@auth'
+import { auth } from '../../../auth'
 
 export default async function Page() {
   const session = await auth()

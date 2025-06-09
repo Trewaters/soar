@@ -68,7 +68,7 @@ export default function AsanaTimer() {
  */
 
 import { AsanaTimerProps, useTimer } from '@context/timerContext'
-import { Box, Typography } from '@node_modules/@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 export default function AsanaTimer({

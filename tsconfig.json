@@ -21,15 +21,15 @@
       }
     ],
     "paths": {
-      "@*": ["./*"],
+      "@/*": ["./"],
       "@app/*": ["./app/*"],
-      "@auth": ["./auth"],
       "@client-api/*": ["./app/api/*"],
       "@clientComponents/*": ["./app/clientComponents/*"],
       "@context/*": ["./app/context/*"],
       "@interfaces/*": ["./app/interfaces/*"],
       "@lib/*": ["./lib/*"],
       "@postures/*": ["./app/navigator/asanaPostures/*"],
+      "@prisma/generated/client": ["./prisma/generated/client"],
       "@prismaSchema/*": ["./prisma/*"],
       "@providers/*": ["./app/providers/*"],
       "@serverComponents/*": ["./components/*"],

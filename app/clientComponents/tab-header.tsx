@@ -54,7 +54,6 @@ export default function TabHeader() {
         value={value}
         onChange={handleChange}
         aria-label="Tab menu group for navigating yoga content"
-        role="tablist"
         scrollButtons="auto"
         centered
         sx={{

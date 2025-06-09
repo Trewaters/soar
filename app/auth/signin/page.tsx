@@ -2,10 +2,9 @@ import React from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
-import { signIn, providerMap, signOut, auth } from '@auth'
-import { AuthError } from '@node_modules/next-auth'
-import { redirect } from '@node_modules/next/navigation'
-import Link from '@node_modules/next/link'
+import { signIn, providerMap, signOut, auth } from '../../../auth'
+import { redirect } from 'next/navigation'
+import Link from 'next/link'
 
 export default async function SignInPage(props: {
   searchParams: { callbackUrl: string | undefined }
@@ -103,7 +102,7 @@ export default async function SignInPage(props: {
                     // Signin can fail for a number of reasons, such as the user
                     // not existing, or the user not having the correct role.
                     // In some cases, you may want to redirect to a custom error
-                    if (error instanceof AuthError) {
+                    if (error && typeof error === 'object' && 'type' in error) {
                       return redirect(
                         `${process.env.SIGNIN_ERROR_URL}?error=${error.type}`
                       )

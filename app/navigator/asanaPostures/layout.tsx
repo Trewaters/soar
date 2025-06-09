@@ -1,5 +1,5 @@
-import { auth } from '@auth'
-import { Box } from '@node_modules/@mui/material'
+import { auth } from '../../../auth'
+import { Box } from '@mui/material'
 import { SessionProvider } from 'next-auth/react'
 import React, { ReactNode } from 'react'
 

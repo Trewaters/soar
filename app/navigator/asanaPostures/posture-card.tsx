@@ -16,7 +16,8 @@ import {
 import { FullAsanaData } from '@context/AsanaPostureContext'
 import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
-import yogaMatWoman from '@public/yogaMatWoman.svg'
+
+const yogaMatWoman = '/yogaMatWoman.svg'
 
 interface PostureCardProps {
   postureCardProp: FullAsanaData

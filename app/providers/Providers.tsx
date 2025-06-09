@@ -1,15 +1,29 @@
 'use client'
 
-import { ReactNode } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import { ThemeProvider } from '@mui/material/styles'
-import { theme } from '@/styles/theme'
+import { theme } from '@styles/theme'
 import { CssBaseline } from '@mui/material'
 import UserStateProvider from '@context/UserContext'
 import FlowSeriesProvider from '@context/AsanaSeriesContext'
 import AsanaPostureProvider from '@context/AsanaPostureContext'
-import { SessionProvider } from '@node_modules/next-auth/react'
+import { SessionProvider } from 'next-auth/react'
+import ReactDOM from 'react-dom'
 
 export function Providers({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    // Initialize axe-core/react for development accessibility checking
+    if (process.env.NODE_ENV === 'development') {
+      import('@axe-core/react')
+        .then((axe) => {
+          axe.default(React, ReactDOM, 1000)
+        })
+        .catch((error) => {
+          console.warn('Failed to load @axe-core/react:', error)
+        })
+    }
+  }, [])
+
   return (
     <SessionProvider basePath={'/api/auth'}>
       <ThemeProvider theme={theme}>

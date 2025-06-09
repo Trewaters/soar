@@ -1,9 +1,9 @@
-import NextAuth from '@node_modules/next-auth'
+import NextAuth from 'next-auth'
 import type { Provider } from 'next-auth/providers'
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 import Credentials from 'next-auth/providers/credentials'
-import { PrismaClient } from '@prisma/generated/client'
+import { PrismaClient } from './prisma/generated/client'
 import { MongoDBAdapter } from '@auth/mongodb-adapter'
 import client from '@lib/mongoDb'
 import { comparePassword, hashPassword } from '@app/utils/password'
@@ -100,7 +100,7 @@ export const providerMap = providers
   })
   .filter((provider) => provider.id !== 'credentials')
 
-export const { auth, handlers, signIn, signOut } = NextAuth({
+const authConfig = {
   providers,
   theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
   adapter: MongoDBAdapter(client),
@@ -218,8 +218,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: 'jwt' },
   events: {
-    signIn: async (message: any) => {
-      // console.log('signIn', message)
+    signIn: async () => {
+      // console.log('signIn event')
     },
     signOut: async (message: any) => {
       console.log('signOut', message)
@@ -239,4 +239,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     newUser: "/auth/new-user", // New users (optional)
     */
   },
-})
+}
+
+// @ts-expect-error - NextAuth v5 beta type resolution issue
+export const { auth, handlers, signIn, signOut } = NextAuth(authConfig)

@@ -7,9 +7,10 @@ import { Box, ButtonGroup, Chip, IconButton, Stack } from '@mui/material'
 import { FullAsanaData } from '@context/AsanaPostureContext'
 import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
-import yogaMatWoman from '@public/yogaMatWoman.svg'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 import PostureShareButton from '@app/clientComponents/exportPoses'
+
+const yogaMatWoman = '/yogaMatWoman.svg'
 
 interface PostureCardProps {
   postureCardProp: FullAsanaData

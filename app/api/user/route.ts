@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/generated/client'
+import { PrismaClient } from '../../../prisma/generated/client'
 
 const prisma = new PrismaClient()
 // const baseUrl = process.env.NEXT_PUBLIC_BASE_URL

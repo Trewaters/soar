@@ -83,7 +83,7 @@ export default function Header() {
   ]
 
   const DrawerList = (
-    <nav aria-label="main navigation menu">
+    <nav aria-label="main navigation menu" id="main-navigation">
       <Box
         sx={{ width: 250 }}
         role="presentation"
@@ -149,7 +149,8 @@ export default function Header() {
             disableRipple
             onClick={toggleDrawer(true)}
             aria-label="Open main navigation"
-            aria-controls="main-navigation"
+            aria-controls={openDrawer ? 'main-navigation' : undefined}
+            aria-expanded={openDrawer}
             component="button"
           >
             <MenuIcon sx={{ height: '2em', width: '2em' }} />
