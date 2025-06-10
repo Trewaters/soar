@@ -155,6 +155,8 @@ export default function Page() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          minHeight: '100vh', // Ensure full viewport height
+          paddingBottom: { xs: '80px', sm: '80px' }, // Extra padding for mobile to ensure content is above nav
         }}
       >
         <SplashHeader

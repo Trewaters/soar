@@ -25,10 +25,17 @@ export default function NavigatorLayout({ children }: { children: ReactNode }) {
         onBlur={(e) => (e.currentTarget.style.transform = 'translateY(-100%)')}
       >
         Skip to main content
-      </a>
-
+      </a>{' '}
       <Header />
-      <main id="main-content" role="main">
+      <main
+        id="main-content"
+        role="main"
+        style={{
+          minHeight: 'calc(100vh - 69px)', // Account for header height
+          paddingBottom: '80px', // Account for bottom navigation height with extra space
+          overflowY: 'auto',
+        }}
+      >
         {children}
       </main>
     </>
