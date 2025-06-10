@@ -14,6 +14,7 @@ export default function Page() {
   const [error, setError] = useState(null)
   const [timerSeconds, setTimerSeconds] = useState(0)
   const [isTimerActive, setIsTimerActive] = useState(false)
+  const [timerEndTime, setTimerEndTime] = useState<number | null>(null)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const router = useRouter()
 
@@ -44,35 +45,93 @@ export default function Page() {
     fetchData()
   }, [])
 
-  // Timer functions
+  // Timer functions with timestamp-based approach for mobile device sleep handling
   const add5Minutes = () => {
-    const fiveMinutesInSeconds = 5 * 60
-    setTimerSeconds((prev) => prev + fiveMinutesInSeconds)
+    const fiveMinutesInMs = 5 * 60 * 1000
+    const now = Date.now()
 
-    if (!isTimerActive) {
+    if (isTimerActive && timerEndTime) {
+      // Add 5 minutes to existing timer
+      setTimerEndTime(timerEndTime + fiveMinutesInMs)
+    } else {
+      // Start new timer
+      const endTime = now + fiveMinutesInMs
+      setTimerEndTime(endTime)
       setIsTimerActive(true)
-      startTimer()
+      startTimer(endTime)
     }
   }
 
-  const startTimer = () => {
+  const startTimer = (endTime: number) => {
     if (timerRef.current) {
       clearInterval(timerRef.current)
     }
 
-    timerRef.current = setInterval(() => {
-      setTimerSeconds((prev) => {
-        if (prev <= 1) {
+    const updateTimer = () => {
+      const now = Date.now()
+      const remaining = Math.max(0, Math.ceil((endTime - now) / 1000))
+
+      setTimerSeconds(remaining)
+
+      if (remaining <= 0) {
+        setIsTimerActive(false)
+        setTimerEndTime(null)
+        if (timerRef.current) {
+          clearInterval(timerRef.current)
+          timerRef.current = null
+        }
+        // Optional: Show notification or sound when timer completes
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification('Timer Complete!', {
+            body: 'Your yoga timer has finished.',
+            icon: '/favicon.ico',
+          })
+        }
+      }
+    }
+
+    // Update immediately
+    updateTimer()
+
+    // Then update every second
+    timerRef.current = setInterval(updateTimer, 1000)
+  }
+
+  // Handle page visibility changes (when user switches apps or locks device)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden && isTimerActive && timerEndTime) {
+        // Page became visible again, recalculate timer
+        const now = Date.now()
+        const remaining = Math.max(0, Math.ceil((timerEndTime - now) / 1000))
+        setTimerSeconds(remaining)
+
+        if (remaining <= 0) {
           setIsTimerActive(false)
+          setTimerEndTime(null)
           if (timerRef.current) {
             clearInterval(timerRef.current)
+            timerRef.current = null
           }
-          return 0
+        } else {
+          // Restart the interval with correct time
+          startTimer(timerEndTime)
         }
-        return prev - 1
-      })
-    }, 1000)
-  }
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [isTimerActive, timerEndTime])
+
+  // Request notification permission on component mount
+  useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission()
+    }
+  }, [])
 
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60)
