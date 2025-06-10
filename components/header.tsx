@@ -1,5 +1,6 @@
 'use client'
-import React from 'react'
+import React, { MouseEvent } from 'react'
+import { useSession } from 'next-auth/react'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import HomeIcon from '@mui/icons-material/Home'
@@ -24,10 +25,8 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
-
 import Link from 'next/link'
 import Image from 'next/image'
-import { useSession } from 'next-auth/react'
 
 export default function Header() {
   const [openDrawer, setOpenDrawer] = React.useState(false)
@@ -83,12 +82,8 @@ export default function Header() {
   ]
 
   const DrawerList = (
-    <nav aria-label="main navigation menu" id="main-navigation">
-      <Box
-        sx={{ width: 250 }}
-        role="presentation"
-        onClick={toggleDrawer(false)}
-      >
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+      <nav aria-label="main navigation menu">
         <List>
           {navLinks.map((navItem, index) => (
             <React.Fragment key={navItem.name}>
@@ -118,11 +113,11 @@ export default function Header() {
             </React.Fragment>
           ))}
         </List>
-      </Box>
-    </nav>
+      </nav>
+    </Box>
   )
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = (event: MouseEvent<HTMLDivElement>) => {
     event.stopPropagation()
     setOpenDrawer(false)
   }
