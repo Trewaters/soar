@@ -17,6 +17,7 @@ import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 import PostureShareButton from '@app/clientComponents/exportPoses'
+import ActivityTracker from '@app/clientComponents/activityTracker/ActivityTracker'
 import { useSession } from 'next-auth/react'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
@@ -448,6 +449,14 @@ export default function PostureActivityDetail({
             label="Sideways"
             // sx={{ mb: '32px' }}
           />
+
+          {/* Activity Tracker Component */}
+          {posture && posture.id && (
+            <Box sx={{ mt: 3, mb: 2 }}>
+              <ActivityTracker posture={posture} variant="detailed" />
+            </Box>
+          )}
+
           <Stack
             flexDirection={'row'}
             gap={2}

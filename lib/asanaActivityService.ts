@@ -127,3 +127,126 @@ export async function getUserAsanaHistory(userId: string) {
     throw error
   }
 }
+
+export async function getPostureWeeklyCount(userId: string, postureId: string) {
+  try {
+    // Get activities for the past 7 days
+    const startDate = new Date()
+    startDate.setDate(startDate.getDate() - 7)
+    startDate.setHours(0, 0, 0, 0)
+
+    const endDate = new Date()
+    endDate.setHours(23, 59, 59, 999)
+
+    const activities = await prisma.asanaActivity.findMany({
+      where: {
+        userId,
+        postureId,
+        datePerformed: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+      orderBy: { datePerformed: 'desc' },
+    })
+
+    return {
+      count: activities.length,
+      activities,
+      dateRange: {
+        start: startDate,
+        end: endDate,
+      },
+    }
+  } catch (error) {
+    logDatabaseError(error, 'findMany', 'AsanaActivity', {
+      userId,
+      postureId,
+      operation: 'weekly_count',
+    })
+    logServiceError(error, 'asanaActivityService', 'getPostureWeeklyCount', {
+      userId,
+      postureId,
+      operation: 'get_weekly_count',
+    })
+    throw error
+  }
+}
+
+export async function getAllPosturesWeeklyCount(userId: string) {
+  try {
+    // Get all activities for the past 7 days
+    const startDate = new Date()
+    startDate.setDate(startDate.getDate() - 7)
+    startDate.setHours(0, 0, 0, 0)
+
+    const endDate = new Date()
+    endDate.setHours(23, 59, 59, 999)
+
+    const activities = await prisma.asanaActivity.findMany({
+      where: {
+        userId,
+        datePerformed: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+      orderBy: { datePerformed: 'desc' },
+    })
+
+    // Group by postureId and count
+    const postureStats: Record<
+      string,
+      {
+        count: number
+        postureName: string
+        lastPerformed: Date
+        activities: typeof activities
+      }
+    > = {}
+
+    activities.forEach((activity) => {
+      if (!postureStats[activity.postureId]) {
+        postureStats[activity.postureId] = {
+          count: 0,
+          postureName: activity.postureName,
+          lastPerformed: activity.datePerformed,
+          activities: [],
+        }
+      }
+      postureStats[activity.postureId].count++
+      postureStats[activity.postureId].activities.push(activity)
+
+      // Update last performed if this activity is more recent
+      if (
+        activity.datePerformed > postureStats[activity.postureId].lastPerformed
+      ) {
+        postureStats[activity.postureId].lastPerformed = activity.datePerformed
+      }
+    })
+
+    return {
+      totalActivities: activities.length,
+      postureStats,
+      dateRange: {
+        start: startDate,
+        end: endDate,
+      },
+    }
+  } catch (error) {
+    logDatabaseError(error, 'findMany', 'AsanaActivity', {
+      userId,
+      operation: 'weekly_summary',
+    })
+    logServiceError(
+      error,
+      'asanaActivityService',
+      'getAllPosturesWeeklyCount',
+      {
+        userId,
+        operation: 'get_weekly_summary',
+      }
+    )
+    throw error
+  }
+}
