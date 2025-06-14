@@ -1,14 +1,24 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Image from 'next/image'
-import { Box, ButtonGroup, Chip, IconButton, Stack } from '@mui/material'
+import {
+  Box,
+  ButtonGroup,
+  Chip,
+  IconButton,
+  Stack,
+  Checkbox,
+  FormControlLabel,
+} from '@mui/material'
 import { FullAsanaData } from '@context/AsanaPostureContext'
 import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 import PostureShareButton from '@app/clientComponents/exportPoses'
+import ActivityTracker from '@app/clientComponents/activityTracker/ActivityTracker'
+import { useSession } from 'next-auth/react'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
@@ -21,6 +31,7 @@ export default function PostureActivityDetail({
 }: PostureCardProps) {
   const posture = postureCardProp
   const router = useRouter()
+  const { data: session } = useSession()
   const [easyChipVariant, setEasyChipVariant] = useState<'filled' | 'outlined'>(
     'outlined'
   )
@@ -30,6 +41,32 @@ export default function PostureActivityDetail({
   const [difficultChipVariant, setDifficultChipVariant] = useState<
     'filled' | 'outlined'
   >('outlined')
+  const [checked, setChecked] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  // Check if activity already exists on component mount
+  useEffect(() => {
+    const checkExistingActivity = async () => {
+      if (session?.user?.id && postureCardProp.id) {
+        try {
+          const response = await fetch(
+            `/api/asanaActivity?userId=${session.user.id}&postureId=${postureCardProp.id}`
+          )
+
+          if (response.ok) {
+            const data = await response.json()
+            setChecked(data.exists)
+          }
+        } catch (error) {
+          console.error('Error checking existing activity:', error)
+          // Don't show error to user for this check, just default to unchecked
+        }
+      }
+    }
+
+    checkExistingActivity()
+  }, [session?.user?.id, postureCardProp.id])
 
   const handleEasyChipClick = () => {
     setEasyChipVariant((prev) => (prev === 'outlined' ? 'filled' : 'outlined'))
@@ -45,6 +82,153 @@ export default function PostureActivityDetail({
     setDifficultChipVariant((prev) =>
       prev === 'outlined' ? 'filled' : 'outlined'
     )
+  }
+
+  const handleCheckboxChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const isChecked = event.target.checked
+    setChecked(isChecked)
+
+    // Enhanced logging for debugging
+    console.log('Checkbox change initiated:', {
+      isChecked,
+      sessionExists: !!session,
+      userId: session?.user?.id,
+      postureId: postureCardProp.id,
+      postureName: postureCardProp.sort_english_name,
+      timestamp: new Date().toISOString(),
+    })
+
+    if (!session?.user?.id) {
+      const errorMessage = 'Please log in to track your activity'
+      console.error('Authentication error:', {
+        error: errorMessage,
+        sessionData: session,
+        operation: 'handleCheckboxChange',
+        timestamp: new Date().toISOString(),
+      })
+      setError(errorMessage)
+      setChecked(false)
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+
+    const requestData = {
+      userId: session.user.id,
+      postureId: postureCardProp.id,
+      postureName: postureCardProp.sort_english_name,
+      duration: 0,
+      datePerformed: new Date(),
+      completionStatus: 'complete',
+    }
+
+    try {
+      if (isChecked) {
+        // Create new activity
+        console.log('Creating activity with data:', requestData)
+
+        const response = await fetch('/api/asanaActivity', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestData),
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          const errorMessage = errorData.error || 'Failed to record activity'
+
+          console.error('API Error - Create Activity:', {
+            status: response.status,
+            statusText: response.statusText,
+            errorData,
+            requestData,
+            timestamp: new Date().toISOString(),
+          })
+
+          throw new Error(errorMessage)
+        }
+
+        const result = await response.json()
+        console.log('Activity recorded successfully:', {
+          result,
+          requestData,
+          timestamp: new Date().toISOString(),
+        })
+      } else {
+        // Delete existing activity
+        const deleteData = {
+          userId: session.user.id,
+          postureId: postureCardProp.id,
+        }
+
+        console.log('Deleting activity with data:', deleteData)
+
+        const response = await fetch('/api/asanaActivity', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(deleteData),
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          const errorMessage = errorData.error || 'Failed to remove activity'
+
+          console.error('API Error - Delete Activity:', {
+            status: response.status,
+            statusText: response.statusText,
+            errorData,
+            deleteData,
+            timestamp: new Date().toISOString(),
+          })
+
+          throw new Error(errorMessage)
+        }
+
+        const result = await response.json()
+        console.log('Activity removed successfully:', {
+          result,
+          deleteData,
+          timestamp: new Date().toISOString(),
+        })
+      }
+    } catch (e: any) {
+      console.error('Error updating activity - Full Context:', {
+        error: {
+          message: e.message,
+          name: e.name,
+          stack: e.stack,
+        },
+        operation: isChecked ? 'create' : 'delete',
+        context: {
+          userId: session.user.id,
+          postureId: postureCardProp.id,
+          postureName: postureCardProp.sort_english_name,
+          isChecked,
+          requestData: isChecked
+            ? requestData
+            : { userId: session.user.id, postureId: postureCardProp.id },
+        },
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        url: window.location.href,
+      })
+
+      setError(e.message || 'Failed to update activity')
+      setChecked(!isChecked) // Revert checkbox state on error
+    } finally {
+      setLoading(false)
+      console.log('Checkbox change completed:', {
+        finalState: {
+          checked: !loading ? checked : 'loading',
+          loading: false,
+          error: error || null,
+        },
+        timestamp: new Date().toISOString(),
+      })
+    }
   }
 
   const getAsanaIconUrl = (category: string) => {
@@ -265,6 +449,14 @@ export default function PostureActivityDetail({
             label="Sideways"
             // sx={{ mb: '32px' }}
           />
+
+          {/* Activity Tracker Component */}
+          {posture && posture.id && (
+            <Box sx={{ mt: 3, mb: 2 }}>
+              <ActivityTracker posture={posture} variant="detailed" />
+            </Box>
+          )}
+
           <Stack
             flexDirection={'row'}
             gap={2}
@@ -301,6 +493,13 @@ export default function PostureActivityDetail({
               />
             </Stack>
           </Stack>
+          <FormControlLabel
+            control={
+              <Checkbox checked={checked} onChange={handleCheckboxChange} />
+            }
+            label={loading ? 'Saving...' : 'Mark for Activity Tracker'}
+          />
+          {error && <Typography color="error">{error}</Typography>}
           {/* <Typography
             variant="body1"
             sx={{

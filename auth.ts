@@ -200,6 +200,17 @@ const authConfig = {
     }) {
       console.log('jwt token', token)
       if (trigger === 'update') token.name = session.user.name
+
+      // Set user ID from database if not already set
+      if (!token.id && token.email) {
+        const user = await prisma.userData.findUnique({
+          where: { email: token.email as string },
+        })
+        if (user) {
+          token.id = user.id
+        }
+      }
+
       if (account?.provider === 'google') {
         return { ...token, accessToken: account.access_token }
       }

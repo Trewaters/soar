@@ -53,6 +53,7 @@ model UserData {
   // exportAccountInfo String
   // deleteAccountInfo String
   providerAccounts ProviderAccount[]
+  asanaActivities  AsanaActivity[] // Relation to AsanaActivity
 }
 
 model ProviderAccount {
@@ -80,10 +81,10 @@ model ProviderAccount {
 
 /// Represents a yoga Asana in the app.
 model AsanaPosture {
-  id                       String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                       String          @id @default(auto()) @map("_id") @db.ObjectId
   english_names            String[]
   sanskrit_names           Json?
-  sort_english_name        String    @unique
+  sort_english_name        String          @unique
   description              String?
   benefits                 String?
   category                 String?
@@ -98,8 +99,8 @@ model AsanaPosture {
   preferred_side           String?
   sideways                 Boolean?
   image                    String?
-  created_on               DateTime? @default(now())
-  updated_on               DateTime? @updatedAt
+  created_on               DateTime?       @default(now())
+  updated_on               DateTime?       @updatedAt
   acitivity_completed      Boolean?
   acitivity_practice       Boolean?
   posture_intent           String?
@@ -114,6 +115,7 @@ model AsanaPosture {
   joint_action             String?
   muscle_action            String?
   created_by               String?
+  asanaActivities          AsanaActivity[] // Relation to AsanaActivity
 }
 
 model AsanaSeries {
@@ -140,4 +142,23 @@ model AsanaSequence {
   breath_direction String?
   createdAt        DateTime? @default(now())
   updatedAt        DateTime? @updatedAt
+}
+
+/// Records a user's daily asana activity.
+model AsanaActivity {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @db.ObjectId
+  postureId        String // Reference to AsanaPosture.id
+  postureName      String // e.g., Adho Mukha Svanasana
+  duration         Int // Duration held (in seconds)
+  datePerformed    DateTime // Date performed
+  notes            String? // User notes (optional)
+  sensations       String? // Body sensations or mood (optional)
+  completionStatus String // e.g., "complete", "skipped", "partial"
+
+  user    UserData     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  posture AsanaPosture @relation(fields: [postureId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

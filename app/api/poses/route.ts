@@ -23,7 +23,15 @@ export async function GET(request: NextRequest) {
 
       return NextResponse.json(pose)
     } catch (error: any) {
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      console.error(
+        'Error fetching pose by sort_english_name:',
+        sortEnglishName,
+        error
+      )
+      return NextResponse.json(
+        { error: 'Internal server error. Please try again later.' },
+        { status: 500 }
+      )
     } finally {
       await prisma.$disconnect()
     }
@@ -46,7 +54,11 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    console.error('Error fetching all asana postures:', error)
+    return NextResponse.json(
+      { error: 'Internal server error. Please try again later.' },
+      { status: 500 }
+    )
   } finally {
     await prisma.$disconnect()
   }
