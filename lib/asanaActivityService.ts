@@ -1,4 +1,5 @@
 import { PrismaClient } from '../prisma/generated/client'
+import { logServiceError, logDatabaseError } from './errorLogger'
 
 const prisma = new PrismaClient()
 
@@ -7,7 +8,7 @@ export type AsanaActivityInput = {
   postureId: string
   postureName: string
   duration: number
-  datePerformed: Date
+  datePerformed: Date | string // Accept both Date and string, convert in function
   notes?: string
   sensations?: string
   completionStatus: string // 'complete', 'skipped', 'partial'
@@ -15,11 +16,78 @@ export type AsanaActivityInput = {
 
 export async function recordAsanaActivity(input: AsanaActivityInput) {
   try {
-    return await prisma.asanaActivity.create({
-      data: input,
+    // Ensure datePerformed is a Date object
+    const data = {
+      ...input,
+      datePerformed:
+        input.datePerformed instanceof Date
+          ? input.datePerformed
+          : new Date(input.datePerformed),
+    }
+
+    const result = await prisma.asanaActivity.create({
+      data,
     })
+
+    return result
   } catch (error) {
-    console.error('Error in recordAsanaActivity:', error)
+    logDatabaseError(error, 'create', 'AsanaActivity', input)
+    logServiceError(error, 'asanaActivityService', 'recordAsanaActivity', {
+      input,
+      operation: 'create_activity',
+    })
+    throw error
+  }
+}
+
+export async function deleteAsanaActivity(userId: string, postureId: string) {
+  try {
+    // Delete the most recent activity for this user and posture
+    const result = await prisma.asanaActivity.deleteMany({
+      where: {
+        userId,
+        postureId,
+      },
+    })
+
+    return result
+  } catch (error) {
+    logDatabaseError(error, 'deleteMany', 'AsanaActivity', {
+      userId,
+      postureId,
+    })
+    logServiceError(error, 'asanaActivityService', 'deleteAsanaActivity', {
+      userId,
+      postureId,
+      operation: 'delete_activity',
+    })
+    throw error
+  }
+}
+
+export async function checkExistingActivity(userId: string, postureId: string) {
+  try {
+    const activity = await prisma.asanaActivity.findFirst({
+      where: {
+        userId,
+        postureId,
+      },
+      orderBy: {
+        datePerformed: 'desc',
+      },
+    })
+
+    return activity
+  } catch (error) {
+    logDatabaseError(error, 'findFirst', 'AsanaActivity', {
+      userId,
+      postureId,
+    })
+    logServiceError(error, 'asanaActivityService', 'checkExistingActivity', {
+      userId,
+      postureId,
+      operation: 'check_activity',
+    })
     throw error
   }
 }
