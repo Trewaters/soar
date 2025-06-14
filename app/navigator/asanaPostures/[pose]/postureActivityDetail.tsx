@@ -3,12 +3,21 @@ import React, { useState } from 'react'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Image from 'next/image'
-import { Box, ButtonGroup, Chip, IconButton, Stack } from '@mui/material'
+import {
+  Box,
+  ButtonGroup,
+  Chip,
+  IconButton,
+  Stack,
+  Checkbox,
+  FormControlLabel,
+} from '@mui/material'
 import { FullAsanaData } from '@context/AsanaPostureContext'
 import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 import PostureShareButton from '@app/clientComponents/exportPoses'
+import { useSession } from 'next-auth/react'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
@@ -21,6 +30,7 @@ export default function PostureActivityDetail({
 }: PostureCardProps) {
   const posture = postureCardProp
   const router = useRouter()
+  const { data: session } = useSession()
   const [easyChipVariant, setEasyChipVariant] = useState<'filled' | 'outlined'>(
     'outlined'
   )
@@ -30,6 +40,9 @@ export default function PostureActivityDetail({
   const [difficultChipVariant, setDifficultChipVariant] = useState<
     'filled' | 'outlined'
   >('outlined')
+  const [checked, setChecked] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleEasyChipClick = () => {
     setEasyChipVariant((prev) => (prev === 'outlined' ? 'filled' : 'outlined'))
@@ -45,6 +58,34 @@ export default function PostureActivityDetail({
     setDifficultChipVariant((prev) =>
       prev === 'outlined' ? 'filled' : 'outlined'
     )
+  }
+
+  const handleCheckboxChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setChecked(event.target.checked)
+    if (event.target.checked && session?.user?.id) {
+      setLoading(true)
+      setError(null)
+      try {
+        await fetch('/api/asanaActivity', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: session.user.id,
+            postureId: postureCardProp.id,
+            postureName: postureCardProp.sort_english_name,
+            duration: 0, // You may want to update this with actual duration
+            datePerformed: new Date().toISOString(),
+            completionStatus: 'complete',
+          }),
+        })
+      } catch (e: any) {
+        setError('Failed to record activity')
+      } finally {
+        setLoading(false)
+      }
+    }
   }
 
   const getAsanaIconUrl = (category: string) => {
@@ -301,6 +342,13 @@ export default function PostureActivityDetail({
               />
             </Stack>
           </Stack>
+          <FormControlLabel
+            control={
+              <Checkbox checked={checked} onChange={handleCheckboxChange} />
+            }
+            label={loading ? 'Saving...' : 'Mark for Activity Tracker'}
+          />
+          {error && <Typography color="error">{error}</Typography>}
           {/* <Typography
             variant="body1"
             sx={{

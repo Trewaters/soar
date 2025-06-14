@@ -38,6 +38,11 @@ export type AsanaSeries = $Result.DefaultSelection<Prisma.$AsanaSeriesPayload>
  * 
  */
 export type AsanaSequence = $Result.DefaultSelection<Prisma.$AsanaSequencePayload>
+/**
+ * Model AsanaActivity
+ * Records a user's daily asana activity.
+ */
+export type AsanaActivity = $Result.DefaultSelection<Prisma.$AsanaActivityPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -178,6 +183,16 @@ export class PrismaClient<
     * ```
     */
   get asanaSequence(): Prisma.AsanaSequenceDelegate<ExtArgs>;
+
+  /**
+   * `prisma.asanaActivity`: Exposes CRUD operations for the **AsanaActivity** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AsanaActivities
+    * const asanaActivities = await prisma.asanaActivity.findMany()
+    * ```
+    */
+  get asanaActivity(): Prisma.AsanaActivityDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -659,7 +674,8 @@ export namespace Prisma {
     ProviderAccount: 'ProviderAccount',
     AsanaPosture: 'AsanaPosture',
     AsanaSeries: 'AsanaSeries',
-    AsanaSequence: 'AsanaSequence'
+    AsanaSequence: 'AsanaSequence',
+    AsanaActivity: 'AsanaActivity'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -675,7 +691,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "userData" | "providerAccount" | "asanaPosture" | "asanaSeries" | "asanaSequence"
+      modelProps: "userData" | "providerAccount" | "asanaPosture" | "asanaSeries" | "asanaSequence" | "asanaActivity"
       txIsolationLevel: never
     }
     model: {
@@ -1049,6 +1065,80 @@ export namespace Prisma {
           }
         }
       }
+      AsanaActivity: {
+        payload: Prisma.$AsanaActivityPayload<ExtArgs>
+        fields: Prisma.AsanaActivityFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AsanaActivityFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaActivityPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AsanaActivityFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaActivityPayload>
+          }
+          findFirst: {
+            args: Prisma.AsanaActivityFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaActivityPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AsanaActivityFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaActivityPayload>
+          }
+          findMany: {
+            args: Prisma.AsanaActivityFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaActivityPayload>[]
+          }
+          create: {
+            args: Prisma.AsanaActivityCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaActivityPayload>
+          }
+          createMany: {
+            args: Prisma.AsanaActivityCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.AsanaActivityDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaActivityPayload>
+          }
+          update: {
+            args: Prisma.AsanaActivityUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaActivityPayload>
+          }
+          deleteMany: {
+            args: Prisma.AsanaActivityDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AsanaActivityUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.AsanaActivityUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AsanaActivityPayload>
+          }
+          aggregate: {
+            args: Prisma.AsanaActivityAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAsanaActivity>
+          }
+          groupBy: {
+            args: Prisma.AsanaActivityGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AsanaActivityGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.AsanaActivityFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.AsanaActivityAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.AsanaActivityCountArgs<ExtArgs>
+            result: $Utils.Optional<AsanaActivityCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1198,10 +1288,12 @@ export namespace Prisma {
 
   export type UserDataCountOutputType = {
     providerAccounts: number
+    asanaActivities: number
   }
 
   export type UserDataCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     providerAccounts?: boolean | UserDataCountOutputTypeCountProviderAccountsArgs
+    asanaActivities?: boolean | UserDataCountOutputTypeCountAsanaActivitiesArgs
   }
 
   // Custom InputTypes
@@ -1220,6 +1312,44 @@ export namespace Prisma {
    */
   export type UserDataCountOutputTypeCountProviderAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProviderAccountWhereInput
+  }
+
+  /**
+   * UserDataCountOutputType without action
+   */
+  export type UserDataCountOutputTypeCountAsanaActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AsanaActivityWhereInput
+  }
+
+
+  /**
+   * Count Type AsanaPostureCountOutputType
+   */
+
+  export type AsanaPostureCountOutputType = {
+    asanaActivities: number
+  }
+
+  export type AsanaPostureCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    asanaActivities?: boolean | AsanaPostureCountOutputTypeCountAsanaActivitiesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * AsanaPostureCountOutputType without action
+   */
+  export type AsanaPostureCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaPostureCountOutputType
+     */
+    select?: AsanaPostureCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * AsanaPostureCountOutputType without action
+   */
+  export type AsanaPostureCountOutputTypeCountAsanaActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AsanaActivityWhereInput
   }
 
 
@@ -1532,6 +1662,7 @@ export namespace Prisma {
     isLocationPublic?: boolean
     role?: boolean
     providerAccounts?: boolean | UserData$providerAccountsArgs<ExtArgs>
+    asanaActivities?: boolean | UserData$asanaActivitiesArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userData"]>
 
@@ -1564,6 +1695,7 @@ export namespace Prisma {
 
   export type UserDataInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     providerAccounts?: boolean | UserData$providerAccountsArgs<ExtArgs>
+    asanaActivities?: boolean | UserData$asanaActivitiesArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -1571,6 +1703,7 @@ export namespace Prisma {
     name: "UserData"
     objects: {
       providerAccounts: Prisma.$ProviderAccountPayload<ExtArgs>[]
+      asanaActivities: Prisma.$AsanaActivityPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1960,6 +2093,7 @@ export namespace Prisma {
   export interface Prisma__UserDataClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     providerAccounts<T extends UserData$providerAccountsArgs<ExtArgs> = {}>(args?: Subset<T, UserData$providerAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "findMany"> | Null>
+    asanaActivities<T extends UserData$asanaActivitiesArgs<ExtArgs> = {}>(args?: Subset<T, UserData$asanaActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2355,6 +2489,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProviderAccountScalarFieldEnum | ProviderAccountScalarFieldEnum[]
+  }
+
+  /**
+   * UserData.asanaActivities
+   */
+  export type UserData$asanaActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaActivity
+     */
+    select?: AsanaActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaActivityInclude<ExtArgs> | null
+    where?: AsanaActivityWhereInput
+    orderBy?: AsanaActivityOrderByWithRelationInput | AsanaActivityOrderByWithRelationInput[]
+    cursor?: AsanaActivityWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AsanaActivityScalarFieldEnum | AsanaActivityScalarFieldEnum[]
   }
 
   /**
@@ -3809,6 +3963,8 @@ export namespace Prisma {
     joint_action?: boolean
     muscle_action?: boolean
     created_by?: boolean
+    asanaActivities?: boolean | AsanaPosture$asanaActivitiesArgs<ExtArgs>
+    _count?: boolean | AsanaPostureCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["asanaPosture"]>
 
 
@@ -3849,10 +4005,16 @@ export namespace Prisma {
     created_by?: boolean
   }
 
+  export type AsanaPostureInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    asanaActivities?: boolean | AsanaPosture$asanaActivitiesArgs<ExtArgs>
+    _count?: boolean | AsanaPostureCountOutputTypeDefaultArgs<ExtArgs>
+  }
 
   export type $AsanaPosturePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "AsanaPosture"
-    objects: {}
+    objects: {
+      asanaActivities: Prisma.$AsanaActivityPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       english_names: string[]
@@ -4251,6 +4413,7 @@ export namespace Prisma {
    */
   export interface Prisma__AsanaPostureClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    asanaActivities<T extends AsanaPosture$asanaActivitiesArgs<ExtArgs> = {}>(args?: Subset<T, AsanaPosture$asanaActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4327,6 +4490,10 @@ export namespace Prisma {
      */
     select?: AsanaPostureSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaPostureInclude<ExtArgs> | null
+    /**
      * Filter, which AsanaPosture to fetch.
      */
     where: AsanaPostureWhereUniqueInput
@@ -4341,6 +4508,10 @@ export namespace Prisma {
      */
     select?: AsanaPostureSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaPostureInclude<ExtArgs> | null
+    /**
      * Filter, which AsanaPosture to fetch.
      */
     where: AsanaPostureWhereUniqueInput
@@ -4354,6 +4525,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AsanaPosture
      */
     select?: AsanaPostureSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaPostureInclude<ExtArgs> | null
     /**
      * Filter, which AsanaPosture to fetch.
      */
@@ -4399,6 +4574,10 @@ export namespace Prisma {
      */
     select?: AsanaPostureSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaPostureInclude<ExtArgs> | null
+    /**
      * Filter, which AsanaPosture to fetch.
      */
     where?: AsanaPostureWhereInput
@@ -4443,6 +4622,10 @@ export namespace Prisma {
      */
     select?: AsanaPostureSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaPostureInclude<ExtArgs> | null
+    /**
      * Filter, which AsanaPostures to fetch.
      */
     where?: AsanaPostureWhereInput
@@ -4482,6 +4665,10 @@ export namespace Prisma {
      */
     select?: AsanaPostureSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaPostureInclude<ExtArgs> | null
+    /**
      * The data needed to create a AsanaPosture.
      */
     data: XOR<AsanaPostureCreateInput, AsanaPostureUncheckedCreateInput>
@@ -4505,6 +4692,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AsanaPosture
      */
     select?: AsanaPostureSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaPostureInclude<ExtArgs> | null
     /**
      * The data needed to update a AsanaPosture.
      */
@@ -4538,6 +4729,10 @@ export namespace Prisma {
      */
     select?: AsanaPostureSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaPostureInclude<ExtArgs> | null
+    /**
      * The filter to search for the AsanaPosture to update in case it exists.
      */
     where: AsanaPostureWhereUniqueInput
@@ -4559,6 +4754,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AsanaPosture
      */
     select?: AsanaPostureSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaPostureInclude<ExtArgs> | null
     /**
      * Filter which AsanaPosture to delete.
      */
@@ -4604,6 +4803,26 @@ export namespace Prisma {
   }
 
   /**
+   * AsanaPosture.asanaActivities
+   */
+  export type AsanaPosture$asanaActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaActivity
+     */
+    select?: AsanaActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaActivityInclude<ExtArgs> | null
+    where?: AsanaActivityWhereInput
+    orderBy?: AsanaActivityOrderByWithRelationInput | AsanaActivityOrderByWithRelationInput[]
+    cursor?: AsanaActivityWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AsanaActivityScalarFieldEnum | AsanaActivityScalarFieldEnum[]
+  }
+
+  /**
    * AsanaPosture without action
    */
   export type AsanaPostureDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4611,6 +4830,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the AsanaPosture
      */
     select?: AsanaPostureSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaPostureInclude<ExtArgs> | null
   }
 
 
@@ -6455,6 +6678,1039 @@ export namespace Prisma {
 
 
   /**
+   * Model AsanaActivity
+   */
+
+  export type AggregateAsanaActivity = {
+    _count: AsanaActivityCountAggregateOutputType | null
+    _avg: AsanaActivityAvgAggregateOutputType | null
+    _sum: AsanaActivitySumAggregateOutputType | null
+    _min: AsanaActivityMinAggregateOutputType | null
+    _max: AsanaActivityMaxAggregateOutputType | null
+  }
+
+  export type AsanaActivityAvgAggregateOutputType = {
+    duration: number | null
+  }
+
+  export type AsanaActivitySumAggregateOutputType = {
+    duration: number | null
+  }
+
+  export type AsanaActivityMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    postureId: string | null
+    postureName: string | null
+    duration: number | null
+    datePerformed: Date | null
+    notes: string | null
+    sensations: string | null
+    completionStatus: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AsanaActivityMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    postureId: string | null
+    postureName: string | null
+    duration: number | null
+    datePerformed: Date | null
+    notes: string | null
+    sensations: string | null
+    completionStatus: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AsanaActivityCountAggregateOutputType = {
+    id: number
+    userId: number
+    postureId: number
+    postureName: number
+    duration: number
+    datePerformed: number
+    notes: number
+    sensations: number
+    completionStatus: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AsanaActivityAvgAggregateInputType = {
+    duration?: true
+  }
+
+  export type AsanaActivitySumAggregateInputType = {
+    duration?: true
+  }
+
+  export type AsanaActivityMinAggregateInputType = {
+    id?: true
+    userId?: true
+    postureId?: true
+    postureName?: true
+    duration?: true
+    datePerformed?: true
+    notes?: true
+    sensations?: true
+    completionStatus?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AsanaActivityMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    postureId?: true
+    postureName?: true
+    duration?: true
+    datePerformed?: true
+    notes?: true
+    sensations?: true
+    completionStatus?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AsanaActivityCountAggregateInputType = {
+    id?: true
+    userId?: true
+    postureId?: true
+    postureName?: true
+    duration?: true
+    datePerformed?: true
+    notes?: true
+    sensations?: true
+    completionStatus?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AsanaActivityAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AsanaActivity to aggregate.
+     */
+    where?: AsanaActivityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AsanaActivities to fetch.
+     */
+    orderBy?: AsanaActivityOrderByWithRelationInput | AsanaActivityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AsanaActivityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AsanaActivities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AsanaActivities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AsanaActivities
+    **/
+    _count?: true | AsanaActivityCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AsanaActivityAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AsanaActivitySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AsanaActivityMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AsanaActivityMaxAggregateInputType
+  }
+
+  export type GetAsanaActivityAggregateType<T extends AsanaActivityAggregateArgs> = {
+        [P in keyof T & keyof AggregateAsanaActivity]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAsanaActivity[P]>
+      : GetScalarType<T[P], AggregateAsanaActivity[P]>
+  }
+
+
+
+
+  export type AsanaActivityGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AsanaActivityWhereInput
+    orderBy?: AsanaActivityOrderByWithAggregationInput | AsanaActivityOrderByWithAggregationInput[]
+    by: AsanaActivityScalarFieldEnum[] | AsanaActivityScalarFieldEnum
+    having?: AsanaActivityScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AsanaActivityCountAggregateInputType | true
+    _avg?: AsanaActivityAvgAggregateInputType
+    _sum?: AsanaActivitySumAggregateInputType
+    _min?: AsanaActivityMinAggregateInputType
+    _max?: AsanaActivityMaxAggregateInputType
+  }
+
+  export type AsanaActivityGroupByOutputType = {
+    id: string
+    userId: string
+    postureId: string
+    postureName: string
+    duration: number
+    datePerformed: Date
+    notes: string | null
+    sensations: string | null
+    completionStatus: string
+    createdAt: Date
+    updatedAt: Date
+    _count: AsanaActivityCountAggregateOutputType | null
+    _avg: AsanaActivityAvgAggregateOutputType | null
+    _sum: AsanaActivitySumAggregateOutputType | null
+    _min: AsanaActivityMinAggregateOutputType | null
+    _max: AsanaActivityMaxAggregateOutputType | null
+  }
+
+  type GetAsanaActivityGroupByPayload<T extends AsanaActivityGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AsanaActivityGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AsanaActivityGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AsanaActivityGroupByOutputType[P]>
+            : GetScalarType<T[P], AsanaActivityGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AsanaActivitySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    postureId?: boolean
+    postureName?: boolean
+    duration?: boolean
+    datePerformed?: boolean
+    notes?: boolean
+    sensations?: boolean
+    completionStatus?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDataDefaultArgs<ExtArgs>
+    posture?: boolean | AsanaPostureDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["asanaActivity"]>
+
+
+  export type AsanaActivitySelectScalar = {
+    id?: boolean
+    userId?: boolean
+    postureId?: boolean
+    postureName?: boolean
+    duration?: boolean
+    datePerformed?: boolean
+    notes?: boolean
+    sensations?: boolean
+    completionStatus?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type AsanaActivityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDataDefaultArgs<ExtArgs>
+    posture?: boolean | AsanaPostureDefaultArgs<ExtArgs>
+  }
+
+  export type $AsanaActivityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AsanaActivity"
+    objects: {
+      user: Prisma.$UserDataPayload<ExtArgs>
+      posture: Prisma.$AsanaPosturePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      postureId: string
+      postureName: string
+      duration: number
+      datePerformed: Date
+      notes: string | null
+      sensations: string | null
+      completionStatus: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["asanaActivity"]>
+    composites: {}
+  }
+
+  type AsanaActivityGetPayload<S extends boolean | null | undefined | AsanaActivityDefaultArgs> = $Result.GetResult<Prisma.$AsanaActivityPayload, S>
+
+  type AsanaActivityCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<AsanaActivityFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: AsanaActivityCountAggregateInputType | true
+    }
+
+  export interface AsanaActivityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AsanaActivity'], meta: { name: 'AsanaActivity' } }
+    /**
+     * Find zero or one AsanaActivity that matches the filter.
+     * @param {AsanaActivityFindUniqueArgs} args - Arguments to find a AsanaActivity
+     * @example
+     * // Get one AsanaActivity
+     * const asanaActivity = await prisma.asanaActivity.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AsanaActivityFindUniqueArgs>(args: SelectSubset<T, AsanaActivityFindUniqueArgs<ExtArgs>>): Prisma__AsanaActivityClient<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one AsanaActivity that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {AsanaActivityFindUniqueOrThrowArgs} args - Arguments to find a AsanaActivity
+     * @example
+     * // Get one AsanaActivity
+     * const asanaActivity = await prisma.asanaActivity.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AsanaActivityFindUniqueOrThrowArgs>(args: SelectSubset<T, AsanaActivityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AsanaActivityClient<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first AsanaActivity that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaActivityFindFirstArgs} args - Arguments to find a AsanaActivity
+     * @example
+     * // Get one AsanaActivity
+     * const asanaActivity = await prisma.asanaActivity.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AsanaActivityFindFirstArgs>(args?: SelectSubset<T, AsanaActivityFindFirstArgs<ExtArgs>>): Prisma__AsanaActivityClient<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first AsanaActivity that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaActivityFindFirstOrThrowArgs} args - Arguments to find a AsanaActivity
+     * @example
+     * // Get one AsanaActivity
+     * const asanaActivity = await prisma.asanaActivity.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AsanaActivityFindFirstOrThrowArgs>(args?: SelectSubset<T, AsanaActivityFindFirstOrThrowArgs<ExtArgs>>): Prisma__AsanaActivityClient<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more AsanaActivities that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaActivityFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AsanaActivities
+     * const asanaActivities = await prisma.asanaActivity.findMany()
+     * 
+     * // Get first 10 AsanaActivities
+     * const asanaActivities = await prisma.asanaActivity.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const asanaActivityWithIdOnly = await prisma.asanaActivity.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AsanaActivityFindManyArgs>(args?: SelectSubset<T, AsanaActivityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a AsanaActivity.
+     * @param {AsanaActivityCreateArgs} args - Arguments to create a AsanaActivity.
+     * @example
+     * // Create one AsanaActivity
+     * const AsanaActivity = await prisma.asanaActivity.create({
+     *   data: {
+     *     // ... data to create a AsanaActivity
+     *   }
+     * })
+     * 
+     */
+    create<T extends AsanaActivityCreateArgs>(args: SelectSubset<T, AsanaActivityCreateArgs<ExtArgs>>): Prisma__AsanaActivityClient<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many AsanaActivities.
+     * @param {AsanaActivityCreateManyArgs} args - Arguments to create many AsanaActivities.
+     * @example
+     * // Create many AsanaActivities
+     * const asanaActivity = await prisma.asanaActivity.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AsanaActivityCreateManyArgs>(args?: SelectSubset<T, AsanaActivityCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a AsanaActivity.
+     * @param {AsanaActivityDeleteArgs} args - Arguments to delete one AsanaActivity.
+     * @example
+     * // Delete one AsanaActivity
+     * const AsanaActivity = await prisma.asanaActivity.delete({
+     *   where: {
+     *     // ... filter to delete one AsanaActivity
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AsanaActivityDeleteArgs>(args: SelectSubset<T, AsanaActivityDeleteArgs<ExtArgs>>): Prisma__AsanaActivityClient<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one AsanaActivity.
+     * @param {AsanaActivityUpdateArgs} args - Arguments to update one AsanaActivity.
+     * @example
+     * // Update one AsanaActivity
+     * const asanaActivity = await prisma.asanaActivity.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AsanaActivityUpdateArgs>(args: SelectSubset<T, AsanaActivityUpdateArgs<ExtArgs>>): Prisma__AsanaActivityClient<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more AsanaActivities.
+     * @param {AsanaActivityDeleteManyArgs} args - Arguments to filter AsanaActivities to delete.
+     * @example
+     * // Delete a few AsanaActivities
+     * const { count } = await prisma.asanaActivity.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AsanaActivityDeleteManyArgs>(args?: SelectSubset<T, AsanaActivityDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AsanaActivities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaActivityUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AsanaActivities
+     * const asanaActivity = await prisma.asanaActivity.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AsanaActivityUpdateManyArgs>(args: SelectSubset<T, AsanaActivityUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one AsanaActivity.
+     * @param {AsanaActivityUpsertArgs} args - Arguments to update or create a AsanaActivity.
+     * @example
+     * // Update or create a AsanaActivity
+     * const asanaActivity = await prisma.asanaActivity.upsert({
+     *   create: {
+     *     // ... data to create a AsanaActivity
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AsanaActivity we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AsanaActivityUpsertArgs>(args: SelectSubset<T, AsanaActivityUpsertArgs<ExtArgs>>): Prisma__AsanaActivityClient<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+    /**
+     * Find zero or more AsanaActivities that matches the filter.
+     * @param {AsanaActivityFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const asanaActivity = await prisma.asanaActivity.findRaw({
+     *   filter: { age: { $gt: 25 } } 
+     * })
+     */
+    findRaw(args?: AsanaActivityFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a AsanaActivity.
+     * @param {AsanaActivityAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const asanaActivity = await prisma.asanaActivity.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: AsanaActivityAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of AsanaActivities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaActivityCountArgs} args - Arguments to filter AsanaActivities to count.
+     * @example
+     * // Count the number of AsanaActivities
+     * const count = await prisma.asanaActivity.count({
+     *   where: {
+     *     // ... the filter for the AsanaActivities we want to count
+     *   }
+     * })
+    **/
+    count<T extends AsanaActivityCountArgs>(
+      args?: Subset<T, AsanaActivityCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AsanaActivityCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AsanaActivity.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaActivityAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AsanaActivityAggregateArgs>(args: Subset<T, AsanaActivityAggregateArgs>): Prisma.PrismaPromise<GetAsanaActivityAggregateType<T>>
+
+    /**
+     * Group by AsanaActivity.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AsanaActivityGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AsanaActivityGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AsanaActivityGroupByArgs['orderBy'] }
+        : { orderBy?: AsanaActivityGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AsanaActivityGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAsanaActivityGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AsanaActivity model
+   */
+  readonly fields: AsanaActivityFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AsanaActivity.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AsanaActivityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDataDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDataDefaultArgs<ExtArgs>>): Prisma__UserDataClient<$Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    posture<T extends AsanaPostureDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AsanaPostureDefaultArgs<ExtArgs>>): Prisma__AsanaPostureClient<$Result.GetResult<Prisma.$AsanaPosturePayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AsanaActivity model
+   */ 
+  interface AsanaActivityFieldRefs {
+    readonly id: FieldRef<"AsanaActivity", 'String'>
+    readonly userId: FieldRef<"AsanaActivity", 'String'>
+    readonly postureId: FieldRef<"AsanaActivity", 'String'>
+    readonly postureName: FieldRef<"AsanaActivity", 'String'>
+    readonly duration: FieldRef<"AsanaActivity", 'Int'>
+    readonly datePerformed: FieldRef<"AsanaActivity", 'DateTime'>
+    readonly notes: FieldRef<"AsanaActivity", 'String'>
+    readonly sensations: FieldRef<"AsanaActivity", 'String'>
+    readonly completionStatus: FieldRef<"AsanaActivity", 'String'>
+    readonly createdAt: FieldRef<"AsanaActivity", 'DateTime'>
+    readonly updatedAt: FieldRef<"AsanaActivity", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AsanaActivity findUnique
+   */
+  export type AsanaActivityFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaActivity
+     */
+    select?: AsanaActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which AsanaActivity to fetch.
+     */
+    where: AsanaActivityWhereUniqueInput
+  }
+
+  /**
+   * AsanaActivity findUniqueOrThrow
+   */
+  export type AsanaActivityFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaActivity
+     */
+    select?: AsanaActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which AsanaActivity to fetch.
+     */
+    where: AsanaActivityWhereUniqueInput
+  }
+
+  /**
+   * AsanaActivity findFirst
+   */
+  export type AsanaActivityFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaActivity
+     */
+    select?: AsanaActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which AsanaActivity to fetch.
+     */
+    where?: AsanaActivityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AsanaActivities to fetch.
+     */
+    orderBy?: AsanaActivityOrderByWithRelationInput | AsanaActivityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AsanaActivities.
+     */
+    cursor?: AsanaActivityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AsanaActivities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AsanaActivities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AsanaActivities.
+     */
+    distinct?: AsanaActivityScalarFieldEnum | AsanaActivityScalarFieldEnum[]
+  }
+
+  /**
+   * AsanaActivity findFirstOrThrow
+   */
+  export type AsanaActivityFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaActivity
+     */
+    select?: AsanaActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which AsanaActivity to fetch.
+     */
+    where?: AsanaActivityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AsanaActivities to fetch.
+     */
+    orderBy?: AsanaActivityOrderByWithRelationInput | AsanaActivityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AsanaActivities.
+     */
+    cursor?: AsanaActivityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AsanaActivities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AsanaActivities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AsanaActivities.
+     */
+    distinct?: AsanaActivityScalarFieldEnum | AsanaActivityScalarFieldEnum[]
+  }
+
+  /**
+   * AsanaActivity findMany
+   */
+  export type AsanaActivityFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaActivity
+     */
+    select?: AsanaActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which AsanaActivities to fetch.
+     */
+    where?: AsanaActivityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AsanaActivities to fetch.
+     */
+    orderBy?: AsanaActivityOrderByWithRelationInput | AsanaActivityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AsanaActivities.
+     */
+    cursor?: AsanaActivityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AsanaActivities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AsanaActivities.
+     */
+    skip?: number
+    distinct?: AsanaActivityScalarFieldEnum | AsanaActivityScalarFieldEnum[]
+  }
+
+  /**
+   * AsanaActivity create
+   */
+  export type AsanaActivityCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaActivity
+     */
+    select?: AsanaActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaActivityInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AsanaActivity.
+     */
+    data: XOR<AsanaActivityCreateInput, AsanaActivityUncheckedCreateInput>
+  }
+
+  /**
+   * AsanaActivity createMany
+   */
+  export type AsanaActivityCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AsanaActivities.
+     */
+    data: AsanaActivityCreateManyInput | AsanaActivityCreateManyInput[]
+  }
+
+  /**
+   * AsanaActivity update
+   */
+  export type AsanaActivityUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaActivity
+     */
+    select?: AsanaActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaActivityInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AsanaActivity.
+     */
+    data: XOR<AsanaActivityUpdateInput, AsanaActivityUncheckedUpdateInput>
+    /**
+     * Choose, which AsanaActivity to update.
+     */
+    where: AsanaActivityWhereUniqueInput
+  }
+
+  /**
+   * AsanaActivity updateMany
+   */
+  export type AsanaActivityUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AsanaActivities.
+     */
+    data: XOR<AsanaActivityUpdateManyMutationInput, AsanaActivityUncheckedUpdateManyInput>
+    /**
+     * Filter which AsanaActivities to update
+     */
+    where?: AsanaActivityWhereInput
+  }
+
+  /**
+   * AsanaActivity upsert
+   */
+  export type AsanaActivityUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaActivity
+     */
+    select?: AsanaActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaActivityInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AsanaActivity to update in case it exists.
+     */
+    where: AsanaActivityWhereUniqueInput
+    /**
+     * In case the AsanaActivity found by the `where` argument doesn't exist, create a new AsanaActivity with this data.
+     */
+    create: XOR<AsanaActivityCreateInput, AsanaActivityUncheckedCreateInput>
+    /**
+     * In case the AsanaActivity was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AsanaActivityUpdateInput, AsanaActivityUncheckedUpdateInput>
+  }
+
+  /**
+   * AsanaActivity delete
+   */
+  export type AsanaActivityDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaActivity
+     */
+    select?: AsanaActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaActivityInclude<ExtArgs> | null
+    /**
+     * Filter which AsanaActivity to delete.
+     */
+    where: AsanaActivityWhereUniqueInput
+  }
+
+  /**
+   * AsanaActivity deleteMany
+   */
+  export type AsanaActivityDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AsanaActivities to delete
+     */
+    where?: AsanaActivityWhereInput
+  }
+
+  /**
+   * AsanaActivity findRaw
+   */
+  export type AsanaActivityFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * AsanaActivity aggregateRaw
+   */
+  export type AsanaActivityAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * AsanaActivity without action
+   */
+  export type AsanaActivityDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaActivity
+     */
+    select?: AsanaActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaActivityInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -6576,6 +7832,23 @@ export namespace Prisma {
   };
 
   export type AsanaSequenceScalarFieldEnum = (typeof AsanaSequenceScalarFieldEnum)[keyof typeof AsanaSequenceScalarFieldEnum]
+
+
+  export const AsanaActivityScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    postureId: 'postureId',
+    postureName: 'postureName',
+    duration: 'duration',
+    datePerformed: 'datePerformed',
+    notes: 'notes',
+    sensations: 'sensations',
+    completionStatus: 'completionStatus',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AsanaActivityScalarFieldEnum = (typeof AsanaActivityScalarFieldEnum)[keyof typeof AsanaActivityScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -6707,6 +7980,7 @@ export namespace Prisma {
     isLocationPublic?: StringNullableFilter<"UserData"> | string | null
     role?: StringNullableFilter<"UserData"> | string | null
     providerAccounts?: ProviderAccountListRelationFilter
+    asanaActivities?: AsanaActivityListRelationFilter
   }
 
   export type UserDataOrderByWithRelationInput = {
@@ -6734,6 +8008,7 @@ export namespace Prisma {
     isLocationPublic?: SortOrder
     role?: SortOrder
     providerAccounts?: ProviderAccountOrderByRelationAggregateInput
+    asanaActivities?: AsanaActivityOrderByRelationAggregateInput
   }
 
   export type UserDataWhereUniqueInput = Prisma.AtLeast<{
@@ -6764,6 +8039,7 @@ export namespace Prisma {
     isLocationPublic?: StringNullableFilter<"UserData"> | string | null
     role?: StringNullableFilter<"UserData"> | string | null
     providerAccounts?: ProviderAccountListRelationFilter
+    asanaActivities?: AsanaActivityListRelationFilter
   }, "id" | "provider_id" | "email">
 
   export type UserDataOrderByWithAggregationInput = {
@@ -6969,6 +8245,7 @@ export namespace Prisma {
     joint_action?: StringNullableFilter<"AsanaPosture"> | string | null
     muscle_action?: StringNullableFilter<"AsanaPosture"> | string | null
     created_by?: StringNullableFilter<"AsanaPosture"> | string | null
+    asanaActivities?: AsanaActivityListRelationFilter
   }
 
   export type AsanaPostureOrderByWithRelationInput = {
@@ -7006,6 +8283,7 @@ export namespace Prisma {
     joint_action?: SortOrder
     muscle_action?: SortOrder
     created_by?: SortOrder
+    asanaActivities?: AsanaActivityOrderByRelationAggregateInput
   }
 
   export type AsanaPostureWhereUniqueInput = Prisma.AtLeast<{
@@ -7046,6 +8324,7 @@ export namespace Prisma {
     joint_action?: StringNullableFilter<"AsanaPosture"> | string | null
     muscle_action?: StringNullableFilter<"AsanaPosture"> | string | null
     created_by?: StringNullableFilter<"AsanaPosture"> | string | null
+    asanaActivities?: AsanaActivityListRelationFilter
   }, "id" | "sort_english_name">
 
   export type AsanaPostureOrderByWithAggregationInput = {
@@ -7272,6 +8551,96 @@ export namespace Prisma {
     updatedAt?: DateTimeNullableWithAggregatesFilter<"AsanaSequence"> | Date | string | null
   }
 
+  export type AsanaActivityWhereInput = {
+    AND?: AsanaActivityWhereInput | AsanaActivityWhereInput[]
+    OR?: AsanaActivityWhereInput[]
+    NOT?: AsanaActivityWhereInput | AsanaActivityWhereInput[]
+    id?: StringFilter<"AsanaActivity"> | string
+    userId?: StringFilter<"AsanaActivity"> | string
+    postureId?: StringFilter<"AsanaActivity"> | string
+    postureName?: StringFilter<"AsanaActivity"> | string
+    duration?: IntFilter<"AsanaActivity"> | number
+    datePerformed?: DateTimeFilter<"AsanaActivity"> | Date | string
+    notes?: StringNullableFilter<"AsanaActivity"> | string | null
+    sensations?: StringNullableFilter<"AsanaActivity"> | string | null
+    completionStatus?: StringFilter<"AsanaActivity"> | string
+    createdAt?: DateTimeFilter<"AsanaActivity"> | Date | string
+    updatedAt?: DateTimeFilter<"AsanaActivity"> | Date | string
+    user?: XOR<UserDataRelationFilter, UserDataWhereInput>
+    posture?: XOR<AsanaPostureRelationFilter, AsanaPostureWhereInput>
+  }
+
+  export type AsanaActivityOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    postureId?: SortOrder
+    postureName?: SortOrder
+    duration?: SortOrder
+    datePerformed?: SortOrder
+    notes?: SortOrder
+    sensations?: SortOrder
+    completionStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserDataOrderByWithRelationInput
+    posture?: AsanaPostureOrderByWithRelationInput
+  }
+
+  export type AsanaActivityWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AsanaActivityWhereInput | AsanaActivityWhereInput[]
+    OR?: AsanaActivityWhereInput[]
+    NOT?: AsanaActivityWhereInput | AsanaActivityWhereInput[]
+    userId?: StringFilter<"AsanaActivity"> | string
+    postureId?: StringFilter<"AsanaActivity"> | string
+    postureName?: StringFilter<"AsanaActivity"> | string
+    duration?: IntFilter<"AsanaActivity"> | number
+    datePerformed?: DateTimeFilter<"AsanaActivity"> | Date | string
+    notes?: StringNullableFilter<"AsanaActivity"> | string | null
+    sensations?: StringNullableFilter<"AsanaActivity"> | string | null
+    completionStatus?: StringFilter<"AsanaActivity"> | string
+    createdAt?: DateTimeFilter<"AsanaActivity"> | Date | string
+    updatedAt?: DateTimeFilter<"AsanaActivity"> | Date | string
+    user?: XOR<UserDataRelationFilter, UserDataWhereInput>
+    posture?: XOR<AsanaPostureRelationFilter, AsanaPostureWhereInput>
+  }, "id">
+
+  export type AsanaActivityOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    postureId?: SortOrder
+    postureName?: SortOrder
+    duration?: SortOrder
+    datePerformed?: SortOrder
+    notes?: SortOrder
+    sensations?: SortOrder
+    completionStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AsanaActivityCountOrderByAggregateInput
+    _avg?: AsanaActivityAvgOrderByAggregateInput
+    _max?: AsanaActivityMaxOrderByAggregateInput
+    _min?: AsanaActivityMinOrderByAggregateInput
+    _sum?: AsanaActivitySumOrderByAggregateInput
+  }
+
+  export type AsanaActivityScalarWhereWithAggregatesInput = {
+    AND?: AsanaActivityScalarWhereWithAggregatesInput | AsanaActivityScalarWhereWithAggregatesInput[]
+    OR?: AsanaActivityScalarWhereWithAggregatesInput[]
+    NOT?: AsanaActivityScalarWhereWithAggregatesInput | AsanaActivityScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AsanaActivity"> | string
+    userId?: StringWithAggregatesFilter<"AsanaActivity"> | string
+    postureId?: StringWithAggregatesFilter<"AsanaActivity"> | string
+    postureName?: StringWithAggregatesFilter<"AsanaActivity"> | string
+    duration?: IntWithAggregatesFilter<"AsanaActivity"> | number
+    datePerformed?: DateTimeWithAggregatesFilter<"AsanaActivity"> | Date | string
+    notes?: StringNullableWithAggregatesFilter<"AsanaActivity"> | string | null
+    sensations?: StringNullableWithAggregatesFilter<"AsanaActivity"> | string | null
+    completionStatus?: StringWithAggregatesFilter<"AsanaActivity"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"AsanaActivity"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"AsanaActivity"> | Date | string
+  }
+
   export type UserDataCreateInput = {
     id?: string
     provider_id?: string | null
@@ -7297,6 +8666,7 @@ export namespace Prisma {
     isLocationPublic?: string | null
     role?: string | null
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
+    asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateInput = {
@@ -7324,6 +8694,7 @@ export namespace Prisma {
     isLocationPublic?: string | null
     role?: string | null
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
+    asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUpdateInput = {
@@ -7350,6 +8721,7 @@ export namespace Prisma {
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
+    asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateInput = {
@@ -7376,6 +8748,7 @@ export namespace Prisma {
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
+    asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataCreateManyInput = {
@@ -7610,6 +8983,7 @@ export namespace Prisma {
     joint_action?: string | null
     muscle_action?: string | null
     created_by?: string | null
+    asanaActivities?: AsanaActivityCreateNestedManyWithoutPostureInput
   }
 
   export type AsanaPostureUncheckedCreateInput = {
@@ -7647,6 +9021,7 @@ export namespace Prisma {
     joint_action?: string | null
     muscle_action?: string | null
     created_by?: string | null
+    asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutPostureInput
   }
 
   export type AsanaPostureUpdateInput = {
@@ -7683,6 +9058,7 @@ export namespace Prisma {
     joint_action?: NullableStringFieldUpdateOperationsInput | string | null
     muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
     created_by?: NullableStringFieldUpdateOperationsInput | string | null
+    asanaActivities?: AsanaActivityUpdateManyWithoutPostureNestedInput
   }
 
   export type AsanaPostureUncheckedUpdateInput = {
@@ -7719,6 +9095,7 @@ export namespace Prisma {
     joint_action?: NullableStringFieldUpdateOperationsInput | string | null
     muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
     created_by?: NullableStringFieldUpdateOperationsInput | string | null
+    asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutPostureNestedInput
   }
 
   export type AsanaPostureCreateManyInput = {
@@ -7990,6 +9367,98 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type AsanaActivityCreateInput = {
+    id?: string
+    postureName: string
+    duration: number
+    datePerformed: Date | string
+    notes?: string | null
+    sensations?: string | null
+    completionStatus: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserDataCreateNestedOneWithoutAsanaActivitiesInput
+    posture: AsanaPostureCreateNestedOneWithoutAsanaActivitiesInput
+  }
+
+  export type AsanaActivityUncheckedCreateInput = {
+    id?: string
+    userId: string
+    postureId: string
+    postureName: string
+    duration: number
+    datePerformed: Date | string
+    notes?: string | null
+    sensations?: string | null
+    completionStatus: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AsanaActivityUpdateInput = {
+    postureName?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    sensations?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserDataUpdateOneRequiredWithoutAsanaActivitiesNestedInput
+    posture?: AsanaPostureUpdateOneRequiredWithoutAsanaActivitiesNestedInput
+  }
+
+  export type AsanaActivityUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    postureId?: StringFieldUpdateOperationsInput | string
+    postureName?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    sensations?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AsanaActivityCreateManyInput = {
+    id?: string
+    userId: string
+    postureId: string
+    postureName: string
+    duration: number
+    datePerformed: Date | string
+    notes?: string | null
+    sensations?: string | null
+    completionStatus: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AsanaActivityUpdateManyMutationInput = {
+    postureName?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    sensations?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AsanaActivityUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    postureId?: StringFieldUpdateOperationsInput | string
+    postureName?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    sensations?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -8062,7 +9531,17 @@ export namespace Prisma {
     none?: ProviderAccountWhereInput
   }
 
+  export type AsanaActivityListRelationFilter = {
+    every?: AsanaActivityWhereInput
+    some?: AsanaActivityWhereInput
+    none?: AsanaActivityWhereInput
+  }
+
   export type ProviderAccountOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AsanaActivityOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -8517,6 +9996,88 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type AsanaPostureRelationFilter = {
+    is?: AsanaPostureWhereInput
+    isNot?: AsanaPostureWhereInput
+  }
+
+  export type AsanaActivityCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    postureId?: SortOrder
+    postureName?: SortOrder
+    duration?: SortOrder
+    datePerformed?: SortOrder
+    notes?: SortOrder
+    sensations?: SortOrder
+    completionStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AsanaActivityAvgOrderByAggregateInput = {
+    duration?: SortOrder
+  }
+
+  export type AsanaActivityMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    postureId?: SortOrder
+    postureName?: SortOrder
+    duration?: SortOrder
+    datePerformed?: SortOrder
+    notes?: SortOrder
+    sensations?: SortOrder
+    completionStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AsanaActivityMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    postureId?: SortOrder
+    postureName?: SortOrder
+    duration?: SortOrder
+    datePerformed?: SortOrder
+    notes?: SortOrder
+    sensations?: SortOrder
+    completionStatus?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AsanaActivitySumOrderByAggregateInput = {
+    duration?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
   export type ProviderAccountCreateNestedManyWithoutUserInput = {
     create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
@@ -8524,11 +10085,25 @@ export namespace Prisma {
     connect?: ProviderAccountWhereUniqueInput | ProviderAccountWhereUniqueInput[]
   }
 
+  export type AsanaActivityCreateNestedManyWithoutUserInput = {
+    create?: XOR<AsanaActivityCreateWithoutUserInput, AsanaActivityUncheckedCreateWithoutUserInput> | AsanaActivityCreateWithoutUserInput[] | AsanaActivityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AsanaActivityCreateOrConnectWithoutUserInput | AsanaActivityCreateOrConnectWithoutUserInput[]
+    createMany?: AsanaActivityCreateManyUserInputEnvelope
+    connect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+  }
+
   export type ProviderAccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
     createMany?: ProviderAccountCreateManyUserInputEnvelope
     connect?: ProviderAccountWhereUniqueInput | ProviderAccountWhereUniqueInput[]
+  }
+
+  export type AsanaActivityUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<AsanaActivityCreateWithoutUserInput, AsanaActivityUncheckedCreateWithoutUserInput> | AsanaActivityCreateWithoutUserInput[] | AsanaActivityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AsanaActivityCreateOrConnectWithoutUserInput | AsanaActivityCreateOrConnectWithoutUserInput[]
+    createMany?: AsanaActivityCreateManyUserInputEnvelope
+    connect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -8563,6 +10138,20 @@ export namespace Prisma {
     deleteMany?: ProviderAccountScalarWhereInput | ProviderAccountScalarWhereInput[]
   }
 
+  export type AsanaActivityUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AsanaActivityCreateWithoutUserInput, AsanaActivityUncheckedCreateWithoutUserInput> | AsanaActivityCreateWithoutUserInput[] | AsanaActivityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AsanaActivityCreateOrConnectWithoutUserInput | AsanaActivityCreateOrConnectWithoutUserInput[]
+    upsert?: AsanaActivityUpsertWithWhereUniqueWithoutUserInput | AsanaActivityUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AsanaActivityCreateManyUserInputEnvelope
+    set?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    disconnect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    delete?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    connect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    update?: AsanaActivityUpdateWithWhereUniqueWithoutUserInput | AsanaActivityUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AsanaActivityUpdateManyWithWhereWithoutUserInput | AsanaActivityUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AsanaActivityScalarWhereInput | AsanaActivityScalarWhereInput[]
+  }
+
   export type ProviderAccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
@@ -8575,6 +10164,20 @@ export namespace Prisma {
     update?: ProviderAccountUpdateWithWhereUniqueWithoutUserInput | ProviderAccountUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: ProviderAccountUpdateManyWithWhereWithoutUserInput | ProviderAccountUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: ProviderAccountScalarWhereInput | ProviderAccountScalarWhereInput[]
+  }
+
+  export type AsanaActivityUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AsanaActivityCreateWithoutUserInput, AsanaActivityUncheckedCreateWithoutUserInput> | AsanaActivityCreateWithoutUserInput[] | AsanaActivityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AsanaActivityCreateOrConnectWithoutUserInput | AsanaActivityCreateOrConnectWithoutUserInput[]
+    upsert?: AsanaActivityUpsertWithWhereUniqueWithoutUserInput | AsanaActivityUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AsanaActivityCreateManyUserInputEnvelope
+    set?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    disconnect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    delete?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    connect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    update?: AsanaActivityUpdateWithWhereUniqueWithoutUserInput | AsanaActivityUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AsanaActivityUpdateManyWithWhereWithoutUserInput | AsanaActivityUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AsanaActivityScalarWhereInput | AsanaActivityScalarWhereInput[]
   }
 
   export type UserDataCreateNestedOneWithoutProviderAccountsInput = {
@@ -8624,6 +10227,20 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type AsanaActivityCreateNestedManyWithoutPostureInput = {
+    create?: XOR<AsanaActivityCreateWithoutPostureInput, AsanaActivityUncheckedCreateWithoutPostureInput> | AsanaActivityCreateWithoutPostureInput[] | AsanaActivityUncheckedCreateWithoutPostureInput[]
+    connectOrCreate?: AsanaActivityCreateOrConnectWithoutPostureInput | AsanaActivityCreateOrConnectWithoutPostureInput[]
+    createMany?: AsanaActivityCreateManyPostureInputEnvelope
+    connect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+  }
+
+  export type AsanaActivityUncheckedCreateNestedManyWithoutPostureInput = {
+    create?: XOR<AsanaActivityCreateWithoutPostureInput, AsanaActivityUncheckedCreateWithoutPostureInput> | AsanaActivityCreateWithoutPostureInput[] | AsanaActivityUncheckedCreateWithoutPostureInput[]
+    connectOrCreate?: AsanaActivityCreateOrConnectWithoutPostureInput | AsanaActivityCreateOrConnectWithoutPostureInput[]
+    createMany?: AsanaActivityCreateManyPostureInputEnvelope
+    connect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+  }
+
   export type AsanaPostureUpdateenglish_namesInput = {
     set?: string[]
     push?: string | string[]
@@ -8659,6 +10276,34 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type AsanaActivityUpdateManyWithoutPostureNestedInput = {
+    create?: XOR<AsanaActivityCreateWithoutPostureInput, AsanaActivityUncheckedCreateWithoutPostureInput> | AsanaActivityCreateWithoutPostureInput[] | AsanaActivityUncheckedCreateWithoutPostureInput[]
+    connectOrCreate?: AsanaActivityCreateOrConnectWithoutPostureInput | AsanaActivityCreateOrConnectWithoutPostureInput[]
+    upsert?: AsanaActivityUpsertWithWhereUniqueWithoutPostureInput | AsanaActivityUpsertWithWhereUniqueWithoutPostureInput[]
+    createMany?: AsanaActivityCreateManyPostureInputEnvelope
+    set?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    disconnect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    delete?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    connect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    update?: AsanaActivityUpdateWithWhereUniqueWithoutPostureInput | AsanaActivityUpdateWithWhereUniqueWithoutPostureInput[]
+    updateMany?: AsanaActivityUpdateManyWithWhereWithoutPostureInput | AsanaActivityUpdateManyWithWhereWithoutPostureInput[]
+    deleteMany?: AsanaActivityScalarWhereInput | AsanaActivityScalarWhereInput[]
+  }
+
+  export type AsanaActivityUncheckedUpdateManyWithoutPostureNestedInput = {
+    create?: XOR<AsanaActivityCreateWithoutPostureInput, AsanaActivityUncheckedCreateWithoutPostureInput> | AsanaActivityCreateWithoutPostureInput[] | AsanaActivityUncheckedCreateWithoutPostureInput[]
+    connectOrCreate?: AsanaActivityCreateOrConnectWithoutPostureInput | AsanaActivityCreateOrConnectWithoutPostureInput[]
+    upsert?: AsanaActivityUpsertWithWhereUniqueWithoutPostureInput | AsanaActivityUpsertWithWhereUniqueWithoutPostureInput[]
+    createMany?: AsanaActivityCreateManyPostureInputEnvelope
+    set?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    disconnect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    delete?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    connect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+    update?: AsanaActivityUpdateWithWhereUniqueWithoutPostureInput | AsanaActivityUpdateWithWhereUniqueWithoutPostureInput[]
+    updateMany?: AsanaActivityUpdateManyWithWhereWithoutPostureInput | AsanaActivityUpdateManyWithWhereWithoutPostureInput[]
+    deleteMany?: AsanaActivityScalarWhereInput | AsanaActivityScalarWhereInput[]
+  }
+
   export type AsanaSeriesCreateseriesPosturesInput = {
     set: string[]
   }
@@ -8684,6 +10329,42 @@ export namespace Prisma {
   export type AsanaSequenceUpdatesequencesSeriesInput = {
     set?: InputJsonValue[]
     push?: InputJsonValue | InputJsonValue[]
+  }
+
+  export type UserDataCreateNestedOneWithoutAsanaActivitiesInput = {
+    create?: XOR<UserDataCreateWithoutAsanaActivitiesInput, UserDataUncheckedCreateWithoutAsanaActivitiesInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutAsanaActivitiesInput
+    connect?: UserDataWhereUniqueInput
+  }
+
+  export type AsanaPostureCreateNestedOneWithoutAsanaActivitiesInput = {
+    create?: XOR<AsanaPostureCreateWithoutAsanaActivitiesInput, AsanaPostureUncheckedCreateWithoutAsanaActivitiesInput>
+    connectOrCreate?: AsanaPostureCreateOrConnectWithoutAsanaActivitiesInput
+    connect?: AsanaPostureWhereUniqueInput
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type UserDataUpdateOneRequiredWithoutAsanaActivitiesNestedInput = {
+    create?: XOR<UserDataCreateWithoutAsanaActivitiesInput, UserDataUncheckedCreateWithoutAsanaActivitiesInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutAsanaActivitiesInput
+    upsert?: UserDataUpsertWithoutAsanaActivitiesInput
+    connect?: UserDataWhereUniqueInput
+    update?: XOR<XOR<UserDataUpdateToOneWithWhereWithoutAsanaActivitiesInput, UserDataUpdateWithoutAsanaActivitiesInput>, UserDataUncheckedUpdateWithoutAsanaActivitiesInput>
+  }
+
+  export type AsanaPostureUpdateOneRequiredWithoutAsanaActivitiesNestedInput = {
+    create?: XOR<AsanaPostureCreateWithoutAsanaActivitiesInput, AsanaPostureUncheckedCreateWithoutAsanaActivitiesInput>
+    connectOrCreate?: AsanaPostureCreateOrConnectWithoutAsanaActivitiesInput
+    upsert?: AsanaPostureUpsertWithoutAsanaActivitiesInput
+    connect?: AsanaPostureWhereUniqueInput
+    update?: XOR<XOR<AsanaPostureUpdateToOneWithWhereWithoutAsanaActivitiesInput, AsanaPostureUpdateWithoutAsanaActivitiesInput>, AsanaPostureUncheckedUpdateWithoutAsanaActivitiesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -8881,6 +10562,33 @@ export namespace Prisma {
     isSet?: boolean
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
   export type ProviderAccountCreateWithoutUserInput = {
     id?: string
     type: string
@@ -8924,6 +10632,41 @@ export namespace Prisma {
     data: ProviderAccountCreateManyUserInput | ProviderAccountCreateManyUserInput[]
   }
 
+  export type AsanaActivityCreateWithoutUserInput = {
+    id?: string
+    postureName: string
+    duration: number
+    datePerformed: Date | string
+    notes?: string | null
+    sensations?: string | null
+    completionStatus: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posture: AsanaPostureCreateNestedOneWithoutAsanaActivitiesInput
+  }
+
+  export type AsanaActivityUncheckedCreateWithoutUserInput = {
+    id?: string
+    postureId: string
+    postureName: string
+    duration: number
+    datePerformed: Date | string
+    notes?: string | null
+    sensations?: string | null
+    completionStatus: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AsanaActivityCreateOrConnectWithoutUserInput = {
+    where: AsanaActivityWhereUniqueInput
+    create: XOR<AsanaActivityCreateWithoutUserInput, AsanaActivityUncheckedCreateWithoutUserInput>
+  }
+
+  export type AsanaActivityCreateManyUserInputEnvelope = {
+    data: AsanaActivityCreateManyUserInput | AsanaActivityCreateManyUserInput[]
+  }
+
   export type ProviderAccountUpsertWithWhereUniqueWithoutUserInput = {
     where: ProviderAccountWhereUniqueInput
     update: XOR<ProviderAccountUpdateWithoutUserInput, ProviderAccountUncheckedUpdateWithoutUserInput>
@@ -8961,6 +10704,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ProviderAccount"> | Date | string
   }
 
+  export type AsanaActivityUpsertWithWhereUniqueWithoutUserInput = {
+    where: AsanaActivityWhereUniqueInput
+    update: XOR<AsanaActivityUpdateWithoutUserInput, AsanaActivityUncheckedUpdateWithoutUserInput>
+    create: XOR<AsanaActivityCreateWithoutUserInput, AsanaActivityUncheckedCreateWithoutUserInput>
+  }
+
+  export type AsanaActivityUpdateWithWhereUniqueWithoutUserInput = {
+    where: AsanaActivityWhereUniqueInput
+    data: XOR<AsanaActivityUpdateWithoutUserInput, AsanaActivityUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AsanaActivityUpdateManyWithWhereWithoutUserInput = {
+    where: AsanaActivityScalarWhereInput
+    data: XOR<AsanaActivityUpdateManyMutationInput, AsanaActivityUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type AsanaActivityScalarWhereInput = {
+    AND?: AsanaActivityScalarWhereInput | AsanaActivityScalarWhereInput[]
+    OR?: AsanaActivityScalarWhereInput[]
+    NOT?: AsanaActivityScalarWhereInput | AsanaActivityScalarWhereInput[]
+    id?: StringFilter<"AsanaActivity"> | string
+    userId?: StringFilter<"AsanaActivity"> | string
+    postureId?: StringFilter<"AsanaActivity"> | string
+    postureName?: StringFilter<"AsanaActivity"> | string
+    duration?: IntFilter<"AsanaActivity"> | number
+    datePerformed?: DateTimeFilter<"AsanaActivity"> | Date | string
+    notes?: StringNullableFilter<"AsanaActivity"> | string | null
+    sensations?: StringNullableFilter<"AsanaActivity"> | string | null
+    completionStatus?: StringFilter<"AsanaActivity"> | string
+    createdAt?: DateTimeFilter<"AsanaActivity"> | Date | string
+    updatedAt?: DateTimeFilter<"AsanaActivity"> | Date | string
+  }
+
   export type UserDataCreateWithoutProviderAccountsInput = {
     id?: string
     provider_id?: string | null
@@ -8985,6 +10761,7 @@ export namespace Prisma {
     socialURL?: string | null
     isLocationPublic?: string | null
     role?: string | null
+    asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutProviderAccountsInput = {
@@ -9011,6 +10788,7 @@ export namespace Prisma {
     socialURL?: string | null
     isLocationPublic?: string | null
     role?: string | null
+    asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutProviderAccountsInput = {
@@ -9052,6 +10830,7 @@ export namespace Prisma {
     socialURL?: NullableStringFieldUpdateOperationsInput | string | null
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutProviderAccountsInput = {
@@ -9077,6 +10856,342 @@ export namespace Prisma {
     socialURL?: NullableStringFieldUpdateOperationsInput | string | null
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
+    asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type AsanaActivityCreateWithoutPostureInput = {
+    id?: string
+    postureName: string
+    duration: number
+    datePerformed: Date | string
+    notes?: string | null
+    sensations?: string | null
+    completionStatus: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserDataCreateNestedOneWithoutAsanaActivitiesInput
+  }
+
+  export type AsanaActivityUncheckedCreateWithoutPostureInput = {
+    id?: string
+    userId: string
+    postureName: string
+    duration: number
+    datePerformed: Date | string
+    notes?: string | null
+    sensations?: string | null
+    completionStatus: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AsanaActivityCreateOrConnectWithoutPostureInput = {
+    where: AsanaActivityWhereUniqueInput
+    create: XOR<AsanaActivityCreateWithoutPostureInput, AsanaActivityUncheckedCreateWithoutPostureInput>
+  }
+
+  export type AsanaActivityCreateManyPostureInputEnvelope = {
+    data: AsanaActivityCreateManyPostureInput | AsanaActivityCreateManyPostureInput[]
+  }
+
+  export type AsanaActivityUpsertWithWhereUniqueWithoutPostureInput = {
+    where: AsanaActivityWhereUniqueInput
+    update: XOR<AsanaActivityUpdateWithoutPostureInput, AsanaActivityUncheckedUpdateWithoutPostureInput>
+    create: XOR<AsanaActivityCreateWithoutPostureInput, AsanaActivityUncheckedCreateWithoutPostureInput>
+  }
+
+  export type AsanaActivityUpdateWithWhereUniqueWithoutPostureInput = {
+    where: AsanaActivityWhereUniqueInput
+    data: XOR<AsanaActivityUpdateWithoutPostureInput, AsanaActivityUncheckedUpdateWithoutPostureInput>
+  }
+
+  export type AsanaActivityUpdateManyWithWhereWithoutPostureInput = {
+    where: AsanaActivityScalarWhereInput
+    data: XOR<AsanaActivityUpdateManyMutationInput, AsanaActivityUncheckedUpdateManyWithoutPostureInput>
+  }
+
+  export type UserDataCreateWithoutAsanaActivitiesInput = {
+    id?: string
+    provider_id?: string | null
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    pronouns?: string | null
+    profile?: InputJsonValue | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    firstName: string
+    lastName: string
+    bio: string
+    headline: string
+    location: string
+    websiteURL: string
+    shareQuick?: string | null
+    yogaStyle?: string | null
+    yogaExperience?: string | null
+    company?: string | null
+    socialURL?: string | null
+    isLocationPublic?: string | null
+    role?: string | null
+    providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
+  }
+
+  export type UserDataUncheckedCreateWithoutAsanaActivitiesInput = {
+    id?: string
+    provider_id?: string | null
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    pronouns?: string | null
+    profile?: InputJsonValue | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    firstName: string
+    lastName: string
+    bio: string
+    headline: string
+    location: string
+    websiteURL: string
+    shareQuick?: string | null
+    yogaStyle?: string | null
+    yogaExperience?: string | null
+    company?: string | null
+    socialURL?: string | null
+    isLocationPublic?: string | null
+    role?: string | null
+    providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserDataCreateOrConnectWithoutAsanaActivitiesInput = {
+    where: UserDataWhereUniqueInput
+    create: XOR<UserDataCreateWithoutAsanaActivitiesInput, UserDataUncheckedCreateWithoutAsanaActivitiesInput>
+  }
+
+  export type AsanaPostureCreateWithoutAsanaActivitiesInput = {
+    id?: string
+    english_names?: AsanaPostureCreateenglish_namesInput | string[]
+    sanskrit_names?: InputJsonValue | null
+    sort_english_name: string
+    description?: string | null
+    benefits?: string | null
+    category?: string | null
+    difficulty?: string | null
+    lore?: string | null
+    breath_direction_default?: string | null
+    dristi?: string | null
+    variations?: AsanaPostureCreatevariationsInput | string[]
+    modifications?: AsanaPostureCreatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
+    preferred_side?: string | null
+    sideways?: boolean | null
+    image?: string | null
+    created_on?: Date | string | null
+    updated_on?: Date | string | null
+    acitivity_completed?: boolean | null
+    acitivity_practice?: boolean | null
+    posture_intent?: string | null
+    breath_series?: AsanaPostureCreatebreath_seriesInput | string[]
+    duration_asana?: string | null
+    transition_cues_out?: string | null
+    transition_cues_in?: string | null
+    setup_cues?: string | null
+    deepening_cues?: string | null
+    customize_asana?: string | null
+    additional_cues?: string | null
+    joint_action?: string | null
+    muscle_action?: string | null
+    created_by?: string | null
+  }
+
+  export type AsanaPostureUncheckedCreateWithoutAsanaActivitiesInput = {
+    id?: string
+    english_names?: AsanaPostureCreateenglish_namesInput | string[]
+    sanskrit_names?: InputJsonValue | null
+    sort_english_name: string
+    description?: string | null
+    benefits?: string | null
+    category?: string | null
+    difficulty?: string | null
+    lore?: string | null
+    breath_direction_default?: string | null
+    dristi?: string | null
+    variations?: AsanaPostureCreatevariationsInput | string[]
+    modifications?: AsanaPostureCreatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
+    preferred_side?: string | null
+    sideways?: boolean | null
+    image?: string | null
+    created_on?: Date | string | null
+    updated_on?: Date | string | null
+    acitivity_completed?: boolean | null
+    acitivity_practice?: boolean | null
+    posture_intent?: string | null
+    breath_series?: AsanaPostureCreatebreath_seriesInput | string[]
+    duration_asana?: string | null
+    transition_cues_out?: string | null
+    transition_cues_in?: string | null
+    setup_cues?: string | null
+    deepening_cues?: string | null
+    customize_asana?: string | null
+    additional_cues?: string | null
+    joint_action?: string | null
+    muscle_action?: string | null
+    created_by?: string | null
+  }
+
+  export type AsanaPostureCreateOrConnectWithoutAsanaActivitiesInput = {
+    where: AsanaPostureWhereUniqueInput
+    create: XOR<AsanaPostureCreateWithoutAsanaActivitiesInput, AsanaPostureUncheckedCreateWithoutAsanaActivitiesInput>
+  }
+
+  export type UserDataUpsertWithoutAsanaActivitiesInput = {
+    update: XOR<UserDataUpdateWithoutAsanaActivitiesInput, UserDataUncheckedUpdateWithoutAsanaActivitiesInput>
+    create: XOR<UserDataCreateWithoutAsanaActivitiesInput, UserDataUncheckedCreateWithoutAsanaActivitiesInput>
+    where?: UserDataWhereInput
+  }
+
+  export type UserDataUpdateToOneWithWhereWithoutAsanaActivitiesInput = {
+    where?: UserDataWhereInput
+    data: XOR<UserDataUpdateWithoutAsanaActivitiesInput, UserDataUncheckedUpdateWithoutAsanaActivitiesInput>
+  }
+
+  export type UserDataUpdateWithoutAsanaActivitiesInput = {
+    provider_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
+    profile?: InputJsonValue | InputJsonValue | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    shareQuick?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaStyle?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    socialURL?: NullableStringFieldUpdateOperationsInput | string | null
+    isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserDataUncheckedUpdateWithoutAsanaActivitiesInput = {
+    provider_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
+    profile?: InputJsonValue | InputJsonValue | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    shareQuick?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaStyle?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    socialURL?: NullableStringFieldUpdateOperationsInput | string | null
+    isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type AsanaPostureUpsertWithoutAsanaActivitiesInput = {
+    update: XOR<AsanaPostureUpdateWithoutAsanaActivitiesInput, AsanaPostureUncheckedUpdateWithoutAsanaActivitiesInput>
+    create: XOR<AsanaPostureCreateWithoutAsanaActivitiesInput, AsanaPostureUncheckedCreateWithoutAsanaActivitiesInput>
+    where?: AsanaPostureWhereInput
+  }
+
+  export type AsanaPostureUpdateToOneWithWhereWithoutAsanaActivitiesInput = {
+    where?: AsanaPostureWhereInput
+    data: XOR<AsanaPostureUpdateWithoutAsanaActivitiesInput, AsanaPostureUncheckedUpdateWithoutAsanaActivitiesInput>
+  }
+
+  export type AsanaPostureUpdateWithoutAsanaActivitiesInput = {
+    english_names?: AsanaPostureUpdateenglish_namesInput | string[]
+    sanskrit_names?: InputJsonValue | InputJsonValue | null
+    sort_english_name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    benefits?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
+    lore?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_direction_default?: NullableStringFieldUpdateOperationsInput | string | null
+    dristi?: NullableStringFieldUpdateOperationsInput | string | null
+    variations?: AsanaPostureUpdatevariationsInput | string[]
+    modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
+    preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
+    sideways?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    created_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acitivity_completed?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    acitivity_practice?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_series?: AsanaPostureUpdatebreath_seriesInput | string[]
+    duration_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_out?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_in?: NullableStringFieldUpdateOperationsInput | string | null
+    setup_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    deepening_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    customize_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    additional_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    joint_action?: NullableStringFieldUpdateOperationsInput | string | null
+    muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type AsanaPostureUncheckedUpdateWithoutAsanaActivitiesInput = {
+    english_names?: AsanaPostureUpdateenglish_namesInput | string[]
+    sanskrit_names?: InputJsonValue | InputJsonValue | null
+    sort_english_name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    benefits?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
+    lore?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_direction_default?: NullableStringFieldUpdateOperationsInput | string | null
+    dristi?: NullableStringFieldUpdateOperationsInput | string | null
+    variations?: AsanaPostureUpdatevariationsInput | string[]
+    modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
+    preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
+    sideways?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    created_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acitivity_completed?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    acitivity_practice?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_series?: AsanaPostureUpdatebreath_seriesInput | string[]
+    duration_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_out?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_in?: NullableStringFieldUpdateOperationsInput | string | null
+    setup_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    deepening_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    customize_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    additional_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    joint_action?: NullableStringFieldUpdateOperationsInput | string | null
+    muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProviderAccountCreateManyUserInput = {
@@ -9092,6 +11207,19 @@ export namespace Prisma {
     id_token?: string | null
     session_state?: InputJsonValue | null
     credentials_password?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AsanaActivityCreateManyUserInput = {
+    id?: string
+    postureId: string
+    postureName: string
+    duration: number
+    datePerformed: Date | string
+    notes?: string | null
+    sensations?: string | null
+    completionStatus: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -9144,6 +11272,91 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AsanaActivityUpdateWithoutUserInput = {
+    postureName?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    sensations?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posture?: AsanaPostureUpdateOneRequiredWithoutAsanaActivitiesNestedInput
+  }
+
+  export type AsanaActivityUncheckedUpdateWithoutUserInput = {
+    postureId?: StringFieldUpdateOperationsInput | string
+    postureName?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    sensations?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AsanaActivityUncheckedUpdateManyWithoutUserInput = {
+    postureId?: StringFieldUpdateOperationsInput | string
+    postureName?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    sensations?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AsanaActivityCreateManyPostureInput = {
+    id?: string
+    userId: string
+    postureName: string
+    duration: number
+    datePerformed: Date | string
+    notes?: string | null
+    sensations?: string | null
+    completionStatus: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AsanaActivityUpdateWithoutPostureInput = {
+    postureName?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    sensations?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserDataUpdateOneRequiredWithoutAsanaActivitiesNestedInput
+  }
+
+  export type AsanaActivityUncheckedUpdateWithoutPostureInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    postureName?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    sensations?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AsanaActivityUncheckedUpdateManyWithoutPostureInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    postureName?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    sensations?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
@@ -9153,6 +11366,10 @@ export namespace Prisma {
      * @deprecated Use UserDataCountOutputTypeDefaultArgs instead
      */
     export type UserDataCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDataCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use AsanaPostureCountOutputTypeDefaultArgs instead
+     */
+    export type AsanaPostureCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AsanaPostureCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserDataDefaultArgs instead
      */
@@ -9173,6 +11390,10 @@ export namespace Prisma {
      * @deprecated Use AsanaSequenceDefaultArgs instead
      */
     export type AsanaSequenceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AsanaSequenceDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use AsanaActivityDefaultArgs instead
+     */
+    export type AsanaActivityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AsanaActivityDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

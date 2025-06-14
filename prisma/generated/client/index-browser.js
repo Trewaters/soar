@@ -217,6 +217,20 @@ exports.Prisma.AsanaSequenceScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.AsanaActivityScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  postureId: 'postureId',
+  postureName: 'postureName',
+  duration: 'duration',
+  datePerformed: 'datePerformed',
+  notes: 'notes',
+  sensations: 'sensations',
+  completionStatus: 'completionStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -233,7 +247,8 @@ exports.Prisma.ModelName = {
   ProviderAccount: 'ProviderAccount',
   AsanaPosture: 'AsanaPosture',
   AsanaSeries: 'AsanaSeries',
-  AsanaSequence: 'AsanaSequence'
+  AsanaSequence: 'AsanaSequence',
+  AsanaActivity: 'AsanaActivity'
 };
 
 /**
