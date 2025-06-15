@@ -5,9 +5,11 @@ import { logApiError } from '../../../../lib/errorLogger'
 const prisma = new PrismaClient()
 
 export async function GET(req: NextRequest) {
+  console.log('=== GET /api/user/loginStreak called ===')
   try {
     const { searchParams } = new URL(req.url)
     const userId = searchParams.get('userId')
+    console.log('Received userId:', userId)
 
     if (!userId) {
       const validationError = new Error(
@@ -41,7 +43,9 @@ export async function GET(req: NextRequest) {
     }
 
     // Calculate login streak using UserLogin table
+    console.log('About to calculate login streak for userId:', userId)
     const streakData = await calculateLoginStreak(userId)
+    console.log('Calculated streak data:', streakData)
 
     return NextResponse.json(streakData, { status: 200 })
   } catch (error) {
@@ -63,6 +67,7 @@ export async function GET(req: NextRequest) {
 }
 
 async function calculateLoginStreak(userId: string) {
+  console.log('=== calculateLoginStreak called with userId:', userId)
   try {
     // Get user's login events ordered by date (most recent first)
     const loginEvents = await prisma.userLogin.findMany({
@@ -72,6 +77,7 @@ async function calculateLoginStreak(userId: string) {
         loginDate: true,
       },
     })
+    console.log('Login events:', loginEvents)
 
     if (loginEvents.length === 0) {
       // No login events found
