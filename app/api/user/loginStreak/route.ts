@@ -30,24 +30,17 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    // Get user data to verify user exists
+    // Verify user exists
     const user = await prisma.userData.findUnique({
       where: { id: userId },
-      select: {
-        id: true,
-        createdAt: true,
-        updatedAt: true,
-        // We'll use updatedAt as a proxy for login activity for now
-        // In a full implementation, we'd have a separate UserLogin table
-      },
+      select: { id: true },
     })
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    // For now, we'll calculate a simple streak based on user activity
-    // In a real implementation, you'd want to track actual login events
+    // Calculate login streak using UserLogin table
     const streakData = await calculateLoginStreak(userId)
 
     return NextResponse.json(streakData, { status: 200 })
@@ -71,16 +64,17 @@ export async function GET(req: NextRequest) {
 
 async function calculateLoginStreak(userId: string) {
   try {
-    // Get the user's basic info
-    const user = await prisma.userData.findUnique({
-      where: { id: userId },
+    // Get user's login events ordered by date (most recent first)
+    const loginEvents = await prisma.userLogin.findMany({
+      where: { userId },
+      orderBy: { loginDate: 'desc' },
       select: {
-        createdAt: true,
-        updatedAt: true,
+        loginDate: true,
       },
     })
 
-    if (!user) {
+    if (loginEvents.length === 0) {
+      // No login events found
       return {
         currentStreak: 0,
         longestStreak: 0,
@@ -89,84 +83,58 @@ async function calculateLoginStreak(userId: string) {
       }
     }
 
-    // Get user's login events ordered by date (most recent first)
-    const loginEvents = await prisma.userLogin.findMany({
-      where: { userId },
-      orderBy: { loginDate: 'desc' },
-      take: 100, // Look at last 100 login events to calculate streaks
-      select: {
-        loginDate: true,
-      },
-    })
+    // Get unique login dates (ignore multiple logins on same day)
+    const uniqueDates = Array.from(
+      new Set(
+        loginEvents.map((login) => {
+          const date = new Date(login.loginDate)
+          // Normalize to start of day for consistent comparison
+          return new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+          ).getTime()
+        })
+      )
+    ).sort((a, b) => b - a) // Sort descending (most recent first)
 
-    if (loginEvents.length === 0) {
-      // New user with no login events recorded yet
-      // Check if they signed up today (might be their first login)
-      const today = new Date()
-      const signupDate = new Date(user.createdAt)
+    const today = new Date()
+    const todayTime = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    ).getTime()
+    const yesterdayTime = todayTime - 24 * 60 * 60 * 1000
 
-      // Check if signup was today
-      const isSignupToday = today.toDateString() === signupDate.toDateString()
+    // Check if user logged in today
+    const isActiveToday = uniqueDates.length > 0 && uniqueDates[0] === todayTime
 
-      return {
-        currentStreak: isSignupToday ? 1 : 0,
-        longestStreak: isSignupToday ? 1 : 0,
-        lastLoginDate: isSignupToday ? signupDate.toISOString() : null,
-        isActiveToday: isSignupToday,
+    // Calculate current streak
+    let currentStreak = 0
+    let expectedDate = isActiveToday ? todayTime : yesterdayTime
+
+    for (const loginDate of uniqueDates) {
+      if (loginDate === expectedDate) {
+        currentStreak++
+        expectedDate -= 24 * 60 * 60 * 1000 // Move to previous day
+      } else if (loginDate < expectedDate) {
+        // Gap found, stop counting current streak
+        break
       }
+      // If loginDate > expectedDate, skip this date (shouldn't happen with proper sorting)
     }
 
-    // Get unique login dates (ignore multiple logins on same day)
-    const uniqueDates = [
-      ...new Set(
-        loginEvents.map((login) => new Date(login.loginDate).toDateString())
-      ),
-    ].sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
-
-    const today = new Date().toDateString()
-    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toDateString()
-
-    let currentStreak = 0
+    // Calculate longest streak
     let longestStreak = 0
-    let tempStreak = 0
-    let isActiveToday = false
+    let tempStreak = 1
 
     if (uniqueDates.length > 0) {
-      const lastLoginDate = uniqueDates[0]
-      isActiveToday = lastLoginDate === today
+      longestStreak = 1 // At least one login
 
-      // Calculate current streak
-      // Start from today if user logged in today, otherwise yesterday
-      const streakStartDate = isActiveToday ? today : yesterday
-      const currentDate = new Date(streakStartDate)
-
-      for (const loginDateStr of uniqueDates) {
-        const expectedDateStr = currentDate.toDateString()
-
-        if (loginDateStr === expectedDateStr) {
-          currentStreak++
-          tempStreak++
-          longestStreak = Math.max(longestStreak, tempStreak)
-
-          // Move to previous day
-          currentDate.setDate(currentDate.getDate() - 1)
-        } else {
-          // Gap in streak, stop counting current streak
-          break
-        }
-      }
-
-      // Calculate longest streak from all login dates
-      tempStreak = 1
       for (let i = 1; i < uniqueDates.length; i++) {
-        const currentLoginDate = new Date(uniqueDates[i])
-        const prevLoginDate = new Date(uniqueDates[i - 1])
-
-        // Calculate days between consecutive logins
-        const daysDiff = Math.floor(
-          (prevLoginDate.getTime() - currentLoginDate.getTime()) /
-            (1000 * 60 * 60 * 24)
-        )
+        const currentDate = uniqueDates[i]
+        const prevDate = uniqueDates[i - 1]
+        const daysDiff = (prevDate - currentDate) / (24 * 60 * 60 * 1000)
 
         if (daysDiff === 1) {
           // Consecutive days
@@ -179,13 +147,14 @@ async function calculateLoginStreak(userId: string) {
       }
     }
 
+    // Get the most recent login date for return
+    const lastLoginDate =
+      loginEvents.length > 0 ? loginEvents[0].loginDate.toISOString() : null
+
     return {
       currentStreak,
       longestStreak: Math.max(longestStreak, currentStreak),
-      lastLoginDate:
-        loginEvents.length > 0
-          ? loginEvents[0].loginDate.toISOString()
-          : user.createdAt.toISOString(),
+      lastLoginDate,
       isActiveToday,
     }
   } catch (error) {
