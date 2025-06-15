@@ -1,8 +1,11 @@
+'use client'
+
 import React from 'react'
 import CurrentTime from '@app/clientComponents/current-time'
 import TabHeader from '@app/clientComponents/tab-header'
 import { Box, Typography } from '@mui/material'
 import Image from 'next/image'
+import AsanaActivityList from '@app/clientComponents/AsanaActivityList'
 
 export default function Page() {
   return (
@@ -24,6 +27,9 @@ export default function Page() {
           Yoga Exercise
         </Typography>
         <CurrentTime />
+      </Box>
+      <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
+        <AsanaActivityList />
       </Box>
       <nav aria-label="Tab Navigation">
         <TabHeader />
