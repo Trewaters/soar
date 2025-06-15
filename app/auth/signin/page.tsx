@@ -93,7 +93,8 @@ export default async function SignInPage(props: {
                   // eslint-disable-next-line no-useless-catch
                   try {
                     await signIn(provider.id, {
-                      redirectTo: props.searchParams?.callbackUrl ?? '',
+                      redirectTo:
+                        props.searchParams?.callbackUrl ?? '/navigator',
                     })
                     // await signIn(provider.id, {
                     // redirectTo: '/navigator/profile',

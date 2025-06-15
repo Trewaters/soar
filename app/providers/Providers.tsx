@@ -10,7 +10,13 @@ import AsanaPostureProvider from '@context/AsanaPostureContext'
 import { SessionProvider } from 'next-auth/react'
 import ReactDOM from 'react-dom'
 
-export function Providers({ children }: { children: ReactNode }) {
+export function Providers({
+  children,
+  session,
+}: {
+  children: ReactNode
+  session: any
+}) {
   useEffect(() => {
     // Initialize axe-core/react for development accessibility checking
     if (process.env.NODE_ENV === 'development') {
@@ -25,7 +31,7 @@ export function Providers({ children }: { children: ReactNode }) {
   }, [])
 
   return (
-    <SessionProvider basePath={'/api/auth'}>
+    <SessionProvider basePath={'/api/auth'} session={session}>
       <ThemeProvider theme={theme}>
         {/* CssBaseline to kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline>

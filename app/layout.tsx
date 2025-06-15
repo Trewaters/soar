@@ -2,6 +2,7 @@ import '@styles/globals.css'
 import { ReactNode } from 'react'
 import type { Metadata } from 'next'
 import { Providers } from '@providers/Providers'
+import { auth } from '../auth'
 
 declare global {
   // eslint-disable-next-line no-unused-vars
@@ -30,7 +31,13 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode
+}) {
+  const session = await auth()
+
   return (
     <html lang="en">
       <head>
@@ -41,7 +48,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <Providers>
+        <Providers session={session}>
           {/* add google analytics script below header */}
           {/* eslint-disable-next-line @next/next/next-script-for-ga */}
           <script
