@@ -2,12 +2,21 @@
 import { MongoClient, ServerApiVersion } from 'mongodb'
 
 // console.log('MONGODB_URI_v2:', process.env.MONGODB_URI_v2)
+// console.log('DATABASE_URL:', process.env.DATABASE_URL)
 
-if (!process.env.MONGODB_URI_v2) {
-  throw new Error('Invalid/Missing environment variable: "MONGODB_URI_v2"')
+// Check for environment variables in order of preference
+const mongoUri =
+  process.env.DATABASE_URL ||
+  process.env.MONGODB_URI_v2 ||
+  process.env.MONGODB_URI
+
+if (!mongoUri) {
+  throw new Error(
+    'Invalid/Missing environment variable: "DATABASE_URL", "MONGODB_URI_v2", or "MONGODB_URI"'
+  )
 }
 
-const uri = process.env.MONGODB_URI_v2
+const uri = mongoUri
 const options = {
   serverApi: {
     version: ServerApiVersion.v1,

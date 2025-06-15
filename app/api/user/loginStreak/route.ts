@@ -2,11 +2,63 @@ import { PrismaClient } from '../../../../prisma/generated/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { logApiError } from '../../../../lib/errorLogger'
 
-const prisma = new PrismaClient()
+// Initialize Prisma client with error handling
+let prisma: PrismaClient | null = null
+
+function getPrismaClient() {
+  if (!prisma) {
+    try {
+      prisma = new PrismaClient({
+        log: ['error', 'warn'],
+        errorFormat: 'pretty',
+      })
+    } catch (error) {
+      console.error('Failed to initialize Prisma client:', error)
+      throw new Error('Database connection failed')
+    }
+  }
+  return prisma
+}
 
 export async function GET(req: NextRequest) {
   console.log('=== GET /api/user/loginStreak called ===')
+
+  // Check environment configuration
+  const dbUrl =
+    process.env.DATABASE_URL ||
+    process.env.MONGODB_URI_v2 ||
+    process.env.MONGODB_URI
+  console.log('Database configuration check:', {
+    hasDataBaseUrl: !!process.env.DATABASE_URL,
+    hasMongoDbUri_v2: !!process.env.MONGODB_URI_v2,
+    hasMongoDbUri: !!process.env.MONGODB_URI,
+    nodeEnv: process.env.NODE_ENV,
+    dbUrlStart: dbUrl ? dbUrl.substring(0, 20) + '...' : 'undefined',
+  })
+
+  if (!dbUrl) {
+    const configError = new Error(
+      'Database configuration missing: No DATABASE_URL, MONGODB_URI_v2 or MONGODB_URI found'
+    )
+    logApiError(configError, req, 'GET /api/user/loginStreak - configuration', {
+      env: process.env.NODE_ENV,
+      availableVars: Object.keys(process.env).filter((key) =>
+        key.includes('MONGODB')
+      ),
+    })
+    return NextResponse.json(
+      {
+        error: 'Database configuration error',
+        details: 'Database connection not configured',
+      },
+      { status: 500 }
+    )
+  }
+
+  let client: PrismaClient | null = null
   try {
+    client = getPrismaClient()
+
     const { searchParams } = new URL(req.url)
     const userId = searchParams.get('userId')
     console.log('Received userId:', userId)
@@ -32,8 +84,21 @@ export async function GET(req: NextRequest) {
       )
     }
 
+    // Test database connection
+    try {
+      await client.$connect()
+      console.log('Database connection successful')
+    } catch (dbError) {
+      console.error('Database connection failed:', dbError)
+      throw new Error(
+        `Database connection failed: ${
+          dbError instanceof Error ? dbError.message : 'Unknown error'
+        }`
+      )
+    }
+
     // Verify user exists
-    const user = await prisma.userData.findUnique({
+    const user = await client.userData.findUnique({
       where: { id: userId },
       select: { id: true },
     })
@@ -44,7 +109,7 @@ export async function GET(req: NextRequest) {
 
     // Calculate login streak using UserLogin table
     console.log('About to calculate login streak for userId:', userId)
-    const streakData = await calculateLoginStreak(userId)
+    const streakData = await calculateLoginStreak(userId, client)
     console.log('Calculated streak data:', streakData)
 
     return NextResponse.json(streakData, { status: 200 })
@@ -62,15 +127,20 @@ export async function GET(req: NextRequest) {
       { status: 500 }
     )
   } finally {
-    await prisma.$disconnect()
+    if (client) {
+      await client.$disconnect()
+    }
   }
 }
 
-async function calculateLoginStreak(userId: string) {
+async function calculateLoginStreak(
+  userId: string,
+  prismaClient: PrismaClient
+) {
   console.log('=== calculateLoginStreak called with userId:', userId)
   try {
     // Get user's login events ordered by date (most recent first)
-    const loginEvents = await prisma.userLogin.findMany({
+    const loginEvents = await prismaClient.userLogin.findMany({
       where: { userId },
       orderBy: { loginDate: 'desc' },
       select: {

@@ -324,3 +324,146 @@ I create branches with the name of the feature I plan to work on. This way I kee
 The "version" branches are locked after release.
 
 I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: _"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0._
+
+## Production Deployment Guide
+
+### Environment Variables Setup
+
+The application uses different database configurations for development and production. Both Prisma and the MongoDB client use a standardized `DATABASE_URL` environment variable with fallback support.
+
+#### Development Environment
+
+```bash
+# Local MongoDB connection with replica set
+DATABASE_URL='mongodb://localhost:27017/v2YogaDBSandbox?replicaSet=rs0'
+
+# Legacy support (will be removed in future versions)
+MONGODB_URI_v2='mongodb://localhost:27017/v2YogaDBSandbox?replicaSet=rs0'
+```
+
+#### Production Environment (Vercel)
+
+Set these environment variables in your Vercel dashboard:
+
+1. **DATABASE_URL** (Primary)
+
+   ```
+   mongodb+srv://username:password@cluster.mongodb.net/yogadb?retryWrites=true&w=majority
+   ```
+
+2. **MONGODB_URI** (Fallback for legacy support)
+   ```
+   mongodb+srv://username:password@cluster.mongodb.net/yogadb?retryWrites=true&w=majority
+   ```
+
+#### Setting Environment Variables in Vercel
+
+1. Go to your Vercel project dashboard
+2. Navigate to **Settings** → **Environment Variables**
+3. Add the following variables for **Production** environment:
+   - `DATABASE_URL`: Your MongoDB Atlas connection string
+   - `MONGODB_URI`: Same MongoDB Atlas connection string (for legacy support)
+   - Any other required environment variables (NextAuth secrets, etc.)
+
+### Database Migration and Setup
+
+#### Local to Production Data Migration
+
+**Warning**: Only migrate development data to production if it contains test data you want to preserve. For real production deployments, start with a clean database.
+
+1. **Export local data** (if needed):
+
+   ```bash
+   mongodump --uri="mongodb://localhost:27017/v2YogaDBSandbox" --out=./data/mongoDumpLocal
+   ```
+
+2. **Import to production** (if needed):
+   ```bash
+   mongorestore --uri="mongodb+srv://username:password@cluster.mongodb.net/yogadb" ./data/mongoDumpLocal/v2YogaDBSandbox
+   ```
+
+#### Production Database Schema Setup
+
+1. **Generate Prisma Client** for production:
+
+   ```bash
+   npx prisma generate
+   ```
+
+2. **Push schema** to production database:
+
+   ```bash
+   npx prisma db push
+   ```
+
+3. **Verify collections** exist in MongoDB Atlas:
+   - `UserData`
+   - `UserLogin`
+   - `Account`
+   - Other required collections per your schema
+
+### Troubleshooting Production Issues
+
+#### Activity Streak Not Working
+
+If the Activity Streak feature fails in production:
+
+1. **Check Environment Variables**:
+
+   - Verify `DATABASE_URL` is set in Vercel
+   - Ensure the MongoDB connection string is valid
+   - Check that the database name matches between local and production
+
+2. **Database Connection Issues**:
+
+   ```bash
+   # Test connection string locally
+   mongosh "mongodb+srv://username:password@cluster.mongodb.net/yogadb"
+   ```
+
+3. **Missing Collections/Data**:
+
+   - Check if `UserLogin` collection exists in production
+   - Verify `UserData` collection has the required user records
+   - Database names are case-sensitive: `yogadb` ≠ `YogaDB`
+
+4. **API Endpoint Testing**:
+
+   ```bash
+   # Test the loginStreak API in production
+   curl "https://yourapp.vercel.app/api/user/loginStreak?userId=YOUR_USER_ID"
+   ```
+
+5. **Check Vercel Logs**:
+   - Go to Vercel Dashboard → Functions tab
+   - Check logs for database connection errors
+   - Look for environment variable missing errors
+
+#### Common Production Errors
+
+1. **"Database configuration missing"**: Environment variables not set in Vercel
+2. **"User not found"**: User doesn't exist in production database
+3. **"Connection timeout"**: Invalid MongoDB connection string or network issues
+4. **"Collection not found"**: Database schema not pushed to production
+
+### Environment Variable Priority
+
+The application checks environment variables in this order:
+
+1. `DATABASE_URL` (preferred for all environments)
+2. `MONGODB_URI_v2` (development fallback)
+3. `MONGODB_URI` (production fallback)
+
+This ensures backward compatibility while moving toward a standardized approach.
+
+### Deployment Checklist
+
+Before deploying to production:
+
+- [ ] Set `DATABASE_URL` in Vercel environment variables
+- [ ] Set `MONGODB_URI` as fallback in Vercel environment variables
+- [ ] Configure NextAuth secrets (`NEXTAUTH_SECRET`, `NEXTAUTH_URL`)
+- [ ] Test database connection with production credentials
+- [ ] Run `npx prisma generate` after any schema changes
+- [ ] Verify all required collections exist in production database
+- [ ] Test critical features (authentication, activity tracking) in staging
