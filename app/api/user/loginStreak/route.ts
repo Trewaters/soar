@@ -24,21 +24,16 @@ export async function GET(req: NextRequest) {
   console.log('=== GET /api/user/loginStreak called ===')
 
   // Check environment configuration
-  const dbUrl =
-    process.env.DATABASE_URL ||
-    process.env.MONGODB_URI_v2 ||
-    process.env.MONGODB_URI
+  const dbUrl = process.env.DATABASE_URL
   console.log('Database configuration check:', {
     hasDataBaseUrl: !!process.env.DATABASE_URL,
-    hasMongoDbUri_v2: !!process.env.MONGODB_URI_v2,
-    hasMongoDbUri: !!process.env.MONGODB_URI,
     nodeEnv: process.env.NODE_ENV,
     dbUrlStart: dbUrl ? dbUrl.substring(0, 20) + '...' : 'undefined',
   })
 
   if (!dbUrl) {
     const configError = new Error(
-      'Database configuration missing: No DATABASE_URL, MONGODB_URI_v2 or MONGODB_URI found'
+      'Database configuration missing: No DATABASE_URL found'
     )
     logApiError(configError, req, 'GET /api/user/loginStreak - configuration', {
       env: process.env.NODE_ENV,
