@@ -35,6 +35,11 @@ const customJestConfig: Config = {
   transformIgnorePatterns: [
     '/node_modules/(?!(next-auth|@auth|@testing-library|@mui|jest-axe|axe-core)/)',
   ],
+  globals: {
+    'ts-jest': {
+      useESM: true,
+    },
+  },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   verbose: true,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { axe, toHaveNoViolations } from 'jest-axe'
 import { useSession } from 'next-auth/react'
@@ -100,7 +100,7 @@ describe('ActivityStreaks Accessibility Tests', () => {
         json: async () => ({
           currentStreak: 5,
           longestStreak: 12,
-          lastLoginDate: '2025-06-14T10:00:00Z',
+          lastLoginDate: new Date().toISOString(),
           isActiveToday: true,
         }),
       } as Response)
@@ -130,7 +130,7 @@ describe('ActivityStreaks Accessibility Tests', () => {
         json: async () => ({
           currentStreak: 7,
           longestStreak: 15,
-          lastLoginDate: '2025-06-14T10:00:00Z',
+          lastLoginDate: new Date().toISOString(),
           isActiveToday: true,
         }),
       } as Response)
@@ -157,7 +157,11 @@ describe('ActivityStreaks Accessibility Tests', () => {
 
       mockFetch.mockRejectedValue(new Error('Network error'))
 
-      const { container } = render(<ActivityStreaks />)
+      let container: HTMLElement
+      await act(async () => {
+        const result = render(<ActivityStreaks />)
+        container = result.container
+      })
 
       await waitFor(() => {
         expect(
@@ -165,7 +169,7 @@ describe('ActivityStreaks Accessibility Tests', () => {
         ).toBeInTheDocument()
       })
 
-      const results = await axe(container)
+      const results = await axe(container!)
       expect(results).toHaveNoViolations()
     })
   })
@@ -193,11 +197,19 @@ describe('ActivityStreaks Accessibility Tests', () => {
     })
 
     it('should pass interactive accessibility tests for compact variant', async () => {
-      await testInteractiveAccessibility(<ActivityStreaks variant="compact" />)
+      await act(async () => {
+        await testInteractiveAccessibility(
+          <ActivityStreaks variant="compact" />
+        )
+      })
     })
 
     it('should pass interactive accessibility tests for detailed variant', async () => {
-      await testInteractiveAccessibility(<ActivityStreaks variant="detailed" />)
+      await act(async () => {
+        await testInteractiveAccessibility(
+          <ActivityStreaks variant="detailed" />
+        )
+      })
     })
   })
 
@@ -217,14 +229,35 @@ describe('ActivityStreaks Accessibility Tests', () => {
         json: async () => ({
           currentStreak: 10,
           longestStreak: 15,
-          lastLoginDate: '2025-06-14T10:00:00Z',
+          lastLoginDate: new Date().toISOString(),
           isActiveToday: true,
         }),
       } as Response)
     })
 
     it('uses proper heading hierarchy in detailed variant', async () => {
-      render(<ActivityStreaks variant="detailed" />)
+      mockUseSession.mockReturnValue({
+        data: {
+          user: { id: 'user123', email: 'test@example.com' },
+          expires: '2025-12-31',
+        },
+        status: 'authenticated',
+        update: jest.fn(),
+      })
+
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          currentStreak: 10,
+          longestStreak: 15,
+          lastLoginDate: new Date().toISOString(),
+          isActiveToday: true,
+        }),
+      } as Response)
+
+      await act(async () => {
+        render(<ActivityStreaks variant="detailed" />)
+      })
 
       await waitFor(() => {
         expect(screen.getByText('Activity Streaks')).toBeInTheDocument()
@@ -240,7 +273,28 @@ describe('ActivityStreaks Accessibility Tests', () => {
     })
 
     it('provides meaningful text content for screen readers', async () => {
-      render(<ActivityStreaks />)
+      mockUseSession.mockReturnValue({
+        data: {
+          user: { id: 'user123', email: 'test@example.com' },
+          expires: '2025-12-31',
+        },
+        status: 'authenticated',
+        update: jest.fn(),
+      })
+
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          currentStreak: 10,
+          longestStreak: 15,
+          lastLoginDate: new Date().toISOString(),
+          isActiveToday: true,
+        }),
+      } as Response)
+
+      await act(async () => {
+        render(<ActivityStreaks />)
+      })
 
       await waitFor(() => {
         expect(screen.getByText('Activity Streak')).toBeInTheDocument()
@@ -254,7 +308,28 @@ describe('ActivityStreaks Accessibility Tests', () => {
     })
 
     it('has proper color contrast and visual indicators', async () => {
-      render(<ActivityStreaks variant="detailed" />)
+      mockUseSession.mockReturnValue({
+        data: {
+          user: { id: 'user123', email: 'test@example.com' },
+          expires: '2025-12-31',
+        },
+        status: 'authenticated',
+        update: jest.fn(),
+      })
+
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          currentStreak: 10,
+          longestStreak: 15,
+          lastLoginDate: new Date().toISOString(),
+          isActiveToday: true,
+        }),
+      } as Response)
+
+      await act(async () => {
+        render(<ActivityStreaks variant="detailed" />)
+      })
 
       await waitFor(() => {
         expect(screen.getByText('Activity Streaks')).toBeInTheDocument()
@@ -268,7 +343,9 @@ describe('ActivityStreaks Accessibility Tests', () => {
         'Active today indicator'
       )
     })
+  })
 
+  describe('accessibility and state management', () => {
     it('handles loading state with proper announcement', () => {
       mockUseSession.mockReturnValue({
         data: null,
@@ -298,7 +375,9 @@ describe('ActivityStreaks Accessibility Tests', () => {
 
       mockFetch.mockRejectedValue(new Error('Network error'))
 
-      render(<ActivityStreaks />)
+      await act(async () => {
+        render(<ActivityStreaks />)
+      })
 
       await waitFor(() => {
         const errorMessage = screen.getByText('Failed to load streak data')
@@ -334,7 +413,11 @@ describe('ActivityStreaks Accessibility Tests', () => {
     })
 
     it('maintains accessibility with zero streak data', async () => {
-      const { container } = render(<ActivityStreaks />)
+      let container: HTMLElement
+      await act(async () => {
+        const result = render(<ActivityStreaks />)
+        container = result.container
+      })
 
       await waitFor(() => {
         expect(screen.getByText('Activity Streak')).toBeInTheDocument()
@@ -343,19 +426,25 @@ describe('ActivityStreaks Accessibility Tests', () => {
       expect(screen.getByText('0')).toBeInTheDocument()
       expect(screen.getByText('days')).toBeInTheDocument()
 
-      const results = await axe(container)
+      const results = await axe(container!)
       expect(results).toHaveNoViolations()
     })
 
     it('maintains proper structure across variants', async () => {
-      const { rerender } = render(<ActivityStreaks variant="compact" />)
+      let rerender: any
+      await act(async () => {
+        const result = render(<ActivityStreaks variant="compact" />)
+        rerender = result.rerender
+      })
 
       await waitFor(() => {
         expect(screen.getByText('Activity Streak')).toBeInTheDocument()
       })
 
       // Switch to detailed variant
-      rerender(<ActivityStreaks variant="detailed" />)
+      await act(async () => {
+        rerender(<ActivityStreaks variant="detailed" />)
+      })
 
       await waitFor(() => {
         expect(screen.getByText('Activity Streaks')).toBeInTheDocument()
@@ -366,52 +455,56 @@ describe('ActivityStreaks Accessibility Tests', () => {
       expect(screen.getByText('days')).toBeInTheDocument()
     })
   })
+})
 
-  describe('icon accessibility', () => {
-    beforeEach(() => {
-      mockUseSession.mockReturnValue({
-        data: {
-          user: { id: 'user123', email: 'test@example.com' },
-          expires: '2025-12-31',
-        },
-        status: 'authenticated',
-        update: jest.fn(),
-      })
-
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: async () => ({
-          currentStreak: 5,
-          longestStreak: 10,
-          lastLoginDate: '2025-06-14T10:00:00Z',
-          isActiveToday: true,
-        }),
-      } as Response)
+describe('icon accessibility', () => {
+  beforeEach(() => {
+    mockUseSession.mockReturnValue({
+      data: {
+        user: { id: 'user123', email: 'test@example.com' },
+        expires: '2025-12-31',
+      },
+      status: 'authenticated',
+      update: jest.fn(),
     })
 
-    it('has accessible icons with proper labels', async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        currentStreak: 5,
+        longestStreak: 10,
+        lastLoginDate: '2025-06-14T10:00:00Z',
+        isActiveToday: true,
+      }),
+    } as Response)
+  })
+
+  it('has accessible icons with proper labels', async () => {
+    await act(async () => {
       render(<ActivityStreaks variant="detailed" />)
-
-      await waitFor(() => {
-        expect(screen.getByTestId('trending-up-icon')).toBeInTheDocument()
-      })
-
-      const trendingIcon = screen.getByTestId('trending-up-icon')
-      expect(trendingIcon).toHaveAttribute('aria-label', 'Trending up icon')
-
-      const activeIcon = screen.getByTestId('whatshot-icon')
-      expect(activeIcon).toHaveAttribute('aria-label', 'Active today indicator')
     })
 
-    it('calendar icon is accessible in compact variant', async () => {
+    await waitFor(() => {
+      expect(screen.getByTestId('trending-up-icon')).toBeInTheDocument()
+    })
+
+    const trendingIcon = screen.getByTestId('trending-up-icon')
+    expect(trendingIcon).toHaveAttribute('aria-label', 'Trending up icon')
+
+    const activeIcon = screen.getByTestId('whatshot-icon')
+    expect(activeIcon).toHaveAttribute('aria-label', 'Active today indicator')
+  })
+
+  it('calendar icon is accessible in compact variant', async () => {
+    await act(async () => {
       render(<ActivityStreaks variant="compact" />)
-
-      await waitFor(() => {
-        expect(screen.getByTestId('calendar-today-icon')).toBeInTheDocument()
-      })
-
-      const calendarIcon = screen.getByTestId('calendar-today-icon')
-      expect(calendarIcon).toHaveAttribute('aria-label', 'Calendar icon')
     })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('calendar-today-icon')).toBeInTheDocument()
+    })
+
+    const calendarIcon = screen.getByTestId('calendar-today-icon')
+    expect(calendarIcon).toHaveAttribute('aria-label', 'Calendar icon')
   })
 })

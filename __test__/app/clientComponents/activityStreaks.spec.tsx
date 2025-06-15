@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { useSession } from 'next-auth/react'
 import ActivityStreaks, {
@@ -88,7 +88,7 @@ describe('ActivityStreaks Component', () => {
     const mockLoginStreakResponse = {
       currentStreak: 5,
       longestStreak: 12,
-      lastLoginDate: '2025-06-14T10:00:00Z',
+      lastLoginDate: new Date().toISOString(),
       isActiveToday: true,
     }
 
@@ -323,7 +323,9 @@ describe('ActivityStreaks Component', () => {
     it('shows error message when API call fails', async () => {
       mockFetch.mockRejectedValue(new Error('Network error'))
 
-      render(<ActivityStreaks />)
+      await act(async () => {
+        render(<ActivityStreaks />)
+      })
 
       await waitFor(() => {
         expect(
@@ -340,7 +342,9 @@ describe('ActivityStreaks Component', () => {
         json: async () => ({ error: 'Server error' }),
       } as Response)
 
-      render(<ActivityStreaks />)
+      await act(async () => {
+        render(<ActivityStreaks />)
+      })
 
       await waitFor(() => {
         expect(

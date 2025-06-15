@@ -15,6 +15,20 @@ jest.mock('@app/clientComponents/tab-header', () => {
   MockedTabHeader.displayName = 'MockedTabHeader'
   return MockedTabHeader
 })
+jest.mock('@app/clientComponents/AsanaActivityList', () => {
+  const MockedAsanaActivityList = () => (
+    <div data-testid="asana-activity-list">Mocked AsanaActivityList</div>
+  )
+  MockedAsanaActivityList.displayName = 'MockedAsanaActivityList'
+  return MockedAsanaActivityList
+})
+jest.mock('@app/clientComponents/activityStreaks/ActivityStreaks', () => {
+  const MockedActivityStreaks = () => (
+    <div data-testid="activity-streaks">Mocked ActivityStreaks</div>
+  )
+  MockedActivityStreaks.displayName = 'MockedActivityStreaks'
+  return MockedActivityStreaks
+})
 jest.mock('next/image', () => {
   const MockedNextImage = (props: any) => (
     // eslint-disable-next-line @next/next/no-img-element
