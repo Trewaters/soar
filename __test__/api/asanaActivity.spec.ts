@@ -192,6 +192,10 @@ describe('/api/asanaActivity Service Tests', () => {
       jest.spyOn(console, 'warn').mockImplementation(() => {})
       jest.spyOn(console, 'info').mockImplementation(() => {})
       jest.spyOn(console, 'debug').mockImplementation(() => {})
+
+      // Clear the error logger buffer before each test
+      const { errorLogger } = jest.requireActual('../../lib/errorLogger')
+      errorLogger.clearBuffer()
     })
 
     afterEach(() => {
@@ -278,7 +282,7 @@ describe('/api/asanaActivity Service Tests', () => {
     })
 
     it('should format error context correctly', () => {
-      const { errorLogger } = require('../../lib/errorLogger')
+      const { errorLogger } = jest.requireActual('../../lib/errorLogger')
       const testError = new Error('Test error')
       const context = {
         operation: 'test_operation',
@@ -293,7 +297,7 @@ describe('/api/asanaActivity Service Tests', () => {
     })
 
     it('should maintain error buffer for debugging', () => {
-      const { errorLogger } = require('../../lib/errorLogger')
+      const { errorLogger } = jest.requireActual('../../lib/errorLogger')
       const testError1 = new Error('First error')
       const testError2 = new Error('Second error')
 
@@ -307,7 +311,7 @@ describe('/api/asanaActivity Service Tests', () => {
     })
 
     it('should clear error buffer when requested', () => {
-      const { errorLogger } = require('../../lib/errorLogger')
+      const { errorLogger } = jest.requireActual('../../lib/errorLogger')
       const testError = new Error('Test error')
 
       errorLogger.logError(testError, { operation: 'test' })
@@ -318,7 +322,7 @@ describe('/api/asanaActivity Service Tests', () => {
     })
 
     it('should provide structured error information', () => {
-      const { errorLogger } = require('../../lib/errorLogger')
+      const { errorLogger } = jest.requireActual('../../lib/errorLogger')
       const testError = new Error('Structured test error')
       testError.stack = 'Test stack trace'
 

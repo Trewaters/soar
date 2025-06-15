@@ -43,6 +43,11 @@ export type AsanaSequence = $Result.DefaultSelection<Prisma.$AsanaSequencePayloa
  * Records a user's daily asana activity.
  */
 export type AsanaActivity = $Result.DefaultSelection<Prisma.$AsanaActivityPayload>
+/**
+ * Model UserLogin
+ * Records user login events for activity streak calculation.
+ */
+export type UserLogin = $Result.DefaultSelection<Prisma.$UserLoginPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -193,6 +198,16 @@ export class PrismaClient<
     * ```
     */
   get asanaActivity(): Prisma.AsanaActivityDelegate<ExtArgs>;
+
+  /**
+   * `prisma.userLogin`: Exposes CRUD operations for the **UserLogin** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserLogins
+    * const userLogins = await prisma.userLogin.findMany()
+    * ```
+    */
+  get userLogin(): Prisma.UserLoginDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -675,7 +690,8 @@ export namespace Prisma {
     AsanaPosture: 'AsanaPosture',
     AsanaSeries: 'AsanaSeries',
     AsanaSequence: 'AsanaSequence',
-    AsanaActivity: 'AsanaActivity'
+    AsanaActivity: 'AsanaActivity',
+    UserLogin: 'UserLogin'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -691,7 +707,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "userData" | "providerAccount" | "asanaPosture" | "asanaSeries" | "asanaSequence" | "asanaActivity"
+      modelProps: "userData" | "providerAccount" | "asanaPosture" | "asanaSeries" | "asanaSequence" | "asanaActivity" | "userLogin"
       txIsolationLevel: never
     }
     model: {
@@ -1139,6 +1155,80 @@ export namespace Prisma {
           }
         }
       }
+      UserLogin: {
+        payload: Prisma.$UserLoginPayload<ExtArgs>
+        fields: Prisma.UserLoginFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserLoginFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLoginPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserLoginFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLoginPayload>
+          }
+          findFirst: {
+            args: Prisma.UserLoginFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLoginPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserLoginFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLoginPayload>
+          }
+          findMany: {
+            args: Prisma.UserLoginFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLoginPayload>[]
+          }
+          create: {
+            args: Prisma.UserLoginCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLoginPayload>
+          }
+          createMany: {
+            args: Prisma.UserLoginCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.UserLoginDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLoginPayload>
+          }
+          update: {
+            args: Prisma.UserLoginUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLoginPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserLoginDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserLoginUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.UserLoginUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserLoginPayload>
+          }
+          aggregate: {
+            args: Prisma.UserLoginAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserLogin>
+          }
+          groupBy: {
+            args: Prisma.UserLoginGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserLoginGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.UserLoginFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.UserLoginAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.UserLoginCountArgs<ExtArgs>
+            result: $Utils.Optional<UserLoginCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1289,11 +1379,13 @@ export namespace Prisma {
   export type UserDataCountOutputType = {
     providerAccounts: number
     asanaActivities: number
+    userLogins: number
   }
 
   export type UserDataCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     providerAccounts?: boolean | UserDataCountOutputTypeCountProviderAccountsArgs
     asanaActivities?: boolean | UserDataCountOutputTypeCountAsanaActivitiesArgs
+    userLogins?: boolean | UserDataCountOutputTypeCountUserLoginsArgs
   }
 
   // Custom InputTypes
@@ -1319,6 +1411,13 @@ export namespace Prisma {
    */
   export type UserDataCountOutputTypeCountAsanaActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AsanaActivityWhereInput
+  }
+
+  /**
+   * UserDataCountOutputType without action
+   */
+  export type UserDataCountOutputTypeCountUserLoginsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserLoginWhereInput
   }
 
 
@@ -1663,6 +1762,7 @@ export namespace Prisma {
     role?: boolean
     providerAccounts?: boolean | UserData$providerAccountsArgs<ExtArgs>
     asanaActivities?: boolean | UserData$asanaActivitiesArgs<ExtArgs>
+    userLogins?: boolean | UserData$userLoginsArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userData"]>
 
@@ -1696,6 +1796,7 @@ export namespace Prisma {
   export type UserDataInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     providerAccounts?: boolean | UserData$providerAccountsArgs<ExtArgs>
     asanaActivities?: boolean | UserData$asanaActivitiesArgs<ExtArgs>
+    userLogins?: boolean | UserData$userLoginsArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -1704,6 +1805,7 @@ export namespace Prisma {
     objects: {
       providerAccounts: Prisma.$ProviderAccountPayload<ExtArgs>[]
       asanaActivities: Prisma.$AsanaActivityPayload<ExtArgs>[]
+      userLogins: Prisma.$UserLoginPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2094,6 +2196,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     providerAccounts<T extends UserData$providerAccountsArgs<ExtArgs> = {}>(args?: Subset<T, UserData$providerAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "findMany"> | Null>
     asanaActivities<T extends UserData$asanaActivitiesArgs<ExtArgs> = {}>(args?: Subset<T, UserData$asanaActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "findMany"> | Null>
+    userLogins<T extends UserData$userLoginsArgs<ExtArgs> = {}>(args?: Subset<T, UserData$userLoginsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserLoginPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2509,6 +2612,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AsanaActivityScalarFieldEnum | AsanaActivityScalarFieldEnum[]
+  }
+
+  /**
+   * UserData.userLogins
+   */
+  export type UserData$userLoginsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLogin
+     */
+    select?: UserLoginSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLoginInclude<ExtArgs> | null
+    where?: UserLoginWhereInput
+    orderBy?: UserLoginOrderByWithRelationInput | UserLoginOrderByWithRelationInput[]
+    cursor?: UserLoginWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserLoginScalarFieldEnum | UserLoginScalarFieldEnum[]
   }
 
   /**
@@ -7711,6 +7834,957 @@ export namespace Prisma {
 
 
   /**
+   * Model UserLogin
+   */
+
+  export type AggregateUserLogin = {
+    _count: UserLoginCountAggregateOutputType | null
+    _min: UserLoginMinAggregateOutputType | null
+    _max: UserLoginMaxAggregateOutputType | null
+  }
+
+  export type UserLoginMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    loginDate: Date | null
+    ipAddress: string | null
+    userAgent: string | null
+    provider: string | null
+    createdAt: Date | null
+  }
+
+  export type UserLoginMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    loginDate: Date | null
+    ipAddress: string | null
+    userAgent: string | null
+    provider: string | null
+    createdAt: Date | null
+  }
+
+  export type UserLoginCountAggregateOutputType = {
+    id: number
+    userId: number
+    loginDate: number
+    ipAddress: number
+    userAgent: number
+    provider: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type UserLoginMinAggregateInputType = {
+    id?: true
+    userId?: true
+    loginDate?: true
+    ipAddress?: true
+    userAgent?: true
+    provider?: true
+    createdAt?: true
+  }
+
+  export type UserLoginMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    loginDate?: true
+    ipAddress?: true
+    userAgent?: true
+    provider?: true
+    createdAt?: true
+  }
+
+  export type UserLoginCountAggregateInputType = {
+    id?: true
+    userId?: true
+    loginDate?: true
+    ipAddress?: true
+    userAgent?: true
+    provider?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type UserLoginAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserLogin to aggregate.
+     */
+    where?: UserLoginWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserLogins to fetch.
+     */
+    orderBy?: UserLoginOrderByWithRelationInput | UserLoginOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserLoginWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserLogins from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserLogins.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserLogins
+    **/
+    _count?: true | UserLoginCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserLoginMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserLoginMaxAggregateInputType
+  }
+
+  export type GetUserLoginAggregateType<T extends UserLoginAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserLogin]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserLogin[P]>
+      : GetScalarType<T[P], AggregateUserLogin[P]>
+  }
+
+
+
+
+  export type UserLoginGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserLoginWhereInput
+    orderBy?: UserLoginOrderByWithAggregationInput | UserLoginOrderByWithAggregationInput[]
+    by: UserLoginScalarFieldEnum[] | UserLoginScalarFieldEnum
+    having?: UserLoginScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserLoginCountAggregateInputType | true
+    _min?: UserLoginMinAggregateInputType
+    _max?: UserLoginMaxAggregateInputType
+  }
+
+  export type UserLoginGroupByOutputType = {
+    id: string
+    userId: string
+    loginDate: Date
+    ipAddress: string | null
+    userAgent: string | null
+    provider: string | null
+    createdAt: Date
+    _count: UserLoginCountAggregateOutputType | null
+    _min: UserLoginMinAggregateOutputType | null
+    _max: UserLoginMaxAggregateOutputType | null
+  }
+
+  type GetUserLoginGroupByPayload<T extends UserLoginGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserLoginGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserLoginGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserLoginGroupByOutputType[P]>
+            : GetScalarType<T[P], UserLoginGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserLoginSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    loginDate?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    provider?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDataDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userLogin"]>
+
+
+  export type UserLoginSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    loginDate?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    provider?: boolean
+    createdAt?: boolean
+  }
+
+  export type UserLoginInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDataDefaultArgs<ExtArgs>
+  }
+
+  export type $UserLoginPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserLogin"
+    objects: {
+      user: Prisma.$UserDataPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      loginDate: Date
+      ipAddress: string | null
+      userAgent: string | null
+      provider: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["userLogin"]>
+    composites: {}
+  }
+
+  type UserLoginGetPayload<S extends boolean | null | undefined | UserLoginDefaultArgs> = $Result.GetResult<Prisma.$UserLoginPayload, S>
+
+  type UserLoginCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<UserLoginFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: UserLoginCountAggregateInputType | true
+    }
+
+  export interface UserLoginDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserLogin'], meta: { name: 'UserLogin' } }
+    /**
+     * Find zero or one UserLogin that matches the filter.
+     * @param {UserLoginFindUniqueArgs} args - Arguments to find a UserLogin
+     * @example
+     * // Get one UserLogin
+     * const userLogin = await prisma.userLogin.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserLoginFindUniqueArgs>(args: SelectSubset<T, UserLoginFindUniqueArgs<ExtArgs>>): Prisma__UserLoginClient<$Result.GetResult<Prisma.$UserLoginPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one UserLogin that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {UserLoginFindUniqueOrThrowArgs} args - Arguments to find a UserLogin
+     * @example
+     * // Get one UserLogin
+     * const userLogin = await prisma.userLogin.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserLoginFindUniqueOrThrowArgs>(args: SelectSubset<T, UserLoginFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserLoginClient<$Result.GetResult<Prisma.$UserLoginPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first UserLogin that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLoginFindFirstArgs} args - Arguments to find a UserLogin
+     * @example
+     * // Get one UserLogin
+     * const userLogin = await prisma.userLogin.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserLoginFindFirstArgs>(args?: SelectSubset<T, UserLoginFindFirstArgs<ExtArgs>>): Prisma__UserLoginClient<$Result.GetResult<Prisma.$UserLoginPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first UserLogin that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLoginFindFirstOrThrowArgs} args - Arguments to find a UserLogin
+     * @example
+     * // Get one UserLogin
+     * const userLogin = await prisma.userLogin.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserLoginFindFirstOrThrowArgs>(args?: SelectSubset<T, UserLoginFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserLoginClient<$Result.GetResult<Prisma.$UserLoginPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more UserLogins that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLoginFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserLogins
+     * const userLogins = await prisma.userLogin.findMany()
+     * 
+     * // Get first 10 UserLogins
+     * const userLogins = await prisma.userLogin.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userLoginWithIdOnly = await prisma.userLogin.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserLoginFindManyArgs>(args?: SelectSubset<T, UserLoginFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserLoginPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a UserLogin.
+     * @param {UserLoginCreateArgs} args - Arguments to create a UserLogin.
+     * @example
+     * // Create one UserLogin
+     * const UserLogin = await prisma.userLogin.create({
+     *   data: {
+     *     // ... data to create a UserLogin
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserLoginCreateArgs>(args: SelectSubset<T, UserLoginCreateArgs<ExtArgs>>): Prisma__UserLoginClient<$Result.GetResult<Prisma.$UserLoginPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many UserLogins.
+     * @param {UserLoginCreateManyArgs} args - Arguments to create many UserLogins.
+     * @example
+     * // Create many UserLogins
+     * const userLogin = await prisma.userLogin.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserLoginCreateManyArgs>(args?: SelectSubset<T, UserLoginCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a UserLogin.
+     * @param {UserLoginDeleteArgs} args - Arguments to delete one UserLogin.
+     * @example
+     * // Delete one UserLogin
+     * const UserLogin = await prisma.userLogin.delete({
+     *   where: {
+     *     // ... filter to delete one UserLogin
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserLoginDeleteArgs>(args: SelectSubset<T, UserLoginDeleteArgs<ExtArgs>>): Prisma__UserLoginClient<$Result.GetResult<Prisma.$UserLoginPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one UserLogin.
+     * @param {UserLoginUpdateArgs} args - Arguments to update one UserLogin.
+     * @example
+     * // Update one UserLogin
+     * const userLogin = await prisma.userLogin.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserLoginUpdateArgs>(args: SelectSubset<T, UserLoginUpdateArgs<ExtArgs>>): Prisma__UserLoginClient<$Result.GetResult<Prisma.$UserLoginPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more UserLogins.
+     * @param {UserLoginDeleteManyArgs} args - Arguments to filter UserLogins to delete.
+     * @example
+     * // Delete a few UserLogins
+     * const { count } = await prisma.userLogin.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserLoginDeleteManyArgs>(args?: SelectSubset<T, UserLoginDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserLogins.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLoginUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserLogins
+     * const userLogin = await prisma.userLogin.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserLoginUpdateManyArgs>(args: SelectSubset<T, UserLoginUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UserLogin.
+     * @param {UserLoginUpsertArgs} args - Arguments to update or create a UserLogin.
+     * @example
+     * // Update or create a UserLogin
+     * const userLogin = await prisma.userLogin.upsert({
+     *   create: {
+     *     // ... data to create a UserLogin
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserLogin we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserLoginUpsertArgs>(args: SelectSubset<T, UserLoginUpsertArgs<ExtArgs>>): Prisma__UserLoginClient<$Result.GetResult<Prisma.$UserLoginPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+    /**
+     * Find zero or more UserLogins that matches the filter.
+     * @param {UserLoginFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const userLogin = await prisma.userLogin.findRaw({
+     *   filter: { age: { $gt: 25 } } 
+     * })
+     */
+    findRaw(args?: UserLoginFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a UserLogin.
+     * @param {UserLoginAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const userLogin = await prisma.userLogin.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: UserLoginAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of UserLogins.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLoginCountArgs} args - Arguments to filter UserLogins to count.
+     * @example
+     * // Count the number of UserLogins
+     * const count = await prisma.userLogin.count({
+     *   where: {
+     *     // ... the filter for the UserLogins we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserLoginCountArgs>(
+      args?: Subset<T, UserLoginCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserLoginCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserLogin.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLoginAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserLoginAggregateArgs>(args: Subset<T, UserLoginAggregateArgs>): Prisma.PrismaPromise<GetUserLoginAggregateType<T>>
+
+    /**
+     * Group by UserLogin.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserLoginGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserLoginGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserLoginGroupByArgs['orderBy'] }
+        : { orderBy?: UserLoginGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserLoginGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserLoginGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserLogin model
+   */
+  readonly fields: UserLoginFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserLogin.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserLoginClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDataDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDataDefaultArgs<ExtArgs>>): Prisma__UserDataClient<$Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserLogin model
+   */ 
+  interface UserLoginFieldRefs {
+    readonly id: FieldRef<"UserLogin", 'String'>
+    readonly userId: FieldRef<"UserLogin", 'String'>
+    readonly loginDate: FieldRef<"UserLogin", 'DateTime'>
+    readonly ipAddress: FieldRef<"UserLogin", 'String'>
+    readonly userAgent: FieldRef<"UserLogin", 'String'>
+    readonly provider: FieldRef<"UserLogin", 'String'>
+    readonly createdAt: FieldRef<"UserLogin", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserLogin findUnique
+   */
+  export type UserLoginFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLogin
+     */
+    select?: UserLoginSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLoginInclude<ExtArgs> | null
+    /**
+     * Filter, which UserLogin to fetch.
+     */
+    where: UserLoginWhereUniqueInput
+  }
+
+  /**
+   * UserLogin findUniqueOrThrow
+   */
+  export type UserLoginFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLogin
+     */
+    select?: UserLoginSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLoginInclude<ExtArgs> | null
+    /**
+     * Filter, which UserLogin to fetch.
+     */
+    where: UserLoginWhereUniqueInput
+  }
+
+  /**
+   * UserLogin findFirst
+   */
+  export type UserLoginFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLogin
+     */
+    select?: UserLoginSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLoginInclude<ExtArgs> | null
+    /**
+     * Filter, which UserLogin to fetch.
+     */
+    where?: UserLoginWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserLogins to fetch.
+     */
+    orderBy?: UserLoginOrderByWithRelationInput | UserLoginOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserLogins.
+     */
+    cursor?: UserLoginWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserLogins from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserLogins.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserLogins.
+     */
+    distinct?: UserLoginScalarFieldEnum | UserLoginScalarFieldEnum[]
+  }
+
+  /**
+   * UserLogin findFirstOrThrow
+   */
+  export type UserLoginFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLogin
+     */
+    select?: UserLoginSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLoginInclude<ExtArgs> | null
+    /**
+     * Filter, which UserLogin to fetch.
+     */
+    where?: UserLoginWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserLogins to fetch.
+     */
+    orderBy?: UserLoginOrderByWithRelationInput | UserLoginOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserLogins.
+     */
+    cursor?: UserLoginWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserLogins from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserLogins.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserLogins.
+     */
+    distinct?: UserLoginScalarFieldEnum | UserLoginScalarFieldEnum[]
+  }
+
+  /**
+   * UserLogin findMany
+   */
+  export type UserLoginFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLogin
+     */
+    select?: UserLoginSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLoginInclude<ExtArgs> | null
+    /**
+     * Filter, which UserLogins to fetch.
+     */
+    where?: UserLoginWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserLogins to fetch.
+     */
+    orderBy?: UserLoginOrderByWithRelationInput | UserLoginOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserLogins.
+     */
+    cursor?: UserLoginWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserLogins from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserLogins.
+     */
+    skip?: number
+    distinct?: UserLoginScalarFieldEnum | UserLoginScalarFieldEnum[]
+  }
+
+  /**
+   * UserLogin create
+   */
+  export type UserLoginCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLogin
+     */
+    select?: UserLoginSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLoginInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserLogin.
+     */
+    data: XOR<UserLoginCreateInput, UserLoginUncheckedCreateInput>
+  }
+
+  /**
+   * UserLogin createMany
+   */
+  export type UserLoginCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserLogins.
+     */
+    data: UserLoginCreateManyInput | UserLoginCreateManyInput[]
+  }
+
+  /**
+   * UserLogin update
+   */
+  export type UserLoginUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLogin
+     */
+    select?: UserLoginSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLoginInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserLogin.
+     */
+    data: XOR<UserLoginUpdateInput, UserLoginUncheckedUpdateInput>
+    /**
+     * Choose, which UserLogin to update.
+     */
+    where: UserLoginWhereUniqueInput
+  }
+
+  /**
+   * UserLogin updateMany
+   */
+  export type UserLoginUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserLogins.
+     */
+    data: XOR<UserLoginUpdateManyMutationInput, UserLoginUncheckedUpdateManyInput>
+    /**
+     * Filter which UserLogins to update
+     */
+    where?: UserLoginWhereInput
+  }
+
+  /**
+   * UserLogin upsert
+   */
+  export type UserLoginUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLogin
+     */
+    select?: UserLoginSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLoginInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserLogin to update in case it exists.
+     */
+    where: UserLoginWhereUniqueInput
+    /**
+     * In case the UserLogin found by the `where` argument doesn't exist, create a new UserLogin with this data.
+     */
+    create: XOR<UserLoginCreateInput, UserLoginUncheckedCreateInput>
+    /**
+     * In case the UserLogin was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserLoginUpdateInput, UserLoginUncheckedUpdateInput>
+  }
+
+  /**
+   * UserLogin delete
+   */
+  export type UserLoginDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLogin
+     */
+    select?: UserLoginSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLoginInclude<ExtArgs> | null
+    /**
+     * Filter which UserLogin to delete.
+     */
+    where: UserLoginWhereUniqueInput
+  }
+
+  /**
+   * UserLogin deleteMany
+   */
+  export type UserLoginDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserLogins to delete
+     */
+    where?: UserLoginWhereInput
+  }
+
+  /**
+   * UserLogin findRaw
+   */
+  export type UserLoginFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * UserLogin aggregateRaw
+   */
+  export type UserLoginAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * UserLogin without action
+   */
+  export type UserLoginDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserLogin
+     */
+    select?: UserLoginSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserLoginInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -7851,6 +8925,19 @@ export namespace Prisma {
   export type AsanaActivityScalarFieldEnum = (typeof AsanaActivityScalarFieldEnum)[keyof typeof AsanaActivityScalarFieldEnum]
 
 
+  export const UserLoginScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    loginDate: 'loginDate',
+    ipAddress: 'ipAddress',
+    userAgent: 'userAgent',
+    provider: 'provider',
+    createdAt: 'createdAt'
+  };
+
+  export type UserLoginScalarFieldEnum = (typeof UserLoginScalarFieldEnum)[keyof typeof UserLoginScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -7981,6 +9068,7 @@ export namespace Prisma {
     role?: StringNullableFilter<"UserData"> | string | null
     providerAccounts?: ProviderAccountListRelationFilter
     asanaActivities?: AsanaActivityListRelationFilter
+    userLogins?: UserLoginListRelationFilter
   }
 
   export type UserDataOrderByWithRelationInput = {
@@ -8009,6 +9097,7 @@ export namespace Prisma {
     role?: SortOrder
     providerAccounts?: ProviderAccountOrderByRelationAggregateInput
     asanaActivities?: AsanaActivityOrderByRelationAggregateInput
+    userLogins?: UserLoginOrderByRelationAggregateInput
   }
 
   export type UserDataWhereUniqueInput = Prisma.AtLeast<{
@@ -8040,6 +9129,7 @@ export namespace Prisma {
     role?: StringNullableFilter<"UserData"> | string | null
     providerAccounts?: ProviderAccountListRelationFilter
     asanaActivities?: AsanaActivityListRelationFilter
+    userLogins?: UserLoginListRelationFilter
   }, "id" | "provider_id" | "email">
 
   export type UserDataOrderByWithAggregationInput = {
@@ -8641,6 +9731,71 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"AsanaActivity"> | Date | string
   }
 
+  export type UserLoginWhereInput = {
+    AND?: UserLoginWhereInput | UserLoginWhereInput[]
+    OR?: UserLoginWhereInput[]
+    NOT?: UserLoginWhereInput | UserLoginWhereInput[]
+    id?: StringFilter<"UserLogin"> | string
+    userId?: StringFilter<"UserLogin"> | string
+    loginDate?: DateTimeFilter<"UserLogin"> | Date | string
+    ipAddress?: StringNullableFilter<"UserLogin"> | string | null
+    userAgent?: StringNullableFilter<"UserLogin"> | string | null
+    provider?: StringNullableFilter<"UserLogin"> | string | null
+    createdAt?: DateTimeFilter<"UserLogin"> | Date | string
+    user?: XOR<UserDataRelationFilter, UserDataWhereInput>
+  }
+
+  export type UserLoginOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    loginDate?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    provider?: SortOrder
+    createdAt?: SortOrder
+    user?: UserDataOrderByWithRelationInput
+  }
+
+  export type UserLoginWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: UserLoginWhereInput | UserLoginWhereInput[]
+    OR?: UserLoginWhereInput[]
+    NOT?: UserLoginWhereInput | UserLoginWhereInput[]
+    userId?: StringFilter<"UserLogin"> | string
+    loginDate?: DateTimeFilter<"UserLogin"> | Date | string
+    ipAddress?: StringNullableFilter<"UserLogin"> | string | null
+    userAgent?: StringNullableFilter<"UserLogin"> | string | null
+    provider?: StringNullableFilter<"UserLogin"> | string | null
+    createdAt?: DateTimeFilter<"UserLogin"> | Date | string
+    user?: XOR<UserDataRelationFilter, UserDataWhereInput>
+  }, "id">
+
+  export type UserLoginOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    loginDate?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    provider?: SortOrder
+    createdAt?: SortOrder
+    _count?: UserLoginCountOrderByAggregateInput
+    _max?: UserLoginMaxOrderByAggregateInput
+    _min?: UserLoginMinOrderByAggregateInput
+  }
+
+  export type UserLoginScalarWhereWithAggregatesInput = {
+    AND?: UserLoginScalarWhereWithAggregatesInput | UserLoginScalarWhereWithAggregatesInput[]
+    OR?: UserLoginScalarWhereWithAggregatesInput[]
+    NOT?: UserLoginScalarWhereWithAggregatesInput | UserLoginScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserLogin"> | string
+    userId?: StringWithAggregatesFilter<"UserLogin"> | string
+    loginDate?: DateTimeWithAggregatesFilter<"UserLogin"> | Date | string
+    ipAddress?: StringNullableWithAggregatesFilter<"UserLogin"> | string | null
+    userAgent?: StringNullableWithAggregatesFilter<"UserLogin"> | string | null
+    provider?: StringNullableWithAggregatesFilter<"UserLogin"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"UserLogin"> | Date | string
+  }
+
   export type UserDataCreateInput = {
     id?: string
     provider_id?: string | null
@@ -8667,6 +9822,7 @@ export namespace Prisma {
     role?: string | null
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateInput = {
@@ -8695,6 +9851,7 @@ export namespace Prisma {
     role?: string | null
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUpdateInput = {
@@ -8722,6 +9879,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateInput = {
@@ -8749,6 +9907,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataCreateManyInput = {
@@ -9459,6 +10618,71 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UserLoginCreateInput = {
+    id?: string
+    loginDate?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+    provider?: string | null
+    createdAt?: Date | string
+    user: UserDataCreateNestedOneWithoutUserLoginsInput
+  }
+
+  export type UserLoginUncheckedCreateInput = {
+    id?: string
+    userId: string
+    loginDate?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+    provider?: string | null
+    createdAt?: Date | string
+  }
+
+  export type UserLoginUpdateInput = {
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserDataUpdateOneRequiredWithoutUserLoginsNestedInput
+  }
+
+  export type UserLoginUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserLoginCreateManyInput = {
+    id?: string
+    userId: string
+    loginDate?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+    provider?: string | null
+    createdAt?: Date | string
+  }
+
+  export type UserLoginUpdateManyMutationInput = {
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserLoginUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -9537,11 +10761,21 @@ export namespace Prisma {
     none?: AsanaActivityWhereInput
   }
 
+  export type UserLoginListRelationFilter = {
+    every?: UserLoginWhereInput
+    some?: UserLoginWhereInput
+    none?: UserLoginWhereInput
+  }
+
   export type ProviderAccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type AsanaActivityOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserLoginOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -10078,6 +11312,36 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
+  export type UserLoginCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    loginDate?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    provider?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserLoginMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    loginDate?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    provider?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserLoginMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    loginDate?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    provider?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type ProviderAccountCreateNestedManyWithoutUserInput = {
     create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
@@ -10092,6 +11356,13 @@ export namespace Prisma {
     connect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
   }
 
+  export type UserLoginCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserLoginCreateWithoutUserInput, UserLoginUncheckedCreateWithoutUserInput> | UserLoginCreateWithoutUserInput[] | UserLoginUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserLoginCreateOrConnectWithoutUserInput | UserLoginCreateOrConnectWithoutUserInput[]
+    createMany?: UserLoginCreateManyUserInputEnvelope
+    connect?: UserLoginWhereUniqueInput | UserLoginWhereUniqueInput[]
+  }
+
   export type ProviderAccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
@@ -10104,6 +11375,13 @@ export namespace Prisma {
     connectOrCreate?: AsanaActivityCreateOrConnectWithoutUserInput | AsanaActivityCreateOrConnectWithoutUserInput[]
     createMany?: AsanaActivityCreateManyUserInputEnvelope
     connect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+  }
+
+  export type UserLoginUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserLoginCreateWithoutUserInput, UserLoginUncheckedCreateWithoutUserInput> | UserLoginCreateWithoutUserInput[] | UserLoginUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserLoginCreateOrConnectWithoutUserInput | UserLoginCreateOrConnectWithoutUserInput[]
+    createMany?: UserLoginCreateManyUserInputEnvelope
+    connect?: UserLoginWhereUniqueInput | UserLoginWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -10152,6 +11430,20 @@ export namespace Prisma {
     deleteMany?: AsanaActivityScalarWhereInput | AsanaActivityScalarWhereInput[]
   }
 
+  export type UserLoginUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserLoginCreateWithoutUserInput, UserLoginUncheckedCreateWithoutUserInput> | UserLoginCreateWithoutUserInput[] | UserLoginUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserLoginCreateOrConnectWithoutUserInput | UserLoginCreateOrConnectWithoutUserInput[]
+    upsert?: UserLoginUpsertWithWhereUniqueWithoutUserInput | UserLoginUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserLoginCreateManyUserInputEnvelope
+    set?: UserLoginWhereUniqueInput | UserLoginWhereUniqueInput[]
+    disconnect?: UserLoginWhereUniqueInput | UserLoginWhereUniqueInput[]
+    delete?: UserLoginWhereUniqueInput | UserLoginWhereUniqueInput[]
+    connect?: UserLoginWhereUniqueInput | UserLoginWhereUniqueInput[]
+    update?: UserLoginUpdateWithWhereUniqueWithoutUserInput | UserLoginUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserLoginUpdateManyWithWhereWithoutUserInput | UserLoginUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserLoginScalarWhereInput | UserLoginScalarWhereInput[]
+  }
+
   export type ProviderAccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
@@ -10178,6 +11470,20 @@ export namespace Prisma {
     update?: AsanaActivityUpdateWithWhereUniqueWithoutUserInput | AsanaActivityUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: AsanaActivityUpdateManyWithWhereWithoutUserInput | AsanaActivityUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: AsanaActivityScalarWhereInput | AsanaActivityScalarWhereInput[]
+  }
+
+  export type UserLoginUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserLoginCreateWithoutUserInput, UserLoginUncheckedCreateWithoutUserInput> | UserLoginCreateWithoutUserInput[] | UserLoginUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserLoginCreateOrConnectWithoutUserInput | UserLoginCreateOrConnectWithoutUserInput[]
+    upsert?: UserLoginUpsertWithWhereUniqueWithoutUserInput | UserLoginUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserLoginCreateManyUserInputEnvelope
+    set?: UserLoginWhereUniqueInput | UserLoginWhereUniqueInput[]
+    disconnect?: UserLoginWhereUniqueInput | UserLoginWhereUniqueInput[]
+    delete?: UserLoginWhereUniqueInput | UserLoginWhereUniqueInput[]
+    connect?: UserLoginWhereUniqueInput | UserLoginWhereUniqueInput[]
+    update?: UserLoginUpdateWithWhereUniqueWithoutUserInput | UserLoginUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserLoginUpdateManyWithWhereWithoutUserInput | UserLoginUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserLoginScalarWhereInput | UserLoginScalarWhereInput[]
   }
 
   export type UserDataCreateNestedOneWithoutProviderAccountsInput = {
@@ -10365,6 +11671,20 @@ export namespace Prisma {
     upsert?: AsanaPostureUpsertWithoutAsanaActivitiesInput
     connect?: AsanaPostureWhereUniqueInput
     update?: XOR<XOR<AsanaPostureUpdateToOneWithWhereWithoutAsanaActivitiesInput, AsanaPostureUpdateWithoutAsanaActivitiesInput>, AsanaPostureUncheckedUpdateWithoutAsanaActivitiesInput>
+  }
+
+  export type UserDataCreateNestedOneWithoutUserLoginsInput = {
+    create?: XOR<UserDataCreateWithoutUserLoginsInput, UserDataUncheckedCreateWithoutUserLoginsInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutUserLoginsInput
+    connect?: UserDataWhereUniqueInput
+  }
+
+  export type UserDataUpdateOneRequiredWithoutUserLoginsNestedInput = {
+    create?: XOR<UserDataCreateWithoutUserLoginsInput, UserDataUncheckedCreateWithoutUserLoginsInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutUserLoginsInput
+    upsert?: UserDataUpsertWithoutUserLoginsInput
+    connect?: UserDataWhereUniqueInput
+    update?: XOR<XOR<UserDataUpdateToOneWithWhereWithoutUserLoginsInput, UserDataUpdateWithoutUserLoginsInput>, UserDataUncheckedUpdateWithoutUserLoginsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -10667,6 +11987,33 @@ export namespace Prisma {
     data: AsanaActivityCreateManyUserInput | AsanaActivityCreateManyUserInput[]
   }
 
+  export type UserLoginCreateWithoutUserInput = {
+    id?: string
+    loginDate?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+    provider?: string | null
+    createdAt?: Date | string
+  }
+
+  export type UserLoginUncheckedCreateWithoutUserInput = {
+    id?: string
+    loginDate?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+    provider?: string | null
+    createdAt?: Date | string
+  }
+
+  export type UserLoginCreateOrConnectWithoutUserInput = {
+    where: UserLoginWhereUniqueInput
+    create: XOR<UserLoginCreateWithoutUserInput, UserLoginUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserLoginCreateManyUserInputEnvelope = {
+    data: UserLoginCreateManyUserInput | UserLoginCreateManyUserInput[]
+  }
+
   export type ProviderAccountUpsertWithWhereUniqueWithoutUserInput = {
     where: ProviderAccountWhereUniqueInput
     update: XOR<ProviderAccountUpdateWithoutUserInput, ProviderAccountUncheckedUpdateWithoutUserInput>
@@ -10737,6 +12084,35 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"AsanaActivity"> | Date | string
   }
 
+  export type UserLoginUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserLoginWhereUniqueInput
+    update: XOR<UserLoginUpdateWithoutUserInput, UserLoginUncheckedUpdateWithoutUserInput>
+    create: XOR<UserLoginCreateWithoutUserInput, UserLoginUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserLoginUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserLoginWhereUniqueInput
+    data: XOR<UserLoginUpdateWithoutUserInput, UserLoginUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserLoginUpdateManyWithWhereWithoutUserInput = {
+    where: UserLoginScalarWhereInput
+    data: XOR<UserLoginUpdateManyMutationInput, UserLoginUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserLoginScalarWhereInput = {
+    AND?: UserLoginScalarWhereInput | UserLoginScalarWhereInput[]
+    OR?: UserLoginScalarWhereInput[]
+    NOT?: UserLoginScalarWhereInput | UserLoginScalarWhereInput[]
+    id?: StringFilter<"UserLogin"> | string
+    userId?: StringFilter<"UserLogin"> | string
+    loginDate?: DateTimeFilter<"UserLogin"> | Date | string
+    ipAddress?: StringNullableFilter<"UserLogin"> | string | null
+    userAgent?: StringNullableFilter<"UserLogin"> | string | null
+    provider?: StringNullableFilter<"UserLogin"> | string | null
+    createdAt?: DateTimeFilter<"UserLogin"> | Date | string
+  }
+
   export type UserDataCreateWithoutProviderAccountsInput = {
     id?: string
     provider_id?: string | null
@@ -10762,6 +12138,7 @@ export namespace Prisma {
     isLocationPublic?: string | null
     role?: string | null
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutProviderAccountsInput = {
@@ -10789,6 +12166,7 @@ export namespace Prisma {
     isLocationPublic?: string | null
     role?: string | null
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutProviderAccountsInput = {
@@ -10831,6 +12209,7 @@ export namespace Prisma {
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutProviderAccountsInput = {
@@ -10857,6 +12236,7 @@ export namespace Prisma {
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AsanaActivityCreateWithoutPostureInput = {
@@ -10935,6 +12315,7 @@ export namespace Prisma {
     isLocationPublic?: string | null
     role?: string | null
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutAsanaActivitiesInput = {
@@ -10962,6 +12343,7 @@ export namespace Prisma {
     isLocationPublic?: string | null
     role?: string | null
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutAsanaActivitiesInput = {
@@ -11083,6 +12465,7 @@ export namespace Prisma {
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutAsanaActivitiesInput = {
@@ -11109,6 +12492,7 @@ export namespace Prisma {
     isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
     role?: NullableStringFieldUpdateOperationsInput | string | null
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AsanaPostureUpsertWithoutAsanaActivitiesInput = {
@@ -11194,6 +12578,132 @@ export namespace Prisma {
     created_by?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type UserDataCreateWithoutUserLoginsInput = {
+    id?: string
+    provider_id?: string | null
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    pronouns?: string | null
+    profile?: InputJsonValue | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    firstName: string
+    lastName: string
+    bio: string
+    headline: string
+    location: string
+    websiteURL: string
+    shareQuick?: string | null
+    yogaStyle?: string | null
+    yogaExperience?: string | null
+    company?: string | null
+    socialURL?: string | null
+    isLocationPublic?: string | null
+    role?: string | null
+    providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
+    asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
+  }
+
+  export type UserDataUncheckedCreateWithoutUserLoginsInput = {
+    id?: string
+    provider_id?: string | null
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    pronouns?: string | null
+    profile?: InputJsonValue | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    firstName: string
+    lastName: string
+    bio: string
+    headline: string
+    location: string
+    websiteURL: string
+    shareQuick?: string | null
+    yogaStyle?: string | null
+    yogaExperience?: string | null
+    company?: string | null
+    socialURL?: string | null
+    isLocationPublic?: string | null
+    role?: string | null
+    providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
+    asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserDataCreateOrConnectWithoutUserLoginsInput = {
+    where: UserDataWhereUniqueInput
+    create: XOR<UserDataCreateWithoutUserLoginsInput, UserDataUncheckedCreateWithoutUserLoginsInput>
+  }
+
+  export type UserDataUpsertWithoutUserLoginsInput = {
+    update: XOR<UserDataUpdateWithoutUserLoginsInput, UserDataUncheckedUpdateWithoutUserLoginsInput>
+    create: XOR<UserDataCreateWithoutUserLoginsInput, UserDataUncheckedCreateWithoutUserLoginsInput>
+    where?: UserDataWhereInput
+  }
+
+  export type UserDataUpdateToOneWithWhereWithoutUserLoginsInput = {
+    where?: UserDataWhereInput
+    data: XOR<UserDataUpdateWithoutUserLoginsInput, UserDataUncheckedUpdateWithoutUserLoginsInput>
+  }
+
+  export type UserDataUpdateWithoutUserLoginsInput = {
+    provider_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
+    profile?: InputJsonValue | InputJsonValue | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    shareQuick?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaStyle?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    socialURL?: NullableStringFieldUpdateOperationsInput | string | null
+    isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
+    asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserDataUncheckedUpdateWithoutUserLoginsInput = {
+    provider_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
+    profile?: InputJsonValue | InputJsonValue | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    shareQuick?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaStyle?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    socialURL?: NullableStringFieldUpdateOperationsInput | string | null
+    isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
+    asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type ProviderAccountCreateManyUserInput = {
     id?: string
     type: string
@@ -11222,6 +12732,15 @@ export namespace Prisma {
     completionStatus: string
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type UserLoginCreateManyUserInput = {
+    id?: string
+    loginDate?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+    provider?: string | null
+    createdAt?: Date | string
   }
 
   export type ProviderAccountUpdateWithoutUserInput = {
@@ -11306,6 +12825,30 @@ export namespace Prisma {
     completionStatus?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserLoginUpdateWithoutUserInput = {
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserLoginUncheckedUpdateWithoutUserInput = {
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserLoginUncheckedUpdateManyWithoutUserInput = {
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    provider?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AsanaActivityCreateManyPostureInput = {
@@ -11394,6 +12937,10 @@ export namespace Prisma {
      * @deprecated Use AsanaActivityDefaultArgs instead
      */
     export type AsanaActivityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AsanaActivityDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use UserLoginDefaultArgs instead
+     */
+    export type UserLoginArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserLoginDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

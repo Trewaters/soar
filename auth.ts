@@ -229,8 +229,38 @@ const authConfig = {
   secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: 'jwt' },
   events: {
-    signIn: async () => {
-      // console.log('signIn event')
+    signIn: async ({ user, account }: { user: any; account: any }) => {
+      console.log('signIn event triggered for user:', user?.email)
+
+      // Record login event for streak tracking
+      if (user?.id) {
+        try {
+          // Get request headers for IP and User Agent (if available in server context)
+          const loginRecord = {
+            userId: user.id,
+            loginDate: new Date(),
+            provider: account?.provider || 'unknown',
+            // In a full implementation, you'd capture these from the request
+            ipAddress: null as string | null,
+            userAgent: null as string | null,
+          }
+
+          await prisma.userLogin.create({
+            data: loginRecord,
+          })
+
+          // Also update the user's lastLogin timestamp in the session
+          await prisma.userData.update({
+            where: { id: user.id },
+            data: { updatedAt: new Date() },
+          })
+
+          console.log('Login event recorded successfully for user:', user.email)
+        } catch (error) {
+          console.error('Error recording login event:', error)
+          // Don't throw here as we don't want to break the login process
+        }
+      }
     },
     signOut: async (message: any) => {
       console.log('signOut', message)

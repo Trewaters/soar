@@ -18,6 +18,7 @@ import { useSession } from 'next-auth/react'
 import { UseUser } from '@context/UserContext'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import ActivityStreaks from '@app/clientComponents/activityStreaks/ActivityStreaks'
 
 // interface ExpandMoreProps extends IconButtonProps {
 //   expand: boolean
@@ -242,6 +243,12 @@ export default function UserDetails() {
                     Member since {membershipDate ?? '6/9/2024'}
                   </Typography>
                 </Stack>
+
+                {/* Activity Streaks Component */}
+                <Box sx={{ mt: 2 }}>
+                  <ActivityStreaks variant="compact" />
+                </Box>
+
                 {/* 
                 <Card>
                  
@@ -578,6 +585,11 @@ export default function UserDetails() {
               </Grid>
             </Grid>
           </Paper>
+
+          {/* Detailed Activity Streaks Section */}
+          <Box sx={{ mt: 3, mx: 3 }}>
+            <ActivityStreaks variant="detailed" />
+          </Box>
         </Box>
       )}
     </>

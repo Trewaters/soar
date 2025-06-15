@@ -54,6 +54,7 @@ model UserData {
   // deleteAccountInfo String
   providerAccounts      ProviderAccount[]
   asanaActivities AsanaActivity[] // Relation to AsanaActivity
+  userLogins      UserLogin[] // Relation to UserLogin
 }
 
 model ProviderAccount {
@@ -161,4 +162,20 @@ model AsanaActivity {
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+/// Records user login events for activity streak calculation.
+model UserLogin {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  loginDate DateTime @default(now())
+  ipAddress String?  // Optional for analytics
+  userAgent String?  // Optional for analytics
+  provider  String?  // e.g., "google", "github", "credentials"
+
+  user      UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, loginDate])
 }
