@@ -146,14 +146,14 @@ export default function ActivityStreaks({
               // Server error - consider this a network error
               hasNetworkError = true
               console.warn(
-                'Failed to fetch login streak data:',
+                'Failed to fetch login streak data (server error):',
                 response.status,
                 response.statusText
               )
             } else {
               // Client error (4xx) - show fallback data
               console.warn(
-                'Failed to fetch login streak data:',
+                'Failed to fetch login streak data (client error):',
                 response.status,
                 response.statusText
               )
