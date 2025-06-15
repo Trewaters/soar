@@ -123,7 +123,14 @@ export async function getUserAsanaHistory(userId: string) {
       orderBy: { datePerformed: 'desc' },
     })
   } catch (error) {
-    console.error('Error in getUserAsanaHistory:', error)
+    logDatabaseError(error, 'findMany', 'AsanaActivity', {
+      userId,
+      operation: 'user_history',
+    })
+    logServiceError(error, 'asanaActivityService', 'getUserAsanaHistory', {
+      userId,
+      operation: 'get_user_history',
+    })
     throw error
   }
 }

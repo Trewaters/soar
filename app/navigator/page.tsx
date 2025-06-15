@@ -28,12 +28,12 @@ export default function Page() {
         </Typography>
         <CurrentTime />
       </Box>
-      <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
-        <AsanaActivityList />
-      </Box>
       <nav aria-label="Tab Navigation">
         <TabHeader />
       </nav>
+      <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
+        <AsanaActivityList />
+      </Box>
     </React.Fragment>
   )
 }

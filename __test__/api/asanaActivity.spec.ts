@@ -5,6 +5,7 @@ import {
   recordAsanaActivity,
   deleteAsanaActivity,
   checkExistingActivity,
+  getUserAsanaHistory,
 } from '../../lib/asanaActivityService'
 
 // Mock the error logger
@@ -19,6 +20,7 @@ jest.mock('../../lib/asanaActivityService', () => ({
   recordAsanaActivity: jest.fn(),
   deleteAsanaActivity: jest.fn(),
   checkExistingActivity: jest.fn(),
+  getUserAsanaHistory: jest.fn(),
 }))
 
 describe('/api/asanaActivity Service Tests', () => {
@@ -77,6 +79,59 @@ describe('/api/asanaActivity Service Tests', () => {
         'user123',
         'posture123'
       )
+    })
+  })
+
+  describe('getUserAsanaHistory', () => {
+    it('should get all activities for a user', async () => {
+      const mockActivities = [
+        {
+          id: '1',
+          userId: 'user123',
+          postureId: 'posture123',
+          postureName: 'Mountain Pose',
+          datePerformed: new Date(),
+          duration: 60,
+          completionStatus: 'complete',
+          notes: null,
+          sensations: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: '2',
+          userId: 'user123',
+          postureId: 'posture456',
+          postureName: 'Warrior I',
+          datePerformed: new Date(),
+          duration: 90,
+          completionStatus: 'complete',
+          notes: null,
+          sensations: null,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]
+
+      const mockGetUserAsanaHistory =
+        getUserAsanaHistory as jest.MockedFunction<typeof getUserAsanaHistory>
+      mockGetUserAsanaHistory.mockResolvedValue(mockActivities)
+
+      const result = await getUserAsanaHistory('user123')
+
+      expect(result).toEqual(mockActivities)
+      expect(mockGetUserAsanaHistory).toHaveBeenCalledWith('user123')
+    })
+
+    it('should return empty array when user has no activities', async () => {
+      const mockGetUserAsanaHistory =
+        getUserAsanaHistory as jest.MockedFunction<typeof getUserAsanaHistory>
+      mockGetUserAsanaHistory.mockResolvedValue([])
+
+      const result = await getUserAsanaHistory('user123')
+
+      expect(result).toEqual([])
+      expect(mockGetUserAsanaHistory).toHaveBeenCalledWith('user123')
     })
   })
 
@@ -170,18 +225,41 @@ describe('/api/asanaActivity Service Tests', () => {
     })
 
     it('should validate required query params for GET', () => {
-      const url = new URL(
+      // Test with both userId and postureId (existing activity check)
+      const url1 = new URL(
         'http://localhost:3000/api/asanaActivity?userId=user123&postureId=posture123'
       )
-      const userId = url.searchParams.get('userId')
-      const postureId = url.searchParams.get('postureId')
+      const userId1 = url1.searchParams.get('userId')
+      const postureId1 = url1.searchParams.get('postureId')
 
-      expect(userId).toBe('user123')
-      expect(postureId).toBe('posture123')
+      expect(userId1).toBe('user123')
+      expect(postureId1).toBe('posture123')
 
-      // Test validation logic
-      const isValid = !!(userId && postureId)
-      expect(isValid).toBe(true)
+      // Test validation logic for existing activity check
+      const isValidForActivityCheck = !!(userId1 && postureId1)
+      expect(isValidForActivityCheck).toBe(true)
+
+      // Test with only userId (get all user activities)
+      const url2 = new URL(
+        'http://localhost:3000/api/asanaActivity?userId=user123'
+      )
+      const userId2 = url2.searchParams.get('userId')
+      const postureId2 = url2.searchParams.get('postureId')
+
+      expect(userId2).toBe('user123')
+      expect(postureId2).toBeNull()
+
+      // Test validation logic for getting all user activities
+      const isValidForUserActivities = !!userId2
+      expect(isValidForUserActivities).toBe(true)
+
+      // Test invalid case - no userId
+      const url3 = new URL('http://localhost:3000/api/asanaActivity')
+      const userId3 = url3.searchParams.get('userId')
+
+      expect(userId3).toBeNull()
+      const isInvalid = !!userId3
+      expect(isInvalid).toBe(false)
     })
   })
 

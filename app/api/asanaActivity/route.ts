@@ -2,6 +2,7 @@ import {
   recordAsanaActivity,
   deleteAsanaActivity,
   checkExistingActivity,
+  getUserAsanaHistory,
 } from '@lib/asanaActivityService'
 import { NextRequest, NextResponse } from 'next/server'
 import { logApiError } from '@lib/errorLogger'
@@ -120,9 +121,9 @@ export async function GET(req: NextRequest) {
     const userId = searchParams.get('userId')
     const postureId = searchParams.get('postureId')
 
-    if (!userId || !postureId) {
+    if (!userId) {
       const validationError = new Error(
-        'Missing required query parameters: userId and postureId'
+        'Missing required query parameter: userId'
       )
       logApiError(validationError, req, 'GET /api/asanaActivity - validation', {
         queryParams: { userId, postureId },
@@ -130,22 +131,32 @@ export async function GET(req: NextRequest) {
       })
       return NextResponse.json(
         {
-          error: 'Missing required query parameters: userId and postureId',
+          error: 'Missing required query parameter: userId',
         },
         { status: 400 }
       )
     }
 
-    const activity = await checkExistingActivity(userId, postureId)
-    return NextResponse.json({ exists: !!activity, activity }, { status: 200 })
+    if (postureId) {
+      // Check if specific activity exists for user and posture
+      const activity = await checkExistingActivity(userId, postureId)
+      return NextResponse.json(
+        { exists: !!activity, activity },
+        { status: 200 }
+      )
+    } else {
+      // Get all activities for the user
+      const activities = await getUserAsanaHistory(userId)
+      return NextResponse.json(activities, { status: 200 })
+    }
   } catch (error) {
     logApiError(error, req, 'GET /api/asanaActivity', {
-      operation: 'check_existing_activity',
+      operation: 'get_asana_activity',
     })
     return NextResponse.json(
       {
         error:
-          error instanceof Error ? error.message : 'Failed to check activity',
+          error instanceof Error ? error.message : 'Failed to get activity',
       },
       { status: 500 }
     )
