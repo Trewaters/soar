@@ -106,8 +106,24 @@ export default function ActivityStreaks({
         loading ||
         hasInitialized
       ) {
+        console.log('ActivityStreaks: Skipping fetch due to conditions:', {
+          hasUserId: !!session?.user?.id,
+          status,
+          loading,
+          hasInitialized,
+          timestamp: new Date().toISOString(),
+        })
         return
       }
+
+      console.log('ActivityStreaks: Starting fetchStreakData for user:', {
+        userId: session.user.id,
+        email: session.user.email,
+        streakTypes,
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV,
+        baseUrl: window.location.origin,
+      })
 
       setLoading(true)
       setError(null)
@@ -120,18 +136,43 @@ export default function ActivityStreaks({
         // Fetch login streak data
         if (streakTypes.includes('login')) {
           try {
-            const response = await fetch(
-              `/api/user/loginStreak?userId=${session.user.id}`,
-              {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              }
-            )
+            const apiUrl = `/api/user/loginStreak?userId=${session.user.id}`
+            console.log('ActivityStreaks: Making API call to:', {
+              url: apiUrl,
+              method: 'GET',
+              headers: { 'Content-Type': 'application/json' },
+              timestamp: new Date().toISOString(),
+            })
+
+            const response = await fetch(apiUrl, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            })
+
+            console.log('ActivityStreaks: API response received:', {
+              status: response.status,
+              statusText: response.statusText,
+              ok: response.ok,
+              headers: Object.fromEntries(response.headers.entries()),
+              url: response.url,
+              timestamp: new Date().toISOString(),
+              requestId: response.headers.get('X-Request-ID'),
+              environment: response.headers.get('X-Environment'),
+              responseTimestamp: response.headers.get('X-Timestamp'),
+            })
 
             if (response.ok) {
               const loginData: LoginStreakResponse = await response.json()
+              console.log(
+                'ActivityStreaks: Successfully parsed response data:',
+                {
+                  loginData,
+                  timestamp: new Date().toISOString(),
+                }
+              )
+
               fetchedStreaks.push({
                 type: 'login',
                 currentStreak: loginData.currentStreak,
@@ -145,18 +186,50 @@ export default function ActivityStreaks({
             } else if (response.status >= 500) {
               // Server error - consider this a network error
               hasNetworkError = true
-              console.warn(
-                'Failed to fetch login streak data (server error):',
-                response.status,
-                response.statusText
-              )
+
+              let errorDetails = null
+              try {
+                errorDetails = await response.json()
+              } catch (parseError) {
+                console.error(
+                  'ActivityStreaks: Failed to parse error response:',
+                  parseError
+                )
+              }
+
+              console.error('ActivityStreaks: Server error response:', {
+                status: response.status,
+                statusText: response.statusText,
+                errorDetails,
+                url: response.url,
+                userId: session.user.id,
+                environment: process.env.NODE_ENV,
+                timestamp: new Date().toISOString(),
+                requestId: response.headers.get('X-Request-ID'),
+                environmentHeader: response.headers.get('X-Environment'),
+                responseTimestamp: response.headers.get('X-Timestamp'),
+              })
             } else {
               // Client error (4xx) - show fallback data
-              console.warn(
-                'Failed to fetch login streak data (client error):',
-                response.status,
-                response.statusText
-              )
+              let errorDetails = null
+              try {
+                errorDetails = await response.json()
+              } catch (parseError) {
+                console.error(
+                  'ActivityStreaks: Failed to parse error response:',
+                  parseError
+                )
+              }
+
+              console.warn('ActivityStreaks: Client error response:', {
+                status: response.status,
+                statusText: response.statusText,
+                errorDetails,
+                url: response.url,
+                userId: session.user.id,
+                timestamp: new Date().toISOString(),
+              })
+
               fetchedStreaks.push({
                 type: 'login',
                 currentStreak: 0,
@@ -170,13 +243,33 @@ export default function ActivityStreaks({
             }
           } catch (e) {
             hasNetworkError = true
-            console.warn('Error fetching login streak:', e)
+            console.error('ActivityStreaks: Network error or fetch failure:', {
+              error: e,
+              errorMessage: e instanceof Error ? e.message : String(e),
+              errorStack: e instanceof Error ? e.stack : undefined,
+              userId: session.user.id,
+              environment: process.env.NODE_ENV,
+              timestamp: new Date().toISOString(),
+              userAgent: navigator.userAgent,
+              connectionType: (navigator as any).connection?.effectiveType,
+              onlineStatus: navigator.onLine,
+            })
           }
         }
 
         // If we have a network error and no data, show error state
         if (hasNetworkError && fetchedStreaks.length === 0) {
-          throw new Error('Failed to load streak data')
+          const errorMsg = 'Failed to load streak data'
+          console.error(
+            'ActivityStreaks: Throwing error due to network failure:',
+            {
+              hasNetworkError,
+              fetchedStreaksLength: fetchedStreaks.length,
+              userId: session.user.id,
+              timestamp: new Date().toISOString(),
+            }
+          )
+          throw new Error(errorMsg)
         }
 
         // If we have network errors but some data, add fallback for failed calls
@@ -185,6 +278,16 @@ export default function ActivityStreaks({
           streakTypes.includes('login') &&
           fetchedStreaks.length === 0
         ) {
+          console.warn(
+            'ActivityStreaks: Adding fallback data due to network error:',
+            {
+              hasNetworkError,
+              streakTypes,
+              fetchedStreaksLength: fetchedStreaks.length,
+              timestamp: new Date().toISOString(),
+            }
+          )
+
           fetchedStreaks.push({
             type: 'login',
             currentStreak: 0,
@@ -216,12 +319,33 @@ export default function ActivityStreaks({
         //   }
         // }
 
+        console.log('ActivityStreaks: Successfully fetched streak data:', {
+          fetchedStreaksCount: fetchedStreaks.length,
+          streakTypes: fetchedStreaks.map((s) => s.type),
+          userId: session.user.id,
+          timestamp: new Date().toISOString(),
+        })
+
         setStreakData(fetchedStreaks)
       } catch (e: any) {
-        console.error('Error fetching streak data:', e)
+        console.error('ActivityStreaks: Error in fetchStreakData:', {
+          error: e,
+          errorMessage: e instanceof Error ? e.message : String(e),
+          errorStack: e instanceof Error ? e.stack : undefined,
+          userId: session?.user?.id,
+          streakTypes,
+          environment: process.env.NODE_ENV,
+          timestamp: new Date().toISOString(),
+          sessionStatus: status,
+          hasSession: !!session,
+        })
         setError('Failed to load streak data')
       } finally {
         setLoading(false)
+        console.log('ActivityStreaks: Fetch process completed:', {
+          userId: session?.user?.id,
+          timestamp: new Date().toISOString(),
+        })
       }
     }
 
