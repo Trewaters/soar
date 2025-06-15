@@ -255,8 +255,21 @@ export default function ActivityStreaks({
 
     const lastDate = new Date(lastActivityDate)
     const now = new Date()
+
+    // Use UTC for consistent date calculations across timezones
+    const lastDateUTC = new Date(
+      lastDate.getUTCFullYear(),
+      lastDate.getUTCMonth(),
+      lastDate.getUTCDate()
+    )
+    const nowUTC = new Date(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate()
+    )
+
     const diffInDays = Math.floor(
-      (now.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24)
+      (nowUTC.getTime() - lastDateUTC.getTime()) / (1000 * 60 * 60 * 24)
     )
 
     if (diffInDays === 0) return 'Today'

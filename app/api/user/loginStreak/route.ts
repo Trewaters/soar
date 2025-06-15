@@ -155,15 +155,16 @@ async function calculateLoginStreak(
     }
 
     // Get unique login dates (ignore multiple logins on same day)
+    // Use UTC to ensure consistent date calculations across timezones
     const uniqueDates = Array.from(
       new Set(
         loginEvents.map((login) => {
           const date = new Date(login.loginDate)
-          // Normalize to start of day for consistent comparison
+          // Normalize to start of day in UTC for consistent comparison
           return new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate()
+            date.getUTCFullYear(),
+            date.getUTCMonth(),
+            date.getUTCDate()
           ).getTime()
         })
       )
@@ -171,9 +172,9 @@ async function calculateLoginStreak(
 
     const today = new Date()
     const todayTime = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate()
+      today.getUTCFullYear(),
+      today.getUTCMonth(),
+      today.getUTCDate()
     ).getTime()
     const yesterdayTime = todayTime - 24 * 60 * 60 * 1000
 
