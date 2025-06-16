@@ -439,6 +439,7 @@ async function calculateLoginStreak(
     const queryTime = Date.now() - queryStartTime
 
     console.log('UserLogin query completed:', {
+      loginEvents,
       userId,
       queryTimeMs: queryTime,
       eventsCount: loginEvents.length,
