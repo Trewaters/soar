@@ -152,6 +152,7 @@ export default function ActivityStreaks({
             })
 
             console.log('ActivityStreaks: API response received:', {
+              response,
               status: response.status,
               statusText: response.statusText,
               ok: response.ok,

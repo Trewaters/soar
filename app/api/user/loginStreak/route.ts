@@ -250,6 +250,7 @@ export async function GET(req: NextRequest) {
     const userQueryTime = Date.now() - userQueryStart
 
     console.log('User lookup completed:', {
+      user,
       requestId,
       userId,
       timestamp,
