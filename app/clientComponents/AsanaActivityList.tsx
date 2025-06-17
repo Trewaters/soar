@@ -53,7 +53,12 @@ export default function AsanaActivityList() {
 
   return (
     <Box>
-      <Typography variant="h6" sx={{ mb: 2 }}>
+      <Typography
+        variant="body1"
+        sx={{ mb: 2 }}
+        textAlign="center"
+        fontWeight={600}
+      >
         Your Recent Activity
       </Typography>
       <List>

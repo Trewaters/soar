@@ -3,11 +3,13 @@
 import React from 'react'
 import CurrentTime from '@app/clientComponents/current-time'
 import TabHeader from '@app/clientComponents/tab-header'
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Divider, Stack, Typography } from '@mui/material'
 import Image from 'next/image'
 import AsanaActivityList from '@app/clientComponents/AsanaActivityList'
 import ActivityStreaks from '@app/clientComponents/activityStreaks/ActivityStreaks'
 import LandingPage from '@app/clientComponents/landing-page'
+import EightLimbs from './eightLimbs/eight-limbs'
+import Link from 'next/link'
 
 export default function Page() {
   return (
@@ -27,6 +29,11 @@ export default function Page() {
         />
         <CurrentTime />
         <ActivityStreaks variant="compact" />
+        <Divider
+          color="#F6893D"
+          textAlign="center"
+          sx={{ mx: 'auto', width: '10%' }}
+        />
         <Typography variant="body1" fontWeight="600" sx={{ mt: 4, mb: 1 }}>
           Start your practice
         </Typography>
@@ -35,6 +42,23 @@ export default function Page() {
       <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
         <Box sx={{ mt: 4 }}>
           <AsanaActivityList />
+        </Box>
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="body1" fontWeight="600" sx={{ mt: 4, mb: 1 }}>
+            Learn about Yoga
+          </Typography>
+          <Typography
+            variant="body1"
+            color="primary.main"
+            sx={{ mb: 1, display: 'flex', flexDirection: 'column', gap: 1 }}
+          >
+            <Link href="/eight-limbs" passHref>
+              Eight Limbs
+            </Link>
+            <Link href="/glossary" passHref>
+              Glossary
+            </Link>
+          </Typography>
         </Box>
       </Box>
     </Stack>
