@@ -233,29 +233,44 @@ const authConfig = {
       console.log('signIn event triggered for user:', user?.email)
 
       // Record login event for streak tracking
-      if (user?.id) {
+      if (user?.email) {
         try {
-          // Get request headers for IP and User Agent (if available in server context)
-          const loginRecord = {
-            userId: user.id,
-            loginDate: new Date(),
-            provider: account?.provider || 'unknown',
-            // In a full implementation, you'd capture these from the request
-            ipAddress: null as string | null,
-            userAgent: null as string | null,
+          // IMPORTANT: Get the UserData record to use the correct internal ID
+          // instead of the OAuth provider ID (user.id)
+          const userData = await prisma.userData.findUnique({
+            where: { email: user.email },
+          })
+
+          if (userData) {
+            // Use the UserData.id (MongoDB ObjectId) for consistency with session
+            const loginRecord = {
+              userId: userData.id, // This is the key fix - use userData.id instead of user.id
+              loginDate: new Date(),
+              provider: account?.provider || 'unknown',
+              // In a full implementation, you'd capture these from the request
+              ipAddress: null as string | null,
+              userAgent: null as string | null,
+            }
+
+            await prisma.userLogin.create({
+              data: loginRecord,
+            })
+
+            // Also update the user's lastLogin timestamp
+            await prisma.userData.update({
+              where: { id: userData.id },
+              data: { updatedAt: new Date() },
+            })
+
+            console.log(
+              'Login event recorded successfully for user:',
+              user.email,
+              'with userId:',
+              userData.id
+            )
+          } else {
+            console.warn('UserData not found for login event:', user.email)
           }
-
-          await prisma.userLogin.create({
-            data: loginRecord,
-          })
-
-          // Also update the user's lastLogin timestamp in the session
-          await prisma.userData.update({
-            where: { id: user.id },
-            data: { updatedAt: new Date() },
-          })
-
-          console.log('Login event recorded successfully for user:', user.email)
         } catch (error) {
           console.error('Error recording login event:', error)
           // Don't throw here as we don't want to break the login process
