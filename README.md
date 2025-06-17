@@ -404,7 +404,7 @@ Set these environment variables in your Vercel dashboard:
 
 ### Troubleshooting Production Issues
 
-#### Activity Streak Not Working
+#### Login Activity Streak Not Working
 
 If the Activity Streak feature fails in production:
 

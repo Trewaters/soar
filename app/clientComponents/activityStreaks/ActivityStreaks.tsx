@@ -450,57 +450,36 @@ export default function ActivityStreaks({
     if (!primaryStreak) return null
 
     return (
-      <Paper
-        elevation={2}
-        sx={{
-          p: 2,
-          borderRadius: 2,
-          backgroundColor: 'background.paper',
-          border: '1px solid',
-          borderColor: 'divider',
-        }}
+      <Stack
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        spacing={2}
+        sx={{ p: 2 }}
       >
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          spacing={2}
-        >
-          <Stack direction="row" alignItems="center" spacing={1}>
-            {primaryStreak.icon}
-            <Typography variant="subtitle2" fontWeight="bold">
-              Activity Streak
-            </Typography>
-          </Stack>
-
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Typography variant="h6" fontWeight="bold" color="primary.main">
-              {primaryStreak.currentStreak}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              days
-            </Typography>
-            {primaryStreak.isActiveToday && (
-              <Tooltip title="Active today">
-                <Box component="span">
-                  <WhatshotIcon color="success" fontSize="small" />
-                </Box>
-              </Tooltip>
-            )}
-          </Stack>
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Typography
+            variant="h3"
+            fontWeight="bold"
+            sx={{ color: 'success.main', textAlign: 'center' }}
+          >
+            Login Streak
+          </Typography>
         </Stack>
 
-        {primaryStreak.currentStreak > 0 && (
-          <Stack direction="row" justifyContent="space-between" sx={{ mt: 1 }}>
-            <Typography variant="caption" color="text.secondary">
-              Longest: {primaryStreak.longestStreak} days
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              Last: {formatLastActivity(primaryStreak.lastActivityDate)}
-            </Typography>
-          </Stack>
-        )}
-      </Paper>
+        <Stack direction="row" alignItems="center" spacing={2}>
+          <Typography variant="h4" fontWeight="bold" color="primary.main">
+            {primaryStreak.currentStreak}
+          </Typography>
+          <Typography
+            variant="h4"
+            color="primary.main"
+            textTransform={'uppercase'}
+          >
+            day{primaryStreak.currentStreak !== 1 ? 's' : ''}
+          </Typography>
+        </Stack>
+      </Stack>
     )
   }
 

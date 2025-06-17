@@ -112,7 +112,7 @@ describe('ActivityStreaks Component', () => {
       render(<ActivityStreaks variant="compact" />)
 
       await waitFor(() => {
-        expect(screen.getByText('Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Login Activity Streak')).toBeInTheDocument()
       })
 
       expect(screen.getByText('5')).toBeInTheDocument()
@@ -364,7 +364,7 @@ describe('ActivityStreaks Component', () => {
       render(<ActivityStreaks />)
 
       await waitFor(() => {
-        expect(screen.getByText('Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Login Activity Streak')).toBeInTheDocument()
       })
 
       // Should show fallback data with 0 streak for client errors
@@ -387,7 +387,7 @@ describe('ActivityStreaks Component', () => {
 
       // Wait for the component to finish loading and render streak data
       await waitFor(() => {
-        expect(screen.getByText('Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Login Activity Streak')).toBeInTheDocument()
       })
 
       // Component should still render with zero streak data, not show "no data" message
@@ -461,7 +461,7 @@ describe('ActivityStreaks Component', () => {
       render(<ActivityStreaks />)
 
       await waitFor(() => {
-        expect(screen.getByText('Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Login Activity Streak')).toBeInTheDocument()
       })
 
       // Should not show "Last:" info when streak is 0
@@ -526,7 +526,7 @@ describe('ActivityStreaks Component', () => {
         // Numbers and labels should be clearly associated
         expect(screen.getByText('7')).toBeInTheDocument()
         expect(screen.getByText('days')).toBeInTheDocument()
-        expect(screen.getByText('Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Login Activity Streak')).toBeInTheDocument()
       })
     })
 
@@ -582,7 +582,7 @@ describe('ActivityStreaks Component', () => {
       render(<ActivityStreaks />)
 
       await waitFor(() => {
-        expect(screen.getByText('Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Login Activity Streak')).toBeInTheDocument()
       })
 
       // Should only make one API call, not loop

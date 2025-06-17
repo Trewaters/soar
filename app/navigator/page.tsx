@@ -34,7 +34,7 @@ export default function Page() {
       </nav>
       <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
         <ActivityStreaks variant="compact" />
-        <Box sx={{ mt: 2 }}>
+        <Box sx={{ mt: 4 }}>
           <AsanaActivityList />
         </Box>
       </Box>
