@@ -54,7 +54,7 @@ export default function AsanaActivityList() {
   return (
     <Box>
       <Typography variant="h6" sx={{ mb: 2 }}>
-        Recent Asana Activity
+        Your Recent Activity
       </Typography>
       <List>
         {activities.map((activity) => (

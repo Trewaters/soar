@@ -3,13 +3,14 @@ import Box from '@mui/material/Box'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
 import Link from 'next/link'
 import { Button, Stack, Typography } from '@mui/material'
+import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 
 const links = [
-  // {
-  //   name: 'Asana Postures',
-  //   href: '/navigator/asanaPostures',
-  //   icon: <WaterDropOutlinedIcon />,
-  // },
+  {
+    name: 'Asanas',
+    href: '/navigator/asanaPostures',
+    icon: <WaterDropOutlinedIcon />,
+  },
   { name: 'Flows', href: '/navigator/flows', icon: <WhatshotIcon /> },
 ]
 
