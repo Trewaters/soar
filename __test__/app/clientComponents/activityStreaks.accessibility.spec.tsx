@@ -256,7 +256,12 @@ describe('ActivityStreaks Accessibility Tests', () => {
       } as Response)
 
       await act(async () => {
-        render(<ActivityStreaks variant="detailed" />)
+        render(
+          <ActivityStreaks
+            variant="detailed"
+            streakTypes={['login', 'asana']}
+          />
+        )
       })
 
       await waitFor(() => {

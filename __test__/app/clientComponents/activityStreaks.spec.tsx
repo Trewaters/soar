@@ -112,7 +112,7 @@ describe('ActivityStreaks Component', () => {
       render(<ActivityStreaks variant="compact" />)
 
       await waitFor(() => {
-        expect(screen.getByText('Login Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Login Streak')).toBeInTheDocument()
       })
 
       expect(screen.getByText('5')).toBeInTheDocument()
