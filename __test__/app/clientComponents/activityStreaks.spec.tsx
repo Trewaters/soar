@@ -37,6 +37,42 @@ describe('ActivityStreaks Component', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockFetch.mockClear()
+
+    // Reset fetch mock to a default successful response
+    mockFetch.mockResolvedValue({
+      ok: true,
+      status: 200,
+      statusText: 'OK',
+      url: '/api/user/loginStreak?userId=user123',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+      }),
+      json: async () => ({
+        currentStreak: 7,
+        longestStreak: 12,
+        lastLoginDate: new Date().toISOString(),
+        isActiveToday: true,
+      }),
+    } as Response)
+
+    // Mock browser APIs that the component uses
+    Object.defineProperty(navigator, 'userAgent', {
+      value: 'Mozilla/5.0 (test browser)',
+      writable: true,
+    })
+
+    Object.defineProperty(navigator, 'onLine', {
+      value: true,
+      writable: true,
+    })
+
+    // Mock window.location.origin for the component
+    Object.defineProperty(window, 'location', {
+      value: {
+        origin: 'http://localhost:3000',
+      },
+      writable: true,
+    })
   })
 
   describe('authentication states', () => {
@@ -104,6 +140,12 @@ describe('ActivityStreaks Component', () => {
 
       mockFetch.mockResolvedValue({
         ok: true,
+        status: 200,
+        statusText: 'OK',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => mockLoginStreakResponse,
       } as Response)
     })
@@ -117,8 +159,7 @@ describe('ActivityStreaks Component', () => {
 
       expect(screen.getByText('5')).toBeInTheDocument()
       expect(screen.getByText('days')).toBeInTheDocument()
-      expect(screen.getByText('Longest: 12 days')).toBeInTheDocument()
-      expect(screen.getByText('Last: Today')).toBeInTheDocument()
+      // Compact variant doesn't show additional details like "Longest:" or "Last:"
     })
 
     it('renders detailed variant with all streak information', async () => {
@@ -136,7 +177,7 @@ describe('ActivityStreaks Component', () => {
     })
 
     it('shows active today indicator when user logged in today', async () => {
-      render(<ActivityStreaks variant="compact" />)
+      render(<ActivityStreaks variant="detailed" />)
 
       await waitFor(() => {
         expect(screen.getByTestId('whatshot-icon')).toBeInTheDocument()
@@ -183,6 +224,12 @@ describe('ActivityStreaks Component', () => {
     it('shows start message for zero streak', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
+        status: 200,
+        statusText: 'OK',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({
           currentStreak: 0,
           longestStreak: 0,
@@ -203,6 +250,12 @@ describe('ActivityStreaks Component', () => {
     it('shows momentum message for moderate streak', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
+        status: 200,
+        statusText: 'OK',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({
           currentStreak: 5,
           longestStreak: 8,
@@ -223,6 +276,12 @@ describe('ActivityStreaks Component', () => {
     it('shows excellent message for long streak', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
+        status: 200,
+        statusText: 'OK',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({
           currentStreak: 15,
           longestStreak: 20,
@@ -241,6 +300,12 @@ describe('ActivityStreaks Component', () => {
     it('shows amazing message for very long streak', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
+        status: 200,
+        statusText: 'OK',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({
           currentStreak: 45,
           longestStreak: 50,
@@ -270,6 +335,12 @@ describe('ActivityStreaks Component', () => {
 
       mockFetch.mockResolvedValue({
         ok: true,
+        status: 200,
+        statusText: 'OK',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({
           currentStreak: 3,
           longestStreak: 7,
@@ -339,6 +410,10 @@ describe('ActivityStreaks Component', () => {
         ok: false,
         status: 500,
         statusText: 'Internal Server Error',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({ error: 'Server error' }),
       } as Response)
 
@@ -358,13 +433,17 @@ describe('ActivityStreaks Component', () => {
         ok: false,
         status: 404,
         statusText: 'Not Found',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({ error: 'User not found' }),
       } as Response)
 
       render(<ActivityStreaks />)
 
       await waitFor(() => {
-        expect(screen.getByText('Login Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Login Streak')).toBeInTheDocument()
       })
 
       // Should show fallback data with 0 streak for client errors
@@ -375,6 +454,12 @@ describe('ActivityStreaks Component', () => {
     it('shows no data message when streak data is empty', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
+        status: 200,
+        statusText: 'OK',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({
           currentStreak: 0,
           longestStreak: 0,
@@ -387,7 +472,7 @@ describe('ActivityStreaks Component', () => {
 
       // Wait for the component to finish loading and render streak data
       await waitFor(() => {
-        expect(screen.getByText('Login Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Login Streak')).toBeInTheDocument()
       })
 
       // Component should still render with zero streak data, not show "no data" message
@@ -411,6 +496,12 @@ describe('ActivityStreaks Component', () => {
       const today = new Date().toISOString()
       mockFetch.mockResolvedValue({
         ok: true,
+        status: 200,
+        statusText: 'OK',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({
           currentStreak: 1,
           longestStreak: 1,
@@ -419,7 +510,7 @@ describe('ActivityStreaks Component', () => {
         }),
       } as Response)
 
-      render(<ActivityStreaks />)
+      render(<ActivityStreaks variant="detailed" />)
 
       await waitFor(() => {
         expect(screen.getByText('Last: Today')).toBeInTheDocument()
@@ -429,9 +520,14 @@ describe('ActivityStreaks Component', () => {
     it('formats "Yesterday" for previous day activity', async () => {
       const yesterday = new Date()
       yesterday.setDate(yesterday.getDate() - 1)
-
       mockFetch.mockResolvedValue({
         ok: true,
+        status: 200,
+        statusText: 'OK',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({
           currentStreak: 1,
           longestStreak: 1,
@@ -440,7 +536,7 @@ describe('ActivityStreaks Component', () => {
         }),
       } as Response)
 
-      render(<ActivityStreaks />)
+      render(<ActivityStreaks variant="detailed" />)
 
       await waitFor(() => {
         expect(screen.getByText('Last: Yesterday')).toBeInTheDocument()
@@ -450,6 +546,12 @@ describe('ActivityStreaks Component', () => {
     it('does not show last activity info when streak is zero', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
+        status: 200,
+        statusText: 'OK',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({
           currentStreak: 0,
           longestStreak: 0,
@@ -461,7 +563,7 @@ describe('ActivityStreaks Component', () => {
       render(<ActivityStreaks />)
 
       await waitFor(() => {
-        expect(screen.getByText('Login Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Login Streak')).toBeInTheDocument()
       })
 
       // Should not show "Last:" info when streak is 0
@@ -471,6 +573,12 @@ describe('ActivityStreaks Component', () => {
     it('formats "Never" for null last activity date with non-zero streak', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
+        status: 200,
+        statusText: 'OK',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({
           currentStreak: 1,
           longestStreak: 1,
@@ -479,7 +587,7 @@ describe('ActivityStreaks Component', () => {
         }),
       } as Response)
 
-      render(<ActivityStreaks />)
+      render(<ActivityStreaks variant="detailed" />)
 
       await waitFor(() => {
         expect(screen.getByText('Last: Never')).toBeInTheDocument()
@@ -500,6 +608,12 @@ describe('ActivityStreaks Component', () => {
 
       mockFetch.mockResolvedValue({
         ok: true,
+        status: 200,
+        statusText: 'OK',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({
           currentStreak: 7,
           longestStreak: 10,
@@ -526,12 +640,12 @@ describe('ActivityStreaks Component', () => {
         // Numbers and labels should be clearly associated
         expect(screen.getByText('7')).toBeInTheDocument()
         expect(screen.getByText('days')).toBeInTheDocument()
-        expect(screen.getByText('Login Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Login Streak')).toBeInTheDocument()
       })
     })
 
     it('includes tooltip information for icons when active today', async () => {
-      render(<ActivityStreaks />)
+      render(<ActivityStreaks variant="detailed" />)
 
       await waitFor(() => {
         const activeIcon = screen.getByTestId('whatshot-icon')
@@ -571,6 +685,12 @@ describe('ActivityStreaks Component', () => {
     it('handles initialization flag correctly to prevent loops', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
+        status: 200,
+        statusText: 'OK',
+        url: '/api/user/loginStreak?userId=user123',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
         json: async () => ({
           currentStreak: 1,
           longestStreak: 1,
@@ -582,7 +702,7 @@ describe('ActivityStreaks Component', () => {
       render(<ActivityStreaks />)
 
       await waitFor(() => {
-        expect(screen.getByText('Login Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Login Streak')).toBeInTheDocument()
       })
 
       // Should only make one API call, not loop

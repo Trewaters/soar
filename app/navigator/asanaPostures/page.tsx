@@ -6,6 +6,7 @@ import { FullAsanaData } from '@context/AsanaPostureContext'
 import SplashHeader from '@app/clientComponents/splash-header'
 import { useRouter } from 'next/navigation'
 import NavBottom from '@serverComponents/navBottom'
+import SplashNavButton from '@app/clientComponents/splash-nav-button'
 
 export default function Page() {
   const [posturePropData, setPosturePropData] = useState<FullAsanaData[]>([])
@@ -39,6 +40,10 @@ export default function Page() {
     fetchData()
   }, [])
 
+  const handleCreateAsanaClick = () => {
+    router.push('/navigator/asanaPostures/createAsana')
+  }
+
   return (
     <>
       <Box
@@ -63,14 +68,15 @@ export default function Page() {
           <PostureSearch posturePropData={posturePropData} />
         )}
         {error && <Typography color="error">Error: {error}</Typography>}
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{ mb: 3 }}
-          onClick={() => router.push('/navigator/asanaPostures/createAsana')}
-        >
-          <Typography whiteSpace={'nowrap'}>Create Asana Posture</Typography>
-        </Button>
+        <SplashNavButton
+          title="Create Asana Posture"
+          description="Customize your practice by creating new Asana postures."
+          sx={{
+            backgroundImage:
+              "url('/images/asana/create-asana-splash-header.svg')",
+          }}
+          onClick={handleCreateAsanaClick}
+        />
       </Box>
       <NavBottom subRoute="/navigator/asanaPostures" />
     </>
