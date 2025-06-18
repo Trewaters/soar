@@ -36,7 +36,8 @@ export default function AsanaActivityList() {
             new Date(b.datePerformed).getTime() -
             new Date(a.datePerformed).getTime()
         )
-        setActivities(sorted)
+        // Limit to 5 most recent activities
+        setActivities(sorted.slice(0, 5))
       } catch (e: any) {
         setError(e.message || 'Error loading activity')
       } finally {

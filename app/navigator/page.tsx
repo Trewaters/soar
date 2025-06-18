@@ -2,16 +2,16 @@
 
 import React from 'react'
 import CurrentTime from '@app/clientComponents/current-time'
-import TabHeader from '@app/clientComponents/tab-header'
 import { Box, Divider, Stack, Typography } from '@mui/material'
 import Image from 'next/image'
 import AsanaActivityList from '@app/clientComponents/AsanaActivityList'
 import ActivityStreaks from '@app/clientComponents/activityStreaks/ActivityStreaks'
 import LandingPage from '@app/clientComponents/landing-page'
-import EightLimbs from './eightLimbs/eight-limbs'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 
 export default function Page() {
+  const { data: session } = useSession()
   return (
     <Stack>
       <Box
@@ -20,6 +20,14 @@ export default function Page() {
         role="main"
         aria-labelledby="page-title"
       >
+        <Typography
+          variant="body1"
+          color="primary.main"
+          id="page-title"
+          sx={{ fontWeight: 600, mb: 2, ml: 4, textAlign: 'start' }}
+        >
+          Welcome {session?.user?.name || 'Yogi'}
+        </Typography>
         <Image
           src={'/images/primary/Home-page-yogi.png'}
           width={207}
