@@ -20,6 +20,11 @@ import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 import PostureShareButton from '@app/clientComponents/exportPoses'
 import ActivityTracker from '@app/clientComponents/activityTracker/ActivityTracker'
 import { useSession } from 'next-auth/react'
+import {
+  checkActivityExists,
+  createAsanaActivity,
+  deleteAsanaActivity,
+} from '@lib/asanaActivityClientService'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
@@ -52,14 +57,11 @@ export default function PostureActivityDetail({
     const checkExistingActivity = async () => {
       if (session?.user?.id && postureCardProp.id) {
         try {
-          const response = await fetch(
-            `/api/asanaActivity?userId=${session.user.id}&postureId=${postureCardProp.id}`
+          const result = await checkActivityExists(
+            session.user.id,
+            postureCardProp.id.toString()
           )
-
-          if (response.ok) {
-            const data = await response.json()
-            setChecked(data.exists)
-          }
+          setChecked(result.exists)
         } catch (error) {
           console.error('Error checking existing activity:', error)
           // Don't show error to user for this check, just default to unchecked
@@ -128,7 +130,7 @@ export default function PostureActivityDetail({
 
     const requestData = {
       userId: session.user.id,
-      postureId: postureCardProp.id,
+      postureId: postureCardProp.id.toString(),
       postureName: postureCardProp.sort_english_name,
       duration: 0,
       datePerformed: new Date(),
@@ -140,30 +142,9 @@ export default function PostureActivityDetail({
         // Create new activity
         console.log('Creating activity with data:', requestData)
 
-        const response = await fetch('/api/asanaActivity', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(requestData),
-        })
+        await createAsanaActivity(requestData)
 
-        if (!response.ok) {
-          const errorData = await response.json()
-          const errorMessage = errorData.error || 'Failed to record activity'
-
-          console.error('API Error - Create Activity:', {
-            status: response.status,
-            statusText: response.statusText,
-            errorData,
-            requestData,
-            timestamp: new Date().toISOString(),
-          })
-
-          throw new Error(errorMessage)
-        }
-
-        const result = await response.json()
         console.log('Activity recorded successfully:', {
-          result,
           requestData,
           timestamp: new Date().toISOString(),
         })
@@ -179,30 +160,12 @@ export default function PostureActivityDetail({
 
         console.log('Deleting activity with data:', deleteData)
 
-        const response = await fetch('/api/asanaActivity', {
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(deleteData),
-        })
+        await deleteAsanaActivity(
+          session.user.id,
+          postureCardProp.id.toString()
+        )
 
-        if (!response.ok) {
-          const errorData = await response.json()
-          const errorMessage = errorData.error || 'Failed to remove activity'
-
-          console.error('API Error - Delete Activity:', {
-            status: response.status,
-            statusText: response.statusText,
-            errorData,
-            deleteData,
-            timestamp: new Date().toISOString(),
-          })
-
-          throw new Error(errorMessage)
-        }
-
-        const result = await response.json()
         console.log('Activity removed successfully:', {
-          result,
           deleteData,
           timestamp: new Date().toISOString(),
         })

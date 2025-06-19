@@ -1,8 +1,9 @@
 'use client'
+
 import { useEffect, useState } from 'react'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
-import { Box, CircularProgress, Typography, Button } from '@mui/material'
-import { FullAsanaData } from '@context/AsanaPostureContext'
+import { Box, CircularProgress, Typography } from '@mui/material'
+import { getAllPostures, type FullAsanaData } from '@lib/postureService'
 import SplashHeader from '@app/clientComponents/splash-header'
 import { useRouter } from 'next/navigation'
 import NavBottom from '@serverComponents/navBottom'
@@ -18,12 +19,9 @@ export default function Page() {
     setLoading(true)
     setError(null)
     try {
-      const response = await fetch('/api/poses', { cache: 'no-store' })
-      if (!response.ok) {
-        throw new Error('Network response was not ok')
-      }
+      const data = await getAllPostures()
       setPosturePropData(
-        (await response.json()).sort((a: FullAsanaData, b: FullAsanaData) => {
+        data.sort((a: FullAsanaData, b: FullAsanaData) => {
           if (a.sort_english_name < b.sort_english_name) return -1
           if (a.sort_english_name > b.sort_english_name) return 1
           return 0

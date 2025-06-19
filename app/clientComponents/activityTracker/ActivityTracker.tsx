@@ -15,25 +15,15 @@ import { FullAsanaData } from '@context/AsanaPostureContext'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import {
+  getPostureWeeklyActivity,
+  type WeeklyActivityData,
+} from '@lib/asanaActivityClientService'
 
 interface ActivityTrackerProps {
   posture: FullAsanaData
   variant?: 'compact' | 'detailed'
   refreshTrigger?: number // Add a prop to trigger refresh when activities change
-}
-
-interface WeeklyActivityData {
-  count: number
-  activities: Array<{
-    id: string
-    datePerformed: string
-    duration: number
-    completionStatus: string
-  }>
-  dateRange: {
-    start: string
-    end: string
-  }
 }
 
 export default function ActivityTracker({
@@ -54,20 +44,14 @@ export default function ActivityTracker({
       setError(null)
 
       try {
-        const response = await fetch(
-          `/api/asanaActivity/weekly?userId=${session.user.id}&postureId=${posture.id}`
+        const data = await getPostureWeeklyActivity(
+          session.user.id,
+          posture.id.toString()
         )
-
-        if (response.ok) {
-          const data = await response.json()
-          setWeeklyData(data)
-        } else {
-          const errorData = await response.json()
-          setError(errorData.error || 'Failed to fetch weekly activity data')
-        }
+        setWeeklyData(data)
       } catch (e: any) {
         console.error('Error fetching weekly activity data:', e)
-        setError('Network error while fetching activity data')
+        setError(e.message || 'Network error while fetching activity data')
       } finally {
         setLoading(false)
       }

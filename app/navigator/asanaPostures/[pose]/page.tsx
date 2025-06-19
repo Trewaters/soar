@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
+import { getPostureByName, type FullAsanaData } from '@lib/postureService'
 import PostureActivityDetail from './postureActivityDetail'
 import { Box } from '@mui/material'
 import NavBottom from '@serverComponents/navBottom'
@@ -24,13 +24,12 @@ export default function Page({ params }: { params: { pose: string } }) {
 
   useEffect(() => {
     const getViewPose = async () => {
-      const response = await fetch(
-        `/api/poses/?sort_english_name=${params.pose}`,
-        { cache: 'no-store' }
-      )
-      const responseData = await response.json()
-      setViewPose(responseData)
-      // return await response.json()
+      try {
+        const responseData = await getPostureByName(params.pose)
+        setViewPose(responseData)
+      } catch (error) {
+        console.error('Error fetching posture:', error)
+      }
     }
     getViewPose()
   }, [params.pose])

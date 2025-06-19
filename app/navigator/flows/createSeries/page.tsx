@@ -29,6 +29,7 @@ import Looks4Icon from '@mui/icons-material/Looks4'
 import Looks5Icon from '@mui/icons-material/Looks5'
 import { useRouter } from 'next/navigation'
 import { FullAsanaData } from '@context/AsanaPostureContext'
+import { getAllPostures } from '@lib/postureService'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SplashHeader from '@app/clientComponents/splash-header'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
@@ -62,13 +63,10 @@ export default function Page() {
       // const seriesData = Array.isArray(data) ? data : [data]
       // setSeries(JSON.parse(JSON.stringify(seriesData)))
       try {
-        const response = await fetch('/api/poses', { cache: 'no-store' })
-        if (!response.ok) {
-          throw new Error('Network response was not ok')
-        }
-        setPostures(await response.json())
+        const postures = await getAllPostures()
+        setPostures(postures)
       } catch (error: Error | any) {
-        error.message
+        console.error('Error fetching postures:', error.message)
       }
     }
     // console.log('create series session', session)

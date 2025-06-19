@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid2'
 import { Box, Button, FormControl, Stack, TextField } from '@mui/material'
 import { useAsanaPosture } from '@app/context/AsanaPostureContext'
+import { createPosture, type CreatePostureInput } from '@lib/postureService'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import NavBottom from '@serverComponents/navBottom'
@@ -11,16 +12,6 @@ import NavBottom from '@serverComponents/navBottom'
 export default function Page() {
   const { data: session } = useSession()
   const { state, dispatch } = useAsanaPosture()
-  const {
-    sort_english_name,
-    english_names,
-    description,
-    category,
-    difficulty,
-    breath_direction_default,
-    preferred_side,
-    sideways,
-  } = state.postures
   const [formData, setFormData] = useState<{
     sort_english_name: string
     english_names: string[]
@@ -62,38 +53,22 @@ export default function Page() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const updatedAsana = {
-      ...state.postures,
-      sort_english_name,
-      english_names,
-      description,
-      category,
-      difficulty,
-      breath_direction_default,
-      preferred_side,
-      sideways,
+      sort_english_name: formData.sort_english_name,
+      english_names: formData.english_names,
+      description: formData.description,
+      category: formData.category,
+      difficulty: formData.difficulty,
+      breath_direction_default: formData.breath_direction_default,
+      preferred_side: formData.preferred_side,
+      sideways: formData.sideways,
       created_by: session?.user?.email ?? 'unknown',
     }
-    dispatch({ type: 'SET_POSTURES', payload: updatedAsana })
 
     try {
-      const response = await fetch('/api/poses/createAsana', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          cache: 'no-store',
-        },
-        body: JSON.stringify(updatedAsana),
-      })
-      if (!response.ok) {
-        throw new Error('Network response was not ok')
-      }
-      // eslint-disable-next-line no-unused-vars
-      const data = await response.json()
-      if (!data || Object.keys(data).length === 0) {
-        throw new Error('Received empty data object')
-      }
+      const data = await createPosture(updatedAsana)
+      console.log('Posture created successfully:', data)
     } catch (error: Error | any) {
-      error.message
+      console.error('Error creating posture:', error.message)
     } finally {
       // clear the form
       setFormData({

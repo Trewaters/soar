@@ -8,7 +8,7 @@ import AsanaTimer from '@app/clientComponents/asanaTimer'
 import { useTimer } from '@context/timerContext'
 import { useRouter } from 'next/navigation'
 import HomeIcon from '@mui/icons-material/Home'
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
+import { getPostureByName, type FullAsanaData } from '@lib/postureService'
 
 export default function ViewAsanaPractice({
   params,
@@ -42,12 +42,12 @@ export default function ViewAsanaPractice({
 
   useEffect(() => {
     const getViewPose = async () => {
-      const response = await fetch(
-        `/api/poses/?sort_english_name=${params.pose}`
-      )
-      const responseData = await response.json()
-      setViewPose(responseData)
-      // return await response.json()
+      try {
+        const responseData = await getPostureByName(params.pose)
+        setViewPose(responseData)
+      } catch (error) {
+        console.error('Error fetching posture:', error)
+      }
     }
     getViewPose()
   }, [params.pose])

@@ -7,16 +7,14 @@ import {
   CircularProgress,
   Box,
 } from '@mui/material'
-
-interface AsanaActivityItem {
-  id: string
-  postureName: string
-  datePerformed: string
-}
+import {
+  getUserActivities,
+  type AsanaActivityData,
+} from '@lib/asanaActivityClientService'
 
 export default function AsanaActivityList() {
   const { data: session, status } = useSession()
-  const [activities, setActivities] = useState<AsanaActivityItem[]>([])
+  const [activities, setActivities] = useState<AsanaActivityData[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -26,12 +24,10 @@ export default function AsanaActivityList() {
       setLoading(true)
       setError(null)
       try {
-        const res = await fetch(`/api/asanaActivity?userId=${session.user.id}`)
-        if (!res.ok) throw new Error('Failed to fetch activity')
-        const data = await res.json()
+        const data = await getUserActivities(session.user.id)
         // Sort by datePerformed descending
         const sorted = data.sort(
-          (a: AsanaActivityItem, b: AsanaActivityItem) =>
+          (a: AsanaActivityData, b: AsanaActivityData) =>
             new Date(b.datePerformed).getTime() -
             new Date(a.datePerformed).getTime()
         )
