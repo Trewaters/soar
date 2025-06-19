@@ -216,6 +216,7 @@ export default function ActivityTracker({
         backgroundColor: 'background.paper',
         border: '1px solid',
         borderColor: 'divider',
+        width: '50%',
       }}
     >
       <Stack spacing={3}>

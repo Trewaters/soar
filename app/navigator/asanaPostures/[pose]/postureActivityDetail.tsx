@@ -468,7 +468,16 @@ export default function PostureActivityDetail({
 
           {/* Activity Tracker Component */}
           {posture && posture.id && (
-            <Box sx={{ mt: 3, mb: 2 }}>
+            <Box
+              sx={{
+                mt: 3,
+                mb: 2,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+              }}
+            >
               <ActivityTracker
                 posture={posture}
                 variant="detailed"
