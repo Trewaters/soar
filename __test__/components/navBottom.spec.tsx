@@ -31,8 +31,8 @@ describe('NavBottom Component', () => {
     it('renders the navigation bar with proper structure', () => {
       render(<NavBottom subRoute="/test-route" />)
 
-      // The component renders as an AppBar which has banner role
-      const navigationBar = screen.getByRole('banner')
+      // The component renders as an AppBar with nav component which has navigation role
+      const navigationBar = screen.getByRole('navigation')
       expect(navigationBar).toBeInTheDocument()
     })
 
@@ -196,7 +196,7 @@ describe('NavBottom Component', () => {
     it('has proper ARIA structure for navigation', () => {
       render(<NavBottom subRoute="/test-route" />)
 
-      const navigationBar = screen.getByRole('banner')
+      const navigationBar = screen.getByRole('navigation')
       expect(navigationBar).toBeInTheDocument()
     })
 
@@ -290,7 +290,7 @@ describe('NavBottom Component', () => {
     it('renders as Material-UI AppBar component', () => {
       render(<NavBottom subRoute="/test-route" />)
 
-      const appBar = screen.getByRole('banner')
+      const appBar = screen.getByRole('navigation')
       expect(appBar).toHaveClass('MuiAppBar-root')
     })
 

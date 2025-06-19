@@ -33,7 +33,7 @@ const customJestConfig: Config = {
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   transformIgnorePatterns: [
-    '/node_modules/(?!(next-auth|@auth|@testing-library|@mui|jest-axe|axe-core)/)',
+    '/node_modules/(?!(next-auth|@auth|@testing-library|@mui|jest-axe|axe-core|react-jsx-runtime)/)',
   ],
   globals: {
     'ts-jest': {

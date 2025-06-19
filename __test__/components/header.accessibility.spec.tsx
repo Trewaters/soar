@@ -8,6 +8,14 @@ import { testNavigationAccessibility } from '../accessibility/axe-test-utils'
 // Extend Jest matchers
 expect.extend(toHaveNoViolations)
 
+// Mock next/navigation
+const mockPush = jest.fn()
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+  }),
+}))
+
 // Mock next-auth
 jest.mock('next-auth/react', () => ({
   useSession: () => ({

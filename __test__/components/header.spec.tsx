@@ -3,6 +3,14 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Header from '../../components/header'
 
+// Mock next/navigation
+const mockPush = jest.fn()
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockPush,
+  }),
+}))
+
 // Mock next-auth more thoroughly
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),
@@ -84,6 +92,7 @@ describe('Header Component', () => {
   beforeEach(() => {
     // Reset mocks before each test
     jest.clearAllMocks()
+    mockPush.mockClear()
   })
 
   describe('when user is not authenticated', () => {

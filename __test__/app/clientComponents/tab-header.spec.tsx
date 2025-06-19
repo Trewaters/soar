@@ -134,9 +134,11 @@ describe('TabHeader Component', () => {
     it('renders LandingPage component in first tab panel', () => {
       render(<TabHeader />)
 
-      // LandingPage contains a navigation with "main menu" label
-      const mainMenu = screen.getByRole('navigation', { name: /main menu/i })
-      expect(mainMenu).toBeInTheDocument()
+      // LandingPage contains a navigation with "Practice navigation" label
+      const practiceNav = screen.getByRole('navigation', {
+        name: /practice navigation/i,
+      })
+      expect(practiceNav).toBeInTheDocument()
 
       // Check for Flows link from LandingPage
       const flowsLink = screen.getByRole('link', { name: /flows/i })

@@ -3,6 +3,19 @@ import { render, screen } from '@testing-library/react'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import Page from '@app/navigator/page'
 
+// Mock next-auth
+jest.mock('next-auth/react', () => ({
+  useSession: jest.fn(() => ({
+    data: {
+      user: {
+        name: 'Test User',
+        email: 'test@example.com',
+      },
+    },
+    status: 'authenticated',
+  })),
+}))
+
 jest.mock('@app/clientComponents/current-time', () => {
   const MockedCurrentTime = () => (
     <div data-testid="current-time">Mocked CurrentTime</div>
@@ -10,11 +23,15 @@ jest.mock('@app/clientComponents/current-time', () => {
   MockedCurrentTime.displayName = 'MockedCurrentTime'
   return MockedCurrentTime
 })
-jest.mock('@app/clientComponents/tab-header', () => {
-  const MockedTabHeader = () => <div>Mocked TabHeader</div>
-  MockedTabHeader.displayName = 'MockedTabHeader'
-  return MockedTabHeader
+
+jest.mock('@app/clientComponents/landing-page', () => {
+  const MockedLandingPage = () => (
+    <div data-testid="landing-page">Mocked LandingPage</div>
+  )
+  MockedLandingPage.displayName = 'MockedLandingPage'
+  return MockedLandingPage
 })
+
 jest.mock('@app/clientComponents/AsanaActivityList', () => {
   const MockedAsanaActivityList = () => (
     <div data-testid="asana-activity-list">Mocked AsanaActivityList</div>
@@ -22,6 +39,7 @@ jest.mock('@app/clientComponents/AsanaActivityList', () => {
   MockedAsanaActivityList.displayName = 'MockedAsanaActivityList'
   return MockedAsanaActivityList
 })
+
 jest.mock('@app/clientComponents/activityStreaks/ActivityStreaks', () => {
   const MockedActivityStreaks = () => (
     <div data-testid="activity-streaks">Mocked ActivityStreaks</div>
@@ -29,6 +47,7 @@ jest.mock('@app/clientComponents/activityStreaks/ActivityStreaks', () => {
   MockedActivityStreaks.displayName = 'MockedActivityStreaks'
   return MockedActivityStreaks
 })
+
 jest.mock('next/image', () => {
   const MockedNextImage = (props: any) => (
     // eslint-disable-next-line @next/next/no-img-element
@@ -37,6 +56,31 @@ jest.mock('next/image', () => {
   MockedNextImage.displayName = 'MockedNextImage'
   return MockedNextImage
 })
+
+jest.mock('next/link', () => {
+  const MockedLink = ({ children, href, ...props }: any) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  )
+  MockedLink.displayName = 'MockedLink'
+  return MockedLink
+})
+
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(() => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    back: jest.fn(),
+    forward: jest.fn(),
+    refresh: jest.fn(),
+    prefetch: jest.fn(),
+  })),
+  useSearchParams: jest.fn(() => ({
+    get: jest.fn(),
+  })),
+  usePathname: jest.fn(() => '/navigator'),
+}))
 
 const theme = createTheme()
 
@@ -47,8 +91,7 @@ describe('Page Component', () => {
         <Page />
       </ThemeProvider>
     )
-    screen.debug(undefined, 60000) // Debugging line to see the rendered output
-    const mainContainer = screen.getByRole('main') // Query by role only
+    const mainContainer = screen.getByRole('main')
     expect(mainContainer).toBeInTheDocument()
     expect(mainContainer).toHaveAttribute('aria-labelledby', 'page-title')
   })
@@ -68,16 +111,15 @@ describe('Page Component', () => {
     expect(image).toHaveAttribute('height', '207')
   })
 
-  it('renders the Typography with correct text and attributes', () => {
+  it('renders the welcome message with user name', () => {
     render(
       <ThemeProvider theme={theme}>
         <Page />
       </ThemeProvider>
     )
-    const typography = screen.getByText('Yoga Exercise')
-    expect(typography).toBeInTheDocument()
-    expect(typography).toHaveAttribute('id', 'page-title')
-    expect(typography).toHaveStyle({ color: 'rgb(25, 118, 210)' }) // Use resolved color value
+    const welcomeText = screen.getByText('Welcome Test User')
+    expect(welcomeText).toBeInTheDocument()
+    expect(welcomeText).toHaveAttribute('id', 'page-title')
   })
 
   it('renders the CurrentTime component', () => {
@@ -89,21 +131,42 @@ describe('Page Component', () => {
     expect(screen.getByTestId('current-time')).toBeInTheDocument()
   })
 
-  it('renders the page title "Yoga Exercise"', () => {
+  it('renders the ActivityStreaks component', () => {
     render(
       <ThemeProvider theme={theme}>
         <Page />
       </ThemeProvider>
     )
-    expect(screen.getByText('Yoga Exercise')).toBeInTheDocument()
-    expect(screen.getByRole('main')).toHaveAttribute(
-      'aria-labelledby',
-      'page-title'
+    expect(screen.getByTestId('activity-streaks')).toBeInTheDocument()
+  })
+
+  it('renders the AsanaActivityList component', () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <Page />
+      </ThemeProvider>
     )
-    expect(screen.getByText('Yoga Exercise')).toHaveAttribute(
-      'id',
-      'page-title'
+    expect(screen.getByTestId('asana-activity-list')).toBeInTheDocument()
+  })
+
+  it('renders the LandingPage component', () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <Page />
+      </ThemeProvider>
     )
+    expect(screen.getByTestId('landing-page')).toBeInTheDocument()
+  })
+
+  it('renders navigation links for learning sections', () => {
+    render(
+      <ThemeProvider theme={theme}>
+        <Page />
+      </ThemeProvider>
+    )
+    expect(screen.getByText('Learn about Yoga')).toBeInTheDocument()
+    expect(screen.getByText('Eight Limbs')).toBeInTheDocument()
+    expect(screen.getByText('Glossary')).toBeInTheDocument()
   })
 
   it('uses semantic HTML and ARIA roles correctly', () => {
@@ -116,8 +179,9 @@ describe('Page Component', () => {
     expect(main).toBeInTheDocument()
     expect(main).toHaveAttribute('aria-labelledby', 'page-title')
 
-    const nav = screen.getByRole('navigation', { name: 'Tab Navigation' })
+    const nav = screen.getByRole('navigation')
     expect(nav).toBeInTheDocument()
+    expect(nav).toHaveAttribute('aria-labelledby', 'learn-section-title')
 
     const image = screen.getByAltText(
       'Illustration of a person practicing yoga'
