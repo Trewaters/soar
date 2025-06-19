@@ -4,7 +4,6 @@ import {
   Typography,
   List,
   ListItem,
-  ListItemText,
   CircularProgress,
   Box,
 } from '@mui/material'
@@ -64,17 +63,43 @@ export default function AsanaActivityList() {
       </Typography>
       <List>
         {activities.map((activity) => (
-          <ListItem key={activity.id} divider>
-            <ListItemText
-              primary={activity.postureName}
-              secondary={new Date(activity.datePerformed).toLocaleDateString(
-                undefined,
-                {
-                  month: 'short',
-                  day: 'numeric',
-                }
-              )}
-            />
+          <ListItem
+            key={activity.id}
+            divider
+            sx={{
+              '&:not(:last-child)::after': {
+                content: '""',
+                position: 'absolute',
+                bottom: 0,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '80%',
+                height: '1px',
+                backgroundColor: 'divider',
+              },
+              '&:not(:last-child)': {
+                borderBottom: 'none',
+              },
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
+              }}
+            >
+              <Typography variant="body1">{activity.postureName}</Typography>
+              <Typography variant="body2" color="text.secondary">
+                {new Date(activity.datePerformed).toLocaleDateString(
+                  undefined,
+                  {
+                    month: 'short',
+                    day: 'numeric',
+                  }
+                )}
+              </Typography>
+            </Box>
           </ListItem>
         ))}
       </List>
