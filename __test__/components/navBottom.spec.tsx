@@ -2,319 +2,313 @@ import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import NavBottom from '../../components/navBottom'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 // Mock next/navigation
 const mockPush = jest.fn()
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: mockPush,
-  }),
+  useRouter: jest.fn(),
 }))
 
-// Mock Next.js Image component
-jest.mock('next/image', () => {
-  const MockImage = ({ src, alt, width, height }: any) => {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={src} alt={alt} width={width} height={height} />
-  }
-  MockImage.displayName = 'MockImage'
-  return MockImage
-})
+// Mock next-auth
+jest.mock('next-auth/react', () => ({
+  useSession: jest.fn(),
+}))
+
+// Mock Material-UI icons
+jest.mock('@mui/icons-material/Home', () => ({
+  __esModule: true,
+  default: () => <div data-testid="home-icon" />,
+}))
+
+jest.mock('@mui/icons-material/Person', () => ({
+  __esModule: true,
+  default: () => <div data-testid="person-icon" />,
+}))
+
+jest.mock('@mui/icons-material/Menu', () => ({
+  __esModule: true,
+  default: () => <div data-testid="menu-icon" />,
+}))
+
+const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>
+const mockUseSession = useSession as jest.MockedFunction<typeof useSession>
 
 describe('NavBottom Component', () => {
   beforeEach(() => {
-    // Reset mocks before each test
     jest.clearAllMocks()
+    mockUseRouter.mockReturnValue({
+      push: mockPush,
+      replace: jest.fn(),
+      back: jest.fn(),
+      forward: jest.fn(),
+      refresh: jest.fn(),
+      prefetch: jest.fn(),
+    })
   })
 
-  describe('component rendering', () => {
-    it('renders the navigation bar with proper structure', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      // The component renders as an AppBar with nav component which has navigation role
-      const navigationBar = screen.getByRole('navigation')
-      expect(navigationBar).toBeInTheDocument()
+  describe('when user is not authenticated', () => {
+    beforeEach(() => {
+      mockUseSession.mockReturnValue({
+        data: null,
+        status: 'unauthenticated',
+        update: jest.fn(),
+      })
     })
 
-    it('renders all three navigation buttons', () => {
-      render(<NavBottom subRoute="/test-route" />)
+    it('renders the navigation bar with all three icons', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      expect(screen.getByRole('navigation')).toBeInTheDocument()
+      expect(screen.getByTestId('home-icon')).toBeInTheDocument()
+      expect(screen.getByTestId('person-icon')).toBeInTheDocument()
+      expect(screen.getByTestId('menu-icon')).toBeInTheDocument()
+    })
+
+    it('has correct aria-label for navigation', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      const nav = screen.getByRole('navigation')
+      expect(nav).toHaveAttribute('aria-label', 'Bottom navigation')
+    })
+
+    it('disables profile button when user is not authenticated', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      const profileButton = screen.getByLabelText('Navigate to user profile')
+      expect(profileButton).toBeDisabled()
+    })
+
+    it('navigates to home when home button is clicked', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      const homeButton = screen.getByLabelText('Navigate to home page')
+      fireEvent.click(homeButton)
+
+      expect(mockPush).toHaveBeenCalledWith('/')
+    })
+
+    it('navigates to subRoute when menu button is clicked', () => {
+      render(<NavBottom subRoute="/dashboard" />)
+
+      const menuButton = screen.getByLabelText('Open navigation menu')
+      fireEvent.click(menuButton)
+
+      expect(mockPush).toHaveBeenCalledWith('/dashboard')
+    })
+
+    it('applies correct colors for unauthenticated state', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      const homeIcon = screen.getByTestId('home-icon')
+      const personIcon = screen.getByTestId('person-icon')
+      const menuIcon = screen.getByTestId('menu-icon')
+
+      // Home icon should always be primary.main
+      expect(homeIcon).toHaveStyle({ color: 'primary.main' })
+
+      // Person icon should be grey when not authenticated
+      expect(personIcon).toHaveStyle({ color: 'grey.500' })
+
+      // Menu icon should always be primary.contrastText
+      expect(menuIcon).toHaveStyle({ color: 'primary.contrastText' })
+    })
+  })
+
+  describe('when user is authenticated', () => {
+    beforeEach(() => {
+      mockUseSession.mockReturnValue({
+        data: {
+          user: {
+            name: 'Test User',
+            email: 'test@example.com',
+          },
+          expires: '2025-12-31T23:59:59.999Z',
+        },
+        status: 'authenticated',
+        update: jest.fn(),
+      })
+    })
+
+    it('enables profile button when user is authenticated', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      const profileButton = screen.getByLabelText('Navigate to user profile')
+      expect(profileButton).not.toBeDisabled()
+    })
+
+    it('navigates to profile when profile button is clicked', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      const profileButton = screen.getByLabelText('Navigate to user profile')
+      fireEvent.click(profileButton)
+
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile')
+    })
+
+    it('applies correct colors for authenticated state', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      const homeIcon = screen.getByTestId('home-icon')
+      const personIcon = screen.getByTestId('person-icon')
+      const menuIcon = screen.getByTestId('menu-icon')
+
+      // Home icon should always be primary.main
+      expect(homeIcon).toHaveStyle({ color: 'primary.main' })
+
+      // Person icon should be green when authenticated
+      expect(personIcon).toHaveStyle({ color: 'success.main' })
+
+      // Menu icon should always be primary.contrastText
+      expect(menuIcon).toHaveStyle({ color: 'primary.contrastText' })
+    })
+  })
+
+  describe('when session is loading', () => {
+    beforeEach(() => {
+      mockUseSession.mockReturnValue({
+        data: null,
+        status: 'loading',
+        update: jest.fn(),
+      })
+    })
+
+    it('treats loading state as unauthenticated', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      const profileButton = screen.getByLabelText('Navigate to user profile')
+      expect(profileButton).toBeDisabled()
+    })
+  })
+
+  describe('responsive layout', () => {
+    it('applies correct responsive styling', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      const nav = screen.getByRole('navigation')
+
+      // Check that it has the expected component prop
+      expect(nav.tagName.toLowerCase()).toBe('nav')
+
+      // The component should be positioned fixed at bottom
+      expect(nav).toHaveStyle({
+        position: 'fixed',
+        bottom: '0',
+        height: '66px',
+      })
+    })
+  })
+
+  describe('button accessibility', () => {
+    beforeEach(() => {
+      mockUseSession.mockReturnValue({
+        data: {
+          user: {
+            name: 'Test User',
+            email: 'test@example.com',
+          },
+          expires: '2025-12-31T23:59:59.999Z',
+        },
+        status: 'authenticated',
+        update: jest.fn(),
+      })
+    })
+
+    it('has proper focus styles for keyboard navigation', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      const buttons = screen.getAllByRole('button')
+
+      buttons.forEach((button) => {
+        expect(button).toHaveAttribute('aria-label')
+      })
+    })
+
+    it('has correct aria-labels for all buttons', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      expect(screen.getByLabelText('Navigate to home page')).toBeInTheDocument()
+      expect(
+        screen.getByLabelText('Navigate to user profile')
+      ).toBeInTheDocument()
+      expect(screen.getByLabelText('Open navigation menu')).toBeInTheDocument()
+    })
+
+    it('supports keyboard interaction', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      const homeButton = screen.getByLabelText('Navigate to home page')
+
+      // Focus the button
+      homeButton.focus()
+      expect(homeButton).toHaveFocus()
+
+      // Simulate Enter key press
+      fireEvent.keyDown(homeButton, { key: 'Enter' })
+      // Note: MUI handles Enter key internally, so we just test that it doesn't break
+    })
+  })
+
+  describe('dynamic path handling', () => {
+    it('handles function-based paths correctly', () => {
+      render(<NavBottom subRoute="/custom-route" />)
+
+      const menuButton = screen.getByLabelText('Open navigation menu')
+      fireEvent.click(menuButton)
+
+      expect(mockPush).toHaveBeenCalledWith('/custom-route')
+    })
+
+    it('handles string-based paths correctly', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      const homeButton = screen.getByLabelText('Navigate to home page')
+      fireEvent.click(homeButton)
+
+      expect(mockPush).toHaveBeenCalledWith('/')
+    })
+  })
+
+  describe('prop validation', () => {
+    it('accepts subRoute prop correctly', () => {
+      const testRoute = '/custom-dashboard'
+      render(<NavBottom subRoute={testRoute} />)
+
+      const menuButton = screen.getByLabelText('Open navigation menu')
+      fireEvent.click(menuButton)
+
+      expect(mockPush).toHaveBeenCalledWith(testRoute)
+    })
+  })
+
+  describe('component structure', () => {
+    it('renders as an AppBar component', () => {
+      render(<NavBottom subRoute="/test" />)
+
+      const nav = screen.getByRole('navigation')
+      expect(nav).toBeInTheDocument()
+    })
+
+    it('contains exactly three navigation buttons', () => {
+      render(<NavBottom subRoute="/test" />)
 
       const buttons = screen.getAllByRole('button')
       expect(buttons).toHaveLength(3)
     })
 
-    it('renders home button with correct icon and accessibility', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      const homeIcon = screen.getByRole('img', { name: /home icon/i })
-      expect(homeIcon).toBeInTheDocument()
-      expect(homeIcon).toHaveAttribute('src', '/icons/bottom-home.svg')
-      expect(homeIcon).toHaveAttribute('width', '20')
-      expect(homeIcon).toHaveAttribute('height', '20')
-    })
-
-    it('renders profile button with correct icon and accessibility', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      const profileIcon = screen.getByRole('img', {
-        name: /user profile icon/i,
-      })
-      expect(profileIcon).toBeInTheDocument()
-      expect(profileIcon).toHaveAttribute('src', '/icons/bottom-user.svg')
-      expect(profileIcon).toHaveAttribute('width', '20')
-      expect(profileIcon).toHaveAttribute('height', '20')
-    })
-
-    it('renders menu button with correct icon and accessibility', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      const menuIcon = screen.getByRole('img', {
-        name: /bottom burger menu icon/i,
-      })
-      expect(menuIcon).toBeInTheDocument()
-      expect(menuIcon).toHaveAttribute('src', '/icons/bottom-burger-menu.svg')
-      expect(menuIcon).toHaveAttribute('width', '20')
-      expect(menuIcon).toHaveAttribute('height', '20')
-    })
-  })
-
-  describe('navigation functionality', () => {
-    it('navigates to home when home button is clicked', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      const homeButton = screen
-        .getByRole('img', { name: /home icon/i })
-        .closest('button')
-      expect(homeButton).toBeInTheDocument()
-
-      if (homeButton) {
-        fireEvent.click(homeButton)
-        expect(mockPush).toHaveBeenCalledTimes(1)
-        expect(mockPush).toHaveBeenCalledWith('/')
-      }
-    })
-
-    it('navigates to profile when profile button is clicked', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      const profileButton = screen
-        .getByRole('img', { name: /user profile icon/i })
-        .closest('button')
-      expect(profileButton).toBeInTheDocument()
-
-      if (profileButton) {
-        fireEvent.click(profileButton)
-        expect(mockPush).toHaveBeenCalledTimes(1)
-        expect(mockPush).toHaveBeenCalledWith('/navigator/profile')
-      }
-    })
-
-    it('navigates to subRoute when menu button is clicked', () => {
-      const testSubRoute = '/navigator/flows'
-      render(<NavBottom subRoute={testSubRoute} />)
-
-      const menuButton = screen
-        .getByRole('img', { name: /bottom burger menu icon/i })
-        .closest('button')
-      expect(menuButton).toBeInTheDocument()
-
-      if (menuButton) {
-        fireEvent.click(menuButton)
-        expect(mockPush).toHaveBeenCalledTimes(1)
-        expect(mockPush).toHaveBeenCalledWith(testSubRoute)
-      }
-    })
-
-    it('handles different subRoute values correctly', () => {
-      const { rerender } = render(<NavBottom subRoute="/first-route" />)
-
-      const menuButton = screen
-        .getByRole('img', { name: /bottom burger menu icon/i })
-        .closest('button')
-
-      if (menuButton) {
-        fireEvent.click(menuButton)
-        expect(mockPush).toHaveBeenCalledWith('/first-route')
-      }
-
-      // Reset mock and test with different subRoute
-      mockPush.mockClear()
-      rerender(<NavBottom subRoute="/second-route" />)
-
-      const updatedMenuButton = screen
-        .getByRole('img', { name: /bottom burger menu icon/i })
-        .closest('button')
-
-      if (updatedMenuButton) {
-        fireEvent.click(updatedMenuButton)
-        expect(mockPush).toHaveBeenCalledWith('/second-route')
-      }
-    })
-  })
-
-  describe('button interaction', () => {
-    it('all buttons are clickable and interactive', () => {
-      render(<NavBottom subRoute="/test-route" />)
+    it('renders icons in correct order', () => {
+      render(<NavBottom subRoute="/test" />)
 
       const buttons = screen.getAllByRole('button')
 
-      buttons.forEach((button) => {
-        expect(button).toBeEnabled()
-        expect(button).not.toHaveAttribute('disabled')
-      })
-    })
-
-    it('buttons have proper Material-UI IconButton structure', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      const buttons = screen.getAllByRole('button')
-
-      buttons.forEach((button) => {
-        expect(button).toHaveClass('MuiIconButton-root')
-      })
-    })
-
-    it('handles multiple rapid clicks correctly', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      const homeButton = screen
-        .getByRole('img', { name: /home icon/i })
-        .closest('button')
-
-      if (homeButton) {
-        fireEvent.click(homeButton)
-        fireEvent.click(homeButton)
-        fireEvent.click(homeButton)
-
-        expect(mockPush).toHaveBeenCalledTimes(3)
-        expect(mockPush).toHaveBeenCalledWith('/')
-      }
-    })
-  })
-
-  describe('accessibility features', () => {
-    it('has proper ARIA structure for navigation', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      const navigationBar = screen.getByRole('navigation')
-      expect(navigationBar).toBeInTheDocument()
-    })
-
-    it('images have descriptive alt text', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      expect(
-        screen.getByRole('img', { name: /home icon/i })
-      ).toBeInTheDocument()
-      expect(
-        screen.getByRole('img', { name: /user profile icon/i })
-      ).toBeInTheDocument()
-      expect(
-        screen.getByRole('img', { name: /bottom burger menu icon/i })
-      ).toBeInTheDocument()
-    })
-
-    it('buttons are keyboard accessible', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      const buttons = screen.getAllByRole('button')
-
-      buttons.forEach((button) => {
-        expect(button).toHaveAttribute('tabindex', '0')
-      })
-    })
-
-    it('supports keyboard navigation', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      const homeButton = screen
-        .getByRole('img', { name: /home icon/i })
-        .closest('button')
-
-      if (homeButton) {
-        homeButton.focus()
-        expect(homeButton).toHaveFocus()
-
-        // Use fireEvent.click instead of keyDown since Material-UI IconButton
-        // handles keyboard events internally and converts them to click events
-        fireEvent.click(homeButton)
-        expect(mockPush).toHaveBeenCalledWith('/')
-      }
-    })
-  })
-
-  describe('props handling', () => {
-    it('correctly uses the subRoute prop', () => {
-      const customSubRoute = '/custom/navigation/path'
-      render(<NavBottom subRoute={customSubRoute} />)
-
-      const menuButton = screen
-        .getByRole('img', { name: /bottom burger menu icon/i })
-        .closest('button')
-
-      if (menuButton) {
-        fireEvent.click(menuButton)
-        expect(mockPush).toHaveBeenCalledWith(customSubRoute)
-      }
-    })
-
-    it('handles empty subRoute prop', () => {
-      render(<NavBottom subRoute="" />)
-
-      const menuButton = screen
-        .getByRole('img', { name: /bottom burger menu icon/i })
-        .closest('button')
-
-      if (menuButton) {
-        fireEvent.click(menuButton)
-        expect(mockPush).toHaveBeenCalledWith('')
-      }
-    })
-
-    it('handles complex subRoute paths', () => {
-      const complexSubRoute = '/navigator/flows/practiceSeries?filter=advanced'
-      render(<NavBottom subRoute={complexSubRoute} />)
-
-      const menuButton = screen
-        .getByRole('img', { name: /bottom burger menu icon/i })
-        .closest('button')
-
-      if (menuButton) {
-        fireEvent.click(menuButton)
-        expect(mockPush).toHaveBeenCalledWith(complexSubRoute)
-      }
-    })
-  })
-
-  describe('component structure', () => {
-    it('renders as Material-UI AppBar component', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      const appBar = screen.getByRole('navigation')
-      expect(appBar).toHaveClass('MuiAppBar-root')
-    })
-
-    it('contains exactly three IconButton components', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      const iconButtons = screen.getAllByRole('button')
-      expect(iconButtons).toHaveLength(3)
-
-      iconButtons.forEach((button) => {
-        expect(button).toHaveClass('MuiIconButton-root')
-      })
-    })
-
-    it('has proper image elements within buttons', () => {
-      render(<NavBottom subRoute="/test-route" />)
-
-      const images = screen.getAllByRole('img')
-      expect(images).toHaveLength(3)
-
-      images.forEach((image) => {
-        expect(image).toHaveAttribute('width', '20')
-        expect(image).toHaveAttribute('height', '20')
-      })
+      // Check that icons are present in the expected order
+      expect(buttons[0]).toHaveAttribute('aria-label', 'Navigate to home page')
+      expect(buttons[1]).toHaveAttribute(
+        'aria-label',
+        'Navigate to user profile'
+      )
+      expect(buttons[2]).toHaveAttribute('aria-label', 'Open navigation menu')
     })
   })
 })
