@@ -1,6 +1,6 @@
 'use client'
-import React, { MouseEvent } from 'react'
-import { useSession } from 'next-auth/react'
+import React, { MouseEvent, useMemo, useCallback } from 'react'
+import { useSession, signOut } from 'next-auth/react'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import HomeIcon from '@mui/icons-material/Home'
@@ -27,59 +27,99 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 export default function Header() {
   const [openDrawer, setOpenDrawer] = React.useState(false)
-  const { data: session } = useSession()
+  const [isAuthLoading, setIsAuthLoading] = React.useState(false)
+  const { data: session, status } = useSession()
+  const router = useRouter()
 
   const toggleDrawer = (open: boolean) => () => {
     setOpenDrawer(open)
   }
 
-  // Update the navLinks to use dynamic auth link
-  const navLinks = [
-    {
-      name: 'Home',
-      href: '/',
-      icon: <HomeIcon />,
-    },
-    {
-      name: '8 Limbs',
-      href: '/navigator/eightLimbs',
-      icon: <FlareIcon />,
-    },
-    {
-      name: 'Asanas',
-      href: '/navigator/asanaPostures',
-      icon: <WaterDropOutlinedIcon />,
-    },
-    {
-      name: 'Flows',
-      href: '/navigator/flows',
-      icon: <WhatshotIcon />,
-    },
-    {
-      name: 'About',
-      href: '/navigator/about',
-      icon: <InfoIcon />,
-    },
-    {
-      name: 'Profile',
-      href: '/navigator/profile',
-      icon: <ManageAccountsIcon />,
-    },
-    {
-      name: 'Glossary',
-      href: '/navigator/glossary',
-      icon: <MenuBookIcon />,
-    },
-    // final item will have a divider above it
-    {
-      name: session ? 'Logout' : 'Login',
-      href: session ? '/auth/signout' : '/auth/signin',
-      icon: <AdminPanelSettingsIcon />,
-    },
-  ]
+  const handleAuthAction = useCallback(async () => {
+    if (status === 'loading' || isAuthLoading) return // Don't allow action while loading
+
+    setIsAuthLoading(true)
+    try {
+      if (session) {
+        // User is logged in, perform logout
+        await signOut({ redirectTo: '/' })
+      } else {
+        // User is not logged in, navigate to signin
+        router.push('/auth/signin')
+      }
+    } catch (error) {
+      console.error('Auth action failed:', error)
+    } finally {
+      setIsAuthLoading(false)
+    }
+  }, [session, status, isAuthLoading, router])
+
+  // Helper function to get the auth button text
+  const getAuthButtonText = () => {
+    if (isAuthLoading) return 'Loading...'
+    if (status === 'loading') return 'Loading...'
+    return session ? 'Logout' : 'Login'
+  }
+
+  // Memoize the navLinks to prevent unnecessary re-renders
+  const navLinks = useMemo(
+    () => [
+      {
+        name: 'Home',
+        href: '/',
+        icon: <HomeIcon />,
+        action: null,
+      },
+      {
+        name: '8 Limbs',
+        href: '/navigator/eightLimbs',
+        icon: <FlareIcon />,
+        action: null,
+      },
+      {
+        name: 'Asanas',
+        href: '/navigator/asanaPostures',
+        icon: <WaterDropOutlinedIcon />,
+        action: null,
+      },
+      {
+        name: 'Flows',
+        href: '/navigator/flows',
+        icon: <WhatshotIcon />,
+        action: null,
+      },
+      {
+        name: 'About',
+        href: '/navigator/about',
+        icon: <InfoIcon />,
+        action: null,
+      },
+      {
+        name: 'Profile',
+        href: '/navigator/profile',
+        icon: <ManageAccountsIcon />,
+        action: null,
+      },
+      {
+        name: 'Glossary',
+        href: '/navigator/glossary',
+        icon: <MenuBookIcon />,
+        action: null,
+      },
+      // final item will have a divider above it
+      {
+        name: 'auth-button', // Use a static identifier, text will be determined in render
+        href: '#',
+        icon: <AdminPanelSettingsIcon />,
+        action: handleAuthAction,
+      },
+    ],
+    [handleAuthAction]
+  )
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
@@ -89,26 +129,39 @@ export default function Header() {
             <React.Fragment key={navItem.name}>
               {index === navLinks.length - 1 && <Divider />}
               <ListItem disablePadding>
-                <Link href={navItem.href} passHref legacyBehavior>
+                {navItem.action ? (
                   <ListItemButton
                     component="button"
                     sx={{ width: '250px' }}
-                    onClick={() => {
+                    onClick={async (e) => {
+                      e.preventDefault()
                       setOpenDrawer(false)
+                      await navItem.action()
                     }}
                   >
                     <ListItemIcon>{navItem.icon}</ListItemIcon>
                     <ListItemText>
-                      {navItem.name === 'Logout' || navItem.name === 'Login' ? (
-                        <Typography variant="button">
-                          {session ? 'Logout' : 'Login'}
-                        </Typography>
-                      ) : (
-                        <Typography variant="button">{navItem.name}</Typography>
-                      )}
+                      <Typography variant="button">
+                        {getAuthButtonText()}
+                      </Typography>
                     </ListItemText>
                   </ListItemButton>
-                </Link>
+                ) : (
+                  <Link href={navItem.href} passHref legacyBehavior>
+                    <ListItemButton
+                      component="button"
+                      sx={{ width: '250px' }}
+                      onClick={() => {
+                        setOpenDrawer(false)
+                      }}
+                    >
+                      <ListItemIcon>{navItem.icon}</ListItemIcon>
+                      <ListItemText>
+                        <Typography variant="button">{navItem.name}</Typography>
+                      </ListItemText>
+                    </ListItemButton>
+                  </Link>
+                )}
               </ListItem>
             </React.Fragment>
           ))}

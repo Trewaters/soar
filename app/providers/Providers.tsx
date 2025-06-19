@@ -31,7 +31,13 @@ export function Providers({
   }, [])
 
   return (
-    <SessionProvider basePath={'/api/auth'} session={session}>
+    <SessionProvider
+      basePath={'/api/auth'}
+      session={session}
+      refetchInterval={0} // Disable automatic refetching (we'll trigger manually)
+      refetchOnWindowFocus={true} // Refetch when window gains focus
+      refetchWhenOffline={false}
+    >
       <ThemeProvider theme={theme}>
         {/* CssBaseline to kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline>
