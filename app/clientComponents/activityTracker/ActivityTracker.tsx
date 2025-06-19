@@ -19,6 +19,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 interface ActivityTrackerProps {
   posture: FullAsanaData
   variant?: 'compact' | 'detailed'
+  refreshTrigger?: number // Add a prop to trigger refresh when activities change
 }
 
 interface WeeklyActivityData {
@@ -38,6 +39,7 @@ interface WeeklyActivityData {
 export default function ActivityTracker({
   posture,
   variant = 'compact',
+  refreshTrigger = 0,
 }: ActivityTrackerProps) {
   const { data: session } = useSession()
   const [weeklyData, setWeeklyData] = useState<WeeklyActivityData | null>(null)
@@ -72,7 +74,7 @@ export default function ActivityTracker({
     }
 
     fetchWeeklyData()
-  }, [session?.user?.id, posture?.id])
+  }, [session?.user?.id, posture?.id, refreshTrigger])
 
   const formatLastPerformed = (
     activities: WeeklyActivityData['activities']
@@ -147,21 +149,9 @@ export default function ActivityTracker({
     )
   }
 
-  if (!weeklyData) {
-    return (
-      <Box
-        sx={{
-          p: 2,
-          textAlign: 'center',
-          backgroundColor: 'grey.100',
-          borderRadius: 1,
-        }}
-      >
-        <Typography variant="body2" color="text.secondary">
-          No activity data available
-        </Typography>
-      </Box>
-    )
+  // Don't render component if there's no activity data or no activities
+  if (!weeklyData || weeklyData.count === 0) {
+    return null
   }
 
   if (variant === 'compact') {
@@ -290,33 +280,55 @@ export default function ActivityTracker({
           </Stack>
         </Stack>
 
-        {/* Activity Timeline (if there are activities) */}
+        {/* Activity List - Show all activities */}
         {weeklyData.activities.length > 0 && (
           <>
             <Divider />
             <Box>
               <Typography variant="body2" color="text.secondary" gutterBottom>
-                Recent Activity:
+                All Activity This Week ({weeklyData.activities.length}{' '}
+                sessions):
               </Typography>
               <Stack spacing={1}>
-                {weeklyData.activities.slice(0, 3).map((activity) => (
+                {weeklyData.activities.map((activity, index) => (
                   <Box
                     key={activity.id}
                     sx={{
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      p: 1,
-                      backgroundColor: 'grey.50',
+                      p: 1.5,
+                      backgroundColor:
+                        index % 2 === 0 ? 'grey.50' : 'background.paper',
                       borderRadius: 1,
+                      border: '1px solid',
+                      borderColor: 'divider',
                     }}
                   >
-                    <Typography variant="body2">
-                      {new Date(activity.datePerformed).toLocaleDateString()}
-                    </Typography>
+                    <Stack spacing={0.5}>
+                      <Typography variant="body2" fontWeight="medium">
+                        {new Date(activity.datePerformed).toLocaleDateString(
+                          'en-US',
+                          {
+                            weekday: 'short',
+                            month: 'short',
+                            day: 'numeric',
+                          }
+                        )}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {new Date(activity.datePerformed).toLocaleTimeString(
+                          'en-US',
+                          {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                          }
+                        )}
+                      </Typography>
+                    </Stack>
                     <Stack direction="row" spacing={1} alignItems="center">
                       <Typography variant="caption" color="text.secondary">
-                        {activity.duration}s
+                        {activity.duration > 0 ? `${activity.duration}s` : '-'}
                       </Typography>
                       <Chip
                         label={activity.completionStatus}
@@ -325,42 +337,17 @@ export default function ActivityTracker({
                         color={
                           activity.completionStatus === 'complete'
                             ? 'success'
-                            : 'default'
+                            : activity.completionStatus === 'partial'
+                              ? 'warning'
+                              : 'default'
                         }
                       />
                     </Stack>
                   </Box>
                 ))}
-                {weeklyData.activities.length > 3 && (
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    textAlign="center"
-                  >
-                    +{weeklyData.activities.length - 3} more activities this
-                    week
-                  </Typography>
-                )}
               </Stack>
             </Box>
           </>
-        )}
-
-        {/* Encouragement message */}
-        {weeklyData.count === 0 && (
-          <Box
-            sx={{
-              p: 2,
-              backgroundColor: 'info.light',
-              borderRadius: 1,
-              textAlign: 'center',
-            }}
-          >
-            <Typography variant="body2" color="info.dark">
-              Start your weekly practice! Track your first{' '}
-              {posture.sort_english_name} session.
-            </Typography>
-          </Box>
         )}
       </Stack>
     </Paper>

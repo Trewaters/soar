@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper'
 import Image from 'next/image'
 import {
   Box,
+  Button,
   ButtonGroup,
   Chip,
   IconButton,
@@ -44,6 +45,7 @@ export default function PostureActivityDetail({
   const [checked, setChecked] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [activityRefreshTrigger, setActivityRefreshTrigger] = useState(0)
 
   // Check if activity already exists on component mount
   useEffect(() => {
@@ -88,10 +90,18 @@ export default function PostureActivityDetail({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const isChecked = event.target.checked
+    await updateActivityState(isChecked)
+  }
+
+  const handleButtonToggle = async () => {
+    await updateActivityState(!checked)
+  }
+
+  const updateActivityState = async (isChecked: boolean) => {
     setChecked(isChecked)
 
     // Enhanced logging for debugging
-    console.log('Checkbox change initiated:', {
+    console.log('Activity state change initiated:', {
       isChecked,
       sessionExists: !!session,
       userId: session?.user?.id,
@@ -105,7 +115,7 @@ export default function PostureActivityDetail({
       console.error('Authentication error:', {
         error: errorMessage,
         sessionData: session,
-        operation: 'handleCheckboxChange',
+        operation: 'updateActivityState',
         timestamp: new Date().toISOString(),
       })
       setError(errorMessage)
@@ -157,6 +167,9 @@ export default function PostureActivityDetail({
           requestData,
           timestamp: new Date().toISOString(),
         })
+
+        // Trigger refresh of ActivityTracker
+        setActivityRefreshTrigger((prev) => prev + 1)
       } else {
         // Delete existing activity
         const deleteData = {
@@ -193,6 +206,9 @@ export default function PostureActivityDetail({
           deleteData,
           timestamp: new Date().toISOString(),
         })
+
+        // Trigger refresh of ActivityTracker
+        setActivityRefreshTrigger((prev) => prev + 1)
       }
     } catch (e: any) {
       console.error('Error updating activity - Full Context:', {
@@ -453,7 +469,11 @@ export default function PostureActivityDetail({
           {/* Activity Tracker Component */}
           {posture && posture.id && (
             <Box sx={{ mt: 3, mb: 2 }}>
-              <ActivityTracker posture={posture} variant="detailed" />
+              <ActivityTracker
+                posture={posture}
+                variant="detailed"
+                refreshTrigger={activityRefreshTrigger}
+              />
             </Box>
           )}
 
@@ -493,13 +513,46 @@ export default function PostureActivityDetail({
               />
             </Stack>
           </Stack>
-          <FormControlLabel
-            control={
-              <Checkbox checked={checked} onChange={handleCheckboxChange} />
-            }
-            label={loading ? 'Saving...' : 'Mark for Activity Tracker'}
-          />
-          {error && <Typography color="error">{error}</Typography>}
+
+          {/* Activity Tracker Toggle - Button and Checkbox */}
+          <Stack sx={{ mt: 2, mb: 2, alignItems: 'center' }}>
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant={checked ? 'contained' : 'outlined'}
+                color={checked ? 'success' : 'primary'}
+                onClick={handleButtonToggle}
+                disabled={loading}
+                sx={{
+                  minWidth: '200px',
+                  textTransform: 'none',
+                }}
+              >
+                {loading
+                  ? 'Saving...'
+                  : checked
+                    ? 'Tracked in Activity'
+                    : 'Mark for Activity Tracker'}
+              </Button>
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={checked}
+                    onChange={handleCheckboxChange}
+                    disabled={loading}
+                  />
+                }
+                label=""
+                sx={{ m: 0 }}
+              />
+            </Stack>
+          </Stack>
+
+          {error && (
+            <Typography color="error" sx={{ mt: 1, mb: 1 }}>
+              {error}
+            </Typography>
+          )}
           {/* <Typography
             variant="body1"
             sx={{

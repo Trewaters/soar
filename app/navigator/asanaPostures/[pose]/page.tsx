@@ -45,15 +45,25 @@ export default function Page({ params }: { params: { pose: string } }) {
         <Box sx={{ height: '60px' }} />
 
         {/* Quick Timer Section */}
-        <QuickTimer
-          buttonText="+5 Minutes"
-          timerMinutes={5}
-          variant="default"
-          onTimerStart={handleTimerStart}
-          onTimerEnd={handleTimerEnd}
-          onTimerUpdate={handleTimerUpdate}
-          maxWidth="400px"
-        />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            px: 2, // Add some padding for mobile devices
+          }}
+        >
+          <QuickTimer
+            buttonText="+5 Minutes"
+            timerMinutes={5}
+            variant="default"
+            onTimerStart={handleTimerStart}
+            onTimerEnd={handleTimerEnd}
+            onTimerUpdate={handleTimerUpdate}
+            maxWidth="400px"
+          />
+        </Box>
       </Box>
       <NavBottom subRoute="/navigator/asanaPostures" />
     </>
