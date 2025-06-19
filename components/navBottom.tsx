@@ -7,6 +7,8 @@ export default function NavBottom(props: { subRoute: string }) {
   const router = useRouter()
   return (
     <AppBar
+      component="nav"
+      aria-label="Bottom navigation"
       position="static"
       sx={{
         backgroundColor: 'info.contrastText',
@@ -25,8 +27,16 @@ export default function NavBottom(props: { subRoute: string }) {
     >
       <IconButton
         disableRipple
+        aria-label="Navigate to home page"
         onClick={() => {
           router.push('/')
+        }}
+        sx={{
+          '&:focus': {
+            outline: '2px solid',
+            outlineColor: 'primary.main',
+            outlineOffset: '2px',
+          },
         }}
       >
         <Image
@@ -38,8 +48,16 @@ export default function NavBottom(props: { subRoute: string }) {
       </IconButton>
       <IconButton
         disableRipple
+        aria-label="Navigate to user profile"
         onClick={() => {
           router.push('/navigator/profile')
+        }}
+        sx={{
+          '&:focus': {
+            outline: '2px solid',
+            outlineColor: 'primary.main',
+            outlineOffset: '2px',
+          },
         }}
       >
         <Image
@@ -51,8 +69,16 @@ export default function NavBottom(props: { subRoute: string }) {
       </IconButton>
       <IconButton
         disableRipple
+        aria-label="Open navigation menu"
         onClick={() => {
           router.push(props.subRoute)
+        }}
+        sx={{
+          '&:focus': {
+            outline: '2px solid',
+            outlineColor: 'primary.main',
+            outlineOffset: '2px',
+          },
         }}
       >
         <Image

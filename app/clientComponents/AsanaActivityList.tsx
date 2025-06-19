@@ -53,7 +53,7 @@ export default function AsanaActivityList() {
     return <Typography>No asana activity found.</Typography>
 
   return (
-    <Box>
+    <Box sx={{ borderRadius: 2, boxShadow: '0px 4px 4px 0px #F6893D' }}>
       <Typography
         variant="body1"
         sx={{ mb: 2 }}

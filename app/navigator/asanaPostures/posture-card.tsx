@@ -417,13 +417,24 @@ export default function PostureCard({ postureCardProp }: PostureCardProps) {
       {posture && FEATURES.SHOW_PRACTICE_VIEW_ASANA && (
         <ButtonGroup
           variant="contained"
-          aria-label="Basic button group"
+          aria-label="Asana practice actions"
           sx={{ m: 2 }}
         >
-          <IconButton disableRipple onClick={handleClick}>
+          <IconButton
+            disableRipple
+            onClick={handleClick}
+            aria-label={`Start practice view for ${posture.english_names[0]} pose`}
+            sx={{
+              '&:focus': {
+                outline: '2px solid',
+                outlineColor: 'primary.main',
+                outlineOffset: '2px',
+              },
+            }}
+          >
             <Image
               src={yogaMatWoman}
-              alt="practice view"
+              alt="Start practice view"
               width={24}
               height={24}
             />

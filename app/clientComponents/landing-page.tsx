@@ -16,29 +16,67 @@ const links = [
 
 export default function LandingPage() {
   return (
-    <Box>
-      <nav aria-label="main menu">
-        <Stack direction="column" spacing={2}>
+    <Box component="section" aria-labelledby="practice-section-title">
+      <nav aria-label="Practice navigation">
+        <Stack direction="column" spacing={2} sx={{ alignItems: 'center' }}>
           {links.map((link) => (
-            <React.Fragment key={link.name}>
-              <Link href={link.href} passHref>
-                <Button
-                  variant={'outlined'}
+            <Link href={link.href} key={link.name} passHref>
+              <Button
+                variant="outlined"
+                aria-label={`Navigate to ${link.name} section`}
+                sx={{
+                  width: '100%',
+                  maxWidth: '300px',
+                  minHeight: '48px',
+                  borderRadius: '14px',
+                  boxShadow: '0px 4px 4px -1px rgba(0, 0, 0, 0.25)',
+                  textTransform: 'uppercase',
+                  padding: '12px 16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  gap: 1,
+                  // Ensure proper text wrapping and sizing
+                  flexWrap: 'nowrap',
+                  '&:hover': {
+                    backgroundColor: 'transparent',
+                    transform: 'translateY(-1px)',
+                    boxShadow: '0px 6px 8px -1px rgba(0, 0, 0, 0.25)',
+                  },
+                  '&:focus': {
+                    outline: '2px solid',
+                    outlineColor: 'primary.main',
+                    outlineOffset: '2px',
+                  },
+                  // Improve focus visibility
+                  '&:focus-visible': {
+                    outline: '3px solid',
+                    outlineColor: 'primary.main',
+                    outlineOffset: '2px',
+                  },
+                }}
+                startIcon={link.icon || undefined}
+              >
+                <Typography
+                  variant="body1"
+                  component="span"
                   sx={{
-                    width: '20%',
-                    borderRadius: '14px',
-                    boxShadow: '0px 4px 4px -1px',
-                    textTransform: 'uppercase',
-                    '&:hover': {
-                      backgroundColor: 'transparent',
-                    },
+                    fontWeight: 'medium',
+                    fontSize: '0.875rem',
+                    lineHeight: 1.4,
+                    flex: '1 1 auto',
+                    textAlign: 'left',
+                    // Remove ellipsis to allow proper text display
+                    wordWrap: 'break-word',
+                    hyphens: 'auto',
+                    // Ensure minimum readable text size
+                    minWidth: 0, // Allow flex item to shrink below content size
                   }}
-                  startIcon={link.icon || undefined}
                 >
-                  <Typography variant="body1">{link.name}</Typography>
-                </Button>
-              </Link>
-            </React.Fragment>
+                  {link.name}
+                </Typography>
+              </Button>
+            </Link>
           ))}
         </Stack>
       </nav>

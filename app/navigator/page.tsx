@@ -28,7 +28,12 @@ export default function Page() {
     <Stack>
       <Box
         textAlign="center"
-        sx={{ marginTop: 4 }}
+        sx={{
+          marginTop: 4,
+          width: '50%',
+          justifyContent: 'center',
+          mx: 'auto',
+        }}
         role="main"
         aria-labelledby="page-title"
       >
@@ -57,42 +62,77 @@ export default function Page() {
         <Typography variant="body1" fontWeight="600" sx={{ mt: 4, mb: 1 }}>
           Start your practice
         </Typography>
-        <LandingPage />
-      </Box>
-      <Box sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
-        <Box sx={{ mt: 4 }}>
+        <Stack>
+          <LandingPage />
+        </Stack>
+        <Stack sx={{ mt: 4 }}>
           <AsanaActivityList />
-        </Box>
-        <Box sx={{ mt: 4 }}>
+        </Stack>
+        <Stack>
           <Typography
             variant="body1"
             fontWeight="600"
             sx={{ mt: 4, mb: 1, textAlign: 'center' }}
+            id="learn-section-title"
           >
             Learn about Yoga
           </Typography>
-          <Stack spacing={1} sx={{ mt: 2 }}>
-            {learnLinks.map((link) => (
-              <Link href={link.href} key={link.name} passHref>
-                <Button
-                  variant="outlined"
-                  sx={{
-                    width: '100%',
-                    mb: 1,
-                    borderRadius: '14px',
-                    boxShadow: '0px 4px 4px -1px',
-                    textTransform: 'uppercase',
-                    '&:hover': {
-                      backgroundColor: 'transparent',
-                    },
-                  }}
-                >
-                  <Typography variant="body1">{link.name}</Typography>
-                </Button>
-              </Link>
-            ))}
-          </Stack>
-        </Box>
+          <nav aria-labelledby="learn-section-title">
+            <Stack spacing={1} sx={{ mt: 2 }}>
+              {learnLinks.map((link) => (
+                <Link href={link.href} key={link.name} passHref>
+                  <Button
+                    variant="outlined"
+                    aria-label={`Navigate to ${link.name} section`}
+                    sx={{
+                      width: '100%',
+                      mb: 1,
+                      borderRadius: '14px',
+                      boxShadow: '0px 4px 4px -1px rgba(0, 0, 0, 0.25)',
+                      textTransform: 'uppercase',
+                      padding: '12px 16px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      '&:hover': {
+                        backgroundColor: 'transparent',
+                        transform: 'translateY(-1px)',
+                        boxShadow: '0px 6px 8px -1px rgba(0, 0, 0, 0.25)',
+                      },
+                      '&:focus': {
+                        outline: '2px solid',
+                        outlineColor: 'primary.main',
+                        outlineOffset: '2px',
+                      },
+                      // Improve focus visibility
+                      '&:focus-visible': {
+                        outline: '3px solid',
+                        outlineColor: 'primary.main',
+                        outlineOffset: '2px',
+                      },
+                    }}
+                  >
+                    <Typography
+                      variant="body1"
+                      component="span"
+                      sx={{
+                        fontWeight: 'medium',
+                        fontSize: '0.875rem',
+                        lineHeight: 1.4,
+                        // Remove overflow restrictions to prevent text cutoff
+                        wordWrap: 'break-word',
+                        hyphens: 'auto',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {link.name}
+                    </Typography>
+                  </Button>
+                </Link>
+              ))}
+            </Stack>
+          </nav>
+        </Stack>
       </Box>
     </Stack>
   )

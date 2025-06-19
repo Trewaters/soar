@@ -290,6 +290,7 @@ export default function StyleGuide() {
                 <Button
                   key={variant}
                   variant="contained"
+                  aria-label={`${colorKey} ${variant} color sample: ${color}`}
                   sx={{
                     backgroundColor: color as string,
                     color:
@@ -299,9 +300,23 @@ export default function StyleGuide() {
                     '&:hover': {
                       backgroundColor: color as string,
                     },
+                    '&:focus': {
+                      outline: '2px solid',
+                      outlineColor: 'primary.main',
+                      outlineOffset: '2px',
+                    },
                   }}
                 >
-                  {variant}: {color}
+                  <Typography
+                    component="span"
+                    sx={{
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {variant}: {color}
+                  </Typography>
                 </Button>
               ))}
             </Stack>
@@ -310,15 +325,36 @@ export default function StyleGuide() {
       </Stack>
       <Stack>
         <Button
+          component="a"
+          href="/"
+          aria-label="Navigate to home page - Type A button style"
           sx={{
             borderRadius: '14px',
-            boxShadow: '0px 4px 4px -1px',
+            boxShadow: '0px 4px 4px -1px rgba(0, 0, 0, 0.25)',
             textTransform: 'uppercase',
+            padding: '12px 16px',
+            '&:hover': {
+              transform: 'translateY(-1px)',
+              boxShadow: '0px 6px 8px -1px rgba(0, 0, 0, 0.25)',
+            },
+            '&:focus': {
+              outline: '2px solid',
+              outlineColor: 'primary.main',
+              outlineOffset: '2px',
+            },
           }}
           variant="outlined"
-          href="/"
         >
-          Type A
+          <Typography
+            component="span"
+            sx={{
+              fontWeight: 'medium',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            Type A
+          </Typography>
         </Button>
       </Stack>
     </Stack>

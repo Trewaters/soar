@@ -79,7 +79,20 @@ export default function UserDetails() {
 
   if (!session) {
     return (
-      <Button variant="outlined" onClick={() => router.push('/auth/signin')}>
+      <Button
+        variant="outlined"
+        onClick={() => router.push('/auth/signin')}
+        aria-label="Sign in to view your profile page"
+        sx={{
+          padding: '12px 16px',
+          borderRadius: '14px',
+          '&:focus': {
+            outline: '2px solid',
+            outlineColor: 'primary.main',
+            outlineOffset: '2px',
+          },
+        }}
+      >
         Sign in to view your profile
       </Button>
     )
