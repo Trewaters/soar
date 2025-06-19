@@ -2,7 +2,7 @@
 
 import React from 'react'
 import CurrentTime from '@app/clientComponents/current-time'
-import { Box, Divider, Stack, Typography } from '@mui/material'
+import { Box, Button, Divider, Stack, Typography } from '@mui/material'
 import Image from 'next/image'
 import AsanaActivityList from '@app/clientComponents/AsanaActivityList'
 import ActivityStreaks from '@app/clientComponents/activityStreaks/ActivityStreaks'
@@ -12,6 +12,18 @@ import { useSession } from 'next-auth/react'
 
 export default function Page() {
   const { data: session } = useSession()
+
+  const learnLinks = [
+    {
+      name: 'Eight Limbs',
+      href: 'navigator/eightLimbs',
+    },
+    {
+      name: 'Glossary',
+      href: 'navigator/glossary',
+    },
+  ]
+
   return (
     <Stack>
       <Box
@@ -52,21 +64,34 @@ export default function Page() {
           <AsanaActivityList />
         </Box>
         <Box sx={{ mt: 4 }}>
-          <Typography variant="body1" fontWeight="600" sx={{ mt: 4, mb: 1 }}>
-            Learn about Yoga
-          </Typography>
           <Typography
             variant="body1"
-            color="primary.main"
-            sx={{ mb: 1, display: 'flex', flexDirection: 'column', gap: 1 }}
+            fontWeight="600"
+            sx={{ mt: 4, mb: 1, textAlign: 'center' }}
           >
-            <Link href="/eight-limbs" passHref>
-              Eight Limbs
-            </Link>
-            <Link href="/glossary" passHref>
-              Glossary
-            </Link>
+            Learn about Yoga
           </Typography>
+          <Stack spacing={1} sx={{ mt: 2 }}>
+            {learnLinks.map((link) => (
+              <Link href={link.href} key={link.name} passHref>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    width: '100%',
+                    mb: 1,
+                    borderRadius: '14px',
+                    boxShadow: '0px 4px 4px -1px',
+                    textTransform: 'uppercase',
+                    '&:hover': {
+                      backgroundColor: 'transparent',
+                    },
+                  }}
+                >
+                  <Typography variant="body1">{link.name}</Typography>
+                </Button>
+              </Link>
+            ))}
+          </Stack>
         </Box>
       </Box>
     </Stack>

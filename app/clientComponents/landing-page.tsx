@@ -23,12 +23,17 @@ export default function LandingPage() {
             <React.Fragment key={link.name}>
               <Link href={link.href} passHref>
                 <Button
+                  variant={'outlined'}
                   sx={{
+                    width: '20%',
+                    borderRadius: '14px',
+                    boxShadow: '0px 4px 4px -1px',
+                    textTransform: 'uppercase',
                     '&:hover': {
                       backgroundColor: 'transparent',
                     },
                   }}
-                  startIcon={link.icon}
+                  startIcon={link.icon || undefined}
                 >
                   <Typography variant="body1">{link.name}</Typography>
                 </Button>

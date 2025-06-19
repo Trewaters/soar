@@ -308,6 +308,19 @@ export default function StyleGuide() {
           </Box>
         ))}
       </Stack>
+      <Stack>
+        <Button
+          sx={{
+            borderRadius: '14px',
+            boxShadow: '0px 4px 4px -1px',
+            textTransform: 'uppercase',
+          }}
+          variant="outlined"
+          href="/"
+        >
+          Type A
+        </Button>
+      </Stack>
     </Stack>
   )
 }
