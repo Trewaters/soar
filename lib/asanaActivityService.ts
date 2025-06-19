@@ -40,13 +40,29 @@ export async function recordAsanaActivity(input: AsanaActivityInput) {
   }
 }
 
+/**
+ * Delete an activity for a specific user and posture on today's date only.
+ * This is used for streak tracking - only removes today's activity, preserving historical data.
+ */
 export async function deleteAsanaActivity(userId: string, postureId: string) {
   try {
-    // Delete the most recent activity for this user and posture
+    // Get today's date range (start and end of today)
+    const today = new Date()
+    const startOfToday = new Date(today)
+    startOfToday.setHours(0, 0, 0, 0)
+
+    const endOfToday = new Date(today)
+    endOfToday.setHours(23, 59, 59, 999)
+
+    // Delete only today's activity for this user and posture
     const result = await prisma.asanaActivity.deleteMany({
       where: {
         userId,
         postureId,
+        datePerformed: {
+          gte: startOfToday,
+          lte: endOfToday,
+        },
       },
     })
 
@@ -65,12 +81,28 @@ export async function deleteAsanaActivity(userId: string, postureId: string) {
   }
 }
 
+/**
+ * Check if an activity exists for a specific user and posture on today's date.
+ * This is used for streak tracking - only activities performed today count for the current streak.
+ */
 export async function checkExistingActivity(userId: string, postureId: string) {
   try {
+    // Get today's date range (start and end of today)
+    const today = new Date()
+    const startOfToday = new Date(today)
+    startOfToday.setHours(0, 0, 0, 0)
+
+    const endOfToday = new Date(today)
+    endOfToday.setHours(23, 59, 59, 999)
+
     const activity = await prisma.asanaActivity.findFirst({
       where: {
         userId,
         postureId,
+        datePerformed: {
+          gte: startOfToday,
+          lte: endOfToday,
+        },
       },
       orderBy: {
         datePerformed: 'desc',

@@ -136,7 +136,7 @@ describe('/api/asanaActivity Service Tests', () => {
   })
 
   describe('checkExistingActivity', () => {
-    it('should check if activity exists', async () => {
+    it('should check if activity exists for today', async () => {
       const mockActivity = {
         id: '1',
         userId: 'user123',
@@ -166,7 +166,7 @@ describe('/api/asanaActivity Service Tests', () => {
       )
     })
 
-    it('should return null when activity does not exist', async () => {
+    it('should return null when no activity exists for today', async () => {
       const mockCheckExistingActivity =
         checkExistingActivity as jest.MockedFunction<
           typeof checkExistingActivity
