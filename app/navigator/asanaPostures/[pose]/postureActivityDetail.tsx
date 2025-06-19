@@ -360,9 +360,10 @@ export default function PostureActivityDetail({
           display: 'flex',
           flexDirection: 'column',
           mt: 3,
+          px: { xs: 0, sm: 2 }, // Remove padding on mobile for full width
         }}
       >
-        <Stack direction={'column'}>
+        <Stack direction={'column'} spacing={0}>
           <AsanaDetails
             details={posture?.sort_english_name}
             label="English Variant Names"
@@ -435,10 +436,16 @@ export default function PostureActivityDetail({
               sx={{
                 mt: 3,
                 mb: 2,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
                 width: '100%',
+                px: { xs: 0, sm: 2 }, // Remove padding on mobile for full width
+                display: 'flex',
+                justifyContent: { xs: 'stretch', sm: 'center' }, // Full width on mobile, centered on larger screens
+                alignItems: 'center',
+                '@media (max-width: 384px)': {
+                  // Ensure full width container on screens 384px or smaller
+                  px: 0,
+                  justifyContent: 'stretch',
+                },
               }}
             >
               <ActivityTracker

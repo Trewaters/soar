@@ -195,12 +195,19 @@ export default function ActivityTracker({
     <Paper
       elevation={3}
       sx={{
-        p: 3,
+        p: { xs: 2, sm: 3 }, // Reduced padding on mobile for more space
         borderRadius: 2,
         backgroundColor: 'background.paper',
         border: '1px solid',
         borderColor: 'divider',
-        width: '50%',
+        width: '100%',
+        maxWidth: { xs: 'none', sm: '600px' }, // Full width on mobile, max width on larger screens
+        '@media (max-width: 384px)': {
+          // Ensure full width on screens 384px or smaller
+          width: '100%',
+          maxWidth: 'none',
+          p: 1.5, // Even smaller padding on very small screens
+        },
       }}
     >
       <Stack spacing={3}>

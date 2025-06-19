@@ -17,10 +17,10 @@ export default function AsanaDetails(props: AsanaDetailsProps) {
     <Box
       sx={{
         width: {
-          xs: '100vw',
+          xs: '100%',
           md: '50vw',
         },
-        px: { xs: '8px' },
+        px: { xs: '8px', sm: '8px' },
       }}
       alignSelf={'center'}
     >
