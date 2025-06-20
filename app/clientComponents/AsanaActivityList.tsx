@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
-import {
-  Typography,
-  List,
-  ListItem,
-  CircularProgress,
-  Box,
-} from '@mui/material'
+import { Typography, List, ListItem, Box } from '@mui/material'
 import {
   getUserActivities,
   type AsanaActivityData,
 } from '@lib/asanaActivityClientService'
+import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 
 export default function AsanaActivityList() {
   const { data: session, status } = useSession()
@@ -42,7 +37,7 @@ export default function AsanaActivityList() {
     if (status === 'authenticated') fetchActivities()
   }, [session, status])
 
-  if (loading) return <CircularProgress />
+  if (loading) return <LoadingSkeleton type="list" lines={5} height={60} />
   if (error) return <Typography color="error">{error}</Typography>
   if (!activities.length)
     return <Typography>No asana activity found.</Typography>

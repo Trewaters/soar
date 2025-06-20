@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { getAllPostures, type FullAsanaData } from '@lib/postureService'
 import SplashHeader from '@app/clientComponents/splash-header'
 import { useRouter } from 'next/navigation'
 import NavBottom from '@serverComponents/navBottom'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
+import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 
 export default function Page() {
   const [posturePropData, setPosturePropData] = useState<FullAsanaData[]>([])
@@ -61,7 +62,7 @@ export default function Page() {
         <Box height={'32px'} />
 
         {loading ? (
-          <CircularProgress sx={{ backgroundColor: 'transparent' }} />
+          <LoadingSkeleton type="search" />
         ) : (
           <PostureSearch posturePropData={posturePropData} />
         )}

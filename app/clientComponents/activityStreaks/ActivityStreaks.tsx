@@ -1,18 +1,11 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import {
-  Box,
-  Typography,
-  Paper,
-  CircularProgress,
-  Stack,
-  Chip,
-  Tooltip,
-} from '@mui/material'
+import { Box, Typography, Paper, Stack, Chip, Tooltip } from '@mui/material'
 import { useSession } from 'next-auth/react'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 
 // Extensible streak type system
 export type StreakType = 'login' | 'asana' | 'meditation' | 'breathwork'
@@ -403,14 +396,12 @@ export default function ActivityStreaks({
 
   if (status === 'loading' || loading) {
     return (
-      <Paper elevation={2} sx={{ p: 2, borderRadius: 2 }}>
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <CircularProgress size={20} aria-label="Loading activity streaks" />
-          <Typography variant="body2" color="text.secondary">
-            Loading activity streaks...
-          </Typography>
-        </Stack>
-      </Paper>
+      <LoadingSkeleton
+        type="card"
+        lines={2}
+        height={80}
+        sx={{ p: 2, borderRadius: 2 }}
+      />
     )
   }
 

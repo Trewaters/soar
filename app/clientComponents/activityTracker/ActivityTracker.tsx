@@ -5,7 +5,6 @@ import {
   Typography,
   Paper,
   Chip,
-  CircularProgress,
   Stack,
   Divider,
   Tooltip,
@@ -15,6 +14,7 @@ import { FullAsanaData } from '@context/AsanaPostureContext'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 import {
   getPostureWeeklyActivity,
   type WeeklyActivityData,
@@ -100,19 +100,14 @@ export default function ActivityTracker({
 
   if (loading) {
     return (
-      <Box
+      <LoadingSkeleton
+        type="card"
+        lines={3}
+        height={variant === 'compact' ? 60 : 120}
         sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
           minHeight: variant === 'compact' ? '60px' : '120px',
         }}
-      >
-        <CircularProgress size={24} />
-        <Typography variant="body2" sx={{ ml: 1 }}>
-          Loading activity data...
-        </Typography>
-      </Box>
+      />
     )
   }
 
