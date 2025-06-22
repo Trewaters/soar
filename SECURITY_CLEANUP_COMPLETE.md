@@ -2,7 +2,7 @@
 
 ## Issue
 
-The commit `463702a` accidentally included hardcoded Cloudflare API tokens and account IDs in debug files:
+The commit accidentally included hardcoded Cloudflare API tokens and account IDs in debug files:
 
 - `debug-cloudflare.js`
 - `debug-cloudflare-2.js`
