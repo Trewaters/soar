@@ -1,7 +1,19 @@
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Box, Button, Typography, Paper } from '@mui/material'
+import {
+  Box,
+  Button,
+  Typography,
+  Paper,
+  Switch,
+  FormControlLabel,
+  Tooltip,
+  Alert,
+  Collapse,
+} from '@mui/material'
 import TimerIcon from '@mui/icons-material/Timer'
+import NotificationsIcon from '@mui/icons-material/Notifications'
+import NotificationsOffIcon from '@mui/icons-material/NotificationsOff'
 
 export interface QuickTimerProps {
   /** Custom button text (default: "+5 Minutes") */
@@ -15,13 +27,17 @@ export interface QuickTimerProps {
   /** Callback when timer ends */
   onTimerEnd?: () => void
   /** Callback with remaining seconds on each update */
-  onTimerUpdate?: (_remainingSeconds: number) => void
+  onTimerUpdate?: (remainingSeconds: number) => void
   /** Show/hide the timer display when active (default: true) */
   showTimeDisplay?: boolean
   /** Variant for different layouts */
   variant?: 'default' | 'compact' | 'minimal'
   /** Maximum width of the component */
   maxWidth?: string | number
+  /** Enable notifications when timer completes (default: false) */
+  enableNotifications?: boolean
+  /** Show notification settings toggle (default: false) */
+  showNotificationToggle?: boolean
 }
 
 export default function QuickTimer({
@@ -34,11 +50,74 @@ export default function QuickTimer({
   showTimeDisplay = true,
   variant = 'default',
   maxWidth = '400px',
+  enableNotifications = false,
+  showNotificationToggle = false,
 }: QuickTimerProps) {
   const [timerSeconds, setTimerSeconds] = useState(0)
   const [isTimerActive, setIsTimerActive] = useState(false)
   const [timerEndTime, setTimerEndTime] = useState<number | null>(null)
+  const [notificationsEnabled, setNotificationsEnabled] =
+    useState(enableNotifications)
+  const [notificationPermission, setNotificationPermission] =
+    useState<NotificationPermission>('default')
+  const [showPermissionAlert, setShowPermissionAlert] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+  // Check notification permission on mount
+  useEffect(() => {
+    if ('Notification' in window) {
+      setNotificationPermission(Notification.permission)
+    }
+  }, [])
+
+  // Request notification permission when user opts in
+  const requestNotificationPermission = useCallback(async () => {
+    if (!('Notification' in window)) {
+      setShowPermissionAlert(true)
+      return false
+    }
+
+    try {
+      const permission = await Notification.requestPermission()
+      setNotificationPermission(permission)
+
+      if (permission === 'granted') {
+        setNotificationsEnabled(true)
+        return true
+      } else if (permission === 'denied') {
+        setShowPermissionAlert(true)
+        setNotificationsEnabled(false)
+        return false
+      }
+    } catch (error) {
+      console.warn('Error requesting notification permission:', error)
+      setShowPermissionAlert(true)
+      return false
+    }
+
+    return false
+  }, [])
+
+  // Show notification when timer completes
+  const showNotification = useCallback(() => {
+    if (
+      notificationsEnabled &&
+      'Notification' in window &&
+      Notification.permission === 'granted'
+    ) {
+      try {
+        new Notification('Timer Complete!', {
+          body: `Your ${timerMinutes}-minute timer has finished.`,
+          icon: '/favicon.ico',
+          badge: '/favicon.ico',
+          tag: 'timer-complete',
+          requireInteraction: false,
+        })
+      } catch (error) {
+        console.warn('Error showing notification:', error)
+      }
+    }
+  }, [notificationsEnabled, timerMinutes])
 
   const startTimer = useCallback(
     (endTime: number) => {
@@ -61,17 +140,8 @@ export default function QuickTimer({
             timerRef.current = null
           }
 
-          // Show notification when timer completes
-          if (
-            'Notification' in window &&
-            Notification.permission === 'granted'
-          ) {
-            new Notification('Timer Complete!', {
-              body: 'Your timer has finished.',
-              icon: '/favicon.ico',
-            })
-          }
-
+          // Show notification when timer completes (if enabled)
+          showNotification()
           onTimerEnd?.()
         }
       }
@@ -82,12 +152,24 @@ export default function QuickTimer({
       // Then update every second
       timerRef.current = setInterval(updateTimer, 1000)
     },
-    [onTimerUpdate, onTimerEnd]
+    [onTimerUpdate, onTimerEnd, showNotification]
   )
 
-  const addTimer = () => {
+  const addTimer = async () => {
     const timerDurationInMs = Math.max(0, timerMinutes * 60 * 1000)
     const now = Date.now()
+
+    // Request notification permission if notifications are enabled but permission hasn't been granted
+    if (
+      enableNotifications &&
+      'Notification' in window &&
+      Notification.permission === 'default'
+    ) {
+      const granted = await requestNotificationPermission()
+      if (granted) {
+        setNotificationsEnabled(true)
+      }
+    }
 
     if (isTimerActive && timerEndTime) {
       // Add time to existing timer
@@ -148,13 +230,6 @@ export default function QuickTimer({
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [isTimerActive, timerEndTime, onTimerEnd, startTimer])
-
-  // Request notification permission on component mount
-  useEffect(() => {
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission()
-    }
-  }, [])
 
   // Cleanup timer on unmount
   useEffect(() => {
@@ -232,6 +307,86 @@ export default function QuickTimer({
     </Button>
   )
 
+  const NotificationToggle = () => {
+    if (!showNotificationToggle || !('Notification' in window)) return null
+
+    const handleToggleNotifications = async (
+      event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+      const enabled = event.target.checked
+
+      if (enabled && notificationPermission !== 'granted') {
+        const granted = await requestNotificationPermission()
+        setNotificationsEnabled(granted)
+      } else {
+        setNotificationsEnabled(enabled)
+      }
+    }
+
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Tooltip
+          title={
+            notificationPermission === 'denied'
+              ? 'Notifications blocked. Enable in browser settings.'
+              : 'Get notified when timer completes'
+          }
+        >
+          <FormControlLabel
+            control={
+              <Switch
+                checked={
+                  notificationsEnabled && notificationPermission === 'granted'
+                }
+                onChange={handleToggleNotifications}
+                disabled={notificationPermission === 'denied'}
+                size={variant === 'minimal' ? 'small' : 'medium'}
+              />
+            }
+            label={
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                {notificationsEnabled &&
+                notificationPermission === 'granted' ? (
+                  <NotificationsIcon fontSize="small" />
+                ) : (
+                  <NotificationsOffIcon fontSize="small" />
+                )}
+                <Typography
+                  variant={variant === 'minimal' ? 'caption' : 'body2'}
+                >
+                  Notifications
+                </Typography>
+              </Box>
+            }
+            sx={{
+              margin: 0,
+              '& .MuiFormControlLabel-label': {
+                fontSize: variant === 'minimal' ? '0.75rem' : '0.875rem',
+              },
+            }}
+          />
+        </Tooltip>
+      </Box>
+    )
+  }
+
+  const PermissionAlert = () => (
+    <Collapse in={showPermissionAlert}>
+      <Alert
+        severity="warning"
+        onClose={() => setShowPermissionAlert(false)}
+        sx={{
+          mb: 1,
+          fontSize: variant === 'minimal' ? '0.75rem' : '0.875rem',
+        }}
+      >
+        {!('Notification' in window)
+          ? 'Browser notifications not supported'
+          : 'Please enable notifications in your browser settings to receive timer alerts.'}
+      </Alert>
+    </Collapse>
+  )
+
   const TimerDisplay = () => {
     if (!isTimerActive || !showTimeDisplay) return null
 
@@ -264,16 +419,20 @@ export default function QuickTimer({
   if (variant === 'minimal') {
     return (
       <Box sx={getContainerStyles()}>
+        <PermissionAlert />
         <TimerButton />
         <TimerDisplay />
+        <NotificationToggle />
       </Box>
     )
   }
 
   return (
     <Paper elevation={variant === 'compact' ? 1 : 2} sx={getContainerStyles()}>
+      <PermissionAlert />
       <TimerButton />
       <TimerDisplay />
+      <NotificationToggle />
     </Paper>
   )
 }

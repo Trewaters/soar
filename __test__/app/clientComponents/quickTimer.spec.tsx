@@ -11,6 +11,17 @@ jest.mock('@mui/icons-material/Timer', () => ({
   default: () => <div data-testid="timer-icon" />,
 }))
 
+// Mock Notification icons
+jest.mock('@mui/icons-material/Notifications', () => ({
+  __esModule: true,
+  default: () => <div data-testid="notifications-icon" />,
+}))
+
+jest.mock('@mui/icons-material/NotificationsOff', () => ({
+  __esModule: true,
+  default: () => <div data-testid="notifications-off-icon" />,
+}))
+
 // Mock Notification API
 const mockNotification = jest.fn()
 const mockRequestPermission = jest.fn().mockResolvedValue('granted')
@@ -23,17 +34,20 @@ Object.defineProperty(window, 'Notification', {
 Object.defineProperty(mockNotification, 'permission', {
   value: 'granted',
   writable: true,
+  configurable: true,
 })
 
 Object.defineProperty(mockNotification, 'requestPermission', {
   value: mockRequestPermission,
   writable: true,
+  configurable: true,
 })
 
 // Mock document.hidden for visibility change tests
 Object.defineProperty(document, 'hidden', {
   value: false,
   writable: true,
+  configurable: true,
 })
 
 describe('QuickTimer Component', () => {
@@ -43,21 +57,43 @@ describe('QuickTimer Component', () => {
     // Set a consistent starting time for predictable testing
     jest.setSystemTime(new Date('2025-01-01T00:00:00.000Z'))
 
-    // Reset Notification properties
+    // Reset Notification properties to default state
     Object.defineProperty(mockNotification, 'permission', {
       value: 'granted',
       writable: true,
+      configurable: true,
     })
+
+    // Reset the mock function
+    mockRequestPermission.mockResolvedValue('granted')
 
     // Reset document.hidden
     Object.defineProperty(document, 'hidden', {
       value: false,
       writable: true,
+      configurable: true,
     })
   })
 
   afterEach(() => {
     jest.useRealTimers()
+
+    // Reset Notification properties back to default state
+    Object.defineProperty(mockNotification, 'permission', {
+      value: 'granted',
+      writable: true,
+      configurable: true,
+    })
+
+    // Reset document.hidden back to default
+    Object.defineProperty(document, 'hidden', {
+      value: false,
+      writable: true,
+      configurable: true,
+    })
+
+    // Clear all mocks
+    jest.clearAllMocks()
   })
 
   describe('Component Rendering', () => {
@@ -186,8 +222,8 @@ describe('QuickTimer Component', () => {
       expect(onTimerEnd).toHaveBeenCalledTimes(1)
     })
 
-    it('shows notification when timer completes', () => {
-      render(<QuickTimer timerMinutes={1} />)
+    it('shows notification when timer completes and notifications are enabled', () => {
+      render(<QuickTimer timerMinutes={1} enableNotifications={true} />)
 
       const button = screen.getByRole('button')
       fireEvent.click(button)
@@ -198,8 +234,11 @@ describe('QuickTimer Component', () => {
       })
 
       expect(mockNotification).toHaveBeenCalledWith('Timer Complete!', {
-        body: 'Your timer has finished.',
+        body: 'Your 1-minute timer has finished.',
         icon: '/favicon.ico',
+        badge: '/favicon.ico',
+        tag: 'timer-complete',
+        requireInteraction: false,
       })
     })
 
@@ -289,7 +328,7 @@ describe('QuickTimer Component', () => {
   })
 
   describe('Notification Permission', () => {
-    it('requests notification permission on mount', () => {
+    it('checks notification permission on mount but does not request it', () => {
       Object.defineProperty(mockNotification, 'permission', {
         value: 'default',
         writable: true,
@@ -297,13 +336,50 @@ describe('QuickTimer Component', () => {
 
       render(<QuickTimer />)
 
+      // Should check permission but not request it automatically
+      expect(mockRequestPermission).not.toHaveBeenCalled()
+    })
+
+    it('requests notification permission when enableNotifications=true and user starts timer', () => {
+      Object.defineProperty(mockNotification, 'permission', {
+        value: 'default',
+        writable: true,
+        configurable: true,
+      })
+
+      render(<QuickTimer enableNotifications={true} />)
+
+      const button = screen.getByRole('button')
+      fireEvent.click(button)
+
       expect(mockRequestPermission).toHaveBeenCalledTimes(1)
+    })
+
+    it('does not show notification when notifications are disabled', () => {
+      Object.defineProperty(mockNotification, 'permission', {
+        value: 'granted',
+        writable: true,
+        configurable: true,
+      })
+
+      render(<QuickTimer timerMinutes={1} enableNotifications={false} />)
+
+      const button = screen.getByRole('button')
+      fireEvent.click(button)
+
+      // Fast forward to timer completion
+      act(() => {
+        jest.advanceTimersByTime(60000)
+      })
+
+      expect(mockNotification).not.toHaveBeenCalled()
     })
 
     it('does not request permission if already granted', () => {
       Object.defineProperty(mockNotification, 'permission', {
         value: 'granted',
         writable: true,
+        configurable: true,
       })
 
       render(<QuickTimer />)
@@ -315,6 +391,7 @@ describe('QuickTimer Component', () => {
       Object.defineProperty(mockNotification, 'permission', {
         value: 'denied',
         writable: true,
+        configurable: true,
       })
 
       render(<QuickTimer timerMinutes={1} />)
@@ -332,6 +409,12 @@ describe('QuickTimer Component', () => {
 
   describe('Cleanup', () => {
     it('cleans up timer on unmount', () => {
+      Object.defineProperty(mockNotification, 'permission', {
+        value: 'granted',
+        writable: true,
+        configurable: true,
+      })
+
       const { unmount } = render(<QuickTimer timerMinutes={1} />)
 
       const button = screen.getByRole('button')
@@ -346,6 +429,12 @@ describe('QuickTimer Component', () => {
     })
 
     it('removes visibility change listener on unmount', () => {
+      Object.defineProperty(mockNotification, 'permission', {
+        value: 'granted',
+        writable: true,
+        configurable: true,
+      })
+
       const removeEventListenerSpy = jest.spyOn(document, 'removeEventListener')
 
       const { unmount } = render(<QuickTimer />)
@@ -361,6 +450,12 @@ describe('QuickTimer Component', () => {
 
   describe('Edge Cases', () => {
     it('handles zero or negative timer minutes gracefully', () => {
+      Object.defineProperty(mockNotification, 'permission', {
+        value: 'granted',
+        writable: true,
+        configurable: true,
+      })
+
       render(<QuickTimer timerMinutes={0} />)
 
       const button = screen.getByRole('button')
@@ -373,6 +468,12 @@ describe('QuickTimer Component', () => {
 
   describe('Accessibility', () => {
     it('has accessible button with proper role', () => {
+      Object.defineProperty(mockNotification, 'permission', {
+        value: 'granted',
+        writable: true,
+        configurable: true,
+      })
+
       render(<QuickTimer />)
 
       const button = screen.getByRole('button')
@@ -393,6 +494,8 @@ describe('QuickTimer Component', () => {
         showTimeDisplay: true,
         variant: 'compact',
         maxWidth: '500px',
+        enableNotifications: true,
+        showNotificationToggle: true,
       }
 
       expect(() => render(<QuickTimer {...props} />)).not.toThrow()
