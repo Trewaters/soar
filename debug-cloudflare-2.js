@@ -1,6 +1,8 @@
 // Test the second Cloudflare API token from .env.cloudflare
-const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID || 'YOUR_ACCOUNT_ID_HERE'
-const CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN || 'YOUR_API_TOKEN_HERE'
+const CLOUDFLARE_ACCOUNT_ID =
+  process.env.CLOUDFLARE_ACCOUNT_ID || 'YOUR_ACCOUNT_ID_HERE'
+const CLOUDFLARE_API_TOKEN =
+  process.env.CLOUDFLARE_API_TOKEN || 'YOUR_API_TOKEN_HERE'
 
 async function testCloudflareConnection() {
   console.log('Testing Cloudflare API connection with second token...\n')
