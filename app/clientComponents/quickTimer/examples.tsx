@@ -64,6 +64,28 @@ export default function QuickTimerExamples() {
 
       <Paper sx={{ p: 3, mb: 3 }}>
         <Typography variant="h6" gutterBottom>
+          Alarm Test Timer (10 seconds) - For Testing Audio
+        </Typography>
+        <Typography variant="body2" color="text.secondary" gutterBottom>
+          This timer is set to 10 seconds so you can quickly test the alarm
+          functionality. Make sure your sound is on!
+        </Typography>
+        <QuickTimer
+          buttonText="Test Alarm (10s)"
+          timerMinutes={10 / 60} // 10 seconds
+          variant="default"
+          enableAlarm={true}
+          showAlarmToggle={true}
+          onTimerStart={() => console.log('Alarm test timer started!')}
+          onTimerEnd={() =>
+            console.log('Alarm test timer completed! You should hear beeps.')
+          }
+          maxWidth="400px"
+        />
+      </Paper>
+
+      <Paper sx={{ p: 3, mb: 3 }}>
+        <Typography variant="h6" gutterBottom>
           Custom Styled (10 minutes)
         </Typography>
         <QuickTimer
