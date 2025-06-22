@@ -2,12 +2,21 @@
 import React, { useState, useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid2'
-import { Box, Button, FormControl, Stack, TextField } from '@mui/material'
+import {
+  Box,
+  Button,
+  FormControl,
+  Stack,
+  TextField,
+  Paper,
+  Divider,
+} from '@mui/material'
 import { useAsanaPosture } from '@app/context/AsanaPostureContext'
 import { createPosture, type CreatePostureInput } from '@lib/postureService'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import NavBottom from '@serverComponents/navBottom'
+import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -266,39 +275,24 @@ export default function Page() {
             </Grid>
           </Grid>
         </form>
+        <Divider sx={{ my: 4 }} />
+        <Grid size={12}>
+          <Paper elevation={1} sx={{ p: 3, borderRadius: '12px' }}>
+            <Typography variant="h6" gutterBottom color="primary">
+              Reference Images
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Upload images to help illustrate this pose. These will be
+              associated with your profile.
+            </Typography>
+
+            <ImageManagement title="" variant="upload-only" />
+          </Paper>
+        </Grid>
       </Box>
       <Stack sx={{ position: 'fixed', bottom: 0 }}>
         <NavBottom subRoute="/navigator/asanaPostures" />
       </Stack>
     </>
-    // <Box sx={{ px: 2 }}>
-    //   <Grid container>
-    //     <Grid size={12}>
-    //       <Typography variant="h1">Create Asana</Typography>
-    //     </Grid>
-    //     <Grid size={12}>
-    //       <FormControl sx={{ width: '100%', mb: 3 }}>
-    //         sort_english_name (must be unique)
-    //       </FormControl>
-    //     </Grid>
-    //     <Grid size={12}>
-    //       <FormControl sx={{ width: '100%', mb: 3 }}>english_names</FormControl>
-    //     </Grid>
-    //     <Grid size={12}>
-    //       <FormControl sx={{ width: '100%', mb: 3 }}>description</FormControl>
-    //     </Grid>
-    //     <Grid size={12}>
-    //       <FormControl sx={{ width: '100%', mb: 3 }}>category</FormControl>
-    //     </Grid>
-    //     <Grid size={12}>
-    //       <FormControl sx={{ width: '100%', mb: 3 }}>difficulty</FormControl>
-    //     </Grid>
-    //     <Grid size={12}>
-    //       <FormControl sx={{ width: '100%', mb: 3 }}>
-    //         breath_direction_default
-    //       </FormControl>
-    //     </Grid>
-    //   </Grid>
-    // </Box>
   )
 }

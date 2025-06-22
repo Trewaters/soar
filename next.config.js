@@ -4,6 +4,16 @@ const { PrismaPlugin } = require('@prisma/nextjs-monorepo-workaround-plugin')
 
 const nextConfig = {
   output: 'standalone',
+  images: {
+    // Configure image domains and loaders
+    domains: [],
+    remotePatterns: [
+      // Add patterns for external image sources if needed
+      // { protocol: 'https', hostname: 'your-cloudflare-domain.com' }
+    ],
+    // Handle unoptimized images (like base64 data URLs)
+    unoptimized: false,
+  },
   webpack: (config, { isServer }) => {
     if (isServer) {
       config.plugins = [...config.plugins, new PrismaPlugin()]

@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import Paper from '@mui/material/Paper'
-import Image from 'next/image'
+import Image from 'next/image''
 import {
   ButtonGroup,
   Checkbox,

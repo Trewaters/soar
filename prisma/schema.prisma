@@ -55,6 +55,7 @@ model UserData {
   providerAccounts      ProviderAccount[]
   asanaActivities AsanaActivity[] // Relation to AsanaActivity
   userLogins      UserLogin[] // Relation to UserLogin
+  poseImages      PoseImage[] // Relation to PoseImage
 }
 
 model ProviderAccount {
@@ -178,4 +179,34 @@ model UserLogin {
   createdAt DateTime @default(now())
 
   @@index([userId, loginDate])
+}
+
+/// Records user-uploaded images of yoga poses.
+model PoseImage {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String      @db.ObjectId
+  url            String      // Image URL (Cloudflare or local reference)
+  altText        String?     // Alternative text for accessibility
+  fileName       String?     // Original filename
+  fileSize       Int?        // File size in bytes
+  uploadedAt     DateTime    @default(now())
+  storageType    StorageType @default(CLOUD) // Where the image is stored
+  localStorageId String?     // Local storage identifier for browser storage
+  cloudflareId   String?     // Cloudflare image ID for cloud images
+  isOffline      Boolean     @default(false) // True if saved offline due to API failure
+  
+  user       UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([storageType])
+}
+
+/// Enum for image storage types
+enum StorageType {
+  CLOUD    // Stored in Cloudflare Images
+  LOCAL    // Stored locally in browser storage
+  HYBRID   // Has both cloud and local copies
 }
