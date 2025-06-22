@@ -70,7 +70,8 @@ export default function ImageUploadFallbackDemo() {
           <br />
           2. The upload should fail and show a fallback dialog
           <br />
-          3. Choose "Save Locally" to test the fallback functionality
+          3. Choose `&quot;`Save Locally`&quot;` to test the fallback
+          functionality
         </Typography>
 
         <Paper sx={{ p: 2, bgcolor: 'grey.100', mt: 2 }}>

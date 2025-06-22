@@ -36,6 +36,10 @@ export function ProfileWithImages() {
 // Modify app/navigator/asanaPostures/createAsana/page.tsx
 
 export function CreateAsanaWithImages() {
+  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+    throw new Error('Function not implemented.')
+  }
+
   return (
     <Box sx={{ px: 2, pb: 7 }}>
       <Typography variant="h1">Create Asana</Typography>
@@ -123,7 +127,7 @@ import { FullAsanaData } from '@lib/postureService'
 import {
   Box,
   Typography,
-  Grid,
+  Grid2 as Grid,
   FormControl,
   Button,
   Paper,
@@ -134,7 +138,8 @@ import {
   DialogTitle,
   DialogContent,
 } from '@mui/material'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 
 export function GalleryOnlyExample() {
   return (
@@ -163,6 +168,7 @@ export function NavWithImageUpload() {
           onClick={() => setUploadOpen(true)}
           title="Upload pose image"
         >
+          {/*            eslint-disable-next-line react/jsx-no-undef            */}
           <CloudUploadIcon />
         </IconButton>
 

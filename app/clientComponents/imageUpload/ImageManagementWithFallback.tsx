@@ -146,8 +146,8 @@ export default function ImageManagementWithFallback({
         </Box>
 
         <Alert severity="info" sx={{ mb: 2 }}>
-          Images will be uploaded to cloud storage. If upload fails, you'll have
-          the option to save locally.
+          Images will be uploaded to cloud storage. If upload fails,
+          you`&apos;`ll have the option to save locally.
         </Alert>
 
         <ImageUploadWithFallback
@@ -272,7 +272,8 @@ export default function ImageManagementWithFallback({
           {storageInfo && (
             <Stack spacing={2}>
               <Alert severity="info">
-                Your browser's local storage quota and usage for image fallback.
+                Your browser`&apos;`s local storage quota and usage for image
+                fallback.
               </Alert>
 
               <Box>

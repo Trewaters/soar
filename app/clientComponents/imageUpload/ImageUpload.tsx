@@ -60,35 +60,7 @@ export default function ImageUpload({
     const file = event.target.files?.[0]
     if (!file) return
 
-    // Validate file type
-    if (!acceptedTypes.includes(file.type)) {
-      setError(
-        `Invalid file type. Please select: ${acceptedTypes
-          .map((type) => type.split('/')[1])
-          .join(', ')}`
-      )
-      return
-    }
-
-    // Validate file size
-    if (file.size > maxFileSize * 1024 * 1024) {
-      setError(`File size must be less than ${maxFileSize}MB`)
-      return
-    }
-
-    setSelectedFile(file)
-    setError(null)
-
-    // Create preview
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      setPreview(e.target?.result as string)
-    }
-    reader.readAsDataURL(file)
-
-    // Auto-generate alt text from filename
-    const baseName = file.name.split('.')[0]
-    setAltText(baseName.replace(/[-_]/g, ' '))
+    processFile(file)
   }
 
   const handleUpload = async () => {
@@ -136,11 +108,7 @@ export default function ImageUpload({
     const files = event.dataTransfer.files
     if (files.length > 0) {
       const file = files[0]
-      // Simulate file input change
-      const fakeEvent = {
-        target: { files: [file] },
-      } as React.ChangeEvent<HTMLInputElement>
-      handleFileSelect(fakeEvent)
+      processFile(file)
     }
   }
 
@@ -159,6 +127,48 @@ export default function ImageUpload({
     </Button>
   )
 
+  // const handleDrop = (event: React.DragEvent) => {
+  //   event.preventDefault()
+  //   const files = event.dataTransfer.files
+  //   if (files.length > 0) {
+  //     const file = files[0]
+  //     // Process dropped file directly
+  //     processFile(file)
+  //   }
+  // }
+
+  const processFile = (file: File) => {
+    // Validate file type
+    if (!acceptedTypes.includes(file.type)) {
+      setError(
+        `Invalid file type. Please select: ${acceptedTypes
+          .map((type) => type.split('/')[1])
+          .join(', ')}`
+      )
+      return
+    }
+
+    // Validate file size
+    if (file.size > maxFileSize * 1024 * 1024) {
+      setError(`File size must be less than ${maxFileSize}MB`)
+      return
+    }
+
+    setSelectedFile(file)
+    setError(null)
+
+    // Create preview
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setPreview(e.target?.result as string)
+    }
+    reader.readAsDataURL(file)
+
+    // Auto-generate alt text from filename
+    const baseName = file.name.split('.')[0]
+    setAltText(baseName.replace(/[-_]/g, ' '))
+  }
+
   const DropzoneArea = () => (
     <Box
       onDragOver={handleDragOver}
@@ -166,11 +176,16 @@ export default function ImageUpload({
       onClick={() => setOpen(true)}
       sx={{
         border: '2px dashed',
-        borderColor: 'primary.main',
+        borderColor: 'grey.300',
         borderRadius: '12px',
-        p: 4,
+        p: 6,
         textAlign: 'center',
         cursor: 'pointer',
+        minHeight: 200,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
         transition: 'all 0.2s ease',
         '&:hover': {
           borderColor: 'primary.dark',

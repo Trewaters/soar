@@ -339,10 +339,36 @@ export default function ImageUploadWithFallback({
     const files = event.dataTransfer.files
     if (files.length > 0) {
       const file = files[0]
-      const fakeEvent = {
-        target: { files: [file] },
-      } as unknown as React.ChangeEvent<HTMLInputElement>
-      handleFileSelect(fakeEvent)
+
+      // Validate file type
+      if (!acceptedTypes.includes(file.type)) {
+        setError(
+          `Invalid file type. Please select: ${acceptedTypes
+            .map((type) => type.split('/')[1])
+            .join(', ')}`
+        )
+        return
+      }
+
+      // Validate file size
+      if (file.size > maxFileSize * 1024 * 1024) {
+        setError(`File size must be less than ${maxFileSize}MB`)
+        return
+      }
+
+      setSelectedFile(file)
+      setError(null)
+
+      // Create preview
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setPreview(e.target?.result as string)
+      }
+      reader.readAsDataURL(file)
+
+      // Auto-generate alt text from filename
+      const baseName = file.name.split('.')[0]
+      setAltText(baseName.replace(/[-_]/g, ' '))
     }
   }
 
