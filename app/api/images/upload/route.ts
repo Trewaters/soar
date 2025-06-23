@@ -1,59 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
 import { PrismaClient } from '../../../../prisma/generated/client'
+import { storageManager } from '../../../../lib/storage/manager'
 
 const prisma = new PrismaClient()
 
-// Cloudflare Images API configuration
-const CLOUDFLARE_ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID
-const CLOUDFLARE_API_TOKEN = process.env.CLOUDFLARE_API_TOKEN
-const CLOUDFLARE_IMAGES_URL = `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/images/v1`
-
-interface CloudflareImageResponse {
-  success: boolean
-  result?: {
-    id: string
-    filename: string
-    uploaded: string
-    requireSignedURLs: boolean
-    variants: string[]
-  }
-  errors?: Array<{ code: number; message: string }>
-}
-
 export async function POST(request: NextRequest) {
   try {
-    // Debug environment variables
-    console.log('Environment check:', {
-      nodeEnv: process.env.NODE_ENV,
-      hasAccountId: !!CLOUDFLARE_ACCOUNT_ID,
-      hasApiToken: !!CLOUDFLARE_API_TOKEN,
-      accountIdValue: CLOUDFLARE_ACCOUNT_ID
-        ? `${CLOUDFLARE_ACCOUNT_ID.substring(0, 8)}...`
-        : 'undefined',
-      apiTokenValue: CLOUDFLARE_API_TOKEN
-        ? `${CLOUDFLARE_API_TOKEN.substring(0, 8)}...`
-        : 'undefined',
-      cloudflareUrl: CLOUDFLARE_IMAGES_URL,
-    })
-
-    // Check environment variables
-    if (!CLOUDFLARE_ACCOUNT_ID || !CLOUDFLARE_API_TOKEN) {
-      console.error('Missing Cloudflare configuration:', {
-        hasAccountId: !!CLOUDFLARE_ACCOUNT_ID,
-        hasApiToken: !!CLOUDFLARE_API_TOKEN,
-      })
-      return NextResponse.json(
-        {
-          error:
-            'Server configuration error: Cloudflare credentials not configured',
-          details:
-            'Please check CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN environment variables',
-        },
-        { status: 500 }
-      )
-    }
-
     // Check authentication
     const session = await auth()
     if (!session?.user?.id) {
@@ -94,72 +47,29 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Upload to Cloudflare Images
-    const cloudflareForm = new FormData()
-    cloudflareForm.append('file', file)
-    cloudflareForm.append(
-      'metadata',
-      JSON.stringify({
-        userId,
-        uploadedAt: new Date().toISOString(),
-        altText: altText || '',
-      })
-    )
-
-    const cloudflareResponse = await fetch(CLOUDFLARE_IMAGES_URL, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${CLOUDFLARE_API_TOKEN}`,
-      },
-      body: cloudflareForm,
+    // Upload using storage manager (handles provider switching automatically)
+    const uploadResult = await storageManager.upload(file.name, file, {
+      access: 'public',
+      addRandomSuffix: true,
     })
 
-    const cloudflareData: CloudflareImageResponse =
-      await cloudflareResponse.json()
-
-    if (!cloudflareData.success || !cloudflareData.result) {
-      console.error('Cloudflare upload failed:', {
-        status: cloudflareResponse.status,
-        errors: cloudflareData.errors,
-        url: CLOUDFLARE_IMAGES_URL,
-      })
-
-      // Return specific error information for client-side fallback handling
-      const errorResponse = {
-        error: 'Cloudflare upload failed',
-        canFallbackToLocal: true,
-        details:
-          'Image upload to cloud storage failed. You can save this image locally instead.',
-        cloudflareError: {
-          status: cloudflareResponse.status,
-          errors: cloudflareData.errors,
-        },
-      }
-
-      // Handle specific error cases
-      if (cloudflareData.errors?.some((error) => error.code === 5403)) {
-        errorResponse.error =
-          'Cloudflare Images permission denied. Please check your API token permissions.'
-        errorResponse.details =
-          'Your API token needs "Account:Cloudflare Images:Edit" permission. Visit https://dash.cloudflare.com/profile/api-tokens to create a new token with the correct permissions.'
-      }
-
-      return NextResponse.json(errorResponse, { status: 503 }) // Service Unavailable
-    }
-
-    // Get the public URL for the image
-    const imageUrl = `https://imagedelivery.net/${CLOUDFLARE_ACCOUNT_ID}/${cloudflareData.result.id}/public`
+    console.log('Storage upload successful:', {
+      provider: storageManager.getActiveProvider().name,
+      url: uploadResult.url,
+      size: uploadResult.size,
+      fileName: uploadResult.fileName,
+    })
 
     // Save to database with cloud storage info
     const poseImage = await prisma.poseImage.create({
       data: {
         userId,
-        url: imageUrl,
+        url: uploadResult.url,
         altText: altText || null,
-        fileName: file.name,
-        fileSize: file.size,
+        fileName: uploadResult.fileName,
+        fileSize: uploadResult.size,
         storageType: 'CLOUD',
-        cloudflareId: cloudflareData.result.id,
+        cloudflareId: uploadResult.metadata?.cloudflareId || null, // Store provider-specific ID
         isOffline: false,
       },
     })
@@ -174,15 +84,15 @@ export async function POST(request: NextRequest) {
       storageType: poseImage.storageType,
     })
   } catch (error) {
-    console.error('Upload error:', error)
+    console.error('Storage upload error:', error)
 
-    // Return error with fallback option
+    // Return error with fallback option (keeps your existing fallback system)
     return NextResponse.json(
       {
-        error: 'Internal server error during upload',
+        error: 'Cloud storage upload failed',
         canFallbackToLocal: true,
         details:
-          'An unexpected error occurred. You can save this image locally instead.',
+          'Upload to cloud storage failed. You can save this image locally instead.',
       },
       { status: 500 }
     )
@@ -268,23 +178,13 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
-    // Extract Cloudflare image ID from URL
-    const urlParts = image.url.split('/')
-    const cloudflareImageId = urlParts[urlParts.length - 2]
-
-    // Delete from Cloudflare
-    if (cloudflareImageId && cloudflareImageId !== 'public') {
-      try {
-        await fetch(`${CLOUDFLARE_IMAGES_URL}/${cloudflareImageId}`, {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${CLOUDFLARE_API_TOKEN}`,
-          },
-        })
-      } catch (error) {
-        console.error('Failed to delete from Cloudflare:', error)
-        // Continue with database deletion even if Cloudflare deletion fails
-      }
+    // Delete from cloud storage using storage manager
+    try {
+      await storageManager.delete(image.url)
+      console.log('Successfully deleted from cloud storage:', image.url)
+    } catch (error) {
+      console.error('Failed to delete from cloud storage:', error)
+      // Continue with database deletion even if cloud deletion fails
     }
 
     // Delete from database

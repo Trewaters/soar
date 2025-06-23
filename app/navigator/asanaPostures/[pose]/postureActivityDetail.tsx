@@ -578,10 +578,6 @@ export default function PostureActivityDetail({
       {/* Image Management Section */}
       {session && posture && (
         <Box sx={{ mt: 3, px: 2, pb: 3 }}>
-          {/* <ImageManagement
-            title={`Images for ${posture.sort_english_name}`}
-            variant="full"
-          /> */}
           <ImageManagementWithFallback
             title={`${posture.sort_english_name} image`}
             variant="full"

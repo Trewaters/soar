@@ -8,6 +8,11 @@ const nextConfig = {
     // Configure image domains and loaders
     domains: [],
     remotePatterns: [
+      // Vercel Blob storage pattern
+      {
+        protocol: 'https',
+        hostname: '*.public.blob.vercel-storage.com',
+      },
       // Add patterns for external image sources if needed
       // { protocol: 'https', hostname: 'your-cloudflare-domain.com' }
     ],
