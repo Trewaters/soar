@@ -26,11 +26,40 @@ import {
   createAsanaActivity,
   deleteAsanaActivity,
 } from '@lib/asanaActivityClientService'
+import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
 interface PostureCardProps {
   postureCardProp: FullAsanaData
+}
+
+// Custom hook to fetch posture images
+const usePostureImages = (postureId?: string, postureName?: string) => {
+  const [images, setImages] = useState<PoseImageData[]>([])
+  const [loading, setLoading] = useState(false)
+  const { data: session } = useSession()
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      if (!session?.user?.id || (!postureId && !postureName)) return
+
+      try {
+        setLoading(true)
+        const response = await getUserPoseImages(50, 0, postureId, postureName)
+        setImages(response.images)
+      } catch (error) {
+        console.error('Error fetching posture images:', error)
+        setImages([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchImages()
+  }, [session?.user?.id, postureId, postureName])
+
+  return { images, loading }
 }
 
 export default function PostureActivityDetail({
@@ -52,6 +81,31 @@ export default function PostureActivityDetail({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [activityRefreshTrigger, setActivityRefreshTrigger] = useState(0)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+  // Fetch uploaded images for this posture
+  const { images: postureImages, loading: imagesLoading } = usePostureImages(
+    posture?.id?.toString(),
+    posture?.sort_english_name
+  )
+
+  // Cycle through images every 10 seconds if multiple images exist
+  useEffect(() => {
+    if (!postureImages || postureImages.length <= 1) return
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % postureImages.length)
+    }, 10000) // Change image every 10 seconds
+
+    return () => clearInterval(interval)
+  }, [postureImages])
+
+  // Handle manual image cycling
+  const handleImageCycle = () => {
+    if (postureImages && postureImages.length > 1) {
+      setCurrentImageIndex((prev) => (prev + 1) % postureImages.length)
+    }
+  }
 
   // Check if activity already exists on component mount
   useEffect(() => {
@@ -252,6 +306,12 @@ export default function PostureActivityDetail({
     }
   }
 
+  // Get background image for display - only use patterns when no uploaded images
+  const getPostureBackgroundImage = () => {
+    // Always use category-based background pattern since uploaded images are displayed separately
+    return getAsanaBackgroundUrl(posture?.category)
+  }
+
   function handleClick() {
     router.push(`../../views/viewAsanaPractice/${posture?.sort_english_name}/`)
   }
@@ -266,7 +326,7 @@ export default function PostureActivityDetail({
       <Box
         sx={{
           textAlign: 'center',
-          backgroundImage: `${getAsanaBackgroundUrl(posture?.category)}`,
+          backgroundImage: getPostureBackgroundImage(),
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
@@ -274,9 +334,15 @@ export default function PostureActivityDetail({
           display: 'flex',
           flexDirection: 'column',
           pb: 4,
+          position: 'relative',
+          transition: 'background-image 0.5s ease-in-out',
         }}
       >
-        <Stack direction={'column'} alignSelf={'center'}>
+        <Stack
+          direction={'column'}
+          alignSelf={'center'}
+          sx={{ position: 'relative', zIndex: 1 }}
+        >
           <Stack>
             <Paper
               elevation={1}
@@ -344,17 +410,228 @@ export default function PostureActivityDetail({
               }}
             >
               {posture?.sort_english_name}
-
-              {/* <Typography
-                variant="subtitle1"
-                component={'p'}
-                color={'primary.contrastText'}
-              >
-                {posture?.sanskrit_names ?? 'Sanskrit Name not-found'}
-              </Typography> */}
             </Typography>
           </Stack>
         </Stack>
+
+        {/* Display uploaded image prominently when available */}
+        {postureImages &&
+        postureImages.length > 0 &&
+        postureImages[currentImageIndex] &&
+        postureImages[currentImageIndex].url &&
+        !postureImages[currentImageIndex].url.startsWith('local://') ? (
+          <Box
+            sx={{
+              position: 'relative',
+              width: '100%',
+              maxWidth: '500px',
+              height: '300px',
+              alignSelf: 'center',
+              mt: 3,
+              mb: 2,
+              borderRadius: '16px',
+              overflow: 'hidden',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+              zIndex: 1,
+            }}
+          >
+            <Image
+              key={postureImages[currentImageIndex].url}
+              src={postureImages[currentImageIndex].url}
+              alt={`${posture?.sort_english_name} user image`}
+              fill
+              style={{
+                objectFit: 'cover',
+                transition: 'all 0.5s ease-in-out',
+              }}
+            />
+
+            {/* Posture name overlay on image */}
+            <Box
+              sx={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                background: 'linear-gradient(transparent, rgba(0, 0, 0, 0.8))',
+                p: 2,
+                zIndex: 2,
+              }}
+            >
+              <Typography
+                variant="h3"
+                component="h2"
+                sx={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
+                }}
+              >
+                {posture?.sort_english_name}
+              </Typography>
+
+              {/* Category badge on image */}
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: -40,
+                  right: 16,
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  borderRadius: '12px',
+                  px: 2,
+                  py: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                }}
+              >
+                <Image
+                  alt={`${posture?.category} icon`}
+                  height={24}
+                  width={24}
+                  src={getAsanaIconUrl(posture?.category)}
+                />
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: 'text.primary',
+                    fontWeight: 'medium',
+                  }}
+                >
+                  {posture?.category}
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+        ) : (
+          // Fallback to text layout when no images available
+          <Stack
+            direction={'column'}
+            alignSelf={'center'}
+            sx={{ position: 'relative', zIndex: 1 }}
+          >
+            <Stack>
+              <Paper
+                elevation={1}
+                sx={{
+                  borderRadius: '16px',
+                  backgroundColor: 'info.contrastText',
+                  mt: 3,
+                  mb: '-24px',
+                  mx: '25%',
+                  zIndex: 1,
+                }}
+              >
+                <Box
+                  sx={{
+                    borderRadius: '16px',
+                    height: '50%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    px: 4,
+                    py: 1,
+                    overflow: 'hidden',
+                  }}
+                  justifyContent={'space-around'}
+                  alignItems={'center'}
+                >
+                  <Image
+                    alt="Asana Standing"
+                    height={36}
+                    width={36}
+                    style={{
+                      alignContent: 'center',
+                    }}
+                    src={getAsanaIconUrl(posture?.category)}
+                  />
+                  <Typography
+                    variant="h5"
+                    component={'p'}
+                    sx={{
+                      color: 'secondary.contrastText',
+                      flexShrink: 1,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {posture?.category}
+                  </Typography>
+                </Box>
+              </Paper>
+            </Stack>
+            <Stack>
+              <Typography
+                variant="h1"
+                component={'h2'}
+                sx={{
+                  pl: 2,
+                  pt: 2,
+                  height: '200px',
+                  width: '400px',
+                  backgroundColor: 'info.contrastText',
+                  color: 'primary.main',
+                  borderRadius: '12px',
+                  alignContent: 'center',
+                  boxShadow: '0 2px 2px 2px rgba(211, 211, 211, 0.5)',
+                }}
+              >
+                {posture?.sort_english_name}
+              </Typography>
+            </Stack>
+          </Stack>
+        )}
+
+        {/* Image cycling indicator - positioned over image or at top when using uploaded images */}
+        {postureImages &&
+          postureImages.length > 0 &&
+          postureImages[currentImageIndex] &&
+          postureImages[currentImageIndex].url &&
+          !postureImages[currentImageIndex].url.startsWith('local://') && (
+            <Box
+              onClick={handleImageCycle}
+              sx={{
+                position: 'absolute',
+                top: 16,
+                right: 16,
+                zIndex: 3,
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                borderRadius: '8px',
+                px: 1.5,
+                py: 0.5,
+                backdropFilter: 'blur(4px)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 0.5,
+                cursor: postureImages.length > 1 ? 'pointer' : 'default',
+                transition: 'all 0.2s ease',
+                '&:hover':
+                  postureImages.length > 1
+                    ? {
+                        backgroundColor: 'rgba(255, 255, 255, 1)',
+                        transform: 'scale(1.05)',
+                      }
+                    : {},
+              }}
+            >
+              <Typography
+                variant="caption"
+                sx={{
+                  color: 'primary.main',
+                  fontWeight: 'medium',
+                  fontSize: '0.75rem',
+                }}
+              >
+                Your Image
+                {postureImages.length > 1 && (
+                  <span style={{ marginLeft: '4px' }}>
+                    {currentImageIndex + 1}/{postureImages.length}
+                  </span>
+                )}
+              </Typography>
+            </Box>
+          )}
       </Box>
       <Box
         sx={{
