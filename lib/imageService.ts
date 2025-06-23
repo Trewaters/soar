@@ -11,12 +11,16 @@ export interface PoseImageData {
   storageType?: 'CLOUD' | 'LOCAL' | 'HYBRID'
   isOffline?: boolean
   localStorageId?: string | null
+  postureId?: string | null
+  postureName?: string | null
 }
 
 export interface UploadImageInput {
   file: File
   altText?: string
   userId: string
+  postureId?: string
+  postureName?: string
 }
 
 export interface GetImagesResponse {
@@ -37,6 +41,12 @@ export async function uploadPoseImage(
     formData.append('userId', input.userId)
     if (input.altText) {
       formData.append('altText', input.altText)
+    }
+    if (input.postureId) {
+      formData.append('postureId', input.postureId)
+    }
+    if (input.postureName) {
+      formData.append('postureName', input.postureName)
     }
 
     const response = await fetch('/api/images/upload', {
@@ -72,13 +82,22 @@ export async function uploadPoseImage(
  */
 export async function getUserPoseImages(
   limit: number = 10,
-  offset: number = 0
+  offset: number = 0,
+  postureId?: string,
+  postureName?: string
 ): Promise<GetImagesResponse> {
   try {
     const params = new URLSearchParams({
       limit: limit.toString(),
       offset: offset.toString(),
     })
+
+    if (postureId) {
+      params.append('postureId', postureId)
+    }
+    if (postureName) {
+      params.append('postureName', postureName)
+    }
 
     const response = await fetch(`/api/images/upload?${params}`, {
       method: 'GET',
@@ -95,6 +114,8 @@ export async function getUserPoseImages(
       operation: 'fetch_user_images',
       limit,
       offset,
+      postureId,
+      postureName,
     })
     throw error
   }

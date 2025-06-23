@@ -19,16 +19,13 @@ import { useRouter } from 'next/navigation'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 import PostureShareButton from '@app/clientComponents/exportPoses'
 import ActivityTracker from '@app/clientComponents/activityTracker/ActivityTracker'
-import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
+import PostureImageManagement from '@app/clientComponents/imageUpload/PostureImageManagement'
 import { useSession } from 'next-auth/react'
 import {
   checkActivityExists,
   createAsanaActivity,
   deleteAsanaActivity,
 } from '@lib/asanaActivityClientService'
-import ImageUploadFallbackDemo from '@app/demo/image-fallback/page'
-import EnhancedImageGallery from '@app/clientComponents/imageUpload/EnhancedImageGallery'
-import ImageManagementWithFallback from '@app/clientComponents/imageUpload/ImageManagementWithFallback'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
@@ -578,11 +575,12 @@ export default function PostureActivityDetail({
       {/* Image Management Section */}
       {session && posture && (
         <Box sx={{ mt: 3, px: 2, pb: 3 }}>
-          <ImageManagementWithFallback
-            title={`${posture.sort_english_name} image`}
+          <PostureImageManagement
+            title={`Images for ${posture.sort_english_name}`}
             variant="full"
+            postureId={posture.id?.toString()}
+            postureName={posture.sort_english_name}
           />
-          {/* <ImageManagement title="My Yoga Pose Images" variant="full" /> */}
         </Box>
       )}
     </Paper>

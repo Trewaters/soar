@@ -21,6 +21,8 @@ export async function POST(request: NextRequest) {
     const file = formData.get('file') as File
     const altText = formData.get('altText') as string
     const userId = formData.get('userId') as string
+    const postureId = formData.get('postureId') as string
+    const postureName = formData.get('postureName') as string
 
     // Validate inputs
     if (!file) {
@@ -64,6 +66,8 @@ export async function POST(request: NextRequest) {
     const poseImage = await prisma.poseImage.create({
       data: {
         userId,
+        postureId: postureId || null,
+        postureName: postureName || null,
         url: uploadResult.url,
         altText: altText || null,
         fileName: uploadResult.fileName,
@@ -114,11 +118,23 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get('limit') || '10')
     const offset = parseInt(searchParams.get('offset') || '0')
+    const postureId = searchParams.get('postureId')
+    const postureName = searchParams.get('postureName')
+
+    // Build where clause
+    const whereClause: any = {
+      userId: session.user.id,
+    }
+
+    // Add posture filter if provided
+    if (postureId) {
+      whereClause.postureId = postureId
+    } else if (postureName) {
+      whereClause.postureName = postureName
+    }
 
     const images = await prisma.poseImage.findMany({
-      where: {
-        userId: session.user.id,
-      },
+      where: whereClause,
       orderBy: {
         uploadedAt: 'desc',
       },
@@ -127,9 +143,7 @@ export async function GET(request: NextRequest) {
     })
 
     const total = await prisma.poseImage.count({
-      where: {
-        userId: session.user.id,
-      },
+      where: whereClause,
     })
 
     return NextResponse.json({

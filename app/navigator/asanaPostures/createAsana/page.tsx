@@ -282,8 +282,10 @@ export default function Page() {
               Reference Images
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Upload images to help illustrate this pose. These will be
-              associated with your profile.
+              Upload reference images to help illustrate this pose. These will
+              be associated with your profile but not specifically with this
+              posture until it&apos;s created. After creating the posture, you
+              can upload posture-specific images on the posture detail page.
             </Typography>
 
             <ImageManagement title="" variant="upload-only" />

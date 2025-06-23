@@ -244,6 +244,8 @@ exports.Prisma.UserLoginScalarFieldEnum = {
 exports.Prisma.PoseImageScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  postureId: 'postureId',
+  postureName: 'postureName',
   url: 'url',
   altText: 'altText',
   fileName: 'fileName',

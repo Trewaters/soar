@@ -1544,10 +1544,12 @@ export namespace Prisma {
 
   export type AsanaPostureCountOutputType = {
     asanaActivities: number
+    poseImages: number
   }
 
   export type AsanaPostureCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     asanaActivities?: boolean | AsanaPostureCountOutputTypeCountAsanaActivitiesArgs
+    poseImages?: boolean | AsanaPostureCountOutputTypeCountPoseImagesArgs
   }
 
   // Custom InputTypes
@@ -1566,6 +1568,13 @@ export namespace Prisma {
    */
   export type AsanaPostureCountOutputTypeCountAsanaActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AsanaActivityWhereInput
+  }
+
+  /**
+   * AsanaPostureCountOutputType without action
+   */
+  export type AsanaPostureCountOutputTypeCountPoseImagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PoseImageWhereInput
   }
 
 
@@ -4228,6 +4237,7 @@ export namespace Prisma {
     muscle_action?: boolean
     created_by?: boolean
     asanaActivities?: boolean | AsanaPosture$asanaActivitiesArgs<ExtArgs>
+    poseImages?: boolean | AsanaPosture$poseImagesArgs<ExtArgs>
     _count?: boolean | AsanaPostureCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["asanaPosture"]>
 
@@ -4271,6 +4281,7 @@ export namespace Prisma {
 
   export type AsanaPostureInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     asanaActivities?: boolean | AsanaPosture$asanaActivitiesArgs<ExtArgs>
+    poseImages?: boolean | AsanaPosture$poseImagesArgs<ExtArgs>
     _count?: boolean | AsanaPostureCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -4278,6 +4289,7 @@ export namespace Prisma {
     name: "AsanaPosture"
     objects: {
       asanaActivities: Prisma.$AsanaActivityPayload<ExtArgs>[]
+      poseImages: Prisma.$PoseImagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4678,6 +4690,7 @@ export namespace Prisma {
   export interface Prisma__AsanaPostureClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     asanaActivities<T extends AsanaPosture$asanaActivitiesArgs<ExtArgs> = {}>(args?: Subset<T, AsanaPosture$asanaActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "findMany"> | Null>
+    poseImages<T extends AsanaPosture$poseImagesArgs<ExtArgs> = {}>(args?: Subset<T, AsanaPosture$poseImagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PoseImagePayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5084,6 +5097,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AsanaActivityScalarFieldEnum | AsanaActivityScalarFieldEnum[]
+  }
+
+  /**
+   * AsanaPosture.poseImages
+   */
+  export type AsanaPosture$poseImagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PoseImage
+     */
+    select?: PoseImageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PoseImageInclude<ExtArgs> | null
+    where?: PoseImageWhereInput
+    orderBy?: PoseImageOrderByWithRelationInput | PoseImageOrderByWithRelationInput[]
+    cursor?: PoseImageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PoseImageScalarFieldEnum | PoseImageScalarFieldEnum[]
   }
 
   /**
@@ -8948,6 +8981,8 @@ export namespace Prisma {
   export type PoseImageMinAggregateOutputType = {
     id: string | null
     userId: string | null
+    postureId: string | null
+    postureName: string | null
     url: string | null
     altText: string | null
     fileName: string | null
@@ -8964,6 +8999,8 @@ export namespace Prisma {
   export type PoseImageMaxAggregateOutputType = {
     id: string | null
     userId: string | null
+    postureId: string | null
+    postureName: string | null
     url: string | null
     altText: string | null
     fileName: string | null
@@ -8980,6 +9017,8 @@ export namespace Prisma {
   export type PoseImageCountAggregateOutputType = {
     id: number
     userId: number
+    postureId: number
+    postureName: number
     url: number
     altText: number
     fileName: number
@@ -9006,6 +9045,8 @@ export namespace Prisma {
   export type PoseImageMinAggregateInputType = {
     id?: true
     userId?: true
+    postureId?: true
+    postureName?: true
     url?: true
     altText?: true
     fileName?: true
@@ -9022,6 +9063,8 @@ export namespace Prisma {
   export type PoseImageMaxAggregateInputType = {
     id?: true
     userId?: true
+    postureId?: true
+    postureName?: true
     url?: true
     altText?: true
     fileName?: true
@@ -9038,6 +9081,8 @@ export namespace Prisma {
   export type PoseImageCountAggregateInputType = {
     id?: true
     userId?: true
+    postureId?: true
+    postureName?: true
     url?: true
     altText?: true
     fileName?: true
@@ -9141,6 +9186,8 @@ export namespace Prisma {
   export type PoseImageGroupByOutputType = {
     id: string
     userId: string
+    postureId: string | null
+    postureName: string | null
     url: string
     altText: string | null
     fileName: string | null
@@ -9176,6 +9223,8 @@ export namespace Prisma {
   export type PoseImageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    postureId?: boolean
+    postureName?: boolean
     url?: boolean
     altText?: boolean
     fileName?: boolean
@@ -9188,12 +9237,15 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDataDefaultArgs<ExtArgs>
+    posture?: boolean | PoseImage$postureArgs<ExtArgs>
   }, ExtArgs["result"]["poseImage"]>
 
 
   export type PoseImageSelectScalar = {
     id?: boolean
     userId?: boolean
+    postureId?: boolean
+    postureName?: boolean
     url?: boolean
     altText?: boolean
     fileName?: boolean
@@ -9209,16 +9261,20 @@ export namespace Prisma {
 
   export type PoseImageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDataDefaultArgs<ExtArgs>
+    posture?: boolean | PoseImage$postureArgs<ExtArgs>
   }
 
   export type $PoseImagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "PoseImage"
     objects: {
       user: Prisma.$UserDataPayload<ExtArgs>
+      posture: Prisma.$AsanaPosturePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
+      postureId: string | null
+      postureName: string | null
       url: string
       altText: string | null
       fileName: string | null
@@ -9594,6 +9650,7 @@ export namespace Prisma {
   export interface Prisma__PoseImageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDataDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDataDefaultArgs<ExtArgs>>): Prisma__UserDataClient<$Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    posture<T extends PoseImage$postureArgs<ExtArgs> = {}>(args?: Subset<T, PoseImage$postureArgs<ExtArgs>>): Prisma__AsanaPostureClient<$Result.GetResult<Prisma.$AsanaPosturePayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9625,6 +9682,8 @@ export namespace Prisma {
   interface PoseImageFieldRefs {
     readonly id: FieldRef<"PoseImage", 'String'>
     readonly userId: FieldRef<"PoseImage", 'String'>
+    readonly postureId: FieldRef<"PoseImage", 'String'>
+    readonly postureName: FieldRef<"PoseImage", 'String'>
     readonly url: FieldRef<"PoseImage", 'String'>
     readonly altText: FieldRef<"PoseImage", 'String'>
     readonly fileName: FieldRef<"PoseImage", 'String'>
@@ -9962,6 +10021,21 @@ export namespace Prisma {
   }
 
   /**
+   * PoseImage.posture
+   */
+  export type PoseImage$postureArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AsanaPosture
+     */
+    select?: AsanaPostureSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AsanaPostureInclude<ExtArgs> | null
+    where?: AsanaPostureWhereInput
+  }
+
+  /**
    * PoseImage without action
    */
   export type PoseImageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10133,6 +10207,8 @@ export namespace Prisma {
   export const PoseImageScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
+    postureId: 'postureId',
+    postureName: 'postureName',
     url: 'url',
     altText: 'altText',
     fileName: 'fileName',
@@ -10564,6 +10640,7 @@ export namespace Prisma {
     muscle_action?: StringNullableFilter<"AsanaPosture"> | string | null
     created_by?: StringNullableFilter<"AsanaPosture"> | string | null
     asanaActivities?: AsanaActivityListRelationFilter
+    poseImages?: PoseImageListRelationFilter
   }
 
   export type AsanaPostureOrderByWithRelationInput = {
@@ -10602,6 +10679,7 @@ export namespace Prisma {
     muscle_action?: SortOrder
     created_by?: SortOrder
     asanaActivities?: AsanaActivityOrderByRelationAggregateInput
+    poseImages?: PoseImageOrderByRelationAggregateInput
   }
 
   export type AsanaPostureWhereUniqueInput = Prisma.AtLeast<{
@@ -10643,6 +10721,7 @@ export namespace Prisma {
     muscle_action?: StringNullableFilter<"AsanaPosture"> | string | null
     created_by?: StringNullableFilter<"AsanaPosture"> | string | null
     asanaActivities?: AsanaActivityListRelationFilter
+    poseImages?: PoseImageListRelationFilter
   }, "id" | "sort_english_name">
 
   export type AsanaPostureOrderByWithAggregationInput = {
@@ -11030,6 +11109,8 @@ export namespace Prisma {
     NOT?: PoseImageWhereInput | PoseImageWhereInput[]
     id?: StringFilter<"PoseImage"> | string
     userId?: StringFilter<"PoseImage"> | string
+    postureId?: StringNullableFilter<"PoseImage"> | string | null
+    postureName?: StringNullableFilter<"PoseImage"> | string | null
     url?: StringFilter<"PoseImage"> | string
     altText?: StringNullableFilter<"PoseImage"> | string | null
     fileName?: StringNullableFilter<"PoseImage"> | string | null
@@ -11042,11 +11123,14 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"PoseImage"> | Date | string
     updatedAt?: DateTimeFilter<"PoseImage"> | Date | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
+    posture?: XOR<AsanaPostureNullableRelationFilter, AsanaPostureWhereInput> | null
   }
 
   export type PoseImageOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
+    postureId?: SortOrder
+    postureName?: SortOrder
     url?: SortOrder
     altText?: SortOrder
     fileName?: SortOrder
@@ -11059,6 +11143,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserDataOrderByWithRelationInput
+    posture?: AsanaPostureOrderByWithRelationInput
   }
 
   export type PoseImageWhereUniqueInput = Prisma.AtLeast<{
@@ -11067,6 +11152,8 @@ export namespace Prisma {
     OR?: PoseImageWhereInput[]
     NOT?: PoseImageWhereInput | PoseImageWhereInput[]
     userId?: StringFilter<"PoseImage"> | string
+    postureId?: StringNullableFilter<"PoseImage"> | string | null
+    postureName?: StringNullableFilter<"PoseImage"> | string | null
     url?: StringFilter<"PoseImage"> | string
     altText?: StringNullableFilter<"PoseImage"> | string | null
     fileName?: StringNullableFilter<"PoseImage"> | string | null
@@ -11079,11 +11166,14 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"PoseImage"> | Date | string
     updatedAt?: DateTimeFilter<"PoseImage"> | Date | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
+    posture?: XOR<AsanaPostureNullableRelationFilter, AsanaPostureWhereInput> | null
   }, "id">
 
   export type PoseImageOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
+    postureId?: SortOrder
+    postureName?: SortOrder
     url?: SortOrder
     altText?: SortOrder
     fileName?: SortOrder
@@ -11108,6 +11198,8 @@ export namespace Prisma {
     NOT?: PoseImageScalarWhereWithAggregatesInput | PoseImageScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"PoseImage"> | string
     userId?: StringWithAggregatesFilter<"PoseImage"> | string
+    postureId?: StringNullableWithAggregatesFilter<"PoseImage"> | string | null
+    postureName?: StringNullableWithAggregatesFilter<"PoseImage"> | string | null
     url?: StringWithAggregatesFilter<"PoseImage"> | string
     altText?: StringNullableWithAggregatesFilter<"PoseImage"> | string | null
     fileName?: StringNullableWithAggregatesFilter<"PoseImage"> | string | null
@@ -11472,6 +11564,7 @@ export namespace Prisma {
     muscle_action?: string | null
     created_by?: string | null
     asanaActivities?: AsanaActivityCreateNestedManyWithoutPostureInput
+    poseImages?: PoseImageCreateNestedManyWithoutPostureInput
   }
 
   export type AsanaPostureUncheckedCreateInput = {
@@ -11510,6 +11603,7 @@ export namespace Prisma {
     muscle_action?: string | null
     created_by?: string | null
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutPostureInput
+    poseImages?: PoseImageUncheckedCreateNestedManyWithoutPostureInput
   }
 
   export type AsanaPostureUpdateInput = {
@@ -11547,6 +11641,7 @@ export namespace Prisma {
     muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
     created_by?: NullableStringFieldUpdateOperationsInput | string | null
     asanaActivities?: AsanaActivityUpdateManyWithoutPostureNestedInput
+    poseImages?: PoseImageUpdateManyWithoutPostureNestedInput
   }
 
   export type AsanaPostureUncheckedUpdateInput = {
@@ -11584,6 +11679,7 @@ export namespace Prisma {
     muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
     created_by?: NullableStringFieldUpdateOperationsInput | string | null
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutPostureNestedInput
+    poseImages?: PoseImageUncheckedUpdateManyWithoutPostureNestedInput
   }
 
   export type AsanaPostureCreateManyInput = {
@@ -12014,6 +12110,7 @@ export namespace Prisma {
 
   export type PoseImageCreateInput = {
     id?: string
+    postureName?: string | null
     url: string
     altText?: string | null
     fileName?: string | null
@@ -12026,11 +12123,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserDataCreateNestedOneWithoutPoseImagesInput
+    posture?: AsanaPostureCreateNestedOneWithoutPoseImagesInput
   }
 
   export type PoseImageUncheckedCreateInput = {
     id?: string
     userId: string
+    postureId?: string | null
+    postureName?: string | null
     url: string
     altText?: string | null
     fileName?: string | null
@@ -12045,6 +12145,7 @@ export namespace Prisma {
   }
 
   export type PoseImageUpdateInput = {
+    postureName?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
     altText?: NullableStringFieldUpdateOperationsInput | string | null
     fileName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12057,10 +12158,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserDataUpdateOneRequiredWithoutPoseImagesNestedInput
+    posture?: AsanaPostureUpdateOneWithoutPoseImagesNestedInput
   }
 
   export type PoseImageUncheckedUpdateInput = {
     userId?: StringFieldUpdateOperationsInput | string
+    postureId?: NullableStringFieldUpdateOperationsInput | string | null
+    postureName?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
     altText?: NullableStringFieldUpdateOperationsInput | string | null
     fileName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12077,6 +12181,8 @@ export namespace Prisma {
   export type PoseImageCreateManyInput = {
     id?: string
     userId: string
+    postureId?: string | null
+    postureName?: string | null
     url: string
     altText?: string | null
     fileName?: string | null
@@ -12091,6 +12197,7 @@ export namespace Prisma {
   }
 
   export type PoseImageUpdateManyMutationInput = {
+    postureName?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
     altText?: NullableStringFieldUpdateOperationsInput | string | null
     fileName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12106,6 +12213,8 @@ export namespace Prisma {
 
   export type PoseImageUncheckedUpdateManyInput = {
     userId?: StringFieldUpdateOperationsInput | string
+    postureId?: NullableStringFieldUpdateOperationsInput | string | null
+    postureName?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
     altText?: NullableStringFieldUpdateOperationsInput | string | null
     fileName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12800,9 +12909,16 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type AsanaPostureNullableRelationFilter = {
+    is?: AsanaPostureWhereInput | null
+    isNot?: AsanaPostureWhereInput | null
+  }
+
   export type PoseImageCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    postureId?: SortOrder
+    postureName?: SortOrder
     url?: SortOrder
     altText?: SortOrder
     fileName?: SortOrder
@@ -12823,6 +12939,8 @@ export namespace Prisma {
   export type PoseImageMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    postureId?: SortOrder
+    postureName?: SortOrder
     url?: SortOrder
     altText?: SortOrder
     fileName?: SortOrder
@@ -12839,6 +12957,8 @@ export namespace Prisma {
   export type PoseImageMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    postureId?: SortOrder
+    postureName?: SortOrder
     url?: SortOrder
     altText?: SortOrder
     fileName?: SortOrder
@@ -13114,11 +13234,25 @@ export namespace Prisma {
     connect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
   }
 
+  export type PoseImageCreateNestedManyWithoutPostureInput = {
+    create?: XOR<PoseImageCreateWithoutPostureInput, PoseImageUncheckedCreateWithoutPostureInput> | PoseImageCreateWithoutPostureInput[] | PoseImageUncheckedCreateWithoutPostureInput[]
+    connectOrCreate?: PoseImageCreateOrConnectWithoutPostureInput | PoseImageCreateOrConnectWithoutPostureInput[]
+    createMany?: PoseImageCreateManyPostureInputEnvelope
+    connect?: PoseImageWhereUniqueInput | PoseImageWhereUniqueInput[]
+  }
+
   export type AsanaActivityUncheckedCreateNestedManyWithoutPostureInput = {
     create?: XOR<AsanaActivityCreateWithoutPostureInput, AsanaActivityUncheckedCreateWithoutPostureInput> | AsanaActivityCreateWithoutPostureInput[] | AsanaActivityUncheckedCreateWithoutPostureInput[]
     connectOrCreate?: AsanaActivityCreateOrConnectWithoutPostureInput | AsanaActivityCreateOrConnectWithoutPostureInput[]
     createMany?: AsanaActivityCreateManyPostureInputEnvelope
     connect?: AsanaActivityWhereUniqueInput | AsanaActivityWhereUniqueInput[]
+  }
+
+  export type PoseImageUncheckedCreateNestedManyWithoutPostureInput = {
+    create?: XOR<PoseImageCreateWithoutPostureInput, PoseImageUncheckedCreateWithoutPostureInput> | PoseImageCreateWithoutPostureInput[] | PoseImageUncheckedCreateWithoutPostureInput[]
+    connectOrCreate?: PoseImageCreateOrConnectWithoutPostureInput | PoseImageCreateOrConnectWithoutPostureInput[]
+    createMany?: PoseImageCreateManyPostureInputEnvelope
+    connect?: PoseImageWhereUniqueInput | PoseImageWhereUniqueInput[]
   }
 
   export type AsanaPostureUpdateenglish_namesInput = {
@@ -13170,6 +13304,20 @@ export namespace Prisma {
     deleteMany?: AsanaActivityScalarWhereInput | AsanaActivityScalarWhereInput[]
   }
 
+  export type PoseImageUpdateManyWithoutPostureNestedInput = {
+    create?: XOR<PoseImageCreateWithoutPostureInput, PoseImageUncheckedCreateWithoutPostureInput> | PoseImageCreateWithoutPostureInput[] | PoseImageUncheckedCreateWithoutPostureInput[]
+    connectOrCreate?: PoseImageCreateOrConnectWithoutPostureInput | PoseImageCreateOrConnectWithoutPostureInput[]
+    upsert?: PoseImageUpsertWithWhereUniqueWithoutPostureInput | PoseImageUpsertWithWhereUniqueWithoutPostureInput[]
+    createMany?: PoseImageCreateManyPostureInputEnvelope
+    set?: PoseImageWhereUniqueInput | PoseImageWhereUniqueInput[]
+    disconnect?: PoseImageWhereUniqueInput | PoseImageWhereUniqueInput[]
+    delete?: PoseImageWhereUniqueInput | PoseImageWhereUniqueInput[]
+    connect?: PoseImageWhereUniqueInput | PoseImageWhereUniqueInput[]
+    update?: PoseImageUpdateWithWhereUniqueWithoutPostureInput | PoseImageUpdateWithWhereUniqueWithoutPostureInput[]
+    updateMany?: PoseImageUpdateManyWithWhereWithoutPostureInput | PoseImageUpdateManyWithWhereWithoutPostureInput[]
+    deleteMany?: PoseImageScalarWhereInput | PoseImageScalarWhereInput[]
+  }
+
   export type AsanaActivityUncheckedUpdateManyWithoutPostureNestedInput = {
     create?: XOR<AsanaActivityCreateWithoutPostureInput, AsanaActivityUncheckedCreateWithoutPostureInput> | AsanaActivityCreateWithoutPostureInput[] | AsanaActivityUncheckedCreateWithoutPostureInput[]
     connectOrCreate?: AsanaActivityCreateOrConnectWithoutPostureInput | AsanaActivityCreateOrConnectWithoutPostureInput[]
@@ -13182,6 +13330,20 @@ export namespace Prisma {
     update?: AsanaActivityUpdateWithWhereUniqueWithoutPostureInput | AsanaActivityUpdateWithWhereUniqueWithoutPostureInput[]
     updateMany?: AsanaActivityUpdateManyWithWhereWithoutPostureInput | AsanaActivityUpdateManyWithWhereWithoutPostureInput[]
     deleteMany?: AsanaActivityScalarWhereInput | AsanaActivityScalarWhereInput[]
+  }
+
+  export type PoseImageUncheckedUpdateManyWithoutPostureNestedInput = {
+    create?: XOR<PoseImageCreateWithoutPostureInput, PoseImageUncheckedCreateWithoutPostureInput> | PoseImageCreateWithoutPostureInput[] | PoseImageUncheckedCreateWithoutPostureInput[]
+    connectOrCreate?: PoseImageCreateOrConnectWithoutPostureInput | PoseImageCreateOrConnectWithoutPostureInput[]
+    upsert?: PoseImageUpsertWithWhereUniqueWithoutPostureInput | PoseImageUpsertWithWhereUniqueWithoutPostureInput[]
+    createMany?: PoseImageCreateManyPostureInputEnvelope
+    set?: PoseImageWhereUniqueInput | PoseImageWhereUniqueInput[]
+    disconnect?: PoseImageWhereUniqueInput | PoseImageWhereUniqueInput[]
+    delete?: PoseImageWhereUniqueInput | PoseImageWhereUniqueInput[]
+    connect?: PoseImageWhereUniqueInput | PoseImageWhereUniqueInput[]
+    update?: PoseImageUpdateWithWhereUniqueWithoutPostureInput | PoseImageUpdateWithWhereUniqueWithoutPostureInput[]
+    updateMany?: PoseImageUpdateManyWithWhereWithoutPostureInput | PoseImageUpdateManyWithWhereWithoutPostureInput[]
+    deleteMany?: PoseImageScalarWhereInput | PoseImageScalarWhereInput[]
   }
 
   export type AsanaSeriesCreateseriesPosturesInput = {
@@ -13267,6 +13429,12 @@ export namespace Prisma {
     connect?: UserDataWhereUniqueInput
   }
 
+  export type AsanaPostureCreateNestedOneWithoutPoseImagesInput = {
+    create?: XOR<AsanaPostureCreateWithoutPoseImagesInput, AsanaPostureUncheckedCreateWithoutPoseImagesInput>
+    connectOrCreate?: AsanaPostureCreateOrConnectWithoutPoseImagesInput
+    connect?: AsanaPostureWhereUniqueInput
+  }
+
   export type EnumStorageTypeFieldUpdateOperationsInput = {
     set?: $Enums.StorageType
   }
@@ -13281,6 +13449,16 @@ export namespace Prisma {
     upsert?: UserDataUpsertWithoutPoseImagesInput
     connect?: UserDataWhereUniqueInput
     update?: XOR<XOR<UserDataUpdateToOneWithWhereWithoutPoseImagesInput, UserDataUpdateWithoutPoseImagesInput>, UserDataUncheckedUpdateWithoutPoseImagesInput>
+  }
+
+  export type AsanaPostureUpdateOneWithoutPoseImagesNestedInput = {
+    create?: XOR<AsanaPostureCreateWithoutPoseImagesInput, AsanaPostureUncheckedCreateWithoutPoseImagesInput>
+    connectOrCreate?: AsanaPostureCreateOrConnectWithoutPoseImagesInput
+    upsert?: AsanaPostureUpsertWithoutPoseImagesInput
+    disconnect?: boolean
+    delete?: AsanaPostureWhereInput | boolean
+    connect?: AsanaPostureWhereUniqueInput
+    update?: XOR<XOR<AsanaPostureUpdateToOneWithWhereWithoutPoseImagesInput, AsanaPostureUpdateWithoutPoseImagesInput>, AsanaPostureUncheckedUpdateWithoutPoseImagesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -13642,6 +13820,7 @@ export namespace Prisma {
 
   export type PoseImageCreateWithoutUserInput = {
     id?: string
+    postureName?: string | null
     url: string
     altText?: string | null
     fileName?: string | null
@@ -13653,10 +13832,13 @@ export namespace Prisma {
     isOffline?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    posture?: AsanaPostureCreateNestedOneWithoutPoseImagesInput
   }
 
   export type PoseImageUncheckedCreateWithoutUserInput = {
     id?: string
+    postureId?: string | null
+    postureName?: string | null
     url: string
     altText?: string | null
     fileName?: string | null
@@ -13800,6 +13982,8 @@ export namespace Prisma {
     NOT?: PoseImageScalarWhereInput | PoseImageScalarWhereInput[]
     id?: StringFilter<"PoseImage"> | string
     userId?: StringFilter<"PoseImage"> | string
+    postureId?: StringNullableFilter<"PoseImage"> | string | null
+    postureName?: StringNullableFilter<"PoseImage"> | string | null
     url?: StringFilter<"PoseImage"> | string
     altText?: StringNullableFilter<"PoseImage"> | string | null
     fileName?: StringNullableFilter<"PoseImage"> | string | null
@@ -13978,6 +14162,49 @@ export namespace Prisma {
     data: AsanaActivityCreateManyPostureInput | AsanaActivityCreateManyPostureInput[]
   }
 
+  export type PoseImageCreateWithoutPostureInput = {
+    id?: string
+    postureName?: string | null
+    url: string
+    altText?: string | null
+    fileName?: string | null
+    fileSize?: number | null
+    uploadedAt?: Date | string
+    storageType?: $Enums.StorageType
+    localStorageId?: string | null
+    cloudflareId?: string | null
+    isOffline?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserDataCreateNestedOneWithoutPoseImagesInput
+  }
+
+  export type PoseImageUncheckedCreateWithoutPostureInput = {
+    id?: string
+    userId: string
+    postureName?: string | null
+    url: string
+    altText?: string | null
+    fileName?: string | null
+    fileSize?: number | null
+    uploadedAt?: Date | string
+    storageType?: $Enums.StorageType
+    localStorageId?: string | null
+    cloudflareId?: string | null
+    isOffline?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PoseImageCreateOrConnectWithoutPostureInput = {
+    where: PoseImageWhereUniqueInput
+    create: XOR<PoseImageCreateWithoutPostureInput, PoseImageUncheckedCreateWithoutPostureInput>
+  }
+
+  export type PoseImageCreateManyPostureInputEnvelope = {
+    data: PoseImageCreateManyPostureInput | PoseImageCreateManyPostureInput[]
+  }
+
   export type AsanaActivityUpsertWithWhereUniqueWithoutPostureInput = {
     where: AsanaActivityWhereUniqueInput
     update: XOR<AsanaActivityUpdateWithoutPostureInput, AsanaActivityUncheckedUpdateWithoutPostureInput>
@@ -13992,6 +14219,22 @@ export namespace Prisma {
   export type AsanaActivityUpdateManyWithWhereWithoutPostureInput = {
     where: AsanaActivityScalarWhereInput
     data: XOR<AsanaActivityUpdateManyMutationInput, AsanaActivityUncheckedUpdateManyWithoutPostureInput>
+  }
+
+  export type PoseImageUpsertWithWhereUniqueWithoutPostureInput = {
+    where: PoseImageWhereUniqueInput
+    update: XOR<PoseImageUpdateWithoutPostureInput, PoseImageUncheckedUpdateWithoutPostureInput>
+    create: XOR<PoseImageCreateWithoutPostureInput, PoseImageUncheckedCreateWithoutPostureInput>
+  }
+
+  export type PoseImageUpdateWithWhereUniqueWithoutPostureInput = {
+    where: PoseImageWhereUniqueInput
+    data: XOR<PoseImageUpdateWithoutPostureInput, PoseImageUncheckedUpdateWithoutPostureInput>
+  }
+
+  export type PoseImageUpdateManyWithWhereWithoutPostureInput = {
+    where: PoseImageScalarWhereInput
+    data: XOR<PoseImageUpdateManyMutationInput, PoseImageUncheckedUpdateManyWithoutPostureInput>
   }
 
   export type UserDataCreateWithoutAsanaActivitiesInput = {
@@ -14092,6 +14335,7 @@ export namespace Prisma {
     joint_action?: string | null
     muscle_action?: string | null
     created_by?: string | null
+    poseImages?: PoseImageCreateNestedManyWithoutPostureInput
   }
 
   export type AsanaPostureUncheckedCreateWithoutAsanaActivitiesInput = {
@@ -14129,6 +14373,7 @@ export namespace Prisma {
     joint_action?: string | null
     muscle_action?: string | null
     created_by?: string | null
+    poseImages?: PoseImageUncheckedCreateNestedManyWithoutPostureInput
   }
 
   export type AsanaPostureCreateOrConnectWithoutAsanaActivitiesInput = {
@@ -14248,6 +14493,7 @@ export namespace Prisma {
     joint_action?: NullableStringFieldUpdateOperationsInput | string | null
     muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
     created_by?: NullableStringFieldUpdateOperationsInput | string | null
+    poseImages?: PoseImageUpdateManyWithoutPostureNestedInput
   }
 
   export type AsanaPostureUncheckedUpdateWithoutAsanaActivitiesInput = {
@@ -14284,6 +14530,7 @@ export namespace Prisma {
     joint_action?: NullableStringFieldUpdateOperationsInput | string | null
     muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
     created_by?: NullableStringFieldUpdateOperationsInput | string | null
+    poseImages?: PoseImageUncheckedUpdateManyWithoutPostureNestedInput
   }
 
   export type UserDataCreateWithoutUserLoginsInput = {
@@ -14479,6 +14726,87 @@ export namespace Prisma {
     create: XOR<UserDataCreateWithoutPoseImagesInput, UserDataUncheckedCreateWithoutPoseImagesInput>
   }
 
+  export type AsanaPostureCreateWithoutPoseImagesInput = {
+    id?: string
+    english_names?: AsanaPostureCreateenglish_namesInput | string[]
+    sanskrit_names?: InputJsonValue | null
+    sort_english_name: string
+    description?: string | null
+    benefits?: string | null
+    category?: string | null
+    difficulty?: string | null
+    lore?: string | null
+    breath_direction_default?: string | null
+    dristi?: string | null
+    variations?: AsanaPostureCreatevariationsInput | string[]
+    modifications?: AsanaPostureCreatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
+    preferred_side?: string | null
+    sideways?: boolean | null
+    image?: string | null
+    created_on?: Date | string | null
+    updated_on?: Date | string | null
+    acitivity_completed?: boolean | null
+    acitivity_practice?: boolean | null
+    posture_intent?: string | null
+    breath_series?: AsanaPostureCreatebreath_seriesInput | string[]
+    duration_asana?: string | null
+    transition_cues_out?: string | null
+    transition_cues_in?: string | null
+    setup_cues?: string | null
+    deepening_cues?: string | null
+    customize_asana?: string | null
+    additional_cues?: string | null
+    joint_action?: string | null
+    muscle_action?: string | null
+    created_by?: string | null
+    asanaActivities?: AsanaActivityCreateNestedManyWithoutPostureInput
+  }
+
+  export type AsanaPostureUncheckedCreateWithoutPoseImagesInput = {
+    id?: string
+    english_names?: AsanaPostureCreateenglish_namesInput | string[]
+    sanskrit_names?: InputJsonValue | null
+    sort_english_name: string
+    description?: string | null
+    benefits?: string | null
+    category?: string | null
+    difficulty?: string | null
+    lore?: string | null
+    breath_direction_default?: string | null
+    dristi?: string | null
+    variations?: AsanaPostureCreatevariationsInput | string[]
+    modifications?: AsanaPostureCreatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
+    preferred_side?: string | null
+    sideways?: boolean | null
+    image?: string | null
+    created_on?: Date | string | null
+    updated_on?: Date | string | null
+    acitivity_completed?: boolean | null
+    acitivity_practice?: boolean | null
+    posture_intent?: string | null
+    breath_series?: AsanaPostureCreatebreath_seriesInput | string[]
+    duration_asana?: string | null
+    transition_cues_out?: string | null
+    transition_cues_in?: string | null
+    setup_cues?: string | null
+    deepening_cues?: string | null
+    customize_asana?: string | null
+    additional_cues?: string | null
+    joint_action?: string | null
+    muscle_action?: string | null
+    created_by?: string | null
+    asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutPostureInput
+  }
+
+  export type AsanaPostureCreateOrConnectWithoutPoseImagesInput = {
+    where: AsanaPostureWhereUniqueInput
+    create: XOR<AsanaPostureCreateWithoutPoseImagesInput, AsanaPostureUncheckedCreateWithoutPoseImagesInput>
+  }
+
   export type UserDataUpsertWithoutPoseImagesInput = {
     update: XOR<UserDataUpdateWithoutPoseImagesInput, UserDataUncheckedUpdateWithoutPoseImagesInput>
     create: XOR<UserDataCreateWithoutPoseImagesInput, UserDataUncheckedCreateWithoutPoseImagesInput>
@@ -14546,6 +14874,91 @@ export namespace Prisma {
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type AsanaPostureUpsertWithoutPoseImagesInput = {
+    update: XOR<AsanaPostureUpdateWithoutPoseImagesInput, AsanaPostureUncheckedUpdateWithoutPoseImagesInput>
+    create: XOR<AsanaPostureCreateWithoutPoseImagesInput, AsanaPostureUncheckedCreateWithoutPoseImagesInput>
+    where?: AsanaPostureWhereInput
+  }
+
+  export type AsanaPostureUpdateToOneWithWhereWithoutPoseImagesInput = {
+    where?: AsanaPostureWhereInput
+    data: XOR<AsanaPostureUpdateWithoutPoseImagesInput, AsanaPostureUncheckedUpdateWithoutPoseImagesInput>
+  }
+
+  export type AsanaPostureUpdateWithoutPoseImagesInput = {
+    english_names?: AsanaPostureUpdateenglish_namesInput | string[]
+    sanskrit_names?: InputJsonValue | InputJsonValue | null
+    sort_english_name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    benefits?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
+    lore?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_direction_default?: NullableStringFieldUpdateOperationsInput | string | null
+    dristi?: NullableStringFieldUpdateOperationsInput | string | null
+    variations?: AsanaPostureUpdatevariationsInput | string[]
+    modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
+    preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
+    sideways?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    created_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acitivity_completed?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    acitivity_practice?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_series?: AsanaPostureUpdatebreath_seriesInput | string[]
+    duration_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_out?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_in?: NullableStringFieldUpdateOperationsInput | string | null
+    setup_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    deepening_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    customize_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    additional_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    joint_action?: NullableStringFieldUpdateOperationsInput | string | null
+    muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
+    asanaActivities?: AsanaActivityUpdateManyWithoutPostureNestedInput
+  }
+
+  export type AsanaPostureUncheckedUpdateWithoutPoseImagesInput = {
+    english_names?: AsanaPostureUpdateenglish_namesInput | string[]
+    sanskrit_names?: InputJsonValue | InputJsonValue | null
+    sort_english_name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    benefits?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
+    lore?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_direction_default?: NullableStringFieldUpdateOperationsInput | string | null
+    dristi?: NullableStringFieldUpdateOperationsInput | string | null
+    variations?: AsanaPostureUpdatevariationsInput | string[]
+    modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
+    preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
+    preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
+    sideways?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    created_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updated_on?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    acitivity_completed?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    acitivity_practice?: NullableBoolFieldUpdateOperationsInput | boolean | null
+    posture_intent?: NullableStringFieldUpdateOperationsInput | string | null
+    breath_series?: AsanaPostureUpdatebreath_seriesInput | string[]
+    duration_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_out?: NullableStringFieldUpdateOperationsInput | string | null
+    transition_cues_in?: NullableStringFieldUpdateOperationsInput | string | null
+    setup_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    deepening_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    customize_asana?: NullableStringFieldUpdateOperationsInput | string | null
+    additional_cues?: NullableStringFieldUpdateOperationsInput | string | null
+    joint_action?: NullableStringFieldUpdateOperationsInput | string | null
+    muscle_action?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
+    asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutPostureNestedInput
+  }
+
   export type ProviderAccountCreateManyUserInput = {
     id?: string
     type: string
@@ -14587,6 +15000,8 @@ export namespace Prisma {
 
   export type PoseImageCreateManyUserInput = {
     id?: string
+    postureId?: string | null
+    postureName?: string | null
     url: string
     altText?: string | null
     fileName?: string | null
@@ -14709,6 +15124,7 @@ export namespace Prisma {
   }
 
   export type PoseImageUpdateWithoutUserInput = {
+    postureName?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
     altText?: NullableStringFieldUpdateOperationsInput | string | null
     fileName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14720,9 +15136,12 @@ export namespace Prisma {
     isOffline?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posture?: AsanaPostureUpdateOneWithoutPoseImagesNestedInput
   }
 
   export type PoseImageUncheckedUpdateWithoutUserInput = {
+    postureId?: NullableStringFieldUpdateOperationsInput | string | null
+    postureName?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
     altText?: NullableStringFieldUpdateOperationsInput | string | null
     fileName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14737,6 +15156,8 @@ export namespace Prisma {
   }
 
   export type PoseImageUncheckedUpdateManyWithoutUserInput = {
+    postureId?: NullableStringFieldUpdateOperationsInput | string | null
+    postureName?: NullableStringFieldUpdateOperationsInput | string | null
     url?: StringFieldUpdateOperationsInput | string
     altText?: NullableStringFieldUpdateOperationsInput | string | null
     fileName?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14759,6 +15180,23 @@ export namespace Prisma {
     notes?: string | null
     sensations?: string | null
     completionStatus: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PoseImageCreateManyPostureInput = {
+    id?: string
+    userId: string
+    postureName?: string | null
+    url: string
+    altText?: string | null
+    fileName?: string | null
+    fileSize?: number | null
+    uploadedAt?: Date | string
+    storageType?: $Enums.StorageType
+    localStorageId?: string | null
+    cloudflareId?: string | null
+    isOffline?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14795,6 +15233,54 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     sensations?: NullableStringFieldUpdateOperationsInput | string | null
     completionStatus?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PoseImageUpdateWithoutPostureInput = {
+    postureName?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: StringFieldUpdateOperationsInput | string
+    altText?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storageType?: EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+    localStorageId?: NullableStringFieldUpdateOperationsInput | string | null
+    cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
+    isOffline?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserDataUpdateOneRequiredWithoutPoseImagesNestedInput
+  }
+
+  export type PoseImageUncheckedUpdateWithoutPostureInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    postureName?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: StringFieldUpdateOperationsInput | string
+    altText?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storageType?: EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+    localStorageId?: NullableStringFieldUpdateOperationsInput | string | null
+    cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
+    isOffline?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PoseImageUncheckedUpdateManyWithoutPostureInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    postureName?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: StringFieldUpdateOperationsInput | string
+    altText?: NullableStringFieldUpdateOperationsInput | string | null
+    fileName?: NullableStringFieldUpdateOperationsInput | string | null
+    fileSize?: NullableIntFieldUpdateOperationsInput | number | null
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    storageType?: EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+    localStorageId?: NullableStringFieldUpdateOperationsInput | string | null
+    cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
+    isOffline?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -118,6 +118,7 @@ model AsanaPosture {
   muscle_action        String?
   created_by          String?
   asanaActivities AsanaActivity[] // Relation to AsanaActivity
+  poseImages      PoseImage[]     // Relation to PoseImage
 }
 
 model AsanaSeries {
@@ -185,6 +186,8 @@ model UserLogin {
 model PoseImage {
   id             String      @id @default(auto()) @map("_id") @db.ObjectId
   userId         String      @db.ObjectId
+  postureId      String?     @db.ObjectId // Optional association with a specific posture
+  postureName    String?     // Store the sort_english_name for easier querying
   url            String      // Image URL (Cloudflare or local reference)
   altText        String?     // Alternative text for accessibility
   fileName       String?     // Original filename
@@ -195,12 +198,15 @@ model PoseImage {
   cloudflareId   String?     // Cloudflare image ID for cloud images
   isOffline      Boolean     @default(false) // True if saved offline due to API failure
   
-  user       UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       UserData      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  posture    AsanaPosture? @relation(fields: [postureId], references: [id], onDelete: SetNull)
   
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   
   @@index([userId])
+  @@index([postureId])
+  @@index([postureName])
   @@index([storageType])
 }
 
