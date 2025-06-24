@@ -22,68 +22,114 @@ const providers: Provider[] = [
     credentials: {
       email: { label: 'Email', type: 'email' },
       password: { label: 'Password', type: 'password' },
+      isNewAccount: { label: 'Is New Account', type: 'text' },
     },
     authorize: async (credentials) => {
       if (!credentials) return null
 
-      let user = await prisma.userData.findUnique({
-        where: { email: credentials.email as string },
-      })
+      const email = credentials.email as string
+      const password = credentials.password as string
+      const isNewAccount = credentials.isNewAccount === 'true'
 
-      if (credentials.password === 'new account' && !user) {
-        user = await prisma.userData.create({
-          data: {
-            email: credentials.email as string,
-            name:
-              typeof credentials.email === 'string' ? credentials.email : '',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            firstName: 'New Account',
-            lastName: 'New Account',
-            bio: '',
-            headline: '',
-            location: '',
-            websiteURL: '',
-          },
+      console.log('Credentials authorize called:', { email, isNewAccount })
+
+      try {
+        let user = await prisma.userData.findUnique({
+          where: { email: email },
         })
-      }
 
-      if (!user) return null
+        // Handle new account creation
+        if (isNewAccount && !user) {
+          console.log('Creating new user account for:', email)
 
-      let providerAccount = await prisma.providerAccount.findUnique({
-        where: { userId: user.id },
-      })
+          // Create new user
+          user = await prisma.userData.create({
+            data: {
+              email: email,
+              name: email.split('@')[0], // Use email prefix as initial name
+              provider_id: `credentials_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, // Unique ID for credentials users
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              firstName: '',
+              lastName: '',
+              bio: '',
+              headline: '',
+              location: '',
+              websiteURL: '',
+              shareQuick: '',
+              yogaStyle: '',
+              yogaExperience: '',
+              company: '',
+              socialURL: '',
+              isLocationPublic: '',
+              role: 'user',
+            },
+          })
 
-      if (!providerAccount) {
-        providerAccount = await prisma.providerAccount.create({
-          data: {
-            userId: user.id,
-            provider: 'credentials',
-            providerAccountId: user.id,
-            type: 'credentials',
-            credentials_password:
-              typeof credentials.password === 'string'
-                ? await hashPassword(credentials.password)
-                : null,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-          },
+          console.log('New user created:', user.id)
+
+          // Create provider account with hashed password
+          const hashedPassword = await hashPassword(password)
+          await prisma.providerAccount.create({
+            data: {
+              userId: user.id,
+              provider: 'credentials',
+              providerAccountId: user.id,
+              type: 'credentials',
+              credentials_password: hashedPassword,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          })
+
+          console.log('Provider account created for user:', user.id)
+
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+          }
+        }
+
+        // Handle existing user login
+        if (!user) {
+          console.log('User not found for login:', email)
+          return null
+        }
+
+        const providerAccount = await prisma.providerAccount.findUnique({
+          where: { userId: user.id },
         })
-      }
 
-      if (!providerAccount.credentials_password) return null
+        if (!providerAccount) {
+          console.log('Provider account not found for user:', user.id)
+          return null
+        }
 
-      const isValidPassword = await comparePassword(
-        credentials.password as string,
-        providerAccount.credentials_password
-      )
+        if (!providerAccount.credentials_password) {
+          console.log('No password found for credentials account:', user.id)
+          return null
+        }
 
-      if (!isValidPassword) return null
+        const isValidPassword = await comparePassword(
+          password,
+          providerAccount.credentials_password
+        )
 
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
+        if (!isValidPassword) {
+          console.log('Invalid password for user:', email)
+          return null
+        }
+
+        console.log('User authenticated successfully:', user.id)
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        }
+      } catch (error) {
+        console.error('Error in credentials authorize:', error)
+        return null
       }
     },
   }),

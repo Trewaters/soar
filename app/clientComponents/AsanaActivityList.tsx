@@ -6,6 +6,7 @@ import {
   type AsanaActivityData,
 } from '@lib/asanaActivityClientService'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
+import Link from 'next/link'
 
 export default function AsanaActivityList() {
   const { data: session, status } = useSession()
@@ -107,7 +108,11 @@ export default function AsanaActivityList() {
               }}
             >
               <Stack spacing={0.5}>
-                <Typography variant="body1">{activity.postureName}</Typography>
+                <Link href={`navigator/asanaPostures/${activity.postureId}`}>
+                  <Typography variant="body1">
+                    {activity.postureName}
+                  </Typography>
+                </Link>
                 <Typography variant="caption" color="text.secondary">
                   {new Date(activity.datePerformed).toLocaleDateString(
                     undefined,

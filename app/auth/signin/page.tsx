@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { signIn, providerMap, signOut, auth } from '../../../auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import CredentialsInput from './credentialsInput'
 
 export default async function SignInPage(props: {
   searchParams: { callbackUrl: string | undefined }
@@ -15,19 +16,6 @@ export default async function SignInPage(props: {
       <nav>
         <Header />
       </nav>
-      {/* <Stack justifySelf={'center'} alignItems={'center'}>
-        <Stack>
-          <Image
-            src={'/icons/asanas/leaf-1.svg'}
-            alt={'SOAR logo'}
-            width={100}
-            height={100}
-          />
-        </Stack>
-        <Stack>
-          <Typography variant={'subtitle1'}>An Uvuyoga App</Typography>
-        </Stack>
-      </Stack> */}
       <Stack justifyContent={'center'} alignItems={'center'} display={'flex'}>
         <Stack
           textAlign={'center'}
@@ -76,15 +64,6 @@ export default async function SignInPage(props: {
             justifyContent={'center'}
             sx={{ mt: 4 }}
           >
-            {/*             
-              // ! Remove until I can fix the following.
-              // 1) password recovery
-              // 2) do not show error page when user is not found
-
-            <CredentialsInput /> 
-
-            */}
-
             {Object.values(providerMap).map((provider, index) => (
               <form
                 key={index}
@@ -138,15 +117,20 @@ export default async function SignInPage(props: {
                 </Button>
               </form>
             ))}
+            <CredentialsInput />
           </Stack>
           <Stack display={'flex'} textAlign={'center'} sx={{ pb: 2 }}>
             {!session && (
               <>
+                <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+                  Sign In or Create Account
+                </Typography>
                 <Typography variant="body1">
                   Don&apos;t have an account yet?
                 </Typography>
-                <Typography variant="body1">
-                  ✨ Signing in will automatically create an account for you.
+                <Typography variant="body2" color="text.secondary">
+                  ✨ Just enter your email below - if it&apos;s new, we&apos;ll
+                  help you create an account!
                 </Typography>
               </>
             )}

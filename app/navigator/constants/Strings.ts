@@ -1,6 +1,17 @@
 export abstract class AppText {
   public static readonly APP_NAME = 'Uvuyoga'
   public static readonly APP_BUTTON_SUBMIT = 'Submit'
+  public static readonly APP_SIGN_IN = 'Sign In'
+  public static readonly APP_SIGN_UP = 'Sign Up'
+  public static readonly APP_CREATE_ACCOUNT = 'Create Account'
+  public static readonly APP_CREATE_ACCOUNT_NOW = 'Create Account Now'
+  public static readonly APP_ALREADY_HAVE_AN_ACCOUNT =
+    'Already have an account?'
+  public static readonly APP_FORGOT_PASSWORD = 'Forgot Password'
+  public static readonly APP_EMAIL_AVAILABLE =
+    'This email is available for a new account!'
+  public static readonly APP_CHOOSE_PASSWORD =
+    'Choose a secure password for your new account'
   // public static readonly APP_DESCRIPTION = 'Uvuyoga Soar is a platform for managing your yoga practice.'
   // public static readonly APP_VERSION = '1.0.0'
   // public static readonly APP_COPYRIGHT = '© 2021 Uvuyoga Soar. All rights reserved.'
