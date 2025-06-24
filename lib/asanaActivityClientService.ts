@@ -27,6 +27,7 @@ export interface WeeklyActivityData {
     datePerformed: string
     duration: number
     completionStatus: string
+    difficulty?: string
   }>
   dateRange: {
     start: string

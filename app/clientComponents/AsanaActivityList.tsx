@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { Typography, List, ListItem, Box } from '@mui/material'
+import { Typography, List, ListItem, Box, Chip, Stack } from '@mui/material'
 import {
   getUserActivities,
   type AsanaActivityData,
@@ -12,6 +12,31 @@ export default function AsanaActivityList() {
   const [activities, setActivities] = useState<AsanaActivityData[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const getDifficultyColor = (
+    difficulty?: string,
+    completionStatus?: string
+  ) => {
+    // Only apply difficulty-based coloring for 'complete' status
+    if (completionStatus === 'complete' && difficulty) {
+      switch (difficulty.toLowerCase()) {
+        case 'easy':
+          return 'success' // Green
+        case 'average':
+          return 'info' // Blue
+        case 'difficult':
+          return 'error' // Red
+        default:
+          return 'success'
+      }
+    }
+    // Fallback to original completion status coloring
+    return completionStatus === 'complete'
+      ? 'success'
+      : completionStatus === 'partial'
+        ? 'warning'
+        : 'default'
+  }
 
   useEffect(() => {
     const fetchActivities = async () => {
@@ -77,19 +102,38 @@ export default function AsanaActivityList() {
               sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
+                alignItems: 'center',
                 width: '100%',
               }}
             >
-              <Typography variant="body1">{activity.postureName}</Typography>
-              <Typography variant="body2" color="text.secondary">
-                {new Date(activity.datePerformed).toLocaleDateString(
-                  undefined,
-                  {
-                    month: 'short',
-                    day: 'numeric',
-                  }
+              <Stack spacing={0.5}>
+                <Typography variant="body1">{activity.postureName}</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {new Date(activity.datePerformed).toLocaleDateString(
+                    undefined,
+                    {
+                      month: 'short',
+                      day: 'numeric',
+                    }
+                  )}
+                </Typography>
+              </Stack>
+              <Stack direction="row" spacing={1} alignItems="center">
+                {activity.difficulty && (
+                  <Typography variant="caption" color="text.secondary">
+                    {activity.difficulty}
+                  </Typography>
                 )}
-              </Typography>
+                <Chip
+                  label={activity.completionStatus}
+                  size="small"
+                  variant="outlined"
+                  color={getDifficultyColor(
+                    activity.difficulty,
+                    activity.completionStatus
+                  )}
+                />
+              </Stack>
             </Box>
           </ListItem>
         ))}

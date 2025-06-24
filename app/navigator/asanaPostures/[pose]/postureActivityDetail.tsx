@@ -816,22 +816,35 @@ export default function PostureActivityDetail({
                 label: 'Easy',
                 variant: easyChipVariant,
                 onClick: handleEasyChipClick,
+                color:
+                  easyChipVariant === 'filled'
+                    ? ('success' as const)
+                    : ('default' as const),
               },
               {
                 label: 'Average',
                 variant: averageChipVariant,
                 onClick: handleAverageChipClick,
+                color:
+                  averageChipVariant === 'filled'
+                    ? ('info' as const)
+                    : ('default' as const),
               },
               {
                 label: 'Difficult',
                 variant: difficultChipVariant,
                 onClick: handleDifficultChipClick,
+                color:
+                  difficultChipVariant === 'filled'
+                    ? ('error' as const)
+                    : ('default' as const),
               },
             ].map((chip) => (
               <Chip
                 key={chip.label}
                 label={chip.label}
                 variant={chip.variant}
+                color={chip.color}
                 onClick={chip.onClick}
                 sx={{ cursor: 'pointer' }}
               />

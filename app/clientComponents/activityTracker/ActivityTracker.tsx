@@ -98,6 +98,31 @@ export default function ActivityTracker({
     return 'None'
   }
 
+  const getDifficultyColor = (
+    difficulty?: string,
+    completionStatus?: string
+  ) => {
+    // Only apply difficulty-based coloring for 'complete' status
+    if (completionStatus === 'complete' && difficulty) {
+      switch (difficulty.toLowerCase()) {
+        case 'easy':
+          return 'success' // Green
+        case 'average':
+          return 'info' // Blue
+        case 'difficult':
+          return 'error' // Red
+        default:
+          return 'success'
+      }
+    }
+    // Fallback to original completion status coloring
+    return completionStatus === 'complete'
+      ? 'success'
+      : completionStatus === 'partial'
+        ? 'warning'
+        : 'default'
+  }
+
   if (loading) {
     return (
       <LoadingSkeleton
@@ -321,13 +346,10 @@ export default function ActivityTracker({
                         label={activity.completionStatus}
                         size="small"
                         variant="outlined"
-                        color={
-                          activity.completionStatus === 'complete'
-                            ? 'success'
-                            : activity.completionStatus === 'partial'
-                              ? 'warning'
-                              : 'default'
-                        }
+                        color={getDifficultyColor(
+                          activity.difficulty,
+                          activity.completionStatus
+                        )}
                       />
                     </Stack>
                   </Box>
