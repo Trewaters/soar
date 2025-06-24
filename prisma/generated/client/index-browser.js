@@ -227,6 +227,7 @@ exports.Prisma.AsanaActivityScalarFieldEnum = {
   notes: 'notes',
   sensations: 'sensations',
   completionStatus: 'completionStatus',
+  difficulty: 'difficulty',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

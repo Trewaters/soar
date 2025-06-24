@@ -158,6 +158,7 @@ model AsanaActivity {
   notes         String?  // User notes (optional)
   sensations    String?  // Body sensations or mood (optional)
   completionStatus String // e.g., "complete", "skipped", "partial"
+  difficulty    String?  // User-selected difficulty: "easy", "average", "difficult"
 
   user          UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
   posture       AsanaPosture @relation(fields: [postureId], references: [id], onDelete: Cascade)

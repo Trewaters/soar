@@ -7004,6 +7004,7 @@ export namespace Prisma {
     notes: string | null
     sensations: string | null
     completionStatus: string | null
+    difficulty: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7018,6 +7019,7 @@ export namespace Prisma {
     notes: string | null
     sensations: string | null
     completionStatus: string | null
+    difficulty: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7032,6 +7034,7 @@ export namespace Prisma {
     notes: number
     sensations: number
     completionStatus: number
+    difficulty: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -7056,6 +7059,7 @@ export namespace Prisma {
     notes?: true
     sensations?: true
     completionStatus?: true
+    difficulty?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7070,6 +7074,7 @@ export namespace Prisma {
     notes?: true
     sensations?: true
     completionStatus?: true
+    difficulty?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7084,6 +7089,7 @@ export namespace Prisma {
     notes?: true
     sensations?: true
     completionStatus?: true
+    difficulty?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -7185,6 +7191,7 @@ export namespace Prisma {
     notes: string | null
     sensations: string | null
     completionStatus: string
+    difficulty: string | null
     createdAt: Date
     updatedAt: Date
     _count: AsanaActivityCountAggregateOutputType | null
@@ -7218,6 +7225,7 @@ export namespace Prisma {
     notes?: boolean
     sensations?: boolean
     completionStatus?: boolean
+    difficulty?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDataDefaultArgs<ExtArgs>
@@ -7235,6 +7243,7 @@ export namespace Prisma {
     notes?: boolean
     sensations?: boolean
     completionStatus?: boolean
+    difficulty?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -7260,6 +7269,7 @@ export namespace Prisma {
       notes: string | null
       sensations: string | null
       completionStatus: string
+      difficulty: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["asanaActivity"]>
@@ -7665,6 +7675,7 @@ export namespace Prisma {
     readonly notes: FieldRef<"AsanaActivity", 'String'>
     readonly sensations: FieldRef<"AsanaActivity", 'String'>
     readonly completionStatus: FieldRef<"AsanaActivity", 'String'>
+    readonly difficulty: FieldRef<"AsanaActivity", 'String'>
     readonly createdAt: FieldRef<"AsanaActivity", 'DateTime'>
     readonly updatedAt: FieldRef<"AsanaActivity", 'DateTime'>
   }
@@ -10184,6 +10195,7 @@ export namespace Prisma {
     notes: 'notes',
     sensations: 'sensations',
     completionStatus: 'completionStatus',
+    difficulty: 'difficulty',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -10961,6 +10973,7 @@ export namespace Prisma {
     notes?: StringNullableFilter<"AsanaActivity"> | string | null
     sensations?: StringNullableFilter<"AsanaActivity"> | string | null
     completionStatus?: StringFilter<"AsanaActivity"> | string
+    difficulty?: StringNullableFilter<"AsanaActivity"> | string | null
     createdAt?: DateTimeFilter<"AsanaActivity"> | Date | string
     updatedAt?: DateTimeFilter<"AsanaActivity"> | Date | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
@@ -10977,6 +10990,7 @@ export namespace Prisma {
     notes?: SortOrder
     sensations?: SortOrder
     completionStatus?: SortOrder
+    difficulty?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserDataOrderByWithRelationInput
@@ -10996,6 +11010,7 @@ export namespace Prisma {
     notes?: StringNullableFilter<"AsanaActivity"> | string | null
     sensations?: StringNullableFilter<"AsanaActivity"> | string | null
     completionStatus?: StringFilter<"AsanaActivity"> | string
+    difficulty?: StringNullableFilter<"AsanaActivity"> | string | null
     createdAt?: DateTimeFilter<"AsanaActivity"> | Date | string
     updatedAt?: DateTimeFilter<"AsanaActivity"> | Date | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
@@ -11012,6 +11027,7 @@ export namespace Prisma {
     notes?: SortOrder
     sensations?: SortOrder
     completionStatus?: SortOrder
+    difficulty?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AsanaActivityCountOrderByAggregateInput
@@ -11034,6 +11050,7 @@ export namespace Prisma {
     notes?: StringNullableWithAggregatesFilter<"AsanaActivity"> | string | null
     sensations?: StringNullableWithAggregatesFilter<"AsanaActivity"> | string | null
     completionStatus?: StringWithAggregatesFilter<"AsanaActivity"> | string
+    difficulty?: StringNullableWithAggregatesFilter<"AsanaActivity"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"AsanaActivity"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"AsanaActivity"> | Date | string
   }
@@ -11959,6 +11976,7 @@ export namespace Prisma {
     notes?: string | null
     sensations?: string | null
     completionStatus: string
+    difficulty?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserDataCreateNestedOneWithoutAsanaActivitiesInput
@@ -11975,6 +11993,7 @@ export namespace Prisma {
     notes?: string | null
     sensations?: string | null
     completionStatus: string
+    difficulty?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11986,6 +12005,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     sensations?: NullableStringFieldUpdateOperationsInput | string | null
     completionStatus?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserDataUpdateOneRequiredWithoutAsanaActivitiesNestedInput
@@ -12001,6 +12021,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     sensations?: NullableStringFieldUpdateOperationsInput | string | null
     completionStatus?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12015,6 +12036,7 @@ export namespace Prisma {
     notes?: string | null
     sensations?: string | null
     completionStatus: string
+    difficulty?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12026,6 +12048,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     sensations?: NullableStringFieldUpdateOperationsInput | string | null
     completionStatus?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12039,6 +12062,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     sensations?: NullableStringFieldUpdateOperationsInput | string | null
     completionStatus?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12811,6 +12835,7 @@ export namespace Prisma {
     notes?: SortOrder
     sensations?: SortOrder
     completionStatus?: SortOrder
+    difficulty?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12829,6 +12854,7 @@ export namespace Prisma {
     notes?: SortOrder
     sensations?: SortOrder
     completionStatus?: SortOrder
+    difficulty?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12843,6 +12869,7 @@ export namespace Prisma {
     notes?: SortOrder
     sensations?: SortOrder
     completionStatus?: SortOrder
+    difficulty?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13764,6 +13791,7 @@ export namespace Prisma {
     notes?: string | null
     sensations?: string | null
     completionStatus: string
+    difficulty?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     posture: AsanaPostureCreateNestedOneWithoutAsanaActivitiesInput
@@ -13778,6 +13806,7 @@ export namespace Prisma {
     notes?: string | null
     sensations?: string | null
     completionStatus: string
+    difficulty?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13927,6 +13956,7 @@ export namespace Prisma {
     notes?: StringNullableFilter<"AsanaActivity"> | string | null
     sensations?: StringNullableFilter<"AsanaActivity"> | string | null
     completionStatus?: StringFilter<"AsanaActivity"> | string
+    difficulty?: StringNullableFilter<"AsanaActivity"> | string | null
     createdAt?: DateTimeFilter<"AsanaActivity"> | Date | string
     updatedAt?: DateTimeFilter<"AsanaActivity"> | Date | string
   }
@@ -14135,6 +14165,7 @@ export namespace Prisma {
     notes?: string | null
     sensations?: string | null
     completionStatus: string
+    difficulty?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserDataCreateNestedOneWithoutAsanaActivitiesInput
@@ -14149,6 +14180,7 @@ export namespace Prisma {
     notes?: string | null
     sensations?: string | null
     completionStatus: string
+    difficulty?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14985,6 +15017,7 @@ export namespace Prisma {
     notes?: string | null
     sensations?: string | null
     completionStatus: string
+    difficulty?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15070,6 +15103,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     sensations?: NullableStringFieldUpdateOperationsInput | string | null
     completionStatus?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posture?: AsanaPostureUpdateOneRequiredWithoutAsanaActivitiesNestedInput
@@ -15083,6 +15117,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     sensations?: NullableStringFieldUpdateOperationsInput | string | null
     completionStatus?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15095,6 +15130,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     sensations?: NullableStringFieldUpdateOperationsInput | string | null
     completionStatus?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15180,6 +15216,7 @@ export namespace Prisma {
     notes?: string | null
     sensations?: string | null
     completionStatus: string
+    difficulty?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15208,6 +15245,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     sensations?: NullableStringFieldUpdateOperationsInput | string | null
     completionStatus?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserDataUpdateOneRequiredWithoutAsanaActivitiesNestedInput
@@ -15221,6 +15259,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     sensations?: NullableStringFieldUpdateOperationsInput | string | null
     completionStatus?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15233,6 +15272,7 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     sensations?: NullableStringFieldUpdateOperationsInput | string | null
     completionStatus?: StringFieldUpdateOperationsInput | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

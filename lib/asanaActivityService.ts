@@ -12,6 +12,7 @@ export type AsanaActivityInput = {
   notes?: string
   sensations?: string
   completionStatus: string // 'complete', 'skipped', 'partial'
+  difficulty?: string // 'easy', 'average', 'difficult'
 }
 
 export async function recordAsanaActivity(input: AsanaActivityInput) {

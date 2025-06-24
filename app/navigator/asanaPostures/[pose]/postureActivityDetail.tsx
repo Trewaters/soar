@@ -77,6 +77,9 @@ export default function PostureActivityDetail({
   const [difficultChipVariant, setDifficultChipVariant] = useState<
     'filled' | 'outlined'
   >('outlined')
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(
+    null
+  )
   const [checked, setChecked] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -117,6 +120,31 @@ export default function PostureActivityDetail({
             postureCardProp.id.toString()
           )
           setChecked(result.exists)
+
+          // Set difficulty state based on existing activity
+          if (result.exists && result.activity?.difficulty) {
+            setSelectedDifficulty(result.activity.difficulty)
+            // Set the appropriate chip variant
+            if (result.activity.difficulty === 'easy') {
+              setEasyChipVariant('filled')
+              setAverageChipVariant('outlined')
+              setDifficultChipVariant('outlined')
+            } else if (result.activity.difficulty === 'average') {
+              setEasyChipVariant('outlined')
+              setAverageChipVariant('filled')
+              setDifficultChipVariant('outlined')
+            } else if (result.activity.difficulty === 'difficult') {
+              setEasyChipVariant('outlined')
+              setAverageChipVariant('outlined')
+              setDifficultChipVariant('filled')
+            }
+          } else {
+            // Reset difficulty state if no activity or no difficulty stored
+            setSelectedDifficulty(null)
+            setEasyChipVariant('outlined')
+            setAverageChipVariant('outlined')
+            setDifficultChipVariant('outlined')
+          }
         } catch (error) {
           console.error('Error checking existing activity:', error)
           // Don't show error to user for this check, just default to unchecked
@@ -128,19 +156,46 @@ export default function PostureActivityDetail({
   }, [session?.user?.id, postureCardProp.id])
 
   const handleEasyChipClick = () => {
-    setEasyChipVariant((prev) => (prev === 'outlined' ? 'filled' : 'outlined'))
+    const newVariant = easyChipVariant === 'outlined' ? 'filled' : 'outlined'
+    setEasyChipVariant(newVariant)
+
+    if (newVariant === 'filled') {
+      setSelectedDifficulty('easy')
+      // Reset other chips
+      setAverageChipVariant('outlined')
+      setDifficultChipVariant('outlined')
+    } else {
+      setSelectedDifficulty(null)
+    }
   }
 
   const handleAverageChipClick = () => {
-    setAverageChipVariant((prev) =>
-      prev === 'outlined' ? 'filled' : 'outlined'
-    )
+    const newVariant = averageChipVariant === 'outlined' ? 'filled' : 'outlined'
+    setAverageChipVariant(newVariant)
+
+    if (newVariant === 'filled') {
+      setSelectedDifficulty('average')
+      // Reset other chips
+      setEasyChipVariant('outlined')
+      setDifficultChipVariant('outlined')
+    } else {
+      setSelectedDifficulty(null)
+    }
   }
 
   const handleDifficultChipClick = () => {
-    setDifficultChipVariant((prev) =>
-      prev === 'outlined' ? 'filled' : 'outlined'
-    )
+    const newVariant =
+      difficultChipVariant === 'outlined' ? 'filled' : 'outlined'
+    setDifficultChipVariant(newVariant)
+
+    if (newVariant === 'filled') {
+      setSelectedDifficulty('difficult')
+      // Reset other chips
+      setEasyChipVariant('outlined')
+      setAverageChipVariant('outlined')
+    } else {
+      setSelectedDifficulty(null)
+    }
   }
 
   const handleCheckboxChange = async (
@@ -190,6 +245,7 @@ export default function PostureActivityDetail({
       duration: 0,
       datePerformed: new Date(),
       completionStatus: 'complete',
+      difficulty: selectedDifficulty || undefined,
     }
 
     try {
@@ -224,6 +280,12 @@ export default function PostureActivityDetail({
           deleteData,
           timestamp: new Date().toISOString(),
         })
+
+        // Reset difficulty selection when activity is removed
+        setSelectedDifficulty(null)
+        setEasyChipVariant('outlined')
+        setAverageChipVariant('outlined')
+        setDifficultChipVariant('outlined')
 
         // Trigger refresh of ActivityTracker
         setActivityRefreshTrigger((prev) => prev + 1)
@@ -734,41 +796,46 @@ export default function PostureActivityDetail({
             </Box>
           )}
 
+          {/* Difficulty Chips */}
           <Stack
-            flexDirection={'row'}
-            gap={2}
+            direction="row"
+            spacing={1}
+            justifyContent="center"
             sx={{
               p: 2,
-              ml: { xs: 2, md: '23%' },
-              opacity: 0.75, // 25% transparency
-              width: 'auto', // Make the width responsive
-              borderRadius: '12px',
-              backdropFilter: 'blur(48%)', // Add blur effect
-              overflow: 'hidden', // Prevent overflow
-              justifyContent: 'center',
+              mt: 2,
+              mx: 'auto',
+              maxWidth: 'fit-content',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(10px)',
+              borderRadius: '16px',
             }}
           >
-            <Stack>
+            {[
+              {
+                label: 'Easy',
+                variant: easyChipVariant,
+                onClick: handleEasyChipClick,
+              },
+              {
+                label: 'Average',
+                variant: averageChipVariant,
+                onClick: handleAverageChipClick,
+              },
+              {
+                label: 'Difficult',
+                variant: difficultChipVariant,
+                onClick: handleDifficultChipClick,
+              },
+            ].map((chip) => (
               <Chip
-                label="Easy"
-                variant={easyChipVariant}
-                onClick={handleEasyChipClick}
+                key={chip.label}
+                label={chip.label}
+                variant={chip.variant}
+                onClick={chip.onClick}
+                sx={{ cursor: 'pointer' }}
               />
-            </Stack>
-            <Stack>
-              <Chip
-                label="Average"
-                variant={averageChipVariant}
-                onClick={handleAverageChipClick}
-              />
-            </Stack>
-            <Stack>
-              <Chip
-                label="Difficult"
-                variant={difficultChipVariant}
-                onClick={handleDifficultChipClick}
-              />
-            </Stack>
+            ))}
           </Stack>
 
           {/* Activity Tracker Toggle - Button and Checkbox */}

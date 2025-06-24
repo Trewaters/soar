@@ -13,6 +13,7 @@ export interface AsanaActivityData {
   duration: number
   datePerformed: string
   completionStatus: string
+  difficulty?: string
   notes?: string
   sensations?: string
   createdAt: string
@@ -40,6 +41,7 @@ export interface CreateActivityInput {
   duration: number
   datePerformed: Date
   completionStatus: string
+  difficulty?: string
   notes?: string
   sensations?: string
 }
