@@ -6999,6 +6999,7 @@ export namespace Prisma {
     userId: string | null
     postureId: string | null
     postureName: string | null
+    sort_english_name: string | null
     duration: number | null
     datePerformed: Date | null
     notes: string | null
@@ -7014,6 +7015,7 @@ export namespace Prisma {
     userId: string | null
     postureId: string | null
     postureName: string | null
+    sort_english_name: string | null
     duration: number | null
     datePerformed: Date | null
     notes: string | null
@@ -7029,6 +7031,7 @@ export namespace Prisma {
     userId: number
     postureId: number
     postureName: number
+    sort_english_name: number
     duration: number
     datePerformed: number
     notes: number
@@ -7054,6 +7057,7 @@ export namespace Prisma {
     userId?: true
     postureId?: true
     postureName?: true
+    sort_english_name?: true
     duration?: true
     datePerformed?: true
     notes?: true
@@ -7069,6 +7073,7 @@ export namespace Prisma {
     userId?: true
     postureId?: true
     postureName?: true
+    sort_english_name?: true
     duration?: true
     datePerformed?: true
     notes?: true
@@ -7084,6 +7089,7 @@ export namespace Prisma {
     userId?: true
     postureId?: true
     postureName?: true
+    sort_english_name?: true
     duration?: true
     datePerformed?: true
     notes?: true
@@ -7186,6 +7192,7 @@ export namespace Prisma {
     userId: string
     postureId: string
     postureName: string
+    sort_english_name: string
     duration: number
     datePerformed: Date
     notes: string | null
@@ -7220,6 +7227,7 @@ export namespace Prisma {
     userId?: boolean
     postureId?: boolean
     postureName?: boolean
+    sort_english_name?: boolean
     duration?: boolean
     datePerformed?: boolean
     notes?: boolean
@@ -7238,6 +7246,7 @@ export namespace Prisma {
     userId?: boolean
     postureId?: boolean
     postureName?: boolean
+    sort_english_name?: boolean
     duration?: boolean
     datePerformed?: boolean
     notes?: boolean
@@ -7264,6 +7273,7 @@ export namespace Prisma {
       userId: string
       postureId: string
       postureName: string
+      sort_english_name: string
       duration: number
       datePerformed: Date
       notes: string | null
@@ -7670,6 +7680,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"AsanaActivity", 'String'>
     readonly postureId: FieldRef<"AsanaActivity", 'String'>
     readonly postureName: FieldRef<"AsanaActivity", 'String'>
+    readonly sort_english_name: FieldRef<"AsanaActivity", 'String'>
     readonly duration: FieldRef<"AsanaActivity", 'Int'>
     readonly datePerformed: FieldRef<"AsanaActivity", 'DateTime'>
     readonly notes: FieldRef<"AsanaActivity", 'String'>
@@ -10190,6 +10201,7 @@ export namespace Prisma {
     userId: 'userId',
     postureId: 'postureId',
     postureName: 'postureName',
+    sort_english_name: 'sort_english_name',
     duration: 'duration',
     datePerformed: 'datePerformed',
     notes: 'notes',
@@ -10968,6 +10980,7 @@ export namespace Prisma {
     userId?: StringFilter<"AsanaActivity"> | string
     postureId?: StringFilter<"AsanaActivity"> | string
     postureName?: StringFilter<"AsanaActivity"> | string
+    sort_english_name?: StringFilter<"AsanaActivity"> | string
     duration?: IntFilter<"AsanaActivity"> | number
     datePerformed?: DateTimeFilter<"AsanaActivity"> | Date | string
     notes?: StringNullableFilter<"AsanaActivity"> | string | null
@@ -10985,6 +10998,7 @@ export namespace Prisma {
     userId?: SortOrder
     postureId?: SortOrder
     postureName?: SortOrder
+    sort_english_name?: SortOrder
     duration?: SortOrder
     datePerformed?: SortOrder
     notes?: SortOrder
@@ -11005,6 +11019,7 @@ export namespace Prisma {
     userId?: StringFilter<"AsanaActivity"> | string
     postureId?: StringFilter<"AsanaActivity"> | string
     postureName?: StringFilter<"AsanaActivity"> | string
+    sort_english_name?: StringFilter<"AsanaActivity"> | string
     duration?: IntFilter<"AsanaActivity"> | number
     datePerformed?: DateTimeFilter<"AsanaActivity"> | Date | string
     notes?: StringNullableFilter<"AsanaActivity"> | string | null
@@ -11022,6 +11037,7 @@ export namespace Prisma {
     userId?: SortOrder
     postureId?: SortOrder
     postureName?: SortOrder
+    sort_english_name?: SortOrder
     duration?: SortOrder
     datePerformed?: SortOrder
     notes?: SortOrder
@@ -11045,6 +11061,7 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"AsanaActivity"> | string
     postureId?: StringWithAggregatesFilter<"AsanaActivity"> | string
     postureName?: StringWithAggregatesFilter<"AsanaActivity"> | string
+    sort_english_name?: StringWithAggregatesFilter<"AsanaActivity"> | string
     duration?: IntWithAggregatesFilter<"AsanaActivity"> | number
     datePerformed?: DateTimeWithAggregatesFilter<"AsanaActivity"> | Date | string
     notes?: StringNullableWithAggregatesFilter<"AsanaActivity"> | string | null
@@ -11971,6 +11988,7 @@ export namespace Prisma {
   export type AsanaActivityCreateInput = {
     id?: string
     postureName: string
+    sort_english_name: string
     duration: number
     datePerformed: Date | string
     notes?: string | null
@@ -11988,6 +12006,7 @@ export namespace Prisma {
     userId: string
     postureId: string
     postureName: string
+    sort_english_name: string
     duration: number
     datePerformed: Date | string
     notes?: string | null
@@ -12000,6 +12019,7 @@ export namespace Prisma {
 
   export type AsanaActivityUpdateInput = {
     postureName?: StringFieldUpdateOperationsInput | string
+    sort_english_name?: StringFieldUpdateOperationsInput | string
     duration?: IntFieldUpdateOperationsInput | number
     datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12016,6 +12036,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     postureId?: StringFieldUpdateOperationsInput | string
     postureName?: StringFieldUpdateOperationsInput | string
+    sort_english_name?: StringFieldUpdateOperationsInput | string
     duration?: IntFieldUpdateOperationsInput | number
     datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12031,6 +12052,7 @@ export namespace Prisma {
     userId: string
     postureId: string
     postureName: string
+    sort_english_name: string
     duration: number
     datePerformed: Date | string
     notes?: string | null
@@ -12043,6 +12065,7 @@ export namespace Prisma {
 
   export type AsanaActivityUpdateManyMutationInput = {
     postureName?: StringFieldUpdateOperationsInput | string
+    sort_english_name?: StringFieldUpdateOperationsInput | string
     duration?: IntFieldUpdateOperationsInput | number
     datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12057,6 +12080,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     postureId?: StringFieldUpdateOperationsInput | string
     postureName?: StringFieldUpdateOperationsInput | string
+    sort_english_name?: StringFieldUpdateOperationsInput | string
     duration?: IntFieldUpdateOperationsInput | number
     datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12830,6 +12854,7 @@ export namespace Prisma {
     userId?: SortOrder
     postureId?: SortOrder
     postureName?: SortOrder
+    sort_english_name?: SortOrder
     duration?: SortOrder
     datePerformed?: SortOrder
     notes?: SortOrder
@@ -12849,6 +12874,7 @@ export namespace Prisma {
     userId?: SortOrder
     postureId?: SortOrder
     postureName?: SortOrder
+    sort_english_name?: SortOrder
     duration?: SortOrder
     datePerformed?: SortOrder
     notes?: SortOrder
@@ -12864,6 +12890,7 @@ export namespace Prisma {
     userId?: SortOrder
     postureId?: SortOrder
     postureName?: SortOrder
+    sort_english_name?: SortOrder
     duration?: SortOrder
     datePerformed?: SortOrder
     notes?: SortOrder
@@ -13786,6 +13813,7 @@ export namespace Prisma {
   export type AsanaActivityCreateWithoutUserInput = {
     id?: string
     postureName: string
+    sort_english_name: string
     duration: number
     datePerformed: Date | string
     notes?: string | null
@@ -13801,6 +13829,7 @@ export namespace Prisma {
     id?: string
     postureId: string
     postureName: string
+    sort_english_name: string
     duration: number
     datePerformed: Date | string
     notes?: string | null
@@ -13951,6 +13980,7 @@ export namespace Prisma {
     userId?: StringFilter<"AsanaActivity"> | string
     postureId?: StringFilter<"AsanaActivity"> | string
     postureName?: StringFilter<"AsanaActivity"> | string
+    sort_english_name?: StringFilter<"AsanaActivity"> | string
     duration?: IntFilter<"AsanaActivity"> | number
     datePerformed?: DateTimeFilter<"AsanaActivity"> | Date | string
     notes?: StringNullableFilter<"AsanaActivity"> | string | null
@@ -14160,6 +14190,7 @@ export namespace Prisma {
   export type AsanaActivityCreateWithoutPostureInput = {
     id?: string
     postureName: string
+    sort_english_name: string
     duration: number
     datePerformed: Date | string
     notes?: string | null
@@ -14175,6 +14206,7 @@ export namespace Prisma {
     id?: string
     userId: string
     postureName: string
+    sort_english_name: string
     duration: number
     datePerformed: Date | string
     notes?: string | null
@@ -15012,6 +15044,7 @@ export namespace Prisma {
     id?: string
     postureId: string
     postureName: string
+    sort_english_name: string
     duration: number
     datePerformed: Date | string
     notes?: string | null
@@ -15098,6 +15131,7 @@ export namespace Prisma {
 
   export type AsanaActivityUpdateWithoutUserInput = {
     postureName?: StringFieldUpdateOperationsInput | string
+    sort_english_name?: StringFieldUpdateOperationsInput | string
     duration?: IntFieldUpdateOperationsInput | number
     datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15112,6 +15146,7 @@ export namespace Prisma {
   export type AsanaActivityUncheckedUpdateWithoutUserInput = {
     postureId?: StringFieldUpdateOperationsInput | string
     postureName?: StringFieldUpdateOperationsInput | string
+    sort_english_name?: StringFieldUpdateOperationsInput | string
     duration?: IntFieldUpdateOperationsInput | number
     datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15125,6 +15160,7 @@ export namespace Prisma {
   export type AsanaActivityUncheckedUpdateManyWithoutUserInput = {
     postureId?: StringFieldUpdateOperationsInput | string
     postureName?: StringFieldUpdateOperationsInput | string
+    sort_english_name?: StringFieldUpdateOperationsInput | string
     duration?: IntFieldUpdateOperationsInput | number
     datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15211,6 +15247,7 @@ export namespace Prisma {
     id?: string
     userId: string
     postureName: string
+    sort_english_name: string
     duration: number
     datePerformed: Date | string
     notes?: string | null
@@ -15240,6 +15277,7 @@ export namespace Prisma {
 
   export type AsanaActivityUpdateWithoutPostureInput = {
     postureName?: StringFieldUpdateOperationsInput | string
+    sort_english_name?: StringFieldUpdateOperationsInput | string
     duration?: IntFieldUpdateOperationsInput | number
     datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15254,6 +15292,7 @@ export namespace Prisma {
   export type AsanaActivityUncheckedUpdateWithoutPostureInput = {
     userId?: StringFieldUpdateOperationsInput | string
     postureName?: StringFieldUpdateOperationsInput | string
+    sort_english_name?: StringFieldUpdateOperationsInput | string
     duration?: IntFieldUpdateOperationsInput | number
     datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15267,6 +15306,7 @@ export namespace Prisma {
   export type AsanaActivityUncheckedUpdateManyWithoutPostureInput = {
     userId?: StringFieldUpdateOperationsInput | string
     postureName?: StringFieldUpdateOperationsInput | string
+    sort_english_name?: StringFieldUpdateOperationsInput | string
     duration?: IntFieldUpdateOperationsInput | number
     datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null

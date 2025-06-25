@@ -108,7 +108,12 @@ export default function AsanaActivityList() {
               }}
             >
               <Stack spacing={0.5}>
-                <Link href={`navigator/asanaPostures/${activity.postureId}`}>
+                <Link
+                  href={`/navigator/asanaPostures/${
+                    activity.sort_english_name ||
+                    encodeURIComponent(activity.postureName)
+                  }`}
+                >
                   <Typography variant="body1">
                     {activity.postureName}
                   </Typography>

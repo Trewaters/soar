@@ -149,16 +149,17 @@ model AsanaSequence {
 
 /// Records a user's daily asana activity.
 model AsanaActivity {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId           String   @db.ObjectId
-  postureId        String // Reference to AsanaPosture.id
-  postureName      String // e.g., Adho Mukha Svanasana
-  duration         Int // Duration held (in seconds)
-  datePerformed    DateTime // Date performed
-  notes            String? // User notes (optional)
-  sensations       String? // Body sensations or mood (optional)
-  completionStatus String // e.g., "complete", "skipped", "partial"
-  difficulty       String? // User-selected difficulty: "easy", "average", "difficult"
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String   @db.ObjectId
+  postureId         String // Reference to AsanaPosture.id
+  postureName       String // e.g., Adho Mukha Svanasana
+  sort_english_name String // For routing - e.g., "Downward Facing Dog"
+  duration          Int // Duration held (in seconds)
+  datePerformed     DateTime // Date performed
+  notes             String? // User notes (optional)
+  sensations        String? // Body sensations or mood (optional)
+  completionStatus  String // e.g., "complete", "skipped", "partial"
+  difficulty        String? // User-selected difficulty: "easy", "average", "difficult"
 
   user    UserData     @relation(fields: [userId], references: [id], onDelete: Cascade)
   posture AsanaPosture @relation(fields: [postureId], references: [id], onDelete: Cascade)

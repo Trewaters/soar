@@ -222,6 +222,7 @@ exports.Prisma.AsanaActivityScalarFieldEnum = {
   userId: 'userId',
   postureId: 'postureId',
   postureName: 'postureName',
+  sort_english_name: 'sort_english_name',
   duration: 'duration',
   datePerformed: 'datePerformed',
   notes: 'notes',

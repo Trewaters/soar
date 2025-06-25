@@ -7,6 +7,7 @@ export type AsanaActivityInput = {
   userId: string
   postureId: string
   postureName: string
+  sort_english_name: string
   duration: number
   datePerformed: Date | string // Accept both Date and string, convert in function
   notes?: string

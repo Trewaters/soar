@@ -10,6 +10,7 @@ export interface AsanaActivityData {
   userId: string
   postureId: string
   postureName: string
+  sort_english_name: string
   duration: number
   datePerformed: string
   completionStatus: string
@@ -39,6 +40,7 @@ export interface CreateActivityInput {
   userId: string
   postureId: string
   postureName: string
+  sort_english_name: string
   duration: number
   datePerformed: Date
   completionStatus: string

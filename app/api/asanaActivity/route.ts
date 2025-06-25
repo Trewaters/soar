@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.json()
 
-    // Validate required fields
+    // Validate required fields (sort_english_name is optional now)
     if (!data.userId || !data.postureId || !data.postureName) {
       const validationError = new Error(
         'Missing required fields: userId, postureId, and postureName are required'
@@ -36,6 +36,11 @@ export async function POST(req: NextRequest) {
         },
         { status: 400 }
       )
+    }
+
+    // Ensure sort_english_name is provided, fallback to postureName if empty
+    if (!data.sort_english_name || data.sort_english_name.trim() === '') {
+      data.sort_english_name = data.postureName
     }
 
     const activity = await recordAsanaActivity(data)

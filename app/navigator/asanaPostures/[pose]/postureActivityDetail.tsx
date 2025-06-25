@@ -242,6 +242,7 @@ export default function PostureActivityDetail({
       userId: session.user.id,
       postureId: postureCardProp.id.toString(),
       postureName: postureCardProp.sort_english_name,
+      sort_english_name: postureCardProp.sort_english_name,
       duration: 0,
       datePerformed: new Date(),
       completionStatus: 'complete',
