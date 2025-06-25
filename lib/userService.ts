@@ -43,24 +43,16 @@ export async function getUserByEmail(email: string): Promise<UserData> {
 
 /**
  * Get user login streak data
+ * This function automatically records today's login activity if not already recorded
+ * and returns the most up-to-date streak information
  */
 export async function getUserLoginStreak(
   userId: string
 ): Promise<UserStreakData> {
   try {
-    const response = await fetch(
-      `/api/user/loginStreak?userId=${encodeURIComponent(userId)}`,
-      {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      }
-    )
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch login streak')
-    }
-
-    return await response.json()
+    // Use recordActivityAndGetStreak to ensure login streak is always up-to-date
+    const result = await recordActivityAndGetStreak(userId, 'view_login_streak')
+    return result.streakData
   } catch (error) {
     logServiceError(error, 'userService', 'getUserLoginStreak', {
       operation: 'fetch_user_login_streak',
@@ -152,6 +144,47 @@ export async function getPractitionerData(id: string): Promise<UserData> {
     logServiceError(error, 'userService', 'getPractitionerData', {
       operation: 'fetch_practitioner_data',
       id,
+    })
+    throw error
+  }
+}
+
+/**
+ * Record user activity and get updated login streak data
+ * This function automatically records today's login activity if not already recorded
+ * and returns the most up-to-date streak information
+ */
+export async function recordActivityAndGetStreak(
+  userId: string,
+  activityType: string = 'view_streaks'
+): Promise<{
+  success: boolean
+  loginRecorded: boolean
+  streakData: UserStreakData
+}> {
+  try {
+    const response = await fetch('/api/user/recordActivity', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, activityType }),
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to record activity')
+    }
+
+    const result = await response.json()
+
+    return {
+      success: result.success,
+      loginRecorded: result.loginRecorded,
+      streakData: result.streakData,
+    }
+  } catch (error) {
+    logServiceError(error, 'userService', 'recordActivityAndGetStreak', {
+      operation: 'record_activity_and_get_streak',
+      userId,
+      activityType,
     })
     throw error
   }

@@ -430,7 +430,12 @@ If the Activity Streak feature fails in production:
 4. **API Endpoint Testing**:
 
    ```bash
-   # Test the loginStreak API in production
+   # Test the recordActivity API in production (automatically updates streak)
+   curl -X POST "https://yourapp.vercel.app/api/user/recordActivity" \
+     -H "Content-Type: application/json" \
+     -d '{"userId":"YOUR_USER_ID","activityType":"view_streaks"}'
+
+   # Test the legacy loginStreak API in production (read-only)
    curl "https://yourapp.vercel.app/api/user/loginStreak?userId=YOUR_USER_ID"
    ```
 

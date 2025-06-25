@@ -26,13 +26,6 @@ interface ActivityStreaksProps {
   streakTypes?: StreakType[]
 }
 
-interface LoginStreakResponse {
-  currentStreak: number
-  longestStreak: number
-  lastLoginDate: string | null
-  isActiveToday: boolean
-}
-
 export default function ActivityStreaks({
   variant = 'compact',
   streakTypes = ['login'],
@@ -126,22 +119,28 @@ export default function ActivityStreaks({
         const fetchedStreaks: StreakData[] = []
         let hasNetworkError = false
 
-        // Fetch login streak data
+        // Record activity and fetch login streak data
         if (streakTypes.includes('login')) {
           try {
-            const apiUrl = `/api/user/loginStreak?userId=${session.user.id}`
-            console.log('ActivityStreaks: Making API call to:', {
-              url: apiUrl,
-              method: 'GET',
-              headers: { 'Content-Type': 'application/json' },
-              timestamp: new Date().toISOString(),
-            })
+            const apiUrl = `/api/user/recordActivity`
+            console.log(
+              'ActivityStreaks: Making API call to record activity:',
+              {
+                url: apiUrl,
+                method: 'POST',
+                timestamp: new Date().toISOString(),
+              }
+            )
 
             const response = await fetch(apiUrl, {
-              method: 'GET',
+              method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
+              body: JSON.stringify({
+                userId: session.user.id,
+                activityType: 'view_streaks',
+              }),
             })
 
             console.log('ActivityStreaks: API response received:', {
@@ -152,15 +151,16 @@ export default function ActivityStreaks({
               url: response.url,
               timestamp: new Date().toISOString(),
               requestId: response.headers.get('X-Request-ID'),
-              environment: response.headers.get('X-Environment'),
-              responseTimestamp: response.headers.get('X-Timestamp'),
             })
 
             if (response.ok) {
-              const loginData: LoginStreakResponse = await response.json()
+              const activityResponse = await response.json()
+              const loginData = activityResponse.streakData
+
               console.log(
-                'ActivityStreaks: Successfully parsed response data:',
+                'ActivityStreaks: Successfully recorded activity and got streak data:',
                 {
+                  loginRecorded: activityResponse.loginRecorded,
                   loginData,
                   timestamp: new Date().toISOString(),
                 }
@@ -554,11 +554,13 @@ export default function ActivityStreaks({
                       variant="outlined"
                       color={streak.color}
                     />
-                    <Chip
-                      label={`Last: ${formatLastActivity(streak.lastActivityDate)}`}
-                      size="small"
-                      variant="outlined"
-                    />
+                    {(streak.currentStreak > 0 || streak.lastActivityDate) && (
+                      <Chip
+                        label={`Last: ${formatLastActivity(streak.lastActivityDate)}`}
+                        size="small"
+                        variant="outlined"
+                      />
+                    )}
                   </Stack>
                 </Stack>
               </Stack>

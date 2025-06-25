@@ -43,15 +43,19 @@ describe('ActivityStreaks Component', () => {
       ok: true,
       status: 200,
       statusText: 'OK',
-      url: '/api/user/loginStreak?userId=user123',
+      url: '/api/user/recordActivity',
       headers: new Headers({
         'Content-Type': 'application/json',
       }),
       json: async () => ({
-        currentStreak: 7,
-        longestStreak: 12,
-        lastLoginDate: new Date().toISOString(),
-        isActiveToday: true,
+        success: true,
+        loginRecorded: true,
+        streakData: {
+          currentStreak: 7,
+          longestStreak: 12,
+          lastLoginDate: new Date().toISOString(),
+          isActiveToday: true,
+        },
       }),
     } as Response)
 
@@ -83,12 +87,11 @@ describe('ActivityStreaks Component', () => {
         update: jest.fn(),
       })
 
-      render(<ActivityStreaks />)
+      const { container } = render(<ActivityStreaks />)
 
-      expect(
-        screen.getByText('Loading activity streaks...')
-      ).toBeInTheDocument()
-      expect(screen.getByRole('progressbar')).toBeInTheDocument()
+      // The LoadingSkeleton component shows skeleton elements with MUI classes
+      const skeletonElements = container.querySelectorAll('.MuiSkeleton-root')
+      expect(skeletonElements.length).toBeGreaterThan(0)
     })
 
     it('shows sign-in message when user is unauthenticated', () => {
@@ -121,14 +124,22 @@ describe('ActivityStreaks Component', () => {
   })
 
   describe('authenticated user with login streak data', () => {
-    const mockLoginStreakResponse = {
-      currentStreak: 5,
-      longestStreak: 12,
-      lastLoginDate: new Date().toISOString(),
-      isActiveToday: true,
+    const mockActivityResponse = {
+      success: true,
+      loginRecorded: true,
+      streakData: {
+        currentStreak: 5,
+        longestStreak: 12,
+        lastLoginDate: new Date().toISOString(),
+        isActiveToday: true,
+      },
     }
 
     beforeEach(() => {
+      // Clear all mocks first
+      jest.clearAllMocks()
+      mockFetch.mockClear()
+
       mockUseSession.mockReturnValue({
         data: {
           user: { id: 'user123', email: 'test@example.com' },
@@ -142,11 +153,11 @@ describe('ActivityStreaks Component', () => {
         ok: true,
         status: 200,
         statusText: 'OK',
-        url: '/api/user/loginStreak?userId=user123',
+        url: '/api/user/recordActivity',
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
-        json: async () => mockLoginStreakResponse,
+        json: async () => mockActivityResponse,
       } as Response)
     })
 
@@ -184,15 +195,19 @@ describe('ActivityStreaks Component', () => {
       })
     })
 
-    it('makes correct API call for login streak data', async () => {
+    it('makes correct API call for recording activity and getting streak data', async () => {
       render(<ActivityStreaks />)
 
       await waitFor(() => {
         expect(mockFetch).toHaveBeenCalledWith(
-          '/api/user/loginStreak?userId=user123',
+          '/api/user/recordActivity',
           expect.objectContaining({
-            method: 'GET',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: 'user123',
+              activityType: 'view_streaks',
+            }),
           })
         )
       })
@@ -226,15 +241,19 @@ describe('ActivityStreaks Component', () => {
         ok: true,
         status: 200,
         statusText: 'OK',
-        url: '/api/user/loginStreak?userId=user123',
+        url: '/api/user/recordActivity',
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
         json: async () => ({
-          currentStreak: 0,
-          longestStreak: 0,
-          lastLoginDate: null,
-          isActiveToday: false,
+          success: true,
+          loginRecorded: false,
+          streakData: {
+            currentStreak: 0,
+            longestStreak: 0,
+            lastLoginDate: null,
+            isActiveToday: false,
+          },
         }),
       } as Response)
 
@@ -252,15 +271,19 @@ describe('ActivityStreaks Component', () => {
         ok: true,
         status: 200,
         statusText: 'OK',
-        url: '/api/user/loginStreak?userId=user123',
+        url: '/api/user/recordActivity',
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
         json: async () => ({
-          currentStreak: 5,
-          longestStreak: 8,
-          lastLoginDate: '2025-06-14T10:00:00Z',
-          isActiveToday: true,
+          success: true,
+          loginRecorded: true,
+          streakData: {
+            currentStreak: 5,
+            longestStreak: 8,
+            lastLoginDate: '2025-06-14T10:00:00Z',
+            isActiveToday: true,
+          },
         }),
       } as Response)
 
@@ -278,15 +301,19 @@ describe('ActivityStreaks Component', () => {
         ok: true,
         status: 200,
         statusText: 'OK',
-        url: '/api/user/loginStreak?userId=user123',
+        url: '/api/user/recordActivity',
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
         json: async () => ({
-          currentStreak: 15,
-          longestStreak: 20,
-          lastLoginDate: '2025-06-14T10:00:00Z',
-          isActiveToday: true,
+          success: true,
+          loginRecorded: true,
+          streakData: {
+            currentStreak: 15,
+            longestStreak: 20,
+            lastLoginDate: '2025-06-14T10:00:00Z',
+            isActiveToday: true,
+          },
         }),
       } as Response)
 
@@ -302,15 +329,19 @@ describe('ActivityStreaks Component', () => {
         ok: true,
         status: 200,
         statusText: 'OK',
-        url: '/api/user/loginStreak?userId=user123',
+        url: '/api/user/recordActivity',
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
         json: async () => ({
-          currentStreak: 45,
-          longestStreak: 50,
-          lastLoginDate: '2025-06-14T10:00:00Z',
-          isActiveToday: true,
+          success: true,
+          loginRecorded: true,
+          streakData: {
+            currentStreak: 45,
+            longestStreak: 50,
+            lastLoginDate: '2025-06-14T10:00:00Z',
+            isActiveToday: true,
+          },
         }),
       } as Response)
 
@@ -337,15 +368,19 @@ describe('ActivityStreaks Component', () => {
         ok: true,
         status: 200,
         statusText: 'OK',
-        url: '/api/user/loginStreak?userId=user123',
+        url: '/api/user/recordActivity',
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
         json: async () => ({
-          currentStreak: 3,
-          longestStreak: 7,
-          lastLoginDate: '2025-06-13T15:30:00Z',
-          isActiveToday: false,
+          success: true,
+          loginRecorded: true,
+          streakData: {
+            currentStreak: 3,
+            longestStreak: 7,
+            lastLoginDate: '2025-06-13T15:30:00Z',
+            isActiveToday: false,
+          },
         }),
       } as Response)
     })
@@ -369,10 +404,14 @@ describe('ActivityStreaks Component', () => {
 
       await waitFor(() => {
         expect(mockFetch).toHaveBeenCalledWith(
-          '/api/user/loginStreak?userId=user123',
+          '/api/user/recordActivity',
           expect.objectContaining({
-            method: 'GET',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: 'user123',
+              activityType: 'view_streaks',
+            }),
           })
         )
       })
@@ -456,15 +495,19 @@ describe('ActivityStreaks Component', () => {
         ok: true,
         status: 200,
         statusText: 'OK',
-        url: '/api/user/loginStreak?userId=user123',
+        url: '/api/user/recordActivity',
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
         json: async () => ({
-          currentStreak: 0,
-          longestStreak: 0,
-          lastLoginDate: null,
-          isActiveToday: false,
+          success: true,
+          loginRecorded: false,
+          streakData: {
+            currentStreak: 0,
+            longestStreak: 0,
+            lastLoginDate: null,
+            isActiveToday: false,
+          },
         }),
       } as Response)
 
@@ -498,15 +541,19 @@ describe('ActivityStreaks Component', () => {
         ok: true,
         status: 200,
         statusText: 'OK',
-        url: '/api/user/loginStreak?userId=user123',
+        url: '/api/user/recordActivity',
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
         json: async () => ({
-          currentStreak: 1,
-          longestStreak: 1,
-          lastLoginDate: today,
-          isActiveToday: true,
+          success: true,
+          loginRecorded: true,
+          streakData: {
+            currentStreak: 1,
+            longestStreak: 1,
+            lastLoginDate: today,
+            isActiveToday: true,
+          },
         }),
       } as Response)
 
@@ -524,15 +571,19 @@ describe('ActivityStreaks Component', () => {
         ok: true,
         status: 200,
         statusText: 'OK',
-        url: '/api/user/loginStreak?userId=user123',
+        url: '/api/user/recordActivity',
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
         json: async () => ({
-          currentStreak: 1,
-          longestStreak: 1,
-          lastLoginDate: yesterday.toISOString(),
-          isActiveToday: false,
+          success: true,
+          loginRecorded: true,
+          streakData: {
+            currentStreak: 1,
+            longestStreak: 1,
+            lastLoginDate: yesterday.toISOString(),
+            isActiveToday: false,
+          },
         }),
       } as Response)
 
@@ -548,15 +599,19 @@ describe('ActivityStreaks Component', () => {
         ok: true,
         status: 200,
         statusText: 'OK',
-        url: '/api/user/loginStreak?userId=user123',
+        url: '/api/user/recordActivity',
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
         json: async () => ({
-          currentStreak: 0,
-          longestStreak: 0,
-          lastLoginDate: null,
-          isActiveToday: false,
+          success: true,
+          loginRecorded: false,
+          streakData: {
+            currentStreak: 0,
+            longestStreak: 0,
+            lastLoginDate: null,
+            isActiveToday: false,
+          },
         }),
       } as Response)
 
@@ -575,15 +630,19 @@ describe('ActivityStreaks Component', () => {
         ok: true,
         status: 200,
         statusText: 'OK',
-        url: '/api/user/loginStreak?userId=user123',
+        url: '/api/user/recordActivity',
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
         json: async () => ({
-          currentStreak: 1,
-          longestStreak: 1,
-          lastLoginDate: null,
-          isActiveToday: false,
+          success: true,
+          loginRecorded: true,
+          streakData: {
+            currentStreak: 1,
+            longestStreak: 1,
+            lastLoginDate: null,
+            isActiveToday: false,
+          },
         }),
       } as Response)
 
@@ -610,15 +669,19 @@ describe('ActivityStreaks Component', () => {
         ok: true,
         status: 200,
         statusText: 'OK',
-        url: '/api/user/loginStreak?userId=user123',
+        url: '/api/user/recordActivity',
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
         json: async () => ({
-          currentStreak: 7,
-          longestStreak: 10,
-          lastLoginDate: '2025-06-14T10:00:00Z',
-          isActiveToday: true,
+          success: true,
+          loginRecorded: true,
+          streakData: {
+            currentStreak: 7,
+            longestStreak: 10,
+            lastLoginDate: '2025-06-14T10:00:00Z',
+            isActiveToday: true,
+          },
         }),
       } as Response)
     })
@@ -677,9 +740,9 @@ describe('ActivityStreaks Component', () => {
 
       render(<ActivityStreaks />)
 
-      expect(
-        screen.getByText('Loading activity streaks...')
-      ).toBeInTheDocument()
+      // The LoadingSkeleton component shows skeleton elements, not text
+      const skeletonElements = document.querySelectorAll('.MuiSkeleton-root')
+      expect(skeletonElements.length).toBeGreaterThan(0)
     })
 
     it('handles initialization flag correctly to prevent loops', async () => {
@@ -687,15 +750,19 @@ describe('ActivityStreaks Component', () => {
         ok: true,
         status: 200,
         statusText: 'OK',
-        url: '/api/user/loginStreak?userId=user123',
+        url: '/api/user/recordActivity',
         headers: new Headers({
           'Content-Type': 'application/json',
         }),
         json: async () => ({
-          currentStreak: 1,
-          longestStreak: 1,
-          lastLoginDate: '2025-06-14T10:00:00Z',
-          isActiveToday: true,
+          success: true,
+          loginRecorded: true,
+          streakData: {
+            currentStreak: 1,
+            longestStreak: 1,
+            lastLoginDate: '2025-06-14T10:00:00Z',
+            isActiveToday: true,
+          },
         }),
       } as Response)
 
