@@ -17,15 +17,17 @@ export default function Page({ params }: { params: { pose: string } }) {
     console.log('Timer completed!')
   }
 
-  const handleTimerUpdate = (_remainingSeconds: number) => {
+  const handleTimerUpdate = (remainingSeconds: number) => {
     // You can use this to update other parts of your UI
-    // console.log('Timer update:', remainingSeconds)
+    console.log('Timer update:', remainingSeconds)
   }
 
   useEffect(() => {
     const getViewPose = async () => {
       try {
-        const responseData = await getPostureByName(params.pose)
+        // Decode the URL parameter to handle spaces and special characters
+        const decodedPose = decodeURIComponent(params.pose)
+        const responseData = await getPostureByName(decodedPose)
         setViewPose(responseData)
       } catch (error) {
         console.error('Error fetching posture:', error)

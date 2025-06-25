@@ -43,7 +43,9 @@ export default function ViewAsanaPractice({
   useEffect(() => {
     const getViewPose = async () => {
       try {
-        const responseData = await getPostureByName(params.pose)
+        // Decode the URL parameter to handle spaces and special characters
+        const decodedPose = decodeURIComponent(params.pose)
+        const responseData = await getPostureByName(decodedPose)
         setViewPose(responseData)
       } catch (error) {
         console.error('Error fetching posture:', error)

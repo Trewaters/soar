@@ -376,7 +376,9 @@ export default function PostureActivityDetail({
   }
 
   function handleClick() {
-    router.push(`../../views/viewAsanaPractice/${posture?.sort_english_name}/`)
+    router.push(
+      `../../views/viewAsanaPractice/${encodeURIComponent(posture?.sort_english_name || '')}/`
+    )
   }
 
   return (
