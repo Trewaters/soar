@@ -56,8 +56,8 @@ export default function Page() {
       >
         <SplashHeader
           src={'/images/asana-postures-splash-header.png'}
-          alt={'Asanas'}
-          title="Asanas"
+          alt={'Asana'}
+          title="Asana"
         />
         <Box height={'32px'} />
 
