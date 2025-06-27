@@ -31,6 +31,17 @@ export interface PoseImageData {
   uploadedAt: string
 }
 
+/**
+ * Props for the `PostureImageUpload` component.
+ *
+ * @property onImageUploaded - Optional callback invoked when an image is successfully uploaded. Receives the uploaded image data as a parameter.
+ * @property onImageDeleted - Optional callback invoked when an image is deleted. Receives the ID of the deleted image.
+ * @property maxFileSize - Optional maximum file size allowed for uploads, in megabytes (MB).
+ * @property acceptedTypes - Optional array of accepted MIME types for image uploads (e.g., ['image/jpeg', 'image/png']).
+ * @property variant - Optional UI variant for the upload component. Can be either `'button'` or `'dropzone'`.
+ * @property postureId - Optional identifier for the posture associated with the image upload.
+ * @property postureName - Optional name of the posture associated with the image upload.
+ */
 interface PostureImageUploadProps {
   onImageUploaded?: (image: PoseImageData) => void
   onImageDeleted?: (imageId: string) => void
@@ -41,6 +52,33 @@ interface PostureImageUploadProps {
   postureName?: string
 }
 
+/**
+ * A React component for uploading images associated with a specific yoga posture.
+ *
+ * Supports both "button" and "dropzone" variants for file selection, drag-and-drop,
+ * file type and size validation, image preview, alt text input for accessibility,
+ * and error handling. Integrates with user session and associates the uploaded image
+ * with a posture by ID and name.
+ *
+ * @component
+ * @param {Object} props - Component props.
+ * @param {(image: UploadedImage) => void} [props.onImageUploaded] - Callback invoked after a successful upload with the uploaded image data.
+ * @param {number} [props.maxFileSize=10] - Maximum allowed file size in MB.
+ * @param {string[]} [props.acceptedTypes=['image/jpeg', 'image/png', 'image/webp']] - Accepted MIME types for image files.
+ * @param {'button' | 'dropzone'} [props.variant='button'] - UI variant for the uploader.
+ * @param {string} props.postureId - The ID of the posture to associate the image with.
+ * @param {string} props.postureName - The name of the posture for display and accessibility.
+ *
+ * @returns {JSX.Element} The image upload UI.
+ *
+ * @example
+ * <PostureImageUpload
+ *   postureId="123"
+ *   postureName="Downward Dog"
+ *   onImageUploaded={(img) => console.log(img)}
+ *   variant="dropzone"
+ * />
+ */
 export default function PostureImageUpload({
   onImageUploaded,
   maxFileSize = 10,

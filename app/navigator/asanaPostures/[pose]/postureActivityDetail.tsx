@@ -27,6 +27,7 @@ import {
   deleteAsanaActivity,
 } from '@lib/asanaActivityClientService'
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
+import PostureImageUpload from '@app/clientComponents/imageUpload/PostureImageUpload'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
@@ -935,9 +936,14 @@ export default function PostureActivityDetail({
       {/* Image Management Section */}
       {session && posture && (
         <Box sx={{ mt: 3, px: 2, pb: 3 }}>
-          <PostureImageManagement
-            title={`Images for ${posture.sort_english_name}`}
-            variant="full"
+          <PostureImageUpload
+            acceptedTypes={[
+              'image/jpeg',
+              'image/png',
+              'image/gif',
+              'image/svg',
+            ]}
+            maxFileSize={5} // 5 MB
             postureId={posture.id?.toString()}
             postureName={posture.sort_english_name}
           />
