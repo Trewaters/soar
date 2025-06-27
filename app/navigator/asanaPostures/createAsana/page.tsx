@@ -61,6 +61,7 @@ export default function Page() {
     preferred_side: string
     sideways: string
     created_by: string
+    dristi?: string
   }>({
     sort_english_name: '',
     english_names: [],
@@ -71,6 +72,7 @@ export default function Page() {
     preferred_side: '',
     sideways: 'No',
     created_by: session?.user?.email ?? 'error-undefined-user',
+    dristi: '',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -214,8 +216,27 @@ export default function Page() {
           link="/navigator/asanaPostures"
           onClick={handleInfoClick}
         />
-
         <Stack sx={{ px: 4 }} spacing={3}>
+          {/* Name Input */}
+          <TextField
+            label="Name"
+            name="sort_english_name"
+            value={formData.sort_english_name}
+            onChange={handleChange}
+            required
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: '12px',
+                borderColor: 'primary.main',
+                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+              },
+              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                {
+                  borderColor: 'primary.light',
+                },
+            }}
+          />
+
           {/* Category Search with Autocomplete */}
           <Autocomplete
             freeSolo
@@ -262,26 +283,6 @@ export default function Page() {
                 }}
               />
             )}
-          />
-
-          {/* Name Input */}
-          <TextField
-            label="Name"
-            name="sort_english_name"
-            value={formData.sort_english_name}
-            onChange={handleChange}
-            required
-            sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: '12px',
-                borderColor: 'primary.main',
-                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-              },
-              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
-                {
-                  borderColor: 'primary.light',
-                },
-            }}
           />
 
           {/* English Variations Input */}
@@ -381,13 +382,19 @@ export default function Page() {
             }}
           />
 
-          {/* Preferred Side Input */}
+          {/* Dristi Component */}
           <TextField
-            label="Preferred side"
-            name="preferred_side"
-            value={formData.preferred_side}
-            onChange={handleChange}
-            placeholder='e.g. "Right", "Left", or "Either"'
+            label="Dristi (Gaze Point)"
+            name="dristi"
+            value={formData.dristi || ''}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                dristi: e.target.value,
+              })
+            }
+            placeholder='e.g. "Tip of the nose", "Between the eyebrows", "Hand", "Toes", "Upward to the sky"'
+            helperText="Type your own or use suggestions like: Tip of the nose, Between the eyebrows, Hand, Toes, Upward to the sky"
             sx={{
               '& .MuiOutlinedInput-notchedOutline': {
                 borderRadius: '12px',
@@ -401,36 +408,7 @@ export default function Page() {
             }}
           />
 
-          {/* Sideways Button Group */}
-          <Box>
-            <Typography variant="body1" sx={{ mb: 1, fontWeight: 600 }}>
-              Sideways?
-            </Typography>
-            <ButtonGroup variant="outlined" sx={{ width: '100%' }}>
-              {['Yes', 'No'].map((option) => (
-                <Button
-                  key={option}
-                  onClick={() => handleSidewaysChange(option)}
-                  variant={sideways === option ? 'contained' : 'outlined'}
-                  sx={{
-                    flex: 1,
-                    borderRadius: '12px',
-                    '&:first-of-type': {
-                      borderTopRightRadius: 0,
-                      borderBottomRightRadius: 0,
-                    },
-                    '&:last-child': {
-                      borderTopLeftRadius: 0,
-                      borderBottomLeftRadius: 0,
-                    },
-                  }}
-                >
-                  {option}
-                </Button>
-              ))}
-            </ButtonGroup>
-          </Box>
-
+          {/* Image Upload Component */}
           <ImageUploadWithFallback
             maxFileSize={5}
             acceptedTypes={['image/jpeg', 'image/png', 'image/svg']}
