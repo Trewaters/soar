@@ -23,12 +23,15 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
     apple: '/icon-192x192.png',
   },
-  themeColor: '#ffffff',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
     title: 'Uvuyoga',
   },
+}
+
+export const viewport = {
+  themeColor: '#ffffff',
 }
 
 export default async function RootLayout({

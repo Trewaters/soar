@@ -4,9 +4,12 @@ import {
 } from '@lib/asanaActivityService'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Force this route to be dynamic since it requires query parameters
+export const dynamic = 'force-dynamic'
+
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url)
+    const { searchParams } = req.nextUrl
     const userId = searchParams.get('userId')
     const postureId = searchParams.get('postureId')
 

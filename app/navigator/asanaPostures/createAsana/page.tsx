@@ -1,26 +1,56 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid2'
 import {
   Box,
   Button,
-  FormControl,
+  ButtonGroup,
   Stack,
   TextField,
-  Paper,
-  Divider,
+  Autocomplete,
+  Typography,
+  Drawer,
 } from '@mui/material'
-import { useAsanaPosture } from '@app/context/AsanaPostureContext'
-import { createPosture, type CreatePostureInput } from '@lib/postureService'
+import { createPosture } from '@lib/postureService'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import NavBottom from '@serverComponents/navBottom'
-import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
+import SplashHeader from '@app/clientComponents/splash-header'
+import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import SearchIcon from '@mui/icons-material/Search'
+import ImageUploadWithFallback from '@app/clientComponents/imageUpload/ImageUploadWithFallback'
+import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUploadWithFallback'
+import { deletePoseImage } from '@lib/imageService'
 
 export default function Page() {
   const { data: session } = useSession()
-  const { state, dispatch } = useAsanaPosture()
+  const router = useRouter()
+  const [open, setOpen] = useState(false)
+  const [difficulty, setDifficulty] = useState('')
+  const [sideways, setSideways] = useState('No')
+  const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Available categories for autocomplete
+  const categories = [
+    'Arm Leg Support',
+    'Backbend',
+    'Balance',
+    'Bandha',
+    'Core',
+    'Forward Bend',
+    'Hip Opener',
+    'Inversion',
+    'Lateral Bend',
+    'Mudra',
+    'Neutral',
+    'Prone',
+    'Restorative',
+    'Seated',
+    'Standing',
+    'Supine',
+    'Twist',
+  ]
+
   const [formData, setFormData] = useState<{
     sort_english_name: string
     english_names: string[]
@@ -37,11 +67,10 @@ export default function Page() {
     description: '',
     category: '',
     difficulty: '',
-    breath_direction_default: '',
+    breath_direction_default: 'Neutral',
     preferred_side: '',
-    sideways: '',
+    sideways: 'No',
     created_by: session?.user?.email ?? 'error-undefined-user',
-    // created_by: "alpha users",
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,17 +79,46 @@ export default function Page() {
       ...formData,
       [name]: value,
     })
-    dispatch({
-      type: 'SET_POSTURES',
-      payload: {
-        ...state.postures,
-        [name]: value,
-      },
+  }
+
+  const handleCategoryChange = (
+    event: React.SyntheticEvent,
+    value: string | null
+  ) => {
+    setFormData({
+      ...formData,
+      category: value || '',
     })
+  }
+
+  const handleDifficultyChange = (value: string) => {
+    setDifficulty(value)
+    setFormData({
+      ...formData,
+      difficulty: value,
+    })
+  }
+
+  const handleSidewaysChange = (value: string) => {
+    setSideways(value)
+    setFormData({
+      ...formData,
+      sideways: value,
+    })
+  }
+
+  const handleImageUploaded = (image: PoseImageData) => {
+    console.log('Image uploaded for asana creation:', image)
+    setUploadedImages((prev) => [...prev, image])
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsSubmitting(true)
+
+    // Track initial uploaded images for cleanup if needed
+    const initialUploadedImages = [...uploadedImages]
+
     const updatedAsana = {
       sort_english_name: formData.sort_english_name,
       english_names: formData.english_names,
@@ -76,225 +134,338 @@ export default function Page() {
     try {
       const data = await createPosture(updatedAsana)
       console.log('Posture created successfully:', data)
+
+      // Clear uploaded images state since posture was created successfully
+      setUploadedImages([])
+
+      // Navigate back to asanas list
+      router.push('/navigator/asanaPostures')
     } catch (error: Error | any) {
       console.error('Error creating posture:', error.message)
+
+      // If posture creation failed and we have uploaded images, clean them up
+      if (initialUploadedImages.length > 0) {
+        console.log(
+          'Cleaning up uploaded images due to posture creation failure...'
+        )
+
+        // Use Promise.allSettled to attempt deletion of all images even if some fail
+        const deletePromises = initialUploadedImages.map(async (image) => {
+          try {
+            await deletePoseImage(image.id)
+            console.log(`✅ Deleted orphaned image: ${image.id}`)
+            return { success: true, imageId: image.id }
+          } catch (deleteError) {
+            console.error(
+              `❌ Failed to delete orphaned image ${image.id}:`,
+              deleteError
+            )
+            return { success: false, imageId: image.id, error: deleteError }
+          }
+        })
+
+        const results = await Promise.allSettled(deletePromises)
+        const successful = results.filter(
+          (result) => result.status === 'fulfilled' && result.value.success
+        ).length
+        const failed = results.length - successful
+
+        console.log(
+          `🧹 Cleanup complete: ${successful} images deleted, ${failed} failed`
+        )
+
+        // Clear the state regardless of individual deletion results
+        setUploadedImages([])
+      }
     } finally {
-      // clear the form
-      setFormData({
-        sort_english_name: '',
-        english_names: [],
-        description: '',
-        category: '',
-        difficulty: '',
-        breath_direction_default: '',
-        preferred_side: '',
-        sideways: '',
-        created_by: 'alpha users',
-      })
+      setIsSubmitting(false)
     }
   }
-  const router = useRouter()
+
+  const handleInfoClick = () => {
+    setOpen(!open)
+  }
 
   useEffect(() => {
     if (session === null) {
       router.push('/navigator/asanaPostures')
     }
   }, [router, session])
-  return (
-    <>
-      <Box sx={{ px: 2, pb: 7 }}>
-        <Typography variant="h1">Create Asana</Typography>
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2}>
-            <Grid size={12}>
-              <FormControl sx={{ width: '100%', mb: 3 }}>
-                <TextField
-                  label="Sort English Name"
-                  name="sort_english_name"
-                  value={formData.sort_english_name}
-                  onChange={handleChange}
-                  required
-                />
-              </FormControl>
-            </Grid>
-            <Grid size={12}>
-              <FormControl sx={{ width: '100%', mb: 3 }}>
-                <TextField
-                  label="English Names"
-                  name="english_names"
-                  value={formData.english_names.join(',')}
-                  onChange={(e) => {
-                    const { value } = e.target
-                    setFormData({
-                      ...formData,
-                      english_names: value.split(',').map((name) => name),
-                    })
-                  }}
-                  onBlur={(e) => {
-                    const { value } = e.target
-                    dispatch({
-                      type: 'SET_POSTURES',
-                      payload: {
-                        ...state.postures,
-                        english_names: value.split(',').map((name) => name),
-                      },
-                    })
-                  }}
-                  helperText="Separate names with commas"
-                  required
-                />
-              </FormControl>
-            </Grid>
-            <Grid size={12}>
-              <FormControl sx={{ width: '100%', mb: 3 }}>
-                <TextField
-                  label="Description"
-                  name="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  required
-                />
-              </FormControl>
-            </Grid>
-            <Grid size={12}>
-              <FormControl sx={{ width: '100%', mb: 3 }}>
-                <TextField
-                  select
-                  label="Category"
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  required
-                  SelectProps={{
-                    native: true,
-                  }}
-                >
-                  <option value=""></option>
-                  <option value="Arm Leg Support">Arm Leg Support</option>
-                  <option value="Backbend">Backbend</option>
-                  <option value="Balance">Balance</option>
-                  <option value="Bandha">Bandha</option>
-                  <option value="Core">Core</option>
-                  <option value="Forward Bend">Forward Bend</option>
-                  <option value="Hip Opener">Hip Opener</option>
-                  <option value="Inversion">Inversion</option>
-                  <option value="Lateral Bend">Lateral Bend</option>
-                  <option value="Mudra">Mudra</option>
-                  <option value="Neutral">Neutral</option>
-                  <option value="Prone">Prone</option>
-                  <option value="Restorative">Restorative</option>
-                  <option value="Seated">Seated</option>
-                  <option value="Standing">Standing</option>
-                  <option value="Supine">Supine</option>
-                  <option value="Twist">Twist</option>
-                </TextField>
-              </FormControl>
-            </Grid>
-            <Grid size={12}>
-              <FormControl sx={{ width: '100%', mb: 3 }}>
-                <TextField
-                  select
-                  label="Difficulty"
-                  name="difficulty"
-                  value={formData.difficulty}
-                  onChange={handleChange}
-                  required
-                  SelectProps={{
-                    native: true,
-                  }}
-                >
-                  <option value=""></option>
-                  <option value="Easy">Easy</option>
-                  <option value="Average">Average</option>
-                  <option value="Difficult">Difficult</option>
-                </TextField>
-              </FormControl>
-            </Grid>
-            <Grid size={12}>
-              <FormControl sx={{ width: '100%', mb: 3 }}>
-                <TextField
-                  select
-                  label="Breath Direction Default"
-                  name="breath_direction_default"
-                  value={formData.breath_direction_default}
-                  onChange={handleChange}
-                  required
-                  SelectProps={{
-                    native: true,
-                  }}
-                >
-                  <option value=""></option>
-                  <option value="Neutral">Neutral</option>
-                  <option value="Inhale">Inhale</option>
-                  <option value="Exhale">Exhale</option>
-                </TextField>
-              </FormControl>
-            </Grid>
-            <Grid size={12}>
-              <FormControl sx={{ width: '100%', mb: 3 }}>
-                <TextField
-                  label="Preferred Side"
-                  name="preferred_side"
-                  placeholder='e.g. "Right"'
-                  value={formData.preferred_side}
-                  onChange={handleChange}
-                  required
-                />
-              </FormControl>
-            </Grid>
-            <Grid size={12}>
-              <FormControl sx={{ width: '100%', mb: 3 }}>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="sideways"
-                    checked={formData.sideways === 'true'}
-                    onChange={(e) => {
-                      const { checked } = e.target
-                      setFormData({
-                        ...formData,
-                        sideways: checked ? 'true' : 'false',
-                      })
-                      dispatch({
-                        type: 'SET_POSTURES',
-                        payload: {
-                          ...state.postures,
-                          sideways: checked ? true : false,
-                        },
-                      })
-                    }}
-                  />
-                  Sideways?
-                </label>
-              </FormControl>
-            </Grid>
-            <Grid size={12}>
-              <Button type="submit" variant="contained" color="primary">
-                Create Asana
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-        <Divider sx={{ my: 4 }} />
-        <Grid size={12}>
-          <Paper elevation={1} sx={{ p: 3, borderRadius: '12px' }}>
-            <Typography variant="h6" gutterBottom color="primary">
-              Reference Images
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Upload reference images to help illustrate this pose. These will
-              be associated with your profile but not specifically with this
-              posture until it&apos;s created. After creating the posture, you
-              can upload posture-specific images on the posture detail page.
-            </Typography>
 
-            <ImageManagement title="" variant="upload-only" />
-          </Paper>
-        </Grid>
-      </Box>
-      <Stack sx={{ position: 'fixed', bottom: 0 }}>
-        <NavBottom subRoute="/navigator/asanaPostures" />
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
+        <SplashHeader
+          src={
+            '/icons/designImages/beautiful-young-woman-practices-yoga-asana.png'
+          }
+          alt={'Create an Asana'}
+          title="Create an Asana"
+        />
+        <SubNavHeader
+          title="Asana"
+          link="/navigator/asanaPostures"
+          onClick={handleInfoClick}
+        />
+
+        <Stack sx={{ px: 4 }} spacing={3}>
+          {/* Category Search with Autocomplete */}
+          <Autocomplete
+            freeSolo
+            id="combo-box-category-search"
+            options={categories}
+            value={formData.category}
+            onChange={handleCategoryChange}
+            onInputChange={(event, newInputValue) => {
+              setFormData({
+                ...formData,
+                category: newInputValue,
+              })
+            }}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: '12px',
+                borderColor: 'primary.main',
+                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+              },
+              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                {
+                  borderColor: 'primary.light',
+                },
+              '& .MuiAutocomplete-endAdornment': {
+                display: 'none',
+              },
+            }}
+            renderInput={(params) => (
+              <TextField
+                sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+                {...params}
+                placeholder="Choose or Add a Category"
+                helperText="Tap to add"
+                slotProps={{
+                  input: {
+                    ...params.InputProps,
+                    startAdornment: (
+                      <>
+                        <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
+                        {params.InputProps.startAdornment}
+                      </>
+                    ),
+                  },
+                }}
+              />
+            )}
+          />
+
+          {/* Name Input */}
+          <TextField
+            label="Name"
+            name="sort_english_name"
+            value={formData.sort_english_name}
+            onChange={handleChange}
+            required
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: '12px',
+                borderColor: 'primary.main',
+                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+              },
+              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                {
+                  borderColor: 'primary.light',
+                },
+            }}
+          />
+
+          {/* English Variations Input */}
+          <TextField
+            label="English Variations"
+            name="english_names"
+            value={formData.english_names.join(', ')}
+            onChange={(e) => {
+              const { value } = e.target
+              setFormData({
+                ...formData,
+                english_names: value.split(',').map((name) => name.trim()),
+              })
+            }}
+            helperText="Separate variations with commas"
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: '12px',
+                borderColor: 'primary.main',
+                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+              },
+              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                {
+                  borderColor: 'primary.light',
+                },
+            }}
+          />
+
+          {/* Description Text Field */}
+          <TextField
+            label="Description"
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            multiline
+            rows={4}
+            placeholder="Enter a detailed description..."
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: '12px',
+                borderColor: 'primary.main',
+                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+              },
+              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                {
+                  borderColor: 'primary.light',
+                },
+            }}
+          />
+
+          {/* Select a Difficulty Level Button Group */}
+          <Box>
+            <Typography variant="body1" sx={{ mb: 1, fontWeight: 600 }}>
+              Select a Difficulty Level
+            </Typography>
+            <ButtonGroup variant="outlined" sx={{ width: '100%' }}>
+              {['Easy', 'Average', 'Difficult'].map((level) => (
+                <Button
+                  key={level}
+                  onClick={() => handleDifficultyChange(level)}
+                  variant={difficulty === level ? 'contained' : 'outlined'}
+                  sx={{
+                    flex: 1,
+                    borderRadius: '12px',
+                    '&:not(:last-child)': {
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0,
+                    },
+                    '&:not(:first-of-type)': {
+                      borderTopLeftRadius: 0,
+                      borderBottomLeftRadius: 0,
+                    },
+                  }}
+                >
+                  {level}
+                </Button>
+              ))}
+            </ButtonGroup>
+          </Box>
+
+          {/* Breath Input */}
+          <TextField
+            label="Breath (default)"
+            name="breath_direction_default"
+            value={formData.breath_direction_default}
+            onChange={handleChange}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: '12px',
+                borderColor: 'primary.main',
+                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+              },
+              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                {
+                  borderColor: 'primary.light',
+                },
+            }}
+          />
+
+          {/* Preferred Side Input */}
+          <TextField
+            label="Preferred side"
+            name="preferred_side"
+            value={formData.preferred_side}
+            onChange={handleChange}
+            placeholder='e.g. "Right", "Left", or "Either"'
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderRadius: '12px',
+                borderColor: 'primary.main',
+                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+              },
+              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                {
+                  borderColor: 'primary.light',
+                },
+            }}
+          />
+
+          {/* Sideways Button Group */}
+          <Box>
+            <Typography variant="body1" sx={{ mb: 1, fontWeight: 600 }}>
+              Sideways?
+            </Typography>
+            <ButtonGroup variant="outlined" sx={{ width: '100%' }}>
+              {['Yes', 'No'].map((option) => (
+                <Button
+                  key={option}
+                  onClick={() => handleSidewaysChange(option)}
+                  variant={sideways === option ? 'contained' : 'outlined'}
+                  sx={{
+                    flex: 1,
+                    borderRadius: '12px',
+                    '&:first-of-type': {
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0,
+                    },
+                    '&:last-child': {
+                      borderTopLeftRadius: 0,
+                      borderBottomLeftRadius: 0,
+                    },
+                  }}
+                >
+                  {option}
+                </Button>
+              ))}
+            </ButtonGroup>
+          </Box>
+
+          <ImageUploadWithFallback
+            maxFileSize={5}
+            acceptedTypes={['image/jpeg', 'image/png', 'image/svg']}
+            variant="dropzone"
+            onImageUploaded={handleImageUploaded}
+          />
+
+          {/* Submit Button */}
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            size="large"
+            disabled={isSubmitting}
+            sx={{
+              borderRadius: '12px',
+              mt: 3,
+              py: 2,
+              fontSize: '1.1rem',
+              fontWeight: 600,
+            }}
+          >
+            {isSubmitting ? 'Creating Asana...' : 'Create Asana'}
+          </Button>
+        </Stack>
       </Stack>
-    </>
+
+      <Drawer anchor="bottom" open={open} onClose={() => setOpen(false)}>
+        <Typography variant="body1" sx={{ p: 2 }}>
+          Fill out the form to create a new asana posture. All fields are
+          required except for preferred side.
+        </Typography>
+      </Drawer>
+
+      <Box height={'72px'} />
+      <NavBottom subRoute="/navigator/asanaPostures" />
+    </Box>
   )
 }
