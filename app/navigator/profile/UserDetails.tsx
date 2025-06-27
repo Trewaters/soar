@@ -11,6 +11,13 @@ import {
   Paper,
   Box,
   FormHelperText,
+  Autocomplete,
+  Card,
+  CardActions,
+  CardContent,
+  Collapse,
+  IconButton,
+  Link,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { red } from '@mui/material/colors'
@@ -19,36 +26,47 @@ import { UseUser } from '@context/UserContext'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import ActivityStreaks from '@app/clientComponents/activityStreaks/ActivityStreaks'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import LinkIcon from '@mui/icons-material/Link'
+import ShareIcon from '@mui/icons-material/Share'
+import MapIcon from '@mui/icons-material/Map'
+import { styled } from '@mui/material/styles'
 
-// interface ExpandMoreProps extends IconButtonProps {
-//   expand: boolean
-// }
-
-// const yogaStyles = [
-//   "Ashtanga",
-//   "Vinyasa Flow",
-//   "Hatha",
-//   "Yin",
-//   "Restorative",
-//   "Nidra",
-//   "Hot yoga",
-//   "Kundalini",
-//   "Iyengar",
-//   "Power Yoga",
-//   "Bikram Yoga",
-//   "Anusara",
-//   "Sivananda",
-//   "Jivamukti",
-//   "Aerial Yoga",
-//   "Prenatal Yoga",
-//   "Kripalu",
-//   "AcroYoga",
-// ]
+const yogaStyles = [
+  'Ashtanga',
+  'Vinyasa Flow',
+  'Hatha',
+  'Yin',
+  'Restorative',
+  'Nidra',
+  'Hot yoga',
+  'Kundalini',
+  'Iyengar',
+  'Power Yoga',
+  'Bikram Yoga',
+  'Anusara',
+  'Sivananda',
+  'Jivamukti',
+  'Aerial Yoga',
+  'Prenatal Yoga',
+  'Kripalu',
+  'AcroYoga',
+]
+const ExpandMore = styled(
+  (props: { expand: boolean } & React.ComponentProps<typeof IconButton>) => {
+    const { expand, ...other } = props
+    return <IconButton {...other} />
+  }
+)(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}))
 
 export default function UserDetails() {
-  // ! disable session while working on the UI
   const { data: session } = useSession()
-  // const session = React.useMemo(() => ({ user: { email: '' } }), [])
 
   const router = useRouter()
   const {
@@ -56,16 +74,11 @@ export default function UserDetails() {
     dispatch,
   } = UseUser()
 
-  // const [expanded, setExpanded] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [profileImageMode, setProfileImageMode] = useState<
     'active' | 'inactive' | 'edit'
   >('active')
-
-  // const handleExpandClick = () => {
-  //   setExpanded(!expanded)
-  // }
 
   useEffect(() => {
     if (session?.user?.email && userData?.email !== session.user.email) {
@@ -76,6 +89,12 @@ export default function UserDetails() {
     }
     setProfileImageMode('active')
   }, [session, dispatch, userData])
+
+  // State for card expand/collapse
+  const [expanded, setExpanded] = useState(false)
+  const handleExpandClick = () => {
+    setExpanded((prev) => !prev)
+  }
 
   if (!session) {
     return (
@@ -134,32 +153,37 @@ export default function UserDetails() {
 
   const membershipDate = new Date(userData?.createdAt).toLocaleDateString()
 
-  // const handleShare = async () => {
-  //   const shareData = {
-  //     title: 'Uvuyoga',
-  //     text: `Check out ${userData.firstName} ${userData.lastName}! ${userData.headline}; ${userData.shareQuick}; ${userData.yogaStyle}; ${userData.yogaExperience};  ${userData.company}; ${userData.websiteURL}; ${userData.location};`,
-  //     url: window.location.href,
-  //   }
-  //   const resultPara = document.querySelector('.result')
-
-  //   try {
-  //     await navigator.clipboard.writeText(JSON.stringify(shareData))
-  //     // console.log('Content copied to clipboard')
-
-  //     if (navigator.share) {
-  //       await navigator.share(shareData)
-  //       // console.log('Content shared successfully')
-  //     } else {
-  //       // console.log('Web Share API not supported in this browser.')
-  //       alert('Link copied to clipboard. Share it manually!')
-  //     }
-  //   } catch (error) {
-  //     // console.error('Error sharing content:', error)
-  //     if (resultPara) {
-  //       resultPara.textContent = `Error: ${error}`
-  //     }
-  //   }
-  // }
+  function handleShare(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
+    event.preventDefault()
+    if (navigator.share) {
+      navigator
+        .share({
+          title: `Yoga Practitioner ${userData?.name || 'Happy Yoga'}`,
+          text: userData?.headline || 'Check out my yoga profile!',
+          url: window.location.href,
+        })
+        .then(() => {
+          setError('Profile shared successfully!')
+        })
+        .catch((err) => {
+          if (err.name !== 'AbortError') {
+            setError('Sharing failed or was cancelled.')
+          }
+        })
+    } else {
+      // Fallback: copy URL to clipboard
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => {
+          setError('Profile link copied to clipboard!')
+        })
+        .catch(() => {
+          setError('Could not copy link to clipboard.')
+        })
+    }
+  }
 
   return (
     <>
@@ -171,253 +195,310 @@ export default function UserDetails() {
       {session && (
         <Box sx={{ flexGrow: 1, justifyItems: 'center' }}>
           <Paper elevation={1} sx={{ mx: 3 }}>
-            <Grid
-              container
+            <Stack
               spacing={3}
               sx={{ p: 3 }}
-              component={'form'}
+              component="form"
               onSubmit={handleSubmit}
             >
-              <Grid size={{ xs: 8 }}>
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Image
+                  src={'/icons/profile/leaf-orange.png'}
+                  width={24}
+                  height={29}
+                  alt="Yoga Practitioner icon"
+                />
                 <Typography variant="h2" color="primary.main">
                   Yoga Practitioner
                 </Typography>
-              </Grid>
-              <Grid display={'flex'} alignItems={'center'} size={{ xs: 4 }}>
-                <Image
-                  src={'/icons/profile/leaf-profile.svg'}
-                  width={50}
-                  height={50}
-                  alt="Yoga Practitioner icon"
-                />
-              </Grid>
+              </Stack>
 
-              <Grid size={3}>
-                <Avatar
-                  sx={{
-                    bgcolor: red[500],
-                    width: { xs: '100%', md: '100%' },
-                    height: { xs: '69%', md: '81%' },
-                  }}
-                  aria-label="name initial"
-                  src={userData?.image}
+              <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
+                <Stack
+                  alignItems="center"
+                  flex={1}
+                  sx={{ position: 'relative' }}
                 >
-                  {!userData?.image ? (
-                    <Image
-                      src={'/icons/profile/profile-person.svg'}
-                      width={50}
-                      height={50}
-                      alt="Generic profile image icon"
-                    />
-                  ) : undefined}
-                </Avatar>
-                {profileImageMode === 'active' && (
-                  <Image
-                    src={'/icons/profile/profile-image-active.svg'}
-                    alt="Active profile image icon"
-                    width={27}
-                    height={27}
-                    style={{
-                      position: 'relative',
-                      bottom: '30%',
-                      left: '80%',
-                      cursor: 'pointer',
-                    }}
-                  />
-                )}
-                {profileImageMode === 'inactive' && (
-                  <Image
-                    src={'/icons/profile/profile-image-inactive.svg'}
-                    width={50}
-                    height={50}
-                    alt="Inactive profile image icon"
-                  />
-                )}
-                {profileImageMode === 'edit' && (
-                  <Image
-                    src={'/icons/profile/profile-image-edit.svg'}
-                    width={50}
-                    height={50}
-                    alt="Edit profile image icon"
-                  />
-                )}
-              </Grid>
-              <Grid
-                size={9}
-                pt={2}
-                // display={'flex'}
-                // justifyContent={'flex-start'}
-              >
-                <Stack justifyContent={'center'}>
-                  <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
-                    {userData?.name ?? 'Yogi Name'}
-                  </Typography>
-                  <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
-                    Member since {membershipDate ?? '6/9/2024'}
-                  </Typography>
-                </Stack>
-
-                {/* Activity Streaks Component */}
-                <Box sx={{ mt: 2 }}>
-                  <ActivityStreaks variant="compact" />
-                </Box>
-
-                {/* 
-                <Card>
-                 
-                  <CardContent>
-                    <Typography variant="body2" color="text.secondary">
-                      {userData?.headline ?? 'What does yoga mean to you?'}
-                    </Typography>
-                  </CardContent>
-                  <CardActions disableSpacing>
-                    <IconButton aria-label="share" onClick={handleShare}>
-                      <ShareIcon />
-                    </IconButton>
-                    <ExpandMore
-                      expand={expanded}
-                      onClick={handleExpandClick}
-                      aria-expanded={expanded}
-                      aria-label="show more"
-                    >
-                      <ExpandMoreIcon />
-                    </ExpandMore>
-                  </CardActions>
-                  <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <CardContent>
-                      <Stack direction="row" spacing={2} mb={2}>
-                        <FormControl>
-                          <TextField
-                            name="shareQuick"
-                            id="outlined-basic"
-                            placeholder='Share "Quickly"'
-                            label="Share Quickly"
-                            value={userData.shareQuick ?? ''}
-                            variant="outlined"
-                            onChange={handleChange}
-                          />
-                        </FormControl>
-                      </Stack>
-
-                      <Stack direction="row" spacing={2} mb={2}>
-                        <FormControl>
-                          <Autocomplete
-                            freeSolo
-                            sx={{ width: '207px' }}
-                            options={yogaStyles}
-                            value={userData.yogaStyle ?? ''}
-                            onChange={(event, newValue) => {
-                              dispatch({
-                                type: 'SET_USER',
-                                payload: {
-                                  ...userData,
-                                  yogaStyle: newValue ?? '',
-                                },
-                              })
-                            }}
-                            filterOptions={(options, state) =>
-                              options.filter((option) =>
-                                option
-                                  .toLowerCase()
-                                  .includes(state.inputValue.toLowerCase())
-                              )
-                            }
-                            renderInput={(params) => (
-                              <TextField
-                                {...params}
-                                name="yogaStyle"
-                                id="outlined-basic"
-                                placeholder='Enter "Yoga Style"'
-                                label="Yoga Style"
-                                variant="outlined"
-                                onChange={handleChange}
-                              />
-                            )}
-                          />
-                        </FormControl>
-                      </Stack>
-                      <Stack direction="row" spacing={2} mb={2}>
-                        <FormControl>
-                          <TextField
-                            name="yogaExperience"
-                            id="outlined-basic"
-                            placeholder='Enter "Yoga Experience"'
-                            label="Yoga Experience"
-                            value={userData.yogaExperience ?? ''}
-                            variant="outlined"
-                            onChange={handleChange}
-                          />
-                        </FormControl>
-                      </Stack>
-
-                      <Stack direction="row" spacing={2} mb={2}>
-                        <FormControl>
-                          <TextField
-                            name="company"
-                            id="outlined-basic"
-                            placeholder='Enter "Company"'
-                            label="Company"
-                            value={userData.company ?? ''}
-                            variant="outlined"
-                            onChange={handleChange}
-                          />
-                        </FormControl>
-                      </Stack>
-
-                      <Stack direction="column" spacing={2} mb={2}>
-                        <Stack
-                          direction="row"
-                          spacing={2}
-                          alignItems={'center'}
-                        >
-                          <LinkIcon />
-                          <Typography variant="body1">
-                            <Link
-                              href={
-                                userData.websiteURL?.startsWith('http')
-                                  ? userData.websiteURL
-                                  : `https://${userData.websiteURL}`
-                              }
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {userData.websiteURL}
-                            </Link>
-                          </Typography>
-                        </Stack>
-                      </Stack>
-                      <Stack direction="row" spacing={2} mb={2}>
-                        
-                        <MapIcon />
-                        <Typography>{userData.location ?? ''}</Typography>
-                        <MyMap />
-                      </Stack>
-                    </CardContent>
-                  </Collapse>
-                </Card>
-                 */}
-              </Grid>
-              <Grid size={12}>
-                <FormControl>
-                  <Typography variant="body1">Username</Typography>
-                  <TextField
-                    name="username"
-                    id="username text input"
+                  <Avatar
                     sx={{
-                      '& .MuiInputBase-root ': {
-                        borderRadius: '12px',
-                        boxShadow: '0 4px 4px 0 #CBCBCB',
-                      },
+                      bgcolor: red[500],
+                      width: { xs: 120, md: 150 },
+                      height: { xs: 120, md: 150 },
                     }}
-                    value={userData?.name ?? undefined}
-                    placeholder="Username"
-                    variant="filled"
-                    disabled
-                  />
-                </FormControl>
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <FormControl>
+                    aria-label="name initial"
+                    src={userData?.image}
+                  >
+                    {!userData?.image ? (
+                      <Image
+                        src={'/icons/profile/profile-person.svg'}
+                        width={50}
+                        height={50}
+                        alt="Generic profile image icon"
+                      />
+                    ) : undefined}
+                  </Avatar>
+                  {profileImageMode === 'active' && (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        bottom: 8,
+                        right: 8,
+                        bgcolor: 'background.paper',
+                        borderRadius: '50%',
+                        width: 40,
+                        height: 40,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: 2,
+                        border: '2px solid',
+                        borderColor: 'primary.main',
+                        zIndex: 1,
+                      }}
+                    >
+                      <Image
+                        src={'/icons/profile/profile-image-active.svg'}
+                        alt="Active profile image icon"
+                        width={27}
+                        height={27}
+                        style={{
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          width: 27,
+                          height: 27,
+                          display: 'block',
+                        }}
+                      />
+                    </Box>
+                  )}
+                  {profileImageMode === 'inactive' && (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        bottom: 8,
+                        right: 8,
+                        bgcolor: 'background.paper',
+                        borderRadius: '50%',
+                        width: 40,
+                        height: 40,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: 2,
+                        border: '2px solid',
+                        borderColor: 'grey.400',
+                        zIndex: 1,
+                      }}
+                    >
+                      <Image
+                        src={'/icons/profile/profile-image-inactive.svg'}
+                        width={27}
+                        height={27}
+                        alt="Inactive profile image icon"
+                        style={{
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          width: 27,
+                          height: 27,
+                          display: 'block',
+                        }}
+                      />
+                    </Box>
+                  )}
+                  {profileImageMode === 'edit' && (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        bottom: 8,
+                        right: 8,
+                        bgcolor: 'background.paper',
+                        borderRadius: '50%',
+                        width: 40,
+                        height: 40,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: 2,
+                        border: '2px solid',
+                        borderColor: 'secondary.main',
+                        zIndex: 1,
+                      }}
+                    >
+                      <Image
+                        src={'/icons/profile/profile-image-edit.svg'}
+                        width={27}
+                        height={27}
+                        alt="Edit profile image icon"
+                        style={{
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          width: 27,
+                          height: 27,
+                          display: 'block',
+                        }}
+                      />
+                    </Box>
+                  )}
+                </Stack>
+                <Stack flex={3} pt={2} spacing={2}>
+                  <Stack justifyContent={'center'}>
+                    <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+                      {userData?.name ?? 'Yogi Name'}
+                    </Typography>
+                    <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+                      Member since {membershipDate ?? '6/9/2024'}
+                    </Typography>
+                  </Stack>
+                  <Box sx={{ mt: 2 }}>
+                    <ActivityStreaks variant="compact" />
+                  </Box>
+                </Stack>
+              </Stack>
+
+              <Card>
+                <CardContent>
+                  <Typography variant="body2" color="text.secondary">
+                    {userData?.headline ?? 'What does yoga mean to you?'}
+                  </Typography>
+                </CardContent>
+                <CardActions disableSpacing>
+                  <IconButton aria-label="share" onClick={handleShare}>
+                    <ShareIcon />
+                  </IconButton>
+                  <ExpandMore
+                    expand={expanded}
+                    onClick={handleExpandClick}
+                    aria-expanded={expanded}
+                    aria-label="show more"
+                  >
+                    <ExpandMoreIcon />
+                  </ExpandMore>
+                </CardActions>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                  <CardContent>
+                    <Stack direction="row" spacing={2} mb={2}>
+                      <FormControl>
+                        <TextField
+                          name="shareQuick"
+                          id="outlined-basic"
+                          placeholder='Share "Quickly"'
+                          label="Share Quickly"
+                          value={userData.shareQuick ?? ''}
+                          variant="outlined"
+                          onChange={handleChange}
+                        />
+                      </FormControl>
+                    </Stack>
+                    <Stack direction="row" spacing={2} mb={2}>
+                      <FormControl>
+                        <Autocomplete
+                          freeSolo
+                          sx={{ width: '207px' }}
+                          options={yogaStyles}
+                          value={userData.yogaStyle ?? ''}
+                          onChange={(event, newValue) => {
+                            dispatch({
+                              type: 'SET_USER',
+                              payload: {
+                                ...userData,
+                                yogaStyle: newValue ?? '',
+                              },
+                            })
+                          }}
+                          filterOptions={(options, state) =>
+                            options.filter((option) =>
+                              option
+                                .toLowerCase()
+                                .includes(state.inputValue.toLowerCase())
+                            )
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              name="yogaStyle"
+                              id="outlined-basic"
+                              placeholder='Enter "Yoga Style"'
+                              label="Yoga Style"
+                              variant="outlined"
+                              onChange={handleChange}
+                            />
+                          )}
+                        />
+                      </FormControl>
+                    </Stack>
+                    <Stack direction="row" spacing={2} mb={2}>
+                      <FormControl>
+                        <TextField
+                          name="yogaExperience"
+                          id="outlined-basic"
+                          placeholder='Enter "Yoga Experience"'
+                          label="Yoga Experience"
+                          value={userData.yogaExperience ?? ''}
+                          variant="outlined"
+                          onChange={handleChange}
+                        />
+                      </FormControl>
+                    </Stack>
+                    <Stack direction="row" spacing={2} mb={2}>
+                      <FormControl>
+                        <TextField
+                          name="company"
+                          id="outlined-basic"
+                          placeholder='Enter "Company"'
+                          label="Company"
+                          value={userData.company ?? ''}
+                          variant="outlined"
+                          onChange={handleChange}
+                        />
+                      </FormControl>
+                    </Stack>
+                    <Stack direction="column" spacing={2} mb={2}>
+                      <Stack direction="row" spacing={2} alignItems={'center'}>
+                        <LinkIcon />
+                        <Typography variant="body1">
+                          <Link
+                            href={
+                              userData.websiteURL?.startsWith('http')
+                                ? userData.websiteURL
+                                : `https://${userData.websiteURL}`
+                            }
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {userData.websiteURL}
+                          </Link>
+                        </Typography>
+                      </Stack>
+                    </Stack>
+                    <Stack direction="row" spacing={2} mb={2}>
+                      <MapIcon />
+                      <Typography>{userData.location ?? ''}</Typography>
+                      <MapIcon />
+                    </Stack>
+                  </CardContent>
+                </Collapse>
+              </Card>
+
+              <FormControl>
+                <Typography variant="body1">Username</Typography>
+                <TextField
+                  name="username"
+                  id="username text input"
+                  sx={{
+                    '& .MuiInputBase-root ': {
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 4px 0 #CBCBCB',
+                    },
+                  }}
+                  value={userData?.name ?? undefined}
+                  placeholder="Username"
+                  variant="filled"
+                  disabled
+                />
+              </FormControl>
+
+              <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
+                <FormControl sx={{ flex: 1 }}>
                   <Typography variant="body1">First Name</Typography>
                   <TextField
                     name="firstName"
@@ -439,9 +520,7 @@ export default function UserDetails() {
                     }}
                   />
                 </FormControl>
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <FormControl>
+                <FormControl sx={{ flex: 1 }}>
                   <Typography variant="body1">Last Name</Typography>
                   <TextField
                     required
@@ -460,96 +539,90 @@ export default function UserDetails() {
                     }}
                   />
                 </FormControl>
-              </Grid>
-              <Grid size={12}>
-                <FormControl>
-                  <Typography variant="body1">Pronouns</Typography>
-                  <TextField
-                    name="pronouns"
-                    id="pronouns"
-                    placeholder='Enter "Pronouns"'
-                    variant="outlined"
-                    value={userData?.pronouns ?? ''}
-                    onChange={handleChange}
-                    sx={{
-                      '& .MuiInputBase-root ': {
-                        borderRadius: '12px',
-                        boxShadow: '0 4px 4px 0 #CBCBCB',
-                      },
-                    }}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid size={12}>
-                <FormControl sx={{ width: '80%' }}>
-                  <Typography variant="body1">
-                    Email Address (primary/internal)
-                  </Typography>
-                  <TextField
-                    id="email-text-input"
-                    name="email"
-                    placeholder="xyz@ABC.com"
-                    value={userData?.email ?? ''}
-                    variant="outlined"
-                    type="email"
-                    disabled
-                    sx={{
-                      '& .MuiInputBase-root ': {
-                        borderRadius: '12px',
-                        boxShadow: '0 4px 4px 0 #CBCBCB',
-                      },
-                    }}
-                  />
-                  <FormHelperText>
-                    Your email address cannot be changed. Contact us for
-                    support.
-                  </FormHelperText>
-                </FormControl>
-              </Grid>
-              <Grid size={12}>
-                <FormControl sx={{ width: '80%' }}>
-                  <Typography variant="body1">Headline</Typography>
-                  <TextField
-                    id="headline-text-input"
-                    name="headline"
-                    placeholder="Enter...2 sentences"
-                    value={userData?.headline ?? 'I am a Yoga instructor.'}
-                    onChange={handleChange}
-                    multiline
-                    maxRows={2}
-                    sx={{
-                      '& .MuiInputBase-root ': {
-                        borderRadius: '12px',
-                        boxShadow: '0 4px 4px 0 #CBCBCB',
-                      },
-                    }}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid size={12}>
-                <FormControl sx={{ width: '80%' }}>
-                  <Typography variant="body1">
-                    Description/About/Bio:
-                  </Typography>
-                  <TextField
-                    id="biography-text-input"
-                    name="bio"
-                    placeholder="Enter...Biography"
-                    value={userData?.bio ?? ''}
-                    onChange={handleChange}
-                    multiline
-                    maxRows={4}
-                    sx={{
-                      '& .MuiInputBase-root ': {
-                        borderRadius: '12px',
-                        boxShadow: '0 4px 4px 0 #CBCBCB',
-                      },
-                    }}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <FormControl sx={{ width: '100%' }}>
+              </Stack>
+
+              <FormControl>
+                <Typography variant="body1">Pronouns</Typography>
+                <TextField
+                  name="pronouns"
+                  id="pronouns"
+                  placeholder='Enter "Pronouns"'
+                  variant="outlined"
+                  value={userData?.pronouns ?? ''}
+                  onChange={handleChange}
+                  sx={{
+                    '& .MuiInputBase-root ': {
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 4px 0 #CBCBCB',
+                    },
+                  }}
+                />
+              </FormControl>
+
+              <FormControl sx={{ width: '80%' }}>
+                <Typography variant="body1">
+                  Email Address (primary/internal)
+                </Typography>
+                <TextField
+                  id="email-text-input"
+                  name="email"
+                  placeholder="xyz@ABC.com"
+                  value={userData?.email ?? ''}
+                  variant="outlined"
+                  type="email"
+                  disabled
+                  sx={{
+                    '& .MuiInputBase-root ': {
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 4px 0 #CBCBCB',
+                    },
+                  }}
+                />
+                <FormHelperText>
+                  Your email address cannot be changed. Contact us for support.
+                </FormHelperText>
+              </FormControl>
+
+              <FormControl sx={{ width: '80%' }}>
+                <Typography variant="body1">Headline</Typography>
+                <TextField
+                  id="headline-text-input"
+                  name="headline"
+                  placeholder="Enter...2 sentences"
+                  value={userData?.headline ?? 'I am a Yoga instructor.'}
+                  onChange={handleChange}
+                  multiline
+                  maxRows={2}
+                  sx={{
+                    '& .MuiInputBase-root ': {
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 4px 0 #CBCBCB',
+                    },
+                  }}
+                />
+              </FormControl>
+
+              <FormControl sx={{ width: '80%' }}>
+                <Typography variant="body1">Description/About/Bio:</Typography>
+                <TextField
+                  id="biography-text-input"
+                  name="bio"
+                  placeholder="Enter...Biography"
+                  value={userData?.bio ?? ''}
+                  onChange={handleChange}
+                  multiline
+                  maxRows={4}
+                  sx={{
+                    '& .MuiInputBase-root ': {
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 4px 0 #CBCBCB',
+                    },
+                  }}
+                />
+              </FormControl>
+
+              <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
+                <FormControl sx={{ width: { xs: '100%', md: '100%' } }}>
                   <Typography variant="body1">Website URL</Typography>
                   <TextField
                     name="websiteURL"
@@ -566,9 +639,7 @@ export default function UserDetails() {
                     }}
                   />
                 </FormControl>
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <FormControl sx={{ width: '60%' }}>
+                <FormControl sx={{ width: { xs: '100%', md: '60%' } }}>
                   <Typography variant="body1">My Location</Typography>
                   <TextField
                     name="location"
@@ -585,8 +656,9 @@ export default function UserDetails() {
                     }}
                   />
                 </FormControl>
-              </Grid>
-              <Grid size={9}>
+              </Stack>
+
+              <Stack direction="row" spacing={2} justifyContent="flex-end">
                 <Button
                   type="submit"
                   disabled={loading}
@@ -595,8 +667,8 @@ export default function UserDetails() {
                 >
                   {loading ? <CircularProgress /> : 'Save'}
                 </Button>
-              </Grid>
-            </Grid>
+              </Stack>
+            </Stack>
           </Paper>
 
           {/* Detailed Activity Streaks Section */}
