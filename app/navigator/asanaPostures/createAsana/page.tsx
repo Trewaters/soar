@@ -143,8 +143,10 @@ export default function Page() {
       setUploadedImages([])
       setEnglishVariationsInput('')
 
-      // Navigate back to asanas list
-      router.push('/navigator/asanaPostures')
+      // Navigate to the newly created asana instead of just the list
+      router.push(
+        `/navigator/asanaPostures/${encodeURIComponent(data.sort_english_name)}`
+      )
     } catch (error: Error | any) {
       console.error('Error creating posture:', error.message)
 

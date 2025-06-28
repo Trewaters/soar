@@ -1,7 +1,7 @@
 import { logServiceError } from './errorLogger'
 
 export interface FullAsanaData {
-  id: number
+  id: string
   english_names: string[]
   sanskrit_names: string
   sort_english_name: string
@@ -54,7 +54,16 @@ export type CreatePostureInput = {
  */
 export async function getAllPostures(): Promise<FullAsanaData[]> {
   try {
-    const response = await fetch('/api/poses', { cache: 'no-store' })
+    // Add timestamp to ensure fresh data
+    const timestamp = Date.now()
+    const response = await fetch(`/api/poses?t=${timestamp}`, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    })
     if (!response.ok) {
       throw new Error('Failed to fetch postures')
     }
@@ -96,22 +105,36 @@ export async function createPosture(
   input: CreatePostureInput
 ): Promise<FullAsanaData> {
   try {
+    console.log('Creating posture with input:', input)
+
     const response = await fetch('/api/poses/createAsana', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        cache: 'no-store',
+        'Cache-Control': 'no-cache',
       },
       body: JSON.stringify(input),
     })
 
+    console.log('Create posture response status:', response.status)
+
     if (!response.ok) {
-      throw new Error('Failed to create posture')
+      const errorData = await response.json().catch(() => ({}))
+      console.error('Create posture failed:', errorData)
+      throw new Error(
+        `Failed to create posture: ${errorData.error || response.statusText}`
+      )
     }
 
     const data = await response.json()
+    console.log('Created posture response:', data)
+
     if (!data || Object.keys(data).length === 0) {
       throw new Error('Received empty data object')
+    }
+
+    if (!data.sort_english_name) {
+      throw new Error('Invalid posture data: missing sort_english_name')
     }
 
     return data

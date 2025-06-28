@@ -15,8 +15,21 @@ export async function POST(request: Request) {
     created_by,
   } = await request.json()
 
+  console.log('Creating posture with data:', {
+    sort_english_name,
+    sideways,
+    typeof_sideways: typeof sideways,
+    english_names,
+    category,
+    difficulty,
+    created_by,
+  })
+
   try {
-    await prisma.asanaPosture.create({
+    // Convert sideways string to boolean
+    const sidewaysBoolean = sideways === 'Yes' || sideways === true
+
+    const createdPosture = await prisma.asanaPosture.create({
       data: {
         english_names,
         sort_english_name,
@@ -25,14 +38,34 @@ export async function POST(request: Request) {
         difficulty,
         breath_direction_default,
         preferred_side,
-        sideways,
-        created_on: new Date().toISOString(),
-        updated_on: null,
+        sideways: sidewaysBoolean,
         created_by,
+        // Note: created_on and updated_on are handled by Prisma defaults
       },
     })
-    return Response.json({ message: 'Asana posture Data saved' })
+
+    console.log('Posture created successfully in database:', {
+      id: createdPosture.id,
+      sort_english_name: createdPosture.sort_english_name,
+      sideways: createdPosture.sideways,
+    })
+
+    // Return the created posture with consistent formatting
+    // Use the actual database ID instead of a temporary one
+    const postureWithId = {
+      ...createdPosture,
+      breath_direction_default:
+        createdPosture.breath_direction_default || 'neutral',
+    }
+
+    return Response.json(postureWithId)
   } catch (error: any) {
+    console.error('Error creating posture in database:', {
+      error: error.message,
+      stack: error.stack,
+      sideways,
+      typeof_sideways: typeof sideways,
+    })
     return Response.json({ error: error.message }, { status: 500 })
   } finally {
     await prisma.$disconnect()

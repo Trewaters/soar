@@ -46,7 +46,7 @@ Abbreviated Posture 1
 */
 
 export interface FullAsanaData {
-  id: number
+  id: string
   english_names: string[]
   sanskrit_names: string
   sort_english_name: string
@@ -261,7 +261,7 @@ type AsanaPostureAction = { type: 'SET_POSTURES'; payload: FullAsanaData }
 
 const initialState: AsanaPosturePageState = {
   postures: {
-    id: 0,
+    id: '',
     english_names: [],
     sanskrit_names: '',
     sort_english_name: '',

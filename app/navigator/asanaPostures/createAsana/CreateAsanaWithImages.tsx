@@ -107,9 +107,9 @@ export default function CreateAsanaWithImages() {
       setEnglishVariationsInput('')
       setUploadedImages([])
 
-      // Redirect to the new asana
+      // Redirect to the new asana using the returned data
       router.push(
-        `/navigator/asanaPostures/${encodeURIComponent(updatedAsana.sort_english_name)}`
+        `/navigator/asanaPostures/${encodeURIComponent(data.sort_english_name)}`
       )
     } catch (error: Error | any) {
       console.error('Error creating posture:', error.message)

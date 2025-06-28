@@ -37,6 +37,49 @@ export default function Page() {
 
   useEffect(() => {
     fetchData()
+
+    // Check for refresh parameter in URL
+    const urlParams = new URLSearchParams(window.location.search)
+    if (urlParams.has('refresh')) {
+      console.log('Refresh parameter detected, forcing data reload...')
+      // Remove the refresh parameter from URL without page reload
+      const newUrl = window.location.pathname
+      window.history.replaceState({}, '', newUrl)
+    }
+  }, [])
+
+  // Refetch data when the page becomes visible (e.g., when returning from create page)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        console.log('Page became visible, refreshing posture data...')
+        fetchData()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    // Also listen for focus events as a fallback
+    const handleFocus = () => {
+      console.log('Window gained focus, refreshing posture data...')
+      fetchData()
+    }
+
+    window.addEventListener('focus', handleFocus)
+
+    // Listen for popstate events (browser back/forward navigation)
+    const handlePopState = () => {
+      console.log('Navigation detected, refreshing posture data...')
+      fetchData()
+    }
+
+    window.addEventListener('popstate', handlePopState)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('focus', handleFocus)
+      window.removeEventListener('popstate', handlePopState)
+    }
   }, [])
 
   const handleCreateAsanaClick = () => {
