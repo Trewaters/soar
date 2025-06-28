@@ -51,6 +51,8 @@ export default function Page() {
     'Twist',
   ]
 
+  const [englishVariationsInput, setEnglishVariationsInput] = useState('')
+
   const [formData, setFormData] = useState<{
     sort_english_name: string
     english_names: string[]
@@ -139,6 +141,7 @@ export default function Page() {
 
       // Clear uploaded images state since posture was created successfully
       setUploadedImages([])
+      setEnglishVariationsInput('')
 
       // Navigate back to asanas list
       router.push('/navigator/asanaPostures')
@@ -289,12 +292,34 @@ export default function Page() {
           <TextField
             label="English Variations"
             name="english_names"
-            value={formData.english_names.join(', ')}
+            value={englishVariationsInput}
             onChange={(e) => {
               const { value } = e.target
+              setEnglishVariationsInput(value)
+
+              // Update the formData with parsed variations, but allow spaces within names
+              const variations = value
+                .split(',')
+                .map((name) => name.trim())
+                .filter((name) => name.length > 0)
               setFormData({
                 ...formData,
-                english_names: value.split(',').map((name) => name.trim()),
+                english_names: variations,
+              })
+            }}
+            onBlur={(e) => {
+              // Clean up the input on blur to ensure proper formatting
+              const { value } = e.target
+              const cleanedVariations = value
+                .split(',')
+                .map((name) => name.trim())
+                .filter((name) => name.length > 0)
+
+              // Update both the input display and form data
+              setEnglishVariationsInput(cleanedVariations.join(', '))
+              setFormData({
+                ...formData,
+                english_names: cleanedVariations,
               })
             }}
             helperText="Separate variations with commas"

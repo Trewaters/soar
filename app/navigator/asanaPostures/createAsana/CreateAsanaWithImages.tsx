@@ -22,6 +22,7 @@ export default function CreateAsanaWithImages() {
   const { data: session } = useSession()
   const { state, dispatch } = useAsanaPosture()
   const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
+  const [englishVariationsInput, setEnglishVariationsInput] = useState('')
   const [formData, setFormData] = useState<{
     sort_english_name: string
     english_names: string[]
@@ -103,6 +104,7 @@ export default function CreateAsanaWithImages() {
         sideways: '',
         created_by: 'alpha users',
       })
+      setEnglishVariationsInput('')
       setUploadedImages([])
 
       // Redirect to the new asana
@@ -149,14 +151,36 @@ export default function CreateAsanaWithImages() {
                       <TextField
                         label="English Names"
                         name="english_names"
-                        value={formData.english_names.join(',')}
+                        value={englishVariationsInput}
                         onChange={(e) => {
                           const { value } = e.target
+                          setEnglishVariationsInput(value)
+
+                          // Update the formData with parsed variations, but allow spaces within names
+                          const variations = value
+                            .split(',')
+                            .map((name) => name.trim())
+                            .filter((name) => name.length > 0)
                           setFormData({
                             ...formData,
-                            english_names: value
-                              .split(',')
-                              .map((name) => name.trim()),
+                            english_names: variations,
+                          })
+                        }}
+                        onBlur={(e) => {
+                          // Clean up the input on blur to ensure proper formatting
+                          const { value } = e.target
+                          const cleanedVariations = value
+                            .split(',')
+                            .map((name) => name.trim())
+                            .filter((name) => name.length > 0)
+
+                          // Update both the input display and form data
+                          setEnglishVariationsInput(
+                            cleanedVariations.join(', ')
+                          )
+                          setFormData({
+                            ...formData,
+                            english_names: cleanedVariations,
                           })
                         }}
                         helperText="Separate names with commas"
