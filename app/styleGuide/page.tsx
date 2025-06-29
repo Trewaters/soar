@@ -46,6 +46,7 @@ import {
   Settings as SettingsIcon,
 } from '@mui/icons-material'
 import { useState } from 'react'
+import { FullAsanaData } from '@app/context/AsanaPostureContext'
 
 export default function StyleGuide() {
   const theme = useTheme()
@@ -79,7 +80,12 @@ export default function StyleGuide() {
   )
 
   // Sample data for components
-  const autocompleteOptions = ['Option 1', 'Option 2', 'Option 3', 'Option 4']
+  const autocompleteOptions: FullAsanaData[] = [
+    { id: '1', sort_english_name: 'Option 1' } as FullAsanaData,
+    { id: '2', sort_english_name: 'Option 2' } as FullAsanaData,
+    { id: '3', sort_english_name: 'Option 3' } as FullAsanaData,
+    { id: '4', sort_english_name: 'Option 4' } as FullAsanaData,
+  ]
   const listItems = ['Home', 'Profile', 'Settings', 'About']
 
   return (
@@ -313,12 +319,57 @@ export default function StyleGuide() {
                 helperText="Helper text"
               />
               <Autocomplete
+                disablePortal
                 options={autocompleteOptions}
-                value={autocompleteValue}
-                onChange={(_, newValue) => setAutocompleteValue(newValue || '')}
+                sx={{
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderRadius: '12px',
+                    borderColor: 'primary.main',
+                    boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+                  },
+                  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                    {
+                      borderColor: 'primary.light', // Ensure border color does not change on hover
+                    },
+                  '& .MuiAutocomplete-endAdornment': {
+                    display: 'none',
+                  },
+                }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Autocomplete" />
+                  <TextField
+                    {...params}
+                    sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+                    placeholder="Search for a Yoga Posture"
+                    InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                        <>
+                          <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
+                          {params.InputProps.startAdornment}
+                        </>
+                      ),
+                    }}
+                  />
                 )}
+                filterOptions={(options, state) =>
+                  options.filter((option) =>
+                    option.sort_english_name
+                      .toLowerCase()
+                      .includes(state.inputValue.toLowerCase())
+                  )
+                }
+                id="search-poses"
+                getOptionLabel={(option: FullAsanaData) =>
+                  option.sort_english_name
+                }
+                renderOption={(props, option) => (
+                  <li {...props} key={option.id}>
+                    {option.sort_english_name}
+                  </li>
+                )}
+                // defaultValue={defaultPosture}
+                autoSelect={true}
+                onChange={(_, newValue) => setAutocompleteValue('')}
               />
               <FormControl>
                 <FormGroup>

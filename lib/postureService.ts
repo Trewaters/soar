@@ -1,41 +1,5 @@
+import { FullAsanaData } from '@app/context/AsanaPostureContext'
 import { logServiceError } from './errorLogger'
-
-export interface FullAsanaData {
-  id: string
-  english_names: string[]
-  sanskrit_names: string
-  sort_english_name: string
-  description: string
-  benefits: string
-  category: string
-  difficulty: string
-  lore: string
-  breath_direction_default: string
-  dristi: string
-  variations: string[]
-  modifications: string[]
-  suggested_postures: string[]
-  preparatory_postures: string[]
-  preferred_side: string
-  sideways: boolean
-  image: string
-  created_on: string
-  updated_on: string
-  activity_completed: boolean
-  activity_practice: boolean
-  posture_intent: string
-  breath_series: string[]
-  duration_asana: string
-  transition_cues_out: string
-  transition_cues_in: string
-  setup_cues: string
-  deepening_cues: string
-  customize_asana: string
-  additional_cues: string
-  joint_action: string
-  muscle_action: string
-  created_by: string
-}
 
 export type CreatePostureInput = {
   sort_english_name: string

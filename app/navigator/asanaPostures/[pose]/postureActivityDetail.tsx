@@ -19,7 +19,6 @@ import { useRouter } from 'next/navigation'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 import PostureShareButton from '@app/clientComponents/exportPoses'
 import ActivityTracker from '@app/clientComponents/activityTracker/ActivityTracker'
-import PostureImageManagement from '@app/clientComponents/imageUpload/PostureImageManagement'
 import { useSession } from 'next-auth/react'
 import {
   checkActivityExists,

@@ -8,7 +8,8 @@ import AsanaTimer from '@app/clientComponents/asanaTimer'
 import { useTimer } from '@context/timerContext'
 import { useRouter } from 'next/navigation'
 import HomeIcon from '@mui/icons-material/Home'
-import { getPostureByName, type FullAsanaData } from '@lib/postureService'
+import { getPostureByName } from '@lib/postureService'
+import { FullAsanaData } from '@app/context/AsanaPostureContext'
 
 export default function ViewAsanaPractice({
   params,

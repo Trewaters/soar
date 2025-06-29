@@ -123,7 +123,8 @@ export function QuickUploadExample() {
 // For viewing existing images
 
 import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
-import { FullAsanaData } from '@lib/postureService'
+import { FullAsanaData } from '@context/AsanaPostureContext'
+
 import {
   Box,
   Typography,

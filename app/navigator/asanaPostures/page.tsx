@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
 import { Box, Typography } from '@mui/material'
-import { getAllPostures, type FullAsanaData } from '@lib/postureService'
+import { getAllPostures } from '@lib/postureService'
 import SplashHeader from '@app/clientComponents/splash-header'
 import { useRouter } from 'next/navigation'
 import NavBottom from '@serverComponents/navBottom'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
+import { FullAsanaData } from '@app/context/AsanaPostureContext'
 
 export default function Page() {
   const [posturePropData, setPosturePropData] = useState<FullAsanaData[]>([])
