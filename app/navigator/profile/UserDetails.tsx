@@ -161,7 +161,9 @@ export default function UserDetails() {
       navigator
         .share({
           title: `Yoga Practitioner ${userData?.name || 'Happy Yoga'}`,
-          text: userData?.headline || 'Check out my yoga profile!',
+          text:
+            (userData?.headline || 'Check out my yoga profile!') +
+            (userData?.shareQuick ? `\n${userData.shareQuick}` : ''),
           url: window.location.href,
         })
         .then(() => {
