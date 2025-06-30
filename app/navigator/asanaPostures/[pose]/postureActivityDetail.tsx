@@ -13,6 +13,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from '@mui/material'
+import EditIcon from '@mui/icons-material/Edit'
 import { FullAsanaData } from '@context/AsanaPostureContext'
 import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
@@ -27,6 +28,7 @@ import {
 } from '@lib/asanaActivityClientService'
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 import PostureImageUpload from '@app/clientComponents/imageUpload/PostureImageUpload'
+import EditPostureDialog from '@app/navigator/asanaPostures/editAsana/EditPostureDialog'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
@@ -85,6 +87,7 @@ export default function PostureActivityDetail({
   const [error, setError] = useState<string | null>(null)
   const [activityRefreshTrigger, setActivityRefreshTrigger] = useState(0)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [editDialogOpen, setEditDialogOpen] = useState(false)
 
   // Fetch uploaded images for this posture
   const { images: postureImages, loading: imagesLoading } = usePostureImages(
@@ -872,6 +875,74 @@ export default function PostureActivityDetail({
           />
         </Box>
       )}
+
+      {/* Edit Posture Button - Shown only to authenticated users who created the posture */}
+      {/* Debug information */}
+      {process.env.NODE_ENV === 'development' && (
+        <Box sx={{ mt: 2, p: 2, backgroundColor: '#f0f0f0', borderRadius: 1 }}>
+          <Typography variant="caption" component="div">
+            Debug - Edit Button Visibility:
+          </Typography>
+          <Typography variant="caption" component="div">
+            Session exists: {session ? 'Yes' : 'No'}
+          </Typography>
+          <Typography variant="caption" component="div">
+            User email: {session?.user?.email || 'None'}
+          </Typography>
+          <Typography variant="caption" component="div">
+            Posture created_by: {posture?.created_by || 'None'}
+          </Typography>
+          <Typography variant="caption" component="div">
+            Can edit:{' '}
+            {session?.user?.email === posture?.created_by ? 'Yes' : 'No'}
+          </Typography>
+        </Box>
+      )}
+
+      {session &&
+        session.user &&
+        (session.user.email === posture?.created_by ||
+          posture?.created_by === 'alpha users') && (
+          <Box
+            sx={{
+              position: 'fixed',
+              bottom: 16,
+              right: 16,
+              zIndex: 100,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-end',
+              gap: 1,
+            }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setEditDialogOpen(true)}
+              startIcon={<EditIcon />}
+              sx={{
+                borderRadius: '12px',
+                px: 3,
+                py: 1.5,
+                textTransform: 'none',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+              }}
+            >
+              Edit Posture
+            </Button>
+          </Box>
+        )}
+
+      {/* Edit Posture Dialog */}
+      <EditPostureDialog
+        open={editDialogOpen}
+        onClose={() => setEditDialogOpen(false)}
+        posture={posture}
+        onSave={() => {
+          // Refresh the page to show updated data
+          window.location.reload()
+        }}
+      />
     </Paper>
   )
 }

@@ -13,6 +13,17 @@ export type CreatePostureInput = {
   created_by: string
 }
 
+export type UpdatePostureInput = {
+  sort_english_name: string
+  english_names: string[]
+  description: string
+  category: string
+  difficulty: string
+  breath_direction_default: string
+  preferred_side: string
+  sideways: string
+}
+
 /**
  * Get all postures
  */
@@ -105,6 +116,58 @@ export async function createPosture(
   } catch (error) {
     logServiceError(error, 'postureService', 'createPosture', {
       operation: 'create_posture',
+      input,
+    })
+    throw error
+  }
+}
+
+/**
+ * Update an existing posture
+ */
+export async function updatePosture(
+  id: string,
+  input: UpdatePostureInput
+): Promise<FullAsanaData> {
+  try {
+    console.log('Updating posture with ID:', id)
+    console.log('Update input:', input)
+
+    const response = await fetch(`/api/poses/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache',
+      },
+      body: JSON.stringify(input),
+    })
+
+    console.log('Update posture response status:', response.status)
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      console.error('Update posture failed:', errorData)
+      throw new Error(
+        `Failed to update posture: ${errorData.error || response.statusText}`
+      )
+    }
+
+    const data = await response.json()
+    console.log('Updated posture response:', data)
+
+    if (!data || Object.keys(data).length === 0) {
+      throw new Error('Received empty data object')
+    }
+
+    if (!data.sort_english_name) {
+      throw new Error('Invalid posture data: missing sort_english_name')
+    }
+
+    return data
+  } catch (error) {
+    logServiceError(error, 'postureService', 'updatePosture', {
+      operation: 'update_posture',
+      id,
       input,
     })
     throw error
