@@ -259,7 +259,9 @@ describe('StyleGuide Component', () => {
       it('displays autocomplete component', () => {
         renderWithTheme(<StyleGuide />)
 
-        expect(screen.getByLabelText('Autocomplete')).toBeInTheDocument()
+        expect(
+          screen.getByPlaceholderText('Search for a Yoga Posture')
+        ).toBeInTheDocument()
       })
 
       it('displays checkbox components with form group', () => {
@@ -355,7 +357,7 @@ describe('StyleGuide Component', () => {
         expect(screen.getAllByTestId('home-icon')).toHaveLength(1)
         expect(screen.getAllByTestId('person-icon')).toHaveLength(2) // Appears in both AppBar and List
         expect(screen.getAllByTestId('settings-icon')).toHaveLength(2) // Appears in both Card header and List
-        expect(screen.getAllByTestId('search-icon')).toHaveLength(1)
+        expect(screen.getAllByTestId('search-icon')).toHaveLength(2)
       })
     })
 
@@ -421,7 +423,9 @@ describe('StyleGuide Component', () => {
     it('allows autocomplete interaction', () => {
       renderWithTheme(<StyleGuide />)
 
-      const autocomplete = screen.getByLabelText('Autocomplete')
+      const autocomplete = screen.getByPlaceholderText(
+        'Search for a Yoga Posture'
+      )
       fireEvent.click(autocomplete)
       fireEvent.change(autocomplete, { target: { value: 'Option' } })
 
@@ -473,7 +477,9 @@ describe('StyleGuide Component', () => {
 
       // Check for proper form accessibility
       expect(screen.getByLabelText('Text Field')).toBeInTheDocument()
-      expect(screen.getByLabelText('Autocomplete')).toBeInTheDocument()
+      expect(
+        screen.getByPlaceholderText('Search for a Yoga Posture')
+      ).toBeInTheDocument()
       expect(screen.getByLabelText('Checkbox Primary')).toBeInTheDocument()
     })
 
