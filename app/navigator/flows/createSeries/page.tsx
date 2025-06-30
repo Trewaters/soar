@@ -53,22 +53,16 @@ export default function Page() {
     setOpen(newOpen)
   }
 
-  useEffect(() => {
-    async function fetchData() {
-      // const baseUrl =
-      //   process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-      // const url = new URL('/api/series/', baseUrl)
-      // const res = await fetch(url.toString())
-      // const data = await res.json()
-      // const seriesData = Array.isArray(data) ? data : [data]
-      // setSeries(JSON.parse(JSON.stringify(seriesData)))
-      try {
-        const postures = await getAllPostures()
-        setPostures(postures)
-      } catch (error: Error | any) {
-        console.error('Error fetching postures:', error.message)
-      }
+  const fetchPostures = async () => {
+    try {
+      const postures = await getAllPostures()
+      setPostures(postures)
+    } catch (error: Error | any) {
+      console.error('Error fetching postures:', error.message)
     }
+  }
+
+  useEffect(() => {
     // console.log('create series session', session)
 
     if (
@@ -81,8 +75,43 @@ export default function Page() {
       router.push('/navigator/flows')
     }
 
-    fetchData()
+    fetchPostures()
   }, [router, session])
+
+  // Refetch postures when the page becomes visible (e.g., when returning from create asana page)
+  // This ensures that newly created asanas appear in the autocomplete search
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        console.log('Page became visible, refreshing posture data...')
+        fetchPostures()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    // Also listen for focus events as a fallback
+    const handleFocus = () => {
+      console.log('Window gained focus, refreshing posture data...')
+      fetchPostures()
+    }
+
+    window.addEventListener('focus', handleFocus)
+
+    // Listen for popstate events (browser back/forward navigation)
+    const handlePopState = () => {
+      console.log('Navigation detected, refreshing posture data...')
+      fetchPostures()
+    }
+
+    window.addEventListener('popstate', handlePopState)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('focus', handleFocus)
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [])
 
   function handleSelect(
     event: React.SyntheticEvent<Element, Event>,
