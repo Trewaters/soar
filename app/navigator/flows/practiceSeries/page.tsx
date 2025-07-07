@@ -4,6 +4,7 @@ import {
   Autocomplete,
   Box,
   Drawer,
+  IconButton,
   Link,
   Stack,
   TextField,
@@ -15,6 +16,7 @@ import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
+import RefreshIcon from '@mui/icons-material/Refresh'
 import NavBottom from '@serverComponents/navBottom'
 import PostureShareButton from '@app/clientComponents/exportPoses'
 
@@ -23,18 +25,39 @@ export default function Page() {
   const [series, setSeries] = useState<FlowSeriesData[]>([])
   const [flow, setFlow] = useState<FlowSeriesData>()
   const [open, setOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    async function fetchData() {
-      const response = await fetch('/api/series', { cache: 'no-store' })
+  const fetchData = async () => {
+    setIsLoading(true)
+    try {
+      // Add timestamp to prevent caching
+      const timestamp = new Date().getTime()
+      const response = await fetch(`/api/series?t=${timestamp}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
+      })
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
       setSeries(await response.json())
+    } catch (error) {
+      console.error('Error fetching series:', error)
+    } finally {
+      setIsLoading(false)
     }
+  }
 
+  useEffect(() => {
     fetchData()
   }, [])
+
+  const handleRefresh = () => {
+    fetchData()
+  }
 
   function handleSelect(
     event: ChangeEvent<object>,
@@ -73,6 +96,19 @@ export default function Page() {
           onClick={handleInfoClick}
         />
         <Stack sx={{ px: 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <Typography variant="h6" sx={{ color: 'primary.main', mr: 2 }}>
+              Practice Series
+            </Typography>
+            <IconButton
+              onClick={handleRefresh}
+              disabled={isLoading}
+              sx={{ color: 'primary.main' }}
+              aria-label="refresh series"
+            >
+              <RefreshIcon />
+            </IconButton>
+          </Box>
           <Autocomplete
             disablePortal
             freeSolo={false}
