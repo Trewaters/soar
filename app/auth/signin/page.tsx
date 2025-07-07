@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
 import { signIn, providerMap, signOut, auth } from '../../../auth'
@@ -16,57 +16,48 @@ export default async function SignInPage(props: {
       <nav>
         <Header />
       </nav>
-      <Stack justifyContent={'center'} alignItems={'center'} display={'flex'}>
+      <Stack justifyContent={'center'} alignItems={'center'} minHeight={'80vh'}>
         <Stack
-          textAlign={'center'}
-          spacing={2}
+          spacing={3}
           sx={{
-            my: 6,
-            border: '1px solid black',
-            width: '50%',
-            borderRadius: '12px',
-            pb: 3,
+            mt: 6,
+            borderTop: '1px solid black',
+            borderLeft: '1px solid black',
+            borderRight: '1px solid black',
+            width: '90%',
+            borderTopLeftRadius: '12px',
+            borderTopRightRadius: '12px',
+            p: 4,
+            minHeight: 'calc(100vh - 120px)',
+            justifyContent: 'space-between',
           }}
         >
-          <Box
-            sx={{ pt: 4 }}
-            display={'flex'}
-            flexDirection={'column'}
-            alignItems={'center'}
-          >
+          <Stack spacing={1} alignItems={'center'}>
             {session ? (
               <>
-                <Typography
-                  alignSelf={'center'}
-                  variant="h2"
-                  color="success.main"
-                >
+                <Typography variant="h2" color="success.main">
                   You&apos;re signed in!
                 </Typography>
-                <Typography alignSelf={'center'} variant="body1">
+                <Typography variant="body1">
                   <Link href="/">Click here</Link>
                   &nbsp;to go to the home page.
                 </Typography>
               </>
             ) : (
               <>
-                <Typography variant="h2">Welcome back!</Typography>
-                <Typography variant="body1" component="p">
+                <Typography variant="h2">Welcome back.</Typography>
+                <Typography variant="body1">
                   We&apos;re happy you&apos;re here!
                 </Typography>
               </>
             )}
-          </Box>
+          </Stack>
 
-          <Stack
-            display={'flex'}
-            alignItems={'center'}
-            justifyContent={'center'}
-            sx={{ mt: 4 }}
-          >
+          <Stack alignItems={'center'} spacing={2}>
             {Object.values(providerMap).map((provider, index) => (
-              <form
+              <Paper
                 key={index}
+                component="form"
                 action={async () => {
                   'use server'
                   // eslint-disable-next-line no-useless-catch
@@ -75,9 +66,6 @@ export default async function SignInPage(props: {
                       redirectTo:
                         props.searchParams?.callbackUrl ?? '/navigator',
                     })
-                    // await signIn(provider.id, {
-                    // redirectTo: '/navigator/profile',
-                    // })
                   } catch (error) {
                     // Signin can fail for a number of reasons, such as the user
                     // not existing, or the user not having the correct role.
@@ -95,6 +83,8 @@ export default async function SignInPage(props: {
                     throw error
                   }
                 }}
+                elevation={0}
+                sx={{ backgroundColor: 'transparent' }}
               >
                 <Button
                   type="submit"
@@ -115,16 +105,13 @@ export default async function SignInPage(props: {
                 >
                   <Typography>Sign in with {provider.name}</Typography>
                 </Button>
-              </form>
+              </Paper>
             ))}
             <CredentialsInput />
           </Stack>
-          <Stack display={'flex'} textAlign={'center'} sx={{ pb: 2 }}>
+          <Stack alignItems={'center'} sx={{ mt: 'auto' }}>
             {!session && (
-              <>
-                <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-                  Sign In or Create Account
-                </Typography>
+              <Stack spacing={1}>
                 <Typography variant="body1">
                   Don&apos;t have an account yet?
                 </Typography>
@@ -132,24 +119,23 @@ export default async function SignInPage(props: {
                   ✨ Just enter your email below - if it&apos;s new, we&apos;ll
                   help you create an account!
                 </Typography>
-              </>
+              </Stack>
             )}
           </Stack>
           {session && (
-            <form
+            <Paper
+              component="form"
               action={async () => {
                 'use server'
                 await signOut({ redirect: true, redirectTo: '/auth/signout' })
               }}
+              elevation={0}
+              sx={{ backgroundColor: 'transparent' }}
             >
-              <Button
-                variant="contained"
-                type="submit"
-                sx={{ width: '50%', alignSelf: 'center' }}
-              >
+              <Button variant="contained" type="submit" sx={{ width: '200px' }}>
                 Sign out
               </Button>
-            </form>
+            </Paper>
           )}
         </Stack>
       </Stack>
