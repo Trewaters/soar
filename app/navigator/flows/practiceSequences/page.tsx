@@ -346,16 +346,28 @@ export default function Page() {
                           <Box
                             key={asanaIndex}
                             alignItems={'center'}
+                            display={'flex'}
+                            flexDirection={'row'}
+                            flexWrap={'nowrap'}
                             className="journalLine"
                           >
                             <Typography
                               variant="body1"
                               fontWeight="bold"
-                              sx={{ width: '30px', textAlign: 'right', mr: 2 }}
+                              sx={{
+                                width: '30px',
+                                textAlign: 'right',
+                                mr: 2,
+                                flexShrink: 0,
+                              }}
                             >
                               {asanaIndex + 1}.
                             </Typography>
-                            <Typography textAlign={'left'} variant="body1">
+                            <Typography
+                              textAlign={'left'}
+                              variant="body1"
+                              sx={{ flexShrink: 0, mr: 1 }}
+                            >
                               <Link
                                 underline="hover"
                                 color="primary.contrastText"
@@ -366,9 +378,11 @@ export default function Page() {
                                 {asana.split(';')[0]}
                               </Link>
                             </Typography>
-                            <Typography textAlign={'left'} variant="body2">
-                              {asana.split(';')[1]}
-                            </Typography>
+                            <Typography
+                              textAlign={'left'}
+                              variant="body2"
+                              sx={{ flexShrink: 0 }}
+                            ></Typography>
                           </Box>
                         ))}
                       </CardContent>
