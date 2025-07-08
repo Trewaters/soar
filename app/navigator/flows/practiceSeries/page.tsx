@@ -16,7 +16,6 @@ import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
-import RefreshIcon from '@mui/icons-material/Refresh'
 import NavBottom from '@serverComponents/navBottom'
 import PostureShareButton from '@app/clientComponents/exportPoses'
 import { getAllSeries } from '@lib/seriesService'
@@ -26,27 +25,19 @@ export default function Page() {
   const [series, setSeries] = useState<FlowSeriesData[]>([])
   const [flow, setFlow] = useState<FlowSeriesData>()
   const [open, setOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
   const fetchData = async () => {
-    setIsLoading(true)
     try {
       const seriesData = await getAllSeries()
       setSeries(seriesData as FlowSeriesData[])
     } catch (error) {
       console.error('Error fetching series:', error)
-    } finally {
-      setIsLoading(false)
     }
   }
 
   useEffect(() => {
     fetchData()
   }, [])
-
-  const handleRefresh = () => {
-    fetchData()
-  }
 
   function handleSelect(
     event: ChangeEvent<object>,
@@ -89,14 +80,6 @@ export default function Page() {
             <Typography variant="h6" sx={{ color: 'primary.main', mr: 2 }}>
               Practice Series
             </Typography>
-            <IconButton
-              onClick={handleRefresh}
-              disabled={isLoading}
-              sx={{ color: 'primary.main' }}
-              aria-label="refresh series"
-            >
-              <RefreshIcon />
-            </IconButton>
           </Box>
           <Autocomplete
             key={`series-autocomplete-${series.length}-${Date.now()}`} // Force re-render when data changes
