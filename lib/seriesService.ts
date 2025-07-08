@@ -1,13 +1,15 @@
 import { logServiceError } from './errorLogger'
 
 export type SeriesData = {
-  id: number
+  id?: string
   seriesName: string
   seriesPostures: string[]
   breath?: string
   description?: string
   duration?: string
   image?: string
+  createdAt?: string
+  updatedAt?: string
 }
 
 export type CreateSeriesInput = {
@@ -24,7 +26,16 @@ export type CreateSeriesInput = {
  */
 export async function getAllSeries(): Promise<SeriesData[]> {
   try {
-    const response = await fetch('/api/series', { cache: 'no-store' })
+    // Add timestamp to prevent caching
+    const timestamp = new Date().getTime()
+    const response = await fetch(`/api/series?t=${timestamp}`, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    })
     if (!response.ok) {
       throw new Error('Failed to fetch series')
     }

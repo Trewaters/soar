@@ -19,6 +19,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import NavBottom from '@serverComponents/navBottom'
 import PostureShareButton from '@app/clientComponents/exportPoses'
+import { getAllSeries } from '@lib/seriesService'
 
 export default function Page() {
   const theme = useTheme()
@@ -30,20 +31,8 @@ export default function Page() {
   const fetchData = async () => {
     setIsLoading(true)
     try {
-      // Add timestamp to prevent caching
-      const timestamp = new Date().getTime()
-      const response = await fetch(`/api/series?t=${timestamp}`, {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          Pragma: 'no-cache',
-          Expires: '0',
-        },
-      })
-      if (!response.ok) {
-        throw new Error('Network response was not ok')
-      }
-      setSeries(await response.json())
+      const seriesData = await getAllSeries()
+      setSeries(seriesData as FlowSeriesData[])
     } catch (error) {
       console.error('Error fetching series:', error)
     } finally {
@@ -110,6 +99,7 @@ export default function Page() {
             </IconButton>
           </Box>
           <Autocomplete
+            key={`series-autocomplete-${series.length}-${Date.now()}`} // Force re-render when data changes
             disablePortal
             freeSolo={false}
             id="combo-box-series-search"
