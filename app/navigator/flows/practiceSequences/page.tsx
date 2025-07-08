@@ -343,7 +343,11 @@ export default function Page() {
                       />
                       <CardContent className="lines" sx={{ p: 0 }}>
                         {seriesMini.seriesPostures.map((asana, asanaIndex) => (
-                          <Box key={asanaIndex} className="journalLine">
+                          <Box
+                            key={asanaIndex}
+                            alignItems={'center'}
+                            className="journalLine"
+                          >
                             <Typography
                               variant="body1"
                               fontWeight="bold"
