@@ -82,6 +82,17 @@ export default function Page() {
 
   useEffect(() => {
     fetchSequences('initial load')
+
+    const handleFocus = () => {
+      console.log('Practice sequences page focused, refreshing sequences...')
+      fetchSequences('focus')
+    }
+
+    window.addEventListener('focus', handleFocus)
+
+    return () => {
+      window.removeEventListener('focus', handleFocus)
+    }
   }, [])
 
   // Refetch sequences when the page becomes visible (e.g., when returning from create sequence page)
