@@ -6,12 +6,12 @@ import {
   Autocomplete,
   Box,
   Button,
+  Stack,
+  TextField,
   Card,
   CardContent,
   CardHeader,
   Link,
-  Stack,
-  TextField,
   Typography,
 } from '@mui/material'
 import React, { ChangeEvent, useEffect, useState } from 'react'
@@ -20,6 +20,7 @@ import RefreshIcon from '@mui/icons-material/Refresh'
 import Image from 'next/image'
 import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
 import NavBottom from '@serverComponents/navBottom'
+import { useRouter } from 'next/navigation'
 
 export default function Page() {
   const [sequences, setSequences] = useState<SequenceData[]>([])
@@ -37,6 +38,7 @@ export default function Page() {
 
   const [page, setPage] = useState(1)
   const itemsPerPage = 1
+  const router = useRouter()
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
@@ -54,6 +56,9 @@ export default function Page() {
       console.log(`Fetching sequences from ${debugContext} at ${timestamp}`)
       const response = await fetch(`/api/sequences?t=${timestamp}`, {
         cache: 'no-store',
+        next: {
+          revalidate: 0,
+        },
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
           Pragma: 'no-cache',
@@ -111,7 +116,7 @@ export default function Page() {
       setSingleSequence(value)
     }
   }
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen)
   }
