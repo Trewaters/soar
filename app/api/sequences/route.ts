@@ -5,17 +5,23 @@ const prisma = new PrismaClient()
 
 export async function GET() {
   try {
-    const data = await prisma.asanaSequence.findMany()
-    const dataWithId = data.map((item, index) => ({
+    const data = await prisma.asanaSequence.findMany({
+      orderBy: {
+        createdAt: 'desc', // Show newest first to help verify new creations
+      },
+    })
+    const dataWithId = data.map((item) => ({
       ...item,
-      id: index + 1,
+      // Preserve the actual database ID instead of regenerating based on array position
       sequencesSeries: Array.isArray(item.sequencesSeries)
         ? item.sequencesSeries
         : [],
     }))
     return NextResponse.json(dataWithId, {
       headers: {
-        'Cache-Control': 'no-store',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        Pragma: 'no-cache',
+        Expires: '0',
       },
     })
   } catch (error: unknown) {

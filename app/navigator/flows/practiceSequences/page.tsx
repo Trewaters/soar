@@ -16,6 +16,7 @@ import {
 } from '@mui/material'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import SearchIcon from '@mui/icons-material/Search'
+import RefreshIcon from '@mui/icons-material/Refresh'
 import Image from 'next/image'
 import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
 import NavBottom from '@serverComponents/navBottom'
@@ -46,21 +47,58 @@ export default function Page() {
     page * itemsPerPage
   )
 
-  useEffect(() => {
-    async function fetchData() {
-      // const baseUrl =
-      //   process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-      // const url = new URL('/api/series/', baseUrl)
-      // const response = await fetch(url)
-      const response = await fetch('/api/sequences', { cache: 'no-store' })
+  // Consolidated function to fetch sequences with consistent cache-busting
+  const fetchSequences = async (debugContext = 'unknown') => {
+    try {
+      const timestamp = Date.now()
+      console.log(`Fetching sequences from ${debugContext} at ${timestamp}`)
+      const response = await fetch(`/api/sequences?t=${timestamp}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
+      })
       if (!response.ok) {
-        throw new Error('Network response was not ok')
+        throw new Error(`Network response was not ok: ${response.status}`)
       }
-      setSequences(await response.json())
+      const newSequences = await response.json()
+      console.log(
+        `Successfully fetched ${newSequences.length} sequences from ${debugContext}`
+      )
+      setSequences(newSequences)
+      return newSequences
+    } catch (error) {
+      console.error(`Error fetching sequences from ${debugContext}:`, error)
+      throw error
+    }
+  }
+
+  useEffect(() => {
+    fetchSequences('initial load')
+  }, [])
+
+  // Refetch sequences when the page becomes visible (e.g., when returning from create sequence page)
+  // This ensures that newly created sequences appear in the autocomplete search
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        // Page became visible, refetch data
+        fetchSequences('visibility change')
+      }
     }
 
-    fetchData()
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
   }, [])
+
+  // Function to refresh sequences data
+  const refreshSequences = async () => {
+    await fetchSequences('manual refresh')
+  }
 
   function handleSelect(
     event: ChangeEvent<object>,
@@ -133,55 +171,79 @@ export default function Page() {
             onClick={toggleDrawer(!open)}
           />
           <Stack sx={{ px: 4 }}>
-            <Autocomplete
-              disablePortal
-              id="combo-box-series-search"
-              options={sequences}
-              getOptionLabel={(option: SequenceData) => option.nameSequence}
-              filterOptions={(options, state) =>
-                options.filter((option) =>
-                  option.nameSequence
-                    .toLowerCase()
-                    .includes(state.inputValue.toLowerCase())
-                )
-              }
-              renderOption={(props, option) => (
-                <li {...props} key={option.id}>
-                  {option.nameSequence}
-                </li>
-              )}
-              sx={{
-                '& .MuiOutlinedInput-notchedOutline': {
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
+              <Autocomplete
+                key={`autocomplete-${sequences.length}-${sequences.map((s) => s.id).join('-')}`}
+                disablePortal
+                id="combo-box-series-search"
+                options={sequences}
+                getOptionLabel={(option: SequenceData) => option.nameSequence}
+                filterOptions={(options, state) =>
+                  options.filter((option) =>
+                    option.nameSequence
+                      .toLowerCase()
+                      .includes(state.inputValue.toLowerCase())
+                  )
+                }
+                renderOption={(props, option) => (
+                  <li {...props} key={option.id}>
+                    {option.nameSequence}
+                  </li>
+                )}
+                sx={{
+                  flexGrow: 1,
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderRadius: '12px',
+                    borderColor: 'primary.main',
+                    boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+                  },
+                  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                    {
+                      borderColor: 'primary.light', // Ensure border color does not change on hover
+                    },
+                  '& .MuiAutocomplete-endAdornment': {
+                    display: 'none',
+                  },
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+                    {...params}
+                    placeholder="Search for a Sequence"
+                    InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                        <>
+                          <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
+                          {params.InputProps.startAdornment}
+                        </>
+                      ),
+                    }}
+                  />
+                )}
+                onChange={handleSelect}
+              />
+              <Button
+                variant="outlined"
+                onClick={refreshSequences}
+                sx={{
+                  minWidth: 'auto',
+                  p: 1.5,
                   borderRadius: '12px',
                   borderColor: 'primary.main',
+                  color: 'primary.main',
                   boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-                },
-                '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
-                  {
-                    borderColor: 'primary.light', // Ensure border color does not change on hover
+                  '&:hover': {
+                    borderColor: 'primary.light',
+                    backgroundColor: 'primary.light',
+                    color: 'white',
                   },
-                '& .MuiAutocomplete-endAdornment': {
-                  display: 'none',
-                },
-              }}
-              renderInput={(params) => (
-                <TextField
-                  sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
-                  {...params}
-                  placeholder="Search for a Sequence"
-                  InputProps={{
-                    ...params.InputProps,
-                    startAdornment: (
-                      <>
-                        <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
-                        {params.InputProps.startAdornment}
-                      </>
-                    ),
-                  }}
-                />
-              )}
-              onChange={handleSelect}
-            />
+                }}
+                aria-label="Refresh sequences"
+              >
+                <RefreshIcon />
+              </Button>
+            </Box>
 
             <React.Fragment key={singleSequence.id}>
               <Box

@@ -42,7 +42,16 @@ export type CreateSequenceInput = {
  */
 export async function getAllSequences(): Promise<SequenceData[]> {
   try {
-    const response = await fetch('/api/sequences', { cache: 'no-store' })
+    // Add timestamp to ensure fresh data
+    const timestamp = Date.now()
+    const response = await fetch(`/api/sequences?t=${timestamp}`, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    })
     if (!response.ok) {
       throw new Error('Failed to fetch sequences')
     }
@@ -66,7 +75,9 @@ export async function createSequence(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        cache: 'no-store',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
       },
       body: JSON.stringify(input),
     })
