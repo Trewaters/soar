@@ -1,26 +1,27 @@
 'use client'
-import SplashHeader from '@app/clientComponents/splash-header'
-import SubNavHeader from '@app/clientComponents/sub-nav-header'
-import { SequenceData } from '@context/SequenceContext'
+
 import {
   Autocomplete,
   Box,
   Button,
-  Stack,
-  TextField,
   Card,
   CardContent,
   CardHeader,
   Link,
+  Stack,
+  TextField,
   Typography,
 } from '@mui/material'
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
+import SplashHeader from '@app/clientComponents/splash-header'
+import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
-import RefreshIcon from '@mui/icons-material/Refresh'
+import { SequenceData, getAllSequences } from '@lib/sequenceService'
+import NavBottom from '@serverComponents/navBottom'
+import React from 'react'
 import Image from 'next/image'
 import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
-import NavBottom from '@serverComponents/navBottom'
-import { useRouter } from 'next/navigation'
+import RefreshIcon from '@mui/icons-material/Refresh'
 
 export default function Page() {
   const [sequences, setSequences] = useState<SequenceData[]>([])
@@ -38,7 +39,6 @@ export default function Page() {
 
   const [page, setPage] = useState(1)
   const itemsPerPage = 1
-  const router = useRouter()
 
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
@@ -49,34 +49,17 @@ export default function Page() {
     page * itemsPerPage
   )
 
-  // Consolidated function to fetch sequences with consistent cache-busting
+  // Consolidated function to fetch sequences
   const fetchSequences = async (debugContext = 'unknown') => {
     try {
-      const timestamp = Date.now()
-      console.log(`Fetching sequences from ${debugContext} at ${timestamp}`)
-      const response = await fetch(`/api/sequences?t=${timestamp}`, {
-        cache: 'no-store',
-        next: {
-          revalidate: 0,
-        },
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          Pragma: 'no-cache',
-          Expires: '0',
-        },
-      })
-      if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.status}`)
-      }
-      const newSequences = await response.json()
+      console.log(`Fetching sequences from ${debugContext}`)
+      const newSequences = await getAllSequences()
       console.log(
         `Successfully fetched ${newSequences.length} sequences from ${debugContext}`
       )
       setSequences(newSequences)
-      return newSequences
     } catch (error) {
       console.error(`Error fetching sequences from ${debugContext}:`, error)
-      throw error
     }
   }
 
@@ -90,14 +73,6 @@ export default function Page() {
 
     window.addEventListener('focus', handleFocus)
 
-    return () => {
-      window.removeEventListener('focus', handleFocus)
-    }
-  }, [])
-
-  // Refetch sequences when the page becomes visible (e.g., when returning from create sequence page)
-  // This ensures that newly created sequences appear in the autocomplete search
-  useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
         // Page became visible, refetch data
@@ -106,8 +81,18 @@ export default function Page() {
     }
 
     document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    const handlePopState = () => {
+      console.log('Navigation detected, refreshing posture data...')
+      fetchSequences('popstate')
+    }
+
+    window.addEventListener('popstate', handlePopState)
+
     return () => {
+      window.removeEventListener('focus', handleFocus)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('popstate', handlePopState)
     }
   }, [])
 
@@ -160,7 +145,9 @@ export default function Page() {
           <Stack sx={{ px: 4 }}>
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
               <Autocomplete
-                key={`autocomplete-${sequences.length}-${sequences.map((s) => s.id).join('-')}`}
+                key={`autocomplete-${sequences.length}-${sequences
+                  .map((s) => s.id)
+                  .join('-')}`}
                 disablePortal
                 id="combo-box-series-search"
                 options={sequences}
@@ -356,12 +343,7 @@ export default function Page() {
                       />
                       <CardContent className="lines" sx={{ p: 0 }}>
                         {seriesMini.seriesPostures.map((asana, asanaIndex) => (
-                          <Stack
-                            direction={'row'}
-                            key={asanaIndex}
-                            className="journalLine"
-                            alignItems="flex-start"
-                          >
+                          <Box key={asanaIndex} className="journalLine">
                             <Typography
                               variant="body1"
                               fontWeight="bold"
@@ -369,24 +351,21 @@ export default function Page() {
                             >
                               {asanaIndex + 1}.
                             </Typography>
-                            <Stack direction={'column'}>
-                              <Typography
-                                textAlign={'left'}
-                                fontWeight={'bold'}
-                                variant="body1"
+                            <Typography textAlign={'left'} variant="body1">
+                              <Link
+                                underline="hover"
+                                color="primary.contrastText"
+                                href={`/navigator/asanaPostures/${
+                                  asana.split(';')[0]
+                                }`}
                               >
-                                <Link
-                                  underline="hover"
-                                  href={`/navigator/asanaPostures/${asana.split(';')[0]}`}
-                                >
-                                  {asana.split(';')[0]}
-                                </Link>
-                              </Typography>
-                              <Typography textAlign={'left'} variant="body2">
-                                {asana.split(';')[1]}
-                              </Typography>
-                            </Stack>
-                          </Stack>
+                                {asana.split(';')[0]}
+                              </Link>
+                            </Typography>
+                            <Typography textAlign={'left'} variant="body2">
+                              {asana.split(';')[1]}
+                            </Typography>
+                          </Box>
                         ))}
                       </CardContent>
                     </Card>
