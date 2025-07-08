@@ -38,6 +38,9 @@ export default function Page() {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
   const [autocompleteInputValue, setAutocompleteInputValue] =
     useState<string>('')
+  const [autocompleteKey, setAutocompleteKey] = useState<string>(
+    `autocomplete-initial-${Date.now()}`
+  )
 
   const [page, setPage] = useState(1)
   const itemsPerPage = 1
@@ -52,12 +55,20 @@ export default function Page() {
   )
 
   // Consolidated function to fetch sequences with consistent cache-busting
-  const fetchSequences = async (debugContext = 'unknown') => {
+  const fetchSequences = async (
+    debugContext = 'unknown',
+    forceRefresh = false
+  ) => {
     try {
       setIsRefreshing(true)
       const timestamp = Date.now()
       console.log(`Fetching sequences from ${debugContext} at ${timestamp}`)
-      const response = await fetch(`/api/sequences?t=${timestamp}`, {
+
+      // Use more aggressive cache-busting for force refresh
+      const cacheParam = forceRefresh
+        ? `force-${timestamp}-${Math.random()}`
+        : timestamp
+      const response = await fetch(`/api/sequences?t=${cacheParam}`, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -72,6 +83,9 @@ export default function Page() {
       console.log(
         `Successfully fetched ${newSequences.length} sequences from ${debugContext}`
       )
+
+      // Force autocomplete re-render by updating key
+      setAutocompleteKey(`autocomplete-${timestamp}-${newSequences.length}`)
       setSequences(newSequences)
       setLastRefresh(timestamp)
       return newSequences
@@ -229,7 +243,7 @@ export default function Page() {
           <Stack sx={{ px: 4 }}>
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
               <Autocomplete
-                key={`autocomplete-${sequences.length}-${lastRefresh}-${sequences.map((s) => s.id).join(',')}`}
+                key={autocompleteKey}
                 disablePortal
                 id="combo-box-series-search"
                 options={sequences}
