@@ -34,6 +34,10 @@ export default function Page() {
     createdAt: '',
     updatedAt: '',
   })
+  const [lastRefresh, setLastRefresh] = useState<number>(0)
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
+  const [autocompleteInputValue, setAutocompleteInputValue] =
+    useState<string>('')
 
   const [page, setPage] = useState(1)
   const itemsPerPage = 1
@@ -50,6 +54,7 @@ export default function Page() {
   // Consolidated function to fetch sequences with consistent cache-busting
   const fetchSequences = async (debugContext = 'unknown') => {
     try {
+      setIsRefreshing(true)
       const timestamp = Date.now()
       console.log(`Fetching sequences from ${debugContext} at ${timestamp}`)
       const response = await fetch(`/api/sequences?t=${timestamp}`, {
@@ -68,36 +73,85 @@ export default function Page() {
         `Successfully fetched ${newSequences.length} sequences from ${debugContext}`
       )
       setSequences(newSequences)
+      setLastRefresh(timestamp)
       return newSequences
     } catch (error) {
       console.error(`Error fetching sequences from ${debugContext}:`, error)
       throw error
+    } finally {
+      setIsRefreshing(false)
     }
   }
 
   useEffect(() => {
+    // Force an immediate fetch when component mounts
     fetchSequences('initial load')
+
+    // Set up a more frequent refresh to catch new sequences added from other tabs/devices
+    const intervalId = setInterval(() => {
+      fetchSequences('periodic refresh')
+    }, 10000) // Refresh every 10 seconds (reduced from 30 seconds)
+
+    return () => {
+      clearInterval(intervalId)
+    }
   }, [])
 
-  // Refetch sequences when the page becomes visible (e.g., when returning from create sequence page)
-  // This ensures that newly created sequences appear in the autocomplete search
+  // Enhanced visibility change detection with more aggressive refresh
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
-        // Page became visible, refetch data
+        // Page became visible, force refetch data immediately
+        console.log('Page became visible, forcing refresh...')
         fetchSequences('visibility change')
       }
     }
 
+    const handleFocus = () => {
+      // Also refetch when window gains focus with a small delay
+      console.log('Window gained focus, forcing refresh...')
+      setTimeout(() => {
+        fetchSequences('window focus')
+      }, 200) // Small delay to ensure the page is fully focused
+    }
+
+    const handlePageShow = () => {
+      // Handle browser back/forward navigation
+      console.log('Page show event, forcing refresh...')
+      fetchSequences('page show')
+    }
+
     document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('focus', handleFocus)
+    window.addEventListener('pageshow', handlePageShow)
+
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('focus', handleFocus)
+      window.removeEventListener('pageshow', handlePageShow)
     }
   }, [])
 
-  // Function to refresh sequences data
+  // Function to refresh sequences data with enhanced error handling
   const refreshSequences = async () => {
-    await fetchSequences('manual refresh')
+    try {
+      await fetchSequences('manual refresh')
+      // Clear the autocomplete input to ensure fresh search
+      setAutocompleteInputValue('')
+      console.log('Manual refresh completed successfully')
+    } catch (error) {
+      console.error('Manual refresh failed:', error)
+      // Retry once after a short delay
+      setTimeout(async () => {
+        try {
+          await fetchSequences('manual refresh retry')
+          setAutocompleteInputValue('')
+          console.log('Manual refresh retry completed successfully')
+        } catch (retryError) {
+          console.error('Manual refresh retry also failed:', retryError)
+        }
+      }, 1000)
+    }
   }
 
   function handleSelect(
@@ -109,6 +163,8 @@ export default function Page() {
     event.preventDefault()
     if (value) {
       setSingleSequence(value)
+      // Clear the input after selection to allow for new searches
+      setAutocompleteInputValue('')
     }
   }
   const [open, setOpen] = React.useState(false)
@@ -173,7 +229,7 @@ export default function Page() {
           <Stack sx={{ px: 4 }}>
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
               <Autocomplete
-                key={`autocomplete-${sequences.length}-${sequences.map((s) => s.id).join('-')}`}
+                key={`autocomplete-${sequences.length}-${lastRefresh}-${sequences.map((s) => s.id).join(',')}`}
                 disablePortal
                 id="combo-box-series-search"
                 options={sequences}
@@ -190,6 +246,11 @@ export default function Page() {
                     {option.nameSequence}
                   </li>
                 )}
+                value={null} // Always reset to null to show placeholder
+                inputValue={autocompleteInputValue}
+                onInputChange={(event, newInputValue) => {
+                  setAutocompleteInputValue(newInputValue)
+                }}
                 sx={{
                   flexGrow: 1,
                   '& .MuiOutlinedInput-notchedOutline': {
@@ -226,6 +287,7 @@ export default function Page() {
               <Button
                 variant="outlined"
                 onClick={refreshSequences}
+                disabled={isRefreshing}
                 sx={{
                   minWidth: 'auto',
                   p: 1.5,
@@ -238,12 +300,38 @@ export default function Page() {
                     backgroundColor: 'primary.light',
                     color: 'white',
                   },
+                  '&:disabled': {
+                    opacity: 0.6,
+                  },
                 }}
                 aria-label="Refresh sequences"
               >
-                <RefreshIcon />
+                <RefreshIcon
+                  sx={{
+                    ...(isRefreshing && {
+                      animation: 'spin 1s linear infinite',
+                      '@keyframes spin': {
+                        '0%': {
+                          transform: 'rotate(0deg)',
+                        },
+                        '100%': {
+                          transform: 'rotate(360deg)',
+                        },
+                      },
+                    }),
+                  }}
+                />
               </Button>
             </Box>
+
+            {/* Debug info for sequences count and last refresh */}
+            <Typography
+              variant="caption"
+              sx={{ px: 2, color: 'text.secondary', mt: 1 }}
+            >
+              {sequences.length} sequences loaded • Last refresh:{' '}
+              {new Date(lastRefresh).toLocaleTimeString()}
+            </Typography>
 
             <React.Fragment key={singleSequence.id}>
               <Box

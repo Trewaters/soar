@@ -149,8 +149,18 @@ export default function Page() {
       }
       const data = await response.json()
       console.log('create sequence response', data)
-      // Navigate back to practice sequences page after successful creation
-      router.push('/navigator/flows/practiceSequences')
+
+      // Ensure the sequence was created successfully before navigating
+      if (data.sequence) {
+        console.log(
+          'Sequence created successfully:',
+          data.sequence.nameSequence
+        )
+        // Navigate back to practice sequences page after successful creation
+        router.push('/navigator/flows/practiceSequences')
+      } else {
+        throw new Error('Sequence creation returned no sequence data')
+      }
     } catch (error: Error | any) {
       console.error('Error creating sequence:', error.message)
     }
