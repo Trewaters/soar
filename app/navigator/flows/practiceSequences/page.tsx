@@ -38,9 +38,6 @@ export default function Page() {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
   const [autocompleteInputValue, setAutocompleteInputValue] =
     useState<string>('')
-  const [autocompleteKey, setAutocompleteKey] = useState<string>(
-    `autocomplete-initial-${Date.now()}`
-  )
 
   const [page, setPage] = useState(1)
   const itemsPerPage = 1
@@ -54,21 +51,13 @@ export default function Page() {
     page * itemsPerPage
   )
 
-  // Consolidated function to fetch sequences with consistent cache-busting
-  const fetchSequences = async (
-    debugContext = 'unknown',
-    forceRefresh = false
-  ) => {
+  // Simplified function to fetch sequences
+  const fetchSequences = async () => {
     try {
       setIsRefreshing(true)
-      const timestamp = Date.now()
-      console.log(`Fetching sequences from ${debugContext} at ${timestamp}`)
+      console.log('Fetching sequences...')
 
-      // Use more aggressive cache-busting for force refresh
-      const cacheParam = forceRefresh
-        ? `force-${timestamp}-${Math.random()}`
-        : timestamp
-      const response = await fetch(`/api/sequences?t=${cacheParam}`, {
+      const response = await fetch('/api/sequences', {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -80,17 +69,13 @@ export default function Page() {
         throw new Error(`Network response was not ok: ${response.status}`)
       }
       const newSequences = await response.json()
-      console.log(
-        `Successfully fetched ${newSequences.length} sequences from ${debugContext}`
-      )
+      console.log(`Successfully fetched ${newSequences.length} sequences`)
 
-      // Force autocomplete re-render by updating key
-      setAutocompleteKey(`autocomplete-${timestamp}-${newSequences.length}`)
       setSequences(newSequences)
-      setLastRefresh(timestamp)
+      setLastRefresh(Date.now())
       return newSequences
     } catch (error) {
-      console.error(`Error fetching sequences from ${debugContext}:`, error)
+      console.error('Error fetching sequences:', error)
       throw error
     } finally {
       setIsRefreshing(false)
@@ -98,41 +83,26 @@ export default function Page() {
   }
 
   useEffect(() => {
-    // Force an immediate fetch when component mounts
-    fetchSequences('initial load')
-
-    // Set up a more frequent refresh to catch new sequences added from other tabs/devices
-    const intervalId = setInterval(() => {
-      fetchSequences('periodic refresh')
-    }, 10000) // Refresh every 10 seconds (reduced from 30 seconds)
-
-    return () => {
-      clearInterval(intervalId)
-    }
+    fetchSequences()
   }, [])
 
-  // Enhanced visibility change detection with more aggressive refresh
+  // Refetch data when the page becomes visible (like asana postures page)
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
-        // Page became visible, force refetch data immediately
-        console.log('Page became visible, forcing refresh...')
-        fetchSequences('visibility change')
+        console.log('Page became visible, refreshing sequence data...')
+        fetchSequences()
       }
     }
 
     const handleFocus = () => {
-      // Also refetch when window gains focus with a small delay
-      console.log('Window gained focus, forcing refresh...')
-      setTimeout(() => {
-        fetchSequences('window focus')
-      }, 200) // Small delay to ensure the page is fully focused
+      console.log('Window gained focus, refreshing sequence data...')
+      fetchSequences()
     }
 
     const handlePageShow = () => {
-      // Handle browser back/forward navigation
-      console.log('Page show event, forcing refresh...')
-      fetchSequences('page show')
+      console.log('Page show event, refreshing sequence data...')
+      fetchSequences()
     }
 
     document.addEventListener('visibilitychange', handleVisibilityChange)
@@ -146,25 +116,14 @@ export default function Page() {
     }
   }, [])
 
-  // Function to refresh sequences data with enhanced error handling
+  // Function to refresh sequences data
   const refreshSequences = async () => {
     try {
-      await fetchSequences('manual refresh')
-      // Clear the autocomplete input to ensure fresh search
+      await fetchSequences()
       setAutocompleteInputValue('')
       console.log('Manual refresh completed successfully')
     } catch (error) {
       console.error('Manual refresh failed:', error)
-      // Retry once after a short delay
-      setTimeout(async () => {
-        try {
-          await fetchSequences('manual refresh retry')
-          setAutocompleteInputValue('')
-          console.log('Manual refresh retry completed successfully')
-        } catch (retryError) {
-          console.error('Manual refresh retry also failed:', retryError)
-        }
-      }, 1000)
     }
   }
 
@@ -243,7 +202,7 @@ export default function Page() {
           <Stack sx={{ px: 4 }}>
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
               <Autocomplete
-                key={autocompleteKey}
+                key={`sequences-autocomplete-${sequences.length}-${lastRefresh}`}
                 disablePortal
                 id="combo-box-series-search"
                 options={sequences}
