@@ -21,7 +21,6 @@ import NavBottom from '@serverComponents/navBottom'
 import React from 'react'
 import Image from 'next/image'
 import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
-import RefreshIcon from '@mui/icons-material/Refresh'
 
 export default function Page() {
   const [sequences, setSequences] = useState<SequenceData[]>([])
@@ -95,11 +94,6 @@ export default function Page() {
       window.removeEventListener('popstate', handlePopState)
     }
   }, [])
-
-  // Function to refresh sequences data
-  const refreshSequences = async () => {
-    await fetchSequences('manual refresh')
-  }
 
   function handleSelect(
     event: ChangeEvent<object>,
@@ -197,26 +191,6 @@ export default function Page() {
                 )}
                 onChange={handleSelect}
               />
-              <Button
-                variant="outlined"
-                onClick={refreshSequences}
-                sx={{
-                  minWidth: 'auto',
-                  p: 1.5,
-                  borderRadius: '12px',
-                  borderColor: 'primary.main',
-                  color: 'primary.main',
-                  boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-                  '&:hover': {
-                    borderColor: 'primary.light',
-                    backgroundColor: 'primary.light',
-                    color: 'white',
-                  },
-                }}
-                aria-label="Refresh sequences"
-              >
-                <RefreshIcon />
-              </Button>
             </Box>
 
             <React.Fragment key={singleSequence.id}>
