@@ -475,7 +475,6 @@ export default function UserDetails() {
                     <Stack direction="row" spacing={2} mb={2}>
                       <MapIcon />
                       <Typography>{userData.location ?? ''}</Typography>
-                      <MapIcon />
                     </Stack>
                   </CardContent>
                 </Collapse>
