@@ -31,6 +31,10 @@ import LinkIcon from '@mui/icons-material/Link'
 import ShareIcon from '@mui/icons-material/Share'
 import MapIcon from '@mui/icons-material/Map'
 import { styled } from '@mui/material/styles'
+import {
+  LocationPicker,
+  LocationData,
+} from '@app/clientComponents/locationPicker'
 
 const yogaStyles = [
   'Ashtanga',
@@ -202,6 +206,21 @@ export default function UserDetails() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     dispatch({ type: 'SET_USER', payload: { ...userData, [name]: value } })
+  }
+
+  const handleLocationChange = (
+    location: string,
+    locationData?: LocationData
+  ) => {
+    dispatch({
+      type: 'SET_USER',
+      payload: {
+        ...userData,
+        location: location,
+        // Optionally store additional location data in a JSON field
+        // We could add locationDetails to the user schema if needed
+      },
+    })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -581,13 +600,15 @@ export default function UserDetails() {
                   label="My Location"
                   width={{ xs: '100%', md: '60%' }}
                 >
-                  <TextField
-                    name="location"
-                    placeholder="Enter your location"
+                  <LocationPicker
                     value={userData?.location ?? ''}
-                    onChange={handleChange}
+                    onChange={handleLocationChange}
+                    placeholder="Search for your city, state, or country"
                     variant="outlined"
                     fullWidth
+                    showCurrentLocation={true}
+                    showMapButton={false}
+                    helperText="Select your location to connect with local yoga practitioners"
                     sx={textFieldStyles}
                   />
                 </FormField>

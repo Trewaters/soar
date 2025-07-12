@@ -35,7 +35,7 @@
     "@mui/material": "^6.1.7",
     "@next/third-parties": "^14.2.8",
     "@prisma/client": "^5.16.1",
-    "@react-google-maps/api": "^2.19.3",
+    "@react-google-maps/api": "^2.20.7",
     "@testing-library/jest-dom": "^6.6.3",
     "@vercel/blob": "^1.1.1",
     "axios": "^1.7.2",
