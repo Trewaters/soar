@@ -66,7 +66,14 @@ const ExpandMore = styled(
 }))
 
 export default function UserDetails() {
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
+  const session = {
+    user: {
+      email: 'john.doe@example.com',
+      name: 'John Doe',
+      image: 'https://www.pexels.com/photo/8247740/',
+    },
+  }
 
   const router = useRouter()
   const {
@@ -79,6 +86,81 @@ export default function UserDetails() {
   const [profileImageMode, setProfileImageMode] = useState<
     'active' | 'inactive' | 'edit'
   >('active')
+
+  const ProfileStatusIndicator = ({
+    mode,
+    iconSrc,
+    alt,
+  }: {
+    mode: 'active' | 'inactive' | 'edit'
+    iconSrc: string
+    alt: string
+  }) => {
+    const borderColors = {
+      active: 'primary.main',
+      inactive: 'grey.400',
+      edit: 'secondary.main',
+    }
+
+    return (
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: 8,
+          right: 8,
+          bgcolor: 'background.paper',
+          borderRadius: '50%',
+          width: 40,
+          height: 40,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: 2,
+          border: '2px solid',
+          borderColor: borderColors[mode],
+          zIndex: 1,
+        }}
+      >
+        <Image
+          src={iconSrc}
+          alt={alt}
+          width={27}
+          height={27}
+          style={{
+            borderRadius: '50%',
+            objectFit: 'cover',
+            width: 27,
+            height: 27,
+            display: 'block',
+          }}
+        />
+      </Box>
+    )
+  }
+
+  const FormField = ({
+    label,
+    children,
+    width = '100%',
+  }: {
+    label: string
+    children: React.ReactNode
+    width?: string | object
+  }) => (
+    <FormControl sx={{ width }}>
+      <Typography variant="body1" sx={{ mb: 1 }}>
+        {label}
+      </Typography>
+      {children}
+    </FormControl>
+  )
+
+  const textFieldStyles = {
+    '& .MuiInputBase-root': {
+      borderRadius: '12px',
+      boxShadow: '0 4px 4px 0 #CBCBCB',
+    },
+  }
 
   useEffect(() => {
     if (session?.user?.email && userData?.email !== session.user.email) {
@@ -195,7 +277,7 @@ export default function UserDetails() {
         </Grid>
       )}
       {session && (
-        <Box sx={{ flexGrow: 1, justifyItems: 'center' }}>
+        <>
           <Paper elevation={1} sx={{ mx: 3 }}>
             <Stack
               spacing={3}
@@ -203,6 +285,7 @@ export default function UserDetails() {
               component="form"
               onSubmit={handleSubmit}
             >
+              {/* Header */}
               <Stack direction="row" spacing={2} alignItems="center">
                 <Image
                   src={'/icons/profile/leaf-orange.png'}
@@ -230,130 +313,47 @@ export default function UserDetails() {
                     aria-label="name initial"
                     src={userData?.image}
                   >
-                    {!userData?.image ? (
+                    {!userData?.image && (
                       <Image
                         src={'/icons/profile/profile-person.svg'}
                         width={50}
                         height={50}
                         alt="Generic profile image icon"
                       />
-                    ) : undefined}
+                    )}
                   </Avatar>
                   {profileImageMode === 'active' && (
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        bottom: 8,
-                        right: 8,
-                        bgcolor: 'background.paper',
-                        borderRadius: '50%',
-                        width: 40,
-                        height: 40,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: 2,
-                        border: '2px solid',
-                        borderColor: 'primary.main',
-                        zIndex: 1,
-                      }}
-                    >
-                      <Image
-                        src={'/icons/profile/profile-image-active.svg'}
-                        alt="Active profile image icon"
-                        width={27}
-                        height={27}
-                        style={{
-                          borderRadius: '50%',
-                          objectFit: 'cover',
-                          width: 27,
-                          height: 27,
-                          display: 'block',
-                        }}
-                      />
-                    </Box>
+                    <ProfileStatusIndicator
+                      mode="active"
+                      iconSrc="/icons/profile/profile-image-active.svg"
+                      alt="Active profile image icon"
+                    />
                   )}
                   {profileImageMode === 'inactive' && (
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        bottom: 8,
-                        right: 8,
-                        bgcolor: 'background.paper',
-                        borderRadius: '50%',
-                        width: 40,
-                        height: 40,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: 2,
-                        border: '2px solid',
-                        borderColor: 'grey.400',
-                        zIndex: 1,
-                      }}
-                    >
-                      <Image
-                        src={'/icons/profile/profile-image-inactive.svg'}
-                        width={27}
-                        height={27}
-                        alt="Inactive profile image icon"
-                        style={{
-                          borderRadius: '50%',
-                          objectFit: 'cover',
-                          width: 27,
-                          height: 27,
-                          display: 'block',
-                        }}
-                      />
-                    </Box>
+                    <ProfileStatusIndicator
+                      mode="inactive"
+                      iconSrc="/icons/profile/profile-image-inactive.svg"
+                      alt="Inactive profile image icon"
+                    />
                   )}
                   {profileImageMode === 'edit' && (
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        bottom: 8,
-                        right: 8,
-                        bgcolor: 'background.paper',
-                        borderRadius: '50%',
-                        width: 40,
-                        height: 40,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: 2,
-                        border: '2px solid',
-                        borderColor: 'secondary.main',
-                        zIndex: 1,
-                      }}
-                    >
-                      <Image
-                        src={'/icons/profile/profile-image-edit.svg'}
-                        width={27}
-                        height={27}
-                        alt="Edit profile image icon"
-                        style={{
-                          borderRadius: '50%',
-                          objectFit: 'cover',
-                          width: 27,
-                          height: 27,
-                          display: 'block',
-                        }}
-                      />
-                    </Box>
+                    <ProfileStatusIndicator
+                      mode="edit"
+                      iconSrc="/icons/profile/profile-image-edit.svg"
+                      alt="Edit profile image icon"
+                    />
                   )}
                 </Stack>
-                <Stack flex={3} pt={2} spacing={2}>
-                  <Stack justifyContent={'center'}>
-                    <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
-                      {userData?.name ?? 'Yogi Name'}
-                    </Typography>
-                    <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
-                      Member since {membershipDate ?? '6/9/2024'}
-                    </Typography>
-                  </Stack>
-                  <Box sx={{ mt: 2 }}>
-                    <ActivityStreaks variant="compact" />
-                  </Box>
+
+                {/* User Details Section */}
+                <Stack flex={3} spacing={2}>
+                  <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+                    {userData?.name ?? 'Yogi Name'}
+                  </Typography>
+                  <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+                    Member since {membershipDate ?? '6/9/2024'}
+                    {/* '6/9/2024' this is the date I started working on Uvuyoga */}
+                  </Typography>
                 </Stack>
               </Stack>
 
@@ -378,86 +378,73 @@ export default function UserDetails() {
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                   <CardContent>
-                    <Stack direction="row" spacing={2} mb={2}>
-                      <FormControl>
-                        <TextField
-                          name="shareQuick"
-                          id="outlined-basic"
-                          placeholder='Share "Quickly"'
-                          label="Share Quickly"
-                          value={userData.shareQuick ?? ''}
-                          variant="outlined"
-                          onChange={handleChange}
-                        />
-                      </FormControl>
-                    </Stack>
-                    <Stack direction="row" spacing={2} mb={2}>
-                      <FormControl>
-                        <Autocomplete
-                          freeSolo
-                          sx={{ width: '207px' }}
-                          options={yogaStyles}
-                          value={userData.yogaStyle ?? ''}
-                          onChange={(event, newValue) => {
-                            dispatch({
-                              type: 'SET_USER',
-                              payload: {
-                                ...userData,
-                                yogaStyle: newValue ?? '',
-                              },
-                            })
-                          }}
-                          filterOptions={(options, state) =>
-                            options.filter((option) =>
-                              option
-                                .toLowerCase()
-                                .includes(state.inputValue.toLowerCase())
-                            )
-                          }
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              name="yogaStyle"
-                              id="outlined-basic"
-                              placeholder='Enter "Yoga Style"'
-                              label="Yoga Style"
-                              variant="outlined"
-                              onChange={handleChange}
-                            />
-                          )}
-                        />
-                      </FormControl>
-                    </Stack>
-                    <Stack direction="row" spacing={2} mb={2}>
-                      <FormControl>
-                        <TextField
-                          name="yogaExperience"
-                          id="outlined-basic"
-                          placeholder='Enter "Yoga Experience"'
-                          label="Yoga Experience"
-                          value={userData.yogaExperience ?? ''}
-                          variant="outlined"
-                          onChange={handleChange}
-                        />
-                      </FormControl>
-                    </Stack>
-                    <Stack direction="row" spacing={2} mb={2}>
-                      <FormControl>
-                        <TextField
-                          name="company"
-                          id="outlined-basic"
-                          placeholder='Enter "Company"'
-                          label="Company"
-                          value={userData.company ?? ''}
-                          variant="outlined"
-                          onChange={handleChange}
-                        />
-                      </FormControl>
-                    </Stack>
-                    <Stack direction="column" spacing={2} mb={2}>
-                      <Stack direction="row" spacing={2} alignItems={'center'}>
+                    <Stack spacing={2}>
+                      <TextField
+                        name="shareQuick"
+                        id="share-quick-input"
+                        placeholder='Share "Quickly"'
+                        label="Share Quickly"
+                        value={userData.shareQuick ?? ''}
+                        variant="outlined"
+                        onChange={handleChange}
+                        fullWidth
+                      />
+                      <Autocomplete
+                        freeSolo
+                        fullWidth
+                        options={yogaStyles}
+                        value={userData.yogaStyle ?? ''}
+                        onChange={(event, newValue) => {
+                          dispatch({
+                            type: 'SET_USER',
+                            payload: {
+                              ...userData,
+                              yogaStyle: newValue ?? '',
+                            },
+                          })
+                        }}
+                        filterOptions={(options, state) =>
+                          options.filter((option) =>
+                            option
+                              .toLowerCase()
+                              .includes(state.inputValue.toLowerCase())
+                          )
+                        }
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            name="yogaStyle"
+                            id="yoga-style-input"
+                            placeholder='Enter "Yoga Style"'
+                            label="Yoga Style"
+                            variant="outlined"
+                            onChange={handleChange}
+                          />
+                        )}
+                      />
+                      <TextField
+                        name="yogaExperience"
+                        id="yoga-experience-input"
+                        placeholder='Enter "Yoga Experience"'
+                        label="Yoga Experience"
+                        value={userData.yogaExperience ?? ''}
+                        variant="outlined"
+                        onChange={handleChange}
+                        fullWidth
+                      />
+                      <TextField
+                        name="company"
+                        id="company-input"
+                        placeholder='Enter "Company"'
+                        label="Company"
+                        value={userData.company ?? ''}
+                        variant="outlined"
+                        onChange={handleChange}
+                        fullWidth
+                      />
+                      <Stack direction="row" spacing={1} alignItems={'center'}>
                         <LinkIcon />
-                        <Typography variant="body1">
+                        <Typography variant="body1" noWrap>
                           <Link
                             href={
                               userData.websiteURL?.startsWith('http')
@@ -467,216 +454,158 @@ export default function UserDetails() {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            {userData.websiteURL}
+                            {userData.websiteURL || 'No website provided'}
                           </Link>
                         </Typography>
                       </Stack>
-                    </Stack>
-                    <Stack direction="row" spacing={2} mb={2}>
-                      <MapIcon />
-                      <Typography>{userData.location ?? ''}</Typography>
+                      <Stack direction="row" spacing={1} alignItems={'center'}>
+                        <MapIcon />
+                        <Typography>
+                          {userData.location || 'No location provided'}
+                        </Typography>
+                      </Stack>
                     </Stack>
                   </CardContent>
                 </Collapse>
               </Card>
 
-              <FormControl>
-                <Typography variant="body1">Username</Typography>
+              {/* Form Fields */}
+              <FormField label="Username">
                 <TextField
                   name="username"
-                  id="username text input"
-                  sx={{
-                    '& .MuiInputBase-root ': {
-                      borderRadius: '12px',
-                      boxShadow: '0 4px 4px 0 #CBCBCB',
-                    },
-                  }}
-                  value={userData?.name ?? undefined}
+                  value={userData?.name ?? ''}
                   placeholder="Username"
                   variant="filled"
                   disabled
+                  fullWidth
+                  sx={textFieldStyles}
                 />
-              </FormControl>
+              </FormField>
 
               <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
-                <FormControl sx={{ flex: 1 }}>
-                  <Typography variant="body1">First Name</Typography>
+                <FormField label="First Name">
                   <TextField
                     name="firstName"
-                    id="first name text input"
-                    placeholder='Enter "First Name"'
+                    placeholder="Enter First Name"
                     value={userData.firstName ?? ''}
                     onChange={handleChange}
                     variant="outlined"
                     required
-                    sx={{
-                      '& .MuiInputBase-root ': {
-                        borderRadius: '12px',
-                        boxShadow: '0 4px 4px 0 #CBCBCB',
-                        '&:hover .MuiInputBase-input': {
-                          borderColor: '2024-11-13 15:47:20',
-                          // backgroundColor: 'lime',
-                        },
-                      },
-                    }}
+                    fullWidth
+                    sx={textFieldStyles}
                   />
-                </FormControl>
-                <FormControl sx={{ flex: 1 }}>
-                  <Typography variant="body1">Last Name</Typography>
+                </FormField>
+
+                <FormField label="Last Name">
                   <TextField
-                    required
                     name="lastName"
-                    id="last name text input"
-                    placeholder='Enter "Last Name"'
+                    placeholder="Enter Last Name"
                     value={userData.lastName ?? ''}
                     onChange={handleChange}
                     variant="outlined"
-                    type="text"
-                    sx={{
-                      '& .MuiInputBase-root ': {
-                        borderRadius: '12px',
-                        boxShadow: '0 4px 4px 0 #CBCBCB',
-                      },
-                    }}
+                    required
+                    fullWidth
+                    sx={textFieldStyles}
                   />
-                </FormControl>
+                </FormField>
               </Stack>
 
-              <FormControl>
-                <Typography variant="body1">Pronouns</Typography>
+              <FormField label="Pronouns">
                 <TextField
                   name="pronouns"
-                  id="pronouns"
-                  placeholder='Enter "Pronouns"'
-                  variant="outlined"
+                  placeholder="Enter Pronouns"
                   value={userData?.pronouns ?? ''}
                   onChange={handleChange}
-                  sx={{
-                    '& .MuiInputBase-root ': {
-                      borderRadius: '12px',
-                      boxShadow: '0 4px 4px 0 #CBCBCB',
-                    },
-                  }}
+                  variant="outlined"
+                  fullWidth
+                  sx={textFieldStyles}
                 />
-              </FormControl>
+              </FormField>
 
-              <FormControl sx={{ width: '80%' }}>
-                <Typography variant="body1">
-                  Email Address (primary/internal)
-                </Typography>
+              <FormField label="Email Address (primary/internal)" width="80%">
                 <TextField
-                  id="email-text-input"
                   name="email"
                   placeholder="xyz@ABC.com"
                   value={userData?.email ?? ''}
                   variant="outlined"
                   type="email"
                   disabled
-                  sx={{
-                    '& .MuiInputBase-root ': {
-                      borderRadius: '12px',
-                      boxShadow: '0 4px 4px 0 #CBCBCB',
-                    },
-                  }}
+                  fullWidth
+                  sx={textFieldStyles}
                 />
                 <FormHelperText>
                   Your email address cannot be changed. Contact us for support.
                 </FormHelperText>
-              </FormControl>
+              </FormField>
 
-              <FormControl sx={{ width: '80%' }}>
-                <Typography variant="body1">Headline</Typography>
+              <FormField label="Headline" width="80%">
                 <TextField
-                  id="headline-text-input"
                   name="headline"
                   placeholder="Enter...2 sentences"
                   value={userData?.headline ?? 'I am a Yoga instructor.'}
                   onChange={handleChange}
                   multiline
                   maxRows={2}
-                  sx={{
-                    '& .MuiInputBase-root ': {
-                      borderRadius: '12px',
-                      boxShadow: '0 4px 4px 0 #CBCBCB',
-                    },
-                  }}
+                  fullWidth
+                  sx={textFieldStyles}
                 />
-              </FormControl>
+              </FormField>
 
-              <FormControl sx={{ width: '80%' }}>
-                <Typography variant="body1">Description/About/Bio:</Typography>
+              <FormField label="Description/About/Bio" width="80%">
                 <TextField
-                  id="biography-text-input"
                   name="bio"
                   placeholder="Enter...Biography"
                   value={userData?.bio ?? ''}
                   onChange={handleChange}
                   multiline
                   maxRows={4}
-                  sx={{
-                    '& .MuiInputBase-root ': {
-                      borderRadius: '12px',
-                      boxShadow: '0 4px 4px 0 #CBCBCB',
-                    },
-                  }}
+                  fullWidth
+                  sx={textFieldStyles}
                 />
-              </FormControl>
+              </FormField>
 
               <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
-                <FormControl sx={{ width: { xs: '100%', md: '100%' } }}>
-                  <Typography variant="body1">Website URL</Typography>
+                <FormField label="Website URL">
                   <TextField
                     name="websiteURL"
-                    id="webisite-url-text-input"
                     placeholder="Enter website URL"
                     value={userData?.websiteURL ?? ''}
                     onChange={handleChange}
                     variant="outlined"
-                    sx={{
-                      '& .MuiInputBase-root ': {
-                        borderRadius: '12px',
-                        boxShadow: '0 4px 4px 0 #CBCBCB',
-                      },
-                    }}
+                    fullWidth
+                    sx={textFieldStyles}
                   />
-                </FormControl>
-                <FormControl sx={{ width: { xs: '100%', md: '60%' } }}>
-                  <Typography variant="body1">My Location</Typography>
+                </FormField>
+
+                <FormField
+                  label="My Location"
+                  width={{ xs: '100%', md: '60%' }}
+                >
                   <TextField
                     name="location"
-                    id="location-text-input"
-                    placeholder='Enter "your location"'
+                    placeholder="Enter your location"
                     value={userData?.location ?? ''}
                     onChange={handleChange}
                     variant="outlined"
-                    sx={{
-                      '& .MuiInputBase-root ': {
-                        borderRadius: '12px',
-                        boxShadow: '0 4px 4px 0 #CBCBCB',
-                      },
-                    }}
+                    fullWidth
+                    sx={textFieldStyles}
                   />
-                </FormControl>
+                </FormField>
               </Stack>
 
               <Stack direction="row" spacing={2} justifyContent="flex-end">
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  variant="contained"
-                  sx={{ display: 'flex', justifySelf: 'flex-end' }}
-                >
-                  {loading ? <CircularProgress /> : 'Save'}
+                <Button type="submit" disabled={loading} variant="contained">
+                  {loading ? <CircularProgress size={20} /> : 'Save'}
                 </Button>
               </Stack>
             </Stack>
           </Paper>
 
           {/* Detailed Activity Streaks Section */}
-          <Box sx={{ mt: 3, mx: 3 }}>
+          <Stack sx={{ mt: 3, mx: 3 }}>
             <ActivityStreaks variant="detailed" />
-          </Box>
-        </Box>
+          </Stack>
+        </>
       )}
     </>
   )

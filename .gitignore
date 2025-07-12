@@ -40,3 +40,6 @@ next-env.d.ts
 
 # dev added files
 postures.json
+
+# mongo files to ignore
+datalogmongod.log*
