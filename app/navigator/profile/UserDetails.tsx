@@ -66,14 +66,14 @@ const ExpandMore = styled(
 }))
 
 export default function UserDetails() {
-  // const { data: session } = useSession()
-  const session = {
-    user: {
-      email: 'john.doe@example.com',
-      name: 'John Doe',
-      image: 'https://www.pexels.com/photo/8247740/',
-    },
-  }
+  const { data: session } = useSession()
+  // const session = {
+  // user: {
+  // email: 'john.doe@example.com',
+  // name: 'John Doe',
+  // image: 'https://www.pexels.com/photo/8247740/',
+  // },
+  // }
 
   const router = useRouter()
   const {
