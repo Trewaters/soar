@@ -10,7 +10,6 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Grid,
   Chip,
   Paper,
   Stack,
@@ -19,6 +18,7 @@ import {
   IconButton,
   Button,
 } from '@mui/material'
+import Grid from '@mui/material/Grid2'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -34,6 +34,7 @@ import {
   getUserCreatedSeries,
   getUserCreatedSequences,
 } from '@lib/userLibraryService'
+import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -158,74 +159,106 @@ export default function LibraryPage() {
 
   if (!session) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4, textAlign: 'center' }}>
-        <Alert severity="warning" sx={{ mb: 2 }}>
-          Please sign in to view your library
-        </Alert>
-        <Button variant="contained" onClick={() => router.push('/auth/signin')}>
-          Sign In
-        </Button>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Grid container spacing={4}>
+          {/* Profile Navigation Menu */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <ProfileNavMenu />
+          </Grid>
+
+          {/* Library Content */}
+          <Grid size={{ xs: 12, md: 8 }}>
+            <Box sx={{ textAlign: 'center' }}>
+              <Alert severity="warning" sx={{ mb: 2 }}>
+                Please sign in to view your library
+              </Alert>
+              <Button
+                variant="contained"
+                onClick={() => router.push('/auth/signin')}
+              >
+                Sign In
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
       </Container>
     )
   }
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h1" component="h1" gutterBottom>
-        My Library
-      </Typography>
+      <Grid container spacing={4}>
+        {/* Profile Navigation Menu */}
+        <Grid size={{ xs: 12, md: 4 }}>
+          <ProfileNavMenu />
+        </Grid>
 
-      <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-        Manage all the content you&apos;ve created in the app
-      </Typography>
+        {/* Library Content */}
+        <Grid size={{ xs: 12, md: 8 }}>
+          <Typography variant="h1" component="h1" gutterBottom>
+            My Library
+          </Typography>
 
-      {error && (
-        <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
-          {error}
-        </Alert>
-      )}
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+            Manage all the content you&apos;ve created in the app
+          </Typography>
 
-      <Paper elevation={2} sx={{ borderRadius: 2 }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs
-            value={tabValue}
-            onChange={handleTabChange}
-            aria-label="library content tabs"
-            variant="fullWidth"
-          >
-            <Tab label={`Asanas (${asanas.length})`} {...a11yProps(0)} />
-            <Tab label={`Series (${series.length})`} {...a11yProps(1)} />
-            <Tab label={`Sequences (${sequences.length})`} {...a11yProps(2)} />
-          </Tabs>
-        </Box>
+          {error && (
+            <Alert
+              severity="error"
+              sx={{ mb: 3 }}
+              onClose={() => setError(null)}
+            >
+              {error}
+            </Alert>
+          )}
 
-        {/* Asanas Tab */}
-        <TabPanel value={tabValue} index={0}>
-          <AsanasLibrary
-            asanas={asanas}
-            loading={asanasLoading}
-            onRefresh={fetchUserAsanas}
-          />
-        </TabPanel>
+          <Paper elevation={2} sx={{ borderRadius: 2 }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <Tabs
+                value={tabValue}
+                onChange={handleTabChange}
+                aria-label="library content tabs"
+                variant="fullWidth"
+              >
+                <Tab label={`Asanas (${asanas.length})`} {...a11yProps(0)} />
+                <Tab label={`Series (${series.length})`} {...a11yProps(1)} />
+                <Tab
+                  label={`Sequences (${sequences.length})`}
+                  {...a11yProps(2)}
+                />
+              </Tabs>
+            </Box>
 
-        {/* Series Tab */}
-        <TabPanel value={tabValue} index={1}>
-          <SeriesLibrary
-            series={series}
-            loading={seriesLoading}
-            onRefresh={fetchUserSeries}
-          />
-        </TabPanel>
+            {/* Asanas Tab */}
+            <TabPanel value={tabValue} index={0}>
+              <AsanasLibrary
+                asanas={asanas}
+                loading={asanasLoading}
+                onRefresh={fetchUserAsanas}
+              />
+            </TabPanel>
 
-        {/* Sequences Tab */}
-        <TabPanel value={tabValue} index={2}>
-          <SequencesLibrary
-            sequences={sequences}
-            loading={sequencesLoading}
-            onRefresh={fetchUserSequences}
-          />
-        </TabPanel>
-      </Paper>
+            {/* Series Tab */}
+            <TabPanel value={tabValue} index={1}>
+              <SeriesLibrary
+                series={series}
+                loading={seriesLoading}
+                onRefresh={fetchUserSeries}
+              />
+            </TabPanel>
+
+            {/* Sequences Tab */}
+            <TabPanel value={tabValue} index={2}>
+              <SequencesLibrary
+                sequences={sequences}
+                loading={sequencesLoading}
+                onRefresh={fetchUserSequences}
+              />
+            </TabPanel>
+          </Paper>
+        </Grid>
+      </Grid>
     </Container>
   )
 }
@@ -276,7 +309,7 @@ function AsanasLibrary({
     <Box sx={{ p: 3 }}>
       <Grid container spacing={3}>
         {asanas.map((asana) => (
-          <Grid item xs={12} sm={6} md={4} key={asana.id}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={asana.id}>
             <AsanaCard asana={asana} />
           </Grid>
         ))}
@@ -331,7 +364,7 @@ function SeriesLibrary({
     <Box sx={{ p: 3 }}>
       <Grid container spacing={3}>
         {series.map((seriesItem) => (
-          <Grid item xs={12} sm={6} md={4} key={seriesItem.id}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={seriesItem.id}>
             <SeriesCard series={seriesItem} />
           </Grid>
         ))}
@@ -387,7 +420,7 @@ function SequencesLibrary({
     <Box sx={{ p: 3 }}>
       <Grid container spacing={3}>
         {sequences.map((sequence) => (
-          <Grid item xs={12} sm={6} md={4} key={sequence.id}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={sequence.id}>
             <SequenceCard sequence={sequence} />
           </Grid>
         ))}
