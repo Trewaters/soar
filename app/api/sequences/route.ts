@@ -1,5 +1,5 @@
 import { PrismaClient } from '../../../prisma/generated/client'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { createHash } from 'crypto'
 
 const prisma = new PrismaClient()
@@ -15,12 +15,17 @@ function generateCacheBustingHash(data: any): string {
   return hash
 }
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const bustCache = searchParams.get('bust') || 'true' // Default to cache busting
+    const createdBy = searchParams.get('createdBy')
 
     console.log('Fetching sequences from database...')
+
+    // For now, since AsanaSequence doesn't have a created_by field,
+    // we'll return all sequences when not filtering, and empty when filtering by user
+    // TODO: Add created_by field to AsanaSequence schema
     const data = await prisma.asanaSequence.findMany({
       orderBy: {
         createdAt: 'desc', // Show newest first to help verify new creations
@@ -28,7 +33,16 @@ export async function GET(request: Request) {
     })
     console.log(`Found ${data.length} sequences in database`)
 
-    const dataWithId = data.map((item) => ({
+    // Filter client-side for now (not ideal, but works until schema is updated)
+    let filteredData = data
+    if (createdBy) {
+      console.log(
+        `Note: Filtering by creator not yet supported for sequences. Returning empty array for user: ${createdBy}`
+      )
+      filteredData = [] // Return empty array for now since we can't filter by creator
+    }
+
+    const dataWithId = filteredData.map((item) => ({
       ...item,
       // Preserve the actual database ID instead of regenerating based on array position
       sequencesSeries: Array.isArray(item.sequencesSeries)
