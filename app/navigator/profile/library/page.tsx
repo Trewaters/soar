@@ -24,15 +24,16 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import EditIcon from '@mui/icons-material/Edit'
 import VisibilityIcon from '@mui/icons-material/Visibility'
+
+import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 import {
+  UserAsanaData,
+  UserSeriesData,
+  UserSequenceData,
   getUserCreatedAsanas,
   getUserCreatedSeries,
   getUserCreatedSequences,
-  type UserAsanaData,
-  type UserSeriesData,
-  type UserSequenceData,
 } from '@lib/userLibraryService'
-import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 
 interface TabPanelProps {
   children?: React.ReactNode
