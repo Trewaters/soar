@@ -25,7 +25,6 @@ const customJestConfig: Config = {
   maxWorkers: 1, // Use single worker to avoid resource conflicts
   detectOpenHandles: true, // Helps identify what's keeping the process alive
   forceExit: true, // Force exit after tests complete
-  bail: 1, // Stop after first test failure to prevent cascading issues
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
     '^@app/(.*)$': '<rootDir>/app/$1',

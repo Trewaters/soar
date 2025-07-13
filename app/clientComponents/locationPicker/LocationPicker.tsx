@@ -278,13 +278,13 @@ export default function LocationPicker({
 
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            errorMessage = 'Location access denied by user.'
+            errorMessage = 'Location access denied'
             break
           case error.POSITION_UNAVAILABLE:
-            errorMessage = 'Location information is unavailable.'
+            errorMessage = 'Location not available'
             break
           case error.TIMEOUT:
-            errorMessage = 'Location request timed out.'
+            errorMessage = 'Location request timed out'
             break
         }
 
@@ -338,6 +338,7 @@ export default function LocationPicker({
                   disabled={isLoadingLocation || !isLoaded}
                   size="small"
                   title="Use current location"
+                  aria-label="Get current location"
                   color="primary"
                 >
                   {isLoadingLocation ? (
@@ -395,8 +396,13 @@ export default function LocationPicker({
                 >
                   <LocationOnIcon sx={{ mr: 2, color: 'text.secondary' }} />
                   <ListItemText
-                    primary={prediction.structured_formatting.main_text}
-                    secondary={prediction.structured_formatting.secondary_text}
+                    primary={
+                      prediction.structured_formatting?.main_text ||
+                      prediction.description
+                    }
+                    secondary={
+                      prediction.structured_formatting?.secondary_text || ''
+                    }
                   />
                 </ListItemButton>
               </ListItem>
