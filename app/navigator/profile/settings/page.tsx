@@ -45,6 +45,19 @@ export default async function SettingsPage() {
                   <Typography component="li" variant="body2" sx={{ mb: 1 }}>
                     Connected accounts management
                   </Typography>
+                  <Typography component="li" variant="body2" sx={{ mb: 1 }}>
+                    <Box
+                      component="a"
+                      href="/navigator/profile/feedback"
+                      sx={{
+                        color: 'primary.main',
+                        textDecoration: 'none',
+                        '&:hover': { textDecoration: 'underline' },
+                      }}
+                    >
+                      Send feedback to developer
+                    </Box>
+                  </Typography>
                 </Box>
 
                 <Typography
