@@ -67,7 +67,7 @@ const initialFormData: FeedbackData = {
 const RatingButton: React.FC<{
   value: number
   currentValue: number
-  onChange: (_value: number) => void
+  onChange: (value: number) => void
   icon: React.ReactNode
   label: string
   color: 'success' | 'warning' | 'error'
@@ -91,6 +91,7 @@ const RatingButton: React.FC<{
 
 const ScaleRating: React.FC<{
   value: number
+  // eslint-disable-next-line no-unused-vars
   onChange: (_value: number) => void
   label: string
 }> = ({ value, onChange, label }) => (
@@ -155,6 +156,14 @@ const FeedbackForm: React.FC = () => {
       if (!response.ok) {
         throw new Error('Failed to submit feedback')
       }
+
+      // Clear form data after successful submission
+      setFormData({
+        ...initialFormData,
+        name: session?.user?.name || '',
+        email: session?.user?.email || '',
+        sessionDate: new Date().toISOString().split('T')[0],
+      })
 
       setSubmitted(true)
     } catch (err) {
