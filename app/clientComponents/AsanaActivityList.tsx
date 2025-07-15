@@ -5,12 +5,30 @@ import {
   getUserActivities,
   type AsanaActivityData,
 } from '@lib/asanaActivityClientService'
+import { getUserSeriesActivities } from '@lib/seriesActivityClientService'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 import Link from 'next/link'
 
+type CombinedActivity =
+  | (AsanaActivityData & { type: 'asana' })
+  | {
+      id: string
+      userId: string
+      seriesId: string
+      seriesName: string
+      datePerformed: string
+      difficulty?: string
+      completionStatus: string
+      duration: number
+      notes?: string
+      createdAt: string
+      updatedAt: string
+      type: 'series'
+    }
+
 export default function AsanaActivityList() {
   const { data: session, status } = useSession()
-  const [activities, setActivities] = useState<AsanaActivityData[]>([])
+  const [activities, setActivities] = useState<CombinedActivity[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -45,10 +63,24 @@ export default function AsanaActivityList() {
       setLoading(true)
       setError(null)
       try {
-        const data = await getUserActivities(session.user.id)
+        const [asanaData, seriesData] = await Promise.all([
+          getUserActivities(session.user.id),
+          getUserSeriesActivities(session.user.id),
+        ])
+        // Transform data to CombinedActivity with type property
+        const combinedData: CombinedActivity[] = [
+          ...asanaData.map((activity) => ({
+            ...activity,
+            type: 'asana' as const,
+          })),
+          ...seriesData.map((activity) => ({
+            ...activity,
+            type: 'series' as const,
+          })),
+        ]
         // Sort by datePerformed descending
-        const sorted = data.sort(
-          (a: AsanaActivityData, b: AsanaActivityData) =>
+        const sorted = combinedData.sort(
+          (a: CombinedActivity, b: CombinedActivity) =>
             new Date(b.datePerformed).getTime() -
             new Date(a.datePerformed).getTime()
         )
@@ -65,8 +97,7 @@ export default function AsanaActivityList() {
 
   if (loading) return <LoadingSkeleton type="list" lines={5} height={60} />
   if (error) return <Typography color="error">{error}</Typography>
-  if (!activities.length)
-    return <Typography>No asana activity found.</Typography>
+  if (!activities.length) return <Typography>No activity found.</Typography>
 
   return (
     <Box sx={{ borderRadius: 2, boxShadow: '0px 4px 4px 0px #F6893D' }}>
@@ -108,16 +139,22 @@ export default function AsanaActivityList() {
               }}
             >
               <Stack spacing={0.5}>
-                <Link
-                  href={`/navigator/asanaPostures/${
-                    activity.sort_english_name ||
-                    encodeURIComponent(activity.postureName)
-                  }`}
-                >
+                {activity.type === 'series' ? (
                   <Typography variant="body1">
-                    {activity.postureName}
+                    Series: {activity.seriesName}
                   </Typography>
-                </Link>
+                ) : (
+                  <Link
+                    href={`/navigator/asanaPostures/${
+                      activity.sort_english_name ||
+                      encodeURIComponent(activity.postureName)
+                    }`}
+                  >
+                    <Typography variant="body1">
+                      {activity.postureName}
+                    </Typography>
+                  </Link>
+                )}
                 <Typography variant="caption" color="text.secondary">
                   {new Date(activity.datePerformed).toLocaleDateString(
                     undefined,

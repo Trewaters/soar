@@ -19,12 +19,15 @@ import SearchIcon from '@mui/icons-material/Search'
 import NavBottom from '@serverComponents/navBottom'
 import PostureShareButton from '@app/clientComponents/exportPoses'
 import { getAllSeries } from '@lib/seriesService'
+import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
+import SeriesWeeklyActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesWeeklyActivityTracker'
 
 export default function Page() {
   const theme = useTheme()
   const [series, setSeries] = useState<FlowSeriesData[]>([])
   const [flow, setFlow] = useState<FlowSeriesData>()
   const [open, setOpen] = useState(false)
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
 
   const fetchData = async () => {
     try {
@@ -53,6 +56,12 @@ export default function Page() {
 
   function handleInfoClick() {
     setOpen(!open)
+  }
+
+  function handleActivityToggle(isTracked: boolean) {
+    console.log('Series activity tracked:', isTracked)
+    // Trigger refresh of any activity components that might be listening
+    setRefreshTrigger((prev) => prev + 1)
   }
 
   return (
@@ -205,6 +214,26 @@ export default function Page() {
                   {flow.description}
                 </Typography>
               </Box>
+
+              {/* Series Activity Tracker */}
+              <Box sx={{ mt: 3 }}>
+                <SeriesActivityTracker
+                  seriesId={flow.id?.toString() || ''}
+                  seriesName={flow.seriesName}
+                  onActivityToggle={handleActivityToggle}
+                />
+              </Box>
+
+              {/* Series Weekly Activity Tracker */}
+              <Box sx={{ mt: 3 }}>
+                <SeriesWeeklyActivityTracker
+                  seriesId={flow.id?.toString() || ''}
+                  seriesName={flow.seriesName}
+                  variant="detailed"
+                  refreshTrigger={refreshTrigger}
+                />
+              </Box>
+
               <PostureShareButton seriesData={flow} />
             </Box>
           </Box>

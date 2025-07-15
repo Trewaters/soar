@@ -54,6 +54,7 @@ model UserData {
   // deleteAccountInfo String
   providerAccounts ProviderAccount[]
   asanaActivities  AsanaActivity[] // Relation to AsanaActivity
+  seriesActivities SeriesActivity[] // Relation to SeriesActivity
   userLogins       UserLogin[] // Relation to UserLogin
   poseImages       PoseImage[] // Relation to PoseImage
 }
@@ -163,6 +164,24 @@ model AsanaActivity {
 
   user    UserData     @relation(fields: [userId], references: [id], onDelete: Cascade)
   posture AsanaPosture @relation(fields: [postureId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// Records a user's series practice activity.
+model SeriesActivity {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @db.ObjectId
+  seriesId         String // Reference to AsanaSeries.id
+  seriesName       String // e.g., "Sun Salutation A"
+  datePerformed    DateTime // Date performed
+  difficulty       String? // User-selected difficulty: "easy", "average", "difficult"
+  completionStatus String   @default("complete") // e.g., "complete", "skipped", "partial"
+  duration         Int      @default(0) // Duration in seconds
+  notes            String? // User notes (optional)
+
+  user UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
