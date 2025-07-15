@@ -4,7 +4,6 @@ import {
   Autocomplete,
   Box,
   Drawer,
-  IconButton,
   Link,
   Stack,
   TextField,
@@ -21,26 +20,37 @@ import PostureShareButton from '@app/clientComponents/exportPoses'
 import { getAllSeries } from '@lib/seriesService'
 import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
 import SeriesWeeklyActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesWeeklyActivityTracker'
+import { useSearchParams } from 'next/navigation'
 
 export default function Page() {
   const theme = useTheme()
+  const searchParams = useSearchParams()
+  const seriesId = searchParams.get('id')
   const [series, setSeries] = useState<FlowSeriesData[]>([])
   const [flow, setFlow] = useState<FlowSeriesData>()
   const [open, setOpen] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
 
-  const fetchData = async () => {
-    try {
-      const seriesData = await getAllSeries()
-      setSeries(seriesData as FlowSeriesData[])
-    } catch (error) {
-      console.error('Error fetching series:', error)
-    }
-  }
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const seriesData = await getAllSeries()
+        setSeries(seriesData as FlowSeriesData[])
+
+        // If there's a series ID in the URL, auto-select that series
+        if (seriesId && seriesData.length > 0) {
+          const selectedSeries = seriesData.find((s) => s.id === seriesId)
+          if (selectedSeries) {
+            setFlow(selectedSeries)
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching series:', error)
+      }
+    }
+
     fetchData()
-  }, [])
+  }, [seriesId]) // Add seriesId as dependency
 
   function handleSelect(
     event: ChangeEvent<object>,
