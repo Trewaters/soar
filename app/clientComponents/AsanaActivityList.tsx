@@ -140,9 +140,13 @@ export default function AsanaActivityList() {
             >
               <Stack spacing={0.5}>
                 {activity.type === 'series' ? (
-                  <Typography variant="body1">
-                    Series: {activity.seriesName}
-                  </Typography>
+                  <Link
+                    href={`/navigator/flows/practiceSeries?id=${activity.seriesId}`}
+                  >
+                    <Typography variant="body1">
+                      Series: {activity.seriesName}
+                    </Typography>
+                  </Link>
                 ) : (
                   <Link
                     href={`/navigator/asanaPostures/${
