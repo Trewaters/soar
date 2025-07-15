@@ -10,18 +10,19 @@ The Soar Yoga App features a comprehensive feedback system that allows authentic
 
 1. **Frontend Components**
 
-   - `FeedbackForm.tsx` - Main feedback form component
+   - `FeedbackForm.tsx` - Main feedback form component with mailto functionality
    - `page.tsx` - Feedback page wrapper with authentication
    - `ProfileNavMenu.tsx` - Navigation (feedback link integration pending)
 
-2. **Backend API**
+2. **Email System**
 
-   - `/api/feedback/route.ts` - Email sending API endpoint
-   - Email template formatting and delivery
+   - Client-side email generation using `mailto:` links
+   - No server-side email processing required
+   - User's default email client handles delivery
 
 3. **Authentication & Security**
    - NextAuth.js session protection
-   - Server-side authentication verification
+   - Client-side authentication verification
    - Protected route implementation
 
 ## 📍 **User Journey**
@@ -210,6 +211,69 @@ const mailOptions = {
   text: /* Plain text fallback */
 }
 ```
+
+## 📧 **Email Delivery System**
+
+The feedback system uses a **client-side email approach** that opens the user's default email client:
+
+### How It Works
+
+1. **Form Collection**: User fills out the comprehensive feedback form
+2. **Email Generation**: Form data is formatted into a professional email template
+3. **Client Opening**: `mailto:` link opens the user's default email client
+4. **User Sends**: User reviews and sends the email from their own email client
+
+### Benefits
+
+- **No Server Configuration**: No need to set up SMTP servers or email credentials
+- **User Privacy**: Users send from their own email accounts
+- **Reliability**: Uses the user's existing email setup
+- **Transparency**: Users can see exactly what information is being sent
+- **Universal Compatibility**: Works on all devices with email clients
+
+### Implementation Details
+
+- **Developer Email**: `trewaters@hotmail.com`
+- **Email Format**: Structured plain text with all feedback data
+- **Subject Line**: Includes app name and rating for easy identification
+- **Fallback**: Clear instructions if email client doesn't open
+
+### Email Template Structure
+
+```
+Subject: Feedback from SOAR Yoga App - Rating: 😊 Excellent
+
+Dear Developer,
+
+I'm sending you feedback about the SOAR Yoga App:
+
+📋 GENERAL INFORMATION
+Name: John Doe
+Email: john@example.com
+Session Date: 2024-01-15
+Submitted: 1/15/2024, 2:30:00 PM
+
+🌟 OVERALL EXPERIENCE
+Overall Rating: 😊 Excellent
+Would Recommend: Yes
+
+[... all form sections with user data ...]
+
+🔧 TECHNICAL DETAILS
+User ID: user123
+User Agent: Mozilla/5.0...
+Timestamp: 2024-01-15T14:30:00.000Z
+
+Best regards,
+John Doe
+```
+
+### Security Considerations
+
+- **Client-Side Only**: No server-side email processing
+- **User Control**: Users can review before sending
+- **No Credentials**: No need to store email passwords
+- **Data Visibility**: Users see exactly what data is sent
 
 ## 🔒 **Security Implementation**
 

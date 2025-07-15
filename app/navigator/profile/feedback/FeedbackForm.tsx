@@ -134,28 +134,88 @@ const FeedbackForm: React.FC = () => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
+  const generateFeedbackEmail = () => {
+    const developerEmail = 'trewaters@hotmail.com'
+    const subject = `Feedback from SOAR Yoga App - Rating: ${getRatingEmoji(formData.overallRating)}`
+
+    const emailBody = `
+Dear Developer,
+
+I'm sending you feedback about the SOAR Yoga App:
+
+📋 GENERAL INFORMATION
+Name: ${formData.name || 'Anonymous'}
+Email: ${formData.email || 'Not provided'}
+Session Date: ${formData.sessionDate}
+Submitted: ${new Date().toLocaleString()}
+
+🌟 OVERALL EXPERIENCE
+Overall Rating: ${getRatingEmoji(formData.overallRating)}
+Would Recommend: ${formData.wouldRecommend || 'Not answered'}
+
+🧘‍♀️ YOGA CONTENT FEEDBACK
+Difficulty Level: ${formData.difficultyLevel || 'Not specified'}
+Pacing: ${formData.pacing || 'Not specified'}
+Favorite Content: ${formData.favoriteContent || 'None specified'}
+
+🎯 APP FUNCTIONALITY
+Technical Issues: ${formData.technicalIssues || 'None reported'}
+Navigation Rating: ${formData.navigationRating ? `${formData.navigationRating}/5` : 'Not rated'}
+Ease of Use: ${formData.easeOfUse ? `${formData.easeOfUse}/5` : 'Not rated'}
+
+💡 SUGGESTIONS & IMPROVEMENTS
+Suggestions: ${formData.suggestions || 'None provided'}
+Instructor Requests: ${formData.instructorRequests || 'None provided'}
+
+💬 USER SENTIMENT
+Experience in 3 Words: ${formData.experienceWords || 'Not provided'}
+What Keeps Me Coming Back: ${formData.motivation || 'Not provided'}
+
+📆 ENGAGEMENT & MOTIVATION
+Practice Frequency: ${formData.practiceFrequency || 'Not specified'}
+Yoga Motivation: ${formData.yogaMotivation || 'Not provided'}
+
+🔧 TECHNICAL DETAILS
+User ID: ${session?.user?.id || 'Unknown'}
+User Agent: ${navigator.userAgent || 'Unknown'}
+Timestamp: ${new Date().toISOString()}
+
+Best regards,
+${formData.name || 'A SOAR Yoga App User'}
+    `
+
+    return `mailto:${developerEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`
+  }
+
+  const getRatingEmoji = (rating: number): string => {
+    if (rating >= 5) return '😊 Excellent'
+    if (rating >= 3) return '⭐ Good'
+    if (rating >= 1) return '👎 Poor'
+    return 'Not rated'
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     setError('')
 
     try {
-      const response = await fetch('/api/feedback', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          userId: session?.user?.id,
-          userAgent: navigator.userAgent,
-          timestamp: new Date().toISOString(),
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to submit feedback')
+      // Validate that at least one meaningful field is filled
+      if (
+        !formData.overallRating &&
+        !formData.suggestions &&
+        !formData.technicalIssues &&
+        !formData.favoriteContent &&
+        !formData.experienceWords
+      ) {
+        throw new Error(
+          'Please provide at least a rating, suggestion, or some feedback before submitting'
+        )
       }
+
+      // Generate mailto link and open user's email client
+      const mailtoLink = generateFeedbackEmail()
+      window.open(mailtoLink, '_blank')
 
       // Clear form data after successful submission
       setFormData({
@@ -181,11 +241,11 @@ const FeedbackForm: React.FC = () => {
             sx={{ fontSize: 64, color: 'success.main', mb: 2 }}
           />
           <Typography variant="h4" gutterBottom>
-            Thank You!
+            Email Client Opened!
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            Your feedback has been sent successfully. We appreciate you taking
-            the time to help us improve!
+            Your feedback has been prepared and your email client should have
+            opened. Please send the email to complete your feedback submission.
           </Typography>
           <Button
             variant="contained"
