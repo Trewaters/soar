@@ -4,6 +4,9 @@ import { createHash } from 'crypto'
 
 const prisma = new PrismaClient()
 
+// Force this route to be dynamic since it requires query parameters
+export const dynamic = 'force-dynamic'
+
 // Utility function to generate cache-busting hash
 function generateCacheBustingHash(data: any): string {
   const timestamp = new Date().getTime()

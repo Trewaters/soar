@@ -3,6 +3,9 @@ import { PrismaClient } from '../../../prisma/generated/client'
 
 const prisma = new PrismaClient()
 
+// Force this route to be dynamic since it requires query parameters
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.nextUrl)
   const sortEnglishName = searchParams.get('sort_english_name')

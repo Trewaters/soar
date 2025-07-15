@@ -3,9 +3,12 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const prisma = new PrismaClient()
 
+// Force this route to be dynamic since it requires query parameters
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.nextUrl)
+    const { searchParams } = request.nextUrl
     const createdBy = searchParams.get('createdBy')
 
     console.log('Fetching series from database...')
