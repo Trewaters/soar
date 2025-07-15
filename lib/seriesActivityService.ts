@@ -1,6 +1,5 @@
 import { PrismaClient } from '../prisma/generated/client'
 import { logDatabaseError, logServiceError } from './errorLogger'
-import { randomUUID } from 'crypto'
 
 const prisma = new PrismaClient()
 
@@ -52,7 +51,6 @@ export async function createSeriesActivity(
   try {
     const activity = await prisma.seriesActivity.create({
       data: {
-        id: randomUUID(),
         userId: input.userId,
         seriesId: input.seriesId,
         seriesName: input.seriesName,
