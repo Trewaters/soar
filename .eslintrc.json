@@ -34,7 +34,7 @@
         "trailingComma": "es5",
         "tabWidth": 2,
         "bracketSpacing": true,
-        "endOfLine": "lf"
+        "endOfLine": "auto"
       },
       { "usePrettierrc": true }
     ],
