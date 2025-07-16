@@ -21,8 +21,12 @@ import NavBottom from '@serverComponents/navBottom'
 import React from 'react'
 import Image from 'next/image'
 import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
+import { useSearchParams } from 'next/navigation'
+import SequenceActivityTracker from '@app/clientComponents/sequenceActivityTracker/SequenceActivityTracker'
 
 export default function Page() {
+  const searchParams = useSearchParams()
+  const sequenceId = searchParams.get('sequenceId')
   const [sequences, setSequences] = useState<SequenceData[]>([])
   const [singleSequence, setSingleSequence] = useState<SequenceData>({
     id: 0,
@@ -35,6 +39,7 @@ export default function Page() {
     createdAt: '',
     updatedAt: '',
   })
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
 
   const [page, setPage] = useState(1)
   const itemsPerPage = 1
@@ -48,21 +53,31 @@ export default function Page() {
     page * itemsPerPage
   )
 
-  // Consolidated function to fetch sequences
-  const fetchSequences = async (debugContext = 'unknown') => {
-    try {
-      console.log(`Fetching sequences from ${debugContext}`)
-      const newSequences = await getAllSequences()
-      console.log(
-        `Successfully fetched ${newSequences.length} sequences from ${debugContext}`
-      )
-      setSequences(newSequences)
-    } catch (error) {
-      console.error(`Error fetching sequences from ${debugContext}:`, error)
-    }
-  }
-
   useEffect(() => {
+    // Consolidated function to fetch sequences
+    const fetchSequences = async (debugContext = 'unknown') => {
+      try {
+        console.log(`Fetching sequences from ${debugContext}`)
+        const newSequences = await getAllSequences()
+        console.log(
+          `Successfully fetched ${newSequences.length} sequences from ${debugContext}`
+        )
+        setSequences(newSequences)
+
+        // If there's a sequence ID in the URL, auto-select that sequence
+        if (sequenceId && newSequences.length > 0) {
+          const selectedSequence = newSequences.find(
+            (s) => s.id?.toString() === sequenceId
+          )
+          if (selectedSequence) {
+            setSingleSequence(selectedSequence)
+          }
+        }
+      } catch (error) {
+        console.error(`Error fetching sequences from ${debugContext}:`, error)
+      }
+    }
+
     fetchSequences('initial load')
 
     const handleFocus = () => {
@@ -93,7 +108,7 @@ export default function Page() {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       window.removeEventListener('popstate', handlePopState)
     }
-  }, [])
+  }, [sequenceId]) // Add sequenceId as dependency
 
   function handleSelect(
     event: ChangeEvent<object>,
@@ -106,6 +121,13 @@ export default function Page() {
       setSingleSequence(value)
     }
   }
+
+  function handleActivityToggle(isTracked: boolean) {
+    console.log('Sequence activity tracked:', isTracked)
+    // Trigger refresh of any activity components that might be listening
+    setRefreshTrigger((prev) => prev + 1)
+  }
+
   const [open, setOpen] = useState(false)
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen)
@@ -397,6 +419,17 @@ export default function Page() {
                       {singleSequence.description}
                     </Typography>
                   </Box>
+
+                  {/* Sequence Activity Tracker */}
+                  {singleSequence.id && singleSequence.id !== 0 && (
+                    <Box sx={{ mt: 3 }}>
+                      <SequenceActivityTracker
+                        sequenceId={singleSequence.id.toString()}
+                        sequenceName={singleSequence.nameSequence}
+                        onActivityToggle={handleActivityToggle}
+                      />
+                    </Box>
+                  )}
                 </Stack>
               ) : null}
             </React.Fragment>

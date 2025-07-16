@@ -247,6 +247,20 @@ exports.Prisma.SeriesActivityScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SequenceActivityScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  sequenceId: 'sequenceId',
+  sequenceName: 'sequenceName',
+  datePerformed: 'datePerformed',
+  difficulty: 'difficulty',
+  completionStatus: 'completionStatus',
+  duration: 'duration',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.UserLoginScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -298,6 +312,7 @@ exports.Prisma.ModelName = {
   AsanaSequence: 'AsanaSequence',
   AsanaActivity: 'AsanaActivity',
   SeriesActivity: 'SeriesActivity',
+  SequenceActivity: 'SequenceActivity',
   UserLogin: 'UserLogin',
   PoseImage: 'PoseImage'
 };

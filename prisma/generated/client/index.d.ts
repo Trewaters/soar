@@ -49,6 +49,11 @@ export type AsanaActivity = $Result.DefaultSelection<Prisma.$AsanaActivityPayloa
  */
 export type SeriesActivity = $Result.DefaultSelection<Prisma.$SeriesActivityPayload>
 /**
+ * Model SequenceActivity
+ * Records a user's sequence practice activity.
+ */
+export type SequenceActivity = $Result.DefaultSelection<Prisma.$SequenceActivityPayload>
+/**
  * Model UserLogin
  * Records user login events for activity streak calculation.
  */
@@ -236,6 +241,16 @@ export class PrismaClient<
     * ```
     */
   get seriesActivity(): Prisma.SeriesActivityDelegate<ExtArgs>;
+
+  /**
+   * `prisma.sequenceActivity`: Exposes CRUD operations for the **SequenceActivity** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SequenceActivities
+    * const sequenceActivities = await prisma.sequenceActivity.findMany()
+    * ```
+    */
+  get sequenceActivity(): Prisma.SequenceActivityDelegate<ExtArgs>;
 
   /**
    * `prisma.userLogin`: Exposes CRUD operations for the **UserLogin** model.
@@ -740,6 +755,7 @@ export namespace Prisma {
     AsanaSequence: 'AsanaSequence',
     AsanaActivity: 'AsanaActivity',
     SeriesActivity: 'SeriesActivity',
+    SequenceActivity: 'SequenceActivity',
     UserLogin: 'UserLogin',
     PoseImage: 'PoseImage'
   };
@@ -757,7 +773,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "userData" | "providerAccount" | "asanaPosture" | "asanaSeries" | "asanaSequence" | "asanaActivity" | "seriesActivity" | "userLogin" | "poseImage"
+      modelProps: "userData" | "providerAccount" | "asanaPosture" | "asanaSeries" | "asanaSequence" | "asanaActivity" | "seriesActivity" | "sequenceActivity" | "userLogin" | "poseImage"
       txIsolationLevel: never
     }
     model: {
@@ -1279,6 +1295,80 @@ export namespace Prisma {
           }
         }
       }
+      SequenceActivity: {
+        payload: Prisma.$SequenceActivityPayload<ExtArgs>
+        fields: Prisma.SequenceActivityFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SequenceActivityFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceActivityPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SequenceActivityFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceActivityPayload>
+          }
+          findFirst: {
+            args: Prisma.SequenceActivityFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceActivityPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SequenceActivityFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceActivityPayload>
+          }
+          findMany: {
+            args: Prisma.SequenceActivityFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceActivityPayload>[]
+          }
+          create: {
+            args: Prisma.SequenceActivityCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceActivityPayload>
+          }
+          createMany: {
+            args: Prisma.SequenceActivityCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.SequenceActivityDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceActivityPayload>
+          }
+          update: {
+            args: Prisma.SequenceActivityUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceActivityPayload>
+          }
+          deleteMany: {
+            args: Prisma.SequenceActivityDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SequenceActivityUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.SequenceActivityUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SequenceActivityPayload>
+          }
+          aggregate: {
+            args: Prisma.SequenceActivityAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSequenceActivity>
+          }
+          groupBy: {
+            args: Prisma.SequenceActivityGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SequenceActivityGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.SequenceActivityFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.SequenceActivityAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.SequenceActivityCountArgs<ExtArgs>
+            result: $Utils.Optional<SequenceActivityCountAggregateOutputType> | number
+          }
+        }
+      }
       UserLogin: {
         payload: Prisma.$UserLoginPayload<ExtArgs>
         fields: Prisma.UserLoginFieldRefs
@@ -1578,6 +1668,7 @@ export namespace Prisma {
     providerAccounts: number
     asanaActivities: number
     seriesActivities: number
+    sequenceActivities: number
     userLogins: number
     poseImages: number
   }
@@ -1586,6 +1677,7 @@ export namespace Prisma {
     providerAccounts?: boolean | UserDataCountOutputTypeCountProviderAccountsArgs
     asanaActivities?: boolean | UserDataCountOutputTypeCountAsanaActivitiesArgs
     seriesActivities?: boolean | UserDataCountOutputTypeCountSeriesActivitiesArgs
+    sequenceActivities?: boolean | UserDataCountOutputTypeCountSequenceActivitiesArgs
     userLogins?: boolean | UserDataCountOutputTypeCountUserLoginsArgs
     poseImages?: boolean | UserDataCountOutputTypeCountPoseImagesArgs
   }
@@ -1620,6 +1712,13 @@ export namespace Prisma {
    */
   export type UserDataCountOutputTypeCountSeriesActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SeriesActivityWhereInput
+  }
+
+  /**
+   * UserDataCountOutputType without action
+   */
+  export type UserDataCountOutputTypeCountSequenceActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SequenceActivityWhereInput
   }
 
   /**
@@ -1988,6 +2087,7 @@ export namespace Prisma {
     providerAccounts?: boolean | UserData$providerAccountsArgs<ExtArgs>
     asanaActivities?: boolean | UserData$asanaActivitiesArgs<ExtArgs>
     seriesActivities?: boolean | UserData$seriesActivitiesArgs<ExtArgs>
+    sequenceActivities?: boolean | UserData$sequenceActivitiesArgs<ExtArgs>
     userLogins?: boolean | UserData$userLoginsArgs<ExtArgs>
     poseImages?: boolean | UserData$poseImagesArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
@@ -2024,6 +2124,7 @@ export namespace Prisma {
     providerAccounts?: boolean | UserData$providerAccountsArgs<ExtArgs>
     asanaActivities?: boolean | UserData$asanaActivitiesArgs<ExtArgs>
     seriesActivities?: boolean | UserData$seriesActivitiesArgs<ExtArgs>
+    sequenceActivities?: boolean | UserData$sequenceActivitiesArgs<ExtArgs>
     userLogins?: boolean | UserData$userLoginsArgs<ExtArgs>
     poseImages?: boolean | UserData$poseImagesArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
@@ -2035,6 +2136,7 @@ export namespace Prisma {
       providerAccounts: Prisma.$ProviderAccountPayload<ExtArgs>[]
       asanaActivities: Prisma.$AsanaActivityPayload<ExtArgs>[]
       seriesActivities: Prisma.$SeriesActivityPayload<ExtArgs>[]
+      sequenceActivities: Prisma.$SequenceActivityPayload<ExtArgs>[]
       userLogins: Prisma.$UserLoginPayload<ExtArgs>[]
       poseImages: Prisma.$PoseImagePayload<ExtArgs>[]
     }
@@ -2428,6 +2530,7 @@ export namespace Prisma {
     providerAccounts<T extends UserData$providerAccountsArgs<ExtArgs> = {}>(args?: Subset<T, UserData$providerAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProviderAccountPayload<ExtArgs>, T, "findMany"> | Null>
     asanaActivities<T extends UserData$asanaActivitiesArgs<ExtArgs> = {}>(args?: Subset<T, UserData$asanaActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AsanaActivityPayload<ExtArgs>, T, "findMany"> | Null>
     seriesActivities<T extends UserData$seriesActivitiesArgs<ExtArgs> = {}>(args?: Subset<T, UserData$seriesActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeriesActivityPayload<ExtArgs>, T, "findMany"> | Null>
+    sequenceActivities<T extends UserData$sequenceActivitiesArgs<ExtArgs> = {}>(args?: Subset<T, UserData$sequenceActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SequenceActivityPayload<ExtArgs>, T, "findMany"> | Null>
     userLogins<T extends UserData$userLoginsArgs<ExtArgs> = {}>(args?: Subset<T, UserData$userLoginsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserLoginPayload<ExtArgs>, T, "findMany"> | Null>
     poseImages<T extends UserData$poseImagesArgs<ExtArgs> = {}>(args?: Subset<T, UserData$poseImagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PoseImagePayload<ExtArgs>, T, "findMany"> | Null>
     /**
@@ -2865,6 +2968,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SeriesActivityScalarFieldEnum | SeriesActivityScalarFieldEnum[]
+  }
+
+  /**
+   * UserData.sequenceActivities
+   */
+  export type UserData$sequenceActivitiesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceActivity
+     */
+    select?: SequenceActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceActivityInclude<ExtArgs> | null
+    where?: SequenceActivityWhereInput
+    orderBy?: SequenceActivityOrderByWithRelationInput | SequenceActivityOrderByWithRelationInput[]
+    cursor?: SequenceActivityWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SequenceActivityScalarFieldEnum | SequenceActivityScalarFieldEnum[]
   }
 
   /**
@@ -9182,6 +9305,1035 @@ export namespace Prisma {
 
 
   /**
+   * Model SequenceActivity
+   */
+
+  export type AggregateSequenceActivity = {
+    _count: SequenceActivityCountAggregateOutputType | null
+    _avg: SequenceActivityAvgAggregateOutputType | null
+    _sum: SequenceActivitySumAggregateOutputType | null
+    _min: SequenceActivityMinAggregateOutputType | null
+    _max: SequenceActivityMaxAggregateOutputType | null
+  }
+
+  export type SequenceActivityAvgAggregateOutputType = {
+    duration: number | null
+  }
+
+  export type SequenceActivitySumAggregateOutputType = {
+    duration: number | null
+  }
+
+  export type SequenceActivityMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    sequenceId: string | null
+    sequenceName: string | null
+    datePerformed: Date | null
+    difficulty: string | null
+    completionStatus: string | null
+    duration: number | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SequenceActivityMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    sequenceId: string | null
+    sequenceName: string | null
+    datePerformed: Date | null
+    difficulty: string | null
+    completionStatus: string | null
+    duration: number | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SequenceActivityCountAggregateOutputType = {
+    id: number
+    userId: number
+    sequenceId: number
+    sequenceName: number
+    datePerformed: number
+    difficulty: number
+    completionStatus: number
+    duration: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SequenceActivityAvgAggregateInputType = {
+    duration?: true
+  }
+
+  export type SequenceActivitySumAggregateInputType = {
+    duration?: true
+  }
+
+  export type SequenceActivityMinAggregateInputType = {
+    id?: true
+    userId?: true
+    sequenceId?: true
+    sequenceName?: true
+    datePerformed?: true
+    difficulty?: true
+    completionStatus?: true
+    duration?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SequenceActivityMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    sequenceId?: true
+    sequenceName?: true
+    datePerformed?: true
+    difficulty?: true
+    completionStatus?: true
+    duration?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SequenceActivityCountAggregateInputType = {
+    id?: true
+    userId?: true
+    sequenceId?: true
+    sequenceName?: true
+    datePerformed?: true
+    difficulty?: true
+    completionStatus?: true
+    duration?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SequenceActivityAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SequenceActivity to aggregate.
+     */
+    where?: SequenceActivityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SequenceActivities to fetch.
+     */
+    orderBy?: SequenceActivityOrderByWithRelationInput | SequenceActivityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SequenceActivityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SequenceActivities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SequenceActivities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SequenceActivities
+    **/
+    _count?: true | SequenceActivityCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SequenceActivityAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SequenceActivitySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SequenceActivityMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SequenceActivityMaxAggregateInputType
+  }
+
+  export type GetSequenceActivityAggregateType<T extends SequenceActivityAggregateArgs> = {
+        [P in keyof T & keyof AggregateSequenceActivity]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSequenceActivity[P]>
+      : GetScalarType<T[P], AggregateSequenceActivity[P]>
+  }
+
+
+
+
+  export type SequenceActivityGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SequenceActivityWhereInput
+    orderBy?: SequenceActivityOrderByWithAggregationInput | SequenceActivityOrderByWithAggregationInput[]
+    by: SequenceActivityScalarFieldEnum[] | SequenceActivityScalarFieldEnum
+    having?: SequenceActivityScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SequenceActivityCountAggregateInputType | true
+    _avg?: SequenceActivityAvgAggregateInputType
+    _sum?: SequenceActivitySumAggregateInputType
+    _min?: SequenceActivityMinAggregateInputType
+    _max?: SequenceActivityMaxAggregateInputType
+  }
+
+  export type SequenceActivityGroupByOutputType = {
+    id: string
+    userId: string
+    sequenceId: string
+    sequenceName: string
+    datePerformed: Date
+    difficulty: string | null
+    completionStatus: string
+    duration: number
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SequenceActivityCountAggregateOutputType | null
+    _avg: SequenceActivityAvgAggregateOutputType | null
+    _sum: SequenceActivitySumAggregateOutputType | null
+    _min: SequenceActivityMinAggregateOutputType | null
+    _max: SequenceActivityMaxAggregateOutputType | null
+  }
+
+  type GetSequenceActivityGroupByPayload<T extends SequenceActivityGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SequenceActivityGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SequenceActivityGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SequenceActivityGroupByOutputType[P]>
+            : GetScalarType<T[P], SequenceActivityGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SequenceActivitySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    sequenceId?: boolean
+    sequenceName?: boolean
+    datePerformed?: boolean
+    difficulty?: boolean
+    completionStatus?: boolean
+    duration?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDataDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["sequenceActivity"]>
+
+
+  export type SequenceActivitySelectScalar = {
+    id?: boolean
+    userId?: boolean
+    sequenceId?: boolean
+    sequenceName?: boolean
+    datePerformed?: boolean
+    difficulty?: boolean
+    completionStatus?: boolean
+    duration?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SequenceActivityInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDataDefaultArgs<ExtArgs>
+  }
+
+  export type $SequenceActivityPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SequenceActivity"
+    objects: {
+      user: Prisma.$UserDataPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      sequenceId: string
+      sequenceName: string
+      datePerformed: Date
+      difficulty: string | null
+      completionStatus: string
+      duration: number
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["sequenceActivity"]>
+    composites: {}
+  }
+
+  type SequenceActivityGetPayload<S extends boolean | null | undefined | SequenceActivityDefaultArgs> = $Result.GetResult<Prisma.$SequenceActivityPayload, S>
+
+  type SequenceActivityCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<SequenceActivityFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: SequenceActivityCountAggregateInputType | true
+    }
+
+  export interface SequenceActivityDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SequenceActivity'], meta: { name: 'SequenceActivity' } }
+    /**
+     * Find zero or one SequenceActivity that matches the filter.
+     * @param {SequenceActivityFindUniqueArgs} args - Arguments to find a SequenceActivity
+     * @example
+     * // Get one SequenceActivity
+     * const sequenceActivity = await prisma.sequenceActivity.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SequenceActivityFindUniqueArgs>(args: SelectSubset<T, SequenceActivityFindUniqueArgs<ExtArgs>>): Prisma__SequenceActivityClient<$Result.GetResult<Prisma.$SequenceActivityPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one SequenceActivity that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {SequenceActivityFindUniqueOrThrowArgs} args - Arguments to find a SequenceActivity
+     * @example
+     * // Get one SequenceActivity
+     * const sequenceActivity = await prisma.sequenceActivity.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SequenceActivityFindUniqueOrThrowArgs>(args: SelectSubset<T, SequenceActivityFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SequenceActivityClient<$Result.GetResult<Prisma.$SequenceActivityPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first SequenceActivity that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceActivityFindFirstArgs} args - Arguments to find a SequenceActivity
+     * @example
+     * // Get one SequenceActivity
+     * const sequenceActivity = await prisma.sequenceActivity.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SequenceActivityFindFirstArgs>(args?: SelectSubset<T, SequenceActivityFindFirstArgs<ExtArgs>>): Prisma__SequenceActivityClient<$Result.GetResult<Prisma.$SequenceActivityPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first SequenceActivity that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceActivityFindFirstOrThrowArgs} args - Arguments to find a SequenceActivity
+     * @example
+     * // Get one SequenceActivity
+     * const sequenceActivity = await prisma.sequenceActivity.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SequenceActivityFindFirstOrThrowArgs>(args?: SelectSubset<T, SequenceActivityFindFirstOrThrowArgs<ExtArgs>>): Prisma__SequenceActivityClient<$Result.GetResult<Prisma.$SequenceActivityPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more SequenceActivities that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceActivityFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SequenceActivities
+     * const sequenceActivities = await prisma.sequenceActivity.findMany()
+     * 
+     * // Get first 10 SequenceActivities
+     * const sequenceActivities = await prisma.sequenceActivity.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const sequenceActivityWithIdOnly = await prisma.sequenceActivity.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SequenceActivityFindManyArgs>(args?: SelectSubset<T, SequenceActivityFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SequenceActivityPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a SequenceActivity.
+     * @param {SequenceActivityCreateArgs} args - Arguments to create a SequenceActivity.
+     * @example
+     * // Create one SequenceActivity
+     * const SequenceActivity = await prisma.sequenceActivity.create({
+     *   data: {
+     *     // ... data to create a SequenceActivity
+     *   }
+     * })
+     * 
+     */
+    create<T extends SequenceActivityCreateArgs>(args: SelectSubset<T, SequenceActivityCreateArgs<ExtArgs>>): Prisma__SequenceActivityClient<$Result.GetResult<Prisma.$SequenceActivityPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many SequenceActivities.
+     * @param {SequenceActivityCreateManyArgs} args - Arguments to create many SequenceActivities.
+     * @example
+     * // Create many SequenceActivities
+     * const sequenceActivity = await prisma.sequenceActivity.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SequenceActivityCreateManyArgs>(args?: SelectSubset<T, SequenceActivityCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a SequenceActivity.
+     * @param {SequenceActivityDeleteArgs} args - Arguments to delete one SequenceActivity.
+     * @example
+     * // Delete one SequenceActivity
+     * const SequenceActivity = await prisma.sequenceActivity.delete({
+     *   where: {
+     *     // ... filter to delete one SequenceActivity
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SequenceActivityDeleteArgs>(args: SelectSubset<T, SequenceActivityDeleteArgs<ExtArgs>>): Prisma__SequenceActivityClient<$Result.GetResult<Prisma.$SequenceActivityPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one SequenceActivity.
+     * @param {SequenceActivityUpdateArgs} args - Arguments to update one SequenceActivity.
+     * @example
+     * // Update one SequenceActivity
+     * const sequenceActivity = await prisma.sequenceActivity.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SequenceActivityUpdateArgs>(args: SelectSubset<T, SequenceActivityUpdateArgs<ExtArgs>>): Prisma__SequenceActivityClient<$Result.GetResult<Prisma.$SequenceActivityPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more SequenceActivities.
+     * @param {SequenceActivityDeleteManyArgs} args - Arguments to filter SequenceActivities to delete.
+     * @example
+     * // Delete a few SequenceActivities
+     * const { count } = await prisma.sequenceActivity.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SequenceActivityDeleteManyArgs>(args?: SelectSubset<T, SequenceActivityDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SequenceActivities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceActivityUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SequenceActivities
+     * const sequenceActivity = await prisma.sequenceActivity.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SequenceActivityUpdateManyArgs>(args: SelectSubset<T, SequenceActivityUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one SequenceActivity.
+     * @param {SequenceActivityUpsertArgs} args - Arguments to update or create a SequenceActivity.
+     * @example
+     * // Update or create a SequenceActivity
+     * const sequenceActivity = await prisma.sequenceActivity.upsert({
+     *   create: {
+     *     // ... data to create a SequenceActivity
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SequenceActivity we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SequenceActivityUpsertArgs>(args: SelectSubset<T, SequenceActivityUpsertArgs<ExtArgs>>): Prisma__SequenceActivityClient<$Result.GetResult<Prisma.$SequenceActivityPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+    /**
+     * Find zero or more SequenceActivities that matches the filter.
+     * @param {SequenceActivityFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const sequenceActivity = await prisma.sequenceActivity.findRaw({
+     *   filter: { age: { $gt: 25 } } 
+     * })
+     */
+    findRaw(args?: SequenceActivityFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a SequenceActivity.
+     * @param {SequenceActivityAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const sequenceActivity = await prisma.sequenceActivity.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: SequenceActivityAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of SequenceActivities.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceActivityCountArgs} args - Arguments to filter SequenceActivities to count.
+     * @example
+     * // Count the number of SequenceActivities
+     * const count = await prisma.sequenceActivity.count({
+     *   where: {
+     *     // ... the filter for the SequenceActivities we want to count
+     *   }
+     * })
+    **/
+    count<T extends SequenceActivityCountArgs>(
+      args?: Subset<T, SequenceActivityCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SequenceActivityCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SequenceActivity.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceActivityAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SequenceActivityAggregateArgs>(args: Subset<T, SequenceActivityAggregateArgs>): Prisma.PrismaPromise<GetSequenceActivityAggregateType<T>>
+
+    /**
+     * Group by SequenceActivity.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SequenceActivityGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SequenceActivityGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SequenceActivityGroupByArgs['orderBy'] }
+        : { orderBy?: SequenceActivityGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SequenceActivityGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSequenceActivityGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SequenceActivity model
+   */
+  readonly fields: SequenceActivityFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SequenceActivity.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SequenceActivityClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDataDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDataDefaultArgs<ExtArgs>>): Prisma__UserDataClient<$Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SequenceActivity model
+   */ 
+  interface SequenceActivityFieldRefs {
+    readonly id: FieldRef<"SequenceActivity", 'String'>
+    readonly userId: FieldRef<"SequenceActivity", 'String'>
+    readonly sequenceId: FieldRef<"SequenceActivity", 'String'>
+    readonly sequenceName: FieldRef<"SequenceActivity", 'String'>
+    readonly datePerformed: FieldRef<"SequenceActivity", 'DateTime'>
+    readonly difficulty: FieldRef<"SequenceActivity", 'String'>
+    readonly completionStatus: FieldRef<"SequenceActivity", 'String'>
+    readonly duration: FieldRef<"SequenceActivity", 'Int'>
+    readonly notes: FieldRef<"SequenceActivity", 'String'>
+    readonly createdAt: FieldRef<"SequenceActivity", 'DateTime'>
+    readonly updatedAt: FieldRef<"SequenceActivity", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SequenceActivity findUnique
+   */
+  export type SequenceActivityFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceActivity
+     */
+    select?: SequenceActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which SequenceActivity to fetch.
+     */
+    where: SequenceActivityWhereUniqueInput
+  }
+
+  /**
+   * SequenceActivity findUniqueOrThrow
+   */
+  export type SequenceActivityFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceActivity
+     */
+    select?: SequenceActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which SequenceActivity to fetch.
+     */
+    where: SequenceActivityWhereUniqueInput
+  }
+
+  /**
+   * SequenceActivity findFirst
+   */
+  export type SequenceActivityFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceActivity
+     */
+    select?: SequenceActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which SequenceActivity to fetch.
+     */
+    where?: SequenceActivityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SequenceActivities to fetch.
+     */
+    orderBy?: SequenceActivityOrderByWithRelationInput | SequenceActivityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SequenceActivities.
+     */
+    cursor?: SequenceActivityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SequenceActivities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SequenceActivities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SequenceActivities.
+     */
+    distinct?: SequenceActivityScalarFieldEnum | SequenceActivityScalarFieldEnum[]
+  }
+
+  /**
+   * SequenceActivity findFirstOrThrow
+   */
+  export type SequenceActivityFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceActivity
+     */
+    select?: SequenceActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which SequenceActivity to fetch.
+     */
+    where?: SequenceActivityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SequenceActivities to fetch.
+     */
+    orderBy?: SequenceActivityOrderByWithRelationInput | SequenceActivityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SequenceActivities.
+     */
+    cursor?: SequenceActivityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SequenceActivities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SequenceActivities.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SequenceActivities.
+     */
+    distinct?: SequenceActivityScalarFieldEnum | SequenceActivityScalarFieldEnum[]
+  }
+
+  /**
+   * SequenceActivity findMany
+   */
+  export type SequenceActivityFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceActivity
+     */
+    select?: SequenceActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceActivityInclude<ExtArgs> | null
+    /**
+     * Filter, which SequenceActivities to fetch.
+     */
+    where?: SequenceActivityWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SequenceActivities to fetch.
+     */
+    orderBy?: SequenceActivityOrderByWithRelationInput | SequenceActivityOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SequenceActivities.
+     */
+    cursor?: SequenceActivityWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SequenceActivities from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SequenceActivities.
+     */
+    skip?: number
+    distinct?: SequenceActivityScalarFieldEnum | SequenceActivityScalarFieldEnum[]
+  }
+
+  /**
+   * SequenceActivity create
+   */
+  export type SequenceActivityCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceActivity
+     */
+    select?: SequenceActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceActivityInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SequenceActivity.
+     */
+    data: XOR<SequenceActivityCreateInput, SequenceActivityUncheckedCreateInput>
+  }
+
+  /**
+   * SequenceActivity createMany
+   */
+  export type SequenceActivityCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SequenceActivities.
+     */
+    data: SequenceActivityCreateManyInput | SequenceActivityCreateManyInput[]
+  }
+
+  /**
+   * SequenceActivity update
+   */
+  export type SequenceActivityUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceActivity
+     */
+    select?: SequenceActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceActivityInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SequenceActivity.
+     */
+    data: XOR<SequenceActivityUpdateInput, SequenceActivityUncheckedUpdateInput>
+    /**
+     * Choose, which SequenceActivity to update.
+     */
+    where: SequenceActivityWhereUniqueInput
+  }
+
+  /**
+   * SequenceActivity updateMany
+   */
+  export type SequenceActivityUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SequenceActivities.
+     */
+    data: XOR<SequenceActivityUpdateManyMutationInput, SequenceActivityUncheckedUpdateManyInput>
+    /**
+     * Filter which SequenceActivities to update
+     */
+    where?: SequenceActivityWhereInput
+  }
+
+  /**
+   * SequenceActivity upsert
+   */
+  export type SequenceActivityUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceActivity
+     */
+    select?: SequenceActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceActivityInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SequenceActivity to update in case it exists.
+     */
+    where: SequenceActivityWhereUniqueInput
+    /**
+     * In case the SequenceActivity found by the `where` argument doesn't exist, create a new SequenceActivity with this data.
+     */
+    create: XOR<SequenceActivityCreateInput, SequenceActivityUncheckedCreateInput>
+    /**
+     * In case the SequenceActivity was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SequenceActivityUpdateInput, SequenceActivityUncheckedUpdateInput>
+  }
+
+  /**
+   * SequenceActivity delete
+   */
+  export type SequenceActivityDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceActivity
+     */
+    select?: SequenceActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceActivityInclude<ExtArgs> | null
+    /**
+     * Filter which SequenceActivity to delete.
+     */
+    where: SequenceActivityWhereUniqueInput
+  }
+
+  /**
+   * SequenceActivity deleteMany
+   */
+  export type SequenceActivityDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SequenceActivities to delete
+     */
+    where?: SequenceActivityWhereInput
+  }
+
+  /**
+   * SequenceActivity findRaw
+   */
+  export type SequenceActivityFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * SequenceActivity aggregateRaw
+   */
+  export type SequenceActivityAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * SequenceActivity without action
+   */
+  export type SequenceActivityDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SequenceActivity
+     */
+    select?: SequenceActivitySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SequenceActivityInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model UserLogin
    */
 
@@ -11384,6 +12536,23 @@ export namespace Prisma {
   export type SeriesActivityScalarFieldEnum = (typeof SeriesActivityScalarFieldEnum)[keyof typeof SeriesActivityScalarFieldEnum]
 
 
+  export const SequenceActivityScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    sequenceId: 'sequenceId',
+    sequenceName: 'sequenceName',
+    datePerformed: 'datePerformed',
+    difficulty: 'difficulty',
+    completionStatus: 'completionStatus',
+    duration: 'duration',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SequenceActivityScalarFieldEnum = (typeof SequenceActivityScalarFieldEnum)[keyof typeof SequenceActivityScalarFieldEnum]
+
+
   export const UserLoginScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -11563,6 +12732,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountListRelationFilter
     asanaActivities?: AsanaActivityListRelationFilter
     seriesActivities?: SeriesActivityListRelationFilter
+    sequenceActivities?: SequenceActivityListRelationFilter
     userLogins?: UserLoginListRelationFilter
     poseImages?: PoseImageListRelationFilter
   }
@@ -11594,6 +12764,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountOrderByRelationAggregateInput
     asanaActivities?: AsanaActivityOrderByRelationAggregateInput
     seriesActivities?: SeriesActivityOrderByRelationAggregateInput
+    sequenceActivities?: SequenceActivityOrderByRelationAggregateInput
     userLogins?: UserLoginOrderByRelationAggregateInput
     poseImages?: PoseImageOrderByRelationAggregateInput
   }
@@ -11628,6 +12799,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountListRelationFilter
     asanaActivities?: AsanaActivityListRelationFilter
     seriesActivities?: SeriesActivityListRelationFilter
+    sequenceActivities?: SequenceActivityListRelationFilter
     userLogins?: UserLoginListRelationFilter
     poseImages?: PoseImageListRelationFilter
   }, "id" | "provider_id" | "email">
@@ -12331,6 +13503,93 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"SeriesActivity"> | Date | string
   }
 
+  export type SequenceActivityWhereInput = {
+    AND?: SequenceActivityWhereInput | SequenceActivityWhereInput[]
+    OR?: SequenceActivityWhereInput[]
+    NOT?: SequenceActivityWhereInput | SequenceActivityWhereInput[]
+    id?: StringFilter<"SequenceActivity"> | string
+    userId?: StringFilter<"SequenceActivity"> | string
+    sequenceId?: StringFilter<"SequenceActivity"> | string
+    sequenceName?: StringFilter<"SequenceActivity"> | string
+    datePerformed?: DateTimeFilter<"SequenceActivity"> | Date | string
+    difficulty?: StringNullableFilter<"SequenceActivity"> | string | null
+    completionStatus?: StringFilter<"SequenceActivity"> | string
+    duration?: IntFilter<"SequenceActivity"> | number
+    notes?: StringNullableFilter<"SequenceActivity"> | string | null
+    createdAt?: DateTimeFilter<"SequenceActivity"> | Date | string
+    updatedAt?: DateTimeFilter<"SequenceActivity"> | Date | string
+    user?: XOR<UserDataRelationFilter, UserDataWhereInput>
+  }
+
+  export type SequenceActivityOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sequenceId?: SortOrder
+    sequenceName?: SortOrder
+    datePerformed?: SortOrder
+    difficulty?: SortOrder
+    completionStatus?: SortOrder
+    duration?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserDataOrderByWithRelationInput
+  }
+
+  export type SequenceActivityWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SequenceActivityWhereInput | SequenceActivityWhereInput[]
+    OR?: SequenceActivityWhereInput[]
+    NOT?: SequenceActivityWhereInput | SequenceActivityWhereInput[]
+    userId?: StringFilter<"SequenceActivity"> | string
+    sequenceId?: StringFilter<"SequenceActivity"> | string
+    sequenceName?: StringFilter<"SequenceActivity"> | string
+    datePerformed?: DateTimeFilter<"SequenceActivity"> | Date | string
+    difficulty?: StringNullableFilter<"SequenceActivity"> | string | null
+    completionStatus?: StringFilter<"SequenceActivity"> | string
+    duration?: IntFilter<"SequenceActivity"> | number
+    notes?: StringNullableFilter<"SequenceActivity"> | string | null
+    createdAt?: DateTimeFilter<"SequenceActivity"> | Date | string
+    updatedAt?: DateTimeFilter<"SequenceActivity"> | Date | string
+    user?: XOR<UserDataRelationFilter, UserDataWhereInput>
+  }, "id">
+
+  export type SequenceActivityOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sequenceId?: SortOrder
+    sequenceName?: SortOrder
+    datePerformed?: SortOrder
+    difficulty?: SortOrder
+    completionStatus?: SortOrder
+    duration?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SequenceActivityCountOrderByAggregateInput
+    _avg?: SequenceActivityAvgOrderByAggregateInput
+    _max?: SequenceActivityMaxOrderByAggregateInput
+    _min?: SequenceActivityMinOrderByAggregateInput
+    _sum?: SequenceActivitySumOrderByAggregateInput
+  }
+
+  export type SequenceActivityScalarWhereWithAggregatesInput = {
+    AND?: SequenceActivityScalarWhereWithAggregatesInput | SequenceActivityScalarWhereWithAggregatesInput[]
+    OR?: SequenceActivityScalarWhereWithAggregatesInput[]
+    NOT?: SequenceActivityScalarWhereWithAggregatesInput | SequenceActivityScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SequenceActivity"> | string
+    userId?: StringWithAggregatesFilter<"SequenceActivity"> | string
+    sequenceId?: StringWithAggregatesFilter<"SequenceActivity"> | string
+    sequenceName?: StringWithAggregatesFilter<"SequenceActivity"> | string
+    datePerformed?: DateTimeWithAggregatesFilter<"SequenceActivity"> | Date | string
+    difficulty?: StringNullableWithAggregatesFilter<"SequenceActivity"> | string | null
+    completionStatus?: StringWithAggregatesFilter<"SequenceActivity"> | string
+    duration?: IntWithAggregatesFilter<"SequenceActivity"> | number
+    notes?: StringNullableWithAggregatesFilter<"SequenceActivity"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SequenceActivity"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SequenceActivity"> | Date | string
+  }
+
   export type UserLoginWhereInput = {
     AND?: UserLoginWhereInput | UserLoginWhereInput[]
     OR?: UserLoginWhereInput[]
@@ -12533,6 +13792,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
   }
@@ -12564,6 +13824,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
   }
@@ -12594,6 +13855,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
   }
@@ -12624,6 +13886,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -13447,6 +14710,99 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SequenceActivityCreateInput = {
+    id?: string
+    sequenceId: string
+    sequenceName: string
+    datePerformed: Date | string
+    difficulty?: string | null
+    completionStatus?: string
+    duration?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserDataCreateNestedOneWithoutSequenceActivitiesInput
+  }
+
+  export type SequenceActivityUncheckedCreateInput = {
+    id?: string
+    userId: string
+    sequenceId: string
+    sequenceName: string
+    datePerformed: Date | string
+    difficulty?: string | null
+    completionStatus?: string
+    duration?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SequenceActivityUpdateInput = {
+    sequenceId?: StringFieldUpdateOperationsInput | string
+    sequenceName?: StringFieldUpdateOperationsInput | string
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserDataUpdateOneRequiredWithoutSequenceActivitiesNestedInput
+  }
+
+  export type SequenceActivityUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    sequenceId?: StringFieldUpdateOperationsInput | string
+    sequenceName?: StringFieldUpdateOperationsInput | string
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SequenceActivityCreateManyInput = {
+    id?: string
+    userId: string
+    sequenceId: string
+    sequenceName: string
+    datePerformed: Date | string
+    difficulty?: string | null
+    completionStatus?: string
+    duration?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SequenceActivityUpdateManyMutationInput = {
+    sequenceId?: StringFieldUpdateOperationsInput | string
+    sequenceName?: StringFieldUpdateOperationsInput | string
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SequenceActivityUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    sequenceId?: StringFieldUpdateOperationsInput | string
+    sequenceName?: StringFieldUpdateOperationsInput | string
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserLoginCreateInput = {
     id?: string
     loginDate?: Date | string
@@ -13716,6 +15072,12 @@ export namespace Prisma {
     none?: SeriesActivityWhereInput
   }
 
+  export type SequenceActivityListRelationFilter = {
+    every?: SequenceActivityWhereInput
+    some?: SequenceActivityWhereInput
+    none?: SequenceActivityWhereInput
+  }
+
   export type UserLoginListRelationFilter = {
     every?: UserLoginWhereInput
     some?: UserLoginWhereInput
@@ -13737,6 +15099,10 @@ export namespace Prisma {
   }
 
   export type SeriesActivityOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SequenceActivityOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14337,6 +15703,56 @@ export namespace Prisma {
     duration?: SortOrder
   }
 
+  export type SequenceActivityCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sequenceId?: SortOrder
+    sequenceName?: SortOrder
+    datePerformed?: SortOrder
+    difficulty?: SortOrder
+    completionStatus?: SortOrder
+    duration?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SequenceActivityAvgOrderByAggregateInput = {
+    duration?: SortOrder
+  }
+
+  export type SequenceActivityMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sequenceId?: SortOrder
+    sequenceName?: SortOrder
+    datePerformed?: SortOrder
+    difficulty?: SortOrder
+    completionStatus?: SortOrder
+    duration?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SequenceActivityMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sequenceId?: SortOrder
+    sequenceName?: SortOrder
+    datePerformed?: SortOrder
+    difficulty?: SortOrder
+    completionStatus?: SortOrder
+    duration?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SequenceActivitySumOrderByAggregateInput = {
+    duration?: SortOrder
+  }
+
   export type UserLoginCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -14485,6 +15901,13 @@ export namespace Prisma {
     connect?: SeriesActivityWhereUniqueInput | SeriesActivityWhereUniqueInput[]
   }
 
+  export type SequenceActivityCreateNestedManyWithoutUserInput = {
+    create?: XOR<SequenceActivityCreateWithoutUserInput, SequenceActivityUncheckedCreateWithoutUserInput> | SequenceActivityCreateWithoutUserInput[] | SequenceActivityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SequenceActivityCreateOrConnectWithoutUserInput | SequenceActivityCreateOrConnectWithoutUserInput[]
+    createMany?: SequenceActivityCreateManyUserInputEnvelope
+    connect?: SequenceActivityWhereUniqueInput | SequenceActivityWhereUniqueInput[]
+  }
+
   export type UserLoginCreateNestedManyWithoutUserInput = {
     create?: XOR<UserLoginCreateWithoutUserInput, UserLoginUncheckedCreateWithoutUserInput> | UserLoginCreateWithoutUserInput[] | UserLoginUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserLoginCreateOrConnectWithoutUserInput | UserLoginCreateOrConnectWithoutUserInput[]
@@ -14518,6 +15941,13 @@ export namespace Prisma {
     connectOrCreate?: SeriesActivityCreateOrConnectWithoutUserInput | SeriesActivityCreateOrConnectWithoutUserInput[]
     createMany?: SeriesActivityCreateManyUserInputEnvelope
     connect?: SeriesActivityWhereUniqueInput | SeriesActivityWhereUniqueInput[]
+  }
+
+  export type SequenceActivityUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SequenceActivityCreateWithoutUserInput, SequenceActivityUncheckedCreateWithoutUserInput> | SequenceActivityCreateWithoutUserInput[] | SequenceActivityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SequenceActivityCreateOrConnectWithoutUserInput | SequenceActivityCreateOrConnectWithoutUserInput[]
+    createMany?: SequenceActivityCreateManyUserInputEnvelope
+    connect?: SequenceActivityWhereUniqueInput | SequenceActivityWhereUniqueInput[]
   }
 
   export type UserLoginUncheckedCreateNestedManyWithoutUserInput = {
@@ -14594,6 +16024,20 @@ export namespace Prisma {
     deleteMany?: SeriesActivityScalarWhereInput | SeriesActivityScalarWhereInput[]
   }
 
+  export type SequenceActivityUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SequenceActivityCreateWithoutUserInput, SequenceActivityUncheckedCreateWithoutUserInput> | SequenceActivityCreateWithoutUserInput[] | SequenceActivityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SequenceActivityCreateOrConnectWithoutUserInput | SequenceActivityCreateOrConnectWithoutUserInput[]
+    upsert?: SequenceActivityUpsertWithWhereUniqueWithoutUserInput | SequenceActivityUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SequenceActivityCreateManyUserInputEnvelope
+    set?: SequenceActivityWhereUniqueInput | SequenceActivityWhereUniqueInput[]
+    disconnect?: SequenceActivityWhereUniqueInput | SequenceActivityWhereUniqueInput[]
+    delete?: SequenceActivityWhereUniqueInput | SequenceActivityWhereUniqueInput[]
+    connect?: SequenceActivityWhereUniqueInput | SequenceActivityWhereUniqueInput[]
+    update?: SequenceActivityUpdateWithWhereUniqueWithoutUserInput | SequenceActivityUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SequenceActivityUpdateManyWithWhereWithoutUserInput | SequenceActivityUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SequenceActivityScalarWhereInput | SequenceActivityScalarWhereInput[]
+  }
+
   export type UserLoginUpdateManyWithoutUserNestedInput = {
     create?: XOR<UserLoginCreateWithoutUserInput, UserLoginUncheckedCreateWithoutUserInput> | UserLoginCreateWithoutUserInput[] | UserLoginUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserLoginCreateOrConnectWithoutUserInput | UserLoginCreateOrConnectWithoutUserInput[]
@@ -14662,6 +16106,20 @@ export namespace Prisma {
     update?: SeriesActivityUpdateWithWhereUniqueWithoutUserInput | SeriesActivityUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SeriesActivityUpdateManyWithWhereWithoutUserInput | SeriesActivityUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SeriesActivityScalarWhereInput | SeriesActivityScalarWhereInput[]
+  }
+
+  export type SequenceActivityUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SequenceActivityCreateWithoutUserInput, SequenceActivityUncheckedCreateWithoutUserInput> | SequenceActivityCreateWithoutUserInput[] | SequenceActivityUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SequenceActivityCreateOrConnectWithoutUserInput | SequenceActivityCreateOrConnectWithoutUserInput[]
+    upsert?: SequenceActivityUpsertWithWhereUniqueWithoutUserInput | SequenceActivityUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SequenceActivityCreateManyUserInputEnvelope
+    set?: SequenceActivityWhereUniqueInput | SequenceActivityWhereUniqueInput[]
+    disconnect?: SequenceActivityWhereUniqueInput | SequenceActivityWhereUniqueInput[]
+    delete?: SequenceActivityWhereUniqueInput | SequenceActivityWhereUniqueInput[]
+    connect?: SequenceActivityWhereUniqueInput | SequenceActivityWhereUniqueInput[]
+    update?: SequenceActivityUpdateWithWhereUniqueWithoutUserInput | SequenceActivityUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SequenceActivityUpdateManyWithWhereWithoutUserInput | SequenceActivityUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SequenceActivityScalarWhereInput | SequenceActivityScalarWhereInput[]
   }
 
   export type UserLoginUncheckedUpdateManyWithoutUserNestedInput = {
@@ -14933,6 +16391,20 @@ export namespace Prisma {
     upsert?: UserDataUpsertWithoutSeriesActivitiesInput
     connect?: UserDataWhereUniqueInput
     update?: XOR<XOR<UserDataUpdateToOneWithWhereWithoutSeriesActivitiesInput, UserDataUpdateWithoutSeriesActivitiesInput>, UserDataUncheckedUpdateWithoutSeriesActivitiesInput>
+  }
+
+  export type UserDataCreateNestedOneWithoutSequenceActivitiesInput = {
+    create?: XOR<UserDataCreateWithoutSequenceActivitiesInput, UserDataUncheckedCreateWithoutSequenceActivitiesInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutSequenceActivitiesInput
+    connect?: UserDataWhereUniqueInput
+  }
+
+  export type UserDataUpdateOneRequiredWithoutSequenceActivitiesNestedInput = {
+    create?: XOR<UserDataCreateWithoutSequenceActivitiesInput, UserDataUncheckedCreateWithoutSequenceActivitiesInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutSequenceActivitiesInput
+    upsert?: UserDataUpsertWithoutSequenceActivitiesInput
+    connect?: UserDataWhereUniqueInput
+    update?: XOR<XOR<UserDataUpdateToOneWithWhereWithoutSequenceActivitiesInput, UserDataUpdateWithoutSequenceActivitiesInput>, UserDataUncheckedUpdateWithoutSequenceActivitiesInput>
   }
 
   export type UserDataCreateNestedOneWithoutUserLoginsInput = {
@@ -15356,6 +16828,41 @@ export namespace Prisma {
     data: SeriesActivityCreateManyUserInput | SeriesActivityCreateManyUserInput[]
   }
 
+  export type SequenceActivityCreateWithoutUserInput = {
+    id?: string
+    sequenceId: string
+    sequenceName: string
+    datePerformed: Date | string
+    difficulty?: string | null
+    completionStatus?: string
+    duration?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SequenceActivityUncheckedCreateWithoutUserInput = {
+    id?: string
+    sequenceId: string
+    sequenceName: string
+    datePerformed: Date | string
+    difficulty?: string | null
+    completionStatus?: string
+    duration?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SequenceActivityCreateOrConnectWithoutUserInput = {
+    where: SequenceActivityWhereUniqueInput
+    create: XOR<SequenceActivityCreateWithoutUserInput, SequenceActivityUncheckedCreateWithoutUserInput>
+  }
+
+  export type SequenceActivityCreateManyUserInputEnvelope = {
+    data: SequenceActivityCreateManyUserInput | SequenceActivityCreateManyUserInput[]
+  }
+
   export type UserLoginCreateWithoutUserInput = {
     id?: string
     loginDate?: Date | string
@@ -15531,6 +17038,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"SeriesActivity"> | Date | string
   }
 
+  export type SequenceActivityUpsertWithWhereUniqueWithoutUserInput = {
+    where: SequenceActivityWhereUniqueInput
+    update: XOR<SequenceActivityUpdateWithoutUserInput, SequenceActivityUncheckedUpdateWithoutUserInput>
+    create: XOR<SequenceActivityCreateWithoutUserInput, SequenceActivityUncheckedCreateWithoutUserInput>
+  }
+
+  export type SequenceActivityUpdateWithWhereUniqueWithoutUserInput = {
+    where: SequenceActivityWhereUniqueInput
+    data: XOR<SequenceActivityUpdateWithoutUserInput, SequenceActivityUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SequenceActivityUpdateManyWithWhereWithoutUserInput = {
+    where: SequenceActivityScalarWhereInput
+    data: XOR<SequenceActivityUpdateManyMutationInput, SequenceActivityUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SequenceActivityScalarWhereInput = {
+    AND?: SequenceActivityScalarWhereInput | SequenceActivityScalarWhereInput[]
+    OR?: SequenceActivityScalarWhereInput[]
+    NOT?: SequenceActivityScalarWhereInput | SequenceActivityScalarWhereInput[]
+    id?: StringFilter<"SequenceActivity"> | string
+    userId?: StringFilter<"SequenceActivity"> | string
+    sequenceId?: StringFilter<"SequenceActivity"> | string
+    sequenceName?: StringFilter<"SequenceActivity"> | string
+    datePerformed?: DateTimeFilter<"SequenceActivity"> | Date | string
+    difficulty?: StringNullableFilter<"SequenceActivity"> | string | null
+    completionStatus?: StringFilter<"SequenceActivity"> | string
+    duration?: IntFilter<"SequenceActivity"> | number
+    notes?: StringNullableFilter<"SequenceActivity"> | string | null
+    createdAt?: DateTimeFilter<"SequenceActivity"> | Date | string
+    updatedAt?: DateTimeFilter<"SequenceActivity"> | Date | string
+  }
+
   export type UserLoginUpsertWithWhereUniqueWithoutUserInput = {
     where: UserLoginWhereUniqueInput
     update: XOR<UserLoginUpdateWithoutUserInput, UserLoginUncheckedUpdateWithoutUserInput>
@@ -15623,6 +17163,7 @@ export namespace Prisma {
     role?: string | null
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
   }
@@ -15653,6 +17194,7 @@ export namespace Prisma {
     role?: string | null
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
   }
@@ -15698,6 +17240,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
   }
@@ -15727,6 +17270,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -15871,6 +17415,7 @@ export namespace Prisma {
     role?: string | null
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
   }
@@ -15901,6 +17446,7 @@ export namespace Prisma {
     role?: string | null
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
   }
@@ -16027,6 +17573,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
   }
@@ -16056,6 +17603,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -16171,6 +17719,7 @@ export namespace Prisma {
     role?: string | null
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
   }
@@ -16201,6 +17750,7 @@ export namespace Prisma {
     role?: string | null
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
   }
@@ -16246,6 +17796,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
   }
@@ -16275,6 +17826,145 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
+    poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserDataCreateWithoutSequenceActivitiesInput = {
+    id?: string
+    provider_id?: string | null
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    pronouns?: string | null
+    profile?: InputJsonValue | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    firstName: string
+    lastName: string
+    bio: string
+    headline: string
+    location: string
+    websiteURL: string
+    shareQuick?: string | null
+    yogaStyle?: string | null
+    yogaExperience?: string | null
+    company?: string | null
+    socialURL?: string | null
+    isLocationPublic?: string | null
+    role?: string | null
+    providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
+    asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
+    seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginCreateNestedManyWithoutUserInput
+    poseImages?: PoseImageCreateNestedManyWithoutUserInput
+  }
+
+  export type UserDataUncheckedCreateWithoutSequenceActivitiesInput = {
+    id?: string
+    provider_id?: string | null
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    pronouns?: string | null
+    profile?: InputJsonValue | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    firstName: string
+    lastName: string
+    bio: string
+    headline: string
+    location: string
+    websiteURL: string
+    shareQuick?: string | null
+    yogaStyle?: string | null
+    yogaExperience?: string | null
+    company?: string | null
+    socialURL?: string | null
+    isLocationPublic?: string | null
+    role?: string | null
+    providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
+    asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
+    seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
+    poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserDataCreateOrConnectWithoutSequenceActivitiesInput = {
+    where: UserDataWhereUniqueInput
+    create: XOR<UserDataCreateWithoutSequenceActivitiesInput, UserDataUncheckedCreateWithoutSequenceActivitiesInput>
+  }
+
+  export type UserDataUpsertWithoutSequenceActivitiesInput = {
+    update: XOR<UserDataUpdateWithoutSequenceActivitiesInput, UserDataUncheckedUpdateWithoutSequenceActivitiesInput>
+    create: XOR<UserDataCreateWithoutSequenceActivitiesInput, UserDataUncheckedCreateWithoutSequenceActivitiesInput>
+    where?: UserDataWhereInput
+  }
+
+  export type UserDataUpdateToOneWithWhereWithoutSequenceActivitiesInput = {
+    where?: UserDataWhereInput
+    data: XOR<UserDataUpdateWithoutSequenceActivitiesInput, UserDataUncheckedUpdateWithoutSequenceActivitiesInput>
+  }
+
+  export type UserDataUpdateWithoutSequenceActivitiesInput = {
+    provider_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
+    profile?: InputJsonValue | InputJsonValue | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    shareQuick?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaStyle?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    socialURL?: NullableStringFieldUpdateOperationsInput | string | null
+    isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
+    asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
+    seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUpdateManyWithoutUserNestedInput
+    poseImages?: PoseImageUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserDataUncheckedUpdateWithoutSequenceActivitiesInput = {
+    provider_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
+    profile?: InputJsonValue | InputJsonValue | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    shareQuick?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaStyle?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    socialURL?: NullableStringFieldUpdateOperationsInput | string | null
+    isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
+    asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
+    seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -16306,6 +17996,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
   }
 
@@ -16336,6 +18027,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -16381,6 +18073,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
   }
 
@@ -16410,6 +18103,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -16440,6 +18134,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
   }
 
@@ -16470,6 +18165,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -16596,6 +18292,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
   }
 
@@ -16625,6 +18322,7 @@ export namespace Prisma {
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -16749,6 +18447,19 @@ export namespace Prisma {
     id?: string
     seriesId: string
     seriesName: string
+    datePerformed: Date | string
+    difficulty?: string | null
+    completionStatus?: string
+    duration?: number
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SequenceActivityCreateManyUserInput = {
+    id?: string
+    sequenceId: string
+    sequenceName: string
     datePerformed: Date | string
     difficulty?: string | null
     completionStatus?: string
@@ -16901,6 +18612,42 @@ export namespace Prisma {
   export type SeriesActivityUncheckedUpdateManyWithoutUserInput = {
     seriesId?: StringFieldUpdateOperationsInput | string
     seriesName?: StringFieldUpdateOperationsInput | string
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SequenceActivityUpdateWithoutUserInput = {
+    sequenceId?: StringFieldUpdateOperationsInput | string
+    sequenceName?: StringFieldUpdateOperationsInput | string
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SequenceActivityUncheckedUpdateWithoutUserInput = {
+    sequenceId?: StringFieldUpdateOperationsInput | string
+    sequenceName?: StringFieldUpdateOperationsInput | string
+    datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
+    difficulty?: NullableStringFieldUpdateOperationsInput | string | null
+    completionStatus?: StringFieldUpdateOperationsInput | string
+    duration?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SequenceActivityUncheckedUpdateManyWithoutUserInput = {
+    sequenceId?: StringFieldUpdateOperationsInput | string
+    sequenceName?: StringFieldUpdateOperationsInput | string
     datePerformed?: DateTimeFieldUpdateOperationsInput | Date | string
     difficulty?: NullableStringFieldUpdateOperationsInput | string | null
     completionStatus?: StringFieldUpdateOperationsInput | string
@@ -17145,6 +18892,10 @@ export namespace Prisma {
      * @deprecated Use SeriesActivityDefaultArgs instead
      */
     export type SeriesActivityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SeriesActivityDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use SequenceActivityDefaultArgs instead
+     */
+    export type SequenceActivityArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SequenceActivityDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserLoginDefaultArgs instead
      */

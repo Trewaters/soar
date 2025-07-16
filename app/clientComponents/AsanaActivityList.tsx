@@ -6,6 +6,7 @@ import {
   type AsanaActivityData,
 } from '@lib/asanaActivityClientService'
 import { getUserSeriesActivities } from '@lib/seriesActivityClientService'
+import { getUserSequenceActivities } from '@lib/sequenceActivityClientService'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 import Link from 'next/link'
 
@@ -24,6 +25,20 @@ type CombinedActivity =
       createdAt: string
       updatedAt: string
       type: 'series'
+    }
+  | {
+      id: string
+      userId: string
+      sequenceId: string
+      sequenceName: string
+      datePerformed: string
+      difficulty?: string
+      completionStatus: string
+      duration: number
+      notes?: string
+      createdAt: string
+      updatedAt: string
+      type: 'sequence'
     }
 
 export default function AsanaActivityList() {
@@ -63,9 +78,10 @@ export default function AsanaActivityList() {
       setLoading(true)
       setError(null)
       try {
-        const [asanaData, seriesData] = await Promise.all([
+        const [asanaData, seriesData, sequenceData] = await Promise.all([
           getUserActivities(session.user.id),
           getUserSeriesActivities(session.user.id),
+          getUserSequenceActivities(session.user.id),
         ])
         // Transform data to CombinedActivity with type property
         const combinedData: CombinedActivity[] = [
@@ -76,6 +92,10 @@ export default function AsanaActivityList() {
           ...seriesData.map((activity) => ({
             ...activity,
             type: 'series' as const,
+          })),
+          ...sequenceData.map((activity) => ({
+            ...activity,
+            type: 'sequence' as const,
           })),
         ]
         // Sort by datePerformed descending
@@ -145,6 +165,14 @@ export default function AsanaActivityList() {
                   >
                     <Typography variant="body1">
                       Series: {activity.seriesName}
+                    </Typography>
+                  </Link>
+                ) : activity.type === 'sequence' ? (
+                  <Link
+                    href={`/navigator/flows/practiceSequences?sequenceId=${activity.sequenceId}`}
+                  >
+                    <Typography variant="body1">
+                      Sequence: {activity.sequenceName}
                     </Typography>
                   </Link>
                 ) : (
