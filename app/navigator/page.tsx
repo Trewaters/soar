@@ -30,7 +30,7 @@ export default function Page() {
         textAlign="center"
         sx={{
           marginTop: 4,
-          width: '50%',
+          width: { xs: '100%', sm: 'auto', md: '60%' },
           justifyContent: 'center',
           mx: 'auto',
         }}

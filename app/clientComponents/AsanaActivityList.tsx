@@ -120,10 +120,18 @@ export default function AsanaActivityList() {
   if (!activities.length) return <Typography>No activity found.</Typography>
 
   return (
-    <Box sx={{ borderRadius: 2, boxShadow: '0px 4px 4px 0px #F6893D' }}>
+    <Box
+      sx={{
+        borderRadius: 2,
+        boxShadow: '0px 4px 4px 0px #F6893D',
+        width: '100%',
+        maxWidth: '100%',
+        overflow: 'hidden',
+      }}
+    >
       <Typography
         variant="body1"
-        sx={{ mb: 2 }}
+        sx={{ mb: 2, px: 2 }}
         textAlign="center"
         fontWeight={600}
       >
@@ -135,6 +143,8 @@ export default function AsanaActivityList() {
             key={activity.id}
             divider
             sx={{
+              width: '100%',
+              boxSizing: 'border-box',
               '&:not(:last-child)::after': {
                 content: '""',
                 position: 'absolute',
@@ -156,14 +166,23 @@ export default function AsanaActivityList() {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 width: '100%',
+                minWidth: 0, // Allow shrinking
+                gap: 1,
               }}
             >
-              <Stack spacing={0.5}>
+              <Stack spacing={0.5} sx={{ flex: 1, minWidth: 0 }}>
                 {activity.type === 'series' ? (
                   <Link
                     href={`/navigator/flows/practiceSeries?id=${activity.seriesId}`}
                   >
-                    <Typography variant="body1">
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
                       Series: {activity.seriesName}
                     </Typography>
                   </Link>
@@ -171,7 +190,14 @@ export default function AsanaActivityList() {
                   <Link
                     href={`/navigator/flows/practiceSequences?sequenceId=${activity.sequenceId}`}
                   >
-                    <Typography variant="body1">
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
                       Sequence: {activity.sequenceName}
                     </Typography>
                   </Link>
@@ -182,7 +208,14 @@ export default function AsanaActivityList() {
                       encodeURIComponent(activity.postureName)
                     }`}
                   >
-                    <Typography variant="body1">
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
                       {activity.postureName}
                     </Typography>
                   </Link>
@@ -197,9 +230,18 @@ export default function AsanaActivityList() {
                   )}
                 </Typography>
               </Stack>
-              <Stack direction="row" spacing={1} alignItems="center">
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                sx={{ flexShrink: 0 }}
+              >
                 {activity.difficulty && (
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ whiteSpace: 'nowrap' }}
+                  >
                     {activity.difficulty}
                   </Typography>
                 )}
