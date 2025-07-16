@@ -877,6 +877,38 @@ export default function PostureActivityDetail({
       )}
 
       {/* Edit Posture Button - Shown only to authenticated users who created the posture */}
+      {session &&
+        session.user &&
+        (session.user.email === posture?.created_by ||
+          posture?.created_by === 'alpha users') && (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              mt: 3,
+              mb: 2,
+              px: 2,
+            }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setEditDialogOpen(true)}
+              startIcon={<EditIcon />}
+              sx={{
+                borderRadius: '12px',
+                px: 3,
+                py: 1.5,
+                textTransform: 'none',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+              }}
+            >
+              Edit Posture
+            </Button>
+          </Box>
+        )}
+
       {/* Debug information */}
       {process.env.NODE_ENV === 'development' && (
         <Box sx={{ mt: 2, p: 2, backgroundColor: '#f0f0f0', borderRadius: 1 }}>
@@ -898,40 +930,6 @@ export default function PostureActivityDetail({
           </Typography>
         </Box>
       )}
-
-      {session &&
-        session.user &&
-        (session.user.email === posture?.created_by ||
-          posture?.created_by === 'alpha users') && (
-          <Box
-            sx={{
-              position: 'fixed',
-              bottom: 16,
-              right: 16,
-              zIndex: 100,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-end',
-              gap: 1,
-            }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setEditDialogOpen(true)}
-              startIcon={<EditIcon />}
-              sx={{
-                borderRadius: '12px',
-                px: 3,
-                py: 1.5,
-                textTransform: 'none',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-              }}
-            >
-              Edit Posture
-            </Button>
-          </Box>
-        )}
 
       {/* Edit Posture Dialog */}
       <EditPostureDialog
