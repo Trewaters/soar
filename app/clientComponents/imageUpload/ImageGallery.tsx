@@ -46,13 +46,14 @@ interface ImageGalleryResponse {
 }
 
 export default function ImageGallery() {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const [images, setImages] = useState<PoseImage[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedImage, setSelectedImage] = useState<PoseImage | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [imageToDelete, setImageToDelete] = useState<PoseImage | null>(null)
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
 
   // Fetch images

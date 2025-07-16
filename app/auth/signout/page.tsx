@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Paper, Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Link from 'next/link'
 import { signOut, auth } from '../../../auth'

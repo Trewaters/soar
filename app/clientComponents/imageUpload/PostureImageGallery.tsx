@@ -52,7 +52,7 @@ export default function PostureImageGallery({
   postureId,
   postureName,
 }: PostureImageGalleryProps) {
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const [images, setImages] = useState<PoseImage[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -105,6 +105,7 @@ export default function PostureImageGallery({
     } else if (status === 'unauthenticated') {
       setLoading(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, postureId, postureName])
 
   // Handle delete

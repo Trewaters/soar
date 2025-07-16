@@ -41,7 +41,6 @@ interface WeeklySeriesActivityData {
 
 export default function SeriesActivityTracker({
   seriesId,
-  seriesName,
   variant = 'compact',
   refreshTrigger = 0,
 }: SeriesActivityTrackerProps) {

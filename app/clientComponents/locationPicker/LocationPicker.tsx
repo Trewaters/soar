@@ -24,7 +24,6 @@ import {
 import {
   LocationOn as LocationOnIcon,
   MyLocation as MyLocationIcon,
-  Search as SearchIcon,
   Close as CloseIcon,
   Public as PublicIcon,
 } from '@mui/icons-material'
@@ -47,6 +46,7 @@ export interface LocationData {
 
 interface LocationPickerProps {
   value?: string
+  // eslint-disable-next-line no-unused-vars
   onChange?: (location: string, locationData?: LocationData) => void
   placeholder?: string
   variant?: 'outlined' | 'filled' | 'standard'

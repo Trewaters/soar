@@ -232,6 +232,7 @@ export default function EnhancedImageGallery() {
     } else if (status === 'unauthenticated') {
       setLoading(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, session?.user?.id])
 
   // Handle delete
@@ -297,6 +298,7 @@ export default function EnhancedImageGallery() {
   }
 
   // Handle upload success
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const handleUploadSuccess = (newImage: PoseImage) => {
     // Refresh the gallery
     fetchImages()

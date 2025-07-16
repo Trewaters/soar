@@ -24,6 +24,7 @@ import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 
 interface ImageUploadProps {
+  // eslint-disable-next-line no-unused-vars
   onUploadSuccess?: (imageData: UploadedImageData) => void
   onClose?: () => void
   open?: boolean

@@ -44,7 +44,9 @@ export interface PoseImageData {
 }
 
 interface ImageUploadWithFallbackProps {
+  // eslint-disable-next-line no-unused-vars
   onImageUploaded?: (image: PoseImageData) => void
+  // eslint-disable-next-line no-unused-vars
   onImageDeleted?: (imageId: string) => void
   maxFileSize?: number // in MB
   acceptedTypes?: string[]

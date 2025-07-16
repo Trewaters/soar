@@ -14,6 +14,7 @@ export interface LocationData {
 
 export interface LocationPickerProps {
   value?: string
+  // eslint-disable-next-line no-unused-vars
   onChange?: (location: string, locationData?: LocationData) => void
   placeholder?: string
   variant?: 'outlined' | 'filled' | 'standard'

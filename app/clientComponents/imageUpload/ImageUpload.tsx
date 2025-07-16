@@ -33,7 +33,9 @@ export interface PoseImageData {
 }
 
 interface ImageUploadProps {
+  // eslint-disable-next-line no-unused-vars
   onImageUploaded?: (image: PoseImageData) => void
+  // eslint-disable-next-line no-unused-vars
   onImageDeleted?: (imageId: string) => void
   maxFileSize?: number // in MB
   acceptedTypes?: string[]
@@ -42,7 +44,6 @@ interface ImageUploadProps {
 
 export default function ImageUpload({
   onImageUploaded,
-  onImageDeleted,
   maxFileSize = 10,
   acceptedTypes = ['image/jpeg', 'image/png', 'image/webp'],
   variant = 'button',

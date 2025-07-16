@@ -20,6 +20,7 @@ import {
 interface SequenceActivityTrackerProps {
   sequenceId: string
   sequenceName: string
+  // eslint-disable-next-line no-unused-vars
   onActivityToggle?: (isTracked: boolean) => void
 }
 

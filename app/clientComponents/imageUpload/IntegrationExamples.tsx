@@ -36,6 +36,7 @@ export function ProfileWithImages() {
 // Modify app/navigator/asanaPostures/createAsana/page.tsx
 
 export function CreateAsanaWithImages() {
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     throw new Error('Function not implemented.')
   }
