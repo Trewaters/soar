@@ -35,7 +35,11 @@ export type TimerPageState = {
   watch: TimerWatch
 }
 
-type TimerAction = { type: 'SET_TIMER'; payload: TimerWatch }
+type TimerAction =
+  | { type: 'SET_TIMER'; payload: TimerWatch }
+  | { type: 'RESET_TIMER' }
+  | { type: 'PAUSE_TIMER' }
+  | { type: 'RESUME_TIMER' }
 
 const initialState: TimerPageState = {
   watch: {
@@ -63,6 +67,33 @@ function TimerReducer(
       return {
         ...state,
         watch: action.payload,
+      }
+    case 'RESET_TIMER':
+      return {
+        ...state,
+        watch: {
+          ...state.watch,
+          isPaused: false,
+          startTime: Date.now(),
+          elapsedTime: 0,
+        },
+      }
+    case 'PAUSE_TIMER':
+      return {
+        ...state,
+        watch: {
+          ...state.watch,
+          isPaused: true,
+        },
+      }
+    case 'RESUME_TIMER':
+      return {
+        ...state,
+        watch: {
+          ...state.watch,
+          isPaused: false,
+          startTime: Date.now() - (state.watch.elapsedTime || 0) * 1000,
+        },
       }
     default:
       return state
