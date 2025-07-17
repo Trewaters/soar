@@ -13,6 +13,11 @@ function getPrismaClient() {
       })
     } catch (error) {
       console.error('Failed to initialize Prisma client:', error)
+      console.error('Database URL exists:', !!process.env.DATABASE_URL)
+      console.error(
+        'Database URL prefix:',
+        process.env.DATABASE_URL?.substring(0, 20)
+      )
       throw new Error('Database connection failed')
     }
   }
@@ -60,27 +65,34 @@ export async function GET() {
     // Test connection first
     await prismaClient.$connect()
 
-    const terms = await prismaClient.glossaryTerm.findMany({
-      orderBy: { term: 'asc' },
+    // Use findRaw to work around datetime parsing issues
+    const rawTerms = await prismaClient.glossaryTerm.findRaw({
+      filter: {},
     })
+
+    // Convert raw terms to proper format and sort by term
+    const terms = (rawTerms as unknown as any[])
+      .map((term: any) => ({
+        id: term._id.$oid,
+        term: term.term,
+        meaning: term.meaning,
+        whyMatters: term.whyMatters,
+        // Fix datetime format by truncating microseconds to milliseconds
+        createdAt: new Date(
+          term.createdAt.replace(/\.(\d{6})Z$/, '.$1'.substring(0, 4) + 'Z')
+        ).toISOString(),
+        updatedAt: new Date(
+          term.updatedAt.replace(/\.(\d{6})Z$/, '.$1'.substring(0, 4) + 'Z')
+        ).toISOString(),
+      }))
+      .sort((a: any, b: any) => a.term.localeCompare(b.term))
 
     // Return empty array if no terms found (instead of null)
     return NextResponse.json(terms || [])
   } catch (error) {
     console.error('Error fetching glossary terms:', error)
 
-    // Return a more specific error response
-    if (error instanceof Error) {
-      if (
-        error.message.includes('timeout') ||
-        error.message.includes('No available servers')
-      ) {
-        console.warn('Database connection timeout, returning fallback data')
-        return NextResponse.json(fallbackGlossaryTerms, { status: 200 })
-      }
-    }
-
-    // Return fallback data for any other database errors
+    // Always return fallback data with 200 status to prevent frontend errors
     console.warn('Database error, returning fallback data')
     return NextResponse.json(fallbackGlossaryTerms, { status: 200 })
   } finally {
