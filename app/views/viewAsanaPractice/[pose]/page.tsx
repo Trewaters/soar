@@ -370,29 +370,26 @@ export default function ViewAsanaPractice({
         </Box>
 
         {/* Main Controls */}
-        <Grid container alignItems="center" spacing={1}>
-          {/* Left side - Secondary controls */}
-          <Grid size={3}>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <Tooltip title="Previous Pose">
-                <IconButton sx={{ color: 'white' }}>
-                  <SkipPreviousIcon fontSize="large" />
-                </IconButton>
-              </Tooltip>
-
-              <Tooltip title="Restart">
-                <IconButton onClick={handleRestart} sx={{ color: 'white' }}>
-                  <RestartAltIcon />
-                </IconButton>
-              </Tooltip>
-            </Box>
-          </Grid>
-
-          {/* Center - Primary controls */}
-          <Grid size={6}>
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+        <Grid container spacing={2}>
+          {/* Primary controls - Always centered */}
+          <Grid size={12}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: { xs: 1, sm: 2 },
+                mb: { xs: 2, sm: 0 },
+              }}
+            >
               <Tooltip title="Stop">
-                <IconButton onClick={handleStop} sx={{ color: 'white' }}>
+                <IconButton
+                  onClick={handleStop}
+                  sx={{
+                    color: 'white',
+                    minWidth: 44,
+                    minHeight: 44,
+                  }}
+                >
                   <StopIcon fontSize="large" />
                 </IconButton>
               </Tooltip>
@@ -404,72 +401,152 @@ export default function ViewAsanaPractice({
                     color: 'white',
                     backgroundColor: 'rgba(255,255,255,0.1)',
                     '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' },
+                    minWidth: 60,
+                    minHeight: 60,
                   }}
                 >
                   {state.watch.isPaused ? (
-                    <PlayCircleIcon sx={{ fontSize: 60 }} />
+                    <PlayCircleIcon sx={{ fontSize: { xs: 48, sm: 60 } }} />
                   ) : (
-                    <PauseCircleIcon sx={{ fontSize: 60 }} />
+                    <PauseCircleIcon sx={{ fontSize: { xs: 48, sm: 60 } }} />
                   )}
                 </IconButton>
               </Tooltip>
 
-              <Tooltip title="Next Pose">
-                <IconButton sx={{ color: 'white' }}>
-                  <SkipNextIcon fontSize="large" />
+              <Tooltip title="Restart">
+                <IconButton
+                  onClick={handleRestart}
+                  sx={{
+                    color: 'white',
+                    minWidth: 44,
+                    minHeight: 44,
+                  }}
+                >
+                  <RestartAltIcon fontSize="large" />
                 </IconButton>
               </Tooltip>
             </Box>
           </Grid>
 
-          {/* Right side - Settings and other controls */}
-          <Grid size={3}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-              {/* Volume Control */}
+          {/* Secondary controls row */}
+          <Grid size={12}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                gap: { xs: 2, sm: 1 },
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              {/* Navigation controls */}
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 1,
+                  justifyContent: { xs: 'center', sm: 'flex-start' },
+                }}
+              >
+                <Tooltip title="Previous Pose">
+                  <IconButton
+                    sx={{
+                      color: 'white',
+                      minWidth: 44,
+                      minHeight: 44,
+                    }}
+                  >
+                    <SkipPreviousIcon fontSize="large" />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Next Pose">
+                  <IconButton
+                    sx={{
+                      color: 'white',
+                      minWidth: 44,
+                      minHeight: 44,
+                    }}
+                  >
+                    <SkipNextIcon fontSize="large" />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+
+              {/* Volume and settings controls */}
               <Box
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: 1,
-                  minWidth: 100,
+                  justifyContent: { xs: 'center', sm: 'flex-end' },
+                  flexWrap: 'wrap',
                 }}
               >
-                <Tooltip title={isMuted ? 'Unmute' : 'Mute'}>
+                {/* Volume Control */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1,
+                    minWidth: { xs: 'auto', sm: 100 },
+                  }}
+                >
+                  <Tooltip title={isMuted ? 'Unmute' : 'Mute'}>
+                    <IconButton
+                      onClick={handleVolumeToggle}
+                      sx={{
+                        color: 'white',
+                        minWidth: 44,
+                        minHeight: 44,
+                      }}
+                    >
+                      {isMuted || volume === 0 ? (
+                        <VolumeOffIcon />
+                      ) : (
+                        <VolumeUpIcon />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+
+                  <Slider
+                    size="small"
+                    value={isMuted ? 0 : volume}
+                    onChange={handleVolumeChange}
+                    sx={{
+                      color: 'white',
+                      width: { xs: 60, sm: 80 },
+                      '& .MuiSlider-thumb': { width: 16, height: 16 },
+                    }}
+                  />
+                </Box>
+
+                <Tooltip title="Settings">
                   <IconButton
-                    onClick={handleVolumeToggle}
-                    sx={{ color: 'white' }}
+                    sx={{
+                      color: 'white',
+                      minWidth: 44,
+                      minHeight: 44,
+                    }}
                   >
-                    {isMuted || volume === 0 ? (
-                      <VolumeOffIcon />
-                    ) : (
-                      <VolumeUpIcon />
-                    )}
+                    <SettingsIcon />
                   </IconButton>
                 </Tooltip>
 
-                <Slider
-                  size="small"
-                  value={isMuted ? 0 : volume}
-                  onChange={handleVolumeChange}
-                  sx={{
-                    color: 'white',
-                    width: 80,
-                    '& .MuiSlider-thumb': { width: 16, height: 16 },
-                  }}
-                />
+                <Tooltip
+                  title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+                >
+                  <IconButton
+                    onClick={handleFullscreen}
+                    sx={{
+                      color: 'white',
+                      minWidth: 44,
+                      minHeight: 44,
+                    }}
+                  >
+                    {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+                  </IconButton>
+                </Tooltip>
               </Box>
-
-              <Tooltip title="Settings">
-                <IconButton sx={{ color: 'white' }}>
-                  <SettingsIcon />
-                </IconButton>
-              </Tooltip>
-
-              <Tooltip title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}>
-                <IconButton onClick={handleFullscreen} sx={{ color: 'white' }}>
-                  {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
-                </IconButton>
-              </Tooltip>
             </Box>
           </Grid>
         </Grid>
