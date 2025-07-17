@@ -68,6 +68,7 @@ export default function AsanaTimer() {
  */
 
 import { AsanaTimerProps, useTimer } from '@context/timerContext'
+import { formatDuration } from '@lib/timerUtils'
 import { Box, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 
@@ -87,11 +88,9 @@ export default function AsanaTimer({
         // When paused, show the stored elapsed time
         setDisplayTime(state.watch.elapsedTime)
         onTimeUpdate(state.watch.elapsedTime)
-      } else if (state.watch.markStartTime) {
+      } else if (state.watch.startTime) {
         // When running, calculate current elapsed time from start time
-        const currentSessionTime = Math.floor(
-          (Date.now() - state.watch.markStartTime) / 1000
-        )
+        const currentSessionTime = (Date.now() - state.watch.startTime) / 1000
         const totalTime = state.watch.elapsedTime + currentSessionTime
         setDisplayTime(totalTime)
         onTimeUpdate(totalTime)
@@ -117,7 +116,7 @@ export default function AsanaTimer({
     }
   }, [
     state.watch.isPaused,
-    state.watch.markStartTime,
+    state.watch.startTime,
     state.watch.elapsedTime,
     onTimeUpdate,
   ])
@@ -132,7 +131,7 @@ export default function AsanaTimer({
   return (
     <Box>
       <Typography sx={{ color: 'white' }}>
-        Elapsed Time: {displayTime} seconds
+        Elapsed Time: {formatDuration(displayTime)}
       </Typography>
     </Box>
   )

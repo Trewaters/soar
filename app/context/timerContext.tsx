@@ -1,10 +1,15 @@
 import { createContext, Dispatch, ReactNode, use, useReducer } from 'react'
-import { mark, stop, clear } from 'marky'
+import {
+  startTimer,
+  stopTimer,
+  clearAllTimers,
+  msToSeconds,
+} from '@lib/timerUtils'
 
 export interface TimerWatch {
   isPaused: boolean
   markName: string | null
-  markStartTime: number | null
+  startTime: number | null
   elapsedTime: number
   id?: string
   name?: string
@@ -33,7 +38,7 @@ const initialState: TimerPageState = {
   watch: {
     isPaused: true,
     markName: null,
-    markStartTime: null,
+    startTime: null,
     elapsedTime: 0,
   },
 }
@@ -61,21 +66,16 @@ function TimerReducer(
         watch: action.payload,
       }
     case 'RESET_TIMER': {
-      // Clear all existing marks
-      if (state.watch.markName) {
-        try {
-          clear()
-        } catch (error) {
-          // Clear may fail, ignore
-        }
-      }
+      // Clear all existing marks and measurements
+      clearAllTimers()
+
       return {
         ...state,
         watch: {
           ...state.watch,
           isPaused: true,
           markName: null,
-          markStartTime: null,
+          startTime: null,
           elapsedTime: 0,
         },
       }
@@ -85,16 +85,14 @@ function TimerReducer(
 
       // If we have an active mark, stop it and get the elapsed time
       if (state.watch.markName && !state.watch.isPaused) {
-        try {
-          const result = stop(state.watch.markName)
+        const result = stopTimer(state.watch.markName)
+        if (result) {
           pausedElapsedTime =
-            state.watch.elapsedTime + Math.floor(result.duration / 1000)
-        } catch (error) {
-          // If stop fails, calculate from stored start time
-          if (state.watch.markStartTime) {
-            const elapsed = Math.floor(
-              (Date.now() - state.watch.markStartTime) / 1000
-            )
+            state.watch.elapsedTime + msToSeconds(result.duration)
+        } else {
+          // Fallback to manual calculation if marky fails
+          if (state.watch.startTime) {
+            const elapsed = (Date.now() - state.watch.startTime) / 1000
             pausedElapsedTime = state.watch.elapsedTime + elapsed
           }
         }
@@ -106,7 +104,7 @@ function TimerReducer(
           ...state.watch,
           isPaused: true,
           markName: null,
-          markStartTime: null,
+          startTime: null,
           elapsedTime: pausedElapsedTime,
         },
       }
@@ -114,12 +112,9 @@ function TimerReducer(
     case 'RESUME_TIMER': {
       // Start a new mark when resuming
       const newMarkName = generateMarkName()
-      const markStartTime = Date.now()
-      try {
-        mark(newMarkName)
-      } catch (error) {
-        console.warn('Failed to create timer mark:', error)
-      }
+      const startTime = Date.now()
+
+      startTimer(newMarkName)
 
       return {
         ...state,
@@ -127,7 +122,7 @@ function TimerReducer(
           ...state.watch,
           isPaused: false,
           markName: newMarkName,
-          markStartTime,
+          startTime,
         },
       }
     }
