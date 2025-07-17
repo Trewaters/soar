@@ -57,7 +57,7 @@ export default function ViewAsanaPractice({
 
   const paperStyle: React.CSSProperties = {
     padding: '20px',
-    backgroundImage: 'url(/view-asana-practice-background.png)',
+    backgroundImage: 'url(/images/asana/view-asana-practice-background.png)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
