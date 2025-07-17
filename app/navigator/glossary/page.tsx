@@ -16,10 +16,29 @@ export default function GlossaryPage() {
 
   useEffect(() => {
     async function fetchGlossary() {
-      const response = await fetch('/api/glossary')
-      const data = await response.json()
-      setGlossary(data)
-      setFilteredGlossary(data)
+      try {
+        const response = await fetch('/api/glossary')
+        const data = await response.json()
+
+        // Handle both successful responses and error responses
+        if (response.ok) {
+          // Successful response - data should be an array
+          setGlossary(Array.isArray(data) ? data : [])
+          setFilteredGlossary(Array.isArray(data) ? data : [])
+        } else {
+          // Error response - check if it has a terms property
+          console.error(
+            'Error fetching glossary:',
+            data.error || 'Unknown error'
+          )
+          setGlossary(Array.isArray(data.terms) ? data.terms : [])
+          setFilteredGlossary(Array.isArray(data.terms) ? data.terms : [])
+        }
+      } catch (error) {
+        console.error('Network error fetching glossary:', error)
+        setGlossary([])
+        setFilteredGlossary([])
+      }
     }
     fetchGlossary()
   }, [])
