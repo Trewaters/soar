@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 import HomeIcon from '@mui/icons-material/Home'
 import { getPostureByName } from '@lib/postureService'
 import { FullAsanaData } from '@app/context/AsanaPostureContext'
+import Image from 'next/image'
 
 export default function ViewAsanaPractice({
   params,
@@ -55,7 +56,6 @@ export default function ViewAsanaPractice({
   }, [params.pose])
 
   const paperStyle = {
-    p: 2.5, // 20px equivalent using theme spacing
     backgroundImage: 'url(/images/asana/view-asana-practice-background.png)',
     backgroundSize: 'contain', // Changed from 'cover' to 'contain' to ensure full image is visible
     backgroundRepeat: 'no-repeat',
@@ -88,22 +88,30 @@ export default function ViewAsanaPractice({
     // console.log('Back Clicked')
     router.push('/navigator/asanaPostures')
   }
-
   return (
-    <Paper sx={paperStyle}>
-      <Grid container>
-        <Grid size={12}>
-          <Typography variant="h1" textAlign={'center'} color={'white'}>
-            Asana Practice
-          </Typography>
-        </Grid>
+    <>
+      <Box sx={{ height: 'auto', width: '100vw' }}>
+        <Image
+          src="/logo/Main Logo in Contrast Light150px.png"
+          alt="UvuYoga Logo"
+          fill
+          style={{ objectFit: 'cover' }}
+        />
+      </Box>
+      <Paper sx={paperStyle}>
+        <Grid container>
+          <Grid size={12}>
+            <Typography variant="h1" textAlign={'center'} color={'white'}>
+              Asana Practice
+            </Typography>
+          </Grid>
 
-        <Grid size={12}>
-          <Typography variant="subtitle1" color={'white'}>
-            {viewPose?.sort_english_name}
-          </Typography>
-        </Grid>
-        {/* 
+          <Grid size={12}>
+            <Typography variant="subtitle1" color={'white'}>
+              {viewPose?.sort_english_name}
+            </Typography>
+          </Grid>
+          {/* 
         <Grid size={6}>
         <Typography variant="subtitle1" color={'white'}>
         [PROGRESS_BAR]`
@@ -135,32 +143,37 @@ export default function ViewAsanaPractice({
         </Grid>
         */}
 
-        <Grid size={12}>
-          <AsanaTimer
-            onTimeUpdate={handleTimeUpdate}
-            onPauseUpdate={handlePauseUpdate}
-          />
-        </Grid>
+          <Grid size={12}>
+            <AsanaTimer
+              onTimeUpdate={handleTimeUpdate}
+              onPauseUpdate={handlePauseUpdate}
+            />
+          </Grid>
 
-        <Grid size={2}>
-          <IconButton onClick={handleIconButtonClick}>
-            {state.watch.isPaused ? (
-              <PlayCircleIcon sx={{ color: 'white', height: 40, width: 40 }} />
-            ) : (
-              <PauseCircleIcon sx={{ color: 'white', height: 40, width: 40 }} />
-            )}
-          </IconButton>
-        </Grid>
+          <Grid size={2}>
+            <IconButton onClick={handleIconButtonClick}>
+              {state.watch.isPaused ? (
+                <PlayCircleIcon
+                  sx={{ color: 'white', height: 40, width: 40 }}
+                />
+              ) : (
+                <PauseCircleIcon
+                  sx={{ color: 'white', height: 40, width: 40 }}
+                />
+              )}
+            </IconButton>
+          </Grid>
 
-        <Grid size={8}>
-          <Button sx={{ color: 'white' }}>NEXT</Button>
+          <Grid size={8}>
+            <Button sx={{ color: 'white' }}>NEXT</Button>
+          </Grid>
+          <Grid size={2}>
+            <IconButton sx={{ color: 'white' }} onClick={handleBackClick}>
+              <HomeIcon />
+            </IconButton>
+          </Grid>
         </Grid>
-        <Grid size={2}>
-          <IconButton sx={{ color: 'white' }} onClick={handleBackClick}>
-            <HomeIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
-    </Paper>
+      </Paper>
+    </>
   )
 }
