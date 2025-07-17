@@ -21,7 +21,6 @@ export default function ViewAsanaPractice({
   /* call api/poses/?sort_english_name=${pose} */
   const [viewPose, setViewPose] = useState<FullAsanaData>()
   const [elapsedTime, setElapsedTime] = useState(0)
-  console.log('elapsedTime', elapsedTime)
   // const [isPaused, setIsPaused] = useState(false)
   const { state, dispatch } = useTimer()
   const router = useRouter()
@@ -55,10 +54,10 @@ export default function ViewAsanaPractice({
     getViewPose()
   }, [params.pose])
 
-  const paperStyle: React.CSSProperties = {
-    padding: '20px',
+  const paperStyle = {
+    p: 2.5, // 20px equivalent using theme spacing
     backgroundImage: 'url(/images/asana/view-asana-practice-background.png)',
-    backgroundSize: 'cover',
+    backgroundSize: 'contain', // Changed from 'cover' to 'contain' to ensure full image is visible
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     width: '100vw',
@@ -66,6 +65,10 @@ export default function ViewAsanaPractice({
     position: 'fixed',
     top: 0,
     left: 0,
+    // Add responsive padding for mobile optimization
+    padding: { xs: 2, sm: 2.5, md: 3 }, // Responsive padding using theme breakpoints
+    // Optional: Add a fallback background color
+    backgroundColor: 'primary.dark', // In case image doesn't load
   }
 
   const handleIconButtonClick = () => {
@@ -87,7 +90,7 @@ export default function ViewAsanaPractice({
   }
 
   return (
-    <Paper style={paperStyle}>
+    <Paper sx={paperStyle}>
       <Grid container>
         <Grid size={12}>
           <Typography variant="h1" textAlign={'center'} color={'white'}>
