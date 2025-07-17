@@ -59,7 +59,7 @@ export default function ViewAsanaPractice({
       if (!state.watch.isPaused) {
         setShowControls(false)
       }
-    }, 6000)
+    }, 12000)
     setControlsTimeout(timeout)
   }, [controlsTimeout, state.watch.isPaused])
 

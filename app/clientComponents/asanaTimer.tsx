@@ -87,6 +87,15 @@ export default function AsanaTimer({
     }
   }, [state.watch.elapsedTime])
 
+  // Reset component state when timer context is reset
+  useEffect(() => {
+    // Check if timer was reset by comparing startTime changes
+    if (state.watch.startTime && state.watch.elapsedTime === 0) {
+      setBaseStartTime(state.watch.startTime)
+      setPausedElapsedTime(0)
+    }
+  }, [state.watch.startTime, state.watch.elapsedTime])
+
   // Update elapsed time when pause state changes
   useEffect(() => {
     if (state.watch.isPaused) {
