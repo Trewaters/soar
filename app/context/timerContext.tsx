@@ -73,7 +73,7 @@ function TimerReducer(
         ...state,
         watch: {
           ...state.watch,
-          isPaused: false,
+          isPaused: true,
           startTime: Date.now(),
           elapsedTime: 0,
         },

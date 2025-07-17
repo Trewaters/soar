@@ -59,7 +59,7 @@ export default function ViewAsanaPractice({
       if (!state.watch.isPaused) {
         setShowControls(false)
       }
-    }, 12000)
+    }, 10000)
     setControlsTimeout(timeout)
   }, [controlsTimeout, state.watch.isPaused])
 
@@ -76,7 +76,9 @@ export default function ViewAsanaPractice({
   }
 
   const handleStop = () => {
+    // Reset the context timer (this sets isPaused: false, startTime: Date.now(), elapsedTime: 0)
     dispatch({ type: 'RESET_TIMER' })
+    // Reset the local elapsed time to sync with the context
     setElapsedTime(0)
   }
 
