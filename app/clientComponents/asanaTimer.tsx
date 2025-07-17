@@ -75,34 +75,58 @@ export default function AsanaTimer({
   onTimeUpdate,
   onPauseUpdate,
 }: AsanaTimerProps) {
-  const [totalTime, setTotalTime] = useState(0)
-  const [startTime, setStartTime] = useState(Date.now())
+  const [baseStartTime, setBaseStartTime] = useState(Date.now())
+  const [pausedElapsedTime, setPausedElapsedTime] = useState(0)
   const { state } = useTimer()
 
+  // Initialize the timer when component mounts or when timer is reset
   useEffect(() => {
-    setStartTime(Date.now())
-  }, [])
+    if (state.watch.elapsedTime === 0) {
+      setBaseStartTime(Date.now())
+      setPausedElapsedTime(0)
+    }
+  }, [state.watch.elapsedTime])
+
+  // Update elapsed time when pause state changes
+  useEffect(() => {
+    if (state.watch.isPaused) {
+      // When pausing, save the current elapsed time
+      const currentElapsed =
+        Math.floor((Date.now() - baseStartTime) / 1000) + pausedElapsedTime
+      setPausedElapsedTime(currentElapsed)
+    } else {
+      // When resuming, reset the base start time
+      setBaseStartTime(Date.now())
+    }
+  }, [state.watch.isPaused, baseStartTime, pausedElapsedTime])
 
   useEffect(() => {
     const timer = setInterval(() => {
       if (!state.watch.isPaused) {
-        const elapsedTime = Math.floor((Date.now() - startTime) / 1000)
-        setTotalTime(elapsedTime)
-        onTimeUpdate(elapsedTime)
+        const currentElapsed =
+          Math.floor((Date.now() - baseStartTime) / 1000) + pausedElapsedTime
+        onTimeUpdate(currentElapsed)
       }
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [state.watch.isPaused, startTime, onTimeUpdate])
+  }, [state.watch.isPaused, baseStartTime, pausedElapsedTime, onTimeUpdate])
 
   useEffect(() => {
-    onPauseUpdate(state.watch.isPaused)
+    if (onPauseUpdate) {
+      onPauseUpdate(state.watch.isPaused)
+    }
   }, [state.watch.isPaused, onPauseUpdate])
+
+  // Calculate current display time
+  const currentElapsed = state.watch.isPaused
+    ? pausedElapsedTime
+    : Math.floor((Date.now() - baseStartTime) / 1000) + pausedElapsedTime
 
   return (
     <Box>
       <Typography sx={{ color: 'white' }}>
-        Elapsed Time: {totalTime} seconds
+        Elapsed Time: {currentElapsed} seconds
       </Typography>
     </Box>
   )

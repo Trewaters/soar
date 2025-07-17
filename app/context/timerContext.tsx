@@ -28,7 +28,7 @@ export interface AsanaTimerProps {
   // eslint-disable-next-line no-unused-vars
   onTimeUpdate: (time: number) => void
   // eslint-disable-next-line no-unused-vars
-  onPauseUpdate: (isPaused: boolean) => void
+  onPauseUpdate?: (isPaused: boolean) => void
 }
 
 export type TimerPageState = {
@@ -84,6 +84,7 @@ function TimerReducer(
         watch: {
           ...state.watch,
           isPaused: true,
+          elapsedTime: Math.floor((Date.now() - state.watch.startTime) / 1000),
         },
       }
     case 'RESUME_TIMER':
@@ -92,7 +93,7 @@ function TimerReducer(
         watch: {
           ...state.watch,
           isPaused: false,
-          startTime: Date.now() - (state.watch.elapsedTime || 0) * 1000,
+          startTime: Date.now(),
         },
       }
     default:

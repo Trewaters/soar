@@ -59,23 +59,12 @@ export default function ViewAsanaPractice({
       if (!state.watch.isPaused) {
         setShowControls(false)
       }
-    }, 3000)
+    }, 6000)
     setControlsTimeout(timeout)
   }, [controlsTimeout, state.watch.isPaused])
 
   const handleTimeUpdate = (time: number) => {
     setElapsedTime(time)
-  }
-
-  const handlePauseUpdate = (paused: boolean) => {
-    dispatch({
-      type: 'SET_TIMER',
-      payload: {
-        ...state.watch,
-        isPaused: paused,
-        startTime: Date.now(),
-      },
-    })
   }
 
   const handlePlayPause = () => {
@@ -94,9 +83,10 @@ export default function ViewAsanaPractice({
   const handleRestart = () => {
     dispatch({ type: 'RESET_TIMER' })
     setElapsedTime(0)
+    // Small delay to ensure reset is processed before resuming
     setTimeout(() => {
       dispatch({ type: 'RESUME_TIMER' })
-    }, 100)
+    }, 10)
   }
 
   const handleFullscreen = () => {
@@ -316,10 +306,7 @@ export default function ViewAsanaPractice({
           </Typography>
         </Box>
 
-        <AsanaTimer
-          onTimeUpdate={handleTimeUpdate}
-          onPauseUpdate={handlePauseUpdate}
-        />
+        <AsanaTimer onTimeUpdate={handleTimeUpdate} />
       </Box>
 
       {/* Bottom Controls - Music player style */}
