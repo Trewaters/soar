@@ -1,27 +1,15 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  use,
-  useEffect,
-  useReducer,
-} from 'react'
+import { createContext, Dispatch, ReactNode, use, useReducer } from 'react'
+import { mark, stop, clear } from 'marky'
 
 export interface TimerWatch {
   isPaused: boolean
-  startTime: number
+  markName: string | null
+  markStartTime: number | null
+  elapsedTime: number
   id?: string
   name?: string
   endTime?: number
-  elapsedTime?: number
   totalTime?: number
-  siSeconds?: number
-  siMinutes?: number
-  siHours?: number
-  siDays?: number
-  siWeeks?: number
-  siMonths?: number
-  siYears?: number
 }
 
 export interface AsanaTimerProps {
@@ -43,8 +31,10 @@ type TimerAction =
 
 const initialState: TimerPageState = {
   watch: {
-    isPaused: false,
-    startTime: Date.now(),
+    isPaused: true,
+    markName: null,
+    markStartTime: null,
+    elapsedTime: 0,
   },
 }
 
@@ -62,40 +52,85 @@ function TimerReducer(
   state: TimerPageState,
   action: TimerAction
 ): TimerPageState {
+  const generateMarkName = () => `timer-${Date.now()}-${Math.random()}`
+
   switch (action.type) {
     case 'SET_TIMER':
       return {
         ...state,
         watch: action.payload,
       }
-    case 'RESET_TIMER':
+    case 'RESET_TIMER': {
+      // Clear all existing marks
+      if (state.watch.markName) {
+        try {
+          clear()
+        } catch (error) {
+          // Clear may fail, ignore
+        }
+      }
       return {
         ...state,
         watch: {
           ...state.watch,
           isPaused: true,
-          startTime: Date.now(),
+          markName: null,
+          markStartTime: null,
           elapsedTime: 0,
         },
       }
-    case 'PAUSE_TIMER':
+    }
+    case 'PAUSE_TIMER': {
+      let pausedElapsedTime = state.watch.elapsedTime
+
+      // If we have an active mark, stop it and get the elapsed time
+      if (state.watch.markName && !state.watch.isPaused) {
+        try {
+          const result = stop(state.watch.markName)
+          pausedElapsedTime =
+            state.watch.elapsedTime + Math.floor(result.duration / 1000)
+        } catch (error) {
+          // If stop fails, calculate from stored start time
+          if (state.watch.markStartTime) {
+            const elapsed = Math.floor(
+              (Date.now() - state.watch.markStartTime) / 1000
+            )
+            pausedElapsedTime = state.watch.elapsedTime + elapsed
+          }
+        }
+      }
+
       return {
         ...state,
         watch: {
           ...state.watch,
           isPaused: true,
-          elapsedTime: Math.floor((Date.now() - state.watch.startTime) / 1000),
+          markName: null,
+          markStartTime: null,
+          elapsedTime: pausedElapsedTime,
         },
       }
-    case 'RESUME_TIMER':
+    }
+    case 'RESUME_TIMER': {
+      // Start a new mark when resuming
+      const newMarkName = generateMarkName()
+      const markStartTime = Date.now()
+      try {
+        mark(newMarkName)
+      } catch (error) {
+        console.warn('Failed to create timer mark:', error)
+      }
+
       return {
         ...state,
         watch: {
           ...state.watch,
           isPaused: false,
-          startTime: Date.now(),
+          markName: newMarkName,
+          markStartTime,
         },
       }
+    }
     default:
       return state
   }
@@ -103,36 +138,6 @@ function TimerReducer(
 
 export default function TimerProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(TimerReducer, initialState)
-
-  useEffect(() => {
-    // const timer = setInterval(() => {
-    //   if (!state.watch.isPaused) {
-    //     const elapsedTime = Math.floor((Date.now() - state.watch.startTime) / 1000)
-    //     const seconds = elapsedTime % 60
-    //     const minutes = Math.floor((elapsedTime % 3600) / 60)
-    //     const hours = Math.floor(elapsedTime / 3600)
-    //     const days = Math.floor(elapsedTime / 86400)
-    //     const weeks = Math.floor(elapsedTime / 604800)
-    //     const months = Math.floor(elapsedTime / 2628000)
-    //     const years = Math.floor(elapsedTime / 31536000)
-    //     dispatch({
-    //       type: 'SET_TIMER',
-    //       payload: {
-    //         ...state.watch,
-    //         elapsedTime,
-    //         siSeconds: seconds,
-    //         siMinutes: minutes,
-    //         siHours: hours,
-    //         siDays: days,
-    //         siWeeks: weeks,
-    //         siMonths: months,
-    //         siYears: years,
-    //       },
-    //     })
-    //   }
-    // }, 1000)
-    // return () => clearInterval(timer)
-  }, [state.watch.isPaused, state.watch.startTime])
 
   return (
     <TimerContext.Provider value={{ state, dispatch }}>

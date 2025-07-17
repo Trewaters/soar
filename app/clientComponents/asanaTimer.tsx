@@ -75,58 +75,64 @@ export default function AsanaTimer({
   onTimeUpdate,
   onPauseUpdate,
 }: AsanaTimerProps) {
-  const [baseStartTime, setBaseStartTime] = useState(Date.now())
-  const [pausedElapsedTime, setPausedElapsedTime] = useState(0)
+  const [displayTime, setDisplayTime] = useState(0)
   const { state } = useTimer()
 
-  // Reset component state when timer context is reset
+  // Update display time and call onTimeUpdate
   useEffect(() => {
-    if (state.watch.elapsedTime === 0 && state.watch.startTime) {
-      setBaseStartTime(state.watch.startTime)
-      setPausedElapsedTime(0)
-    }
-  }, [state.watch.elapsedTime, state.watch.startTime])
+    let interval: NodeJS.Timeout | null = null
 
-  // Update elapsed time when pause state changes
-  useEffect(() => {
-    if (state.watch.isPaused) {
-      // When pausing, save the current elapsed time
-      const currentElapsed =
-        Math.floor((Date.now() - baseStartTime) / 1000) + pausedElapsedTime
-      setPausedElapsedTime(currentElapsed)
-    } else {
-      // When resuming, reset the base start time
-      setBaseStartTime(Date.now())
-    }
-  }, [state.watch.isPaused, baseStartTime, pausedElapsedTime])
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (!state.watch.isPaused) {
-        const currentElapsed =
-          Math.floor((Date.now() - baseStartTime) / 1000) + pausedElapsedTime
-        onTimeUpdate(currentElapsed)
+    const updateDisplayTime = () => {
+      if (state.watch.isPaused) {
+        // When paused, show the stored elapsed time
+        setDisplayTime(state.watch.elapsedTime)
+        onTimeUpdate(state.watch.elapsedTime)
+      } else if (state.watch.markStartTime) {
+        // When running, calculate current elapsed time from start time
+        const currentSessionTime = Math.floor(
+          (Date.now() - state.watch.markStartTime) / 1000
+        )
+        const totalTime = state.watch.elapsedTime + currentSessionTime
+        setDisplayTime(totalTime)
+        onTimeUpdate(totalTime)
+      } else {
+        // No active timing, use stored elapsed time
+        setDisplayTime(state.watch.elapsedTime)
+        onTimeUpdate(state.watch.elapsedTime)
       }
-    }, 1000)
+    }
 
-    return () => clearInterval(timer)
-  }, [state.watch.isPaused, baseStartTime, pausedElapsedTime, onTimeUpdate])
+    // Update immediately
+    updateDisplayTime()
 
+    // Set up interval to update every second when not paused
+    if (!state.watch.isPaused) {
+      interval = setInterval(updateDisplayTime, 1000)
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [
+    state.watch.isPaused,
+    state.watch.markStartTime,
+    state.watch.elapsedTime,
+    onTimeUpdate,
+  ])
+
+  // Notify about pause state changes
   useEffect(() => {
     if (onPauseUpdate) {
       onPauseUpdate(state.watch.isPaused)
     }
   }, [state.watch.isPaused, onPauseUpdate])
 
-  // Calculate current display time
-  const currentElapsed = state.watch.isPaused
-    ? pausedElapsedTime
-    : Math.floor((Date.now() - baseStartTime) / 1000) + pausedElapsedTime
-
   return (
     <Box>
       <Typography sx={{ color: 'white' }}>
-        Elapsed Time: {currentElapsed} seconds
+        Elapsed Time: {displayTime} seconds
       </Typography>
     </Box>
   )
