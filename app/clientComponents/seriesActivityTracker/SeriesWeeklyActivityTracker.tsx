@@ -28,7 +28,7 @@ interface SeriesWeeklyActivityTrackerProps {
 
 export default function SeriesWeeklyActivityTracker({
   seriesId,
-  seriesName,
+  seriesName: _seriesName,
   variant = 'compact',
   refreshTrigger = 0,
 }: SeriesWeeklyActivityTrackerProps) {

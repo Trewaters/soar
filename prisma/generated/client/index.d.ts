@@ -63,6 +63,11 @@ export type UserLogin = $Result.DefaultSelection<Prisma.$UserLoginPayload>
  * Records user-uploaded images of yoga poses.
  */
 export type PoseImage = $Result.DefaultSelection<Prisma.$PoseImagePayload>
+/**
+ * Model GlossaryTerm
+ * 
+ */
+export type GlossaryTerm = $Result.DefaultSelection<Prisma.$GlossaryTermPayload>
 
 /**
  * Enums
@@ -271,6 +276,16 @@ export class PrismaClient<
     * ```
     */
   get poseImage(): Prisma.PoseImageDelegate<ExtArgs>;
+
+  /**
+   * `prisma.glossaryTerm`: Exposes CRUD operations for the **GlossaryTerm** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GlossaryTerms
+    * const glossaryTerms = await prisma.glossaryTerm.findMany()
+    * ```
+    */
+  get glossaryTerm(): Prisma.GlossaryTermDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -757,7 +772,8 @@ export namespace Prisma {
     SeriesActivity: 'SeriesActivity',
     SequenceActivity: 'SequenceActivity',
     UserLogin: 'UserLogin',
-    PoseImage: 'PoseImage'
+    PoseImage: 'PoseImage',
+    GlossaryTerm: 'GlossaryTerm'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -773,7 +789,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "userData" | "providerAccount" | "asanaPosture" | "asanaSeries" | "asanaSequence" | "asanaActivity" | "seriesActivity" | "sequenceActivity" | "userLogin" | "poseImage"
+      modelProps: "userData" | "providerAccount" | "asanaPosture" | "asanaSeries" | "asanaSequence" | "asanaActivity" | "seriesActivity" | "sequenceActivity" | "userLogin" | "poseImage" | "glossaryTerm"
       txIsolationLevel: never
     }
     model: {
@@ -1514,6 +1530,80 @@ export namespace Prisma {
           count: {
             args: Prisma.PoseImageCountArgs<ExtArgs>
             result: $Utils.Optional<PoseImageCountAggregateOutputType> | number
+          }
+        }
+      }
+      GlossaryTerm: {
+        payload: Prisma.$GlossaryTermPayload<ExtArgs>
+        fields: Prisma.GlossaryTermFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GlossaryTermFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlossaryTermPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GlossaryTermFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlossaryTermPayload>
+          }
+          findFirst: {
+            args: Prisma.GlossaryTermFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlossaryTermPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GlossaryTermFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlossaryTermPayload>
+          }
+          findMany: {
+            args: Prisma.GlossaryTermFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlossaryTermPayload>[]
+          }
+          create: {
+            args: Prisma.GlossaryTermCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlossaryTermPayload>
+          }
+          createMany: {
+            args: Prisma.GlossaryTermCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.GlossaryTermDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlossaryTermPayload>
+          }
+          update: {
+            args: Prisma.GlossaryTermUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlossaryTermPayload>
+          }
+          deleteMany: {
+            args: Prisma.GlossaryTermDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GlossaryTermUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.GlossaryTermUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GlossaryTermPayload>
+          }
+          aggregate: {
+            args: Prisma.GlossaryTermAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGlossaryTerm>
+          }
+          groupBy: {
+            args: Prisma.GlossaryTermGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GlossaryTermGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.GlossaryTermFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.GlossaryTermAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.GlossaryTermCountArgs<ExtArgs>
+            result: $Utils.Optional<GlossaryTermCountAggregateOutputType> | number
           }
         }
       }
@@ -12377,6 +12467,899 @@ export namespace Prisma {
 
 
   /**
+   * Model GlossaryTerm
+   */
+
+  export type AggregateGlossaryTerm = {
+    _count: GlossaryTermCountAggregateOutputType | null
+    _min: GlossaryTermMinAggregateOutputType | null
+    _max: GlossaryTermMaxAggregateOutputType | null
+  }
+
+  export type GlossaryTermMinAggregateOutputType = {
+    id: string | null
+    term: string | null
+    meaning: string | null
+    whyMatters: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GlossaryTermMaxAggregateOutputType = {
+    id: string | null
+    term: string | null
+    meaning: string | null
+    whyMatters: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GlossaryTermCountAggregateOutputType = {
+    id: number
+    term: number
+    meaning: number
+    whyMatters: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type GlossaryTermMinAggregateInputType = {
+    id?: true
+    term?: true
+    meaning?: true
+    whyMatters?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GlossaryTermMaxAggregateInputType = {
+    id?: true
+    term?: true
+    meaning?: true
+    whyMatters?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GlossaryTermCountAggregateInputType = {
+    id?: true
+    term?: true
+    meaning?: true
+    whyMatters?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type GlossaryTermAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GlossaryTerm to aggregate.
+     */
+    where?: GlossaryTermWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GlossaryTerms to fetch.
+     */
+    orderBy?: GlossaryTermOrderByWithRelationInput | GlossaryTermOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GlossaryTermWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GlossaryTerms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GlossaryTerms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GlossaryTerms
+    **/
+    _count?: true | GlossaryTermCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GlossaryTermMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GlossaryTermMaxAggregateInputType
+  }
+
+  export type GetGlossaryTermAggregateType<T extends GlossaryTermAggregateArgs> = {
+        [P in keyof T & keyof AggregateGlossaryTerm]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGlossaryTerm[P]>
+      : GetScalarType<T[P], AggregateGlossaryTerm[P]>
+  }
+
+
+
+
+  export type GlossaryTermGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GlossaryTermWhereInput
+    orderBy?: GlossaryTermOrderByWithAggregationInput | GlossaryTermOrderByWithAggregationInput[]
+    by: GlossaryTermScalarFieldEnum[] | GlossaryTermScalarFieldEnum
+    having?: GlossaryTermScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GlossaryTermCountAggregateInputType | true
+    _min?: GlossaryTermMinAggregateInputType
+    _max?: GlossaryTermMaxAggregateInputType
+  }
+
+  export type GlossaryTermGroupByOutputType = {
+    id: string
+    term: string
+    meaning: string
+    whyMatters: string
+    createdAt: Date
+    updatedAt: Date
+    _count: GlossaryTermCountAggregateOutputType | null
+    _min: GlossaryTermMinAggregateOutputType | null
+    _max: GlossaryTermMaxAggregateOutputType | null
+  }
+
+  type GetGlossaryTermGroupByPayload<T extends GlossaryTermGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GlossaryTermGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GlossaryTermGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GlossaryTermGroupByOutputType[P]>
+            : GetScalarType<T[P], GlossaryTermGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GlossaryTermSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    term?: boolean
+    meaning?: boolean
+    whyMatters?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["glossaryTerm"]>
+
+
+  export type GlossaryTermSelectScalar = {
+    id?: boolean
+    term?: boolean
+    meaning?: boolean
+    whyMatters?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $GlossaryTermPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GlossaryTerm"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      term: string
+      meaning: string
+      whyMatters: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["glossaryTerm"]>
+    composites: {}
+  }
+
+  type GlossaryTermGetPayload<S extends boolean | null | undefined | GlossaryTermDefaultArgs> = $Result.GetResult<Prisma.$GlossaryTermPayload, S>
+
+  type GlossaryTermCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<GlossaryTermFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: GlossaryTermCountAggregateInputType | true
+    }
+
+  export interface GlossaryTermDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GlossaryTerm'], meta: { name: 'GlossaryTerm' } }
+    /**
+     * Find zero or one GlossaryTerm that matches the filter.
+     * @param {GlossaryTermFindUniqueArgs} args - Arguments to find a GlossaryTerm
+     * @example
+     * // Get one GlossaryTerm
+     * const glossaryTerm = await prisma.glossaryTerm.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GlossaryTermFindUniqueArgs>(args: SelectSubset<T, GlossaryTermFindUniqueArgs<ExtArgs>>): Prisma__GlossaryTermClient<$Result.GetResult<Prisma.$GlossaryTermPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one GlossaryTerm that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {GlossaryTermFindUniqueOrThrowArgs} args - Arguments to find a GlossaryTerm
+     * @example
+     * // Get one GlossaryTerm
+     * const glossaryTerm = await prisma.glossaryTerm.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GlossaryTermFindUniqueOrThrowArgs>(args: SelectSubset<T, GlossaryTermFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GlossaryTermClient<$Result.GetResult<Prisma.$GlossaryTermPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first GlossaryTerm that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlossaryTermFindFirstArgs} args - Arguments to find a GlossaryTerm
+     * @example
+     * // Get one GlossaryTerm
+     * const glossaryTerm = await prisma.glossaryTerm.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GlossaryTermFindFirstArgs>(args?: SelectSubset<T, GlossaryTermFindFirstArgs<ExtArgs>>): Prisma__GlossaryTermClient<$Result.GetResult<Prisma.$GlossaryTermPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first GlossaryTerm that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlossaryTermFindFirstOrThrowArgs} args - Arguments to find a GlossaryTerm
+     * @example
+     * // Get one GlossaryTerm
+     * const glossaryTerm = await prisma.glossaryTerm.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GlossaryTermFindFirstOrThrowArgs>(args?: SelectSubset<T, GlossaryTermFindFirstOrThrowArgs<ExtArgs>>): Prisma__GlossaryTermClient<$Result.GetResult<Prisma.$GlossaryTermPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more GlossaryTerms that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlossaryTermFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GlossaryTerms
+     * const glossaryTerms = await prisma.glossaryTerm.findMany()
+     * 
+     * // Get first 10 GlossaryTerms
+     * const glossaryTerms = await prisma.glossaryTerm.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const glossaryTermWithIdOnly = await prisma.glossaryTerm.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GlossaryTermFindManyArgs>(args?: SelectSubset<T, GlossaryTermFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GlossaryTermPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a GlossaryTerm.
+     * @param {GlossaryTermCreateArgs} args - Arguments to create a GlossaryTerm.
+     * @example
+     * // Create one GlossaryTerm
+     * const GlossaryTerm = await prisma.glossaryTerm.create({
+     *   data: {
+     *     // ... data to create a GlossaryTerm
+     *   }
+     * })
+     * 
+     */
+    create<T extends GlossaryTermCreateArgs>(args: SelectSubset<T, GlossaryTermCreateArgs<ExtArgs>>): Prisma__GlossaryTermClient<$Result.GetResult<Prisma.$GlossaryTermPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many GlossaryTerms.
+     * @param {GlossaryTermCreateManyArgs} args - Arguments to create many GlossaryTerms.
+     * @example
+     * // Create many GlossaryTerms
+     * const glossaryTerm = await prisma.glossaryTerm.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GlossaryTermCreateManyArgs>(args?: SelectSubset<T, GlossaryTermCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a GlossaryTerm.
+     * @param {GlossaryTermDeleteArgs} args - Arguments to delete one GlossaryTerm.
+     * @example
+     * // Delete one GlossaryTerm
+     * const GlossaryTerm = await prisma.glossaryTerm.delete({
+     *   where: {
+     *     // ... filter to delete one GlossaryTerm
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GlossaryTermDeleteArgs>(args: SelectSubset<T, GlossaryTermDeleteArgs<ExtArgs>>): Prisma__GlossaryTermClient<$Result.GetResult<Prisma.$GlossaryTermPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one GlossaryTerm.
+     * @param {GlossaryTermUpdateArgs} args - Arguments to update one GlossaryTerm.
+     * @example
+     * // Update one GlossaryTerm
+     * const glossaryTerm = await prisma.glossaryTerm.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GlossaryTermUpdateArgs>(args: SelectSubset<T, GlossaryTermUpdateArgs<ExtArgs>>): Prisma__GlossaryTermClient<$Result.GetResult<Prisma.$GlossaryTermPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more GlossaryTerms.
+     * @param {GlossaryTermDeleteManyArgs} args - Arguments to filter GlossaryTerms to delete.
+     * @example
+     * // Delete a few GlossaryTerms
+     * const { count } = await prisma.glossaryTerm.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GlossaryTermDeleteManyArgs>(args?: SelectSubset<T, GlossaryTermDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GlossaryTerms.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlossaryTermUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GlossaryTerms
+     * const glossaryTerm = await prisma.glossaryTerm.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GlossaryTermUpdateManyArgs>(args: SelectSubset<T, GlossaryTermUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one GlossaryTerm.
+     * @param {GlossaryTermUpsertArgs} args - Arguments to update or create a GlossaryTerm.
+     * @example
+     * // Update or create a GlossaryTerm
+     * const glossaryTerm = await prisma.glossaryTerm.upsert({
+     *   create: {
+     *     // ... data to create a GlossaryTerm
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GlossaryTerm we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GlossaryTermUpsertArgs>(args: SelectSubset<T, GlossaryTermUpsertArgs<ExtArgs>>): Prisma__GlossaryTermClient<$Result.GetResult<Prisma.$GlossaryTermPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+    /**
+     * Find zero or more GlossaryTerms that matches the filter.
+     * @param {GlossaryTermFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const glossaryTerm = await prisma.glossaryTerm.findRaw({
+     *   filter: { age: { $gt: 25 } } 
+     * })
+     */
+    findRaw(args?: GlossaryTermFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a GlossaryTerm.
+     * @param {GlossaryTermAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const glossaryTerm = await prisma.glossaryTerm.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: GlossaryTermAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of GlossaryTerms.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlossaryTermCountArgs} args - Arguments to filter GlossaryTerms to count.
+     * @example
+     * // Count the number of GlossaryTerms
+     * const count = await prisma.glossaryTerm.count({
+     *   where: {
+     *     // ... the filter for the GlossaryTerms we want to count
+     *   }
+     * })
+    **/
+    count<T extends GlossaryTermCountArgs>(
+      args?: Subset<T, GlossaryTermCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GlossaryTermCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GlossaryTerm.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlossaryTermAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GlossaryTermAggregateArgs>(args: Subset<T, GlossaryTermAggregateArgs>): Prisma.PrismaPromise<GetGlossaryTermAggregateType<T>>
+
+    /**
+     * Group by GlossaryTerm.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GlossaryTermGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GlossaryTermGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GlossaryTermGroupByArgs['orderBy'] }
+        : { orderBy?: GlossaryTermGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GlossaryTermGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGlossaryTermGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GlossaryTerm model
+   */
+  readonly fields: GlossaryTermFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GlossaryTerm.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GlossaryTermClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GlossaryTerm model
+   */ 
+  interface GlossaryTermFieldRefs {
+    readonly id: FieldRef<"GlossaryTerm", 'String'>
+    readonly term: FieldRef<"GlossaryTerm", 'String'>
+    readonly meaning: FieldRef<"GlossaryTerm", 'String'>
+    readonly whyMatters: FieldRef<"GlossaryTerm", 'String'>
+    readonly createdAt: FieldRef<"GlossaryTerm", 'DateTime'>
+    readonly updatedAt: FieldRef<"GlossaryTerm", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GlossaryTerm findUnique
+   */
+  export type GlossaryTermFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlossaryTerm
+     */
+    select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * Filter, which GlossaryTerm to fetch.
+     */
+    where: GlossaryTermWhereUniqueInput
+  }
+
+  /**
+   * GlossaryTerm findUniqueOrThrow
+   */
+  export type GlossaryTermFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlossaryTerm
+     */
+    select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * Filter, which GlossaryTerm to fetch.
+     */
+    where: GlossaryTermWhereUniqueInput
+  }
+
+  /**
+   * GlossaryTerm findFirst
+   */
+  export type GlossaryTermFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlossaryTerm
+     */
+    select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * Filter, which GlossaryTerm to fetch.
+     */
+    where?: GlossaryTermWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GlossaryTerms to fetch.
+     */
+    orderBy?: GlossaryTermOrderByWithRelationInput | GlossaryTermOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GlossaryTerms.
+     */
+    cursor?: GlossaryTermWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GlossaryTerms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GlossaryTerms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GlossaryTerms.
+     */
+    distinct?: GlossaryTermScalarFieldEnum | GlossaryTermScalarFieldEnum[]
+  }
+
+  /**
+   * GlossaryTerm findFirstOrThrow
+   */
+  export type GlossaryTermFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlossaryTerm
+     */
+    select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * Filter, which GlossaryTerm to fetch.
+     */
+    where?: GlossaryTermWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GlossaryTerms to fetch.
+     */
+    orderBy?: GlossaryTermOrderByWithRelationInput | GlossaryTermOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GlossaryTerms.
+     */
+    cursor?: GlossaryTermWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GlossaryTerms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GlossaryTerms.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GlossaryTerms.
+     */
+    distinct?: GlossaryTermScalarFieldEnum | GlossaryTermScalarFieldEnum[]
+  }
+
+  /**
+   * GlossaryTerm findMany
+   */
+  export type GlossaryTermFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlossaryTerm
+     */
+    select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * Filter, which GlossaryTerms to fetch.
+     */
+    where?: GlossaryTermWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GlossaryTerms to fetch.
+     */
+    orderBy?: GlossaryTermOrderByWithRelationInput | GlossaryTermOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GlossaryTerms.
+     */
+    cursor?: GlossaryTermWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GlossaryTerms from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GlossaryTerms.
+     */
+    skip?: number
+    distinct?: GlossaryTermScalarFieldEnum | GlossaryTermScalarFieldEnum[]
+  }
+
+  /**
+   * GlossaryTerm create
+   */
+  export type GlossaryTermCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlossaryTerm
+     */
+    select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * The data needed to create a GlossaryTerm.
+     */
+    data: XOR<GlossaryTermCreateInput, GlossaryTermUncheckedCreateInput>
+  }
+
+  /**
+   * GlossaryTerm createMany
+   */
+  export type GlossaryTermCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GlossaryTerms.
+     */
+    data: GlossaryTermCreateManyInput | GlossaryTermCreateManyInput[]
+  }
+
+  /**
+   * GlossaryTerm update
+   */
+  export type GlossaryTermUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlossaryTerm
+     */
+    select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * The data needed to update a GlossaryTerm.
+     */
+    data: XOR<GlossaryTermUpdateInput, GlossaryTermUncheckedUpdateInput>
+    /**
+     * Choose, which GlossaryTerm to update.
+     */
+    where: GlossaryTermWhereUniqueInput
+  }
+
+  /**
+   * GlossaryTerm updateMany
+   */
+  export type GlossaryTermUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GlossaryTerms.
+     */
+    data: XOR<GlossaryTermUpdateManyMutationInput, GlossaryTermUncheckedUpdateManyInput>
+    /**
+     * Filter which GlossaryTerms to update
+     */
+    where?: GlossaryTermWhereInput
+  }
+
+  /**
+   * GlossaryTerm upsert
+   */
+  export type GlossaryTermUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlossaryTerm
+     */
+    select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * The filter to search for the GlossaryTerm to update in case it exists.
+     */
+    where: GlossaryTermWhereUniqueInput
+    /**
+     * In case the GlossaryTerm found by the `where` argument doesn't exist, create a new GlossaryTerm with this data.
+     */
+    create: XOR<GlossaryTermCreateInput, GlossaryTermUncheckedCreateInput>
+    /**
+     * In case the GlossaryTerm was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GlossaryTermUpdateInput, GlossaryTermUncheckedUpdateInput>
+  }
+
+  /**
+   * GlossaryTerm delete
+   */
+  export type GlossaryTermDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlossaryTerm
+     */
+    select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * Filter which GlossaryTerm to delete.
+     */
+    where: GlossaryTermWhereUniqueInput
+  }
+
+  /**
+   * GlossaryTerm deleteMany
+   */
+  export type GlossaryTermDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GlossaryTerms to delete
+     */
+    where?: GlossaryTermWhereInput
+  }
+
+  /**
+   * GlossaryTerm findRaw
+   */
+  export type GlossaryTermFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * GlossaryTerm aggregateRaw
+   */
+  export type GlossaryTermAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * GlossaryTerm without action
+   */
+  export type GlossaryTermDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlossaryTerm
+     */
+    select?: GlossaryTermSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -12585,6 +13568,18 @@ export namespace Prisma {
   };
 
   export type PoseImageScalarFieldEnum = (typeof PoseImageScalarFieldEnum)[keyof typeof PoseImageScalarFieldEnum]
+
+
+  export const GlossaryTermScalarFieldEnum: {
+    id: 'id',
+    term: 'term',
+    meaning: 'meaning',
+    whyMatters: 'whyMatters',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type GlossaryTermScalarFieldEnum = (typeof GlossaryTermScalarFieldEnum)[keyof typeof GlossaryTermScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -13763,6 +14758,63 @@ export namespace Prisma {
     isOffline?: BoolWithAggregatesFilter<"PoseImage"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"PoseImage"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PoseImage"> | Date | string
+  }
+
+  export type GlossaryTermWhereInput = {
+    AND?: GlossaryTermWhereInput | GlossaryTermWhereInput[]
+    OR?: GlossaryTermWhereInput[]
+    NOT?: GlossaryTermWhereInput | GlossaryTermWhereInput[]
+    id?: StringFilter<"GlossaryTerm"> | string
+    term?: StringFilter<"GlossaryTerm"> | string
+    meaning?: StringFilter<"GlossaryTerm"> | string
+    whyMatters?: StringFilter<"GlossaryTerm"> | string
+    createdAt?: DateTimeFilter<"GlossaryTerm"> | Date | string
+    updatedAt?: DateTimeFilter<"GlossaryTerm"> | Date | string
+  }
+
+  export type GlossaryTermOrderByWithRelationInput = {
+    id?: SortOrder
+    term?: SortOrder
+    meaning?: SortOrder
+    whyMatters?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GlossaryTermWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    term?: string
+    AND?: GlossaryTermWhereInput | GlossaryTermWhereInput[]
+    OR?: GlossaryTermWhereInput[]
+    NOT?: GlossaryTermWhereInput | GlossaryTermWhereInput[]
+    meaning?: StringFilter<"GlossaryTerm"> | string
+    whyMatters?: StringFilter<"GlossaryTerm"> | string
+    createdAt?: DateTimeFilter<"GlossaryTerm"> | Date | string
+    updatedAt?: DateTimeFilter<"GlossaryTerm"> | Date | string
+  }, "id" | "term">
+
+  export type GlossaryTermOrderByWithAggregationInput = {
+    id?: SortOrder
+    term?: SortOrder
+    meaning?: SortOrder
+    whyMatters?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: GlossaryTermCountOrderByAggregateInput
+    _max?: GlossaryTermMaxOrderByAggregateInput
+    _min?: GlossaryTermMinOrderByAggregateInput
+  }
+
+  export type GlossaryTermScalarWhereWithAggregatesInput = {
+    AND?: GlossaryTermScalarWhereWithAggregatesInput | GlossaryTermScalarWhereWithAggregatesInput[]
+    OR?: GlossaryTermScalarWhereWithAggregatesInput[]
+    NOT?: GlossaryTermScalarWhereWithAggregatesInput | GlossaryTermScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"GlossaryTerm"> | string
+    term?: StringWithAggregatesFilter<"GlossaryTerm"> | string
+    meaning?: StringWithAggregatesFilter<"GlossaryTerm"> | string
+    whyMatters?: StringWithAggregatesFilter<"GlossaryTerm"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"GlossaryTerm"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GlossaryTerm"> | Date | string
   }
 
   export type UserDataCreateInput = {
@@ -14988,6 +16040,65 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type GlossaryTermCreateInput = {
+    id?: string
+    term: string
+    meaning: string
+    whyMatters: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GlossaryTermUncheckedCreateInput = {
+    id?: string
+    term: string
+    meaning: string
+    whyMatters: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GlossaryTermUpdateInput = {
+    term?: StringFieldUpdateOperationsInput | string
+    meaning?: StringFieldUpdateOperationsInput | string
+    whyMatters?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GlossaryTermUncheckedUpdateInput = {
+    term?: StringFieldUpdateOperationsInput | string
+    meaning?: StringFieldUpdateOperationsInput | string
+    whyMatters?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GlossaryTermCreateManyInput = {
+    id?: string
+    term: string
+    meaning: string
+    whyMatters: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GlossaryTermUpdateManyMutationInput = {
+    term?: StringFieldUpdateOperationsInput | string
+    meaning?: StringFieldUpdateOperationsInput | string
+    whyMatters?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GlossaryTermUncheckedUpdateManyInput = {
+    term?: StringFieldUpdateOperationsInput | string
+    meaning?: StringFieldUpdateOperationsInput | string
+    whyMatters?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -15878,6 +16989,33 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type GlossaryTermCountOrderByAggregateInput = {
+    id?: SortOrder
+    term?: SortOrder
+    meaning?: SortOrder
+    whyMatters?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GlossaryTermMaxOrderByAggregateInput = {
+    id?: SortOrder
+    term?: SortOrder
+    meaning?: SortOrder
+    whyMatters?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GlossaryTermMinOrderByAggregateInput = {
+    id?: SortOrder
+    term?: SortOrder
+    meaning?: SortOrder
+    whyMatters?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type ProviderAccountCreateNestedManyWithoutUserInput = {
@@ -18904,6 +20042,10 @@ export namespace Prisma {
      * @deprecated Use PoseImageDefaultArgs instead
      */
     export type PoseImageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PoseImageDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use GlossaryTermDefaultArgs instead
+     */
+    export type GlossaryTermArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = GlossaryTermDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

@@ -256,3 +256,12 @@ enum StorageType {
   LOCAL    // Stored locally in browser storage
   HYBRID   // Has both cloud and local copies
 }
+
+model GlossaryTerm {
+  id          String   @id @default(cuid()) @map("_id")
+  term        String   @unique
+  meaning     String
+  whyMatters  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

@@ -289,6 +289,15 @@ exports.Prisma.PoseImageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.GlossaryTermScalarFieldEnum = {
+  id: 'id',
+  term: 'term',
+  meaning: 'meaning',
+  whyMatters: 'whyMatters',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -314,7 +323,8 @@ exports.Prisma.ModelName = {
   SeriesActivity: 'SeriesActivity',
   SequenceActivity: 'SequenceActivity',
   UserLogin: 'UserLogin',
-  PoseImage: 'PoseImage'
+  PoseImage: 'PoseImage',
+  GlossaryTerm: 'GlossaryTerm'
 };
 
 /**

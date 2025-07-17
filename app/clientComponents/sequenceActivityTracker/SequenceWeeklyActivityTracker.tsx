@@ -26,7 +26,7 @@ interface SequenceWeeklyActivityTrackerProps {
 
 export default function SequenceWeeklyActivityTracker({
   sequenceId,
-  sequenceName,
+  sequenceName: _sequenceName,
   variant = 'compact',
   refreshTrigger = 0,
 }: SequenceWeeklyActivityTrackerProps) {
