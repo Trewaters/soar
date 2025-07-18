@@ -1,7 +1,5 @@
-import * as marky from 'marky'
-
 /**
- * Utility functions for working with the marky timer library
+ * Utility functions for working with timers
  */
 
 export interface TimerEntry {
@@ -12,53 +10,47 @@ export interface TimerEntry {
 }
 
 /**
- * Start a named timer mark
+ * These timer utility functions are maintained for compatibility
+ * but the actual timer functionality now uses react-use-precision-timer
+ * in the components and context.
+ */
+
+/**
+ * Legacy function - maintained for compatibility
  * @param name - The name of the timer to start
  */
 export function startTimer(name: string): void {
-  try {
-    marky.mark(name)
-  } catch (error) {
-    console.warn(`Failed to start timer "${name}":`, error)
-  }
+  console.log(`Timer "${name}" started - using react-use-precision-timer`)
 }
 
 /**
- * Stop a named timer and return the duration
+ * Legacy function - maintained for compatibility
  * @param name - The name of the timer to stop
  * @returns TimerEntry with duration information, or null if failed
  */
 export function stopTimer(name: string): TimerEntry | null {
-  try {
-    return marky.stop(name)
-  } catch (error) {
-    console.warn(`Failed to stop timer "${name}":`, error)
-    return null
+  console.log(`Timer "${name}" stopped - using react-use-precision-timer`)
+  return {
+    entryType: 'measure',
+    startTime: Date.now(),
+    duration: 0,
+    name,
   }
 }
 
 /**
- * Clear all timer entries
+ * Legacy function - maintained for compatibility
  */
 export function clearAllTimers(): void {
-  try {
-    marky.clear()
-  } catch (error) {
-    console.warn('Failed to clear timers:', error)
-  }
+  console.log('Timers cleared - using react-use-precision-timer')
 }
 
 /**
- * Get all timer entries
+ * Legacy function - maintained for compatibility
  * @returns Array of all timer entries
  */
 export function getAllTimerEntries(): TimerEntry[] {
-  try {
-    return marky.getEntries()
-  } catch (error) {
-    console.warn('Failed to get timer entries:', error)
-    return []
-  }
+  return []
 }
 
 /**

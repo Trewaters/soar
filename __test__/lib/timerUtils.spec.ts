@@ -14,17 +14,19 @@ import {
   msToSeconds,
 } from '@lib/timerUtils'
 
-// Mock marky to avoid issues in test environment
-jest.mock('marky', () => ({
-  mark: jest.fn(),
-  stop: jest.fn(() => ({
-    entryType: 'measure',
-    startTime: 1000,
-    duration: 5000, // 5 seconds
-    name: 'test-timer',
+// Mock react-use-precision-timer instead of marky
+jest.mock('react-use-precision-timer', () => ({
+  useTimer: jest.fn(),
+  useStopwatch: jest.fn(() => ({
+    start: jest.fn(),
+    stop: jest.fn(),
+    pause: jest.fn(),
+    resume: jest.fn(),
+    isRunning: jest.fn(() => false),
+    getElapsedRunningTime: jest.fn(() => 5000), // 5 seconds
+    getElapsedPausedTime: jest.fn(() => 0),
   })),
-  clear: jest.fn(),
-  getEntries: jest.fn(() => []),
+  useDelay: jest.fn(),
 }))
 
 describe('Timer Utils', () => {
@@ -67,22 +69,16 @@ describe('Timer Utils', () => {
     })
   })
 
-  describe('timer functions', () => {
-    it('should start and stop timers', () => {
-      startTimer('test-timer')
-      const result = stopTimer('test-timer')
-
-      expect(result).toBeDefined()
-      expect(result?.name).toBe('test-timer')
-      expect(result?.duration).toBe(5000)
-    })
-
-    it('should handle timer errors gracefully', () => {
-      // Should not throw even if timer operations fail
+  describe('legacy timer functions', () => {
+    it('should handle timer operations gracefully', () => {
+      // Should not throw even if timer operations are called
       expect(() => {
         startTimer('test')
-        stopTimer('non-existent')
+        const result = stopTimer('test')
         clearAllTimers()
+
+        expect(result).toBeDefined()
+        expect(result?.name).toBe('test')
       }).not.toThrow()
     })
   })

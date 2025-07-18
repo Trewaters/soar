@@ -70,43 +70,34 @@ export default function AsanaTimer() {
 import { AsanaTimerProps, useTimer } from '@context/timerContext'
 import { formatDuration } from '@lib/timerUtils'
 import { Box, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
+import { useStopwatch } from 'react-use-precision-timer'
 
 export default function AsanaTimer({
   onTimeUpdate,
   onPauseUpdate,
 }: AsanaTimerProps) {
-  const [displayTime, setDisplayTime] = useState(0)
-  const { state } = useTimer()
+  const { state, dispatch } = useTimer()
 
-  // Update display time and call onTimeUpdate
+  // Create a stopwatch using react-use-precision-timer
+  const stopwatch = useStopwatch()
+
+  // Update callback to track elapsed time
+  const updateElapsedTime = useCallback(() => {
+    const elapsedSeconds = Math.floor(stopwatch.getElapsedRunningTime() / 1000)
+    dispatch({ type: 'UPDATE_ELAPSED_TIME', payload: elapsedSeconds })
+    onTimeUpdate(elapsedSeconds)
+  }, [stopwatch, dispatch, onTimeUpdate])
+
+  // Set up interval to update elapsed time every second when running
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
 
-    const updateDisplayTime = () => {
-      if (state.watch.isPaused) {
-        // When paused, show the stored elapsed time
-        setDisplayTime(state.watch.elapsedTime)
-        onTimeUpdate(state.watch.elapsedTime)
-      } else if (state.watch.startTime) {
-        // When running, calculate current elapsed time from start time
-        const currentSessionTime = (Date.now() - state.watch.startTime) / 1000
-        const totalTime = state.watch.elapsedTime + currentSessionTime
-        setDisplayTime(totalTime)
-        onTimeUpdate(totalTime)
-      } else {
-        // No active timing, use stored elapsed time
-        setDisplayTime(state.watch.elapsedTime)
-        onTimeUpdate(state.watch.elapsedTime)
-      }
-    }
-
-    // Update immediately
-    updateDisplayTime()
-
-    // Set up interval to update every second when not paused
-    if (!state.watch.isPaused) {
-      interval = setInterval(updateDisplayTime, 1000)
+    if (state.watch.isRunning && !state.watch.isPaused) {
+      // Update immediately
+      updateElapsedTime()
+      // Set up interval for regular updates
+      interval = setInterval(updateElapsedTime, 1000)
     }
 
     return () => {
@@ -114,12 +105,29 @@ export default function AsanaTimer({
         clearInterval(interval)
       }
     }
-  }, [
-    state.watch.isPaused,
-    state.watch.startTime,
-    state.watch.elapsedTime,
-    onTimeUpdate,
-  ])
+  }, [state.watch.isRunning, state.watch.isPaused, updateElapsedTime])
+
+  // Handle timer state changes
+  useEffect(() => {
+    if (state.watch.isRunning && !state.watch.isPaused) {
+      // Timer should be running
+      if (!stopwatch.isRunning()) {
+        stopwatch.start()
+      }
+    } else {
+      // Timer should be paused or stopped
+      if (stopwatch.isRunning()) {
+        stopwatch.pause()
+      }
+    }
+  }, [state.watch.isRunning, state.watch.isPaused, stopwatch])
+
+  // Handle reset
+  useEffect(() => {
+    if (state.watch.elapsedTime === 0 && !state.watch.isRunning) {
+      stopwatch.stop()
+    }
+  }, [state.watch.elapsedTime, state.watch.isRunning, stopwatch])
 
   // Notify about pause state changes
   useEffect(() => {
@@ -131,7 +139,7 @@ export default function AsanaTimer({
   return (
     <Box>
       <Typography sx={{ color: 'white' }}>
-        Elapsed Time: {formatDuration(displayTime)}
+        Elapsed Time: {formatDuration(state.watch.elapsedTime)}
       </Typography>
     </Box>
   )

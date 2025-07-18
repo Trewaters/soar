@@ -73,22 +73,26 @@ export default function ViewAsanaPractice({
     if (
       state.watch.elapsedTime === 0 &&
       state.watch.isPaused &&
-      !state.watch.markName
+      !state.watch.isRunning
     ) {
       setElapsedTime(0)
     }
-  }, [state.watch.elapsedTime, state.watch.isPaused, state.watch.markName])
+  }, [state.watch.elapsedTime, state.watch.isPaused, state.watch.isRunning])
 
   const handlePlayPause = () => {
-    if (state.watch.isPaused) {
-      dispatch({ type: 'RESUME_TIMER' })
+    if (state.watch.isPaused || !state.watch.isRunning) {
+      if (state.watch.elapsedTime === 0) {
+        dispatch({ type: 'START_TIMER' })
+      } else {
+        dispatch({ type: 'RESUME_TIMER' })
+      }
     } else {
       dispatch({ type: 'PAUSE_TIMER' })
     }
   }
 
   const handleStop = () => {
-    // Reset the context timer (this sets isPaused: true, startTime: null, elapsedTime: 0)
+    // Reset the context timer (this sets isPaused: true, isRunning: false, elapsedTime: 0)
     dispatch({ type: 'RESET_TIMER' })
     // Reset the local elapsed time to sync with the context
     setElapsedTime(0)
@@ -97,9 +101,9 @@ export default function ViewAsanaPractice({
   const handleRestart = () => {
     dispatch({ type: 'RESET_TIMER' })
     setElapsedTime(0)
-    // Small delay to ensure reset is processed before resuming
+    // Small delay to ensure reset is processed before starting
     setTimeout(() => {
-      dispatch({ type: 'RESUME_TIMER' })
+      dispatch({ type: 'START_TIMER' })
     }, 10)
   }
 

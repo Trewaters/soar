@@ -1,14 +1,8 @@
 import { createContext, Dispatch, ReactNode, use, useReducer } from 'react'
-import {
-  startTimer,
-  stopTimer,
-  clearAllTimers,
-  msToSeconds,
-} from '@lib/timerUtils'
 
 export interface TimerWatch {
   isPaused: boolean
-  markName: string | null
+  isRunning: boolean
   startTime: number | null
   elapsedTime: number
   id?: string
@@ -33,11 +27,14 @@ type TimerAction =
   | { type: 'RESET_TIMER' }
   | { type: 'PAUSE_TIMER' }
   | { type: 'RESUME_TIMER' }
+  | { type: 'START_TIMER' }
+  | { type: 'STOP_TIMER' }
+  | { type: 'UPDATE_ELAPSED_TIME'; payload: number }
 
 const initialState: TimerPageState = {
   watch: {
     isPaused: true,
-    markName: null,
+    isRunning: false,
     startTime: null,
     elapsedTime: 0,
   },
@@ -57,8 +54,6 @@ function TimerReducer(
   state: TimerPageState,
   action: TimerAction
 ): TimerPageState {
-  const generateMarkName = () => `timer-${Date.now()}-${Math.random()}`
-
   switch (action.type) {
     case 'SET_TIMER':
       return {
@@ -66,63 +61,65 @@ function TimerReducer(
         watch: action.payload,
       }
     case 'RESET_TIMER': {
-      // Clear all existing marks and measurements
-      clearAllTimers()
-
       return {
         ...state,
         watch: {
           ...state.watch,
           isPaused: true,
-          markName: null,
+          isRunning: false,
           startTime: null,
           elapsedTime: 0,
         },
       }
     }
-    case 'PAUSE_TIMER': {
-      let pausedElapsedTime = state.watch.elapsedTime
-
-      // If we have an active mark, stop it and get the elapsed time
-      if (state.watch.markName && !state.watch.isPaused) {
-        const result = stopTimer(state.watch.markName)
-        if (result) {
-          pausedElapsedTime =
-            state.watch.elapsedTime + msToSeconds(result.duration)
-        } else {
-          // Fallback to manual calculation if marky fails
-          if (state.watch.startTime) {
-            const elapsed = (Date.now() - state.watch.startTime) / 1000
-            pausedElapsedTime = state.watch.elapsedTime + elapsed
-          }
-        }
-      }
-
-      return {
-        ...state,
-        watch: {
-          ...state.watch,
-          isPaused: true,
-          markName: null,
-          startTime: null,
-          elapsedTime: pausedElapsedTime,
-        },
-      }
-    }
-    case 'RESUME_TIMER': {
-      // Start a new mark when resuming
-      const newMarkName = generateMarkName()
-      const startTime = Date.now()
-
-      startTimer(newMarkName)
-
+    case 'START_TIMER': {
       return {
         ...state,
         watch: {
           ...state.watch,
           isPaused: false,
-          markName: newMarkName,
-          startTime,
+          isRunning: true,
+          startTime: Date.now(),
+        },
+      }
+    }
+    case 'PAUSE_TIMER': {
+      return {
+        ...state,
+        watch: {
+          ...state.watch,
+          isPaused: true,
+          isRunning: false,
+        },
+      }
+    }
+    case 'RESUME_TIMER': {
+      return {
+        ...state,
+        watch: {
+          ...state.watch,
+          isPaused: false,
+          isRunning: true,
+        },
+      }
+    }
+    case 'STOP_TIMER': {
+      return {
+        ...state,
+        watch: {
+          ...state.watch,
+          isPaused: true,
+          isRunning: false,
+          startTime: null,
+        },
+      }
+    }
+    case 'UPDATE_ELAPSED_TIME': {
+      return {
+        ...state,
+        watch: {
+          ...state.watch,
+          elapsedTime: action.payload,
         },
       }
     }
