@@ -456,8 +456,6 @@ If the Activity Streak feature fails in production:
 The application checks environment variables in this order:
 
 1. `DATABASE_URL` (preferred for all environments)
-2. `MONGODB_URI_v2` (development fallback)
-3. `MONGODB_URI` (production fallback)
 
 This ensures backward compatibility while moving toward a standardized approach.
 
