@@ -125,7 +125,7 @@ export default function PrecisionTimerExamples() {
             Running Time: {formatTime(stopwatch.getElapsedRunningTime())}
           </Typography>
           <Typography variant="body2">
-            Paused Time: {formatTime(stopwatch.getElapsedPausedTime())}
+            Paused Time: {formatTime(stopwatch.getTotalElapsedPausedTime())}
           </Typography>
           <Typography variant="body2">
             Status:{' '}
