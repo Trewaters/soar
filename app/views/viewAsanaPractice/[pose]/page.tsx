@@ -69,31 +69,38 @@ export default function ViewAsanaPractice({
 
   // Sync local elapsedTime with timer context state
   useEffect(() => {
-    // When timer is reset, ensure local state is also reset
-    if (
-      state.watch.elapsedTime === 0 &&
-      state.watch.isPaused &&
-      !state.watch.isRunning
-    ) {
-      setElapsedTime(0)
-    }
-  }, [state.watch.elapsedTime, state.watch.isPaused, state.watch.isRunning])
+    // Always sync local state with context state
+    setElapsedTime(state.watch.elapsedTime)
+  }, [state.watch.elapsedTime])
 
   const handlePlayPause = () => {
-    if (state.watch.isPaused || !state.watch.isRunning) {
-      if (state.watch.elapsedTime === 0) {
+    console.log('handlePlayPause called, current state:', {
+      isPaused: state.watch.isPaused,
+      isRunning: state.watch.isRunning,
+      elapsedTime: state.watch.elapsedTime,
+    })
+
+    if (state.watch.isPaused) {
+      // Timer is currently paused - start or resume
+      if (state.watch.elapsedTime === 0 && !state.watch.isRunning) {
+        // Starting from beginning
+        console.log('Starting timer from beginning')
         dispatch({ type: 'START_TIMER' })
       } else {
+        // Resuming from pause
+        console.log('Resuming timer from pause')
         dispatch({ type: 'RESUME_TIMER' })
       }
     } else {
+      // Timer is currently running - pause it
+      console.log('Pausing timer')
       dispatch({ type: 'PAUSE_TIMER' })
     }
   }
 
   const handleStop = () => {
-    // Reset the context timer (this sets isPaused: true, isRunning: false, elapsedTime: 0)
-    dispatch({ type: 'RESET_TIMER' })
+    // Stop the timer completely (this sets isPaused: true, isRunning: false, elapsedTime: 0)
+    dispatch({ type: 'STOP_TIMER' })
     // Reset the local elapsed time to sync with the context
     setElapsedTime(0)
   }

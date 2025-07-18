@@ -7,6 +7,7 @@ import { CssBaseline } from '@mui/material'
 import UserStateProvider from '@context/UserContext'
 import FlowSeriesProvider from '@context/AsanaSeriesContext'
 import AsanaPostureProvider from '@context/AsanaPostureContext'
+import TimerProvider from '@context/timerContext'
 import { SessionProvider } from 'next-auth/react'
 import ReactDOM from 'react-dom'
 
@@ -42,9 +43,11 @@ export function Providers({
         {/* CssBaseline to kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline>
           <UserStateProvider>
-            <FlowSeriesProvider>
-              <AsanaPostureProvider>{children}</AsanaPostureProvider>
-            </FlowSeriesProvider>
+            <TimerProvider>
+              <FlowSeriesProvider>
+                <AsanaPostureProvider>{children}</AsanaPostureProvider>
+              </FlowSeriesProvider>
+            </TimerProvider>
           </UserStateProvider>
         </CssBaseline>
       </ThemeProvider>

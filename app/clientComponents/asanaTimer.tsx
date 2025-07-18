@@ -70,64 +70,95 @@ export default function AsanaTimer() {
 import { AsanaTimerProps, useTimer } from '@context/timerContext'
 import { formatDuration } from '@lib/timerUtils'
 import { Box, Typography } from '@mui/material'
-import { useCallback, useEffect } from 'react'
-import { useStopwatch } from 'react-use-precision-timer'
+import { useCallback, useEffect, useRef } from 'react'
 
 export default function AsanaTimer({
   onTimeUpdate,
   onPauseUpdate,
 }: AsanaTimerProps) {
   const { state, dispatch } = useTimer()
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const startTimeRef = useRef<number | null>(null)
+  const lastElapsedRef = useRef<number>(0)
 
-  // Create a stopwatch using react-use-precision-timer
-  const stopwatch = useStopwatch()
+  // Debug logging
+  console.log('AsanaTimer state:', {
+    isRunning: state.watch.isRunning,
+    isPaused: state.watch.isPaused,
+    elapsedTime: state.watch.elapsedTime,
+  })
 
-  // Update callback to track elapsed time
+  // Simple fallback timer implementation
   const updateElapsedTime = useCallback(() => {
-    const elapsedSeconds = Math.floor(stopwatch.getElapsedRunningTime() / 1000)
-    dispatch({ type: 'UPDATE_ELAPSED_TIME', payload: elapsedSeconds })
-    onTimeUpdate(elapsedSeconds)
-  }, [stopwatch, dispatch, onTimeUpdate])
+    if (
+      startTimeRef.current &&
+      state.watch.isRunning &&
+      !state.watch.isPaused
+    ) {
+      const now = Date.now()
+      const elapsedSeconds = Math.floor(
+        (now - startTimeRef.current) / 1000 + lastElapsedRef.current
+      )
+      console.log('Updating elapsed time:', elapsedSeconds)
+      dispatch({ type: 'UPDATE_ELAPSED_TIME', payload: elapsedSeconds })
+      onTimeUpdate(elapsedSeconds)
+    }
+  }, [state.watch.isRunning, state.watch.isPaused, dispatch, onTimeUpdate])
 
   // Set up interval to update elapsed time every second when running
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null
-
     if (state.watch.isRunning && !state.watch.isPaused) {
+      // Set start time when starting
+      if (!startTimeRef.current) {
+        startTimeRef.current = Date.now()
+        lastElapsedRef.current = state.watch.elapsedTime
+      }
+
       // Update immediately
       updateElapsedTime()
       // Set up interval for regular updates
-      interval = setInterval(updateElapsedTime, 1000)
+      intervalRef.current = setInterval(updateElapsedTime, 1000)
+    } else if (state.watch.isPaused) {
+      // Store the current elapsed time and clear interval when paused
+      lastElapsedRef.current = state.watch.elapsedTime
+      startTimeRef.current = null
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    } else {
+      // Clear everything when stopped
+      startTimeRef.current = null
+      lastElapsedRef.current = 0
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
     }
 
     return () => {
-      if (interval) {
-        clearInterval(interval)
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
       }
     }
-  }, [state.watch.isRunning, state.watch.isPaused, updateElapsedTime])
-
-  // Handle timer state changes
-  useEffect(() => {
-    if (state.watch.isRunning && !state.watch.isPaused) {
-      // Timer should be running
-      if (!stopwatch.isRunning()) {
-        stopwatch.start()
-      }
-    } else {
-      // Timer should be paused or stopped
-      if (stopwatch.isRunning()) {
-        stopwatch.pause()
-      }
-    }
-  }, [state.watch.isRunning, state.watch.isPaused, stopwatch])
+  }, [
+    state.watch.isRunning,
+    state.watch.isPaused,
+    state.watch.elapsedTime,
+    updateElapsedTime,
+  ])
 
   // Handle reset
   useEffect(() => {
     if (state.watch.elapsedTime === 0 && !state.watch.isRunning) {
-      stopwatch.stop()
+      startTimeRef.current = null
+      lastElapsedRef.current = 0
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
     }
-  }, [state.watch.elapsedTime, state.watch.isRunning, stopwatch])
+  }, [state.watch.elapsedTime, state.watch.isRunning])
 
   // Notify about pause state changes
   useEffect(() => {
@@ -139,7 +170,7 @@ export default function AsanaTimer({
   return (
     <Box>
       <Typography sx={{ color: 'white' }}>
-        Elapsed Time: {formatDuration(state.watch.elapsedTime)}
+        Debug Timer: {formatDuration(state.watch.elapsedTime)}
       </Typography>
     </Box>
   )

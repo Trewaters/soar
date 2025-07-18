@@ -1,4 +1,10 @@
-import { createContext, Dispatch, ReactNode, use, useReducer } from 'react'
+import {
+  createContext,
+  Dispatch,
+  ReactNode,
+  useContext,
+  useReducer,
+} from 'react'
 
 export interface TimerWatch {
   isPaused: boolean
@@ -111,6 +117,7 @@ function TimerReducer(
           isPaused: true,
           isRunning: false,
           startTime: null,
+          elapsedTime: 0, // Reset elapsed time when stopping
         },
       }
     }
@@ -139,7 +146,7 @@ export default function TimerProvider({ children }: { children: ReactNode }) {
 }
 
 export function useTimer() {
-  const context = use(TimerContext)
+  const context = useContext(TimerContext)
   if (!context) {
     throw new Error('useTimer must be used within a TimerProvider')
   }
