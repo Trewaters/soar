@@ -58,6 +58,19 @@ export default async function SettingsPage() {
                       Send feedback to developer
                     </Box>
                   </Typography>
+                  <Typography component="li" variant="body2" sx={{ mb: 1 }}>
+                    <Box
+                      component="a"
+                      href="/navigator/compliance/terms"
+                      sx={{
+                        color: 'primary.main',
+                        textDecoration: 'none',
+                        '&:hover': { textDecoration: 'underline' },
+                      }}
+                    >
+                      Terms and conditions
+                    </Box>
+                  </Typography>
                 </Box>
 
                 <Typography
