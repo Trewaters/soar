@@ -61,7 +61,7 @@ export default async function SettingsPage() {
                   <Typography component="li" variant="body2" sx={{ mb: 1 }}>
                     <Box
                       component="a"
-                      href="/navigator/compliance/terms"
+                      href="/compliance/terms"
                       sx={{
                         color: 'primary.main',
                         textDecoration: 'none',
