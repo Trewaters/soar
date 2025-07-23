@@ -40,3 +40,9 @@ next-env.d.ts
 
 # dev added files
 postures.json
+
+# CoPilot files
+.instructions
+.instructions/**
+.continue
+.continue/**
