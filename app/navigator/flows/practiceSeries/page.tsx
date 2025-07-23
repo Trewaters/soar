@@ -17,24 +17,40 @@ import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
 import NavBottom from '@serverComponents/navBottom'
 import PostureShareButton from '@app/clientComponents/exportPoses'
+import { getAllSeries } from '@lib/seriesService'
+import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
+import SeriesWeeklyActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesWeeklyActivityTracker'
+import { useSearchParams } from 'next/navigation'
 
 export default function Page() {
   const theme = useTheme()
+  const searchParams = useSearchParams()
+  const seriesId = searchParams.get('id')
   const [series, setSeries] = useState<FlowSeriesData[]>([])
   const [flow, setFlow] = useState<FlowSeriesData>()
   const [open, setOpen] = useState(false)
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await fetch('/api/series', { cache: 'no-store' })
-      if (!response.ok) {
-        throw new Error('Network response was not ok')
+    const fetchData = async () => {
+      try {
+        const seriesData = await getAllSeries()
+        setSeries(seriesData as FlowSeriesData[])
+
+        // If there's a series ID in the URL, auto-select that series
+        if (seriesId && seriesData.length > 0) {
+          const selectedSeries = seriesData.find((s) => s.id === seriesId)
+          if (selectedSeries) {
+            setFlow(selectedSeries)
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching series:', error)
       }
-      setSeries(await response.json())
     }
 
     fetchData()
-  }, [])
+  }, [seriesId]) // Add seriesId as dependency
 
   function handleSelect(
     event: ChangeEvent<object>,
@@ -50,6 +66,12 @@ export default function Page() {
 
   function handleInfoClick() {
     setOpen(!open)
+  }
+
+  function handleActivityToggle(isTracked: boolean) {
+    console.log('Series activity tracked:', isTracked)
+    // Trigger refresh of any activity components that might be listening
+    setRefreshTrigger((prev) => prev + 1)
   }
 
   return (
@@ -73,7 +95,13 @@ export default function Page() {
           onClick={handleInfoClick}
         />
         <Stack sx={{ px: 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <Typography variant="h6" sx={{ color: 'primary.main', mr: 2 }}>
+              Practice Series
+            </Typography>
+          </Box>
           <Autocomplete
+            key={`series-autocomplete-${series.length}-${Date.now()}`} // Force re-render when data changes
             disablePortal
             freeSolo={false}
             id="combo-box-series-search"
@@ -196,6 +224,26 @@ export default function Page() {
                   {flow.description}
                 </Typography>
               </Box>
+
+              {/* Series Activity Tracker */}
+              <Box sx={{ mt: 3 }}>
+                <SeriesActivityTracker
+                  seriesId={flow.id?.toString() || ''}
+                  seriesName={flow.seriesName}
+                  onActivityToggle={handleActivityToggle}
+                />
+              </Box>
+
+              {/* Series Weekly Activity Tracker */}
+              <Box sx={{ mt: 3 }}>
+                <SeriesWeeklyActivityTracker
+                  seriesId={flow.id?.toString() || ''}
+                  seriesName={flow.seriesName}
+                  variant="detailed"
+                  refreshTrigger={refreshTrigger}
+                />
+              </Box>
+
               <PostureShareButton seriesData={flow} />
             </Box>
           </Box>

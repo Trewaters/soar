@@ -138,7 +138,9 @@ export default function Page() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          cache: 'no-store',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
         },
         body: JSON.stringify(updatedSequence),
       })
@@ -147,8 +149,20 @@ export default function Page() {
       }
       const data = await response.json()
       console.log('create sequence response', data)
+
+      // Ensure the sequence was created successfully before navigating
+      if (data.sequence) {
+        console.log(
+          'Sequence created successfully:',
+          data.sequence.nameSequence
+        )
+        // Navigate back to practice sequences page after successful creation
+        router.push('/navigator/flows/practiceSequences')
+      } else {
+        throw new Error('Sequence creation returned no sequence data')
+      }
     } catch (error: Error | any) {
-      error.message
+      console.error('Error creating sequence:', error.message)
     }
     handleCancel()
   }

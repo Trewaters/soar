@@ -5,6 +5,9 @@ import { storageManager } from '../../../../lib/storage/manager'
 
 const prisma = new PrismaClient()
 
+// Force this route to be dynamic since it requires query parameters and authentication
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
   try {
     // Check authentication

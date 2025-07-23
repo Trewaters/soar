@@ -46,3 +46,5 @@ postures.json
 .instructions/**
 .continue
 .continue/**
+# mongo files to ignore
+datalogmongod.log*

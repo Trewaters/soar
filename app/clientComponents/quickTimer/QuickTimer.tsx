@@ -29,6 +29,7 @@ export interface QuickTimerProps {
   /** Callback when timer ends */
   onTimerEnd?: () => void
   /** Callback with remaining seconds on each update */
+  // eslint-disable-next-line no-unused-vars
   onTimerUpdate?: (remainingSeconds: number) => void
   /** Show/hide the timer display when active (default: true) */
   showTimeDisplay?: boolean

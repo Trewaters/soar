@@ -8,7 +8,12 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 
 // Extensible streak type system
-export type StreakType = 'login' | 'asana' | 'meditation' | 'breathwork'
+export type StreakType =
+  | 'login'
+  | 'asana'
+  | 'meditation'
+  | 'breathwork'
+  | 'sequence'
 
 export interface StreakData {
   type: StreakType
@@ -46,6 +51,8 @@ export default function ActivityStreaks({
         return <WhatshotIcon fontSize="small" />
       case 'breathwork':
         return <WhatshotIcon fontSize="small" />
+      case 'sequence':
+        return <TrendingUpIcon fontSize="small" />
       default:
         return <TrendingUpIcon fontSize="small" />
     }
@@ -63,6 +70,8 @@ export default function ActivityStreaks({
         return 'secondary'
       case 'breathwork':
         return 'warning'
+      case 'sequence':
+        return 'success'
       default:
         return 'primary'
     }
@@ -78,6 +87,8 @@ export default function ActivityStreaks({
         return 'Meditation'
       case 'breathwork':
         return 'Breathwork'
+      case 'sequence':
+        return 'Sequence Practice'
       default:
         return 'Activity'
     }
@@ -294,6 +305,21 @@ export default function ActivityStreaks({
         }
 
         // TODO: Add other streak types here as they are implemented
+        // Add sequence streak support
+        if (streakTypes.includes('sequence')) {
+          // For now, add placeholder streak data until sequence streak calculation is implemented
+          fetchedStreaks.push({
+            type: 'sequence',
+            currentStreak: 0,
+            longestStreak: 0,
+            lastActivityDate: null,
+            isActiveToday: false,
+            displayName: getStreakDisplayName('sequence'),
+            icon: getStreakIcon('sequence'),
+            color: getStreakColor('sequence'),
+          })
+        }
+
         // Example for future asana streaks:
         // if (streakTypes.includes('asana')) {
         //   const asanaResponse = await fetch(`/api/user/asanaStreak?userId=${session.user.id}`)

@@ -28,6 +28,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { logApiError } from '../../../../lib/errorLogger'
 import { randomUUID } from 'crypto'
 
+// Force this route to be dynamic since it requires query parameters
+export const dynamic = 'force-dynamic'
+
 // Initialize Prisma client with error handling
 let prisma: PrismaClient | null = null
 

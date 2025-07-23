@@ -6,6 +6,18 @@ interface SplashNavButtonProps extends ComponentProps<typeof Box> {
   description: string
 }
 
+/**
+ * A navigation button component for splash screen interfaces.
+ *
+ * Renders a styled clickable box with a title and description text.
+ * The button has a fixed size width x height (363x210px) with rounded corners, borders,
+ * and hover effects including shadow highlights.
+ *
+ * @param title - The main title text displayed at the bottom of the button
+ * @param description - The descriptive text displayed at the top of the button
+ * @param props - Additional props including sx styling overrides and onClick handler
+ * @returns A Material-UI Box component styled as a navigation button
+ */
 export default function SplashNavButton({
   title,
   description,

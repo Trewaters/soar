@@ -1,87 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import PostureSearch from '@app/navigator/asanaPostures/posture-search'
-import { Box, Typography } from '@mui/material'
-import { getAllPostures } from '@lib/postureService'
+import { Box } from '@mui/material'
 import SplashHeader from '@app/clientComponents/splash-header'
 import { useRouter } from 'next/navigation'
 import NavBottom from '@serverComponents/navBottom'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
-import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
 
 export default function Page() {
-  const [posturePropData, setPosturePropData] = useState<FullAsanaData[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
   const router = useRouter()
 
-  const fetchData = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const data = await getAllPostures()
-      setPosturePropData(
-        data.sort((a: FullAsanaData, b: FullAsanaData) => {
-          if (a.sort_english_name < b.sort_english_name) return -1
-          if (a.sort_english_name > b.sort_english_name) return 1
-          return 0
-        })
-      )
-    } catch (error: Error | any) {
-      setError(error.message)
-    } finally {
-      setLoading(false)
-    }
+  const handlePracticeAsanaClick = () => {
+    // Navigate to the dedicated practice asana page
+    router.push('/navigator/asanaPostures/practiceAsanas')
   }
-
-  useEffect(() => {
-    fetchData()
-
-    // Check for refresh parameter in URL
-    const urlParams = new URLSearchParams(window.location.search)
-    if (urlParams.has('refresh')) {
-      console.log('Refresh parameter detected, forcing data reload...')
-      // Remove the refresh parameter from URL without page reload
-      const newUrl = window.location.pathname
-      window.history.replaceState({}, '', newUrl)
-    }
-  }, [])
-
-  // Refetch data when the page becomes visible (e.g., when returning from create page)
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        console.log('Page became visible, refreshing posture data...')
-        fetchData()
-      }
-    }
-
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-
-    // Also listen for focus events as a fallback
-    const handleFocus = () => {
-      console.log('Window gained focus, refreshing posture data...')
-      fetchData()
-    }
-
-    window.addEventListener('focus', handleFocus)
-
-    // Listen for popstate events (browser back/forward navigation)
-    const handlePopState = () => {
-      console.log('Navigation detected, refreshing posture data...')
-      fetchData()
-    }
-
-    window.addEventListener('popstate', handlePopState)
-
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-      window.removeEventListener('focus', handleFocus)
-      window.removeEventListener('popstate', handlePopState)
-    }
-  }, [])
 
   const handleCreateAsanaClick = () => {
     router.push('/navigator/asanaPostures/createAsana')
@@ -105,12 +36,30 @@ export default function Page() {
         />
         <Box height={'32px'} />
 
-        {loading ? (
-          <LoadingSkeleton type="search" />
-        ) : (
-          <PostureSearch posturePropData={posturePropData} />
-        )}
-        {error && <Typography color="error">Error: {error}</Typography>}
+        {/* Practice Asana Postures Button with embedded search */}
+        <Box
+          sx={{
+            width: '100%',
+            maxWidth: '363px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            mb: 4,
+          }}
+        >
+          <SplashNavButton
+            title="Practice Asana Postures"
+            description="Search and practice yoga postures."
+            sx={{
+              backgroundImage:
+                "url('/images/asana/practice-asana-posture-210x363.png')",
+              mb: 2,
+            }}
+            onClick={handlePracticeAsanaClick}
+          />
+        </Box>
+
+        {/* Create Asana Postures Button */}
         <SplashNavButton
           title="Create Asana Posture"
           description="Customize your practice by creating new Asana postures."
@@ -121,6 +70,7 @@ export default function Page() {
           onClick={handleCreateAsanaClick}
         />
       </Box>
+      <Box height={'72px'} />
       <NavBottom subRoute="/navigator/asanaPostures" />
     </>
   )

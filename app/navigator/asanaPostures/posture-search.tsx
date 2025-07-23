@@ -11,6 +11,27 @@ interface PostureSearchProps {
   posturePropData: FullAsanaData[]
 }
 
+/**
+ * A search component for yoga postures that provides autocomplete functionality.
+ *
+ * @component
+ * @param props - The component props
+ * @param props.posturePropData - Array of full asana data objects to search through
+ *
+ * @returns A search interface with autocomplete dropdown for selecting yoga postures
+ *
+ * @example
+ * ```tsx
+ * <PostureSearch posturePropData={asanaPostures} />
+ * ```
+ *
+ * @remarks
+ * - Updates the global asana posture state when a selection is made
+ * - Navigates to the selected posture's detail page
+ * - Filters postures by English name using case-insensitive matching
+ * - Displays a search icon and custom styling for the input field
+ * - Automatically selects the first matching option when typing
+ */
 export default function PostureSearch({ posturePropData }: PostureSearchProps) {
   const { state, dispatch } = useAsanaPosture()
   const [postures, setPostures] = useState<FullAsanaData[]>(posturePropData)
@@ -28,7 +49,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
   ) {
     dispatch({ type: 'SET_POSTURES', payload: value ?? state.postures })
     router.push(
-      `../navigator/asanaPostures/${encodeURIComponent(value?.sort_english_name || '')}/`
+      `/navigator/asanaPostures/${encodeURIComponent(value?.sort_english_name || '')}/`
     )
   }
 

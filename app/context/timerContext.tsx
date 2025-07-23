@@ -2,45 +2,47 @@ import {
   createContext,
   Dispatch,
   ReactNode,
-  use,
-  useEffect,
+  useContext,
   useReducer,
 } from 'react'
 
 export interface TimerWatch {
   isPaused: boolean
-  startTime: number
+  isRunning: boolean
+  startTime: number | null
+  elapsedTime: number
   id?: string
   name?: string
   endTime?: number
-  elapsedTime?: number
   totalTime?: number
-  siSeconds?: number
-  siMinutes?: number
-  siHours?: number
-  siDays?: number
-  siWeeks?: number
-  siMonths?: number
-  siYears?: number
 }
 
 export interface AsanaTimerProps {
   // eslint-disable-next-line no-unused-vars
   onTimeUpdate: (time: number) => void
   // eslint-disable-next-line no-unused-vars
-  onPauseUpdate: (isPaused: boolean) => void
+  onPauseUpdate?: (isPaused: boolean) => void
 }
 
 export type TimerPageState = {
   watch: TimerWatch
 }
 
-type TimerAction = { type: 'SET_TIMER'; payload: TimerWatch }
+type TimerAction =
+  | { type: 'SET_TIMER'; payload: TimerWatch }
+  | { type: 'RESET_TIMER' }
+  | { type: 'PAUSE_TIMER' }
+  | { type: 'RESUME_TIMER' }
+  | { type: 'START_TIMER' }
+  | { type: 'STOP_TIMER' }
+  | { type: 'UPDATE_ELAPSED_TIME'; payload: number }
 
 const initialState: TimerPageState = {
   watch: {
-    isPaused: false,
-    startTime: Date.now(),
+    isPaused: true,
+    isRunning: false,
+    startTime: null,
+    elapsedTime: 0,
   },
 }
 
@@ -64,6 +66,70 @@ function TimerReducer(
         ...state,
         watch: action.payload,
       }
+    case 'RESET_TIMER': {
+      return {
+        ...state,
+        watch: {
+          ...state.watch,
+          isPaused: true,
+          isRunning: false,
+          startTime: null,
+          elapsedTime: 0,
+        },
+      }
+    }
+    case 'START_TIMER': {
+      return {
+        ...state,
+        watch: {
+          ...state.watch,
+          isPaused: false,
+          isRunning: true,
+          startTime: Date.now(),
+        },
+      }
+    }
+    case 'PAUSE_TIMER': {
+      return {
+        ...state,
+        watch: {
+          ...state.watch,
+          isPaused: true,
+          isRunning: false,
+        },
+      }
+    }
+    case 'RESUME_TIMER': {
+      return {
+        ...state,
+        watch: {
+          ...state.watch,
+          isPaused: false,
+          isRunning: true,
+        },
+      }
+    }
+    case 'STOP_TIMER': {
+      return {
+        ...state,
+        watch: {
+          ...state.watch,
+          isPaused: true,
+          isRunning: false,
+          startTime: null,
+          elapsedTime: 0, // Reset elapsed time when stopping
+        },
+      }
+    }
+    case 'UPDATE_ELAPSED_TIME': {
+      return {
+        ...state,
+        watch: {
+          ...state.watch,
+          elapsedTime: action.payload,
+        },
+      }
+    }
     default:
       return state
   }
@@ -71,36 +137,6 @@ function TimerReducer(
 
 export default function TimerProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(TimerReducer, initialState)
-
-  useEffect(() => {
-    // const timer = setInterval(() => {
-    //   if (!state.watch.isPaused) {
-    //     const elapsedTime = Math.floor((Date.now() - state.watch.startTime) / 1000)
-    //     const seconds = elapsedTime % 60
-    //     const minutes = Math.floor((elapsedTime % 3600) / 60)
-    //     const hours = Math.floor(elapsedTime / 3600)
-    //     const days = Math.floor(elapsedTime / 86400)
-    //     const weeks = Math.floor(elapsedTime / 604800)
-    //     const months = Math.floor(elapsedTime / 2628000)
-    //     const years = Math.floor(elapsedTime / 31536000)
-    //     dispatch({
-    //       type: 'SET_TIMER',
-    //       payload: {
-    //         ...state.watch,
-    //         elapsedTime,
-    //         siSeconds: seconds,
-    //         siMinutes: minutes,
-    //         siHours: hours,
-    //         siDays: days,
-    //         siWeeks: weeks,
-    //         siMonths: months,
-    //         siYears: years,
-    //       },
-    //     })
-    //   }
-    // }, 1000)
-    // return () => clearInterval(timer)
-  }, [state.watch.isPaused, state.watch.startTime])
 
   return (
     <TimerContext.Provider value={{ state, dispatch }}>
@@ -110,7 +146,7 @@ export default function TimerProvider({ children }: { children: ReactNode }) {
 }
 
 export function useTimer() {
-  const context = use(TimerContext)
+  const context = useContext(TimerContext)
   if (!context) {
     throw new Error('useTimer must be used within a TimerProvider')
   }

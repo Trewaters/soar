@@ -21,13 +21,18 @@ const customJestConfig: Config = {
   coverageReporters: ['text', 'lcov', 'html'],
   testEnvironment: 'jsdom',
   testMatch: ['**/__test__/**/*.spec.ts', '**/__test__/**/*.spec.tsx'],
+  testTimeout: 30000, // 30 seconds timeout to prevent hanging
+  maxWorkers: 1, // Use single worker to avoid resource conflicts
+  detectOpenHandles: true, // Helps identify what's keeping the process alive
+  forceExit: true, // Force exit after tests complete
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
     '^@app/(.*)$': '<rootDir>/app/$1',
     '^@clientComponents/(.*)$': '<rootDir>/app/clientComponents/$1',
     '^@components/(.*)$': '<rootDir>/components/$1',
-    // Fix for @testing-library modules
-    '^@testing-library/(.*)$': '@testing-library/$1',
+    '^@lib/(.*)$': '<rootDir>/lib/$1',
+    '^@serverComponents/(.*)$': '<rootDir>/components/$1',
+    '^@context/(.*)$': '<rootDir>/app/context/$1',
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
     '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
   },

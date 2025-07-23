@@ -43,7 +43,9 @@ export interface PoseImageData {
  * @property postureName - Optional name of the posture associated with the image upload.
  */
 interface PostureImageUploadProps {
+  // eslint-disable-next-line no-unused-vars
   onImageUploaded?: (image: PoseImageData) => void
+  // eslint-disable-next-line no-unused-vars
   onImageDeleted?: (imageId: string) => void
   maxFileSize?: number // in MB
   acceptedTypes?: string[]

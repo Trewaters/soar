@@ -1,9 +1,10 @@
 import React from 'react'
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Button, Paper, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
 import { signIn, providerMap, signOut, auth } from '../../../auth'
 import { redirect } from 'next/navigation'
+import { Link as MuiLink } from '@mui/material'
 import Link from 'next/link'
 import CredentialsInput from './credentialsInput'
 
@@ -16,141 +17,134 @@ export default async function SignInPage(props: {
       <nav>
         <Header />
       </nav>
-      <Stack justifyContent={'center'} alignItems={'center'} display={'flex'}>
+      <Stack justifyContent={'center'} alignItems={'center'} minHeight={'80vh'}>
         <Stack
-          textAlign={'center'}
-          spacing={2}
+          spacing={3}
           sx={{
-            my: 6,
-            border: '1px solid black',
-            width: '50%',
-            borderRadius: '12px',
-            pb: 3,
+            mt: 6,
+            borderTop: '1px solid black',
+            borderLeft: '1px solid black',
+            borderRight: '1px solid black',
+            width: '90%',
+            borderTopLeftRadius: '12px',
+            borderTopRightRadius: '12px',
+            p: 4,
+            minHeight: 'calc(100vh - 120px)',
+            justifyContent: 'space-between',
           }}
         >
-          <Box
-            sx={{ pt: 4 }}
-            display={'flex'}
-            flexDirection={'column'}
-            alignItems={'center'}
-          >
+          <Stack spacing={3} alignItems={'center'}>
             {session ? (
               <>
-                <Typography
-                  alignSelf={'center'}
-                  variant="h2"
-                  color="success.main"
-                >
+                <Typography variant="h2" color="success.main">
                   You&apos;re signed in!
                 </Typography>
-                <Typography alignSelf={'center'} variant="body1">
-                  <Link href="/">Click here</Link>
+                <Typography variant="body1">
+                  <Link href="/" passHref legacyBehavior>
+                    <MuiLink>Click here</MuiLink>
+                  </Link>
                   &nbsp;to go to the home page.
                 </Typography>
+                <Paper
+                  component="form"
+                  action={async () => {
+                    'use server'
+                    await signOut({
+                      redirect: true,
+                      redirectTo: '/auth/signout',
+                    })
+                  }}
+                  elevation={0}
+                  sx={{ backgroundColor: 'transparent' }}
+                >
+                  <Button
+                    variant="outlined"
+                    type="submit"
+                    sx={{ width: 'auto' }}
+                  >
+                    Sign out
+                  </Button>
+                </Paper>
               </>
             ) : (
-              <>
-                <Typography variant="h2">Welcome back!</Typography>
-                <Typography variant="body1" component="p">
+              <Stack alignItems={'center'} spacing={2}>
+                <Typography variant="h2">Welcome back.</Typography>
+                <Typography variant="body1">
                   We&apos;re happy you&apos;re here!
                 </Typography>
-              </>
-            )}
-          </Box>
+                {Object.values(providerMap).map((provider, index) => (
+                  <Paper
+                    key={index}
+                    component="form"
+                    action={async () => {
+                      'use server'
+                      // eslint-disable-next-line no-useless-catch
+                      try {
+                        await signIn(provider.id, {
+                          redirectTo:
+                            props.searchParams?.callbackUrl ?? '/navigator',
+                        })
+                      } catch (error) {
+                        // Signin can fail for a number of reasons, such as the user
+                        // not existing, or the user not having the correct role.
+                        // In some cases, you may want to redirect to a custom error
+                        if (
+                          error &&
+                          typeof error === 'object' &&
+                          'type' in error
+                        ) {
+                          return redirect(
+                            `${process.env.SIGNIN_ERROR_URL}?error=${error.type}`
+                          )
+                        }
 
-          <Stack
-            display={'flex'}
-            alignItems={'center'}
-            justifyContent={'center'}
-            sx={{ mt: 4 }}
-          >
-            {Object.values(providerMap).map((provider, index) => (
-              <form
-                key={index}
-                action={async () => {
-                  'use server'
-                  // eslint-disable-next-line no-useless-catch
-                  try {
-                    await signIn(provider.id, {
-                      redirectTo:
-                        props.searchParams?.callbackUrl ?? '/navigator',
-                    })
-                    // await signIn(provider.id, {
-                    // redirectTo: '/navigator/profile',
-                    // })
-                  } catch (error) {
-                    // Signin can fail for a number of reasons, such as the user
-                    // not existing, or the user not having the correct role.
-                    // In some cases, you may want to redirect to a custom error
-                    if (error && typeof error === 'object' && 'type' in error) {
-                      return redirect(
-                        `${process.env.SIGNIN_ERROR_URL}?error=${error.type}`
-                      )
-                    }
-
-                    // Otherwise if a redirects happens Next.js can handle it
-                    // so you can just re-thrown the error and let Next.js handle it.
-                    // Docs:
-                    // https://nextjs.org/docs/app/api-reference/functions/redirect#server-component
-                    throw error
-                  }
-                }}
-              >
-                <Button
-                  type="submit"
-                  variant="outlined"
-                  sx={{ m: 2, borderRadius: '12px' }}
-                  startIcon={
-                    <Image
-                      src={
-                        provider.name.toLowerCase() === 'google'
-                          ? '/icons/profile/auth-google.svg'
-                          : '/icons/profile/auth-github-mark.svg'
+                        // Otherwise if a redirects happens Next.js can handle it
+                        // so you can just re-thrown the error and let Next.js handle it.
+                        // Docs:
+                        // https://nextjs.org/docs/app/api-reference/functions/redirect#server-component
+                        throw error
                       }
-                      alt={provider.name}
-                      width={20}
-                      height={20}
-                    />
-                  }
-                >
-                  <Typography>Sign in with {provider.name}</Typography>
-                </Button>
-              </form>
-            ))}
-            <CredentialsInput />
-          </Stack>
-          <Stack display={'flex'} textAlign={'center'} sx={{ pb: 2 }}>
+                    }}
+                    elevation={0}
+                    sx={{ backgroundColor: 'transparent' }}
+                  >
+                    <Button
+                      type="submit"
+                      variant="outlined"
+                      sx={{ m: 2, borderRadius: '12px' }}
+                      startIcon={
+                        <Image
+                          src={
+                            provider.name.toLowerCase() === 'google'
+                              ? '/icons/profile/auth-google.svg'
+                              : '/icons/profile/auth-github-mark.svg'
+                          }
+                          alt={provider.name}
+                          width={20}
+                          height={20}
+                        />
+                      }
+                    >
+                      <Typography>Sign in with {provider.name}</Typography>
+                    </Button>
+                  </Paper>
+                ))}
+                <CredentialsInput />
+              </Stack>
+            )}
+
             {!session && (
-              <>
-                <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
-                  Sign In or Create Account
-                </Typography>
+              <Stack spacing={1}>
                 <Typography variant="body1">
                   Don&apos;t have an account yet?
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  ✨ Just enter your email below - if it&apos;s new, we&apos;ll
-                  help you create an account!
+                  ✨ Use any method to login the first timea and an account will
+                  be created for you!
                 </Typography>
-              </>
+              </Stack>
             )}
           </Stack>
-          {session && (
-            <form
-              action={async () => {
-                'use server'
-                await signOut({ redirect: true, redirectTo: '/auth/signout' })
-              }}
-            >
-              <Button
-                variant="contained"
-                type="submit"
-                sx={{ width: '50%', alignSelf: 'center' }}
-              >
-                Sign out
-              </Button>
-            </form>
-          )}
         </Stack>
       </Stack>
     </>

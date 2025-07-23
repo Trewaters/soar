@@ -9,6 +9,7 @@ interface ImageUploadButtonProps {
   size?: 'small' | 'medium' | 'large'
   disabled?: boolean
   fullWidth?: boolean
+  // eslint-disable-next-line no-unused-vars
   onUploadSuccess?: (imageData: any) => void
 }
 

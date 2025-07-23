@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Button, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Link from 'next/link'
 import { signOut, auth } from '../../../auth'
@@ -18,7 +18,7 @@ export default async function SignOutPage(props: {
         <nav>
           <Header />
         </nav>
-        <Stack justifyContent={'center'} alignItems={'center'} display={'flex'}>
+        <Stack justifyContent={'center'} alignItems={'center'}>
           <Stack
             textAlign={'center'}
             spacing={2}
@@ -31,13 +31,14 @@ export default async function SignOutPage(props: {
               borderRadius: '12px',
             }}
           >
-            <Box sx={{ pt: 4, pb: 2 }}>
+            <Stack spacing={1} sx={{ pt: 4, pb: 2 }}>
               <Typography variant="h2">Signing you out...</Typography>
               <Typography variant="body1">
                 Please wait while we sign you out.
               </Typography>
-            </Box>
-            <form
+            </Stack>
+            <Stack
+              component="form"
               action={async () => {
                 'use server'
                 await signOut({ redirectTo: '/auth/signout?success=true' })
@@ -50,7 +51,7 @@ export default async function SignOutPage(props: {
               >
                 <Typography>Complete Sign Out</Typography>
               </Button>
-            </form>
+            </Stack>
           </Stack>
         </Stack>
       </>
@@ -62,20 +63,7 @@ export default async function SignOutPage(props: {
       <nav>
         <Header />
       </nav>
-      {/* <Stack display={'flex'} alignItems={'center'}>
-        <Stack flexDirection={'row'}>
-          <Image
-            src={'/icons/asanas/leaf-1.svg'}
-            alt={'SOAR logo'}
-            width={100}
-            height={100}
-          />
-        </Stack>
-        <Stack>
-          <Typography variant={'subtitle1'}>An Uvuyoga App</Typography>
-        </Stack>
-      </Stack> */}
-      <Stack justifyContent={'center'} alignItems={'center'} display={'flex'}>
+      <Stack justifyContent={'center'} alignItems={'center'}>
         <Stack
           textAlign={'center'}
           spacing={2}
@@ -88,22 +76,20 @@ export default async function SignOutPage(props: {
             borderRadius: '12px',
           }}
         >
-          <Box sx={{ pt: 4, pb: 2 }}>
+          <Stack spacing={1} sx={{ pt: 4, pb: 2 }}>
             <Typography color="success.main" variant="h2">
-              {searchParams?.success
-                ? "You're signed out!"
-                : 'Already signed out!'}
+              {searchParams?.success ? "You're signed out!" : 'Oops...'}
             </Typography>
             <Typography variant="body1">
               {searchParams?.success
-                ? 'Come back soon to continue your yoga journey!'
-                : "You weren't signed in, but welcome back anytime!"}
+                ? 'We hope to see you continue your yoga journey!'
+                : 'You are still signed in!'}
             </Typography>
-          </Box>
+          </Stack>
           <Link href="/" passHref>
             <Button
               type="button"
-              variant="contained"
+              variant="outlined"
               sx={{ borderRadius: '12px' }}
             >
               <Typography>Go back to the home page</Typography>
@@ -112,7 +98,7 @@ export default async function SignOutPage(props: {
           <Link href="/auth/signin" passHref>
             <Button
               type="button"
-              variant="contained"
+              variant="outlined"
               sx={{ borderRadius: '12px' }}
             >
               <Typography>Sign in again!</Typography>

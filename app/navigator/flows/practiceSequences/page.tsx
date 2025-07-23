@@ -1,7 +1,5 @@
 'use client'
-import SplashHeader from '@app/clientComponents/splash-header'
-import SubNavHeader from '@app/clientComponents/sub-nav-header'
-import { SequenceData } from '@context/SequenceContext'
+
 import {
   Autocomplete,
   Box,
@@ -14,13 +12,21 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
+import SplashHeader from '@app/clientComponents/splash-header'
+import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
+import { SequenceData, getAllSequences } from '@lib/sequenceService'
+import NavBottom from '@serverComponents/navBottom'
+import React from 'react'
 import Image from 'next/image'
 import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
-import NavBottom from '@serverComponents/navBottom'
+import { useSearchParams } from 'next/navigation'
+import SequenceActivityTracker from '@app/clientComponents/sequenceActivityTracker/SequenceActivityTracker'
 
 export default function Page() {
+  const searchParams = useSearchParams()
+  const sequenceId = searchParams.get('sequenceId')
   const [sequences, setSequences] = useState<SequenceData[]>([])
   const [singleSequence, setSingleSequence] = useState<SequenceData>({
     id: 0,
@@ -33,6 +39,7 @@ export default function Page() {
     createdAt: '',
     updatedAt: '',
   })
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
 
   const [page, setPage] = useState(1)
   const itemsPerPage = 1
@@ -47,20 +54,61 @@ export default function Page() {
   )
 
   useEffect(() => {
-    async function fetchData() {
-      // const baseUrl =
-      //   process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-      // const url = new URL('/api/series/', baseUrl)
-      // const response = await fetch(url)
-      const response = await fetch('/api/sequences', { cache: 'no-store' })
-      if (!response.ok) {
-        throw new Error('Network response was not ok')
+    // Consolidated function to fetch sequences
+    const fetchSequences = async (debugContext = 'unknown') => {
+      try {
+        console.log(`Fetching sequences from ${debugContext}`)
+        const newSequences = await getAllSequences()
+        console.log(
+          `Successfully fetched ${newSequences.length} sequences from ${debugContext}`
+        )
+        setSequences(newSequences)
+
+        // If there's a sequence ID in the URL, auto-select that sequence
+        if (sequenceId && newSequences.length > 0) {
+          const selectedSequence = newSequences.find(
+            (s) => s.id?.toString() === sequenceId
+          )
+          if (selectedSequence) {
+            setSingleSequence(selectedSequence)
+          }
+        }
+      } catch (error) {
+        console.error(`Error fetching sequences from ${debugContext}:`, error)
       }
-      setSequences(await response.json())
     }
 
-    fetchData()
-  }, [])
+    fetchSequences('initial load')
+
+    const handleFocus = () => {
+      console.log('Practice sequences page focused, refreshing sequences...')
+      fetchSequences('focus')
+    }
+
+    window.addEventListener('focus', handleFocus)
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        // Page became visible, refetch data
+        fetchSequences('visibility change')
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    const handlePopState = () => {
+      console.log('Navigation detected, refreshing posture data...')
+      fetchSequences('popstate')
+    }
+
+    window.addEventListener('popstate', handlePopState)
+
+    return () => {
+      window.removeEventListener('focus', handleFocus)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [sequenceId]) // Add sequenceId as dependency
 
   function handleSelect(
     event: ChangeEvent<object>,
@@ -73,39 +121,17 @@ export default function Page() {
       setSingleSequence(value)
     }
   }
-  const [open, setOpen] = React.useState(false)
+
+  function handleActivityToggle(isTracked: boolean) {
+    console.log('Sequence activity tracked:', isTracked)
+    // Trigger refresh of any activity components that might be listening
+    setRefreshTrigger((prev) => prev + 1)
+  }
+
+  const [open, setOpen] = useState(false)
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen)
   }
-
-  /* 
-                  // breath icons
-                  import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-                  import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-                  import ContactlessIcon from '@mui/icons-material/Contactless';
-                  import DeblurIcon from '@mui/icons-material/Deblur';
-                  import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
-                  import FastForwardIcon from '@mui/icons-material/FastForward';
-                  import FastRewindIcon from '@mui/icons-material/FastRewind';
-                  import FileUploadIcon from '@mui/icons-material/FileUpload';
-                  import FileDownloadIcon from '@mui/icons-material/FileDownload';
-                  import KeyboardDoubleArrowLeftIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
-                  import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
-                  import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-                  import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
-                  import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
-                  import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
-
-                  // best so far
-                  import LoginIcon from '@mui/icons-material/Login';
-                  import LogoutIcon from '@mui/icons-material/Logout';
-                  <LoginIcon />
-                    <LogoutIcon />
-
-                  // meditation icon
-                  import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
-
-                  */
 
   return (
     <>
@@ -133,55 +159,61 @@ export default function Page() {
             onClick={toggleDrawer(!open)}
           />
           <Stack sx={{ px: 4 }}>
-            <Autocomplete
-              disablePortal
-              id="combo-box-series-search"
-              options={sequences}
-              getOptionLabel={(option: SequenceData) => option.nameSequence}
-              filterOptions={(options, state) =>
-                options.filter((option) =>
-                  option.nameSequence
-                    .toLowerCase()
-                    .includes(state.inputValue.toLowerCase())
-                )
-              }
-              renderOption={(props, option) => (
-                <li {...props} key={option.id}>
-                  {option.nameSequence}
-                </li>
-              )}
-              sx={{
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderRadius: '12px',
-                  borderColor: 'primary.main',
-                  boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-                },
-                '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
-                  {
-                    borderColor: 'primary.light', // Ensure border color does not change on hover
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
+              <Autocomplete
+                key={`autocomplete-${sequences.length}-${sequences
+                  .map((s) => s.id)
+                  .join('-')}`}
+                disablePortal
+                id="combo-box-series-search"
+                options={sequences}
+                getOptionLabel={(option: SequenceData) => option.nameSequence}
+                filterOptions={(options, state) =>
+                  options.filter((option) =>
+                    option.nameSequence
+                      .toLowerCase()
+                      .includes(state.inputValue.toLowerCase())
+                  )
+                }
+                renderOption={(props, option) => (
+                  <li {...props} key={option.id}>
+                    {option.nameSequence}
+                  </li>
+                )}
+                sx={{
+                  flexGrow: 1,
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderRadius: '12px',
+                    borderColor: 'primary.main',
+                    boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
                   },
-                '& .MuiAutocomplete-endAdornment': {
-                  display: 'none',
-                },
-              }}
-              renderInput={(params) => (
-                <TextField
-                  sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
-                  {...params}
-                  placeholder="Search for a Sequence"
-                  InputProps={{
-                    ...params.InputProps,
-                    startAdornment: (
-                      <>
-                        <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
-                        {params.InputProps.startAdornment}
-                      </>
-                    ),
-                  }}
-                />
-              )}
-              onChange={handleSelect}
-            />
+                  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                    {
+                      borderColor: 'primary.light', // Ensure border color does not change on hover
+                    },
+                  '& .MuiAutocomplete-endAdornment': {
+                    display: 'none',
+                  },
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+                    {...params}
+                    placeholder="Search for a Sequence"
+                    InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                        <>
+                          <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
+                          {params.InputProps.startAdornment}
+                        </>
+                      ),
+                    }}
+                  />
+                )}
+                onChange={handleSelect}
+              />
+            </Box>
 
             <React.Fragment key={singleSequence.id}>
               <Box
@@ -307,37 +339,47 @@ export default function Page() {
                       />
                       <CardContent className="lines" sx={{ p: 0 }}>
                         {seriesMini.seriesPostures.map((asana, asanaIndex) => (
-                          <Stack
-                            direction={'row'}
+                          <Box
                             key={asanaIndex}
+                            alignItems={'center'}
+                            display={'flex'}
+                            flexDirection={'row'}
+                            flexWrap={'nowrap'}
                             className="journalLine"
-                            alignItems="flex-start"
                           >
                             <Typography
                               variant="body1"
                               fontWeight="bold"
-                              sx={{ width: '30px', textAlign: 'right', mr: 2 }}
+                              sx={{
+                                width: '30px',
+                                textAlign: 'right',
+                                mr: 2,
+                                flexShrink: 0,
+                              }}
                             >
                               {asanaIndex + 1}.
                             </Typography>
-                            <Stack direction={'column'}>
-                              <Typography
-                                textAlign={'left'}
-                                fontWeight={'bold'}
-                                variant="body1"
+                            <Typography
+                              textAlign={'left'}
+                              variant="body1"
+                              sx={{ flexShrink: 0, mr: 1 }}
+                            >
+                              <Link
+                                underline="hover"
+                                color="primary.contrastText"
+                                href={`/navigator/asanaPostures/${
+                                  asana.split(';')[0]
+                                }`}
                               >
-                                <Link
-                                  underline="hover"
-                                  href={`/navigator/asanaPostures/${asana.split(';')[0]}`}
-                                >
-                                  {asana.split(';')[0]}
-                                </Link>
-                              </Typography>
-                              <Typography textAlign={'left'} variant="body2">
-                                {asana.split(';')[1]}
-                              </Typography>
-                            </Stack>
-                          </Stack>
+                                {asana.split(';')[0]}
+                              </Link>
+                            </Typography>
+                            <Typography
+                              textAlign={'left'}
+                              variant="body2"
+                              sx={{ flexShrink: 0 }}
+                            ></Typography>
+                          </Box>
                         ))}
                       </CardContent>
                     </Card>
@@ -377,6 +419,17 @@ export default function Page() {
                       {singleSequence.description}
                     </Typography>
                   </Box>
+
+                  {/* Sequence Activity Tracker */}
+                  {singleSequence.id && singleSequence.id !== 0 && (
+                    <Box sx={{ mt: 3 }}>
+                      <SequenceActivityTracker
+                        sequenceId={singleSequence.id.toString()}
+                        sequenceName={singleSequence.nameSequence}
+                        onActivityToggle={handleActivityToggle}
+                      />
+                    </Box>
+                  )}
                 </Stack>
               ) : null}
             </React.Fragment>

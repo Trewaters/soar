@@ -3,6 +3,9 @@ import { PrismaClient } from '../../../prisma/generated/client'
 const prisma = new PrismaClient()
 // const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
+// Force this route to be dynamic since it requires query parameters
+export const dynamic = 'force-dynamic'
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const email = searchParams.get('email')

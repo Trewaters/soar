@@ -18,13 +18,11 @@ import {
 import {
   CloudUpload as CloudUploadIcon,
   Photo as PhotoIcon,
-  Sync as SyncIcon,
   Info as InfoIcon,
 } from '@mui/icons-material'
 import ImageUploadWithFallback from './ImageUploadWithFallback'
 import EnhancedImageGallery from './EnhancedImageGallery'
-import { syncLocalImagesToCloud, getLocalStorageInfo } from '@lib/imageService'
-import { useSession } from 'next-auth/react'
+import { getLocalStorageInfo } from '@lib/imageService'
 
 export interface PoseImageData {
   id: string
@@ -79,7 +77,6 @@ export default function ImageManagementWithFallback({
   variant = 'full',
   showStorageInfo = true,
 }: ImageManagementWithFallbackProps) {
-  const { data: session } = useSession()
   const [tabValue, setTabValue] = useState(0)
   const [refreshGallery, setRefreshGallery] = useState(0)
   const [storageInfoOpen, setStorageInfoOpen] = useState(false)

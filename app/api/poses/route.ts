@@ -3,9 +3,13 @@ import { PrismaClient } from '../../../prisma/generated/client'
 
 const prisma = new PrismaClient()
 
+// Force this route to be dynamic since it requires query parameters
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.nextUrl)
   const sortEnglishName = searchParams.get('sort_english_name')
+  const createdBy = searchParams.get('createdBy')
 
   if (sortEnglishName) {
     try {
@@ -38,8 +42,17 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    console.log('Fetching all postures from database...')
+    console.log('Fetching postures from database...')
+
+    // Build where clause based on query parameters
+    const whereClause: any = {}
+    if (createdBy) {
+      whereClause.created_by = createdBy
+      console.log(`Filtering postures by creator: ${createdBy}`)
+    }
+
     const data = await prisma.asanaPosture.findMany({
+      where: whereClause,
       orderBy: {
         created_on: 'desc', // Show newest first to help verify new creations
       },
