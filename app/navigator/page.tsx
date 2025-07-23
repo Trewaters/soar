@@ -66,6 +66,9 @@ export default function Page() {
           <LandingPage />
         </Stack>
         <Stack sx={{ mt: 4 }}>
+          <Typography variant="body1" fontWeight="600" sx={{ mt: 4, mb: 1 }}>
+            Your Recent Activity
+          </Typography>
           <AsanaActivityList />
         </Stack>
         <Stack>

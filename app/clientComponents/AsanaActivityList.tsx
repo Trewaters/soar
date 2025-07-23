@@ -129,14 +129,6 @@ export default function AsanaActivityList() {
         overflow: 'hidden',
       }}
     >
-      <Typography
-        variant="body1"
-        sx={{ mb: 2, px: 2 }}
-        textAlign="center"
-        fontWeight={600}
-      >
-        Your Recent Activity
-      </Typography>
       <List>
         {activities.map((activity) => (
           <ListItem
