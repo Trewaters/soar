@@ -5,10 +5,46 @@ import { FlowSeriesData } from '@context/AsanaSeriesContext'
 import { getAllSeries } from '@lib/seriesService'
 import userEvent from '@testing-library/user-event'
 
+// Mock next/navigation
+jest.mock('next/navigation', () => ({
+  useSearchParams: jest.fn(() => ({
+    get: jest.fn(() => null),
+  })),
+}))
+
 // Mock the seriesService
 jest.mock('@lib/seriesService', () => ({
   getAllSeries: jest.fn(),
 }))
+
+// Mock SeriesActivityTracker to avoid NextAuth import issues
+jest.mock(
+  '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker',
+  () => {
+    const MockSeriesActivityTracker = ({ seriesId }: any) => (
+      <div data-testid="series-activity-tracker">
+        Activity Tracker for series: {seriesId}
+      </div>
+    )
+    MockSeriesActivityTracker.displayName = 'MockSeriesActivityTracker'
+    return MockSeriesActivityTracker
+  }
+)
+
+// Mock SeriesWeeklyActivityTracker to avoid NextAuth import issues
+jest.mock(
+  '@app/clientComponents/seriesActivityTracker/SeriesWeeklyActivityTracker',
+  () => {
+    const MockSeriesWeeklyActivityTracker = ({ seriesId }: any) => (
+      <div data-testid="series-weekly-activity-tracker">
+        Weekly Activity Tracker for series: {seriesId}
+      </div>
+    )
+    MockSeriesWeeklyActivityTracker.displayName =
+      'MockSeriesWeeklyActivityTracker'
+    return MockSeriesWeeklyActivityTracker
+  }
+)
 
 const mockGetAllSeries = getAllSeries as jest.MockedFunction<
   typeof getAllSeries
@@ -18,7 +54,7 @@ const mockGetAllSeries = getAllSeries as jest.MockedFunction<
 jest.mock('@app/clientComponents/splash-header', () => {
   const MockSplashHeader = ({ title, src, alt }: any) => (
     <div data-testid="splash-header">
-      <img src={src} alt={alt} />
+      <img src={src} alt={alt} width={400} height={200} />
       <span>{title}</span>
     </div>
   )
