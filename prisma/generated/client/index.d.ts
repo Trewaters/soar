@@ -4224,6 +4224,7 @@ export namespace Prisma {
     lore: string | null
     breath_direction_default: string | null
     dristi: string | null
+    label: string | null
     preferred_side: string | null
     sideways: boolean | null
     image: string | null
@@ -4254,6 +4255,7 @@ export namespace Prisma {
     lore: string | null
     breath_direction_default: string | null
     dristi: string | null
+    label: string | null
     preferred_side: string | null
     sideways: boolean | null
     image: string | null
@@ -4288,6 +4290,7 @@ export namespace Prisma {
     dristi: number
     variations: number
     modifications: number
+    label: number
     suggested_postures: number
     preparatory_postures: number
     preferred_side: number
@@ -4323,6 +4326,7 @@ export namespace Prisma {
     lore?: true
     breath_direction_default?: true
     dristi?: true
+    label?: true
     preferred_side?: true
     sideways?: true
     image?: true
@@ -4353,6 +4357,7 @@ export namespace Prisma {
     lore?: true
     breath_direction_default?: true
     dristi?: true
+    label?: true
     preferred_side?: true
     sideways?: true
     image?: true
@@ -4387,6 +4392,7 @@ export namespace Prisma {
     dristi?: true
     variations?: true
     modifications?: true
+    label?: true
     suggested_postures?: true
     preparatory_postures?: true
     preferred_side?: true
@@ -4497,6 +4503,7 @@ export namespace Prisma {
     dristi: string | null
     variations: string[]
     modifications: string[]
+    label: string | null
     suggested_postures: string[]
     preparatory_postures: string[]
     preferred_side: string | null
@@ -4551,6 +4558,7 @@ export namespace Prisma {
     dristi?: boolean
     variations?: boolean
     modifications?: boolean
+    label?: boolean
     suggested_postures?: boolean
     preparatory_postures?: boolean
     preferred_side?: boolean
@@ -4592,6 +4600,7 @@ export namespace Prisma {
     dristi?: boolean
     variations?: boolean
     modifications?: boolean
+    label?: boolean
     suggested_postures?: boolean
     preparatory_postures?: boolean
     preferred_side?: boolean
@@ -4641,6 +4650,7 @@ export namespace Prisma {
       dristi: string | null
       variations: string[]
       modifications: string[]
+      label: string | null
       suggested_postures: string[]
       preparatory_postures: string[]
       preferred_side: string | null
@@ -5069,6 +5079,7 @@ export namespace Prisma {
     readonly dristi: FieldRef<"AsanaPosture", 'String'>
     readonly variations: FieldRef<"AsanaPosture", 'String[]'>
     readonly modifications: FieldRef<"AsanaPosture", 'String[]'>
+    readonly label: FieldRef<"AsanaPosture", 'String'>
     readonly suggested_postures: FieldRef<"AsanaPosture", 'String[]'>
     readonly preparatory_postures: FieldRef<"AsanaPosture", 'String[]'>
     readonly preferred_side: FieldRef<"AsanaPosture", 'String'>
@@ -13427,6 +13438,7 @@ export namespace Prisma {
     dristi: 'dristi',
     variations: 'variations',
     modifications: 'modifications',
+    label: 'label',
     suggested_postures: 'suggested_postures',
     preparatory_postures: 'preparatory_postures',
     preferred_side: 'preferred_side',
@@ -13981,6 +13993,7 @@ export namespace Prisma {
     dristi?: StringNullableFilter<"AsanaPosture"> | string | null
     variations?: StringNullableListFilter<"AsanaPosture">
     modifications?: StringNullableListFilter<"AsanaPosture">
+    label?: StringNullableFilter<"AsanaPosture"> | string | null
     suggested_postures?: StringNullableListFilter<"AsanaPosture">
     preparatory_postures?: StringNullableListFilter<"AsanaPosture">
     preferred_side?: StringNullableFilter<"AsanaPosture"> | string | null
@@ -14020,6 +14033,7 @@ export namespace Prisma {
     dristi?: SortOrder
     variations?: SortOrder
     modifications?: SortOrder
+    label?: SortOrder
     suggested_postures?: SortOrder
     preparatory_postures?: SortOrder
     preferred_side?: SortOrder
@@ -14062,6 +14076,7 @@ export namespace Prisma {
     dristi?: StringNullableFilter<"AsanaPosture"> | string | null
     variations?: StringNullableListFilter<"AsanaPosture">
     modifications?: StringNullableListFilter<"AsanaPosture">
+    label?: StringNullableFilter<"AsanaPosture"> | string | null
     suggested_postures?: StringNullableListFilter<"AsanaPosture">
     preparatory_postures?: StringNullableListFilter<"AsanaPosture">
     preferred_side?: StringNullableFilter<"AsanaPosture"> | string | null
@@ -14101,6 +14116,7 @@ export namespace Prisma {
     dristi?: SortOrder
     variations?: SortOrder
     modifications?: SortOrder
+    label?: SortOrder
     suggested_postures?: SortOrder
     preparatory_postures?: SortOrder
     preferred_side?: SortOrder
@@ -14144,6 +14160,7 @@ export namespace Prisma {
     dristi?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
     variations?: StringNullableListFilter<"AsanaPosture">
     modifications?: StringNullableListFilter<"AsanaPosture">
+    label?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
     suggested_postures?: StringNullableListFilter<"AsanaPosture">
     preparatory_postures?: StringNullableListFilter<"AsanaPosture">
     preferred_side?: StringNullableWithAggregatesFilter<"AsanaPosture"> | string | null
@@ -15154,6 +15171,7 @@ export namespace Prisma {
     dristi?: string | null
     variations?: AsanaPostureCreatevariationsInput | string[]
     modifications?: AsanaPostureCreatemodificationsInput | string[]
+    label?: string | null
     suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
     preferred_side?: string | null
@@ -15193,6 +15211,7 @@ export namespace Prisma {
     dristi?: string | null
     variations?: AsanaPostureCreatevariationsInput | string[]
     modifications?: AsanaPostureCreatemodificationsInput | string[]
+    label?: string | null
     suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
     preferred_side?: string | null
@@ -15231,6 +15250,7 @@ export namespace Prisma {
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
     variations?: AsanaPostureUpdatevariationsInput | string[]
     modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    label?: NullableStringFieldUpdateOperationsInput | string | null
     suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15269,6 +15289,7 @@ export namespace Prisma {
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
     variations?: AsanaPostureUpdatevariationsInput | string[]
     modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    label?: NullableStringFieldUpdateOperationsInput | string | null
     suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15308,6 +15329,7 @@ export namespace Prisma {
     dristi?: string | null
     variations?: AsanaPostureCreatevariationsInput | string[]
     modifications?: AsanaPostureCreatemodificationsInput | string[]
+    label?: string | null
     suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
     preferred_side?: string | null
@@ -15344,6 +15366,7 @@ export namespace Prisma {
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
     variations?: AsanaPostureUpdatevariationsInput | string[]
     modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    label?: NullableStringFieldUpdateOperationsInput | string | null
     suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15380,6 +15403,7 @@ export namespace Prisma {
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
     variations?: AsanaPostureUpdatevariationsInput | string[]
     modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    label?: NullableStringFieldUpdateOperationsInput | string | null
     suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16504,6 +16528,7 @@ export namespace Prisma {
     dristi?: SortOrder
     variations?: SortOrder
     modifications?: SortOrder
+    label?: SortOrder
     suggested_postures?: SortOrder
     preparatory_postures?: SortOrder
     preferred_side?: SortOrder
@@ -16537,6 +16562,7 @@ export namespace Prisma {
     lore?: SortOrder
     breath_direction_default?: SortOrder
     dristi?: SortOrder
+    label?: SortOrder
     preferred_side?: SortOrder
     sideways?: SortOrder
     image?: SortOrder
@@ -16567,6 +16593,7 @@ export namespace Prisma {
     lore?: SortOrder
     breath_direction_default?: SortOrder
     dristi?: SortOrder
+    label?: SortOrder
     preferred_side?: SortOrder
     sideways?: SortOrder
     image?: SortOrder
@@ -18608,6 +18635,7 @@ export namespace Prisma {
     dristi?: string | null
     variations?: AsanaPostureCreatevariationsInput | string[]
     modifications?: AsanaPostureCreatemodificationsInput | string[]
+    label?: string | null
     suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
     preferred_side?: string | null
@@ -18646,6 +18674,7 @@ export namespace Prisma {
     dristi?: string | null
     variations?: AsanaPostureCreatevariationsInput | string[]
     modifications?: AsanaPostureCreatemodificationsInput | string[]
+    label?: string | null
     suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
     preferred_side?: string | null
@@ -18770,6 +18799,7 @@ export namespace Prisma {
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
     variations?: AsanaPostureUpdatevariationsInput | string[]
     modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    label?: NullableStringFieldUpdateOperationsInput | string | null
     suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
@@ -18807,6 +18837,7 @@ export namespace Prisma {
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
     variations?: AsanaPostureUpdatevariationsInput | string[]
     modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    label?: NullableStringFieldUpdateOperationsInput | string | null
     suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19326,6 +19357,7 @@ export namespace Prisma {
     dristi?: string | null
     variations?: AsanaPostureCreatevariationsInput | string[]
     modifications?: AsanaPostureCreatemodificationsInput | string[]
+    label?: string | null
     suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
     preferred_side?: string | null
@@ -19364,6 +19396,7 @@ export namespace Prisma {
     dristi?: string | null
     variations?: AsanaPostureCreatevariationsInput | string[]
     modifications?: AsanaPostureCreatemodificationsInput | string[]
+    label?: string | null
     suggested_postures?: AsanaPostureCreatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureCreatepreparatory_posturesInput | string[]
     preferred_side?: string | null
@@ -19488,6 +19521,7 @@ export namespace Prisma {
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
     variations?: AsanaPostureUpdatevariationsInput | string[]
     modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    label?: NullableStringFieldUpdateOperationsInput | string | null
     suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19525,6 +19559,7 @@ export namespace Prisma {
     dristi?: NullableStringFieldUpdateOperationsInput | string | null
     variations?: AsanaPostureUpdatevariationsInput | string[]
     modifications?: AsanaPostureUpdatemodificationsInput | string[]
+    label?: NullableStringFieldUpdateOperationsInput | string | null
     suggested_postures?: AsanaPostureUpdatesuggested_posturesInput | string[]
     preparatory_postures?: AsanaPostureUpdatepreparatory_posturesInput | string[]
     preferred_side?: NullableStringFieldUpdateOperationsInput | string | null

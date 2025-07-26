@@ -59,6 +59,7 @@ export interface FullAsanaData {
   dristi: string
   variations: string[]
   modifications: string[]
+  label: string
   suggested_postures: string[]
   preparatory_postures: string[]
   preferred_side: string
@@ -274,6 +275,7 @@ const initialState: AsanaPosturePageState = {
     dristi: '',
     variations: [],
     modifications: [],
+    label: '',
     suggested_postures: [],
     preparatory_postures: [],
     preferred_side: '',

@@ -98,6 +98,7 @@ model AsanaPosture {
   dristi                   String?
   variations               String[]
   modifications            String[]
+  label                    String?
   suggested_postures       String[]
   preparatory_postures     String[]
   preferred_side           String?

@@ -42,9 +42,8 @@ next-env.d.ts
 postures.json
 
 # CoPilot files
-.instructions
-.instructions/**
-.continue
-.continue/**
+.github
+.github/**
+
 # mongo files to ignore
 datalogmongod.log*

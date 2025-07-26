@@ -32,6 +32,20 @@ import EditPostureDialog from '@app/navigator/asanaPostures/editAsana/EditPostur
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
+/*  
+Developer Notes:
+Prioritized Details...
+
+1. Name of Asana
+2. Picture of Asana
+3. Description of Asana
+4. Category of Asana
+5. Difficulty of Asana
+6. Activity Streaks, Mark Asana as Complete
+7. Dristi
+
+*/
+
 interface PostureCardProps {
   postureCardProp: FullAsanaData
 }
@@ -636,7 +650,7 @@ export default function PostureActivityDetail({
         <Stack direction={'column'} spacing={0}>
           <AsanaDetails
             details={posture?.sort_english_name}
-            label="English Variant Names"
+            label={posture?.label ?? 'English Variant Names'}
             sx={{
               mb: '32px',
             }}

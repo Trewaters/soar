@@ -170,6 +170,7 @@ exports.Prisma.AsanaPostureScalarFieldEnum = {
   dristi: 'dristi',
   variations: 'variations',
   modifications: 'modifications',
+  label: 'label',
   suggested_postures: 'suggested_postures',
   preparatory_postures: 'preparatory_postures',
   preferred_side: 'preferred_side',
