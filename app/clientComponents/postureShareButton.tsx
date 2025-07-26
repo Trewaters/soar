@@ -4,6 +4,32 @@ import IosShareIcon from '@mui/icons-material/IosShare'
 import { FullAsanaData } from '@app/context/AsanaPostureContext'
 import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
 
+/*  
+Developer Note:
+
+I would like the share text for a series to look like this:
+
+Sharing a video of
+the yoga series 
+"Sun Salutation A"
+
+Below are the postures in this series: 
+
+* Mountain,
+* Forward Fold,
+* Halfway Lift,
+* High to Low Plank,
+* Upward Facing Dog,
+* Downward Facing Dog,
+
+Practice with Uvuyoga!
+
+https://www.happyyoga.app/navigator/flows/practiceSeries
+
+(www.happyyoga.app)
+
+*/
+
 interface PostureShareButtonProps {
   postureData?: FullAsanaData | null
   seriesData?: FlowSeriesData | null

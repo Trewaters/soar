@@ -18,7 +18,7 @@ import { FullAsanaData } from '@context/AsanaPostureContext'
 import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
-import PostureShareButton from '@app/clientComponents/exportPoses'
+import PostureShareButton from '@app/clientComponents/postureShareButton'
 import ActivityTracker from '@app/clientComponents/activityTracker/ActivityTracker'
 import { useSession } from 'next-auth/react'
 import {

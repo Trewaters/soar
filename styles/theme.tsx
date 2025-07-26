@@ -141,10 +141,12 @@ export const theme = createTheme({
     splashTitle: {
       fontSize: '3rem',
       fontWeight: '900',
-      textTransform: 'capitalize',
+      textTransform: 'uppercase',
       letterSpacing: '0.1rem',
       wordSpacing: '0.1rem',
       textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      textAlign: 'center',
     },
   },
   components: {

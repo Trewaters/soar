@@ -9,6 +9,8 @@ interface SplashHeaderProps {
   height?: number | { xs?: number; sm?: number; md?: number; lg?: number }
   width?: number | { xs?: number; sm?: number; md?: number; lg?: number }
   style?: React.CSSProperties
+  // Spacing props
+  spacing?: number | { xs?: number; sm?: number; md?: number; lg?: number }
   // Decorative icon props
   showIcon?: boolean
   iconSrc?: string
@@ -27,6 +29,7 @@ interface SplashHeaderProps {
  * @param {number | object} [props.height=355] - The height of the image. Can be a number or responsive object with breakpoint values.
  * @param {number | object} [props.width=384] - The width of the image. Can be a number or responsive object with breakpoint values.
  * @param {React.CSSProperties} [props.style] - Additional styles for the image.
+ * @param {number | object} [props.spacing=2] - The spacing between image and title sections. Can be a number or responsive object with breakpoint values.
  * @param {boolean} [props.showIcon=true] - Whether to show the decorative icon next to the title.
  * @param {string} [props.iconSrc="/icons/designImages/leaf-orange.png"] - The source URL of the decorative icon.
  * @param {string} [props.iconAlt=""] - The alt text for the decorative icon. Empty by default for decorative images.
@@ -41,6 +44,7 @@ export default function SplashHeader({
   height = 355,
   width = 384,
   style,
+  spacing = 2,
   showIcon = true,
   iconSrc = '/icons/designImages/leaf-orange.png',
   iconAlt = '',
@@ -71,7 +75,7 @@ export default function SplashHeader({
   }
 
   return (
-    <Stack>
+    <Stack spacing={spacing}>
       <Box
         sx={{
           display: 'flex',
@@ -116,23 +120,23 @@ export default function SplashHeader({
         )}
         <Typography
           variant="splashTitle"
-          textTransform={'uppercase'}
           sx={{
+            // Layout and visual styling only - typography styles come from theme variant
             color: 'primary.main',
             backgroundColor: 'navSplash.light',
             px: { xs: 0, sm: 2 },
             py: 1,
             borderRadius: '8px',
             overflow: 'hidden',
+            maxWidth: '100vw',
+            // Responsive fontSize override - MUI theme variants don't support responsive typography
+            // All other typography properties (textTransform, whiteSpace, textAlign, etc.) come from theme
             fontSize: {
               xs: 'clamp(0.75rem, 4vw, 1.2rem)',
               sm: 'clamp(1rem, 3vw, 1.5rem)',
               md: 'clamp(1.2rem, 2.5vw, 1.8rem)',
               lg: 'clamp(1.4rem, 2vw, 2rem)',
             },
-            whiteSpace: 'nowrap',
-            textAlign: 'center',
-            maxWidth: '100vw',
           }}
         >
           {title}
