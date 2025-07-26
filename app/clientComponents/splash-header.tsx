@@ -2,8 +2,13 @@ import { Box, Stack, Typography } from '@mui/material'
 import Image from 'next/image'
 import React from 'react'
 
-interface SplashHeaderProps extends React.ComponentProps<typeof Image> {
+interface SplashHeaderProps {
   title: string
+  src: string
+  alt: string
+  height?: number | { xs?: number; sm?: number; md?: number; lg?: number }
+  width?: number | { xs?: number; sm?: number; md?: number; lg?: number }
+  style?: React.CSSProperties
 }
 
 /**
@@ -14,10 +19,44 @@ interface SplashHeaderProps extends React.ComponentProps<typeof Image> {
  * @param {string} props.title - The title text to be displayed.
  * @param {string} props.src - The source URL of the image.
  * @param {string} props.alt - The alt text for the image.
+ * @param {number | object} [props.height=355] - The height of the image. Can be a number or responsive object with breakpoint values.
+ * @param {number | object} [props.width=384] - The width of the image. Can be a number or responsive object with breakpoint values.
+ * @param {React.CSSProperties} [props.style] - Additional styles for the image.
  *
  * @returns {JSX.Element} The rendered SplashHeader component.
  */
-export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
+export default function SplashHeader({
+  title,
+  src,
+  alt,
+  height = 355,
+  width = 384,
+  style,
+}: SplashHeaderProps) {
+  // Extract base dimensions for Next.js Image component
+  const baseHeight =
+    typeof height === 'number'
+      ? height
+      : height.md || height.sm || height.xs || 355
+
+  const baseWidth =
+    typeof width === 'number' ? width : width.md || width.sm || width.xs || 384
+
+  // Create responsive sizing for the container
+  const getResponsiveDimensions = (
+    dimension: number | { xs?: number; sm?: number; md?: number; lg?: number }
+  ) => {
+    if (typeof dimension === 'number') {
+      return dimension
+    }
+    return {
+      xs: dimension.xs,
+      sm: dimension.sm,
+      md: dimension.md,
+      lg: dimension.lg,
+    }
+  }
+
   return (
     <Stack>
       <Box
@@ -26,18 +65,27 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
           flexDirection: 'column',
           alignItems: 'center',
           position: 'relative',
+          // Apply responsive sizing to the container
+          width: getResponsiveDimensions(width),
+          height: getResponsiveDimensions(height),
+          '& img': {
+            width: '100% !important',
+            height: '100% !important',
+            objectFit: 'contain',
+          },
         }}
       >
         <Image
-          src={props.src}
-          alt={props.alt}
-          height={'355'}
-          width={'384'}
+          src={src}
+          alt={alt}
+          height={baseHeight}
+          width={baseWidth}
           style={{
             display: 'flex',
             alignSelf: 'center',
+            ...style,
           }}
-        ></Image>
+        />
       </Box>
       <Stack
         direction={'row'}
@@ -49,8 +97,8 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
           src={'/icons/designImages/leaf-orange.png'}
           height={'24'}
           width={'24'}
-          alt={props.alt}
-        ></Image>
+          alt=""
+        />
         <Typography
           variant="splashTitle"
           textTransform={'uppercase'}

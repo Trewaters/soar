@@ -143,7 +143,10 @@ describe('TabHeader Component', () => {
       // Check for Flows link from LandingPage
       const flowsLink = screen.getByRole('link', { name: /flows/i })
       expect(flowsLink).toBeInTheDocument()
-      expect(flowsLink).toHaveAttribute('href', '/navigator/flows')
+      expect(flowsLink).toHaveAttribute(
+        'href',
+        '/navigator/flows/practiceSeries'
+      )
     })
 
     it('switches to second tab panel when second tab is clicked', () => {
