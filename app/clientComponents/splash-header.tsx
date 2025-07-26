@@ -9,6 +9,11 @@ interface SplashHeaderProps {
   height?: number | { xs?: number; sm?: number; md?: number; lg?: number }
   width?: number | { xs?: number; sm?: number; md?: number; lg?: number }
   style?: React.CSSProperties
+  // Decorative icon props
+  showIcon?: boolean
+  iconSrc?: string
+  iconAlt?: string
+  iconSize?: number | `${number}`
 }
 
 /**
@@ -22,6 +27,10 @@ interface SplashHeaderProps {
  * @param {number | object} [props.height=355] - The height of the image. Can be a number or responsive object with breakpoint values.
  * @param {number | object} [props.width=384] - The width of the image. Can be a number or responsive object with breakpoint values.
  * @param {React.CSSProperties} [props.style] - Additional styles for the image.
+ * @param {boolean} [props.showIcon=true] - Whether to show the decorative icon next to the title.
+ * @param {string} [props.iconSrc="/icons/designImages/leaf-orange.png"] - The source URL of the decorative icon.
+ * @param {string} [props.iconAlt=""] - The alt text for the decorative icon. Empty by default for decorative images.
+ * @param {number | `${number}`} [props.iconSize=24] - The size of the decorative icon in pixels.
  *
  * @returns {JSX.Element} The rendered SplashHeader component.
  */
@@ -32,6 +41,10 @@ export default function SplashHeader({
   height = 355,
   width = 384,
   style,
+  showIcon = true,
+  iconSrc = '/icons/designImages/leaf-orange.png',
+  iconAlt = '',
+  iconSize = 24,
 }: SplashHeaderProps) {
   // Extract base dimensions for Next.js Image component
   const baseHeight =
@@ -93,12 +106,14 @@ export default function SplashHeader({
         alignItems={'center'}
         justifyContent={'center'}
       >
-        <Image
-          src={'/icons/designImages/leaf-orange.png'}
-          height={'24'}
-          width={'24'}
-          alt=""
-        />
+        {showIcon && (
+          <Image
+            src={iconSrc}
+            height={iconSize}
+            width={iconSize}
+            alt={iconAlt}
+          />
+        )}
         <Typography
           variant="splashTitle"
           textTransform={'uppercase'}
