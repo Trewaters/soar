@@ -57,10 +57,19 @@ export default function SplashHeader({ title, ...props }: SplashHeaderProps) {
           sx={{
             color: 'primary.main',
             backgroundColor: 'navSplash.light',
-            px: 2,
+            px: { xs: 0, sm: 2 },
             py: 1,
             borderRadius: '8px',
             overflow: 'hidden',
+            fontSize: {
+              xs: 'clamp(0.75rem, 4vw, 1.2rem)',
+              sm: 'clamp(1rem, 3vw, 1.5rem)',
+              md: 'clamp(1.2rem, 2.5vw, 1.8rem)',
+              lg: 'clamp(1.4rem, 2vw, 2rem)',
+            },
+            whiteSpace: 'nowrap',
+            textAlign: 'center',
+            maxWidth: '100vw',
           }}
         >
           {title}

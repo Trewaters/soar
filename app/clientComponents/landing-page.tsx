@@ -11,7 +11,11 @@ const links = [
     href: '/navigator/asanaPostures',
     icon: <WaterDropOutlinedIcon />,
   },
-  { name: 'Flows', href: '/navigator/flows', icon: <WhatshotIcon /> },
+  {
+    name: 'Flows',
+    href: '/navigator/flows/practiceSeries',
+    icon: <WhatshotIcon />,
+  },
 ]
 
 export default function LandingPage() {
