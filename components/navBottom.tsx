@@ -4,7 +4,7 @@ import { AppBar, IconButton } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home'
 import PersonIcon from '@mui/icons-material/Person'
 import MenuIcon from '@mui/icons-material/Menu'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { useSession } from 'next-auth/react'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -19,7 +19,7 @@ interface NavItem {
 }
 
 export default function NavBottom(props: { subRoute: string }) {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const { data: session, status } = useSession()
 
   // Determine if user is authenticated

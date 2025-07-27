@@ -23,7 +23,7 @@ import {
   Dashboard as DashboardIcon,
 } from '@mui/icons-material'
 import { useSession, signOut } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { UseUser } from '@context/UserContext'
 
 interface ProfileNavMenuItem {
@@ -38,7 +38,7 @@ interface ProfileNavMenuItem {
 
 const ProfileNavMenu: React.FC = () => {
   const { data: session } = useSession()
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const {
     state: { userData },
   } = UseUser()

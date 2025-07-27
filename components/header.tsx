@@ -27,13 +27,13 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 
 export default function Header() {
   const [openDrawer, setOpenDrawer] = React.useState(false)
   const [isAuthLoading, setIsAuthLoading] = React.useState(false)
   const { data: session, status } = useSession()
-  const router = useRouter()
+  const router = useNavigationWithLoading()
 
   const toggleDrawer = (open: boolean) => () => {
     setOpenDrawer(open)

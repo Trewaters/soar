@@ -2,12 +2,12 @@
 
 import { Box } from '@mui/material'
 import SplashHeader from '@app/clientComponents/splash-header'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import NavBottom from '@serverComponents/navBottom'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
 
 export default function Page() {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
 
   const handlePracticeAsanaClick = () => {
     // Navigate to the dedicated practice asana page

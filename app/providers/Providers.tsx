@@ -8,6 +8,8 @@ import UserStateProvider from '@context/UserContext'
 import FlowSeriesProvider from '@context/AsanaSeriesContext'
 import AsanaPostureProvider from '@context/AsanaPostureContext'
 import TimerProvider from '@context/timerContext'
+import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
+import GlobalNavigationOverlay from '@clientComponents/GlobalNavigationOverlay'
 import { SessionProvider } from 'next-auth/react'
 import ReactDOM from 'react-dom'
 
@@ -39,18 +41,23 @@ export function Providers({
       refetchOnWindowFocus={true} // Refetch when window gains focus
       refetchWhenOffline={false}
     >
-      <ThemeProvider theme={theme}>
-        {/* CssBaseline to kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline>
-          <UserStateProvider>
-            <TimerProvider>
-              <FlowSeriesProvider>
-                <AsanaPostureProvider>{children}</AsanaPostureProvider>
-              </FlowSeriesProvider>
-            </TimerProvider>
-          </UserStateProvider>
-        </CssBaseline>
-      </ThemeProvider>
+      <NavigationLoadingProvider>
+        <ThemeProvider theme={theme}>
+          {/* CssBaseline to kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline>
+            <UserStateProvider>
+              <TimerProvider>
+                <FlowSeriesProvider>
+                  <AsanaPostureProvider>
+                    {children}
+                    <GlobalNavigationOverlay />
+                  </AsanaPostureProvider>
+                </FlowSeriesProvider>
+              </TimerProvider>
+            </UserStateProvider>
+          </CssBaseline>
+        </ThemeProvider>
+      </NavigationLoadingProvider>
     </SessionProvider>
   )
 }
