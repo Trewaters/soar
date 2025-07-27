@@ -30,18 +30,18 @@ export default function LandingPage() {
               variant="outlined"
               aria-label={`Navigate to ${link.name} section`}
               sx={{
-                width: '100%',
-                maxWidth: '300px',
+                width: 'auto',
+                maxWidth: '320px',
+                minWidth: '120px',
                 minHeight: '48px',
                 borderRadius: '14px',
                 boxShadow: '0px 4px 4px -1px rgba(0, 0, 0, 0.25)',
                 textTransform: 'uppercase',
-                padding: '12px 16px',
+                padding: '12px 20px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'flex-start',
                 gap: 1,
-                // Ensure proper text wrapping and sizing
                 flexWrap: 'nowrap',
                 '&:hover': {
                   backgroundColor: 'transparent',
@@ -53,7 +53,6 @@ export default function LandingPage() {
                   outlineColor: 'primary.main',
                   outlineOffset: '2px',
                 },
-                // Improve focus visibility
                 '&:focus-visible': {
                   outline: '3px solid',
                   outlineColor: 'primary.main',
@@ -71,11 +70,13 @@ export default function LandingPage() {
                   lineHeight: 1.4,
                   flex: '1 1 auto',
                   textAlign: 'left',
-                  // Remove ellipsis to allow proper text display
                   wordWrap: 'break-word',
                   hyphens: 'auto',
-                  // Ensure minimum readable text size
-                  minWidth: 0, // Allow flex item to shrink below content size
+                  minWidth: 0,
+                  maxWidth: '200px', // Limit text width for better fit
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 {link.name}

@@ -64,12 +64,18 @@ export function useNavigationWithLoading() {
       return
     }
 
-    startNavigation('back', 'back-button')
-    router.back()
+    try {
+      startNavigation('back', 'back-button')
+      router.back()
 
-    setTimeout(() => {
+      setTimeout(() => {
+        endNavigation()
+      }, 500)
+    } catch (error) {
+      // Handle navigation errors gracefully
+      console.warn('Back navigation failed:', error)
       endNavigation()
-    }, 500)
+    }
   }, [router, startNavigation, endNavigation, state.isNavigating])
 
   /**
@@ -80,12 +86,18 @@ export function useNavigationWithLoading() {
       return
     }
 
-    startNavigation('forward', 'forward-button')
-    router.forward()
+    try {
+      startNavigation('forward', 'forward-button')
+      router.forward()
 
-    setTimeout(() => {
+      setTimeout(() => {
+        endNavigation()
+      }, 500)
+    } catch (error) {
+      // Handle navigation errors gracefully
+      console.warn('Forward navigation failed:', error)
       endNavigation()
-    }, 500)
+    }
   }, [router, startNavigation, endNavigation, state.isNavigating])
 
   /**
@@ -96,12 +108,18 @@ export function useNavigationWithLoading() {
       return
     }
 
-    startNavigation('refresh', 'refresh-button')
-    router.refresh()
+    try {
+      startNavigation('refresh', 'refresh-button')
+      router.refresh()
 
-    setTimeout(() => {
+      setTimeout(() => {
+        endNavigation()
+      }, 1000) // Slightly longer for refresh
+    } catch (error) {
+      // Handle navigation errors gracefully
+      console.warn('Page refresh failed:', error)
       endNavigation()
-    }, 1000) // Slightly longer for refresh
+    }
   }, [router, startNavigation, endNavigation, state.isNavigating])
 
   return {

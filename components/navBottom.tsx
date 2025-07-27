@@ -3,7 +3,7 @@ import React from 'react'
 import { AppBar, IconButton } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home'
 import PersonIcon from '@mui/icons-material/Person'
-import MenuIcon from '@mui/icons-material/Menu'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { useSession } from 'next-auth/react'
 
@@ -43,16 +43,24 @@ export default function NavBottom(props: { subRoute: string }) {
         isAuthenticated ? 'success.main' : 'grey.500', // Green when logged in, gray when logged out
     },
     {
-      id: 'menu',
-      label: 'Open navigation menu',
-      icon: <MenuIcon />,
-      path: () => props.subRoute,
+      id: 'back',
+      label: 'Navigate back to previous page',
+      icon: <ArrowBackIcon aria-hidden="true" />,
+      path: 'back',
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       getColor: (_isAuthenticated: boolean) => 'primary.contrastText', // Always primary.contrastText
     },
   ]
 
-  const handleNavigation = (path: string | (() => string)) => {
+  const handleNavigation = (path: string | (() => string), itemId?: string) => {
+    // Handle back navigation specially
+    if (itemId === 'back' || path === 'back') {
+      // Use the router.back() method with loading states
+      router.back()
+      return
+    }
+
+    // Handle regular navigation
     const targetPath = typeof path === 'function' ? path() : path
     router.push(targetPath)
   }
@@ -83,7 +91,9 @@ export default function NavBottom(props: { subRoute: string }) {
           disableRipple
           disabled={item.id === 'profile' && !isAuthenticated} // Disable profile when not authenticated
           aria-label={item.label}
-          onClick={() => handleNavigation(item.path)}
+          title={item.label}
+          role="button"
+          onClick={() => handleNavigation(item.path, item.id)}
           sx={{
             color: item.getColor(isAuthenticated),
             '&:focus': {

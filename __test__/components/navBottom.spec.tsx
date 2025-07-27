@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 
 // Mock next/navigation
 const mockPush = jest.fn()
+const mockBack = jest.fn()
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }))
@@ -30,9 +31,9 @@ jest.mock('@mui/icons-material/Person', () => ({
   default: () => <div data-testid="person-icon" />,
 }))
 
-jest.mock('@mui/icons-material/Menu', () => ({
+jest.mock('@mui/icons-material/ArrowBack', () => ({
   __esModule: true,
-  default: () => <div data-testid="menu-icon" />,
+  default: (props: any) => <div data-testid="arrow-back-icon" {...props} />,
 }))
 
 const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>
@@ -51,7 +52,7 @@ describe('NavBottom Component', () => {
     mockUseRouter.mockReturnValue({
       push: mockPush,
       replace: jest.fn(),
-      back: jest.fn(),
+      back: mockBack,
       forward: jest.fn(),
       refresh: jest.fn(),
       prefetch: jest.fn(),
@@ -73,7 +74,7 @@ describe('NavBottom Component', () => {
       expect(screen.getByRole('navigation')).toBeInTheDocument()
       expect(screen.getByTestId('home-icon')).toBeInTheDocument()
       expect(screen.getByTestId('person-icon')).toBeInTheDocument()
-      expect(screen.getByTestId('menu-icon')).toBeInTheDocument()
+      expect(screen.getByTestId('arrow-back-icon')).toBeInTheDocument()
     })
 
     it('has correct aria-label for navigation', () => {
@@ -99,13 +100,14 @@ describe('NavBottom Component', () => {
       expect(mockPush).toHaveBeenCalledWith('/')
     })
 
-    it('navigates to subRoute when menu button is clicked', () => {
+    it('navigates back when back button is clicked', () => {
       render(<NavBottom subRoute="/dashboard" />, { wrapper: TestWrapper })
 
-      const menuButton = screen.getByLabelText('Open navigation menu')
-      fireEvent.click(menuButton)
+      const backButton = screen.getByLabelText('Navigate back to previous page')
+      fireEvent.click(backButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/dashboard')
+      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).not.toHaveBeenCalled()
     })
 
     it('applies correct colors for unauthenticated state', () => {
@@ -113,7 +115,7 @@ describe('NavBottom Component', () => {
 
       const homeIcon = screen.getByTestId('home-icon')
       const personIcon = screen.getByTestId('person-icon')
-      const menuIcon = screen.getByTestId('menu-icon')
+      const backIcon = screen.getByTestId('arrow-back-icon')
 
       // Home icon should always be primary.main
       expect(homeIcon).toHaveStyle({ color: 'primary.main' })
@@ -121,8 +123,8 @@ describe('NavBottom Component', () => {
       // Person icon should be grey when not authenticated
       expect(personIcon).toHaveStyle({ color: 'grey.500' })
 
-      // Menu icon should always be primary.contrastText
-      expect(menuIcon).toHaveStyle({ color: 'primary.contrastText' })
+      // Back icon should always be primary.contrastText
+      expect(backIcon).toHaveStyle({ color: 'primary.contrastText' })
     })
   })
 
@@ -162,7 +164,7 @@ describe('NavBottom Component', () => {
 
       const homeIcon = screen.getByTestId('home-icon')
       const personIcon = screen.getByTestId('person-icon')
-      const menuIcon = screen.getByTestId('menu-icon')
+      const backIcon = screen.getByTestId('arrow-back-icon')
 
       // Home icon should always be primary.main
       expect(homeIcon).toHaveStyle({ color: 'primary.main' })
@@ -170,8 +172,8 @@ describe('NavBottom Component', () => {
       // Person icon should be green when authenticated
       expect(personIcon).toHaveStyle({ color: 'success.main' })
 
-      // Menu icon should always be primary.contrastText
-      expect(menuIcon).toHaveStyle({ color: 'primary.contrastText' })
+      // Back icon should always be primary.contrastText
+      expect(backIcon).toHaveStyle({ color: 'primary.contrastText' })
     })
   })
 
@@ -242,7 +244,30 @@ describe('NavBottom Component', () => {
       expect(
         screen.getByLabelText('Navigate to user profile')
       ).toBeInTheDocument()
-      expect(screen.getByLabelText('Open navigation menu')).toBeInTheDocument()
+      expect(
+        screen.getByLabelText('Navigate back to previous page')
+      ).toBeInTheDocument()
+    })
+
+    it('back button has proper accessibility attributes', () => {
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
+
+      const backButton = screen.getByLabelText('Navigate back to previous page')
+
+      // Check that the button has proper accessibility attributes
+      expect(backButton).toHaveAttribute(
+        'aria-label',
+        'Navigate back to previous page'
+      )
+      expect(backButton).toHaveAttribute(
+        'title',
+        'Navigate back to previous page'
+      )
+      expect(backButton).toHaveAttribute('role', 'button')
+
+      // Check that the icon has aria-hidden
+      const backIcon = screen.getByTestId('arrow-back-icon')
+      expect(backIcon).toHaveAttribute('aria-hidden', 'true')
     })
 
     it('supports keyboard interaction', () => {
@@ -260,35 +285,72 @@ describe('NavBottom Component', () => {
     })
   })
 
-  describe('dynamic path handling', () => {
-    it('handles function-based paths correctly', () => {
+  describe('back navigation handling', () => {
+    it('calls router.back() when back button is clicked', () => {
       render(<NavBottom subRoute="/custom-route" />, { wrapper: TestWrapper })
 
-      const menuButton = screen.getByLabelText('Open navigation menu')
-      fireEvent.click(menuButton)
+      const backButton = screen.getByLabelText('Navigate back to previous page')
+      fireEvent.click(backButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/custom-route')
+      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).not.toHaveBeenCalled()
     })
 
-    it('handles string-based paths correctly', () => {
+    it('back navigation ignores subRoute prop', () => {
+      render(<NavBottom subRoute="/should-not-be-used" />, {
+        wrapper: TestWrapper,
+      })
+
+      const backButton = screen.getByLabelText('Navigate back to previous page')
+      fireEvent.click(backButton)
+
+      // Should call router.back(), not push to subRoute
+      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).not.toHaveBeenCalledWith('/should-not-be-used')
+    })
+
+    it('integrates with loading states properly', () => {
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
+
+      const backButton = screen.getByLabelText('Navigate back to previous page')
+      fireEvent.click(backButton)
+
+      // Verify that router.back() was called (loading state is handled by the hook)
+      expect(mockBack).toHaveBeenCalledTimes(1)
+    })
+
+    it('handles edge case when no browser history exists', () => {
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
+
+      const backButton = screen.getByLabelText('Navigate back to previous page')
+      fireEvent.click(backButton)
+
+      // Component should still call router.back() - the router handles the edge case
+      expect(mockBack).toHaveBeenCalledTimes(1)
+    })
+
+    it('handles string-based paths correctly for home navigation', () => {
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const homeButton = screen.getByLabelText('Navigate to home page')
       fireEvent.click(homeButton)
 
       expect(mockPush).toHaveBeenCalledWith('/')
+      expect(mockBack).not.toHaveBeenCalled()
     })
   })
 
   describe('prop validation', () => {
-    it('accepts subRoute prop correctly', () => {
+    it('accepts subRoute prop but back button ignores it', () => {
       const testRoute = '/custom-dashboard'
       render(<NavBottom subRoute={testRoute} />, { wrapper: TestWrapper })
 
-      const menuButton = screen.getByLabelText('Open navigation menu')
-      fireEvent.click(menuButton)
+      // Back button should not use the subRoute prop
+      const backButton = screen.getByLabelText('Navigate back to previous page')
+      fireEvent.click(backButton)
 
-      expect(mockPush).toHaveBeenCalledWith(testRoute)
+      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).not.toHaveBeenCalledWith(testRoute)
     })
   })
 
@@ -318,7 +380,10 @@ describe('NavBottom Component', () => {
         'aria-label',
         'Navigate to user profile'
       )
-      expect(buttons[2]).toHaveAttribute('aria-label', 'Open navigation menu')
+      expect(buttons[2]).toHaveAttribute(
+        'aria-label',
+        'Navigate back to previous page'
+      )
     })
   })
 })
