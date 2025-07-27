@@ -1,6 +1,9 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
+import { ThemeProvider } from '@mui/material/styles'
+import { theme } from '@styles/theme'
+import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import TabHeader from '../../../app/clientComponents/tab-header'
 
 // Mock next/navigation for the EightLimbs component
@@ -61,6 +64,13 @@ jest.mock('@mui/icons-material/Whatshot', () => ({
   default: () => <div data-testid="whatshot-icon" />,
 }))
 
+// Test wrapper component with all required providers
+const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+  <ThemeProvider theme={theme}>
+    <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
+  </ThemeProvider>
+)
+
 describe('TabHeader Component', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -68,7 +78,7 @@ describe('TabHeader Component', () => {
 
   describe('initial render and accessibility', () => {
     it('renders with proper accessibility structure', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       const tabList = screen.getByRole('tablist', {
         name: /tab menu group for navigating yoga content/i,
@@ -77,7 +87,7 @@ describe('TabHeader Component', () => {
     })
 
     it('renders both tabs with correct labels and accessibility attributes', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       const startPracticeTab = screen.getByRole('tab', {
         name: /start your practice tab/i,
@@ -100,7 +110,7 @@ describe('TabHeader Component', () => {
     })
 
     it('renders with first tab selected by default', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       const startPracticeTab = screen.getByRole('tab', {
         name: /start your practice tab/i,
@@ -116,7 +126,7 @@ describe('TabHeader Component', () => {
 
   describe('tab panels and content', () => {
     it('shows first tab panel content by default', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       const firstTabPanel = screen.getByRole('tabpanel', {
         name: /start your practice tab/i,
@@ -132,7 +142,7 @@ describe('TabHeader Component', () => {
     })
 
     it('renders LandingPage component in first tab panel', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       // LandingPage contains a navigation with "Practice navigation" label
       const practiceNav = screen.getByRole('navigation', {
@@ -140,17 +150,16 @@ describe('TabHeader Component', () => {
       })
       expect(practiceNav).toBeInTheDocument()
 
-      // Check for Flows link from LandingPage
-      const flowsLink = screen.getByRole('link', { name: /flows/i })
-      expect(flowsLink).toBeInTheDocument()
-      expect(flowsLink).toHaveAttribute(
-        'href',
-        '/navigator/flows/practiceSeries'
-      )
+      // Check for Flows button from LandingPage (NavigationButton renders as button, not link)
+      const flowsButton = screen.getByRole('button', {
+        name: /navigate to flows section/i,
+      })
+      expect(flowsButton).toBeInTheDocument()
+      expect(flowsButton).toHaveTextContent('Flows')
     })
 
     it('switches to second tab panel when second tab is clicked', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       const learnYogaTab = screen.getByRole('tab', {
         name: /learn about yoga tab/i,
@@ -172,7 +181,7 @@ describe('TabHeader Component', () => {
     })
 
     it('renders EightLimbs component in second tab panel', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       const learnYogaTab = screen.getByRole('tab', {
         name: /learn about yoga tab/i,
@@ -195,7 +204,7 @@ describe('TabHeader Component', () => {
 
   describe('tab navigation and interaction', () => {
     it('updates aria-selected attributes when switching tabs', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       const startPracticeTab = screen.getByRole('tab', {
         name: /start your practice tab/i,
@@ -218,7 +227,7 @@ describe('TabHeader Component', () => {
     })
 
     it('supports keyboard navigation', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       const startPracticeTab = screen.getByRole('tab', {
         name: /start your practice tab/i,
@@ -235,7 +244,7 @@ describe('TabHeader Component', () => {
     })
 
     it('maintains proper tabindex values', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       const startPracticeTab = screen.getByRole('tab', {
         name: /start your practice tab/i,
@@ -258,14 +267,14 @@ describe('TabHeader Component', () => {
 
   describe('component structure and styling', () => {
     it('has the expected data-testid for the main container', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       const tabHeader = screen.getByTestId('tab-header')
       expect(tabHeader).toBeInTheDocument()
     })
 
     it('renders tabs with proper MUI structure', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       // Use the more specific tablist with the aria-label
       const tabList = screen.getByRole('tablist', {
@@ -280,7 +289,7 @@ describe('TabHeader Component', () => {
     })
 
     it('renders tab panels with proper MUI structure', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       const firstTabPanel = screen.getByRole('tabpanel')
       expect(firstTabPanel).toHaveAttribute('role', 'tabpanel')
@@ -291,7 +300,7 @@ describe('TabHeader Component', () => {
 
   describe('content integration', () => {
     it('integrates properly with LandingPage navigation', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       // Should show LandingPage content in first tab
       const flowsButton = screen.getByRole('button', { name: /flows/i })
@@ -299,7 +308,7 @@ describe('TabHeader Component', () => {
     })
 
     it('integrates properly with EightLimbs navigation', () => {
-      render(<TabHeader />)
+      render(<TabHeader />, { wrapper: TestWrapper })
 
       const learnYogaTab = screen.getByRole('tab', {
         name: /learn about yoga tab/i,

@@ -2,6 +2,9 @@ import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { axe, toHaveNoViolations } from 'jest-axe'
+import { ThemeProvider } from '@mui/material/styles'
+import { theme } from '@styles/theme'
+import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import Header from '../../components/header'
 import { testNavigationAccessibility } from '../accessibility/axe-test-utils'
 
@@ -56,15 +59,22 @@ jest.mock('@mui/icons-material/Menu', () => ({
   default: () => <div data-testid="menu-icon" />,
 }))
 
+// Test wrapper component with all required providers
+const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+  <ThemeProvider theme={theme}>
+    <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
+  </ThemeProvider>
+)
+
 describe('Header Accessibility Tests', () => {
   it('should not have accessibility violations in closed state', async () => {
-    const { container } = render(<Header />)
+    const { container } = render(<Header />, { wrapper: TestWrapper })
     const results = await axe(container)
     expect(results).toHaveNoViolations()
   })
 
   it('should not have accessibility violations with drawer open', async () => {
-    const { container } = render(<Header />)
+    const { container } = render(<Header />, { wrapper: TestWrapper })
 
     // Open the drawer
     const menuButton = screen.getByRole('button', {
@@ -77,11 +87,11 @@ describe('Header Accessibility Tests', () => {
   })
 
   it('should pass navigation-specific accessibility tests', async () => {
-    await testNavigationAccessibility(<Header />)
+    await testNavigationAccessibility(<Header />, { wrapper: TestWrapper })
   })
 
   it('should have proper keyboard navigation support', async () => {
-    render(<Header />)
+    render(<Header />, { wrapper: TestWrapper })
 
     const menuButton = screen.getByRole('button', {
       name: /open main navigation/i,
@@ -106,7 +116,7 @@ describe('Header Accessibility Tests', () => {
   })
 
   it('should have proper ARIA attributes for navigation', () => {
-    render(<Header />)
+    render(<Header />, { wrapper: TestWrapper })
 
     const menuButton = screen.getByRole('button', {
       name: /open main navigation/i,
@@ -125,7 +135,7 @@ describe('Header Accessibility Tests', () => {
   })
 
   it('should have accessible logo with proper alt text', () => {
-    render(<Header />)
+    render(<Header />, { wrapper: TestWrapper })
 
     const logo = screen.getByRole('img', { name: /soar yoga main logo/i })
     expect(logo).toHaveAttribute('alt', 'Soar Yoga main logo')

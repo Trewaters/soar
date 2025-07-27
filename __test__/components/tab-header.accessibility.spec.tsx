@@ -2,6 +2,9 @@ import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { axe, toHaveNoViolations } from 'jest-axe'
+import { ThemeProvider } from '@mui/material/styles'
+import { theme } from '@styles/theme'
+import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import TabHeader from '../../app/clientComponents/tab-header'
 import { testInteractiveAccessibility } from '../accessibility/axe-test-utils'
 
@@ -25,19 +28,26 @@ jest.mock('next/link', () => {
   return MockLink
 })
 
+// Test wrapper component with all required providers
+const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+  <ThemeProvider theme={theme}>
+    <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
+  </ThemeProvider>
+)
+
 describe('TabHeader Accessibility Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
   it('should not have accessibility violations in default state', async () => {
-    const { container } = render(<TabHeader />)
+    const { container } = render(<TabHeader />, { wrapper: TestWrapper })
     const results = await axe(container)
     expect(results).toHaveNoViolations()
   })
 
   it('should not have accessibility violations when switching tabs', async () => {
-    const { container } = render(<TabHeader />)
+    const { container } = render(<TabHeader />, { wrapper: TestWrapper })
 
     const learnYogaTab = screen.getByRole('tab', {
       name: /learn about yoga tab/i,
@@ -49,11 +59,11 @@ describe('TabHeader Accessibility Tests', () => {
   })
 
   it('should pass interactive accessibility tests', async () => {
-    await testInteractiveAccessibility(<TabHeader />)
+    await testInteractiveAccessibility(<TabHeader />, { wrapper: TestWrapper })
   })
 
   it('should have proper tab accessibility attributes', () => {
-    render(<TabHeader />)
+    render(<TabHeader />, { wrapper: TestWrapper })
 
     const tabLists = screen.getAllByRole('tablist')
     // MUI creates nested tablist roles, we want the inner one with aria-label
@@ -76,7 +86,7 @@ describe('TabHeader Accessibility Tests', () => {
   })
 
   it('should maintain proper tab panel accessibility', () => {
-    render(<TabHeader />)
+    render(<TabHeader />, { wrapper: TestWrapper })
 
     const firstTabPanel = screen.getByRole('tabpanel')
     expect(firstTabPanel).toHaveAttribute('id', 'simple-tabpanel-0')
@@ -85,7 +95,7 @@ describe('TabHeader Accessibility Tests', () => {
   })
 
   it('should support keyboard navigation between tabs', () => {
-    render(<TabHeader />)
+    render(<TabHeader />, { wrapper: TestWrapper })
 
     const startPracticeTab = screen.getByRole('tab', {
       name: /start your practice tab/i,
@@ -106,7 +116,7 @@ describe('TabHeader Accessibility Tests', () => {
   })
 
   it('should handle tab activation with Enter and Space keys', () => {
-    render(<TabHeader />)
+    render(<TabHeader />, { wrapper: TestWrapper })
 
     const learnYogaTab = screen.getByRole('tab', {
       name: /learn about yoga tab/i,

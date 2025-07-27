@@ -1,6 +1,9 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
+import { ThemeProvider } from '@mui/material/styles'
+import { theme } from '@styles/theme'
+import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import NavBottom from '../../components/navBottom'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -35,6 +38,13 @@ jest.mock('@mui/icons-material/Menu', () => ({
 const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>
 const mockUseSession = useSession as jest.MockedFunction<typeof useSession>
 
+// Test wrapper component with all required providers
+const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+  <ThemeProvider theme={theme}>
+    <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
+  </ThemeProvider>
+)
+
 describe('NavBottom Component', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -58,7 +68,7 @@ describe('NavBottom Component', () => {
     })
 
     it('renders the navigation bar with all three icons', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       expect(screen.getByRole('navigation')).toBeInTheDocument()
       expect(screen.getByTestId('home-icon')).toBeInTheDocument()
@@ -67,21 +77,21 @@ describe('NavBottom Component', () => {
     })
 
     it('has correct aria-label for navigation', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const nav = screen.getByRole('navigation')
       expect(nav).toHaveAttribute('aria-label', 'Bottom navigation')
     })
 
     it('disables profile button when user is not authenticated', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const profileButton = screen.getByLabelText('Navigate to user profile')
       expect(profileButton).toBeDisabled()
     })
 
     it('navigates to home when home button is clicked', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const homeButton = screen.getByLabelText('Navigate to home page')
       fireEvent.click(homeButton)
@@ -90,7 +100,7 @@ describe('NavBottom Component', () => {
     })
 
     it('navigates to subRoute when menu button is clicked', () => {
-      render(<NavBottom subRoute="/dashboard" />)
+      render(<NavBottom subRoute="/dashboard" />, { wrapper: TestWrapper })
 
       const menuButton = screen.getByLabelText('Open navigation menu')
       fireEvent.click(menuButton)
@@ -99,7 +109,7 @@ describe('NavBottom Component', () => {
     })
 
     it('applies correct colors for unauthenticated state', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const homeIcon = screen.getByTestId('home-icon')
       const personIcon = screen.getByTestId('person-icon')
@@ -132,14 +142,14 @@ describe('NavBottom Component', () => {
     })
 
     it('enables profile button when user is authenticated', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const profileButton = screen.getByLabelText('Navigate to user profile')
       expect(profileButton).not.toBeDisabled()
     })
 
     it('navigates to profile when profile button is clicked', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const profileButton = screen.getByLabelText('Navigate to user profile')
       fireEvent.click(profileButton)
@@ -148,7 +158,7 @@ describe('NavBottom Component', () => {
     })
 
     it('applies correct colors for authenticated state', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const homeIcon = screen.getByTestId('home-icon')
       const personIcon = screen.getByTestId('person-icon')
@@ -175,7 +185,7 @@ describe('NavBottom Component', () => {
     })
 
     it('treats loading state as unauthenticated', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const profileButton = screen.getByLabelText('Navigate to user profile')
       expect(profileButton).toBeDisabled()
@@ -184,7 +194,7 @@ describe('NavBottom Component', () => {
 
   describe('responsive layout', () => {
     it('applies correct responsive styling', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const nav = screen.getByRole('navigation')
 
@@ -216,7 +226,7 @@ describe('NavBottom Component', () => {
     })
 
     it('has proper focus styles for keyboard navigation', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const buttons = screen.getAllByRole('button')
 
@@ -226,7 +236,7 @@ describe('NavBottom Component', () => {
     })
 
     it('has correct aria-labels for all buttons', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       expect(screen.getByLabelText('Navigate to home page')).toBeInTheDocument()
       expect(
@@ -236,7 +246,7 @@ describe('NavBottom Component', () => {
     })
 
     it('supports keyboard interaction', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const homeButton = screen.getByLabelText('Navigate to home page')
 
@@ -252,7 +262,7 @@ describe('NavBottom Component', () => {
 
   describe('dynamic path handling', () => {
     it('handles function-based paths correctly', () => {
-      render(<NavBottom subRoute="/custom-route" />)
+      render(<NavBottom subRoute="/custom-route" />, { wrapper: TestWrapper })
 
       const menuButton = screen.getByLabelText('Open navigation menu')
       fireEvent.click(menuButton)
@@ -261,7 +271,7 @@ describe('NavBottom Component', () => {
     })
 
     it('handles string-based paths correctly', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const homeButton = screen.getByLabelText('Navigate to home page')
       fireEvent.click(homeButton)
@@ -273,7 +283,7 @@ describe('NavBottom Component', () => {
   describe('prop validation', () => {
     it('accepts subRoute prop correctly', () => {
       const testRoute = '/custom-dashboard'
-      render(<NavBottom subRoute={testRoute} />)
+      render(<NavBottom subRoute={testRoute} />, { wrapper: TestWrapper })
 
       const menuButton = screen.getByLabelText('Open navigation menu')
       fireEvent.click(menuButton)
@@ -284,21 +294,21 @@ describe('NavBottom Component', () => {
 
   describe('component structure', () => {
     it('renders as an AppBar component', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const nav = screen.getByRole('navigation')
       expect(nav).toBeInTheDocument()
     })
 
     it('contains exactly three navigation buttons', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const buttons = screen.getAllByRole('button')
       expect(buttons).toHaveLength(3)
     })
 
     it('renders icons in correct order', () => {
-      render(<NavBottom subRoute="/test" />)
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       const buttons = screen.getAllByRole('button')
 

@@ -1,6 +1,9 @@
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
+import { ThemeProvider } from '@mui/material/styles'
+import { theme } from '@styles/theme'
+import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import Header from '../../components/header'
 
 // Mock next/navigation
@@ -88,6 +91,13 @@ jest.mock('@mui/icons-material/MenuBook', () => ({
   default: () => <div data-testid="menu-book-icon" />,
 }))
 
+// Test wrapper component with all required providers
+const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+  <ThemeProvider theme={theme}>
+    <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
+  </ThemeProvider>
+)
+
 describe('Header Component', () => {
   beforeEach(() => {
     // Reset mocks before each test
@@ -105,7 +115,7 @@ describe('Header Component', () => {
     })
 
     it('renders the header with logo and menu button', () => {
-      render(<Header />)
+      render(<Header />, { wrapper: TestWrapper })
 
       expect(screen.getByRole('banner')).toBeInTheDocument()
       expect(
@@ -117,7 +127,7 @@ describe('Header Component', () => {
     })
 
     it('shows Login option when user is not authenticated', () => {
-      render(<Header />)
+      render(<Header />, { wrapper: TestWrapper })
 
       // Open the drawer
       const menuButton = screen.getByRole('button', {
@@ -143,7 +153,7 @@ describe('Header Component', () => {
     })
 
     it('shows Logout option when user is authenticated', () => {
-      render(<Header />)
+      render(<Header />, { wrapper: TestWrapper })
 
       // Open the drawer
       const menuButton = screen.getByRole('button', {
@@ -166,7 +176,7 @@ describe('Header Component', () => {
     })
 
     it('opens navigation drawer when menu button is clicked', () => {
-      render(<Header />)
+      render(<Header />, { wrapper: TestWrapper })
 
       const menuButton = screen.getByRole('button', {
         name: /open main navigation/i,
@@ -179,7 +189,7 @@ describe('Header Component', () => {
     })
 
     it('renders all navigation links in the drawer', () => {
-      render(<Header />)
+      render(<Header />, { wrapper: TestWrapper })
 
       // Open the drawer
       const menuButton = screen.getByRole('button', {
@@ -198,7 +208,7 @@ describe('Header Component', () => {
     })
 
     it('has correct links for navigation items', () => {
-      render(<Header />)
+      render(<Header />, { wrapper: TestWrapper })
 
       const menuButton = screen.getByRole('button', {
         name: /open main navigation/i,
@@ -224,7 +234,7 @@ describe('Header Component', () => {
     })
 
     it('closes drawer when a navigation item is clicked', async () => {
-      render(<Header />)
+      render(<Header />, { wrapper: TestWrapper })
 
       // Open the drawer
       const menuButton = screen.getByRole('button', {
@@ -245,7 +255,7 @@ describe('Header Component', () => {
     })
 
     it('has proper accessibility attributes', () => {
-      render(<Header />)
+      render(<Header />, { wrapper: TestWrapper })
 
       const menuButton = screen.getByRole('button', {
         name: /open main navigation/i,
@@ -265,7 +275,7 @@ describe('Header Component', () => {
     })
 
     it('has a divider before the auth link', () => {
-      render(<Header />)
+      render(<Header />, { wrapper: TestWrapper })
 
       const menuButton = screen.getByRole('button', {
         name: /open main navigation/i,
@@ -288,7 +298,7 @@ describe('Header Component', () => {
     })
 
     it('logo links to home page', () => {
-      render(<Header />)
+      render(<Header />, { wrapper: TestWrapper })
 
       const logoLink = screen.getByRole('link', {
         name: /soar yoga main logo/i,
@@ -297,7 +307,7 @@ describe('Header Component', () => {
     })
 
     it('logo has correct image attributes', () => {
-      render(<Header />)
+      render(<Header />, { wrapper: TestWrapper })
 
       const logoImage = screen.getByRole('img', {
         name: /soar yoga main logo/i,
