@@ -344,6 +344,245 @@ describe('PostureShareButton', () => {
     })
   })
 
+  describe('Series Share Format Specification', () => {
+    it('should generate exact PRD-specified format for series sharing', () => {
+      // Create a more realistic series data for testing the exact format
+      const testSeriesData: FlowSeriesData = {
+        id: 'test-series-format',
+        seriesName: 'Sun Salutation A',
+        description: 'Classic sun salutation sequence',
+        seriesPostures: [
+          'Mountain Pose',
+          'Upward Salute',
+          'Standing Forward Fold',
+          'Low Lunge',
+          'Plank Pose',
+        ],
+        duration: '15',
+      }
+
+      // Import the actual SeriesShareStrategy to test directly
+      const { SeriesShareStrategy } = require('../../../types/sharing')
+      const strategy = new SeriesShareStrategy()
+      const shareConfig = strategy.generateShareConfig(testSeriesData)
+
+      // Verify the exact format matches PRD specification
+      const expectedText = `Sharing a video of
+the yoga series
+"Sun Salutation A"
+
+Below are the postures in this series:
+
+* Mountain Pose,
+* Upward Salute,
+* Standing Forward Fold,
+* Low Lunge,
+* Plank Pose
+
+Practice with Uvuyoga!
+
+https://www.happyyoga.app/navigator/flows/practiceSeries
+
+(www.happyyoga.app)`
+
+      expect(shareConfig.text).toBe(expectedText)
+      expect(shareConfig.title).toBe(
+        'Sharing a video of the yoga series "Sun Salutation A"'
+      )
+      expect(shareConfig.url).toBe(
+        'https://www.happyyoga.app/navigator/flows/practiceSeries'
+      )
+      expect(shareConfig.shareType).toBe('series')
+    })
+
+    it('should handle series with single posture correctly', () => {
+      const singlePostureSeriesData: FlowSeriesData = {
+        id: 'single-posture-series',
+        seriesName: "Child's Pose Rest",
+        description: 'Single pose relaxation',
+        seriesPostures: ["Child's Pose"],
+        duration: '5',
+      }
+
+      const { SeriesShareStrategy } = require('../../../types/sharing')
+      const strategy = new SeriesShareStrategy()
+      const shareConfig = strategy.generateShareConfig(singlePostureSeriesData)
+
+      // For single posture, should not have comma after the last (and only) item
+      const expectedText = `Sharing a video of
+the yoga series
+"Child's Pose Rest"
+
+Below are the postures in this series:
+
+* Child's Pose
+
+Practice with Uvuyoga!
+
+https://www.happyyoga.app/navigator/flows/practiceSeries
+
+(www.happyyoga.app)`
+
+      expect(shareConfig.text).toBe(expectedText)
+    })
+
+    it('should clean semicolons from posture names in series format', () => {
+      const seriesWithSemicolons: FlowSeriesData = {
+        id: 'semicolon-test',
+        seriesName: 'Test Series',
+        description: 'Testing semicolon cleanup',
+        seriesPostures: ['Warrior I; Right Side', 'Warrior I; Left Side'],
+        duration: '10',
+      }
+
+      const { SeriesShareStrategy } = require('../../../types/sharing')
+      const strategy = new SeriesShareStrategy()
+      const shareConfig = strategy.generateShareConfig(seriesWithSemicolons)
+
+      // Should clean semicolons and format correctly
+      const expectedText = `Sharing a video of
+the yoga series
+"Test Series"
+
+Below are the postures in this series:
+
+* Warrior I Right Side,
+* Warrior I Left Side
+
+Practice with Uvuyoga!
+
+https://www.happyyoga.app/navigator/flows/practiceSeries
+
+(www.happyyoga.app)`
+
+      expect(shareConfig.text).toBe(expectedText)
+    })
+  })
+
+  describe('Asana Share Format Specification', () => {
+    it('should generate exact PRD-specified format for asana sharing', () => {
+      // Create test asana data for testing the exact format
+      const testAsanaData: FullAsanaData = {
+        id: 'test-asana-format',
+        english_names: ['Warrior I'],
+        sort_english_name: 'Warrior I',
+        description: 'A powerful standing pose that strengthens the legs',
+        benefits: 'Strengthens legs and core',
+        category: 'Standing',
+        difficulty: 'Beginner',
+        sanskrit_names: 'Virabhadrasana I',
+        lore: 'Named after the fierce warrior Virabhadra',
+        breath_direction_default: 'Inhale',
+        dristi: 'Forward',
+        variations: ['Warrior I with blocks'],
+        modifications: ['Use wall for support'],
+        label: 'Warrior I Pose',
+        suggested_postures: ['Mountain Pose'],
+        preparatory_postures: ['Forward Fold'],
+        preferred_side: 'Both',
+        sideways: false,
+        image: 'warrior1.jpg',
+        created_on: '2024-01-01',
+        updated_on: '2024-01-01',
+        activity_completed: false,
+        activity_practice: false,
+        posture_intent: 'Strength',
+        breath_series: ['4 count inhale'],
+        duration_asana: '30 seconds',
+        transition_cues_out: 'Step back to mountain',
+        transition_cues_in: 'Step forward into lunge',
+        setup_cues: 'Stand tall, step forward',
+        deepening_cues: 'Sink deeper into front leg',
+        customize_asana: 'Adjust stance width',
+        additional_cues: 'Keep spine straight',
+        joint_action: 'Hip flexion',
+        muscle_action: 'Quadriceps engagement',
+        created_by: 'instructor',
+      }
+
+      // Import the actual AsanaShareStrategy to test directly
+      const { AsanaShareStrategy } = require('../../../types/sharing')
+      const strategy = new AsanaShareStrategy()
+      const shareConfig = strategy.generateShareConfig(testAsanaData)
+
+      // Verify the exact format matches PRD specification
+      const expectedText = `The yoga posture Warrior I was shared with you. Below is the description:
+
+Practice with Uvuyoga!
+
+https://www.happyyoga.app/navigator/flows/practiceSeries
+
+(www.happyyoga.app)`
+
+      expect(shareConfig.text).toBe(expectedText)
+      expect(shareConfig.title).toBe(
+        'The yoga posture "Warrior I" was shared with you. Below is the description:'
+      )
+      expect(shareConfig.url).toBe(
+        'https://www.happyyoga.app/navigator/flows/practiceSeries'
+      )
+      expect(shareConfig.shareType).toBe('asana')
+    })
+
+    it('should handle asana names with special characters correctly', () => {
+      const specialAsanaData: FullAsanaData = {
+        id: 'special-asana',
+        english_names: ["Child's Pose"],
+        sort_english_name: "Child's Pose",
+        description: 'A restful pose',
+        benefits: 'Calming',
+        category: 'Restorative',
+        difficulty: 'Beginner',
+        sanskrit_names: 'Balasana',
+        lore: 'Ancient resting pose',
+        breath_direction_default: 'Natural',
+        dristi: 'Down',
+        variations: ["Extended Child's Pose"],
+        modifications: ['Use bolster'],
+        label: "Child's Pose",
+        suggested_postures: ['Cat Pose'],
+        preparatory_postures: ['Table Top'],
+        preferred_side: 'Center',
+        sideways: false,
+        image: 'childs.jpg',
+        created_on: '2024-01-01',
+        updated_on: '2024-01-01',
+        activity_completed: false,
+        activity_practice: false,
+        posture_intent: 'Rest',
+        breath_series: ['Natural breathing'],
+        duration_asana: '1-5 minutes',
+        transition_cues_out: 'Slowly rise up',
+        transition_cues_in: 'Sit back on heels',
+        setup_cues: 'Kneel on mat',
+        deepening_cues: 'Relax completely',
+        customize_asana: 'Use props as needed',
+        additional_cues: 'Rest forehead on mat',
+        joint_action: 'Spinal flexion',
+        muscle_action: 'Full body relaxation',
+        created_by: 'instructor',
+      }
+
+      const { AsanaShareStrategy } = require('../../../types/sharing')
+      const strategy = new AsanaShareStrategy()
+      const shareConfig = strategy.generateShareConfig(specialAsanaData)
+
+      // Should handle special characters correctly
+      const expectedText = `The yoga posture Child's Pose was shared with you. Below is the description:
+
+Practice with Uvuyoga!
+
+https://www.happyyoga.app/navigator/flows/practiceSeries
+
+(www.happyyoga.app)`
+
+      expect(shareConfig.text).toBe(expectedText)
+      expect(shareConfig.title).toBe(
+        'The yoga posture "Child\'s Pose" was shared with you. Below is the description:'
+      )
+    })
+  })
+
   describe('Legacy Props Support', () => {
     it('should support legacy postureData prop', () => {
       render(

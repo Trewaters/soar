@@ -920,11 +920,7 @@ const PostureShareButton: React.FC<CombinedPostureShareButtonProps> = (
 
     switch (content.contentType) {
       case 'asana':
-        return (
-          (content.data as FullAsanaData).english_names?.join(', ') ||
-          (content.data as FullAsanaData).sort_english_name ||
-          'Asana'
-        )
+        return (content.data as FullAsanaData).sort_english_name || 'Asana'
       case 'series':
         return (content.data as FlowSeriesData).seriesName || 'Series'
       case 'sequence':

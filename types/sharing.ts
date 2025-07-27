@@ -77,20 +77,29 @@ export function createShareStrategy(
 
 /**
  * Share strategy for individual yoga postures/asanas
- * Formats asana data with Sanskrit names, descriptions, and benefits
- * Uses current page URL or provided fallback for context preservation
+ * Implements exact format specification from PRD with mandatory format:
+ * "The yoga posture [Asana Posture sort name] was shared with you. Below is the description:
+ * Practice with Uvuyoga! https://www.happyyoga.app/navigator/flows/practiceSeries (www.happyyoga.app)"
  */
 export class AsanaShareStrategy implements ShareStrategy {
-  generateShareConfig(data: FullAsanaData, url?: string): ShareConfig {
+  generateShareConfig(data: FullAsanaData): ShareConfig {
     const postureName = data.sort_english_name
-    const sanskritName = data.sanskrit_names || ''
 
-    // Generate URL using the new URL generation system
-    const shareUrl = generateUrlWithFallbacks('asana', data, url)
+    // According to PRD, asana sharing must always use the production URL
+    const shareUrl = 'https://www.happyyoga.app/navigator/flows/practiceSeries'
+
+    // Implement exact PRD format specification
+    const shareText = `The yoga posture ${postureName} was shared with you. Below is the description:
+
+Practice with Uvuyoga!
+
+${shareUrl}
+
+(www.happyyoga.app)`
 
     return {
       title: `The yoga posture "${postureName}" was shared with you. Below is the description:`,
-      text: `${data.description}\n\n${sanskritName ? `Sanskrit: ${sanskritName}\n` : ''}${data.benefits ? `Benefits: ${data.benefits}\n` : ''}\nPractice with us at Uvuyoga!`,
+      text: shareText,
       url: shareUrl,
       shareType: 'asana',
     }
@@ -99,22 +108,48 @@ export class AsanaShareStrategy implements ShareStrategy {
 
 /**
  * Share strategy for yoga series (collections of related asanas)
- * Implements exact format specification from PRD with video header and specific URL
- * Always uses the designated practice series URL regardless of current context
+ * Implements exact format specification from PRD with mandatory format:
+ * "Sharing a video of the yoga series "[Series Name]"
+ * Below are the postures in this series: * [Posture 1], * [Posture 2], etc.
+ * Practice with Uvuyoga! https://www.happyyoga.app/navigator/flows/practiceSeries (www.happyyoga.app)"
  */
 export class SeriesShareStrategy implements ShareStrategy {
   generateShareConfig(data: FlowSeriesData): ShareConfig {
     const seriesName = data.seriesName
+
+    // Format postures with exactly the required format: "* [Posture Name],"
     const posturesText = data.seriesPostures
-      .map((posture) => `• ${posture.replace(';', ',')}`)
+      .map((posture, index) => {
+        // Clean posture name and add comma except for last item
+        const cleanPosture = posture.replace(/;/g, '')
+        return index === data.seriesPostures.length - 1
+          ? `* ${cleanPosture}`
+          : `* ${cleanPosture},`
+      })
       .join('\n')
 
     // Generate URL using the new URL generation system - series always use specific URL
-    const shareUrl = generateUrlWithFallbacks('series', data)
+    // According to PRD, series sharing must always use the production URL
+    const shareUrl = 'https://www.happyyoga.app/navigator/flows/practiceSeries'
+
+    // Implement exact PRD format specification
+    const shareText = `Sharing a video of
+the yoga series
+"${seriesName}"
+
+Below are the postures in this series:
+
+${posturesText}
+
+Practice with Uvuyoga!
+
+${shareUrl}
+
+(www.happyyoga.app)`
 
     return {
-      title: `Sharing a video of the yoga series\n\nThe yoga series "${seriesName}" was shared with you. Below are the postures:`,
-      text: `${posturesText}\n\nPractice with Uvuyoga!`,
+      title: `Sharing a video of the yoga series "${seriesName}"`,
+      text: shareText,
       url: shareUrl,
       shareType: 'series',
     }
