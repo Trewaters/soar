@@ -86,10 +86,10 @@ jest.mock('@serverComponents/navBottom', () => {
 })
 
 // Mock PostureShareButton component
-jest.mock('@app/clientComponents/exportPoses', () => {
-  const MockPostureShareButton = ({ seriesData }: any) => (
+jest.mock('@app/clientComponents/postureShareButton', () => {
+  const MockPostureShareButton = ({ content }: any) => (
     <div data-testid="posture-share-button">
-      Share: {seriesData?.seriesName}
+      Share: {content?.data?.seriesName || ''}
     </div>
   )
   MockPostureShareButton.displayName = 'MockPostureShareButton'

@@ -244,7 +244,12 @@ export default function Page() {
                 />
               </Box>
 
-              <PostureShareButton seriesData={flow} />
+              <PostureShareButton
+                content={{
+                  contentType: 'series',
+                  data: flow,
+                }}
+              />
             </Box>
           </Box>
         )}

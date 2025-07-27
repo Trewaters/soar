@@ -6,6 +6,7 @@
 import { FullAsanaData } from '@context/AsanaPostureContext'
 import { FlowSeriesData } from '@context/AsanaSeriesContext'
 import { SequenceData } from '@context/SequenceContext'
+import { generateUrlWithFallbacks } from '../app/utils/urlGeneration'
 
 /**
  * Discriminated union for different types of shareable yoga content
@@ -77,16 +78,20 @@ export function createShareStrategy(
 /**
  * Share strategy for individual yoga postures/asanas
  * Formats asana data with Sanskrit names, descriptions, and benefits
+ * Uses current page URL or provided fallback for context preservation
  */
 export class AsanaShareStrategy implements ShareStrategy {
   generateShareConfig(data: FullAsanaData, url?: string): ShareConfig {
     const postureName = data.sort_english_name
     const sanskritName = data.sanskrit_names || ''
 
+    // Generate URL using the new URL generation system
+    const shareUrl = generateUrlWithFallbacks('asana', data, url)
+
     return {
       title: `The yoga posture "${postureName}" was shared with you. Below is the description:`,
       text: `${data.description}\n\n${sanskritName ? `Sanskrit: ${sanskritName}\n` : ''}${data.benefits ? `Benefits: ${data.benefits}\n` : ''}\nPractice with us at Uvuyoga!`,
-      url: url || (typeof window !== 'undefined' ? window.location.href : ''),
+      url: shareUrl,
       shareType: 'asana',
     }
   }
@@ -95,6 +100,7 @@ export class AsanaShareStrategy implements ShareStrategy {
 /**
  * Share strategy for yoga series (collections of related asanas)
  * Implements exact format specification from PRD with video header and specific URL
+ * Always uses the designated practice series URL regardless of current context
  */
 export class SeriesShareStrategy implements ShareStrategy {
   generateShareConfig(data: FlowSeriesData): ShareConfig {
@@ -103,10 +109,13 @@ export class SeriesShareStrategy implements ShareStrategy {
       .map((posture) => `• ${posture.replace(';', ',')}`)
       .join('\n')
 
+    // Generate URL using the new URL generation system - series always use specific URL
+    const shareUrl = generateUrlWithFallbacks('series', data)
+
     return {
       title: `Sharing a video of the yoga series\n\nThe yoga series "${seriesName}" was shared with you. Below are the postures:`,
       text: `${posturesText}\n\nPractice with Uvuyoga!`,
-      url: 'https://www.happyyoga.app/navigator/flows/practiceSeries',
+      url: shareUrl,
       shareType: 'series',
     }
   }
@@ -115,6 +124,7 @@ export class SeriesShareStrategy implements ShareStrategy {
 /**
  * Share strategy for yoga sequences (ordered flows with multiple series)
  * Combines sequence information with included series data
+ * Uses sequence-specific URL or falls back to current context
  */
 export class SequenceShareStrategy implements ShareStrategy {
   generateShareConfig(data: SequenceData, url?: string): ShareConfig {
@@ -123,10 +133,13 @@ export class SequenceShareStrategy implements ShareStrategy {
       .map((series) => series.seriesName)
       .join(', ')
 
+    // Generate URL using the new URL generation system
+    const shareUrl = generateUrlWithFallbacks('sequence', data, url)
+
     return {
       title: `The yoga sequence "${sequenceName}" was shared with you. Below is the flow:`,
       text: `Description: ${data.description || 'A custom yoga sequence'}\n\nSeries included: ${seriesNames}\n\nDuration: ${data.duration || 'Varies'}\n\nPractice with us at Uvuyoga!`,
-      url: url || (typeof window !== 'undefined' ? window.location.href : ''),
+      url: shareUrl,
       shareType: 'sequence',
     }
   }

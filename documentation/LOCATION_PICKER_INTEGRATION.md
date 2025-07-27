@@ -132,7 +132,6 @@ The following packages are already included in the project:
 
 ```tsx
 import { LocationPicker } from '@app/clientComponents/locationPicker'
-
 ;<LocationPicker
   value={userData?.location ?? ''}
   onChange={handleLocationChange}

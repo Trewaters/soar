@@ -868,7 +868,12 @@ export default function PostureActivityDetail({
             </IconButton>
           </Stack>
           <Stack sx={{ m: 2, border: '1px solid black', borderRadius: '12px' }}>
-            <PostureShareButton postureData={posture} />
+            <PostureShareButton
+              content={{
+                contentType: 'asana',
+                data: posture,
+              }}
+            />
           </Stack>
         </ButtonGroup>
       )}
