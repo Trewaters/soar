@@ -20,13 +20,24 @@ import SearchIcon from '@mui/icons-material/Search'
 import ImageUploadWithFallback from '@app/clientComponents/imageUpload/ImageUploadWithFallback'
 import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUploadWithFallback'
 import { deletePoseImage } from '@lib/imageService'
+import {
+  FreemiumNotification,
+  useFreemiumNotification,
+} from '@app/clientComponents/freemiumNotification'
 
 export default function Page() {
   const { data: session } = useSession()
   const router = useRouter()
+  const { userAuthState, checkFeatureAccess, handleCtaAction } =
+    useFreemiumNotification()
+
+  // State for notification management
+  const [notificationState, setNotificationState] = useState({
+    isOpen: false,
+  })
+
   const [open, setOpen] = useState(false)
   const [difficulty, setDifficulty] = useState('')
-  const [sideways, setSideways] = useState('No')
   const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -100,14 +111,6 @@ export default function Page() {
     setFormData({
       ...formData,
       difficulty: value,
-    })
-  }
-
-  const handleSidewaysChange = (value: string) => {
-    setSideways(value)
-    setFormData({
-      ...formData,
-      sideways: value,
     })
   }
 
@@ -193,11 +196,30 @@ export default function Page() {
     setOpen(!open)
   }
 
+  // Freemium access control
   useEffect(() => {
-    if (session === null) {
-      router.push('/navigator/asanaPostures')
+    const accessResult = checkFeatureAccess('createAsana')
+
+    if (!accessResult.hasAccess) {
+      // Show notification and redirect to asana list
+      setNotificationState({ isOpen: true })
+
+      // Delay redirect to allow notification to show
+      setTimeout(() => {
+        router.push('/navigator/asanaPostures')
+      }, 2000)
     }
-  }, [router, session])
+  }, [checkFeatureAccess, router])
+
+  // Close notification handler
+  const handleCloseNotification = () => {
+    setNotificationState({ isOpen: false })
+  }
+
+  // Handle CTA click in notification
+  const handleNotificationCtaClick = () => {
+    handleCtaAction('createAsana', window.location.pathname)
+  }
 
   return (
     <Box
@@ -471,6 +493,15 @@ export default function Page() {
 
       <Box height={'72px'} />
       <NavBottom subRoute="/navigator/asanaPostures" />
+
+      {/* Freemium Notification */}
+      <FreemiumNotification
+        featureType="createAsana"
+        userAuthState={userAuthState}
+        isOpen={notificationState.isOpen}
+        onClose={handleCloseNotification}
+        onCtaClick={handleNotificationCtaClick}
+      />
     </Box>
   )
 }
