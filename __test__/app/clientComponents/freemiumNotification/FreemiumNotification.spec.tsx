@@ -71,23 +71,23 @@ describe('FreemiumNotification', () => {
       ).toBeInTheDocument()
     })
 
-    it('displays correct content for free users', () => {
+    it('displays correct content for authenticated users (they have access)', () => {
       render(
         <TestWrapper>
           <FreemiumNotification
             {...defaultProps}
             featureType="createAsana"
-            userAuthState="authenticated-free"
+            userAuthState="authenticated-pro"
           />
         </TestWrapper>
       )
 
-      expect(screen.getByText('Upgrade Required')).toBeInTheDocument()
+      expect(screen.getByText('Feature Available')).toBeInTheDocument()
       expect(
-        screen.getByText('Upgrade to Pro to create custom asanas')
+        screen.getByText('You can create custom asanas')
       ).toBeInTheDocument()
       expect(
-        screen.getByRole('button', { name: /upgrade now/i })
+        screen.getByRole('button', { name: /continue/i })
       ).toBeInTheDocument()
     })
 
@@ -271,14 +271,14 @@ describe('FreemiumNotification', () => {
         <TestWrapper>
           <FreemiumNotification
             {...defaultProps}
-            userAuthState="authenticated-free"
+            userAuthState="authenticated-pro"
           />
         </TestWrapper>
       )
 
-      // Test warning severity for free users
+      // Test success severity for authenticated users
       expect(screen.getByTestId('freemium-notification-alert')).toHaveClass(
-        'MuiAlert-filledWarning'
+        'MuiAlert-filledSuccess'
       )
     })
 

@@ -58,16 +58,7 @@ const FreemiumNotification: React.FC<FreemiumNotificationProps> = ({
       }
     }
 
-    if (userAuthState === 'authenticated-free') {
-      return {
-        title: 'Upgrade Required',
-        message: `Upgrade to Pro to create ${featureName}`,
-        ctaText: 'Upgrade Now',
-        severity: 'warning' as const,
-      }
-    }
-
-    // Fallback for authenticated-pro users (shouldn't normally see this)
+    // All authenticated users have access (no payment system implemented yet)
     return {
       title: 'Feature Available',
       message: `You can create ${featureName}`,

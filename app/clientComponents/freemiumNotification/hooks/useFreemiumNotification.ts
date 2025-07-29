@@ -18,19 +18,13 @@ export const useFreemiumNotification = () => {
   const router = useNavigationWithLoading()
 
   // Determine user authentication state
-  const userAuthState: UserAuthState = useMemo(() => {
-    if (status === 'loading') {
-      return 'unauthenticated' // Default during loading
-    }
+  const userAuthState = useMemo<UserAuthState>(() => {
+    if (status === 'loading') return 'unauthenticated'
+    if (!session?.user) return 'unauthenticated'
 
-    if (!session) {
-      return 'unauthenticated'
-    }
-
-    // TODO: Add logic to determine if user is pro/premium
-    // For now, all authenticated users are considered free tier
-    // This would be replaced with actual subscription check
-    return 'authenticated-free'
+    // All authenticated users are treated as having full access
+    // No upgrade/payment system implemented yet
+    return 'authenticated-pro'
   }, [session, status])
 
   // Check if user has access to a specific feature
@@ -60,22 +54,7 @@ export const useFreemiumNotification = () => {
         }
       }
 
-      // Free tier users need to upgrade
-      if (userAuthState === 'authenticated-free') {
-        return {
-          hasAccess: false,
-          requiresLogin: false,
-          requiresUpgrade: true,
-          notificationContent: {
-            title: 'Upgrade Required',
-            message: `Upgrade to Pro to create ${featureName}`,
-            ctaText: 'Upgrade Now',
-            severity: 'warning',
-          },
-        }
-      }
-
-      // Pro users have access
+      // All authenticated users have access (no payment system yet)
       return {
         hasAccess: true,
         requiresLogin: false,
@@ -101,12 +80,11 @@ export const useFreemiumNotification = () => {
     [router]
   )
 
-  // Handle navigation to upgrade page (placeholder)
+  // Handle navigation to upgrade page (disabled - no payment system yet)
   const handleUpgradeRedirect = useCallback(() => {
-    // TODO: Implement actual upgrade flow
-    // For now, redirect to profile page where upgrade info might be shown
-    router.push('/navigator/profile')
-  }, [router])
+    // TODO: Implement actual upgrade flow when payment system is ready
+    console.warn('Upgrade functionality not implemented yet')
+  }, [])
 
   // Get notification content for a specific feature
   const getNotificationContent = useCallback(

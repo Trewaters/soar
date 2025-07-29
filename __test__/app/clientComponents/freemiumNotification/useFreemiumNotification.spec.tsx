@@ -52,7 +52,7 @@ describe('useFreemiumNotification', () => {
       expect(result.current.userAuthState).toBe('unauthenticated')
     })
 
-    it('returns authenticated-free for all authenticated users (current implementation)', () => {
+    it('returns authenticated-pro for all authenticated users (current implementation)', () => {
       mockUseSession.mockReturnValue({
         data: {
           user: {
@@ -69,12 +69,12 @@ describe('useFreemiumNotification', () => {
         wrapper: TestWrapper,
       })
 
-      expect(result.current.userAuthState).toBe('authenticated-free')
+      expect(result.current.userAuthState).toBe('authenticated-pro')
     })
 
-    // Note: The current implementation treats all authenticated users as free tier
-    // This test documents the current behavior, not the intended behavior
-    it('returns authenticated-free even for users with pro subscription (current limitation)', () => {
+    // Note: The current implementation treats all authenticated users as having full access
+    // This test documents the current behavior since no payment system is implemented
+    it('returns authenticated-pro for all authenticated users (no payment system yet)', () => {
       mockUseSession.mockReturnValue({
         data: {
           user: {
@@ -92,11 +92,11 @@ describe('useFreemiumNotification', () => {
         wrapper: TestWrapper,
       })
 
-      // Current implementation always returns 'authenticated-free' for authenticated users
-      expect(result.current.userAuthState).toBe('authenticated-free')
+      // Current implementation always returns 'authenticated-pro' for authenticated users
+      expect(result.current.userAuthState).toBe('authenticated-pro')
     })
 
-    it('defaults to authenticated-free when subscription is undefined', () => {
+    it('returns authenticated-pro when subscription is undefined', () => {
       mockUseSession.mockReturnValue({
         data: {
           user: {
@@ -113,7 +113,7 @@ describe('useFreemiumNotification', () => {
         wrapper: TestWrapper,
       })
 
-      expect(result.current.userAuthState).toBe('authenticated-free')
+      expect(result.current.userAuthState).toBe('authenticated-pro')
     })
   })
 
@@ -135,7 +135,7 @@ describe('useFreemiumNotification', () => {
       expect(accessResult.requiresUpgrade).toBe(false)
     })
 
-    it('denies access for all authenticated users (current implementation treats all as free)', () => {
+    it('grants access for all authenticated users (current implementation)', () => {
       mockUseSession.mockReturnValue({
         data: {
           user: {
@@ -153,12 +153,12 @@ describe('useFreemiumNotification', () => {
       })
       const accessResult = result.current.checkFeatureAccess('createAsana')
 
-      expect(accessResult.hasAccess).toBe(false)
+      expect(accessResult.hasAccess).toBe(true)
       expect(accessResult.requiresLogin).toBe(false)
-      expect(accessResult.requiresUpgrade).toBe(true)
+      expect(accessResult.requiresUpgrade).toBe(false)
     })
 
-    it('handles all feature types correctly (current implementation denies all)', () => {
+    it('handles all feature types correctly (current implementation grants access)', () => {
       mockUseSession.mockReturnValue({
         data: {
           user: {
@@ -184,8 +184,9 @@ describe('useFreemiumNotification', () => {
 
       features.forEach((feature) => {
         const accessResult = result.current.checkFeatureAccess(feature)
-        expect(accessResult.hasAccess).toBe(false)
-        expect(accessResult.requiresUpgrade).toBe(true)
+        expect(accessResult.hasAccess).toBe(true)
+        expect(accessResult.requiresLogin).toBe(false)
+        expect(accessResult.requiresUpgrade).toBe(false)
       })
     })
   })
@@ -209,7 +210,7 @@ describe('useFreemiumNotification', () => {
       )
     })
 
-    it('redirects to profile page for authenticated users needing upgrade', () => {
+    it('does nothing for authenticated users (they have access)', () => {
       mockUseSession.mockReturnValue({
         data: {
           user: {
@@ -228,10 +229,11 @@ describe('useFreemiumNotification', () => {
 
       result.current.handleCtaAction('createAsana', '/current-path')
 
-      expect(mockRouter.push).toHaveBeenCalledWith('/navigator/profile')
+      // No redirect should happen since authenticated users have access
+      expect(mockRouter.push).not.toHaveBeenCalled()
     })
 
-    it('handles pro users gracefully (current implementation treats all as free)', () => {
+    it('handles all authenticated users gracefully (current implementation gives full access)', () => {
       mockUseSession.mockReturnValue({
         data: {
           user: {
@@ -250,8 +252,8 @@ describe('useFreemiumNotification', () => {
 
       result.current.handleCtaAction('createSequence', '/current-path')
 
-      // Current implementation treats all authenticated users as needing upgrade
-      expect(mockRouter.push).toHaveBeenCalledWith('/navigator/profile')
+      // No redirect should happen since authenticated users have access
+      expect(mockRouter.push).not.toHaveBeenCalled()
     })
 
     it('handles missing currentPath gracefully', () => {
@@ -299,7 +301,7 @@ describe('useFreemiumNotification', () => {
         wrapper: TestWrapper,
       })
 
-      expect(result.current.userAuthState).toBe('authenticated-free')
+      expect(result.current.userAuthState).toBe('unauthenticated')
     })
   })
 
@@ -318,7 +320,7 @@ describe('useFreemiumNotification', () => {
         wrapper: TestWrapper,
       })
 
-      expect(result.current.userAuthState).toBe('authenticated-free')
+      expect(result.current.userAuthState).toBe('unauthenticated')
     })
 
     it('handles subscription with different casing (current implementation ignores subscription)', () => {
@@ -339,7 +341,7 @@ describe('useFreemiumNotification', () => {
       })
 
       // Current implementation doesn't check subscription field
-      expect(result.current.userAuthState).toBe('authenticated-free')
+      expect(result.current.userAuthState).toBe('authenticated-pro')
     })
   })
 })
