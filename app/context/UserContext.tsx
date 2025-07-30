@@ -1,12 +1,15 @@
 'use client'
-import {
+import React, {
   createContext,
-  useReducer,
-  useContext,
   ReactNode,
+  useContext,
+  useReducer,
   Dispatch,
+  useMemo,
+  useCallback,
   useEffect,
 } from 'react'
+import { isMobileDevice } from '@app/utils/mobileInputHelpers'
 
 export type UserData = {
   // 'id' is not editable
@@ -114,12 +117,20 @@ export type UserProfilePageState = {
   userData: UserData
   userGithubProfile: UserGithubProfile
   userGoogleProfile: UserGoogleProfile
+  isMobile?: boolean
+  deviceInfo?: {
+    isMobile: boolean
+    userAgent?: string
+    screenWidth?: number
+    touchSupport?: boolean
+  }
 }
 
 type UserAction =
   | { type: 'SET_USER'; payload: UserData }
   | { type: 'SET_GITHUB_PROFILE'; payload: UserGithubProfile }
   | { type: 'SET_GOOGLE_PROFILE'; payload: UserGoogleProfile }
+  | { type: 'SET_DEVICE_INFO'; payload: UserProfilePageState['deviceInfo'] }
 
 const initialState: UserProfilePageState = {
   userData: {
@@ -208,6 +219,11 @@ const initialState: UserProfilePageState = {
     iat: 0,
     exp: 0,
   },
+  isMobile: false,
+  deviceInfo: {
+    isMobile: false,
+    touchSupport: false,
+  },
 }
 
 interface UserStateContextType {
@@ -231,6 +247,12 @@ function UserReducer(
       return { ...state, userGithubProfile: action.payload }
     case 'SET_GOOGLE_PROFILE':
       return { ...state, userGoogleProfile: action.payload }
+    case 'SET_DEVICE_INFO':
+      return {
+        ...state,
+        deviceInfo: action.payload,
+        isMobile: action.payload?.isMobile || false,
+      }
     default:
       return state
   }
@@ -243,8 +265,23 @@ export default function UserStateProvider({
 }) {
   const [state, dispatch] = useReducer(UserReducer, initialState)
 
+  // Detect device capabilities on mount
   useEffect(() => {
-    const fetchUserData = async (email: string) => {
+    if (typeof window !== 'undefined') {
+      const deviceInfo = {
+        isMobile: isMobileDevice(),
+        userAgent: navigator.userAgent,
+        screenWidth: window.screen.width,
+        touchSupport: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
+      }
+
+      dispatch({ type: 'SET_DEVICE_INFO', payload: deviceInfo })
+    }
+  }, [])
+
+  // Memoize the fetchUserData function to prevent unnecessary re-creation
+  const fetchUserData = useCallback(
+    async (email: string) => {
       let fetchUser: any
       try {
         const userResponse = await fetch(
@@ -282,15 +319,27 @@ export default function UserStateProvider({
       } catch (error) {
         throw new Error(`Error fetching user profile: ${error}`)
       }
-    }
+    },
+    [dispatch]
+  )
 
+  useEffect(() => {
     if (state.userData.email) {
       fetchUserData(state.userData.email)
     }
-  }, [state.userData.email])
+  }, [state.userData.email, fetchUserData])
+
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(
+    () => ({
+      state,
+      dispatch,
+    }),
+    [state, dispatch]
+  )
 
   return (
-    <UserStateContext.Provider value={{ state, dispatch }}>
+    <UserStateContext.Provider value={contextValue}>
       {children}
     </UserStateContext.Provider>
   )

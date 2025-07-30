@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import {
   Avatar,
   Button,
@@ -31,10 +31,12 @@ import LinkIcon from '@mui/icons-material/Link'
 import ShareIcon from '@mui/icons-material/Share'
 import MapIcon from '@mui/icons-material/Map'
 import { styled } from '@mui/material/styles'
+import { LocationPicker } from '@app/clientComponents/locationPicker'
+import TextInputField from '@app/clientComponents/inputComponents/TextInputField'
 import {
-  LocationPicker,
-  LocationData,
-} from '@app/clientComponents/locationPicker'
+  getMobileInputTheme,
+  getMobileFormContainerTheme,
+} from '@app/utils/mobileThemeHelpers'
 
 const yogaStyles = [
   'Ashtanga',
@@ -91,6 +93,67 @@ export default function UserDetails() {
     'active' | 'inactive' | 'edit'
   >('active')
 
+  // Local form state to prevent re-renders on every keystroke
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    pronouns: '',
+    headline: '',
+    bio: '',
+    websiteURL: '',
+    location: '',
+    shareQuick: '',
+    yogaStyle: '',
+    yogaExperience: '',
+    company: '',
+  })
+
+  // Initialize form data when userData changes
+  useEffect(() => {
+    if (userData) {
+      setFormData({
+        firstName: userData.firstName ?? '',
+        lastName: userData.lastName ?? '',
+        pronouns: userData.pronouns ?? '',
+        headline: userData.headline ?? '',
+        bio: userData.bio ?? '',
+        websiteURL: userData.websiteURL ?? '',
+        location: userData.location ?? '',
+        shareQuick: userData.shareQuick ?? '',
+        yogaStyle: userData.yogaStyle ?? '',
+        yogaExperience: userData.yogaExperience ?? '',
+        company: userData.company ?? '',
+      })
+    }
+  }, [userData])
+
+  // Memoized stable change handler to prevent re-creation
+  const handleChange = useCallback(
+    (
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+      value?: string
+    ) => {
+      const { name } = e.target
+      const fieldValue = value !== undefined ? value : e.target.value
+
+      console.log('onChange called for:', name, 'with value:', fieldValue)
+
+      // Update local form state only - this doesn't trigger context re-renders
+      setFormData((prev) => ({
+        ...prev,
+        [name]: fieldValue,
+      }))
+    },
+    []
+  )
+
+  const handleLocationChange = useCallback((location: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      location: location,
+    }))
+  }, [])
+
   const ProfileStatusIndicator = ({
     mode,
     iconSrc,
@@ -142,28 +205,23 @@ export default function UserDetails() {
     )
   }
 
-  const FormField = ({
-    label,
-    children,
-    width = '100%',
-  }: {
-    label: string
-    children: React.ReactNode
-    width?: string | object
-  }) => (
-    <FormControl sx={{ width }}>
-      <Typography variant="body1" sx={{ mb: 1 }}>
-        {label}
-      </Typography>
-      {children}
-    </FormControl>
-  )
-
   const textFieldStyles = {
     '& .MuiInputBase-root': {
       borderRadius: '12px',
       boxShadow: '0 4px 4px 0 #CBCBCB',
+      fontSize: '16px', // Prevents mobile zoom
+      minHeight: '48px', // Touch-friendly
     },
+    '& .MuiInputBase-input': {
+      fontSize: '16px !important', // Critical for preventing iOS zoom
+      padding: '12px 16px',
+      WebkitAppearance: 'none',
+    },
+    '& .MuiFormLabel-root': {
+      fontSize: '16px',
+    },
+    // Apply mobile-specific enhancements
+    ...getMobileInputTheme(),
   }
 
   useEffect(() => {
@@ -203,31 +261,18 @@ export default function UserDetails() {
     )
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    dispatch({ type: 'SET_USER', payload: { ...userData, [name]: value } })
-  }
-
-  const handleLocationChange = (
-    location: string,
-    locationData?: LocationData
-  ) => {
-    dispatch({
-      type: 'SET_USER',
-      payload: {
-        ...userData,
-        location: location,
-        // Optionally store additional location data in a JSON field
-        // We could add locationDetails to the user schema if needed
-      },
-    })
-  }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
+
     try {
+      // Update userData context with all form data at once
+      const updatedUserData = {
+        ...userData,
+        ...formData,
+      }
+
       const response = await fetch(
         `/api/user/updateUserData/?email=${userData.email}`,
         {
@@ -235,7 +280,7 @@ export default function UserDetails() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(userData),
+          body: JSON.stringify(updatedUserData),
         }
       )
 
@@ -297,7 +342,13 @@ export default function UserDetails() {
       )}
       {session && (
         <>
-          <Paper elevation={1} sx={{ mx: 3 }}>
+          <Paper
+            elevation={1}
+            sx={{
+              mx: 3,
+              ...getMobileFormContainerTheme(), // Mobile keyboard optimizations
+            }}
+          >
             <Stack
               spacing={3}
               sx={{ p: 3 }}
@@ -398,12 +449,12 @@ export default function UserDetails() {
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                   <CardContent>
                     <Stack spacing={2}>
-                      <TextField
+                      <TextInputField
                         name="shareQuick"
                         id="share-quick-input"
                         placeholder='Share "Quickly"'
                         label="Share Quickly"
-                        value={userData.shareQuick ?? ''}
+                        value={formData.shareQuick}
                         variant="outlined"
                         onChange={handleChange}
                         fullWidth
@@ -412,15 +463,12 @@ export default function UserDetails() {
                         freeSolo
                         fullWidth
                         options={yogaStyles}
-                        value={userData.yogaStyle ?? ''}
+                        value={formData.yogaStyle}
                         onChange={(event, newValue) => {
-                          dispatch({
-                            type: 'SET_USER',
-                            payload: {
-                              ...userData,
-                              yogaStyle: newValue ?? '',
-                            },
-                          })
+                          setFormData((prev) => ({
+                            ...prev,
+                            yogaStyle: newValue ?? '',
+                          }))
                         }}
                         filterOptions={(options, state) =>
                           options.filter((option) =>
@@ -441,22 +489,22 @@ export default function UserDetails() {
                           />
                         )}
                       />
-                      <TextField
+                      <TextInputField
                         name="yogaExperience"
                         id="yoga-experience-input"
                         placeholder='Enter "Yoga Experience"'
                         label="Yoga Experience"
-                        value={userData.yogaExperience ?? ''}
+                        value={formData.yogaExperience}
                         variant="outlined"
                         onChange={handleChange}
                         fullWidth
                       />
-                      <TextField
+                      <TextInputField
                         name="company"
                         id="company-input"
                         placeholder='Enter "Company"'
                         label="Company"
-                        value={userData.company ?? ''}
+                        value={formData.company}
                         variant="outlined"
                         onChange={handleChange}
                         fullWidth
@@ -489,7 +537,10 @@ export default function UserDetails() {
               </Card>
 
               {/* Form Fields */}
-              <FormField label="Username">
+              <FormControl sx={{ width: '100%' }}>
+                <Typography variant="body1" sx={{ mb: 1 }}>
+                  Username
+                </Typography>
                 <TextField
                   name="username"
                   value={userData?.name ?? ''}
@@ -499,49 +550,67 @@ export default function UserDetails() {
                   fullWidth
                   sx={textFieldStyles}
                 />
-              </FormField>
+              </FormControl>
 
               <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
-                <FormField label="First Name">
+                <FormControl sx={{ width: '100%' }}>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    First Name
+                  </Typography>
                   <TextField
                     name="firstName"
                     placeholder="Enter First Name"
-                    value={userData.firstName ?? ''}
-                    onChange={handleChange}
+                    value={formData.firstName ?? ''}
+                    onChange={(e) => {
+                      const { name, value } = e.target
+                      setFormData((prev) => ({
+                        ...prev,
+                        [name]: value,
+                      }))
+                    }}
                     variant="outlined"
                     required
                     fullWidth
                     sx={textFieldStyles}
                   />
-                </FormField>
+                </FormControl>
 
-                <FormField label="Last Name">
-                  <TextField
+                <FormControl sx={{ width: '100%' }}>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    Last Name
+                  </Typography>
+                  <TextInputField
                     name="lastName"
                     placeholder="Enter Last Name"
-                    value={userData.lastName ?? ''}
+                    value={formData.lastName}
                     onChange={handleChange}
                     variant="outlined"
                     required
                     fullWidth
                     sx={textFieldStyles}
                   />
-                </FormField>
+                </FormControl>
               </Stack>
 
-              <FormField label="Pronouns">
-                <TextField
+              <FormControl sx={{ width: '100%' }}>
+                <Typography variant="body1" sx={{ mb: 1 }}>
+                  Pronouns
+                </Typography>
+                <TextInputField
                   name="pronouns"
                   placeholder="Enter Pronouns"
-                  value={userData?.pronouns ?? ''}
+                  value={formData.pronouns}
                   onChange={handleChange}
                   variant="outlined"
                   fullWidth
                   sx={textFieldStyles}
                 />
-              </FormField>
+              </FormControl>
 
-              <FormField label="Email Address (primary/internal)" width="80%">
+              <FormControl sx={{ width: '80%' }}>
+                <Typography variant="body1" sx={{ mb: 1 }}>
+                  Email Address (primary/internal)
+                </Typography>
                 <TextField
                   name="email"
                   placeholder="xyz@ABC.com"
@@ -555,53 +624,62 @@ export default function UserDetails() {
                 <FormHelperText>
                   Your email address cannot be changed. Contact us for support.
                 </FormHelperText>
-              </FormField>
+              </FormControl>
 
-              <FormField label="Headline" width="80%">
-                <TextField
+              <FormControl sx={{ width: '80%' }}>
+                <Typography variant="body1" sx={{ mb: 1 }}>
+                  Headline
+                </Typography>
+                <TextInputField
                   name="headline"
                   placeholder="Enter...2 sentences"
-                  value={userData?.headline ?? 'I am a Yoga instructor.'}
+                  value={formData.headline || 'I am a Yoga instructor.'}
                   onChange={handleChange}
                   multiline
                   maxRows={2}
                   fullWidth
                   sx={textFieldStyles}
                 />
-              </FormField>
+              </FormControl>
 
-              <FormField label="Description/About/Bio" width="80%">
-                <TextField
+              <FormControl sx={{ width: '80%' }}>
+                <Typography variant="body1" sx={{ mb: 1 }}>
+                  Description/About/Bio
+                </Typography>
+                <TextInputField
                   name="bio"
                   placeholder="Enter...Biography"
-                  value={userData?.bio ?? ''}
+                  value={formData.bio}
                   onChange={handleChange}
                   multiline
                   maxRows={4}
                   fullWidth
                   sx={textFieldStyles}
                 />
-              </FormField>
+              </FormControl>
 
               <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
-                <FormField label="Website URL">
-                  <TextField
+                <FormControl sx={{ width: '100%' }}>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    Website URL
+                  </Typography>
+                  <TextInputField
                     name="websiteURL"
                     placeholder="Enter website URL"
-                    value={userData?.websiteURL ?? ''}
+                    value={formData.websiteURL}
                     onChange={handleChange}
                     variant="outlined"
                     fullWidth
                     sx={textFieldStyles}
                   />
-                </FormField>
+                </FormControl>
 
-                <FormField
-                  label="My Location"
-                  width={{ xs: '100%', md: '60%' }}
-                >
+                <FormControl sx={{ width: { xs: '100%', md: '60%' } }}>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    My Location
+                  </Typography>
                   <LocationPicker
-                    value={userData?.location ?? ''}
+                    value={formData.location}
                     onChange={handleLocationChange}
                     placeholder="Search for your city, state, or country"
                     variant="outlined"
@@ -611,7 +689,7 @@ export default function UserDetails() {
                     helperText="Select your location to connect with local yoga practitioners"
                     sx={textFieldStyles}
                   />
-                </FormField>
+                </FormControl>
               </Stack>
 
               <Stack direction="row" spacing={2} justifyContent="flex-end">
