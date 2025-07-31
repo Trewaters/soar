@@ -557,7 +557,7 @@ export default function UserDetails() {
                   <Typography variant="body1" sx={{ mb: 1 }}>
                     First Name
                   </Typography>
-                  <TextField
+                  <TextInputField
                     name="firstName"
                     placeholder="Enter First Name"
                     value={formData.firstName ?? ''}

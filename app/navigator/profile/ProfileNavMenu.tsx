@@ -20,7 +20,7 @@ import {
   Settings as SettingsIcon,
   Logout as LogoutIcon,
   Person as PersonIcon,
-  Dashboard as DashboardIcon,
+  Home,
 } from '@mui/icons-material'
 import { useSession, signOut } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
@@ -79,9 +79,9 @@ const ProfileNavMenu: React.FC = () => {
       disabled: false, // Settings page is now available
     },
     {
-      id: 'dashboard',
-      label: 'Dashboard',
-      icon: <DashboardIcon />,
+      id: 'home',
+      label: 'Home Page',
+      icon: <Home />,
       href: '/navigator',
     },
   ]

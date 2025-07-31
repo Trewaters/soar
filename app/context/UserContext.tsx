@@ -136,7 +136,7 @@ const initialState: UserProfilePageState = {
   userData: {
     id: '1',
     provider_id: '',
-    name: 'initialState',
+    name: '',
     email: '',
     emailVerified: new Date(),
     image: '',
