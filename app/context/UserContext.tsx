@@ -43,11 +43,9 @@ export type UserData = {
 
   emailVerified: Date
   profile: Record<string, any>
-  // TODO: Add the following fields to the UserData object (type/interface, updateUserData route, and UserDetails.tsx)
-  // yogaStyle: string
-  // yogaExperience: string
-  // yogaCertification: string
-  // userCompany: string
+  // Profile image management fields
+  profileImages: string[]
+  activeProfileImage?: string
 }
 
 export type UserGithubProfile = {
@@ -131,6 +129,10 @@ type UserAction =
   | { type: 'SET_GITHUB_PROFILE'; payload: UserGithubProfile }
   | { type: 'SET_GOOGLE_PROFILE'; payload: UserGoogleProfile }
   | { type: 'SET_DEVICE_INFO'; payload: UserProfilePageState['deviceInfo'] }
+  | {
+      type: 'SET_PROFILE_IMAGES'
+      payload: { images: string[]; active: string | null }
+    }
 
 const initialState: UserProfilePageState = {
   userData: {
@@ -157,6 +159,8 @@ const initialState: UserProfilePageState = {
     socialURL: '',
     isLocationPublic: '',
     role: 'user',
+    profileImages: [],
+    activeProfileImage: undefined,
   },
   userGithubProfile: {
     login: '',
@@ -252,6 +256,15 @@ function UserReducer(
         ...state,
         deviceInfo: action.payload,
         isMobile: action.payload?.isMobile || false,
+      }
+    case 'SET_PROFILE_IMAGES':
+      return {
+        ...state,
+        userData: {
+          ...state.userData,
+          profileImages: action.payload.images,
+          activeProfileImage: action.payload.active || undefined,
+        },
       }
     default:
       return state

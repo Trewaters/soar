@@ -1,8 +1,85 @@
-'use client'
+// ProfileImageManagerWithContext wires up UserContext and API
+function ProfileImageManagerWithContext() {
+  const { state, dispatch } = UseUser()
+  const images = state.userData.profileImages || []
+  const active = state.userData.activeProfileImage || null
+  const placeholder = state.userData.image || '/images/profile-placeholder.png'
+
+  // Upload, delete, and set active handlers
+  const handleUpload = async (file: File) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    const res = await fetch('/api/profileImage/route', {
+      method: 'POST',
+      body: formData,
+    })
+    if (res.ok) {
+      const data = await res.json()
+      dispatch({
+        type: 'SET_PROFILE_IMAGES',
+        payload: {
+          images: data.images,
+          active: data.images[data.images.length - 1] || null,
+        },
+      })
+    }
+  }
+
+  const handleDelete = async (url: string) => {
+    const res = await fetch('/api/profileImage/delete', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    })
+    if (res.ok) {
+      const data = await res.json()
+      dispatch({
+        type: 'SET_PROFILE_IMAGES',
+        payload: { images: data.images, active: data.activeProfileImage },
+      })
+    }
+  }
+
+  const handleSelect = async (url: string) => {
+    const res = await fetch('/api/profileImage/setActive', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    })
+    if (res.ok) {
+      const data = await res.json()
+      dispatch({
+        type: 'SET_PROFILE_IMAGES',
+        payload: { images, active: data.activeProfileImage },
+      })
+    }
+  }
+
+  return (
+    <ProfileImageManager
+      images={images}
+      active={active}
+      placeholder={placeholder}
+      onChange={(imgs, act) =>
+        dispatch({
+          type: 'SET_PROFILE_IMAGES',
+          payload: { images: imgs, active: act },
+        })
+      }
+      // @ts-ignore
+      onUpload={handleUpload}
+      onDelete={handleDelete}
+      onSelect={handleSelect}
+    />
+  )
+}
+;('use client')
 import React, { useState } from 'react'
 import { Box, Typography, Tabs, Tab, Paper } from '@mui/material'
 import ImageUpload from './ImageUpload'
 import ImageGallery from './ImageGallery'
+import { ProfileImageManager } from '../ProfileImage/ProfileImageManager'
+import { UseUser } from '../../context/UserContext'
 import type { PoseImageData } from './ImageUpload'
 
 interface TabPanelProps {
@@ -97,6 +174,7 @@ export default function ImageManagement({
       >
         {showUploadButton && <Tab label="Upload" />}
         {showGallery && <Tab label="Gallery" />}
+        <Tab label="Profile Image" />
       </Tabs>
 
       {showUploadButton && (
@@ -113,6 +191,13 @@ export default function ImageManagement({
           <ImageGallery key={refreshGallery} />
         </TabPanel>
       )}
+
+      <TabPanel
+        value={tabValue}
+        index={(showUploadButton ? 1 : 0) + (showGallery ? 1 : 0)}
+      >
+        <ProfileImageManagerWithContext />
+      </TabPanel>
     </Paper>
   )
 }
