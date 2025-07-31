@@ -71,6 +71,19 @@ export default async function SettingsPage() {
                       Terms and conditions
                     </Box>
                   </Typography>
+                  <Typography component="li" variant="body2" sx={{ mb: 1 }}>
+                    <Box
+                      component="a"
+                      href="/navigator/profile/privacy-policy"
+                      sx={{
+                        color: 'primary.main',
+                        textDecoration: 'none',
+                        '&:hover': { textDecoration: 'underline' },
+                      }}
+                    >
+                      Privacy Policy
+                    </Box>
+                  </Typography>
                 </Box>
 
                 <Typography

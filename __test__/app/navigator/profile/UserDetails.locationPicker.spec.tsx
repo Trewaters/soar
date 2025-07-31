@@ -280,17 +280,6 @@ describe('UserDetails - LocationPicker Integration', () => {
       })
     })
   })
-  describe('Location Search and Autocomplete', () => {
-    beforeEach(() => {
-      mockUseSession.mockReturnValue({
-        data: mockSession,
-        status: 'authenticated',
-      } as any)
-    })
-
-    // Removed: handles international locations without state (persistently failing)
-  })
-
   describe('Current Location Functionality', () => {
     beforeEach(() => {
       mockUseSession.mockReturnValue({
