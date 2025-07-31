@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
+import { Tabs, Tab } from '@mui/material'
 import {
   Box,
   Typography,
@@ -86,16 +87,18 @@ export default function EnhancedImageGallery() {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
   const [selectedImageMenu, setSelectedImageMenu] =
     useState<CombinedImage | null>(null)
+  // Tab state: 0 = Profile Images, 1 = Gallery Images
+  const [tab, setTab] = useState(1)
 
   // Fetch images from database and combine with local storage
-  const fetchImages = async () => {
+  const fetchImages = async (imageType: 'profile' | 'gallery') => {
     try {
       setLoading(true)
       setError(null)
 
       // Fetch from database
-      // Fetch only gallery images
-      const response = await fetch('/api/images/upload?imageType=gallery')
+      // Fetch by imageType
+      const response = await fetch(`/api/images/upload?imageType=${imageType}`)
       if (!response.ok) {
         throw new Error('Failed to fetch images from database')
       }
@@ -229,12 +232,17 @@ export default function EnhancedImageGallery() {
 
   useEffect(() => {
     if (status === 'authenticated') {
-      fetchImages()
+      fetchImages(tab === 0 ? 'profile' : 'gallery')
     } else if (status === 'unauthenticated') {
       setLoading(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, session?.user?.id])
+  }, [status, session?.user?.id, tab])
+
+  // Handle tab change
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setTab(newValue)
+  }
 
   // Handle delete
   const handleDeleteClick = (image: CombinedImage) => {
@@ -289,7 +297,7 @@ export default function EnhancedImageGallery() {
       setSyncResults(results)
 
       // Refresh the gallery after sync
-      await fetchImages()
+      await fetchImages(tab === 0 ? 'profile' : 'gallery')
     } catch (error) {
       console.error('Sync error:', error)
       setError('Failed to sync images to cloud')
@@ -302,7 +310,7 @@ export default function EnhancedImageGallery() {
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const handleUploadSuccess = (newImage: PoseImage) => {
     // Refresh the gallery
-    fetchImages()
+    fetchImages(tab === 0 ? 'profile' : 'gallery')
   }
 
   // Handle image click for zoom
@@ -367,7 +375,11 @@ export default function EnhancedImageGallery() {
         <Alert
           severity="error"
           action={
-            <Button color="inherit" size="small" onClick={fetchImages}>
+            <Button
+              color="inherit"
+              size="small"
+              onClick={() => fetchImages(tab === 0 ? 'profile' : 'gallery')}
+            >
               Retry
             </Button>
           }
@@ -396,6 +408,24 @@ export default function EnhancedImageGallery() {
         }}
       >
         <Box>
+          {/* Tabs for switching image type */}
+          <Tabs
+            value={tab}
+            onChange={handleTabChange}
+            aria-label="Image Type Tabs"
+            sx={{ mb: 2 }}
+          >
+            <Tab
+              label="Profile Images"
+              id="profile-tab"
+              aria-controls="profile-panel"
+            />
+            <Tab
+              label="Gallery Images"
+              id="gallery-tab"
+              aria-controls="gallery-panel"
+            />
+          </Tabs>
           <Typography variant="h5">
             My Yoga Pose Images ({images.length})
           </Typography>

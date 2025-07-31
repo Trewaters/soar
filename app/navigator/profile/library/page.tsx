@@ -35,6 +35,7 @@ import {
   getUserCreatedSequences,
 } from '@lib/userLibraryService'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
+import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -227,6 +228,7 @@ export default function LibraryPage() {
                   label={`Sequences (${sequences.length})`}
                   {...a11yProps(2)}
                 />
+                <Tab label="Profile Images" {...a11yProps(3)} />
               </Tabs>
             </Box>
 
@@ -255,6 +257,11 @@ export default function LibraryPage() {
                 loading={sequencesLoading}
                 onRefresh={fetchUserSequences}
               />
+            </TabPanel>
+
+            {/* Profile Images Tab */}
+            <TabPanel value={tabValue} index={3}>
+              <ImageManagement />
             </TabPanel>
           </Paper>
         </Grid>

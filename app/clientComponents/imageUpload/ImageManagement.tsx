@@ -1,4 +1,11 @@
-// ProfileImageManagerWithContext wires up UserContext and API
+import React, { useState } from 'react'
+import { Box, Typography, Tabs, Tab, Paper } from '@mui/material'
+import ImageUpload from './ImageUpload'
+import ImageGallery from './ImageGallery'
+import { ProfileImageManager } from '../ProfileImage/ProfileImageManager'
+import { UseUser } from '../../context/UserContext'
+import type { PoseImageData } from './ImageUpload'
+
 function ProfileImageManagerWithContext() {
   const { state, dispatch } = UseUser()
   const images = state.userData.profileImages || []
@@ -60,28 +67,19 @@ function ProfileImageManagerWithContext() {
       images={images}
       active={active}
       placeholder={placeholder}
+      loading={false}
       onChange={(imgs, act) =>
         dispatch({
           type: 'SET_PROFILE_IMAGES',
           payload: { images: imgs, active: act },
         })
       }
-      // @ts-ignore
       onUpload={handleUpload}
       onDelete={handleDelete}
       onSelect={handleSelect}
     />
   )
 }
-;('use client')
-import React, { useState } from 'react'
-import { Box, Typography, Tabs, Tab, Paper } from '@mui/material'
-import ImageUpload from './ImageUpload'
-import ImageGallery from './ImageGallery'
-import { ProfileImageManager } from '../ProfileImage/ProfileImageManager'
-import { UseUser } from '../../context/UserContext'
-import type { PoseImageData } from './ImageUpload'
-
 interface TabPanelProps {
   children?: React.ReactNode
   index: number
