@@ -94,7 +94,8 @@ export default function EnhancedImageGallery() {
       setError(null)
 
       // Fetch from database
-      const response = await fetch('/api/images/upload')
+      // Fetch only gallery images
+      const response = await fetch('/api/images/upload?imageType=gallery')
       if (!response.ok) {
         throw new Error('Failed to fetch images from database')
       }

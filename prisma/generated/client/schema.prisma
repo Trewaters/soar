@@ -242,6 +242,7 @@ model PoseImage {
   localStorageId String? // Local storage identifier for browser storage
   cloudflareId   String? // Cloudflare image ID for cloud images
   isOffline      Boolean     @default(false) // True if saved offline due to API failure
+  imageType      String      @default("posture") // 'profile', 'posture', 'gallery', etc.
 
   user    UserData      @relation(fields: [userId], references: [id], onDelete: Cascade)
   posture AsanaPosture? @relation(fields: [postureId], references: [id], onDelete: SetNull)
@@ -253,6 +254,7 @@ model PoseImage {
   @@index([postureId])
   @@index([postureName])
   @@index([storageType])
+  @@index([imageType])
 }
 
 /// Enum for image storage types

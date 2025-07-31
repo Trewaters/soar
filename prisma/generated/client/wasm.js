@@ -288,6 +288,7 @@ exports.Prisma.PoseImageScalarFieldEnum = {
   localStorageId: 'localStorageId',
   cloudflareId: 'cloudflareId',
   isOffline: 'isOffline',
+  imageType: 'imageType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

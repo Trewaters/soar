@@ -203,6 +203,7 @@ export default function ImageUploadWithFallback({
       formData.append('file', selectedFile)
       formData.append('altText', altText.trim() || '')
       formData.append('userId', session.user.id)
+      formData.append('imageType', 'gallery') // Tag as gallery image
 
       const response = await fetch('/api/images/upload', {
         method: 'POST',

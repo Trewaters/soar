@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
     const userId = formData.get('userId') as string
     const postureId = formData.get('postureId') as string
     const postureName = formData.get('postureName') as string
+    const imageType = (formData.get('imageType') as string) || 'posture'
 
     // Validate inputs
     if (!file) {
@@ -78,6 +79,7 @@ export async function POST(request: NextRequest) {
         storageType: 'CLOUD',
         cloudflareId: uploadResult.metadata?.cloudflareId || null, // Store provider-specific ID
         isOffline: false,
+        imageType,
       },
     })
 
@@ -89,6 +91,7 @@ export async function POST(request: NextRequest) {
       fileSize: poseImage.fileSize,
       uploadedAt: poseImage.uploadedAt,
       storageType: poseImage.storageType,
+      imageType: poseImage.imageType,
     })
   } catch (error) {
     console.error('Storage upload error:', error)
@@ -123,6 +126,7 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0')
     const postureId = searchParams.get('postureId')
     const postureName = searchParams.get('postureName')
+    const imageType = searchParams.get('imageType')
 
     // Build where clause
     const whereClause: any = {
@@ -134,6 +138,9 @@ export async function GET(request: NextRequest) {
       whereClause.postureId = postureId
     } else if (postureName) {
       whereClause.postureName = postureName
+    }
+    if (imageType) {
+      whereClause.imageType = imageType
     }
 
     const images = await prisma.poseImage.findMany({

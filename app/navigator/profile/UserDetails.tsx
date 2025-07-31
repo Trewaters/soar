@@ -113,7 +113,9 @@ export default function UserDetails() {
   const fetchProfileImages = useCallback(async () => {
     setImageLoading(true)
     try {
-      const res = await fetch('/api/images/upload', { method: 'GET' })
+      const res = await fetch('/api/images/upload?imageType=profile', {
+        method: 'GET',
+      })
       const data = await res.json()
       if (data.images) {
         setProfileImages(data.images.map((img: any) => img.url))
@@ -158,6 +160,7 @@ export default function UserDetails() {
       const formData = new FormData()
       formData.append('file', file)
       formData.append('userId', userData.id)
+      formData.append('imageType', 'profile')
       // Optionally: formData.append('altText', 'Profile image')
       const res = await fetch('/api/images/upload', {
         method: 'POST',
@@ -177,7 +180,9 @@ export default function UserDetails() {
     setError(null)
     try {
       // Find image ID by URL (requires GET to fetch all images)
-      const res = await fetch('/api/images/upload', { method: 'GET' })
+      const res = await fetch('/api/images/upload?imageType=profile', {
+        method: 'GET',
+      })
       const data = await res.json()
       const img = data.images.find((img: any) => img.url === url)
       if (!img) throw new Error('Image not found')

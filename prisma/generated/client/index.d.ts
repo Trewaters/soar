@@ -11440,6 +11440,7 @@ export namespace Prisma {
     localStorageId: string | null
     cloudflareId: string | null
     isOffline: boolean | null
+    imageType: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11458,6 +11459,7 @@ export namespace Prisma {
     localStorageId: string | null
     cloudflareId: string | null
     isOffline: boolean | null
+    imageType: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11476,6 +11478,7 @@ export namespace Prisma {
     localStorageId: number
     cloudflareId: number
     isOffline: number
+    imageType: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -11504,6 +11507,7 @@ export namespace Prisma {
     localStorageId?: true
     cloudflareId?: true
     isOffline?: true
+    imageType?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -11522,6 +11526,7 @@ export namespace Prisma {
     localStorageId?: true
     cloudflareId?: true
     isOffline?: true
+    imageType?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -11540,6 +11545,7 @@ export namespace Prisma {
     localStorageId?: true
     cloudflareId?: true
     isOffline?: true
+    imageType?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -11645,6 +11651,7 @@ export namespace Prisma {
     localStorageId: string | null
     cloudflareId: string | null
     isOffline: boolean
+    imageType: string
     createdAt: Date
     updatedAt: Date
     _count: PoseImageCountAggregateOutputType | null
@@ -11682,6 +11689,7 @@ export namespace Prisma {
     localStorageId?: boolean
     cloudflareId?: boolean
     isOffline?: boolean
+    imageType?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDataDefaultArgs<ExtArgs>
@@ -11703,6 +11711,7 @@ export namespace Prisma {
     localStorageId?: boolean
     cloudflareId?: boolean
     isOffline?: boolean
+    imageType?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -11732,6 +11741,7 @@ export namespace Prisma {
       localStorageId: string | null
       cloudflareId: string | null
       isOffline: boolean
+      imageType: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["poseImage"]>
@@ -12141,6 +12151,7 @@ export namespace Prisma {
     readonly localStorageId: FieldRef<"PoseImage", 'String'>
     readonly cloudflareId: FieldRef<"PoseImage", 'String'>
     readonly isOffline: FieldRef<"PoseImage", 'Boolean'>
+    readonly imageType: FieldRef<"PoseImage", 'String'>
     readonly createdAt: FieldRef<"PoseImage", 'DateTime'>
     readonly updatedAt: FieldRef<"PoseImage", 'DateTime'>
   }
@@ -13598,6 +13609,7 @@ export namespace Prisma {
     localStorageId: 'localStorageId',
     cloudflareId: 'cloudflareId',
     isOffline: 'isOffline',
+    imageType: 'imageType',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14717,6 +14729,7 @@ export namespace Prisma {
     localStorageId?: StringNullableFilter<"PoseImage"> | string | null
     cloudflareId?: StringNullableFilter<"PoseImage"> | string | null
     isOffline?: BoolFilter<"PoseImage"> | boolean
+    imageType?: StringFilter<"PoseImage"> | string
     createdAt?: DateTimeFilter<"PoseImage"> | Date | string
     updatedAt?: DateTimeFilter<"PoseImage"> | Date | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
@@ -14737,6 +14750,7 @@ export namespace Prisma {
     localStorageId?: SortOrder
     cloudflareId?: SortOrder
     isOffline?: SortOrder
+    imageType?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserDataOrderByWithRelationInput
@@ -14760,6 +14774,7 @@ export namespace Prisma {
     localStorageId?: StringNullableFilter<"PoseImage"> | string | null
     cloudflareId?: StringNullableFilter<"PoseImage"> | string | null
     isOffline?: BoolFilter<"PoseImage"> | boolean
+    imageType?: StringFilter<"PoseImage"> | string
     createdAt?: DateTimeFilter<"PoseImage"> | Date | string
     updatedAt?: DateTimeFilter<"PoseImage"> | Date | string
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
@@ -14780,6 +14795,7 @@ export namespace Prisma {
     localStorageId?: SortOrder
     cloudflareId?: SortOrder
     isOffline?: SortOrder
+    imageType?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PoseImageCountOrderByAggregateInput
@@ -14806,6 +14822,7 @@ export namespace Prisma {
     localStorageId?: StringNullableWithAggregatesFilter<"PoseImage"> | string | null
     cloudflareId?: StringNullableWithAggregatesFilter<"PoseImage"> | string | null
     isOffline?: BoolWithAggregatesFilter<"PoseImage"> | boolean
+    imageType?: StringWithAggregatesFilter<"PoseImage"> | string
     createdAt?: DateTimeWithAggregatesFilter<"PoseImage"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"PoseImage"> | Date | string
   }
@@ -16003,6 +16020,7 @@ export namespace Prisma {
     localStorageId?: string | null
     cloudflareId?: string | null
     isOffline?: boolean
+    imageType?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserDataCreateNestedOneWithoutPoseImagesInput
@@ -16023,6 +16041,7 @@ export namespace Prisma {
     localStorageId?: string | null
     cloudflareId?: string | null
     isOffline?: boolean
+    imageType?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16038,6 +16057,7 @@ export namespace Prisma {
     localStorageId?: NullableStringFieldUpdateOperationsInput | string | null
     cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
     isOffline?: BoolFieldUpdateOperationsInput | boolean
+    imageType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserDataUpdateOneRequiredWithoutPoseImagesNestedInput
@@ -16057,6 +16077,7 @@ export namespace Prisma {
     localStorageId?: NullableStringFieldUpdateOperationsInput | string | null
     cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
     isOffline?: BoolFieldUpdateOperationsInput | boolean
+    imageType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16075,6 +16096,7 @@ export namespace Prisma {
     localStorageId?: string | null
     cloudflareId?: string | null
     isOffline?: boolean
+    imageType?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16090,6 +16112,7 @@ export namespace Prisma {
     localStorageId?: NullableStringFieldUpdateOperationsInput | string | null
     cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
     isOffline?: BoolFieldUpdateOperationsInput | boolean
+    imageType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16107,6 +16130,7 @@ export namespace Prisma {
     localStorageId?: NullableStringFieldUpdateOperationsInput | string | null
     cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
     isOffline?: BoolFieldUpdateOperationsInput | boolean
+    imageType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17003,6 +17027,7 @@ export namespace Prisma {
     localStorageId?: SortOrder
     cloudflareId?: SortOrder
     isOffline?: SortOrder
+    imageType?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17025,6 +17050,7 @@ export namespace Prisma {
     localStorageId?: SortOrder
     cloudflareId?: SortOrder
     isOffline?: SortOrder
+    imageType?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17043,6 +17069,7 @@ export namespace Prisma {
     localStorageId?: SortOrder
     cloudflareId?: SortOrder
     isOffline?: SortOrder
+    imageType?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -18127,6 +18154,7 @@ export namespace Prisma {
     localStorageId?: string | null
     cloudflareId?: string | null
     isOffline?: boolean
+    imageType?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     posture?: AsanaPostureCreateNestedOneWithoutPoseImagesInput
@@ -18145,6 +18173,7 @@ export namespace Prisma {
     localStorageId?: string | null
     cloudflareId?: string | null
     isOffline?: boolean
+    imageType?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18358,6 +18387,7 @@ export namespace Prisma {
     localStorageId?: StringNullableFilter<"PoseImage"> | string | null
     cloudflareId?: StringNullableFilter<"PoseImage"> | string | null
     isOffline?: BoolFilter<"PoseImage"> | boolean
+    imageType?: StringFilter<"PoseImage"> | string
     createdAt?: DateTimeFilter<"PoseImage"> | Date | string
     updatedAt?: DateTimeFilter<"PoseImage"> | Date | string
   }
@@ -18559,6 +18589,7 @@ export namespace Prisma {
     localStorageId?: string | null
     cloudflareId?: string | null
     isOffline?: boolean
+    imageType?: string
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserDataCreateNestedOneWithoutPoseImagesInput
@@ -18577,6 +18608,7 @@ export namespace Prisma {
     localStorageId?: string | null
     cloudflareId?: string | null
     isOffline?: boolean
+    imageType?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19772,6 +19804,7 @@ export namespace Prisma {
     localStorageId?: string | null
     cloudflareId?: string | null
     isOffline?: boolean
+    imageType?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19973,6 +20006,7 @@ export namespace Prisma {
     localStorageId?: NullableStringFieldUpdateOperationsInput | string | null
     cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
     isOffline?: BoolFieldUpdateOperationsInput | boolean
+    imageType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posture?: AsanaPostureUpdateOneWithoutPoseImagesNestedInput
@@ -19990,6 +20024,7 @@ export namespace Prisma {
     localStorageId?: NullableStringFieldUpdateOperationsInput | string | null
     cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
     isOffline?: BoolFieldUpdateOperationsInput | boolean
+    imageType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20006,6 +20041,7 @@ export namespace Prisma {
     localStorageId?: NullableStringFieldUpdateOperationsInput | string | null
     cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
     isOffline?: BoolFieldUpdateOperationsInput | boolean
+    imageType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20038,6 +20074,7 @@ export namespace Prisma {
     localStorageId?: string | null
     cloudflareId?: string | null
     isOffline?: boolean
+    imageType?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20095,6 +20132,7 @@ export namespace Prisma {
     localStorageId?: NullableStringFieldUpdateOperationsInput | string | null
     cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
     isOffline?: BoolFieldUpdateOperationsInput | boolean
+    imageType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserDataUpdateOneRequiredWithoutPoseImagesNestedInput
@@ -20112,6 +20150,7 @@ export namespace Prisma {
     localStorageId?: NullableStringFieldUpdateOperationsInput | string | null
     cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
     isOffline?: BoolFieldUpdateOperationsInput | boolean
+    imageType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20128,6 +20167,7 @@ export namespace Prisma {
     localStorageId?: NullableStringFieldUpdateOperationsInput | string | null
     cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
     isOffline?: BoolFieldUpdateOperationsInput | boolean
+    imageType?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
