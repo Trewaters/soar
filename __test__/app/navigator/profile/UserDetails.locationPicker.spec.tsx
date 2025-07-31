@@ -344,110 +344,110 @@ describe('UserDetails - LocationPicker Integration', () => {
         data: mockSession,
         status: 'authenticated',
       } as any)
+    })
 
-      it('includes location data in form submission', async () => {
-        const user = userEvent.setup()
+    it('includes location data in form submission', async () => {
+      const user = userEvent.setup()
 
-        render(<UserDetails />)
+      render(<UserDetails />)
 
-        await waitFor(() => {
-          const saveButton = screen.getByRole('button', { name: /save/i })
-          expect(saveButton).toBeInTheDocument()
-        })
-
-        // Update location first
-        const locationInput = screen.getByPlaceholderText(
-          'Search for your city, state, or country'
-        )
-        await user.clear(locationInput)
-        await user.type(locationInput, 'Los Angeles, CA')
-
-        // We need to ensure the location is actually updated in the form
-        // Wait for any state updates to propagate
-        await waitFor(() => {
-          expect(locationInput).toHaveValue('Los Angeles, CA')
-        })
-
+      await waitFor(() => {
         const saveButton = screen.getByRole('button', { name: /save/i })
-        await user.click(saveButton)
-
-        await waitFor(() => {
-          expect(global.fetch).toHaveBeenCalledWith(
-            `/api/user/updateUserData/?email=${mockUserData.email}`,
-            expect.objectContaining({
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: expect.stringContaining('"location":'),
-            })
-          )
-        })
+        expect(saveButton).toBeInTheDocument()
       })
 
-      it('handles form submission error gracefully', async () => {
-        const user = userEvent.setup()
+      // Update location first
+      const locationInput = screen.getByPlaceholderText(
+        'Search for your city, state, or country'
+      )
+      await user.clear(locationInput)
+      await user.type(locationInput, 'Los Angeles, CA')
 
-        ;(global.fetch as jest.Mock).mockResolvedValue({
-          ok: false,
-          status: 500,
-        })
-
-        render(<UserDetails />)
-
-        await waitFor(() => {
-          const saveButton = screen.getByRole('button', { name: /save/i })
-          expect(saveButton).toBeInTheDocument()
-        })
-
-        const saveButton = screen.getByRole('button', { name: /save/i })
-        await user.click(saveButton)
-
-        await waitFor(() => {
-          expect(
-            screen.getByText(/error updating user data/i)
-          ).toBeInTheDocument()
-        })
+      // We need to ensure the location is actually updated in the form
+      // Wait for any state updates to propagate
+      await waitFor(() => {
+        expect(locationInput).toHaveValue('Los Angeles, CA')
       })
 
-      it('shows loading state during form submission', async () => {
-        const user = userEvent.setup()
+      const saveButton = screen.getByRole('button', { name: /save/i })
+      await user.click(saveButton)
 
-        ;(global.fetch as jest.Mock).mockImplementation(
-          () =>
-            new Promise((resolve) =>
-              setTimeout(
-                () =>
-                  resolve({
-                    ok: true,
-                    json: () => Promise.resolve(mockUserData),
-                  }),
-                100
-              )
-            )
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalledWith(
+          `/api/user/updateUserData/?email=${mockUserData.email}`,
+          expect.objectContaining({
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: expect.stringContaining('"location":'),
+          })
         )
+      })
+    })
 
-        render(<UserDetails />)
+    it('handles form submission error gracefully', async () => {
+      const user = userEvent.setup()
 
-        await waitFor(() => {
-          const saveButton = screen.getByRole('button', { name: /save/i })
-          expect(saveButton).toBeInTheDocument()
-        })
+      ;(global.fetch as jest.Mock).mockResolvedValue({
+        ok: false,
+        status: 500,
+      })
 
+      render(<UserDetails />)
+
+      await waitFor(() => {
         const saveButton = screen.getByRole('button', { name: /save/i })
-        await user.click(saveButton)
+        expect(saveButton).toBeInTheDocument()
+      })
 
-        // Should show loading indicator in save button
+      const saveButton = screen.getByRole('button', { name: /save/i })
+      await user.click(saveButton)
+
+      await waitFor(() => {
         expect(
-          screen.getByRole('progressbar', { hidden: true })
+          screen.getByText(/error updating user data/i)
         ).toBeInTheDocument()
-
-        // Wait for submission to complete
-        await waitFor(
-          () => {
-            expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
-          },
-          { timeout: 2000 }
-        )
       })
+    })
+
+    it('shows loading state during form submission', async () => {
+      const user = userEvent.setup()
+
+      ;(global.fetch as jest.Mock).mockImplementation(
+        () =>
+          new Promise((resolve) =>
+            setTimeout(
+              () =>
+                resolve({
+                  ok: true,
+                  json: () => Promise.resolve(mockUserData),
+                }),
+              100
+            )
+          )
+      )
+
+      render(<UserDetails />)
+
+      await waitFor(() => {
+        const saveButton = screen.getByRole('button', { name: /save/i })
+        expect(saveButton).toBeInTheDocument()
+      })
+
+      const saveButton = screen.getByRole('button', { name: /save/i })
+      await user.click(saveButton)
+
+      // Should show loading indicator in save button
+      expect(
+        screen.getByRole('progressbar', { hidden: true })
+      ).toBeInTheDocument()
+
+      // Wait for submission to complete
+      await waitFor(
+        () => {
+          expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+        },
+        { timeout: 2000 }
+      )
     })
 
     // ...existing code...

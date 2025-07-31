@@ -1,5 +1,7 @@
 'use client'
 import React, { useEffect, useState, useCallback } from 'react'
+import Modal from '@mui/material/Modal'
+import { ProfileImageManager } from '@app/clientComponents/ProfileImage/ProfileImageManager'
 import {
   Avatar,
   Button,
@@ -92,6 +94,114 @@ export default function UserDetails() {
   const [profileImageMode, setProfileImageMode] = useState<
     'active' | 'inactive' | 'edit'
   >('active')
+  // Modal state for profile image manager
+  const [imageManagerOpen, setImageManagerOpen] = useState(false)
+
+  // Local state for images (mirrors context, but allows optimistic UI)
+  const [profileImages, setProfileImages] = useState<string[]>(
+    userData?.profileImages || []
+  )
+  const [activeProfileImage, setActiveProfileImage] = useState<string | null>(
+    userData?.activeProfileImage || null
+  )
+  const [imageLoading, setImageLoading] = useState(false)
+
+  // Placeholder image
+  const profilePlaceholder = '/icons/profile/profile-person.svg'
+
+  // Fetch images from API (on mount and after upload/delete)
+  const fetchProfileImages = useCallback(async () => {
+    setImageLoading(true)
+    try {
+      const res = await fetch('/api/images/upload', { method: 'GET' })
+      const data = await res.json()
+      if (data.images) {
+        setProfileImages(data.images.map((img: any) => img.url))
+        // Optionally, set active image from DB if available
+        if (
+          userData?.activeProfileImage &&
+          data.images.some(
+            (img: any) => img.url === userData.activeProfileImage
+          )
+        ) {
+          setActiveProfileImage(userData.activeProfileImage)
+        } else if (data.images.length > 0) {
+          setActiveProfileImage(data.images[0].url)
+        } else {
+          setActiveProfileImage(null)
+        }
+      }
+    } catch (e) {
+      setError('Failed to load profile images')
+    } finally {
+      setImageLoading(false)
+    }
+  }, [userData?.activeProfileImage])
+
+  useEffect(() => {
+    fetchProfileImages()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Sync context when images change
+  useEffect(() => {
+    dispatch({
+      type: 'SET_PROFILE_IMAGES',
+      payload: { images: profileImages, active: activeProfileImage },
+    })
+  }, [profileImages, activeProfileImage, dispatch])
+  // Handlers for ProfileImageManager
+  const handleProfileImageUpload = async (file: File) => {
+    setImageLoading(true)
+    setError(null)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('userId', userData.id)
+      // Optionally: formData.append('altText', 'Profile image')
+      const res = await fetch('/api/images/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      if (!res.ok) throw new Error('Upload failed')
+      await fetchProfileImages()
+    } catch (e: any) {
+      setError(e.message || 'Upload failed')
+    } finally {
+      setImageLoading(false)
+    }
+  }
+
+  const handleProfileImageDelete = async (url: string) => {
+    setImageLoading(true)
+    setError(null)
+    try {
+      // Find image ID by URL (requires GET to fetch all images)
+      const res = await fetch('/api/images/upload', { method: 'GET' })
+      const data = await res.json()
+      const img = data.images.find((img: any) => img.url === url)
+      if (!img) throw new Error('Image not found')
+      const delRes = await fetch(`/api/images/upload?id=${img.id}`, {
+        method: 'DELETE',
+      })
+      if (!delRes.ok) throw new Error('Delete failed')
+      await fetchProfileImages()
+    } catch (e: any) {
+      setError(e.message || 'Delete failed')
+    } finally {
+      setImageLoading(false)
+    }
+  }
+
+  const handleProfileImageSelect = async (url: string) => {
+    setActiveProfileImage(url)
+    // Optionally, update userData context and persist active image to DB
+    dispatch({
+      type: 'SET_PROFILE_IMAGES',
+      payload: { images: profileImages, active: url },
+    })
+    // Optionally, call an API to persist active image selection
+  }
 
   // Local form state to prevent re-renders on every keystroke
   const [formData, setFormData] = useState({
@@ -356,6 +466,7 @@ export default function UserDetails() {
               onSubmit={handleSubmit}
             >
               {/* Header */}
+
               <Stack direction="row" spacing={2} alignItems="center">
                 <Image
                   src={'/icons/profile/leaf-orange.png'}
@@ -381,17 +492,76 @@ export default function UserDetails() {
                       height: { xs: 120, md: 150 },
                     }}
                     aria-label="name initial"
-                    src={userData?.image}
+                    src={
+                      activeProfileImage ||
+                      userData?.image ||
+                      profilePlaceholder
+                    }
                   >
-                    {!userData?.image && (
+                    {!(activeProfileImage || userData?.image) && (
                       <Image
-                        src={'/icons/profile/profile-person.svg'}
+                        src={profilePlaceholder}
                         width={50}
                         height={50}
                         alt="Generic profile image icon"
                       />
                     )}
                   </Avatar>
+                  {/* Profile Image Manager Modal */}
+                  <Modal
+                    open={imageManagerOpen}
+                    onClose={() => setImageManagerOpen(false)}
+                    aria-labelledby="profile-image-manager-title"
+                    aria-describedby="profile-image-manager-description"
+                  >
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                        borderRadius: 2,
+                        minWidth: { xs: 300, md: 400 },
+                        outline: 'none',
+                        maxHeight: '90vh',
+                        overflowY: 'auto',
+                      }}
+                    >
+                      <Typography
+                        id="profile-image-manager-title"
+                        variant="h6"
+                        sx={{ mb: 2 }}
+                      >
+                        Manage Profile Images
+                      </Typography>
+                      <ProfileImageManager
+                        images={profileImages}
+                        active={activeProfileImage}
+                        placeholder={profilePlaceholder}
+                        onChange={(imgs, active) => {
+                          setProfileImages(imgs)
+                          setActiveProfileImage(active)
+                        }}
+                        onUpload={handleProfileImageUpload}
+                        onDelete={handleProfileImageDelete}
+                        onSelect={handleProfileImageSelect}
+                        loading={imageLoading}
+                        maxImages={3}
+                      />
+                      <Button
+                        onClick={() => setImageManagerOpen(false)}
+                        sx={{ mt: 2 }}
+                        variant="outlined"
+                        fullWidth
+                        aria-label="Close profile image manager"
+                      >
+                        Close
+                      </Button>
+                    </Box>
+                  </Modal>
                   {profileImageMode === 'active' && (
                     <ProfileStatusIndicator
                       mode="active"
@@ -530,6 +700,20 @@ export default function UserDetails() {
                         <Typography>
                           {userData.location || 'No location provided'}
                         </Typography>
+                      </Stack>
+                      {/* Move Manage Profile Images button above Save button */}
+                      <Stack
+                        direction="row"
+                        spacing={2}
+                        justifyContent="flex-end"
+                      >
+                        <Button
+                          variant="outlined"
+                          aria-label="Open profile image manager"
+                          onClick={() => setImageManagerOpen(true)}
+                        >
+                          Manage Profile Images
+                        </Button>
                       </Stack>
                     </Stack>
                   </CardContent>
