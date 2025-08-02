@@ -52,7 +52,7 @@ export default function AsanaActivityList() {
     completionStatus?: string
   ) => {
     // Only apply difficulty-based coloring for 'complete' status
-    if (completionStatus === 'complete' && difficulty) {
+    if (difficulty) {
       switch (difficulty.toLowerCase()) {
         case 'easy':
           return 'success' // Green
@@ -228,17 +228,8 @@ export default function AsanaActivityList() {
                 alignItems="center"
                 sx={{ flexShrink: 0 }}
               >
-                {activity.difficulty && (
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    sx={{ whiteSpace: 'nowrap' }}
-                  >
-                    {activity.difficulty}
-                  </Typography>
-                )}
                 <Chip
-                  label={activity.completionStatus}
+                  label={activity.difficulty || activity.completionStatus}
                   size="small"
                   variant="outlined"
                   color={getDifficultyColor(
