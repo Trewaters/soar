@@ -114,9 +114,9 @@ interface ImageManagementProps {
  * Perfect for user profiles, asana creation, or any page where users need to manage images
  */
 export default function ImageManagement({
-  title = 'Pose Images',
-  showUploadButton = true,
-  showGallery = true,
+  title = 'Profile Images',
+  showUploadButton = false,
+  showGallery = false,
   variant = 'full',
 }: ImageManagementProps) {
   const [tabValue, setTabValue] = useState(0)
