@@ -656,7 +656,7 @@ export default function UserDetails() {
                 </CardActions>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                   <CardContent>
-                    <Stack spacing={2}>
+                    <Stack spacing={3}>
                       <TextInputField
                         name="shareQuick"
                         id="share-quick-input"
@@ -834,7 +834,7 @@ export default function UserDetails() {
                 />
               </FormControl>
 
-              <FormControl sx={{ width: { xs: '100%', sm: '90%', md: '80%' } }}>
+              <FormControl sx={{ width: '100%' }}>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   Email Address (primary/internal)
                 </Typography>
@@ -853,7 +853,7 @@ export default function UserDetails() {
                 </FormHelperText>
               </FormControl>
 
-              <FormControl sx={{ width: { xs: '100%', sm: '90%', md: '80%' } }}>
+              <FormControl sx={{ width: '100%' }}>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   Headline
                 </Typography>
@@ -869,7 +869,7 @@ export default function UserDetails() {
                 />
               </FormControl>
 
-              <FormControl sx={{ width: { xs: '100%', sm: '90%', md: '80%' } }}>
+              <FormControl sx={{ width: '100%' }}>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   Description/About/Bio
                 </Typography>
