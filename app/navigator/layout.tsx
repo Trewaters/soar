@@ -1,4 +1,5 @@
 'use client'
+import { Box } from '@mui/material'
 import Header from '@serverComponents/header'
 import { ReactNode } from 'react'
 
@@ -27,17 +28,17 @@ export default function NavigatorLayout({ children }: { children: ReactNode }) {
         Skip to main content
       </a>{' '}
       <Header />
-      <main
+      <Box
         id="main-content"
         role="main"
-        style={{
+        sx={{
           minHeight: 'calc(100vh - 69px)', // Account for header height
-          paddingBottom: '80px', // Account for bottom navigation height with extra space
+          pb: 20, // 20 * 4 = 80px bottom padding
           overflowY: 'auto',
         }}
       >
         {children}
-      </main>
+      </Box>
     </>
   )
 }

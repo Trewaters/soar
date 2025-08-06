@@ -32,7 +32,8 @@ export default function Page() {
           marginTop: 4,
           width: { xs: '100%', sm: 'auto', md: '60%' },
           justifyContent: 'center',
-          mx: 'auto',
+          marginLeft: 'auto',
+          marginRight: 'auto',
         }}
         role="main"
         aria-labelledby="page-title"
@@ -57,7 +58,7 @@ export default function Page() {
         <Divider
           color="#F6893D"
           textAlign="center"
-          sx={{ mx: 'auto', width: '10%' }}
+          sx={{ marginLeft: 'auto', marginRight: 'auto', width: '10%' }}
         />
         <Typography variant="body1" fontWeight="600" sx={{ mt: 4, mb: 1 }}>
           Start your practice
@@ -89,11 +90,12 @@ export default function Page() {
                     aria-label={`Navigate to ${link.name} section`}
                     sx={{
                       width: '100%',
-                      mb: 1,
+                      mb: 2,
                       borderRadius: '14px',
                       boxShadow: '0px 4px 4px -1px rgba(0, 0, 0, 0.25)',
                       textTransform: 'uppercase',
-                      padding: '12px 16px',
+                      py: 1.5,
+                      px: 2,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',

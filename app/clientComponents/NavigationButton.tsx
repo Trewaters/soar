@@ -96,8 +96,8 @@ const NavigationButton = forwardRef<HTMLButtonElement, NavigationButtonProps>(
     // Enhanced styling with loading states
     const enhancedSx = {
       // Base mobile-optimized touch styling
-      minHeight: '48px', // Minimum touch target size
-      minWidth: '48px',
+      minHeight: 48, // Minimum touch target size
+      minWidth: 48,
       transition: theme.transitions.create(
         ['background-color', 'box-shadow', 'border-color', 'transform'],
         {

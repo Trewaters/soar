@@ -31,13 +31,14 @@ export default function LandingPage() {
               aria-label={`Navigate to ${link.name} section`}
               sx={{
                 width: 'auto',
-                maxWidth: '320px',
-                minWidth: '120px',
-                minHeight: '48px',
+                maxWidth: 320,
+                minWidth: 120,
+                minHeight: 48,
                 borderRadius: '14px',
                 boxShadow: '0px 4px 4px -1px rgba(0, 0, 0, 0.25)',
                 textTransform: 'uppercase',
-                padding: '12px 20px',
+                py: 4, // 32px (valid index)
+                px: 4, // 32px (valid index)
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'flex-start',
@@ -73,7 +74,7 @@ export default function LandingPage() {
                   wordWrap: 'break-word',
                   hyphens: 'auto',
                   minWidth: 0,
-                  maxWidth: '200px', // Limit text width for better fit
+                  maxWidth: 200, // Limit text width for better fit
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',

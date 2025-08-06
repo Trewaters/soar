@@ -1,3 +1,4 @@
+import { Box } from '@mui/material'
 import React from 'react'
 
 export const metadata = {
@@ -7,7 +8,7 @@ export const metadata = {
 }
 
 const PrivacyPolicyPage = () => (
-  <main style={{ maxWidth: 800, margin: '0 auto', padding: '2rem' }}>
+  <Box style={{ maxWidth: 800, margin: '0 auto', padding: '2rem' }}>
     <h1>Privacy Policy</h1>
     <p>
       <strong>Last Updated: July 30th, 2025</strong>
@@ -124,7 +125,7 @@ const PrivacyPolicyPage = () => (
       <br />
       Address: TBD
     </p>
-  </main>
+  </Box>
 )
 
 export default PrivacyPolicyPage

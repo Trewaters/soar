@@ -132,7 +132,7 @@ export default function Header() {
                 {navItem.action ? (
                   <ListItemButton
                     component="button"
-                    sx={{ width: '250px' }}
+                    sx={{ width: 250 }}
                     onClick={async (e) => {
                       e.preventDefault()
                       setOpenDrawer(false)
@@ -150,7 +150,7 @@ export default function Header() {
                   <Link href={navItem.href} passHref legacyBehavior>
                     <ListItemButton
                       component="button"
-                      sx={{ width: '250px' }}
+                      sx={{ width: 250 }}
                       onClick={() => {
                         setOpenDrawer(false)
                       }}
@@ -180,7 +180,7 @@ export default function Header() {
       position="static"
       sx={{
         pr: 2,
-        height: '69px',
+        height: 69,
       }}
       elevation={0}
     >

@@ -103,25 +103,8 @@ export default function ActivityStreaks({
         loading ||
         hasInitialized
       ) {
-        console.log('ActivityStreaks: Skipping fetch due to conditions:', {
-          hasUserId: !!session?.user?.id,
-          status,
-          loading,
-          hasInitialized,
-          timestamp: new Date().toISOString(),
-        })
         return
       }
-
-      console.log('ActivityStreaks: Starting fetchStreakData for user:', {
-        userId: session.user.id,
-        email: session.user.email,
-        streakTypes,
-        timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV,
-        baseUrl: window.location.origin,
-      })
-
       setLoading(true)
       setError(null)
       setHasInitialized(true)
@@ -152,16 +135,6 @@ export default function ActivityStreaks({
                 userId: session.user.id,
                 activityType: 'view_streaks',
               }),
-            })
-
-            console.log('ActivityStreaks: API response received:', {
-              status: response.status,
-              statusText: response.statusText,
-              ok: response.ok,
-              headers: Object.fromEntries(response.headers.entries()),
-              url: response.url,
-              timestamp: new Date().toISOString(),
-              requestId: response.headers.get('X-Request-ID'),
             })
 
             if (response.ok) {
@@ -320,31 +293,6 @@ export default function ActivityStreaks({
           })
         }
 
-        // Example for future asana streaks:
-        // if (streakTypes.includes('asana')) {
-        //   const asanaResponse = await fetch(`/api/user/asanaStreak?userId=${session.user.id}`)
-        //   if (asanaResponse.ok) {
-        //     const asanaData = await asanaResponse.json()
-        //     fetchedStreaks.push({
-        //       type: 'asana',
-        //       currentStreak: asanaData.currentStreak,
-        //       longestStreak: asanaData.longestStreak,
-        //       lastActivityDate: asanaData.lastActivityDate,
-        //       isActiveToday: asanaData.isActiveToday,
-        //       displayName: getStreakDisplayName('asana'),
-        //       icon: getStreakIcon('asana'),
-        //       color: getStreakColor('asana'),
-        //     })
-        //   }
-        // }
-
-        console.log('ActivityStreaks: Successfully fetched streak data:', {
-          fetchedStreaksCount: fetchedStreaks.length,
-          streakTypes: fetchedStreaks.map((s) => s.type),
-          userId: session.user.id,
-          timestamp: new Date().toISOString(),
-        })
-
         setStreakData(fetchedStreaks)
       } catch (e: any) {
         console.error('ActivityStreaks: Error in fetchStreakData:', {
@@ -361,10 +309,6 @@ export default function ActivityStreaks({
         setError('Failed to load streak data')
       } finally {
         setLoading(false)
-        console.log('ActivityStreaks: Fetch process completed:', {
-          userId: session?.user?.id,
-          timestamp: new Date().toISOString(),
-        })
       }
     }
 

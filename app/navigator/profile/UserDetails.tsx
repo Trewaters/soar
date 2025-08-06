@@ -340,7 +340,13 @@ export default function UserDetails() {
   }
 
   useEffect(() => {
-    if (session?.user?.email && userData?.email !== session.user.email) {
+    // If session is available and userData.email is empty, set it to trigger context fetch
+    if (session?.user?.email && (!userData?.email || userData?.email === '')) {
+      dispatch({
+        type: 'SET_USER',
+        payload: { ...userData, email: session.user.email },
+      })
+    } else if (session?.user?.email && userData?.email !== session.user.email) {
       dispatch({
         type: 'SET_USER',
         payload: { ...userData, email: session.user.email },
@@ -373,6 +379,22 @@ export default function UserDetails() {
       >
         Sign in to view your profile
       </Button>
+    )
+  }
+
+  // Show loading spinner if userData is not yet loaded
+  if (!userData) {
+    return (
+      <Stack
+        alignItems="center"
+        justifyContent="center"
+        sx={{ minHeight: 300, width: '100%' }}
+      >
+        <CircularProgress size={48} color="primary" />
+        <Typography variant="body1" sx={{ mt: 2 }}>
+          Loading your profile...
+        </Typography>
+      </Stack>
     )
   }
 
@@ -460,13 +482,21 @@ export default function UserDetails() {
           <Paper
             elevation={1}
             sx={{
-              mx: 3,
+              mx: { xs: 0, sm: 2, md: 4 },
+              my: { xs: 0, sm: 2 },
+              width: { xs: '100%', sm: '95%', md: '80%', lg: '65%' },
+              maxWidth: 700,
+              alignSelf: 'center',
               ...getMobileFormContainerTheme(), // Mobile keyboard optimizations
             }}
           >
             <Stack
               spacing={3}
-              sx={{ p: 3 }}
+              sx={{
+                p: { xs: 2, sm: 3, md: 4 },
+                width: '100%',
+                boxSizing: 'border-box',
+              }}
               component="form"
               onSubmit={handleSubmit}
             >
@@ -484,7 +514,10 @@ export default function UserDetails() {
                 </Typography>
               </Stack>
 
-              <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
+              <Stack
+                direction={{ xs: 'column', md: 'row' }}
+                spacing={{ xs: 2, md: 3 }}
+              >
                 <Stack
                   alignItems="center"
                   flex={1}
@@ -638,11 +671,12 @@ export default function UserDetails() {
                         freeSolo
                         fullWidth
                         options={yogaStyles}
-                        value={formData.yogaStyle}
+                        value={formData.yogaStyle || ''}
                         onChange={(event, newValue) => {
                           setFormData((prev) => ({
                             ...prev,
-                            yogaStyle: newValue ?? '',
+                            yogaStyle:
+                              typeof newValue === 'string' ? newValue : '',
                           }))
                         }}
                         filterOptions={(options, state) =>
@@ -660,9 +694,13 @@ export default function UserDetails() {
                             placeholder='Enter "Yoga Style"'
                             label="Yoga Style"
                             variant="outlined"
+                            value={formData.yogaStyle || ''}
                             onChange={handleChange}
+                            fullWidth
+                            sx={{ ...textFieldStyles, width: '100%' }}
                           />
                         )}
+                        sx={{ width: '100%' }}
                       />
                       <TextInputField
                         name="yogaExperience"
@@ -737,11 +775,11 @@ export default function UserDetails() {
                   variant="filled"
                   disabled
                   fullWidth
-                  sx={textFieldStyles}
+                  sx={{ ...textFieldStyles, width: '100%' }}
                 />
               </FormControl>
 
-              <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
+              <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                 <FormControl sx={{ width: '100%' }}>
                   <Typography variant="body1" sx={{ mb: 1 }}>
                     First Name
@@ -760,7 +798,7 @@ export default function UserDetails() {
                     variant="outlined"
                     required
                     fullWidth
-                    sx={textFieldStyles}
+                    sx={{ ...textFieldStyles, width: '100%' }}
                   />
                 </FormControl>
 
@@ -776,7 +814,7 @@ export default function UserDetails() {
                     variant="outlined"
                     required
                     fullWidth
-                    sx={textFieldStyles}
+                    sx={{ ...textFieldStyles, width: '100%' }}
                   />
                 </FormControl>
               </Stack>
@@ -792,11 +830,11 @@ export default function UserDetails() {
                   onChange={handleChange}
                   variant="outlined"
                   fullWidth
-                  sx={textFieldStyles}
+                  sx={{ ...textFieldStyles, width: '100%' }}
                 />
               </FormControl>
 
-              <FormControl sx={{ width: '80%' }}>
+              <FormControl sx={{ width: { xs: '100%', sm: '90%', md: '80%' } }}>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   Email Address (primary/internal)
                 </Typography>
@@ -808,14 +846,14 @@ export default function UserDetails() {
                   type="email"
                   disabled
                   fullWidth
-                  sx={textFieldStyles}
+                  sx={{ ...textFieldStyles, width: '100%' }}
                 />
                 <FormHelperText>
                   Your email address cannot be changed. Contact us for support.
                 </FormHelperText>
               </FormControl>
 
-              <FormControl sx={{ width: '80%' }}>
+              <FormControl sx={{ width: { xs: '100%', sm: '90%', md: '80%' } }}>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   Headline
                 </Typography>
@@ -827,11 +865,11 @@ export default function UserDetails() {
                   multiline
                   maxRows={2}
                   fullWidth
-                  sx={textFieldStyles}
+                  sx={{ ...textFieldStyles, width: '100%' }}
                 />
               </FormControl>
 
-              <FormControl sx={{ width: '80%' }}>
+              <FormControl sx={{ width: { xs: '100%', sm: '90%', md: '80%' } }}>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   Description/About/Bio
                 </Typography>
@@ -843,11 +881,11 @@ export default function UserDetails() {
                   multiline
                   maxRows={4}
                   fullWidth
-                  sx={textFieldStyles}
+                  sx={{ ...textFieldStyles, width: '100%' }}
                 />
               </FormControl>
 
-              <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
+              <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                 <FormControl sx={{ width: '100%' }}>
                   <Typography variant="body1" sx={{ mb: 1 }}>
                     Website URL
@@ -859,7 +897,7 @@ export default function UserDetails() {
                     onChange={handleChange}
                     variant="outlined"
                     fullWidth
-                    sx={textFieldStyles}
+                    sx={{ ...textFieldStyles, width: '100%' }}
                   />
                 </FormControl>
 
@@ -876,13 +914,23 @@ export default function UserDetails() {
                     showCurrentLocation={true}
                     showMapButton={false}
                     helperText="Select your location to connect with local yoga practitioners"
-                    sx={textFieldStyles}
+                    sx={{ ...textFieldStyles, width: '100%' }}
                   />
                 </FormControl>
               </Stack>
 
-              <Stack direction="row" spacing={2} justifyContent="flex-end">
-                <Button type="submit" disabled={loading} variant="contained">
+              <Stack
+                direction="row"
+                spacing={2}
+                justifyContent="flex-end"
+                sx={{ width: '100%' }}
+              >
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  variant="contained"
+                  sx={{ minWidth: 120, py: 1.5, fontSize: 16 }}
+                >
                   {loading ? <CircularProgress size={20} /> : 'Save'}
                 </Button>
               </Stack>

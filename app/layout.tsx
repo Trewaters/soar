@@ -1,6 +1,7 @@
 import '@styles/globals.css'
 import { ReactNode } from 'react'
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { Providers } from '@providers/Providers'
 import { auth } from '../auth'
 
@@ -57,23 +58,49 @@ export default async function RootLayout({
       </head>
       <body>
         <Providers session={session}>
-          {/* add google analytics script below header */}
-          {/* eslint-disable-next-line @next/next/next-script-for-ga */}
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-BE8QV7LLJV"
-          ></script>
-          <script
+          {/* Handle wallet extension conflicts before loading analytics */}
+          <Script
+            id="wallet-conflict-handler"
+            strategy="beforeInteractive"
             dangerouslySetInnerHTML={{
               __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-BE8QV7LLJV');
-          `,
+                try {
+                  // Prevent wallet extensions from interfering with analytics
+                  const originalDefineProperty = Object.defineProperty;
+                  Object.defineProperty = function(obj, prop, descriptor) {
+                    try {
+                      return originalDefineProperty.call(this, obj, prop, descriptor);
+                    } catch (error) {
+                      if (error instanceof TypeError && error.message.includes('redefine')) {
+                        console.warn('Wallet extension conflict detected for property:', prop);
+                        return obj;
+                      }
+                      throw error;
+                    }
+                  };
+                  
+                  // Initialize dataLayer safely
+                  window.dataLayer = window.dataLayer || [];
+                } catch (error) {
+                  console.warn('Wallet extension conflict handling failed:', error);
+                }
+              `,
             }}
           />
-          {/* <GoogleAnalytics gaId="G-BE8QV7LLJV" /> */}
+
+          {/* Google Analytics with Next.js Script component */}
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-BE8QV7LLJV"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-BE8QV7LLJV');
+            `}
+          </Script>
           {children}
         </Providers>
       </body>
