@@ -836,25 +836,6 @@ export default function UserDetails() {
 
               <FormControl sx={{ width: '100%' }}>
                 <Typography variant="body1" sx={{ mb: 1 }}>
-                  Email Address (primary/internal)
-                </Typography>
-                <TextField
-                  name="email"
-                  placeholder="xyz@ABC.com"
-                  value={userData?.email ?? ''}
-                  variant="outlined"
-                  type="email"
-                  disabled
-                  fullWidth
-                  sx={{ ...textFieldStyles, width: '100%' }}
-                />
-                <FormHelperText>
-                  Your email address cannot be changed. Contact us for support.
-                </FormHelperText>
-              </FormControl>
-
-              <FormControl sx={{ width: '100%' }}>
-                <Typography variant="body1" sx={{ mb: 1 }}>
                   Headline
                 </Typography>
                 <TextInputField
@@ -863,7 +844,8 @@ export default function UserDetails() {
                   value={formData.headline || 'I am a Yoga instructor.'}
                   onChange={handleChange}
                   multiline
-                  maxRows={2}
+                  maxRows={6}
+                  minRows={2}
                   fullWidth
                   sx={{ ...textFieldStyles, width: '100%' }}
                 />
@@ -879,45 +861,57 @@ export default function UserDetails() {
                   value={formData.bio}
                   onChange={handleChange}
                   multiline
-                  maxRows={4}
+                  maxRows={6}
+                  minRows={4}
                   fullWidth
                   sx={{ ...textFieldStyles, width: '100%' }}
                 />
               </FormControl>
 
-              <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-                <FormControl sx={{ width: '100%' }}>
-                  <Typography variant="body1" sx={{ mb: 1 }}>
-                    Website URL
-                  </Typography>
-                  <TextInputField
-                    name="websiteURL"
-                    placeholder="Enter website URL"
-                    value={formData.websiteURL}
-                    onChange={handleChange}
-                    variant="outlined"
-                    fullWidth
-                    sx={{ ...textFieldStyles, width: '100%' }}
-                  />
-                </FormControl>
+              <FormControl sx={{ width: '100%' }}>
+                <Typography variant="body1" sx={{ mb: 1 }}>
+                  Website URL
+                </Typography>
+                <TextInputField
+                  name="websiteURL"
+                  placeholder="Enter website URL"
+                  value={formData.websiteURL}
+                  onChange={handleChange}
+                  variant="outlined"
+                  fullWidth
+                  sx={{ ...textFieldStyles, width: '100%' }}
+                />
+              </FormControl>
 
-                <FormControl sx={{ width: { xs: '100%', md: '60%' } }}>
-                  <Typography variant="body1" sx={{ mb: 1 }}>
-                    My Location
-                  </Typography>
-                  <LocationPicker
-                    value={formData.location}
-                    onChange={handleLocationChange}
-                    placeholder="Search for your city, state, or country"
-                    variant="outlined"
-                    fullWidth
-                    showCurrentLocation={true}
-                    showMapButton={false}
-                    helperText="Select your location to connect with local yoga practitioners"
-                    sx={{ ...textFieldStyles, width: '100%' }}
-                  />
-                </FormControl>
-              </Stack>
+              <FormControl sx={{ width: '100%' }}>
+                <Typography variant="body1" sx={{ mb: 1 }}>
+                  My Location
+                </Typography>
+                <LocationPicker
+                  value={formData.location}
+                  onChange={handleLocationChange}
+                  placeholder="Search for your city, state, or country"
+                  variant="outlined"
+                  fullWidth
+                  showCurrentLocation={true}
+                  showMapButton={false}
+                  helperText="Select your location to connect with local yoga practitioners"
+                  sx={{ ...textFieldStyles, width: '100%' }}
+                />
+              </FormControl>
+
+              <Typography variant="body1" sx={{ mb: 1 }}>
+                Email Address (primary/internal)
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ mb: 1, backgroundColor: 'lightgray' }}
+              >
+                {userData?.email ?? 'N/A'}
+              </Typography>
+              <FormHelperText>
+                Your email address cannot be changed.
+              </FormHelperText>
 
               <Stack
                 direction="row"
