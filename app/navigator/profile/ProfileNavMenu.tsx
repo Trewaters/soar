@@ -43,6 +43,14 @@ const ProfileNavMenu: React.FC = () => {
     state: { userData },
   } = UseUser()
 
+  // Get current pathname for highlighting
+  const [currentPath, setCurrentPath] = React.useState<string>('')
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentPath(window.location.pathname)
+    }
+  }, [])
+
   const handleSignOut = async () => {
     try {
       await signOut({ redirectTo: '/auth/signout?success=true' })
@@ -91,6 +99,7 @@ const ProfileNavMenu: React.FC = () => {
       item.action()
     } else if (item.href && !item.disabled) {
       router.push(item.href)
+      setCurrentPath(item.href)
     }
   }
 
@@ -139,62 +148,76 @@ const ProfileNavMenu: React.FC = () => {
 
         {/* Navigation Menu */}
         <List sx={{ p: 0 }}>
-          {menuItems.map((item, index) => (
-            <React.Fragment key={item.id}>
-              <ListItem disablePadding>
-                <ListItemButton
-                  onClick={() => handleNavigation(item)}
-                  disabled={item.disabled}
-                  sx={{
-                    py: 2,
-                    px: 3,
-                    '&:hover': {
-                      bgcolor: 'primary.light',
-                      color: 'primary.contrastText',
-                    },
-                    '&.Mui-disabled': {
-                      opacity: 0.5,
-                    },
-                  }}
-                >
-                  <ListItemIcon
+          {menuItems.map((item, index) => {
+            const isSelected = !!item.href && currentPath === item.href
+            return (
+              <React.Fragment key={item.id}>
+                <ListItem disablePadding>
+                  <ListItemButton
+                    onClick={() => handleNavigation(item)}
+                    disabled={item.disabled}
+                    selected={Boolean(isSelected)}
                     sx={{
-                      color: item.disabled ? 'text.disabled' : 'primary.main',
-                      minWidth: 40,
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.label}
-                    sx={{
-                      '& .MuiListItemText-primary': {
-                        fontWeight: 500,
-                        color: item.disabled ? 'text.disabled' : 'text.primary',
+                      py: 2,
+                      px: 3,
+                      bgcolor: isSelected ? 'primary.light' : undefined,
+                      color: isSelected ? 'primary.contrastText' : undefined,
+                      '&:hover': {
+                        bgcolor: 'primary.light',
+                        color: 'primary.contrastText',
+                      },
+                      '&.Mui-disabled': {
+                        opacity: 0.5,
                       },
                     }}
-                  />
-                  {item.badge && (
-                    <Chip
-                      label={item.badge}
-                      size="small"
-                      color="secondary"
-                      sx={{ fontSize: '0.7rem', height: 20 }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        color: item.disabled
+                          ? 'text.disabled'
+                          : isSelected
+                            ? 'primary.dark'
+                            : 'primary.main',
+                        minWidth: 40,
+                      }}
+                    >
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={item.label}
+                      sx={{
+                        '& .MuiListItemText-primary': {
+                          fontWeight: 600,
+                          color: item.disabled
+                            ? 'text.disabled'
+                            : isSelected
+                              ? 'primary.dark'
+                              : 'text.primary',
+                        },
+                      }}
                     />
-                  )}
-                  {item.disabled && (
-                    <Chip
-                      label="Coming Soon"
-                      size="small"
-                      variant="outlined"
-                      sx={{ fontSize: '0.7rem', height: 20 }}
-                    />
-                  )}
-                </ListItemButton>
-              </ListItem>
-              {index < menuItems.length - 1 && <Divider />}
-            </React.Fragment>
-          ))}
+                    {item.badge && (
+                      <Chip
+                        label={item.badge}
+                        size="small"
+                        color="secondary"
+                        sx={{ fontSize: '0.7rem', height: 20 }}
+                      />
+                    )}
+                    {item.disabled && (
+                      <Chip
+                        label="Coming Soon"
+                        size="small"
+                        variant="outlined"
+                        sx={{ fontSize: '0.7rem', height: 20 }}
+                      />
+                    )}
+                  </ListItemButton>
+                </ListItem>
+                {index < menuItems.length - 1 && <Divider />}
+              </React.Fragment>
+            )
+          })}
 
           {/* Sign Out Section */}
           <Divider sx={{ my: 1 }} />

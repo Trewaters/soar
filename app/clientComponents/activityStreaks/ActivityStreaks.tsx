@@ -117,15 +117,6 @@ export default function ActivityStreaks({
         if (streakTypes.includes('login')) {
           try {
             const apiUrl = `/api/user/recordActivity`
-            console.log(
-              'ActivityStreaks: Making API call to record activity:',
-              {
-                url: apiUrl,
-                method: 'POST',
-                timestamp: new Date().toISOString(),
-              }
-            )
-
             const response = await fetch(apiUrl, {
               method: 'POST',
               headers: {
