@@ -23,6 +23,11 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import EditIcon from '@mui/icons-material/Edit'
+import EditSeriesDialog, {
+  Series as EditSeriesShape,
+  Asana as EditAsanaShape,
+} from '@app/navigator/flows/editSeries/EditSeriesDialog'
+import { updateSeries, deleteSeries } from '@lib/seriesService'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
@@ -145,6 +150,7 @@ export default function LibraryPage() {
       fetchUserSeries()
       fetchUserSequences()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user?.email])
 
   if (status === 'loading') {
@@ -234,20 +240,12 @@ export default function LibraryPage() {
 
             {/* Asanas Tab */}
             <TabPanel value={tabValue} index={0}>
-              <AsanasLibrary
-                asanas={asanas}
-                loading={asanasLoading}
-                onRefresh={fetchUserAsanas}
-              />
+              <AsanasLibrary asanas={asanas} loading={asanasLoading} />
             </TabPanel>
 
             {/* Series Tab */}
             <TabPanel value={tabValue} index={1}>
-              <SeriesLibrary
-                series={series}
-                loading={seriesLoading}
-                onRefresh={fetchUserSeries}
-              />
+              <SeriesLibrary series={series} loading={seriesLoading} />
             </TabPanel>
 
             {/* Sequences Tab */}
@@ -255,7 +253,6 @@ export default function LibraryPage() {
               <SequencesLibrary
                 sequences={sequences}
                 loading={sequencesLoading}
-                onRefresh={fetchUserSequences}
               />
             </TabPanel>
 
@@ -274,11 +271,9 @@ export default function LibraryPage() {
 function AsanasLibrary({
   asanas,
   loading,
-  onRefresh,
 }: {
   asanas: UserAsanaData[]
   loading: boolean
-  onRefresh: () => void
 }) {
   const router = useRouter()
 
@@ -329,11 +324,9 @@ function AsanasLibrary({
 function SeriesLibrary({
   series,
   loading,
-  onRefresh,
 }: {
   series: UserSeriesData[]
   loading: boolean
-  onRefresh: () => void
 }) {
   const router = useRouter()
 
@@ -384,11 +377,9 @@ function SeriesLibrary({
 function SequencesLibrary({
   sequences,
   loading,
-  onRefresh,
 }: {
   sequences: UserSequenceData[]
   loading: boolean
-  onRefresh: () => void
 }) {
   const router = useRouter()
 
@@ -564,6 +555,47 @@ function AsanaCard({ asana }: { asana: UserAsanaData }) {
 
 function SeriesCard({ series }: { series: UserSeriesData }) {
   const router = useRouter()
+  const [editOpen, setEditOpen] = useState(false)
+
+  // Map UserSeriesData to EditSeriesDialog shape
+  const dialogSeries: EditSeriesShape = {
+    id: series.id || '',
+    name: series.seriesName,
+    description: series.description || '',
+    difficulty: 'beginner',
+    asanas: (series.seriesPostures || []).map((sp, idx) => {
+      const parts = sp.split(';')
+      const name = (parts[0] || '').trim()
+      const simplified = (parts[1] || '').trim()
+      const asana: EditAsanaShape = {
+        id: `${idx}-${name}`,
+        name,
+        difficulty: simplified || 'unknown',
+      }
+      return asana
+    }),
+    created_by: series.createdBy || '',
+  }
+
+  const handleSave = async (updated: EditSeriesShape) => {
+    try {
+      await updateSeries(updated.id, updated)
+      setEditOpen(false)
+      // optionally trigger a refresh via router or a parent callback; omitted here
+    } catch (e) {
+      console.error('Failed to update series', e)
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteSeries(id)
+      setEditOpen(false)
+      // optionally refresh list; omitted here
+    } catch (e) {
+      console.error('Failed to delete series', e)
+    }
+  }
 
   return (
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -602,15 +634,19 @@ function SeriesCard({ series }: { series: UserSeriesData }) {
           <IconButton
             size="small"
             title="Edit"
-            onClick={() => {
-              // TODO: Create edit functionality
-              console.log('Edit series:', series.id)
-            }}
+            onClick={() => setEditOpen(true)}
           >
             <EditIcon />
           </IconButton>
         </Stack>
       </Box>
+      <EditSeriesDialog
+        open={editOpen}
+        onClose={() => setEditOpen(false)}
+        series={dialogSeries}
+        onSave={handleSave}
+        onDelete={handleDelete}
+      />
     </Card>
   )
 }

@@ -130,14 +130,13 @@ model AsanaPosture {
 
 model AsanaSeries {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  seriesName    String
+  seriesName      String
   seriesPostures  String[]
-  // breath           String?
-  // breath specified for the series
-  breathSeries           String[]
+  breathSeries    String[]
   description     String?
-  durationSeries        String?
+  durationSeries  String?
   image           String?
+  created_by      String
   createdAt       DateTime? @default(now())
   updatedAt       DateTime? @updatedAt
 }

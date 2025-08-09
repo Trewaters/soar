@@ -10,7 +10,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
@@ -21,8 +21,17 @@ import { getAllSeries } from '@lib/seriesService'
 import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
 import SeriesWeeklyActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesWeeklyActivityTracker'
 import { useSearchParams } from 'next/navigation'
+import EditIcon from '@mui/icons-material/Edit'
+import IconButton from '@mui/material/IconButton'
+import EditSeriesDialog, {
+  Series as EditSeriesShape,
+  Asana as EditAsanaShape,
+} from '@app/navigator/flows/editSeries/EditSeriesDialog'
+import { useSession } from 'next-auth/react'
+import { deleteSeries, updateSeries } from '@lib/seriesService'
 
 export default function Page() {
+  const { data: session } = useSession()
   const theme = useTheme()
   const searchParams = useSearchParams()
   const seriesId = searchParams.get('id')
@@ -30,34 +39,47 @@ export default function Page() {
   const [flow, setFlow] = useState<FlowSeriesData>()
   const [open, setOpen] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [acOpen, setAcOpen] = useState(false)
+  const [editOpen, setEditOpen] = useState(false)
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchSeries = useCallback(
+    async (selectId?: string) => {
+      setLoading(true)
       try {
         const seriesData = await getAllSeries()
         setSeries(seriesData as FlowSeriesData[])
-
         // If there's a series ID in the URL, auto-select that series
-        if (seriesId && seriesData.length > 0) {
-          const selectedSeries = seriesData.find((s) => s.id === seriesId)
-          if (selectedSeries) {
-            setFlow(selectedSeries)
+        if (seriesData.length > 0) {
+          if (seriesId) {
+            const selectedSeries = seriesData.find((s) => s.id === seriesId)
+            if (selectedSeries) setFlow(selectedSeries)
+          } else if (selectId) {
+            const selectedSeries = seriesData.find((s) => s.id === selectId)
+            if (selectedSeries) setFlow(selectedSeries)
+          } else if (flow?.id) {
+            const selectedSeries = seriesData.find((s) => s.id === flow.id)
+            if (selectedSeries) setFlow(selectedSeries)
           }
         }
       } catch (error) {
         console.error('Error fetching series:', error)
+      } finally {
+        setLoading(false)
       }
-    }
+    },
+    [seriesId, flow?.id]
+  )
 
-    fetchData()
-  }, [seriesId]) // Add seriesId as dependency
+  useEffect(() => {
+    // initial load
+    fetchSeries()
+  }, [fetchSeries])
 
   function handleSelect(
     event: ChangeEvent<object>,
     value: FlowSeriesData | null
   ) {
-    // Logs the type of event (e.g., 'click')
-    // Logs the element that triggered the event
     event.preventDefault()
     if (value) {
       setFlow(value)
@@ -72,6 +94,61 @@ export default function Page() {
     console.log('Series activity tracked:', isTracked)
     // Trigger refresh of any activity components that might be listening
     setRefreshTrigger((prev) => prev + 1)
+  }
+
+  // Determine if current user owns the selected series
+  const isOwner = useMemo(() => {
+    if (!flow || !session?.user?.email) return false
+    // createdBy added by API normalization
+    return (flow as any).createdBy === session.user.email
+  }, [flow, session?.user?.email])
+
+  // Map FlowSeriesData to EditSeriesDialog expected shape
+  const dialogSeries: EditSeriesShape | null = useMemo(() => {
+    if (!flow) return null
+    const asanas: EditAsanaShape[] = (flow.seriesPostures || []).map(
+      (sp, idx) => {
+        const parts = sp.split(';')
+        const name = (parts[0] || '').trim()
+        const simplified = (parts[1] || '').trim()
+        return {
+          id: `${idx}-${name}`,
+          name,
+          difficulty: simplified || 'unknown',
+        }
+      }
+    )
+    return {
+      id: flow.id || '',
+      name: flow.seriesName,
+      description: flow.description || '',
+      difficulty: 'beginner',
+      asanas,
+      created_by: (flow as any).createdBy || '',
+    }
+  }, [flow])
+
+  const handleEditSave = async (updated: EditSeriesShape) => {
+    try {
+      await updateSeries(updated.id, updated)
+      // refresh list and reselect the updated series so UI reflects changes immediately
+      await fetchSeries(updated.id)
+      setEditOpen(false)
+    } catch (e) {
+      console.error('Failed to save series update', e)
+    }
+  }
+
+  const handleEditDelete = async (id: string) => {
+    try {
+      await deleteSeries(id)
+      // Clear selection and refresh
+      setFlow(undefined)
+      await fetchSeries()
+      setEditOpen(false)
+    } catch (e) {
+      console.error('Failed to delete series', e)
+    }
   }
 
   return (
@@ -101,13 +178,26 @@ export default function Page() {
             </Typography>
           </Box>
           <Autocomplete
-            key={`series-autocomplete-${series.length}-${Date.now()}`} // Force re-render when data changes
             disablePortal
             freeSolo={false}
             id="combo-box-series-search"
-            options={series.sort((a, b) =>
-              a.seriesName.localeCompare(b.seriesName)
-            )}
+            open={acOpen}
+            onOpen={() => {
+              setAcOpen(true)
+              // Refresh list when user opens the dropdown to avoid stale data
+              fetchSeries()
+            }}
+            onClose={() => setAcOpen(false)}
+            loading={loading}
+            loadingText="Loading series..."
+            noOptionsText={loading ? 'Loading series...' : 'No series found'}
+            options={
+              series && series.length > 0
+                ? series.sort((a, b) =>
+                    a.seriesName.localeCompare(b.seriesName)
+                  )
+                : []
+            }
             getOptionLabel={(option: FlowSeriesData) => option.seriesName}
             renderOption={(props, option) => (
               <li {...props} key={option.id}>
@@ -129,7 +219,7 @@ export default function Page() {
               },
               '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
                 {
-                  borderColor: 'primary.light', // Ensure border color does not change on hover
+                  borderColor: 'primary.light',
                 },
               '& .MuiAutocomplete-endAdornment': {
                 display: 'none',
@@ -163,6 +253,7 @@ export default function Page() {
               flexDirection={'column'}
               alignItems={'center'}
             >
+              {/* Title + optional Edit button for owners */}
               <Box className="journal">
                 <Typography
                   variant="h3"
@@ -175,6 +266,20 @@ export default function Page() {
                 >
                   {flow.seriesName}
                 </Typography>
+                {isOwner && (
+                  <Box
+                    sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}
+                  >
+                    <IconButton
+                      aria-label="Edit series"
+                      onClick={() => setEditOpen(true)}
+                      color="primary"
+                      size="small"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Box>
+                )}
                 <Stack>
                   {flow.seriesPostures.map((pose) => (
                     <Box key={pose} className="lines">
@@ -265,6 +370,15 @@ export default function Page() {
       <Box height={'72px'} />
 
       <NavBottom subRoute="/navigator/flows" />
+      {dialogSeries && (
+        <EditSeriesDialog
+          open={editOpen}
+          onClose={() => setEditOpen(false)}
+          series={dialogSeries}
+          onSave={handleEditSave}
+          onDelete={handleEditDelete}
+        />
+      )}
     </Box>
   )
 }
