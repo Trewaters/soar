@@ -278,31 +278,8 @@ export default function UserDetails() {
     iconSrc: string
     alt: string
   }) => {
-    const borderColors = {
-      active: 'primary.main',
-      inactive: 'grey.400',
-      edit: 'secondary.main',
-    }
-
     return (
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: 8,
-          right: 8,
-          bgcolor: 'background.paper',
-          borderRadius: '50%',
-          width: 40,
-          height: 40,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: 2,
-          border: '2px solid',
-          borderColor: borderColors[mode],
-          zIndex: 1,
-        }}
-      >
+      <Box>
         <Image
           src={iconSrc}
           alt={alt}
@@ -352,7 +329,7 @@ export default function UserDetails() {
         payload: { ...userData, email: session.user.email },
       })
     }
-    setProfileImageMode('active')
+    // setProfileImageMode('active')
   }, [session, dispatch, userData])
 
   // State for card expand/collapse
@@ -600,7 +577,7 @@ export default function UserDetails() {
                       </Button>
                     </Box>
                   </Modal>
-                  {profileImageMode === 'active' && (
+                  {/*   {profileImageMode === 'active' && (
                     <ProfileStatusIndicator
                       mode="active"
                       iconSrc="/icons/profile/profile-image-active.svg"
@@ -620,7 +597,7 @@ export default function UserDetails() {
                       iconSrc="/icons/profile/profile-image-edit.svg"
                       alt="Edit profile image icon"
                     />
-                  )}
+                  )} */}
                 </Stack>
 
                 {/* User Details Section */}
