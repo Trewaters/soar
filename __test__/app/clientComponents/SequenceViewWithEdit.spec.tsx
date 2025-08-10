@@ -14,6 +14,16 @@ jest.mock('next/image', () => ({
   ),
 }))
 
+// Mock Next.js app router to avoid invariant errors when EditSequence uses useRouter
+jest.mock('next/navigation', () => {
+  const push = jest.fn()
+  ;(global as any).__routerPushMock = push
+  return {
+    __esModule: true,
+    useRouter: () => ({ push }),
+  }
+})
+
 // Mock NextAuth session
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),
