@@ -217,6 +217,7 @@ exports.Prisma.AsanaSequenceScalarFieldEnum = {
   durationSequence: 'durationSequence',
   image: 'image',
   breath_direction: 'breath_direction',
+  created_by: 'created_by',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

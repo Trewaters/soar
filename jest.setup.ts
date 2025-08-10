@@ -1,6 +1,19 @@
 import '@testing-library/jest-dom'
 import { configureAxe, toHaveNoViolations } from 'jest-axe'
 import type { JestAxeConfigureOptions } from 'jest-axe'
+// Globally mock next-auth/react to avoid ESM import issues in Jest and allow tests to override session state
+const mockUseSession = jest.fn(() => ({
+  data: null,
+  status: 'unauthenticated',
+}))
+jest.mock('next-auth/react', () => ({
+  __esModule: true,
+  useSession: mockUseSession,
+  SessionProvider: ({ children }: { children: React.ReactNode }) => children,
+  signIn: jest.fn(),
+  signOut: jest.fn(),
+}))
+;(globalThis as any).mockUseSession = mockUseSession
 
 // Mock browser audio APIs that are not available in JSDOM
 beforeAll(() => {

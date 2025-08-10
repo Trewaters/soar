@@ -26,24 +26,17 @@ export async function GET(request: NextRequest) {
 
     console.log('Fetching sequences from database...')
 
-    // For now, since AsanaSequence doesn't have a created_by field,
-    // we'll return all sequences when not filtering, and empty when filtering by user
-    // TODO: Add created_by field to AsanaSequence schema
+    // Fetch sequences with optional server-side filtering by creator
+    const where = createdBy ? { created_by: createdBy } : undefined
     const data = await prisma.asanaSequence.findMany({
+      where,
       orderBy: {
         createdAt: 'desc', // Show newest first to help verify new creations
       },
     })
     console.log(`Found ${data.length} sequences in database`)
 
-    // Filter client-side for now (not ideal, but works until schema is updated)
-    let filteredData = data
-    if (createdBy) {
-      console.log(
-        `Note: Filtering by creator not yet supported for sequences. Returning empty array for user: ${createdBy}`
-      )
-      filteredData = [] // Return empty array for now since we can't filter by creator
-    }
+    const filteredData = data
 
     const dataWithId = filteredData.map((item) => ({
       ...item,

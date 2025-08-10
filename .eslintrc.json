@@ -71,6 +71,7 @@
     "jsx-a11y/anchor-is-valid": "warn",
     "jsx-a11y/alt-text": "warn",
     "jsx-a11y/label-has-associated-control": "warn",
-    "react/react-in-jsx-scope": "off" // DISABLE for Typescript
+    "react/react-in-jsx-scope": "off", // DISABLE for Typescript
+    "react/prop-types": "off"
   }
 }

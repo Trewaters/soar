@@ -4,10 +4,10 @@ import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
 import '@testing-library/jest-dom'
 import PostureShareButton from '@app/clientComponents/postureShareButton'
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
-import { FlowSeriesData } from '@app/context/AsanaSeriesContext'
-import { SequenceData } from '@app/context/SequenceContext'
-import { ShareableContent } from '../../../types/sharing'
+import type { FullAsanaData } from '@app/context/AsanaPostureContext'
+import type { FlowSeriesData } from '@app/context/AsanaSeriesContext'
+import type { SequenceData } from '@app/context/SequenceContext'
+import type { ShareableContent } from '../../../types/sharing'
 import theme from '../../../styles/theme'
 
 // Mock Next.js navigation
@@ -21,17 +21,14 @@ jest.mock('../../../types/sharing', () => ({
 
 // Mock contexts with comprehensive data
 jest.mock('@app/context/AsanaPostureContext', () => ({
-  ...jest.requireActual('@app/context/AsanaPostureContext'),
   useAsanaPosture: jest.fn(),
 }))
 
 jest.mock('@app/context/AsanaSeriesContext', () => ({
-  ...jest.requireActual('@app/context/AsanaSeriesContext'),
   useFlowSeries: jest.fn(),
 }))
 
 jest.mock('@app/context/SequenceContext', () => ({
-  ...jest.requireActual('@app/context/SequenceContext'),
   useSequence: jest.fn(),
 }))
 

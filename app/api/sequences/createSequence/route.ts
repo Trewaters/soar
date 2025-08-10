@@ -1,8 +1,13 @@
 import { PrismaClient } from '../../../../prisma/generated/client'
+import { auth } from '../../../../auth'
 
 const prisma = new PrismaClient()
 
 export async function POST(request: Request) {
+  const session = await auth()
+  if (!session?.user?.email) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 })
+  }
   const {
     nameSequence,
     sequencesSeries,
@@ -24,6 +29,7 @@ export async function POST(request: Request) {
         durationSequence,
         image,
         breath_direction,
+        created_by: session.user.email,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },

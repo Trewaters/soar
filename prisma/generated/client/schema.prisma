@@ -149,6 +149,7 @@ model AsanaSequence {
   durationSequence String?
   image            String?
   breath_direction String?
+  created_by       String?
   createdAt        DateTime? @default(now())
   updatedAt        DateTime? @updatedAt
 }

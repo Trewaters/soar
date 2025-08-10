@@ -6448,6 +6448,7 @@ export namespace Prisma {
     durationSequence: string | null
     image: string | null
     breath_direction: string | null
+    created_by: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6459,6 +6460,7 @@ export namespace Prisma {
     durationSequence: string | null
     image: string | null
     breath_direction: string | null
+    created_by: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6471,6 +6473,7 @@ export namespace Prisma {
     durationSequence: number
     image: number
     breath_direction: number
+    created_by: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -6484,6 +6487,7 @@ export namespace Prisma {
     durationSequence?: true
     image?: true
     breath_direction?: true
+    created_by?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6495,6 +6499,7 @@ export namespace Prisma {
     durationSequence?: true
     image?: true
     breath_direction?: true
+    created_by?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6507,6 +6512,7 @@ export namespace Prisma {
     durationSequence?: true
     image?: true
     breath_direction?: true
+    created_by?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -6592,6 +6598,7 @@ export namespace Prisma {
     durationSequence: string | null
     image: string | null
     breath_direction: string | null
+    created_by: string | null
     createdAt: Date | null
     updatedAt: Date | null
     _count: AsanaSequenceCountAggregateOutputType | null
@@ -6621,6 +6628,7 @@ export namespace Prisma {
     durationSequence?: boolean
     image?: boolean
     breath_direction?: boolean
+    created_by?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["asanaSequence"]>
@@ -6634,6 +6642,7 @@ export namespace Prisma {
     durationSequence?: boolean
     image?: boolean
     breath_direction?: boolean
+    created_by?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -6650,6 +6659,7 @@ export namespace Prisma {
       durationSequence: string | null
       image: string | null
       breath_direction: string | null
+      created_by: string | null
       createdAt: Date | null
       updatedAt: Date | null
     }, ExtArgs["result"]["asanaSequence"]>
@@ -7051,6 +7061,7 @@ export namespace Prisma {
     readonly durationSequence: FieldRef<"AsanaSequence", 'String'>
     readonly image: FieldRef<"AsanaSequence", 'String'>
     readonly breath_direction: FieldRef<"AsanaSequence", 'String'>
+    readonly created_by: FieldRef<"AsanaSequence", 'String'>
     readonly createdAt: FieldRef<"AsanaSequence", 'DateTime'>
     readonly updatedAt: FieldRef<"AsanaSequence", 'DateTime'>
   }
@@ -13534,6 +13545,7 @@ export namespace Prisma {
     durationSequence: 'durationSequence',
     image: 'image',
     breath_direction: 'breath_direction',
+    created_by: 'created_by',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14329,6 +14341,7 @@ export namespace Prisma {
     durationSequence?: StringNullableFilter<"AsanaSequence"> | string | null
     image?: StringNullableFilter<"AsanaSequence"> | string | null
     breath_direction?: StringNullableFilter<"AsanaSequence"> | string | null
+    created_by?: StringNullableFilter<"AsanaSequence"> | string | null
     createdAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
   }
@@ -14341,6 +14354,7 @@ export namespace Prisma {
     durationSequence?: SortOrder
     image?: SortOrder
     breath_direction?: SortOrder
+    created_by?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14356,6 +14370,7 @@ export namespace Prisma {
     durationSequence?: StringNullableFilter<"AsanaSequence"> | string | null
     image?: StringNullableFilter<"AsanaSequence"> | string | null
     breath_direction?: StringNullableFilter<"AsanaSequence"> | string | null
+    created_by?: StringNullableFilter<"AsanaSequence"> | string | null
     createdAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"AsanaSequence"> | Date | string | null
   }, "id">
@@ -14368,6 +14383,7 @@ export namespace Prisma {
     durationSequence?: SortOrder
     image?: SortOrder
     breath_direction?: SortOrder
+    created_by?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: AsanaSequenceCountOrderByAggregateInput
@@ -14386,6 +14402,7 @@ export namespace Prisma {
     durationSequence?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
     image?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
     breath_direction?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
+    created_by?: StringNullableWithAggregatesFilter<"AsanaSequence"> | string | null
     createdAt?: DateTimeNullableWithAggregatesFilter<"AsanaSequence"> | Date | string | null
     updatedAt?: DateTimeNullableWithAggregatesFilter<"AsanaSequence"> | Date | string | null
   }
@@ -15603,6 +15620,7 @@ export namespace Prisma {
     durationSequence?: string | null
     image?: string | null
     breath_direction?: string | null
+    created_by?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
   }
@@ -15615,6 +15633,7 @@ export namespace Prisma {
     durationSequence?: string | null
     image?: string | null
     breath_direction?: string | null
+    created_by?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
   }
@@ -15626,6 +15645,7 @@ export namespace Prisma {
     durationSequence?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     breath_direction?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -15637,6 +15657,7 @@ export namespace Prisma {
     durationSequence?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     breath_direction?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -15649,6 +15670,7 @@ export namespace Prisma {
     durationSequence?: string | null
     image?: string | null
     breath_direction?: string | null
+    created_by?: string | null
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
   }
@@ -15660,6 +15682,7 @@ export namespace Prisma {
     durationSequence?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     breath_direction?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -15671,6 +15694,7 @@ export namespace Prisma {
     durationSequence?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     breath_direction?: NullableStringFieldUpdateOperationsInput | string | null
+    created_by?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -16779,6 +16803,7 @@ export namespace Prisma {
     durationSequence?: SortOrder
     image?: SortOrder
     breath_direction?: SortOrder
+    created_by?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16790,6 +16815,7 @@ export namespace Prisma {
     durationSequence?: SortOrder
     image?: SortOrder
     breath_direction?: SortOrder
+    created_by?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16801,6 +16827,7 @@ export namespace Prisma {
     durationSequence?: SortOrder
     image?: SortOrder
     breath_direction?: SortOrder
+    created_by?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }

@@ -39,7 +39,7 @@ export default function Page() {
     createdAt: '',
     updatedAt: '',
   })
-  const [refreshTrigger, setRefreshTrigger] = useState(0)
+  const [, setRefreshTrigger] = useState(0)
 
   const [page, setPage] = useState(1)
   const itemsPerPage = 1
@@ -118,6 +118,7 @@ export default function Page() {
     // Logs the element that triggered the event
     event.preventDefault()
     if (value) {
+      // Restore original behavior: select sequence locally for practice UI
       setSingleSequence(value)
     }
   }
@@ -238,6 +239,18 @@ export default function Page() {
                 >
                   {singleSequence.nameSequence}
                 </Typography>
+                {singleSequence?.id ? (
+                  <Box sx={{ ml: 5, mt: 1 }}>
+                    <Link
+                      underline="hover"
+                      color="primary.main"
+                      href={`/sequences/${singleSequence.id}`}
+                      aria-label={`Open details for ${singleSequence.nameSequence}`}
+                    >
+                      Open details
+                    </Link>
+                  </Box>
+                ) : null}
               </Box>
               {singleSequence?.id ? (
                 <Stack rowGap={3} alignItems="center">
