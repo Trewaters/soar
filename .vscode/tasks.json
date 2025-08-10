@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "jest-minimal",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"test:minimal"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			],
+			"group": "build"
+		}
+	]
+}

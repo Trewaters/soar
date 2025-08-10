@@ -14,6 +14,7 @@ import {
   FormControlLabel,
 } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 import { FullAsanaData } from '@context/AsanaPostureContext'
 import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
@@ -27,6 +28,7 @@ import {
   deleteAsanaActivity,
 } from '@lib/asanaActivityClientService'
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
+import { deletePosture } from '@lib/postureService'
 import PostureImageUpload from '@app/clientComponents/imageUpload/PostureImageUpload'
 import EditPostureDialog from '@app/navigator/asanaPostures/editAsana/EditPostureDialog'
 
@@ -104,7 +106,7 @@ export default function PostureActivityDetail({
   const [editDialogOpen, setEditDialogOpen] = useState(false)
 
   // Fetch uploaded images for this posture
-  const { images: postureImages, loading: imagesLoading } = usePostureImages(
+  const { images: postureImages } = usePostureImages(
     posture?.id?.toString(),
     posture?.sort_english_name
   )
@@ -895,7 +897,7 @@ export default function PostureActivityDetail({
         </Box>
       )}
 
-      {/* Edit Posture Button - Shown only to authenticated users who created the posture */}
+      {/* Edit/Delete Posture Buttons - Edit visible to creator or 'alpha users'; Delete only to actual creator */}
       {session &&
         session.user &&
         (session.user.email === posture?.created_by ||
@@ -910,21 +912,52 @@ export default function PostureActivityDetail({
               px: 2,
             }}
           >
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setEditDialogOpen(true)}
-              startIcon={<EditIcon />}
-              sx={{
-                borderRadius: '12px',
-                px: 3,
-                py: 1.5,
-                textTransform: 'none',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-              }}
-            >
-              Edit Posture
-            </Button>
+            <Stack direction="row" spacing={2}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setEditDialogOpen(true)}
+                startIcon={<EditIcon />}
+                sx={{
+                  borderRadius: '12px',
+                  px: 3,
+                  py: 1.5,
+                  textTransform: 'none',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                }}
+              >
+                Edit Posture
+              </Button>
+              {session.user.email === posture?.created_by && (
+                <Button
+                  variant="outlined"
+                  color="error"
+                  startIcon={<DeleteIcon />}
+                  sx={{
+                    borderRadius: '12px',
+                    px: 3,
+                    py: 1.5,
+                    textTransform: 'none',
+                  }}
+                  onClick={async () => {
+                    if (!posture?.id) return
+                    const confirmed = window.confirm(
+                      'Delete this asana? This cannot be undone.'
+                    )
+                    if (!confirmed) return
+                    try {
+                      await deletePosture(posture.id)
+                      // Navigate back to list after delete
+                      router.push('/navigator/asanaPostures')
+                    } catch (e: any) {
+                      alert(e?.message || 'Failed to delete posture')
+                    }
+                  }}
+                >
+                  Delete
+                </Button>
+              )}
+            </Stack>
           </Box>
         )}
 

@@ -99,3 +99,48 @@ export async function PUT(
     await prisma.$disconnect()
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await auth()
+
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    // Get the posture to verify ownership
+    const existingPosture = await prisma.asanaPosture.findUnique({
+      where: { id: params.id },
+    })
+
+    if (!existingPosture) {
+      return NextResponse.json({ error: 'Posture not found' }, { status: 404 })
+    }
+
+    if (existingPosture.created_by !== session.user.email) {
+      return NextResponse.json(
+        { error: 'Unauthorized: You can only delete postures you created' },
+        { status: 403 }
+      )
+    }
+
+    await prisma.asanaPosture.delete({ where: { id: params.id } })
+
+    return NextResponse.json({ success: true })
+  } catch (error: any) {
+    console.error('Error deleting posture from database:', {
+      error: error.message,
+      stack: error.stack,
+      postureId: params.id,
+    })
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  } finally {
+    await prisma.$disconnect()
+  }
+}

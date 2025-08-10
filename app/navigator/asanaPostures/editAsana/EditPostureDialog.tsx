@@ -17,15 +17,23 @@ import {
   Chip,
 } from '@mui/material'
 import { FullAsanaData } from '@app/context/AsanaPostureContext'
-import { updatePosture, type UpdatePostureInput } from '@lib/postureService'
+import {
+  updatePosture,
+  type UpdatePostureInput,
+  deletePosture,
+} from '@lib/postureService'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import DeleteIcon from '@mui/icons-material/Delete'
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 interface EditPostureDialogProps {
   open: boolean
   onClose: () => void
   posture: FullAsanaData
-  onSave: (updatedPosture: FullAsanaData) => void
+  onSave: () => void
 }
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 export default function EditPostureDialog({
   open,
@@ -34,6 +42,7 @@ export default function EditPostureDialog({
   onSave,
 }: EditPostureDialogProps) {
   const { data: session } = useSession()
+  const router = useRouter()
   const [difficulty, setDifficulty] = useState('')
   const [sideways, setSideways] = useState('No')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -184,7 +193,7 @@ export default function EditPostureDialog({
     try {
       const data = await updatePosture(posture.id, updatedAsana)
       console.log('Posture updated successfully:', data)
-      onSave(data)
+      onSave()
       onClose()
     } catch (error: Error | any) {
       console.error('Error updating posture:', error.message)
@@ -387,6 +396,34 @@ export default function EditPostureDialog({
         </Box>
       </DialogContent>
       <DialogActions>
+        {canEdit && (
+          <Button
+            color="error"
+            variant="outlined"
+            startIcon={<DeleteIcon />}
+            disabled={isSubmitting}
+            onClick={async () => {
+              if (!posture?.id) return
+              const confirmed = window.confirm(
+                'Delete this asana? This cannot be undone.'
+              )
+              if (!confirmed) return
+              try {
+                setIsSubmitting(true)
+                await deletePosture(posture.id)
+                onClose()
+                router.push('/navigator/asanaPostures')
+              } catch (e: any) {
+                setError(e?.message || 'Failed to delete posture')
+              } finally {
+                setIsSubmitting(false)
+              }
+            }}
+            sx={{ mr: 'auto' }}
+          >
+            Delete
+          </Button>
+        )}
         <Button onClick={onClose} disabled={isSubmitting}>
           Cancel
         </Button>

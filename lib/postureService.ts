@@ -173,3 +173,39 @@ export async function updatePosture(
     throw error
   }
 }
+
+/**
+ * Delete an existing posture by ID
+ */
+export async function deletePosture(id: string): Promise<{ success: boolean }> {
+  try {
+    console.log('Deleting posture with ID:', id)
+
+    const response = await fetch(`/api/poses/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    })
+
+    console.log('Delete posture response status:', response.status)
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}))
+      console.error('Delete posture failed:', errorData)
+      throw new Error(
+        `Failed to delete posture: ${errorData.error || response.statusText}`
+      )
+    }
+
+    const data = await response.json()
+    console.log('Deleted posture response:', data)
+    return data
+  } catch (error) {
+    logServiceError(error, 'postureService', 'deletePosture', {
+      operation: 'delete_posture',
+      id,
+    })
+    throw error
+  }
+}
