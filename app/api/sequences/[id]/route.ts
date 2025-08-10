@@ -84,3 +84,36 @@ export async function PATCH(
     )
   }
 }
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await auth()
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { id } = params
+    const existing = await prisma.asanaSequence.findUnique({ where: { id } })
+    if (!existing) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    }
+
+    const requester = (session.user.email || '').trim().toLowerCase()
+    const owner = (existing.created_by || '').trim().toLowerCase()
+    if (!owner || owner !== requester) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    await prisma.asanaSequence.delete({ where: { id } })
+    return NextResponse.json({ success: true }, { status: 200 })
+  } catch (error: any) {
+    console.error('DELETE sequence error', error)
+    return NextResponse.json(
+      { error: error?.message || 'Server error' },
+      { status: 500 }
+    )
+  }
+}

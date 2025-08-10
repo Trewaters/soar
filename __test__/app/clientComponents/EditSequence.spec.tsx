@@ -8,7 +8,14 @@ import EditSequence, {
 } from '@clientComponents/EditSequence'
 
 // Standard Soar test mocks
-jest.mock('next/navigation')
+jest.mock('next/navigation', () => {
+  const push = jest.fn()
+  ;(global as any).__routerPushMock = push
+  return {
+    __esModule: true,
+    useRouter: () => ({ push }),
+  }
+})
 jest.mock('next/image', () => ({
   __esModule: true,
   default: ({ src, alt, width, height, ...props }: any) => (
@@ -206,6 +213,50 @@ describe('EditSequence', () => {
       items = screen.getAllByRole('listitem')
       expect(within(items[0]).getByText('Sun Salutation')).toBeInTheDocument()
       expect(within(items[1]).getByText('Warmup')).toBeInTheDocument()
+    })
+
+    it('shows Delete button and deletes sequence after confirmation', async () => {
+      const user = userEvent.setup()
+      mockUseSession.mockReturnValue({
+        data: { user: { email: 'test@uvuyoga.com' } },
+        status: 'authenticated',
+      })
+
+      // Mock DELETE
+      ;(global as any).fetch = jest
+        .fn()
+        .mockImplementation((url: string, init?: any) => {
+          if (init?.method === 'DELETE') {
+            return Promise.resolve({
+              ok: true,
+              json: async () => ({ success: true }),
+            })
+          }
+          return Promise.resolve({ ok: true, json: async () => ({}) })
+        })
+
+      render(<EditSequence sequence={baseSequence()} />, {
+        wrapper: TestWrapper,
+      })
+
+      const deleteBtn = screen.getByRole('button', { name: /delete sequence/i })
+      expect(deleteBtn).toBeInTheDocument()
+
+      await user.click(deleteBtn)
+      // Confirm dialog
+      expect(
+        screen.getByRole('heading', { name: /delete this sequence/i })
+      ).toBeInTheDocument()
+
+      await user.click(screen.getByRole('button', { name: /delete$/i }))
+
+      expect((global as any).fetch).toHaveBeenCalledWith(
+        expect.stringMatching(/\/api\/sequences\/seq-1$/),
+        expect.objectContaining({ method: 'DELETE' })
+      )
+      expect((global as any).__routerPushMock).toHaveBeenCalledWith(
+        '/sequences'
+      )
     })
   })
 

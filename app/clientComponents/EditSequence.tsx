@@ -25,6 +25,7 @@ import {
   CardHeader,
   CardContent,
 } from '@mui/material'
+import { useRouter } from 'next/navigation'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
@@ -64,6 +65,7 @@ export default function EditSequence({
   children,
 }: EditSequenceProps) {
   const { data: session, status } = useSession()
+  const router = useRouter()
   const ctx = useSequence()
   const editor = useSequenceEditor()
   const ctxIsOwner = useSequenceOwnership()
@@ -89,6 +91,8 @@ export default function EditSequence({
     open: boolean
     index: number | null
   }>({ open: false, index: null })
+
+  const [confirmDeleteSeq, setConfirmDeleteSeq] = useState(false)
   const [dragIndex, setDragIndex] = useState<number | null>(null)
   const [saveState, setSaveState] = useState<
     'idle' | 'saving' | 'saved' | 'error'
@@ -229,6 +233,28 @@ export default function EditSequence({
     }
   }
 
+  const handleDeleteSequence = async () => {
+    if (!isOwner) return
+    if (!model.id || typeof model.id !== 'string') return
+    try {
+      const res = await fetch(`/api/sequences/${model.id}`, {
+        method: 'DELETE',
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data?.error || `Delete failed (${res.status})`)
+      }
+      // Navigate back to sequences list after delete
+      router.push('/sequences')
+    } catch (e) {
+      // Surface an inline error via saveError banner area
+      setSaveState('error')
+      setSaveError(e instanceof Error ? e.message : 'Failed to delete')
+    } finally {
+      setConfirmDeleteSeq(false)
+    }
+  }
+
   if (status === 'loading') {
     return (
       <Box role="status" aria-live="polite" sx={{ p: 2 }}>
@@ -280,6 +306,14 @@ export default function EditSequence({
                 disabled={!canSave || saveState === 'saving'}
               >
                 {saveState === 'saving' ? 'Saving…' : 'Save changes'}
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => setConfirmDeleteSeq(true)}
+                aria-label="Delete sequence"
+              >
+                Delete sequence
               </Button>
               {saveState === 'saved' && (
                 <Typography color="success.main" sx={{ ml: 1 }}>
@@ -532,6 +566,34 @@ export default function EditSequence({
           </Stack>
         </CardContent>
       </Card>
+
+      <Dialog
+        open={confirmDeleteSeq}
+        onClose={() => setConfirmDeleteSeq(false)}
+        aria-labelledby="confirm-delete-sequence-title"
+      >
+        <DialogTitle id="confirm-delete-sequence-title">
+          Delete this sequence?
+        </DialogTitle>
+        <DialogContent>
+          <Typography>
+            This will permanently delete the sequence "{model.nameSequence}".
+            This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmDeleteSeq(false)} autoFocus>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDeleteSequence}
+            color="error"
+            variant="contained"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }
