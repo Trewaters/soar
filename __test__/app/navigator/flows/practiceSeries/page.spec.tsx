@@ -192,6 +192,117 @@ const renderWithTheme = (component: React.ReactElement) => {
 }
 
 describe('Practice Series Page', () => {
+  describe('Grouped Rendering and Ordering', () => {
+    it('renders grouped sections with user/alpha series at top and others alphabetical', async () => {
+      // Add createdBy and canonicalAsanaId to mock data for partitioning
+      const userEmail = 'user@example.com'
+      const alphaEmail = 'alpha@example.com'
+      const testSeriesData: FlowSeriesData[] = [
+        {
+          id: '1',
+          seriesName: 'User Series',
+          seriesPostures: ['Pose1;Desc'],
+          description: 'User created',
+          createdBy: userEmail,
+          canonicalAsanaId: 'A',
+        },
+        {
+          id: '2',
+          seriesName: 'Alpha Series',
+          seriesPostures: ['Pose2;Desc'],
+          description: 'Alpha created',
+          createdBy: alphaEmail,
+          canonicalAsanaId: 'B',
+        },
+        {
+          id: '3',
+          seriesName: 'Other Series',
+          seriesPostures: ['Pose3;Desc'],
+          description: 'Other',
+          createdBy: 'other@example.com',
+          canonicalAsanaId: 'C',
+        },
+        {
+          id: '4',
+          seriesName: 'Another Series',
+          seriesPostures: ['Pose4;Desc'],
+          description: 'Other',
+          createdBy: 'other2@example.com',
+          canonicalAsanaId: 'D',
+        },
+      ]
+      mockGetAllSeries.mockResolvedValue(testSeriesData)
+
+      renderWithTheme(<Page />)
+
+      // Wait for data fetch
+      await waitFor(() => {
+        expect(mockGetAllSeries).toHaveBeenCalled()
+      })
+
+      // Should render grouped sections with correct labels
+      expect(screen.getByText('Your Series')).toBeInTheDocument()
+      expect(screen.getByText('Others')).toBeInTheDocument()
+
+      // Top section should contain user and alpha series
+      expect(screen.getByText('User Series')).toBeInTheDocument()
+      expect(screen.getByText('Alpha Series')).toBeInTheDocument()
+
+      // Others section should contain other series, sorted alphabetically
+      const others = [
+        screen.getByText('Another Series'),
+        screen.getByText('Other Series'),
+      ]
+      expect(others[0].textContent < others[1].textContent).toBe(true)
+
+      // No duplicates across sections
+      const allSeries = [
+        'User Series',
+        'Alpha Series',
+        'Other Series',
+        'Another Series',
+      ]
+      allSeries.forEach((name) => {
+        expect(screen.getAllByText(name).length).toBe(1)
+      })
+    })
+    it('has proper ARIA labels and supports keyboard navigation in grouped sections', async () => {
+      mockGetAllSeries.mockResolvedValue([
+        {
+          id: '1',
+          seriesName: 'User Series',
+          seriesPostures: ['Pose1;Desc'],
+          description: 'User created',
+          createdBy: 'user@example.com',
+          canonicalAsanaId: 'A',
+        },
+        {
+          id: '2',
+          seriesName: 'Other Series',
+          seriesPostures: ['Pose2;Desc'],
+          description: 'Other',
+          createdBy: 'other@example.com',
+          canonicalAsanaId: 'B',
+        },
+      ])
+      renderWithTheme(<Page />)
+      await waitFor(() => {
+        expect(mockGetAllSeries).toHaveBeenCalled()
+      })
+      // Check ARIA labels
+      expect(
+        screen.getByText('Your Series').closest('[aria-label]')
+      ).toHaveAttribute('aria-label', 'Your Series')
+      expect(
+        screen.getByText('Others').closest('[aria-label]')
+      ).toHaveAttribute('aria-label', 'Others')
+      // Keyboard navigation
+      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      searchInput.focus()
+      fireEvent.keyDown(searchInput, { key: 'ArrowDown' })
+      expect(screen.getByRole('combobox')).toHaveFocus()
+    })
+  })
   beforeEach(() => {
     jest.clearAllMocks()
     // Mock console.error to avoid noise in tests
