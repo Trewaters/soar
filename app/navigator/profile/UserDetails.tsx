@@ -890,7 +890,7 @@ export default function UserDetails() {
               <Stack
                 direction="row"
                 spacing={2}
-                justifyContent="flex-end"
+                justifyContent="space-around"
                 sx={{ width: '100%' }}
               >
                 <Button
