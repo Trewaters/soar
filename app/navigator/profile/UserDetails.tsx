@@ -422,7 +422,7 @@ export default function UserDetails() {
         .share({
           title: `UvuYoga Practitioner ${userData?.name || 'UvuYoga App Profile'}`,
           text:
-            (userData?.headline || 'Check out my yoga profile!') +
+            (userData?.headline ?? 'Check out my yoga profile!') +
             (userData?.shareQuick ? `\n\n${userData.shareQuick}` : '') +
             (userData?.yogaStyle
               ? `\n\nYoga Style: ${userData.yogaStyle}`
@@ -431,8 +431,10 @@ export default function UserDetails() {
               ? `\n\nYoga Experience: ${userData.yogaExperience}`
               : '') +
             (userData?.company ? `\n\nCompany: ${userData.company}` : '') +
-            (userData?.location ? `\n\nCompany: ${userData.location}` : '') +
-            (userData?.websiteURL ? `\n\nCompany: ${userData.websiteURL}` : ''),
+            (userData?.location ? `\n\nLocation: ${userData.location}` : '') +
+            (userData?.websiteURL
+              ? `\n\nMy Website: ${userData.websiteURL}`
+              : ''),
           url: window.location.href,
         })
         .then(() => {
