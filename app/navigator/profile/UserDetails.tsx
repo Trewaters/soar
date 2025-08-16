@@ -420,10 +420,19 @@ export default function UserDetails() {
     if (navigator.share) {
       navigator
         .share({
-          title: `Yoga Practitioner ${userData?.name || 'Happy Yoga'}`,
+          title: `UvuYoga Practitioner ${userData?.name || 'UvuYoga App Profile'}`,
           text:
             (userData?.headline || 'Check out my yoga profile!') +
-            (userData?.shareQuick ? `\n${userData.shareQuick}` : ''),
+            (userData?.shareQuick ? `\n\n${userData.shareQuick}` : '') +
+            (userData?.yogaStyle
+              ? `\n\nYoga Style: ${userData.yogaStyle}`
+              : '') +
+            (userData?.yogaExperience
+              ? `\n\nYoga Experience: ${userData.yogaExperience}`
+              : '') +
+            (userData?.company ? `\n\nCompany: ${userData.company}` : '') +
+            (userData?.location ? `\n\nCompany: ${userData.location}` : '') +
+            (userData?.websiteURL ? `\n\nCompany: ${userData.websiteURL}` : ''),
           url: window.location.href,
         })
         .then(() => {
