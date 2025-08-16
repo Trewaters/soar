@@ -721,20 +721,6 @@ export default function UserDetails() {
                           {userData.location || 'No location provided'}
                         </Typography>
                       </Stack>
-                      {/* Move Manage Profile Images button above Save button */}
-                      <Stack
-                        direction="row"
-                        spacing={2}
-                        justifyContent="flex-end"
-                      >
-                        <Button
-                          variant="outlined"
-                          aria-label="Open profile image manager"
-                          onClick={() => setImageManagerOpen(true)}
-                        >
-                          Manage Profile Images
-                        </Button>
-                      </Stack>
                     </Stack>
                   </CardContent>
                 </Collapse>
@@ -889,13 +875,21 @@ export default function UserDetails() {
               <FormHelperText>
                 Your email address cannot be changed.
               </FormHelperText>
-
+              {/* Move Manage Profile Images button above Save button */}
               <Stack
                 direction="row"
                 spacing={2}
                 justifyContent="flex-end"
                 sx={{ width: '100%' }}
               >
+                <Button
+                  variant="outlined"
+                  aria-label="Open profile image manager"
+                  onClick={() => setImageManagerOpen(true)}
+                >
+                  Manage Profile Images
+                </Button>
+
                 <Button
                   type="submit"
                   disabled={loading}
