@@ -73,42 +73,49 @@ export default function Header() {
         href: '/',
         icon: <HomeIcon />,
         action: null,
+        color: 'gray',
       },
       {
         name: '8 Limbs',
         href: '/navigator/eightLimbs',
         icon: <FlareIcon />,
         action: null,
+        color: 'gray',
       },
       {
         name: 'Asanas',
         href: '/navigator/asanaPostures',
-        icon: <WaterDropOutlinedIcon />,
+        icon: <WaterDropOutlinedIcon color="primary" />,
         action: null,
+        color: 'primary',
       },
       {
         name: 'Flows',
         href: '/navigator/flows',
-        icon: <WhatshotIcon />,
+        icon: <WhatshotIcon color="primary" />,
         action: null,
+        color: 'primary',
       },
       {
         name: 'About',
         href: '/navigator/about',
         icon: <InfoIcon />,
         action: null,
+        color: 'gray',
       },
       {
         name: 'Profile',
         href: '/navigator/profile',
         icon: <ManageAccountsIcon />,
         action: null,
+        color: 'gray',
       },
       {
         name: 'Glossary',
         href: '/navigator/glossary',
         icon: <MenuBookIcon />,
         action: null,
+        color: 'gray',
       },
       // final item will have a divider above it
       {
@@ -116,6 +123,7 @@ export default function Header() {
         href: '#',
         icon: <AdminPanelSettingsIcon />,
         action: handleAuthAction,
+        color: 'gray',
       },
     ],
     [handleAuthAction]
@@ -157,7 +165,9 @@ export default function Header() {
                     >
                       <ListItemIcon>{navItem.icon}</ListItemIcon>
                       <ListItemText>
-                        <Typography variant="button">{navItem.name}</Typography>
+                        <Typography variant="button" color={navItem.color}>
+                          {navItem.name}
+                        </Typography>
                       </ListItemText>
                     </ListItemButton>
                   </Link>
