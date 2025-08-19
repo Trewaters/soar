@@ -39,6 +39,14 @@ export default function Header() {
     setOpenDrawer(open)
   }
 
+  // Get current pathname for highlighting
+  const [currentPath, setCurrentPath] = React.useState<string>('')
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentPath(window.location.pathname)
+    }
+  }, [window.location.pathname])
+
   const handleAuthAction = useCallback(async () => {
     if (status === 'loading' || isAuthLoading) return // Don't allow action while loading
 
@@ -70,7 +78,7 @@ export default function Header() {
     () => [
       {
         name: 'Home',
-        href: '/',
+        href: '/navigator',
         icon: <HomeIcon />,
         action: null,
         color: 'gray',
@@ -133,48 +141,70 @@ export default function Header() {
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <nav aria-label="main navigation menu">
         <List>
-          {navLinks.map((navItem, index) => (
-            <React.Fragment key={navItem.name}>
-              {index === navLinks.length - 1 && <Divider />}
-              <ListItem disablePadding>
-                {navItem.action ? (
-                  <ListItemButton
-                    component="button"
-                    sx={{ width: 250 }}
-                    onClick={async (e) => {
-                      e.preventDefault()
-                      setOpenDrawer(false)
-                      await navItem.action()
-                    }}
-                  >
-                    <ListItemIcon>{navItem.icon}</ListItemIcon>
-                    <ListItemText>
-                      <Typography variant="button">
-                        {getAuthButtonText()}
-                      </Typography>
-                    </ListItemText>
-                  </ListItemButton>
-                ) : (
-                  <Link href={navItem.href} passHref legacyBehavior>
+          {navLinks.map((navItem, index) => {
+            const isSelected = !!navItem.href && currentPath === navItem.href
+            return (
+              <React.Fragment key={navItem.name}>
+                {index === navLinks.length - 1 && <Divider />}
+                <ListItem disablePadding>
+                  {navItem.action ? (
                     <ListItemButton
                       component="button"
                       sx={{ width: 250 }}
-                      onClick={() => {
+                      onClick={async (e) => {
+                        e.preventDefault()
                         setOpenDrawer(false)
+                        await navItem.action()
                       }}
                     >
                       <ListItemIcon>{navItem.icon}</ListItemIcon>
                       <ListItemText>
-                        <Typography variant="button" color={navItem.color}>
-                          {navItem.name}
+                        <Typography variant="button">
+                          {getAuthButtonText()}
                         </Typography>
                       </ListItemText>
                     </ListItemButton>
-                  </Link>
-                )}
-              </ListItem>
-            </React.Fragment>
-          ))}
+                  ) : (
+                    <Link href={navItem.href} passHref legacyBehavior>
+                      <ListItemButton
+                        component="button"
+                        sx={{
+                          width: 250,
+                          bgcolor: isSelected ? 'secondary.light' : undefined,
+                          color: isSelected
+                            ? 'primary.contrastText'
+                            : navItem.color,
+                          '&:hover': {
+                            bgcolor: 'primary.light',
+                            color: 'black',
+                            '& .MuiTypography-button': {
+                              color:
+                                navItem.color === 'primary'
+                                  ? 'primary.main'
+                                  : 'text.primary',
+                            },
+                          },
+                          '&.Mui-disabled': {
+                            opacity: 0.5,
+                          },
+                        }}
+                        onClick={() => {
+                          setOpenDrawer(false)
+                        }}
+                      >
+                        <ListItemIcon>{navItem.icon}</ListItemIcon>
+                        <ListItemText>
+                          <Typography variant="button" color={navItem.color}>
+                            {navItem.name}
+                          </Typography>
+                        </ListItemText>
+                      </ListItemButton>
+                    </Link>
+                  )}
+                </ListItem>
+              </React.Fragment>
+            )
+          })}
         </List>
       </nav>
     </Box>

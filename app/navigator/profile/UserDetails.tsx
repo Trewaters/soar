@@ -425,7 +425,9 @@ export default function UserDetails() {
             (userData?.headline
               ? `\n\n${userData.headline}`
               : 'Check out my yoga profile!') +
-            (userData?.shareQuick ? `\n\n${userData.shareQuick}` : '') +
+            (userData?.shareQuick
+              ? `\n\n${userData.shareQuick}`
+              : `\n\n${formData.shareQuick}`) +
             (userData?.yogaStyle
               ? `\n\nYoga Style: ${userData.yogaStyle}`
               : '') +
@@ -437,7 +439,6 @@ export default function UserDetails() {
             (userData?.websiteURL
               ? `\n\nMy Website: ${userData.websiteURL}`
               : ''),
-          url: window.location.href,
         })
         .then(() => {
           setError('Profile shared successfully!')
