@@ -13,7 +13,6 @@ import {
 import { createPosture } from '@lib/postureService'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import NavBottom from '@serverComponents/navBottom'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
@@ -490,9 +489,6 @@ export default function Page() {
           required except for preferred side.
         </Typography>
       </Drawer>
-
-      <Box height={'72px'} />
-      <NavBottom subRoute="/navigator/asanaPostures" />
 
       {/* Freemium Notification */}
       <FreemiumNotification

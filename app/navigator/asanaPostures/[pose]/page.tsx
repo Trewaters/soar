@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { getPostureByName } from '@lib/postureService'
 import PostureActivityDetail from './postureActivityDetail'
 import { Box } from '@mui/material'
-import NavBottom from '@serverComponents/navBottom'
 import { QuickTimer } from '@app/clientComponents/quickTimer'
 import { FullAsanaData } from '@app/context/AsanaPostureContext'
 
@@ -67,7 +66,6 @@ export default function Page({ params }: { params: { pose: string } }) {
           />
         </Box>
       </Box>
-      <NavBottom subRoute="/navigator/asanaPostures" />
     </>
   )
 }

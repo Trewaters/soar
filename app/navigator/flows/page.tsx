@@ -4,7 +4,6 @@ import { Box } from '@mui/material'
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 
-import NavBottom from '@serverComponents/navBottom'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
 import {
@@ -131,8 +130,6 @@ export default function Page() {
           onClick={handleCreateSequenceClick}
         />
       </Box>
-      <Box height={'72px'} />
-      <NavBottom subRoute="/navigator/flows" />
 
       {/* Freemium Notification */}
       {notificationState.featureType && (

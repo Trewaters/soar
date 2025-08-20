@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import { getAllPostures } from '@lib/postureService'
 import SplashHeader from '@app/clientComponents/splash-header'
-import NavBottom from '@serverComponents/navBottom'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 import { FullAsanaData } from '@app/context/AsanaPostureContext'
@@ -156,8 +155,6 @@ export default function Page() {
           </Typography>
         </Box>
       </Box>
-      <Box height={'72px'} />
-      <NavBottom subRoute="/navigator/asanaPostures" />
     </>
   )
 }

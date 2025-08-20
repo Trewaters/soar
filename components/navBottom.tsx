@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { AppBar, IconButton } from '@mui/material'
+import { Box, IconButton } from '@mui/material'
 import HomeIcon from '@mui/icons-material/Home'
 import PersonIcon from '@mui/icons-material/Person'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -66,22 +66,26 @@ export default function NavBottom(props: { subRoute: string }) {
   }
 
   return (
-    <AppBar
+    <Box
       component="nav"
       aria-label="Bottom navigation"
-      position="static"
       sx={{
+        position: 'fixed',
         backgroundColor: 'info.contrastText',
         borderTopRightRadius: 0,
         borderTopLeftRadius: 0,
         width: { sm: '100vw', md: '40vw' },
+        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
         px: 2,
-        bottom: 0,
-        position: 'fixed',
+        top: 'auto !important',
+        bottom: '0 !important',
         left: { sm: '0', md: '30vw' },
+        right: 'auto',
         height: '66px',
+        zIndex: (theme) => theme.zIndex.appBar,
         justifySelf: 'center',
       }}
     >
@@ -116,6 +120,6 @@ export default function NavBottom(props: { subRoute: string }) {
           })}
         </IconButton>
       ))}
-    </AppBar>
+    </Box>
   )
 }

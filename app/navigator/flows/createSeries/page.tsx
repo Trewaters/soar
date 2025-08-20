@@ -35,7 +35,6 @@ import SplashHeader from '@app/clientComponents/splash-header'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AutocompleteComponent from '@app/clientComponents/autocomplete-search'
 import Image from 'next/image'
-import NavBottom from '@serverComponents/navBottom'
 import { AppText } from '@app/navigator/constants/Strings'
 
 export default function Page() {
@@ -584,11 +583,9 @@ export default function Page() {
           </Stack>
         </Drawer>
       </Box>
-      <Box height={'72px'} />
       {/* 
       TODO: add snackbar message for success/failure no
       */}
-      <NavBottom subRoute="/navigator/flows" />
     </>
   )
 }

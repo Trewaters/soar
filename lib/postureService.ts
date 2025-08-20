@@ -80,8 +80,6 @@ export async function createPosture(
   input: CreatePostureInput
 ): Promise<FullAsanaData> {
   try {
-    console.log('Creating posture with input:', input)
-
     const response = await fetch('/api/poses/createAsana', {
       method: 'POST',
       headers: {
@@ -91,18 +89,14 @@ export async function createPosture(
       body: JSON.stringify(input),
     })
 
-    console.log('Create posture response status:', response.status)
-
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
-      console.error('Create posture failed:', errorData)
       throw new Error(
         `Failed to create posture: ${errorData.error || response.statusText}`
       )
     }
 
     const data = await response.json()
-    console.log('Created posture response:', data)
 
     if (!data || Object.keys(data).length === 0) {
       throw new Error('Received empty data object')
@@ -130,9 +124,6 @@ export async function updatePosture(
   input: UpdatePostureInput
 ): Promise<FullAsanaData> {
   try {
-    console.log('Updating posture with ID:', id)
-    console.log('Update input:', input)
-
     const response = await fetch(`/api/poses/${id}`, {
       method: 'PUT',
       headers: {
@@ -141,8 +132,6 @@ export async function updatePosture(
       },
       body: JSON.stringify(input),
     })
-
-    console.log('Update posture response status:', response.status)
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
@@ -153,7 +142,6 @@ export async function updatePosture(
     }
 
     const data = await response.json()
-    console.log('Updated posture response:', data)
 
     if (!data || Object.keys(data).length === 0) {
       throw new Error('Received empty data object')
@@ -179,16 +167,12 @@ export async function updatePosture(
  */
 export async function deletePosture(id: string): Promise<{ success: boolean }> {
   try {
-    console.log('Deleting posture with ID:', id)
-
     const response = await fetch(`/api/poses/${id}`, {
       method: 'DELETE',
       headers: {
         'Cache-Control': 'no-cache',
       },
     })
-
-    console.log('Delete posture response status:', response.status)
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
@@ -199,7 +183,6 @@ export async function deletePosture(id: string): Promise<{ success: boolean }> {
     }
 
     const data = await response.json()
-    console.log('Deleted posture response:', data)
     return data
   } catch (error) {
     logServiceError(error, 'postureService', 'deletePosture', {

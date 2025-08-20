@@ -1,9 +1,13 @@
 'use client'
 import { Box } from '@mui/material'
 import Header from '@serverComponents/header'
+import NavBottom from '@serverComponents/navBottom'
 import { ReactNode } from 'react'
+import { usePathname } from 'next/navigation'
 
 export default function NavigatorLayout({ children }: { children: ReactNode }) {
+  const pathname = usePathname()
+
   return (
     <>
       {/* Skip link */}
@@ -32,13 +36,15 @@ export default function NavigatorLayout({ children }: { children: ReactNode }) {
         id="main-content"
         role="main"
         sx={{
-          minHeight: 'calc(100vh - 69px)', // Account for header height
-          pb: 20, // 20 * 4 = 80px bottom padding
+          minHeight: 'calc(100vh - 69px - 66px)', // Account for header height (69px) and bottom nav height (66px)
+          pb: '74px', // Bottom padding: 66px (nav height) + 8px (additional spacing)
           overflowY: 'auto',
         }}
       >
         {children}
       </Box>
+      {/* Bottom Navigation - appears on all navigator pages */}
+      <NavBottom subRoute={pathname} />
     </>
   )
 }

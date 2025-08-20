@@ -132,15 +132,6 @@ export default function ActivityStreaks({
               const activityResponse = await response.json()
               const loginData = activityResponse.streakData
 
-              console.log(
-                'ActivityStreaks: Successfully recorded activity and got streak data:',
-                {
-                  loginRecorded: activityResponse.loginRecorded,
-                  loginData,
-                  timestamp: new Date().toISOString(),
-                }
-              )
-
               fetchedStreaks.push({
                 type: 'login',
                 currentStreak: loginData.currentStreak,
@@ -188,15 +179,6 @@ export default function ActivityStreaks({
                   parseError
                 )
               }
-
-              console.warn('ActivityStreaks: Client error response:', {
-                status: response.status,
-                statusText: response.statusText,
-                errorDetails,
-                url: response.url,
-                userId: session.user.id,
-                timestamp: new Date().toISOString(),
-              })
 
               fetchedStreaks.push({
                 type: 'login',
@@ -246,7 +228,7 @@ export default function ActivityStreaks({
           streakTypes.includes('login') &&
           fetchedStreaks.length === 0
         ) {
-          console.warn(
+          console.error(
             'ActivityStreaks: Adding fallback data due to network error:',
             {
               hasNetworkError,

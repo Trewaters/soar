@@ -3,7 +3,6 @@
 import { Box } from '@mui/material'
 import SplashHeader from '@app/clientComponents/splash-header'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
-import NavBottom from '@serverComponents/navBottom'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
 
 export default function Page() {
@@ -70,8 +69,6 @@ export default function Page() {
           onClick={handleCreateAsanaClick}
         />
       </Box>
-      <Box height={'72px'} />
-      <NavBottom subRoute="/navigator/asanaPostures" />
     </>
   )
 }

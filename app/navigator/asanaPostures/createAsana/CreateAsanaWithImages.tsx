@@ -14,7 +14,6 @@ import { useAsanaPosture } from '@app/context/AsanaPostureContext'
 import { createPosture, type CreatePostureInput } from '@lib/postureService'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import NavBottom from '@serverComponents/navBottom'
 import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
 import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUpload'
 
@@ -374,10 +373,6 @@ export default function CreateAsanaWithImages() {
           </Grid>
         </form>
       </Box>
-
-      <Stack sx={{ position: 'fixed', bottom: 0 }}>
-        <NavBottom subRoute="/navigator/asanaPostures" />
-      </Stack>
     </>
   )
 }

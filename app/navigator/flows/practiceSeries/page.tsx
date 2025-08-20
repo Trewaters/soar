@@ -20,7 +20,6 @@ import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
-import NavBottom from '@serverComponents/navBottom'
 import PostureShareButton from '@app/clientComponents/postureShareButton'
 import { getAllSeries, deleteSeries, updateSeries } from '@lib/seriesService'
 import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
@@ -555,9 +554,7 @@ export default function Page() {
       >
         <Typography variant="body1">Pick a Series to practice.</Typography>
       </Drawer>
-      <Box height={'72px'} />
 
-      <NavBottom subRoute="/navigator/flows" />
       {dialogSeries && (
         <EditSeriesDialog
           open={editOpen}

@@ -20,7 +20,6 @@ import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
 import { SequenceData, getAllSequences } from '@lib/sequenceService'
-import NavBottom from '@serverComponents/navBottom'
 import React from 'react'
 import Image from 'next/image'
 import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
@@ -603,9 +602,6 @@ export default function Page() {
           </Stack>
         </Stack>
       </Box>
-      <Box height={'72px'} />
-
-      <NavBottom subRoute="/navigator/flows" />
     </>
   )
 }
