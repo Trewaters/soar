@@ -89,6 +89,8 @@ export default function NavBottom(props: { subRoute: string }) {
         <IconButton
           key={item.id}
           disableRipple
+          disableFocusRipple
+          disableTouchRipple
           disabled={item.id === 'profile' && !isAuthenticated} // Disable profile when not authenticated
           aria-label={item.label}
           title={item.label}
@@ -97,6 +99,9 @@ export default function NavBottom(props: { subRoute: string }) {
           sx={{
             color: item.getColor(isAuthenticated),
             '&:focus': {
+              outline: 'none', // Remove focus outline
+            },
+            '&:focus-visible': {
               outline: '2px solid',
               outlineColor: 'primary.main',
               outlineOffset: '2px',
