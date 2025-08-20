@@ -177,7 +177,7 @@ documentation/
 ### 1. Profile Forms
 
 ```typescript
-// Already integrated in UserDetails.tsx
+// Already integrated in EditUserDetails.tsx
 <TextInputField
   label="Name"
   value={practitioner.name}

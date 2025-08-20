@@ -56,7 +56,7 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import UserDetails from '@app/navigator/profile/UserDetails'
+import EditUserDetails from '@app/navigator/profile/editUserDetails'
 import { UseUser } from '@app/context/UserContext'
 import '@testing-library/jest-dom'
 
@@ -168,7 +168,7 @@ const mockUseSession = useSession as jest.MockedFunction<typeof useSession>
 const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>
 const mockUseUser = UseUser as jest.MockedFunction<typeof UseUser>
 
-describe('UserDetails - LocationPicker Integration', () => {
+describe('EditUserDetails - LocationPicker Integration', () => {
   const mockRouterPush = jest.fn()
 
   beforeEach(() => {
@@ -207,7 +207,7 @@ describe('UserDetails - LocationPicker Integration', () => {
         status: 'unauthenticated',
       } as any)
 
-      render(<UserDetails />)
+      render(<EditUserDetails />)
 
       expect(
         screen.getByRole('button', { name: /sign in to view your profile/i })
@@ -221,7 +221,7 @@ describe('UserDetails - LocationPicker Integration', () => {
         status: 'authenticated',
       } as any)
 
-      render(<UserDetails />)
+      render(<EditUserDetails />)
 
       await waitFor(() => {
         expect(screen.getByText('My Location')).toBeInTheDocument()
@@ -241,7 +241,7 @@ describe('UserDetails - LocationPicker Integration', () => {
     })
 
     it('renders LocationPicker with correct props', async () => {
-      render(<UserDetails />)
+      render(<EditUserDetails />)
 
       await waitFor(() => {
         expect(screen.getByText('My Location')).toBeInTheDocument()
@@ -270,7 +270,7 @@ describe('UserDetails - LocationPicker Integration', () => {
         dispatch: mockDispatch,
       } as any)
 
-      render(<UserDetails />)
+      render(<EditUserDetails />)
 
       await waitFor(() => {
         const locationInput = screen.getByPlaceholderText(
@@ -291,7 +291,7 @@ describe('UserDetails - LocationPicker Integration', () => {
     it('requests current location when button is clicked', async () => {
       const user = userEvent.setup()
 
-      render(<UserDetails />)
+      render(<EditUserDetails />)
 
       await waitFor(() => {
         const currentLocationBtn = screen.getByTitle('Use current location')
@@ -310,7 +310,7 @@ describe('UserDetails - LocationPicker Integration', () => {
         // Don't call success immediately to simulate loading
       })
 
-      render(<UserDetails />)
+      render(<EditUserDetails />)
       await waitFor(() => {
         const currentLocationBtn = screen.getByTitle('Use current location')
         expect(currentLocationBtn).toBeInTheDocument()
@@ -349,7 +349,7 @@ describe('UserDetails - LocationPicker Integration', () => {
     it('includes location data in form submission', async () => {
       const user = userEvent.setup()
 
-      render(<UserDetails />)
+      render(<EditUserDetails />)
 
       await waitFor(() => {
         const saveButton = screen.getByRole('button', { name: /save/i })
@@ -392,7 +392,7 @@ describe('UserDetails - LocationPicker Integration', () => {
         status: 500,
       })
 
-      render(<UserDetails />)
+      render(<EditUserDetails />)
 
       await waitFor(() => {
         const saveButton = screen.getByRole('button', { name: /save/i })
@@ -426,7 +426,7 @@ describe('UserDetails - LocationPicker Integration', () => {
           )
       )
 
-      render(<UserDetails />)
+      render(<EditUserDetails />)
 
       await waitFor(() => {
         const saveButton = screen.getByRole('button', { name: /save/i })
@@ -454,7 +454,7 @@ describe('UserDetails - LocationPicker Integration', () => {
   })
 
   it('displays helper text explaining location benefits', async () => {
-    render(<UserDetails />)
+    render(<EditUserDetails />)
 
     await waitFor(() => {
       expect(
@@ -488,7 +488,7 @@ describe('UserDetails - LocationPicker Integration', () => {
       callback(mockPlaceDetails, 'OK')
     })
 
-    render(<UserDetails />)
+    render(<EditUserDetails />)
 
     await waitFor(() => {
       const locationInput = screen.getByPlaceholderText(
@@ -534,7 +534,7 @@ describe('Edge Cases and Boundary Conditions', () => {
       dispatch: mockDispatch,
     } as any)
 
-    render(<UserDetails />)
+    render(<EditUserDetails />)
 
     await waitFor(() => {
       const locationInput = screen.getByPlaceholderText(
@@ -550,7 +550,7 @@ describe('Edge Cases and Boundary Conditions', () => {
     const longLocationName =
       'A Very Long Location Name That Exceeds Normal Length Limits'
 
-    render(<UserDetails />)
+    render(<EditUserDetails />)
 
     await waitFor(() => {
       const locationInput = screen.getByPlaceholderText(
@@ -573,7 +573,7 @@ describe('Edge Cases and Boundary Conditions', () => {
     const user = userEvent.setup()
     const specialLocationName = 'Saint-Jean-sur-Richelieu, Québec'
 
-    render(<UserDetails />)
+    render(<EditUserDetails />)
 
     await waitFor(() => {
       const locationInput = screen.getByPlaceholderText(
@@ -595,7 +595,7 @@ describe('Edge Cases and Boundary Conditions', () => {
   it('does not fetch predictions for short input', async () => {
     const user = userEvent.setup()
 
-    render(<UserDetails />)
+    render(<EditUserDetails />)
 
     await waitFor(() => {
       const locationInput = screen.getByPlaceholderText(
@@ -630,7 +630,7 @@ describe('User Context Integration', () => {
       dispatch: mockDispatch,
     } as any)
 
-    render(<UserDetails />)
+    render(<EditUserDetails />)
 
     expect(mockDispatch).toHaveBeenCalledWith({
       type: 'SET_USER',

@@ -42,7 +42,7 @@ This document describes the integration of Google Maps API with the "My Location
 
 ### Integration Points
 
-- **UserDetails.tsx**: Replaced standard TextField with LocationPicker
+- **EditUserDetails.tsx**: Replaced standard TextField with LocationPicker
 - **UserContext.tsx**: Uses existing location field (no changes needed)
 - **Prisma Schema**: Uses existing location String field
 

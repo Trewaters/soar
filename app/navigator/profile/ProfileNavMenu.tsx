@@ -74,12 +74,6 @@ const ProfileNavMenu: React.FC = () => {
       badge: 'New',
     },
     {
-      id: 'edit-profile',
-      label: 'Edit Profile',
-      icon: <EditIcon />,
-      href: '/navigator/profile',
-    },
-    {
       id: 'account-settings',
       label: 'Account Settings',
       icon: <SettingsIcon />,
