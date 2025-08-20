@@ -1,0 +1,38 @@
+[
+  {
+    "term": "Asana",
+    "definition": "A physical posture or pose in yoga practice designed to build strength, flexibility, and awareness.",
+    "category": "foundational",
+    "source": "default",
+    "sanskrit": "Āsana",
+    "pronunciation": "AH-suh-nuh",
+    "whyMatters": "Forms the structural foundation of physical yoga practice and supports alignment and breath awareness."
+  },
+  {
+    "term": "Pranayama",
+    "definition": "The yogic practice of breath regulation to influence life force (prana) and mental state.",
+    "category": "breath",
+    "source": "default",
+    "sanskrit": "Prāṇāyāma",
+    "pronunciation": "PRAA-nuh-YAA-muh",
+    "whyMatters": "Balances the nervous system, deepens focus, and prepares the mind for meditation."
+  },
+  {
+    "term": "Dhyana",
+    "definition": "Meditative absorption; sustained, effortless concentration leading toward stillness.",
+    "category": "meditation",
+    "source": "default",
+    "sanskrit": "Dhyāna",
+    "pronunciation": "dhyah-nuh",
+    "whyMatters": "Cultivates clarity, equanimity, and deeper self-awareness."
+  },
+  {
+    "term": "Mantra",
+    "definition": "A sacred sound, word, or phrase repeated to focus the mind and refine awareness.",
+    "category": "sound",
+    "source": "default",
+    "sanskrit": "Mantra",
+    "pronunciation": "MAHN-truh",
+    "whyMatters": "Supports mental focus, energetic resonance, and emotional regulation."
+  }
+]

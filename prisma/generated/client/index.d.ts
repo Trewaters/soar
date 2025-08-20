@@ -81,11 +81,24 @@ export namespace $Enums {
 
 export type StorageType = (typeof StorageType)[keyof typeof StorageType]
 
+
+export const GlossarySource: {
+  DEFAULT: 'DEFAULT',
+  ALPHA_USER: 'ALPHA_USER',
+  USER: 'USER'
+};
+
+export type GlossarySource = (typeof GlossarySource)[keyof typeof GlossarySource]
+
 }
 
 export type StorageType = $Enums.StorageType
 
 export const StorageType: typeof $Enums.StorageType
+
+export type GlossarySource = $Enums.GlossarySource
+
+export const GlossarySource: typeof $Enums.GlossarySource
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1761,6 +1774,7 @@ export namespace Prisma {
     sequenceActivities: number
     userLogins: number
     poseImages: number
+    glossaryTerms: number
   }
 
   export type UserDataCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1770,6 +1784,7 @@ export namespace Prisma {
     sequenceActivities?: boolean | UserDataCountOutputTypeCountSequenceActivitiesArgs
     userLogins?: boolean | UserDataCountOutputTypeCountUserLoginsArgs
     poseImages?: boolean | UserDataCountOutputTypeCountPoseImagesArgs
+    glossaryTerms?: boolean | UserDataCountOutputTypeCountGlossaryTermsArgs
   }
 
   // Custom InputTypes
@@ -1823,6 +1838,13 @@ export namespace Prisma {
    */
   export type UserDataCountOutputTypeCountPoseImagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PoseImageWhereInput
+  }
+
+  /**
+   * UserDataCountOutputType without action
+   */
+  export type UserDataCountOutputTypeCountGlossaryTermsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GlossaryTermWhereInput
   }
 
 
@@ -2192,6 +2214,7 @@ export namespace Prisma {
     sequenceActivities?: boolean | UserData$sequenceActivitiesArgs<ExtArgs>
     userLogins?: boolean | UserData$userLoginsArgs<ExtArgs>
     poseImages?: boolean | UserData$poseImagesArgs<ExtArgs>
+    glossaryTerms?: boolean | UserData$glossaryTermsArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userData"]>
 
@@ -2231,6 +2254,7 @@ export namespace Prisma {
     sequenceActivities?: boolean | UserData$sequenceActivitiesArgs<ExtArgs>
     userLogins?: boolean | UserData$userLoginsArgs<ExtArgs>
     poseImages?: boolean | UserData$poseImagesArgs<ExtArgs>
+    glossaryTerms?: boolean | UserData$glossaryTermsArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -2243,6 +2267,7 @@ export namespace Prisma {
       sequenceActivities: Prisma.$SequenceActivityPayload<ExtArgs>[]
       userLogins: Prisma.$UserLoginPayload<ExtArgs>[]
       poseImages: Prisma.$PoseImagePayload<ExtArgs>[]
+      glossaryTerms: Prisma.$GlossaryTermPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2642,6 +2667,7 @@ export namespace Prisma {
     sequenceActivities<T extends UserData$sequenceActivitiesArgs<ExtArgs> = {}>(args?: Subset<T, UserData$sequenceActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SequenceActivityPayload<ExtArgs>, T, "findMany"> | Null>
     userLogins<T extends UserData$userLoginsArgs<ExtArgs> = {}>(args?: Subset<T, UserData$userLoginsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserLoginPayload<ExtArgs>, T, "findMany"> | Null>
     poseImages<T extends UserData$poseImagesArgs<ExtArgs> = {}>(args?: Subset<T, UserData$poseImagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PoseImagePayload<ExtArgs>, T, "findMany"> | Null>
+    glossaryTerms<T extends UserData$glossaryTermsArgs<ExtArgs> = {}>(args?: Subset<T, UserData$glossaryTermsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GlossaryTermPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3139,6 +3165,26 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PoseImageScalarFieldEnum | PoseImageScalarFieldEnum[]
+  }
+
+  /**
+   * UserData.glossaryTerms
+   */
+  export type UserData$glossaryTermsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GlossaryTerm
+     */
+    select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GlossaryTermInclude<ExtArgs> | null
+    where?: GlossaryTermWhereInput
+    orderBy?: GlossaryTermOrderByWithRelationInput | GlossaryTermOrderByWithRelationInput[]
+    cursor?: GlossaryTermWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GlossaryTermScalarFieldEnum | GlossaryTermScalarFieldEnum[]
   }
 
   /**
@@ -12546,6 +12592,12 @@ export namespace Prisma {
     term: string | null
     meaning: string | null
     whyMatters: string | null
+    category: string | null
+    sanskrit: string | null
+    pronunciation: string | null
+    source: $Enums.GlossarySource | null
+    userId: string | null
+    readOnly: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12555,6 +12607,12 @@ export namespace Prisma {
     term: string | null
     meaning: string | null
     whyMatters: string | null
+    category: string | null
+    sanskrit: string | null
+    pronunciation: string | null
+    source: $Enums.GlossarySource | null
+    userId: string | null
+    readOnly: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -12564,6 +12622,12 @@ export namespace Prisma {
     term: number
     meaning: number
     whyMatters: number
+    category: number
+    sanskrit: number
+    pronunciation: number
+    source: number
+    userId: number
+    readOnly: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -12575,6 +12639,12 @@ export namespace Prisma {
     term?: true
     meaning?: true
     whyMatters?: true
+    category?: true
+    sanskrit?: true
+    pronunciation?: true
+    source?: true
+    userId?: true
+    readOnly?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12584,6 +12654,12 @@ export namespace Prisma {
     term?: true
     meaning?: true
     whyMatters?: true
+    category?: true
+    sanskrit?: true
+    pronunciation?: true
+    source?: true
+    userId?: true
+    readOnly?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12593,6 +12669,12 @@ export namespace Prisma {
     term?: true
     meaning?: true
     whyMatters?: true
+    category?: true
+    sanskrit?: true
+    pronunciation?: true
+    source?: true
+    userId?: true
+    readOnly?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -12675,6 +12757,12 @@ export namespace Prisma {
     term: string
     meaning: string
     whyMatters: string
+    category: string | null
+    sanskrit: string | null
+    pronunciation: string | null
+    source: $Enums.GlossarySource
+    userId: string | null
+    readOnly: boolean
     createdAt: Date
     updatedAt: Date
     _count: GlossaryTermCountAggregateOutputType | null
@@ -12701,8 +12789,15 @@ export namespace Prisma {
     term?: boolean
     meaning?: boolean
     whyMatters?: boolean
+    category?: boolean
+    sanskrit?: boolean
+    pronunciation?: boolean
+    source?: boolean
+    userId?: boolean
+    readOnly?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    user?: boolean | GlossaryTerm$userArgs<ExtArgs>
   }, ExtArgs["result"]["glossaryTerm"]>
 
 
@@ -12711,19 +12806,36 @@ export namespace Prisma {
     term?: boolean
     meaning?: boolean
     whyMatters?: boolean
+    category?: boolean
+    sanskrit?: boolean
+    pronunciation?: boolean
+    source?: boolean
+    userId?: boolean
+    readOnly?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
+  export type GlossaryTermInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | GlossaryTerm$userArgs<ExtArgs>
+  }
 
   export type $GlossaryTermPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "GlossaryTerm"
-    objects: {}
+    objects: {
+      user: Prisma.$UserDataPayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       term: string
       meaning: string
       whyMatters: string
+      category: string | null
+      sanskrit: string | null
+      pronunciation: string | null
+      source: $Enums.GlossarySource
+      userId: string | null
+      readOnly: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["glossaryTerm"]>
@@ -13089,6 +13201,7 @@ export namespace Prisma {
    */
   export interface Prisma__GlossaryTermClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends GlossaryTerm$userArgs<ExtArgs> = {}>(args?: Subset<T, GlossaryTerm$userArgs<ExtArgs>>): Prisma__UserDataClient<$Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13122,6 +13235,12 @@ export namespace Prisma {
     readonly term: FieldRef<"GlossaryTerm", 'String'>
     readonly meaning: FieldRef<"GlossaryTerm", 'String'>
     readonly whyMatters: FieldRef<"GlossaryTerm", 'String'>
+    readonly category: FieldRef<"GlossaryTerm", 'String'>
+    readonly sanskrit: FieldRef<"GlossaryTerm", 'String'>
+    readonly pronunciation: FieldRef<"GlossaryTerm", 'String'>
+    readonly source: FieldRef<"GlossaryTerm", 'GlossarySource'>
+    readonly userId: FieldRef<"GlossaryTerm", 'String'>
+    readonly readOnly: FieldRef<"GlossaryTerm", 'Boolean'>
     readonly createdAt: FieldRef<"GlossaryTerm", 'DateTime'>
     readonly updatedAt: FieldRef<"GlossaryTerm", 'DateTime'>
   }
@@ -13137,6 +13256,10 @@ export namespace Prisma {
      */
     select?: GlossaryTermSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GlossaryTermInclude<ExtArgs> | null
+    /**
      * Filter, which GlossaryTerm to fetch.
      */
     where: GlossaryTermWhereUniqueInput
@@ -13151,6 +13274,10 @@ export namespace Prisma {
      */
     select?: GlossaryTermSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GlossaryTermInclude<ExtArgs> | null
+    /**
      * Filter, which GlossaryTerm to fetch.
      */
     where: GlossaryTermWhereUniqueInput
@@ -13164,6 +13291,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the GlossaryTerm
      */
     select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GlossaryTermInclude<ExtArgs> | null
     /**
      * Filter, which GlossaryTerm to fetch.
      */
@@ -13209,6 +13340,10 @@ export namespace Prisma {
      */
     select?: GlossaryTermSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GlossaryTermInclude<ExtArgs> | null
+    /**
      * Filter, which GlossaryTerm to fetch.
      */
     where?: GlossaryTermWhereInput
@@ -13253,6 +13388,10 @@ export namespace Prisma {
      */
     select?: GlossaryTermSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GlossaryTermInclude<ExtArgs> | null
+    /**
      * Filter, which GlossaryTerms to fetch.
      */
     where?: GlossaryTermWhereInput
@@ -13292,6 +13431,10 @@ export namespace Prisma {
      */
     select?: GlossaryTermSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GlossaryTermInclude<ExtArgs> | null
+    /**
      * The data needed to create a GlossaryTerm.
      */
     data: XOR<GlossaryTermCreateInput, GlossaryTermUncheckedCreateInput>
@@ -13315,6 +13458,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the GlossaryTerm
      */
     select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GlossaryTermInclude<ExtArgs> | null
     /**
      * The data needed to update a GlossaryTerm.
      */
@@ -13348,6 +13495,10 @@ export namespace Prisma {
      */
     select?: GlossaryTermSelect<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GlossaryTermInclude<ExtArgs> | null
+    /**
      * The filter to search for the GlossaryTerm to update in case it exists.
      */
     where: GlossaryTermWhereUniqueInput
@@ -13369,6 +13520,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the GlossaryTerm
      */
     select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GlossaryTermInclude<ExtArgs> | null
     /**
      * Filter which GlossaryTerm to delete.
      */
@@ -13414,6 +13569,21 @@ export namespace Prisma {
   }
 
   /**
+   * GlossaryTerm.user
+   */
+  export type GlossaryTerm$userArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserData
+     */
+    select?: UserDataSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserDataInclude<ExtArgs> | null
+    where?: UserDataWhereInput
+  }
+
+  /**
    * GlossaryTerm without action
    */
   export type GlossaryTermDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -13421,6 +13591,10 @@ export namespace Prisma {
      * Select specific fields to fetch from the GlossaryTerm
      */
     select?: GlossaryTermSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GlossaryTermInclude<ExtArgs> | null
   }
 
 
@@ -13646,6 +13820,12 @@ export namespace Prisma {
     term: 'term',
     meaning: 'meaning',
     whyMatters: 'whyMatters',
+    category: 'category',
+    sanskrit: 'sanskrit',
+    pronunciation: 'pronunciation',
+    source: 'source',
+    userId: 'userId',
+    readOnly: 'readOnly',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -13752,6 +13932,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'GlossarySource'
+   */
+  export type EnumGlossarySourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GlossarySource'>
+    
+
+
+  /**
+   * Reference to a field of type 'GlossarySource[]'
+   */
+  export type ListEnumGlossarySourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GlossarySource[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -13803,6 +13997,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityListRelationFilter
     userLogins?: UserLoginListRelationFilter
     poseImages?: PoseImageListRelationFilter
+    glossaryTerms?: GlossaryTermListRelationFilter
   }
 
   export type UserDataOrderByWithRelationInput = {
@@ -13837,6 +14032,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityOrderByRelationAggregateInput
     userLogins?: UserLoginOrderByRelationAggregateInput
     poseImages?: PoseImageOrderByRelationAggregateInput
+    glossaryTerms?: GlossaryTermOrderByRelationAggregateInput
   }
 
   export type UserDataWhereUniqueInput = Prisma.AtLeast<{
@@ -13874,6 +14070,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityListRelationFilter
     userLogins?: UserLoginListRelationFilter
     poseImages?: PoseImageListRelationFilter
+    glossaryTerms?: GlossaryTermListRelationFilter
   }, "id" | "provider_id" | "email">
 
   export type UserDataOrderByWithAggregationInput = {
@@ -14869,8 +15066,15 @@ export namespace Prisma {
     term?: StringFilter<"GlossaryTerm"> | string
     meaning?: StringFilter<"GlossaryTerm"> | string
     whyMatters?: StringFilter<"GlossaryTerm"> | string
+    category?: StringNullableFilter<"GlossaryTerm"> | string | null
+    sanskrit?: StringNullableFilter<"GlossaryTerm"> | string | null
+    pronunciation?: StringNullableFilter<"GlossaryTerm"> | string | null
+    source?: EnumGlossarySourceFilter<"GlossaryTerm"> | $Enums.GlossarySource
+    userId?: StringNullableFilter<"GlossaryTerm"> | string | null
+    readOnly?: BoolFilter<"GlossaryTerm"> | boolean
     createdAt?: DateTimeFilter<"GlossaryTerm"> | Date | string
     updatedAt?: DateTimeFilter<"GlossaryTerm"> | Date | string
+    user?: XOR<UserDataNullableRelationFilter, UserDataWhereInput> | null
   }
 
   export type GlossaryTermOrderByWithRelationInput = {
@@ -14878,8 +15082,15 @@ export namespace Prisma {
     term?: SortOrder
     meaning?: SortOrder
     whyMatters?: SortOrder
+    category?: SortOrder
+    sanskrit?: SortOrder
+    pronunciation?: SortOrder
+    source?: SortOrder
+    userId?: SortOrder
+    readOnly?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    user?: UserDataOrderByWithRelationInput
   }
 
   export type GlossaryTermWhereUniqueInput = Prisma.AtLeast<{
@@ -14890,8 +15101,15 @@ export namespace Prisma {
     NOT?: GlossaryTermWhereInput | GlossaryTermWhereInput[]
     meaning?: StringFilter<"GlossaryTerm"> | string
     whyMatters?: StringFilter<"GlossaryTerm"> | string
+    category?: StringNullableFilter<"GlossaryTerm"> | string | null
+    sanskrit?: StringNullableFilter<"GlossaryTerm"> | string | null
+    pronunciation?: StringNullableFilter<"GlossaryTerm"> | string | null
+    source?: EnumGlossarySourceFilter<"GlossaryTerm"> | $Enums.GlossarySource
+    userId?: StringNullableFilter<"GlossaryTerm"> | string | null
+    readOnly?: BoolFilter<"GlossaryTerm"> | boolean
     createdAt?: DateTimeFilter<"GlossaryTerm"> | Date | string
     updatedAt?: DateTimeFilter<"GlossaryTerm"> | Date | string
+    user?: XOR<UserDataNullableRelationFilter, UserDataWhereInput> | null
   }, "id" | "term">
 
   export type GlossaryTermOrderByWithAggregationInput = {
@@ -14899,6 +15117,12 @@ export namespace Prisma {
     term?: SortOrder
     meaning?: SortOrder
     whyMatters?: SortOrder
+    category?: SortOrder
+    sanskrit?: SortOrder
+    pronunciation?: SortOrder
+    source?: SortOrder
+    userId?: SortOrder
+    readOnly?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: GlossaryTermCountOrderByAggregateInput
@@ -14914,6 +15138,12 @@ export namespace Prisma {
     term?: StringWithAggregatesFilter<"GlossaryTerm"> | string
     meaning?: StringWithAggregatesFilter<"GlossaryTerm"> | string
     whyMatters?: StringWithAggregatesFilter<"GlossaryTerm"> | string
+    category?: StringNullableWithAggregatesFilter<"GlossaryTerm"> | string | null
+    sanskrit?: StringNullableWithAggregatesFilter<"GlossaryTerm"> | string | null
+    pronunciation?: StringNullableWithAggregatesFilter<"GlossaryTerm"> | string | null
+    source?: EnumGlossarySourceWithAggregatesFilter<"GlossaryTerm"> | $Enums.GlossarySource
+    userId?: StringNullableWithAggregatesFilter<"GlossaryTerm"> | string | null
+    readOnly?: BoolWithAggregatesFilter<"GlossaryTerm"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"GlossaryTerm"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"GlossaryTerm"> | Date | string
   }
@@ -14950,6 +15180,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateInput = {
@@ -14984,6 +15215,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUpdateInput = {
@@ -15017,6 +15249,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateInput = {
@@ -15050,6 +15283,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataCreateManyInput = {
@@ -16188,8 +16422,14 @@ export namespace Prisma {
     term: string
     meaning: string
     whyMatters: string
+    category?: string | null
+    sanskrit?: string | null
+    pronunciation?: string | null
+    source?: $Enums.GlossarySource
+    readOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    user?: UserDataCreateNestedOneWithoutGlossaryTermsInput
   }
 
   export type GlossaryTermUncheckedCreateInput = {
@@ -16197,6 +16437,12 @@ export namespace Prisma {
     term: string
     meaning: string
     whyMatters: string
+    category?: string | null
+    sanskrit?: string | null
+    pronunciation?: string | null
+    source?: $Enums.GlossarySource
+    userId?: string | null
+    readOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16205,14 +16451,26 @@ export namespace Prisma {
     term?: StringFieldUpdateOperationsInput | string
     meaning?: StringFieldUpdateOperationsInput | string
     whyMatters?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sanskrit?: NullableStringFieldUpdateOperationsInput | string | null
+    pronunciation?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: EnumGlossarySourceFieldUpdateOperationsInput | $Enums.GlossarySource
+    readOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserDataUpdateOneWithoutGlossaryTermsNestedInput
   }
 
   export type GlossaryTermUncheckedUpdateInput = {
     term?: StringFieldUpdateOperationsInput | string
     meaning?: StringFieldUpdateOperationsInput | string
     whyMatters?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sanskrit?: NullableStringFieldUpdateOperationsInput | string | null
+    pronunciation?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: EnumGlossarySourceFieldUpdateOperationsInput | $Enums.GlossarySource
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    readOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16222,6 +16480,12 @@ export namespace Prisma {
     term: string
     meaning: string
     whyMatters: string
+    category?: string | null
+    sanskrit?: string | null
+    pronunciation?: string | null
+    source?: $Enums.GlossarySource
+    userId?: string | null
+    readOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16230,6 +16494,11 @@ export namespace Prisma {
     term?: StringFieldUpdateOperationsInput | string
     meaning?: StringFieldUpdateOperationsInput | string
     whyMatters?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sanskrit?: NullableStringFieldUpdateOperationsInput | string | null
+    pronunciation?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: EnumGlossarySourceFieldUpdateOperationsInput | $Enums.GlossarySource
+    readOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16238,6 +16507,12 @@ export namespace Prisma {
     term?: StringFieldUpdateOperationsInput | string
     meaning?: StringFieldUpdateOperationsInput | string
     whyMatters?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sanskrit?: NullableStringFieldUpdateOperationsInput | string | null
+    pronunciation?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: EnumGlossarySourceFieldUpdateOperationsInput | $Enums.GlossarySource
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    readOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16352,6 +16627,12 @@ export namespace Prisma {
     none?: PoseImageWhereInput
   }
 
+  export type GlossaryTermListRelationFilter = {
+    every?: GlossaryTermWhereInput
+    some?: GlossaryTermWhereInput
+    none?: GlossaryTermWhereInput
+  }
+
   export type ProviderAccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -16373,6 +16654,10 @@ export namespace Prisma {
   }
 
   export type PoseImageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GlossaryTermOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -17150,11 +17435,29 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type EnumGlossarySourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.GlossarySource | EnumGlossarySourceFieldRefInput<$PrismaModel>
+    in?: $Enums.GlossarySource[] | ListEnumGlossarySourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GlossarySource[] | ListEnumGlossarySourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumGlossarySourceFilter<$PrismaModel> | $Enums.GlossarySource
+  }
+
+  export type UserDataNullableRelationFilter = {
+    is?: UserDataWhereInput | null
+    isNot?: UserDataWhereInput | null
+  }
+
   export type GlossaryTermCountOrderByAggregateInput = {
     id?: SortOrder
     term?: SortOrder
     meaning?: SortOrder
     whyMatters?: SortOrder
+    category?: SortOrder
+    sanskrit?: SortOrder
+    pronunciation?: SortOrder
+    source?: SortOrder
+    userId?: SortOrder
+    readOnly?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17164,6 +17467,12 @@ export namespace Prisma {
     term?: SortOrder
     meaning?: SortOrder
     whyMatters?: SortOrder
+    category?: SortOrder
+    sanskrit?: SortOrder
+    pronunciation?: SortOrder
+    source?: SortOrder
+    userId?: SortOrder
+    readOnly?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -17173,8 +17482,24 @@ export namespace Prisma {
     term?: SortOrder
     meaning?: SortOrder
     whyMatters?: SortOrder
+    category?: SortOrder
+    sanskrit?: SortOrder
+    pronunciation?: SortOrder
+    source?: SortOrder
+    userId?: SortOrder
+    readOnly?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EnumGlossarySourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GlossarySource | EnumGlossarySourceFieldRefInput<$PrismaModel>
+    in?: $Enums.GlossarySource[] | ListEnumGlossarySourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GlossarySource[] | ListEnumGlossarySourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumGlossarySourceWithAggregatesFilter<$PrismaModel> | $Enums.GlossarySource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGlossarySourceFilter<$PrismaModel>
+    _max?: NestedEnumGlossarySourceFilter<$PrismaModel>
   }
 
   export type UserDataCreateprofileImagesInput = {
@@ -17223,6 +17548,13 @@ export namespace Prisma {
     connect?: PoseImageWhereUniqueInput | PoseImageWhereUniqueInput[]
   }
 
+  export type GlossaryTermCreateNestedManyWithoutUserInput = {
+    create?: XOR<GlossaryTermCreateWithoutUserInput, GlossaryTermUncheckedCreateWithoutUserInput> | GlossaryTermCreateWithoutUserInput[] | GlossaryTermUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GlossaryTermCreateOrConnectWithoutUserInput | GlossaryTermCreateOrConnectWithoutUserInput[]
+    createMany?: GlossaryTermCreateManyUserInputEnvelope
+    connect?: GlossaryTermWhereUniqueInput | GlossaryTermWhereUniqueInput[]
+  }
+
   export type ProviderAccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
@@ -17263,6 +17595,13 @@ export namespace Prisma {
     connectOrCreate?: PoseImageCreateOrConnectWithoutUserInput | PoseImageCreateOrConnectWithoutUserInput[]
     createMany?: PoseImageCreateManyUserInputEnvelope
     connect?: PoseImageWhereUniqueInput | PoseImageWhereUniqueInput[]
+  }
+
+  export type GlossaryTermUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<GlossaryTermCreateWithoutUserInput, GlossaryTermUncheckedCreateWithoutUserInput> | GlossaryTermCreateWithoutUserInput[] | GlossaryTermUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GlossaryTermCreateOrConnectWithoutUserInput | GlossaryTermCreateOrConnectWithoutUserInput[]
+    createMany?: GlossaryTermCreateManyUserInputEnvelope
+    connect?: GlossaryTermWhereUniqueInput | GlossaryTermWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -17372,6 +17711,20 @@ export namespace Prisma {
     deleteMany?: PoseImageScalarWhereInput | PoseImageScalarWhereInput[]
   }
 
+  export type GlossaryTermUpdateManyWithoutUserNestedInput = {
+    create?: XOR<GlossaryTermCreateWithoutUserInput, GlossaryTermUncheckedCreateWithoutUserInput> | GlossaryTermCreateWithoutUserInput[] | GlossaryTermUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GlossaryTermCreateOrConnectWithoutUserInput | GlossaryTermCreateOrConnectWithoutUserInput[]
+    upsert?: GlossaryTermUpsertWithWhereUniqueWithoutUserInput | GlossaryTermUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: GlossaryTermCreateManyUserInputEnvelope
+    set?: GlossaryTermWhereUniqueInput | GlossaryTermWhereUniqueInput[]
+    disconnect?: GlossaryTermWhereUniqueInput | GlossaryTermWhereUniqueInput[]
+    delete?: GlossaryTermWhereUniqueInput | GlossaryTermWhereUniqueInput[]
+    connect?: GlossaryTermWhereUniqueInput | GlossaryTermWhereUniqueInput[]
+    update?: GlossaryTermUpdateWithWhereUniqueWithoutUserInput | GlossaryTermUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: GlossaryTermUpdateManyWithWhereWithoutUserInput | GlossaryTermUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: GlossaryTermScalarWhereInput | GlossaryTermScalarWhereInput[]
+  }
+
   export type ProviderAccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
@@ -17454,6 +17807,20 @@ export namespace Prisma {
     update?: PoseImageUpdateWithWhereUniqueWithoutUserInput | PoseImageUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: PoseImageUpdateManyWithWhereWithoutUserInput | PoseImageUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: PoseImageScalarWhereInput | PoseImageScalarWhereInput[]
+  }
+
+  export type GlossaryTermUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<GlossaryTermCreateWithoutUserInput, GlossaryTermUncheckedCreateWithoutUserInput> | GlossaryTermCreateWithoutUserInput[] | GlossaryTermUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: GlossaryTermCreateOrConnectWithoutUserInput | GlossaryTermCreateOrConnectWithoutUserInput[]
+    upsert?: GlossaryTermUpsertWithWhereUniqueWithoutUserInput | GlossaryTermUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: GlossaryTermCreateManyUserInputEnvelope
+    set?: GlossaryTermWhereUniqueInput | GlossaryTermWhereUniqueInput[]
+    disconnect?: GlossaryTermWhereUniqueInput | GlossaryTermWhereUniqueInput[]
+    delete?: GlossaryTermWhereUniqueInput | GlossaryTermWhereUniqueInput[]
+    connect?: GlossaryTermWhereUniqueInput | GlossaryTermWhereUniqueInput[]
+    update?: GlossaryTermUpdateWithWhereUniqueWithoutUserInput | GlossaryTermUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: GlossaryTermUpdateManyWithWhereWithoutUserInput | GlossaryTermUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: GlossaryTermScalarWhereInput | GlossaryTermScalarWhereInput[]
   }
 
   export type UserDataCreateNestedOneWithoutProviderAccountsInput = {
@@ -17765,6 +18132,26 @@ export namespace Prisma {
     update?: XOR<XOR<AsanaPostureUpdateToOneWithWhereWithoutPoseImagesInput, AsanaPostureUpdateWithoutPoseImagesInput>, AsanaPostureUncheckedUpdateWithoutPoseImagesInput>
   }
 
+  export type UserDataCreateNestedOneWithoutGlossaryTermsInput = {
+    create?: XOR<UserDataCreateWithoutGlossaryTermsInput, UserDataUncheckedCreateWithoutGlossaryTermsInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutGlossaryTermsInput
+    connect?: UserDataWhereUniqueInput
+  }
+
+  export type EnumGlossarySourceFieldUpdateOperationsInput = {
+    set?: $Enums.GlossarySource
+  }
+
+  export type UserDataUpdateOneWithoutGlossaryTermsNestedInput = {
+    create?: XOR<UserDataCreateWithoutGlossaryTermsInput, UserDataUncheckedCreateWithoutGlossaryTermsInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutGlossaryTermsInput
+    upsert?: UserDataUpsertWithoutGlossaryTermsInput
+    disconnect?: boolean
+    delete?: UserDataWhereInput | boolean
+    connect?: UserDataWhereUniqueInput
+    update?: XOR<XOR<UserDataUpdateToOneWithWhereWithoutGlossaryTermsInput, UserDataUpdateWithoutGlossaryTermsInput>, UserDataUncheckedUpdateWithoutGlossaryTermsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -18017,6 +18404,23 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type NestedEnumGlossarySourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.GlossarySource | EnumGlossarySourceFieldRefInput<$PrismaModel>
+    in?: $Enums.GlossarySource[] | ListEnumGlossarySourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GlossarySource[] | ListEnumGlossarySourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumGlossarySourceFilter<$PrismaModel> | $Enums.GlossarySource
+  }
+
+  export type NestedEnumGlossarySourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GlossarySource | EnumGlossarySourceFieldRefInput<$PrismaModel>
+    in?: $Enums.GlossarySource[] | ListEnumGlossarySourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GlossarySource[] | ListEnumGlossarySourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumGlossarySourceWithAggregatesFilter<$PrismaModel> | $Enums.GlossarySource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGlossarySourceFilter<$PrismaModel>
+    _max?: NestedEnumGlossarySourceFilter<$PrismaModel>
+  }
+
   export type ProviderAccountCreateWithoutUserInput = {
     id?: string
     type: string
@@ -18241,6 +18645,43 @@ export namespace Prisma {
     data: PoseImageCreateManyUserInput | PoseImageCreateManyUserInput[]
   }
 
+  export type GlossaryTermCreateWithoutUserInput = {
+    id?: string
+    term: string
+    meaning: string
+    whyMatters: string
+    category?: string | null
+    sanskrit?: string | null
+    pronunciation?: string | null
+    source?: $Enums.GlossarySource
+    readOnly?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GlossaryTermUncheckedCreateWithoutUserInput = {
+    id?: string
+    term: string
+    meaning: string
+    whyMatters: string
+    category?: string | null
+    sanskrit?: string | null
+    pronunciation?: string | null
+    source?: $Enums.GlossarySource
+    readOnly?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GlossaryTermCreateOrConnectWithoutUserInput = {
+    where: GlossaryTermWhereUniqueInput
+    create: XOR<GlossaryTermCreateWithoutUserInput, GlossaryTermUncheckedCreateWithoutUserInput>
+  }
+
+  export type GlossaryTermCreateManyUserInputEnvelope = {
+    data: GlossaryTermCreateManyUserInput | GlossaryTermCreateManyUserInput[]
+  }
+
   export type ProviderAccountUpsertWithWhereUniqueWithoutUserInput = {
     where: ProviderAccountWhereUniqueInput
     update: XOR<ProviderAccountUpdateWithoutUserInput, ProviderAccountUncheckedUpdateWithoutUserInput>
@@ -18446,6 +18887,40 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PoseImage"> | Date | string
   }
 
+  export type GlossaryTermUpsertWithWhereUniqueWithoutUserInput = {
+    where: GlossaryTermWhereUniqueInput
+    update: XOR<GlossaryTermUpdateWithoutUserInput, GlossaryTermUncheckedUpdateWithoutUserInput>
+    create: XOR<GlossaryTermCreateWithoutUserInput, GlossaryTermUncheckedCreateWithoutUserInput>
+  }
+
+  export type GlossaryTermUpdateWithWhereUniqueWithoutUserInput = {
+    where: GlossaryTermWhereUniqueInput
+    data: XOR<GlossaryTermUpdateWithoutUserInput, GlossaryTermUncheckedUpdateWithoutUserInput>
+  }
+
+  export type GlossaryTermUpdateManyWithWhereWithoutUserInput = {
+    where: GlossaryTermScalarWhereInput
+    data: XOR<GlossaryTermUpdateManyMutationInput, GlossaryTermUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type GlossaryTermScalarWhereInput = {
+    AND?: GlossaryTermScalarWhereInput | GlossaryTermScalarWhereInput[]
+    OR?: GlossaryTermScalarWhereInput[]
+    NOT?: GlossaryTermScalarWhereInput | GlossaryTermScalarWhereInput[]
+    id?: StringFilter<"GlossaryTerm"> | string
+    term?: StringFilter<"GlossaryTerm"> | string
+    meaning?: StringFilter<"GlossaryTerm"> | string
+    whyMatters?: StringFilter<"GlossaryTerm"> | string
+    category?: StringNullableFilter<"GlossaryTerm"> | string | null
+    sanskrit?: StringNullableFilter<"GlossaryTerm"> | string | null
+    pronunciation?: StringNullableFilter<"GlossaryTerm"> | string | null
+    source?: EnumGlossarySourceFilter<"GlossaryTerm"> | $Enums.GlossarySource
+    userId?: StringNullableFilter<"GlossaryTerm"> | string | null
+    readOnly?: BoolFilter<"GlossaryTerm"> | boolean
+    createdAt?: DateTimeFilter<"GlossaryTerm"> | Date | string
+    updatedAt?: DateTimeFilter<"GlossaryTerm"> | Date | string
+  }
+
   export type UserDataCreateWithoutProviderAccountsInput = {
     id?: string
     provider_id?: string | null
@@ -18477,6 +18952,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutProviderAccountsInput = {
@@ -18510,6 +18986,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutProviderAccountsInput = {
@@ -18558,6 +19035,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutProviderAccountsInput = {
@@ -18590,6 +19068,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AsanaActivityCreateWithoutPostureInput = {
@@ -18739,6 +19218,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutAsanaActivitiesInput = {
@@ -18772,6 +19252,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutAsanaActivitiesInput = {
@@ -18903,6 +19384,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutAsanaActivitiesInput = {
@@ -18935,6 +19417,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AsanaPostureUpsertWithoutAsanaActivitiesInput = {
@@ -19055,6 +19538,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutSeriesActivitiesInput = {
@@ -19088,6 +19572,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutSeriesActivitiesInput = {
@@ -19136,6 +19621,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutSeriesActivitiesInput = {
@@ -19168,6 +19654,7 @@ export namespace Prisma {
     sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataCreateWithoutSequenceActivitiesInput = {
@@ -19201,6 +19688,7 @@ export namespace Prisma {
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutSequenceActivitiesInput = {
@@ -19234,6 +19722,7 @@ export namespace Prisma {
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutSequenceActivitiesInput = {
@@ -19282,6 +19771,7 @@ export namespace Prisma {
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutSequenceActivitiesInput = {
@@ -19314,6 +19804,7 @@ export namespace Prisma {
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataCreateWithoutUserLoginsInput = {
@@ -19347,6 +19838,7 @@ export namespace Prisma {
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutUserLoginsInput = {
@@ -19380,6 +19872,7 @@ export namespace Prisma {
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutUserLoginsInput = {
@@ -19428,6 +19921,7 @@ export namespace Prisma {
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutUserLoginsInput = {
@@ -19460,6 +19954,7 @@ export namespace Prisma {
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataCreateWithoutPoseImagesInput = {
@@ -19493,6 +19988,7 @@ export namespace Prisma {
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutPoseImagesInput = {
@@ -19526,6 +20022,7 @@ export namespace Prisma {
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutPoseImagesInput = {
@@ -19657,6 +20154,7 @@ export namespace Prisma {
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutPoseImagesInput = {
@@ -19689,6 +20187,7 @@ export namespace Prisma {
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AsanaPostureUpsertWithoutPoseImagesInput = {
@@ -19778,6 +20277,156 @@ export namespace Prisma {
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutPostureNestedInput
   }
 
+  export type UserDataCreateWithoutGlossaryTermsInput = {
+    id?: string
+    provider_id?: string | null
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    pronouns?: string | null
+    profile?: InputJsonValue | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    firstName: string
+    lastName: string
+    bio: string
+    headline: string
+    location: string
+    websiteURL: string
+    shareQuick?: string | null
+    yogaStyle?: string | null
+    yogaExperience?: string | null
+    company?: string | null
+    socialURL?: string | null
+    isLocationPublic?: string | null
+    role?: string | null
+    profileImages?: UserDataCreateprofileImagesInput | string[]
+    activeProfileImage?: string | null
+    providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
+    asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
+    seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginCreateNestedManyWithoutUserInput
+    poseImages?: PoseImageCreateNestedManyWithoutUserInput
+  }
+
+  export type UserDataUncheckedCreateWithoutGlossaryTermsInput = {
+    id?: string
+    provider_id?: string | null
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    pronouns?: string | null
+    profile?: InputJsonValue | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    firstName: string
+    lastName: string
+    bio: string
+    headline: string
+    location: string
+    websiteURL: string
+    shareQuick?: string | null
+    yogaStyle?: string | null
+    yogaExperience?: string | null
+    company?: string | null
+    socialURL?: string | null
+    isLocationPublic?: string | null
+    role?: string | null
+    profileImages?: UserDataCreateprofileImagesInput | string[]
+    activeProfileImage?: string | null
+    providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
+    asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
+    seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
+    poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserDataCreateOrConnectWithoutGlossaryTermsInput = {
+    where: UserDataWhereUniqueInput
+    create: XOR<UserDataCreateWithoutGlossaryTermsInput, UserDataUncheckedCreateWithoutGlossaryTermsInput>
+  }
+
+  export type UserDataUpsertWithoutGlossaryTermsInput = {
+    update: XOR<UserDataUpdateWithoutGlossaryTermsInput, UserDataUncheckedUpdateWithoutGlossaryTermsInput>
+    create: XOR<UserDataCreateWithoutGlossaryTermsInput, UserDataUncheckedCreateWithoutGlossaryTermsInput>
+    where?: UserDataWhereInput
+  }
+
+  export type UserDataUpdateToOneWithWhereWithoutGlossaryTermsInput = {
+    where?: UserDataWhereInput
+    data: XOR<UserDataUpdateWithoutGlossaryTermsInput, UserDataUncheckedUpdateWithoutGlossaryTermsInput>
+  }
+
+  export type UserDataUpdateWithoutGlossaryTermsInput = {
+    provider_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
+    profile?: InputJsonValue | InputJsonValue | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    shareQuick?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaStyle?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    socialURL?: NullableStringFieldUpdateOperationsInput | string | null
+    isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImages?: UserDataUpdateprofileImagesInput | string[]
+    activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
+    asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
+    seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUpdateManyWithoutUserNestedInput
+    poseImages?: PoseImageUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserDataUncheckedUpdateWithoutGlossaryTermsInput = {
+    provider_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
+    profile?: InputJsonValue | InputJsonValue | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    shareQuick?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaStyle?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    socialURL?: NullableStringFieldUpdateOperationsInput | string | null
+    isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImages?: UserDataUpdateprofileImagesInput | string[]
+    activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
+    asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
+    seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
+    poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type ProviderAccountCreateManyUserInput = {
     id?: string
     type: string
@@ -19859,6 +20508,20 @@ export namespace Prisma {
     cloudflareId?: string | null
     isOffline?: boolean
     imageType?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GlossaryTermCreateManyUserInput = {
+    id?: string
+    term: string
+    meaning: string
+    whyMatters: string
+    category?: string | null
+    sanskrit?: string | null
+    pronunciation?: string | null
+    source?: $Enums.GlossarySource
+    readOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -20096,6 +20759,45 @@ export namespace Prisma {
     cloudflareId?: NullableStringFieldUpdateOperationsInput | string | null
     isOffline?: BoolFieldUpdateOperationsInput | boolean
     imageType?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GlossaryTermUpdateWithoutUserInput = {
+    term?: StringFieldUpdateOperationsInput | string
+    meaning?: StringFieldUpdateOperationsInput | string
+    whyMatters?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sanskrit?: NullableStringFieldUpdateOperationsInput | string | null
+    pronunciation?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: EnumGlossarySourceFieldUpdateOperationsInput | $Enums.GlossarySource
+    readOnly?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GlossaryTermUncheckedUpdateWithoutUserInput = {
+    term?: StringFieldUpdateOperationsInput | string
+    meaning?: StringFieldUpdateOperationsInput | string
+    whyMatters?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sanskrit?: NullableStringFieldUpdateOperationsInput | string | null
+    pronunciation?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: EnumGlossarySourceFieldUpdateOperationsInput | $Enums.GlossarySource
+    readOnly?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GlossaryTermUncheckedUpdateManyWithoutUserInput = {
+    term?: StringFieldUpdateOperationsInput | string
+    meaning?: StringFieldUpdateOperationsInput | string
+    whyMatters?: StringFieldUpdateOperationsInput | string
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    sanskrit?: NullableStringFieldUpdateOperationsInput | string | null
+    pronunciation?: NullableStringFieldUpdateOperationsInput | string | null
+    source?: EnumGlossarySourceFieldUpdateOperationsInput | $Enums.GlossarySource
+    readOnly?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

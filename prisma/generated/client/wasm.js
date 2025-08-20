@@ -300,6 +300,12 @@ exports.Prisma.GlossaryTermScalarFieldEnum = {
   term: 'term',
   meaning: 'meaning',
   whyMatters: 'whyMatters',
+  category: 'category',
+  sanskrit: 'sanskrit',
+  pronunciation: 'pronunciation',
+  source: 'source',
+  userId: 'userId',
+  readOnly: 'readOnly',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -317,6 +323,12 @@ exports.StorageType = exports.$Enums.StorageType = {
   CLOUD: 'CLOUD',
   LOCAL: 'LOCAL',
   HYBRID: 'HYBRID'
+};
+
+exports.GlossarySource = exports.$Enums.GlossarySource = {
+  DEFAULT: 'DEFAULT',
+  ALPHA_USER: 'ALPHA_USER',
+  USER: 'USER'
 };
 
 exports.Prisma.ModelName = {

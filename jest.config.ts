@@ -33,6 +33,7 @@ const customJestConfig: Config = {
     '^@lib/(.*)$': '<rootDir>/lib/$1',
     '^@serverComponents/(.*)$': '<rootDir>/components/$1',
     '^@context/(.*)$': '<rootDir>/app/context/$1',
+    '^@styles/(.*)$': '<rootDir>/styles/$1',
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
     '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
   },

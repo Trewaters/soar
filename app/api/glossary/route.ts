@@ -24,32 +24,19 @@ function getPrismaClient() {
   return prisma
 }
 
-// Fallback glossary data for when database is unavailable
+// Lightweight fallback when DB unreachable (subset of default bundled terms)
 const fallbackGlossaryTerms = [
   {
-    id: '1',
+    id: 'fallback-1',
     term: 'Asana',
     meaning: 'A yoga pose or posture',
     whyMatters:
       'Asanas are the physical foundation of yoga practice, helping to build strength, flexibility, and mindfulness.',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: '2',
-    term: 'Pranayama',
-    meaning: 'Breath control or breathing exercises',
-    whyMatters:
-      'Pranayama helps regulate the nervous system, improve focus, and connect the mind and body.',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: '3',
-    term: 'Meditation',
-    meaning: 'A practice of focused attention and awareness',
-    whyMatters:
-      'Meditation cultivates mindfulness, reduces stress, and promotes mental clarity and emotional balance.',
+    category: 'foundational',
+    sanskrit: 'Āsana',
+    pronunciation: 'AH-suh-nuh',
+    source: 'DEFAULT',
+    readOnly: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   },
@@ -62,33 +49,27 @@ export async function GET() {
   try {
     const prismaClient = getPrismaClient()
 
-    // Test connection first
     await prismaClient.$connect()
 
-    // Use findRaw to work around datetime parsing issues
-    const rawTerms = await prismaClient.glossaryTerm.findRaw({
-      filter: {},
+    const terms = await prismaClient.glossaryTerm.findMany({
+      orderBy: { term: 'asc' },
     })
 
-    // Convert raw terms to proper format and sort by term
-    const terms = (rawTerms as unknown as any[])
-      .map((term: any) => ({
-        id: term._id.$oid,
-        term: term.term,
-        meaning: term.meaning,
-        whyMatters: term.whyMatters,
-        // Fix datetime format by truncating microseconds to milliseconds
-        createdAt: new Date(
-          term.createdAt.replace(/\.(\d{6})Z$/, '.$1'.substring(0, 4) + 'Z')
-        ).toISOString(),
-        updatedAt: new Date(
-          term.updatedAt.replace(/\.(\d{6})Z$/, '.$1'.substring(0, 4) + 'Z')
-        ).toISOString(),
+    return NextResponse.json(
+      terms.map((t) => ({
+        id: t.id,
+        term: t.term,
+        meaning: t.meaning,
+        whyMatters: t.whyMatters,
+        category: t.category,
+        sanskrit: t.sanskrit,
+        pronunciation: t.pronunciation,
+        source: t.source,
+        readOnly: t.readOnly,
+        createdAt: t.createdAt,
+        updatedAt: t.updatedAt,
       }))
-      .sort((a: any, b: any) => a.term.localeCompare(b.term))
-
-    // Return empty array if no terms found (instead of null)
-    return NextResponse.json(terms || [])
+    )
   } catch (error) {
     console.error('Error fetching glossary terms:', error)
 
@@ -96,13 +77,115 @@ export async function GET() {
     console.warn('Database error, returning fallback data')
     return NextResponse.json(fallbackGlossaryTerms, { status: 200 })
   } finally {
-    // Disconnect to prevent connection leaks
-    if (prisma) {
-      try {
-        await prisma.$disconnect()
-      } catch (e) {
-        console.error('Error disconnecting from database:', e)
-      }
+    // Intentionally keep connection open in serverless-friendly pattern
+  }
+}
+
+export async function POST(req: Request) {
+  const { auth } = await import('../../../auth')
+  const session = await auth()
+  if (!session?.user?.email) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+  try {
+    const prismaClient = getPrismaClient()
+    await prismaClient.$connect()
+    const body = await req.json()
+
+    // Backend validation
+    const term = (body.term || '').trim()
+    const meaning = (body.meaning || body.definition || '').trim()
+    const whyMatters = (body.whyMatters || '').trim()
+    const category = (body.category || '').trim()
+    const sanskrit = (body.sanskrit || '').trim()
+    const pronunciation = (body.pronunciation || '').trim()
+
+    if (!term) {
+      return NextResponse.json(
+        { error: 'Term name is required' },
+        { status: 400 }
+      )
     }
+    if (term.length > 100) {
+      return NextResponse.json(
+        { error: 'Term name must be 100 characters or less' },
+        { status: 400 }
+      )
+    }
+    if (!meaning) {
+      return NextResponse.json(
+        { error: 'Definition/meaning is required' },
+        { status: 400 }
+      )
+    }
+    if (meaning.length > 1000) {
+      return NextResponse.json(
+        { error: 'Definition must be 1000 characters or less' },
+        { status: 400 }
+      )
+    }
+    if (whyMatters.length > 500) {
+      return NextResponse.json(
+        { error: 'Why it matters must be 500 characters or less' },
+        { status: 400 }
+      )
+    }
+    if (category.length > 50) {
+      return NextResponse.json(
+        { error: 'Category must be 50 characters or less' },
+        { status: 400 }
+      )
+    }
+    if (sanskrit.length > 100) {
+      return NextResponse.json(
+        { error: 'Sanskrit term must be 100 characters or less' },
+        { status: 400 }
+      )
+    }
+    if (pronunciation.length > 150) {
+      return NextResponse.json(
+        { error: 'Pronunciation guide must be 150 characters or less' },
+        { status: 400 }
+      )
+    }
+
+    // Check for duplicate terms
+    const existing = await prismaClient.glossaryTerm.findUnique({
+      where: { term },
+    })
+    if (existing) {
+      return NextResponse.json(
+        { error: 'A term with this name already exists' },
+        { status: 409 }
+      )
+    }
+
+    // Determine source (alpha vs user)
+    const { default: getAlphaUserIds } = await import('../../lib/alphaUsers')
+    const alphaSet = new Set(
+      getAlphaUserIds().map((e: string) => e.toLowerCase())
+    )
+    const source = alphaSet.has(session.user.email.toLowerCase())
+      ? 'ALPHA_USER'
+      : 'USER'
+
+    const created = await prismaClient.glossaryTerm.create({
+      data: {
+        term,
+        meaning,
+        whyMatters: whyMatters || null,
+        category: category || null,
+        sanskrit: sanskrit || null,
+        pronunciation: pronunciation || null,
+        source,
+        userId: (session.user as any).id || null,
+        readOnly: false,
+      },
+    })
+
+    return NextResponse.json(created, { status: 201 })
+  } catch (error) {
+    console.error('Create glossary term error', error)
+    return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }
