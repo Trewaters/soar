@@ -12,8 +12,10 @@ import {
   TextField,
   Typography,
   ListSubheader,
+  IconButton,
 } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
+import EditIcon from '@mui/icons-material/Edit'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
@@ -392,14 +394,15 @@ export default function Page() {
                 </Typography>
                 {singleSequence?.id ? (
                   <Box sx={{ ml: 5, mt: 1 }}>
-                    <Link
-                      underline="hover"
-                      color="primary.main"
+                    <IconButton
+                      color="primary"
                       href={`/sequences/${singleSequence.id}`}
-                      aria-label={`Open details for ${singleSequence.nameSequence}`}
+                      aria-label={`Edit ${singleSequence.nameSequence}`}
+                      sx={{ minWidth: 0, p: 1 }}
+                      component={Link}
                     >
-                      Open details
-                    </Link>
+                      <EditIcon />
+                    </IconButton>
                   </Box>
                 ) : null}
               </Box>

@@ -41,11 +41,12 @@ export default function Header() {
 
   // Get current pathname for highlighting
   const [currentPath, setCurrentPath] = React.useState<string>('')
+
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
       setCurrentPath(window.location.pathname)
     }
-  }, [window.location.pathname])
+  }, [])
 
   const handleAuthAction = useCallback(async () => {
     if (status === 'loading' || isAuthLoading) return // Don't allow action while loading
