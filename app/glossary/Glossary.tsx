@@ -371,8 +371,8 @@ export const Glossary: React.FC = () => {
         <DialogTitle>Delete term</DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete "{deleteTarget}"? This action cannot
-            be undone.
+            Are you sure you want to delete &quot;{deleteTarget}&quot;? This
+            action cannot be undone.
           </Typography>
         </DialogContent>
         <DialogActions>
