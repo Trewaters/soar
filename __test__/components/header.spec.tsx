@@ -12,6 +12,7 @@ jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
   }),
+  usePathname: () => '/navigator',
 }))
 
 // Mock next-auth more thoroughly
@@ -217,7 +218,7 @@ describe('Header Component', () => {
 
       expect(screen.getByRole('link', { name: /home/i })).toHaveAttribute(
         'href',
-        '/'
+        '/navigator'
       )
       expect(screen.getByRole('link', { name: /8 limbs/i })).toHaveAttribute(
         'href',

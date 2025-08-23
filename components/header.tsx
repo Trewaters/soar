@@ -1,6 +1,7 @@
 'use client'
 import React, { MouseEvent, useMemo, useCallback } from 'react'
 import { useSession, signOut } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import HomeIcon from '@mui/icons-material/Home'
@@ -34,19 +35,11 @@ export default function Header() {
   const [isAuthLoading, setIsAuthLoading] = React.useState(false)
   const { data: session, status } = useSession()
   const router = useNavigationWithLoading()
+  const currentPath = usePathname()
 
   const toggleDrawer = (open: boolean) => () => {
     setOpenDrawer(open)
   }
-
-  // Get current pathname for highlighting
-  const [currentPath, setCurrentPath] = React.useState<string>('')
-
-  React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setCurrentPath(window.location.pathname)
-    }
-  }, [])
 
   const handleAuthAction = useCallback(async () => {
     if (status === 'loading' || isAuthLoading) return // Don't allow action while loading

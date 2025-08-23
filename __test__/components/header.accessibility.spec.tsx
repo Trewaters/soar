@@ -17,6 +17,7 @@ jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
   }),
+  usePathname: () => '/navigator',
 }))
 
 // Mock next-auth
