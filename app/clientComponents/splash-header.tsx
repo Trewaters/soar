@@ -104,19 +104,31 @@ export default function SplashHeader({
           }}
         />
       </Box>
-      <Stack
-        direction={'row'}
-        gap={1}
-        alignItems={'center'}
-        justifyContent={'center'}
+      <Box
+        sx={{
+          width: '100%',
+          maxWidth: '100vw',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          gap: 1,
+        }}
       >
         {showIcon && (
-          <Image
-            src={iconSrc}
-            height={iconSize}
-            width={iconSize}
-            alt={iconAlt}
-          />
+          <Box
+            sx={{
+              flexShrink: 0,
+              mt: 0.5, // Align with first line of text
+            }}
+          >
+            <Image
+              src={iconSrc}
+              height={iconSize}
+              width={iconSize}
+              alt={iconAlt}
+            />
+          </Box>
         )}
         <Typography
           variant="splashTitle"
@@ -124,28 +136,28 @@ export default function SplashHeader({
             // Layout and visual styling only - typography styles come from theme variant
             color: 'primary.main',
             backgroundColor: 'navSplash.light',
-            px: { xs: 0, sm: 2 },
+            px: { xs: 1, sm: 2 },
             py: 1,
             borderRadius: '8px',
-            width: '100%',
-            maxWidth: '100vw',
+            flex: 1,
+            maxWidth: showIcon ? 'calc(100vw - 40px)' : '100vw', // Account for icon width
             wordBreak: 'break-word',
             overflowWrap: 'break-word',
             hyphens: 'auto',
             textAlign: 'center',
-            // Responsive fontSize override - MUI theme variants don't support responsive typography
-            // All other typography properties (textTransform, whiteSpace, textAlign, etc.) come from theme
+            lineHeight: 1.2,
+            // More aggressive responsive fontSize scaling - prioritizes fitting on screen
             fontSize: {
-              xs: 'clamp(0.75rem, 7.5vw, 1.2rem)', // 0.75/1/1.2/1.4 base, 7.5vw for xs
-              sm: 'clamp(1rem, 10vw, 2.5rem)', // as you want
-              md: 'clamp(1.2rem, 12vw, 3rem)', // 1.2/1.4 ratio to sm, 12vw for md
-              lg: 'clamp(1.4rem, 14vw, 3.5rem)', // 1.4/1.7 ratio to sm, 14vw for lg
+              xs: 'clamp(0.75rem, 4vw, 1rem)', // Much more conservative scaling for xs
+              sm: 'clamp(0.875rem, 5vw, 1.5rem)', // More conservative for sm
+              md: 'clamp(1rem, 6vw, 2rem)', // More conservative for md
+              lg: 'clamp(1.125rem, 7vw, 2.5rem)', // More conservative for lg
             },
           }}
         >
           {title}
         </Typography>
-      </Stack>
+      </Box>
     </Stack>
   )
 }
