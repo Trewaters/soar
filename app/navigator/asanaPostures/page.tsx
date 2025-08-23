@@ -1,13 +1,59 @@
 'use client'
 
-import { Autocomplete, Box, TextField, InputAdornment } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
+import { useEffect, useState } from 'react'
+import { Autocomplete, Box, TextField } from '@mui/material'
+import { useSession } from 'next-auth/react'
 import SplashHeader from '@app/clientComponents/splash-header'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
+import { getUserPostures } from '@lib/postureService'
+import { FullAsanaData } from '@app/context/AsanaPostureContext'
 
 export default function Page() {
   const router = useNavigationWithLoading()
+  const { data: session } = useSession()
+  const [userAsanas, setUserAsanas] = useState<FullAsanaData[]>([])
+  const [loading, setLoading] = useState(false)
+
+  // Fetch user-created asanas
+  useEffect(() => {
+    const fetchUserAsanas = async () => {
+      if (!session?.user?.email) return
+
+      setLoading(true)
+      try {
+        const asanas = await getUserPostures(session.user.email)
+        setUserAsanas(asanas)
+      } catch (error) {
+        console.error('Error fetching user asanas:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUserAsanas()
+  }, [session?.user?.email])
+
+  // Transform user asanas into autocomplete options
+  const autocompleteOptions = userAsanas.map((asana) => ({
+    label: `${asana.english_names?.[0] || asana.sort_english_name}`,
+    value: asana.sort_english_name,
+    asana: asana,
+  }))
+
+  // Add a helpful message if no asanas are found
+  const getPlaceholderText = () => {
+    if (!session?.user?.email) {
+      return 'Please sign in to search your asanas'
+    }
+    if (loading) {
+      return 'Loading your asanas...'
+    }
+    if (userAsanas.length === 0) {
+      return 'No asanas created yet. Create your first asana below!'
+    }
+    return `Search your ${userAsanas.length} created asana${userAsanas.length === 1 ? '' : 's'}`
+  }
 
   const handlePracticeAsanaClick = () => {
     // Navigate to the dedicated practice asana page
@@ -45,20 +91,14 @@ export default function Page() {
           }}
         >
           <Autocomplete
-            options={[
-              {
-                label: 'Adho Mukha Svanasana (Downward Dog)',
-                value: 'adho-mukha-svanasana',
-              },
-              { label: 'Tadasana (Mountain Pose)', value: 'tadasana' },
-              { label: 'Vrikshasana (Tree Pose)', value: 'vrikshasana' },
-              // ...more asana options
-            ]}
+            options={autocompleteOptions}
             getOptionLabel={(option) => option.label}
+            loading={loading}
+            disabled={!session?.user?.email}
             renderInput={(params) => (
               <TextField
                 {...params}
-                placeholder="Search Asana Postures"
+                placeholder={getPlaceholderText()}
                 variant="outlined"
                 sx={{
                   bgcolor: 'background.paper',

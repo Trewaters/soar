@@ -52,6 +52,39 @@ export async function getAllPostures(): Promise<FullAsanaData[]> {
 }
 
 /**
+ * Get postures created by a specific user
+ */
+export async function getUserPostures(
+  createdBy: string
+): Promise<FullAsanaData[]> {
+  try {
+    // Add timestamp to ensure fresh data
+    const timestamp = Date.now()
+    const response = await fetch(
+      `/api/poses?createdBy=${encodeURIComponent(createdBy)}&t=${timestamp}`,
+      {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
+      }
+    )
+    if (!response.ok) {
+      throw new Error('Failed to fetch user postures')
+    }
+    return await response.json()
+  } catch (error) {
+    logServiceError(error, 'postureService', 'getUserPostures', {
+      operation: 'fetch_user_postures',
+      createdBy,
+    })
+    throw error
+  }
+}
+
+/**
  * Get posture by sort_english_name
  */
 export async function getPostureByName(name: string): Promise<FullAsanaData> {
