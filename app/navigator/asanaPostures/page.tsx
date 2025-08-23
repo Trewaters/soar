@@ -58,7 +58,7 @@ export default function Page() {
             renderInput={(params) => (
               <TextField
                 {...params}
-                placeholder="🔍 Search Asana Postures"
+                placeholder="Search Asana Postures"
                 variant="outlined"
                 sx={{
                   bgcolor: 'background.paper',
