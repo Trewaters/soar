@@ -48,7 +48,7 @@ export default function SplashHeader({
   showIcon = true,
   iconSrc = '/icons/designImages/leaf-orange.png',
   iconAlt = '',
-  iconSize = 24,
+  iconSize = 21,
 }: SplashHeaderProps) {
   // Extract base dimensions for Next.js Image component
   const baseHeight =
@@ -132,10 +132,10 @@ export default function SplashHeader({
             // Responsive fontSize override - MUI theme variants don't support responsive typography
             // All other typography properties (textTransform, whiteSpace, textAlign, etc.) come from theme
             fontSize: {
-              xs: 'clamp(0.75rem, 4vw, 1.2rem)',
-              sm: 'clamp(1rem, 3vw, 1.5rem)',
-              md: 'clamp(1.2rem, 2.5vw, 1.8rem)',
-              lg: 'clamp(1.4rem, 2vw, 2rem)',
+              xs: 'clamp(0.75rem, 7.5vw, 1.2rem)', // 0.75/1/1.2/1.4 base, 7.5vw for xs
+              sm: 'clamp(1rem, 10vw, 2.5rem)', // as you want
+              md: 'clamp(1.2rem, 12vw, 3rem)', // 1.2/1.4 ratio to sm, 12vw for md
+              lg: 'clamp(1.4rem, 14vw, 3.5rem)', // 1.4/1.7 ratio to sm, 14vw for lg
             },
           }}
         >
