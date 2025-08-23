@@ -127,8 +127,12 @@ export default function SplashHeader({
             px: { xs: 0, sm: 2 },
             py: 1,
             borderRadius: '8px',
-            overflow: 'hidden',
+            width: '100%',
             maxWidth: '100vw',
+            wordBreak: 'break-word',
+            overflowWrap: 'break-word',
+            hyphens: 'auto',
+            textAlign: 'center',
             // Responsive fontSize override - MUI theme variants don't support responsive typography
             // All other typography properties (textTransform, whiteSpace, textAlign, etc.) come from theme
             fontSize: {
