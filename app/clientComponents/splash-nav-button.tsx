@@ -67,7 +67,7 @@ export default function SplashNavButton({
           backgroundRepeat: 'no-repeat',
           position: 'relative',
           // Apply grayscale filter if it's a black and white image
-          filter: image && premium ? 'grayscale(100%)' : 'none',
+          // filter: image && premium ? 'grayscale(100%)' : 'none',
         }}
       >
         {/* Star icon for premium features */}
@@ -75,9 +75,9 @@ export default function SplashNavButton({
           <Box
             sx={{
               position: 'absolute',
-              top: 12,
+              bottom: 6,
               right: 12,
-              backgroundColor: '#FF6B35',
+              backgroundColor: 'navSplash.dark',
               borderRadius: '50%',
               width: 32,
               height: 32,
@@ -89,7 +89,7 @@ export default function SplashNavButton({
           >
             <StarIcon
               sx={{
-                color: 'white',
+                color: 'warning.main',
                 fontSize: 20,
               }}
             />
@@ -97,16 +97,14 @@ export default function SplashNavButton({
         )}
 
         <Typography
-          variant="body1"
+          variant="subtitle1"
           component={'h2'}
           sx={{
-            color: '#2C5A8A',
+            color: 'info.main',
             alignSelf: 'flex-start',
+            fontWeight: 'bold',
             mt: 2,
             mx: 2,
-            fontWeight: 'bold',
-            fontSize: '16px',
-            lineHeight: 1.3,
             maxWidth: '70%',
           }}
         >
