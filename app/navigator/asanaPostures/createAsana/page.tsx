@@ -245,7 +245,7 @@ export default function Page() {
         <Stack sx={{ px: 4 }} spacing={3}>
           {/* Name Input */}
           <TextField
-            label="Name"
+            label="Asana Posture Name"
             name="sort_english_name"
             value={formData.sort_english_name}
             onChange={handleChange}
@@ -313,9 +313,10 @@ export default function Page() {
 
           {/* English Variations Input */}
           <TextField
-            label="English Variations"
+            label="Name Variations"
             name="english_names"
             value={englishVariationsInput}
+            placeholder='e.g. "Downward Dog, Adho Mukha Svanasana"'
             onChange={(e) => {
               const { value } = e.target
               setEnglishVariationsInput(value)
@@ -345,7 +346,7 @@ export default function Page() {
                 english_names: cleanedVariations,
               })
             }}
-            helperText="Separate variations with commas"
+            helperText="Separate variant names with commas"
             sx={{
               '& .MuiOutlinedInput-notchedOutline': {
                 borderRadius: '12px',
