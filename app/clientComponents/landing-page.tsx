@@ -1,9 +1,9 @@
 import React from 'react'
 import Box from '@mui/material/Box'
-import WhatshotIcon from '@mui/icons-material/Whatshot'
 import { Stack, Typography } from '@mui/material'
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import NavigationButton from '@clientComponents/NavigationButton'
+import TimelapseOutlinedIcon from '@mui/icons-material/TimelapseOutlined'
 
 const links = [
   {
@@ -12,9 +12,9 @@ const links = [
     icon: <WaterDropOutlinedIcon />,
   },
   {
-    name: 'Flows',
+    name: 'Series',
     href: '/navigator/flows/practiceSeries',
-    icon: <WhatshotIcon />,
+    icon: <TimelapseOutlinedIcon />,
   },
 ]
 

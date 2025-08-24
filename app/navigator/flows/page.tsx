@@ -87,6 +87,7 @@ export default function Page() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          gap: 6,
         }}
       >
         <SplashHeader
@@ -94,10 +95,10 @@ export default function Page() {
           alt={'Flows'}
           title="Flows"
         />
-        <Box height={'32px'} />
         <SplashNavButton
           title="Practice Series"
           description="Series are made up of asana poses."
+          image="/images/practice-series-color.png"
           sx={{
             backgroundImage: "url('/images/practice-series-color.png')",
           }}
@@ -106,6 +107,7 @@ export default function Page() {
         <SplashNavButton
           title="Create Series"
           description="Create your own Series of asana poses."
+          image="/images/create-series-bw.png"
           sx={{
             backgroundImage: "url('/images/create-series-bw.png')",
           }}
@@ -114,6 +116,7 @@ export default function Page() {
         <SplashNavButton
           title="Practice Sequences"
           description="Sequences are ordered series."
+          image="/icons/designImages/beautiful-young-woman-practices-yoga-asana.png"
           sx={{
             backgroundImage:
               "url('/icons/designImages/beautiful-young-woman-practices-yoga-asana.png')",
@@ -123,6 +126,7 @@ export default function Page() {
         <SplashNavButton
           title="Create Sequence"
           description="Create your Sequences."
+          image="/icons/designImages/beautiful-young-woman-practices-yoga-create-sequence.png"
           sx={{
             backgroundImage:
               "url('/icons/designImages/beautiful-young-woman-practices-yoga-create-sequence.png')",

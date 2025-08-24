@@ -109,26 +109,19 @@ export default function SplashHeader({
           width: '100%',
           maxWidth: '100vw',
           display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'flex-start',
+          alignItems: 'center',
           justifyContent: 'center',
-          gap: 1,
+          gap: 0.5, // Smaller gap to keep icon close to text
         }}
       >
         {showIcon && (
-          <Box
-            sx={{
-              flexShrink: 0,
-              mt: 0.5, // Align with first line of text
-            }}
-          >
-            <Image
-              src={iconSrc}
-              height={iconSize}
-              width={iconSize}
-              alt={iconAlt}
-            />
-          </Box>
+          <Image
+            src={iconSrc}
+            height={iconSize}
+            width={iconSize}
+            alt={iconAlt}
+            style={{ flexShrink: 0 }}
+          />
         )}
         <Typography
           variant="splashTitle"
@@ -139,8 +132,7 @@ export default function SplashHeader({
             px: { xs: 1, sm: 2 },
             py: 1,
             borderRadius: '8px',
-            flex: 1,
-            maxWidth: showIcon ? 'calc(100vw - 40px)' : '100vw', // Account for icon width
+            maxWidth: showIcon ? 'calc(100vw - 32px)' : '100vw', // Account for icon width + gap
             wordBreak: 'break-word',
             overflowWrap: 'break-word',
             hyphens: 'auto',

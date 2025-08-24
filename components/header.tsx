@@ -8,10 +8,9 @@ import HomeIcon from '@mui/icons-material/Home'
 import MenuIcon from '@mui/icons-material/Menu'
 import FlareIcon from '@mui/icons-material/Flare'
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
-import WhatshotIcon from '@mui/icons-material/Whatshot'
+import TipsAndUpdatesOutlinedIcon from '@mui/icons-material/TipsAndUpdatesOutlined'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
-import InfoIcon from '@mui/icons-material/Info'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import {
   AppBar,
@@ -29,6 +28,8 @@ import {
 import Link from 'next/link'
 import Image from 'next/image'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
+import TimelapseOutlinedIcon from '@mui/icons-material/TimelapseOutlined'
 
 export default function Header() {
   const [openDrawer, setOpenDrawer] = React.useState(false)
@@ -92,16 +93,23 @@ export default function Header() {
         color: 'primary',
       },
       {
-        name: 'Flows',
-        href: '/navigator/flows',
-        icon: <WhatshotIcon color="primary" />,
+        name: 'Series',
+        href: '/navigator/flows/practiceSeries',
+        icon: <TimelapseOutlinedIcon color="primary" />,
+        action: null,
+        color: 'primary',
+      },
+      {
+        name: 'Sequences',
+        href: '/navigator/flows/practiceSequences',
+        icon: <Brightness1OutlinedIcon color="primary" />,
         action: null,
         color: 'primary',
       },
       {
         name: 'About',
         href: '/navigator/about',
-        icon: <InfoIcon />,
+        icon: <TipsAndUpdatesOutlinedIcon />,
         action: null,
         color: 'gray',
       },

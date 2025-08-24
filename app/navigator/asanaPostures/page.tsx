@@ -87,7 +87,7 @@ export default function Page() {
           sx={{
             width: '100%',
             maxWidth: '363px',
-            mb: 3,
+            mb: 6,
           }}
         >
           <Autocomplete
@@ -186,6 +186,7 @@ export default function Page() {
           <SplashNavButton
             title="Practice Asana Postures"
             description="Search and practice yoga postures."
+            image="/images/asana/practice-asana-posture-210x363.png"
             sx={{
               backgroundImage:
                 "url('/images/asana/practice-asana-posture-210x363.png')",
@@ -199,6 +200,7 @@ export default function Page() {
         <SplashNavButton
           title="Create Asana Posture"
           description="Customize your practice by creating new Asana postures."
+          image="/images/asana/create-asana-splash-header.png"
           sx={{
             backgroundImage:
               "url('/images/asana/create-asana-splash-header.svg')",
