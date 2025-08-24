@@ -1,5 +1,5 @@
 'use client'
-import React, { MouseEvent, useMemo, useCallback } from 'react'
+import React, { MouseEvent, useMemo, useCallback, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 import Box from '@mui/material/Box'
@@ -37,6 +37,18 @@ export default function Header() {
   const { data: session, status } = useSession()
   const router = useNavigationWithLoading()
   const currentPath = usePathname()
+
+  // Listen for custom event from NavBottom to open drawer
+  useEffect(() => {
+    const handleOpenDrawer = () => {
+      setOpenDrawer(true)
+    }
+
+    window.addEventListener('openHeaderDrawer', handleOpenDrawer)
+    return () => {
+      window.removeEventListener('openHeaderDrawer', handleOpenDrawer)
+    }
+  }, [])
 
   const toggleDrawer = (open: boolean) => () => {
     setOpenDrawer(open)

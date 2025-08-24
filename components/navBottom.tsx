@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { Box, IconButton } from '@mui/material'
-import HomeIcon from '@mui/icons-material/Home'
+import MenuIcon from '@mui/icons-material/Menu'
 import PersonIcon from '@mui/icons-material/Person'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
@@ -14,11 +14,14 @@ interface NavItem {
   id: string
   label: string
   icon: React.ReactNode
-  path: string | (() => string)
+  path: string | (() => string) | 'menu'
   getColor: ColorFunction
 }
 
-export default function NavBottom(props: { subRoute: string }) {
+export default function NavBottom(props: {
+  subRoute: string
+  onMenuToggle?: () => void
+}) {
   const router = useNavigationWithLoading()
   const { data: session, status } = useSession()
 
@@ -27,10 +30,10 @@ export default function NavBottom(props: { subRoute: string }) {
 
   const navItems: NavItem[] = [
     {
-      id: 'home',
-      label: 'Navigate to home page',
-      icon: <HomeIcon />,
-      path: '/',
+      id: 'menu',
+      label: 'Open main navigation menu',
+      icon: <MenuIcon />,
+      path: 'menu',
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       getColor: (_isAuthenticated: boolean) => 'primary.main', // Always primary.main
     },
@@ -52,7 +55,18 @@ export default function NavBottom(props: { subRoute: string }) {
     },
   ]
 
-  const handleNavigation = (path: string | (() => string), itemId?: string) => {
+  const handleNavigation = (
+    path: string | (() => string) | 'menu',
+    itemId?: string
+  ) => {
+    // Handle menu toggle specially
+    if (itemId === 'menu' || path === 'menu') {
+      if (props.onMenuToggle) {
+        props.onMenuToggle()
+      }
+      return
+    }
+
     // Handle back navigation specially
     if (itemId === 'back' || path === 'back') {
       // Use the router.back() method with loading states

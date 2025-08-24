@@ -8,6 +8,12 @@ import { usePathname } from 'next/navigation'
 export default function NavigatorLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname()
 
+  const handleMenuToggle = () => {
+    // Trigger the header menu by dispatching a custom event
+    const event = new CustomEvent('openHeaderDrawer')
+    window.dispatchEvent(event)
+  }
+
   return (
     <>
       {/* Skip link */}
@@ -44,7 +50,7 @@ export default function NavigatorLayout({ children }: { children: ReactNode }) {
         {children}
       </Box>
       {/* Bottom Navigation - appears on all navigator pages */}
-      <NavBottom subRoute={pathname} />
+      <NavBottom subRoute={pathname} onMenuToggle={handleMenuToggle} />
     </>
   )
 }

@@ -201,6 +201,7 @@ export default function Page() {
           title="Create Asana Posture"
           description="Customize your practice by creating new Asana postures."
           image="/images/asana/create-asana-splash-header.png"
+          premium
           sx={{
             backgroundImage:
               "url('/images/asana/create-asana-splash-header.svg')",
