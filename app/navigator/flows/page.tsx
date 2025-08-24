@@ -108,6 +108,7 @@ export default function Page() {
           title="Create Series"
           description="Create your own Series of asana poses."
           image="/images/create-series-bw.png"
+          premium
           sx={{
             backgroundImage: "url('/images/create-series-bw.png')",
           }}
@@ -127,6 +128,7 @@ export default function Page() {
           title="Create Sequence"
           description="Create your Sequences."
           image="/icons/designImages/beautiful-young-woman-practices-yoga-create-sequence.png"
+          premium
           sx={{
             backgroundImage:
               "url('/icons/designImages/beautiful-young-woman-practices-yoga-create-sequence.png')",
