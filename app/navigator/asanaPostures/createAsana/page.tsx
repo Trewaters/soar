@@ -9,6 +9,10 @@ import {
   Autocomplete,
   Typography,
   Drawer,
+  Snackbar,
+  Alert,
+  Backdrop,
+  CircularProgress,
 } from '@mui/material'
 import { createPosture } from '@lib/postureService'
 import { useSession } from 'next-auth/react'
@@ -33,6 +37,13 @@ export default function Page() {
   // State for notification management
   const [notificationState, setNotificationState] = useState({
     isOpen: false,
+  })
+
+  // State for success feedback
+  const [successState, setSuccessState] = useState({
+    showToast: false,
+    message: '',
+    isNavigating: false,
   })
 
   const [open, setOpen] = useState(false)
@@ -145,10 +156,19 @@ export default function Page() {
       setUploadedImages([])
       setEnglishVariationsInput('')
 
-      // Navigate to the newly created asana instead of just the list
-      router.push(
-        `/navigator/asanaPostures/${encodeURIComponent(data.sort_english_name)}`
-      )
+      // Show success toast
+      setSuccessState({
+        showToast: true,
+        message: `"${data.sort_english_name}" has been created successfully!`,
+        isNavigating: true,
+      })
+
+      // Wait a moment to show the success message, then navigate
+      setTimeout(() => {
+        router.push(
+          `/navigator/asanaPostures/${encodeURIComponent(data.sort_english_name)}`
+        )
+      }, 1500)
     } catch (error: Error | any) {
       console.error('Error creating posture:', error.message)
 
@@ -187,7 +207,10 @@ export default function Page() {
         setUploadedImages([])
       }
     } finally {
-      setIsSubmitting(false)
+      // Only reset submitting if we're not navigating
+      if (!successState.isNavigating) {
+        setIsSubmitting(false)
+      }
     }
   }
 
@@ -218,6 +241,17 @@ export default function Page() {
   // Handle CTA click in notification
   const handleNotificationCtaClick = () => {
     handleCtaAction('createAsana', window.location.pathname)
+  }
+
+  // Handle success toast close
+  const handleSuccessToastClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setSuccessState((prev) => ({ ...prev, showToast: false }))
   }
 
   return (
@@ -470,7 +504,7 @@ export default function Page() {
             onClick={handleSubmit}
             variant="contained"
             size="large"
-            disabled={isSubmitting}
+            disabled={isSubmitting || successState.isNavigating}
             sx={{
               borderRadius: '12px',
               mt: 3,
@@ -479,7 +513,11 @@ export default function Page() {
               fontWeight: 600,
             }}
           >
-            {isSubmitting ? 'Creating Asana...' : 'Create Asana'}
+            {successState.isNavigating
+              ? 'Redirecting to your new asana...'
+              : isSubmitting
+                ? 'Creating Asana...'
+                : 'Create Asana'}
           </Button>
         </Stack>
       </Stack>
@@ -499,6 +537,53 @@ export default function Page() {
         onClose={handleCloseNotification}
         onCtaClick={handleNotificationCtaClick}
       />
+
+      {/* Success Toast */}
+      <Snackbar
+        open={successState.showToast}
+        autoHideDuration={6000}
+        onClose={handleSuccessToastClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={handleSuccessToastClose}
+          severity="success"
+          variant="filled"
+          sx={{
+            width: '100%',
+            borderRadius: '12px',
+            fontSize: '1rem',
+          }}
+        >
+          {successState.message}
+        </Alert>
+      </Snackbar>
+
+      {/* Loading Overlay */}
+      <Backdrop
+        sx={{
+          color: '#fff',
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        }}
+        open={successState.isNavigating}
+      >
+        <Stack
+          spacing={3}
+          alignItems="center"
+          sx={{
+            textAlign: 'center',
+          }}
+        >
+          <CircularProgress color="primary" size={60} />
+          <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
+            Taking you to your new asana...
+          </Typography>
+          <Typography variant="body2" sx={{ opacity: 0.8 }}>
+            Just a moment while we prepare everything
+          </Typography>
+        </Stack>
+      </Backdrop>
     </Box>
   )
 }
