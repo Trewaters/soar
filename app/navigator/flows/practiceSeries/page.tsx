@@ -62,12 +62,25 @@ export default function Page() {
   // Ordered options for Autocomplete: user/alpha-created first, deduped, then others alphabetical
   // Partition ordered options for section headers
   const orderedSeriesOptions = useMemo(() => {
+    // Filter series to only show those created by current user or alpha users
+    const authorizedSeries = enrichedSeries.filter((s) => {
+      const createdBy = (s as any).createdBy
+      const userIdentifiers = [currentUserId, session?.user?.email].filter(
+        Boolean
+      )
+      // Allow series created by current user or alpha users only
+      return (
+        (createdBy && userIdentifiers.includes(createdBy)) ||
+        (createdBy && alphaUserIds.includes(createdBy))
+      )
+    })
+
     if (!FEATURES.PRIORITIZE_USER_ENTRIES_IN_SEARCH)
-      return series.map((s) => ({
+      return authorizedSeries.map((s) => ({
         ...s,
         id: s.id ? String(s.id) : '',
       }))
-    const validSeries = enrichedSeries
+    const validSeries = authorizedSeries
       .filter((s) => !!s.id && !!s.seriesName && !!s.seriesPostures)
       .map((s) => ({
         ...s,
@@ -79,10 +92,9 @@ export default function Page() {
       alphaUserIds,
       (item) => String((item as FlowSeriesData).seriesName || '')
     ) as FlowSeriesData[]
-    // Partition for section headers: Mine, Alpha, Others
+    // Partition for section headers: Mine, Alpha (no Others since we filtered them out)
     const mine: (FlowSeriesData & { id: string })[] = []
     const alpha: (FlowSeriesData & { id: string })[] = []
-    const others: (FlowSeriesData & { id: string })[] = []
     // Accept both user id and email for matching "Mine"
     const userIdentifiers = [currentUserId, session?.user?.email].filter(
       Boolean
@@ -98,11 +110,9 @@ export default function Page() {
         mine.push(itemWithId)
       } else if (createdBy && alphaUserIds.includes(createdBy)) {
         alpha.push(itemWithId)
-      } else {
-        others.push(itemWithId)
       }
     })
-    // Compose with section header markers
+    // Compose with section header markers (no Others section)
     const result: Array<
       | (FlowSeriesData & { id: string })
       | { section: 'Mine' | 'Alpha' | 'Others' }
@@ -115,18 +125,8 @@ export default function Page() {
       result.push({ section: 'Alpha' })
       alpha.forEach((item) => result.push(item))
     }
-    if (others.length > 0) {
-      result.push({ section: 'Others' })
-      others.forEach((item) => result.push(item))
-    }
     return result
-  }, [
-    enrichedSeries,
-    currentUserId,
-    alphaUserIds,
-    series,
-    session?.user?.email,
-  ])
+  }, [enrichedSeries, currentUserId, alphaUserIds, session?.user?.email])
 
   const fetchSeries = useCallback(
     async (selectId?: string) => {
@@ -351,11 +351,11 @@ export default function Page() {
             filterOptions={(options, state) => {
               // Partition options into groups by section
               const groups: Record<string, any[]> = {}
-              let currentSection: 'Mine' | 'Alpha' | 'Others' | null = null
+              let currentSection: 'Mine' | 'Alpha' | null = null
               for (const option of options) {
                 const opt = option as any
                 if ('section' in opt) {
-                  currentSection = opt.section as 'Mine' | 'Alpha' | 'Others'
+                  currentSection = opt.section as 'Mine' | 'Alpha'
                   if (!groups[currentSection]) groups[currentSection] = []
                 } else if (currentSection) {
                   if (!groups[currentSection]) groups[currentSection] = []
@@ -372,11 +372,7 @@ export default function Page() {
               }
               // Flatten back to options array, inserting section header if group has any items
               const filtered: typeof options = []
-              const sectionOrder: Array<'Mine' | 'Alpha' | 'Others'> = [
-                'Mine',
-                'Alpha',
-                'Others',
-              ]
+              const sectionOrder: Array<'Mine' | 'Alpha'> = ['Mine', 'Alpha']
               for (const section of sectionOrder) {
                 if (groups[section] && groups[section].length > 0) {
                   filtered.push({

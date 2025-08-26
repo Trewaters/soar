@@ -53,9 +53,20 @@ export default function Page() {
     Boolean
   ) as string[]
   const orderedSequenceOptions = React.useMemo(() => {
-    if (!FEATURES.PRIORITIZE_USER_ENTRIES_IN_SEARCH) return enrichedSequences
+    // Filter sequences to only show those created by current user or alpha users
+    const authorizedSequences = enrichedSequences.filter((s) => {
+      const createdBy = (s as any).createdBy
+      // Allow sequences created by current user or alpha users only
+      return (
+        (createdBy && userIdentifiers.includes(createdBy)) ||
+        (createdBy && alphaUserIds.includes(createdBy))
+      )
+    })
+
+    if (!FEATURES.PRIORITIZE_USER_ENTRIES_IN_SEARCH) return authorizedSequences
+
     // Convert id to string for ordering, then map back to SequenceData
-    const validSequences = enrichedSequences
+    const validSequences = authorizedSequences
       .filter(
         (s) =>
           typeof s.id !== 'undefined' && !!s.nameSequence && !!s.sequencesSeries
@@ -67,21 +78,18 @@ export default function Page() {
       alphaUserIds,
       (item) => String(item.nameSequence || '')
     )
-    // Partition for section headers: Mine, Alpha, Others
+    // Partition for section headers: Mine, Alpha (no Others since we filtered them out)
     const mine: typeof allOrdered = []
     const alpha: typeof allOrdered = []
-    const others: typeof allOrdered = []
     allOrdered.forEach((item) => {
       const createdBy = (item as any).createdBy
       if (createdBy && userIdentifiers.includes(createdBy)) {
         mine.push(item)
       } else if (createdBy && alphaUserIds.includes(createdBy)) {
         alpha.push(item)
-      } else {
-        others.push(item)
       }
     })
-    // Compose with section header markers
+    // Compose with section header markers (no Others section)
     const result: Array<
       (typeof allOrdered)[number] | { section: 'Mine' | 'Alpha' | 'Others' }
     > = []
@@ -92,10 +100,6 @@ export default function Page() {
     if (alpha.length > 0) {
       result.push({ section: 'Alpha' })
       alpha.forEach((item) => result.push(item))
-    }
-    if (others.length > 0) {
-      result.push({ section: 'Others' })
-      others.forEach((item) => result.push(item))
     }
     return result
   }, [enrichedSequences, currentUserId, alphaUserIds, userIdentifiers])
@@ -285,14 +289,11 @@ export default function Page() {
                 filterOptions={(options, state) => {
                   // Partition options into groups by section
                   const groups: Record<string, any[]> = {}
-                  let currentSection: 'Mine' | 'Alpha' | 'Others' | null = null
+                  let currentSection: 'Mine' | 'Alpha' | null = null
                   for (const option of options) {
                     const opt = option as any
                     if ('section' in opt) {
-                      currentSection = opt.section as
-                        | 'Mine'
-                        | 'Alpha'
-                        | 'Others'
+                      currentSection = opt.section as 'Mine' | 'Alpha'
                       if (!groups[currentSection]) groups[currentSection] = []
                     } else if (currentSection) {
                       if (!groups[currentSection]) groups[currentSection] = []
@@ -308,10 +309,9 @@ export default function Page() {
                   }
                   // Flatten back to options array, inserting section header if group has any items
                   const filtered: typeof options = []
-                  const sectionOrder: Array<'Mine' | 'Alpha' | 'Others'> = [
+                  const sectionOrder: Array<'Mine' | 'Alpha'> = [
                     'Mine',
                     'Alpha',
-                    'Others',
                   ]
                   for (const section of sectionOrder) {
                     if (groups[section] && groups[section].length > 0) {
