@@ -111,7 +111,7 @@ export default function Page() {
             Search and Practice Yoga Postures
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-            Use the search below to find any yoga posture and view detailed
+            Use the search below to find any asana posture and view detailed
             information about its alignment, benefits, and practice
             instructions.
           </Typography>

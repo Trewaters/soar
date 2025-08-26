@@ -29,8 +29,8 @@ Improve a meaningful app that helps yogis worldwide. Collaborate on a [NextJS](h
 
 _Asanas_
 
-- View Yoga postures details.
-- Create Yoga posture.
+- View Asana postures details.
+- Create Asana posture.
 
 _Flows_
 

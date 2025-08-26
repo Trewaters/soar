@@ -106,8 +106,8 @@ function convertLegacyProps(
  * @component
  * @param {CombinedPostureShareButtonProps} props - The properties for the component.
  * @param {ShareableContent} props.content - The yoga content to share (discriminated union).
- * @param {FullAsanaData} [props.postureData] - Legacy: The data for a single yoga posture (deprecated).
- * @param {FlowSeriesData} [props.seriesData] - Legacy: The data for a series of yoga postures (deprecated).
+ * @param {FullAsanaData} [props.postureData] - Legacy: The data for a single asana posture (deprecated).
+ * @param {FlowSeriesData} [props.seriesData] - Legacy: The data for a series of asana postures (deprecated).
  * @param {boolean} [props.showDetails=false] - Flag to indicate whether to show detailed information.
  *
  * @returns {JSX.Element} The rendered sharing component.

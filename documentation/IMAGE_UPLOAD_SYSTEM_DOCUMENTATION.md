@@ -98,7 +98,7 @@ The Soar Yoga app features a comprehensive image upload and gallery system that 
 
 #### `PostureImageUpload.tsx`
 
-**Purpose**: Upload images associated with specific yoga postures
+**Purpose**: Upload images associated with specific asana postures
 **Features**:
 
 - Associates images with posture ID or name
