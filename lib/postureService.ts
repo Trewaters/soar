@@ -1,6 +1,6 @@
 import { FullAsanaData } from '@app/context/AsanaPostureContext'
 import { logServiceError } from './errorLogger'
-import { getAlphaUserIds } from './alphaUsers'
+import { getAlphaUserIds } from '@app/lib/alphaUsers'
 
 export type CreatePostureInput = {
   sort_english_name: string

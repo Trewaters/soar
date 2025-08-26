@@ -1,6 +1,8 @@
 import { PrismaClient } from '../../../prisma/generated/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { createHash } from 'crypto'
+import { auth } from '../../../auth'
+import getAlphaUserIds from '@app/lib/alphaUsers'
 
 const prisma = new PrismaClient()
 
@@ -26,10 +28,65 @@ export async function GET(request: NextRequest) {
 
     console.log('Fetching sequences from database...')
 
-    // Fetch sequences with optional server-side filtering by creator
-    const where = createdBy ? { created_by: createdBy } : undefined
+    // Get session and alpha user IDs for access control
+    const session = await auth()
+    const currentUserEmail = session?.user?.email || null
+    const alphaUserIds = getAlphaUserIds()
+
+    const whereClause: any = {}
+
+    if (createdBy) {
+      // Access control: only allow if user requests their own sequences or alpha user sequences
+      const hasAccess =
+        !currentUserEmail || // Allow if no user (for public access)
+        createdBy === currentUserEmail || // User's own sequences
+        alphaUserIds.includes(createdBy) // Alpha user's sequences
+
+      if (!hasAccess) {
+        return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+      }
+
+      whereClause.created_by = createdBy
+      console.log(`Filtering sequences by creator: ${createdBy}`)
+    } else {
+      // If no specific creator, filter by access control
+      if (currentUserEmail) {
+        // Show user's own sequences + alpha user sequences
+        const allowedCreators = [currentUserEmail, ...alphaUserIds]
+        whereClause.created_by = {
+          in: allowedCreators,
+        }
+        console.log(
+          `Filtering sequences by allowed creators: ${allowedCreators.join(', ')}`
+        )
+      } else {
+        // If no user, only show alpha user sequences
+        if (alphaUserIds.length > 0) {
+          whereClause.created_by = {
+            in: alphaUserIds,
+          }
+          console.log(
+            `No user session, showing only alpha user sequences: ${alphaUserIds.join(', ')}`
+          )
+        } else {
+          // No alpha users configured, return empty result for unauthenticated users
+          console.log(
+            'No alpha users configured and no user session, returning empty result'
+          )
+          return NextResponse.json([], {
+            headers: {
+              'Content-Type': 'application/json',
+              'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+              'X-Content-Type-Options': 'nosniff',
+            },
+          })
+        }
+      }
+    }
+
+    // Fetch sequences with access control
     const data = await prisma.asanaSequence.findMany({
-      where,
+      where: whereClause,
       orderBy: {
         createdAt: 'desc', // Show newest first to help verify new creations
       },

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '../../../prisma/generated/client'
 import { auth } from '../../../auth'
-import { getAlphaUserIds } from '@lib/alphaUsers'
+import { getAlphaUserIds } from '@app/lib/alphaUsers'
 
 const prisma = new PrismaClient()
 
