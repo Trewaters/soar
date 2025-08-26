@@ -294,8 +294,8 @@ export default function Page() {
               <TextField
                 sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
                 {...params}
-                placeholder="Choose or Add a Category"
-                helperText="Tap to add"
+                placeholder="Select a Category"
+                helperText="Select Category"
                 slotProps={{
                   input: {
                     ...params.InputProps,
@@ -414,7 +414,7 @@ export default function Page() {
 
           {/* Breath Input */}
           <TextField
-            label="Breath (default)"
+            label="Breath action"
             name="breath_direction_default"
             value={formData.breath_direction_default}
             onChange={handleChange}
