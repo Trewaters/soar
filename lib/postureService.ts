@@ -1,5 +1,6 @@
 import { FullAsanaData } from '@app/context/AsanaPostureContext'
 import { logServiceError } from './errorLogger'
+import { getAlphaUserIds } from './alphaUsers'
 
 export type CreatePostureInput = {
   sort_english_name: string
@@ -79,6 +80,103 @@ export async function getUserPostures(
     logServiceError(error, 'postureService', 'getUserPostures', {
       operation: 'fetch_user_postures',
       createdBy,
+    })
+    throw error
+  }
+}
+
+/**
+ * Get postures accessible to the current user (own postures + alpha user postures)
+ */
+export async function getAccessiblePostures(
+  currentUserEmail?: string
+): Promise<FullAsanaData[]> {
+  try {
+    // Get alpha user IDs
+    const alphaUserIds = getAlphaUserIds()
+
+    // If no current user, only show alpha user postures
+    if (!currentUserEmail) {
+      if (alphaUserIds.length === 0) {
+        return []
+      }
+
+      // Fetch only alpha user postures
+      const alphaPostures: FullAsanaData[] = []
+      for (const alphaUserId of alphaUserIds) {
+        try {
+          const response = await fetch(
+            `/api/poses?createdBy=${encodeURIComponent(alphaUserId)}&t=${Date.now()}`,
+            {
+              cache: 'no-store',
+              headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                Pragma: 'no-cache',
+                Expires: '0',
+              },
+            }
+          )
+          if (response.ok) {
+            const postures = await response.json()
+            alphaPostures.push(...postures)
+          }
+        } catch (error) {
+          console.warn(
+            `Failed to fetch postures for alpha user ${alphaUserId}:`,
+            error
+          )
+        }
+      }
+      return alphaPostures
+    }
+
+    // Fetch user's own postures
+    const userPostures = await getUserPostures(currentUserEmail)
+
+    // Fetch alpha user postures
+    const alphaPostures: FullAsanaData[] = []
+    for (const alphaUserId of alphaUserIds) {
+      // Skip if the current user is already an alpha user (avoid duplicates)
+      if (alphaUserId === currentUserEmail) continue
+
+      try {
+        const response = await fetch(
+          `/api/poses?createdBy=${encodeURIComponent(alphaUserId)}&t=${Date.now()}`,
+          {
+            cache: 'no-store',
+            headers: {
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              Pragma: 'no-cache',
+              Expires: '0',
+            },
+          }
+        )
+        if (response.ok) {
+          const postures = await response.json()
+          alphaPostures.push(...postures)
+        }
+      } catch (error) {
+        console.warn(
+          `Failed to fetch postures for alpha user ${alphaUserId}:`,
+          error
+        )
+      }
+    }
+
+    // Combine and deduplicate postures
+    const allPostures = [...userPostures, ...alphaPostures]
+    const uniquePostures = allPostures.filter(
+      (posture, index, arr) =>
+        arr.findIndex(
+          (p) => p.sort_english_name === posture.sort_english_name
+        ) === index
+    )
+
+    return uniquePostures
+  } catch (error) {
+    logServiceError(error, 'postureService', 'getAccessiblePostures', {
+      operation: 'fetch_accessible_postures',
+      currentUserEmail,
     })
     throw error
   }

@@ -29,7 +29,7 @@ import Looks4Icon from '@mui/icons-material/Looks4'
 import Looks5Icon from '@mui/icons-material/Looks5'
 import { useRouter } from 'next/navigation'
 import { FullAsanaData } from '@context/AsanaPostureContext'
-import { getAllPostures } from '@lib/postureService'
+import { getAccessiblePostures } from '@lib/postureService'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SplashHeader from '@app/clientComponents/splash-header'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
@@ -54,7 +54,9 @@ export default function Page() {
 
   const fetchPostures = async () => {
     try {
-      const postures = await getAllPostures()
+      const postures = await getAccessiblePostures(
+        session?.user?.email || undefined
+      )
       setPostures(postures)
     } catch (error: Error | any) {
       console.error('Error fetching postures:', error.message)

@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 import SplashHeader from '@app/clientComponents/splash-header'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
-import { getUserPostures } from '@lib/postureService'
+import { getAccessiblePostures } from '@lib/postureService'
 import { FullAsanaData } from '@app/context/AsanaPostureContext'
 
 export default function Page() {
@@ -15,17 +15,18 @@ export default function Page() {
   const [userAsanas, setUserAsanas] = useState<FullAsanaData[]>([])
   const [loading, setLoading] = useState(false)
 
-  // Fetch user-created asanas
+  // Fetch user-accessible asanas (user's own + alpha users)
   useEffect(() => {
     const fetchUserAsanas = async () => {
-      if (!session?.user?.email) return
-
       setLoading(true)
       try {
-        const asanas = await getUserPostures(session.user.email)
+        // Use the new access-controlled service function
+        const asanas = await getAccessiblePostures(
+          session?.user?.email || undefined
+        )
         setUserAsanas(asanas)
       } catch (error) {
-        console.error('Error fetching user asanas:', error)
+        console.error('Error fetching accessible asanas:', error)
       } finally {
         setLoading(false)
       }
@@ -43,16 +44,17 @@ export default function Page() {
 
   // Add a helpful message if no asanas are found
   const getPlaceholderText = () => {
-    if (!session?.user?.email) {
-      return 'Please sign in to search your asanas'
-    }
     if (loading) {
-      return 'Loading your asanas...'
+      return 'Loading accessible asanas...'
     }
     if (userAsanas.length === 0) {
-      return 'No asanas created yet. Create your first asana below!'
+      return session?.user?.email
+        ? 'No accessible asanas found. Create your first asana below!'
+        : 'No asanas available. Sign in to access your asanas.'
     }
-    return `Search your ${userAsanas.length} created asana${userAsanas.length === 1 ? '' : 's'}`
+    return session?.user?.email
+      ? `Search your ${userAsanas.length} accessible asana${userAsanas.length === 1 ? '' : 's'}`
+      : `Search ${userAsanas.length} available asana${userAsanas.length === 1 ? '' : 's'}`
   }
 
   const handlePracticeAsanaClick = () => {
