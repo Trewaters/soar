@@ -25,6 +25,7 @@ import {
 import { useSession, signOut } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { UseUser } from '@context/UserContext'
+import { AppText } from '../constants/Strings'
 
 interface ProfileNavMenuItem {
   id: string
@@ -213,7 +214,7 @@ const ProfileNavMenu: React.FC = () => {
             )
           })}
 
-          {/* Sign Out Section */}
+          {/* Logout Section */}
           <Divider sx={{ my: 1 }} />
           <ListItem disablePadding>
             <ListItemButton
@@ -231,7 +232,7 @@ const ProfileNavMenu: React.FC = () => {
                 <LogoutIcon />
               </ListItemIcon>
               <ListItemText
-                primary="Sign Out"
+                primary={AppText.APP_LOGOUT}
                 sx={{
                   '& .MuiListItemText-primary': {
                     fontWeight: 500,

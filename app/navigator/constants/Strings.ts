@@ -23,7 +23,7 @@ export abstract class AppText {
   // public static readonly APP_FAQ = 'FAQ'
   // public static readonly APP_ABOUT = 'About'
   // public static readonly APP_SETTINGS = 'Settings'
-  // public static readonly APP_SIGN_OUT = 'Sign Out'
+  public static readonly APP_LOGOUT = 'Logout'
   // public static readonly APP_SIGN_IN = 'Sign In'
   // public static readonly APP_SIGN_UP = 'Sign Up'
   // public static readonly APP_SIGN_UP_NOW = 'Sign Up Now'

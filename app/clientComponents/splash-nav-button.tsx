@@ -100,7 +100,7 @@ export default function SplashNavButton({
           variant="subtitle1"
           component={'h2'}
           sx={{
-            color: 'info.main',
+            color: 'navSplash.main',
             alignSelf: 'flex-start',
             fontWeight: 'bold',
             mt: 2,

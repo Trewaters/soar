@@ -3,6 +3,7 @@ import { Button, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Link from 'next/link'
 import { signOut, auth } from '../../../auth'
+import { AppText } from '@app/navigator/constants/Strings'
 
 export default async function SignOutPage(props: {
   searchParams: { success?: string }
@@ -49,7 +50,7 @@ export default async function SignOutPage(props: {
                 variant="contained"
                 sx={{ borderRadius: '12px' }}
               >
-                <Typography>Complete Sign Out</Typography>
+                <Typography>Complete {AppText.APP_LOGOUT}</Typography>
               </Button>
             </Stack>
           </Stack>
