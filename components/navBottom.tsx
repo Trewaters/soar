@@ -39,9 +39,11 @@ export default function NavBottom(props: {
     },
     {
       id: 'profile',
-      label: 'Navigate to user profile',
+      label: isAuthenticated
+        ? 'Navigate to user profile'
+        : 'Login to access profile',
       icon: <PersonIcon />,
-      path: '/navigator/profile',
+      path: isAuthenticated ? '/navigator/profile' : '/auth/signin',
       getColor: (isAuthenticated: boolean) =>
         isAuthenticated ? 'success.main' : 'grey.500', // Green when logged in, gray when logged out
     },
@@ -109,7 +111,6 @@ export default function NavBottom(props: {
           disableRipple
           disableFocusRipple
           disableTouchRipple
-          disabled={item.id === 'profile' && !isAuthenticated} // Disable profile when not authenticated
           aria-label={item.label}
           title={item.label}
           role="button"
