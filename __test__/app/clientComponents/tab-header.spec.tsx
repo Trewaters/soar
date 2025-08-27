@@ -303,8 +303,8 @@ describe('TabHeader Component', () => {
       render(<TabHeader />, { wrapper: TestWrapper })
 
       // Should show LandingPage content in first tab
-      const flowsButton = screen.getByRole('button', { name: /flows/i })
-      expect(flowsButton).toBeInTheDocument()
+      const seriesButton = screen.getByRole('button', { name: /series/i })
+      expect(seriesButton).toBeInTheDocument()
     })
 
     it('integrates properly with EightLimbs navigation', () => {

@@ -1,5 +1,12 @@
 import { render, screen } from '@testing-library/react'
 
+// Mock React before any imports
+jest.mock('react', () => ({
+  ...jest.requireActual('react'),
+  useState: jest.fn(),
+  useMemo: jest.fn(),
+}))
+
 // We need to mock before importing the Page component for flag variations
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn(() => ({ get: jest.fn(() => null) })),
@@ -117,7 +124,24 @@ jest.mock('@app/FEATURES', () => ({
 
 import Page from '@app/navigator/flows/practiceSequences/page'
 
+const mockUseState = jest.fn()
+const mockUseMemo = jest.fn()
+
 describe('Practice Sequences page - grouped sections', () => {
+  beforeEach(() => {
+    // Mock useState to return sequences and setter
+    mockUseState.mockReturnValue([sampleSequences, jest.fn()])
+    // Mock useMemo to return enriched sequences
+    mockUseMemo.mockImplementation((fn) => fn())
+
+    require('react').useState = mockUseState
+    require('react').useMemo = mockUseMemo
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
   it('renders grouped list with user/alpha in top and deduped others when flag is on', async () => {
     render(<Page />)
 
@@ -145,6 +169,13 @@ describe('Practice Sequences page - grouped sections', () => {
 describe('Practice Sequences page - feature flag off', () => {
   it('does not render grouped list when feature flag is disabled', async () => {
     jest.resetModules()
+
+    // Mock React with the same setup
+    jest.doMock('react', () => ({
+      ...jest.requireActual('react'),
+      useState: jest.fn().mockReturnValue([sampleSequences, jest.fn()]),
+      useMemo: jest.fn().mockImplementation((fn) => fn()),
+    }))
 
     jest.doMock('@app/FEATURES', () => ({
       FEATURES: { PRIORITIZE_USER_ENTRIES_IN_SEARCH: false },

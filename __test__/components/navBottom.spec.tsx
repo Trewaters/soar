@@ -21,9 +21,9 @@ jest.mock('next-auth/react', () => ({
 }))
 
 // Mock Material-UI icons
-jest.mock('@mui/icons-material/Home', () => ({
+jest.mock('@mui/icons-material/Menu', () => ({
   __esModule: true,
-  default: () => <div data-testid="home-icon" />,
+  default: () => <div data-testid="menu-icon" />,
 }))
 
 jest.mock('@mui/icons-material/Person', () => ({
@@ -72,7 +72,7 @@ describe('NavBottom Component', () => {
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
       expect(screen.getByRole('navigation')).toBeInTheDocument()
-      expect(screen.getByTestId('home-icon')).toBeInTheDocument()
+      expect(screen.getByTestId('menu-icon')).toBeInTheDocument()
       expect(screen.getByTestId('person-icon')).toBeInTheDocument()
       expect(screen.getByTestId('arrow-back-icon')).toBeInTheDocument()
     })
@@ -87,17 +87,20 @@ describe('NavBottom Component', () => {
     it('disables profile button when user is not authenticated', () => {
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
-      const profileButton = screen.getByLabelText('Navigate to user profile')
-      expect(profileButton).toBeDisabled()
+      const profileButton = screen.getByLabelText('Login to access profile')
+      expect(profileButton).not.toBeDisabled() // Profile button should not be disabled, it redirects to login
     })
 
-    it('navigates to home when home button is clicked', () => {
-      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
+    it('calls menu toggle when menu button is clicked', () => {
+      const mockMenuToggle = jest.fn()
+      render(<NavBottom subRoute="/test" onMenuToggle={mockMenuToggle} />, {
+        wrapper: TestWrapper,
+      })
 
-      const homeButton = screen.getByLabelText('Navigate to home page')
-      fireEvent.click(homeButton)
+      const menuButton = screen.getByLabelText('Open main navigation menu')
+      fireEvent.click(menuButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/')
+      expect(mockMenuToggle).toHaveBeenCalledTimes(1)
     })
 
     it('navigates back when back button is clicked', () => {
@@ -113,12 +116,12 @@ describe('NavBottom Component', () => {
     it('applies correct colors for unauthenticated state', () => {
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
-      const homeIcon = screen.getByTestId('home-icon')
+      const menuIcon = screen.getByTestId('menu-icon')
       const personIcon = screen.getByTestId('person-icon')
       const backIcon = screen.getByTestId('arrow-back-icon')
 
-      // Home icon should always be primary.main
-      expect(homeIcon).toHaveStyle({ color: 'primary.main' })
+      // Menu icon should always be primary.main
+      expect(menuIcon).toHaveStyle({ color: 'primary.main' })
 
       // Person icon should be grey when not authenticated
       expect(personIcon).toHaveStyle({ color: 'grey.500' })
@@ -162,12 +165,12 @@ describe('NavBottom Component', () => {
     it('applies correct colors for authenticated state', () => {
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
-      const homeIcon = screen.getByTestId('home-icon')
+      const menuIcon = screen.getByTestId('menu-icon')
       const personIcon = screen.getByTestId('person-icon')
       const backIcon = screen.getByTestId('arrow-back-icon')
 
-      // Home icon should always be primary.main
-      expect(homeIcon).toHaveStyle({ color: 'primary.main' })
+      // Menu icon should always be primary.main
+      expect(menuIcon).toHaveStyle({ color: 'primary.main' })
 
       // Person icon should be green when authenticated
       expect(personIcon).toHaveStyle({ color: 'success.main' })
@@ -189,8 +192,8 @@ describe('NavBottom Component', () => {
     it('treats loading state as unauthenticated', () => {
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
-      const profileButton = screen.getByLabelText('Navigate to user profile')
-      expect(profileButton).toBeDisabled()
+      const profileButton = screen.getByLabelText('Login to access profile')
+      expect(profileButton).not.toBeDisabled() // Should redirect to login, not be disabled
     })
   })
 
@@ -240,7 +243,9 @@ describe('NavBottom Component', () => {
     it('has correct aria-labels for all buttons', () => {
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
-      expect(screen.getByLabelText('Navigate to home page')).toBeInTheDocument()
+      expect(
+        screen.getByLabelText('Open main navigation menu')
+      ).toBeInTheDocument()
       expect(
         screen.getByLabelText('Navigate to user profile')
       ).toBeInTheDocument()
@@ -271,16 +276,19 @@ describe('NavBottom Component', () => {
     })
 
     it('supports keyboard interaction', () => {
-      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
+      const mockMenuToggle = jest.fn()
+      render(<NavBottom subRoute="/test" onMenuToggle={mockMenuToggle} />, {
+        wrapper: TestWrapper,
+      })
 
-      const homeButton = screen.getByLabelText('Navigate to home page')
+      const menuButton = screen.getByLabelText('Open main navigation menu')
 
       // Focus the button
-      homeButton.focus()
-      expect(homeButton).toHaveFocus()
+      menuButton.focus()
+      expect(menuButton).toHaveFocus()
 
       // Simulate Enter key press
-      fireEvent.keyDown(homeButton, { key: 'Enter' })
+      fireEvent.keyDown(menuButton, { key: 'Enter' })
       // Note: MUI handles Enter key internally, so we just test that it doesn't break
     })
   })
@@ -329,13 +337,17 @@ describe('NavBottom Component', () => {
       expect(mockBack).toHaveBeenCalledTimes(1)
     })
 
-    it('handles string-based paths correctly for home navigation', () => {
-      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
+    it('handles menu toggle correctly', () => {
+      const mockMenuToggle = jest.fn()
+      render(<NavBottom subRoute="/test" onMenuToggle={mockMenuToggle} />, {
+        wrapper: TestWrapper,
+      })
 
-      const homeButton = screen.getByLabelText('Navigate to home page')
-      fireEvent.click(homeButton)
+      const menuButton = screen.getByLabelText('Open main navigation menu')
+      fireEvent.click(menuButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/')
+      expect(mockMenuToggle).toHaveBeenCalledTimes(1)
+      expect(mockPush).not.toHaveBeenCalled()
       expect(mockBack).not.toHaveBeenCalled()
     })
   })
@@ -355,6 +367,15 @@ describe('NavBottom Component', () => {
   })
 
   describe('component structure', () => {
+    beforeEach(() => {
+      // Set unauthenticated state for consistent testing
+      mockUseSession.mockReturnValue({
+        data: null,
+        status: 'unauthenticated',
+        update: jest.fn(),
+      })
+    })
+
     it('renders as an AppBar component', () => {
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
@@ -375,10 +396,13 @@ describe('NavBottom Component', () => {
       const buttons = screen.getAllByRole('button')
 
       // Check that icons are present in the expected order
-      expect(buttons[0]).toHaveAttribute('aria-label', 'Navigate to home page')
+      expect(buttons[0]).toHaveAttribute(
+        'aria-label',
+        'Open main navigation menu'
+      )
       expect(buttons[1]).toHaveAttribute(
         'aria-label',
-        'Navigate to user profile'
+        'Login to access profile'
       )
       expect(buttons[2]).toHaveAttribute(
         'aria-label',

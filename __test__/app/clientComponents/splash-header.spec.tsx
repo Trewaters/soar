@@ -82,8 +82,8 @@ describe('SplashHeader Component', () => {
         'src',
         '/icons/designImages/leaf-orange.png'
       )
-      expect(decorativeIcon).toHaveAttribute('height', '24')
-      expect(decorativeIcon).toHaveAttribute('width', '24')
+      expect(decorativeIcon).toHaveAttribute('height', '21')
+      expect(decorativeIcon).toHaveAttribute('width', '21')
     })
 
     it('should hide decorative icon when showIcon is false', () => {
