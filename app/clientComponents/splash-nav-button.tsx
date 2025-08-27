@@ -101,11 +101,15 @@ export default function SplashNavButton({
           component={'h2'}
           sx={{
             color: 'navSplash.main',
+            backgroundColor: 'rgba(255, 255, 255, 0.3)',
+            borderRadius: '8px',
+            padding: '6px 12px',
+            marginTop: '12px',
             alignSelf: 'flex-start',
             fontWeight: 'bold',
             mt: 2,
             mx: 2,
-            maxWidth: '70%',
+            maxWidth: 'auto',
           }}
         >
           {description}

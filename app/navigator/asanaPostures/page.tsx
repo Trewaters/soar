@@ -202,7 +202,7 @@ export default function Page() {
         <SplashNavButton
           title="Create Asana Posture"
           description="Customize your practice by creating new Asana postures."
-          image="/images/asana/create-asana-splash-header.png"
+          image="/images/asana/create-asana-splash-header-bw.png"
           premium
           sx={{
             backgroundImage:
