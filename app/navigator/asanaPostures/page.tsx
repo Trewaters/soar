@@ -1,61 +1,57 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Autocomplete, Box, TextField } from '@mui/material'
-import { useSession } from 'next-auth/react'
+import { Box } from '@mui/material'
 import SplashHeader from '@app/clientComponents/splash-header'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
-import { getAccessiblePostures } from '@lib/postureService'
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
 
 export default function Page() {
   const router = useNavigationWithLoading()
-  const { data: session } = useSession()
-  const [userAsanas, setUserAsanas] = useState<FullAsanaData[]>([])
-  const [loading, setLoading] = useState(false)
+  // const { data: session } = useSession()
+  // const [userAsanas, setUserAsanas] = useState<FullAsanaData[]>([])
+  // const [loading, setLoading] = useState(false)
 
   // Fetch user-accessible asanas (user's own + alpha users)
-  useEffect(() => {
-    const fetchUserAsanas = async () => {
-      setLoading(true)
-      try {
-        // Use the new access-controlled service function
-        const asanas = await getAccessiblePostures(
-          session?.user?.email || undefined
-        )
-        setUserAsanas(asanas)
-      } catch (error) {
-        console.error('Error fetching accessible asanas:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
+  // useEffect(() => {
+  //   const fetchUserAsanas = async () => {
+  //     setLoading(true)
+  //     try {
+  //       // Use the new access-controlled service function
+  //       const asanas = await getAccessiblePostures(
+  //         session?.user?.email || undefined
+  //       )
+  //       setUserAsanas(asanas)
+  //     } catch (error) {
+  //       console.error('Error fetching accessible asanas:', error)
+  //     } finally {
+  //       setLoading(false)
+  //     }
+  //   }
 
-    fetchUserAsanas()
-  }, [session?.user?.email])
+  //   fetchUserAsanas()
+  // }, [session?.user?.email])
 
   // Transform user asanas into autocomplete options
-  const autocompleteOptions = userAsanas.map((asana) => ({
-    label: `${asana.english_names?.[0] || asana.sort_english_name}`,
-    value: asana.sort_english_name,
-    asana: asana,
-  }))
+  // const autocompleteOptions = userAsanas.map((asana) => ({
+  //   label: `${asana.english_names?.[0] || asana.sort_english_name}`,
+  //   value: asana.sort_english_name,
+  //   asana: asana,
+  // }))
 
   // Add a helpful message if no asanas are found
-  const getPlaceholderText = () => {
-    if (loading) {
-      return 'Loading accessible asanas...'
-    }
-    if (userAsanas.length === 0) {
-      return session?.user?.email
-        ? 'No accessible asanas found. Create your first asana below!'
-        : 'No asanas available. Sign in to access your asanas.'
-    }
-    return session?.user?.email
-      ? `Search your ${userAsanas.length} accessible asana${userAsanas.length === 1 ? '' : 's'}`
-      : `Search ${userAsanas.length} available asana${userAsanas.length === 1 ? '' : 's'}`
-  }
+  // const getPlaceholderText = () => {
+  //   if (loading) {
+  //     return 'Loading accessible asanas...'
+  //   }
+  //   if (userAsanas.length === 0) {
+  //     return session?.user?.email
+  //       ? 'No accessible asanas found. Create your first asana below!'
+  //       : 'No asanas available. Sign in to access your asanas.'
+  //   }
+  //   return session?.user?.email
+  //     ? `Search your ${userAsanas.length} accessible asana${userAsanas.length === 1 ? '' : 's'}`
+  //     : `Search ${userAsanas.length} available asana${userAsanas.length === 1 ? '' : 's'}`
+  // }
 
   const handlePracticeAsanaClick = () => {
     // Navigate to the dedicated practice asana page
@@ -85,7 +81,7 @@ export default function Page() {
         <Box height={'32px'} />
 
         {/* Autocomplete Search for Asana Postures */}
-        <Box
+        {/* <Box
           sx={{
             width: '100%',
             maxWidth: '363px',
@@ -174,6 +170,7 @@ export default function Page() {
             autoHighlight
           />
         </Box>
+         */}
         {/* Practice Asana Postures Button with embedded search */}
         <Box
           sx={{
