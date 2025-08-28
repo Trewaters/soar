@@ -3,10 +3,7 @@ import React, { useState, useEffect } from 'react'
 import {
   Box,
   Button,
-  ButtonGroup,
   Stack,
-  TextField,
-  Autocomplete,
   Typography,
   Drawer,
   Snackbar,
@@ -19,7 +16,8 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
-import SearchIcon from '@mui/icons-material/Search'
+import AsanaDetailsEdit from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
+import type { AsanaEditFieldProps } from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
 import ImageUploadWithFallback from '@app/clientComponents/imageUpload/ImageUploadWithFallback'
 import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUploadWithFallback'
 import { deletePoseImage } from '@lib/imageService'
@@ -47,7 +45,6 @@ export default function Page() {
   })
 
   const [open, setOpen] = useState(false)
-  const [difficulty, setDifficulty] = useState('')
   const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -71,8 +68,6 @@ export default function Page() {
     'Supine',
     'Twist',
   ]
-
-  const [englishVariationsInput, setEnglishVariationsInput] = useState('')
 
   const [formData, setFormData] = useState<{
     sort_english_name: string
@@ -98,31 +93,74 @@ export default function Page() {
     dristi: '',
   })
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value,
-    })
-  }
-
-  const handleCategoryChange = (
-    event: React.SyntheticEvent,
-    value: string | null
-  ) => {
-    setFormData({
-      ...formData,
-      category: value || '',
-    })
-  }
-
-  const handleDifficultyChange = (value: string) => {
-    setDifficulty(value)
-    setFormData({
-      ...formData,
-      difficulty: value,
-    })
-  }
+  // Create field configurations for AsanaDetailsEdit
+  const formFields: AsanaEditFieldProps[] = [
+    {
+      type: 'text',
+      label: 'Asana Posture Name',
+      value: formData.sort_english_name,
+      onChange: (value: string) =>
+        setFormData({ ...formData, sort_english_name: value }),
+      required: true,
+      placeholder: 'Enter the name of the asana',
+    },
+    {
+      type: 'autocomplete',
+      label: 'Category',
+      value: formData.category,
+      options: categories,
+      onChange: (value: string) =>
+        setFormData({ ...formData, category: value }),
+      placeholder: 'Select a Category',
+      helperText: 'Select Category',
+      freeSolo: true,
+    },
+    {
+      type: 'variations',
+      label: 'Name Variations',
+      value: formData.english_names,
+      onChange: (value: string[]) =>
+        setFormData({ ...formData, english_names: value }),
+      placeholder: 'e.g. "Downward Dog, Adho Mukha Svanasana"',
+      helperText: 'Separate variant names with commas',
+    },
+    {
+      type: 'multiline',
+      label: 'Description',
+      value: formData.description,
+      onChange: (value: string) =>
+        setFormData({ ...formData, description: value }),
+      placeholder: 'Enter a detailed description...',
+      rows: 4,
+    },
+    {
+      type: 'buttonGroup',
+      label: 'Difficulty Level',
+      value: formData.difficulty,
+      options: ['Easy', 'Average', 'Difficult'],
+      onChange: (value: string) =>
+        setFormData({ ...formData, difficulty: value }),
+      helperText: 'Select the difficulty level for this asana',
+    },
+    {
+      type: 'text',
+      label: 'Breath Action',
+      value: formData.breath_direction_default,
+      onChange: (value: string) =>
+        setFormData({ ...formData, breath_direction_default: value }),
+      placeholder: 'e.g. Inhale, Exhale, Neutral',
+    },
+    {
+      type: 'text',
+      label: 'Dristi (Gaze Point)',
+      value: formData.dristi || '',
+      onChange: (value: string) => setFormData({ ...formData, dristi: value }),
+      placeholder:
+        'e.g. "Tip of the nose", "Between the eyebrows", "Hand", "Toes", "Upward to the sky"',
+      helperText:
+        'Type your own or use suggestions like: Tip of the nose, Between the eyebrows, Hand, Toes, Upward to the sky',
+    },
+  ]
 
   const handleImageUploaded = (image: PoseImageData) => {
     console.log('Image uploaded for asana creation:', image)
@@ -154,7 +192,6 @@ export default function Page() {
 
       // Clear uploaded images state since posture was created successfully
       setUploadedImages([])
-      setEnglishVariationsInput('')
 
       // Show success toast
       setSuccessState({
@@ -277,227 +314,37 @@ export default function Page() {
           onClick={handleInfoClick}
         />
         <Stack sx={{ px: 4 }} spacing={3}>
-          {/* Name Input */}
-          <TextField
-            label="Asana Posture Name"
-            name="sort_english_name"
-            value={formData.sort_english_name}
-            onChange={handleChange}
-            required
-            sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: '12px',
-                borderColor: 'primary.main',
-                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-              },
-              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
-                {
-                  borderColor: 'primary.light',
-                },
-            }}
-          />
-
-          {/* Category Search with Autocomplete */}
-          <Autocomplete
-            freeSolo
-            id="combo-box-category-search"
-            options={categories}
-            value={formData.category}
-            onChange={handleCategoryChange}
-            onInputChange={(event, newInputValue) => {
-              setFormData({
-                ...formData,
-                category: newInputValue,
-              })
-            }}
-            sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: '12px',
-                borderColor: 'primary.main',
-                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-              },
-              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
-                {
-                  borderColor: 'primary.light',
-                },
-              '& .MuiAutocomplete-endAdornment': {
-                display: 'none',
-              },
-            }}
-            renderInput={(params) => (
-              <TextField
-                sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
-                {...params}
-                placeholder="Select a Category"
-                helperText="Select Category"
-                slotProps={{
-                  input: {
-                    ...params.InputProps,
-                    startAdornment: (
-                      <>
-                        <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
-                        {params.InputProps.startAdornment}
-                      </>
-                    ),
-                  },
-                }}
-              />
-            )}
-          />
-
-          {/* English Variations Input */}
-          <TextField
-            label="Name Variations"
-            name="english_names"
-            value={englishVariationsInput}
-            placeholder='e.g. "Downward Dog, Adho Mukha Svanasana"'
-            onChange={(e) => {
-              const { value } = e.target
-              setEnglishVariationsInput(value)
-
-              // Update the formData with parsed variations, but allow spaces within names
-              const variations = value
-                .split(',')
-                .map((name) => name.trim())
-                .filter((name) => name.length > 0)
-              setFormData({
-                ...formData,
-                english_names: variations,
-              })
-            }}
-            onBlur={(e) => {
-              // Clean up the input on blur to ensure proper formatting
-              const { value } = e.target
-              const cleanedVariations = value
-                .split(',')
-                .map((name) => name.trim())
-                .filter((name) => name.length > 0)
-
-              // Update both the input display and form data
-              setEnglishVariationsInput(cleanedVariations.join(', '))
-              setFormData({
-                ...formData,
-                english_names: cleanedVariations,
-              })
-            }}
-            helperText="Separate variant names with commas"
-            sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: '12px',
-                borderColor: 'primary.main',
-                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-              },
-              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
-                {
-                  borderColor: 'primary.light',
-                },
-            }}
-          />
-
-          {/* Description Text Field */}
-          <TextField
-            label="Description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            multiline
-            rows={4}
-            placeholder="Enter a detailed description..."
-            sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: '12px',
-                borderColor: 'primary.main',
-                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-              },
-              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
-                {
-                  borderColor: 'primary.light',
-                },
-            }}
-          />
-
-          {/* Select a Difficulty Level Button Group */}
-          <Box>
-            <Typography variant="body1" sx={{ mb: 1, fontWeight: 600 }}>
-              Select a Difficulty Level
-            </Typography>
-            <ButtonGroup variant="outlined" sx={{ width: '100%' }}>
-              {['Easy', 'Average', 'Difficult'].map((level) => (
-                <Button
-                  key={level}
-                  onClick={() => handleDifficultyChange(level)}
-                  variant={difficulty === level ? 'contained' : 'outlined'}
-                  sx={{
-                    flex: 1,
-                    borderRadius: '12px',
-                    '&:not(:last-child)': {
-                      borderTopRightRadius: 0,
-                      borderBottomRightRadius: 0,
-                    },
-                    '&:not(:first-of-type)': {
-                      borderTopLeftRadius: 0,
-                      borderBottomLeftRadius: 0,
-                    },
-                  }}
-                >
-                  {level}
-                </Button>
-              ))}
-            </ButtonGroup>
-          </Box>
-
-          {/* Breath Input */}
-          <TextField
-            label="Breath action"
-            name="breath_direction_default"
-            value={formData.breath_direction_default}
-            onChange={handleChange}
-            sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: '12px',
-                borderColor: 'primary.main',
-                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-              },
-              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
-                {
-                  borderColor: 'primary.light',
-                },
-            }}
-          />
-
-          {/* Dristi Component */}
-          <TextField
-            label="Dristi (Gaze Point)"
-            name="dristi"
-            value={formData.dristi || ''}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                dristi: e.target.value,
-              })
-            }
-            placeholder='e.g. "Tip of the nose", "Between the eyebrows", "Hand", "Toes", "Upward to the sky"'
-            helperText="Type your own or use suggestions like: Tip of the nose, Between the eyebrows, Hand, Toes, Upward to the sky"
-            sx={{
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderRadius: '12px',
-                borderColor: 'primary.main',
-                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-              },
-              '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
-                {
-                  borderColor: 'primary.light',
-                },
-            }}
-          />
+          {/* Asana Form Fields using AsanaDetailsEdit */}
+          <AsanaDetailsEdit fields={formFields} />
 
           {/* Image Upload Component */}
-          <ImageUploadWithFallback
-            maxFileSize={5}
-            acceptedTypes={['image/jpeg', 'image/png', 'image/svg']}
-            variant="dropzone"
-            onImageUploaded={handleImageUploaded}
-          />
+          <Box sx={{ pl: 4 }}>
+            <Typography
+              variant="subtitle1"
+              sx={{
+                fontWeight: 'bold',
+                color: 'primary.main',
+                mb: 1,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+              }}
+            >
+              <Box
+                component="img"
+                src="/icons/asanas/label_name_leaf.png"
+                alt=""
+                sx={{ width: 16, height: 20 }}
+              />
+              Image Upload
+            </Typography>
+            <ImageUploadWithFallback
+              maxFileSize={5}
+              acceptedTypes={['image/jpeg', 'image/png', 'image/svg']}
+              variant="dropzone"
+              onImageUploaded={handleImageUploaded}
+            />
+          </Box>
 
           {/* Submit Button */}
           <Button
