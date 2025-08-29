@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     const session = await auth().catch(() => null)
     const createdBy = session?.user?.email ?? 'guest'
 
-    await prisma.asanaSeries.create({
+    const newSeries = await prisma.asanaSeries.create({
       data: {
         seriesName,
         seriesPostures,
@@ -58,7 +58,12 @@ export async function POST(request: Request) {
     })
     const timestamp = Date.now().toString()
     return Response.json(
-      { message: 'Series Data saved', timestamp },
+      {
+        message: 'Series Data saved',
+        timestamp,
+        id: newSeries.id,
+        seriesName: newSeries.seriesName,
+      },
       {
         headers: {
           'Cache-Control':

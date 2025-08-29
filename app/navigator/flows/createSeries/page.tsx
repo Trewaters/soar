@@ -174,14 +174,20 @@ export default function Page() {
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
-      // eslint-disable-next-line no-unused-vars
       const data = await response.json()
+
+      // Redirect to the series detail page if we got an ID back
+      if (data.id) {
+        router.push(`/navigator/flows/practiceSeries?id=${data.id}`)
+        return
+      }
+
       return data
     } catch (error: Error | any) {
-      error.message
+      console.error('Error creating series:', error.message)
     }
-    // router.push('/navigator/flows')
-    handleCancel()
+    // Fallback to flows page if something went wrong
+    router.push('/navigator/flows')
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
