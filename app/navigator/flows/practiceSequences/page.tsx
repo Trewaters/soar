@@ -16,6 +16,8 @@ import {
 } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
@@ -217,9 +219,22 @@ export default function Page() {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
+          width: '100%',
+          maxWidth: '100vw',
+          boxSizing: 'border-box',
+          overflow: 'hidden',
         }}
       >
-        <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
+        <Stack
+          spacing={2}
+          sx={{
+            marginX: 3,
+            mb: '1em',
+            width: '100%',
+            maxWidth: 'calc(100vw - 24px)',
+            boxSizing: 'border-box',
+          }}
+        >
           <SplashHeader
             src={'/icons/designImages/header-practice-sequence.png'}
             alt={'Practice Sequences'}
@@ -230,13 +245,28 @@ export default function Page() {
             link="/navigator/flows"
             onClick={toggleDrawer(!open)}
           />
-          <Stack sx={{ px: 4 }}>
+          <Stack
+            sx={{
+              px: 4,
+              width: '100%',
+              maxWidth: '100%',
+              boxSizing: 'border-box',
+            }}
+          >
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <Typography variant="h6" sx={{ color: 'primary.main', mr: 2 }}>
                 Practice Sequences
               </Typography>
             </Box>
-            <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 1,
+                alignItems: 'flex-start',
+                width: '100%',
+                maxWidth: '100%',
+              }}
+            >
               <Autocomplete
                 key={`autocomplete-${orderedSequenceOptions.length}-${orderedSequenceOptions.map((s: any) => s.id ?? s.section).join('-')}`}
                 disablePortal
@@ -412,7 +442,8 @@ export default function Page() {
                     <Card
                       key={i}
                       sx={{
-                        width: '85%',
+                        width: '100%',
+                        maxWidth: '85%',
                         boxShadow: 3,
                         textAlign: 'center',
                         borderColor: 'primary.main',
@@ -425,77 +456,6 @@ export default function Page() {
                         className="journalTitle"
                         title={
                           <Box width={'100%'}>
-                            <Stack
-                              flexDirection={'row'}
-                              justifyContent={'space-between'}
-                            >
-                              <Stack>
-                                <Button
-                                  disableRipple
-                                  onClick={() =>
-                                    setPage((prev) => Math.max(prev - 1, 1))
-                                  }
-                                  disabled={page === 1}
-                                  startIcon={
-                                    <Image
-                                      src="/icons/navigation/nav-practice-sequence-back-arrow.svg"
-                                      width={7}
-                                      height={7}
-                                      alt={'sequence-back-arrow'}
-                                    />
-                                  }
-                                  sx={{
-                                    '&:hover': {
-                                      backgroundColor: 'transparent',
-                                      boxShadow: 'none',
-                                    },
-                                  }}
-                                >
-                                  {singleSequence.sequencesSeries[page - 2]
-                                    ?.seriesName || 'Previous'}
-                                </Button>
-                              </Stack>
-                              <Stack>
-                                <Button
-                                  disableRipple
-                                  onClick={() =>
-                                    setPage((prev) =>
-                                      Math.min(
-                                        prev + 1,
-                                        Math.ceil(
-                                          singleSequence.sequencesSeries
-                                            .length / itemsPerPage
-                                        )
-                                      )
-                                    )
-                                  }
-                                  disabled={
-                                    page ===
-                                    Math.ceil(
-                                      singleSequence.sequencesSeries.length /
-                                        itemsPerPage
-                                    )
-                                  }
-                                  endIcon={
-                                    <Image
-                                      src="/icons/navigation/nav-practice-sequence-advance-arrow.svg"
-                                      width={7}
-                                      height={7}
-                                      alt={'sequence-back-arrow'}
-                                    />
-                                  }
-                                  sx={{
-                                    '&:hover': {
-                                      backgroundColor: 'transparent',
-                                      boxShadow: 'none',
-                                    },
-                                  }}
-                                >
-                                  {singleSequence.sequencesSeries[page]
-                                    ?.seriesName || 'Next'}
-                                </Button>
-                              </Stack>
-                            </Stack>
                             <Stack>
                               <Typography variant="h6">
                                 {seriesMini.seriesName}
@@ -513,15 +473,23 @@ export default function Page() {
                             flexDirection={'row'}
                             flexWrap={'nowrap'}
                             className="journalLine"
+                            sx={{
+                              maxWidth: '100%',
+                              width: '100%',
+                              minWidth: 'unset',
+                              justifyContent: 'flex-start',
+                              alignItems: 'flex-start',
+                              gap: 2,
+                            }}
                           >
                             <Typography
                               variant="body1"
                               fontWeight="bold"
                               sx={{
-                                width: '30px',
+                                width: '35px',
                                 textAlign: 'right',
-                                mr: 2,
                                 flexShrink: 0,
+                                lineHeight: 1.5,
                               }}
                             >
                               {asanaIndex + 1}.
@@ -529,7 +497,11 @@ export default function Page() {
                             <Typography
                               textAlign={'left'}
                               variant="body1"
-                              sx={{ flexShrink: 0, mr: 1 }}
+                              sx={{
+                                flex: '1 1 auto',
+                                minWidth: 0,
+                                lineHeight: 1.5,
+                              }}
                             >
                               <Link
                                 underline="hover"
@@ -537,27 +509,106 @@ export default function Page() {
                                 href={`/navigator/asanaPostures/${
                                   asana.split(';')[0]
                                 }`}
+                                sx={{
+                                  wordWrap: 'break-word',
+                                  overflowWrap: 'break-word',
+                                  hyphens: 'auto',
+                                  display: 'inline-block',
+                                  maxWidth: '100%',
+                                  lineHeight: 1.5,
+                                }}
                               >
                                 {asana.split(';')[0]}
                               </Link>
                             </Typography>
-                            <Typography
-                              textAlign={'left'}
-                              variant="body2"
-                              sx={{ flexShrink: 0 }}
-                            ></Typography>
                           </Box>
                         ))}
                       </CardContent>
                     </Card>
                   ))}
-                  <CustomPaginationCircles
-                    count={Math.ceil(
-                      singleSequence.sequencesSeries.length / itemsPerPage
-                    )}
-                    page={page}
-                    onChange={handleChange}
-                  />
+
+                  {/* Navigation with chevrons inline with pagination circles */}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 1,
+                      mt: 2,
+                      width: '100%',
+                      maxWidth: '85%',
+                    }}
+                  >
+                    <Button
+                      disableRipple
+                      onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                      disabled={page === 1}
+                      sx={{
+                        minWidth: 'auto',
+                        p: 1,
+                        '&:hover': {
+                          backgroundColor: 'transparent',
+                        },
+                        '&.Mui-disabled': {
+                          opacity: 0.3,
+                        },
+                      }}
+                    >
+                      <ChevronLeftIcon
+                        sx={{
+                          fontSize: 24,
+                          color: 'primary.main',
+                        }}
+                      />
+                    </Button>
+
+                    <CustomPaginationCircles
+                      count={Math.ceil(
+                        singleSequence.sequencesSeries.length / itemsPerPage
+                      )}
+                      page={page}
+                      onChange={handleChange}
+                    />
+
+                    <Button
+                      disableRipple
+                      onClick={() =>
+                        setPage((prev) =>
+                          Math.min(
+                            prev + 1,
+                            Math.ceil(
+                              singleSequence.sequencesSeries.length /
+                                itemsPerPage
+                            )
+                          )
+                        )
+                      }
+                      disabled={
+                        page ===
+                        Math.ceil(
+                          singleSequence.sequencesSeries.length / itemsPerPage
+                        )
+                      }
+                      sx={{
+                        minWidth: 'auto',
+                        p: 1,
+                        '&:hover': {
+                          backgroundColor: 'transparent',
+                        },
+                        '&.Mui-disabled': {
+                          opacity: 0.3,
+                        },
+                      }}
+                    >
+                      <ChevronRightIcon
+                        sx={{
+                          fontSize: 24,
+                          color: 'primary.main',
+                        }}
+                      />
+                    </Button>
+                  </Box>
+
                   <Box
                     className={'journal'}
                     sx={{

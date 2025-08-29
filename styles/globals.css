@@ -10,6 +10,16 @@
 
 body {
   min-height: 100vh;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 a {
@@ -39,10 +49,15 @@ a:hover {
   border-bottom: 1px dotted #ccc;
   text-transform: capitalize;
   height: auto;
-  padding: 10px;
-  min-width: 277px;
-  max-width: 500px;
+  padding: 10px 0;
+  width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 0;
 }
 .journal .journalTitle {
   list-style: none;
@@ -69,8 +84,9 @@ a:hover {
 .lines {
   border-left: 1px solid #ffaa9f;
   border-right: 1px solid #ffaa9f;
-  width: 2px;
   float: left;
   margin-left: 40px;
   white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
 }
