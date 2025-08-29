@@ -156,8 +156,8 @@ export default function Page() {
           'Sequence created successfully:',
           data.sequence.nameSequence
         )
-        // Navigate back to practice sequences page after successful creation
-        router.push('/navigator/flows/practiceSequences')
+        // Navigate to the newly created sequence detail page
+        router.push(`/sequences/${data.sequence.id}`)
       } else {
         throw new Error('Sequence creation returned no sequence data')
       }
