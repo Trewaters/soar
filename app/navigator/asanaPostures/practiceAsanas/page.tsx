@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { getAccessiblePostures } from '@lib/postureService'
 import SplashHeader from '@app/clientComponents/splash-header'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
@@ -95,66 +95,51 @@ export default function Page() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
+          justifyContent: 'center',
           alignItems: 'center',
-          minHeight: '100vh',
-          paddingBottom: { xs: '80px', sm: '80px' },
         }}
       >
-        <SplashHeader
-          src={'/images/asana/practice-asana-posture-210x363.png'}
-          alt={'Practice Asana Postures'}
-          title="Practice Asana Postures"
-        />
-        <Box
-          sx={{
-            justifyContent: 'space-around',
-            width: '50%',
-          }}
-        >
+        <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
+          <SplashHeader
+            src={'/images/asana/practice-asana-posture-210x363.png'}
+            alt={'Practice Asana Postures'}
+            title="Practice Asana Postures"
+          />
           <SubNavHeader
             title="Asanas"
             link="/navigator/asanaPostures"
             onClick={handleInfoClick}
           />
-        </Box>
-        <Box height={'32px'} />
-        {/* Search Section */}
-        <Box
-          sx={{
-            width: '100%',
-            maxWidth: '600px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            mb: 4,
-          }}
-        >
-          {loading ? (
-            <LoadingSkeleton type="search" />
-          ) : (
-            <PostureSearch posturePropData={posturePropData} />
-          )}
-          {error && (
-            <Typography color="error" sx={{ mt: 2 }}>
-              Error: {error}
-            </Typography>
-          )}
-        </Box>
-
-        {/* Instructions */}
-        <Box
-          sx={{
-            width: '100%',
-            maxWidth: '600px',
-            textAlign: 'center',
-            px: 2,
-          }}
-        >
-          <Typography variant="body2" color="text.secondary">
-            Start typing to search for a posture, then select it to view
-            detailed practice information.
-          </Typography>
-        </Box>
+          <Stack sx={{ px: 4 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <Typography variant="h6" sx={{ color: 'primary.main', mr: 2 }}>
+                Practice Asanas
+              </Typography>
+            </Box>
+            {/* Search Section */}
+            <Box
+              sx={{
+                width: '100%',
+                maxWidth: '600px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                mb: 4,
+              }}
+            >
+              {loading ? (
+                <LoadingSkeleton type="search" />
+              ) : (
+                <PostureSearch posturePropData={posturePropData} />
+              )}
+              {error && (
+                <Typography color="error" sx={{ mt: 2 }}>
+                  Error: {error}
+                </Typography>
+              )}
+            </Box>
+          </Stack>
+        </Stack>
       </Box>
     </>
   )

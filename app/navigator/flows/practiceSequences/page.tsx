@@ -217,13 +217,9 @@ export default function Page() {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          mt: 4,
         }}
       >
-        <Stack
-          spacing={2}
-          sx={{ marginX: 3, marginY: 3, mb: '1em', width: '100%' }}
-        >
+        <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
           <SplashHeader
             src={'/icons/designImages/header-practice-sequence.png'}
             alt={'Practice Sequences'}
@@ -235,6 +231,11 @@ export default function Page() {
             onClick={toggleDrawer(!open)}
           />
           <Stack sx={{ px: 4 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <Typography variant="h6" sx={{ color: 'primary.main', mr: 2 }}>
+                Practice Sequences
+              </Typography>
+            </Box>
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-start' }}>
               <Autocomplete
                 key={`autocomplete-${orderedSequenceOptions.length}-${orderedSequenceOptions.map((s: any) => s.id ?? s.section).join('-')}`}
@@ -330,7 +331,7 @@ export default function Page() {
                   return opt.id === val.id
                 }}
                 sx={{
-                  flexGrow: 1,
+                  width: '100%',
                   '& .MuiOutlinedInput-notchedOutline': {
                     borderRadius: '12px',
                     borderColor: 'primary.main',
