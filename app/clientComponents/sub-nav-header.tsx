@@ -38,7 +38,7 @@ const SubNavHeader: React.FC<SubNavHeaderProps> = ({
       direction={'row'}
       justifyContent={'space-between'}
       sx={{
-        marginTop: 4,
+        marginTop: 1,
         paddingLeft: 4,
         paddingRight: 4,
         ...sx,

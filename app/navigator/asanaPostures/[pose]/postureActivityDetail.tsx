@@ -31,6 +31,7 @@ import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 import { deletePosture } from '@lib/postureService'
 import PostureImageUpload from '@app/clientComponents/imageUpload/PostureImageUpload'
 import EditPostureDialog from '@app/navigator/asanaPostures/editAsana/EditPostureDialog'
+import SubNavHeader from '@app/clientComponents/sub-nav-header'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
@@ -645,10 +646,10 @@ export default function PostureActivityDetail({
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          mt: 3,
           px: { xs: 0, sm: 2 }, // Remove padding on mobile for full width
         }}
       >
+        <SubNavHeader title="Asana" link="/navigator/asanaPostures" />
         <Stack direction={'column'} spacing={0}>
           <AsanaDetails
             details={posture?.sort_english_name}
