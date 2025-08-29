@@ -203,7 +203,7 @@ export default React.memo(function AsanaDetailsEdit(
         </Stack>
 
         {/* Field Input Section */}
-        <Box sx={{ pl: 4 }}>{renderFieldInput(field, fieldId)}</Box>
+        <Box>{renderFieldInput(field, fieldId)}</Box>
       </Box>
     )
   }
