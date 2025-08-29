@@ -47,3 +47,7 @@ postures.json
 
 # mongo files to ignore
 datalogmongod.log*
+
+# Ai scripts
+/scripts*
+/scripts/*
