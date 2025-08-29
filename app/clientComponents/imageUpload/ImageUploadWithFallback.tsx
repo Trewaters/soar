@@ -477,26 +477,6 @@ export default function ImageUploadWithFallback({
   return (
     <>
       {variant === 'button' ? <UploadButton /> : <DropzoneArea />}
-
-      {/* Debug Info */}
-      <Box sx={{ mt: 2, p: 1, bgcolor: 'grey.100', borderRadius: 1 }}>
-        <Typography variant="caption" color="text.secondary" display="block">
-          🔍 Debug Info:
-        </Typography>
-        <Typography variant="caption" color="text.secondary" display="block">
-          • Fallback Dialog Open: {fallbackDialog.open ? '✅ YES' : '❌ NO'}
-        </Typography>
-        <Typography variant="caption" color="text.secondary" display="block">
-          • Error: {fallbackDialog.error || 'none'}
-        </Typography>
-        <Typography variant="caption" color="text.secondary" display="block">
-          • Has File: {fallbackDialog.file ? '✅ YES' : '❌ NO'}
-        </Typography>
-        <Typography variant="caption" color="text.secondary" display="block">
-          • Session: {session?.user?.id ? '✅ Logged in' : '❌ Not logged in'}
-        </Typography>
-      </Box>
-
       {/* Main Upload Dialog */}
       <Dialog
         open={open}

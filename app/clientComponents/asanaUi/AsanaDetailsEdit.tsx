@@ -214,7 +214,7 @@ export default React.memo(function AsanaDetailsEdit(
         return (
           <TextField
             id={fieldId}
-            label={field.label}
+            // label={field.label}
             value={field.value}
             onChange={(e) => field.onChange(e.target.value)}
             placeholder={field.placeholder}
@@ -233,7 +233,7 @@ export default React.memo(function AsanaDetailsEdit(
         return (
           <TextField
             id={fieldId}
-            label={field.label}
+            // label={field.label}
             value={field.value}
             onChange={(e) => field.onChange(e.target.value)}
             placeholder={field.placeholder}
@@ -271,7 +271,7 @@ export default React.memo(function AsanaDetailsEdit(
             renderInput={(params) => (
               <TextField
                 {...params}
-                label={field.label}
+                // label={field.label}
                 placeholder={field.placeholder}
                 required={field.required}
                 helperText={field.helperText}
@@ -345,7 +345,7 @@ export default React.memo(function AsanaDetailsEdit(
         return (
           <TextField
             id={fieldId}
-            label={field.label}
+            // label={field.label}
             value={variationsDisplayValue}
             onChange={(e) => {
               const { value } = e.target
