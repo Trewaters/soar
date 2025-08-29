@@ -456,6 +456,70 @@ export default function Page() {
                         className="journalTitle"
                         title={
                           <Box width={'100%'}>
+                            <Stack
+                              flexDirection={'row'}
+                              justifyContent={'space-between'}
+                              alignItems={'center'}
+                              sx={{ mb: 1 }}
+                            >
+                              <Button
+                                disableRipple
+                                onClick={() =>
+                                  setPage((prev) => Math.max(prev - 1, 1))
+                                }
+                                disabled={page === 1}
+                                startIcon={<ChevronLeftIcon />}
+                                sx={{
+                                  fontSize: '0.875rem',
+                                  '&:hover': {
+                                    backgroundColor: 'transparent',
+                                    boxShadow: 'none',
+                                  },
+                                  '&.Mui-disabled': {
+                                    opacity: 0.3,
+                                  },
+                                }}
+                              >
+                                {singleSequence.sequencesSeries[page - 2]
+                                  ?.seriesName || 'Previous'}
+                              </Button>
+
+                              <Button
+                                disableRipple
+                                onClick={() =>
+                                  setPage((prev) =>
+                                    Math.min(
+                                      prev + 1,
+                                      Math.ceil(
+                                        singleSequence.sequencesSeries.length /
+                                          itemsPerPage
+                                      )
+                                    )
+                                  )
+                                }
+                                disabled={
+                                  page ===
+                                  Math.ceil(
+                                    singleSequence.sequencesSeries.length /
+                                      itemsPerPage
+                                  )
+                                }
+                                endIcon={<ChevronRightIcon />}
+                                sx={{
+                                  fontSize: '0.875rem',
+                                  '&:hover': {
+                                    backgroundColor: 'transparent',
+                                    boxShadow: 'none',
+                                  },
+                                  '&.Mui-disabled': {
+                                    opacity: 0.3,
+                                  },
+                                }}
+                              >
+                                {singleSequence.sequencesSeries[page]
+                                  ?.seriesName || 'Next'}
+                              </Button>
+                            </Stack>
                             <Stack>
                               <Typography variant="h6">
                                 {seriesMini.seriesName}
