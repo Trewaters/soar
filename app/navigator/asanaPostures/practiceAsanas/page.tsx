@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Box, Typography } from '@mui/material'
 import { getAccessiblePostures } from '@lib/postureService'
 import SplashHeader from '@app/clientComponents/splash-header'
@@ -8,6 +8,7 @@ import PostureSearch from '@app/navigator/asanaPostures/posture-search'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 import { FullAsanaData } from '@app/context/AsanaPostureContext'
 import { useSession } from 'next-auth/react'
+import SubNavHeader from '@app/clientComponents/sub-nav-header'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -15,7 +16,12 @@ export default function Page() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const fetchData = async () => {
+  const handleInfoClick = () => {
+    // Handle help/info click - could show a help dialog or navigate to help page
+    console.log('Help info clicked for Practice Asanas page')
+  }
+
+  const fetchData = useCallback(async () => {
     setLoading(true)
     setError(null)
     try {
@@ -34,7 +40,7 @@ export default function Page() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [session?.user?.email])
 
   useEffect(() => {
     fetchData()
@@ -47,7 +53,7 @@ export default function Page() {
       const newUrl = window.location.pathname
       window.history.replaceState({}, '', newUrl)
     }
-  }, [])
+  }, [fetchData])
 
   // Refetch data when the page becomes visible (e.g., when returning from create page)
   useEffect(() => {
@@ -81,7 +87,7 @@ export default function Page() {
       window.removeEventListener('focus', handleFocus)
       window.removeEventListener('popstate', handlePopState)
     }
-  }, [])
+  }, [fetchData])
 
   return (
     <>
@@ -99,28 +105,19 @@ export default function Page() {
           alt={'Practice Asana Postures'}
           title="Practice Asana Postures"
         />
-        <Box height={'32px'} />
-
-        {/* Description */}
         <Box
           sx={{
-            width: '100%',
-            maxWidth: '600px',
-            textAlign: 'center',
-            mb: 4,
-            px: 2,
+            justifyContent: 'space-around',
+            width: '50%',
           }}
         >
-          <Typography variant="h6" color="primary" gutterBottom>
-            Search and Practice Yoga Postures
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
-            Use the search below to find any asana posture and view detailed
-            information about its alignment, benefits, and practice
-            instructions.
-          </Typography>
+          <SubNavHeader
+            title="Asanas"
+            link="/navigator/asanaPostures"
+            onClick={handleInfoClick}
+          />
         </Box>
-
+        <Box height={'32px'} />
         {/* Search Section */}
         <Box
           sx={{
