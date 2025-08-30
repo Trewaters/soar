@@ -245,18 +245,33 @@ export default function Page() {
         alignItems: 'center',
       }}
     >
-      <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
-        <SplashHeader
-          src={'/images/series/series-practice-splash-header.png'}
-          alt={'Practice Series'}
-          title="Practice Series"
-        />
+      <SplashHeader
+        src={'/images/series/series-practice-splash-header.png'}
+        alt={'Practice Series'}
+        title="Practice Series"
+      />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          width: '100%',
+          marginX: 3,
+          mb: '1em',
+        }}
+      >
         <SubNavHeader
           title="Flows"
           link="/navigator/flows"
           onClick={handleInfoClick}
+          sx={{
+            width: '100%',
+            maxWidth: '384px', // Match SplashHeader width
+            alignSelf: 'center',
+            mb: 2, // Add bottom margin for spacing
+          }}
         />
-        <Stack sx={{ px: 4 }}>
+        <Stack sx={{ px: 4, width: '100%', maxWidth: '600px' }}>
           <Autocomplete
             disablePortal
             freeSolo={false}
@@ -425,7 +440,7 @@ export default function Page() {
           {/* GroupedAutocompleteSections removed: UI now uses flat ordered list only */}
         </Stack>
         {flow && (
-          <Box width="100%" sx={{ p: 2 }} key={flow.id}>
+          <Box width="100%" sx={{ p: 2, maxWidth: '600px' }} key={flow.id}>
             <Box
               display={'flex'}
               flexDirection={'column'}
@@ -536,7 +551,7 @@ export default function Page() {
             </Box>
           </Box>
         )}
-      </Stack>
+      </Box>
       <Drawer
         // sx={{ width: '50%' }}
         anchor="bottom"

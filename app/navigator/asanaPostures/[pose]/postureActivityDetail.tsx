@@ -961,29 +961,6 @@ export default function PostureActivityDetail({
             </Stack>
           </Box>
         )}
-
-      {/* Debug information */}
-      {process.env.NODE_ENV === 'development' && (
-        <Box sx={{ mt: 2, p: 2, backgroundColor: '#f0f0f0', borderRadius: 1 }}>
-          <Typography variant="caption" component="div">
-            Debug - Edit Button Visibility:
-          </Typography>
-          <Typography variant="caption" component="div">
-            Session exists: {session ? 'Yes' : 'No'}
-          </Typography>
-          <Typography variant="caption" component="div">
-            User email: {session?.user?.email || 'None'}
-          </Typography>
-          <Typography variant="caption" component="div">
-            Posture created_by: {posture?.created_by || 'None'}
-          </Typography>
-          <Typography variant="caption" component="div">
-            Can edit:{' '}
-            {session?.user?.email === posture?.created_by ? 'Yes' : 'No'}
-          </Typography>
-        </Box>
-      )}
-
       {/* Edit Posture Dialog */}
       <EditPostureDialog
         open={editDialogOpen}
