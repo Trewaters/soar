@@ -6,7 +6,7 @@ import type { AsanaSequence } from '../../../prisma/generated/client'
 export const dynamic = 'force-dynamic'
 
 const prisma = new PrismaClient()
-
+/* DELETE THIS PAGE. NOT USED CORRECTLY 2025-08-30 06:40:15 */
 export default async function SequencesIndexPage() {
   const sequences = await prisma.asanaSequence.findMany({
     orderBy: { createdAt: 'desc' },

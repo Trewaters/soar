@@ -240,8 +240,8 @@ export default function EditSequence({
         const data = await res.json().catch(() => ({}))
         throw new Error(data?.error || `Delete failed (${res.status})`)
       }
-      // Navigate back to sequences list after delete
-      router.push('/navigator/sequences')
+      // Navigate to practice sequences page after delete
+      router.push('/navigator/flows/practiceSequences')
     } catch (e) {
       // Surface an inline error via saveError banner area
       setSaveState('error')
