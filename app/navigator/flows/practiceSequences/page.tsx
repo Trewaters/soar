@@ -237,9 +237,7 @@ export default function Page() {
           sx={{
             marginX: 3,
             mb: '1em',
-            width: '100%',
-            maxWidth: 'calc(100vw - 24px)',
-            boxSizing: 'border-box',
+            width: 'fit-content',
           }}
         >
           <SubNavHeader
@@ -247,21 +245,13 @@ export default function Page() {
             link="/navigator/flows"
             onClick={toggleDrawer(!open)}
           />
-          <Stack
-            sx={{
-              px: 4,
-              width: '100%',
-              maxWidth: '100%',
-              boxSizing: 'border-box',
-            }}
-          >
+          <Stack sx={{ px: 4 }}>
             <Box
               sx={{
                 display: 'flex',
                 gap: 1,
                 alignItems: 'flex-start',
-                width: '100%',
-                maxWidth: '100%',
+                width: { xs: '90vw', md: '40vw' },
               }}
             >
               <Autocomplete
