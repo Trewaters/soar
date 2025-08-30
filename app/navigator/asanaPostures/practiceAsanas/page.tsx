@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography, Drawer } from '@mui/material'
 import { getAccessiblePostures } from '@lib/postureService'
 import SplashHeader from '@app/clientComponents/splash-header'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
@@ -15,10 +15,10 @@ export default function Page() {
   const [posturePropData, setPosturePropData] = useState<FullAsanaData[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [open, setOpen] = useState(false)
 
   const handleInfoClick = () => {
-    // Handle help/info click - could show a help dialog or navigate to help page
-    console.log('Help info clicked for Practice Asanas page')
+    setOpen(!open)
   }
 
   const fetchData = useCallback(async () => {
@@ -151,6 +151,25 @@ export default function Page() {
           </Stack>
         </Box>
       </Box>
+
+      <Drawer
+        anchor="bottom"
+        open={open}
+        onClose={() => setOpen(false)}
+        sx={{
+          '& .MuiDrawer-paper': {
+            maxWidth: '100vw',
+          },
+        }}
+        disablePortal={false}
+        disableScrollLock={true}
+      >
+        <Typography variant="body1" sx={{ p: 2 }}>
+          Search and browse through your available yoga postures. Use the search
+          bar to find specific asanas or scroll through the complete collection
+          to explore and practice different poses.
+        </Typography>
+      </Drawer>
     </>
   )
 }

@@ -13,6 +13,7 @@ import {
   Typography,
   ListSubheader,
   IconButton,
+  Drawer,
 } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
@@ -209,9 +210,6 @@ export default function Page() {
   }
 
   const [open, setOpen] = useState(false)
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen)
-  }
 
   return (
     <>
@@ -235,23 +233,39 @@ export default function Page() {
         <Stack
           spacing={2}
           sx={{
-            marginX: 3,
             mb: '1em',
-            width: 'fit-content',
+            width: '100%',
+            maxWidth: '600px',
+            alignItems: 'center',
+            alignSelf: 'center',
           }}
         >
           <SubNavHeader
             title="Flows"
             link="/navigator/flows"
-            onClick={toggleDrawer(!open)}
+            onClick={() => setOpen(!open)}
+            sx={{
+              width: '100%',
+              maxWidth: '600px',
+              alignSelf: 'center',
+              mb: 2,
+            }}
           />
-          <Stack sx={{ px: 4 }}>
+          <Stack
+            sx={{
+              px: 4,
+              width: '100%',
+              maxWidth: '600px',
+              alignItems: 'center',
+            }}
+          >
             <Box
               sx={{
                 display: 'flex',
                 gap: 1,
                 alignItems: 'flex-start',
-                width: { xs: '90vw', md: '40vw' },
+                width: '100%',
+                maxWidth: '600px',
               }}
             >
               <Autocomplete
@@ -400,8 +414,9 @@ export default function Page() {
                     backgroundColor: 'primary.main',
                     borderTopLeftRadius: '12px',
                     borderTopRightRadius: '12px',
-                    width: 'fit-content',
-                    ml: 5,
+                    width: '100%',
+                    maxWidth: '600px',
+                    alignSelf: 'center',
                     pr: 7,
                     pl: 2,
                     fontWeight: 'bold',
@@ -410,7 +425,14 @@ export default function Page() {
                   {singleSequence.nameSequence}
                 </Typography>
                 {singleSequence?.id ? (
-                  <Box sx={{ ml: 5, mt: 1 }}>
+                  <Box
+                    sx={{
+                      width: '100%',
+                      maxWidth: '600px',
+                      alignSelf: 'center',
+                      mt: 1,
+                    }}
+                  >
                     <IconButton
                       color="primary"
                       onClick={() => {
@@ -432,7 +454,7 @@ export default function Page() {
                       key={i}
                       sx={{
                         width: '100%',
-                        maxWidth: '85%',
+                        maxWidth: '600px',
                         boxShadow: 3,
                         textAlign: 'center',
                         borderColor: 'primary.main',
@@ -580,7 +602,7 @@ export default function Page() {
                     </Card>
                   ))}
 
-                  {/* Navigation with chevrons inline with pagination circles */}
+                  {/* Navigation with pagination circles */}
                   <Box
                     sx={{
                       display: 'flex',
@@ -589,32 +611,9 @@ export default function Page() {
                       gap: 1,
                       mt: 2,
                       width: '100%',
-                      maxWidth: '85%',
+                      maxWidth: '600px',
                     }}
                   >
-                    <Button
-                      disableRipple
-                      onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                      disabled={page === 1}
-                      sx={{
-                        minWidth: 'auto',
-                        p: 1,
-                        '&:hover': {
-                          backgroundColor: 'transparent',
-                        },
-                        '&.Mui-disabled': {
-                          opacity: 0.3,
-                        },
-                      }}
-                    >
-                      <ChevronLeftIcon
-                        sx={{
-                          fontSize: 24,
-                          color: 'primary.main',
-                        }}
-                      />
-                    </Button>
-
                     <CustomPaginationCircles
                       count={Math.ceil(
                         singleSequence.sequencesSeries.length / itemsPerPage
@@ -622,44 +621,6 @@ export default function Page() {
                       page={page}
                       onChange={handleChange}
                     />
-
-                    <Button
-                      disableRipple
-                      onClick={() =>
-                        setPage((prev) =>
-                          Math.min(
-                            prev + 1,
-                            Math.ceil(
-                              singleSequence.sequencesSeries.length /
-                                itemsPerPage
-                            )
-                          )
-                        )
-                      }
-                      disabled={
-                        page ===
-                        Math.ceil(
-                          singleSequence.sequencesSeries.length / itemsPerPage
-                        )
-                      }
-                      sx={{
-                        minWidth: 'auto',
-                        p: 1,
-                        '&:hover': {
-                          backgroundColor: 'transparent',
-                        },
-                        '&.Mui-disabled': {
-                          opacity: 0.3,
-                        },
-                      }}
-                    >
-                      <ChevronRightIcon
-                        sx={{
-                          fontSize: 24,
-                          color: 'primary.main',
-                        }}
-                      />
-                    </Button>
                   </Box>
 
                   {/* Sequence Image */}
@@ -738,6 +699,25 @@ export default function Page() {
           </Stack>
         </Stack>
       </Box>
+
+      <Drawer
+        anchor="bottom"
+        open={open}
+        onClose={() => setOpen(false)}
+        sx={{
+          '& .MuiDrawer-paper': {
+            maxWidth: '100vw',
+          },
+        }}
+        disablePortal={false}
+        disableScrollLock={true}
+      >
+        <Typography variant="body1" sx={{ p: 2 }}>
+          Browse and practice yoga sequences. Use the search to find specific
+          sequences or scroll through the collection. Select a sequence to view
+          details and track your practice progress.
+        </Typography>
+      </Drawer>
     </>
   )
 }

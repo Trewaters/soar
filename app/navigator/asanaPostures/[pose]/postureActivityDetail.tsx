@@ -12,6 +12,7 @@ import {
   Stack,
   Checkbox,
   FormControlLabel,
+  Drawer,
 } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -105,6 +106,11 @@ export default function PostureActivityDetail({
   const [activityRefreshTrigger, setActivityRefreshTrigger] = useState(0)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  const handleInfoClick = () => {
+    setOpen(!open)
+  }
 
   // Fetch uploaded images for this posture
   const { images: postureImages } = usePostureImages(
@@ -654,7 +660,11 @@ export default function PostureActivityDetail({
           px: { xs: 0, sm: 2 }, // Remove padding on mobile for full width
         }}
       >
-        <SubNavHeader title="Asana" link="/navigator/asanaPostures" />
+        <SubNavHeader
+          title="Asana"
+          link="/navigator/asanaPostures"
+          onClick={handleInfoClick}
+        />
         <Stack direction={'column'} spacing={0}>
           <AsanaDetails
             details={posture?.sort_english_name}
@@ -976,6 +986,26 @@ export default function PostureActivityDetail({
           window.location.reload()
         }}
       />
+
+      <Drawer
+        anchor="bottom"
+        open={open}
+        onClose={() => setOpen(false)}
+        sx={{
+          '& .MuiDrawer-paper': {
+            maxWidth: '100vw',
+          },
+        }}
+        disablePortal={false}
+        disableScrollLock={true}
+      >
+        <Typography variant="body1" sx={{ p: 2 }}>
+          View detailed information about this asana posture. You can track your
+          practice activity, set difficulty levels, and access additional pose
+          details and benefits. Use the practice view button to see the pose in
+          action.
+        </Typography>
+      </Drawer>
     </Paper>
   )
 }
