@@ -183,7 +183,7 @@ export default function Page() {
           }}
         >
           <SplashNavButton
-            title="Practice Asana Postures"
+            title="Practice Asanas"
             description="Search and practice asana postures."
             image="/images/asana/practice-asana-posture-210x363.png"
             sx={{

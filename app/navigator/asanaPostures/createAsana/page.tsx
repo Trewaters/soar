@@ -112,7 +112,6 @@ export default function Page() {
       onChange: (value: string) =>
         setFormData({ ...formData, category: value }),
       placeholder: 'Select a Category',
-      helperText: 'Select Category',
       freeSolo: true,
     },
     {
@@ -122,7 +121,7 @@ export default function Page() {
       onChange: (value: string[]) =>
         setFormData({ ...formData, english_names: value }),
       placeholder: 'e.g. "Downward Dog, Adho Mukha Svanasana"',
-      helperText: 'Separate variant names with commas',
+      helperText: 'Separate name variants with commas',
     },
     {
       type: 'multiline',
@@ -300,14 +299,14 @@ export default function Page() {
         alignItems: 'center',
       }}
     >
+      <SplashHeader
+        src={
+          '/icons/designImages/beautiful-young-woman-practices-yoga-asana.png'
+        }
+        alt={'Create an Asana'}
+        title="Create an Asana"
+      />
       <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
-        <SplashHeader
-          src={
-            '/icons/designImages/beautiful-young-woman-practices-yoga-asana.png'
-          }
-          alt={'Create an Asana'}
-          title="Create an Asana"
-        />
         <SubNavHeader
           title="Asana"
           link="/navigator/asanaPostures"

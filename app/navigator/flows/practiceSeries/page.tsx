@@ -257,11 +257,6 @@ export default function Page() {
           onClick={handleInfoClick}
         />
         <Stack sx={{ px: 4 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-            <Typography variant="h6" sx={{ color: 'primary.main', mr: 2 }}>
-              Practice Series
-            </Typography>
-          </Box>
           <Autocomplete
             disablePortal
             freeSolo={false}

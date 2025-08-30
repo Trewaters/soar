@@ -39,8 +39,10 @@ const SubNavHeader: React.FC<SubNavHeaderProps> = ({
       justifyContent={'space-between'}
       sx={{
         marginTop: 1,
-        paddingLeft: 4,
-        paddingRight: 4,
+        width: '100%',
+        maxWidth: '384px', // Match SplashHeader default width
+        alignSelf: 'center', // Center the component
+        paddingX: 0, // Remove padding to align with image edges
         ...sx,
       }}
     >

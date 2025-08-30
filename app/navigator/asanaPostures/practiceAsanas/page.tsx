@@ -99,23 +99,33 @@ export default function Page() {
           alignItems: 'center',
         }}
       >
-        <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
-          <SplashHeader
-            src={'/images/asana/practice-asana-posture-210x363.png'}
-            alt={'Practice Asana Postures'}
-            title="Practice Asana Postures"
-          />
+        <SplashHeader
+          src={'/images/asana/practice-asana-posture-210x363.png'}
+          alt={'Practice Asanas'}
+          title="Practice Asanas"
+        />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+            marginX: 3,
+            mb: '1em',
+          }}
+        >
           <SubNavHeader
             title="Asanas"
             link="/navigator/asanaPostures"
             onClick={handleInfoClick}
+            sx={{
+              width: '100%',
+              maxWidth: '384px', // Match SplashHeader width
+              alignSelf: 'center',
+              mb: 2, // Add bottom margin for spacing
+            }}
           />
-          <Stack sx={{ px: 4 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Typography variant="h6" sx={{ color: 'primary.main', mr: 2 }}>
-                Practice Asanas
-              </Typography>
-            </Box>
+          <Stack sx={{ px: 4, width: '100%', maxWidth: '600px' }}>
             {/* Search Section */}
             <Box
               sx={{
@@ -139,7 +149,7 @@ export default function Page() {
               )}
             </Box>
           </Stack>
-        </Stack>
+        </Box>
       </Box>
     </>
   )

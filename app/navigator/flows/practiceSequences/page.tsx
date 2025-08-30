@@ -227,6 +227,11 @@ export default function Page() {
           overflow: 'hidden',
         }}
       >
+        <SplashHeader
+          src={'/icons/designImages/header-practice-sequence.png'}
+          alt={'Practice Sequences'}
+          title="Practice Sequences"
+        />
         <Stack
           spacing={2}
           sx={{
@@ -237,11 +242,6 @@ export default function Page() {
             boxSizing: 'border-box',
           }}
         >
-          <SplashHeader
-            src={'/icons/designImages/header-practice-sequence.png'}
-            alt={'Practice Sequences'}
-            title="Practice Sequences"
-          />
           <SubNavHeader
             title="Flows"
             link="/navigator/flows"
@@ -255,11 +255,6 @@ export default function Page() {
               boxSizing: 'border-box',
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Typography variant="h6" sx={{ color: 'primary.main', mr: 2 }}>
-                Practice Sequences
-              </Typography>
-            </Box>
             <Box
               sx={{
                 display: 'flex',
