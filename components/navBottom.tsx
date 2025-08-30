@@ -3,9 +3,11 @@ import React from 'react'
 import { Box, IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import PersonIcon from '@mui/icons-material/Person'
+import HomeIcon from '@mui/icons-material/Home'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { useSession } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type ColorFunction = (isAuthenticated: boolean) => string
@@ -24,9 +26,13 @@ export default function NavBottom(props: {
 }) {
   const router = useNavigationWithLoading()
   const { data: session, status } = useSession()
+  const pathname = usePathname()
 
   // Determine if user is authenticated
   const isAuthenticated = status === 'authenticated' && !!session
+
+  // Check if we're in the profile section
+  const isInProfileSection = pathname?.includes('/navigator/profile')
 
   const navItems: NavItem[] = [
     {
@@ -39,11 +45,17 @@ export default function NavBottom(props: {
     },
     {
       id: 'profile',
-      label: isAuthenticated
-        ? 'Navigate to user profile'
-        : 'Login to access profile',
-      icon: <PersonIcon />,
-      path: isAuthenticated ? '/navigator/profile' : '/auth/signin',
+      label: isInProfileSection
+        ? 'Navigate to home page'
+        : isAuthenticated
+          ? 'Navigate to user profile'
+          : 'Login to access profile',
+      icon: isInProfileSection ? <HomeIcon /> : <PersonIcon />,
+      path: isInProfileSection
+        ? '/'
+        : isAuthenticated
+          ? '/navigator/profile'
+          : '/auth/signin',
       getColor: (isAuthenticated: boolean) =>
         isAuthenticated ? 'success.main' : 'grey.500', // Green when logged in, gray when logged out
     },
