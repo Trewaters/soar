@@ -421,6 +421,9 @@ export default function PostureActivityDetail({
           pb: 4,
           position: 'relative',
           transition: 'background-image 0.5s ease-in-out',
+          width: '100%',
+          maxWidth: '600px', // Match practice series page width
+          mx: 'auto',
         }}
       >
         {/* Display uploaded image prominently when available */}
@@ -646,6 +649,8 @@ export default function PostureActivityDetail({
         sx={{
           display: 'flex',
           flexDirection: 'column',
+          maxWidth: '600px', // Match practice series page width
+          mx: 'auto',
           px: { xs: 0, sm: 2 }, // Remove padding on mobile for full width
         }}
       >
