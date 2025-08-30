@@ -157,7 +157,7 @@ export default function Page() {
           data.sequence.nameSequence
         )
         // Navigate to the newly created sequence detail page
-        router.push(`/sequences/${data.sequence.id}`)
+        router.push(`/navigator/sequences/${data.sequence.id}`)
       } else {
         throw new Error('Sequence creation returned no sequence data')
       }

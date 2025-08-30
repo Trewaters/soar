@@ -121,12 +121,8 @@ export default function EditSequence({
     return e
   }, [model])
 
-  useEffect(() => {
-    if (!usingContext) {
-      onChange?.(form)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form, usingContext])
+  // Remove the useEffect that calls onChange on every form change
+  // This was causing the parent component to navigate away on every keystroke
 
   const setField = <K extends keyof EditableSequence>(
     key: K,
@@ -245,7 +241,7 @@ export default function EditSequence({
         throw new Error(data?.error || `Delete failed (${res.status})`)
       }
       // Navigate back to sequences list after delete
-      router.push('/sequences')
+      router.push('/navigator/sequences')
     } catch (e) {
       // Surface an inline error via saveError banner area
       setSaveState('error')
@@ -289,6 +285,21 @@ export default function EditSequence({
     )
   }
 
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Prevent form submission - instead trigger save if valid
+    if (canSave) {
+      handleSave()
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      // Don't trigger form submission on Enter
+    }
+  }
+
   return (
     <Box component="section" aria-label="edit-sequence" sx={{ p: 2 }}>
       <Card variant="outlined" sx={{ borderRadius: 2 }}>
@@ -329,241 +340,253 @@ export default function EditSequence({
           }
         />
         <CardContent>
-          <Stack spacing={3}>
-            {/* Details Section */}
-            <Box>
-              <Typography variant="h6" component="h2" sx={{ mb: 1 }}>
-                Details
-              </Typography>
-              <Stack spacing={2}>
-                <Box role="group" aria-label="sequence-name">
-                  <TextField
-                    label="Sequence Name"
-                    value={model.nameSequence}
-                    onChange={(e) => setField('nameSequence', e.target.value)}
-                    required
-                    fullWidth
-                    inputProps={{ maxLength: 100 }}
-                    error={!!errors.nameSequence}
-                    helperText={
-                      errors.nameSequence || 'Enter a concise, descriptive name'
-                    }
-                  />
-                </Box>
-                <Box role="group" aria-label="sequence-owner">
-                  <TextField
-                    label="Created by"
-                    value={sequence.created_by || 'Unknown'}
-                    fullWidth
-                    InputProps={{ readOnly: true }}
-                    helperText="Only the creator may edit this sequence"
-                  />
-                </Box>
-                <Box role="group" aria-label="sequence-description">
-                  <TextField
-                    label="Description"
-                    value={model.description}
-                    onChange={(e) => setField('description', e.target.value)}
-                    fullWidth
-                    multiline
-                    minRows={3}
-                    inputProps={{ maxLength: 1000 }}
-                    error={!!errors.description}
-                    helperText={
-                      errors.description ||
-                      'Optional. Provide details about this sequence'
-                    }
-                  />
-                </Box>
-              </Stack>
-            </Box>
-
-            <Divider />
-
-            {/* Image Section */}
-            <Box role="group" aria-label="sequence-image">
-              <Typography
-                variant="h6"
-                component="h2"
-                color="primary.main"
-                sx={{ mb: 1 }}
-              >
-                Image
-              </Typography>
-              {model.image ? (
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Box sx={{ position: 'relative', width: 160, height: 100 }}>
-                    <Image
-                      src={model.image as string}
-                      alt={model.nameSequence || 'Sequence image'}
-                      fill
-                      sizes="160px"
-                      style={{ objectFit: 'cover', borderRadius: 8 }}
+          <form onSubmit={handleFormSubmit}>
+            <Stack spacing={3}>
+              {/* Details Section */}
+              <Box>
+                <Typography variant="h6" component="h2" sx={{ mb: 1 }}>
+                  Details
+                </Typography>
+                <Stack spacing={2}>
+                  <Box role="group" aria-label="sequence-name">
+                    <TextField
+                      label="Sequence Name"
+                      value={model.nameSequence}
+                      onChange={(e) => setField('nameSequence', e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      required
+                      fullWidth
+                      inputProps={{ maxLength: 100 }}
+                      error={!!errors.nameSequence}
+                      helperText={
+                        errors.nameSequence ||
+                        'Enter a concise, descriptive name'
+                      }
                     />
                   </Box>
+                  <Box role="group" aria-label="sequence-owner">
+                    <TextField
+                      label="Created by"
+                      value={sequence.created_by || 'Unknown'}
+                      fullWidth
+                      InputProps={{ readOnly: true }}
+                      helperText="Only the creator may edit this sequence"
+                    />
+                  </Box>
+                  <Box role="group" aria-label="sequence-description">
+                    <TextField
+                      label="Description"
+                      value={model.description}
+                      onChange={(e) => setField('description', e.target.value)}
+                      onKeyDown={(e) => {
+                        // Allow Enter in multiline description but prevent form submission
+                        if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey) {
+                          e.stopPropagation()
+                        }
+                      }}
+                      fullWidth
+                      multiline
+                      minRows={3}
+                      inputProps={{ maxLength: 1000 }}
+                      error={!!errors.description}
+                      helperText={
+                        errors.description ||
+                        'Optional. Provide details about this sequence'
+                      }
+                    />
+                  </Box>
+                </Stack>
+              </Box>
+
+              <Divider />
+
+              {/* Image Section */}
+              <Box role="group" aria-label="sequence-image">
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  color="primary.main"
+                  sx={{ mb: 1 }}
+                >
+                  Image
+                </Typography>
+                {model.image ? (
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                    <Box sx={{ position: 'relative', width: 160, height: 100 }}>
+                      <Image
+                        src={model.image as string}
+                        alt={model.nameSequence || 'Sequence image'}
+                        fill
+                        sizes="160px"
+                        style={{ objectFit: 'cover', borderRadius: 8 }}
+                      />
+                    </Box>
+                    <TextField
+                      label="Image URL"
+                      value={model.image}
+                      onChange={(e) => setField('image', e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      fullWidth
+                      error={!!errors.image}
+                      helperText={
+                        errors.image || 'You can paste a URL or upload below'
+                      }
+                    />
+                  </Box>
+                ) : (
                   <TextField
                     label="Image URL"
                     value={model.image}
                     onChange={(e) => setField('image', e.target.value)}
+                    onKeyDown={handleKeyDown}
                     fullWidth
                     error={!!errors.image}
                     helperText={
                       errors.image || 'You can paste a URL or upload below'
                     }
                   />
+                )}
+                <Box sx={{ mt: 1 }}>
+                  <ImageUpload onImageUploaded={handleImageUploaded} />
                 </Box>
-              ) : (
-                <TextField
-                  label="Image URL"
-                  value={model.image}
-                  onChange={(e) => setField('image', e.target.value)}
-                  fullWidth
-                  error={!!errors.image}
-                  helperText={
-                    errors.image || 'You can paste a URL or upload below'
-                  }
-                />
-              )}
-              <Box sx={{ mt: 1 }}>
-                <ImageUpload onImageUploaded={handleImageUploaded} />
               </Box>
-            </Box>
 
-            <Divider />
+              <Divider />
 
-            {/* Flow Series Section */}
-            <Box role="group" aria-label="sequence-flow-series">
-              <Typography variant="h6" component="h2" sx={{ mb: 1 }}>
-                Flow Series
-              </Typography>
-              {model.sequencesSeries?.length ? (
-                <List dense>
-                  {model.sequencesSeries.map((s, idx) => (
-                    <ListItem
-                      key={`${s.seriesName}-${idx}`}
-                      draggable
-                      onDragStart={() => onDragStart(idx)}
-                      onDragOver={onDragOver}
-                      onDrop={() => onDrop(idx)}
-                      aria-grabbed={dragIndex === idx ? 'true' : 'false'}
-                      secondaryAction={
+              {/* Flow Series Section */}
+              <Box role="group" aria-label="sequence-flow-series">
+                <Typography variant="h6" component="h2" sx={{ mb: 1 }}>
+                  Flow Series
+                </Typography>
+                {model.sequencesSeries?.length ? (
+                  <List dense>
+                    {model.sequencesSeries.map((s, idx) => (
+                      <ListItem
+                        key={`${s.seriesName}-${idx}`}
+                        draggable
+                        onDragStart={() => onDragStart(idx)}
+                        onDragOver={onDragOver}
+                        onDrop={() => onDrop(idx)}
+                        aria-grabbed={dragIndex === idx ? 'true' : 'false'}
+                        secondaryAction={
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 0.5,
+                            }}
+                          >
+                            <Tooltip title="Move up">
+                              <span>
+                                <IconButton
+                                  aria-label={`move ${s.seriesName} up`}
+                                  onClick={() => moveItem(idx, idx - 1)}
+                                  disabled={idx === 0}
+                                  size="small"
+                                >
+                                  <ArrowUpwardIcon fontSize="small" />
+                                </IconButton>
+                              </span>
+                            </Tooltip>
+                            <Tooltip title="Move down">
+                              <span>
+                                <IconButton
+                                  aria-label={`move ${s.seriesName} down`}
+                                  onClick={() => moveItem(idx, idx + 1)}
+                                  disabled={
+                                    idx === model.sequencesSeries.length - 1
+                                  }
+                                  size="small"
+                                >
+                                  <ArrowDownwardIcon fontSize="small" />
+                                </IconButton>
+                              </span>
+                            </Tooltip>
+                            <Tooltip title="Remove from sequence">
+                              <IconButton
+                                edge="end"
+                                aria-label={`remove series ${s.seriesName}`}
+                                onClick={() => requestRemoveSeries(idx)}
+                                color="error"
+                              >
+                                <DeleteForeverIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </Box>
+                        }
+                      >
+                        <ListItemAvatar>
+                          <Avatar src={s.image} alt={s.seriesName} />
+                        </ListItemAvatar>
                         <Box
                           sx={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: 0.5,
+                            gap: 1,
+                            flex: 1,
                           }}
                         >
-                          <Tooltip title="Move up">
-                            <span>
-                              <IconButton
-                                aria-label={`move ${s.seriesName} up`}
-                                onClick={() => moveItem(idx, idx - 1)}
-                                disabled={idx === 0}
-                                size="small"
-                              >
-                                <ArrowUpwardIcon fontSize="small" />
-                              </IconButton>
-                            </span>
-                          </Tooltip>
-                          <Tooltip title="Move down">
-                            <span>
-                              <IconButton
-                                aria-label={`move ${s.seriesName} down`}
-                                onClick={() => moveItem(idx, idx + 1)}
-                                disabled={
-                                  idx === model.sequencesSeries.length - 1
-                                }
-                                size="small"
-                              >
-                                <ArrowDownwardIcon fontSize="small" />
-                              </IconButton>
-                            </span>
-                          </Tooltip>
-                          <Tooltip title="Remove from sequence">
+                          <Tooltip title="Drag to reorder">
                             <IconButton
-                              edge="end"
-                              aria-label={`remove series ${s.seriesName}`}
-                              onClick={() => requestRemoveSeries(idx)}
-                              color="error"
+                              size="small"
+                              edge="start"
+                              aria-label={`drag ${s.seriesName}`}
+                              sx={{ cursor: 'grab' }}
                             >
-                              <DeleteForeverIcon />
+                              <DragIndicatorIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
+                          <ListItemText
+                            primary={s.seriesName}
+                            secondary={
+                              s.seriesPostures?.length
+                                ? `${s.seriesPostures.length} postures`
+                                : undefined
+                            }
+                          />
                         </Box>
-                      }
-                    >
-                      <ListItemAvatar>
-                        <Avatar src={s.image} alt={s.seriesName} />
-                      </ListItemAvatar>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: 1,
-                          flex: 1,
-                        }}
-                      >
-                        <Tooltip title="Drag to reorder">
-                          <IconButton
-                            size="small"
-                            edge="start"
-                            aria-label={`drag ${s.seriesName}`}
-                            sx={{ cursor: 'grab' }}
-                          >
-                            <DragIndicatorIcon fontSize="small" />
-                          </IconButton>
-                        </Tooltip>
-                        <ListItemText
-                          primary={s.seriesName}
-                          secondary={
-                            s.seriesPostures?.length
-                              ? `${s.seriesPostures.length} postures`
-                              : undefined
-                          }
-                        />
-                      </Box>
-                    </ListItem>
-                  ))}
-                </List>
-              ) : (
-                <Alert severity="info" sx={{ mt: 1 }}>
-                  No flow series added yet.
-                </Alert>
-              )}
-            </Box>
+                      </ListItem>
+                    ))}
+                  </List>
+                ) : (
+                  <Alert severity="info" sx={{ mt: 1 }}>
+                    No flow series added yet.
+                  </Alert>
+                )}
+              </Box>
 
-            <Dialog
-              open={confirm.open}
-              onClose={cancelRemoveSeries}
-              aria-labelledby="confirm-remove-series-title"
-            >
-              <DialogTitle id="confirm-remove-series-title">
-                Remove series from sequence?
-              </DialogTitle>
-              <DialogContent>
-                <Typography>
-                  This action will remove the selected series from this
-                  sequence.
-                </Typography>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={cancelRemoveSeries} autoFocus>
-                  Cancel
-                </Button>
-                <Button
-                  onClick={confirmRemoveSeries}
-                  color="error"
-                  variant="contained"
-                >
-                  Remove
-                </Button>
-              </DialogActions>
-            </Dialog>
+              <Dialog
+                open={confirm.open}
+                onClose={cancelRemoveSeries}
+                aria-labelledby="confirm-remove-series-title"
+              >
+                <DialogTitle id="confirm-remove-series-title">
+                  Remove series from sequence?
+                </DialogTitle>
+                <DialogContent>
+                  <Typography>
+                    This action will remove the selected series from this
+                    sequence.
+                  </Typography>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={cancelRemoveSeries} autoFocus>
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={confirmRemoveSeries}
+                    color="error"
+                    variant="contained"
+                  >
+                    Remove
+                  </Button>
+                </DialogActions>
+              </Dialog>
 
-            {/* Future: drag-and-drop reordering */}
-            {children}
-          </Stack>
+              {/* Future: drag-and-drop reordering */}
+              {children}
+            </Stack>
+          </form>
         </CardContent>
       </Card>
 

@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import theme from '@styles/theme'
+import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import SequenceViewWithEdit from '@clientComponents/SequenceViewWithEdit'
 
 // Mock next/image to avoid DOM warnings from the "fill" prop
@@ -34,7 +35,7 @@ const mockUseSession = require('next-auth/react').useSession as jest.Mock
 const Wrapper = ({ children }: { children: React.ReactNode }) => (
   <ThemeProvider theme={theme}>
     <CssBaseline />
-    {children}
+    <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
   </ThemeProvider>
 )
 

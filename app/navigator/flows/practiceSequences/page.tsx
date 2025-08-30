@@ -15,6 +15,7 @@ import {
   IconButton,
 } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import EditIcon from '@mui/icons-material/Edit'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
@@ -33,6 +34,7 @@ import getAlphaUserIds from '@app/lib/alphaUsers'
 import { orderPosturesForSearch } from '@app/utils/search/orderPosturesForSearch'
 
 export default function Page() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const sequenceId = searchParams.get('sequenceId')
   const { data: session } = useSession()
@@ -426,10 +428,12 @@ export default function Page() {
                   <Box sx={{ ml: 5, mt: 1 }}>
                     <IconButton
                       color="primary"
-                      href={`/sequences/${singleSequence.id}`}
+                      onClick={() => {
+                        const editUrl = `/navigator/sequences/${singleSequence.id}?edit=true`
+                        router.push(editUrl)
+                      }}
                       aria-label={`Edit ${singleSequence.nameSequence}`}
                       sx={{ minWidth: 0, p: 1 }}
-                      component={Link}
                     >
                       <EditIcon />
                     </IconButton>
@@ -672,6 +676,37 @@ export default function Page() {
                       />
                     </Button>
                   </Box>
+
+                  {/* Sequence Image */}
+                  {singleSequence.image && (
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        px: 2,
+                        mt: 2,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          position: 'relative',
+                          width: { xs: '100%', sm: '400px' },
+                          height: 200,
+                          borderRadius: 2,
+                          overflow: 'hidden',
+                          boxShadow: 3,
+                        }}
+                      >
+                        <Image
+                          src={singleSequence.image}
+                          alt={singleSequence.nameSequence || 'Sequence image'}
+                          fill
+                          sizes="(max-width: 600px) 100vw, 400px"
+                          style={{ objectFit: 'cover' }}
+                        />
+                      </Box>
+                    </Box>
+                  )}
 
                   <Box
                     className={'journal'}
