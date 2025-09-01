@@ -216,7 +216,32 @@ export default function UserDetails() {
   }, [userData?.activeProfileImage, activeProfileImage])
 
   if (!userData) {
-    return null
+    return (
+      <Paper
+        elevation={1}
+        sx={{
+          mx: { xs: 0, sm: 2, md: 4 },
+          my: { xs: 0, sm: 2 },
+          width: { xs: '100%', sm: '95%', md: '80%', lg: '65%' },
+          maxWidth: 700,
+          alignSelf: 'center',
+        }}
+      >
+        <Stack
+          spacing={3}
+          sx={{
+            p: { xs: 2, sm: 3, md: 4 },
+            width: '100%',
+            boxSizing: 'border-box',
+            textAlign: 'center',
+          }}
+        >
+          <Typography variant="h6" color="text.secondary">
+            Loading your yoga profile...
+          </Typography>
+        </Stack>
+      </Paper>
+    )
   }
 
   const membershipDate = userData.createdAt

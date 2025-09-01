@@ -4,6 +4,7 @@ import { Stack, Typography } from '@mui/material'
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import NavigationButton from '@clientComponents/NavigationButton'
 import TimelapseOutlinedIcon from '@mui/icons-material/TimelapseOutlined'
+import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
 
 const links = [
   {
@@ -15,6 +16,11 @@ const links = [
     name: 'Series',
     href: '/navigator/flows/practiceSeries',
     icon: <TimelapseOutlinedIcon />,
+  },
+  {
+    name: 'Sequences',
+    href: '/navigator/flows/practiceSequences',
+    icon: <Brightness1OutlinedIcon />,
   },
 ]
 
@@ -30,7 +36,7 @@ export default function LandingPage() {
               variant="outlined"
               aria-label={`Navigate to ${link.name} section`}
               sx={{
-                width: 'auto',
+                width: 150, // Fixed width to ensure all buttons are same size
                 maxWidth: 320,
                 minWidth: 120,
                 minHeight: 48,
