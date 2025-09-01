@@ -28,6 +28,11 @@ export default function Page() {
 
 function ClientWrapper() {
   const [editMode, setEditMode] = useState(false)
+
+  const handleSaveSuccess = () => {
+    setEditMode(false) // Switch back to view mode after successful save
+  }
+
   return (
     <Box
       display={'flex'}
@@ -44,7 +49,11 @@ function ClientWrapper() {
           {editMode ? <NoteAltIcon /> : <EditIcon />}
         </IconButton>
       </Tooltip>
-      {editMode ? <EditUserDetails /> : <UserDetails />}
+      {editMode ? (
+        <EditUserDetails onSaveSuccess={handleSaveSuccess} />
+      ) : (
+        <UserDetails />
+      )}
     </Box>
   )
 }

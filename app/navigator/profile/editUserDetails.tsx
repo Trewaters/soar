@@ -40,6 +40,10 @@ import {
   getMobileFormContainerTheme,
 } from '@app/utils/mobileThemeHelpers'
 
+interface EditUserDetailsProps {
+  onSaveSuccess?: () => void
+}
+
 const yogaStyles = [
   'Ashtanga',
   'Vinyasa Flow',
@@ -73,7 +77,9 @@ const ExpandMore = styled(
   }),
 }))
 
-export default function EditUserDetails() {
+export default function EditUserDetails({
+  onSaveSuccess,
+}: EditUserDetailsProps = {}) {
   const { data: session } = useSession()
   // const session = {
   // user: {
@@ -404,6 +410,9 @@ export default function EditUserDetails() {
 
       const updatedUser = await response.json()
       dispatch({ type: 'SET_USER', payload: updatedUser })
+
+      // Switch back to view mode to show saved changes
+      onSaveSuccess?.()
     } catch (error) {
       setError(`Error updating user data: ${(error as Error).message}`)
     } finally {

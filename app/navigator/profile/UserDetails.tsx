@@ -1,17 +1,168 @@
 'use client'
-import React from 'react'
-import { Stack, Typography, Avatar, Box, Paper, Link } from '@mui/material'
+import React, { useEffect, useState, useCallback } from 'react'
+import {
+  Stack,
+  Typography,
+  Avatar,
+  Box,
+  Paper,
+  Link,
+  Card,
+  CardContent,
+  CardActions,
+  IconButton,
+} from '@mui/material'
 import { red } from '@mui/material/colors'
 import Image from 'next/image'
 import { UseUser } from '@context/UserContext'
 
 import LinkIcon from '@mui/icons-material/Link'
 import MapIcon from '@mui/icons-material/Map'
+import ShareIcon from '@mui/icons-material/Share'
 
 export default function UserDetails() {
   const {
     state: { userData },
+    dispatch,
   } = UseUser()
+
+  // Local state for managing the active profile image
+  const [activeProfileImage, setActiveProfileImage] = useState<string | null>(
+    userData?.activeProfileImage || null
+  )
+
+  // State for error/success messages
+  const [error, setError] = useState<string>('')
+
+  // Handle share functionality
+  function handleShare(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ): void {
+    event.preventDefault()
+    if (navigator.share) {
+      navigator
+        .share({
+          title: `UvuYoga Practitioner ${userData?.name || 'UvuYoga App Profile'}`,
+          text: getSharePreviewText(),
+        })
+        .then(() => {
+          setError('Profile shared successfully!')
+          // Clear the message after 3 seconds
+          setTimeout(() => setError(''), 3000)
+        })
+        .catch((err) => {
+          if (err.name !== 'AbortError') {
+            setError('Sharing failed or was cancelled.')
+            setTimeout(() => setError(''), 3000)
+          }
+        })
+    } else {
+      // Fallback: copy URL to clipboard
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => {
+          setError('Profile link copied to clipboard!')
+          setTimeout(() => setError(''), 3000)
+        })
+        .catch(() => {
+          setError('Could not copy link to clipboard.')
+          setTimeout(() => setError(''), 3000)
+        })
+    }
+  }
+
+  // Generate preview text for sharing - matches editUserDetails logic exactly
+  const getSharePreviewText = () => {
+    const parts = []
+
+    // Add shareQuick message (if it exists)
+    if (userData?.shareQuick) {
+      parts.push(userData.shareQuick)
+    }
+
+    // Add headline or default message
+    if (userData?.headline) {
+      parts.push(userData.headline)
+    } else {
+      parts.push('Check out my yoga profile!')
+    }
+
+    // Add yoga details if they exist (only from userData, no formData in view mode)
+    if (userData?.yogaStyle) {
+      parts.push(`Yoga Style: ${userData.yogaStyle}`)
+    }
+
+    if (userData?.yogaExperience) {
+      parts.push(`Yoga Experience: ${userData.yogaExperience}`)
+    }
+
+    if (userData?.company) {
+      parts.push(`Company: ${userData.company}`)
+    }
+
+    if (userData?.location) {
+      parts.push(`Location: ${userData.location}`)
+    }
+
+    if (userData?.websiteURL) {
+      parts.push(`My Website: ${userData.websiteURL}`)
+    }
+
+    return parts.join('\n')
+  }
+
+  // Fetch profile images from API and sync with context
+  const fetchProfileImages = useCallback(async () => {
+    if (!userData?.id) return
+
+    try {
+      const res = await fetch('/api/images/upload?imageType=profile', {
+        method: 'GET',
+      })
+      const data = await res.json()
+
+      if (data.images && data.images.length > 0) {
+        const images = data.images.map((img: any) => img.url)
+
+        // Set active profile image based on priority:
+        // 1. userData.activeProfileImage if it exists in the fetched images
+        // 2. First image from the fetched images
+        // 3. userData.image (social account image)
+        let activeImage = null
+
+        if (
+          userData.activeProfileImage &&
+          images.includes(userData.activeProfileImage)
+        ) {
+          activeImage = userData.activeProfileImage
+        } else if (images.length > 0) {
+          activeImage = images[0]
+        }
+
+        setActiveProfileImage(activeImage)
+
+        // Update the context with the fetched profile images
+        dispatch({
+          type: 'SET_PROFILE_IMAGES',
+          payload: { images, active: activeImage },
+        })
+      }
+    } catch (error) {
+      console.error('Failed to fetch profile images:', error)
+    }
+  }, [userData?.id, userData?.activeProfileImage, dispatch])
+
+  // Fetch profile images on component mount and when userData changes
+  useEffect(() => {
+    fetchProfileImages()
+  }, [fetchProfileImages])
+
+  // Update local state when context updates
+  useEffect(() => {
+    if (userData?.activeProfileImage !== activeProfileImage) {
+      setActiveProfileImage(userData?.activeProfileImage || null)
+    }
+  }, [userData?.activeProfileImage, activeProfileImage])
 
   if (!userData) {
     return null
@@ -64,13 +215,9 @@ export default function UserDetails() {
                 height: { xs: 120, md: 150 },
               }}
               aria-label="name initial"
-              src={
-                userData.activeProfileImage ||
-                userData.image ||
-                '/icons/profile/profile-person.svg'
-              }
+              src={activeProfileImage || userData?.image || undefined}
             >
-              {!(userData.activeProfileImage || userData.image) && (
+              {!(activeProfileImage || userData?.image) && (
                 <Image
                   src={'/icons/profile/profile-person.svg'}
                   width={50}
@@ -89,45 +236,45 @@ export default function UserDetails() {
             </Typography>
           </Stack>
         </Stack>
-        <Typography variant="body2" color="text.secondary">
-          {userData.headline ?? 'What does yoga mean to you?'}
-        </Typography>
-        <Stack spacing={3}>
-          <Typography variant="body1">
-            {userData.shareQuick || 'No quick share provided.'}
-          </Typography>
-          <Typography variant="body1">
-            Yoga Style: {userData.yogaStyle || 'N/A'}
-          </Typography>
-          <Typography variant="body1">
-            Yoga Experience: {userData.yogaExperience || 'N/A'}
-          </Typography>
-          <Typography variant="body1">
-            Company: {userData.company || 'N/A'}
-          </Typography>
-          <Stack direction="row" spacing={1} alignItems={'center'}>
-            <LinkIcon />
-            <Typography variant="body1" noWrap>
-              <Link
-                href={
-                  userData.websiteURL?.startsWith('http')
-                    ? userData.websiteURL
-                    : `https://${userData.websiteURL}`
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {userData.websiteURL || 'No website provided'}
-              </Link>
+
+        {/* Share Preview Card */}
+        <Card
+          sx={{
+            backgroundColor: 'grey.100',
+            border: '1px solid',
+            borderColor: 'grey.300',
+          }}
+        >
+          <CardContent>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ whiteSpace: 'pre-line' }}
+            >
+              {getSharePreviewText()}
             </Typography>
-          </Stack>
-          <Stack direction="row" spacing={1} alignItems={'center'}>
-            <MapIcon />
-            <Typography>
-              {userData.location || 'No location provided'}
-            </Typography>
-          </Stack>
-        </Stack>
+          </CardContent>
+          <CardActions disableSpacing sx={{ pt: 0 }}>
+            <IconButton
+              aria-label="share profile"
+              onClick={handleShare}
+              sx={{ ml: 'auto' }}
+            >
+              <ShareIcon />
+            </IconButton>
+          </CardActions>
+        </Card>
+
+        {error && (
+          <Typography
+            variant="body2"
+            color={error.includes('success') ? 'success.main' : 'error.main'}
+            sx={{ textAlign: 'center', py: 1 }}
+          >
+            {error}
+          </Typography>
+        )}
+
         <Typography variant="body1" sx={{ mb: 1 }}>
           Username
         </Typography>

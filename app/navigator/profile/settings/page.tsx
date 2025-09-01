@@ -25,11 +25,12 @@ export default async function SettingsPage() {
                 </Typography>
 
                 <Typography variant="body1" color="text.secondary">
-                  Account settings functionality is coming soon. This page will
-                  include:
+                  You can modify your profile information from the Profile
+                  Overview page.
                 </Typography>
 
                 <Box component="ul" sx={{ pl: 3 }}>
+                  {/* 
                   <Typography component="li" variant="body2" sx={{ mb: 1 }}>
                     Privacy settings
                   </Typography>
@@ -45,6 +46,7 @@ export default async function SettingsPage() {
                   <Typography component="li" variant="body2" sx={{ mb: 1 }}>
                     Connected accounts management
                   </Typography>
+                   */}
                   <Typography component="li" variant="body2" sx={{ mb: 1 }}>
                     <Box
                       component="a"
@@ -85,15 +87,6 @@ export default async function SettingsPage() {
                     </Box>
                   </Typography>
                 </Box>
-
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mt: 3 }}
-                >
-                  For now, you can manage your profile information from the
-                  Profile Overview page.
-                </Typography>
               </Stack>
             </Paper>
           </Grid>
