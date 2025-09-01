@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
 import { SessionProvider } from 'next-auth/react'
-import theme from '@styles/theme'
+import theme from '../../../../styles/theme'
 import UserDetails from '@/app/navigator/profile/UserDetails'
 
 // Mock Next.js Image component
@@ -176,15 +176,17 @@ describe('UserDetails Avatar Display', () => {
       expect(screen.getByText('Test User')).toBeInTheDocument()
     })
 
-    it('should return null when userData is not available', () => {
+    it('should display loading state when userData is not available', () => {
       mockUseUser.mockReturnValue({
         state: { userData: null },
         dispatch: mockDispatch,
       })
 
-      const { container } = render(<UserDetails />, { wrapper: TestWrapper })
+      render(<UserDetails />, { wrapper: TestWrapper })
 
-      expect(container.firstChild).toBeNull()
+      expect(
+        screen.getByText('Loading your yoga profile...')
+      ).toBeInTheDocument()
     })
   })
 
@@ -463,6 +465,40 @@ describe('UserDetails Avatar Display', () => {
         .closest('.MuiCard-root')
       expect(shareCard).toBeInTheDocument()
       expect(shareCard).toHaveClass('MuiCard-root')
+    })
+
+    it('should display loading message in share preview when userData is null', () => {
+      mockUseUser.mockReturnValue({
+        state: { userData: null },
+        dispatch: mockDispatch,
+      })
+
+      render(<UserDetails />, { wrapper: TestWrapper })
+
+      // Should show the main loading message
+      expect(
+        screen.getByText('Loading your yoga profile...')
+      ).toBeInTheDocument()
+    })
+
+    it('should disable share button when userData is not loaded', () => {
+      const userData = {
+        id: '1',
+        email: 'test@example.com',
+        name: 'Test User',
+        createdAt: '2023-01-01T00:00:00.000Z',
+      }
+
+      mockUseUser.mockReturnValue({
+        state: { userData },
+        dispatch: mockDispatch,
+      })
+
+      render(<UserDetails />, { wrapper: TestWrapper })
+
+      const shareButton = screen.getByLabelText('share profile')
+      expect(shareButton).toBeInTheDocument()
+      expect(shareButton).not.toBeDisabled()
     })
   })
 })

@@ -15,12 +15,14 @@ import {
 import { red } from '@mui/material/colors'
 import Image from 'next/image'
 import { UseUser } from '@context/UserContext'
+import { useSession } from 'next-auth/react'
 
 import LinkIcon from '@mui/icons-material/Link'
 import MapIcon from '@mui/icons-material/Map'
 import ShareIcon from '@mui/icons-material/Share'
 
 export default function UserDetails() {
+  const { data: session } = useSession()
   const {
     state: { userData },
     dispatch,
@@ -33,6 +35,45 @@ export default function UserDetails() {
 
   // State for error/success messages
   const [error, setError] = useState<string>('')
+
+  // State to force re-render when userData changes
+  const [, forceUpdate] = useState({})
+
+  // Fetch complete user data if profile fields are empty but session exists
+  useEffect(() => {
+    const fetchCompleteUserData = async () => {
+      if (
+        session?.user?.email &&
+        userData &&
+        (!userData.email || // userData.email is empty, needs initial fetch
+          userData.email === '' || // explicitly empty string
+          !userData.yogaStyle || // or profile fields are empty
+          !userData.company ||
+          !userData.location ||
+          !userData.headline)
+      ) {
+        try {
+          const response = await fetch(
+            `/api/user/?email=${encodeURIComponent(session.user.email)}`,
+            { cache: 'no-store' }
+          )
+          if (response.ok) {
+            const result = await response.json()
+            dispatch({ type: 'SET_USER', payload: result.data })
+          }
+        } catch (error) {
+          console.error('Error fetching complete user data:', error)
+        }
+      }
+    }
+
+    fetchCompleteUserData()
+  }, [session, userData, dispatch])
+
+  // Force re-render when userData changes to update share preview
+  useEffect(() => {
+    forceUpdate({})
+  }, [userData])
 
   // Handle share functionality
   function handleShare(
@@ -71,41 +112,51 @@ export default function UserDetails() {
     }
   }
 
-  // Generate preview text for sharing - matches editUserDetails logic exactly
+  // Generate preview text for sharing - simplified version
   const getSharePreviewText = () => {
+    // If userData is not available or empty, show a default message
+    if (!userData || Object.keys(userData).length === 0) {
+      return 'Check out my yoga profile!'
+    }
+
     const parts = []
 
-    // Add shareQuick message (if it exists)
-    if (userData?.shareQuick) {
-      parts.push(userData.shareQuick)
+    // Add shareQuick message (if it exists and has content)
+    if (userData.shareQuick && userData.shareQuick.trim()) {
+      parts.push(userData.shareQuick.trim())
     }
 
     // Add headline or default message
-    if (userData?.headline) {
-      parts.push(userData.headline)
-    } else {
+    if (userData.headline && userData.headline.trim()) {
+      parts.push(userData.headline.trim())
+    } else if (parts.length === 0) {
       parts.push('Check out my yoga profile!')
     }
 
-    // Add yoga details if they exist (only from userData, no formData in view mode)
-    if (userData?.yogaStyle) {
-      parts.push(`Yoga Style: ${userData.yogaStyle}`)
+    // Add yoga details if they exist
+    if (userData.yogaStyle && userData.yogaStyle.trim()) {
+      parts.push(`Yoga Style: ${userData.yogaStyle.trim()}`)
     }
 
-    if (userData?.yogaExperience) {
-      parts.push(`Yoga Experience: ${userData.yogaExperience}`)
+    if (userData.yogaExperience && userData.yogaExperience.trim()) {
+      parts.push(`Yoga Experience: ${userData.yogaExperience.trim()}`)
     }
 
-    if (userData?.company) {
-      parts.push(`Company: ${userData.company}`)
+    if (userData.company && userData.company.trim()) {
+      parts.push(`Company: ${userData.company.trim()}`)
     }
 
-    if (userData?.location) {
-      parts.push(`Location: ${userData.location}`)
+    if (userData.location && userData.location.trim()) {
+      parts.push(`Location: ${userData.location.trim()}`)
     }
 
-    if (userData?.websiteURL) {
-      parts.push(`My Website: ${userData.websiteURL}`)
+    if (userData.websiteURL && userData.websiteURL.trim()) {
+      parts.push(`My Website: ${userData.websiteURL.trim()}`)
+    }
+
+    // If no parts were added, show default message
+    if (parts.length === 0) {
+      parts.push('Check out my yoga profile!')
     }
 
     return parts.join('\n')
