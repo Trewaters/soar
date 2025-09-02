@@ -30,6 +30,8 @@ import Image from 'next/image'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
 import TimelapseOutlinedIcon from '@mui/icons-material/TimelapseOutlined'
+import GroupWorkIcon from '@mui/icons-material/GroupWork'
+import WorkspacesIcon from '@mui/icons-material/Workspaces'
 
 export default function Header() {
   const [openDrawer, setOpenDrawer] = React.useState(false)
@@ -100,21 +102,24 @@ export default function Header() {
       {
         name: 'Asanas',
         href: '/navigator/asanaPostures',
-        icon: <WaterDropOutlinedIcon color="primary" />,
+        // icon: <WaterDropOutlinedIcon color="primary" />,
+        icon: <Brightness1OutlinedIcon color="primary" />,
         action: null,
         color: 'primary',
       },
       {
         name: 'Series',
         href: '/navigator/flows/practiceSeries',
-        icon: <TimelapseOutlinedIcon color="primary" />,
+        // icon: <TimelapseOutlinedIcon color="primary" />,
+        icon: <WorkspacesIcon color="primary" />,
         action: null,
         color: 'primary',
       },
       {
         name: 'Sequences',
         href: '/navigator/flows/practiceSequences',
-        icon: <Brightness1OutlinedIcon color="primary" />,
+        // icon: <Brightness1OutlinedIcon color="primary" />,
+        icon: <GroupWorkIcon color="primary" />,
         action: null,
         color: 'primary',
       },

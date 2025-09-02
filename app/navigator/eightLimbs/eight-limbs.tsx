@@ -15,12 +15,14 @@ import LensBlurIcon from '@mui/icons-material/LensBlur'
 import MediationIcon from '@mui/icons-material/Mediation'
 import FlagIcon from '@mui/icons-material/Flag'
 import SpaIcon from '@mui/icons-material/Spa'
+import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
 
 export const eightLimbsData = [
   {
     primary: 'Asana',
     secondary: 'Physical Postures',
-    icon: <WaterDropOutlinedIcon />,
+    // icon: <WaterDropOutlinedIcon />,
+    icon: <Brightness1OutlinedIcon />,
     onClick: (router: ReturnType<typeof useRouter>) =>
       router.push('/navigator/asanaPostures'),
     iconSx: { color: 'primary.main', pl: 3 },

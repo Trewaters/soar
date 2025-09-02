@@ -5,22 +5,29 @@ import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import NavigationButton from '@clientComponents/NavigationButton'
 import TimelapseOutlinedIcon from '@mui/icons-material/TimelapseOutlined'
 import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
+import BubbleChartIcon from '@mui/icons-material/BubbleChart'
+import GroupWorkIcon from '@mui/icons-material/GroupWork'
+import WorkspacesIcon from '@mui/icons-material/Workspaces'
 
 const links = [
   {
     name: 'Asanas',
     href: '/navigator/asanaPostures',
-    icon: <WaterDropOutlinedIcon />,
+    // icon: <WaterDropOutlinedIcon />,
+    icon: <Brightness1OutlinedIcon />,
   },
   {
     name: 'Series',
     href: '/navigator/flows/practiceSeries',
-    icon: <TimelapseOutlinedIcon />,
+    // icon: <TimelapseOutlinedIcon />,
+    icon: <WorkspacesIcon />,
   },
   {
     name: 'Sequences',
     href: '/navigator/flows/practiceSequences',
-    icon: <Brightness1OutlinedIcon />,
+    // icon: <Brightness1OutlinedIcon />,
+    // icon: <BubbleChartIcon />,
+    icon: <GroupWorkIcon />,
   },
 ]
 
