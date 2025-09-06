@@ -21,6 +21,7 @@ import {
 import Grid from '@mui/material/Grid2'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { UseUser } from '@app/context/UserContext'
 import Image from 'next/image'
 import EditIcon from '@mui/icons-material/Edit'
 import EditSeriesDialog, {
@@ -73,6 +74,7 @@ function a11yProps(index: number) {
 
 export default function LibraryPage() {
   const { data: session, status } = useSession()
+  const { state } = UseUser()
   const router = useRouter()
   const [tabValue, setTabValue] = useState(0)
 
@@ -80,6 +82,9 @@ export default function LibraryPage() {
   const [asanas, setAsanas] = useState<UserAsanaData[]>([])
   const [series, setSeries] = useState<UserSeriesData[]>([])
   const [sequences, setSequences] = useState<UserSequenceData[]>([])
+
+  // Get profile images count from UserContext
+  const profileImagesCount = state.userData.profileImages?.length || 0
 
   // Loading states
   const [asanasLoading, setAsanasLoading] = useState(false)
@@ -234,7 +239,10 @@ export default function LibraryPage() {
                   label={`Sequences (${sequences.length})`}
                   {...a11yProps(2)}
                 />
-                <Tab label="Profile Images" {...a11yProps(3)} />
+                <Tab
+                  label={`Profile Images (${profileImagesCount})`}
+                  {...a11yProps(3)}
+                />
               </Tabs>
             </Box>
 
