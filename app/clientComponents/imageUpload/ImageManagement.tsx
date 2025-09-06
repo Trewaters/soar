@@ -16,7 +16,7 @@ function ProfileImageManagerWithContext() {
   const handleUpload = async (file: File) => {
     const formData = new FormData()
     formData.append('file', file)
-    const res = await fetch('/api/profileImage/route', {
+    const res = await fetch('/api/profileImage', {
       method: 'POST',
       body: formData,
     })
@@ -26,9 +26,15 @@ function ProfileImageManagerWithContext() {
         type: 'SET_PROFILE_IMAGES',
         payload: {
           images: data.images,
-          active: data.images[data.images.length - 1] || null,
+          active: data.activeProfileImage || null,
         },
       })
+    } else {
+      const errorData = await res.json()
+      console.error('Upload failed:', errorData)
+      throw new Error(
+        errorData.error || `Upload failed with status ${res.status}`
+      )
     }
   }
 

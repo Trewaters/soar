@@ -1,12 +1,10 @@
 'use client'
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Stack,
   Typography,
-  Avatar,
   Box,
   Paper,
-  Link,
   Card,
   CardContent,
   CardActions,
@@ -14,11 +12,10 @@ import {
 } from '@mui/material'
 import { red } from '@mui/material/colors'
 import Image from 'next/image'
-import { UseUser } from '@context/UserContext'
+import { UseUser } from '@app/context/UserContext'
+import { UserAvatar } from '@app/clientComponents/UserAvatar'
 import { useSession } from 'next-auth/react'
 
-import LinkIcon from '@mui/icons-material/Link'
-import MapIcon from '@mui/icons-material/Map'
 import ShareIcon from '@mui/icons-material/Share'
 
 export default function UserDetails() {
@@ -27,11 +24,6 @@ export default function UserDetails() {
     state: { userData },
     dispatch,
   } = UseUser()
-
-  // Local state for managing the active profile image
-  const [activeProfileImage, setActiveProfileImage] = useState<string | null>(
-    userData?.activeProfileImage || null
-  )
 
   // State for error/success messages
   const [error, setError] = useState<string>('')
@@ -162,59 +154,6 @@ export default function UserDetails() {
     return parts.join('\n')
   }
 
-  // Fetch profile images from API and sync with context
-  const fetchProfileImages = useCallback(async () => {
-    if (!userData?.id) return
-
-    try {
-      const res = await fetch('/api/images/upload?imageType=profile', {
-        method: 'GET',
-      })
-      const data = await res.json()
-
-      if (data.images && data.images.length > 0) {
-        const images = data.images.map((img: any) => img.url)
-
-        // Set active profile image based on priority:
-        // 1. userData.activeProfileImage if it exists in the fetched images
-        // 2. First image from the fetched images
-        // 3. userData.image (social account image)
-        let activeImage = null
-
-        if (
-          userData.activeProfileImage &&
-          images.includes(userData.activeProfileImage)
-        ) {
-          activeImage = userData.activeProfileImage
-        } else if (images.length > 0) {
-          activeImage = images[0]
-        }
-
-        setActiveProfileImage(activeImage)
-
-        // Update the context with the fetched profile images
-        dispatch({
-          type: 'SET_PROFILE_IMAGES',
-          payload: { images, active: activeImage },
-        })
-      }
-    } catch (error) {
-      console.error('Failed to fetch profile images:', error)
-    }
-  }, [userData?.id, userData?.activeProfileImage, dispatch])
-
-  // Fetch profile images on component mount and when userData changes
-  useEffect(() => {
-    fetchProfileImages()
-  }, [fetchProfileImages])
-
-  // Update local state when context updates
-  useEffect(() => {
-    if (userData?.activeProfileImage !== activeProfileImage) {
-      setActiveProfileImage(userData?.activeProfileImage || null)
-    }
-  }, [userData?.activeProfileImage, activeProfileImage])
-
   if (!userData) {
     return (
       <Paper
@@ -284,24 +223,16 @@ export default function UserDetails() {
           spacing={{ xs: 2, md: 3 }}
         >
           <Stack alignItems="center" flex={1} sx={{ position: 'relative' }}>
-            <Avatar
+            <UserAvatar
+              size="large"
+              showPlaceholderIndicator={true}
               sx={{
                 bgcolor: red[500],
                 width: { xs: 120, md: 150 },
                 height: { xs: 120, md: 150 },
               }}
-              aria-label="name initial"
-              src={activeProfileImage || userData?.image || undefined}
-            >
-              {!(activeProfileImage || userData?.image) && (
-                <Image
-                  src={'/icons/profile/profile-person.svg'}
-                  width={50}
-                  height={50}
-                  alt="Generic profile image icon"
-                />
-              )}
-            </Avatar>
+              aria-label="User profile image"
+            />
           </Stack>
           <Stack flex={3} spacing={2}>
             <Typography variant="body1" sx={{ fontStyle: 'italic' }}>

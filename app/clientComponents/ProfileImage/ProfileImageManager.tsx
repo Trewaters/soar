@@ -64,6 +64,12 @@ export const ProfileImageManager: React.FC<ProfileImageManagerProps> = ({
       <Typography variant="h6" sx={{ mb: 2 }}>
         Profile Images
       </Typography>
+
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        Upload up to {maxImages} profile images. Click on any image to set it as
+        your active profile picture that will be displayed throughout the app.
+      </Typography>
+
       <ProfileImageUpload
         onUpload={handleUpload}
         disabled={loading || images.length >= maxImages}
@@ -83,6 +89,8 @@ export const ProfileImageManager: React.FC<ProfileImageManagerProps> = ({
       />
       <Typography variant="caption" sx={{ display: 'block', mt: 1 }}>
         {images.length}/{maxImages} images uploaded
+        {active &&
+          ` • Active: ${images.indexOf(active) + 1} of ${images.length}`}
       </Typography>
     </Box>
   )

@@ -27,6 +27,7 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
+import { UserAvatar } from '@app/clientComponents/UserAvatar'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
 import TimelapseOutlinedIcon from '@mui/icons-material/TimelapseOutlined'
@@ -280,6 +281,19 @@ export default function Header() {
             </Link>
           </Box>
         </Stack>
+
+        {/* User Profile Avatar - only show if logged in */}
+        {session && (
+          <UserAvatar
+            size="medium"
+            sx={{
+              width: 36,
+              height: 36,
+              cursor: 'pointer',
+            }}
+            onClick={() => router.push('/navigator/profile')}
+          />
+        )}
       </Box>
       <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
         <Paper onClick={handleClick} sx={{ height: '100%' }}>
