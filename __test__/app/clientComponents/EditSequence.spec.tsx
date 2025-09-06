@@ -18,10 +18,20 @@ jest.mock('next/navigation', () => {
 })
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, width, height, ...props }: any) => (
+  default: ({ src, alt, width, height, fill, ...props }: any) => {
+    // Convert boolean fill to string or omit it
+    const imgProps = { ...props }
+    if (fill === true) {
+      // Don't pass fill as a prop to img element
+    } else if (typeof fill === 'string') {
+      imgProps.fill = fill
+    }
+
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={src} alt={alt} width={width} height={height} {...props} />
-  ),
+    return (
+      <img src={src} alt={alt} width={width} height={height} {...imgProps} />
+    )
+  },
 }))
 
 // Mock NextAuth session

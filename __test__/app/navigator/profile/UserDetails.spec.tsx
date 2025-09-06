@@ -228,9 +228,9 @@ describe('UserDetails Avatar Display', () => {
 
       render(<UserDetails />, { wrapper: TestWrapper })
 
-      const avatar = screen.getByLabelText('name initial')
+      const avatar = screen.getByLabelText('User profile image')
       expect(avatar).toBeInTheDocument()
-      expect(avatar).toHaveAttribute('aria-label', 'name initial')
+      expect(avatar).toHaveAttribute('aria-label', 'User profile image')
     })
 
     it('should have proper alt text for generic profile icon', () => {
@@ -250,7 +250,7 @@ describe('UserDetails Avatar Display', () => {
 
       render(<UserDetails />, { wrapper: TestWrapper })
 
-      const genericIcon = screen.getByAltText('Generic profile image icon')
+      const genericIcon = screen.getByAltText('Default profile icon')
       expect(genericIcon).toBeInTheDocument()
     })
   })
@@ -273,7 +273,7 @@ describe('UserDetails Avatar Display', () => {
 
       render(<UserDetails />, { wrapper: TestWrapper })
 
-      const avatar = screen.getByLabelText('name initial')
+      const avatar = screen.getByLabelText('User profile image')
       expect(avatar).toBeInTheDocument()
 
       // Avatar should have the MUI Avatar component styling

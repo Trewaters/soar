@@ -119,32 +119,22 @@ export default function EditUserDetails({
   const fetchProfileImages = useCallback(async () => {
     setImageLoading(true)
     try {
-      const res = await fetch('/api/images/upload?imageType=profile', {
+      const res = await fetch('/api/profileImage/get', {
         method: 'GET',
       })
       const data = await res.json()
-      if (data.images) {
-        setProfileImages(data.images.map((img: any) => img.url))
-        // Optionally, set active image from DB if available
-        if (
-          userData?.activeProfileImage &&
-          data.images.some(
-            (img: any) => img.url === userData.activeProfileImage
-          )
-        ) {
-          setActiveProfileImage(userData.activeProfileImage)
-        } else if (data.images.length > 0) {
-          setActiveProfileImage(data.images[0].url)
-        } else {
-          setActiveProfileImage(null)
-        }
+      if (data.success) {
+        setProfileImages(data.images || [])
+        setActiveProfileImage(data.activeImage || null)
+      } else {
+        setError(data.error || 'Failed to load profile images')
       }
     } catch (e) {
       setError('Failed to load profile images')
     } finally {
       setImageLoading(false)
     }
-  }, [userData?.activeProfileImage])
+  }, [])
 
   useEffect(() => {
     fetchProfileImages()
@@ -165,15 +155,26 @@ export default function EditUserDetails({
     try {
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('userId', userData.id)
-      formData.append('imageType', 'profile')
-      // Optionally: formData.append('altText', 'Profile image')
-      const res = await fetch('/api/images/upload', {
+      
+      const res = await fetch('/api/profileImage', {
         method: 'POST',
         body: formData,
       })
-      if (!res.ok) throw new Error('Upload failed')
-      await fetchProfileImages()
+      
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.error || 'Upload failed')
+      }
+      
+      const data = await res.json()
+      setProfileImages(data.images || [])
+      setActiveProfileImage(data.activeProfileImage || null)
+      
+      // Update context with new images
+      dispatch({
+        type: 'SET_PROFILE_IMAGES',
+        payload: { images: data.images || [], active: data.activeProfileImage || null },
+      })
     } catch (e: any) {
       setError(e.message || 'Upload failed')
     } finally {
@@ -185,18 +186,30 @@ export default function EditUserDetails({
     setImageLoading(true)
     setError(null)
     try {
-      // Find image ID by URL (requires GET to fetch all images)
-      const res = await fetch('/api/images/upload?imageType=profile', {
-        method: 'GET',
-      })
-      const data = await res.json()
-      const img = data.images.find((img: any) => img.url === url)
-      if (!img) throw new Error('Image not found')
-      const delRes = await fetch(`/api/images/upload?id=${img.id}`, {
+      const delRes = await fetch('/api/profileImage/delete', {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url }),
       })
-      if (!delRes.ok) throw new Error('Delete failed')
-      await fetchProfileImages()
+      
+      if (!delRes.ok) {
+        const errorData = await delRes.json()
+        throw new Error(errorData.error || 'Delete failed')
+      }
+      
+      const data = await delRes.json()
+      if (data.success) {
+        setProfileImages(data.images || [])
+        setActiveProfileImage(data.activeProfileImage || null)
+        
+        // Update context
+        dispatch({
+          type: 'SET_PROFILE_IMAGES',
+          payload: { images: data.images || [], active: data.activeProfileImage || null },
+        })
+      }
     } catch (e: any) {
       setError(e.message || 'Delete failed')
     } finally {
@@ -205,13 +218,37 @@ export default function EditUserDetails({
   }
 
   const handleProfileImageSelect = async (url: string) => {
-    setActiveProfileImage(url)
-    // Optionally, update userData context and persist active image to DB
-    dispatch({
-      type: 'SET_PROFILE_IMAGES',
-      payload: { images: profileImages, active: url },
-    })
-    // Optionally, call an API to persist active image selection
+    setImageLoading(true)
+    setError(null)
+    try {
+      const res = await fetch('/api/profileImage/setActive', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url }),
+      })
+      
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.error || 'Failed to set active image')
+      }
+      
+      const data = await res.json()
+      if (data.success) {
+        setActiveProfileImage(url)
+        
+        // Update context
+        dispatch({
+          type: 'SET_PROFILE_IMAGES',
+          payload: { images: profileImages, active: url },
+        })
+      }
+    } catch (e: any) {
+      setError(e.message || 'Failed to set active image')
+    } finally {
+      setImageLoading(false)
+    }
   }
 
   // Local form state to prevent re-renders on every keystroke
