@@ -148,7 +148,7 @@ interface ImageManagementProps {
   title?: string
   showUploadButton?: boolean
   showGallery?: boolean
-  variant?: 'full' | 'upload-only' | 'gallery-only'
+  variant?: 'full' | 'upload-only' | 'gallery-only' | 'profile-only'
 }
 
 /**
@@ -200,11 +200,26 @@ export default function ImageManagement({
     )
   }
 
+  if (variant === 'profile-only') {
+    return (
+      <Box sx={{ px: 3 }}>
+        {title && (
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            {title}
+          </Typography>
+        )}
+        <ProfileImageManagerWithContext />
+      </Box>
+    )
+  }
+
   return (
     <Paper elevation={1} sx={{ borderRadius: '16px', overflow: 'hidden' }}>
-      <Typography variant="h6" sx={{ p: 3, pb: 0 }}>
-        {title}
-      </Typography>
+      {title && (
+        <Typography variant="h6" sx={{ p: 3, pb: 0 }}>
+          {title}
+        </Typography>
+      )}
 
       <Tabs
         value={tabValue}

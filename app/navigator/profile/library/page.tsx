@@ -266,7 +266,7 @@ export default function LibraryPage() {
 
             {/* Profile Images Tab */}
             <TabPanel value={tabValue} index={3}>
-              <ImageManagement title="" />
+              <ImageManagement title="" variant="profile-only" />
             </TabPanel>
           </Paper>
         </Grid>
