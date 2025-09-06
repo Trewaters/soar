@@ -155,25 +155,28 @@ export default function EditUserDetails({
     try {
       const formData = new FormData()
       formData.append('file', file)
-      
+
       const res = await fetch('/api/profileImage', {
         method: 'POST',
         body: formData,
       })
-      
+
       if (!res.ok) {
         const errorData = await res.json()
         throw new Error(errorData.error || 'Upload failed')
       }
-      
+
       const data = await res.json()
       setProfileImages(data.images || [])
       setActiveProfileImage(data.activeProfileImage || null)
-      
+
       // Update context with new images
       dispatch({
         type: 'SET_PROFILE_IMAGES',
-        payload: { images: data.images || [], active: data.activeProfileImage || null },
+        payload: {
+          images: data.images || [],
+          active: data.activeProfileImage || null,
+        },
       })
     } catch (e: any) {
       setError(e.message || 'Upload failed')
@@ -193,21 +196,24 @@ export default function EditUserDetails({
         },
         body: JSON.stringify({ url }),
       })
-      
+
       if (!delRes.ok) {
         const errorData = await delRes.json()
         throw new Error(errorData.error || 'Delete failed')
       }
-      
+
       const data = await delRes.json()
       if (data.success) {
         setProfileImages(data.images || [])
         setActiveProfileImage(data.activeProfileImage || null)
-        
+
         // Update context
         dispatch({
           type: 'SET_PROFILE_IMAGES',
-          payload: { images: data.images || [], active: data.activeProfileImage || null },
+          payload: {
+            images: data.images || [],
+            active: data.activeProfileImage || null,
+          },
         })
       }
     } catch (e: any) {
@@ -228,16 +234,16 @@ export default function EditUserDetails({
         },
         body: JSON.stringify({ url }),
       })
-      
+
       if (!res.ok) {
         const errorData = await res.json()
         throw new Error(errorData.error || 'Failed to set active image')
       }
-      
+
       const data = await res.json()
       if (data.success) {
         setActiveProfileImage(url)
-        
+
         // Update context
         dispatch({
           type: 'SET_PROFILE_IMAGES',
