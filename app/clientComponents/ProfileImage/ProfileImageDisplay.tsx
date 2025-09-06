@@ -9,6 +9,7 @@ interface ProfileImageDisplayProps {
   onSelect: (url: string) => void
   onDelete: (url: string) => void
   placeholder: string
+  showSubtitle?: boolean
 }
 
 export const ProfileImageDisplay: React.FC<ProfileImageDisplayProps> = ({
@@ -17,12 +18,15 @@ export const ProfileImageDisplay: React.FC<ProfileImageDisplayProps> = ({
   onSelect,
   onDelete,
   placeholder,
+  showSubtitle = true,
 }) => {
   return (
     <Box sx={{ mt: 2 }}>
-      <Typography variant="subtitle2" gutterBottom>
-        Your Profile Images
-      </Typography>
+      {showSubtitle && (
+        <Typography variant="subtitle2" gutterBottom>
+          Your Profile Images
+        </Typography>
+      )}
 
       <Box display="flex" flexWrap="wrap" gap={2}>
         {images.length === 0 ? (

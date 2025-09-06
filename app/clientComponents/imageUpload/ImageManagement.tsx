@@ -1,16 +1,51 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Typography, Tabs, Tab, Paper } from '@mui/material'
 import ImageUpload from './ImageUpload'
 import ImageGallery from './ImageGallery'
 import { ProfileImageManager } from '../ProfileImage/ProfileImageManager'
 import { UseUser } from '../../context/UserContext'
+import { getUserProfileImages } from '@lib/profileImageService'
+import { useSession } from 'next-auth/react'
 import type { PoseImageData } from './ImageUpload'
 
 function ProfileImageManagerWithContext() {
   const { state, dispatch } = UseUser()
+  const { data: session } = useSession()
+  const [loading, setLoading] = useState(false)
+
   const images = state.userData.profileImages || []
   const active = state.userData.activeProfileImage || null
   const placeholder = state.userData.image || '/images/profile-placeholder.png'
+
+  // Load initial profile images when component mounts
+  useEffect(() => {
+    const loadInitialImages = async () => {
+      if (!session?.user?.email) return
+
+      // Only load if we don't already have images in context
+      if (images.length === 0) {
+        setLoading(true)
+        try {
+          const response = await getUserProfileImages()
+          if (response.success) {
+            dispatch({
+              type: 'SET_PROFILE_IMAGES',
+              payload: {
+                images: response.images,
+                active: response.activeImage,
+              },
+            })
+          }
+        } catch (error) {
+          console.error('Failed to load profile images:', error)
+        } finally {
+          setLoading(false)
+        }
+      }
+    }
+
+    loadInitialImages()
+  }, [session?.user?.email, images.length, dispatch])
 
   // Upload, delete, and set active handlers
   const handleUpload = async (file: File) => {
@@ -73,7 +108,8 @@ function ProfileImageManagerWithContext() {
       images={images}
       active={active}
       placeholder={placeholder}
-      loading={false}
+      loading={loading}
+      showHeader={false}
       onChange={(imgs, act) =>
         dispatch({
           type: 'SET_PROFILE_IMAGES',
