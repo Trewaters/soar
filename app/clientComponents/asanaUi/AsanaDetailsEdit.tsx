@@ -35,7 +35,7 @@ interface TextFieldProps extends BaseFieldProps {
   type: 'text'
   placeholder?: string
   value: string
-  onChange: (value: string) => void
+  onChange: (_value: string) => void
 }
 
 // Multiline text field props
@@ -44,7 +44,7 @@ interface MultilineFieldProps extends BaseFieldProps {
   placeholder?: string
   rows?: number
   value: string
-  onChange: (value: string) => void
+  onChange: (_value: string) => void
 }
 
 // Autocomplete field props
@@ -54,7 +54,7 @@ interface AutocompleteFieldProps extends BaseFieldProps {
   placeholder?: string
   freeSolo?: boolean
   value: string
-  onChange: (value: string) => void
+  onChange: (_value: string) => void
 }
 
 // Button group field props
@@ -62,7 +62,7 @@ interface ButtonGroupFieldProps extends BaseFieldProps {
   type: 'buttonGroup'
   options: string[]
   value: string
-  onChange: (value: string) => void
+  onChange: (_value: string) => void
 }
 
 // Variations field props (comma-separated input)
@@ -70,7 +70,7 @@ interface VariationsFieldProps extends BaseFieldProps {
   type: 'variations'
   placeholder?: string
   value: string[]
-  onChange: (value: string[]) => void
+  onChange: (_value: string[]) => void
 }
 
 // Custom field props (allows any custom component)
@@ -78,7 +78,7 @@ interface CustomFieldProps extends BaseFieldProps {
   type: 'custom'
   children: ReactNode
   value: any
-  onChange: (value: any) => void
+  onChange: (_value: any) => void
 }
 
 // Union type for all field props
@@ -150,6 +150,76 @@ export default React.memo(function AsanaDetailsEdit(
   props: AsanaDetailsEditComponentProps
 ) {
   const { fields, ...stackProps } = props
+
+  // Local helper component to manage the variations input display string
+  // while still syncing the final array to the parent via field.onChange.
+  function VariationInput({
+    field,
+    fieldId,
+  }: {
+    field: VariationsFieldProps
+    fieldId: string
+  }) {
+    const [display, setDisplay] = React.useState<string>(
+      Array.isArray(field.value) ? field.value.join(', ') : ''
+    )
+    const isEditingRef = React.useRef(false)
+
+    // Keep display in sync when not actively editing (e.g., parent reset)
+    React.useEffect(() => {
+      if (!isEditingRef.current) {
+        setDisplay(Array.isArray(field.value) ? field.value.join(', ') : '')
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [field.value])
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const v = e.target.value
+      isEditingRef.current = true
+      setDisplay(v)
+      // Do not sync to parent on every comma — preserve user's raw input including commas
+    }
+
+    const finalize = (value: string) => {
+      const cleanedVariations = value
+        .split(',')
+        .map((name) => name.trim())
+        .filter((name) => name.length > 0)
+      field.onChange(cleanedVariations)
+      setDisplay(cleanedVariations.join(', '))
+    }
+
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      isEditingRef.current = false
+      finalize(e.target.value)
+    }
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        finalize((e.target as HTMLInputElement).value)
+        // move focus away to trigger any parent listeners if needed
+        ;(e.target as HTMLInputElement).blur()
+      }
+    }
+
+    return (
+      <TextField
+        id={fieldId}
+        value={display}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
+        placeholder={field.placeholder}
+        required={field.required}
+        disabled={field.disabled}
+        fullWidth
+        sx={fieldSxStyles}
+        helperText={field.helperText}
+        aria-describedby={field.helperText ? `${fieldId}-helper` : undefined}
+      />
+    )
+  }
 
   const renderField = (field: AsanaEditFieldProps, index: number) => {
     const fieldId = `asana-edit-field-${index}`
@@ -338,40 +408,10 @@ export default React.memo(function AsanaDetailsEdit(
         )
 
       case 'variations': {
-        const variationsDisplayValue = Array.isArray(field.value)
-          ? field.value.join(', ')
-          : ''
-
         return (
-          <TextField
-            id={fieldId}
-            // label={field.label}
-            value={variationsDisplayValue}
-            onChange={(e) => {
-              const { value } = e.target
-              const variations = value
-                .split(',')
-                .map((name) => name.trim())
-                .filter((name) => name.length > 0)
-              field.onChange(variations)
-            }}
-            onBlur={(e) => {
-              const { value } = e.target
-              const cleanedVariations = value
-                .split(',')
-                .map((name) => name.trim())
-                .filter((name) => name.length > 0)
-              field.onChange(cleanedVariations)
-            }}
-            placeholder={field.placeholder}
-            required={field.required}
-            disabled={field.disabled}
-            fullWidth
-            sx={fieldSxStyles}
-            helperText={field.helperText}
-            aria-describedby={
-              field.helperText ? `${fieldId}-helper` : undefined
-            }
+          <VariationInput
+            field={field as VariationsFieldProps}
+            fieldId={fieldId}
           />
         )
       }
