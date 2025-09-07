@@ -7,7 +7,6 @@ import IconButton from '@mui/material/IconButton'
 import HomeIcon from '@mui/icons-material/Home'
 import MenuIcon from '@mui/icons-material/Menu'
 import FlareIcon from '@mui/icons-material/Flare'
-import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import TipsAndUpdatesOutlinedIcon from '@mui/icons-material/TipsAndUpdatesOutlined'
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
@@ -27,10 +26,8 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import Image from 'next/image'
-import { UserAvatar } from '@app/clientComponents/UserAvatar'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
-import TimelapseOutlinedIcon from '@mui/icons-material/TimelapseOutlined'
 import GroupWorkIcon from '@mui/icons-material/GroupWork'
 import WorkspacesIcon from '@mui/icons-material/Workspaces'
 
@@ -281,19 +278,6 @@ export default function Header() {
             </Link>
           </Box>
         </Stack>
-
-        {/* User Profile Avatar - only show if logged in */}
-        {session && (
-          <UserAvatar
-            size="medium"
-            sx={{
-              width: 36,
-              height: 36,
-              cursor: 'pointer',
-            }}
-            onClick={() => router.push('/navigator/profile')}
-          />
-        )}
       </Box>
       <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
         <Paper onClick={handleClick} sx={{ height: '100%' }}>
