@@ -19,7 +19,7 @@ export type UserStreakData = {
 /**
  * Get user by email
  */
-export async function getUserByEmail(email: string): Promise<UserData> {
+export async function getUserByEmail(email: string): Promise<UserData | null> {
   try {
     const response = await fetch(
       `/api/user?email=${encodeURIComponent(email)}`,
@@ -31,7 +31,8 @@ export async function getUserByEmail(email: string): Promise<UserData> {
       throw new Error('Failed to fetch user')
     }
     const result = await response.json()
-    return result.data
+    // API may return { data: null } for missing users
+    return result.data ?? null
   } catch (error) {
     logServiceError(error, 'userService', 'getUserByEmail', {
       operation: 'fetch_user_by_email',
@@ -95,7 +96,7 @@ export async function updatePractitionerData(
 export async function getUserAccount(
   userId?: string,
   email?: string
-): Promise<any> {
+): Promise<any | null> {
   try {
     const params = new URLSearchParams()
     if (userId) params.append('userId', userId)
@@ -113,7 +114,7 @@ export async function getUserAccount(
     }
 
     const result = await response.json()
-    return result.data
+    return result.data ?? null
   } catch (error) {
     logServiceError(error, 'userService', 'getUserAccount', {
       operation: 'fetch_user_account',

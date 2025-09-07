@@ -22,18 +22,19 @@ export async function GET(req: Request) {
         console.log('account:', account)
 
         if (!account) {
-          return new Response(
-            JSON.stringify({ error: 'Email Account not found' }),
-            {
-              status: 404,
-            }
-          )
+          // No user found for this email - return 200 with null data for consistency
+          return new Response(JSON.stringify({ data: null }), {
+            status: 200,
+            headers: { 'Cache-Control': 'no-store' },
+          })
         }
+
         providerAccount = await prisma.providerAccount.findUnique({
           where: { userId: account.id },
         })
 
-        return new Response(JSON.stringify({ data: providerAccount }), {
+        // If provider account is not found, return a consistent 200 response with null data
+        return new Response(JSON.stringify({ data: providerAccount ?? null }), {
           status: 200,
           headers: {
             'Cache-Control': 'no-store',
@@ -59,8 +60,10 @@ export async function GET(req: Request) {
     })
 
     if (!account) {
-      return new Response(JSON.stringify({ error: 'Account not found' }), {
-        status: 404,
+      // Return consistent success response with null data when no providerAccount exists
+      return new Response(JSON.stringify({ data: null }), {
+        status: 200,
+        headers: { 'Cache-Control': 'no-store' },
       })
     }
   } catch (error) {

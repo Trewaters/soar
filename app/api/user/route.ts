@@ -12,8 +12,10 @@ export async function GET(req: Request) {
   let user
 
   if (!email) {
-    return new Response(JSON.stringify({ error: 'User not found' }), {
-      status: 404,
+    // No email provided - respond with consistent shape
+    return new Response(JSON.stringify({ data: null }), {
+      status: 200,
+      headers: { 'Cache-Control': 'no-store' },
     })
   }
 
@@ -25,8 +27,10 @@ export async function GET(req: Request) {
     })
 
     if (!user) {
-      return new Response(JSON.stringify({ error: 'User not found' }), {
-        status: 404,
+      // Return consistent success response with null data when no user exists
+      return new Response(JSON.stringify({ data: null }), {
+        status: 200,
+        headers: { 'Cache-Control': 'no-store' },
       })
     }
   } catch (error) {

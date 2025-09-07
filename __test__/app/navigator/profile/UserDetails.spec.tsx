@@ -374,7 +374,9 @@ describe('UserDetails Avatar Display', () => {
       render(<UserDetails />, { wrapper: TestWrapper })
 
       // Check that default share preview text is displayed
-      const sharePreviewCard = screen.getByText(/Check out my yoga profile!/)
+      const sharePreviewCard = screen.getByText(
+        /Check out my Uvuyoga! www.happyyoga.app/
+      )
       expect(sharePreviewCard).toBeInTheDocument()
     })
 
@@ -510,7 +512,7 @@ describe('UserDetails Avatar Display', () => {
 
       // Check that the card has the proper MUI Card styling
       const shareCard = screen
-        .getByText(/Check out my yoga profile!/)
+        .getByText(/Check out my Uvuyoga! www.happyyoga.app/)
         .closest('.MuiCard-root')
       expect(shareCard).toBeInTheDocument()
       expect(shareCard).toHaveClass('MuiCard-root')

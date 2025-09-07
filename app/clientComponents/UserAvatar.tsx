@@ -1,7 +1,9 @@
-import React from 'react'
-import { Avatar, AvatarProps, Box, Chip } from '@mui/material'
+import React, { useRef, useState } from 'react'
+import { Avatar, AvatarProps, Box, Chip, CircularProgress } from '@mui/material'
 import { useActiveProfileImage } from '@app/hooks/useActiveProfileImage'
 import Image from 'next/image'
+import { UseUser } from '@app/context/UserContext'
+import { useSession } from 'next-auth/react'
 
 interface UserAvatarProps extends Omit<AvatarProps, 'src' | 'alt'> {
   /**
@@ -16,6 +18,10 @@ interface UserAvatarProps extends Omit<AvatarProps, 'src' | 'alt'> {
    * Custom alt text - if not provided, defaults to "User profile image"
    */
   alt?: string
+  /**
+   * Enable clicking avatar to upload a new profile image
+   */
+  enableUpload?: boolean
 }
 
 const sizeMap = {
@@ -33,17 +39,80 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
   showPlaceholderIndicator = false,
   alt = 'User profile image',
   sx,
+  // When true, clicking the avatar opens a file picker and uploads the chosen image
+  enableUpload = false,
   ...avatarProps
 }) => {
-  const { activeImage, isPlaceholder, hasCustomImage, isDefaultImage } =
-    useActiveProfileImage()
+  const { activeImage, isPlaceholder } = useActiveProfileImage()
+  const { dispatch } = UseUser()
+  const { data: session } = useSession()
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const [uploading, setUploading] = useState(false)
 
   const sizeStyles = sizeMap[size]
 
   const iconSize = sizeStyles ? sizeStyles.width * 0.6 : 32
 
+  // Only allow upload when the default placeholder avatar is showing.
+  // If there is at least one image (uploaded or provider image) disable upload even if enableUpload prop is true.
+  const effectiveEnableUpload = enableUpload && isPlaceholder
+
   return (
     <Box sx={{ position: 'relative', display: 'inline-block' }}>
+      {/* Hidden file input used when upload is enabled */}
+      {effectiveEnableUpload && (
+        <input
+          aria-label="upload profile image input"
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={async (e) => {
+            const file = e.target.files && e.target.files[0]
+            if (!file) return
+            if (!session?.user?.email) {
+              window.alert('You must be logged in to upload a profile image.')
+              return
+            }
+            try {
+              setUploading(true)
+              const formData = new FormData()
+              formData.append('file', file)
+              const res = await fetch('/api/profileImage', {
+                method: 'POST',
+                body: formData,
+              })
+              if (res.ok) {
+                const data = await res.json()
+                dispatch({
+                  type: 'SET_PROFILE_IMAGES',
+                  payload: {
+                    images: data.images,
+                    active: data.activeProfileImage || null,
+                  },
+                })
+                // Optionally notify user
+                // eslint-disable-next-line no-console
+                console.log('Profile image uploaded')
+              } else {
+                const err = await res.json()
+                // eslint-disable-next-line no-console
+                console.error('Upload failed', err)
+                window.alert(err?.error || 'Upload failed')
+              }
+            } catch (err) {
+              // eslint-disable-next-line no-console
+              console.error('Upload error', err)
+              window.alert('Upload error')
+            } finally {
+              setUploading(false)
+              // Clear input so same file can be selected again if needed
+              if (inputRef.current) inputRef.current.value = ''
+            }
+          }}
+        />
+      )}
+
       <Avatar
         // Only set src when there is a real image (not the placeholder path)
         src={isPlaceholder ? undefined : activeImage}
@@ -51,6 +120,12 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
         sx={{
           ...sizeStyles,
           ...sx,
+          cursor: effectiveEnableUpload ? 'pointer' : undefined,
+        }}
+        onClick={() => {
+          if (effectiveEnableUpload && inputRef.current) {
+            inputRef.current.click()
+          }
         }}
         {...avatarProps}
       >
@@ -62,6 +137,21 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
             height={iconSize}
             alt="Default profile icon"
           />
+        )}
+        {uploading && (
+          <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              bgcolor: 'rgba(255,255,255,0.6)',
+              borderRadius: '50%',
+            }}
+          >
+            <CircularProgress size={24} />
+          </Box>
         )}
       </Avatar>
 

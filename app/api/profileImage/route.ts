@@ -44,13 +44,46 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'File too large' }, { status: 400 })
     }
 
-    // Fetch user
-    const user = await prisma.userData.findUnique({
+    // Fetch user (if not present, create a minimal user record so uploads can proceed)
+    let user = await prisma.userData.findUnique({
       where: { email: session.user.email },
     })
+
     if (!user) {
-      console.log('User not found:', session.user.email)
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      console.log(
+        'User not found, creating minimal user record for:',
+        session.user.email
+      )
+      try {
+        user = await prisma.userData.create({
+          data: {
+            email: session.user.email,
+            name: session.user.email.split('@')[0],
+            provider_id: session.user.id ?? undefined,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            firstName: '',
+            lastName: '',
+            bio: '',
+            headline: '',
+            location: '',
+            websiteURL: '',
+            shareQuick: '',
+            yogaStyle: '',
+            yogaExperience: '',
+            company: '',
+            socialURL: '',
+            isLocationPublic: '',
+            role: 'user',
+            profileImages: [],
+            activeProfileImage: null,
+          },
+        })
+        console.log('Created minimal user record:', user.id)
+      } catch (createErr) {
+        console.error('Failed to create user record during upload:', createErr)
+        return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      }
     }
 
     const profileImages = user.profileImages || []

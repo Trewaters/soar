@@ -28,6 +28,9 @@ export default function UserDetails() {
   // State for error/success messages
   const [error, setError] = useState<string>('')
 
+  // Guard to avoid repeatedly attempting to fetch the user when the first attempt fails
+  const [hasAttemptedFetch, setHasAttemptedFetch] = useState(false)
+
   // State to force re-render when userData changes
   const [, forceUpdate] = useState({})
 
@@ -37,6 +40,8 @@ export default function UserDetails() {
       if (
         session?.user?.email &&
         userData &&
+        // Only attempt fetch once to avoid tight retry loops when backend returns errors
+        !hasAttemptedFetch &&
         (!userData.email || // userData.email is empty, needs initial fetch
           userData.email === '' || // explicitly empty string
           !userData.yogaStyle || // or profile fields are empty
@@ -52,15 +57,21 @@ export default function UserDetails() {
           if (response.ok) {
             const result = await response.json()
             dispatch({ type: 'SET_USER', payload: result.data })
+            setHasAttemptedFetch(true)
+          } else {
+            // Stop further attempts if server returns not found or error to avoid loop
+            setHasAttemptedFetch(true)
+            console.warn('Failed to fetch complete user data:', response.status)
           }
         } catch (error) {
           console.error('Error fetching complete user data:', error)
+          setHasAttemptedFetch(true)
         }
       }
     }
 
     fetchCompleteUserData()
-  }, [session, userData, dispatch])
+  }, [session, userData, dispatch, hasAttemptedFetch])
 
   // Force re-render when userData changes to update share preview
   useEffect(() => {
@@ -108,7 +119,7 @@ export default function UserDetails() {
   const getSharePreviewText = () => {
     // If userData is not available or empty, show a default message
     if (!userData || Object.keys(userData).length === 0) {
-      return 'Check out my yoga profile!'
+      return 'Check out my Uvuyoga! www.happyyoga.app'
     }
 
     const parts = []
@@ -122,7 +133,7 @@ export default function UserDetails() {
     if (userData.headline && userData.headline.trim()) {
       parts.push(userData.headline.trim())
     } else if (parts.length === 0) {
-      parts.push('Check out my yoga profile!')
+      parts.push('Check out my Uvuyoga! www.happyyoga.app')
     }
 
     // Add yoga details if they exist
@@ -148,7 +159,7 @@ export default function UserDetails() {
 
     // If no parts were added, show default message
     if (parts.length === 0) {
-      parts.push('Check out my yoga profile!')
+      parts.push('Check out my Uvuyoga! www.happyyoga.app')
     }
 
     return parts.join('\n')
@@ -232,6 +243,7 @@ export default function UserDetails() {
                 height: { xs: 120, md: 150 },
               }}
               aria-label="name initial"
+              enableUpload={true}
             />
           </Stack>
           <Stack flex={3} spacing={2}>

@@ -72,7 +72,7 @@ const ProfileNavMenu: React.FC = () => {
       label: 'My Library',
       icon: <LibraryIcon />,
       href: '/navigator/profile/library',
-      badge: 'New',
+      // badge: 'New',
     },
     {
       id: 'account-settings',

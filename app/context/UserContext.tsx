@@ -316,14 +316,46 @@ export default function UserStateProvider({
           `/api/user/fetchAccount/?userId=${fetchUser.data.id}`,
           { cache: 'no-store' }
         )
+
+        if (!accountResponse.ok) {
+          // No provider account exists for this user - skip provider profile handling
+          // Log for debugging and return early
+          try {
+            const txt = await accountResponse.text()
+            console.warn('fetchAccount not ok:', accountResponse.status, txt)
+          } catch (_) {
+            console.warn('fetchAccount not ok:', accountResponse.status)
+          }
+          return
+        }
+
         const fetchAccount = await accountResponse.json()
-        const profile = JSON.parse(fetchUser.data.profile)
-        if (fetchAccount.data.provider === 'github') {
+
+        // Safely parse profile JSON; profile may be empty or already an object
+        let profile: any = {}
+        try {
+          profile = fetchUser.data.profile
+            ? typeof fetchUser.data.profile === 'string'
+              ? JSON.parse(fetchUser.data.profile)
+              : fetchUser.data.profile
+            : {}
+        } catch (err) {
+          console.warn('Failed to parse user.profile JSON', err)
+          profile = {}
+        }
+
+        const provider = fetchAccount?.data?.provider
+        if (!provider) {
+          // nothing to do if provider info is missing
+          return
+        }
+
+        if (provider === 'github') {
           dispatch({
             type: 'SET_GITHUB_PROFILE',
             payload: profile as UserGithubProfile,
           })
-        } else if (fetchAccount.data.provider === 'google') {
+        } else if (provider === 'google') {
           dispatch({
             type: 'SET_GOOGLE_PROFILE',
             payload: profile as UserGoogleProfile,
