@@ -20,6 +20,8 @@ import { useSession } from 'next-auth/react'
 import Paper from '@mui/material/Paper'
 import ListSubheader from '@mui/material/ListSubheader'
 import Typography from '@mui/material/Typography'
+import Divider from '@mui/material/Divider'
+import SeriesImageManager from '@app/clientComponents/SeriesImageManager'
 
 export interface Asana {
   id: string
@@ -176,6 +178,14 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
               />
             </FormControl>
           </Paper>
+
+          {/* Images Section */}
+          <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
+            <SeriesImageManager seriesId={series.id} disabled={!isCreator} />
+          </Paper>
+
+          <Divider sx={{ mb: 3 }} />
+
           {/* Asana List Management */}
           <Paper elevation={1} sx={{ p: 3, mb: 1.5, borderRadius: '12px' }}>
             <Typography variant="h6" gutterBottom color="primary">

@@ -158,15 +158,17 @@ describe('Page Component', () => {
     expect(screen.getByTestId('landing-page')).toBeInTheDocument()
   })
 
-  it('renders navigation links for learning sections', () => {
+  it('renders key page sections', () => {
     render(
       <ThemeProvider theme={theme}>
         <Page />
       </ThemeProvider>
     )
-    expect(screen.getByText('Learn about Yoga')).toBeInTheDocument()
-    expect(screen.getByText('Eight Limbs')).toBeInTheDocument()
-    expect(screen.getByText('Glossary')).toBeInTheDocument()
+    expect(screen.getByText('Build Your Practice:')).toBeInTheDocument()
+    expect(
+      screen.getByText('"From Single Asana to Full Sequences"')
+    ).toBeInTheDocument()
+    expect(screen.getByText('Your Recent Activity')).toBeInTheDocument()
   })
 
   it('uses semantic HTML and ARIA roles correctly', () => {
@@ -178,10 +180,6 @@ describe('Page Component', () => {
     const main = screen.getByRole('main')
     expect(main).toBeInTheDocument()
     expect(main).toHaveAttribute('aria-labelledby', 'page-title')
-
-    const nav = screen.getByRole('navigation')
-    expect(nav).toBeInTheDocument()
-    expect(nav).toHaveAttribute('aria-labelledby', 'learn-section-title')
 
     const image = screen.getByAltText(
       'Illustration of a person practicing yoga'

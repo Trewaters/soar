@@ -204,6 +204,7 @@ exports.Prisma.AsanaSeriesScalarFieldEnum = {
   description: 'description',
   durationSeries: 'durationSeries',
   image: 'image',
+  images: 'images',
   created_by: 'created_by',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

@@ -6,7 +6,7 @@ import { theme } from '@styles/theme'
 import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import NavBottom from '../../components/navBottom'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 // Mock next/navigation
 const mockPush = jest.fn()
@@ -18,6 +18,7 @@ const mockPrefetch = jest.fn()
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  usePathname: jest.fn(),
 }))
 
 // Mock next-auth
@@ -42,6 +43,7 @@ jest.mock('@mui/icons-material/ArrowBack', () => ({
 }))
 
 const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>
+const mockUsePathname = usePathname as jest.MockedFunction<typeof usePathname>
 const mockUseSession = useSession as jest.MockedFunction<typeof useSession>
 
 // Test wrapper component with all required providers
@@ -85,6 +87,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       refresh: mockRefresh,
       prefetch: mockPrefetch,
     })
+    mockUsePathname.mockReturnValue('/')
   })
 
   describe('Back Navigation Functionality Across Different Page Combinations', () => {

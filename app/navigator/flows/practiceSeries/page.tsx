@@ -199,7 +199,8 @@ export default function Page() {
         return {
           id: `${idx}-${name}`,
           name,
-          difficulty: simplified || 'unknown',
+          // Show nothing when difficulty is missing instead of the literal 'unknown'
+          difficulty: simplified || '',
         }
       }
     )

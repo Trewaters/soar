@@ -51,6 +51,7 @@ export async function POST(request: Request) {
         description,
         durationSeries,
         image,
+        images: image ? [image] : [], // Initialize images array with legacy image if present
         created_by: createdBy,
         createdAt: new Date(),
         updatedAt: new Date(),

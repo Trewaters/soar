@@ -15,6 +15,22 @@ jest.mock('next-auth/react', () => ({
 }))
 ;(globalThis as any).mockUseSession = mockUseSession
 
+// Globally mock next/navigation hooks used by many components (useRouter, usePathname)
+const mockUsePathname = jest.fn(() => '/')
+const mockUseRouter = jest.fn(() => ({
+  push: jest.fn(),
+  replace: jest.fn(),
+  prefetch: jest.fn(),
+}))
+jest.mock('next/navigation', () => ({
+  __esModule: true,
+  usePathname: mockUsePathname,
+  useRouter: mockUseRouter,
+  useSearchParams: jest.fn(() => new URLSearchParams()),
+}))
+;(globalThis as any).mockUsePathname = mockUsePathname
+;(globalThis as any).mockUseRouter = mockUseRouter
+
 // Mock browser audio APIs that are not available in JSDOM
 beforeAll(() => {
   // Mock AudioContext

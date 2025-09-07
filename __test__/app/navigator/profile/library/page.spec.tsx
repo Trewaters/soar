@@ -78,11 +78,9 @@ jest.mock('next/navigation', () => ({
 }))
 
 // Mock UserContext
+const mockUseUser = jest.fn()
 jest.mock('@app/context/UserContext', () => ({
-  UseUser: () => ({
-    state: mockUserState,
-    dispatch: mockDispatch,
-  }),
+  UseUser: () => mockUseUser(),
 }))
 
 // Mock next-auth/react
@@ -102,6 +100,12 @@ describe('LibraryPage Profile Images Tab Count', () => {
     mockGetUserCreatedAsanas.mockResolvedValue([])
     mockGetUserCreatedSeries.mockResolvedValue([])
     mockGetUserCreatedSequences.mockResolvedValue([])
+
+    // Setup default UserContext mock
+    mockUseUser.mockReturnValue({
+      state: mockUserState,
+      dispatch: mockDispatch,
+    })
   })
 
   it('should display profile images count in the tab label', async () => {
@@ -127,7 +131,7 @@ describe('LibraryPage Profile Images Tab Count', () => {
       },
     }
 
-    jest.mocked(require('@app/context/UserContext').UseUser).mockReturnValue({
+    mockUseUser.mockReturnValue({
       state: mockUserStateEmpty,
       dispatch: mockDispatch,
     })

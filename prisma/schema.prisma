@@ -136,7 +136,8 @@ model AsanaSeries {
   breathSeries    String[]
   description     String?
   durationSeries  String?
-  image           String?
+  image           String? // Legacy single image field - kept for backward compatibility
+  images          String[] @default([]) // Multiple image URLs for the series
   created_by      String
   createdAt       DateTime? @default(now())
   updatedAt       DateTime? @updatedAt

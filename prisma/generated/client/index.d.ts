@@ -5588,6 +5588,7 @@ export namespace Prisma {
     description: number
     durationSeries: number
     image: number
+    images: number
     created_by: number
     createdAt: number
     updatedAt: number
@@ -5625,6 +5626,7 @@ export namespace Prisma {
     description?: true
     durationSeries?: true
     image?: true
+    images?: true
     created_by?: true
     createdAt?: true
     updatedAt?: true
@@ -5711,6 +5713,7 @@ export namespace Prisma {
     description: string | null
     durationSeries: string | null
     image: string | null
+    images: string[]
     created_by: string
     createdAt: Date | null
     updatedAt: Date | null
@@ -5741,6 +5744,7 @@ export namespace Prisma {
     description?: boolean
     durationSeries?: boolean
     image?: boolean
+    images?: boolean
     created_by?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5755,6 +5759,7 @@ export namespace Prisma {
     description?: boolean
     durationSeries?: boolean
     image?: boolean
+    images?: boolean
     created_by?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -5772,6 +5777,7 @@ export namespace Prisma {
       description: string | null
       durationSeries: string | null
       image: string | null
+      images: string[]
       created_by: string
       createdAt: Date | null
       updatedAt: Date | null
@@ -6174,6 +6180,7 @@ export namespace Prisma {
     readonly description: FieldRef<"AsanaSeries", 'String'>
     readonly durationSeries: FieldRef<"AsanaSeries", 'String'>
     readonly image: FieldRef<"AsanaSeries", 'String'>
+    readonly images: FieldRef<"AsanaSeries", 'String[]'>
     readonly created_by: FieldRef<"AsanaSeries", 'String'>
     readonly createdAt: FieldRef<"AsanaSeries", 'DateTime'>
     readonly updatedAt: FieldRef<"AsanaSeries", 'DateTime'>
@@ -13703,6 +13710,7 @@ export namespace Prisma {
     description: 'description',
     durationSeries: 'durationSeries',
     image: 'image',
+    images: 'images',
     created_by: 'created_by',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -14461,6 +14469,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"AsanaSeries"> | string | null
     durationSeries?: StringNullableFilter<"AsanaSeries"> | string | null
     image?: StringNullableFilter<"AsanaSeries"> | string | null
+    images?: StringNullableListFilter<"AsanaSeries">
     created_by?: StringFilter<"AsanaSeries"> | string
     createdAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
@@ -14474,6 +14483,7 @@ export namespace Prisma {
     description?: SortOrder
     durationSeries?: SortOrder
     image?: SortOrder
+    images?: SortOrder
     created_by?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14490,6 +14500,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"AsanaSeries"> | string | null
     durationSeries?: StringNullableFilter<"AsanaSeries"> | string | null
     image?: StringNullableFilter<"AsanaSeries"> | string | null
+    images?: StringNullableListFilter<"AsanaSeries">
     created_by?: StringFilter<"AsanaSeries"> | string
     createdAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
     updatedAt?: DateTimeNullableFilter<"AsanaSeries"> | Date | string | null
@@ -14503,6 +14514,7 @@ export namespace Prisma {
     description?: SortOrder
     durationSeries?: SortOrder
     image?: SortOrder
+    images?: SortOrder
     created_by?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14522,6 +14534,7 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"AsanaSeries"> | string | null
     durationSeries?: StringNullableWithAggregatesFilter<"AsanaSeries"> | string | null
     image?: StringNullableWithAggregatesFilter<"AsanaSeries"> | string | null
+    images?: StringNullableListFilter<"AsanaSeries">
     created_by?: StringWithAggregatesFilter<"AsanaSeries"> | string
     createdAt?: DateTimeNullableWithAggregatesFilter<"AsanaSeries"> | Date | string | null
     updatedAt?: DateTimeNullableWithAggregatesFilter<"AsanaSeries"> | Date | string | null
@@ -15767,6 +15780,7 @@ export namespace Prisma {
     description?: string | null
     durationSeries?: string | null
     image?: string | null
+    images?: AsanaSeriesCreateimagesInput | string[]
     created_by: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -15780,6 +15794,7 @@ export namespace Prisma {
     description?: string | null
     durationSeries?: string | null
     image?: string | null
+    images?: AsanaSeriesCreateimagesInput | string[]
     created_by: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -15792,6 +15807,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     durationSeries?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: AsanaSeriesUpdateimagesInput | string[]
     created_by?: StringFieldUpdateOperationsInput | string
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -15804,6 +15820,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     durationSeries?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: AsanaSeriesUpdateimagesInput | string[]
     created_by?: StringFieldUpdateOperationsInput | string
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -15817,6 +15834,7 @@ export namespace Prisma {
     description?: string | null
     durationSeries?: string | null
     image?: string | null
+    images?: AsanaSeriesCreateimagesInput | string[]
     created_by: string
     createdAt?: Date | string | null
     updatedAt?: Date | string | null
@@ -15829,6 +15847,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     durationSeries?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: AsanaSeriesUpdateimagesInput | string[]
     created_by?: StringFieldUpdateOperationsInput | string
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -15841,6 +15860,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     durationSeries?: NullableStringFieldUpdateOperationsInput | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    images?: AsanaSeriesUpdateimagesInput | string[]
     created_by?: StringFieldUpdateOperationsInput | string
     createdAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -17039,6 +17059,7 @@ export namespace Prisma {
     description?: SortOrder
     durationSeries?: SortOrder
     image?: SortOrder
+    images?: SortOrder
     created_by?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -17997,12 +18018,21 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type AsanaSeriesCreateimagesInput = {
+    set: string[]
+  }
+
   export type AsanaSeriesUpdateseriesPosturesInput = {
     set?: string[]
     push?: string | string[]
   }
 
   export type AsanaSeriesUpdatebreathSeriesInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type AsanaSeriesUpdateimagesInput = {
     set?: string[]
     push?: string | string[]
   }
