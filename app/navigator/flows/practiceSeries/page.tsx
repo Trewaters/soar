@@ -14,6 +14,8 @@ import {
   Typography,
   useTheme,
   ListSubheader,
+  Card,
+  CardMedia,
 } from '@mui/material'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import SplashHeader from '@app/clientComponents/splash-header'
@@ -44,6 +46,7 @@ export default function Page() {
   const [loading, setLoading] = useState(false)
   const [acOpen, setAcOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
+  const [images, setImages] = useState<string[]>([])
 
   // Partitioned, grouped search data using centralized ordering utility
   const enrichedSeries = useMemo(
@@ -160,6 +163,38 @@ export default function Page() {
     // initial load
     fetchSeries()
   }, [fetchSeries])
+
+  // Fetch images array for the selected series (prefer images[0] over legacy flow.image)
+  useEffect(() => {
+    let mounted = true
+    async function fetchImages() {
+      if (!flow?.id) {
+        if (mounted) setImages([])
+        return
+      }
+      try {
+        const res = await fetch(`/api/series/${flow.id}/images`)
+        if (!res.ok) {
+          if (mounted) setImages([])
+          return
+        }
+        const data = await res.json()
+        if (mounted) setImages(Array.isArray(data.images) ? data.images : [])
+      } catch (e) {
+        console.error('Failed to fetch series images', e)
+        if (mounted) setImages([])
+      }
+    }
+    fetchImages()
+    return () => {
+      mounted = false
+    }
+  }, [flow?.id])
+
+  const imageUrl = useMemo(() => {
+    if (images && images.length > 0) return images[0]
+    return flow?.image || ''
+  }, [images, flow?.image])
 
   function handleSelect(
     event: ChangeEvent<object>,
@@ -494,6 +529,26 @@ export default function Page() {
                     </Box>
                   ))}
                 </Stack>
+                {/* Series image (if uploaded) - shown between posture list and description */}
+                {imageUrl ? (
+                  <Box sx={{ width: '100%', maxWidth: 600, mt: 2 }}>
+                    <Card
+                      sx={{
+                        position: 'relative',
+                        boxShadow: 'none',
+                        backgroundColor: 'transparent',
+                      }}
+                    >
+                      <CardMedia
+                        component="img"
+                        height={300}
+                        image={imageUrl}
+                        alt={`${flow.seriesName} image`}
+                        sx={{ objectFit: 'cover', borderRadius: 2 }}
+                      />
+                    </Card>
+                  </Box>
+                ) : null}
               </Box>
               <Box
                 className={'journal'}
