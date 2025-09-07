@@ -56,8 +56,8 @@ export default function SeriesImageManagementDemo() {
           To test this feature:
         </Typography>
         <ol>
-          <li>Make sure you're logged in as a series creator</li>
-          <li>Click "Open Demo Dialog" below</li>
+          <li>Make sure you&apos;re logged in as a series creator</li>
+          <li>Click &quot;Open Demo Dialog&quot; below</li>
           <li>Try uploading images (JPEG, PNG, WebP formats)</li>
           <li>Delete images using the delete button on each image</li>
           <li>Test on both desktop and mobile devices</li>

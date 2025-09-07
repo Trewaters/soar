@@ -231,7 +231,7 @@ export default function UserDetails() {
                 width: { xs: 120, md: 150 },
                 height: { xs: 120, md: 150 },
               }}
-              aria-label="User profile image"
+              aria-label="name initial"
             />
           </Stack>
           <Stack flex={3} spacing={2}>

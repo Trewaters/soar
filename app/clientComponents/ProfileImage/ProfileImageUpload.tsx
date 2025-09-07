@@ -42,11 +42,13 @@ export const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({
         aria-label="Upload profile image"
       >
         Upload Image
+        {/* keep input in DOM but visually hidden so user-event can target it directly */}
         <input
           ref={inputRef}
           type="file"
           accept="image/jpeg,image/png"
-          hidden
+          style={{ display: 'none' }}
+          aria-label="Upload Image"
           onChange={handleFileChange}
         />
       </Button>

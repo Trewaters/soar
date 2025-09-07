@@ -45,7 +45,8 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
   return (
     <Box sx={{ position: 'relative', display: 'inline-block' }}>
       <Avatar
-        src={activeImage}
+        // Only set src when there is a real image (not the placeholder path)
+        src={isPlaceholder ? undefined : activeImage}
         alt={alt}
         sx={{
           ...sizeStyles,
@@ -54,6 +55,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
         {...avatarProps}
       >
         {isPlaceholder && (
+          // Render an <img> inside Avatar for the placeholder so tests can find it by alt
           <Image
             src="/icons/profile/profile-person.svg"
             width={iconSize}

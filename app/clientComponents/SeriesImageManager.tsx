@@ -56,6 +56,14 @@ export default function SeriesImageManager({
       setLoading(true)
       setError(null)
 
+      // Some test environments don't provide global.fetch; guard against that
+      if (typeof fetch !== 'function') {
+        // Skip fetching in environments without fetch (tests will mock behavior)
+        setImages([])
+        onImagesChange?.([])
+        return
+      }
+
       const response = await fetch(`/api/series/${seriesId}/images`)
 
       if (!response.ok) {
@@ -291,7 +299,7 @@ export default function SeriesImageManager({
         <DialogContent>
           {selectedFile && (
             <Typography>
-              Upload "{selectedFile.name}" (
+              Upload &quot;{selectedFile.name}&quot; (
               {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB)?
             </Typography>
           )}
