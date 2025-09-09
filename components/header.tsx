@@ -91,13 +91,6 @@ export default function Header() {
         color: 'gray',
       },
       {
-        name: '8 Limbs',
-        href: '/navigator/eightLimbs',
-        icon: <FlareIcon />,
-        action: null,
-        color: 'gray',
-      },
-      {
         name: 'Asanas',
         href: '/navigator/asanaPostures',
         // icon: <WaterDropOutlinedIcon color="primary" />,
@@ -120,6 +113,13 @@ export default function Header() {
         icon: <GroupWorkIcon color="primary" />,
         action: null,
         color: 'primary',
+      },
+      {
+        name: '8 Limbs',
+        href: '/navigator/eightLimbs',
+        icon: <FlareIcon />,
+        action: null,
+        color: 'gray',
       },
       {
         name: 'About',

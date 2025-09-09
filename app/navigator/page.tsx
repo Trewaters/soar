@@ -9,9 +9,11 @@ import ActivityStreaks from '@app/clientComponents/activityStreaks/ActivityStrea
 import LandingPage from '@app/clientComponents/landing-page'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import { UseUser } from '@app/context/UserContext'
 
 export default function Page() {
   const { data: session } = useSession()
+  const { state } = UseUser()
 
   const learnLinks = [
     {
@@ -44,7 +46,12 @@ export default function Page() {
           id="page-title"
           sx={{ fontWeight: 600, mb: 2, ml: 4, textAlign: 'start' }}
         >
-          Welcome {session?.user?.name || 'Yogi'}
+          {(() => {
+            const first = state?.userData?.firstName || ''
+            const last = state?.userData?.lastName || ''
+            const combined = `${first} ${last}`.trim()
+            return `Welcome ${combined || 'Yogi'}`
+          })()}
         </Typography>
         <Image
           src={'/images/primary/Home-page-yogi.png'}
