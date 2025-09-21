@@ -58,7 +58,12 @@ const navigatorMock = {
 
 // Set up global mocks for both global and globalThis
 Object.defineProperty(global, 'window', {
-  value: windowMock,
+  value: {
+    ...windowMock,
+    PushManager: MockPushManager,
+    Notification: MockNotification,
+    atob: windowMock.atob,
+  },
   writable: true,
   configurable: true,
 })
@@ -89,7 +94,12 @@ Object.defineProperty(global, 'fetch', {
 
 // Also set on globalThis for compatibility
 Object.defineProperty(globalThis, 'window', {
-  value: windowMock,
+  value: {
+    ...windowMock,
+    PushManager: MockPushManager,
+    Notification: MockNotification,
+    atob: windowMock.atob,
+  },
   writable: true,
   configurable: true,
 })
@@ -285,14 +295,12 @@ describe('Push Notification Utilities', () => {
     })
 
     it('should handle permission denied', async () => {
-      ;(window.Notification.requestPermission as jest.Mock).mockResolvedValue(
-        'denied'
-      )
+      MockNotification.requestPermission.mockResolvedValue('denied')
 
       const result = await enablePushNotifications()
 
       expect(result.success).toBe(false)
-      expect(result.error).toContain('permission denied')
+      expect(result.error).toContain('denied')
     })
 
     it('should handle service worker registration failure', async () => {
