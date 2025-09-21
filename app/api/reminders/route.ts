@@ -4,6 +4,52 @@ import { auth } from '../../../auth'
 
 const prisma = new PrismaClient()
 
+export async function GET() {
+  const session = await auth()
+  if (!session || !session.user || !session.user.id) {
+    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  }
+
+  try {
+    // Get user data including timezone
+    const userData = await prisma.userData.findUnique({
+      where: { id: session.user.id },
+      select: { tz: true },
+    })
+
+    // Get existing reminder for this user
+    const reminder = await prisma.reminder.findFirst({
+      where: { userId: session.user.id },
+    })
+
+    if (!reminder) {
+      // Return default values if no reminder exists
+      return NextResponse.json({
+        timeOfDay: '08:00',
+        timezone: userData?.tz || 'America/Los_Angeles',
+        days: ['Mon', 'Wed', 'Fri'],
+        message: 'Time for your yoga practice! 🧘‍♀️',
+        enabled: false,
+      })
+    }
+
+    // Return existing reminder data
+    return NextResponse.json({
+      timeOfDay: reminder.timeOfDay,
+      timezone: userData?.tz || 'America/Los_Angeles',
+      days: reminder.days,
+      message: reminder.message,
+      enabled: reminder.enabled,
+    })
+  } catch (error) {
+    console.error('Error fetching reminder settings:', error)
+    return NextResponse.json(
+      { error: 'Failed to fetch reminder settings' },
+      { status: 500 }
+    )
+  }
+}
+
 export async function POST(req: NextRequest) {
   const session = await auth()
   if (!session || !session.user || !session.user.id) {

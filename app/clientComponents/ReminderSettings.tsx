@@ -130,6 +130,27 @@ export default function ReminderSettings() {
     }
   }, [])
 
+  // Fetch existing reminder settings when user session is available
+  useEffect(() => {
+    const fetchReminderSettings = async () => {
+      if (!session?.user) return
+
+      try {
+        const response = await fetch('/api/reminders')
+        if (response.ok) {
+          const data = await response.json()
+          setReminderData(data)
+        } else {
+          console.error('Failed to fetch reminder settings')
+        }
+      } catch (error) {
+        console.error('Error fetching reminder settings:', error)
+      }
+    }
+
+    fetchReminderSettings()
+  }, [session?.user])
+
   const showNotification = useCallback(
     (type: 'success' | 'error' | 'info' | 'warning', message: string) => {
       setNotification({ type, message })
