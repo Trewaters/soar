@@ -176,6 +176,37 @@ describe('Push Notification Utilities', () => {
 
     // Ensure environment variable is set
     process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY = 'test-vapid-key'
+
+    // Re-establish all global properties to ensure proper browser support detection
+    // This prevents test contamination from tests that temporarily modify globals
+    Object.defineProperty(global, 'window', {
+      value: {
+        ...windowMock,
+        PushManager: MockPushManager,
+        Notification: MockNotification,
+        atob: windowMock.atob,
+      },
+      writable: true,
+      configurable: true,
+    })
+
+    Object.defineProperty(global, 'navigator', {
+      value: navigatorMock,
+      writable: true,
+      configurable: true,
+    })
+
+    Object.defineProperty(global, 'Notification', {
+      value: MockNotification,
+      writable: true,
+      configurable: true,
+    })
+
+    Object.defineProperty(global, 'PushManager', {
+      value: MockPushManager,
+      writable: true,
+      configurable: true,
+    })
   })
 
   describe('Browser Support Detection', () => {
@@ -184,30 +215,64 @@ describe('Push Notification Utilities', () => {
     })
 
     it('should detect lack of support when ServiceWorker is missing', () => {
+      // Temporarily redefine navigator without serviceWorker
       const originalNavigator = global.navigator
-      delete (global as any).navigator.serviceWorker
+      Object.defineProperty(global, 'navigator', {
+        value: {},
+        writable: true,
+        configurable: true,
+      })
 
       expect(isPushSupported()).toBe(false)
 
-      global.navigator = originalNavigator
+      // Restore original navigator
+      Object.defineProperty(global, 'navigator', {
+        value: originalNavigator,
+        writable: true,
+        configurable: true,
+      })
     })
 
     it('should detect lack of support when PushManager is missing', () => {
-      const originalPushManager = global.window.PushManager
-      delete (global.window as any).PushManager
+      // Temporarily redefine window without PushManager property
+      const originalWindow = global.window
+      const { PushManager, ...windowWithoutPushManager } = originalWindow
+
+      Object.defineProperty(global, 'window', {
+        value: windowWithoutPushManager,
+        writable: true,
+        configurable: true,
+      })
 
       expect(isPushSupported()).toBe(false)
 
-      global.window.PushManager = originalPushManager
+      // Restore original window
+      Object.defineProperty(global, 'window', {
+        value: originalWindow,
+        writable: true,
+        configurable: true,
+      })
     })
 
     it('should detect lack of support when Notification is missing', () => {
-      const originalNotification = global.window.Notification
-      delete (global.window as any).Notification
+      // Temporarily redefine window without Notification property
+      const originalWindow = global.window
+      const { Notification, ...windowWithoutNotification } = originalWindow
+
+      Object.defineProperty(global, 'window', {
+        value: windowWithoutNotification,
+        writable: true,
+        configurable: true,
+      })
 
       expect(isPushSupported()).toBe(false)
 
-      global.window.Notification = originalNotification
+      // Restore original window
+      Object.defineProperty(global, 'window', {
+        value: originalWindow,
+        writable: true,
+        configurable: true,
+      })
     })
   })
 
@@ -225,17 +290,33 @@ describe('Push Notification Utilities', () => {
     })
 
     it('should return denied when Notification is not supported', () => {
-      const originalNotification = (global as any).Notification
-      const originalWindowNotification = (global as any).window?.Notification
+      // Temporarily redefine global and window without Notification property
+      const originalNotification = global.Notification
+      const originalWindow = global.window
+      const { Notification, ...windowWithoutNotification } = originalWindow
 
       delete (global as any).Notification
-      delete (global as any).window?.Notification
+
+      Object.defineProperty(global, 'window', {
+        value: windowWithoutNotification,
+        writable: true,
+        configurable: true,
+      })
 
       expect(getNotificationPermission()).toBe('denied')
-      ;(global as any).Notification = originalNotification
-      if (originalWindowNotification) {
-        ;(global as any).window.Notification = originalWindowNotification
-      }
+
+      // Restore original values
+      Object.defineProperty(global, 'Notification', {
+        value: originalNotification,
+        writable: true,
+        configurable: true,
+      })
+
+      Object.defineProperty(global, 'window', {
+        value: originalWindow,
+        writable: true,
+        configurable: true,
+      })
     })
   })
 
@@ -415,14 +496,27 @@ describe('Push Notification Utilities', () => {
     })
 
     it('should return null when push is not supported', async () => {
-      const originalPushManager = global.window.PushManager
-      delete (global.window as any).PushManager
+      // Temporarily redefine window without PushManager to test unsupported scenario
+      const originalWindow = global.window
+      Object.defineProperty(global, 'window', {
+        value: {
+          ...originalWindow,
+          PushManager: undefined,
+        },
+        writable: true,
+        configurable: true,
+      })
 
       const subscription = await getExistingSubscription()
 
       expect(subscription).toBe(null)
 
-      global.window.PushManager = originalPushManager
+      // Restore original window
+      Object.defineProperty(global, 'window', {
+        value: originalWindow,
+        writable: true,
+        configurable: true,
+      })
     })
 
     it('should handle errors gracefully', async () => {
