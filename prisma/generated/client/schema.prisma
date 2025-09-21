@@ -189,7 +189,7 @@ model AsanaSequence {
 model AsanaActivity {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
   userId            String   @db.ObjectId
-  postureId         String // Reference to AsanaPosture.id
+  postureId         String @db.ObjectId // Reference to AsanaPosture.id
   postureName       String // e.g., Adho Mukha Svanasana
   sort_english_name String // For routing - e.g., "Downward Facing Dog"
   duration          Int // Duration held (in seconds)
