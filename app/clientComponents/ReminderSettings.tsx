@@ -331,6 +331,44 @@ export default function ReminderSettings() {
     }
   }
 
+  const handleTestEmailNotification = async () => {
+    if (!session?.user?.email) {
+      showNotification('warning', 'No email address found in your account')
+      return
+    }
+
+    if (!reminderData.emailNotificationsEnabled) {
+      showNotification('warning', 'Email notifications are disabled')
+      return
+    }
+
+    setLoading(true)
+    try {
+      const response = await fetch('/api/test/email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        showNotification(
+          'success',
+          `Test email sent to ${session.user.email}! Check your inbox.`
+        )
+      } else {
+        const error = await response.json()
+        showNotification('error', error.error || 'Failed to send test email')
+      }
+    } catch (error) {
+      console.error('Test email error:', error)
+      showNotification('error', 'Failed to send test email')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   if (!session?.user) {
     return (
       <Card>
@@ -547,24 +585,36 @@ export default function ReminderSettings() {
 
                 <Box sx={{ flexShrink: 0 }}>
                   {session?.user?.email && (
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={
-                            reminderData.emailNotificationsEnabled ?? true
-                          }
-                          onChange={(e) =>
-                            handleInputChange(
-                              'emailNotificationsEnabled',
-                              e.target.checked
-                            )
-                          }
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      {reminderData.emailNotificationsEnabled && (
+                        <Button
+                          variant="outlined"
+                          onClick={handleTestEmailNotification}
                           size="small"
-                        />
-                      }
-                      label=""
-                      sx={{ m: 0 }}
-                    />
+                          disabled={loading}
+                        >
+                          Test Email
+                        </Button>
+                      )}
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            checked={
+                              reminderData.emailNotificationsEnabled ?? true
+                            }
+                            onChange={(e) =>
+                              handleInputChange(
+                                'emailNotificationsEnabled',
+                                e.target.checked
+                              )
+                            }
+                            size="small"
+                          />
+                        }
+                        label=""
+                        sx={{ m: 0 }}
+                      />
+                    </Stack>
                   )}
                 </Box>
               </Stack>
