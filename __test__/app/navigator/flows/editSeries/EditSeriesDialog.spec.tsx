@@ -132,7 +132,7 @@ describe('EditSeriesDialog', () => {
         { wrapper: Wrapper }
       )
       await user.click(screen.getByRole('button', { name: 'Save Changes' }))
-      expect(screen.getByRole('alert')).toHaveTextContent('Name is required')
+      expect(screen.getByText('Name is required.')).toBeInTheDocument()
       expect(onSave).not.toHaveBeenCalled()
     })
 

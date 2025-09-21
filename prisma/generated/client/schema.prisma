@@ -61,8 +61,37 @@ model UserData {
   glossaryTerms      GlossaryTerm[] // User-created glossary terms
 
   /// Profile image management fields
-  profileImages      String[] @db.String // Array of image URLs or IDs, max 3 enforced in backend
+  profileImages      String[]           @db.String // Array of image URLs or IDs, max 3 enforced in backend
   activeProfileImage String? // URL or ID of the active profile image
+  tz                 String             @default("America/Los_Angeles") // store IANA TZ
+  reminders          Reminder[]
+  pushSubscriptions  PushSubscription[]
+}
+
+model Reminder {
+  id        String    @id @default(cuid()) @map("_id")
+  userId    String    @db.ObjectId
+  user      UserData  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // store preferred local times; one or many
+  timeOfDay String // "07:30" 24h format
+  days      String[] // ["Mon","Tue","Wed","Thu","Fri"] or ["Sun",...]
+  enabled   Boolean   @default(true)
+  message   String    @default("🧘 Practice time")
+  lastSent  DateTime? // to avoid double-sends within a window
+
+  @@index([userId])
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid()) @map("_id")
+  userId    String   @db.ObjectId
+  user      UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 model ProviderAccount {
@@ -136,7 +165,8 @@ model AsanaSeries {
   breathSeries   String[]
   description    String?
   durationSeries String?
-  image          String?
+  image          String? // Legacy single image field - kept for backward compatibility
+  images         String[]  @default([]) // Multiple image URLs for the series
   created_by     String
   createdAt      DateTime? @default(now())
   updatedAt      DateTime? @updatedAt

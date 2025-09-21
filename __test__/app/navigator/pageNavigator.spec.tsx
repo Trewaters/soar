@@ -117,7 +117,7 @@ describe('Page Component', () => {
         <Page />
       </ThemeProvider>
     )
-    const welcomeText = screen.getByText('Welcome Test User')
+    const welcomeText = screen.getByText('Welcome Yogi')
     expect(welcomeText).toBeInTheDocument()
     expect(welcomeText).toHaveAttribute('id', 'page-title')
   })

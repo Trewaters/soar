@@ -19,6 +19,16 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type UserData = $Result.DefaultSelection<Prisma.$UserDataPayload>
 /**
+ * Model Reminder
+ * 
+ */
+export type Reminder = $Result.DefaultSelection<Prisma.$ReminderPayload>
+/**
+ * Model PushSubscription
+ * 
+ */
+export type PushSubscription = $Result.DefaultSelection<Prisma.$PushSubscriptionPayload>
+/**
  * Model ProviderAccount
  * 
  */
@@ -199,6 +209,26 @@ export class PrismaClient<
     * ```
     */
   get userData(): Prisma.UserDataDelegate<ExtArgs>;
+
+  /**
+   * `prisma.reminder`: Exposes CRUD operations for the **Reminder** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Reminders
+    * const reminders = await prisma.reminder.findMany()
+    * ```
+    */
+  get reminder(): Prisma.ReminderDelegate<ExtArgs>;
+
+  /**
+   * `prisma.pushSubscription`: Exposes CRUD operations for the **PushSubscription** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PushSubscriptions
+    * const pushSubscriptions = await prisma.pushSubscription.findMany()
+    * ```
+    */
+  get pushSubscription(): Prisma.PushSubscriptionDelegate<ExtArgs>;
 
   /**
    * `prisma.providerAccount`: Exposes CRUD operations for the **ProviderAccount** model.
@@ -777,6 +807,8 @@ export namespace Prisma {
 
   export const ModelName: {
     UserData: 'UserData',
+    Reminder: 'Reminder',
+    PushSubscription: 'PushSubscription',
     ProviderAccount: 'ProviderAccount',
     AsanaPosture: 'AsanaPosture',
     AsanaSeries: 'AsanaSeries',
@@ -802,7 +834,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "userData" | "providerAccount" | "asanaPosture" | "asanaSeries" | "asanaSequence" | "asanaActivity" | "seriesActivity" | "sequenceActivity" | "userLogin" | "poseImage" | "glossaryTerm"
+      modelProps: "userData" | "reminder" | "pushSubscription" | "providerAccount" | "asanaPosture" | "asanaSeries" | "asanaSequence" | "asanaActivity" | "seriesActivity" | "sequenceActivity" | "userLogin" | "poseImage" | "glossaryTerm"
       txIsolationLevel: never
     }
     model: {
@@ -877,6 +909,154 @@ export namespace Prisma {
           count: {
             args: Prisma.UserDataCountArgs<ExtArgs>
             result: $Utils.Optional<UserDataCountAggregateOutputType> | number
+          }
+        }
+      }
+      Reminder: {
+        payload: Prisma.$ReminderPayload<ExtArgs>
+        fields: Prisma.ReminderFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReminderFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReminderPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReminderFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>
+          }
+          findFirst: {
+            args: Prisma.ReminderFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReminderPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReminderFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>
+          }
+          findMany: {
+            args: Prisma.ReminderFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>[]
+          }
+          create: {
+            args: Prisma.ReminderCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>
+          }
+          createMany: {
+            args: Prisma.ReminderCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.ReminderDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>
+          }
+          update: {
+            args: Prisma.ReminderUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReminderDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReminderUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ReminderUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReminderPayload>
+          }
+          aggregate: {
+            args: Prisma.ReminderAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReminder>
+          }
+          groupBy: {
+            args: Prisma.ReminderGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReminderGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.ReminderFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.ReminderAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.ReminderCountArgs<ExtArgs>
+            result: $Utils.Optional<ReminderCountAggregateOutputType> | number
+          }
+        }
+      }
+      PushSubscription: {
+        payload: Prisma.$PushSubscriptionPayload<ExtArgs>
+        fields: Prisma.PushSubscriptionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PushSubscriptionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PushSubscriptionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+          }
+          findFirst: {
+            args: Prisma.PushSubscriptionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PushSubscriptionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+          }
+          findMany: {
+            args: Prisma.PushSubscriptionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>[]
+          }
+          create: {
+            args: Prisma.PushSubscriptionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+          }
+          createMany: {
+            args: Prisma.PushSubscriptionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.PushSubscriptionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+          }
+          update: {
+            args: Prisma.PushSubscriptionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+          }
+          deleteMany: {
+            args: Prisma.PushSubscriptionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PushSubscriptionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PushSubscriptionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PushSubscriptionPayload>
+          }
+          aggregate: {
+            args: Prisma.PushSubscriptionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePushSubscription>
+          }
+          groupBy: {
+            args: Prisma.PushSubscriptionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PushSubscriptionGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.PushSubscriptionFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.PushSubscriptionAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.PushSubscriptionCountArgs<ExtArgs>
+            result: $Utils.Optional<PushSubscriptionCountAggregateOutputType> | number
           }
         }
       }
@@ -1775,6 +1955,8 @@ export namespace Prisma {
     userLogins: number
     poseImages: number
     glossaryTerms: number
+    reminders: number
+    pushSubscriptions: number
   }
 
   export type UserDataCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1785,6 +1967,8 @@ export namespace Prisma {
     userLogins?: boolean | UserDataCountOutputTypeCountUserLoginsArgs
     poseImages?: boolean | UserDataCountOutputTypeCountPoseImagesArgs
     glossaryTerms?: boolean | UserDataCountOutputTypeCountGlossaryTermsArgs
+    reminders?: boolean | UserDataCountOutputTypeCountRemindersArgs
+    pushSubscriptions?: boolean | UserDataCountOutputTypeCountPushSubscriptionsArgs
   }
 
   // Custom InputTypes
@@ -1845,6 +2029,20 @@ export namespace Prisma {
    */
   export type UserDataCountOutputTypeCountGlossaryTermsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GlossaryTermWhereInput
+  }
+
+  /**
+   * UserDataCountOutputType without action
+   */
+  export type UserDataCountOutputTypeCountRemindersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReminderWhereInput
+  }
+
+  /**
+   * UserDataCountOutputType without action
+   */
+  export type UserDataCountOutputTypeCountPushSubscriptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PushSubscriptionWhereInput
   }
 
 
@@ -1926,6 +2124,7 @@ export namespace Prisma {
     isLocationPublic: string | null
     role: string | null
     activeProfileImage: string | null
+    tz: string | null
   }
 
   export type UserDataMaxAggregateOutputType = {
@@ -1952,6 +2151,7 @@ export namespace Prisma {
     isLocationPublic: string | null
     role: string | null
     activeProfileImage: string | null
+    tz: string | null
   }
 
   export type UserDataCountAggregateOutputType = {
@@ -1980,6 +2180,7 @@ export namespace Prisma {
     role: number
     profileImages: number
     activeProfileImage: number
+    tz: number
     _all: number
   }
 
@@ -2008,6 +2209,7 @@ export namespace Prisma {
     isLocationPublic?: true
     role?: true
     activeProfileImage?: true
+    tz?: true
   }
 
   export type UserDataMaxAggregateInputType = {
@@ -2034,6 +2236,7 @@ export namespace Prisma {
     isLocationPublic?: true
     role?: true
     activeProfileImage?: true
+    tz?: true
   }
 
   export type UserDataCountAggregateInputType = {
@@ -2062,6 +2265,7 @@ export namespace Prisma {
     role?: true
     profileImages?: true
     activeProfileImage?: true
+    tz?: true
     _all?: true
   }
 
@@ -2163,6 +2367,7 @@ export namespace Prisma {
     role: string | null
     profileImages: string[]
     activeProfileImage: string | null
+    tz: string
     _count: UserDataCountAggregateOutputType | null
     _min: UserDataMinAggregateOutputType | null
     _max: UserDataMaxAggregateOutputType | null
@@ -2208,6 +2413,7 @@ export namespace Prisma {
     role?: boolean
     profileImages?: boolean
     activeProfileImage?: boolean
+    tz?: boolean
     providerAccounts?: boolean | UserData$providerAccountsArgs<ExtArgs>
     asanaActivities?: boolean | UserData$asanaActivitiesArgs<ExtArgs>
     seriesActivities?: boolean | UserData$seriesActivitiesArgs<ExtArgs>
@@ -2215,6 +2421,8 @@ export namespace Prisma {
     userLogins?: boolean | UserData$userLoginsArgs<ExtArgs>
     poseImages?: boolean | UserData$poseImagesArgs<ExtArgs>
     glossaryTerms?: boolean | UserData$glossaryTermsArgs<ExtArgs>
+    reminders?: boolean | UserData$remindersArgs<ExtArgs>
+    pushSubscriptions?: boolean | UserData$pushSubscriptionsArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userData"]>
 
@@ -2245,6 +2453,7 @@ export namespace Prisma {
     role?: boolean
     profileImages?: boolean
     activeProfileImage?: boolean
+    tz?: boolean
   }
 
   export type UserDataInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2255,6 +2464,8 @@ export namespace Prisma {
     userLogins?: boolean | UserData$userLoginsArgs<ExtArgs>
     poseImages?: boolean | UserData$poseImagesArgs<ExtArgs>
     glossaryTerms?: boolean | UserData$glossaryTermsArgs<ExtArgs>
+    reminders?: boolean | UserData$remindersArgs<ExtArgs>
+    pushSubscriptions?: boolean | UserData$pushSubscriptionsArgs<ExtArgs>
     _count?: boolean | UserDataCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -2268,6 +2479,8 @@ export namespace Prisma {
       userLogins: Prisma.$UserLoginPayload<ExtArgs>[]
       poseImages: Prisma.$PoseImagePayload<ExtArgs>[]
       glossaryTerms: Prisma.$GlossaryTermPayload<ExtArgs>[]
+      reminders: Prisma.$ReminderPayload<ExtArgs>[]
+      pushSubscriptions: Prisma.$PushSubscriptionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2298,6 +2511,7 @@ export namespace Prisma {
        */
       profileImages: string[]
       activeProfileImage: string | null
+      tz: string
     }, ExtArgs["result"]["userData"]>
     composites: {}
   }
@@ -2668,6 +2882,8 @@ export namespace Prisma {
     userLogins<T extends UserData$userLoginsArgs<ExtArgs> = {}>(args?: Subset<T, UserData$userLoginsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserLoginPayload<ExtArgs>, T, "findMany"> | Null>
     poseImages<T extends UserData$poseImagesArgs<ExtArgs> = {}>(args?: Subset<T, UserData$poseImagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PoseImagePayload<ExtArgs>, T, "findMany"> | Null>
     glossaryTerms<T extends UserData$glossaryTermsArgs<ExtArgs> = {}>(args?: Subset<T, UserData$glossaryTermsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GlossaryTermPayload<ExtArgs>, T, "findMany"> | Null>
+    reminders<T extends UserData$remindersArgs<ExtArgs> = {}>(args?: Subset<T, UserData$remindersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findMany"> | Null>
+    pushSubscriptions<T extends UserData$pushSubscriptionsArgs<ExtArgs> = {}>(args?: Subset<T, UserData$pushSubscriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findMany"> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2722,6 +2938,7 @@ export namespace Prisma {
     readonly role: FieldRef<"UserData", 'String'>
     readonly profileImages: FieldRef<"UserData", 'String[]'>
     readonly activeProfileImage: FieldRef<"UserData", 'String'>
+    readonly tz: FieldRef<"UserData", 'String'>
   }
     
 
@@ -3188,6 +3405,46 @@ export namespace Prisma {
   }
 
   /**
+   * UserData.reminders
+   */
+  export type UserData$remindersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reminder
+     */
+    select?: ReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReminderInclude<ExtArgs> | null
+    where?: ReminderWhereInput
+    orderBy?: ReminderOrderByWithRelationInput | ReminderOrderByWithRelationInput[]
+    cursor?: ReminderWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReminderScalarFieldEnum | ReminderScalarFieldEnum[]
+  }
+
+  /**
+   * UserData.pushSubscriptions
+   */
+  export type UserData$pushSubscriptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    where?: PushSubscriptionWhereInput
+    orderBy?: PushSubscriptionOrderByWithRelationInput | PushSubscriptionOrderByWithRelationInput[]
+    cursor?: PushSubscriptionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PushSubscriptionScalarFieldEnum | PushSubscriptionScalarFieldEnum[]
+  }
+
+  /**
    * UserData without action
    */
   export type UserDataDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3199,6 +3456,1893 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserDataInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Reminder
+   */
+
+  export type AggregateReminder = {
+    _count: ReminderCountAggregateOutputType | null
+    _min: ReminderMinAggregateOutputType | null
+    _max: ReminderMaxAggregateOutputType | null
+  }
+
+  export type ReminderMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    timeOfDay: string | null
+    enabled: boolean | null
+    message: string | null
+    lastSent: Date | null
+  }
+
+  export type ReminderMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    timeOfDay: string | null
+    enabled: boolean | null
+    message: string | null
+    lastSent: Date | null
+  }
+
+  export type ReminderCountAggregateOutputType = {
+    id: number
+    userId: number
+    timeOfDay: number
+    days: number
+    enabled: number
+    message: number
+    lastSent: number
+    _all: number
+  }
+
+
+  export type ReminderMinAggregateInputType = {
+    id?: true
+    userId?: true
+    timeOfDay?: true
+    enabled?: true
+    message?: true
+    lastSent?: true
+  }
+
+  export type ReminderMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    timeOfDay?: true
+    enabled?: true
+    message?: true
+    lastSent?: true
+  }
+
+  export type ReminderCountAggregateInputType = {
+    id?: true
+    userId?: true
+    timeOfDay?: true
+    days?: true
+    enabled?: true
+    message?: true
+    lastSent?: true
+    _all?: true
+  }
+
+  export type ReminderAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Reminder to aggregate.
+     */
+    where?: ReminderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Reminders to fetch.
+     */
+    orderBy?: ReminderOrderByWithRelationInput | ReminderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReminderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Reminders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Reminders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Reminders
+    **/
+    _count?: true | ReminderCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReminderMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReminderMaxAggregateInputType
+  }
+
+  export type GetReminderAggregateType<T extends ReminderAggregateArgs> = {
+        [P in keyof T & keyof AggregateReminder]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReminder[P]>
+      : GetScalarType<T[P], AggregateReminder[P]>
+  }
+
+
+
+
+  export type ReminderGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReminderWhereInput
+    orderBy?: ReminderOrderByWithAggregationInput | ReminderOrderByWithAggregationInput[]
+    by: ReminderScalarFieldEnum[] | ReminderScalarFieldEnum
+    having?: ReminderScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReminderCountAggregateInputType | true
+    _min?: ReminderMinAggregateInputType
+    _max?: ReminderMaxAggregateInputType
+  }
+
+  export type ReminderGroupByOutputType = {
+    id: string
+    userId: string
+    timeOfDay: string
+    days: string[]
+    enabled: boolean
+    message: string
+    lastSent: Date | null
+    _count: ReminderCountAggregateOutputType | null
+    _min: ReminderMinAggregateOutputType | null
+    _max: ReminderMaxAggregateOutputType | null
+  }
+
+  type GetReminderGroupByPayload<T extends ReminderGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReminderGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReminderGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReminderGroupByOutputType[P]>
+            : GetScalarType<T[P], ReminderGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReminderSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    timeOfDay?: boolean
+    days?: boolean
+    enabled?: boolean
+    message?: boolean
+    lastSent?: boolean
+    user?: boolean | UserDataDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reminder"]>
+
+
+  export type ReminderSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    timeOfDay?: boolean
+    days?: boolean
+    enabled?: boolean
+    message?: boolean
+    lastSent?: boolean
+  }
+
+  export type ReminderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDataDefaultArgs<ExtArgs>
+  }
+
+  export type $ReminderPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Reminder"
+    objects: {
+      user: Prisma.$UserDataPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      timeOfDay: string
+      days: string[]
+      enabled: boolean
+      message: string
+      lastSent: Date | null
+    }, ExtArgs["result"]["reminder"]>
+    composites: {}
+  }
+
+  type ReminderGetPayload<S extends boolean | null | undefined | ReminderDefaultArgs> = $Result.GetResult<Prisma.$ReminderPayload, S>
+
+  type ReminderCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<ReminderFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: ReminderCountAggregateInputType | true
+    }
+
+  export interface ReminderDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Reminder'], meta: { name: 'Reminder' } }
+    /**
+     * Find zero or one Reminder that matches the filter.
+     * @param {ReminderFindUniqueArgs} args - Arguments to find a Reminder
+     * @example
+     * // Get one Reminder
+     * const reminder = await prisma.reminder.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReminderFindUniqueArgs>(args: SelectSubset<T, ReminderFindUniqueArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Reminder that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {ReminderFindUniqueOrThrowArgs} args - Arguments to find a Reminder
+     * @example
+     * // Get one Reminder
+     * const reminder = await prisma.reminder.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReminderFindUniqueOrThrowArgs>(args: SelectSubset<T, ReminderFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Reminder that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReminderFindFirstArgs} args - Arguments to find a Reminder
+     * @example
+     * // Get one Reminder
+     * const reminder = await prisma.reminder.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReminderFindFirstArgs>(args?: SelectSubset<T, ReminderFindFirstArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Reminder that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReminderFindFirstOrThrowArgs} args - Arguments to find a Reminder
+     * @example
+     * // Get one Reminder
+     * const reminder = await prisma.reminder.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReminderFindFirstOrThrowArgs>(args?: SelectSubset<T, ReminderFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Reminders that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReminderFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Reminders
+     * const reminders = await prisma.reminder.findMany()
+     * 
+     * // Get first 10 Reminders
+     * const reminders = await prisma.reminder.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const reminderWithIdOnly = await prisma.reminder.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReminderFindManyArgs>(args?: SelectSubset<T, ReminderFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Reminder.
+     * @param {ReminderCreateArgs} args - Arguments to create a Reminder.
+     * @example
+     * // Create one Reminder
+     * const Reminder = await prisma.reminder.create({
+     *   data: {
+     *     // ... data to create a Reminder
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReminderCreateArgs>(args: SelectSubset<T, ReminderCreateArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Reminders.
+     * @param {ReminderCreateManyArgs} args - Arguments to create many Reminders.
+     * @example
+     * // Create many Reminders
+     * const reminder = await prisma.reminder.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReminderCreateManyArgs>(args?: SelectSubset<T, ReminderCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Reminder.
+     * @param {ReminderDeleteArgs} args - Arguments to delete one Reminder.
+     * @example
+     * // Delete one Reminder
+     * const Reminder = await prisma.reminder.delete({
+     *   where: {
+     *     // ... filter to delete one Reminder
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReminderDeleteArgs>(args: SelectSubset<T, ReminderDeleteArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Reminder.
+     * @param {ReminderUpdateArgs} args - Arguments to update one Reminder.
+     * @example
+     * // Update one Reminder
+     * const reminder = await prisma.reminder.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReminderUpdateArgs>(args: SelectSubset<T, ReminderUpdateArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Reminders.
+     * @param {ReminderDeleteManyArgs} args - Arguments to filter Reminders to delete.
+     * @example
+     * // Delete a few Reminders
+     * const { count } = await prisma.reminder.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReminderDeleteManyArgs>(args?: SelectSubset<T, ReminderDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Reminders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReminderUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Reminders
+     * const reminder = await prisma.reminder.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReminderUpdateManyArgs>(args: SelectSubset<T, ReminderUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Reminder.
+     * @param {ReminderUpsertArgs} args - Arguments to update or create a Reminder.
+     * @example
+     * // Update or create a Reminder
+     * const reminder = await prisma.reminder.upsert({
+     *   create: {
+     *     // ... data to create a Reminder
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Reminder we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReminderUpsertArgs>(args: SelectSubset<T, ReminderUpsertArgs<ExtArgs>>): Prisma__ReminderClient<$Result.GetResult<Prisma.$ReminderPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+    /**
+     * Find zero or more Reminders that matches the filter.
+     * @param {ReminderFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const reminder = await prisma.reminder.findRaw({
+     *   filter: { age: { $gt: 25 } } 
+     * })
+     */
+    findRaw(args?: ReminderFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a Reminder.
+     * @param {ReminderAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const reminder = await prisma.reminder.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: ReminderAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of Reminders.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReminderCountArgs} args - Arguments to filter Reminders to count.
+     * @example
+     * // Count the number of Reminders
+     * const count = await prisma.reminder.count({
+     *   where: {
+     *     // ... the filter for the Reminders we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReminderCountArgs>(
+      args?: Subset<T, ReminderCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReminderCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Reminder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReminderAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReminderAggregateArgs>(args: Subset<T, ReminderAggregateArgs>): Prisma.PrismaPromise<GetReminderAggregateType<T>>
+
+    /**
+     * Group by Reminder.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReminderGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReminderGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReminderGroupByArgs['orderBy'] }
+        : { orderBy?: ReminderGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReminderGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReminderGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Reminder model
+   */
+  readonly fields: ReminderFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Reminder.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReminderClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDataDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDataDefaultArgs<ExtArgs>>): Prisma__UserDataClient<$Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Reminder model
+   */ 
+  interface ReminderFieldRefs {
+    readonly id: FieldRef<"Reminder", 'String'>
+    readonly userId: FieldRef<"Reminder", 'String'>
+    readonly timeOfDay: FieldRef<"Reminder", 'String'>
+    readonly days: FieldRef<"Reminder", 'String[]'>
+    readonly enabled: FieldRef<"Reminder", 'Boolean'>
+    readonly message: FieldRef<"Reminder", 'String'>
+    readonly lastSent: FieldRef<"Reminder", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Reminder findUnique
+   */
+  export type ReminderFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reminder
+     */
+    select?: ReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReminderInclude<ExtArgs> | null
+    /**
+     * Filter, which Reminder to fetch.
+     */
+    where: ReminderWhereUniqueInput
+  }
+
+  /**
+   * Reminder findUniqueOrThrow
+   */
+  export type ReminderFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reminder
+     */
+    select?: ReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReminderInclude<ExtArgs> | null
+    /**
+     * Filter, which Reminder to fetch.
+     */
+    where: ReminderWhereUniqueInput
+  }
+
+  /**
+   * Reminder findFirst
+   */
+  export type ReminderFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reminder
+     */
+    select?: ReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReminderInclude<ExtArgs> | null
+    /**
+     * Filter, which Reminder to fetch.
+     */
+    where?: ReminderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Reminders to fetch.
+     */
+    orderBy?: ReminderOrderByWithRelationInput | ReminderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Reminders.
+     */
+    cursor?: ReminderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Reminders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Reminders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Reminders.
+     */
+    distinct?: ReminderScalarFieldEnum | ReminderScalarFieldEnum[]
+  }
+
+  /**
+   * Reminder findFirstOrThrow
+   */
+  export type ReminderFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reminder
+     */
+    select?: ReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReminderInclude<ExtArgs> | null
+    /**
+     * Filter, which Reminder to fetch.
+     */
+    where?: ReminderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Reminders to fetch.
+     */
+    orderBy?: ReminderOrderByWithRelationInput | ReminderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Reminders.
+     */
+    cursor?: ReminderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Reminders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Reminders.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Reminders.
+     */
+    distinct?: ReminderScalarFieldEnum | ReminderScalarFieldEnum[]
+  }
+
+  /**
+   * Reminder findMany
+   */
+  export type ReminderFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reminder
+     */
+    select?: ReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReminderInclude<ExtArgs> | null
+    /**
+     * Filter, which Reminders to fetch.
+     */
+    where?: ReminderWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Reminders to fetch.
+     */
+    orderBy?: ReminderOrderByWithRelationInput | ReminderOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Reminders.
+     */
+    cursor?: ReminderWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Reminders from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Reminders.
+     */
+    skip?: number
+    distinct?: ReminderScalarFieldEnum | ReminderScalarFieldEnum[]
+  }
+
+  /**
+   * Reminder create
+   */
+  export type ReminderCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reminder
+     */
+    select?: ReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReminderInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Reminder.
+     */
+    data: XOR<ReminderCreateInput, ReminderUncheckedCreateInput>
+  }
+
+  /**
+   * Reminder createMany
+   */
+  export type ReminderCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Reminders.
+     */
+    data: ReminderCreateManyInput | ReminderCreateManyInput[]
+  }
+
+  /**
+   * Reminder update
+   */
+  export type ReminderUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reminder
+     */
+    select?: ReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReminderInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Reminder.
+     */
+    data: XOR<ReminderUpdateInput, ReminderUncheckedUpdateInput>
+    /**
+     * Choose, which Reminder to update.
+     */
+    where: ReminderWhereUniqueInput
+  }
+
+  /**
+   * Reminder updateMany
+   */
+  export type ReminderUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Reminders.
+     */
+    data: XOR<ReminderUpdateManyMutationInput, ReminderUncheckedUpdateManyInput>
+    /**
+     * Filter which Reminders to update
+     */
+    where?: ReminderWhereInput
+  }
+
+  /**
+   * Reminder upsert
+   */
+  export type ReminderUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reminder
+     */
+    select?: ReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReminderInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Reminder to update in case it exists.
+     */
+    where: ReminderWhereUniqueInput
+    /**
+     * In case the Reminder found by the `where` argument doesn't exist, create a new Reminder with this data.
+     */
+    create: XOR<ReminderCreateInput, ReminderUncheckedCreateInput>
+    /**
+     * In case the Reminder was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReminderUpdateInput, ReminderUncheckedUpdateInput>
+  }
+
+  /**
+   * Reminder delete
+   */
+  export type ReminderDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reminder
+     */
+    select?: ReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReminderInclude<ExtArgs> | null
+    /**
+     * Filter which Reminder to delete.
+     */
+    where: ReminderWhereUniqueInput
+  }
+
+  /**
+   * Reminder deleteMany
+   */
+  export type ReminderDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Reminders to delete
+     */
+    where?: ReminderWhereInput
+  }
+
+  /**
+   * Reminder findRaw
+   */
+  export type ReminderFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * Reminder aggregateRaw
+   */
+  export type ReminderAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * Reminder without action
+   */
+  export type ReminderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Reminder
+     */
+    select?: ReminderSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReminderInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PushSubscription
+   */
+
+  export type AggregatePushSubscription = {
+    _count: PushSubscriptionCountAggregateOutputType | null
+    _min: PushSubscriptionMinAggregateOutputType | null
+    _max: PushSubscriptionMaxAggregateOutputType | null
+  }
+
+  export type PushSubscriptionMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    endpoint: string | null
+    p256dh: string | null
+    auth: string | null
+    createdAt: Date | null
+  }
+
+  export type PushSubscriptionMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    endpoint: string | null
+    p256dh: string | null
+    auth: string | null
+    createdAt: Date | null
+  }
+
+  export type PushSubscriptionCountAggregateOutputType = {
+    id: number
+    userId: number
+    endpoint: number
+    p256dh: number
+    auth: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type PushSubscriptionMinAggregateInputType = {
+    id?: true
+    userId?: true
+    endpoint?: true
+    p256dh?: true
+    auth?: true
+    createdAt?: true
+  }
+
+  export type PushSubscriptionMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    endpoint?: true
+    p256dh?: true
+    auth?: true
+    createdAt?: true
+  }
+
+  export type PushSubscriptionCountAggregateInputType = {
+    id?: true
+    userId?: true
+    endpoint?: true
+    p256dh?: true
+    auth?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type PushSubscriptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PushSubscription to aggregate.
+     */
+    where?: PushSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PushSubscriptions to fetch.
+     */
+    orderBy?: PushSubscriptionOrderByWithRelationInput | PushSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PushSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PushSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PushSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PushSubscriptions
+    **/
+    _count?: true | PushSubscriptionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PushSubscriptionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PushSubscriptionMaxAggregateInputType
+  }
+
+  export type GetPushSubscriptionAggregateType<T extends PushSubscriptionAggregateArgs> = {
+        [P in keyof T & keyof AggregatePushSubscription]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePushSubscription[P]>
+      : GetScalarType<T[P], AggregatePushSubscription[P]>
+  }
+
+
+
+
+  export type PushSubscriptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PushSubscriptionWhereInput
+    orderBy?: PushSubscriptionOrderByWithAggregationInput | PushSubscriptionOrderByWithAggregationInput[]
+    by: PushSubscriptionScalarFieldEnum[] | PushSubscriptionScalarFieldEnum
+    having?: PushSubscriptionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PushSubscriptionCountAggregateInputType | true
+    _min?: PushSubscriptionMinAggregateInputType
+    _max?: PushSubscriptionMaxAggregateInputType
+  }
+
+  export type PushSubscriptionGroupByOutputType = {
+    id: string
+    userId: string
+    endpoint: string
+    p256dh: string
+    auth: string
+    createdAt: Date
+    _count: PushSubscriptionCountAggregateOutputType | null
+    _min: PushSubscriptionMinAggregateOutputType | null
+    _max: PushSubscriptionMaxAggregateOutputType | null
+  }
+
+  type GetPushSubscriptionGroupByPayload<T extends PushSubscriptionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PushSubscriptionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PushSubscriptionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PushSubscriptionGroupByOutputType[P]>
+            : GetScalarType<T[P], PushSubscriptionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PushSubscriptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    endpoint?: boolean
+    p256dh?: boolean
+    auth?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDataDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pushSubscription"]>
+
+
+  export type PushSubscriptionSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    endpoint?: boolean
+    p256dh?: boolean
+    auth?: boolean
+    createdAt?: boolean
+  }
+
+  export type PushSubscriptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDataDefaultArgs<ExtArgs>
+  }
+
+  export type $PushSubscriptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PushSubscription"
+    objects: {
+      user: Prisma.$UserDataPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      endpoint: string
+      p256dh: string
+      auth: string
+      createdAt: Date
+    }, ExtArgs["result"]["pushSubscription"]>
+    composites: {}
+  }
+
+  type PushSubscriptionGetPayload<S extends boolean | null | undefined | PushSubscriptionDefaultArgs> = $Result.GetResult<Prisma.$PushSubscriptionPayload, S>
+
+  type PushSubscriptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PushSubscriptionFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PushSubscriptionCountAggregateInputType | true
+    }
+
+  export interface PushSubscriptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PushSubscription'], meta: { name: 'PushSubscription' } }
+    /**
+     * Find zero or one PushSubscription that matches the filter.
+     * @param {PushSubscriptionFindUniqueArgs} args - Arguments to find a PushSubscription
+     * @example
+     * // Get one PushSubscription
+     * const pushSubscription = await prisma.pushSubscription.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PushSubscriptionFindUniqueArgs>(args: SelectSubset<T, PushSubscriptionFindUniqueArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one PushSubscription that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PushSubscriptionFindUniqueOrThrowArgs} args - Arguments to find a PushSubscription
+     * @example
+     * // Get one PushSubscription
+     * const pushSubscription = await prisma.pushSubscription.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PushSubscriptionFindUniqueOrThrowArgs>(args: SelectSubset<T, PushSubscriptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first PushSubscription that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionFindFirstArgs} args - Arguments to find a PushSubscription
+     * @example
+     * // Get one PushSubscription
+     * const pushSubscription = await prisma.pushSubscription.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PushSubscriptionFindFirstArgs>(args?: SelectSubset<T, PushSubscriptionFindFirstArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first PushSubscription that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionFindFirstOrThrowArgs} args - Arguments to find a PushSubscription
+     * @example
+     * // Get one PushSubscription
+     * const pushSubscription = await prisma.pushSubscription.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PushSubscriptionFindFirstOrThrowArgs>(args?: SelectSubset<T, PushSubscriptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more PushSubscriptions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PushSubscriptions
+     * const pushSubscriptions = await prisma.pushSubscription.findMany()
+     * 
+     * // Get first 10 PushSubscriptions
+     * const pushSubscriptions = await prisma.pushSubscription.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const pushSubscriptionWithIdOnly = await prisma.pushSubscription.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PushSubscriptionFindManyArgs>(args?: SelectSubset<T, PushSubscriptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a PushSubscription.
+     * @param {PushSubscriptionCreateArgs} args - Arguments to create a PushSubscription.
+     * @example
+     * // Create one PushSubscription
+     * const PushSubscription = await prisma.pushSubscription.create({
+     *   data: {
+     *     // ... data to create a PushSubscription
+     *   }
+     * })
+     * 
+     */
+    create<T extends PushSubscriptionCreateArgs>(args: SelectSubset<T, PushSubscriptionCreateArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many PushSubscriptions.
+     * @param {PushSubscriptionCreateManyArgs} args - Arguments to create many PushSubscriptions.
+     * @example
+     * // Create many PushSubscriptions
+     * const pushSubscription = await prisma.pushSubscription.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PushSubscriptionCreateManyArgs>(args?: SelectSubset<T, PushSubscriptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a PushSubscription.
+     * @param {PushSubscriptionDeleteArgs} args - Arguments to delete one PushSubscription.
+     * @example
+     * // Delete one PushSubscription
+     * const PushSubscription = await prisma.pushSubscription.delete({
+     *   where: {
+     *     // ... filter to delete one PushSubscription
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PushSubscriptionDeleteArgs>(args: SelectSubset<T, PushSubscriptionDeleteArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one PushSubscription.
+     * @param {PushSubscriptionUpdateArgs} args - Arguments to update one PushSubscription.
+     * @example
+     * // Update one PushSubscription
+     * const pushSubscription = await prisma.pushSubscription.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PushSubscriptionUpdateArgs>(args: SelectSubset<T, PushSubscriptionUpdateArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more PushSubscriptions.
+     * @param {PushSubscriptionDeleteManyArgs} args - Arguments to filter PushSubscriptions to delete.
+     * @example
+     * // Delete a few PushSubscriptions
+     * const { count } = await prisma.pushSubscription.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PushSubscriptionDeleteManyArgs>(args?: SelectSubset<T, PushSubscriptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PushSubscriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PushSubscriptions
+     * const pushSubscription = await prisma.pushSubscription.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PushSubscriptionUpdateManyArgs>(args: SelectSubset<T, PushSubscriptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PushSubscription.
+     * @param {PushSubscriptionUpsertArgs} args - Arguments to update or create a PushSubscription.
+     * @example
+     * // Update or create a PushSubscription
+     * const pushSubscription = await prisma.pushSubscription.upsert({
+     *   create: {
+     *     // ... data to create a PushSubscription
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PushSubscription we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PushSubscriptionUpsertArgs>(args: SelectSubset<T, PushSubscriptionUpsertArgs<ExtArgs>>): Prisma__PushSubscriptionClient<$Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+    /**
+     * Find zero or more PushSubscriptions that matches the filter.
+     * @param {PushSubscriptionFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const pushSubscription = await prisma.pushSubscription.findRaw({
+     *   filter: { age: { $gt: 25 } } 
+     * })
+     */
+    findRaw(args?: PushSubscriptionFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a PushSubscription.
+     * @param {PushSubscriptionAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const pushSubscription = await prisma.pushSubscription.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: PushSubscriptionAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of PushSubscriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionCountArgs} args - Arguments to filter PushSubscriptions to count.
+     * @example
+     * // Count the number of PushSubscriptions
+     * const count = await prisma.pushSubscription.count({
+     *   where: {
+     *     // ... the filter for the PushSubscriptions we want to count
+     *   }
+     * })
+    **/
+    count<T extends PushSubscriptionCountArgs>(
+      args?: Subset<T, PushSubscriptionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PushSubscriptionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PushSubscription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PushSubscriptionAggregateArgs>(args: Subset<T, PushSubscriptionAggregateArgs>): Prisma.PrismaPromise<GetPushSubscriptionAggregateType<T>>
+
+    /**
+     * Group by PushSubscription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PushSubscriptionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PushSubscriptionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PushSubscriptionGroupByArgs['orderBy'] }
+        : { orderBy?: PushSubscriptionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PushSubscriptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPushSubscriptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PushSubscription model
+   */
+  readonly fields: PushSubscriptionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PushSubscription.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PushSubscriptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDataDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDataDefaultArgs<ExtArgs>>): Prisma__UserDataClient<$Result.GetResult<Prisma.$UserDataPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PushSubscription model
+   */ 
+  interface PushSubscriptionFieldRefs {
+    readonly id: FieldRef<"PushSubscription", 'String'>
+    readonly userId: FieldRef<"PushSubscription", 'String'>
+    readonly endpoint: FieldRef<"PushSubscription", 'String'>
+    readonly p256dh: FieldRef<"PushSubscription", 'String'>
+    readonly auth: FieldRef<"PushSubscription", 'String'>
+    readonly createdAt: FieldRef<"PushSubscription", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PushSubscription findUnique
+   */
+  export type PushSubscriptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which PushSubscription to fetch.
+     */
+    where: PushSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * PushSubscription findUniqueOrThrow
+   */
+  export type PushSubscriptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which PushSubscription to fetch.
+     */
+    where: PushSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * PushSubscription findFirst
+   */
+  export type PushSubscriptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which PushSubscription to fetch.
+     */
+    where?: PushSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PushSubscriptions to fetch.
+     */
+    orderBy?: PushSubscriptionOrderByWithRelationInput | PushSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PushSubscriptions.
+     */
+    cursor?: PushSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PushSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PushSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PushSubscriptions.
+     */
+    distinct?: PushSubscriptionScalarFieldEnum | PushSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * PushSubscription findFirstOrThrow
+   */
+  export type PushSubscriptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which PushSubscription to fetch.
+     */
+    where?: PushSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PushSubscriptions to fetch.
+     */
+    orderBy?: PushSubscriptionOrderByWithRelationInput | PushSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PushSubscriptions.
+     */
+    cursor?: PushSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PushSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PushSubscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PushSubscriptions.
+     */
+    distinct?: PushSubscriptionScalarFieldEnum | PushSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * PushSubscription findMany
+   */
+  export type PushSubscriptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter, which PushSubscriptions to fetch.
+     */
+    where?: PushSubscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PushSubscriptions to fetch.
+     */
+    orderBy?: PushSubscriptionOrderByWithRelationInput | PushSubscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PushSubscriptions.
+     */
+    cursor?: PushSubscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PushSubscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PushSubscriptions.
+     */
+    skip?: number
+    distinct?: PushSubscriptionScalarFieldEnum | PushSubscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * PushSubscription create
+   */
+  export type PushSubscriptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PushSubscription.
+     */
+    data: XOR<PushSubscriptionCreateInput, PushSubscriptionUncheckedCreateInput>
+  }
+
+  /**
+   * PushSubscription createMany
+   */
+  export type PushSubscriptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PushSubscriptions.
+     */
+    data: PushSubscriptionCreateManyInput | PushSubscriptionCreateManyInput[]
+  }
+
+  /**
+   * PushSubscription update
+   */
+  export type PushSubscriptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PushSubscription.
+     */
+    data: XOR<PushSubscriptionUpdateInput, PushSubscriptionUncheckedUpdateInput>
+    /**
+     * Choose, which PushSubscription to update.
+     */
+    where: PushSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * PushSubscription updateMany
+   */
+  export type PushSubscriptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PushSubscriptions.
+     */
+    data: XOR<PushSubscriptionUpdateManyMutationInput, PushSubscriptionUncheckedUpdateManyInput>
+    /**
+     * Filter which PushSubscriptions to update
+     */
+    where?: PushSubscriptionWhereInput
+  }
+
+  /**
+   * PushSubscription upsert
+   */
+  export type PushSubscriptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PushSubscription to update in case it exists.
+     */
+    where: PushSubscriptionWhereUniqueInput
+    /**
+     * In case the PushSubscription found by the `where` argument doesn't exist, create a new PushSubscription with this data.
+     */
+    create: XOR<PushSubscriptionCreateInput, PushSubscriptionUncheckedCreateInput>
+    /**
+     * In case the PushSubscription was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PushSubscriptionUpdateInput, PushSubscriptionUncheckedUpdateInput>
+  }
+
+  /**
+   * PushSubscription delete
+   */
+  export type PushSubscriptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
+    /**
+     * Filter which PushSubscription to delete.
+     */
+    where: PushSubscriptionWhereUniqueInput
+  }
+
+  /**
+   * PushSubscription deleteMany
+   */
+  export type PushSubscriptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PushSubscriptions to delete
+     */
+    where?: PushSubscriptionWhereInput
+  }
+
+  /**
+   * PushSubscription findRaw
+   */
+  export type PushSubscriptionFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * PushSubscription aggregateRaw
+   */
+  export type PushSubscriptionAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * PushSubscription without action
+   */
+  export type PushSubscriptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PushSubscription
+     */
+    select?: PushSubscriptionSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PushSubscriptionInclude<ExtArgs> | null
   }
 
 
@@ -13634,10 +15778,36 @@ export namespace Prisma {
     isLocationPublic: 'isLocationPublic',
     role: 'role',
     profileImages: 'profileImages',
-    activeProfileImage: 'activeProfileImage'
+    activeProfileImage: 'activeProfileImage',
+    tz: 'tz'
   };
 
   export type UserDataScalarFieldEnum = (typeof UserDataScalarFieldEnum)[keyof typeof UserDataScalarFieldEnum]
+
+
+  export const ReminderScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    timeOfDay: 'timeOfDay',
+    days: 'days',
+    enabled: 'enabled',
+    message: 'message',
+    lastSent: 'lastSent'
+  };
+
+  export type ReminderScalarFieldEnum = (typeof ReminderScalarFieldEnum)[keyof typeof ReminderScalarFieldEnum]
+
+
+  export const PushSubscriptionScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    endpoint: 'endpoint',
+    p256dh: 'p256dh',
+    auth: 'auth',
+    createdAt: 'createdAt'
+  };
+
+  export type PushSubscriptionScalarFieldEnum = (typeof PushSubscriptionScalarFieldEnum)[keyof typeof PushSubscriptionScalarFieldEnum]
 
 
   export const ProviderAccountScalarFieldEnum: {
@@ -13898,6 +16068,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -13908,13 +16085,6 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -13999,6 +16169,7 @@ export namespace Prisma {
     role?: StringNullableFilter<"UserData"> | string | null
     profileImages?: StringNullableListFilter<"UserData">
     activeProfileImage?: StringNullableFilter<"UserData"> | string | null
+    tz?: StringFilter<"UserData"> | string
     providerAccounts?: ProviderAccountListRelationFilter
     asanaActivities?: AsanaActivityListRelationFilter
     seriesActivities?: SeriesActivityListRelationFilter
@@ -14006,6 +16177,8 @@ export namespace Prisma {
     userLogins?: UserLoginListRelationFilter
     poseImages?: PoseImageListRelationFilter
     glossaryTerms?: GlossaryTermListRelationFilter
+    reminders?: ReminderListRelationFilter
+    pushSubscriptions?: PushSubscriptionListRelationFilter
   }
 
   export type UserDataOrderByWithRelationInput = {
@@ -14034,6 +16207,7 @@ export namespace Prisma {
     role?: SortOrder
     profileImages?: SortOrder
     activeProfileImage?: SortOrder
+    tz?: SortOrder
     providerAccounts?: ProviderAccountOrderByRelationAggregateInput
     asanaActivities?: AsanaActivityOrderByRelationAggregateInput
     seriesActivities?: SeriesActivityOrderByRelationAggregateInput
@@ -14041,6 +16215,8 @@ export namespace Prisma {
     userLogins?: UserLoginOrderByRelationAggregateInput
     poseImages?: PoseImageOrderByRelationAggregateInput
     glossaryTerms?: GlossaryTermOrderByRelationAggregateInput
+    reminders?: ReminderOrderByRelationAggregateInput
+    pushSubscriptions?: PushSubscriptionOrderByRelationAggregateInput
   }
 
   export type UserDataWhereUniqueInput = Prisma.AtLeast<{
@@ -14072,6 +16248,7 @@ export namespace Prisma {
     role?: StringNullableFilter<"UserData"> | string | null
     profileImages?: StringNullableListFilter<"UserData">
     activeProfileImage?: StringNullableFilter<"UserData"> | string | null
+    tz?: StringFilter<"UserData"> | string
     providerAccounts?: ProviderAccountListRelationFilter
     asanaActivities?: AsanaActivityListRelationFilter
     seriesActivities?: SeriesActivityListRelationFilter
@@ -14079,6 +16256,8 @@ export namespace Prisma {
     userLogins?: UserLoginListRelationFilter
     poseImages?: PoseImageListRelationFilter
     glossaryTerms?: GlossaryTermListRelationFilter
+    reminders?: ReminderListRelationFilter
+    pushSubscriptions?: PushSubscriptionListRelationFilter
   }, "id" | "provider_id" | "email">
 
   export type UserDataOrderByWithAggregationInput = {
@@ -14107,6 +16286,7 @@ export namespace Prisma {
     role?: SortOrder
     profileImages?: SortOrder
     activeProfileImage?: SortOrder
+    tz?: SortOrder
     _count?: UserDataCountOrderByAggregateInput
     _max?: UserDataMaxOrderByAggregateInput
     _min?: UserDataMinOrderByAggregateInput
@@ -14141,6 +16321,132 @@ export namespace Prisma {
     role?: StringNullableWithAggregatesFilter<"UserData"> | string | null
     profileImages?: StringNullableListFilter<"UserData">
     activeProfileImage?: StringNullableWithAggregatesFilter<"UserData"> | string | null
+    tz?: StringWithAggregatesFilter<"UserData"> | string
+  }
+
+  export type ReminderWhereInput = {
+    AND?: ReminderWhereInput | ReminderWhereInput[]
+    OR?: ReminderWhereInput[]
+    NOT?: ReminderWhereInput | ReminderWhereInput[]
+    id?: StringFilter<"Reminder"> | string
+    userId?: StringFilter<"Reminder"> | string
+    timeOfDay?: StringFilter<"Reminder"> | string
+    days?: StringNullableListFilter<"Reminder">
+    enabled?: BoolFilter<"Reminder"> | boolean
+    message?: StringFilter<"Reminder"> | string
+    lastSent?: DateTimeNullableFilter<"Reminder"> | Date | string | null
+    user?: XOR<UserDataRelationFilter, UserDataWhereInput>
+  }
+
+  export type ReminderOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    timeOfDay?: SortOrder
+    days?: SortOrder
+    enabled?: SortOrder
+    message?: SortOrder
+    lastSent?: SortOrder
+    user?: UserDataOrderByWithRelationInput
+  }
+
+  export type ReminderWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ReminderWhereInput | ReminderWhereInput[]
+    OR?: ReminderWhereInput[]
+    NOT?: ReminderWhereInput | ReminderWhereInput[]
+    userId?: StringFilter<"Reminder"> | string
+    timeOfDay?: StringFilter<"Reminder"> | string
+    days?: StringNullableListFilter<"Reminder">
+    enabled?: BoolFilter<"Reminder"> | boolean
+    message?: StringFilter<"Reminder"> | string
+    lastSent?: DateTimeNullableFilter<"Reminder"> | Date | string | null
+    user?: XOR<UserDataRelationFilter, UserDataWhereInput>
+  }, "id">
+
+  export type ReminderOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    timeOfDay?: SortOrder
+    days?: SortOrder
+    enabled?: SortOrder
+    message?: SortOrder
+    lastSent?: SortOrder
+    _count?: ReminderCountOrderByAggregateInput
+    _max?: ReminderMaxOrderByAggregateInput
+    _min?: ReminderMinOrderByAggregateInput
+  }
+
+  export type ReminderScalarWhereWithAggregatesInput = {
+    AND?: ReminderScalarWhereWithAggregatesInput | ReminderScalarWhereWithAggregatesInput[]
+    OR?: ReminderScalarWhereWithAggregatesInput[]
+    NOT?: ReminderScalarWhereWithAggregatesInput | ReminderScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Reminder"> | string
+    userId?: StringWithAggregatesFilter<"Reminder"> | string
+    timeOfDay?: StringWithAggregatesFilter<"Reminder"> | string
+    days?: StringNullableListFilter<"Reminder">
+    enabled?: BoolWithAggregatesFilter<"Reminder"> | boolean
+    message?: StringWithAggregatesFilter<"Reminder"> | string
+    lastSent?: DateTimeNullableWithAggregatesFilter<"Reminder"> | Date | string | null
+  }
+
+  export type PushSubscriptionWhereInput = {
+    AND?: PushSubscriptionWhereInput | PushSubscriptionWhereInput[]
+    OR?: PushSubscriptionWhereInput[]
+    NOT?: PushSubscriptionWhereInput | PushSubscriptionWhereInput[]
+    id?: StringFilter<"PushSubscription"> | string
+    userId?: StringFilter<"PushSubscription"> | string
+    endpoint?: StringFilter<"PushSubscription"> | string
+    p256dh?: StringFilter<"PushSubscription"> | string
+    auth?: StringFilter<"PushSubscription"> | string
+    createdAt?: DateTimeFilter<"PushSubscription"> | Date | string
+    user?: XOR<UserDataRelationFilter, UserDataWhereInput>
+  }
+
+  export type PushSubscriptionOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    endpoint?: SortOrder
+    p256dh?: SortOrder
+    auth?: SortOrder
+    createdAt?: SortOrder
+    user?: UserDataOrderByWithRelationInput
+  }
+
+  export type PushSubscriptionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    endpoint?: string
+    AND?: PushSubscriptionWhereInput | PushSubscriptionWhereInput[]
+    OR?: PushSubscriptionWhereInput[]
+    NOT?: PushSubscriptionWhereInput | PushSubscriptionWhereInput[]
+    userId?: StringFilter<"PushSubscription"> | string
+    p256dh?: StringFilter<"PushSubscription"> | string
+    auth?: StringFilter<"PushSubscription"> | string
+    createdAt?: DateTimeFilter<"PushSubscription"> | Date | string
+    user?: XOR<UserDataRelationFilter, UserDataWhereInput>
+  }, "id" | "endpoint">
+
+  export type PushSubscriptionOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    endpoint?: SortOrder
+    p256dh?: SortOrder
+    auth?: SortOrder
+    createdAt?: SortOrder
+    _count?: PushSubscriptionCountOrderByAggregateInput
+    _max?: PushSubscriptionMaxOrderByAggregateInput
+    _min?: PushSubscriptionMinOrderByAggregateInput
+  }
+
+  export type PushSubscriptionScalarWhereWithAggregatesInput = {
+    AND?: PushSubscriptionScalarWhereWithAggregatesInput | PushSubscriptionScalarWhereWithAggregatesInput[]
+    OR?: PushSubscriptionScalarWhereWithAggregatesInput[]
+    NOT?: PushSubscriptionScalarWhereWithAggregatesInput | PushSubscriptionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PushSubscription"> | string
+    userId?: StringWithAggregatesFilter<"PushSubscription"> | string
+    endpoint?: StringWithAggregatesFilter<"PushSubscription"> | string
+    p256dh?: StringWithAggregatesFilter<"PushSubscription"> | string
+    auth?: StringWithAggregatesFilter<"PushSubscription"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"PushSubscription"> | Date | string
   }
 
   export type ProviderAccountWhereInput = {
@@ -15187,6 +17493,7 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
@@ -15194,6 +17501,8 @@ export namespace Prisma {
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
+    reminders?: ReminderCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateInput = {
@@ -15222,6 +17531,7 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
@@ -15229,6 +17539,8 @@ export namespace Prisma {
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUpdateInput = {
@@ -15256,6 +17568,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
@@ -15263,6 +17576,8 @@ export namespace Prisma {
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateInput = {
@@ -15290,6 +17605,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
@@ -15297,6 +17613,8 @@ export namespace Prisma {
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataCreateManyInput = {
@@ -15325,6 +17643,7 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
   }
 
   export type UserDataUpdateManyMutationInput = {
@@ -15352,6 +17671,7 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserDataUncheckedUpdateManyInput = {
@@ -15379,6 +17699,130 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ReminderCreateInput = {
+    id?: string
+    timeOfDay: string
+    days?: ReminderCreatedaysInput | string[]
+    enabled?: boolean
+    message?: string
+    lastSent?: Date | string | null
+    user: UserDataCreateNestedOneWithoutRemindersInput
+  }
+
+  export type ReminderUncheckedCreateInput = {
+    id?: string
+    userId: string
+    timeOfDay: string
+    days?: ReminderCreatedaysInput | string[]
+    enabled?: boolean
+    message?: string
+    lastSent?: Date | string | null
+  }
+
+  export type ReminderUpdateInput = {
+    timeOfDay?: StringFieldUpdateOperationsInput | string
+    days?: ReminderUpdatedaysInput | string[]
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    message?: StringFieldUpdateOperationsInput | string
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserDataUpdateOneRequiredWithoutRemindersNestedInput
+  }
+
+  export type ReminderUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    timeOfDay?: StringFieldUpdateOperationsInput | string
+    days?: ReminderUpdatedaysInput | string[]
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    message?: StringFieldUpdateOperationsInput | string
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ReminderCreateManyInput = {
+    id?: string
+    userId: string
+    timeOfDay: string
+    days?: ReminderCreatedaysInput | string[]
+    enabled?: boolean
+    message?: string
+    lastSent?: Date | string | null
+  }
+
+  export type ReminderUpdateManyMutationInput = {
+    timeOfDay?: StringFieldUpdateOperationsInput | string
+    days?: ReminderUpdatedaysInput | string[]
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    message?: StringFieldUpdateOperationsInput | string
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ReminderUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    timeOfDay?: StringFieldUpdateOperationsInput | string
+    days?: ReminderUpdatedaysInput | string[]
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    message?: StringFieldUpdateOperationsInput | string
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PushSubscriptionCreateInput = {
+    id?: string
+    endpoint: string
+    p256dh: string
+    auth: string
+    createdAt?: Date | string
+    user: UserDataCreateNestedOneWithoutPushSubscriptionsInput
+  }
+
+  export type PushSubscriptionUncheckedCreateInput = {
+    id?: string
+    userId: string
+    endpoint: string
+    p256dh: string
+    auth: string
+    createdAt?: Date | string
+  }
+
+  export type PushSubscriptionUpdateInput = {
+    endpoint?: StringFieldUpdateOperationsInput | string
+    p256dh?: StringFieldUpdateOperationsInput | string
+    auth?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserDataUpdateOneRequiredWithoutPushSubscriptionsNestedInput
+  }
+
+  export type PushSubscriptionUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    endpoint?: StringFieldUpdateOperationsInput | string
+    p256dh?: StringFieldUpdateOperationsInput | string
+    auth?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PushSubscriptionCreateManyInput = {
+    id?: string
+    userId: string
+    endpoint: string
+    p256dh: string
+    auth: string
+    createdAt?: Date | string
+  }
+
+  export type PushSubscriptionUpdateManyMutationInput = {
+    endpoint?: StringFieldUpdateOperationsInput | string
+    p256dh?: StringFieldUpdateOperationsInput | string
+    auth?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PushSubscriptionUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    endpoint?: StringFieldUpdateOperationsInput | string
+    p256dh?: StringFieldUpdateOperationsInput | string
+    auth?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProviderAccountCreateInput = {
@@ -16653,6 +19097,18 @@ export namespace Prisma {
     none?: GlossaryTermWhereInput
   }
 
+  export type ReminderListRelationFilter = {
+    every?: ReminderWhereInput
+    some?: ReminderWhereInput
+    none?: ReminderWhereInput
+  }
+
+  export type PushSubscriptionListRelationFilter = {
+    every?: PushSubscriptionWhereInput
+    some?: PushSubscriptionWhereInput
+    none?: PushSubscriptionWhereInput
+  }
+
   export type ProviderAccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -16678,6 +19134,14 @@ export namespace Prisma {
   }
 
   export type GlossaryTermOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ReminderOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PushSubscriptionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16707,6 +19171,7 @@ export namespace Prisma {
     role?: SortOrder
     profileImages?: SortOrder
     activeProfileImage?: SortOrder
+    tz?: SortOrder
   }
 
   export type UserDataMaxOrderByAggregateInput = {
@@ -16733,6 +19198,7 @@ export namespace Prisma {
     isLocationPublic?: SortOrder
     role?: SortOrder
     activeProfileImage?: SortOrder
+    tz?: SortOrder
   }
 
   export type UserDataMinOrderByAggregateInput = {
@@ -16759,6 +19225,7 @@ export namespace Prisma {
     isLocationPublic?: SortOrder
     role?: SortOrder
     activeProfileImage?: SortOrder
+    tz?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -16842,6 +19309,79 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type UserDataRelationFilter = {
+    is?: UserDataWhereInput
+    isNot?: UserDataWhereInput
+  }
+
+  export type ReminderCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    timeOfDay?: SortOrder
+    days?: SortOrder
+    enabled?: SortOrder
+    message?: SortOrder
+    lastSent?: SortOrder
+  }
+
+  export type ReminderMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    timeOfDay?: SortOrder
+    enabled?: SortOrder
+    message?: SortOrder
+    lastSent?: SortOrder
+  }
+
+  export type ReminderMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    timeOfDay?: SortOrder
+    enabled?: SortOrder
+    message?: SortOrder
+    lastSent?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type PushSubscriptionCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    endpoint?: SortOrder
+    p256dh?: SortOrder
+    auth?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PushSubscriptionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    endpoint?: SortOrder
+    p256dh?: SortOrder
+    auth?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PushSubscriptionMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    endpoint?: SortOrder
+    p256dh?: SortOrder
+    auth?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -16852,11 +19392,6 @@ export namespace Prisma {
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
     isSet?: boolean
-  }
-
-  export type UserDataRelationFilter = {
-    is?: UserDataWhereInput
-    isNot?: UserDataWhereInput
   }
 
   export type ProviderAccountCountOrderByAggregateInput = {
@@ -17363,11 +19898,6 @@ export namespace Prisma {
     not?: NestedEnumStorageTypeFilter<$PrismaModel> | $Enums.StorageType
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type AsanaPostureNullableRelationFilter = {
     is?: AsanaPostureWhereInput | null
     isNot?: AsanaPostureWhereInput | null
@@ -17446,14 +19976,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStorageTypeFilter<$PrismaModel>
     _max?: NestedEnumStorageTypeFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumGlossarySourceFilter<$PrismaModel = never> = {
@@ -17576,6 +20098,20 @@ export namespace Prisma {
     connect?: GlossaryTermWhereUniqueInput | GlossaryTermWhereUniqueInput[]
   }
 
+  export type ReminderCreateNestedManyWithoutUserInput = {
+    create?: XOR<ReminderCreateWithoutUserInput, ReminderUncheckedCreateWithoutUserInput> | ReminderCreateWithoutUserInput[] | ReminderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReminderCreateOrConnectWithoutUserInput | ReminderCreateOrConnectWithoutUserInput[]
+    createMany?: ReminderCreateManyUserInputEnvelope
+    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+  }
+
+  export type PushSubscriptionCreateNestedManyWithoutUserInput = {
+    create?: XOR<PushSubscriptionCreateWithoutUserInput, PushSubscriptionUncheckedCreateWithoutUserInput> | PushSubscriptionCreateWithoutUserInput[] | PushSubscriptionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PushSubscriptionCreateOrConnectWithoutUserInput | PushSubscriptionCreateOrConnectWithoutUserInput[]
+    createMany?: PushSubscriptionCreateManyUserInputEnvelope
+    connect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+  }
+
   export type ProviderAccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
@@ -17623,6 +20159,20 @@ export namespace Prisma {
     connectOrCreate?: GlossaryTermCreateOrConnectWithoutUserInput | GlossaryTermCreateOrConnectWithoutUserInput[]
     createMany?: GlossaryTermCreateManyUserInputEnvelope
     connect?: GlossaryTermWhereUniqueInput | GlossaryTermWhereUniqueInput[]
+  }
+
+  export type ReminderUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ReminderCreateWithoutUserInput, ReminderUncheckedCreateWithoutUserInput> | ReminderCreateWithoutUserInput[] | ReminderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReminderCreateOrConnectWithoutUserInput | ReminderCreateOrConnectWithoutUserInput[]
+    createMany?: ReminderCreateManyUserInputEnvelope
+    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+  }
+
+  export type PushSubscriptionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PushSubscriptionCreateWithoutUserInput, PushSubscriptionUncheckedCreateWithoutUserInput> | PushSubscriptionCreateWithoutUserInput[] | PushSubscriptionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PushSubscriptionCreateOrConnectWithoutUserInput | PushSubscriptionCreateOrConnectWithoutUserInput[]
+    createMany?: PushSubscriptionCreateManyUserInputEnvelope
+    connect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -17746,6 +20296,34 @@ export namespace Prisma {
     deleteMany?: GlossaryTermScalarWhereInput | GlossaryTermScalarWhereInput[]
   }
 
+  export type ReminderUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ReminderCreateWithoutUserInput, ReminderUncheckedCreateWithoutUserInput> | ReminderCreateWithoutUserInput[] | ReminderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReminderCreateOrConnectWithoutUserInput | ReminderCreateOrConnectWithoutUserInput[]
+    upsert?: ReminderUpsertWithWhereUniqueWithoutUserInput | ReminderUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ReminderCreateManyUserInputEnvelope
+    set?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    disconnect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    delete?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    update?: ReminderUpdateWithWhereUniqueWithoutUserInput | ReminderUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ReminderUpdateManyWithWhereWithoutUserInput | ReminderUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
+  }
+
+  export type PushSubscriptionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PushSubscriptionCreateWithoutUserInput, PushSubscriptionUncheckedCreateWithoutUserInput> | PushSubscriptionCreateWithoutUserInput[] | PushSubscriptionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PushSubscriptionCreateOrConnectWithoutUserInput | PushSubscriptionCreateOrConnectWithoutUserInput[]
+    upsert?: PushSubscriptionUpsertWithWhereUniqueWithoutUserInput | PushSubscriptionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PushSubscriptionCreateManyUserInputEnvelope
+    set?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    disconnect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    delete?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    connect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    update?: PushSubscriptionUpdateWithWhereUniqueWithoutUserInput | PushSubscriptionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PushSubscriptionUpdateManyWithWhereWithoutUserInput | PushSubscriptionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PushSubscriptionScalarWhereInput | PushSubscriptionScalarWhereInput[]
+  }
+
   export type ProviderAccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<ProviderAccountCreateWithoutUserInput, ProviderAccountUncheckedCreateWithoutUserInput> | ProviderAccountCreateWithoutUserInput[] | ProviderAccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ProviderAccountCreateOrConnectWithoutUserInput | ProviderAccountCreateOrConnectWithoutUserInput[]
@@ -17842,6 +20420,75 @@ export namespace Prisma {
     update?: GlossaryTermUpdateWithWhereUniqueWithoutUserInput | GlossaryTermUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: GlossaryTermUpdateManyWithWhereWithoutUserInput | GlossaryTermUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: GlossaryTermScalarWhereInput | GlossaryTermScalarWhereInput[]
+  }
+
+  export type ReminderUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ReminderCreateWithoutUserInput, ReminderUncheckedCreateWithoutUserInput> | ReminderCreateWithoutUserInput[] | ReminderUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ReminderCreateOrConnectWithoutUserInput | ReminderCreateOrConnectWithoutUserInput[]
+    upsert?: ReminderUpsertWithWhereUniqueWithoutUserInput | ReminderUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ReminderCreateManyUserInputEnvelope
+    set?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    disconnect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    delete?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    connect?: ReminderWhereUniqueInput | ReminderWhereUniqueInput[]
+    update?: ReminderUpdateWithWhereUniqueWithoutUserInput | ReminderUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ReminderUpdateManyWithWhereWithoutUserInput | ReminderUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
+  }
+
+  export type PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PushSubscriptionCreateWithoutUserInput, PushSubscriptionUncheckedCreateWithoutUserInput> | PushSubscriptionCreateWithoutUserInput[] | PushSubscriptionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PushSubscriptionCreateOrConnectWithoutUserInput | PushSubscriptionCreateOrConnectWithoutUserInput[]
+    upsert?: PushSubscriptionUpsertWithWhereUniqueWithoutUserInput | PushSubscriptionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PushSubscriptionCreateManyUserInputEnvelope
+    set?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    disconnect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    delete?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    connect?: PushSubscriptionWhereUniqueInput | PushSubscriptionWhereUniqueInput[]
+    update?: PushSubscriptionUpdateWithWhereUniqueWithoutUserInput | PushSubscriptionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PushSubscriptionUpdateManyWithWhereWithoutUserInput | PushSubscriptionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PushSubscriptionScalarWhereInput | PushSubscriptionScalarWhereInput[]
+  }
+
+  export type ReminderCreatedaysInput = {
+    set: string[]
+  }
+
+  export type UserDataCreateNestedOneWithoutRemindersInput = {
+    create?: XOR<UserDataCreateWithoutRemindersInput, UserDataUncheckedCreateWithoutRemindersInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutRemindersInput
+    connect?: UserDataWhereUniqueInput
+  }
+
+  export type ReminderUpdatedaysInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type UserDataUpdateOneRequiredWithoutRemindersNestedInput = {
+    create?: XOR<UserDataCreateWithoutRemindersInput, UserDataUncheckedCreateWithoutRemindersInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutRemindersInput
+    upsert?: UserDataUpsertWithoutRemindersInput
+    connect?: UserDataWhereUniqueInput
+    update?: XOR<XOR<UserDataUpdateToOneWithWhereWithoutRemindersInput, UserDataUpdateWithoutRemindersInput>, UserDataUncheckedUpdateWithoutRemindersInput>
+  }
+
+  export type UserDataCreateNestedOneWithoutPushSubscriptionsInput = {
+    create?: XOR<UserDataCreateWithoutPushSubscriptionsInput, UserDataUncheckedCreateWithoutPushSubscriptionsInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutPushSubscriptionsInput
+    connect?: UserDataWhereUniqueInput
+  }
+
+  export type UserDataUpdateOneRequiredWithoutPushSubscriptionsNestedInput = {
+    create?: XOR<UserDataCreateWithoutPushSubscriptionsInput, UserDataUncheckedCreateWithoutPushSubscriptionsInput>
+    connectOrCreate?: UserDataCreateOrConnectWithoutPushSubscriptionsInput
+    upsert?: UserDataUpsertWithoutPushSubscriptionsInput
+    connect?: UserDataWhereUniqueInput
+    update?: XOR<XOR<UserDataUpdateToOneWithWhereWithoutPushSubscriptionsInput, UserDataUpdateWithoutPushSubscriptionsInput>, UserDataUncheckedUpdateWithoutPushSubscriptionsInput>
   }
 
   export type UserDataCreateNestedOneWithoutProviderAccountsInput = {
@@ -18140,10 +20787,6 @@ export namespace Prisma {
     set?: $Enums.StorageType
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
   export type UserDataUpdateOneRequiredWithoutPoseImagesNestedInput = {
     create?: XOR<UserDataCreateWithoutPoseImagesInput, UserDataUncheckedCreateWithoutPoseImagesInput>
     connectOrCreate?: UserDataCreateOrConnectWithoutPoseImagesInput
@@ -18333,6 +20976,19 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -18411,11 +21067,6 @@ export namespace Prisma {
     not?: NestedEnumStorageTypeFilter<$PrismaModel> | $Enums.StorageType
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NestedEnumStorageTypeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.StorageType | EnumStorageTypeFieldRefInput<$PrismaModel>
     in?: $Enums.StorageType[] | ListEnumStorageTypeFieldRefInput<$PrismaModel>
@@ -18424,14 +21075,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumStorageTypeFilter<$PrismaModel>
     _max?: NestedEnumStorageTypeFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumGlossarySourceFilter<$PrismaModel = never> = {
@@ -18712,6 +21355,58 @@ export namespace Prisma {
     data: GlossaryTermCreateManyUserInput | GlossaryTermCreateManyUserInput[]
   }
 
+  export type ReminderCreateWithoutUserInput = {
+    id?: string
+    timeOfDay: string
+    days?: ReminderCreatedaysInput | string[]
+    enabled?: boolean
+    message?: string
+    lastSent?: Date | string | null
+  }
+
+  export type ReminderUncheckedCreateWithoutUserInput = {
+    id?: string
+    timeOfDay: string
+    days?: ReminderCreatedaysInput | string[]
+    enabled?: boolean
+    message?: string
+    lastSent?: Date | string | null
+  }
+
+  export type ReminderCreateOrConnectWithoutUserInput = {
+    where: ReminderWhereUniqueInput
+    create: XOR<ReminderCreateWithoutUserInput, ReminderUncheckedCreateWithoutUserInput>
+  }
+
+  export type ReminderCreateManyUserInputEnvelope = {
+    data: ReminderCreateManyUserInput | ReminderCreateManyUserInput[]
+  }
+
+  export type PushSubscriptionCreateWithoutUserInput = {
+    id?: string
+    endpoint: string
+    p256dh: string
+    auth: string
+    createdAt?: Date | string
+  }
+
+  export type PushSubscriptionUncheckedCreateWithoutUserInput = {
+    id?: string
+    endpoint: string
+    p256dh: string
+    auth: string
+    createdAt?: Date | string
+  }
+
+  export type PushSubscriptionCreateOrConnectWithoutUserInput = {
+    where: PushSubscriptionWhereUniqueInput
+    create: XOR<PushSubscriptionCreateWithoutUserInput, PushSubscriptionUncheckedCreateWithoutUserInput>
+  }
+
+  export type PushSubscriptionCreateManyUserInputEnvelope = {
+    data: PushSubscriptionCreateManyUserInput | PushSubscriptionCreateManyUserInput[]
+  }
+
   export type ProviderAccountUpsertWithWhereUniqueWithoutUserInput = {
     where: ProviderAccountWhereUniqueInput
     update: XOR<ProviderAccountUpdateWithoutUserInput, ProviderAccountUncheckedUpdateWithoutUserInput>
@@ -18951,6 +21646,387 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"GlossaryTerm"> | Date | string
   }
 
+  export type ReminderUpsertWithWhereUniqueWithoutUserInput = {
+    where: ReminderWhereUniqueInput
+    update: XOR<ReminderUpdateWithoutUserInput, ReminderUncheckedUpdateWithoutUserInput>
+    create: XOR<ReminderCreateWithoutUserInput, ReminderUncheckedCreateWithoutUserInput>
+  }
+
+  export type ReminderUpdateWithWhereUniqueWithoutUserInput = {
+    where: ReminderWhereUniqueInput
+    data: XOR<ReminderUpdateWithoutUserInput, ReminderUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ReminderUpdateManyWithWhereWithoutUserInput = {
+    where: ReminderScalarWhereInput
+    data: XOR<ReminderUpdateManyMutationInput, ReminderUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ReminderScalarWhereInput = {
+    AND?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
+    OR?: ReminderScalarWhereInput[]
+    NOT?: ReminderScalarWhereInput | ReminderScalarWhereInput[]
+    id?: StringFilter<"Reminder"> | string
+    userId?: StringFilter<"Reminder"> | string
+    timeOfDay?: StringFilter<"Reminder"> | string
+    days?: StringNullableListFilter<"Reminder">
+    enabled?: BoolFilter<"Reminder"> | boolean
+    message?: StringFilter<"Reminder"> | string
+    lastSent?: DateTimeNullableFilter<"Reminder"> | Date | string | null
+  }
+
+  export type PushSubscriptionUpsertWithWhereUniqueWithoutUserInput = {
+    where: PushSubscriptionWhereUniqueInput
+    update: XOR<PushSubscriptionUpdateWithoutUserInput, PushSubscriptionUncheckedUpdateWithoutUserInput>
+    create: XOR<PushSubscriptionCreateWithoutUserInput, PushSubscriptionUncheckedCreateWithoutUserInput>
+  }
+
+  export type PushSubscriptionUpdateWithWhereUniqueWithoutUserInput = {
+    where: PushSubscriptionWhereUniqueInput
+    data: XOR<PushSubscriptionUpdateWithoutUserInput, PushSubscriptionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PushSubscriptionUpdateManyWithWhereWithoutUserInput = {
+    where: PushSubscriptionScalarWhereInput
+    data: XOR<PushSubscriptionUpdateManyMutationInput, PushSubscriptionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PushSubscriptionScalarWhereInput = {
+    AND?: PushSubscriptionScalarWhereInput | PushSubscriptionScalarWhereInput[]
+    OR?: PushSubscriptionScalarWhereInput[]
+    NOT?: PushSubscriptionScalarWhereInput | PushSubscriptionScalarWhereInput[]
+    id?: StringFilter<"PushSubscription"> | string
+    userId?: StringFilter<"PushSubscription"> | string
+    endpoint?: StringFilter<"PushSubscription"> | string
+    p256dh?: StringFilter<"PushSubscription"> | string
+    auth?: StringFilter<"PushSubscription"> | string
+    createdAt?: DateTimeFilter<"PushSubscription"> | Date | string
+  }
+
+  export type UserDataCreateWithoutRemindersInput = {
+    id?: string
+    provider_id?: string | null
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    pronouns?: string | null
+    profile?: InputJsonValue | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    firstName: string
+    lastName: string
+    bio: string
+    headline: string
+    location: string
+    websiteURL: string
+    shareQuick?: string | null
+    yogaStyle?: string | null
+    yogaExperience?: string | null
+    company?: string | null
+    socialURL?: string | null
+    isLocationPublic?: string | null
+    role?: string | null
+    profileImages?: UserDataCreateprofileImagesInput | string[]
+    activeProfileImage?: string | null
+    tz?: string
+    providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
+    asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
+    seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginCreateNestedManyWithoutUserInput
+    poseImages?: PoseImageCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserDataUncheckedCreateWithoutRemindersInput = {
+    id?: string
+    provider_id?: string | null
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    pronouns?: string | null
+    profile?: InputJsonValue | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    firstName: string
+    lastName: string
+    bio: string
+    headline: string
+    location: string
+    websiteURL: string
+    shareQuick?: string | null
+    yogaStyle?: string | null
+    yogaExperience?: string | null
+    company?: string | null
+    socialURL?: string | null
+    isLocationPublic?: string | null
+    role?: string | null
+    profileImages?: UserDataCreateprofileImagesInput | string[]
+    activeProfileImage?: string | null
+    tz?: string
+    providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
+    asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
+    seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
+    poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserDataCreateOrConnectWithoutRemindersInput = {
+    where: UserDataWhereUniqueInput
+    create: XOR<UserDataCreateWithoutRemindersInput, UserDataUncheckedCreateWithoutRemindersInput>
+  }
+
+  export type UserDataUpsertWithoutRemindersInput = {
+    update: XOR<UserDataUpdateWithoutRemindersInput, UserDataUncheckedUpdateWithoutRemindersInput>
+    create: XOR<UserDataCreateWithoutRemindersInput, UserDataUncheckedCreateWithoutRemindersInput>
+    where?: UserDataWhereInput
+  }
+
+  export type UserDataUpdateToOneWithWhereWithoutRemindersInput = {
+    where?: UserDataWhereInput
+    data: XOR<UserDataUpdateWithoutRemindersInput, UserDataUncheckedUpdateWithoutRemindersInput>
+  }
+
+  export type UserDataUpdateWithoutRemindersInput = {
+    provider_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
+    profile?: InputJsonValue | InputJsonValue | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    shareQuick?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaStyle?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    socialURL?: NullableStringFieldUpdateOperationsInput | string | null
+    isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImages?: UserDataUpdateprofileImagesInput | string[]
+    activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
+    providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
+    asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
+    seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUpdateManyWithoutUserNestedInput
+    poseImages?: PoseImageUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserDataUncheckedUpdateWithoutRemindersInput = {
+    provider_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
+    profile?: InputJsonValue | InputJsonValue | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    shareQuick?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaStyle?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    socialURL?: NullableStringFieldUpdateOperationsInput | string | null
+    isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImages?: UserDataUpdateprofileImagesInput | string[]
+    activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
+    providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
+    asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
+    seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
+    poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserDataCreateWithoutPushSubscriptionsInput = {
+    id?: string
+    provider_id?: string | null
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    pronouns?: string | null
+    profile?: InputJsonValue | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    firstName: string
+    lastName: string
+    bio: string
+    headline: string
+    location: string
+    websiteURL: string
+    shareQuick?: string | null
+    yogaStyle?: string | null
+    yogaExperience?: string | null
+    company?: string | null
+    socialURL?: string | null
+    isLocationPublic?: string | null
+    role?: string | null
+    profileImages?: UserDataCreateprofileImagesInput | string[]
+    activeProfileImage?: string | null
+    tz?: string
+    providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
+    asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
+    seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginCreateNestedManyWithoutUserInput
+    poseImages?: PoseImageCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
+    reminders?: ReminderCreateNestedManyWithoutUserInput
+  }
+
+  export type UserDataUncheckedCreateWithoutPushSubscriptionsInput = {
+    id?: string
+    provider_id?: string | null
+    name?: string | null
+    email?: string | null
+    emailVerified?: Date | string | null
+    image?: string | null
+    pronouns?: string | null
+    profile?: InputJsonValue | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    firstName: string
+    lastName: string
+    bio: string
+    headline: string
+    location: string
+    websiteURL: string
+    shareQuick?: string | null
+    yogaStyle?: string | null
+    yogaExperience?: string | null
+    company?: string | null
+    socialURL?: string | null
+    isLocationPublic?: string | null
+    role?: string | null
+    profileImages?: UserDataCreateprofileImagesInput | string[]
+    activeProfileImage?: string | null
+    tz?: string
+    providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
+    asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
+    seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
+    sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
+    userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
+    poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
+    glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserDataCreateOrConnectWithoutPushSubscriptionsInput = {
+    where: UserDataWhereUniqueInput
+    create: XOR<UserDataCreateWithoutPushSubscriptionsInput, UserDataUncheckedCreateWithoutPushSubscriptionsInput>
+  }
+
+  export type UserDataUpsertWithoutPushSubscriptionsInput = {
+    update: XOR<UserDataUpdateWithoutPushSubscriptionsInput, UserDataUncheckedUpdateWithoutPushSubscriptionsInput>
+    create: XOR<UserDataCreateWithoutPushSubscriptionsInput, UserDataUncheckedCreateWithoutPushSubscriptionsInput>
+    where?: UserDataWhereInput
+  }
+
+  export type UserDataUpdateToOneWithWhereWithoutPushSubscriptionsInput = {
+    where?: UserDataWhereInput
+    data: XOR<UserDataUpdateWithoutPushSubscriptionsInput, UserDataUncheckedUpdateWithoutPushSubscriptionsInput>
+  }
+
+  export type UserDataUpdateWithoutPushSubscriptionsInput = {
+    provider_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
+    profile?: InputJsonValue | InputJsonValue | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    shareQuick?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaStyle?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    socialURL?: NullableStringFieldUpdateOperationsInput | string | null
+    isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImages?: UserDataUpdateprofileImagesInput | string[]
+    activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
+    providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
+    asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
+    seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUpdateManyWithoutUserNestedInput
+    poseImages?: PoseImageUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserDataUncheckedUpdateWithoutPushSubscriptionsInput = {
+    provider_id?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    pronouns?: NullableStringFieldUpdateOperationsInput | string | null
+    profile?: InputJsonValue | InputJsonValue | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    bio?: StringFieldUpdateOperationsInput | string
+    headline?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    websiteURL?: StringFieldUpdateOperationsInput | string
+    shareQuick?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaStyle?: NullableStringFieldUpdateOperationsInput | string | null
+    yogaExperience?: NullableStringFieldUpdateOperationsInput | string | null
+    company?: NullableStringFieldUpdateOperationsInput | string | null
+    socialURL?: NullableStringFieldUpdateOperationsInput | string | null
+    isLocationPublic?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImages?: UserDataUpdateprofileImagesInput | string[]
+    activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
+    providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
+    asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
+    seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
+    sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
+    userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
+    poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
+    glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
+  }
+
   export type UserDataCreateWithoutProviderAccountsInput = {
     id?: string
     provider_id?: string | null
@@ -18977,12 +22053,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
+    reminders?: ReminderCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutProviderAccountsInput = {
@@ -19011,12 +22090,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutProviderAccountsInput = {
@@ -19060,12 +22142,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutProviderAccountsInput = {
@@ -19093,12 +22178,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AsanaActivityCreateWithoutPostureInput = {
@@ -19243,12 +22331,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
+    reminders?: ReminderCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutAsanaActivitiesInput = {
@@ -19277,12 +22368,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutAsanaActivitiesInput = {
@@ -19409,12 +22503,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutAsanaActivitiesInput = {
@@ -19442,12 +22539,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AsanaPostureUpsertWithoutAsanaActivitiesInput = {
@@ -19563,12 +22663,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
+    reminders?: ReminderCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutSeriesActivitiesInput = {
@@ -19597,12 +22700,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutSeriesActivitiesInput = {
@@ -19646,12 +22752,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutSeriesActivitiesInput = {
@@ -19679,12 +22788,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataCreateWithoutSequenceActivitiesInput = {
@@ -19713,12 +22825,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
+    reminders?: ReminderCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutSequenceActivitiesInput = {
@@ -19747,12 +22862,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutSequenceActivitiesInput = {
@@ -19796,12 +22914,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutSequenceActivitiesInput = {
@@ -19829,12 +22950,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataCreateWithoutUserLoginsInput = {
@@ -19863,12 +22987,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
+    reminders?: ReminderCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutUserLoginsInput = {
@@ -19897,12 +23024,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutUserLoginsInput = {
@@ -19946,12 +23076,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutUserLoginsInput = {
@@ -19979,12 +23112,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataCreateWithoutPoseImagesInput = {
@@ -20013,12 +23149,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermCreateNestedManyWithoutUserInput
+    reminders?: ReminderCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutPoseImagesInput = {
@@ -20047,12 +23186,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     glossaryTerms?: GlossaryTermUncheckedCreateNestedManyWithoutUserInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutPoseImagesInput = {
@@ -20179,12 +23321,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutPoseImagesInput = {
@@ -20212,12 +23357,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     glossaryTerms?: GlossaryTermUncheckedUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AsanaPostureUpsertWithoutPoseImagesInput = {
@@ -20333,12 +23481,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityCreateNestedManyWithoutUserInput
     userLogins?: UserLoginCreateNestedManyWithoutUserInput
     poseImages?: PoseImageCreateNestedManyWithoutUserInput
+    reminders?: ReminderCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionCreateNestedManyWithoutUserInput
   }
 
   export type UserDataUncheckedCreateWithoutGlossaryTermsInput = {
@@ -20367,12 +23518,15 @@ export namespace Prisma {
     role?: string | null
     profileImages?: UserDataCreateprofileImagesInput | string[]
     activeProfileImage?: string | null
+    tz?: string
     providerAccounts?: ProviderAccountUncheckedCreateNestedManyWithoutUserInput
     asanaActivities?: AsanaActivityUncheckedCreateNestedManyWithoutUserInput
     seriesActivities?: SeriesActivityUncheckedCreateNestedManyWithoutUserInput
     sequenceActivities?: SequenceActivityUncheckedCreateNestedManyWithoutUserInput
     userLogins?: UserLoginUncheckedCreateNestedManyWithoutUserInput
     poseImages?: PoseImageUncheckedCreateNestedManyWithoutUserInput
+    reminders?: ReminderUncheckedCreateNestedManyWithoutUserInput
+    pushSubscriptions?: PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserDataCreateOrConnectWithoutGlossaryTermsInput = {
@@ -20416,12 +23570,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUpdateManyWithoutUserNestedInput
   }
 
   export type UserDataUncheckedUpdateWithoutGlossaryTermsInput = {
@@ -20449,12 +23606,15 @@ export namespace Prisma {
     role?: NullableStringFieldUpdateOperationsInput | string | null
     profileImages?: UserDataUpdateprofileImagesInput | string[]
     activeProfileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    tz?: StringFieldUpdateOperationsInput | string
     providerAccounts?: ProviderAccountUncheckedUpdateManyWithoutUserNestedInput
     asanaActivities?: AsanaActivityUncheckedUpdateManyWithoutUserNestedInput
     seriesActivities?: SeriesActivityUncheckedUpdateManyWithoutUserNestedInput
     sequenceActivities?: SequenceActivityUncheckedUpdateManyWithoutUserNestedInput
     userLogins?: UserLoginUncheckedUpdateManyWithoutUserNestedInput
     poseImages?: PoseImageUncheckedUpdateManyWithoutUserNestedInput
+    reminders?: ReminderUncheckedUpdateManyWithoutUserNestedInput
+    pushSubscriptions?: PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProviderAccountCreateManyUserInput = {
@@ -20554,6 +23714,23 @@ export namespace Prisma {
     readOnly?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type ReminderCreateManyUserInput = {
+    id?: string
+    timeOfDay: string
+    days?: ReminderCreatedaysInput | string[]
+    enabled?: boolean
+    message?: string
+    lastSent?: Date | string | null
+  }
+
+  export type PushSubscriptionCreateManyUserInput = {
+    id?: string
+    endpoint: string
+    p256dh: string
+    auth: string
+    createdAt?: Date | string
   }
 
   export type ProviderAccountUpdateWithoutUserInput = {
@@ -20832,6 +24009,51 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ReminderUpdateWithoutUserInput = {
+    timeOfDay?: StringFieldUpdateOperationsInput | string
+    days?: ReminderUpdatedaysInput | string[]
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    message?: StringFieldUpdateOperationsInput | string
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ReminderUncheckedUpdateWithoutUserInput = {
+    timeOfDay?: StringFieldUpdateOperationsInput | string
+    days?: ReminderUpdatedaysInput | string[]
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    message?: StringFieldUpdateOperationsInput | string
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ReminderUncheckedUpdateManyWithoutUserInput = {
+    timeOfDay?: StringFieldUpdateOperationsInput | string
+    days?: ReminderUpdatedaysInput | string[]
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    message?: StringFieldUpdateOperationsInput | string
+    lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PushSubscriptionUpdateWithoutUserInput = {
+    endpoint?: StringFieldUpdateOperationsInput | string
+    p256dh?: StringFieldUpdateOperationsInput | string
+    auth?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PushSubscriptionUncheckedUpdateWithoutUserInput = {
+    endpoint?: StringFieldUpdateOperationsInput | string
+    p256dh?: StringFieldUpdateOperationsInput | string
+    auth?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PushSubscriptionUncheckedUpdateManyWithoutUserInput = {
+    endpoint?: StringFieldUpdateOperationsInput | string
+    p256dh?: StringFieldUpdateOperationsInput | string
+    auth?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AsanaActivityCreateManyPostureInput = {
     id?: string
     userId: string
@@ -20975,6 +24197,14 @@ export namespace Prisma {
      * @deprecated Use UserDataDefaultArgs instead
      */
     export type UserDataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDataDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use ReminderDefaultArgs instead
+     */
+    export type ReminderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ReminderDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PushSubscriptionDefaultArgs instead
+     */
+    export type PushSubscriptionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PushSubscriptionDefaultArgs<ExtArgs>
     /**
      * @deprecated Use ProviderAccountDefaultArgs instead
      */

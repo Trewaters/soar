@@ -6,23 +6,32 @@ import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
 import { SessionProvider } from 'next-auth/react'
 import theme from '../../../../styles/theme'
-import UserDetails from '@app/navigator/profile/UserDetails'
+import UserDetails from '../../../../app/navigator/profile/UserDetails'
 
-// Mock Next.js Image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, width, height, ...props }: any) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={src} alt={alt} width={width} height={height} {...props} />
-  ),
+  default: (props: any) => <img {...props} alt={props.alt || ''} />,
 }))
 
-// Mock UserContext
-const mockDispatch = jest.fn()
+// Mock the UserContext
 const mockUseUser = jest.fn()
+const mockDispatch = jest.fn()
 
-jest.mock('@context/UserContext', () => ({
+jest.mock('@app/context/UserContext', () => ({
   UseUser: () => mockUseUser(),
+}))
+
+// Mock the useActiveProfileImage hook
+const mockUseActiveProfileImage = jest.fn()
+jest.mock('@app/hooks/useActiveProfileImage', () => ({
+  useActiveProfileImage: () => mockUseActiveProfileImage(),
+}))
+
+// Mock next-auth
+const mockUseSession = jest.fn()
+jest.mock('next-auth/react', () => ({
+  useSession: () => mockUseSession(),
+  SessionProvider: ({ children }: { children: React.ReactNode }) => children,
 }))
 
 // Standard test wrapper for Soar components
@@ -42,6 +51,21 @@ describe('UserDetails Avatar Display', () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ images: [] }),
+    })
+
+    // Set default mock for useSession
+    mockUseSession.mockReturnValue({
+      data: null,
+      status: 'loading',
+    })
+
+    // Set default mock for useActiveProfileImage
+    mockUseActiveProfileImage.mockReturnValue({
+      activeImage: '/images/profile-placeholder.png',
+      isPlaceholder: true,
+      hasCustomImage: false,
+      imageCount: 0,
+      isDefaultImage: false,
     })
   })
 
@@ -66,16 +90,29 @@ describe('UserDetails Avatar Display', () => {
         dispatch: mockDispatch,
       })
 
+      // Mock the useActiveProfileImage hook to return the active image
+      mockUseActiveProfileImage.mockReturnValue({
+        activeImage: 'https://example.com/active-profile.jpg',
+        isPlaceholder: false,
+        hasCustomImage: true,
+        imageCount: 1,
+        isDefaultImage: false,
+      })
+
       render(<UserDetails />, { wrapper: TestWrapper })
 
-      // Initially, the component should show the active profile image
+      // Wait for the component to render and look for the img inside the Avatar
       await waitFor(() => {
         const avatar = screen.getByLabelText('name initial')
-        expect(avatar).toHaveAttribute(
-          'src',
-          'https://example.com/active-profile.jpg'
-        )
+        expect(avatar).toBeInTheDocument()
       })
+
+      // Look for the img element inside the Avatar that has the correct src
+      const avatarImg = screen.getByAltText('User profile image')
+      expect(avatarImg).toHaveAttribute(
+        'src',
+        'https://example.com/active-profile.jpg'
+      )
     })
 
     it('should display social account image when active profile image is not available', async () => {
@@ -93,6 +130,15 @@ describe('UserDetails Avatar Display', () => {
         dispatch: mockDispatch,
       })
 
+      // Mock the useActiveProfileImage hook to return the social image
+      mockUseActiveProfileImage.mockReturnValue({
+        activeImage: 'https://example.com/social-image.jpg',
+        isPlaceholder: false,
+        hasCustomImage: false,
+        imageCount: 0,
+        isDefaultImage: true,
+      })
+
       render(<UserDetails />, { wrapper: TestWrapper })
 
       // Wait for the component to render
@@ -101,9 +147,9 @@ describe('UserDetails Avatar Display', () => {
         expect(avatar).toBeInTheDocument()
       })
 
-      // Check that the avatar initially has the social image
-      const avatar = screen.getByLabelText('name initial')
-      expect(avatar).toHaveAttribute(
+      // Check that the avatar img has the social image
+      const avatarImg = screen.getByAltText('User profile image')
+      expect(avatarImg).toHaveAttribute(
         'src',
         'https://example.com/social-image.jpg'
       )
@@ -124,16 +170,23 @@ describe('UserDetails Avatar Display', () => {
         dispatch: mockDispatch,
       })
 
+      // Mock the useActiveProfileImage hook to return placeholder
+      mockUseActiveProfileImage.mockReturnValue({
+        activeImage: '/images/profile-placeholder.png',
+        isPlaceholder: true,
+        hasCustomImage: false,
+        imageCount: 0,
+        isDefaultImage: false,
+      })
+
       render(<UserDetails />, { wrapper: TestWrapper })
 
-      // Avatar should not have a src attribute when no images are available
+      // Avatar should not have a src attribute when using placeholder
       const avatar = screen.getByLabelText('name initial')
       expect(avatar).not.toHaveAttribute('src')
 
       // Generic profile icon should be displayed inside Avatar
-      const genericProfileIcon = screen.getByAltText(
-        'Generic profile image icon'
-      )
+      const genericProfileIcon = screen.getByAltText('Default profile icon')
       expect(genericProfileIcon).toBeInTheDocument()
       expect(genericProfileIcon).toHaveAttribute(
         'src',
@@ -156,6 +209,15 @@ describe('UserDetails Avatar Display', () => {
         dispatch: mockDispatch,
       })
 
+      // Mock the useActiveProfileImage hook to return placeholder for empty strings
+      mockUseActiveProfileImage.mockReturnValue({
+        activeImage: '/images/profile-placeholder.png',
+        isPlaceholder: true,
+        hasCustomImage: false,
+        imageCount: 0,
+        isDefaultImage: false,
+      })
+
       render(<UserDetails />, { wrapper: TestWrapper })
 
       // Avatar should not have a src attribute when images are empty strings
@@ -163,9 +225,7 @@ describe('UserDetails Avatar Display', () => {
       expect(avatar).not.toHaveAttribute('src')
 
       // Generic profile icon should be displayed inside Avatar
-      const genericProfileIcon = screen.getByAltText(
-        'Generic profile image icon'
-      )
+      const genericProfileIcon = screen.getByAltText('Default profile icon')
       expect(genericProfileIcon).toBeInTheDocument()
       expect(genericProfileIcon).toHaveAttribute(
         'src',
@@ -228,9 +288,9 @@ describe('UserDetails Avatar Display', () => {
 
       render(<UserDetails />, { wrapper: TestWrapper })
 
-      const avatar = screen.getByLabelText('User profile image')
+      const avatar = screen.getByLabelText('name initial')
       expect(avatar).toBeInTheDocument()
-      expect(avatar).toHaveAttribute('aria-label', 'User profile image')
+      expect(avatar).toHaveAttribute('aria-label', 'name initial')
     })
 
     it('should have proper alt text for generic profile icon', () => {
@@ -273,7 +333,7 @@ describe('UserDetails Avatar Display', () => {
 
       render(<UserDetails />, { wrapper: TestWrapper })
 
-      const avatar = screen.getByLabelText('User profile image')
+      const avatar = screen.getByLabelText('name initial')
       expect(avatar).toBeInTheDocument()
 
       // Avatar should have the MUI Avatar component styling

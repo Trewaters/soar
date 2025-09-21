@@ -11,11 +11,10 @@ describe('ProfileImageUpload', () => {
 
   it('shows error for invalid file type', async () => {
     render(<ProfileImageUpload onUpload={jest.fn()} />)
-    const input = screen
-      .getByLabelText('Upload profile image')
-      .querySelector('input[type="file"]')
+    // Target the hidden file input directly by its aria-label
+    const input = screen.getByLabelText('Upload Image')
     const file = new File(['dummy'], 'test.gif', { type: 'image/gif' })
-    fireEvent.change(input!, { target: { files: [file] } })
+    fireEvent.change(input, { target: { files: [file] } })
     expect(
       await screen.findByText(/Only JPEG and PNG images are allowed/)
     ).toBeInTheDocument()
@@ -23,14 +22,13 @@ describe('ProfileImageUpload', () => {
 
   it('shows error for file size > 2MB', async () => {
     render(<ProfileImageUpload onUpload={jest.fn()} />)
-    const input = screen
-      .getByLabelText('Upload profile image')
-      .querySelector('input[type="file"]')
+    // Target the hidden file input directly by its aria-label
+    const input = screen.getByLabelText('Upload Image')
     const file = new File(['a'.repeat(2 * 1024 * 1024 + 1)], 'big.png', {
       type: 'image/png',
     })
     Object.defineProperty(file, 'size', { value: 2 * 1024 * 1024 + 1 })
-    fireEvent.change(input!, { target: { files: [file] } })
+    fireEvent.change(input, { target: { files: [file] } })
     expect(
       await screen.findByText(/File size must be under 2MB/)
     ).toBeInTheDocument()

@@ -11,16 +11,22 @@ const customJestConfig: Config = {
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   collectCoverageFrom: [
-    '<rootDir>/pages/**/*.{ts,tsx}',
-    '<rootDir>/__test__/**/*.{ts,tsx}',
     '<rootDir>/app/**/*.{ts,tsx}',
-    '<rootDir>/app/components/**/*.{ts,tsx}',
+    '<rootDir>/components/**/*.{ts,tsx}',
+    '<rootDir>/lib/**/*.{ts,tsx}',
     '!**/node_modules/**',
     '!**/styles/**',
+    '!<rootDir>/__test__/**/*.{ts,tsx}',
+    '!<rootDir>/pages/**/*.{ts,tsx}',
   ],
   coverageReporters: ['text', 'lcov', 'html'],
   testEnvironment: 'jsdom',
-  testMatch: ['**/__test__/**/*.spec.ts', '**/__test__/**/*.spec.tsx'],
+  testMatch: [
+    '**/__test__/**/*.spec.ts',
+    '**/__test__/**/*.spec.tsx',
+    '**/__test__/**/*.test.ts',
+    '**/__test__/**/*.test.tsx',
+  ],
   testTimeout: 30000, // 30 seconds timeout to prevent hanging
   maxWorkers: 1, // Use single worker to avoid resource conflicts
   detectOpenHandles: true, // Helps identify what's keeping the process alive

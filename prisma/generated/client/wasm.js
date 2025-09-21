@@ -137,7 +137,27 @@ exports.Prisma.UserDataScalarFieldEnum = {
   isLocationPublic: 'isLocationPublic',
   role: 'role',
   profileImages: 'profileImages',
-  activeProfileImage: 'activeProfileImage'
+  activeProfileImage: 'activeProfileImage',
+  tz: 'tz'
+};
+
+exports.Prisma.ReminderScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  timeOfDay: 'timeOfDay',
+  days: 'days',
+  enabled: 'enabled',
+  message: 'message',
+  lastSent: 'lastSent'
+};
+
+exports.Prisma.PushSubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  endpoint: 'endpoint',
+  p256dh: 'p256dh',
+  auth: 'auth',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.ProviderAccountScalarFieldEnum = {
@@ -334,6 +354,8 @@ exports.GlossarySource = exports.$Enums.GlossarySource = {
 
 exports.Prisma.ModelName = {
   UserData: 'UserData',
+  Reminder: 'Reminder',
+  PushSubscription: 'PushSubscription',
   ProviderAccount: 'ProviderAccount',
   AsanaPosture: 'AsanaPosture',
   AsanaSeries: 'AsanaSeries',

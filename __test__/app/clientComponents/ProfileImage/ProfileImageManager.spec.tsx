@@ -60,7 +60,7 @@ describe('ProfileImageManager', () => {
 
       // Component renders a labeled upload control
       expect(screen.getByText('Upload Image')).toBeInTheDocument()
-      expect(screen.getByLabelText(/upload profile image/i)).toBeInTheDocument()
+      expect(screen.getByLabelText(/upload image/i)).toBeInTheDocument()
     })
 
     it('should display all profile images', () => {
@@ -95,14 +95,17 @@ describe('ProfileImageManager', () => {
       const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
       mockOnUpload.mockResolvedValue(undefined)
 
-      render(<ProfileImageManager {...defaultProps} />, {
+      render(<ProfileImageManager {...defaultProps} images={[]} />, {
         wrapper: TestWrapper,
       })
 
-      const fileInput = screen.getByLabelText(/upload profile image/i)
-      await user.upload(fileInput, file)
+      const fileInput = screen.getByLabelText('Upload Image') // Target the hidden input directly
+      fireEvent.change(fileInput, { target: { files: [file] } })
 
-      expect(mockOnUpload).toHaveBeenCalledWith(file)
+      // Wait for async operations
+      await waitFor(() => {
+        expect(mockOnUpload).toHaveBeenCalledWith(file)
+      })
     })
 
     it('should show error when upload fails', async () => {
@@ -110,16 +113,14 @@ describe('ProfileImageManager', () => {
       const errorMessage = 'Upload failed'
       mockOnUpload.mockRejectedValue(new Error(errorMessage))
 
-      render(<ProfileImageManager {...defaultProps} />, {
+      // Use props with fewer than max images so upload can proceed and fail
+      render(<ProfileImageManager {...defaultProps} images={[]} />, {
         wrapper: TestWrapper,
       })
 
       // The visible control is a label with pointer-events disabled; target the hidden file input inside it
-      const uploadLabel = screen.getByLabelText(/upload profile image/i)
-      const fileInput = uploadLabel.querySelector(
-        'input[type="file"]'
-      ) as HTMLInputElement
-      await user.upload(fileInput, file)
+      const fileInput = screen.getByLabelText('Upload Image') // Target the hidden input directly
+      fireEvent.change(fileInput, { target: { files: [file] } })
 
       await waitFor(() => {
         expect(screen.getByText(errorMessage)).toBeInTheDocument()
@@ -138,8 +139,8 @@ describe('ProfileImageManager', () => {
         { wrapper: TestWrapper }
       )
 
-      const fileInput = screen.getByLabelText(/upload profile image/i)
-      await user.upload(fileInput, file)
+      const fileInput = screen.getByLabelText('Upload Image') // Target the hidden input directly
+      fireEvent.change(fileInput, { target: { files: [file] } })
 
       await waitFor(() => {
         expect(
@@ -159,7 +160,7 @@ describe('ProfileImageManager', () => {
         { wrapper: TestWrapper }
       )
 
-      const uploadButton = screen.getByLabelText(/upload profile image/i)
+      const uploadButton = screen.getByRole('button', { name: /upload/i })
       expect(uploadButton).toBeDisabled()
     })
 
@@ -278,7 +279,7 @@ describe('ProfileImageManager', () => {
 
       // Simulate the internal error state
       const fileInput = screen.getByLabelText(
-        /upload profile image/i
+        /upload image/i
       ) as HTMLInputElement
       fireEvent.change(fileInput, { target: { files: [file] } })
 
@@ -296,7 +297,7 @@ describe('ProfileImageManager', () => {
       })
 
       const file = new File(['test'], 'test.jpg', { type: 'image/jpeg' })
-      const fileInput = screen.getByLabelText(/upload profile image/i)
+      const fileInput = screen.getByLabelText(/upload image/i)
 
       // First upload fails
       await user.upload(fileInput, file)
@@ -346,8 +347,8 @@ describe('ProfileImageManager', () => {
 
       // Component should accept up to 5 images instead of default 3
       // This would be verified by the upload behavior
-      // The upload control uses an aria-label of 'Upload profile image'
-      expect(screen.getByLabelText(/upload profile image/i)).toBeInTheDocument()
+      // The upload control uses an aria-label of 'Upload Image'
+      expect(screen.getByLabelText(/upload image/i)).toBeInTheDocument()
     })
 
     it('should handle custom placeholder image', () => {
@@ -386,7 +387,7 @@ describe('ProfileImageManager', () => {
 
       const deleteButtons = screen.getAllByLabelText(/delete profile image/i)
       expect(deleteButtons.length).toBeGreaterThan(0)
-      const uploadButton = screen.getByLabelText(/upload profile image/i)
+      const uploadButton = screen.getByLabelText(/upload image/i)
       expect(uploadButton).toBeInTheDocument()
     })
 

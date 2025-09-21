@@ -33,25 +33,31 @@ export const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({
     }
   }
 
+  const handleButtonClick = () => {
+    if (!disabled && inputRef.current) {
+      inputRef.current.click()
+    }
+  }
+
   return (
     <Box>
       <Button
         variant="contained"
-        component="label"
         disabled={disabled}
         aria-label="Upload profile image"
+        onClick={handleButtonClick}
       >
         Upload Image
-        {/* keep input in DOM but visually hidden so user-event can target it directly */}
-        <input
-          ref={inputRef}
-          type="file"
-          accept="image/jpeg,image/png"
-          style={{ display: 'none' }}
-          aria-label="Upload Image"
-          onChange={handleFileChange}
-        />
       </Button>
+      {/* keep input in DOM but visually hidden so user-event can target it directly */}
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/jpeg,image/png"
+        style={{ display: 'none' }}
+        aria-label="Upload Image"
+        onChange={handleFileChange}
+      />
       {error && (
         <Alert severity="error" sx={{ mt: 2 }}>
           {error}
