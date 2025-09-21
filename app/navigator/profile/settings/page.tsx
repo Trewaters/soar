@@ -86,6 +86,19 @@ export default async function SettingsPage() {
                       Privacy Policy
                     </Box>
                   </Typography>
+                  <Typography component="li" variant="body2" sx={{ mb: 1 }}>
+                    <Box
+                      component="a"
+                      href="/settings/notifications"
+                      sx={{
+                        color: 'primary.main',
+                        textDecoration: 'none',
+                        '&:hover': { textDecoration: 'underline' },
+                      }}
+                    >
+                      Notification Settings
+                    </Box>
+                  </Typography>
                 </Box>
               </Stack>
             </Paper>
