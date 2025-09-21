@@ -1,20 +1,49 @@
 // Service Worker for handling push notifications in Soar Yoga App
+// Version 2.0 - Enhanced error handling and caching prevention
 
-self.addEventListener('install', () => {
-  console.log('Service Worker installing...')
+const CACHE_VERSION = 'v2.0'
+const SW_VERSION = '2.0.1'
+
+console.log(`Service Worker ${SW_VERSION} initializing...`)
+
+self.addEventListener('install', (event) => {
+  console.log(`Service Worker ${SW_VERSION} installing...`)
   // Skip waiting to activate the new service worker immediately
-  self.skipWaiting()
+  // This prevents caching issues that can cause push subscription failures
+  event.waitUntil(
+    Promise.resolve().then(() => {
+      console.log('Service Worker installation complete')
+      return self.skipWaiting()
+    })
+  )
 })
 
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activated')
-  // Take control of all clients immediately
-  event.waitUntil(self.clients.claim())
+  console.log(`Service Worker ${SW_VERSION} activated`)
+
+  // Take control of all clients immediately and clear old caches
+  event.waitUntil(
+    Promise.all([
+      self.clients.claim(),
+      caches.keys().then((cacheNames) => {
+        return Promise.all(
+          cacheNames
+            .filter((cacheName) => cacheName !== CACHE_VERSION)
+            .map((cacheName) => {
+              console.log('Deleting old cache:', cacheName)
+              return caches.delete(cacheName)
+            })
+        )
+      }),
+    ]).then(() => {
+      console.log('Service Worker activation complete')
+    })
+  )
 })
 
-// Handle push notifications
+// Handle push notifications with enhanced error handling
 self.addEventListener('push', (event) => {
-  console.log('Push event received:', event)
+  console.log(`[SW ${SW_VERSION}] Push event received:`, event)
 
   let notificationData = {
     title: 'Soar Yoga Practice Reminder',
@@ -46,14 +75,16 @@ self.addEventListener('push', (event) => {
         ...notificationData,
         ...pushData,
       }
+      console.log(`[SW ${SW_VERSION}] Parsed push data:`, pushData)
     } catch (error) {
-      console.error('Error parsing push data:', error)
+      console.error(`[SW ${SW_VERSION}] Error parsing push data:`, error)
+      // Continue with default notification data
     }
   }
 
-  const showNotification = self.registration.showNotification(
-    notificationData.title,
-    {
+  // Show the notification with error handling
+  const showNotification = self.registration
+    .showNotification(notificationData.title, {
       body: notificationData.body,
       icon: notificationData.icon,
       badge: notificationData.badge,
@@ -63,15 +94,19 @@ self.addEventListener('push', (event) => {
       data: {
         url: notificationData.url,
       },
-    }
-  )
+    })
+    .catch((error) => {
+      console.error(`[SW ${SW_VERSION}] Error showing notification:`, error)
+    })
 
   event.waitUntil(showNotification)
 })
 
-// Handle notification clicks
+// Handle notification clicks with enhanced logging
 self.addEventListener('notificationclick', (event) => {
-  console.log('Notification clicked:', event)
+  console.log(`[SW ${SW_VERSION}] Notification clicked:`, event)
+  console.log(`[SW ${SW_VERSION}] Action:`, event.action)
+  console.log(`[SW ${SW_VERSION}] Notification data:`, event.notification.data)
 
   // Close the notification
   event.notification.close()

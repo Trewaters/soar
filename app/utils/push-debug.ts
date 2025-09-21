@@ -1,59 +1,86 @@
 /**
  * Debug utility for push notification issues
  * This file helps diagnose common push notification problems
+ * Enhanced version with comprehensive error analysis
  */
 
+// Import enhanced push notification utilities
+import { enablePushNotificationsEnhanced } from './subscribe-push-enhanced'
+
 export async function debugPushSupport() {
-  console.log('=== Push Notification Debug Report ===')
+  console.clear()
+  console.log('🔍 === SOAR PUSH NOTIFICATION DIAGNOSTIC ===')
+  console.log(`Timestamp: ${new Date().toISOString()}`)
+  console.log(`User Agent: ${navigator.userAgent}`)
+  console.log(`URL: ${window.location.href}`)
+  console.log('')
 
-  // Check browser support
-  const hasServiceWorker = 'serviceWorker' in navigator
-  const hasPushManager = 'PushManager' in window
-  const hasNotification = 'Notification' in window
+  // Check basic browser support
+  console.log('=== 1. Basic Browser Support ===')
+  const support = {
+    serviceWorker: 'serviceWorker' in navigator,
+    pushManager: 'PushManager' in window,
+    notifications: 'Notification' in window,
+    https:
+      window.location.protocol === 'https:' ||
+      window.location.hostname === 'localhost',
+  }
 
-  console.log('Browser Support:')
-  console.log('- Service Worker:', hasServiceWorker)
-  console.log('- Push Manager:', hasPushManager)
-  console.log('- Notification API:', hasNotification)
+  console.log('✅ Browser Support Check:', support)
 
-  if (!hasServiceWorker || !hasPushManager || !hasNotification) {
-    console.error('❌ Browser does not support push notifications')
+  if (!support.serviceWorker) {
+    console.error('❌ ServiceWorker not supported')
+    return false
+  }
+  if (!support.pushManager) {
+    console.error('❌ PushManager not supported')
+    return false
+  }
+  if (!support.notifications) {
+    console.error('❌ Notifications not supported')
+    return false
+  }
+  if (!support.https) {
+    console.error('❌ HTTPS required for push notifications (except localhost)')
     return false
   }
 
-  // Check notification permission
-  const permission = Notification.permission
-  console.log('- Notification Permission:', permission)
-
-  // Check if we're on HTTPS or localhost
-  const isSecure =
-    location.protocol === 'https:' || location.hostname === 'localhost'
-  console.log('- Secure Context (HTTPS/localhost):', isSecure)
-
-  if (!isSecure) {
-    console.error('❌ Push notifications require HTTPS or localhost')
-    return false
-  }
-
-  // Check VAPID key
+  // Check environment variables
+  console.log('\n=== 2. Configuration Check ===')
   const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
   console.log('- VAPID Key present:', !!vapidKey)
   console.log('- VAPID Key length:', vapidKey?.length)
+  console.log('- VAPID Key preview:', vapidKey?.substring(0, 20) + '...')
 
   if (!vapidKey) {
     console.error('❌ VAPID public key not configured')
     return false
   }
 
-  // Try to register service worker
+  // Check current permission status
+  console.log('\n=== 3. Permission Status ===')
+  const permission = Notification.permission
+  console.log('- Current permission:', permission)
+
+  if (permission === 'denied') {
+    console.error('❌ Notifications are permanently denied by user')
+    console.log(
+      '🛠️  User must manually enable notifications in browser settings'
+    )
+    return false
+  }
+
+  // Test service worker registration
+  console.log('\n=== 4. Service Worker Test ===')
   try {
-    console.log('\n=== Testing Service Worker Registration ===')
     const registration = await navigator.serviceWorker.register('/sw.js', {
       scope: '/',
+      updateViaCache: 'none',
     })
     console.log('✅ Service Worker registered successfully')
     console.log('- Scope:', registration.scope)
-    console.log('- State:', registration.active?.state)
+    console.log('- State:', registration.active?.state || 'installing')
+    console.log('- Update found:', !!registration.waiting)
 
     // Wait for service worker to be ready
     await navigator.serviceWorker.ready
@@ -64,13 +91,116 @@ export async function debugPushSupport() {
       console.error('❌ PushManager not available on registration')
       return false
     }
-
     console.log('✅ PushManager available on registration')
+
     return registration
   } catch (error) {
     console.error('❌ Service Worker registration failed:', error)
     return false
   }
+}
+
+export async function debugPushSubscriptionEnhanced(
+  registration: ServiceWorkerRegistration
+) {
+  console.log('\n=== 5. Enhanced Push Subscription Test ===')
+
+  try {
+    // Check for existing subscription
+    const existingSubscription =
+      await registration.pushManager.getSubscription()
+    if (existingSubscription) {
+      console.log('⚠️ Existing subscription found')
+      console.log('- Endpoint:', existingSubscription.endpoint)
+      console.log('- Unsubscribing to start fresh...')
+      await existingSubscription.unsubscribe()
+    }
+
+    // Use the enhanced push notification system
+    console.log('🚀 Testing enhanced push subscription...')
+    const result = await enablePushNotificationsEnhanced()
+
+    if (result.success) {
+      console.log('✅ Enhanced push subscription successful!')
+      console.log('- Endpoint:', result.subscription?.endpoint)
+      console.log('- Diagnostics:', result.diagnostics)
+      return result.subscription
+    } else {
+      console.error('❌ Enhanced push subscription failed:', result.error)
+      console.error('- Diagnostics:', result.diagnostics)
+
+      // Provide specific troubleshooting based on error
+      if (result.error?.includes('AbortError')) {
+        console.log('\n🔧 ABORTATION ERROR TROUBLESHOOTING:')
+        console.log('1. Clear browser cache and cookies for this site')
+        console.log('2. Try in an incognito/private window')
+        console.log('3. Disable browser extensions temporarily')
+        console.log('4. Check if notifications are blocked in browser settings')
+        console.log('5. Restart your browser completely')
+        console.log('6. Try a different browser (Chrome, Firefox, Safari)')
+      } else if (result.error?.includes('NotSupported')) {
+        console.log('\n🔧 NOT SUPPORTED ERROR TROUBLESHOOTING:')
+        console.log('1. Ensure you are using HTTPS (or localhost)')
+        console.log('2. Update your browser to the latest version')
+        console.log('3. Try Chrome, Firefox, Edge, or Safari')
+      } else if (result.error?.includes('NotAllowed')) {
+        console.log('\n🔧 PERMISSION DENIED TROUBLESHOOTING:')
+        console.log('1. Click the notification icon in the address bar')
+        console.log(
+          '2. Go to browser settings → Privacy & Security → Notifications'
+        )
+        console.log('3. Allow notifications for this site')
+      }
+
+      return null
+    }
+  } catch (error) {
+    console.error('❌ Enhanced push subscription test failed:', error)
+    return null
+  }
+}
+
+export async function runComprehensivePushDebug() {
+  console.clear()
+  console.log('🧘‍♀️ === SOAR YOGA PUSH NOTIFICATION COMPREHENSIVE DEBUG ===\n')
+
+  const registration = await debugPushSupport()
+  if (!registration) {
+    console.log('\n❌ Push notification setup failed - see errors above')
+    return { success: false, stage: 'basic_support' }
+  }
+
+  const subscription = await debugPushSubscriptionEnhanced(
+    registration as ServiceWorkerRegistration
+  )
+  if (!subscription) {
+    console.log('\n❌ Push subscription failed - see errors above')
+    return { success: false, stage: 'subscription' }
+  }
+
+  console.log('\n✅ === ALL PUSH NOTIFICATION TESTS PASSED! ===')
+  console.log('Push notifications are working correctly for this user/browser.')
+
+  return {
+    success: true,
+    registration,
+    subscription,
+    stage: 'complete',
+  }
+}
+
+// Quick test function for development
+export async function quickPushTest() {
+  console.log('🚀 Quick Push Test...')
+  const result = await enablePushNotificationsEnhanced()
+
+  if (result.success) {
+    console.log('✅ Quick test passed!', result.diagnostics)
+  } else {
+    console.error('❌ Quick test failed:', result.error, result.diagnostics)
+  }
+
+  return result
 }
 
 export async function debugPushSubscription(

@@ -18,6 +18,102 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
   return outputArray
 }
 
+// Enhanced error analysis for push subscription failures
+function analyzePushError(error: any): {
+  errorType: string
+  userMessage: string
+  technicalDetails: string
+  suggestedActions: string[]
+} {
+  console.error('Analyzing push error:', error)
+
+  if (error?.name === 'AbortError') {
+    return {
+      errorType: 'AbortError',
+      userMessage:
+        'Push service registration was aborted. This often happens due to browser cache issues or conflicts.',
+      technicalDetails: `${error.name}: ${error.message}`,
+      suggestedActions: [
+        'Clear browser cache and cookies for this site',
+        'Disable browser extensions temporarily',
+        'Try in an incognito/private window',
+        'Restart your browser',
+        'Check if notifications are blocked in browser settings',
+      ],
+    }
+  }
+
+  if (error?.name === 'NotSupportedError') {
+    return {
+      errorType: 'NotSupportedError',
+      userMessage:
+        'Push notifications are not supported in this browser or environment.',
+      technicalDetails: `${error.name}: ${error.message}`,
+      suggestedActions: [
+        'Try using Chrome, Firefox, Edge, or Safari',
+        'Make sure you are using HTTPS (not HTTP)',
+        'Check if you are in a supported browser environment',
+      ],
+    }
+  }
+
+  if (error?.name === 'NotAllowedError') {
+    return {
+      errorType: 'NotAllowedError',
+      userMessage: 'Push notifications are blocked or permission was denied.',
+      technicalDetails: `${error.name}: ${error.message}`,
+      suggestedActions: [
+        'Click the notification icon in your browser address bar',
+        'Go to browser settings and allow notifications for this site',
+        'Check if notifications are disabled globally in browser',
+      ],
+    }
+  }
+
+  if (error?.message?.includes('VAPID')) {
+    return {
+      errorType: 'VAPIDError',
+      userMessage: 'There is a configuration error with push notifications.',
+      technicalDetails: `VAPID Error: ${error.message}`,
+      suggestedActions: [
+        'Contact support - this is a server configuration issue',
+        'Try again later',
+      ],
+    }
+  }
+
+  // Network or service errors
+  if (
+    error?.message?.includes('network') ||
+    error?.message?.includes('fetch') ||
+    error?.message?.includes('service')
+  ) {
+    return {
+      errorType: 'NetworkError',
+      userMessage:
+        'There was a network error while setting up push notifications.',
+      technicalDetails: `Network Error: ${error.message}`,
+      suggestedActions: [
+        'Check your internet connection',
+        'Try again in a few moments',
+        'Disable VPN if you are using one',
+      ],
+    }
+  }
+
+  // Default case
+  return {
+    errorType: 'UnknownError',
+    userMessage: 'An unexpected error occurred while setting up notifications.',
+    technicalDetails: `Unknown Error: ${error?.message || String(error)}`,
+    suggestedActions: [
+      'Try refreshing the page',
+      'Try again in a few minutes',
+      'Contact support if the problem persists',
+    ],
+  }
+}
+
 // Enhanced service worker registration with better error handling
 async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistration> {
   let attempt = 0
@@ -73,15 +169,16 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
       )
 
       if (attempt === maxAttempts) {
-        const errorMessage =
-          error instanceof Error ? error.message : String(error)
+        const errorAnalysis = analyzePushError(error)
         throw new Error(
-          `Failed to register service worker after ${maxAttempts} attempts: ${errorMessage}`
+          `Failed to register service worker after ${maxAttempts} attempts. ${errorAnalysis.userMessage} Technical details: ${errorAnalysis.technicalDetails}`
         )
       }
 
-      // Wait before retrying
-      await new Promise((resolve) => setTimeout(resolve, 1000 * attempt))
+      // Wait before retrying - use exponential backoff
+      await new Promise((resolve) =>
+        setTimeout(resolve, 1000 * Math.pow(2, attempt - 1))
+      )
     }
   }
 
@@ -127,22 +224,26 @@ async function subscribeToPushWithRetry(
     } catch (error) {
       console.error(`Push subscription attempt ${attempt} failed:`, error)
 
+      // Use enhanced error analysis
+      const errorAnalysis = analyzePushError(error)
+      console.error('Error analysis:', errorAnalysis)
+
       // Specific handling for AbortError
-      if (error instanceof Error && error.name === 'AbortError') {
-        console.error('AbortError detected - this typically means:')
-        console.error('1. Browser push service is temporarily unavailable')
-        console.error('2. VAPID keys might be invalid')
-        console.error('3. Browser permissions are blocked')
-        console.error('4. Network connectivity issues')
+      if (errorAnalysis.errorType === 'AbortError') {
+        console.error('AbortError detected - attempting recovery strategies:')
 
         // For AbortError, try clearing any cached push state
         if (attempt === 1) {
           try {
-            // Clear any cached push manager state
+            console.log('Clearing cached push manager state...')
             const existingSub = await registration.pushManager.getSubscription()
             if (existingSub) {
               await existingSub.unsubscribe()
+              console.log('Unsubscribed from cached subscription')
             }
+
+            // Wait longer before retry for AbortError
+            await new Promise((resolve) => setTimeout(resolve, 1000))
           } catch (clearError) {
             console.warn('Failed to clear push state:', clearError)
           }
@@ -150,14 +251,13 @@ async function subscribeToPushWithRetry(
       }
 
       if (attempt === maxAttempts) {
-        const errorMessage =
-          error instanceof Error ? error.message : String(error)
+        const errorAnalysis = analyzePushError(error)
         throw new Error(
-          `Failed to subscribe to push notifications after ${maxAttempts} attempts: ${errorMessage}`
+          `Failed to subscribe to push notifications after ${maxAttempts} attempts. ${errorAnalysis.userMessage} Technical details: ${errorAnalysis.technicalDetails}`
         )
       }
 
-      // Exponential backoff
+      // Exponential backoff - wait longer between retries
       await new Promise((resolve) =>
         setTimeout(resolve, 1000 * Math.pow(2, attempt - 1))
       )
@@ -279,17 +379,20 @@ export async function enablePushNotificationsEnhanced(): Promise<{
   } catch (error) {
     console.error('Error enabling push notifications:', error)
 
-    const errorMessage =
-      error instanceof Error ? error.message : 'Unknown error occurred'
+    // Use enhanced error analysis for better user feedback
+    const errorAnalysis = analyzePushError(error)
+    console.error('Enhanced error analysis:', errorAnalysis)
+
     diagnostics.error = {
       name: error instanceof Error ? error.name : 'Unknown',
-      message: errorMessage,
+      message: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
+      analysis: errorAnalysis,
     }
 
     return {
       success: false,
-      error: errorMessage,
+      error: errorAnalysis.userMessage,
       diagnostics,
     }
   }

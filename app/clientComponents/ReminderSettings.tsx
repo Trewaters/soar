@@ -5,6 +5,7 @@ import {
   Box,
   Card,
   CardContent,
+  CardHeader,
   Typography,
   Button,
   FormControl,
@@ -30,13 +31,13 @@ import {
 } from '@mui/icons-material'
 import { useSession } from 'next-auth/react'
 import {
-  enablePushNotifications,
   disablePushNotifications,
-  getExistingSubscription,
   isPushSupported,
   getNotificationPermission,
+  getExistingSubscription,
   sendTestNotification,
-} from '@app/utils/subscribe-push'
+} from '../utils/subscribe-push'
+import { enablePushNotificationsEnhanced } from '../utils/subscribe-push-enhanced'
 
 interface ReminderData {
   timeOfDay: string
@@ -183,20 +184,54 @@ export default function ReminderSettings() {
 
     setLoading(true)
     try {
-      const result = await enablePushNotifications()
+      // Use enhanced push notification function with better error handling
+      const result = await enablePushNotificationsEnhanced()
 
       if (result.success) {
         setPushSubscribed(true)
         setPermissionStatus('granted')
         showNotification('success', 'Push notifications enabled successfully!')
-      } else {
-        showNotification(
-          'error',
-          result.error || 'Failed to enable push notifications'
+
+        // Log successful diagnostics for debugging
+        console.log(
+          'Push notifications enabled with diagnostics:',
+          result.diagnostics
         )
+      } else {
+        // Enhanced error reporting with diagnostics
+        console.error(
+          'Push notification failed:',
+          result.error,
+          result.diagnostics
+        )
+
+        let errorMessage = result.error || 'Failed to enable push notifications'
+
+        // Provide more specific error messages based on common issues
+        if (
+          result.error?.includes('AbortError') ||
+          result.error?.includes('Registration failed')
+        ) {
+          errorMessage =
+            'Push service registration failed. Please try clearing your browser cache and cookies for this site, then try again.'
+        } else if (result.error?.includes('NotSupportedError')) {
+          errorMessage =
+            'Push notifications are not supported in this browser. Please try using Chrome, Firefox, or Safari.'
+        } else if (result.error?.includes('NotAllowedError')) {
+          errorMessage =
+            'Push notifications are blocked. Please enable notifications in your browser settings.'
+        } else if (result.error?.includes('VAPID')) {
+          errorMessage = 'Configuration error. Please contact support.'
+        }
+
+        showNotification('error', errorMessage)
       }
     } catch (error) {
-      showNotification('error', 'Error enabling push notifications')
+      console.error('Unexpected error enabling push notifications:', error)
+      showNotification(
+        'error',
+        'Unexpected error enabling push notifications. Please try again.'
+      )
     } finally {
       setLoading(false)
     }
@@ -541,6 +576,91 @@ export default function ReminderSettings() {
           </Typography>
         </CardContent>
       </Card>
+
+      {/* Debug Section - Only show in development */}
+      {process.env.NODE_ENV === 'development' && (
+        <Card
+          elevation={1}
+          sx={{
+            bgcolor: 'grey.50',
+            borderLeft: 4,
+            borderLeftColor: 'warning.main',
+          }}
+        >
+          <CardHeader
+            title="🔧 Push Notification Debug Tools"
+            titleTypographyProps={{ variant: 'h6', color: 'warning.main' }}
+            subheader="Development tools to diagnose push notification issues"
+          />
+          <CardContent>
+            <Stack spacing={2}>
+              <Typography variant="body2" color="text.secondary">
+                Use these tools to diagnose and fix push notification problems:
+              </Typography>
+
+              <Stack direction="row" spacing={2} flexWrap="wrap">
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => {
+                    import('../utils/push-debug').then(
+                      ({ runComprehensivePushDebug }) => {
+                        runComprehensivePushDebug()
+                      }
+                    )
+                  }}
+                  startIcon={<CheckIcon />}
+                >
+                  Run Full Diagnostic
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => {
+                    import('../utils/push-debug').then(({ quickPushTest }) => {
+                      quickPushTest()
+                    })
+                  }}
+                  startIcon={<CheckIcon />}
+                >
+                  Quick Test
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => {
+                    console.clear()
+                    console.log('🧘‍♀️ ENVIRONMENT INFO:')
+                    console.log(
+                      '- VAPID Key:',
+                      !!process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+                    )
+                    console.log('- Permission:', Notification.permission)
+                    console.log(
+                      '- Service Worker Support:',
+                      'serviceWorker' in navigator
+                    )
+                    console.log(
+                      '- Push Manager Support:',
+                      'PushManager' in window
+                    )
+                    console.log('- User Agent:', navigator.userAgent)
+                  }}
+                >
+                  Environment Info
+                </Button>
+              </Stack>
+
+              <Typography variant="caption" color="text.secondary">
+                💡 Open browser Developer Tools (F12) → Console to see
+                diagnostic output
+              </Typography>
+            </Stack>
+          </CardContent>
+        </Card>
+      )}
     </Stack>
   )
 }
