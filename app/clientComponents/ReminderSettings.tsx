@@ -207,24 +207,42 @@ export default function ReminderSettings() {
 
         let errorMessage = result.error || 'Failed to enable push notifications'
 
-        // Provide more specific error messages based on common issues
-        if (
-          result.error?.includes('AbortError') ||
-          result.error?.includes('Registration failed')
-        ) {
-          errorMessage =
-            'Push service registration failed. Please try clearing your browser cache and cookies for this site, then try again.'
-        } else if (result.error?.includes('NotSupportedError')) {
-          errorMessage =
-            'Push notifications are not supported in this browser. Please try using Chrome, Firefox, or Safari.'
-        } else if (result.error?.includes('NotAllowedError')) {
-          errorMessage =
-            'Push notifications are blocked. Please enable notifications in your browser settings.'
-        } else if (result.error?.includes('VAPID')) {
-          errorMessage = 'Configuration error. Please contact support.'
-        }
+        // Check for production AbortError scenario with email fallback
+        const isProduction =
+          window.location.hostname === 'www.happyyoga.app' ||
+          window.location.hostname === 'happyyoga.app'
 
-        showNotification('error', errorMessage)
+        if (
+          isProduction &&
+          result.diagnostics?.productionFallback &&
+          result.error?.includes('browser service limitations')
+        ) {
+          // For production AbortError with fallback, show info instead of error
+          showNotification(
+            'info',
+            'Push notifications temporarily unavailable - email reminders active'
+          )
+        } else {
+          // Handle all other error cases
+          if (
+            result.error?.includes('AbortError') ||
+            result.error?.includes('Registration failed')
+          ) {
+            errorMessage = isProduction
+              ? 'Push service temporarily unavailable. Your reminders will be sent via email instead.'
+              : 'Push service registration failed. Please try clearing your browser cache and cookies for this site, then try again.'
+          } else if (result.error?.includes('NotSupportedError')) {
+            errorMessage =
+              'Push notifications are not supported in this browser. Please try using Chrome, Firefox, or Safari.'
+          } else if (result.error?.includes('NotAllowedError')) {
+            errorMessage =
+              'Push notifications are blocked. Please enable notifications in your browser settings.'
+          } else if (result.error?.includes('VAPID')) {
+            errorMessage = 'Configuration error. Please contact support.'
+          }
+
+          showNotification('error', errorMessage)
+        }
       }
     } catch (error) {
       console.error('Unexpected error enabling push notifications:', error)

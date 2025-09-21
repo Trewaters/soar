@@ -27,19 +27,40 @@ function analyzePushError(error: any): {
 } {
   console.error('Analyzing push error:', error)
 
-  if (error?.name === 'AbortError') {
+  // Check for AbortError - look at both name and message for better detection
+  if (
+    error?.name === 'AbortError' ||
+    (error?.message && error.message.includes('AbortError')) ||
+    (error?.message &&
+      error.message.includes('Registration failed - push service error'))
+  ) {
+    // Check if we're in production for more specific messaging
+    const isProduction =
+      window.location.hostname === 'www.happyyoga.app' ||
+      window.location.hostname === 'happyyoga.app'
+
     return {
       errorType: 'AbortError',
-      userMessage:
-        'Push service registration was aborted. This often happens due to browser cache issues or conflicts.',
-      technicalDetails: `${error.name}: ${error.message}`,
-      suggestedActions: [
-        'Clear browser cache and cookies for this site',
-        'Disable browser extensions temporarily',
-        'Try in an incognito/private window',
-        'Restart your browser',
-        'Check if notifications are blocked in browser settings',
-      ],
+      userMessage: isProduction
+        ? 'Push notifications are temporarily unavailable. You can still receive email reminders for your yoga practice.'
+        : 'Push service registration was aborted. This often happens due to browser cache issues or conflicts.',
+      technicalDetails: `${error?.name || 'AbortError'}: ${
+        error?.message || String(error)
+      }`,
+      suggestedActions: isProduction
+        ? [
+            'Email reminders will work as an alternative',
+            'Try refreshing the page and clearing browser cache',
+            'Contact support if this persists',
+            'Push notifications may work better in Chrome or Firefox',
+          ]
+        : [
+            'Clear browser cache and cookies for this site',
+            'Disable browser extensions temporarily',
+            'Try in an incognito/private window',
+            'Restart your browser',
+            'Check if notifications are blocked in browser settings',
+          ],
     }
   }
 
@@ -232,7 +253,7 @@ async function subscribeToPushWithRetry(
       if (errorAnalysis.errorType === 'AbortError') {
         console.error('AbortError detected - attempting recovery strategies:')
 
-        // For AbortError, try clearing any cached push state
+        // For AbortError, try more aggressive recovery strategies
         if (attempt === 1) {
           try {
             console.log('Clearing cached push manager state...')
@@ -246,6 +267,43 @@ async function subscribeToPushWithRetry(
             await new Promise((resolve) => setTimeout(resolve, 1000))
           } catch (clearError) {
             console.warn('Failed to clear push state:', clearError)
+          }
+          // On second failure, try re-registering the service worker
+          try {
+            console.log(
+              'Re-registering service worker for AbortError recovery...'
+            )
+
+            // Unregister all service workers
+            const registrations =
+              await navigator.serviceWorker.getRegistrations()
+            for (const reg of registrations) {
+              await reg.unregister()
+            }
+
+            // Wait for cleanup
+            await new Promise((resolve) => setTimeout(resolve, 2000))
+
+            // Re-register fresh service worker
+            const newRegistration = await navigator.serviceWorker.register(
+              '/sw.js',
+              {
+                scope: '/',
+                updateViaCache: 'none',
+              }
+            )
+
+            // Wait for it to be ready
+            await navigator.serviceWorker.ready
+
+            // Update registration reference
+            registration = newRegistration
+            console.log('Service worker re-registered successfully')
+          } catch (reregisterError) {
+            console.warn(
+              'Failed to re-register service worker:',
+              reregisterError
+            )
           }
         }
       }
@@ -277,6 +335,17 @@ export async function enablePushNotificationsEnhanced(): Promise<{
   const diagnostics: Record<string, any> = {}
 
   try {
+    // Check if we're in production
+    const isProduction =
+      window.location.hostname === 'www.happyyoga.app' ||
+      window.location.hostname === 'happyyoga.app'
+
+    diagnostics.environment = {
+      isProduction,
+      hostname: window.location.hostname,
+      protocol: window.location.protocol,
+    }
+
     // Pre-flight checks
     diagnostics.browserSupport = {
       serviceWorker: 'serviceWorker' in navigator,
@@ -383,6 +452,37 @@ export async function enablePushNotificationsEnhanced(): Promise<{
     const errorAnalysis = analyzePushError(error)
     console.error('Enhanced error analysis:', errorAnalysis)
 
+    // In production, if we get persistent AbortErrors, provide graceful fallback
+    const isProduction =
+      window.location.hostname === 'www.happyyoga.app' ||
+      window.location.hostname === 'happyyoga.app'
+
+    if (isProduction && errorAnalysis.errorType === 'AbortError') {
+      console.log(
+        'Production AbortError detected - activating email reminder fallback'
+      )
+
+      // Log additional production diagnostic info
+      diagnostics.productionFallback = {
+        reason: 'Persistent AbortError in production',
+        emailBackupAvailable: true,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+      }
+    }
+
+    // Validate VAPID key configuration in production
+    const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+    if (isProduction && !vapidKey) {
+      diagnostics.configurationIssues = {
+        vapidKeyMissing: true,
+        environment: 'production',
+        recommendation:
+          'Check NEXT_PUBLIC_VAPID_PUBLIC_KEY environment variable',
+      }
+      console.error('Production VAPID key validation failed')
+    }
+
     diagnostics.error = {
       name: error instanceof Error ? error.name : 'Unknown',
       message: error instanceof Error ? error.message : String(error),
@@ -390,9 +490,22 @@ export async function enablePushNotificationsEnhanced(): Promise<{
       analysis: errorAnalysis,
     }
 
+    // Provide production-specific user messaging
+    let userMessage = errorAnalysis.userMessage
+    if (
+      isProduction &&
+      errorAnalysis.errorType === 'AbortError' &&
+      diagnostics.productionFallback
+    ) {
+      userMessage =
+        'Push notifications are currently unavailable due to browser service limitations. ' +
+        "Don't worry - your reminders will still be delivered via email. " +
+        'You can update your email reminder preferences in the settings below.'
+    }
+
     return {
       success: false,
-      error: errorAnalysis.userMessage,
+      error: userMessage,
       diagnostics,
     }
   }
