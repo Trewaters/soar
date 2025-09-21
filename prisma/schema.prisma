@@ -78,6 +78,7 @@ model Reminder {
   enabled   Boolean  @default(true)
   message   String   @default("🧘 Practice time")
   lastSent  DateTime? // to avoid double-sends within a window
+  emailNotificationsEnabled Boolean @default(true) // Allow users to disable email fallback
 
   @@index([userId])
 }

@@ -69,15 +69,16 @@ model UserData {
 }
 
 model Reminder {
-  id        String    @id @default(cuid()) @map("_id")
-  userId    String    @db.ObjectId
-  user      UserData  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                        String    @id @default(cuid()) @map("_id")
+  userId                    String    @db.ObjectId
+  user                      UserData  @relation(fields: [userId], references: [id], onDelete: Cascade)
   // store preferred local times; one or many
-  timeOfDay String // "07:30" 24h format
-  days      String[] // ["Mon","Tue","Wed","Thu","Fri"] or ["Sun",...]
-  enabled   Boolean   @default(true)
-  message   String    @default("🧘 Practice time")
-  lastSent  DateTime? // to avoid double-sends within a window
+  timeOfDay                 String // "07:30" 24h format
+  days                      String[] // ["Mon","Tue","Wed","Thu","Fri"] or ["Sun",...]
+  enabled                   Boolean   @default(true)
+  message                   String    @default("🧘 Practice time")
+  lastSent                  DateTime? // to avoid double-sends within a window
+  emailNotificationsEnabled Boolean   @default(true) // Allow users to disable email fallback
 
   @@index([userId])
 }

@@ -3476,6 +3476,7 @@ export namespace Prisma {
     enabled: boolean | null
     message: string | null
     lastSent: Date | null
+    emailNotificationsEnabled: boolean | null
   }
 
   export type ReminderMaxAggregateOutputType = {
@@ -3485,6 +3486,7 @@ export namespace Prisma {
     enabled: boolean | null
     message: string | null
     lastSent: Date | null
+    emailNotificationsEnabled: boolean | null
   }
 
   export type ReminderCountAggregateOutputType = {
@@ -3495,6 +3497,7 @@ export namespace Prisma {
     enabled: number
     message: number
     lastSent: number
+    emailNotificationsEnabled: number
     _all: number
   }
 
@@ -3506,6 +3509,7 @@ export namespace Prisma {
     enabled?: true
     message?: true
     lastSent?: true
+    emailNotificationsEnabled?: true
   }
 
   export type ReminderMaxAggregateInputType = {
@@ -3515,6 +3519,7 @@ export namespace Prisma {
     enabled?: true
     message?: true
     lastSent?: true
+    emailNotificationsEnabled?: true
   }
 
   export type ReminderCountAggregateInputType = {
@@ -3525,6 +3530,7 @@ export namespace Prisma {
     enabled?: true
     message?: true
     lastSent?: true
+    emailNotificationsEnabled?: true
     _all?: true
   }
 
@@ -3608,6 +3614,7 @@ export namespace Prisma {
     enabled: boolean
     message: string
     lastSent: Date | null
+    emailNotificationsEnabled: boolean
     _count: ReminderCountAggregateOutputType | null
     _min: ReminderMinAggregateOutputType | null
     _max: ReminderMaxAggregateOutputType | null
@@ -3635,6 +3642,7 @@ export namespace Prisma {
     enabled?: boolean
     message?: boolean
     lastSent?: boolean
+    emailNotificationsEnabled?: boolean
     user?: boolean | UserDataDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["reminder"]>
 
@@ -3647,6 +3655,7 @@ export namespace Prisma {
     enabled?: boolean
     message?: boolean
     lastSent?: boolean
+    emailNotificationsEnabled?: boolean
   }
 
   export type ReminderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3666,6 +3675,7 @@ export namespace Prisma {
       enabled: boolean
       message: string
       lastSent: Date | null
+      emailNotificationsEnabled: boolean
     }, ExtArgs["result"]["reminder"]>
     composites: {}
   }
@@ -4066,6 +4076,7 @@ export namespace Prisma {
     readonly enabled: FieldRef<"Reminder", 'Boolean'>
     readonly message: FieldRef<"Reminder", 'String'>
     readonly lastSent: FieldRef<"Reminder", 'DateTime'>
+    readonly emailNotificationsEnabled: FieldRef<"Reminder", 'Boolean'>
   }
     
 
@@ -15792,7 +15803,8 @@ export namespace Prisma {
     days: 'days',
     enabled: 'enabled',
     message: 'message',
-    lastSent: 'lastSent'
+    lastSent: 'lastSent',
+    emailNotificationsEnabled: 'emailNotificationsEnabled'
   };
 
   export type ReminderScalarFieldEnum = (typeof ReminderScalarFieldEnum)[keyof typeof ReminderScalarFieldEnum]
@@ -16335,6 +16347,7 @@ export namespace Prisma {
     enabled?: BoolFilter<"Reminder"> | boolean
     message?: StringFilter<"Reminder"> | string
     lastSent?: DateTimeNullableFilter<"Reminder"> | Date | string | null
+    emailNotificationsEnabled?: BoolFilter<"Reminder"> | boolean
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
   }
 
@@ -16346,6 +16359,7 @@ export namespace Prisma {
     enabled?: SortOrder
     message?: SortOrder
     lastSent?: SortOrder
+    emailNotificationsEnabled?: SortOrder
     user?: UserDataOrderByWithRelationInput
   }
 
@@ -16360,6 +16374,7 @@ export namespace Prisma {
     enabled?: BoolFilter<"Reminder"> | boolean
     message?: StringFilter<"Reminder"> | string
     lastSent?: DateTimeNullableFilter<"Reminder"> | Date | string | null
+    emailNotificationsEnabled?: BoolFilter<"Reminder"> | boolean
     user?: XOR<UserDataRelationFilter, UserDataWhereInput>
   }, "id">
 
@@ -16371,6 +16386,7 @@ export namespace Prisma {
     enabled?: SortOrder
     message?: SortOrder
     lastSent?: SortOrder
+    emailNotificationsEnabled?: SortOrder
     _count?: ReminderCountOrderByAggregateInput
     _max?: ReminderMaxOrderByAggregateInput
     _min?: ReminderMinOrderByAggregateInput
@@ -16387,6 +16403,7 @@ export namespace Prisma {
     enabled?: BoolWithAggregatesFilter<"Reminder"> | boolean
     message?: StringWithAggregatesFilter<"Reminder"> | string
     lastSent?: DateTimeNullableWithAggregatesFilter<"Reminder"> | Date | string | null
+    emailNotificationsEnabled?: BoolWithAggregatesFilter<"Reminder"> | boolean
   }
 
   export type PushSubscriptionWhereInput = {
@@ -17709,6 +17726,7 @@ export namespace Prisma {
     enabled?: boolean
     message?: string
     lastSent?: Date | string | null
+    emailNotificationsEnabled?: boolean
     user: UserDataCreateNestedOneWithoutRemindersInput
   }
 
@@ -17720,6 +17738,7 @@ export namespace Prisma {
     enabled?: boolean
     message?: string
     lastSent?: Date | string | null
+    emailNotificationsEnabled?: boolean
   }
 
   export type ReminderUpdateInput = {
@@ -17728,6 +17747,7 @@ export namespace Prisma {
     enabled?: BoolFieldUpdateOperationsInput | boolean
     message?: StringFieldUpdateOperationsInput | string
     lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailNotificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
     user?: UserDataUpdateOneRequiredWithoutRemindersNestedInput
   }
 
@@ -17738,6 +17758,7 @@ export namespace Prisma {
     enabled?: BoolFieldUpdateOperationsInput | boolean
     message?: StringFieldUpdateOperationsInput | string
     lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailNotificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ReminderCreateManyInput = {
@@ -17748,6 +17769,7 @@ export namespace Prisma {
     enabled?: boolean
     message?: string
     lastSent?: Date | string | null
+    emailNotificationsEnabled?: boolean
   }
 
   export type ReminderUpdateManyMutationInput = {
@@ -17756,6 +17778,7 @@ export namespace Prisma {
     enabled?: BoolFieldUpdateOperationsInput | boolean
     message?: StringFieldUpdateOperationsInput | string
     lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailNotificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ReminderUncheckedUpdateManyInput = {
@@ -17765,6 +17788,7 @@ export namespace Prisma {
     enabled?: BoolFieldUpdateOperationsInput | boolean
     message?: StringFieldUpdateOperationsInput | string
     lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailNotificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PushSubscriptionCreateInput = {
@@ -19327,6 +19351,7 @@ export namespace Prisma {
     enabled?: SortOrder
     message?: SortOrder
     lastSent?: SortOrder
+    emailNotificationsEnabled?: SortOrder
   }
 
   export type ReminderMaxOrderByAggregateInput = {
@@ -19336,6 +19361,7 @@ export namespace Prisma {
     enabled?: SortOrder
     message?: SortOrder
     lastSent?: SortOrder
+    emailNotificationsEnabled?: SortOrder
   }
 
   export type ReminderMinOrderByAggregateInput = {
@@ -19345,6 +19371,7 @@ export namespace Prisma {
     enabled?: SortOrder
     message?: SortOrder
     lastSent?: SortOrder
+    emailNotificationsEnabled?: SortOrder
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -21362,6 +21389,7 @@ export namespace Prisma {
     enabled?: boolean
     message?: string
     lastSent?: Date | string | null
+    emailNotificationsEnabled?: boolean
   }
 
   export type ReminderUncheckedCreateWithoutUserInput = {
@@ -21371,6 +21399,7 @@ export namespace Prisma {
     enabled?: boolean
     message?: string
     lastSent?: Date | string | null
+    emailNotificationsEnabled?: boolean
   }
 
   export type ReminderCreateOrConnectWithoutUserInput = {
@@ -21673,6 +21702,7 @@ export namespace Prisma {
     enabled?: BoolFilter<"Reminder"> | boolean
     message?: StringFilter<"Reminder"> | string
     lastSent?: DateTimeNullableFilter<"Reminder"> | Date | string | null
+    emailNotificationsEnabled?: BoolFilter<"Reminder"> | boolean
   }
 
   export type PushSubscriptionUpsertWithWhereUniqueWithoutUserInput = {
@@ -23723,6 +23753,7 @@ export namespace Prisma {
     enabled?: boolean
     message?: string
     lastSent?: Date | string | null
+    emailNotificationsEnabled?: boolean
   }
 
   export type PushSubscriptionCreateManyUserInput = {
@@ -24015,6 +24046,7 @@ export namespace Prisma {
     enabled?: BoolFieldUpdateOperationsInput | boolean
     message?: StringFieldUpdateOperationsInput | string
     lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailNotificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ReminderUncheckedUpdateWithoutUserInput = {
@@ -24023,6 +24055,7 @@ export namespace Prisma {
     enabled?: BoolFieldUpdateOperationsInput | boolean
     message?: StringFieldUpdateOperationsInput | string
     lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailNotificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type ReminderUncheckedUpdateManyWithoutUserInput = {
@@ -24031,6 +24064,7 @@ export namespace Prisma {
     enabled?: BoolFieldUpdateOperationsInput | boolean
     message?: StringFieldUpdateOperationsInput | string
     lastSent?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    emailNotificationsEnabled?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PushSubscriptionUpdateWithoutUserInput = {

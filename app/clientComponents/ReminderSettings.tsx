@@ -27,7 +27,8 @@ import {
   NotificationsOff as NotificationsOffIcon,
   Schedule as ScheduleIcon,
   Check as CheckIcon,
-  Info as InfoIcon,
+  Email as EmailIcon,
+  EmailOutlined as EmailOffIcon,
 } from '@mui/icons-material'
 import { useSession } from 'next-auth/react'
 import {
@@ -45,6 +46,7 @@ interface ReminderData {
   days: string[]
   message: string
   enabled: boolean
+  emailNotificationsEnabled?: boolean // Add email notifications preference
 }
 
 const TIMEZONES = [
@@ -82,6 +84,7 @@ export default function ReminderSettings() {
     days: ['Mon', 'Wed', 'Fri'],
     message: 'Time for your yoga practice! 🧘‍♀️',
     enabled: false,
+    emailNotificationsEnabled: true, // Default to enabled
   })
 
   const [pushSubscribed, setPushSubscribed] = useState(false)
@@ -379,68 +382,213 @@ export default function ReminderSettings() {
             </Alert>
           )}
 
-          {/* Push Notification Setup */}
+          {/* Notification Methods Status */}
           <Box sx={{ mb: 3 }}>
             <Typography variant="subtitle2" gutterBottom>
-              Push Notifications
+              Notification Methods
             </Typography>
-            <Stack direction="row" spacing={2} alignItems="center">
-              {pushSubscribed ? (
-                <>
-                  <Chip
-                    icon={<CheckIcon />}
-                    label="Push notifications enabled"
-                    color="success"
-                    variant="outlined"
-                  />
-                  <Button
-                    variant="outlined"
-                    onClick={handleDisablePushNotifications}
-                    disabled={loading}
-                    startIcon={<NotificationsOffIcon />}
-                    size="small"
-                  >
-                    Disable
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    onClick={handleTestNotification}
-                    size="small"
-                  >
-                    Test
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Chip
-                    icon={<InfoIcon />}
-                    label="Push notifications disabled"
-                    color="default"
-                    variant="outlined"
-                  />
-                  <Button
-                    variant="contained"
-                    onClick={handleEnablePushNotifications}
-                    disabled={loading}
-                    startIcon={
-                      loading ? (
-                        <CircularProgress size={16} />
-                      ) : (
-                        <NotificationsIcon />
-                      )
-                    }
-                    size="small"
-                  >
-                    Enable Push Notifications
-                  </Button>
-                </>
-              )}
-            </Stack>
 
+            {/* Push Notifications Status */}
+            <Box
+              sx={{
+                mb: 2,
+                p: 2,
+                bgcolor: 'background.paper',
+                borderRadius: 1,
+                border: '1px solid',
+                borderColor: 'divider',
+              }}
+            >
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={2}
+                alignItems={{ xs: 'stretch', sm: 'center' }}
+                justifyContent="space-between"
+              >
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    alignItems="center"
+                    sx={{ flexWrap: 'wrap' }}
+                  >
+                    {pushSubscribed ? (
+                      <Chip
+                        icon={<NotificationsIcon />}
+                        label="Push notifications enabled"
+                        color="success"
+                        variant="filled"
+                      />
+                    ) : (
+                      <Chip
+                        icon={<NotificationsOffIcon />}
+                        label="Push notifications disabled"
+                        color="default"
+                        variant="outlined"
+                      />
+                    )}
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ minWidth: 0 }}
+                    >
+                      Instant browser notifications
+                    </Typography>
+                  </Stack>
+                </Box>
+
+                <Box sx={{ flexShrink: 0 }}>
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    sx={{
+                      justifyContent: { xs: 'flex-end', sm: 'flex-start' },
+                    }}
+                  >
+                    {pushSubscribed ? (
+                      <>
+                        <Button
+                          variant="outlined"
+                          onClick={handleTestNotification}
+                          size="small"
+                          disabled={loading}
+                        >
+                          Test
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          onClick={handleDisablePushNotifications}
+                          disabled={loading}
+                          startIcon={<NotificationsOffIcon />}
+                          size="small"
+                        >
+                          Disable
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        onClick={handleEnablePushNotifications}
+                        disabled={loading}
+                        startIcon={
+                          loading ? (
+                            <CircularProgress size={16} />
+                          ) : (
+                            <NotificationsIcon />
+                          )
+                        }
+                        size="small"
+                        sx={{ minWidth: 'fit-content' }}
+                      >
+                        Enable
+                      </Button>
+                    )}
+                  </Stack>
+                </Box>
+              </Stack>
+            </Box>
+
+            {/* Email Notifications Status */}
+            <Box
+              sx={{
+                mb: 2,
+                p: 2,
+                bgcolor: 'background.paper',
+                borderRadius: 1,
+                border: '1px solid',
+                borderColor: 'divider',
+              }}
+            >
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={2}
+                alignItems={{ xs: 'stretch', sm: 'center' }}
+                justifyContent="space-between"
+              >
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    alignItems="center"
+                    sx={{ flexWrap: 'wrap' }}
+                  >
+                    {session?.user?.email &&
+                    reminderData.emailNotificationsEnabled ? (
+                      <Chip
+                        icon={<EmailIcon />}
+                        label="Email notifications enabled"
+                        color="info"
+                        variant="filled"
+                      />
+                    ) : (
+                      <Chip
+                        icon={<EmailOffIcon />}
+                        label={
+                          session?.user?.email
+                            ? 'Email notifications disabled'
+                            : 'No email available'
+                        }
+                        color="default"
+                        variant="outlined"
+                      />
+                    )}
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ minWidth: 0 }}
+                    >
+                      {session?.user?.email
+                        ? `Sent to ${session.user.email}`
+                        : 'Backup method when push fails'}
+                    </Typography>
+                  </Stack>
+                </Box>
+
+                <Box sx={{ flexShrink: 0 }}>
+                  {session?.user?.email && (
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={
+                            reminderData.emailNotificationsEnabled ?? true
+                          }
+                          onChange={(e) =>
+                            handleInputChange(
+                              'emailNotificationsEnabled',
+                              e.target.checked
+                            )
+                          }
+                          size="small"
+                        />
+                      }
+                      label=""
+                      sx={{ m: 0 }}
+                    />
+                  )}
+                </Box>
+              </Stack>
+            </Box>
+
+            {/* Notification Status Alerts */}
             {permissionStatus === 'denied' && (
               <Alert severity="error" sx={{ mt: 1 }}>
                 Browser notifications are blocked. Please enable them in your
                 browser settings.
+              </Alert>
+            )}
+
+            {!session?.user?.email && (
+              <Alert severity="warning" sx={{ mt: 1 }}>
+                No email address found in your account. Email reminders will not
+                be available as backup.
+              </Alert>
+            )}
+
+            {!pushSubscribed && !session?.user?.email && (
+              <Alert severity="error" sx={{ mt: 1 }}>
+                No notification methods available. Please add an email to your
+                account or enable push notifications.
               </Alert>
             )}
           </Box>

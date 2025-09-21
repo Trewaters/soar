@@ -69,7 +69,7 @@ export async function GET() {
       }
     }
 
-    if (!pushed && r.user.email) {
+    if (!pushed && r.user.email && r.emailNotificationsEnabled) {
       await sendReminderEmail(
         r.user.email,
         'Practice now 🧘',

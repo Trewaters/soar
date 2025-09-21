@@ -148,7 +148,8 @@ exports.Prisma.ReminderScalarFieldEnum = {
   days: 'days',
   enabled: 'enabled',
   message: 'message',
-  lastSent: 'lastSent'
+  lastSent: 'lastSent',
+  emailNotificationsEnabled: 'emailNotificationsEnabled'
 };
 
 exports.Prisma.PushSubscriptionScalarFieldEnum = {
