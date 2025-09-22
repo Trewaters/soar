@@ -96,7 +96,7 @@ export default async function SettingsPage() {
                         '&:hover': { textDecoration: 'underline' },
                       }}
                     >
-                      Notification Settings
+                      Notification Preferences
                     </Box>
                   </Typography>
                 </Box>

@@ -22,7 +22,7 @@ export default async function NotificationSettingsPage() {
             <Paper elevation={2} sx={{ p: 4, borderRadius: 2 }}>
               <Stack spacing={3}>
                 <Typography variant="h1" component="h1" gutterBottom>
-                  Notification Settings
+                  Notification Preferences
                 </Typography>
 
                 <Typography variant="body1" color="text.secondary">
