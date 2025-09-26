@@ -135,6 +135,51 @@ function analyzePushError(error: any): {
   }
 }
 
+function waitForServiceWorkerController(
+  timeoutMs = 15000
+): Promise<ServiceWorker> {
+  if (navigator.serviceWorker.controller) {
+    return Promise.resolve(navigator.serviceWorker.controller)
+  }
+
+  return new Promise((resolve, reject) => {
+    let settled = false
+
+    const cleanup = () => {
+      if (settled) return
+      settled = true
+      navigator.serviceWorker.removeEventListener(
+        'controllerchange',
+        onControllerChange
+      )
+      if (timeoutId) {
+        window.clearTimeout(timeoutId)
+      }
+    }
+
+    const onControllerChange = () => {
+      if (navigator.serviceWorker.controller) {
+        cleanup()
+        resolve(navigator.serviceWorker.controller)
+      }
+    }
+
+    navigator.serviceWorker.addEventListener(
+      'controllerchange',
+      onControllerChange
+    )
+
+    const timeoutId = window.setTimeout(() => {
+      cleanup()
+      reject(
+        new Error(
+          `Service worker controller not available after ${timeoutMs}ms`
+        )
+      )
+    }, timeoutMs)
+  })
+}
+
 // Enhanced service worker registration with aggressive conflict resolution
 async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistration> {
   let attempt = 0
@@ -223,19 +268,39 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
 
       // Strategy 2: Verify the registration is actually active
       let activeWait = 0
-      while (!readyRegistration.active && activeWait < 10000) {
+      while (
+        !readyRegistration.active &&
+        !navigator.serviceWorker.controller &&
+        activeWait < 10000
+      ) {
         console.log('⏳ Waiting for service worker to become active...')
         await new Promise((resolve) => setTimeout(resolve, 500))
         activeWait += 500
       }
 
-      if (!readyRegistration.active) {
+      let activeWorker =
+        readyRegistration.active || navigator.serviceWorker.controller
+
+      if (!activeWorker) {
+        console.log('🚦 Waiting for service worker controller takeover...')
+        try {
+          activeWorker = await waitForServiceWorkerController(10000)
+        } catch (controllerError) {
+          console.error(
+            '⚠️ Service worker controller did not resolve:',
+            controllerError
+          )
+          throw new Error('Service worker failed to become active')
+        }
+      }
+
+      if (!activeWorker) {
         throw new Error('Service worker failed to become active')
       }
 
       console.log(
         '🎉 Service Worker is ready and active:',
-        readyRegistration.active.state
+        activeWorker.state || readyRegistration.active?.state
       )
       return readyRegistration
     } catch (error) {
