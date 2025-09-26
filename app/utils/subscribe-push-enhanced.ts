@@ -539,8 +539,10 @@ async function subscribeToPushWithRetry(
 ): Promise<PushSubscription> {
   const publicVapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
 
-  if (!publicVapidKey) {
-    throw new Error('VAPID public key not configured')
+  if (!publicVapidKey || publicVapidKey.length < 64) {
+    const errorMessage = 'VAPID public key not configured or is invalid.'
+    console.error(`❌ FATAL: ${errorMessage}`)
+    throw new Error(errorMessage)
   }
 
   let attempt = 0
