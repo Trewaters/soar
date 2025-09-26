@@ -7,7 +7,7 @@ import { fromZonedTime, toZonedTime, format } from 'date-fns-tz'
 export const runtime = 'nodejs' // needs node for web-push
 
 const prisma = new PrismaClient()
-const WINDOW_SECONDS = 60
+const WINDOW_SECONDS = 1800 // 30 minutes
 
 export async function GET() {
   // (optional) protect with a secret header so only your cron can call this
