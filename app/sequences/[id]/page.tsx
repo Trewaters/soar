@@ -10,9 +10,9 @@ const prisma = new PrismaClient()
 export default async function SequenceDetailPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
-  const { id } = params
+  const { id } = await params
 
   const seq = await prisma.asanaSequence.findUnique({ where: { id } })
   if (!seq) return notFound()

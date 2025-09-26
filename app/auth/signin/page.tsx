@@ -8,10 +8,13 @@ import { Link as MuiLink } from '@mui/material'
 import Link from 'next/link'
 import CredentialsInput from './credentialsInput'
 
-export default async function SignInPage(props: {
-  searchParams: { callbackUrl: string | undefined }
+export default async function SignInPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ callbackUrl?: string }>
 }) {
   const session = await auth()
+  const resolvedSearchParams = (await searchParams) ?? {}
   return (
     <>
       <nav>
@@ -82,7 +85,7 @@ export default async function SignInPage(props: {
                       try {
                         await signIn(provider.id, {
                           redirectTo:
-                            props.searchParams?.callbackUrl ?? '/navigator',
+                            resolvedSearchParams.callbackUrl ?? '/navigator',
                         })
                       } catch (error) {
                         // Signin can fail for a number of reasons, such as the user

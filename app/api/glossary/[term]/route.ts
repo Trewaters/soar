@@ -12,7 +12,7 @@ function canEdit(source: string | undefined) {
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { term: string } }
+  { params }: { params: Promise<{ term: string }> }
 ) {
   const session = await auth()
   if (!session?.user?.email) {
@@ -20,7 +20,8 @@ export async function PATCH(
   }
   const userEmail = session.user.email
   const body = await req.json()
-  const targetTerm = decodeURIComponent(params.term)
+  const resolvedParams = await params
+  const targetTerm = decodeURIComponent(resolvedParams.term)
 
   // Backend validation for update data
   const meaning = (body.meaning || '').trim()
@@ -102,13 +103,14 @@ export async function PATCH(
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: { term: string } }
+  { params }: { params: Promise<{ term: string }> }
 ) {
   const session = await auth()
   if (!session?.user?.email) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
-  const targetTerm = decodeURIComponent(params.term)
+  const resolvedParams = await params
+  const targetTerm = decodeURIComponent(resolvedParams.term)
 
   try {
     const existing = await prisma.glossaryTerm.findUnique({

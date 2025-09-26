@@ -135,7 +135,7 @@ function analyzePushError(error: any): {
   }
 }
 
-// Enhanced service worker registration with better error handling
+// Enhanced service worker registration with aggressive conflict resolution
 async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistration> {
   let attempt = 0
   const maxAttempts = 3
@@ -144,66 +144,328 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
     try {
       attempt++
       console.log(
-        `Service Worker registration attempt ${attempt}/${maxAttempts}`
+        `🔧 Service Worker registration attempt ${attempt}/${maxAttempts}`
       )
 
-      // For first attempt, try to clean up any existing registrations
-      if (attempt === 1) {
+      // AGGRESSIVE CLEANUP: Always clean up on first attempt and retry scenarios
+      if (attempt === 1 || attempt === 2) {
         try {
+          console.log('🧹 Starting aggressive service worker cleanup...')
+
+          // Get all registrations and unregister them
           const registrations = await navigator.serviceWorker.getRegistrations()
+          console.log(`Found ${registrations.length} existing registrations`)
+
           for (const reg of registrations) {
-            console.log('Unregistering existing service worker:', reg.scope)
-            await reg.unregister()
+            console.log('🗑️ Unregistering service worker:', reg.scope)
+            try {
+              await reg.unregister()
+              console.log('✅ Successfully unregistered:', reg.scope)
+            } catch (unregError) {
+              console.warn('⚠️ Failed to unregister:', reg.scope, unregError)
+            }
           }
-          // Brief wait for cleanup
-          await new Promise((resolve) => setTimeout(resolve, 200))
+
+          // Force clear any cached service worker state
+          if (
+            'serviceWorker' in navigator &&
+            navigator.serviceWorker.controller
+          ) {
+            console.log('🔄 Clearing service worker controller state...')
+            try {
+              // Post message to current SW to self-destruct if possible
+              navigator.serviceWorker.controller.postMessage({
+                command: 'SKIP_WAITING',
+              })
+            } catch (postError) {
+              console.warn('Could not message service worker:', postError)
+            }
+          }
+
+          // Extended wait for cleanup on retry attempts
+          const cleanupWait = attempt === 1 ? 500 : 2000
+          console.log(`⏱️ Waiting ${cleanupWait}ms for cleanup...`)
+          await new Promise((resolve) => setTimeout(resolve, cleanupWait))
         } catch (cleanupError) {
-          console.warn('Service worker cleanup failed:', cleanupError)
-          // Continue anyway
+          console.warn('⚠️ Service worker cleanup failed:', cleanupError)
+          // Continue anyway - don't let cleanup failures stop us
         }
       }
 
+      console.log('📝 Registering new service worker...')
       const registration = await navigator.serviceWorker.register('/sw.js', {
         scope: '/',
         updateViaCache: 'none', // Prevent caching issues
       })
 
-      console.log('Service Worker registered successfully:', registration.scope)
-
-      // Wait for the service worker to be ready with timeout
-      const readyPromise = navigator.serviceWorker.ready
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(
-          () => reject(new Error('Service Worker ready timeout')),
-          10000
-        )
+      console.log(
+        '✅ Service Worker registered successfully:',
+        registration.scope
       )
 
-      await Promise.race([readyPromise, timeoutPromise])
-      console.log('Service Worker is ready')
+      // Enhanced readiness check with multiple strategies
+      console.log('⏳ Waiting for service worker to be ready...')
 
-      return registration
+      // Strategy 1: Use the standard ready promise with timeout
+      const readyPromise = navigator.serviceWorker.ready
+      const timeoutPromise = new Promise<ServiceWorkerRegistration>(
+        (_, reject) =>
+          setTimeout(
+            () => reject(new Error('Service Worker ready timeout after 15s')),
+            15000 // Increased timeout
+          )
+      )
+
+      const readyRegistration = await Promise.race([
+        readyPromise,
+        timeoutPromise,
+      ])
+
+      // Strategy 2: Verify the registration is actually active
+      let activeWait = 0
+      while (!readyRegistration.active && activeWait < 10000) {
+        console.log('⏳ Waiting for service worker to become active...')
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        activeWait += 500
+      }
+
+      if (!readyRegistration.active) {
+        throw new Error('Service worker failed to become active')
+      }
+
+      console.log(
+        '🎉 Service Worker is ready and active:',
+        readyRegistration.active.state
+      )
+      return readyRegistration
     } catch (error) {
       console.error(
-        `Service Worker registration attempt ${attempt} failed:`,
+        `❌ Service Worker registration attempt ${attempt} failed:`,
         error
       )
 
       if (attempt === maxAttempts) {
         const errorAnalysis = analyzePushError(error)
+        console.error('🔍 Final attempt failed with analysis:', errorAnalysis)
         throw new Error(
           `Failed to register service worker after ${maxAttempts} attempts. ${errorAnalysis.userMessage} Technical details: ${errorAnalysis.technicalDetails}`
         )
       }
 
-      // Wait before retrying - use exponential backoff
-      await new Promise((resolve) =>
-        setTimeout(resolve, 1000 * Math.pow(2, attempt - 1))
-      )
+      // Progressive backoff: 1s, 3s, 6s
+      const backoffTime = 1000 * Math.pow(2, attempt - 1) + attempt * 1000
+      console.log(`⏱️ Waiting ${backoffTime}ms before retry...`)
+      await new Promise((resolve) => setTimeout(resolve, backoffTime))
     }
   }
 
   throw new Error('Unexpected error in service worker registration')
+}
+
+// Advanced push notification diagnostic utility
+export async function debugPushNotifications(): Promise<{
+  diagnostics: Record<string, any>
+  recommendations: string[]
+  canAttemptFix: boolean
+}> {
+  const diagnostics: Record<string, any> = {
+    timestamp: new Date().toISOString(),
+    userAgent: navigator.userAgent,
+    url: window.location.href,
+  }
+
+  const recommendations: string[] = []
+
+  try {
+    // Browser support check
+    diagnostics.browserSupport = {
+      serviceWorker: 'serviceWorker' in navigator,
+      pushManager: 'PushManager' in window,
+      notification: 'Notification' in window,
+      secureContext: window.isSecureContext,
+      protocol: window.location.protocol,
+      hostname: window.location.hostname,
+    }
+
+    if (!diagnostics.browserSupport.serviceWorker) {
+      recommendations.push('❌ Service Worker not supported - upgrade browser')
+    }
+    if (!diagnostics.browserSupport.pushManager) {
+      recommendations.push('❌ Push Manager not supported - upgrade browser')
+    }
+    if (!diagnostics.browserSupport.notification) {
+      recommendations.push('❌ Notifications not supported - upgrade browser')
+    }
+    if (!diagnostics.browserSupport.secureContext) {
+      recommendations.push('❌ HTTPS required - switch to secure connection')
+    }
+
+    // Permission status
+    diagnostics.permissions = {
+      notification: Notification.permission,
+      persistent: 'persistent' in Notification.prototype,
+    }
+
+    if (diagnostics.permissions.notification === 'denied') {
+      recommendations.push(
+        '🚫 Notifications denied - enable in browser settings'
+      )
+    } else if (diagnostics.permissions.notification === 'default') {
+      recommendations.push('❓ Notifications not yet requested')
+    }
+
+    // Service worker status
+    if ('serviceWorker' in navigator) {
+      try {
+        const registrations = await navigator.serviceWorker.getRegistrations()
+        diagnostics.serviceWorkers = {
+          count: registrations.length,
+          registrations: registrations.map((reg) => ({
+            scope: reg.scope,
+            active: !!reg.active,
+            installing: !!reg.installing,
+            waiting: !!reg.waiting,
+            state: reg.active?.state,
+            scriptURL: reg.active?.scriptURL,
+          })),
+        }
+
+        // Check for conflicts
+        if (registrations.length > 1) {
+          recommendations.push(
+            '⚠️ Multiple service workers detected - may cause conflicts'
+          )
+        }
+
+        if (registrations.length === 0) {
+          recommendations.push('❌ No service worker registered')
+        } else {
+          const activeWorkers = registrations.filter((reg) => reg.active)
+          if (activeWorkers.length === 0) {
+            recommendations.push('❌ No active service workers found')
+          }
+        }
+
+        // Check current controller
+        diagnostics.serviceWorkerController = {
+          hasController: !!navigator.serviceWorker.controller,
+          controllerURL: navigator.serviceWorker.controller?.scriptURL,
+          controllerState: navigator.serviceWorker.controller?.state,
+        }
+
+        if (!navigator.serviceWorker.controller) {
+          recommendations.push('⚠️ No service worker controlling this page')
+        }
+      } catch (swError) {
+        diagnostics.serviceWorkerError = String(swError)
+        recommendations.push('❌ Service worker check failed: ' + swError)
+      }
+    }
+
+    // Push subscription status
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      try {
+        const registration = await navigator.serviceWorker.ready
+        const existingSubscription =
+          await registration.pushManager.getSubscription()
+
+        diagnostics.pushSubscription = {
+          hasExisting: !!existingSubscription,
+          endpoint: existingSubscription?.endpoint,
+          hasKeys: existingSubscription
+            ? {
+                p256dh: !!existingSubscription.getKey('p256dh'),
+                auth: !!existingSubscription.getKey('auth'),
+              }
+            : null,
+        }
+
+        if (existingSubscription) {
+          recommendations.push('✅ Existing push subscription found')
+        } else {
+          recommendations.push('❓ No existing push subscription')
+        }
+      } catch (pushError) {
+        diagnostics.pushSubscriptionError = String(pushError)
+        recommendations.push('❌ Push subscription check failed: ' + pushError)
+      }
+    }
+
+    // VAPID key check
+    const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
+    diagnostics.vapidConfiguration = {
+      hasKey: !!vapidKey,
+      keyLength: vapidKey?.length || 0,
+      keyValid: vapidKey ? vapidKey.length > 80 : false,
+    }
+
+    if (!vapidKey) {
+      recommendations.push('❌ VAPID public key not configured')
+    } else if (vapidKey.length < 80) {
+      recommendations.push('❌ VAPID public key appears invalid (too short)')
+    } else {
+      recommendations.push('✅ VAPID key configured')
+    }
+
+    // Network connectivity test
+    try {
+      const networkTest = await fetch('/api/push/subscribe', {
+        method: 'HEAD',
+      })
+      diagnostics.networkConnectivity = {
+        canReachAPI: networkTest.ok,
+        status: networkTest.status,
+      }
+
+      if (!networkTest.ok) {
+        recommendations.push('❌ Cannot reach push API endpoint')
+      }
+    } catch (networkError) {
+      diagnostics.networkConnectivity = {
+        error: String(networkError),
+      }
+      recommendations.push('❌ Network connectivity issue: ' + networkError)
+    }
+
+    // Environment analysis
+    const isProduction =
+      window.location.hostname === 'www.happyyoga.app' ||
+      window.location.hostname === 'happyyoga.app'
+
+    diagnostics.environment = {
+      isProduction,
+      isDevelopment: !isProduction,
+      hostname: window.location.hostname,
+      port: window.location.port,
+    }
+
+    // Final assessment
+    const criticalIssues = recommendations.filter((r) => r.startsWith('❌'))
+    const canAttemptFix = criticalIssues.length === 0
+
+    if (canAttemptFix) {
+      recommendations.push('🎉 System appears ready for push notifications')
+    } else {
+      recommendations.push(
+        `🚨 ${criticalIssues.length} critical issues must be resolved first`
+      )
+    }
+
+    return {
+      diagnostics,
+      recommendations,
+      canAttemptFix,
+    }
+  } catch (error) {
+    diagnostics.debugError = String(error)
+    recommendations.push('❌ Diagnostic check failed: ' + error)
+
+    return {
+      diagnostics,
+      recommendations,
+      canAttemptFix: false,
+    }
+  }
 }
 
 // Enhanced push subscription with better error handling
@@ -271,34 +533,48 @@ async function subscribeToPushWithRetry(
           // On second failure, try re-registering the service worker
           try {
             console.log(
-              'Re-registering service worker for AbortError recovery...'
+              '🔄 Re-registering service worker for AbortError recovery...'
             )
 
-            // Unregister all service workers
+            // Unregister all service workers aggressively
             const registrations =
               await navigator.serviceWorker.getRegistrations()
+            console.log(`Found ${registrations.length} registrations to clear`)
+
             for (const reg of registrations) {
+              console.log('🗑️ Force unregistering:', reg.scope)
               await reg.unregister()
             }
 
-            // Wait for cleanup
-            await new Promise((resolve) => setTimeout(resolve, 2000))
+            // Extended wait for cleanup - AbortErrors need more time
+            console.log('⏱️ Extended cleanup wait for AbortError recovery...')
+            await new Promise((resolve) => setTimeout(resolve, 3000))
 
-            // Re-register fresh service worker
+            // Re-register fresh service worker with more explicit options
+            console.log('📝 Fresh service worker registration...')
             const newRegistration = await navigator.serviceWorker.register(
               '/sw.js',
               {
                 scope: '/',
                 updateViaCache: 'none',
+                type: 'classic', // Explicit type
               }
             )
 
-            // Wait for it to be ready
-            await navigator.serviceWorker.ready
+            // Enhanced wait for readiness
+            console.log('⏳ Waiting for new registration to be ready...')
+            const readyReg = await navigator.serviceWorker.ready
+
+            // Verify it's actually the new registration
+            if (readyReg.scope !== newRegistration.scope) {
+              console.warn(
+                '⚠️ Registration scope mismatch, using ready registration'
+              )
+            }
 
             // Update registration reference
-            registration = newRegistration
-            console.log('Service worker re-registered successfully')
+            registration = readyReg
+            console.log('✅ Service worker re-registered successfully')
           } catch (reregisterError) {
             console.warn(
               'Failed to re-register service worker:',

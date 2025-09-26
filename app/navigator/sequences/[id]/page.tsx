@@ -3,16 +3,16 @@
 import { notFound } from 'next/navigation'
 import { Box } from '@mui/material'
 import { useSearchParams } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import SequenceViewWithEdit from '@clientComponents/SequenceViewWithEdit'
 import type { EditableSequence } from '@clientComponents/EditSequence'
 
 export default function SequenceDetailPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
-  const { id } = params
+  const { id } = use(params)
   const searchParams = useSearchParams()
 
   // Fallback method using window.location.search

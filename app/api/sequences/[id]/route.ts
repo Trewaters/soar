@@ -6,10 +6,11 @@ export const dynamic = 'force-dynamic'
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params
+    const resolvedParams = await params
+    const { id } = resolvedParams
     const sequence = await prisma.asanaSequence.findUnique({ where: { id } })
     if (!sequence)
       return NextResponse.json({ error: 'Not found' }, { status: 404 })
@@ -25,14 +26,15 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await auth()
   if (!session?.user?.email) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const { id } = params
+  const resolvedParams = await params
+  const { id } = resolvedParams
   let body: any
   try {
     body = await request.json()
@@ -87,7 +89,7 @@ export async function PATCH(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -95,7 +97,8 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = params
+    const resolvedParams = await params
+    const { id } = resolvedParams
     const existing = await prisma.asanaSequence.findUnique({ where: { id } })
     if (!existing) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 })

@@ -37,8 +37,33 @@ self.addEventListener('activate', (event) => {
       }),
     ]).then(() => {
       console.log('Service Worker activation complete')
+
+      // Notify all clients that service worker is ready
+      return self.clients.matchAll().then((clients) => {
+        clients.forEach((client) => {
+          client.postMessage({
+            type: 'SW_ACTIVATED',
+            version: SW_VERSION,
+            timestamp: Date.now(),
+          })
+        })
+      })
     })
   )
+})
+
+// Handle messages from main thread
+self.addEventListener('message', (event) => {
+  console.log(`[SW ${SW_VERSION}] Message received:`, event.data)
+
+  if (event.data && event.data.command === 'SKIP_WAITING') {
+    console.log('Skipping waiting as requested')
+    self.skipWaiting()
+  }
+
+  if (event.data && event.data.command === 'GET_VERSION') {
+    event.ports[0].postMessage({ version: SW_VERSION })
+  }
 })
 
 // Handle push notifications with enhanced error handling

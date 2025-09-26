@@ -38,7 +38,10 @@ import {
   getExistingSubscription,
   sendTestNotification,
 } from '../utils/subscribe-push'
-import { enablePushNotificationsEnhanced } from '../utils/subscribe-push-enhanced'
+import {
+  enablePushNotificationsEnhanced,
+  debugPushNotifications,
+} from '../utils/subscribe-push-enhanced'
 
 interface ReminderData {
   timeOfDay: string
@@ -364,6 +367,56 @@ export default function ReminderSettings() {
     } catch (error) {
       console.error('Test email error:', error)
       showNotification('error', 'Failed to send test email')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleDebugPushNotifications = async () => {
+    setLoading(true)
+    try {
+      const debugInfo = await debugPushNotifications()
+
+      console.group('🔍 Push Notification Debug Report')
+      console.log('📊 Diagnostics:', debugInfo.diagnostics)
+      console.log('💡 Recommendations:', debugInfo.recommendations)
+      console.log('🔧 Can Attempt Fix:', debugInfo.canAttemptFix)
+      console.groupEnd()
+
+      // Show comprehensive debug info to user
+      const debugMessage = [
+        '🔍 Push Notification Debug Results:',
+        '',
+        '📊 System Status:',
+        ...debugInfo.recommendations.slice(0, 5), // Show first 5 recommendations
+        '',
+        debugInfo.canAttemptFix
+          ? '✅ System ready - you can try enabling push notifications'
+          : '❌ Issues detected - check browser console for details',
+        '',
+        'Full debug report logged to browser console.',
+      ].join('\n')
+
+      showNotification(
+        debugInfo.canAttemptFix ? 'success' : 'warning',
+        debugMessage
+      )
+
+      // Also show critical issues immediately
+      const criticalIssues = debugInfo.recommendations.filter((r) =>
+        r.startsWith('❌')
+      )
+      if (criticalIssues.length > 0) {
+        setTimeout(() => {
+          showNotification(
+            'error',
+            `Critical Issues Found:\n${criticalIssues.join('\n')}`
+          )
+        }, 1000)
+      }
+    } catch (error) {
+      console.error('Debug check failed:', error)
+      showNotification('error', 'Debug check failed - see console for details')
     } finally {
       setLoading(false)
     }
@@ -818,16 +871,11 @@ export default function ReminderSettings() {
                 <Button
                   variant="outlined"
                   size="small"
-                  onClick={() => {
-                    import('../utils/push-debug').then(
-                      ({ runComprehensivePushDebug }) => {
-                        runComprehensivePushDebug()
-                      }
-                    )
-                  }}
+                  onClick={handleDebugPushNotifications}
+                  disabled={loading}
                   startIcon={<CheckIcon />}
                 >
-                  Run Full Diagnostic
+                  Debug Push System
                 </Button>
 
                 <Button

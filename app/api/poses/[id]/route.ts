@@ -6,8 +6,9 @@ const prisma = new PrismaClient()
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params
   try {
     const session = await auth()
 
@@ -29,7 +30,7 @@ export async function PUT(
       sideways,
     } = await request.json()
 
-    console.log('Updating posture with ID:', params.id)
+    console.log('Updating posture with ID:', resolvedParams.id)
     console.log('Request data:', {
       sort_english_name,
       sideways,
@@ -41,7 +42,7 @@ export async function PUT(
 
     // First, get the existing posture to check ownership
     const existingPosture = await prisma.asanaPosture.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
     })
 
     if (!existingPosture) {
@@ -60,7 +61,7 @@ export async function PUT(
     const sidewaysBoolean = sideways === 'Yes' || sideways === true
 
     const updatedPosture = await prisma.asanaPosture.update({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       data: {
         english_names,
         sort_english_name,
@@ -92,7 +93,7 @@ export async function PUT(
     console.error('Error updating posture in database:', {
       error: error.message,
       stack: error.stack,
-      postureId: params.id,
+      postureId: resolvedParams.id,
     })
     return NextResponse.json({ error: error.message }, { status: 500 })
   } finally {
@@ -102,8 +103,9 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params
   try {
     const session = await auth()
 
@@ -116,7 +118,7 @@ export async function DELETE(
 
     // Get the posture to verify ownership
     const existingPosture = await prisma.asanaPosture.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
     })
 
     if (!existingPosture) {
@@ -130,14 +132,14 @@ export async function DELETE(
       )
     }
 
-    await prisma.asanaPosture.delete({ where: { id: params.id } })
+    await prisma.asanaPosture.delete({ where: { id: resolvedParams.id } })
 
     return NextResponse.json({ success: true })
   } catch (error: any) {
     console.error('Error deleting posture from database:', {
       error: error.message,
       stack: error.stack,
-      postureId: params.id,
+      postureId: resolvedParams.id,
     })
     return NextResponse.json({ error: error.message }, { status: 500 })
   } finally {

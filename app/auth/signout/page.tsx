@@ -5,12 +5,15 @@ import Link from 'next/link'
 import { signOut, auth } from '../../../auth'
 import { AppText } from '@app/navigator/constants/Strings'
 
-export default async function SignOutPage(props: {
-  searchParams: { success?: string }
+export default async function SignOutPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ success?: string }>
 }) {
   // Check if user is signed in
   const session = await auth()
-  const { searchParams } = props
+  const resolvedSearchParams = (await searchParams) ?? {}
+  const isSignOutSuccess = Boolean(resolvedSearchParams.success)
 
   // If user is signed in, redirect to signout with proper form action
   if (session) {
@@ -79,10 +82,10 @@ export default async function SignOutPage(props: {
         >
           <Stack spacing={1} sx={{ pt: 4, pb: 2 }}>
             <Typography color="success.main" variant="h2">
-              {searchParams?.success ? "You're signed out!" : 'Oops...'}
+              {isSignOutSuccess ? "You're signed out!" : 'Oops...'}
             </Typography>
             <Typography variant="body1">
-              {searchParams?.success
+              {isSignOutSuccess
                 ? 'We hope to see you continue your yoga journey!'
                 : 'You are still signed in!'}
             </Typography>

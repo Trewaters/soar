@@ -9,7 +9,7 @@ import {
   LinearProgress,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, use } from 'react'
 import PauseCircleIcon from '@mui/icons-material/PauseCircle'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
 import StopIcon from '@mui/icons-material/Stop'
@@ -33,8 +33,9 @@ import Image from 'next/image'
 export default function ViewAsanaPractice({
   params,
 }: {
-  params: { pose: string }
+  params: Promise<{ pose: string }>
 }) {
+  const { pose } = use(params)
   const [viewPose, setViewPose] = useState<FullAsanaData>()
   const [elapsedTime, setElapsedTime] = useState(0)
   const [totalTime] = useState(300) // Default 5 minutes
@@ -153,7 +154,7 @@ export default function ViewAsanaPractice({
   useEffect(() => {
     const getViewPose = async () => {
       try {
-        const decodedPose = decodeURIComponent(params.pose)
+        const decodedPose = decodeURIComponent(pose)
         const responseData = await getPostureByName(decodedPose)
         setViewPose(responseData)
       } catch (error) {
@@ -161,7 +162,7 @@ export default function ViewAsanaPractice({
       }
     }
     getViewPose()
-  }, [params.pose])
+  }, [pose])
 
   // Mouse movement handler for auto-hiding controls
   useEffect(() => {

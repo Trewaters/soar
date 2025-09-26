@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -17,9 +17,10 @@ export async function GET(
         { status: 401 }
       )
     }
+    const resolvedParams = await params
 
     const series = await prisma.asanaSeries.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       select: {
         id: true,
         seriesName: true,
@@ -75,7 +76,7 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -85,6 +86,7 @@ export async function PATCH(
         { status: 401 }
       )
     }
+    const resolvedParams = await params
     const body = await request.json()
     const name: string | undefined = body?.name
     const description: string | undefined = body?.description
@@ -97,7 +99,7 @@ export async function PATCH(
     const imageInput: string | undefined = body?.image
     // Fetch series to check ownership
     const existingSeries = await prisma.asanaSeries.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
     })
     if (!existingSeries) {
       return NextResponse.json({ error: 'Series not found' }, { status: 404 })
@@ -137,7 +139,7 @@ export async function PATCH(
     if (typeof imageInput === 'string') updateData.image = imageInput
 
     const updated = await prisma.asanaSeries.update({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       data: updateData,
     })
 
@@ -151,7 +153,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -161,9 +163,10 @@ export async function DELETE(
         { status: 401 }
       )
     }
+    const resolvedParams = await params
     // Fetch series to check ownership
     const existingSeries = await prisma.asanaSeries.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
     })
     if (!existingSeries) {
       return NextResponse.json({ error: 'Series not found' }, { status: 404 })
@@ -182,7 +185,7 @@ export async function DELETE(
       )
     }
     await prisma.asanaSeries.delete({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
     })
     return NextResponse.json({ success: true })
   } catch (error: any) {

@@ -11,15 +11,16 @@ export const runtime = 'nodejs'
 // GET - Fetch all images for a specific series
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+    const resolvedParams = await params
 
-    const seriesId = params.id
+    const seriesId = resolvedParams.id
 
     const series = await prisma.asanaSeries.findUnique({
       where: { id: seriesId },
@@ -50,7 +51,7 @@ export async function GET(
 // POST - Add a new image to a series
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -58,7 +59,8 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const seriesId = params.id
+    const resolvedParams = await params
+    const seriesId = resolvedParams.id
 
     // Check if series exists and user owns it
     const series = await prisma.asanaSeries.findUnique({
@@ -140,7 +142,7 @@ export async function POST(
 // DELETE - Remove an image from a series
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth()
@@ -148,7 +150,8 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const seriesId = params.id
+    const resolvedParams = await params
+    const seriesId = resolvedParams.id
     const { searchParams } = new URL(request.url)
     const imageUrl = searchParams.get('imageUrl')
 

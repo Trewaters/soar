@@ -1,12 +1,17 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, use } from 'react'
 import { getPostureByName } from '@lib/postureService'
 import PostureActivityDetail from './postureActivityDetail'
 import { Box } from '@mui/material'
 import { QuickTimer } from '@app/clientComponents/quickTimer'
 import { FullAsanaData } from '@app/context/AsanaPostureContext'
 
-export default function Page({ params }: { params: { pose: string } }) {
+export default function Page({
+  params,
+}: {
+  params: Promise<{ pose: string }>
+}) {
+  const { pose } = use(params)
   const [viewPose, setViewPose] = useState<FullAsanaData>({} as FullAsanaData)
 
   const handleTimerStart = () => {
@@ -26,7 +31,7 @@ export default function Page({ params }: { params: { pose: string } }) {
     const getViewPose = async () => {
       try {
         // Decode the URL parameter to handle spaces and special characters
-        const decodedPose = decodeURIComponent(params.pose)
+        const decodedPose = decodeURIComponent(pose)
         const responseData = await getPostureByName(decodedPose)
         setViewPose(responseData)
       } catch (error) {
@@ -34,7 +39,7 @@ export default function Page({ params }: { params: { pose: string } }) {
       }
     }
     getViewPose()
-  }, [params.pose])
+  }, [pose])
   return (
     <>
       <Box
