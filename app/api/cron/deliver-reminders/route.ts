@@ -27,8 +27,15 @@ export async function GET() {
   const timeMatches = (d: Date, tz: string, targetHHmm: string) => {
     const [h, m] = targetHHmm.split(':').map(Number)
     const local = toZonedTime(d, tz)
-    const localTarget = new Date(local)
-    localTarget.setHours(h, m, 0, 0)
+    const localTarget = new Date(
+      local.getFullYear(),
+      local.getMonth(),
+      local.getDate(),
+      h,
+      m,
+      0,
+      0
+    )
     const targetUtc = fromZonedTime(localTarget, tz).getTime()
     const diff = Math.abs(now.getTime() - targetUtc)
     return diff <= WINDOW_SECONDS * 1000
