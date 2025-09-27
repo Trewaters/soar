@@ -89,7 +89,7 @@ export default async function SettingsPage() {
                   <Typography component="li" variant="body2" sx={{ mb: 1 }}>
                     <Box
                       component="a"
-                      href="/settings/notifications"
+                      href="/navigator/profile/settings/notifications"
                       sx={{
                         color: 'primary.main',
                         textDecoration: 'none',

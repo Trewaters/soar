@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid2'
 import { SessionProvider } from 'next-auth/react'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
 import ReminderSettings from '@app/clientComponents/ReminderSettings'
-import { auth } from '../../../auth'
+import { auth } from '../../../../../auth'
 
 export default async function NotificationSettingsPage() {
   const session = await auth()
