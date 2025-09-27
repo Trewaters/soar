@@ -183,6 +183,27 @@ export async function getAccessiblePostures(
 }
 
 /**
+ * Get posture by ID (ObjectId)
+ */
+export async function getPostureById(id: string): Promise<FullAsanaData> {
+  try {
+    const response = await fetch(`/api/poses/?id=${encodeURIComponent(id)}`, {
+      cache: 'no-store',
+    })
+    if (!response.ok) {
+      throw new Error('Failed to fetch posture')
+    }
+    return await response.json()
+  } catch (error) {
+    logServiceError(error, 'postureService', 'getPostureById', {
+      operation: 'fetch_posture_by_id',
+      id,
+    })
+    throw error
+  }
+}
+
+/**
  * Get posture by sort_english_name
  */
 export async function getPostureByName(name: string): Promise<FullAsanaData> {
@@ -201,6 +222,46 @@ export async function getPostureByName(name: string): Promise<FullAsanaData> {
       name,
     })
     throw error
+  }
+}
+
+/**
+ * Get posture by ID or name (flexible lookup)
+ */
+export async function getPosture(idOrName: string): Promise<FullAsanaData> {
+  try {
+    // First try by ID (if it looks like an ObjectId)
+    if (idOrName.match(/^[0-9a-fA-F]{24}$/)) {
+      try {
+        return await getPostureById(idOrName)
+      } catch (idError) {
+        console.log('ID lookup failed, falling back to name lookup')
+      }
+    }
+
+    // Fall back to name lookup
+    return await getPostureByName(idOrName)
+  } catch (error) {
+    logServiceError(error, 'postureService', 'getPosture', {
+      operation: 'fetch_posture_flexible',
+      idOrName,
+    })
+    throw error
+  }
+}
+
+/**
+ * Get posture ID by name (for navigation purposes)
+ * Used to convert pose names from series data to ObjectIds for navigation
+ */
+export async function getPostureIdByName(name: string): Promise<string | null> {
+  try {
+    const posture = await getPostureByName(name)
+    return posture.id
+  } catch (error) {
+    // If posture not found, return null instead of throwing
+    console.warn(`Posture not found for name: ${name}`)
+    return null
   }
 }
 

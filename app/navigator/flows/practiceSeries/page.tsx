@@ -18,6 +18,7 @@ import {
   CardMedia,
 } from '@mui/material'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { getPostureIdByName } from '@lib/postureService'
 import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
@@ -26,7 +27,7 @@ import PostureShareButton from '@app/clientComponents/postureShareButton'
 import { getAllSeries, deleteSeries, updateSeries } from '@lib/seriesService'
 import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
 import SeriesWeeklyActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesWeeklyActivityTracker'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import EditIcon from '@mui/icons-material/Edit'
 import IconButton from '@mui/material/IconButton'
 import EditSeriesDialog, {
@@ -37,6 +38,7 @@ import EditSeriesDialog, {
 export default function Page() {
   const { data: session } = useSession()
   const theme = useTheme()
+  const router = useRouter()
   const searchParams = useSearchParams()
   const seriesId = searchParams.get('id')
   const [series, setSeries] = useState<FlowSeriesData[]>([])
@@ -47,6 +49,9 @@ export default function Page() {
   const [acOpen, setAcOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const [images, setImages] = useState<string[]>([])
+  const [postureIds, setPostureIds] = useState<{
+    [poseName: string]: string | null
+  }>({})
 
   // Partitioned, grouped search data using centralized ordering utility
   const enrichedSeries = useMemo(
@@ -140,8 +145,12 @@ export default function Page() {
         // If there's a series ID in the URL, auto-select that series
         if (seriesData.length > 0) {
           if (seriesId) {
-            const selectedSeries = seriesData.find((s) => s.id === seriesId)
-            if (selectedSeries) setFlow(selectedSeries)
+            const selectedSeries = seriesData.find(
+              (s) => String(s.id) === String(seriesId)
+            )
+            if (selectedSeries) {
+              setFlow(selectedSeries)
+            }
           } else if (selectId) {
             const selectedSeries = seriesData.find((s) => s.id === selectId)
             if (selectedSeries) setFlow(selectedSeries)
@@ -163,6 +172,18 @@ export default function Page() {
     // initial load
     fetchSeries()
   }, [fetchSeries])
+
+  // Handle series ID changes after series data is loaded
+  useEffect(() => {
+    if (seriesId && series.length > 0 && !flow) {
+      const selectedSeries = series.find(
+        (s) => String(s.id) === String(seriesId)
+      )
+      if (selectedSeries) {
+        setFlow(selectedSeries)
+      }
+    }
+  }, [seriesId, series, flow])
 
   // Fetch images array for the selected series (prefer images[0] over legacy flow.image)
   useEffect(() => {
@@ -191,6 +212,37 @@ export default function Page() {
     }
   }, [flow?.id])
 
+  // Resolve asana IDs for navigation
+  useEffect(() => {
+    let mounted = true
+    async function resolvePostureIds() {
+      if (!flow?.seriesPostures?.length) {
+        if (mounted) setPostureIds({})
+        return
+      }
+
+      const idsMap: { [poseName: string]: string | null } = {}
+
+      for (const pose of flow.seriesPostures) {
+        const poseName = pose.split(';')[0]
+        try {
+          const id = await getPostureIdByName(poseName)
+          idsMap[poseName] = id
+        } catch (error) {
+          console.warn(`Failed to resolve ID for pose: ${poseName}`, error)
+          idsMap[poseName] = null
+        }
+      }
+
+      if (mounted) setPostureIds(idsMap)
+    }
+
+    resolvePostureIds()
+    return () => {
+      mounted = false
+    }
+  }, [flow?.seriesPostures])
+
   const imageUrl = useMemo(() => {
     if (images && images.length > 0) return images[0]
     return flow?.image || ''
@@ -203,6 +255,12 @@ export default function Page() {
     event.preventDefault()
     if (value) {
       setFlow(value)
+      setOpen(false)
+      setAcOpen(false)
+      // Update URL to show the series ID
+      router.push(`/navigator/flows/practiceSeries?id=${value.id}`, {
+        scroll: false,
+      })
     }
   }
 
@@ -514,13 +572,23 @@ export default function Page() {
                     <Box key={pose} className="lines">
                       <Box key={pose} className="journalLine">
                         <Typography textAlign={'left'} variant="body1">
-                          <Link
-                            underline="hover"
-                            color="primary.contrastText"
-                            href={`/navigator/asanaPostures/${pose.split(';')[0]}`}
-                          >
-                            {pose.split(';')[0]}
-                          </Link>
+                          {(() => {
+                            const poseName = pose.split(';')[0]
+                            const postureId = postureIds[poseName]
+                            const href = postureId
+                              ? `/navigator/asanaPostures/${postureId}`
+                              : `/navigator/asanaPostures/${encodeURIComponent(poseName)}`
+
+                            return (
+                              <Link
+                                underline="hover"
+                                color="primary.contrastText"
+                                href={href}
+                              >
+                                {poseName}
+                              </Link>
+                            )
+                          })()}
                         </Typography>
                         <Typography textAlign={'left'} variant="body2">
                           {pose.split(';')[1]}

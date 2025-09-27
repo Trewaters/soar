@@ -201,9 +201,7 @@ export default function Page() {
 
       // Wait a moment to show the success message, then navigate
       setTimeout(() => {
-        router.push(
-          `/navigator/asanaPostures/${encodeURIComponent(data.sort_english_name)}`
-        )
+        router.push(`/navigator/asanaPostures/${data.id}`)
       }, 1500)
     } catch (error: Error | any) {
       console.error('Error creating posture:', error.message)

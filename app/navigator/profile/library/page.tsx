@@ -536,11 +536,7 @@ function AsanaCard({ asana }: { asana: UserAsanaData }) {
         <Stack direction="row" spacing={1}>
           <IconButton
             size="small"
-            onClick={() =>
-              router.push(
-                `/navigator/asanaPostures/${encodeURIComponent(asana.sort_english_name)}`
-              )
-            }
+            onClick={() => router.push(`/navigator/asanaPostures/${asana.id}`)}
             title="View"
           >
             <VisibilityIcon />
@@ -694,11 +690,7 @@ function SequenceCard({ sequence }: { sequence: UserSequenceData }) {
         <Stack direction="row" spacing={1}>
           <IconButton
             size="small"
-            onClick={() =>
-              router.push(
-                `/navigator/flows/practiceSequences?id=${sequence.id}`
-              )
-            }
+            onClick={() => router.push(`/navigator/sequences/${sequence.id}`)}
             title="View"
           >
             <VisibilityIcon />

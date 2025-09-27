@@ -11,12 +11,50 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.nextUrl)
   const sortEnglishName = searchParams.get('sort_english_name')
+  const id = searchParams.get('id')
   const createdBy = searchParams.get('createdBy')
 
   // Get current session to determine access control
   const session = await auth()
   const currentUserEmail = session?.user?.email
   const alphaUserIds = getAlphaUserIds()
+
+  // Handle ID lookup first (if provided)
+  if (id) {
+    try {
+      const pose = await prisma.asanaPosture.findUnique({
+        where: { id: id },
+      })
+
+      if (!pose) {
+        return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
+      }
+
+      // Check access control for individual pose
+      const hasAccess =
+        !currentUserEmail || // Allow if no user (for public access)
+        pose.created_by === currentUserEmail || // User's own pose
+        alphaUserIds.includes(pose.created_by || '') // Alpha user's pose
+
+      if (!hasAccess) {
+        return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+      }
+
+      if (pose.breath_direction_default === null) {
+        pose.breath_direction_default = ''
+      }
+
+      return NextResponse.json(pose)
+    } catch (error: any) {
+      console.error('Error fetching pose by id:', id, error)
+      return NextResponse.json(
+        { error: 'Internal server error. Please try again later.' },
+        { status: 500 }
+      )
+    } finally {
+      await prisma.$disconnect()
+    }
+  }
 
   if (sortEnglishName) {
     try {

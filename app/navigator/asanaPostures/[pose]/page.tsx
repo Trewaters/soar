@@ -1,8 +1,8 @@
 'use client'
 import React, { useEffect, useState, use } from 'react'
-import { getPostureByName } from '@lib/postureService'
+import { getPosture } from '@lib/postureService'
 import PostureActivityDetail from './postureActivityDetail'
-import { Box } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { QuickTimer } from '@app/clientComponents/quickTimer'
 import { FullAsanaData } from '@app/context/AsanaPostureContext'
 
@@ -12,7 +12,9 @@ export default function Page({
   params: Promise<{ pose: string }>
 }) {
   const { pose } = use(params)
-  const [viewPose, setViewPose] = useState<FullAsanaData>({} as FullAsanaData)
+  const [viewPose, setViewPose] = useState<FullAsanaData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   const handleTimerStart = () => {
     console.log('Timer started!')
@@ -30,16 +32,77 @@ export default function Page({
   useEffect(() => {
     const getViewPose = async () => {
       try {
+        setLoading(true)
+        setError(null)
         // Decode the URL parameter to handle spaces and special characters
         const decodedPose = decodeURIComponent(pose)
-        const responseData = await getPostureByName(decodedPose)
+        const responseData = await getPosture(decodedPose)
         setViewPose(responseData)
       } catch (error) {
         console.error('Error fetching posture:', error)
+        setError(
+          error instanceof Error ? error.message : 'Failed to load posture'
+        )
+      } finally {
+        setLoading(false)
       }
     }
     getViewPose()
   }, [pose])
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '400px',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )
+  }
+
+  if (error) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '400px',
+          flexDirection: 'column',
+          gap: 2,
+        }}
+      >
+        <Typography variant="h6" color="error">
+          Error loading posture
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {error}
+        </Typography>
+      </Box>
+    )
+  }
+
+  if (!viewPose) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '400px',
+        }}
+      >
+        <Typography variant="h6" color="text.secondary">
+          No posture data found
+        </Typography>
+      </Box>
+    )
+  }
+
   return (
     <>
       <Box

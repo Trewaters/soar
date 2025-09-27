@@ -179,9 +179,7 @@ export default function AsanaActivityList() {
                     </Typography>
                   </Link>
                 ) : activity.type === 'sequence' ? (
-                  <Link
-                    href={`/navigator/flows/practiceSequences?sequenceId=${activity.sequenceId}`}
-                  >
+                  <Link href={`/navigator/sequences/${activity.sequenceId}`}>
                     <Typography
                       variant="body1"
                       sx={{
@@ -196,8 +194,7 @@ export default function AsanaActivityList() {
                 ) : (
                   <Link
                     href={`/navigator/asanaPostures/${
-                      activity.sort_english_name ||
-                      encodeURIComponent(activity.postureName)
+                      activity.type === 'asana' ? activity.postureId : '#'
                     }`}
                   >
                     <Typography

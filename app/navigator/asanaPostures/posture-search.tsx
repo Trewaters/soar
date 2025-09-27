@@ -59,7 +59,7 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
     if (value && 'section' in value) return
     dispatch({ type: 'SET_POSTURES', payload: value ?? state.postures })
     router.push(
-      `/navigator/asanaPostures/${encodeURIComponent((value as FullAsanaData)?.sort_english_name || '')}/`
+      `/navigator/asanaPostures/${(value as FullAsanaData)?.id || ''}/`
     )
   }
   // Get current user id from session

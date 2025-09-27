@@ -96,6 +96,32 @@ export async function getAllSeries(): Promise<SeriesData[]> {
 }
 
 /**
+ * Get a single series by ID
+ */
+export async function getSingleSeries(id: string): Promise<SeriesData> {
+  try {
+    const response = await fetch(`/api/series/${id}`, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache',
+      },
+    })
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('Series not found')
+      }
+      throw new Error('Failed to fetch series')
+    }
+
+    return await response.json()
+  } catch (error) {
+    logServiceError(error, 'seriesService', 'getSingleSeries', { id })
+    throw error
+  }
+}
+
+/**
  * Create a new series
  */
 export async function createSeries(

@@ -218,14 +218,14 @@ describe('URL Generation Utilities', () => {
       const seriesData = { id: 'series-123', seriesName: 'Sun Salutation' }
       const seriesUrl = generateContentUrl('series', seriesData)
       expect(seriesUrl).toBe(
-        'https://www.happyyoga.app/navigator/flows/practiceSeries?seriesId=series-123'
+        'https://www.happyyoga.app/navigator/flows/series/series-123'
       )
 
       // Test sequence with ID
       const sequenceData = { id: 'seq-456', nameSequence: 'Morning Flow' }
       const sequenceUrl = generateContentUrl('sequence', sequenceData)
       expect(sequenceUrl).toBe(
-        'https://www.happyyoga.app/navigator/flows/practiceSequence?sequenceId=seq-456'
+        'https://www.happyyoga.app/navigator/sequences/seq-456'
       )
 
       // Test asana with ID (production only)
@@ -469,10 +469,10 @@ describe('URL Generation Utilities', () => {
 
       expect(asanaUrl).toBe('https://www.happyyoga.app/asana/warrior-i')
       expect(seriesUrl).toBe(
-        'https://www.happyyoga.app/navigator/flows/practiceSeries?seriesId=sun-salutation'
+        'https://www.happyyoga.app/navigator/flows/series/sun-salutation'
       )
       expect(sequenceUrl).toBe(
-        'https://www.happyyoga.app/navigator/flows/practiceSequence?sequenceId=morning-flow'
+        'https://www.happyyoga.app/navigator/sequences/morning-flow'
       )
     })
   })

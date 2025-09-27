@@ -163,30 +163,30 @@ export const generateContentUrl = (
       }
 
       case 'series': {
-        // Series always use the specific practice series URL as per PRD requirements
-        const seriesUrl = `${baseUrl}${contentPath}`
-
-        // Add series ID if available for direct access
+        // Series use the [id] route structure for direct navigation
         if (contentData?.id && environment === 'production') {
-          const directSeriesUrl = `${seriesUrl}?seriesId=${contentData.id}`
-          return validateUrl(directSeriesUrl) ? directSeriesUrl : seriesUrl
+          const directSeriesUrl = `${baseUrl}/navigator/flows/series/${contentData.id}`
+          return validateUrl(directSeriesUrl)
+            ? directSeriesUrl
+            : `${baseUrl}${contentPath}`
         }
 
+        // Fallback to general series URL
+        const seriesUrl = `${baseUrl}${contentPath}`
         return validateUrl(seriesUrl) ? seriesUrl : getCurrentPageUrl()
       }
 
       case 'sequence': {
-        // Sequences use practice sequence URL with potential sequence ID
-        const sequenceUrl = `${baseUrl}${contentPath}`
-
-        // Add sequence ID if available for direct access
+        // Sequences use the [id] route structure for direct navigation
         if (contentData?.id && environment === 'production') {
-          const directSequenceUrl = `${sequenceUrl}?sequenceId=${contentData.id}`
+          const directSequenceUrl = `${baseUrl}/navigator/sequences/${contentData.id}`
           return validateUrl(directSequenceUrl)
             ? directSequenceUrl
-            : sequenceUrl
+            : `${baseUrl}${contentPath}`
         }
 
+        // Fallback to general sequences URL
+        const sequenceUrl = `${baseUrl}${contentPath}`
         return validateUrl(sequenceUrl) ? sequenceUrl : getCurrentPageUrl()
       }
 

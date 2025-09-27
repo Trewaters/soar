@@ -17,6 +17,8 @@ import {
 } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+
+import { getPostureIdByName } from '@lib/postureService'
 import EditIcon from '@mui/icons-material/Edit'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
@@ -24,6 +26,7 @@ import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
 import { SequenceData, getAllSequences } from '@lib/sequenceService'
+import { getAllSeries } from '@lib/seriesService'
 import React from 'react'
 import Image from 'next/image'
 import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
@@ -190,6 +193,93 @@ export default function Page() {
     }
   }, [sequenceId]) // Add sequenceId as dependency
 
+  // Helper function to resolve series ID and navigate
+  const handleSeriesNavigation = async (seriesMini: any) => {
+    try {
+      console.log('=== PRACTICE SEQUENCES - SERIES NAVIGATION DEBUG ===')
+      console.log('Series data from sequence:', seriesMini)
+      console.log('Series ID (likely pagination ID):', seriesMini.id)
+      console.log('Series name to resolve:', seriesMini.seriesName)
+
+      if (!seriesMini.seriesName) {
+        console.error('No series name available for resolution')
+        alert('Cannot navigate: Series name is missing')
+        return
+      }
+
+      console.log('Fetching all series to find match...')
+      const allSeries = await getAllSeries()
+      console.log(`Found ${allSeries.length} total series in database`)
+
+      // Try to find matching series by name
+      const matchingSeries = allSeries.find(
+        (series) =>
+          series.seriesName === seriesMini.seriesName ||
+          series.seriesName.toLowerCase() ===
+            seriesMini.seriesName.toLowerCase() ||
+          series.seriesName.trim().toLowerCase() ===
+            seriesMini.seriesName.trim().toLowerCase()
+      )
+
+      if (matchingSeries?.id) {
+        console.log('✅ SUCCESS: Found matching series!')
+        console.log('Series name:', matchingSeries.seriesName)
+        console.log('MongoDB ObjectId:', matchingSeries.id)
+        router.push(`/navigator/flows/practiceSeries?id=${matchingSeries.id}`)
+      } else {
+        console.error('❌ FAILED: Could not resolve series by name')
+        console.error('Looking for series name:', seriesMini.seriesName)
+        console.error(
+          'Available series names:',
+          allSeries.map((s) => s.seriesName)
+        )
+        alert(`Cannot find series named "${seriesMini.seriesName}"`)
+      }
+    } catch (error) {
+      console.error('❌ ERROR during series resolution:', error)
+      alert(
+        `Error loading series: ${error instanceof Error ? error.message : 'Unknown error'}`
+      )
+    } finally {
+      console.log('=== END PRACTICE SEQUENCES - SERIES NAVIGATION DEBUG ===')
+    }
+  }
+
+  // Resolve asana IDs for navigation
+  useEffect(() => {
+    let mounted = true
+    async function resolvePostureIds() {
+      if (!singleSequence?.sequencesSeries?.length) {
+        if (mounted) setPostureIds({})
+        return
+      }
+
+      const idsMap: { [poseName: string]: string | null } = {}
+
+      // Iterate through series in the sequence
+      for (const series of singleSequence.sequencesSeries) {
+        // Iterate through postures in each series
+        for (const pose of series.seriesPostures) {
+          const poseName = pose.split(';')[0]
+          try {
+            const id = await getPostureIdByName(poseName)
+            idsMap[poseName] = id
+          } catch (error) {
+            console.warn(`Failed to resolve ID for pose: ${poseName}`, error)
+            idsMap[poseName] = null
+          }
+        }
+      }
+
+      if (mounted) setPostureIds(idsMap)
+    }
+
+    resolvePostureIds()
+    return () => {
+      mounted = false
+    }
+  }, [singleSequence?.sequencesSeries])
+
   function handleSelect(
     event: ChangeEvent<object>,
     value: SequenceData | null
@@ -210,6 +300,9 @@ export default function Page() {
   }
 
   const [open, setOpen] = useState(false)
+  const [postureIds, setPostureIds] = useState<{
+    [poseName: string]: string | null
+  }>({})
 
   return (
     <>
@@ -532,7 +625,19 @@ export default function Page() {
                               </Button>
                             </Stack>
                             <Stack>
-                              <Typography variant="h6">
+                              <Typography
+                                variant="h6"
+                                onClick={() =>
+                                  handleSeriesNavigation(seriesMini)
+                                }
+                                sx={{
+                                  color: 'primary.main',
+                                  cursor: 'pointer',
+                                  '&:hover': {
+                                    textDecoration: 'underline',
+                                  },
+                                }}
+                              >
                                 {seriesMini.seriesName}
                               </Typography>
                             </Stack>
@@ -578,23 +683,31 @@ export default function Page() {
                                 lineHeight: 1.5,
                               }}
                             >
-                              <Link
-                                underline="hover"
-                                color="primary.contrastText"
-                                href={`/navigator/asanaPostures/${
-                                  asana.split(';')[0]
-                                }`}
-                                sx={{
-                                  wordWrap: 'break-word',
-                                  overflowWrap: 'break-word',
-                                  hyphens: 'auto',
-                                  display: 'inline-block',
-                                  maxWidth: '100%',
-                                  lineHeight: 1.5,
-                                }}
-                              >
-                                {asana.split(';')[0]}
-                              </Link>
+                              {(() => {
+                                const poseName = asana.split(';')[0]
+                                const postureId = postureIds[poseName]
+                                const href = postureId
+                                  ? `/navigator/asanaPostures/${postureId}`
+                                  : `/navigator/asanaPostures/${encodeURIComponent(poseName)}`
+
+                                return (
+                                  <Link
+                                    underline="hover"
+                                    color="primary.contrastText"
+                                    href={href}
+                                    sx={{
+                                      wordWrap: 'break-word',
+                                      overflowWrap: 'break-word',
+                                      hyphens: 'auto',
+                                      display: 'inline-block',
+                                      maxWidth: '100%',
+                                      lineHeight: 1.5,
+                                    }}
+                                  >
+                                    {poseName}
+                                  </Link>
+                                )
+                              })()}
                             </Typography>
                           </Box>
                         ))}
