@@ -30,6 +30,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+import AddIcon from '@mui/icons-material/Add'
 import { useSession } from 'next-auth/react'
 import { FlowSeriesSequence } from '@context/AsanaSeriesContext'
 import {
@@ -41,6 +42,7 @@ import Image from 'next/image'
 import ImageUpload, {
   PoseImageData,
 } from '@clientComponents/imageUpload/ImageUpload'
+import AddSeriesDialog from '@clientComponents/AddSeriesDialog'
 
 export type EditableSequence = {
   id: string | number
@@ -98,6 +100,7 @@ export default function EditSequence({
     'idle' | 'saving' | 'saved' | 'error'
   >('idle')
   const [saveError, setSaveError] = useState<string | null>(null)
+  const [showAddSeriesDialog, setShowAddSeriesDialog] = useState(false)
 
   const model: EditableSequence = usingContext
     ? (ctx.state.sequences as unknown as EditableSequence)
@@ -249,6 +252,29 @@ export default function EditSequence({
     } finally {
       setConfirmDeleteSeq(false)
     }
+  }
+
+  const handleAddSeries = (newSeries: any[]) => {
+    const seriesToAdd = newSeries.map((series) => ({
+      id: series.id,
+      seriesName: series.seriesName,
+      seriesPostures: series.seriesPostures || [],
+      image: series.image || '',
+      breath: '',
+      duration: series.durationSeries || '',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }))
+
+    if (usingContext) {
+      editor.addSeries(seriesToAdd)
+    } else {
+      setForm((prev) => ({
+        ...prev,
+        sequencesSeries: [...prev.sequencesSeries, ...seriesToAdd],
+      }))
+    }
+    setShowAddSeriesDialog(false)
   }
 
   if (status === 'loading') {
@@ -455,9 +481,28 @@ export default function EditSequence({
 
               {/* Flow Series Section */}
               <Box role="group" aria-label="sequence-flow-series">
-                <Typography variant="h6" component="h2" sx={{ mb: 1 }}>
-                  Flow Series
-                </Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    mb: 1,
+                  }}
+                >
+                  <Typography variant="h6" component="h2">
+                    Flow Series
+                  </Typography>
+                  {isOwner && (
+                    <Button
+                      variant="outlined"
+                      startIcon={<AddIcon />}
+                      onClick={() => setShowAddSeriesDialog(true)}
+                      size="small"
+                    >
+                      Add Series
+                    </Button>
+                  )}
+                </Box>
                 {model.sequencesSeries?.length ? (
                   <List dense>
                     {model.sequencesSeries.map((s, idx) => (
@@ -617,6 +662,14 @@ export default function EditSequence({
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Add Series Dialog */}
+      <AddSeriesDialog
+        open={showAddSeriesDialog}
+        onClose={() => setShowAddSeriesDialog(false)}
+        onAdd={handleAddSeries}
+        excludeSeriesIds={model.sequencesSeries.map((s) => s.id || '')}
+      />
     </Box>
   )
 }

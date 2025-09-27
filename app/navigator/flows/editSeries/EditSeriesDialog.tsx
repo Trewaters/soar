@@ -16,12 +16,15 @@ import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+import AddIcon from '@mui/icons-material/Add'
 import { useSession } from 'next-auth/react'
 import Paper from '@mui/material/Paper'
 import ListSubheader from '@mui/material/ListSubheader'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
+import Box from '@mui/material/Box'
 import SeriesImageManager from '@app/clientComponents/SeriesImageManager'
+import AddAsanasDialog from '@clientComponents/AddAsanasDialog'
 
 export interface Asana {
   id: string
@@ -69,6 +72,7 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
   const [asanas, setAsanas] = React.useState<Asana[]>(series.asanas)
   const [error, setError] = React.useState<string | null>(null)
   const [confirmDeleteOpen, setConfirmDeleteOpen] = React.useState(false)
+  const [showAddAsanasDialog, setShowAddAsanasDialog] = React.useState(false)
 
   // Validation logic
   const validate = () => {
@@ -91,6 +95,16 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
       difficulty,
       asanas,
     })
+  }
+
+  const handleAddAsanas = (newAsanas: any[]) => {
+    const asanaToAdd: Asana[] = newAsanas.map((asana) => ({
+      id: asana.id,
+      name: asana.english_names[0] || asana.sort_english_name,
+      difficulty: asana.difficulty || 'beginner',
+    }))
+    setAsanas((prev) => [...prev, ...asanaToAdd])
+    setShowAddAsanasDialog(false)
   }
 
   // Only allow dialog to open for creator
@@ -188,9 +202,28 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
 
           {/* Asana List Management */}
           <Paper elevation={1} sx={{ p: 3, mb: 1.5, borderRadius: '12px' }}>
-            <Typography variant="h6" gutterBottom color="primary">
-              Asana List
-            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                mb: 2,
+              }}
+            >
+              <Typography variant="h6" gutterBottom color="primary">
+                Asana List
+              </Typography>
+              {isCreator && (
+                <Button
+                  variant="outlined"
+                  startIcon={<AddIcon />}
+                  onClick={() => setShowAddAsanasDialog(true)}
+                  size="small"
+                >
+                  Add Asanas
+                </Button>
+              )}
+            </Box>
             <List
               dense
               aria-label="Asana list"
@@ -260,10 +293,7 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
                     </>
                   }
                 >
-                  <ListItemText
-                    primary={asana.name}
-                    secondary={`Difficulty: ${asana.difficulty}`}
-                  />
+                  <ListItemText primary={asana.name} />
                 </ListItem>
               ))}
             </List>
@@ -323,6 +353,14 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
           </DialogActions>
         </Dialog>
       </DialogActions>
+
+      {/* Add Asanas Dialog */}
+      <AddAsanasDialog
+        open={showAddAsanasDialog}
+        onClose={() => setShowAddAsanasDialog(false)}
+        onAdd={handleAddAsanas}
+        excludeAsanaIds={asanas.map((a) => a.id)}
+      />
     </Dialog>
   )
 }

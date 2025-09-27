@@ -35,6 +35,7 @@ type SequenceAction =
   | { type: 'UPDATE_FIELD'; payload: { key: keyof SequenceData; value: any } }
   | { type: 'REMOVE_SERIES_AT'; payload: { index: number } }
   | { type: 'REORDER_SERIES'; payload: { from: number; to: number } }
+  | { type: 'ADD_SERIES'; payload: { series: FlowSeriesSequence[] } }
 
 const initialState: SequencePageState = {
   sequences: {
@@ -101,6 +102,16 @@ export function SequenceReducer(
         ...state,
         sequences: { ...state.sequences, sequencesSeries: list },
       }
+    }
+    case 'ADD_SERIES': {
+      const next = {
+        ...state.sequences,
+        sequencesSeries: [
+          ...state.sequences.sequencesSeries,
+          ...action.payload.series,
+        ],
+      }
+      return { ...state, sequences: next }
     }
     default:
       return state
@@ -169,5 +180,7 @@ export function useSequenceEditor() {
       dispatch({ type: 'REMOVE_SERIES_AT', payload: { index } }),
     reorderSeries: (from: number, to: number) =>
       dispatch({ type: 'REORDER_SERIES', payload: { from, to } }),
+    addSeries: (series: FlowSeriesSequence[]) =>
+      dispatch({ type: 'ADD_SERIES', payload: { series } }),
   }
 }
