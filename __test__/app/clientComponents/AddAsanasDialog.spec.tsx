@@ -6,6 +6,9 @@ import AddAsanasDialog from '@clientComponents/AddAsanasDialog'
 import theme from '@styles/theme'
 
 // Mock next-auth
+jest.mock('next-auth/react')
+const mockUseSession = require('next-auth/react').useSession as jest.Mock
+
 const mockSession = {
   user: { email: 'test@example.com' },
   expires: new Date(Date.now() + 2 * 86400).toISOString(),
@@ -53,6 +56,12 @@ const renderWithProviders = (ui: React.ReactElement) => {
 describe('AddAsanasDialog', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+
+    // Mock useSession to return an authenticated session
+    mockUseSession.mockReturnValue({
+      data: mockSession,
+      status: 'authenticated',
+    })
     ;(global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve(mockAsanas),
@@ -113,7 +122,7 @@ describe('AddAsanasDialog', () => {
     fireEvent.click(mountainPoseCheckbox)
 
     expect(screen.getByText('Selected Asanas (1):')).toBeInTheDocument()
-    expect(screen.getByText('Mountain Pose (Tadasana)')).toBeInTheDocument()
+    expect(screen.getAllByText('Mountain Pose (Tadasana)')).toHaveLength(2) // One in list, one in chip
 
     // Deselect by clicking chip delete
     const chip = screen.getByTestId('CancelIcon')

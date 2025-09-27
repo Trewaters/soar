@@ -11,6 +11,12 @@ const mockSession = {
   expires: new Date(Date.now() + 2 * 86400).toISOString(),
 }
 
+// Mock the useSession hook
+jest.mock('next-auth/react', () => ({
+  SessionProvider: ({ children }: any) => <>{children}</>,
+  useSession: jest.fn(),
+}))
+
 // Mock fetch
 global.fetch = jest.fn()
 
@@ -42,9 +48,17 @@ const renderWithProviders = (ui: React.ReactElement) => {
   )
 }
 
+// Cast the mocked useSession to use in tests
+const mockUseSession = require('next-auth/react').useSession as jest.Mock
+
 describe('EditSeriesDialog - Add Asanas Integration', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    // Mock useSession to return the test session
+    mockUseSession.mockReturnValue({
+      data: mockSession,
+      status: 'authenticated',
+    })
     ;(global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: () =>
@@ -84,6 +98,8 @@ describe('EditSeriesDialog - Add Asanas Integration', () => {
       <EditSeriesDialog {...defaultProps} series={nonCreatorSeries} />
     )
 
+    // For non-creator, the component should show the Unauthorized dialog instead
+    expect(screen.getByText('Unauthorized')).toBeInTheDocument()
     expect(
       screen.queryByRole('button', { name: 'Add Asanas' })
     ).not.toBeInTheDocument()

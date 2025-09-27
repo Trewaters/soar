@@ -31,6 +31,61 @@ jest.mock('@/app/context/AsanaSeriesContext', () => ({
   FlowSeriesProvider: ({ children }: any) => <>{children}</>,
 }))
 
+// Mock AddAsanasDialog
+jest.mock('@clientComponents/AddAsanasDialog', () => {
+  return function MockAddAsanasDialog({
+    open,
+    onClose,
+    onAdd,
+    excludeAsanaIds,
+  }: any) {
+    if (!open) return null
+    return (
+      <div data-testid="add-asanas-dialog">
+        <h2>Add Asanas to Series</h2>
+        <p>Excluded: {excludeAsanaIds?.join(', ')}</p>
+        <button
+          onClick={() =>
+            onAdd([
+              {
+                id: 'new1',
+                english_names: ['Tree Pose'],
+                sort_english_name: 'tree-pose',
+                difficulty: 'intermediate',
+              },
+            ])
+          }
+        >
+          Add Tree Pose
+        </button>
+        <button
+          onClick={() =>
+            onAdd([
+              {
+                id: 'new1',
+                english_names: ['Tree Pose'],
+                sort_english_name: 'tree-pose',
+                difficulty: 'intermediate',
+              },
+              {
+                id: 'new2',
+                english_names: ['Eagle Pose'],
+                sort_english_name: 'eagle-pose',
+                difficulty: 'intermediate',
+              },
+            ])
+          }
+        >
+          Add Multiple Asanas
+        </button>
+        <button data-testid="cancel-add-asanas-btn" onClick={onClose}>
+          Cancel
+        </button>
+      </div>
+    )
+  }
+})
+
 // useSession is imported and mocked; use useSession.mockReturnValue directly in tests
 
 const theme = createTheme()
@@ -239,6 +294,246 @@ describe('EditSeriesDialog', () => {
       ).toBeInTheDocument()
       await user.click(screen.getByRole('button', { name: 'Delete' }))
       expect(onDelete).toHaveBeenCalledWith('s1')
+    })
+  })
+
+  describe('Add Asanas Feature', () => {
+    beforeEach(() => {
+      ;(useSession as jest.Mock).mockReturnValue({
+        data: { user: { email: 'owner@yoga.com' } },
+        status: 'authenticated',
+      })
+    })
+
+    it('shows Add Asanas button for series creator', () => {
+      render(
+        <EditSeriesDialog
+          open
+          onClose={jest.fn()}
+          series={makeSeries()}
+          onSave={jest.fn()}
+          onDelete={jest.fn()}
+        />,
+        { wrapper: Wrapper }
+      )
+
+      expect(
+        screen.getByRole('button', { name: 'Add Asanas' })
+      ).toBeInTheDocument()
+    })
+
+    it('does not show Add Asanas button for non-creator', () => {
+      ;(useSession as jest.Mock).mockReturnValue({
+        data: { user: { email: 'different@yoga.com' } },
+        status: 'authenticated',
+      })
+
+      render(
+        <EditSeriesDialog
+          open
+          onClose={jest.fn()}
+          series={makeSeries()}
+          onSave={jest.fn()}
+          onDelete={jest.fn()}
+        />,
+        { wrapper: Wrapper }
+      )
+
+      expect(
+        screen.queryByRole('button', { name: 'Add Asanas' })
+      ).not.toBeInTheDocument()
+    })
+
+    it('opens AddAsanasDialog when Add Asanas button is clicked', async () => {
+      const user = userEvent.setup()
+      render(
+        <EditSeriesDialog
+          open
+          onClose={jest.fn()}
+          series={makeSeries()}
+          onSave={jest.fn()}
+          onDelete={jest.fn()}
+        />,
+        { wrapper: Wrapper }
+      )
+
+      await user.click(screen.getByRole('button', { name: 'Add Asanas' }))
+
+      expect(screen.getByTestId('add-asanas-dialog')).toBeInTheDocument()
+      expect(screen.getByText('Add Asanas to Series')).toBeInTheDocument()
+    })
+
+    it('passes excluded asana IDs to AddAsanasDialog', async () => {
+      const user = userEvent.setup()
+      render(
+        <EditSeriesDialog
+          open
+          onClose={jest.fn()}
+          series={makeSeries()}
+          onSave={jest.fn()}
+          onDelete={jest.fn()}
+        />,
+        { wrapper: Wrapper }
+      )
+
+      await user.click(screen.getByRole('button', { name: 'Add Asanas' }))
+
+      // Should exclude existing asana IDs
+      expect(screen.getByText('Excluded: a1, a2, a3')).toBeInTheDocument()
+    })
+
+    it('adds new asanas to the series when AddAsanasDialog calls onAdd', async () => {
+      const user = userEvent.setup()
+      const onSave = jest.fn()
+      render(
+        <EditSeriesDialog
+          open
+          onClose={jest.fn()}
+          series={makeSeries()}
+          onSave={onSave}
+          onDelete={jest.fn()}
+        />,
+        { wrapper: Wrapper }
+      )
+
+      // Open dialog
+      await user.click(screen.getByRole('button', { name: 'Add Asanas' }))
+
+      // Add asana through mocked dialog
+      await user.click(screen.getByText('Add Tree Pose'))
+
+      // Verify new asana appears in the list
+      expect(screen.getByText('Tree Pose')).toBeInTheDocument()
+
+      // Save and verify the asana was added
+      await user.click(screen.getByRole('button', { name: 'Save Changes' }))
+      expect(onSave).toHaveBeenCalledWith(
+        expect.objectContaining({
+          asanas: expect.arrayContaining([
+            expect.objectContaining({
+              id: 'new1',
+              name: 'Tree Pose',
+              difficulty: 'intermediate',
+            }),
+          ]),
+        })
+      )
+    })
+
+    it('closes AddAsanasDialog when cancel is clicked', async () => {
+      const user = userEvent.setup()
+      render(
+        <EditSeriesDialog
+          open
+          onClose={jest.fn()}
+          series={makeSeries()}
+          onSave={jest.fn()}
+          onDelete={jest.fn()}
+        />,
+        { wrapper: Wrapper }
+      )
+
+      // Open dialog
+      await user.click(screen.getByRole('button', { name: 'Add Asanas' }))
+      expect(screen.getByTestId('add-asanas-dialog')).toBeInTheDocument()
+
+      // Cancel dialog
+      await user.click(screen.getByTestId('cancel-add-asanas-btn'))
+      expect(screen.queryByTestId('add-asanas-dialog')).not.toBeInTheDocument()
+    })
+
+    it('maintains existing asanas when adding new ones', async () => {
+      const user = userEvent.setup()
+      render(
+        <EditSeriesDialog
+          open
+          onClose={jest.fn()}
+          series={makeSeries()}
+          onSave={jest.fn()}
+          onDelete={jest.fn()}
+        />,
+        { wrapper: Wrapper }
+      )
+
+      // Verify existing asanas are present
+      expect(screen.getByText('Warrior I')).toBeInTheDocument()
+      expect(screen.getByText('Downward Dog')).toBeInTheDocument()
+      expect(screen.getByText("Child's Pose")).toBeInTheDocument()
+
+      // Add new asana
+      await user.click(screen.getByRole('button', { name: 'Add Asanas' }))
+      await user.click(screen.getByText('Add Tree Pose'))
+
+      // Verify all asanas are still present
+      expect(screen.getByText('Warrior I')).toBeInTheDocument()
+      expect(screen.getByText('Downward Dog')).toBeInTheDocument()
+      expect(screen.getByText("Child's Pose")).toBeInTheDocument()
+      expect(screen.getByText('Tree Pose')).toBeInTheDocument()
+    })
+
+    it('can add multiple asanas from a single dialog interaction', async () => {
+      // Update the mock to support multiple asanas
+      jest.doMock('@clientComponents/AddAsanasDialog', () => {
+        return function MockAddAsanasDialog({ open, onClose, onAdd }: any) {
+          if (!open) return null
+          return (
+            <div data-testid="add-asanas-dialog">
+              <button
+                onClick={() =>
+                  onAdd([
+                    {
+                      id: 'new1',
+                      english_names: ['Tree Pose'],
+                      sort_english_name: 'tree-pose',
+                      difficulty: 'intermediate',
+                    },
+                    {
+                      id: 'new2',
+                      english_names: ['Eagle Pose'],
+                      sort_english_name: 'eagle-pose',
+                      difficulty: 'advanced',
+                    },
+                  ])
+                }
+              >
+                Add Multiple Asanas
+              </button>
+              <button onClick={onClose}>Cancel</button>
+            </div>
+          )
+        }
+      })
+
+      const user = userEvent.setup()
+      const onSave = jest.fn()
+      render(
+        <EditSeriesDialog
+          open
+          onClose={jest.fn()}
+          series={makeSeries()}
+          onSave={onSave}
+          onDelete={jest.fn()}
+        />,
+        { wrapper: Wrapper }
+      )
+
+      await user.click(screen.getByRole('button', { name: 'Add Asanas' }))
+      await user.click(screen.getByText('Add Multiple Asanas'))
+
+      // Verify both new asanas appear
+      expect(screen.getByText('Tree Pose')).toBeInTheDocument()
+      expect(screen.getByText('Eagle Pose')).toBeInTheDocument()
+
+      // Save and verify both asanas were added
+      await user.click(screen.getByRole('button', { name: 'Save Changes' }))
+      expect(onSave).toHaveBeenCalledWith(
+        expect.objectContaining({
+          asanas: expect.arrayContaining([
+            expect.objectContaining({ name: 'Tree Pose' }),
+            expect.objectContaining({ name: 'Eagle Pose' }),
+          ]),
+        })
+      )
     })
   })
 

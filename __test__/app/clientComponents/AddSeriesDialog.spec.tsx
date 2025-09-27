@@ -1,14 +1,21 @@
 import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { ThemeProvider } from '@mui/material/styles'
-import { SessionProvider } from 'next-auth/react'
 import AddSeriesDialog from '@clientComponents/AddSeriesDialog'
 import theme from '@styles/theme'
 
-// Mock next-auth
+// Explicit next-auth hook mock to ensure session-dependent fetch executes
+jest.mock('next-auth/react', () => ({ useSession: jest.fn() }))
+
 const mockSession = {
   user: { email: 'test@example.com' },
   expires: new Date(Date.now() + 2 * 86400).toISOString(),
+}
+
+// Access mocked hook
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { useSession: mockUseSession } = require('next-auth/react') as {
+  useSession: jest.Mock
 }
 
 // Mock fetch
@@ -42,17 +49,20 @@ const defaultProps = {
   excludeSeriesIds: [],
 }
 
-const renderWithProviders = (ui: React.ReactElement) => {
-  return render(
-    <SessionProvider session={mockSession}>
-      <ThemeProvider theme={theme}>{ui}</ThemeProvider>
-    </SessionProvider>
-  )
-}
+const MockSessionProvider = ({ children }: { children: React.ReactNode }) => (
+  <>{children}</>
+)
+
+const renderWithProviders = (ui: React.ReactElement) =>
+  render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>)
 
 describe('AddSeriesDialog', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockUseSession.mockReturnValue({
+      data: mockSession,
+      status: 'authenticated',
+    })
     ;(global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: () => Promise.resolve(mockSeries),
@@ -78,8 +88,8 @@ describe('AddSeriesDialog', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByText('Morning Flow')).toBeInTheDocument()
-      expect(screen.getByText('Power Flow')).toBeInTheDocument()
+      expect(screen.getAllByText('Morning Flow')[0]).toBeInTheDocument()
+      expect(screen.getAllByText('Power Flow')[0]).toBeInTheDocument()
     })
   })
 
@@ -87,7 +97,7 @@ describe('AddSeriesDialog', () => {
     renderWithProviders(<AddSeriesDialog {...defaultProps} />)
 
     await waitFor(() => {
-      expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+      expect(screen.getAllByText('Morning Flow')[0]).toBeInTheDocument()
     })
 
     expect(screen.getByText('A gentle morning flow series')).toBeInTheDocument()
@@ -99,7 +109,7 @@ describe('AddSeriesDialog', () => {
     renderWithProviders(<AddSeriesDialog {...defaultProps} />)
 
     await waitFor(() => {
-      expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+      expect(screen.getAllByText('Morning Flow')[0]).toBeInTheDocument()
     })
 
     const searchInput = screen.getByPlaceholderText(/Search series/)
@@ -113,7 +123,7 @@ describe('AddSeriesDialog', () => {
     renderWithProviders(<AddSeriesDialog {...defaultProps} />)
 
     await waitFor(() => {
-      expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+      expect(screen.getAllByText('Morning Flow')[0]).toBeInTheDocument()
     })
 
     // Select a series
@@ -158,7 +168,7 @@ describe('AddSeriesDialog', () => {
 
     await waitFor(() => {
       expect(screen.queryByText('Morning Flow')).not.toBeInTheDocument()
-      expect(screen.getByText('Power Flow')).toBeInTheDocument()
+      expect(screen.getAllByText('Power Flow')[0]).toBeInTheDocument()
     })
   })
 
@@ -185,7 +195,7 @@ describe('AddSeriesDialog', () => {
     renderWithProviders(<AddSeriesDialog {...defaultProps} />)
 
     await waitFor(() => {
-      expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+      expect(screen.getAllByText('Morning Flow')[0]).toBeInTheDocument()
     })
 
     const addButton = screen.getByRole('button', { name: /Add 0 Series/ })
