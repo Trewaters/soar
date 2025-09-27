@@ -6,11 +6,32 @@ import { getAllSeries } from '@lib/seriesService'
 import userEvent from '@testing-library/user-event'
 
 // Mock next/navigation
+const mockPush = jest.fn()
+const mockReplace = jest.fn()
+const mockPrefetch = jest.fn()
+const mockBack = jest.fn()
+const mockForward = jest.fn()
+const mockRefresh = jest.fn()
+const mockGet = jest.fn(() => null)
+
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn(() => ({
-    get: jest.fn(() => null),
+    get: mockGet,
+  })),
+  useRouter: jest.fn(() => ({
+    push: mockPush,
+    replace: mockReplace,
+    prefetch: mockPrefetch,
+    back: mockBack,
+    forward: mockForward,
+    refresh: mockRefresh,
   })),
 }))
+
+// Make mocks available for test access
+;(global as any).__mockNavigationPush = mockPush
+;(global as any).__mockNavigationReplace = mockReplace
+;(global as any).__mockSearchParamsGet = mockGet
 
 // Mock NextAuth
 jest.mock('next-auth/react', () => ({
@@ -608,7 +629,7 @@ describe('Practice Series Page', () => {
         })
         expect(mountainPoseLink).toHaveAttribute(
           'href',
-          '/navigator/asanaPostures/Mountain Pose'
+          '/navigator/asanaPostures/Mountain%20Pose'
         )
 
         const forwardFoldLink = screen.getByRole('link', {
@@ -616,7 +637,7 @@ describe('Practice Series Page', () => {
         })
         expect(forwardFoldLink).toHaveAttribute(
           'href',
-          '/navigator/asanaPostures/Forward Fold'
+          '/navigator/asanaPostures/Forward%20Fold'
         )
       })
     })
