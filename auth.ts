@@ -15,6 +15,8 @@ import { comparePassword, hashPassword } from '@app/utils/password'
 
 const prisma = new PrismaClient()
 
+const USER_EXISTENCE_CHECK_INTERVAL_MS = 1000 * 60 * 5
+
 const providers: Provider[] = [
   GitHub,
   Google,
@@ -228,9 +230,26 @@ const authConfig = {
     },
     async session({ session, token }: { session: any; token: any }) {
       console.log('session token', token)
-      if (token) {
+
+      if (!token || (token as any).userDeleted) {
+        console.warn('Session invalidated due to missing user record.', {
+          tokenEmail: token?.email,
+        })
+        return null
+      }
+
+      if (session?.user && token.id) {
         session.user.id = token.id as string
       }
+
+      if (session?.user && token.email) {
+        session.user.email = token.email as string
+      }
+
+      if (session?.user && token.name) {
+        session.user.name = token.name as string
+      }
+
       return session
     },
     async jwt({
@@ -245,6 +264,13 @@ const authConfig = {
       account?: any
     }) {
       console.log('jwt token', token)
+
+      if ((token as any).userDeleted) {
+        return token
+      }
+
+      const now = Date.now()
+
       if (trigger === 'update') token.name = session.user.name
 
       // Set user ID from database if not already set
@@ -254,7 +280,52 @@ const authConfig = {
         })
         if (user) {
           token.id = user.id
+          token.lastUserCheck = now
+        } else {
+          console.warn(
+            'JWT token email has no matching user. Marking for sign-out.',
+            {
+              tokenEmail: token.email,
+            }
+          )
+
+          token.userDeleted = true
+          token.lastUserCheck = now
+
+          return token
         }
+      }
+
+      const lastUserCheck =
+        typeof token.lastUserCheck === 'number' ? token.lastUserCheck : 0
+      const shouldCheckUser =
+        trigger === 'signIn' ||
+        trigger === 'signUp' ||
+        now - lastUserCheck > USER_EXISTENCE_CHECK_INTERVAL_MS
+
+      if (token.id && shouldCheckUser) {
+        const userExists = await prisma.userData.findUnique({
+          where: { id: token.id as string },
+          select: { id: true },
+        })
+
+        if (!userExists) {
+          console.warn(
+            'JWT token detected missing user. Marking for sign-out.',
+            {
+              tokenEmail: token.email,
+              tokenId: token.id,
+            }
+          )
+
+          token.userDeleted = true
+          token.id = undefined
+          token.lastUserCheck = now
+
+          return token
+        }
+
+        token.lastUserCheck = now
       }
 
       if (account?.provider === 'google') {

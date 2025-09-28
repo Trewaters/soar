@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { Box, Typography, Paper, Stack, Chip, Tooltip } from '@mui/material'
-import { useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
@@ -169,7 +169,7 @@ export default function ActivityStreaks({
                 responseTimestamp: response.headers.get('X-Timestamp'),
               })
             } else {
-              // Client error (4xx) - show fallback data
+              // Client error (4xx) - show fallback data or sign out
               let errorDetails = null
               try {
                 errorDetails = await response.json()
@@ -178,6 +178,25 @@ export default function ActivityStreaks({
                   'ActivityStreaks: Failed to parse error response:',
                   parseError
                 )
+              }
+
+              if (response.status === 401) {
+                console.warn(
+                  'ActivityStreaks: Session invalid. Signing user out.',
+                  {
+                    status: response.status,
+                    statusText: response.statusText,
+                    errorDetails,
+                    userId: session.user.id,
+                    environment: process.env.NODE_ENV,
+                    timestamp: new Date().toISOString(),
+                  }
+                )
+
+                await signOut({
+                  callbackUrl: '/auth/signin?reason=session_expired',
+                })
+                return
               }
 
               fetchedStreaks.push({

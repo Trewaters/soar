@@ -81,13 +81,19 @@ export async function POST(req: NextRequest) {
     })
 
     if (!user) {
+      console.warn('recordActivity: user not found for supplied session id.', {
+        requestId,
+        timestamp,
+        userId,
+      })
+
       return NextResponse.json(
         {
-          error: 'User not found',
+          error: 'User session is no longer valid. Please sign in again.',
           requestId,
           timestamp,
         },
-        { status: 404 }
+        { status: 401 }
       )
     }
 
