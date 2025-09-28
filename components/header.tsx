@@ -182,9 +182,15 @@ export default function Header() {
                       </ListItemText>
                     </ListItemButton>
                   ) : (
-                    <Link href={navItem.href} passHref legacyBehavior>
+                    <Link
+                      href={navItem.href}
+                      style={{
+                        textDecoration: 'none',
+                        width: '100%',
+                        display: 'block',
+                      }}
+                    >
                       <ListItemButton
-                        component="button"
                         sx={{
                           width: 250,
                           bgcolor: isSelected ? 'secondary.light' : undefined,
@@ -267,7 +273,7 @@ export default function Header() {
               transform: 'translateX(-50%)',
             }}
           >
-            <Link href="/" passHref legacyBehavior>
+            <Link href="/">
               <Image
                 src="/logo/Main Logo in Contrast Light150px.png"
                 alt="Soar Yoga main logo"

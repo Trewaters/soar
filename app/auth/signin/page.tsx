@@ -43,9 +43,9 @@ export default async function SignInPage({
                   You&apos;re signed in!
                 </Typography>
                 <Typography variant="body1">
-                  <Link href="/" passHref legacyBehavior>
-                    <MuiLink>Click here</MuiLink>
-                  </Link>
+                  <MuiLink component={Link} href="/">
+                    Click here
+                  </MuiLink>
                   &nbsp;to go to the home page.
                 </Typography>
                 <Paper
