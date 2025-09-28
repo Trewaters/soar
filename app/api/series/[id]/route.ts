@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '../../../../prisma/generated/client'
 import { auth } from '../../../../auth'
 import getAlphaUserIds from '@app/lib/alphaUsers'
+import { formatSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
 
 const prisma = new PrismaClient()
 
@@ -125,7 +126,7 @@ export async function PATCH(
     if (typeof name === 'string') updateData.seriesName = name
     if (Array.isArray(asanas)) {
       updateData.seriesPostures = asanas.map((a) =>
-        `${a.name}; ${a.difficulty ?? ''}`.trim()
+        formatSeriesPostureEntry(a.name, a.difficulty)
       )
     }
     if (Array.isArray(breathInput)) {

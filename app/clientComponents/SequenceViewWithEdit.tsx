@@ -16,6 +16,7 @@ import { useSession } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import EditSequence, { EditableSequence } from '@clientComponents/EditSequence'
 import { getAllSeries } from '@lib/seriesService'
+import { splitSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
 import Image from 'next/image'
 
 type Props = {
@@ -302,7 +303,8 @@ export default function SequenceViewWithEdit({
                 <CardContent className="lines" sx={{ p: 0 }}>
                   {seriesMini.seriesPostures?.length ? (
                     seriesMini.seriesPostures.map((posture, index) => {
-                      const [englishName, sanskritName] = posture.split(';')
+                      const { name: englishName, secondary: sanskritName } =
+                        splitSeriesPostureEntry(posture)
                       return (
                         <Stack
                           key={`${englishName}-${index}`}

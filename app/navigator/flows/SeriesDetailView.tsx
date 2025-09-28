@@ -8,6 +8,7 @@ import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/S
 import SeriesWeeklyActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesWeeklyActivityTracker'
 import PostureShareButton from '@app/clientComponents/postureShareButton'
 import { getPostureIdByName } from '@lib/postureService'
+import { splitSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
 
 interface SeriesDetailViewProps {
   series: FlowSeriesData
@@ -37,7 +38,7 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
       const idsMap: { [poseName: string]: string | null } = {}
 
       for (const pose of flow.seriesPostures) {
-        const poseName = pose.split(';')[0]
+        const { name: poseName } = splitSeriesPostureEntry(pose)
         try {
           const id = await getPostureIdByName(poseName)
           idsMap[poseName] = id
@@ -156,8 +157,7 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
       {/* Series Postures */}
       <Stack spacing={1} sx={{ width: '100%', mb: 3 }}>
         {flow.seriesPostures?.map((pose, index) => {
-          const poseName = pose.split(';')[0]
-          const sanskritName = pose.split(';')[1]
+          const { name: poseName, secondary } = splitSeriesPostureEntry(pose)
           const postureId = postureIds[poseName]
 
           // Use ID if available, fallback to name (encoded) for backwards compatibility
@@ -176,13 +176,15 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
                     {poseName}
                   </Link>
                 </Typography>
-                <Typography
-                  textAlign="left"
-                  variant="body2"
-                  color="text.secondary"
-                >
-                  {sanskritName}
-                </Typography>
+                {secondary && (
+                  <Typography
+                    textAlign="left"
+                    variant="body2"
+                    color="text.secondary"
+                  >
+                    {secondary}
+                  </Typography>
+                )}
               </Box>
             </Box>
           )

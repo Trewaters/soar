@@ -36,6 +36,10 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AutocompleteComponent from '@app/clientComponents/autocomplete-search'
 import Image from 'next/image'
 import { AppText } from '@app/navigator/constants/Strings'
+import {
+  formatSeriesPostureEntry,
+  splitSeriesPostureEntry,
+} from '@app/utils/asana/seriesPostureLabels'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -77,6 +81,7 @@ export default function Page() {
     }
 
     fetchPostures()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, session])
 
   // Refetch postures when the page becomes visible (e.g., when returning from create asana page)
@@ -112,6 +117,7 @@ export default function Page() {
       window.removeEventListener('focus', handleFocus)
       window.removeEventListener('popstate', handlePopState)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function handleSelect(
@@ -125,14 +131,15 @@ export default function Page() {
         value.sanskrit_names[0]?.simplified
           ? value.sanskrit_names[0].simplified
           : ''
+      const formattedEntry = formatSeriesPostureEntry(
+        value.sort_english_name,
+        simplifiedName
+      )
       dispatch({
         type: 'SET_FLOW_SERIES',
         payload: {
           ...state.flowSeries,
-          seriesPostures: [
-            ...state.flowSeries.seriesPostures,
-            value.sort_english_name + '; ' + simplifiedName,
-          ],
+          seriesPostures: [...state.flowSeries.seriesPostures, formattedEntry],
         },
       })
     }
@@ -333,56 +340,67 @@ export default function Page() {
                         mx: 4,
                       }}
                     >
-                      {seriesPostures.map((word, index) => (
-                        <Stack
-                          className="journalLine"
-                          key={`${word}+${index}`}
-                          sx={{
-                            alignItems: 'center',
-                            display: 'flex',
-                            flexDirection: 'row',
-                          }}
-                        >
-                          <Stack>
-                            <IconButton
-                              disableRipple
-                              sx={{ color: 'error.light' }}
-                              onClick={() =>
-                                dispatch({
-                                  type: 'SET_FLOW_SERIES',
-                                  payload: {
-                                    ...state.flowSeries,
-                                    seriesPostures:
-                                      state.flowSeries.seriesPostures.filter(
-                                        (item) => item !== word
-                                      ),
-                                  },
-                                })
-                              }
-                            >
-                              <DeleteForeverIcon />
-                            </IconButton>
-                          </Stack>
-                          <Stack>
-                            {word.split(';').map((splitWord, idx) => (
+                      {seriesPostures.map((word, index) => {
+                        const { name, secondary } =
+                          splitSeriesPostureEntry(word)
+
+                        return (
+                          <Stack
+                            className="journalLine"
+                            key={`${word}+${index}`}
+                            sx={{
+                              alignItems: 'center',
+                              display: 'flex',
+                              flexDirection: 'row',
+                            }}
+                          >
+                            <Stack>
+                              <IconButton
+                                disableRipple
+                                sx={{ color: 'error.light' }}
+                                onClick={() =>
+                                  dispatch({
+                                    type: 'SET_FLOW_SERIES',
+                                    payload: {
+                                      ...state.flowSeries,
+                                      seriesPostures:
+                                        state.flowSeries.seriesPostures.filter(
+                                          (item) => item !== word
+                                        ),
+                                    },
+                                  })
+                                }
+                              >
+                                <DeleteForeverIcon />
+                              </IconButton>
+                            </Stack>
+                            <Stack>
                               <Typography
-                                key={`${word}-${idx}`}
-                                variant={idx === 1 ? 'body2' : 'body1'}
+                                variant="body1"
                                 sx={{
                                   textOverflow: 'ellipsis',
                                   whiteSpace: 'nowrap',
-                                  ...(idx === 1 && {
-                                    fontWeight: 'bold',
-                                    fontStyle: 'italic',
-                                  }), // Add emphasis styles here
                                 }}
                               >
-                                {splitWord}
+                                {name}
                               </Typography>
-                            ))}
+                              {secondary && (
+                                <Typography
+                                  variant="body2"
+                                  sx={{
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    fontWeight: 'bold',
+                                    fontStyle: 'italic',
+                                  }}
+                                >
+                                  {secondary}
+                                </Typography>
+                              )}
+                            </Stack>
                           </Stack>
-                        </Stack>
-                      ))}
+                        )
+                      })}
                     </Stack>
                     <Stack
                       direction="row"

@@ -25,6 +25,7 @@ import Divider from '@mui/material/Divider'
 import Box from '@mui/material/Box'
 import SeriesImageManager from '@app/clientComponents/SeriesImageManager'
 import AddAsanasDialog from '@clientComponents/AddAsanasDialog'
+import { sanitizeSeriesSecondaryLabel } from '@app/utils/asana/seriesPostureLabels'
 
 export interface Asana {
   id: string
@@ -98,11 +99,17 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
   }
 
   const handleAddAsanas = (newAsanas: any[]) => {
-    const asanaToAdd: Asana[] = newAsanas.map((asana) => ({
-      id: asana.id,
-      name: asana.english_names[0] || asana.sort_english_name,
-      difficulty: asana.difficulty || 'beginner',
-    }))
+    const asanaToAdd: Asana[] = newAsanas.map((asana) => {
+      const englishName = asana.english_names[0] || asana.sort_english_name
+      const sanskritName =
+        typeof asana.sanskrit_names === 'string' ? asana.sanskrit_names : ''
+
+      return {
+        id: asana.id,
+        name: englishName,
+        difficulty: sanitizeSeriesSecondaryLabel(sanskritName),
+      }
+    })
     setAsanas((prev) => [...prev, ...asanaToAdd])
     setShowAddAsanasDialog(false)
   }

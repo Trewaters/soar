@@ -39,6 +39,7 @@ import { ArrowBack, ArrowForward } from '@mui/icons-material'
 import Image from 'next/image'
 import NavBottom from '@serverComponents/navBottom'
 import { AppText } from '@app/navigator/constants/Strings'
+import { splitSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
 
 async function fetchSeries() {
   try {
@@ -376,28 +377,36 @@ export default function Page() {
                         </FormLabel>
 
                         <List className="lines">
-                          {postures.map((series, index) => (
-                            <ListItem
-                              className="journalLine"
-                              sx={{ whiteSpace: 'collapse' }}
-                              key={`${series}${index}`}
-                            >
-                              <ListItemText
-                                primary={series.split(';').map((item, idx) => (
-                                  <Typography
-                                    variant="body1"
-                                    key={idx}
-                                    sx={{
-                                      fontStyle:
-                                        idx === 1 ? 'italic' : 'normal',
-                                    }}
-                                  >
-                                    {item}
-                                  </Typography>
-                                ))}
-                              />
-                            </ListItem>
-                          ))}
+                          {postures.map((series, index) => {
+                            const { name, secondary } =
+                              splitSeriesPostureEntry(series)
+
+                            return (
+                              <ListItem
+                                className="journalLine"
+                                sx={{ whiteSpace: 'collapse' }}
+                                key={`${series}${index}`}
+                              >
+                                <ListItemText
+                                  primary={
+                                    <>
+                                      <Typography variant="body1">
+                                        {name}
+                                      </Typography>
+                                      {secondary && (
+                                        <Typography
+                                          variant="body1"
+                                          sx={{ fontStyle: 'italic' }}
+                                        >
+                                          {secondary}
+                                        </Typography>
+                                      )}
+                                    </>
+                                  }
+                                />
+                              </ListItem>
+                            )
+                          })}
                         </List>
                         <ListItem>
                           <Stack>

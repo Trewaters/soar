@@ -51,7 +51,7 @@ jest.mock('@clientComponents/AddAsanasDialog', () => {
                 id: 'new1',
                 english_names: ['Tree Pose'],
                 sort_english_name: 'tree-pose',
-                difficulty: 'intermediate',
+                sanskrit_names: 'Vrikshasana', // Sanskrit name will be sanitized to empty if it's a difficulty
               },
             ])
           }
@@ -65,13 +65,13 @@ jest.mock('@clientComponents/AddAsanasDialog', () => {
                 id: 'new1',
                 english_names: ['Tree Pose'],
                 sort_english_name: 'tree-pose',
-                difficulty: 'intermediate',
+                sanskrit_names: 'Vrikshasana',
               },
               {
                 id: 'new2',
                 english_names: ['Eagle Pose'],
                 sort_english_name: 'eagle-pose',
-                difficulty: 'intermediate',
+                sanskrit_names: 'Garudasana',
               },
             ])
           }
@@ -413,7 +413,7 @@ describe('EditSeriesDialog', () => {
             expect.objectContaining({
               id: 'new1',
               name: 'Tree Pose',
-              difficulty: 'intermediate',
+              difficulty: 'Vrikshasana', // Sanskrit name is preserved by sanitizeSeriesSecondaryLabel
             }),
           ]),
         })
@@ -485,13 +485,13 @@ describe('EditSeriesDialog', () => {
                       id: 'new1',
                       english_names: ['Tree Pose'],
                       sort_english_name: 'tree-pose',
-                      difficulty: 'intermediate',
+                      sanskrit_names: 'Vrikshasana',
                     },
                     {
                       id: 'new2',
                       english_names: ['Eagle Pose'],
                       sort_english_name: 'eagle-pose',
-                      difficulty: 'advanced',
+                      sanskrit_names: 'Garudasana',
                     },
                   ])
                 }

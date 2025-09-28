@@ -34,6 +34,7 @@ import EditSeriesDialog, {
   Series as EditSeriesShape,
   Asana as EditAsanaShape,
 } from '@app/navigator/flows/editSeries/EditSeriesDialog'
+import { splitSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -251,15 +252,14 @@ export default function Page() {
   const dialogSeries: EditSeriesShape | null = useMemo(() => {
     if (!flow) return null
     const asanas: EditAsanaShape[] = (flow.seriesPostures || []).map(
-      (sp, idx) => {
-        const parts = sp.split(';')
-        const name = (parts[0] || '').trim()
-        const simplified = (parts[1] || '').trim()
+      (entry, idx) => {
+        const { name, secondary } = splitSeriesPostureEntry(entry)
+        const resolvedName = name || `asana-${idx}`
+
         return {
-          id: `${idx}-${name}`,
-          name,
-          // Show nothing when difficulty is missing instead of the literal 'unknown'
-          difficulty: simplified || '',
+          id: `${idx}-${resolvedName}`,
+          name: resolvedName,
+          difficulty: secondary,
         }
       }
     )
@@ -534,31 +534,33 @@ export default function Page() {
                   </Box>
                 )}
                 <Stack>
-                  {flow.seriesPostures.map((pose) => (
-                    <Box key={pose} className="lines">
-                      <Box key={pose} className="journalLine">
-                        <Typography textAlign={'left'} variant="body1">
-                          {(() => {
-                            const href = getPostureNavigationUrlSync(pose)
-                            const poseName = pose.split(';')[0]
+                  {flow.seriesPostures.map((pose) => {
+                    const { name: poseName, secondary } =
+                      splitSeriesPostureEntry(pose)
+                    const href = getPostureNavigationUrlSync(pose)
+                    const resolvedName = poseName || pose
 
-                            return (
-                              <Link
-                                underline="hover"
-                                color="primary.contrastText"
-                                href={href}
-                              >
-                                {poseName}
-                              </Link>
-                            )
-                          })()}
-                        </Typography>
-                        <Typography textAlign={'left'} variant="body2">
-                          {pose.split(';')[1]}
-                        </Typography>
+                    return (
+                      <Box key={pose} className="lines">
+                        <Box className="journalLine">
+                          <Typography textAlign={'left'} variant="body1">
+                            <Link
+                              underline="hover"
+                              color="primary.contrastText"
+                              href={href}
+                            >
+                              {resolvedName}
+                            </Link>
+                          </Typography>
+                          {secondary && (
+                            <Typography textAlign={'left'} variant="body2">
+                              {secondary}
+                            </Typography>
+                          )}
+                        </Box>
                       </Box>
-                    </Box>
-                  ))}
+                    )
+                  })}
                 </Stack>
                 {/* Series image (if uploaded) - shown between posture list and description */}
                 {imageUrl ? (

@@ -29,6 +29,7 @@ import EditSeriesDialog, {
   Asana as EditAsanaShape,
 } from '@app/navigator/flows/editSeries/EditSeriesDialog'
 import { updateSeries, deleteSeries } from '@lib/seriesService'
+import { splitSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
@@ -568,13 +569,12 @@ function SeriesCard({ series }: { series: UserSeriesData }) {
     description: series.description || '',
     difficulty: 'beginner',
     asanas: (series.seriesPostures || []).map((sp, idx) => {
-      const parts = sp.split(';')
-      const name = (parts[0] || '').trim()
-      const simplified = (parts[1] || '').trim()
+      const { name, secondary } = splitSeriesPostureEntry(sp)
+      const resolvedName = name || `asana-${idx}`
       const asana: EditAsanaShape = {
-        id: `${idx}-${name}`,
-        name,
-        difficulty: simplified || 'unknown',
+        id: `${idx}-${resolvedName}`,
+        name: resolvedName,
+        difficulty: secondary,
       }
       return asana
     }),
