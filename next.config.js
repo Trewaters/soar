@@ -18,6 +18,8 @@ const nextConfig = {
     ],
     // Handle unoptimized images (like base64 data URLs)
     unoptimized: false,
+    // Configure allowed quality values for Next.js 16+ compatibility
+    qualities: [25, 50, 75, 90, 95, 100],
   },
   webpack: (config, { isServer }) => {
     if (isServer) {
