@@ -18,7 +18,7 @@ import {
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { getPostureIdByName } from '@lib/postureService'
+import { getPostureNavigationUrlSync } from '@app/utils/navigation/postureNavigation'
 import EditIcon from '@mui/icons-material/Edit'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
@@ -246,40 +246,6 @@ export default function Page() {
   }
 
   // Resolve asana IDs for navigation
-  useEffect(() => {
-    let mounted = true
-    async function resolvePostureIds() {
-      if (!singleSequence?.sequencesSeries?.length) {
-        if (mounted) setPostureIds({})
-        return
-      }
-
-      const idsMap: { [poseName: string]: string | null } = {}
-
-      // Iterate through series in the sequence
-      for (const series of singleSequence.sequencesSeries) {
-        // Iterate through postures in each series
-        for (const pose of series.seriesPostures) {
-          const poseName = pose.split(';')[0]
-          try {
-            const id = await getPostureIdByName(poseName)
-            idsMap[poseName] = id
-          } catch (error) {
-            console.warn(`Failed to resolve ID for pose: ${poseName}`, error)
-            idsMap[poseName] = null
-          }
-        }
-      }
-
-      if (mounted) setPostureIds(idsMap)
-    }
-
-    resolvePostureIds()
-    return () => {
-      mounted = false
-    }
-  }, [singleSequence?.sequencesSeries])
-
   function handleSelect(
     event: ChangeEvent<object>,
     value: SequenceData | null
@@ -300,10 +266,6 @@ export default function Page() {
   }
 
   const [open, setOpen] = useState(false)
-  const [postureIds, setPostureIds] = useState<{
-    [poseName: string]: string | null
-  }>({})
-
   return (
     <>
       <Box
@@ -685,10 +647,7 @@ export default function Page() {
                             >
                               {(() => {
                                 const poseName = asana.split(';')[0]
-                                const postureId = postureIds[poseName]
-                                const href = postureId
-                                  ? `/navigator/asanaPostures/${postureId}`
-                                  : `/navigator/asanaPostures/${encodeURIComponent(poseName)}`
+                                const href = getPostureNavigationUrlSync(asana)
 
                                 return (
                                   <Link

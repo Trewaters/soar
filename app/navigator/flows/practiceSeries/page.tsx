@@ -18,7 +18,7 @@ import {
   CardMedia,
 } from '@mui/material'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { getPostureIdByName } from '@lib/postureService'
+import { getPostureNavigationUrlSync } from '@app/utils/navigation/postureNavigation'
 import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
@@ -49,9 +49,6 @@ export default function Page() {
   const [acOpen, setAcOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const [images, setImages] = useState<string[]>([])
-  const [postureIds, setPostureIds] = useState<{
-    [poseName: string]: string | null
-  }>({})
 
   // Partitioned, grouped search data using centralized ordering utility
   const enrichedSeries = useMemo(
@@ -211,37 +208,6 @@ export default function Page() {
       mounted = false
     }
   }, [flow?.id])
-
-  // Resolve asana IDs for navigation
-  useEffect(() => {
-    let mounted = true
-    async function resolvePostureIds() {
-      if (!flow?.seriesPostures?.length) {
-        if (mounted) setPostureIds({})
-        return
-      }
-
-      const idsMap: { [poseName: string]: string | null } = {}
-
-      for (const pose of flow.seriesPostures) {
-        const poseName = pose.split(';')[0]
-        try {
-          const id = await getPostureIdByName(poseName)
-          idsMap[poseName] = id
-        } catch (error) {
-          console.warn(`Failed to resolve ID for pose: ${poseName}`, error)
-          idsMap[poseName] = null
-        }
-      }
-
-      if (mounted) setPostureIds(idsMap)
-    }
-
-    resolvePostureIds()
-    return () => {
-      mounted = false
-    }
-  }, [flow?.seriesPostures])
 
   const imageUrl = useMemo(() => {
     if (images && images.length > 0) return images[0]
@@ -573,11 +539,8 @@ export default function Page() {
                       <Box key={pose} className="journalLine">
                         <Typography textAlign={'left'} variant="body1">
                           {(() => {
+                            const href = getPostureNavigationUrlSync(pose)
                             const poseName = pose.split(';')[0]
-                            const postureId = postureIds[poseName]
-                            const href = postureId
-                              ? `/navigator/asanaPostures/${postureId}`
-                              : `/navigator/asanaPostures/${encodeURIComponent(poseName)}`
 
                             return (
                               <Link
