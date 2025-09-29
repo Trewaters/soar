@@ -42,19 +42,6 @@ export async function GET(req: Request) {
     await prisma.$disconnect()
   }
 
-  // try {
-  //   practitioner = await fetch(
-  //     `${baseUrl}/api/user/fetchPractitioner/?id=${user.id}`
-  //   )
-  //   const data = await practitioner.json()
-  // } catch (error) {
-  //   console.error('Practitioner creation error (api/user):', error)
-  //   return new Response(
-  //     JSON.stringify({ error: 'Failed to create practitioner data' }),
-  //     { status: 500 }
-  //   )
-  // }
-
   return new Response(JSON.stringify({ data: user }), {
     status: 200,
     headers: {

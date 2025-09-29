@@ -9,6 +9,8 @@ jest.mock('next-auth/react', () => ({
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  useSearchParams: () => new URLSearchParams(),
+  usePathname: () => '/',
 }))
 
 import { useSession } from 'next-auth/react'

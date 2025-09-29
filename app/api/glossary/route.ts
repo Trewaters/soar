@@ -12,9 +12,11 @@ function getPrismaClient() {
         errorFormat: 'pretty',
       })
     } catch (error) {
-      console.error('Failed to initialize Prisma client:', error)
-      console.error('Database URL exists:', !!process.env.DATABASE_URL)
       console.error(
+        'Failed to initialize Prisma client:',
+        error,
+        'Database URL exists:',
+        !!process.env.DATABASE_URL,
         'Database URL prefix:',
         process.env.DATABASE_URL?.substring(0, 20)
       )
@@ -74,7 +76,6 @@ export async function GET() {
     console.error('Error fetching glossary terms:', error)
 
     // Always return fallback data with 200 status to prevent frontend errors
-    console.warn('Database error, returning fallback data')
     return NextResponse.json(fallbackGlossaryTerms, { status: 200 })
   } finally {
     // Intentionally keep connection open in serverless-friendly pattern

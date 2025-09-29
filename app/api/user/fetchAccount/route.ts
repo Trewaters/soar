@@ -11,15 +11,12 @@ export async function GET(req: Request) {
   const userEmail = searchParams.get('email') || undefined
   let account, providerAccount
 
-  console.log('email:', userEmail)
-
   if (!userId) {
     if (userEmail) {
       try {
         account = await prisma.userData.findUnique({
           where: { email: userEmail },
         })
-        console.log('account:', account)
 
         if (!account) {
           // No user found for this email - return 200 with null data for consistency

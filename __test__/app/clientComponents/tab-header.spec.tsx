@@ -12,6 +12,8 @@ jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
   }),
+  usePathname: () => '/',
+  useSearchParams: () => new URLSearchParams(),
 }))
 
 // Mock Next.js Link component

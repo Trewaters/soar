@@ -18,8 +18,6 @@ export async function POST(request: Request) {
   } = await request.json()
 
   try {
-    console.log('Creating new sequence:', nameSequence)
-
     // Create and return the new sequence to verify it was created successfully
     const newSequence = await prisma.asanaSequence.create({
       data: {
@@ -34,8 +32,6 @@ export async function POST(request: Request) {
         updatedAt: new Date().toISOString(),
       },
     })
-
-    console.log('Sequence created successfully with ID:', newSequence.id)
 
     // Add a small delay to ensure database transaction is fully committed
     await new Promise((resolve) => setTimeout(resolve, 100))

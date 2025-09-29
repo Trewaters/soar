@@ -59,13 +59,6 @@ export async function POST(request: NextRequest) {
       addRandomSuffix: true,
     })
 
-    console.log('Storage upload successful:', {
-      provider: storageManager.getActiveProvider().name,
-      url: uploadResult.url,
-      size: uploadResult.size,
-      fileName: uploadResult.fileName,
-    })
-
     // Save to database with cloud storage info
     const poseImage = await prisma.poseImage.create({
       data: {
@@ -205,7 +198,6 @@ export async function DELETE(request: NextRequest) {
     // Delete from cloud storage using storage manager
     try {
       await storageManager.delete(image.url)
-      console.log('Successfully deleted from cloud storage:', image.url)
     } catch (error) {
       console.error('Failed to delete from cloud storage:', error)
       // Continue with database deletion even if cloud deletion fails

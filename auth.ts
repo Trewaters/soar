@@ -33,8 +33,6 @@ const providers: Provider[] = [
       const password = credentials.password as string
       const isNewAccount = credentials.isNewAccount === 'true'
 
-      console.log('Credentials authorize called:', { email, isNewAccount })
-
       try {
         let user = await prisma.userData.findUnique({
           where: { email: email },
@@ -42,8 +40,6 @@ const providers: Provider[] = [
 
         // Handle new account creation
         if (isNewAccount && !user) {
-          console.log('Creating new user account for:', email)
-
           // Create new user
           user = await prisma.userData.create({
             data: {
@@ -68,8 +64,6 @@ const providers: Provider[] = [
             },
           })
 
-          console.log('New user created:', user.id)
-
           // Create provider account with hashed password
           const hashedPassword = await hashPassword(password)
           await prisma.providerAccount.create({
@@ -83,8 +77,6 @@ const providers: Provider[] = [
               updatedAt: new Date(),
             },
           })
-
-          console.log('Provider account created for user:', user.id)
 
           return {
             id: user.id,
@@ -123,7 +115,6 @@ const providers: Provider[] = [
           return null
         }
 
-        console.log('User authenticated successfully:', user.id)
         return {
           id: user.id,
           name: user.name,
@@ -163,7 +154,6 @@ const authConfig = {
       account: any
       profile?: any
     }) {
-      console.log('signIn user', user)
       const email = user.email
 
       const existingUser = await prisma.userData.findUnique({
@@ -220,7 +210,6 @@ const authConfig = {
               // },
             },
           })
-          console.log('newUser', newUser)
         } catch (error) {
           console.error('Error creating new user:', error)
           throw error
@@ -229,8 +218,6 @@ const authConfig = {
       return true
     },
     async session({ session, token }: { session: any; token: any }) {
-      console.log('session token', token)
-
       if (!token || (token as any).userDeleted) {
         console.warn('Session invalidated due to missing user record.', {
           tokenEmail: token?.email,
@@ -263,8 +250,6 @@ const authConfig = {
       session?: any
       account?: any
     }) {
-      console.log('jwt token', token)
-
       if ((token as any).userDeleted) {
         return token
       }
@@ -347,8 +332,6 @@ const authConfig = {
   session: { strategy: 'jwt' },
   events: {
     signIn: async ({ user, account }: { user: any; account: any }) => {
-      console.log('signIn event triggered for user:', user?.email)
-
       // Record login event for streak tracking
       if (user?.email) {
         try {
@@ -378,13 +361,6 @@ const authConfig = {
               where: { id: userData.id },
               data: { updatedAt: new Date() },
             })
-
-            console.log(
-              'Login event recorded successfully for user:',
-              user.email,
-              'with userId:',
-              userData.id
-            )
           } else {
             console.warn('UserData not found for login event:', user.email)
           }

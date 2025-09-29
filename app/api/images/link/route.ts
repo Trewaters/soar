@@ -66,12 +66,6 @@ export async function POST(request: NextRequest) {
       data: updateData,
     })
 
-    console.log(`Successfully linked image ${imageId} to posture:`, {
-      postureId,
-      postureName,
-      imageUrl: updatedImage.url,
-    })
-
     return NextResponse.json({
       success: true,
       image: updatedImage,

@@ -97,8 +97,6 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    console.log('Fetching postures from database...')
-
     // Build where clause based on access control
     const whereClause: any = {}
 
@@ -114,7 +112,6 @@ export async function GET(request: NextRequest) {
       }
 
       whereClause.created_by = createdBy
-      console.log(`Filtering postures by creator: ${createdBy}`)
     } else {
       // If no specific creator, filter by access control
       if (currentUserEmail) {
@@ -123,18 +120,12 @@ export async function GET(request: NextRequest) {
         whereClause.created_by = {
           in: allowedCreators,
         }
-        console.log(
-          `Filtering postures by allowed creators: ${allowedCreators.join(', ')}`
-        )
       } else {
         // If no user, only show alpha user posts
         if (alphaUserIds.length > 0) {
           whereClause.created_by = {
             in: alphaUserIds,
           }
-          console.log(
-            `No user session, showing only alpha user postures: ${alphaUserIds.join(', ')}`
-          )
         } else {
           // No alpha users and no current user - return empty array
           return NextResponse.json([], {
@@ -154,7 +145,6 @@ export async function GET(request: NextRequest) {
         created_on: 'desc', // Show newest first to help verify new creations
       },
     })
-    console.log(`Found ${data.length} postures in database`)
 
     const dataWithId = data.map((item) => ({
       ...item,

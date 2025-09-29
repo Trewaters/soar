@@ -55,20 +55,6 @@ export async function GET(req: NextRequest) {
   const isProduction = process.env.NODE_ENV === 'production'
   const deployment = process.env.VERCEL_ENV || 'local'
 
-  console.log('=== GET /api/user/loginStreak called ===', {
-    requestId,
-    timestamp,
-    url: req.url,
-    method: req.method,
-    environment: process.env.NODE_ENV,
-    deployment,
-    isProduction,
-    headers: Object.fromEntries(req.headers.entries()),
-    userAgent: req.headers.get('user-agent'),
-    referer: req.headers.get('referer'),
-    origin: req.headers.get('origin'),
-  })
-
   // Enhanced environment configuration check
   const dbUrl = process.env.DATABASE_URL
   const envVars = Object.keys(process.env).filter(
@@ -102,12 +88,6 @@ export async function GET(req: NextRequest) {
       'unknown',
   }
 
-  console.log('Enhanced database configuration check:', {
-    requestId,
-    timestamp,
-    ...envConfig,
-  })
-
   if (!dbUrl) {
     const configError = new Error(
       'Database configuration missing: No DATABASE_URL found'
@@ -137,23 +117,10 @@ export async function GET(req: NextRequest) {
 
   let client: PrismaClient | null = null
   try {
-    console.log('Attempting to get Prisma client...', {
-      requestId,
-      timestamp,
-      dbProvider: envConfig.dbProvider,
-      hasAtlasCluster: envConfig.hasAtlasCluster,
-    })
     client = getPrismaClient()
 
     const { searchParams } = new URL(req.url)
     const userId = searchParams.get('userId')
-    console.log('Extracted query parameters:', {
-      requestId,
-      userId,
-      fullUrl: req.url,
-      searchParams: Object.fromEntries(searchParams.entries()),
-      timestamp,
-    })
 
     if (!userId) {
       const validationError = new Error(
@@ -182,24 +149,7 @@ export async function GET(req: NextRequest) {
 
     // Enhanced database connection testing
     try {
-      console.log('Testing database connection...', {
-        requestId,
-        userId,
-        timestamp,
-        dbProvider: envConfig.dbProvider,
-      })
-
-      const connectionStart = Date.now()
       await client.$connect()
-      const connectionTime = Date.now() - connectionStart
-
-      console.log('Database connection successful', {
-        requestId,
-        userId,
-        timestamp,
-        connectionTimeMs: connectionTime,
-        dbProvider: envConfig.dbProvider,
-      })
     } catch (dbError) {
       const detailedError = {
         requestId,

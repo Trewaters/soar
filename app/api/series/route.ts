@@ -11,7 +11,6 @@ export const runtime = 'nodejs'
 
 export async function GET(request: Request) {
   try {
-    console.log('Fetching series from database...')
     const url = new URL(request.url)
     const createdByParam = url.searchParams.get('createdBy')
     const session = await auth().catch(() => null)

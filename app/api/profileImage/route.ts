@@ -8,32 +8,21 @@ const MAX_FILE_SIZE = 2 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 export async function POST(req: NextRequest) {
-  console.log('Profile image upload endpoint called')
-
   try {
     const session = await auth()
-    console.log('Session:', session ? 'Found' : 'Not found')
 
     if (!session || !session.user?.email) {
       console.log('No session or email found')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    console.log('Getting form data...')
     const formData = await req.formData()
-    console.log('Form data entries:', Array.from(formData.keys()))
 
     const file = formData.get('file') as File | null
     if (!file) {
       console.log('No file found in form data')
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
     }
-
-    console.log('File details:', {
-      name: file.name,
-      type: file.type,
-      size: file.size,
-    })
 
     if (!ALLOWED_TYPES.includes(file.type)) {
       console.log('Invalid file type:', file.type)
@@ -79,7 +68,6 @@ export async function POST(req: NextRequest) {
             activeProfileImage: null,
           },
         })
-        console.log('Created minimal user record:', user.id)
       } catch (createErr) {
         console.error('Failed to create user record during upload:', createErr)
         return NextResponse.json({ error: 'User not found' }, { status: 404 })
@@ -88,14 +76,12 @@ export async function POST(req: NextRequest) {
 
     const profileImages = user.profileImages || []
     if (profileImages.length >= 3) {
-      console.log('Max profile images reached:', profileImages.length)
       return NextResponse.json(
         { error: 'Maximum 3 profile images allowed' },
         { status: 400 }
       )
     }
 
-    console.log('Uploading file to storage...')
     // Upload file using storage manager
     const uploadResult = await storageManager.upload(
       `profile-${Date.now()}-${file.name}`,
@@ -106,13 +92,6 @@ export async function POST(req: NextRequest) {
       }
     )
 
-    console.log('Storage upload successful:', {
-      provider: storageManager.getActiveProvider().name,
-      url: uploadResult.url,
-      size: uploadResult.size,
-      fileName: uploadResult.fileName,
-    })
-
     const url = uploadResult.url
     const updatedImages = [...profileImages, url]
 
@@ -121,7 +100,6 @@ export async function POST(req: NextRequest) {
     const shouldSetAsActive =
       !user.activeProfileImage || profileImages.length === 0
 
-    console.log('Updating user profile images in database...')
     // Update user profileImages and potentially activeProfileImage
     const updated = await prisma.userData.update({
       where: { email: session.user.email },
@@ -129,11 +107,6 @@ export async function POST(req: NextRequest) {
         profileImages: updatedImages,
         ...(shouldSetAsActive && { activeProfileImage: url }),
       },
-    })
-
-    console.log('Database update successful:', {
-      totalImages: updated.profileImages.length,
-      activeImage: updated.activeProfileImage,
     })
 
     return NextResponse.json({

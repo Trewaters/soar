@@ -26,8 +26,6 @@ export async function GET(request: NextRequest) {
     const bustCache = searchParams.get('bust') || 'true' // Default to cache busting
     const createdBy = searchParams.get('createdBy')
 
-    console.log('Fetching sequences from database...')
-
     // Get session and alpha user IDs for access control
     const session = await auth()
     const currentUserEmail = session?.user?.email || null
@@ -47,7 +45,6 @@ export async function GET(request: NextRequest) {
       }
 
       whereClause.created_by = createdBy
-      console.log(`Filtering sequences by creator: ${createdBy}`)
     } else {
       // If no specific creator, filter by access control
       if (currentUserEmail) {
@@ -56,9 +53,6 @@ export async function GET(request: NextRequest) {
         whereClause.created_by = {
           in: allowedCreators,
         }
-        console.log(
-          `Filtering sequences by allowed creators: ${allowedCreators.join(', ')}`
-        )
       } else {
         // If no user, only show alpha user sequences
         if (alphaUserIds.length > 0) {
@@ -91,7 +85,6 @@ export async function GET(request: NextRequest) {
         createdAt: 'desc', // Show newest first to help verify new creations
       },
     })
-    console.log(`Found ${data.length} sequences in database`)
 
     const filteredData = data
 

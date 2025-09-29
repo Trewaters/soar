@@ -30,16 +30,6 @@ export async function PUT(
       sideways,
     } = await request.json()
 
-    console.log('Updating posture with ID:', resolvedParams.id)
-    console.log('Request data:', {
-      sort_english_name,
-      sideways,
-      typeof_sideways: typeof sideways,
-      english_names,
-      category,
-      difficulty,
-    })
-
     // First, get the existing posture to check ownership
     const existingPosture = await prisma.asanaPosture.findUnique({
       where: { id: resolvedParams.id },
@@ -74,13 +64,6 @@ export async function PUT(
         // Note: updated_on is handled by Prisma defaults, created_by should not be changed
       },
     })
-
-    console.log('Posture updated successfully in database:', {
-      id: updatedPosture.id,
-      sort_english_name: updatedPosture.sort_english_name,
-      sideways: updatedPosture.sideways,
-    })
-
     // Return the updated posture with consistent formatting
     const postureWithFormattedData = {
       ...updatedPosture,

@@ -15,16 +15,6 @@ export async function POST(request: Request) {
     created_by,
   } = await request.json()
 
-  console.log('Creating posture with data:', {
-    sort_english_name,
-    sideways,
-    typeof_sideways: typeof sideways,
-    english_names,
-    category,
-    difficulty,
-    created_by,
-  })
-
   try {
     // Convert sideways string to boolean
     const sidewaysBoolean = sideways === 'Yes' || sideways === true
@@ -42,12 +32,6 @@ export async function POST(request: Request) {
         created_by,
         // Note: created_on and updated_on are handled by Prisma defaults
       },
-    })
-
-    console.log('Posture created successfully in database:', {
-      id: createdPosture.id,
-      sort_english_name: createdPosture.sort_english_name,
-      sideways: createdPosture.sideways,
     })
 
     // Return the created posture with consistent formatting

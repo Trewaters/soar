@@ -22,10 +22,6 @@ export async function POST() {
       )
     }
 
-    console.log(
-      '🔍 Looking for orphaned images that need to be linked to asanas...'
-    )
-
     // Find images that have postureName but no postureId
     const orphanedImages = await prisma.poseImage.findMany({
       where: {
@@ -36,10 +32,6 @@ export async function POST() {
         },
       },
     })
-
-    console.log(
-      `Found ${orphanedImages.length} orphaned images for user ${session.user.id}`
-    )
 
     if (orphanedImages.length === 0) {
       return NextResponse.json({
@@ -74,9 +66,6 @@ export async function POST() {
             },
           })
 
-          console.log(
-            `✅ Linked image ${image.id} to asana "${matchingAsana.sort_english_name}" (ID: ${matchingAsana.id})`
-          )
           linkedCount++
           results.push({
             imageId: image.id,
@@ -105,11 +94,6 @@ export async function POST() {
         })
       }
     }
-
-    console.log('\n📊 Summary:')
-    console.log(`  - Successfully linked: ${linkedCount} images`)
-    console.log(`  - Errors: ${errorCount} images`)
-    console.log(`  - Total processed: ${orphanedImages.length} images`)
 
     return NextResponse.json({
       success: true,
