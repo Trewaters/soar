@@ -51,6 +51,8 @@ interface ImageUploadWithFallbackProps {
   maxFileSize?: number // in MB
   acceptedTypes?: string[]
   variant?: 'button' | 'dropzone'
+  postureId?: string
+  postureName?: string
 }
 
 interface FallbackDialogState {
@@ -103,6 +105,8 @@ export default function ImageUploadWithFallback({
   maxFileSize = 10,
   acceptedTypes = ['image/jpeg', 'image/png', 'image/webp'],
   variant = 'button',
+  postureId,
+  postureName,
 }: ImageUploadWithFallbackProps) {
   const { data: session } = useSession()
   const [open, setOpen] = useState(false)
@@ -203,7 +207,18 @@ export default function ImageUploadWithFallback({
       formData.append('file', selectedFile)
       formData.append('altText', altText.trim() || '')
       formData.append('userId', session.user.id)
-      formData.append('imageType', 'gallery') // Tag as gallery image
+      formData.append(
+        'imageType',
+        postureId || postureName ? 'posture' : 'gallery'
+      ) // Tag as posture image if posture info provided
+
+      // Add posture information if available
+      if (postureId) {
+        formData.append('postureId', postureId)
+      }
+      if (postureName) {
+        formData.append('postureName', postureName)
+      }
 
       const response = await fetch('/api/images/upload', {
         method: 'POST',

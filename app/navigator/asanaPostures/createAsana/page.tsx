@@ -44,6 +44,13 @@ export default function Page() {
     isNavigating: false,
   })
 
+  // State for error feedback
+  const [errorState, setErrorState] = useState({
+    showToast: false,
+    message: '',
+    isDuplicateName: false,
+  })
+
   const [open, setOpen] = useState(false)
   const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -166,9 +173,22 @@ export default function Page() {
     setUploadedImages((prev) => [...prev, image])
   }
 
+  // Generate alternative name suggestions for duplicates
+  const generateAlternativeName = (originalName: string): string => {
+    const timestamp = new Date().getTime().toString().slice(-4)
+    return `${originalName} (${timestamp})`
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+
+    // Clear any previous error states
+    setErrorState({
+      showToast: false,
+      message: '',
+      isDuplicateName: false,
+    })
 
     // Track initial uploaded images for cleanup if needed
     const initialUploadedImages = [...uploadedImages]
@@ -189,6 +209,41 @@ export default function Page() {
       const data = await createPosture(updatedAsana)
       console.log('Posture created successfully:', data)
 
+      // Link uploaded images to the newly created posture
+      if (initialUploadedImages.length > 0) {
+        console.log('Linking uploaded images to new posture:', data.id)
+
+        try {
+          const linkPromises = initialUploadedImages.map(async (image) => {
+            const response = await fetch(`/api/images/link`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                imageId: image.id,
+                postureId: data.id.toString(),
+                postureName: data.sort_english_name,
+              }),
+            })
+
+            if (!response.ok) {
+              console.error(
+                `Failed to link image ${image.id} to posture ${data.id}`
+              )
+            } else {
+              console.log(`✅ Linked image ${image.id} to posture ${data.id}`)
+            }
+          })
+
+          await Promise.allSettled(linkPromises)
+          console.log('Image linking process completed')
+        } catch (linkError) {
+          console.error('Error linking images to posture:', linkError)
+          // Don't fail the entire creation process for image linking issues
+        }
+      }
+
       // Clear uploaded images state since posture was created successfully
       setUploadedImages([])
 
@@ -205,6 +260,28 @@ export default function Page() {
       }, 1500)
     } catch (error: Error | any) {
       console.error('Error creating posture:', error.message)
+
+      // Check if this is a duplicate name error
+      const isDuplicateName =
+        error.message?.includes('Unique constraint failed') &&
+        error.message?.includes('AsanaPosture_sort_english_name_key')
+
+      if (isDuplicateName) {
+        const suggestedName = generateAlternativeName(
+          formData.sort_english_name
+        )
+        setErrorState({
+          showToast: true,
+          message: `An asana with the name "${formData.sort_english_name}" already exists. Try "${suggestedName}" instead, or choose a different name.`,
+          isDuplicateName: true,
+        })
+      } else {
+        setErrorState({
+          showToast: true,
+          message: `Failed to create asana: ${error.message || 'Unknown error occurred'}`,
+          isDuplicateName: false,
+        })
+      }
 
       // If posture creation failed and we have uploaded images, clean them up
       if (initialUploadedImages.length > 0) {
@@ -288,6 +365,17 @@ export default function Page() {
     setSuccessState((prev) => ({ ...prev, showToast: false }))
   }
 
+  // Handle error toast close
+  const handleErrorToastClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setErrorState((prev) => ({ ...prev, showToast: false }))
+  }
+
   return (
     <Box
       sx={{
@@ -340,6 +428,7 @@ export default function Page() {
               acceptedTypes={['image/jpeg', 'image/png', 'image/svg']}
               variant="dropzone"
               onImageUploaded={handleImageUploaded}
+              postureName={formData.sort_english_name}
             />
           </Box>
 
@@ -400,6 +489,27 @@ export default function Page() {
           }}
         >
           {successState.message}
+        </Alert>
+      </Snackbar>
+
+      {/* Error Toast */}
+      <Snackbar
+        open={errorState.showToast}
+        autoHideDuration={8000}
+        onClose={handleErrorToastClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={handleErrorToastClose}
+          severity="error"
+          variant="filled"
+          sx={{
+            width: '100%',
+            borderRadius: '12px',
+            fontSize: '1rem',
+          }}
+        >
+          {errorState.message}
         </Alert>
       </Snackbar>
 
