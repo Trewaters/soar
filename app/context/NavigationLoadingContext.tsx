@@ -1,5 +1,12 @@
 'use client'
-import React, { createContext, useContext, useState, ReactNode } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useRef,
+  useEffect,
+} from 'react'
 
 interface NavigationLoadingState {
   isNavigating: boolean
@@ -31,33 +38,55 @@ export function NavigationLoadingProvider({
   children: ReactNode
 }) {
   const [state, setState] = useState<NavigationLoadingState>(initialState)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const startNavigation = (targetPath: string, elementId?: string) => {
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+
+    console.log(`Starting navigation to: ${targetPath}`)
     setState({
       isNavigating: true,
       targetPath,
       elementId: elementId || null,
     })
 
-    // Auto-clear navigation state after a timeout to prevent stuck loading states
-    // This handles cases where navigation might fail or take too long
-    setTimeout(() => {
+    // Ultra-conservative safety timeout - only triggers if everything fails
+    timeoutRef.current = setTimeout(() => {
       setState((prev) => {
-        // Only clear if we're still loading to the same path
         if (prev.targetPath === targetPath && prev.isNavigating) {
           console.warn(
-            `Navigation timeout exceeded for ${targetPath}, clearing loading state`
+            `Emergency navigation timeout for ${targetPath} - clearing stuck loading state`
           )
           return initialState
         }
         return prev
       })
-    }, 8000) // 8 second timeout - longer than individual navigation timeouts
+      timeoutRef.current = null
+    }, 3000) // 3 second emergency timeout - longer than safety timeouts
   }
 
   const endNavigation = () => {
+    console.log('Ending navigation')
+    // Clear timeout when navigation ends successfully
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
     setState(initialState)
   }
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
 
   const isNavigatingTo = (path: string) => {
     return state.isNavigating && state.targetPath === path

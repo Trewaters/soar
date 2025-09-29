@@ -86,7 +86,8 @@ export async function getUserPostures(
 }
 
 /**
- * Get postures accessible to the current user (own postures + alpha user postures)
+ * Get postures that are accessible to the current user
+ * Includes user's own postures and alpha user postures
  */
 export async function getAccessiblePostures(
   currentUserEmail?: string
@@ -101,9 +102,8 @@ export async function getAccessiblePostures(
         return []
       }
 
-      // Fetch only alpha user postures
-      const alphaPostures: FullAsanaData[] = []
-      for (const alphaUserId of alphaUserIds) {
+      // Fetch all alpha user postures in parallel
+      const alphaPosturePromises = alphaUserIds.map(async (alphaUserId) => {
         try {
           const response = await fetch(
             `/api/poses?createdBy=${encodeURIComponent(alphaUserId)}&t=${Date.now()}`,
@@ -117,54 +117,68 @@ export async function getAccessiblePostures(
             }
           )
           if (response.ok) {
-            const postures = await response.json()
-            alphaPostures.push(...postures)
+            return await response.json()
           }
+          return []
         } catch (error) {
           console.warn(
             `Failed to fetch postures for alpha user ${alphaUserId}:`,
             error
           )
+          return []
         }
-      }
-      return alphaPostures
+      })
+
+      const alphaPostureArrays = await Promise.all(alphaPosturePromises)
+      return alphaPostureArrays.flat()
     }
 
-    // Fetch user's own postures
-    const userPostures = await getUserPostures(currentUserEmail)
+    // For authenticated users, fetch both user postures and alpha postures in parallel
+    const fetchPromises: Promise<FullAsanaData[]>[] = []
 
-    // Fetch alpha user postures
-    const alphaPostures: FullAsanaData[] = []
-    for (const alphaUserId of alphaUserIds) {
-      // Skip if the current user is already an alpha user (avoid duplicates)
-      if (alphaUserId === currentUserEmail) continue
+    // Add user postures promise
+    fetchPromises.push(getUserPostures(currentUserEmail))
 
-      try {
-        const response = await fetch(
-          `/api/poses?createdBy=${encodeURIComponent(alphaUserId)}&t=${Date.now()}`,
-          {
-            cache: 'no-store',
-            headers: {
-              'Cache-Control': 'no-cache, no-store, must-revalidate',
-              Pragma: 'no-cache',
-              Expires: '0',
-            },
+    // Add alpha user postures promises (excluding current user if they're an alpha user)
+    const relevantAlphaUserIds = alphaUserIds.filter(
+      (alphaUserId) => alphaUserId !== currentUserEmail
+    )
+
+    const alphaPosturePromises = relevantAlphaUserIds.map(
+      async (alphaUserId) => {
+        try {
+          const response = await fetch(
+            `/api/poses?createdBy=${encodeURIComponent(alphaUserId)}&t=${Date.now()}`,
+            {
+              cache: 'no-store',
+              headers: {
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                Pragma: 'no-cache',
+                Expires: '0',
+              },
+            }
+          )
+          if (response.ok) {
+            return await response.json()
           }
-        )
-        if (response.ok) {
-          const postures = await response.json()
-          alphaPostures.push(...postures)
+          return []
+        } catch (error) {
+          console.warn(
+            `Failed to fetch postures for alpha user ${alphaUserId}:`,
+            error
+          )
+          return []
         }
-      } catch (error) {
-        console.warn(
-          `Failed to fetch postures for alpha user ${alphaUserId}:`,
-          error
-        )
       }
-    }
+    )
 
-    // Combine and deduplicate postures
-    const allPostures = [...userPostures, ...alphaPostures]
+    fetchPromises.push(...alphaPosturePromises)
+
+    // Wait for all requests to complete in parallel
+    const allPostureArrays = await Promise.all(fetchPromises)
+    const allPostures = allPostureArrays.flat()
+
+    // Deduplicate postures by sort_english_name
     const uniquePostures = allPostures.filter(
       (posture, index, arr) =>
         arr.findIndex(

@@ -2,7 +2,7 @@
 
 import { Box } from '@mui/material'
 import { useState, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 
 import SplashHeader from '@app/clientComponents/splash-header'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
@@ -13,7 +13,7 @@ import {
 } from '@app/clientComponents/freemiumNotification'
 
 export default function Page() {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const { userAuthState, checkFeatureAccess, handleCtaAction } =
     useFreemiumNotification()
 
