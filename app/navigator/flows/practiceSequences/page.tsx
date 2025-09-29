@@ -122,6 +122,8 @@ export default function Page() {
     createdAt: '',
     updatedAt: '',
   })
+  const [isLoadingFreshSeriesData, setIsLoadingFreshSeriesData] =
+    useState<boolean>(false)
   const [, setRefreshTrigger] = useState(0)
 
   const [page, setPage] = useState(1)
@@ -192,6 +194,75 @@ export default function Page() {
       window.removeEventListener('popstate', handlePopState)
     }
   }, [sequenceId]) // Add sequenceId as dependency
+
+  // Fetch fresh series data to ensure sequences show current series content
+  useEffect(() => {
+    const refreshSeriesData = async () => {
+      if (
+        !singleSequence ||
+        !singleSequence.sequencesSeries ||
+        singleSequence.sequencesSeries.length === 0 ||
+        singleSequence.id === 0
+      ) {
+        return
+      }
+
+      setIsLoadingFreshSeriesData(true)
+      try {
+        // Get all current series data from the database
+        const allSeries = await getAllSeries()
+
+        // For each series in the sequence, find the matching current series data
+        const refreshedSeriesData = singleSequence.sequencesSeries.map(
+          (sequenceSeries: any) => {
+            // Find the matching series by name (series names should be unique)
+            const currentSeriesData = allSeries.find(
+              (dbSeries) => dbSeries.seriesName === sequenceSeries.seriesName
+            )
+
+            if (currentSeriesData) {
+              // Use current series data from database
+              return {
+                ...sequenceSeries, // Keep sequence-specific fields like id
+                seriesName: currentSeriesData.seriesName,
+                seriesPostures: currentSeriesData.seriesPostures,
+                description: currentSeriesData.description,
+                duration: currentSeriesData.duration,
+                image: currentSeriesData.image,
+                // Add timestamp to track freshness
+                lastRefreshed: new Date().toISOString(),
+              }
+            } else {
+              // If series no longer exists, keep original data but mark as stale
+              console.warn(
+                `Series "${sequenceSeries.seriesName}" not found in current database`
+              )
+              return {
+                ...sequenceSeries,
+                isStale: true,
+              }
+            }
+          }
+        )
+
+        // Update the singleSequence with fresh series data
+        setSingleSequence((prevSequence) => ({
+          ...prevSequence,
+          sequencesSeries: refreshedSeriesData,
+        }))
+      } catch (error) {
+        console.error(
+          'Failed to fetch fresh series data for practice sequences:',
+          error
+        )
+        // On error, keep using original sequence data (no action needed)
+      } finally {
+        setIsLoadingFreshSeriesData(false)
+      }
+    }
+
+    refreshSeriesData()
+  }, [singleSequence.id]) // Only re-run when sequence ID changes
 
   // Helper function to resolve series ID and navigate
   const handleSeriesNavigation = async (seriesMini: any) => {

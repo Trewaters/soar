@@ -10,6 +10,7 @@ import {
   CardContent,
   CardHeader,
   Button,
+  CircularProgress,
 } from '@mui/material'
 import { ArrowBack as ArrowBackIcon } from '@mui/icons-material'
 import { useSession } from 'next-auth/react'
@@ -32,11 +33,71 @@ export default function SequenceViewWithEdit({
   const navigation = useNavigationWithLoading()
   const [showEdit, setShowEdit] = useState<boolean>(defaultShowEdit)
   const [model, setModel] = useState<EditableSequence>(sequence)
+  const [isLoadingFreshData, setIsLoadingFreshData] = useState<boolean>(false)
 
   // Sync showEdit with defaultShowEdit prop changes
   useEffect(() => {
     setShowEdit(defaultShowEdit)
   }, [defaultShowEdit])
+
+  // Fetch fresh series data to ensure sequences show current series content
+  useEffect(() => {
+    const fetchFreshSeriesData = async () => {
+      if (!sequence.sequencesSeries || sequence.sequencesSeries.length === 0) {
+        return
+      }
+
+      setIsLoadingFreshData(true)
+      try {
+        // Get all current series data from the database
+        const allSeries = await getAllSeries()
+
+        // For each series in the sequence, find the matching current series data
+        const refreshedData = sequence.sequencesSeries.map((sequenceSeries) => {
+          // Find the matching series by name (series names should be unique)
+          const currentSeriesData = allSeries.find(
+            (dbSeries) => dbSeries.seriesName === sequenceSeries.seriesName
+          )
+
+          if (currentSeriesData) {
+            // Use current series data from database
+            return {
+              ...sequenceSeries, // Keep sequence-specific fields like id
+              seriesName: currentSeriesData.seriesName,
+              seriesPostures: currentSeriesData.seriesPostures,
+              description: currentSeriesData.description,
+              duration: currentSeriesData.duration,
+              image: currentSeriesData.image,
+              // Add timestamp to track freshness
+              lastRefreshed: new Date().toISOString(),
+            }
+          } else {
+            // If series no longer exists, keep original data but mark as stale
+            console.warn(
+              `Series "${sequenceSeries.seriesName}" not found in current database`
+            )
+            return {
+              ...sequenceSeries,
+              isStale: true,
+            }
+          }
+        })
+
+        // Update the model with fresh data
+        setModel((prevModel) => ({
+          ...prevModel,
+          sequencesSeries: refreshedData,
+        }))
+      } catch (error) {
+        console.error('Failed to fetch fresh series data:', error)
+        // On error, keep using original sequence data (no action needed)
+      } finally {
+        setIsLoadingFreshData(false)
+      }
+    }
+
+    fetchFreshSeriesData()
+  }, [sequence.id, sequence.sequencesSeries]) // Re-run when sequence changes
 
   const isOwner = useMemo(() => {
     const email = session?.user?.email ?? null
@@ -260,102 +321,118 @@ export default function SequenceViewWithEdit({
           </Box>
         )}
         {/* Flow Series Cards - Following Soar pattern - Only show when NOT in edit mode */}
-        {!showEdit && model.sequencesSeries?.length ? (
-          <Stack spacing={3} alignItems="center">
-            {model.sequencesSeries.map((seriesMini, i) => (
-              <Card
-                key={`${seriesMini.seriesName}-${i}`}
-                sx={{
-                  width: '100%',
-                  maxWidth: '85%',
-                  boxShadow: 3,
-                  textAlign: 'center',
-                  borderColor: 'primary.main',
-                  borderWidth: '1px',
-                  borderStyle: 'solid',
-                  cursor: 'pointer',
-                  '&:hover': {
-                    boxShadow: 6,
-                    transform: 'translateY(-1px)',
-                    transition: 'all 0.2s ease-in-out',
-                  },
-                }}
-                className="journal"
-                onClick={() => handleSeriesNavigation(seriesMini)}
-              >
-                <CardHeader
-                  className="journalTitle"
-                  title={
-                    <Box width={'100%'}>
-                      <Stack
-                        flexDirection={'row'}
-                        justifyContent={'center'}
-                        alignItems={'center'}
-                        sx={{ mb: 1 }}
-                      >
-                        <Typography variant="h6">
-                          {seriesMini.seriesName}
-                        </Typography>
-                      </Stack>
-                    </Box>
-                  }
-                />
-                <CardContent className="lines" sx={{ p: 0 }}>
-                  {seriesMini.seriesPostures?.length ? (
-                    seriesMini.seriesPostures.map((posture, index) => {
-                      const { name: englishName, secondary: sanskritName } =
-                        splitSeriesPostureEntry(posture)
-                      return (
-                        <Stack
-                          key={`${englishName}-${index}`}
-                          sx={{
-                            px: 3,
-                            py: 1,
-                            '&:hover': {
-                              backgroundColor: '#f0f0f0',
-                              transition: 'all 0.2s',
-                            },
-                          }}
-                        >
-                          <Typography
-                            variant="body1"
-                            sx={{ fontWeight: 'normal' }}
+        {!showEdit && (
+          <>
+            {isLoadingFreshData && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', my: 3 }}>
+                <CircularProgress size={24} />
+                <Typography variant="body2" sx={{ ml: 2 }}>
+                  Refreshing series data...
+                </Typography>
+              </Box>
+            )}
+            {model.sequencesSeries?.length ? (
+              <Stack spacing={3} alignItems="center">
+                {model.sequencesSeries.map((seriesMini, i) => (
+                  <Card
+                    key={`${seriesMini.seriesName}-${i}`}
+                    sx={{
+                      width: '100%',
+                      maxWidth: '85%',
+                      boxShadow: 3,
+                      textAlign: 'center',
+                      borderColor: 'primary.main',
+                      borderWidth: '1px',
+                      borderStyle: 'solid',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        boxShadow: 6,
+                        transform: 'translateY(-1px)',
+                        transition: 'all 0.2s ease-in-out',
+                      },
+                    }}
+                    className="journal"
+                    onClick={() => handleSeriesNavigation(seriesMini)}
+                  >
+                    <CardHeader
+                      className="journalTitle"
+                      title={
+                        <Box width={'100%'}>
+                          <Stack
+                            flexDirection={'row'}
+                            justifyContent={'center'}
+                            alignItems={'center'}
+                            sx={{ mb: 1 }}
                           >
-                            {englishName}
-                          </Typography>
-                          {sanskritName && (
-                            <Typography
-                              variant="body2"
+                            <Typography variant="h6">
+                              {seriesMini.seriesName}
+                            </Typography>
+                          </Stack>
+                        </Box>
+                      }
+                    />
+                    <CardContent className="lines" sx={{ p: 0 }}>
+                      {seriesMini.seriesPostures?.length ? (
+                        seriesMini.seriesPostures.map((posture, index) => {
+                          const { name: englishName, secondary: sanskritName } =
+                            splitSeriesPostureEntry(posture)
+                          return (
+                            <Stack
+                              key={`${englishName}-${index}`}
                               sx={{
-                                fontStyle: 'italic',
-                                color: 'text.secondary',
-                                fontSize: '0.9rem',
+                                px: 3,
+                                py: 1,
+                                '&:hover': {
+                                  backgroundColor: '#f0f0f0',
+                                  transition: 'all 0.2s',
+                                },
                               }}
                             >
-                              {sanskritName.trim()}
-                            </Typography>
-                          )}
-                        </Stack>
-                      )
-                    })
-                  ) : (
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ p: 2 }}
-                    >
-                      No postures in this series
-                    </Typography>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </Stack>
-        ) : !showEdit ? (
-          <Typography variant="body2" color="text.secondary" textAlign="center">
-            No flow series added.
-          </Typography>
-        ) : null}
+                              <Typography
+                                variant="body1"
+                                sx={{ fontWeight: 'normal' }}
+                              >
+                                {englishName}
+                              </Typography>
+                              {sanskritName && (
+                                <Typography
+                                  variant="body2"
+                                  sx={{
+                                    fontStyle: 'italic',
+                                    color: 'text.secondary',
+                                    fontSize: '0.9rem',
+                                  }}
+                                >
+                                  {sanskritName.trim()}
+                                </Typography>
+                              )}
+                            </Stack>
+                          )
+                        })
+                      ) : (
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ p: 2 }}
+                        >
+                          No postures in this series
+                        </Typography>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </Stack>
+            ) : !isLoadingFreshData ? (
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                textAlign="center"
+              >
+                No flow series added.
+              </Typography>
+            ) : null}
+          </>
+        )}
 
         {/* Description Section with Soar styling - Only show when NOT in edit mode */}
         {!showEdit && model.description && (
