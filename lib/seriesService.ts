@@ -56,6 +56,7 @@ export type SeriesData = {
   image?: string
   createdAt?: string
   updatedAt?: string
+  createdBy?: string // Add this field for ownership tracking
 }
 
 export type CreateSeriesInput = {

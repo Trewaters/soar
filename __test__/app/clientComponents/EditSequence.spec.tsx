@@ -306,7 +306,7 @@ describe('EditSequence', () => {
         expect.objectContaining({ method: 'DELETE' })
       )
       expect((global as any).__routerPushMock).toHaveBeenCalledWith(
-        '/sequences'
+        '/navigator/flows/practiceSequences'
       )
     })
   })

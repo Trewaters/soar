@@ -41,19 +41,7 @@ import NavBottom from '@serverComponents/navBottom'
 import { AppText } from '@app/navigator/constants/Strings'
 import { splitSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
 import getAlphaUserIds from '@app/lib/alphaUsers'
-
-async function fetchSeries() {
-  try {
-    const res = await fetch('/api/series', { cache: 'no-store' })
-    if (!res.ok) {
-      throw new Error('Network response was not ok')
-    }
-    const data = await res.json()
-    return data
-  } catch (error) {
-    throw new Error('Error fetching sequence data')
-  }
-}
+import { getAllSeries } from '@lib/seriesService'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -78,7 +66,9 @@ export default function Page() {
   const [seriesNameSet, setSeriesNameSet] = useState<string[]>([])
   const [postures, setPostures] = useState<string[]>([])
   const [open, setOpen] = useState(false)
-  const [alphaUserIds, setAlphaUserIds] = useState<string[]>([])
+
+  // Get alpha user IDs (synchronous function like in practiceSeries)
+  const alphaUserIds = useMemo(() => getAlphaUserIds(), [])
 
   const [currentSeriesIndex, setCurrentSeriesIndex] = useState(
     seriesNameSet.length - 1
@@ -86,37 +76,43 @@ export default function Page() {
 
   const router = useRouter()
 
-  // Fetch alpha user IDs on component mount
-  useEffect(() => {
-    async function fetchAlphaUsers() {
-      try {
-        const alphaIds = await getAlphaUserIds()
-        setAlphaUserIds(alphaIds)
-      } catch (error) {
-        console.error('Error fetching alpha user IDs:', error)
-        setAlphaUserIds([])
-      }
-    }
-    fetchAlphaUsers()
-  }, [])
+  // Enrich series data with normalized createdBy field like in practiceSeries
+  const enrichedSeries = useMemo(
+    () =>
+      (flowSeries || []).map((s) => ({
+        ...s,
+        createdBy: (s as any).createdBy ?? (s as any).created_by ?? undefined,
+        canonicalAsanaId: (s as any).canonicalAsanaId ?? (s as any).id,
+      })),
+    [flowSeries]
+  )
 
   // Prepare ordered series options with grouping like in practiceSeries
   const orderedSeriesOptions = useMemo(() => {
-    if (!flowSeries || flowSeries.length === 0) return []
+    if (!enrichedSeries || enrichedSeries.length === 0) return []
 
     // Get current user identifier
     const currentUserId = session?.user?.id
     const currentUserEmail = session?.user?.email
 
+    // Filter series to only show those created by current user or alpha users
+    const userIdentifiers = [currentUserId, currentUserEmail].filter(Boolean)
+    const authorizedSeries = enrichedSeries.filter((s) => {
+      const createdBy = (s as any).createdBy
+      // Allow series created by current user or alpha users only
+      return (
+        (createdBy && userIdentifiers.includes(createdBy)) ||
+        (createdBy && alphaUserIds.includes(createdBy))
+      )
+    })
+
     // Partition series into groups
     const mine: (FlowSeriesData & { id: string })[] = []
     const alpha: (FlowSeriesData & { id: string })[] = []
 
-    // Accept both user id and email for matching "Mine"
-    const userIdentifiers = [currentUserId, currentUserEmail].filter(Boolean)
-
-    flowSeries.forEach((item) => {
+    authorizedSeries.forEach((item) => {
       const createdBy = (item as any).createdBy
+
       // Ensure id is always a string
       const itemWithId: FlowSeriesData & { id: string } = {
         ...item,
@@ -150,14 +146,14 @@ export default function Page() {
     }
 
     return result
-  }, [flowSeries, session?.user?.id, session?.user?.email, alphaUserIds])
+  }, [enrichedSeries, session?.user?.id, session?.user?.email, alphaUserIds])
 
   useEffect(() => {
     async function getData() {
-      const seriesData = await fetchSeries()
+      const seriesData = await getAllSeries()
 
       if (seriesData) {
-        setFlowSeries(seriesData)
+        setFlowSeries(seriesData as FlowSeriesData[])
       }
     }
 
