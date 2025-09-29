@@ -1,6 +1,6 @@
 'use client'
-import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
+import { useCallback, useEffect, useRef } from 'react'
 import { useNavigationLoading } from '@context/NavigationLoadingContext'
 
 /**
@@ -9,7 +9,44 @@ import { useNavigationLoading } from '@context/NavigationLoadingContext'
  */
 export function useNavigationWithLoading() {
   const router = useRouter()
+  const pathname = usePathname()
   const { startNavigation, endNavigation, state } = useNavigationLoading()
+  const currentPathRef = useRef(pathname)
+  const navigationStartTimeRef = useRef<number | null>(null)
+  const minimumLoadingTimeRef = useRef<NodeJS.Timeout | null>(null)
+
+  // Monitor pathname changes to detect when navigation completes
+  useEffect(() => {
+    if (currentPathRef.current !== pathname) {
+      // Path has changed, navigation is complete
+      if (state.isNavigating && navigationStartTimeRef.current) {
+        const navigationDuration = Date.now() - navigationStartTimeRef.current
+        const minimumLoadingTime = 300 // Show loading for at least 300ms
+
+        if (navigationDuration >= minimumLoadingTime) {
+          // Navigation took long enough, end immediately
+          endNavigation()
+        } else {
+          // Navigation was too fast, delay ending to prevent jarring UX
+          const remainingTime = minimumLoadingTime - navigationDuration
+          minimumLoadingTimeRef.current = setTimeout(() => {
+            endNavigation()
+          }, remainingTime)
+        }
+      }
+      currentPathRef.current = pathname
+      navigationStartTimeRef.current = null
+    }
+  }, [pathname, state.isNavigating, endNavigation])
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (minimumLoadingTimeRef.current) {
+        clearTimeout(minimumLoadingTimeRef.current)
+      }
+    }
+  }, [])
 
   /**
    * Navigate to a new route with loading state feedback
@@ -32,8 +69,15 @@ export function useNavigationWithLoading() {
         return
       }
 
-      // Start loading state
+      // Clear any pending minimum loading timeout
+      if (minimumLoadingTimeRef.current) {
+        clearTimeout(minimumLoadingTimeRef.current)
+        minimumLoadingTimeRef.current = null
+      }
+
+      // Start loading state and record navigation start time
       startNavigation(path, elementId)
+      navigationStartTimeRef.current = Date.now()
 
       try {
         // Perform navigation
@@ -43,14 +87,20 @@ export function useNavigationWithLoading() {
           router.push(path)
         }
 
-        // End loading state after a brief delay to ensure the navigation has started
-        // This provides visual feedback while the route is loading
+        // Fallback timeout in case pathname change detection fails
         setTimeout(() => {
-          endNavigation()
-        }, 500) // Short delay for immediate visual feedback
+          if (state.isNavigating && navigationStartTimeRef.current) {
+            console.warn(
+              'Navigation timeout reached, forcing end of loading state'
+            )
+            endNavigation()
+            navigationStartTimeRef.current = null
+          }
+        }, 5000) // 5 second maximum timeout
       } catch (error) {
         console.error('Navigation error:', error)
         endNavigation()
+        navigationStartTimeRef.current = null
       }
     },
     [router, startNavigation, endNavigation, state.isNavigating]
@@ -64,17 +114,30 @@ export function useNavigationWithLoading() {
       return
     }
 
+    // Clear any pending minimum loading timeout
+    if (minimumLoadingTimeRef.current) {
+      clearTimeout(minimumLoadingTimeRef.current)
+      minimumLoadingTimeRef.current = null
+    }
+
     try {
       startNavigation('back', 'back-button')
+      navigationStartTimeRef.current = Date.now()
       router.back()
 
+      // Fallback timeout for back navigation
       setTimeout(() => {
-        endNavigation()
-      }, 500)
+        if (state.isNavigating && navigationStartTimeRef.current) {
+          console.warn('Back navigation timeout reached')
+          endNavigation()
+          navigationStartTimeRef.current = null
+        }
+      }, 3000) // 3 second timeout for back navigation
     } catch (error) {
       // Handle navigation errors gracefully
       console.warn('Back navigation failed:', error)
       endNavigation()
+      navigationStartTimeRef.current = null
     }
   }, [router, startNavigation, endNavigation, state.isNavigating])
 
@@ -86,17 +149,30 @@ export function useNavigationWithLoading() {
       return
     }
 
+    // Clear any pending minimum loading timeout
+    if (minimumLoadingTimeRef.current) {
+      clearTimeout(minimumLoadingTimeRef.current)
+      minimumLoadingTimeRef.current = null
+    }
+
     try {
       startNavigation('forward', 'forward-button')
+      navigationStartTimeRef.current = Date.now()
       router.forward()
 
+      // Fallback timeout for forward navigation
       setTimeout(() => {
-        endNavigation()
-      }, 500)
+        if (state.isNavigating && navigationStartTimeRef.current) {
+          console.warn('Forward navigation timeout reached')
+          endNavigation()
+          navigationStartTimeRef.current = null
+        }
+      }, 3000) // 3 second timeout for forward navigation
     } catch (error) {
       // Handle navigation errors gracefully
       console.warn('Forward navigation failed:', error)
       endNavigation()
+      navigationStartTimeRef.current = null
     }
   }, [router, startNavigation, endNavigation, state.isNavigating])
 
@@ -108,17 +184,30 @@ export function useNavigationWithLoading() {
       return
     }
 
+    // Clear any pending minimum loading timeout
+    if (minimumLoadingTimeRef.current) {
+      clearTimeout(minimumLoadingTimeRef.current)
+      minimumLoadingTimeRef.current = null
+    }
+
     try {
       startNavigation('refresh', 'refresh-button')
+      navigationStartTimeRef.current = Date.now()
       router.refresh()
 
+      // For refresh, use a longer timeout since the page reloads
       setTimeout(() => {
-        endNavigation()
-      }, 1000) // Slightly longer for refresh
+        if (state.isNavigating && navigationStartTimeRef.current) {
+          console.warn('Page refresh timeout reached')
+          endNavigation()
+          navigationStartTimeRef.current = null
+        }
+      }, 2000) // 2 second timeout for refresh
     } catch (error) {
       // Handle navigation errors gracefully
       console.warn('Page refresh failed:', error)
       endNavigation()
+      navigationStartTimeRef.current = null
     }
   }, [router, startNavigation, endNavigation, state.isNavigating])
 

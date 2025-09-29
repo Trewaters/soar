@@ -44,12 +44,15 @@ export function NavigationLoadingProvider({
     setTimeout(() => {
       setState((prev) => {
         // Only clear if we're still loading to the same path
-        if (prev.targetPath === targetPath) {
+        if (prev.targetPath === targetPath && prev.isNavigating) {
+          console.warn(
+            `Navigation timeout exceeded for ${targetPath}, clearing loading state`
+          )
           return initialState
         }
         return prev
       })
-    }, 5000) // 5 second timeout
+    }, 8000) // 8 second timeout - longer than individual navigation timeouts
   }
 
   const endNavigation = () => {
