@@ -24,7 +24,7 @@ import {
   Checkbox,
 } from '@mui/material'
 import { useSession } from 'next-auth/react'
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useState, useMemo } from 'react'
 import { LooksOne } from '@mui/icons-material'
 import LooksTwoIcon from '@mui/icons-material/LooksTwo'
 import Looks3Icon from '@mui/icons-material/Looks3'
@@ -40,6 +40,7 @@ import Image from 'next/image'
 import NavBottom from '@serverComponents/navBottom'
 import { AppText } from '@app/navigator/constants/Strings'
 import { splitSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
+import getAlphaUserIds from '@app/lib/alphaUsers'
 
 async function fetchSeries() {
   try {
@@ -77,12 +78,79 @@ export default function Page() {
   const [seriesNameSet, setSeriesNameSet] = useState<string[]>([])
   const [postures, setPostures] = useState<string[]>([])
   const [open, setOpen] = useState(false)
+  const [alphaUserIds, setAlphaUserIds] = useState<string[]>([])
 
   const [currentSeriesIndex, setCurrentSeriesIndex] = useState(
     seriesNameSet.length - 1
   )
 
   const router = useRouter()
+
+  // Fetch alpha user IDs on component mount
+  useEffect(() => {
+    async function fetchAlphaUsers() {
+      try {
+        const alphaIds = await getAlphaUserIds()
+        setAlphaUserIds(alphaIds)
+      } catch (error) {
+        console.error('Error fetching alpha user IDs:', error)
+        setAlphaUserIds([])
+      }
+    }
+    fetchAlphaUsers()
+  }, [])
+
+  // Prepare ordered series options with grouping like in practiceSeries
+  const orderedSeriesOptions = useMemo(() => {
+    if (!flowSeries || flowSeries.length === 0) return []
+
+    // Get current user identifier
+    const currentUserId = session?.user?.id
+    const currentUserEmail = session?.user?.email
+
+    // Partition series into groups
+    const mine: (FlowSeriesData & { id: string })[] = []
+    const alpha: (FlowSeriesData & { id: string })[] = []
+
+    // Accept both user id and email for matching "Mine"
+    const userIdentifiers = [currentUserId, currentUserEmail].filter(Boolean)
+
+    flowSeries.forEach((item) => {
+      const createdBy = (item as any).createdBy
+      // Ensure id is always a string
+      const itemWithId: FlowSeriesData & { id: string } = {
+        ...item,
+        id: (item as any).id ? String((item as any).id) : '',
+      }
+
+      if (createdBy && userIdentifiers.includes(createdBy)) {
+        mine.push(itemWithId)
+      } else if (createdBy && alphaUserIds.includes(createdBy)) {
+        alpha.push(itemWithId)
+      }
+    })
+
+    // Sort each group alphabetically
+    mine.sort((a, b) => a.seriesName.localeCompare(b.seriesName))
+    alpha.sort((a, b) => a.seriesName.localeCompare(b.seriesName))
+
+    // Compose with section header markers
+    const result: Array<
+      | (FlowSeriesData & { id: string })
+      | { section: 'Mine' | 'Alpha' | 'Others' }
+    > = []
+
+    if (mine.length > 0) {
+      result.push({ section: 'Mine' })
+      mine.forEach((item) => result.push(item))
+    }
+    if (alpha.length > 0) {
+      result.push({ section: 'Alpha' })
+      alpha.forEach((item) => result.push(item))
+    }
+
+    return result
+  }, [flowSeries, session?.user?.id, session?.user?.email, alphaUserIds])
 
   useEffect(() => {
     async function getData() {
@@ -261,22 +329,122 @@ export default function Page() {
             <Autocomplete
               disablePortal
               id="combo-box-series-search"
-              options={flowSeries.sort((a, b) =>
-                a.seriesName.localeCompare(b.seriesName)
-              )}
-              getOptionLabel={(option: FlowSeriesData) => option.seriesName}
-              renderOption={(props, option) => (
-                <li {...props} key={option.id}>
-                  {option.seriesName}
-                </li>
-              )}
-              filterOptions={(options, state) =>
-                options.filter((option) =>
-                  option.seriesName
-                    .toLowerCase()
-                    .includes(state.inputValue.toLowerCase())
-                )
-              }
+              options={orderedSeriesOptions}
+              getOptionLabel={(option) => {
+                const opt = option as any
+                if ('section' in opt) return ''
+                return opt.seriesName
+              }}
+              // Render section headers for groups
+              renderOption={(() => {
+                // Build a map of option indices to section labels
+                let lastSection: string | null = null
+                const sectionHeaderMap: Record<number, string> = {}
+                orderedSeriesOptions.forEach((opt: any, idx: number) => {
+                  const o = opt as any
+                  if ('section' in o) {
+                    lastSection = o.section
+                  } else if (lastSection) {
+                    sectionHeaderMap[idx] = lastSection
+                    lastSection = null
+                  }
+                })
+
+                interface SectionOption {
+                  section: 'Mine' | 'Alpha' | 'Others'
+                }
+
+                interface SeriesOption extends FlowSeriesData {
+                  id: string
+                  seriesName: string
+                }
+
+                type AutocompleteOption = SeriesOption | SectionOption
+
+                interface RenderOptionProps {
+                  key?: string
+                  [key: string]: any
+                }
+
+                interface RenderOptionState {
+                  index: number
+                }
+
+                const renderOptionFn = (
+                  props: RenderOptionProps,
+                  option: AutocompleteOption,
+                  { index }: RenderOptionState
+                ) => {
+                  const opt = option as AutocompleteOption
+                  if ('section' in opt) {
+                    // Never render section as an option (handled below)
+                    return null
+                  }
+                  const sectionLabel = sectionHeaderMap[index] || null
+                  return (
+                    <>
+                      {sectionLabel && (
+                        <ListSubheader
+                          key={sectionLabel + '-header'}
+                          component="div"
+                          disableSticky
+                          role="presentation"
+                        >
+                          {sectionLabel}
+                        </ListSubheader>
+                      )}
+                      <li {...props} key={opt.id}>
+                        {opt.seriesName}
+                      </li>
+                    </>
+                  )
+                }
+                renderOptionFn.displayName = 'SeriesAutocompleteRenderOption'
+                return renderOptionFn
+              })()}
+              // Filter options with proper grouping
+              filterOptions={(options, state) => {
+                // Partition options into groups by section
+                const groups: Record<string, any[]> = {}
+                let currentSection: 'Mine' | 'Alpha' | null = null
+                for (const option of options) {
+                  const opt = option as any
+                  if ('section' in opt) {
+                    currentSection = opt.section as 'Mine' | 'Alpha'
+                    if (!groups[currentSection]) groups[currentSection] = []
+                  } else if (currentSection) {
+                    if (!groups[currentSection]) groups[currentSection] = []
+                    // Only add if matches search
+                    if (
+                      opt.seriesName &&
+                      opt.seriesName
+                        .toLowerCase()
+                        .includes(state.inputValue.toLowerCase())
+                    ) {
+                      groups[currentSection].push(opt)
+                    }
+                  }
+                }
+                // Flatten back to options array, inserting section header if group has any items
+                const filtered: typeof options = []
+                const sectionOrder: Array<'Mine' | 'Alpha'> = ['Mine', 'Alpha']
+                for (const section of sectionOrder) {
+                  if (groups[section] && groups[section].length > 0) {
+                    filtered.push({
+                      section: section as 'Mine' | 'Alpha' | 'Others',
+                    })
+                    filtered.push(...groups[section])
+                  }
+                }
+                return filtered
+              }}
+              // Prevent section headers from being selected
+              isOptionEqualToValue={(option, value) => {
+                const opt = option as any
+                const val = value as any
+                if ('section' in opt || 'section' in val) return false
+                return opt.id === val.id
+              }}
               sx={{
                 '& .MuiOutlinedInput-notchedOutline': {
                   borderRadius: '12px',
@@ -310,7 +478,12 @@ export default function Page() {
                   }}
                 />
               )}
-              onChange={handleSelect}
+              onChange={(event, value) => {
+                const val = value as any
+                // Ignore section header clicks
+                if (val && 'section' in val) return
+                handleSelect(event as any, value as FlowSeriesData | null)
+              }}
             />
           </FormControl>
           <Box sx={{ px: 2 }}>
