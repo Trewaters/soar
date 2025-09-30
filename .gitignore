@@ -28,7 +28,6 @@ yarn-error.log*
 .env*.local
 .env.*
 .env
-.env.cloudflare
 .env.local
 
 # vercel
@@ -51,3 +50,6 @@ datalogmongod.log*
 # Ai scripts
 /scripts*
 /scripts/*
+
+# Prisma generated files
+prisma/generated/

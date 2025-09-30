@@ -96,6 +96,7 @@ export default function Page() {
     breath_direction_default: 'Neutral',
     preferred_side: '',
     sideways: 'No',
+    // created_by should be the user's email (project convention)
     created_by: session?.user?.email ?? 'error-undefined-user',
     dristi: '',
   })
@@ -202,6 +203,7 @@ export default function Page() {
       breath_direction_default: formData.breath_direction_default,
       preferred_side: formData.preferred_side,
       sideways: formData.sideways,
+      // created_by should be the user's email
       created_by: session?.user?.email ?? 'unknown',
     }
 

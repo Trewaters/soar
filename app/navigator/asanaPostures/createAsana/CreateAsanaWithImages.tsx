@@ -2,16 +2,9 @@
 import React, { useState, useEffect } from 'react'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid2'
-import {
-  Box,
-  Button,
-  FormControl,
-  Stack,
-  TextField,
-  Paper,
-} from '@mui/material'
+import { Box, Button, FormControl, TextField, Paper } from '@mui/material'
 import { useAsanaPosture } from '@app/context/AsanaPostureContext'
-import { createPosture, type CreatePostureInput } from '@lib/postureService'
+import { createPosture } from '@lib/postureService'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
@@ -41,6 +34,7 @@ export default function CreateAsanaWithImages() {
     breath_direction_default: '',
     preferred_side: '',
     sideways: '',
+    // created_by should be the user's email (project convention)
     created_by: session?.user?.email ?? 'error-undefined-user',
   })
 
@@ -67,10 +61,7 @@ export default function CreateAsanaWithImages() {
     })
   }
 
-  const handleImageUploaded = (image: PoseImageData) => {
-    console.log('Reference image uploaded for asana creation:', image)
-    setUploadedImages((prev) => [...prev, image])
-  }
+  // uploadedImages state is updated by child ImageManagement component when variant="upload-only"
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

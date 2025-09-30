@@ -5,7 +5,7 @@ import '@testing-library/jest-dom'
 import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
-import theme from '@styles/theme'
+import { theme } from '../../../../../styles/theme'
 import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import Page from '@app/navigator/flows/createSequence/page'
 
@@ -38,6 +38,17 @@ const mockSessionUser = {
 const mockSession = {
   user: mockSessionUser,
   expires: '2024-01-01',
+}
+
+// Ensure the global next-auth mock from jest.setup can be configured per-test
+const globalMockUseSession = (global as any).mockUseSession as
+  | jest.Mock
+  | undefined
+if (globalMockUseSession) {
+  globalMockUseSession.mockImplementation(() => ({
+    data: mockSession,
+    status: 'authenticated',
+  }))
 }
 
 const mockSeriesData = [

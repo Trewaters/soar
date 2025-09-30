@@ -30,6 +30,8 @@ export async function POST(request: Request) {
         preferred_side,
         sideways: sidewaysBoolean,
         created_by,
+        // Mark as user-created when a creator identifier is supplied
+        isUserCreated: Boolean(created_by),
         // Note: created_on and updated_on are handled by Prisma defaults
       },
     })

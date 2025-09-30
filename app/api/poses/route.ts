@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
   // Get current session to determine access control
   const session = await auth()
   const currentUserEmail = session?.user?.email
+  const currentUserId = session?.user?.id
   const alphaUserIds = getAlphaUserIds()
 
   console.log('🔍 /api/poses: Request details:', {
@@ -41,7 +42,8 @@ export async function GET(request: NextRequest) {
       // Check access control for individual pose
       const hasAccess =
         !currentUserEmail || // Allow if no user (for public access)
-        pose.created_by === currentUserEmail || // User's own pose
+        pose.created_by === currentUserEmail || // User's own pose (email)
+        pose.created_by === currentUserId || // Older records may store creator as user id
         alphaUserIds.includes(pose.created_by || '') // Alpha user's pose
 
       if (!hasAccess) {
@@ -77,7 +79,8 @@ export async function GET(request: NextRequest) {
       // Check access control for individual pose
       const hasAccess =
         !currentUserEmail || // Allow if no user (for public access)
-        pose.created_by === currentUserEmail || // User's own pose
+        pose.created_by === currentUserEmail || // User's own pose (email)
+        pose.created_by === currentUserId || // Older records may store creator as user id
         alphaUserIds.includes(pose.created_by || '') // Alpha user's pose
 
       if (!hasAccess) {
@@ -112,7 +115,8 @@ export async function GET(request: NextRequest) {
       // If specific creator is requested, check access
       const hasAccess =
         !currentUserEmail || // Allow if no user (for public access)
-        createdBy === currentUserEmail || // User's own poses
+        createdBy === currentUserEmail || // User's own poses (email)
+        createdBy === currentUserId || // Allow querying by user id for older records
         alphaUserIds.includes(createdBy) // Alpha user's poses
 
       if (!hasAccess) {
@@ -124,7 +128,12 @@ export async function GET(request: NextRequest) {
       // If no specific creator, filter by access control
       if (currentUserEmail) {
         // Show user's own posts + alpha user posts
-        const allowedCreators = [currentUserEmail, ...alphaUserIds]
+        // Include both email and id for backward compatibility
+        const allowedCreators = [
+          ...(currentUserEmail ? [currentUserEmail] : []),
+          ...(currentUserId ? [currentUserId] : []),
+          ...alphaUserIds,
+        ]
         whereClause.created_by = {
           in: allowedCreators,
         }

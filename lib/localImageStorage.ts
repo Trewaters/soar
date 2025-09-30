@@ -1,7 +1,7 @@
 /**
  * Local Storage Service for managing offline images
  * Handles storing, retrieving, and managing images in browser storage
- * when Cloudflare API is unavailable
+ * when API is unavailable
  */
 
 interface LocalImageData {

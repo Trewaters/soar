@@ -15,6 +15,10 @@ import {
   CircularProgress,
   Chip,
   LinearProgress,
+  Card,
+  CardContent,
+  CardMedia,
+  IconButton,
 } from '@mui/material'
 import {
   CloudUpload as CloudUploadIcon,
@@ -112,6 +116,9 @@ export default function ImageUploadWithFallback({
   const [open, setOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
+  type StagedImage = { name: string; size: number; dataUrl: string }
+  const [stagedImages, setStagedImages] = useState<StagedImage[]>([])
+  const STAGED_KEY = 'soar:staged-asana-images'
   const [altText, setAltText] = useState('')
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -152,8 +159,31 @@ export default function ImageUploadWithFallback({
     initStorage()
   }, [])
 
+  // Load staged images when creating a new asana (no postureId)
+  React.useEffect(() => {
+    if (postureId) return
+    try {
+      const raw = localStorage.getItem(STAGED_KEY)
+      if (raw) {
+        const parsed = JSON.parse(raw) as StagedImage[]
+        setStagedImages(parsed)
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [postureId])
+
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const files = Array.from(event.target.files || [])
+    if (!files.length) return
+
+    // If no postureId, allow selecting multiple files and stage them
+    if (!postureId) {
+      processSelectedFilesForStaging(files)
+      return
+    }
+
+    const file = files[0]
     if (!file) return
 
     // Validate file type
@@ -187,15 +217,121 @@ export default function ImageUploadWithFallback({
     setAltText(baseName.replace(/[-_]/g, ' '))
   }
 
+  const processSelectedFilesForStaging = async (files: File[]) => {
+    // filter/validate
+    const valid: File[] = []
+    for (const file of files) {
+      if (!acceptedTypes.includes(file.type)) continue
+      if (file.size > maxFileSize * 1024 * 1024) continue
+      valid.push(file)
+    }
+    if (!valid.length) return
+
+    try {
+      const fileToDataUrl = (file: File) =>
+        new Promise<string>((resolve, reject) => {
+          const fr = new FileReader()
+          fr.onload = () => resolve(String(fr.result))
+          fr.onerror = reject
+          fr.readAsDataURL(file)
+        })
+
+      const converted = await Promise.all(
+        valid.map(async (f) => {
+          return {
+            name: f.name,
+            size: f.size,
+            dataUrl: await fileToDataUrl(f),
+          }
+        })
+      )
+
+      const next = [...stagedImages, ...converted]
+      setStagedImages(next)
+      try {
+        localStorage.setItem(STAGED_KEY, JSON.stringify(next))
+      } catch (e) {}
+    } catch (e) {
+      console.warn('Staging failed', e)
+    }
+  }
+
   const handleCloudUpload = async () => {
-    if (!selectedFile || !session?.user?.id) {
-      setError('Please select a file and ensure you are logged in')
+    if (!session?.user?.id) {
+      setError('Please ensure you are logged in')
       return
     }
 
+    // If there are staged images (creating a new asana), upload them in sequence
+    if (!selectedFile && stagedImages.length > 0) {
+      setUploading(true)
+      setError(null)
+
+      const dataUrlToFile = (dataUrl: string, filename: string) => {
+        const arr = dataUrl.split(',')
+        const mimeMatch = arr[0].match(/:(.*?);/)
+        const mime = mimeMatch ? mimeMatch[1] : 'image/png'
+        const bstr = atob(arr[1])
+        let n = bstr.length
+        const u8 = new Uint8Array(n)
+        while (n--) u8[n] = bstr.charCodeAt(n)
+        return new File([u8], filename, { type: mime })
+      }
+
+      try {
+        for (const s of stagedImages) {
+          const file = dataUrlToFile(s.dataUrl, s.name)
+
+          const formData = new FormData()
+          formData.append('file', file)
+          formData.append('altText', '')
+          formData.append('userId', session.user.id)
+          formData.append(
+            'imageType',
+            postureId || postureName ? 'posture' : 'gallery'
+          )
+          if (postureId) formData.append('postureId', postureId)
+          if (postureName) formData.append('postureName', postureName)
+
+          const response = await fetch('/api/images/upload', {
+            method: 'POST',
+            body: formData,
+          })
+
+          let data: any
+          try {
+            data = await response.json()
+          } catch (jsonError) {
+            data = { error: 'Network error occurred', canFallbackToLocal: true }
+          }
+
+          if (!response.ok) {
+            // If any upload fails, surface an error and stop batch
+            setError(data?.error || 'Upload failed')
+            throw new Error(data?.error || 'Upload failed')
+          }
+
+          onImageUploaded?.(data)
+        }
+
+        // All uploaded successfully: clear staged images
+        setStagedImages([])
+        try {
+          localStorage.removeItem(STAGED_KEY)
+        } catch (e) {}
+
+        handleClose()
+        return
+      } catch (error) {
+        console.error('Batch upload error:', error)
+      } finally {
+        setUploading(false)
+      }
+    }
+
     console.log('🚀 Starting cloud upload...', {
-      fileName: selectedFile.name,
-      fileSize: selectedFile.size,
+      fileName: selectedFile ? selectedFile.name : null,
+      fileSize: selectedFile ? selectedFile.size : null,
       userId: session.user.id,
     })
 
@@ -204,7 +340,9 @@ export default function ImageUploadWithFallback({
 
     try {
       const formData = new FormData()
-      formData.append('file', selectedFile)
+      if (selectedFile) {
+        formData.append('file', selectedFile)
+      }
       formData.append('altText', altText.trim() || '')
       formData.append('userId', session.user.id)
       formData.append(
@@ -391,40 +529,45 @@ export default function ImageUploadWithFallback({
 
   const handleDrop = (event: React.DragEvent) => {
     event.preventDefault()
-    const files = event.dataTransfer.files
-    if (files.length > 0) {
-      const file = files[0]
+    const files = Array.from(event.dataTransfer.files || [])
+    if (!files.length) return
 
-      // Validate file type
-      if (!acceptedTypes.includes(file.type)) {
-        setError(
-          `Invalid file type. Please select: ${acceptedTypes
-            .map((type) => type.split('/')[1])
-            .join(', ')}`
-        )
-        return
-      }
-
-      // Validate file size
-      if (file.size > maxFileSize * 1024 * 1024) {
-        setError(`File size must be less than ${maxFileSize}MB`)
-        return
-      }
-
-      setSelectedFile(file)
-      setError(null)
-
-      // Create preview
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setPreview(e.target?.result as string)
-      }
-      reader.readAsDataURL(file)
-
-      // Auto-generate alt text from filename
-      const baseName = file.name.split('.')[0]
-      setAltText(baseName.replace(/[-_]/g, ' '))
+    if (!postureId) {
+      processSelectedFilesForStaging(files)
+      return
     }
+
+    const file = files[0]
+
+    // Validate file type
+    if (!acceptedTypes.includes(file.type)) {
+      setError(
+        `Invalid file type. Please select: ${acceptedTypes
+          .map((type) => type.split('/')[1])
+          .join(', ')}`
+      )
+      return
+    }
+
+    // Validate file size
+    if (file.size > maxFileSize * 1024 * 1024) {
+      setError(`File size must be less than ${maxFileSize}MB`)
+      return
+    }
+
+    setSelectedFile(file)
+    setError(null)
+
+    // Create preview
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setPreview(e.target?.result as string)
+    }
+    reader.readAsDataURL(file)
+
+    // Auto-generate alt text from filename
+    const baseName = file.name.split('.')[0]
+    setAltText(baseName.replace(/[-_]/g, ' '))
   }
 
   const UploadButton = () => (
@@ -469,6 +612,18 @@ export default function ImageUploadWithFallback({
       <Typography variant="body2" color="text.secondary">
         Drag and drop an image here, or click to select
       </Typography>
+      {/* helper: allow multiple selection when creating a new asana */}
+      {!postureId && (
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          display="block"
+          mt={1}
+        >
+          You can select multiple images at once while creating a new asana.
+          They will be staged locally until you save the asana.
+        </Typography>
+      )}
       <Typography
         variant="caption"
         color="text.secondary"
@@ -524,6 +679,7 @@ export default function ImageUploadWithFallback({
                   type="file"
                   accept={acceptedTypes.join(',')}
                   onChange={handleFileSelect}
+                  multiple={!postureId}
                   style={{ display: 'none' }}
                 />
                 <Paper
@@ -547,6 +703,66 @@ export default function ImageUploadWithFallback({
                     Click to select an image
                   </Typography>
                 </Paper>
+                {/* Show staged previews when creating a new asana */}
+                {!postureId && stagedImages.length > 0 && (
+                  <Box sx={{ mt: 2 }}>
+                    <Typography variant="subtitle2">
+                      Staged images (not yet saved)
+                    </Typography>
+                    <Box
+                      sx={{ display: 'flex', gap: 2, mt: 1, overflowX: 'auto' }}
+                    >
+                      {stagedImages.map((s, i) => (
+                        <Card key={`staged-${i}`} sx={{ minWidth: 160 }}>
+                          <CardMedia
+                            component="img"
+                            height="120"
+                            image={s.dataUrl}
+                            alt={s.name}
+                            sx={{ objectFit: 'cover' }}
+                          />
+                          <CardContent>
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between"
+                              alignItems="center"
+                            >
+                              <Box>
+                                <Typography variant="body2" noWrap>
+                                  {s.name}
+                                </Typography>
+                                <Typography
+                                  variant="caption"
+                                  color="text.secondary"
+                                >
+                                  {formatFileSize(s.size)}
+                                </Typography>
+                              </Box>
+                              <IconButton
+                                onClick={() => {
+                                  const next = stagedImages.filter(
+                                    (_, idx) => idx !== i
+                                  )
+                                  setStagedImages(next)
+                                  try {
+                                    localStorage.setItem(
+                                      STAGED_KEY,
+                                      JSON.stringify(next)
+                                    )
+                                  } catch (e) {}
+                                }}
+                                color="error"
+                                size="small"
+                              >
+                                <StorageIcon />
+                              </IconButton>
+                            </Stack>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </Box>
+                  </Box>
+                )}
               </Box>
             ) : (
               <Box sx={{ textAlign: 'center' }}>
@@ -612,7 +828,7 @@ export default function ImageUploadWithFallback({
           <Button
             onClick={handleCloudUpload}
             variant="contained"
-            disabled={!selectedFile || uploading}
+            disabled={!(selectedFile || stagedImages.length > 0) || uploading}
             startIcon={
               uploading ? <CircularProgress size={20} /> : <CloudUploadIcon />
             }

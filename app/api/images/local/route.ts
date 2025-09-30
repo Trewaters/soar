@@ -76,12 +76,12 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { imageId, cloudUrl, cloudflareId } = body
+    const { imageId, cloudUrl } = body
 
     // Validate inputs
-    if (!imageId || !cloudUrl || !cloudflareId) {
+    if (!imageId || !cloudUrl) {
       return NextResponse.json(
-        { error: 'Missing required fields: imageId, cloudUrl, cloudflareId' },
+        { error: 'Missing required fields: imageId, cloudUrl' },
         { status: 400 }
       )
     }
@@ -105,7 +105,6 @@ export async function PUT(request: NextRequest) {
       data: {
         url: cloudUrl,
         storageType: 'CLOUD',
-        cloudflareId,
         isOffline: false,
       },
     })

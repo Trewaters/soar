@@ -155,6 +155,8 @@ model AsanaPosture {
   joint_action         String?
   muscle_action        String?
   created_by          String?
+  isUserCreated       Boolean @default(false) // Flag to identify user-created asanas
+  imageCount          Int @default(0) // Cache for number of images (performance optimization)
   asanaActivities AsanaActivity[] // Relation to AsanaActivity
   poseImages      PoseImage[]     // Relation to PoseImage
 }
@@ -274,6 +276,7 @@ model PoseImage {
   localStorageId String?     // Local storage identifier for browser storage
   isOffline      Boolean     @default(false) // True if saved offline due to API failure
   imageType      String      @default("posture") // 'profile', 'posture', 'gallery', etc.
+  displayOrder   Int         @default(1) // Order for carousel display (1-3)
 
   user       UserData      @relation(fields: [userId], references: [id], onDelete: Cascade)
   posture    AsanaPosture? @relation(fields: [postureId], references: [id], onDelete: SetNull)
@@ -286,6 +289,7 @@ model PoseImage {
   @@index([postureName])
   @@index([storageType])
   @@index([imageType])
+  @@index([postureId, displayOrder]) // Composite index for efficient carousel queries
 }
 
 /// Enum for image storage types

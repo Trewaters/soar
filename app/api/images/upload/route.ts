@@ -2,17 +2,102 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
 import { PrismaClient } from '../../../../prisma/generated/client'
 import { storageManager } from '../../../../lib/storage/manager'
+import {
+  getNextDisplayOrder,
+  ImageLimitError,
+  AsanaOwnershipError,
+  SystemAsanaError,
+} from '../../../utils/asanaOwnership'
+import {
+  MAX_IMAGES_PER_ASANA,
+  MAX_FILE_SIZE,
+  ALLOWED_IMAGE_TYPES,
+  ImageUploadResponse,
+} from '../../../../types/images'
 
 const prisma = new PrismaClient()
 
 // Force this route to be dynamic since it requires query parameters and authentication
 export const dynamic = 'force-dynamic'
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     // Check authentication
     const session = await auth()
-    if (!session?.user?.id) {
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    // Get query parameters for image status
+    const { searchParams } = new URL(request.url)
+    const postureId = searchParams.get('postureId')
+
+    if (!postureId) {
+      return NextResponse.json({ error: 'postureId required' }, { status: 400 })
+    }
+
+    // Get the asana to check ownership and image count
+    const asana = await prisma.asanaPosture.findUnique({
+      where: { id: postureId },
+      select: {
+        id: true,
+        isUserCreated: true,
+        imageCount: true,
+        created_by: true,
+      },
+    })
+
+    if (!asana) {
+      return NextResponse.json({ error: 'Asana not found' }, { status: 404 })
+    }
+
+    // Use backwards compatible ownership check
+    const sessionEmail = session.user.email
+    const isUserOwned = asana.created_by === sessionEmail
+
+    // Check if user can manage images (user-created or user is the creator)
+    const canManage = isUserOwned && Boolean(asana.created_by)
+
+    if (!canManage) {
+      return NextResponse.json(
+        { error: 'You can only manage images for your own asanas' },
+        { status: 403 }
+      )
+    }
+
+    // Return image status
+    return NextResponse.json({
+      canUpload: true,
+      currentCount: asana.imageCount || 0,
+      maxImages: MAX_IMAGES_PER_ASANA,
+      remainingSlots: MAX_IMAGES_PER_ASANA - (asana.imageCount || 0),
+    })
+  } catch (error) {
+    console.error('Error getting image status:', error)
+    return NextResponse.json(
+      { error: 'Failed to get image status' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function POST(request: NextRequest) {
+  // Debug environment variables
+  console.log('🔧 Environment debug:', {
+    NODE_ENV: process.env.NODE_ENV,
+    hasVercelToken: !!process.env.BLOB_READ_WRITE_TOKEN,
+    blobTokenLength: process.env.BLOB_READ_WRITE_TOKEN?.length || 0,
+    vercelUrl: process.env.VERCEL_URL,
+    nextAuthUrl: process.env.NEXTAUTH_URL,
+  })
+
+  try {
+    // Check authentication
+    const session = await auth()
+    if (!session?.user?.email) {
       return NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }
@@ -27,191 +112,243 @@ export async function POST(request: NextRequest) {
     const postureId = formData.get('postureId') as string
     const postureName = formData.get('postureName') as string
     const imageType = (formData.get('imageType') as string) || 'posture'
+    const displayOrderParam = formData.get('displayOrder') as string
 
     // Validate inputs
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 })
     }
 
-    if (userId !== session.user.id) {
+    if (userId !== session.user.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
+    // Validate file type using constants
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { error: 'Invalid file type. Only images are allowed.' },
+        {
+          error: `Invalid file type. Only ${ALLOWED_IMAGE_TYPES.join(', ')} are allowed.`,
+        },
         { status: 400 }
       )
     }
 
-    // Validate file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
+    // Validate file size using constants
+    if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { error: 'File too large. Maximum size is 10MB.' },
+        {
+          error: `File too large. Maximum size is ${MAX_FILE_SIZE / (1024 * 1024)}MB.`,
+        },
         { status: 400 }
       )
     }
 
-    // Upload using storage manager (Vercel Blob only)
-    const uploadResult = await storageManager.upload(file.name, file, {
+    // For posture images, validate multi-image constraints
+    if (postureId && imageType === 'posture') {
+      // Get the asana to check if it's user-created and current image count
+      const asana = await prisma.asanaPosture.findUnique({
+        where: { id: postureId },
+        select: {
+          id: true,
+          isUserCreated: true,
+          imageCount: true,
+          created_by: true,
+        },
+      })
+
+      if (!asana) {
+        return NextResponse.json({ error: 'Asana not found' }, { status: 404 })
+      }
+
+      // Use backwards compatible ownership check
+      const sessionEmail = session.user.email
+      const isUserOwned = asana.created_by === sessionEmail
+
+      // Backwards compatible system asana detection
+      const isSystemAsana = !Boolean(asana.created_by)
+
+      // Check if this is a system asana (no images allowed)
+      if (isSystemAsana) {
+        throw new SystemAsanaError(
+          'Cannot upload images to system asanas. Only user-created asanas support images.'
+        )
+      }
+
+      // Check ownership
+      if (!isUserOwned) {
+        throw new AsanaOwnershipError(
+          'You can only upload images to your own asanas.',
+          'OWNERSHIP_ERROR'
+        )
+      }
+
+      // Calculate maxImages using backwards compatible logic
+      const maxImages = Boolean(asana.created_by) ? MAX_IMAGES_PER_ASANA : 0
+
+      // Check image limit
+      const currentImageCount = asana.imageCount || 0
+      if (currentImageCount >= maxImages) {
+        throw new ImageLimitError(
+          `Maximum of ${maxImages} images allowed per asana`,
+          currentImageCount,
+          maxImages
+        )
+      }
+    }
+
+    // Determine the display order
+    let displayOrder = 1
+    if (displayOrderParam) {
+      displayOrder = parseInt(displayOrderParam)
+    } else if (postureId && imageType === 'posture') {
+      displayOrder = await getNextDisplayOrder(postureId)
+    }
+
+    // Convert file to buffer for upload
+    const bytes = await file.arrayBuffer()
+    const buffer = Buffer.from(bytes)
+
+    // Generate a unique filename
+    const fileExtension = file.name.split('.').pop() || 'jpg'
+    const timestamp = Date.now()
+    const randomString = Math.random().toString(36).substring(2, 8)
+    const filename = `${imageType}_${timestamp}_${randomString}.${fileExtension}`
+
+    console.log('🔍 About to upload to storage:', {
+      filename,
+      fileSize: buffer.length,
+      storageProvider: storageManager.getActiveProvider().name,
+    })
+
+    // Upload to storage
+    const uploadResult = await storageManager.upload(filename, buffer, {
       access: 'public',
-      addRandomSuffix: true,
     })
 
-    // Save to database with Vercel Blob storage info
-    const poseImage = await prisma.poseImage.create({
-      data: {
-        userId,
-        postureId: postureId || null,
-        postureName: postureName || null,
-        url: uploadResult.url,
-        altText: altText || null,
-        fileName: uploadResult.fileName,
-        fileSize: uploadResult.size,
-        storageType: 'CLOUD',
-        isOffline: false,
-        imageType,
-      },
+    console.log('✅ Storage upload successful:', uploadResult)
+
+    // Get the user's ObjectId from the database using their email
+    const user = await prisma.userData.findUnique({
+      where: { email: session.user.email! },
+      select: { id: true },
     })
 
-    return NextResponse.json({
-      id: poseImage.id,
-      url: poseImage.url,
-      altText: poseImage.altText,
-      fileName: poseImage.fileName,
-      fileSize: poseImage.fileSize,
-      uploadedAt: poseImage.uploadedAt,
-      storageType: poseImage.storageType,
-      imageType: poseImage.imageType,
+    if (!user) {
+      return NextResponse.json(
+        { error: 'User not found in database' },
+        { status: 404 }
+      )
+    }
+
+    // Save image metadata to database
+    const imageData = {
+      userId: user.id, // Use the ObjectId, not the email
+      fileName: filename,
+      altText: altText || `${postureName || imageType} image`,
+      fileSize: file.size,
+      imageType: imageType,
+      url: uploadResult.url,
+      displayOrder: displayOrder,
+      ...(postureId && { postureId }),
+      ...(postureName && { postureName }),
+    }
+
+    console.log('💾 Saving to database:', { ...imageData, fileSize: file.size })
+
+    const savedImage = await prisma.poseImage.create({
+      data: imageData,
     })
+
+    console.log('✅ Database save successful:', savedImage.id)
+
+    // Update asana image count if this is a posture image
+    if (postureId && imageType === 'posture') {
+      await prisma.asanaPosture.update({
+        where: { id: postureId },
+        data: {
+          imageCount: {
+            increment: 1,
+          },
+        },
+      })
+      console.log('✅ Updated asana image count')
+    }
+
+    const response: ImageUploadResponse = {
+      id: savedImage.id,
+      url: savedImage.url,
+      altText: savedImage.altText || undefined,
+      fileName: savedImage.fileName || undefined,
+      fileSize: savedImage.fileSize || undefined,
+      uploadedAt: savedImage.uploadedAt,
+      storageType: savedImage.storageType,
+      imageType: savedImage.imageType,
+      displayOrder: savedImage.displayOrder,
+      remainingSlots: MAX_IMAGES_PER_ASANA - 1,
+      totalImages: 1,
+    }
+
+    console.log('🎉 Upload complete, returning response')
+    return NextResponse.json(response)
   } catch (error) {
-    console.error('Vercel Blob upload error:', error)
+    console.error('Enhanced image upload error:', error)
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      type: typeof error,
+      errorObject: error,
+    })
 
-    // Return error with fallback option (keeps your existing fallback system)
+    // Handle specific error types
+    if (error instanceof ImageLimitError) {
+      return NextResponse.json(
+        {
+          error: error.message,
+          code: 'LIMIT_EXCEEDED',
+          current: error.current,
+          limit: error.limit,
+        },
+        { status: 400 }
+      )
+    }
+
+    if (error instanceof AsanaOwnershipError) {
+      return NextResponse.json(
+        {
+          error: error.message,
+          code: 'UNAUTHORIZED',
+        },
+        { status: 403 }
+      )
+    }
+
+    if (error instanceof SystemAsanaError) {
+      return NextResponse.json(
+        {
+          error: error.message,
+          code: 'SYSTEM_ASANA',
+        },
+        { status: 400 }
+      )
+    }
+
+    // Return error with more detailed information for debugging
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred'
     return NextResponse.json(
       {
-        error: 'Vercel Blob upload failed',
+        error: 'Image upload failed',
+        details: errorMessage,
         canFallbackToLocal: true,
-        details:
-          'Upload to Vercel Blob failed. You can save this image locally instead.',
+        debugInfo:
+          process.env.NODE_ENV === 'development'
+            ? {
+                errorType: typeof error,
+                errorMessage: errorMessage,
+                timestamp: new Date().toISOString(),
+              }
+            : undefined,
       },
-      { status: 500 }
-    )
-  }
-}
-
-// GET endpoint to retrieve user's uploaded images
-export async function GET(request: NextRequest) {
-  try {
-    // Check authentication
-    const session = await auth()
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      )
-    }
-
-    const { searchParams } = new URL(request.url)
-    const limit = parseInt(searchParams.get('limit') || '10')
-    const offset = parseInt(searchParams.get('offset') || '0')
-    const postureId = searchParams.get('postureId')
-    const postureName = searchParams.get('postureName')
-    const imageType = searchParams.get('imageType')
-
-    // Build where clause
-    const whereClause: any = {
-      userId: session.user.id,
-    }
-
-    // Add posture filter if provided
-    if (postureId) {
-      whereClause.postureId = postureId
-    } else if (postureName) {
-      whereClause.postureName = postureName
-    }
-    if (imageType) {
-      whereClause.imageType = imageType
-    }
-
-    const images = await prisma.poseImage.findMany({
-      where: whereClause,
-      orderBy: {
-        uploadedAt: 'desc',
-      },
-      take: limit,
-      skip: offset,
-    })
-
-    const total = await prisma.poseImage.count({
-      where: whereClause,
-    })
-
-    return NextResponse.json({
-      images,
-      total,
-      hasMore: offset + limit < total,
-    })
-  } catch (error) {
-    console.error('Get images error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
-  }
-}
-
-// DELETE endpoint to remove an image
-export async function DELETE(request: NextRequest) {
-  try {
-    // Check authentication
-    const session = await auth()
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      )
-    }
-
-    const { searchParams } = new URL(request.url)
-    const imageId = searchParams.get('id')
-
-    if (!imageId) {
-      return NextResponse.json({ error: 'Image ID required' }, { status: 400 })
-    }
-
-    // Find the image and verify ownership
-    const image = await prisma.poseImage.findUnique({
-      where: { id: imageId },
-    })
-
-    if (!image) {
-      return NextResponse.json({ error: 'Image not found' }, { status: 404 })
-    }
-
-    if (image.userId !== session.user.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
-    }
-
-    // Delete from cloud storage using storage manager
-    try {
-      await storageManager.delete(image.url)
-    } catch (error) {
-      console.error('Failed to delete from cloud storage:', error)
-      // Continue with database deletion even if cloud deletion fails
-    }
-
-    // Delete from database
-    await prisma.poseImage.delete({
-      where: { id: imageId },
-    })
-
-    return NextResponse.json({ success: true })
-  } catch (error) {
-    console.error('Delete image error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
       { status: 500 }
     )
   }

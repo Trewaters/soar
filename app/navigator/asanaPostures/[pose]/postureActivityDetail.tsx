@@ -28,6 +28,8 @@ import {
   createAsanaActivity,
   deleteAsanaActivity,
 } from '@lib/asanaActivityClientService'
+import ImageCarousel from '@app/clientComponents/imageUpload/ImageCarousel'
+import CarouselDotNavigation from '@app/clientComponents/imageUpload/CarouselDotNavigation'
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 import { deletePosture } from '@lib/postureService'
 import PostureImageUpload from '@app/clientComponents/imageUpload/PostureImageUpload'
@@ -118,22 +120,9 @@ export default function PostureActivityDetail({
     posture?.sort_english_name
   )
 
-  // Cycle through images every 10 seconds if multiple images exist
-  useEffect(() => {
-    if (!postureImages || postureImages.length <= 1) return
-
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % postureImages.length)
-    }, 10000) // Change image every 10 seconds
-
-    return () => clearInterval(interval)
-  }, [postureImages])
-
-  // Handle manual image cycling
-  const handleImageCycle = () => {
-    if (postureImages && postureImages.length > 1) {
-      setCurrentImageIndex((prev) => (prev + 1) % postureImages.length)
-    }
+  // Handle carousel image index changes
+  const handleCarouselIndexChange = (index: number) => {
+    setCurrentImageIndex(index)
   }
 
   // Check if activity already exists on component mount
@@ -432,18 +421,13 @@ export default function PostureActivityDetail({
           mx: 'auto',
         }}
       >
-        {/* Display uploaded image prominently when available */}
-        {postureImages &&
-        postureImages.length > 0 &&
-        postureImages[currentImageIndex] &&
-        postureImages[currentImageIndex].url &&
-        !postureImages[currentImageIndex].url.startsWith('local://') ? (
+        {/* Display image carousel when uploaded images are available */}
+        {postureImages && postureImages.length > 0 ? (
           <Box
             sx={{
               position: 'relative',
               width: '100%',
               maxWidth: '500px',
-              height: '300px',
               alignSelf: 'center',
               mt: 3,
               mb: 2,
@@ -453,15 +437,31 @@ export default function PostureActivityDetail({
               zIndex: 1,
             }}
           >
-            <Image
-              key={postureImages[currentImageIndex].url}
-              src={postureImages[currentImageIndex].url}
-              alt={`${posture?.sort_english_name} user image`}
-              fill
-              style={{
-                objectFit: 'cover',
-                transition: 'all 0.5s ease-in-out',
-              }}
+            {/* Convert PoseImageData for carousel */}
+            <ImageCarousel
+              images={postureImages.map((img) => ({
+                id: img.id,
+                userId: '',
+                postureId: posture?.id?.toString(),
+                postureName: posture?.sort_english_name,
+                url: img.url,
+                altText: img.altText || `${posture?.sort_english_name} pose`,
+                fileName: img.fileName || undefined,
+                fileSize: img.fileSize || undefined,
+                uploadedAt: new Date(img.uploadedAt),
+                storageType: 'CLOUD' as const,
+                localStorageId: undefined,
+                isOffline: false,
+                imageType: 'posture',
+                displayOrder: 1,
+                createdAt: new Date(img.uploadedAt),
+                updatedAt: new Date(img.uploadedAt),
+              }))}
+              currentIndex={currentImageIndex}
+              onIndexChange={handleCarouselIndexChange}
+              height={300}
+              showArrows={postureImages.length > 1}
+              aria-label={`Images for ${posture?.sort_english_name} pose`}
             />
 
             {/* Posture name overlay on image */}
@@ -473,9 +473,77 @@ export default function PostureActivityDetail({
                 right: 0,
                 background: 'linear-gradient(transparent, rgba(0, 0, 0, 0.8))',
                 p: 2,
-                zIndex: 2,
+                zIndex: 3,
               }}
             >
+              <Typography
+                variant="h3"
+                sx={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)',
+                  fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
+                }}
+              >
+                {posture?.sort_english_name}
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)',
+                }}
+              >
+                {posture?.category}
+              </Typography>
+            </Box>
+
+            {/* Dot navigation for multiple images */}
+            {postureImages.length > 1 && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 16,
+                  right: 16,
+                  zIndex: 4,
+                }}
+              >
+                <CarouselDotNavigation
+                  images={postureImages.map((img) => ({
+                    id: img.id,
+                    userId: '',
+                    postureId: posture?.id?.toString(),
+                    postureName: posture?.sort_english_name,
+                    url: img.url,
+                    altText:
+                      img.altText || `${posture?.sort_english_name} pose`,
+                    fileName: img.fileName || undefined,
+                    fileSize: img.fileSize || undefined,
+                    uploadedAt: new Date(img.uploadedAt),
+                    storageType: 'CLOUD' as const,
+                    localStorageId: undefined,
+                    isOffline: false,
+                    imageType: 'posture',
+                    displayOrder: 1,
+                    createdAt: new Date(img.uploadedAt),
+                    updatedAt: new Date(img.uploadedAt),
+                  }))}
+                  activeIndex={currentImageIndex}
+                  onIndexChange={handleCarouselIndexChange}
+                  size="small"
+                  color="secondary"
+                />
+              </Box>
+            )}
+          </Box>
+        ) : (
+          // Fallback to text layout when no images available
+          <Stack
+            direction={'column'}
+            alignSelf={'center'}
+            sx={{ position: 'relative', zIndex: 1 }}
+          >
+            <Stack>
               <Typography
                 variant="h3"
                 component="h2"
@@ -520,65 +588,61 @@ export default function PostureActivityDetail({
                   {posture?.category}
                 </Typography>
               </Box>
-            </Box>
-          </Box>
-        ) : (
-          // Fallback to text layout when no images available
-          <Stack
-            direction={'column'}
-            alignSelf={'center'}
-            sx={{ position: 'relative', zIndex: 1 }}
-          >
-            <Stack>
-              <Paper
-                elevation={1}
+            </Stack>
+          </Stack>
+        )}
+
+        {/* Category badge when no uploaded images are available */}
+        {(!postureImages || postureImages.length === 0) && (
+          <>
+            <Paper
+              elevation={1}
+              sx={{
+                borderRadius: '16px',
+                backgroundColor: 'info.contrastText',
+                mt: 3,
+                mb: '-24px',
+                mx: '25%',
+                zIndex: 1,
+              }}
+            >
+              <Box
                 sx={{
                   borderRadius: '16px',
-                  backgroundColor: 'info.contrastText',
-                  mt: 3,
-                  mb: '-24px',
-                  mx: '25%',
-                  zIndex: 1,
+                  height: '50%',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  px: 4,
+                  py: 1,
+                  overflow: 'hidden',
                 }}
+                justifyContent={'space-around'}
+                alignItems={'center'}
               >
-                <Box
-                  sx={{
-                    borderRadius: '16px',
-                    height: '50%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    px: 4,
-                    py: 1,
-                    overflow: 'hidden',
+                <Image
+                  alt="Asana Standing"
+                  height={36}
+                  width={36}
+                  style={{
+                    alignContent: 'center',
                   }}
-                  justifyContent={'space-around'}
-                  alignItems={'center'}
+                  src={getAsanaIconUrl(posture?.category)}
+                />
+                <Typography
+                  variant="h5"
+                  component={'p'}
+                  sx={{
+                    color: 'secondary.contrastText',
+                    flexShrink: 1,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
                 >
-                  <Image
-                    alt="Asana Standing"
-                    height={36}
-                    width={36}
-                    style={{
-                      alignContent: 'center',
-                    }}
-                    src={getAsanaIconUrl(posture?.category)}
-                  />
-                  <Typography
-                    variant="h5"
-                    component={'p'}
-                    sx={{
-                      color: 'secondary.contrastText',
-                      flexShrink: 1,
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {posture?.category}
-                  </Typography>
-                </Box>
-              </Paper>
-            </Stack>
+                  {posture?.category}
+                </Typography>
+              </Box>
+            </Paper>
             <Stack>
               <Typography
                 variant="h1"
@@ -598,58 +662,8 @@ export default function PostureActivityDetail({
                 {posture?.sort_english_name}
               </Typography>
             </Stack>
-          </Stack>
+          </>
         )}
-
-        {/* Image cycling indicator - positioned over image or at top when using uploaded images */}
-        {postureImages &&
-          postureImages.length > 0 &&
-          postureImages[currentImageIndex] &&
-          postureImages[currentImageIndex].url &&
-          !postureImages[currentImageIndex].url.startsWith('local://') && (
-            <Box
-              onClick={handleImageCycle}
-              sx={{
-                position: 'absolute',
-                top: 16,
-                right: 16,
-                zIndex: 3,
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                borderRadius: '8px',
-                px: 1.5,
-                py: 0.5,
-                backdropFilter: 'blur(4px)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 0.5,
-                cursor: postureImages.length > 1 ? 'pointer' : 'default',
-                transition: 'all 0.2s ease',
-                '&:hover':
-                  postureImages.length > 1
-                    ? {
-                        backgroundColor: 'rgba(255, 255, 255, 1)',
-                        transform: 'scale(1.05)',
-                      }
-                    : {},
-              }}
-            >
-              <Typography
-                variant="caption"
-                sx={{
-                  color: 'primary.main',
-                  fontWeight: 'medium',
-                  fontSize: '0.75rem',
-                }}
-              >
-                Your Image
-                {postureImages.length > 1 && (
-                  <span style={{ marginLeft: '4px' }}>
-                    {currentImageIndex + 1}/{postureImages.length}
-                  </span>
-                )}
-              </Typography>
-            </Box>
-          )}
       </Box>
       <Box
         sx={{

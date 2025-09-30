@@ -7,6 +7,7 @@ import {
   useEffect,
   useReducer,
 } from 'react'
+import { PoseImageData } from '../../types/images'
 
 // Full Posture Data Interface
 // ! udpate name to 'FullAsanaData' ( 2024-11-10 12:27:15 )
@@ -81,6 +82,10 @@ export interface FullAsanaData {
   joint_action: string
   muscle_action: string
   created_by: string
+  // New fields for multi-image support
+  isUserCreated?: boolean
+  imageCount?: number
+  poseImages?: PoseImageData[]
 }
 
 export interface displayAsanaPosture {
@@ -255,10 +260,23 @@ export interface PostureCardFields {
 
 export interface AsanaPosturePageState {
   postures: FullAsanaData
+  // New multi-image carousel state
+  currentImageIndex: number
+  isReordering: boolean
+  uploadProgress: number | null
   // selectedPosture: FullAsanaData | undefined
 }
 
-type AsanaPostureAction = { type: 'SET_POSTURES'; payload: FullAsanaData }
+type AsanaPostureAction =
+  | { type: 'SET_POSTURES'; payload: FullAsanaData }
+  | { type: 'SET_CURRENT_IMAGE_INDEX'; payload: number }
+  | { type: 'UPDATE_IMAGE_COUNT'; payload: number }
+  | { type: 'ADD_POSE_IMAGE'; payload: PoseImageData }
+  | { type: 'REMOVE_POSE_IMAGE'; payload: string } // imageId
+  | { type: 'REORDER_IMAGES'; payload: PoseImageData[] }
+  | { type: 'SET_REORDERING'; payload: boolean }
+  | { type: 'SET_UPLOAD_PROGRESS'; payload: number | null }
+  | { type: 'RESET_CAROUSEL' }
 
 const initialState: AsanaPosturePageState = {
   postures: {
@@ -297,18 +315,32 @@ const initialState: AsanaPosturePageState = {
     joint_action: '',
     muscle_action: '',
     created_by: '',
+    isUserCreated: false,
+    imageCount: 0,
+    poseImages: [],
   },
+  currentImageIndex: 0,
+  isReordering: false,
+  uploadProgress: null,
 }
 
-interface AsanaPostureContextType {
+export interface AsanaPostureContextType {
   state: AsanaPosturePageState
   dispatch: Dispatch<AsanaPostureAction>
+  // Helper functions for multi-image management
+  setCurrentImageIndex: (index: number) => void
+  updateImageCount: (count: number) => void
+  addPoseImage: (image: PoseImageData) => void
+  removePoseImage: (imageId: string) => void
+  reorderImages: (images: PoseImageData[]) => void
+  setReordering: (isReordering: boolean) => void
+  setUploadProgress: (progress: number | null) => void
+  resetCarousel: () => void
 }
 
-export const AsanaPostureContext = createContext<AsanaPostureContextType>({
-  state: initialState,
-  dispatch: () => null,
-})
+export const AsanaPostureContext = createContext<
+  AsanaPostureContextType | undefined
+>(undefined)
 
 function AsanaPostureReducer(
   state: AsanaPosturePageState,
@@ -316,7 +348,71 @@ function AsanaPostureReducer(
 ): AsanaPosturePageState {
   switch (action.type) {
     case 'SET_POSTURES':
-      return { ...state, postures: action.payload }
+      return {
+        ...state,
+        postures: action.payload,
+        currentImageIndex: 0, // Reset carousel when postures change
+      }
+    case 'SET_CURRENT_IMAGE_INDEX':
+      return { ...state, currentImageIndex: action.payload }
+    case 'UPDATE_IMAGE_COUNT':
+      return {
+        ...state,
+        postures: {
+          ...state.postures,
+          imageCount: action.payload,
+        },
+      }
+    case 'ADD_POSE_IMAGE': {
+      const updatedImages = [
+        ...(state.postures.poseImages || []),
+        action.payload,
+      ]
+      return {
+        ...state,
+        postures: {
+          ...state.postures,
+          poseImages: updatedImages,
+          imageCount: updatedImages.length,
+        },
+      }
+    }
+    case 'REMOVE_POSE_IMAGE': {
+      const filteredImages = (state.postures.poseImages || []).filter(
+        (img) => img.id !== action.payload
+      )
+      return {
+        ...state,
+        postures: {
+          ...state.postures,
+          poseImages: filteredImages,
+          imageCount: filteredImages.length,
+        },
+        currentImageIndex: Math.min(
+          state.currentImageIndex,
+          filteredImages.length - 1
+        ),
+      }
+    }
+    case 'REORDER_IMAGES':
+      return {
+        ...state,
+        postures: {
+          ...state.postures,
+          poseImages: action.payload,
+        },
+      }
+    case 'SET_REORDERING':
+      return { ...state, isReordering: action.payload }
+    case 'SET_UPLOAD_PROGRESS':
+      return { ...state, uploadProgress: action.payload }
+    case 'RESET_CAROUSEL':
+      return {
+        ...state,
+        currentImageIndex: 0,
+        isReordering: false,
+        uploadProgress: null,
+      }
     default:
       return state
   }
@@ -329,10 +425,56 @@ export default function AsanaPostureProvider({
 }) {
   const [state, dispatch] = useReducer(AsanaPostureReducer, initialState)
 
+  // Helper functions for multi-image management
+  const setCurrentImageIndex = (index: number) => {
+    dispatch({ type: 'SET_CURRENT_IMAGE_INDEX', payload: index })
+  }
+
+  const updateImageCount = (count: number) => {
+    dispatch({ type: 'UPDATE_IMAGE_COUNT', payload: count })
+  }
+
+  const addPoseImage = (image: PoseImageData) => {
+    dispatch({ type: 'ADD_POSE_IMAGE', payload: image })
+  }
+
+  const removePoseImage = (imageId: string) => {
+    dispatch({ type: 'REMOVE_POSE_IMAGE', payload: imageId })
+  }
+
+  const reorderImages = (images: PoseImageData[]) => {
+    dispatch({ type: 'REORDER_IMAGES', payload: images })
+  }
+
+  const setReordering = (isReordering: boolean) => {
+    dispatch({ type: 'SET_REORDERING', payload: isReordering })
+  }
+
+  const setUploadProgress = (progress: number | null) => {
+    dispatch({ type: 'SET_UPLOAD_PROGRESS', payload: progress })
+  }
+
+  const resetCarousel = () => {
+    dispatch({ type: 'RESET_CAROUSEL' })
+  }
+
   useEffect(() => {}, [state.postures])
 
+  const contextValue = {
+    state,
+    dispatch,
+    setCurrentImageIndex,
+    updateImageCount,
+    addPoseImage,
+    removePoseImage,
+    reorderImages,
+    setReordering,
+    setUploadProgress,
+    resetCarousel,
+  }
+
   return (
-    <AsanaPostureContext.Provider value={{ state, dispatch }}>
+    <AsanaPostureContext.Provider value={contextValue}>
       {children}
     </AsanaPostureContext.Provider>
   )
