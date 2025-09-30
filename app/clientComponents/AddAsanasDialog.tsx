@@ -21,6 +21,7 @@ import {
   CircularProgress,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
+import RefreshIcon from '@mui/icons-material/Refresh'
 import { useSession } from 'next-auth/react'
 
 interface AsanaOption {
@@ -38,6 +39,7 @@ interface AddAsanasDialogProps {
   onClose: () => void
   onAdd: (asanas: AsanaOption[]) => void
   excludeAsanaIds?: string[]
+  refreshTrigger?: number // Add this to trigger data refresh
 }
 
 export default function AddAsanasDialog({
@@ -45,6 +47,7 @@ export default function AddAsanasDialog({
   onClose,
   onAdd,
   excludeAsanaIds = [],
+  refreshTrigger = 0, // Add this parameter
 }: AddAsanasDialogProps) {
   const { data: session } = useSession()
   const [availableAsanas, setAvailableAsanas] = useState<AsanaOption[]>([])
@@ -54,14 +57,61 @@ export default function AddAsanasDialog({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Fetch available asanas when dialog opens
+  // Add a manual refresh function
+  const refreshAsanas = async () => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      // Add cache-busting parameter to ensure fresh data
+      const timestamp = new Date().getTime()
+      const response = await fetch(`/api/poses?_t=${timestamp}`, {
+        // Force cache bypass
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          Pragma: 'no-cache',
+          Expires: '0',
+        },
+      })
+      if (!response.ok) {
+        throw new Error('Failed to fetch asanas')
+      }
+
+      const asanas: AsanaOption[] = await response.json()
+
+      // Filter out asanas that are already in the series
+      const filtered = asanas.filter(
+        (asana) => !excludeAsanaIds.includes(asana.id)
+      )
+
+      setAvailableAsanas(filtered)
+      setFilteredAsanas(filtered)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load asanas')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Fetch available asanas when dialog opens or when refreshTrigger changes
   useEffect(() => {
     const fetchAvailableAsanas = async () => {
       setLoading(true)
       setError(null)
 
       try {
-        const response = await fetch('/api/poses')
+        // Add cache-busting parameter to ensure fresh data
+        const timestamp = new Date().getTime()
+        const response = await fetch(`/api/poses?_t=${timestamp}`, {
+          // Force cache bypass
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            Pragma: 'no-cache',
+            Expires: '0',
+          },
+        })
         if (!response.ok) {
           throw new Error('Failed to fetch asanas')
         }
@@ -85,7 +135,7 @@ export default function AddAsanasDialog({
     if (open && session?.user?.email) {
       fetchAvailableAsanas()
     }
-  }, [open, session?.user?.email, excludeAsanaIds])
+  }, [open, session?.user?.email, excludeAsanaIds, refreshTrigger]) // Add refreshTrigger to dependencies
 
   // Filter asanas based on search term
   useEffect(() => {
@@ -155,20 +205,31 @@ export default function AddAsanasDialog({
 
       <DialogContent>
         <Box sx={{ mb: 2 }}>
-          <TextField
-            fullWidth
-            placeholder="Search asanas by name, category, or difficulty..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ mb: 2 }}
-          />
+          <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+            <TextField
+              fullWidth
+              placeholder="Search asanas by name, category, or difficulty..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Button
+              onClick={refreshAsanas}
+              disabled={loading}
+              startIcon={<RefreshIcon />}
+              variant="outlined"
+              sx={{ minWidth: 'auto', px: 2 }}
+              title="Refresh asana list"
+            >
+              Refresh
+            </Button>
+          </Box>
 
           {selectedAsanas.length > 0 && (
             <Box sx={{ mb: 2 }}>

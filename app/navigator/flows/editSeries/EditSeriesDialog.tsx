@@ -74,6 +74,7 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
   const [error, setError] = React.useState<string | null>(null)
   const [confirmDeleteOpen, setConfirmDeleteOpen] = React.useState(false)
   const [showAddAsanasDialog, setShowAddAsanasDialog] = React.useState(false)
+  const [asanaRefreshTrigger, setAsanaRefreshTrigger] = React.useState(0)
 
   // Validation logic
   const validate = () => {
@@ -224,7 +225,11 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
                 <Button
                   variant="outlined"
                   startIcon={<AddIcon />}
-                  onClick={() => setShowAddAsanasDialog(true)}
+                  onClick={() => {
+                    // Trigger a refresh when opening the dialog to ensure new asanas appear
+                    setAsanaRefreshTrigger((prev) => prev + 1)
+                    setShowAddAsanasDialog(true)
+                  }}
                   size="small"
                 >
                   Add Asanas
@@ -367,6 +372,7 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
         onClose={() => setShowAddAsanasDialog(false)}
         onAdd={handleAddAsanas}
         excludeAsanaIds={asanas.map((a) => a.id)}
+        refreshTrigger={asanaRefreshTrigger}
       />
     </Dialog>
   )
