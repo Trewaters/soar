@@ -19,6 +19,14 @@ export async function GET(request: NextRequest) {
   const currentUserEmail = session?.user?.email
   const alphaUserIds = getAlphaUserIds()
 
+  console.log('🔍 /api/poses: Request details:', {
+    currentUserEmail,
+    alphaUserIds,
+    sortEnglishName,
+    id,
+    createdBy,
+  })
+
   // Handle ID lookup first (if provided)
   if (id) {
     try {
@@ -144,6 +152,17 @@ export async function GET(request: NextRequest) {
       orderBy: {
         created_on: 'desc', // Show newest first to help verify new creations
       },
+    })
+
+    console.log('📊 /api/poses: Query results:', {
+      whereClause,
+      totalFound: data.length,
+      recentAsanas: data.slice(0, 3).map((asana) => ({
+        id: asana.id,
+        english_names: asana.english_names,
+        created_by: asana.created_by,
+        created_on: asana.created_on,
+      })),
     })
 
     const dataWithId = data.map((item) => ({

@@ -227,7 +227,17 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
                   startIcon={<AddIcon />}
                   onClick={() => {
                     // Trigger a refresh when opening the dialog to ensure new asanas appear
-                    setAsanaRefreshTrigger((prev) => prev + 1)
+                    console.log('🔄 EditSeriesDialog: Triggering asana refresh')
+                    setAsanaRefreshTrigger((prev) => {
+                      const newValue = prev + 1
+                      console.log(
+                        '🔄 EditSeriesDialog: Refresh trigger updated:',
+                        prev,
+                        '→',
+                        newValue
+                      )
+                      return newValue
+                    })
                     setShowAddAsanasDialog(true)
                   }}
                   size="small"

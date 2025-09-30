@@ -59,13 +59,17 @@ export default function AddAsanasDialog({
 
   // Add a manual refresh function
   const refreshAsanas = async () => {
+    console.log('🔄 AddAsanasDialog: Manual refresh triggered')
     setLoading(true)
     setError(null)
 
     try {
       // Add cache-busting parameter to ensure fresh data
       const timestamp = new Date().getTime()
-      const response = await fetch(`/api/poses?_t=${timestamp}`, {
+      const fetchUrl = `/api/poses?_t=${timestamp}`
+      console.log('📡 AddAsanasDialog: Manual refresh fetching from:', fetchUrl)
+
+      const response = await fetch(fetchUrl, {
         // Force cache bypass
         cache: 'no-store',
         headers: {
@@ -79,15 +83,26 @@ export default function AddAsanasDialog({
       }
 
       const asanas: AsanaOption[] = await response.json()
+      console.log(
+        '✅ AddAsanasDialog: Manual refresh received asanas:',
+        asanas.length,
+        'total'
+      )
 
       // Filter out asanas that are already in the series
       const filtered = asanas.filter(
         (asana) => !excludeAsanaIds.includes(asana.id)
       )
+      console.log(
+        '🔍 AddAsanasDialog: Manual refresh filtered asanas:',
+        filtered.length,
+        'available to add'
+      )
 
       setAvailableAsanas(filtered)
       setFilteredAsanas(filtered)
     } catch (err) {
+      console.error('❌ AddAsanasDialog: Manual refresh error:', err)
       setError(err instanceof Error ? err.message : 'Failed to load asanas')
     } finally {
       setLoading(false)
@@ -97,13 +112,22 @@ export default function AddAsanasDialog({
   // Fetch available asanas when dialog opens or when refreshTrigger changes
   useEffect(() => {
     const fetchAvailableAsanas = async () => {
+      console.log('🔄 AddAsanasDialog: Fetching asanas...', {
+        open,
+        userEmail: session?.user?.email,
+        refreshTrigger,
+        excludeAsanaIds: excludeAsanaIds.length,
+      })
       setLoading(true)
       setError(null)
 
       try {
         // Add cache-busting parameter to ensure fresh data
         const timestamp = new Date().getTime()
-        const response = await fetch(`/api/poses?_t=${timestamp}`, {
+        const fetchUrl = `/api/poses?_t=${timestamp}`
+        console.log('📡 AddAsanasDialog: Fetching from:', fetchUrl)
+
+        const response = await fetch(fetchUrl, {
           // Force cache bypass
           cache: 'no-store',
           headers: {
@@ -117,15 +141,26 @@ export default function AddAsanasDialog({
         }
 
         const asanas: AsanaOption[] = await response.json()
+        console.log(
+          '✅ AddAsanasDialog: Received asanas:',
+          asanas.length,
+          'total'
+        )
 
         // Filter out asanas that are already in the series
         const filtered = asanas.filter(
           (asana) => !excludeAsanaIds.includes(asana.id)
         )
+        console.log(
+          '🔍 AddAsanasDialog: Filtered asanas:',
+          filtered.length,
+          'available to add'
+        )
 
         setAvailableAsanas(filtered)
         setFilteredAsanas(filtered)
       } catch (err) {
+        console.error('❌ AddAsanasDialog: Error fetching asanas:', err)
         setError(err instanceof Error ? err.message : 'Failed to load asanas')
       } finally {
         setLoading(false)
@@ -180,6 +215,9 @@ export default function AddAsanasDialog({
     setSelectedAsanas([])
     setSearchTerm('')
     setError(null)
+    // Clear cached data when closing to ensure fresh data on next open
+    setAvailableAsanas([])
+    setFilteredAsanas([])
     onClose()
   }
 
