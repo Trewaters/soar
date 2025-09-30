@@ -33,9 +33,6 @@ export async function POST(request: Request) {
       },
     })
 
-    // Add a small delay to ensure database transaction is fully committed
-    await new Promise((resolve) => setTimeout(resolve, 100))
-
     return Response.json(
       {
         message: 'Sequence Data saved',

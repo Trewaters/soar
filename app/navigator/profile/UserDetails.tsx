@@ -91,13 +91,12 @@ export default function UserDetails() {
         })
         .then(() => {
           setError('Profile shared successfully!')
-          // Clear the message after 3 seconds
-          setTimeout(() => setError(''), 3000)
+          // Message will clear on next user interaction
         })
         .catch((err) => {
           if (err.name !== 'AbortError') {
             setError('Sharing failed or was cancelled.')
-            setTimeout(() => setError(''), 3000)
+            // Message will clear on next user interaction
           }
         })
     } else {
@@ -106,11 +105,11 @@ export default function UserDetails() {
         .writeText(window.location.href)
         .then(() => {
           setError('Profile link copied to clipboard!')
-          setTimeout(() => setError(''), 3000)
+          // Message will clear on next user interaction
         })
         .catch(() => {
           setError('Could not copy link to clipboard.')
-          setTimeout(() => setError(''), 3000)
+          // Message will clear on next user interaction
         })
     }
   }

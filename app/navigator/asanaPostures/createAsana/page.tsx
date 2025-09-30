@@ -254,10 +254,8 @@ export default function Page() {
         isNavigating: true,
       })
 
-      // Wait a moment to show the success message, then navigate
-      setTimeout(() => {
-        router.push(`/navigator/asanaPostures/${data.id}`)
-      }, 1500)
+      // Navigate immediately to show the new posture
+      router.push(`/navigator/asanaPostures/${data.id}`)
     } catch (error: Error | any) {
       console.error('Error creating posture:', error.message)
 
@@ -334,13 +332,9 @@ export default function Page() {
     const accessResult = checkFeatureAccess('createAsana')
 
     if (!accessResult.hasAccess) {
-      // Show notification and redirect to asana list
+      // Show notification and redirect immediately
       setNotificationState({ isOpen: true })
-
-      // Delay redirect to allow notification to show
-      setTimeout(() => {
-        router.push('/navigator/asanaPostures')
-      }, 2000)
+      router.push('/navigator/asanaPostures')
     }
   }, [checkFeatureAccess, router])
 

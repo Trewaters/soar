@@ -44,25 +44,14 @@ export default function ViewAsanaPractice({
   const [volume, setVolume] = useState(50)
   const [isMuted, setIsMuted] = useState(false)
   const [showInfo, setShowInfo] = useState(false)
-  const [controlsTimeout, setControlsTimeout] = useState<NodeJS.Timeout | null>(
-    null
-  )
 
   const { state, dispatch } = useTimer()
   const router = useRouter()
 
-  // Auto-hide controls after inactivity
-  const resetControlsTimeout = useCallback(() => {
-    if (controlsTimeout) clearTimeout(controlsTimeout)
-    setShowControls(true)
-
-    const timeout = setTimeout(() => {
-      if (!state.watch.isPaused) {
-        setShowControls(false)
-      }
-    }, 20000) // Doubled from 10 seconds to 20 seconds
-    setControlsTimeout(timeout)
-  }, [controlsTimeout, state.watch.isPaused])
+  // Show/hide controls based on user interaction only - no artificial timeouts
+  const toggleControls = useCallback(() => {
+    setShowControls(!showControls)
+  }, [showControls])
 
   const handleTimeUpdate = (time: number) => {
     setElapsedTime(time)
@@ -109,10 +98,8 @@ export default function ViewAsanaPractice({
   const handleRestart = () => {
     dispatch({ type: 'RESET_TIMER' })
     setElapsedTime(0)
-    // Small delay to ensure reset is processed before starting
-    setTimeout(() => {
-      dispatch({ type: 'START_TIMER' })
-    }, 10)
+    // Immediately start timer after reset
+    dispatch({ type: 'START_TIMER' })
   }
 
   const handleFullscreen = () => {
@@ -164,20 +151,8 @@ export default function ViewAsanaPractice({
     getViewPose()
   }, [pose])
 
-  // Mouse movement handler for auto-hiding controls
-  useEffect(() => {
-    const handleMouseMove = () => resetControlsTimeout()
-    const handleKeyPress = () => resetControlsTimeout()
-
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('keydown', handleKeyPress)
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('keydown', handleKeyPress)
-      if (controlsTimeout) clearTimeout(controlsTimeout)
-    }
-  }, [resetControlsTimeout, controlsTimeout])
+  // Controls are visible by default and can be toggled by user
+  // No artificial timeouts - user controls when to show/hide
 
   const paperStyle = {
     backgroundImage: 'url(/images/asana/view-asana-practice-background.png)',
@@ -197,7 +172,7 @@ export default function ViewAsanaPractice({
   }
 
   return (
-    <Paper sx={paperStyle} onClick={resetControlsTimeout}>
+    <Paper sx={paperStyle} onClick={toggleControls}>
       {/* Header - Always visible when controls are shown */}
       <Box
         sx={{

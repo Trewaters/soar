@@ -91,17 +91,7 @@ export function useNavigationWithLoading() {
         }
         console.log(`   Router navigation method called successfully`)
 
-        // Reasonable safety timeout - much shorter than before
-        // This only triggers if navigation completely fails
-        setTimeout(() => {
-          if (state.isNavigating && navigationStartTimeRef.current) {
-            console.warn(
-              `Navigation safety timeout reached for ${path}, ending loading state`
-            )
-            endNavigation()
-            navigationStartTimeRef.current = null
-          }
-        }, 1500) // 1.5 second safety timeout - reduced from 3 seconds
+        // Navigation completion is handled by pathname monitoring - no artificial timeouts needed
       } catch (error) {
         console.error('Navigation error:', error)
         endNavigation()
@@ -124,14 +114,7 @@ export function useNavigationWithLoading() {
       navigationStartTimeRef.current = Date.now()
       router.back()
 
-      // Safety timeout for back navigation
-      setTimeout(() => {
-        if (state.isNavigating && navigationStartTimeRef.current) {
-          console.warn('Back navigation safety timeout reached')
-          endNavigation()
-          navigationStartTimeRef.current = null
-        }
-      }, 1000) // 1 second safety timeout for back navigation
+      // Navigation completion handled by pathname monitoring
     } catch (error) {
       // Handle navigation errors gracefully
       console.warn('Back navigation failed:', error)
@@ -153,14 +136,7 @@ export function useNavigationWithLoading() {
       navigationStartTimeRef.current = Date.now()
       router.forward()
 
-      // Safety timeout for forward navigation
-      setTimeout(() => {
-        if (state.isNavigating && navigationStartTimeRef.current) {
-          console.warn('Forward navigation safety timeout reached')
-          endNavigation()
-          navigationStartTimeRef.current = null
-        }
-      }, 1000) // 1 second safety timeout for forward navigation
+      // Navigation completion handled by pathname monitoring
     } catch (error) {
       // Handle navigation errors gracefully
       console.warn('Forward navigation failed:', error)

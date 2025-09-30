@@ -224,8 +224,7 @@ export default function EditSequence({
       setSaveState('saved')
       // Optionally notify parent with latest model
       onChange?.(usingContext ? (ctx.state.sequences as any) : form)
-      // Reset saved indicator after a moment
-      setTimeout(() => setSaveState('idle'), 1500)
+      // Saved state will reset on next edit or component lifecycle
     } catch (e: any) {
       setSaveState('error')
       setSaveError(e?.message || 'An error occurred while saving')
