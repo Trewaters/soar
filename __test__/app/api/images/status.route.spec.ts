@@ -9,14 +9,15 @@ jest.mock('next/server', () => ({
 }))
 
 // Mock Prisma singleton used by the route
-jest.mock('../../../../prisma/generated/client', () => ({
-  __esModule: true,
-  default: {
-    asanaPosture: {
-      findUnique: jest.fn(),
-    },
-    $disconnect: jest.fn(),
+const mockPrismaInstance = {
+  asanaPosture: {
+    findUnique: jest.fn(),
   },
+  $disconnect: jest.fn(),
+}
+
+jest.mock('../../../../prisma/generated/client', () => ({
+  PrismaClient: jest.fn(() => mockPrismaInstance),
 }))
 
 // Mock auth
@@ -24,7 +25,6 @@ jest.mock('../../../../auth', () => ({
   auth: jest.fn(),
 }))
 
-const prisma = require('../../../../prisma/generated/client')
 const { auth } = require('../../../../auth')
 const route = require('../../../../app/api/images/status/route')
 
@@ -90,7 +90,7 @@ describe('GET /api/images/status', () => {
     ;(auth as jest.Mock).mockResolvedValue({
       user: { email: 'creator@example.com' },
     })
-    ;(prisma as any).asanaPosture.findUnique.mockResolvedValue(null)
+    mockPrismaInstance.asanaPosture.findUnique.mockResolvedValue(null)
 
     const req: any = {
       url: `${baseUrl}?postureId=missing&userId=creator@example.com`,
@@ -106,7 +106,7 @@ describe('GET /api/images/status', () => {
     ;(auth as jest.Mock).mockResolvedValue({
       user: { email: 'creator@example.com' },
     })
-    ;(prisma as any).asanaPosture.findUnique.mockResolvedValue({
+    mockPrismaInstance.asanaPosture.findUnique.mockResolvedValue({
       isUserCreated: true,
       created_by: 'creator@example.com',
       imageCount: 1,

@@ -47,9 +47,8 @@ postures.json
 # mongo files to ignore
 datalogmongod.log*
 
-# Ai scripts
-scripts*
-scripts/*
+# Scripts folder
+scripts/
 
 # Prisma generated files
 prisma/generated/
