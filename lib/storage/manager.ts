@@ -1,16 +1,13 @@
 /**
- * Storage Manager - Central interface for managing different storage providers
- * Allows easy switching between cloud storage solutions
+ * Storage Manager - Interface for Vercel Blob storage
  */
 
 import type { StorageProvider } from './types'
 import { vercelBlobProvider } from './providers/vercel-blob'
-import { cloudflareImagesProvider } from './providers/cloudflare-images'
 
 // Available storage providers
 export const STORAGE_PROVIDERS = {
   'vercel-blob': vercelBlobProvider,
-  'cloudflare-images': cloudflareImagesProvider,
 } as const
 
 export type StorageProviderName = keyof typeof STORAGE_PROVIDERS
@@ -19,10 +16,6 @@ export type StorageProviderName = keyof typeof STORAGE_PROVIDERS
 export interface StorageConfig {
   /** Primary storage provider to use */
   primaryProvider: StorageProviderName
-  /** Fallback provider if primary fails (optional) */
-  fallbackProvider?: StorageProviderName
-  /** Whether to enable automatic provider switching */
-  autoSwitchOnFailure?: boolean
   /** Retry configuration */
   retries?: {
     maxAttempts: number
@@ -32,8 +25,7 @@ export interface StorageConfig {
 
 // Default configuration
 const DEFAULT_CONFIG: StorageConfig = {
-  primaryProvider: 'vercel-blob', // Default to Vercel Blob
-  autoSwitchOnFailure: true,
+  primaryProvider: 'vercel-blob', // Only Vercel Blob supported
   retries: {
     maxAttempts: 2,
     delayMs: 1000,
@@ -72,50 +64,21 @@ export class StorageManager {
   }
 
   /**
-   * Upload file with automatic fallback handling
+   * Upload file with Vercel Blob storage
    */
   async upload(
     fileName: string,
     file: File | Blob | Buffer,
     options: Parameters<StorageProvider['upload']>[2] = { access: 'public' }
   ) {
-    let lastError: Error | null = null
-
-    // Try primary provider
     try {
       return await this.activeProvider.upload(fileName, file, options)
     } catch (error) {
-      lastError = error instanceof Error ? error : new Error(String(error))
-      console.warn(
-        `Primary provider (${this.activeProvider.name}) failed:`,
-        error
-      )
+      const lastError =
+        error instanceof Error ? error : new Error(String(error))
+      console.error(`Vercel Blob upload failed for ${fileName}:`, error)
+      throw lastError
     }
-
-    // Try fallback provider if configured and auto-switch is enabled
-    if (
-      this.config.fallbackProvider &&
-      this.config.autoSwitchOnFailure &&
-      this.config.fallbackProvider !== this.config.primaryProvider
-    ) {
-      try {
-        const fallbackProvider = STORAGE_PROVIDERS[this.config.fallbackProvider]
-        console.log(`Attempting fallback to ${fallbackProvider.name}...`)
-
-        const result = await fallbackProvider.upload(fileName, file, options)
-
-        // Switch to fallback provider for future uploads
-        this.switchProvider(this.config.fallbackProvider)
-        console.log(`Switched to fallback provider: ${fallbackProvider.name}`)
-
-        return result
-      } catch (fallbackError) {
-        console.warn(`Fallback provider also failed:`, fallbackError)
-      }
-    }
-
-    // If we get here, all providers failed
-    throw lastError || new Error('All storage providers failed')
   }
 
   /**
@@ -168,32 +131,24 @@ export class StorageManager {
   }
 
   /**
-   * Automatically detect and configure the best available provider
+   * Automatically detect and configure Vercel Blob provider
    */
   async autoConfigureProvider(): Promise<StorageProviderName | null> {
-    console.log('Auto-configuring storage provider...')
+    console.log('Configuring Vercel Blob storage provider...')
 
-    // Check providers in order of preference
-    const preferenceOrder: StorageProviderName[] = [
-      'vercel-blob',
-      'cloudflare-images',
-    ]
+    const provider = STORAGE_PROVIDERS['vercel-blob']
+    const isConfigured = await provider.isConfigured()
 
-    for (const providerName of preferenceOrder) {
-      const provider = STORAGE_PROVIDERS[providerName]
-      const isConfigured = await provider.isConfigured()
-
-      if (isConfigured) {
-        console.log(`✅ Auto-configured provider: ${providerName}`)
-        this.switchProvider(providerName)
-        return providerName
-      } else {
-        const status = provider.getConfigStatus()
-        console.log(`❌ ${providerName} not configured:`, status.missingConfig)
-      }
+    if (isConfigured) {
+      console.log('✅ Vercel Blob provider configured successfully')
+      this.switchProvider('vercel-blob')
+      return 'vercel-blob'
+    } else {
+      const status = provider.getConfigStatus()
+      console.log('❌ Vercel Blob not configured:', status.missingConfig)
     }
 
-    console.warn('⚠️  No storage providers are properly configured')
+    console.warn('⚠️  Vercel Blob storage provider not properly configured')
     return null
   }
 
@@ -220,27 +175,14 @@ export class StorageManager {
   }
 }
 
-// Export singleton instance with environment-based configuration
+// Export singleton instance with Vercel Blob configuration
 const getDefaultProvider = (): StorageProviderName => {
-  // Auto-detect based on environment variables
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
-    return 'vercel-blob'
-  }
-  if (process.env.CLOUDFLARE_ACCOUNT_ID && process.env.CLOUDFLARE_API_TOKEN) {
-    return 'cloudflare-images'
-  }
-
-  // Default fallback
+  // Always use Vercel Blob
   return 'vercel-blob'
 }
 
 export const storageManager = new StorageManager({
   primaryProvider: getDefaultProvider(),
-  fallbackProvider:
-    getDefaultProvider() === 'vercel-blob'
-      ? 'cloudflare-images'
-      : 'vercel-blob',
-  autoSwitchOnFailure: true,
 })
 
 // Initialize auto-configuration on import

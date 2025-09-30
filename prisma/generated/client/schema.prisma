@@ -265,14 +265,13 @@ model PoseImage {
   userId         String      @db.ObjectId
   postureId      String?     @db.ObjectId // Optional association with a specific posture
   postureName    String? // Store the sort_english_name for easier querying
-  url            String // Image URL (Cloudflare or local reference)
+  url            String // Image URL (Vercel Blob or local reference)
   altText        String? // Alternative text for accessibility
   fileName       String? // Original filename
   fileSize       Int? // File size in bytes
   uploadedAt     DateTime    @default(now())
   storageType    StorageType @default(CLOUD) // Where the image is stored
   localStorageId String? // Local storage identifier for browser storage
-  cloudflareId   String? // Cloudflare image ID for cloud images
   isOffline      Boolean     @default(false) // True if saved offline due to API failure
   imageType      String      @default("posture") // 'profile', 'posture', 'gallery', etc.
 
@@ -291,7 +290,7 @@ model PoseImage {
 
 /// Enum for image storage types
 enum StorageType {
-  CLOUD // Stored in Cloudflare Images
+  CLOUD // Stored in Vercel Blob
   LOCAL // Stored locally in browser storage
   HYBRID // Has both cloud and local copies
 }

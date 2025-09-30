@@ -30,7 +30,7 @@ export interface GetImagesResponse {
 }
 
 /**
- * Upload a pose image to Cloudflare and save to database
+ * Upload a pose image to Vercel Blob and save to database
  */
 export async function uploadPoseImage(
   input: UploadImageInput
@@ -56,12 +56,6 @@ export async function uploadPoseImage(
 
     if (!response.ok) {
       const errorData = await response.json()
-
-      // Handle specific Cloudflare permission error
-      if (errorData.errorCode === 5403) {
-        throw new Error(`${errorData.error}\n\n${errorData.details}`)
-      }
-
       throw new Error(errorData.error || 'Failed to upload image')
     }
 

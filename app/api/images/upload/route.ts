@@ -53,13 +53,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Upload using storage manager (handles provider switching automatically)
+    // Upload using storage manager (Vercel Blob only)
     const uploadResult = await storageManager.upload(file.name, file, {
       access: 'public',
       addRandomSuffix: true,
     })
 
-    // Save to database with cloud storage info
+    // Save to database with Vercel Blob storage info
     const poseImage = await prisma.poseImage.create({
       data: {
         userId,
@@ -70,7 +70,6 @@ export async function POST(request: NextRequest) {
         fileName: uploadResult.fileName,
         fileSize: uploadResult.size,
         storageType: 'CLOUD',
-        cloudflareId: uploadResult.metadata?.cloudflareId || null, // Store provider-specific ID
         isOffline: false,
         imageType,
       },
@@ -87,15 +86,15 @@ export async function POST(request: NextRequest) {
       imageType: poseImage.imageType,
     })
   } catch (error) {
-    console.error('Storage upload error:', error)
+    console.error('Vercel Blob upload error:', error)
 
     // Return error with fallback option (keeps your existing fallback system)
     return NextResponse.json(
       {
-        error: 'Cloud storage upload failed',
+        error: 'Vercel Blob upload failed',
         canFallbackToLocal: true,
         details:
-          'Upload to cloud storage failed. You can save this image locally instead.',
+          'Upload to Vercel Blob failed. You can save this image locally instead.',
       },
       { status: 500 }
     )

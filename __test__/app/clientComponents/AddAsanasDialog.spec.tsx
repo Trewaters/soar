@@ -83,13 +83,23 @@ describe('AddAsanasDialog', () => {
     renderWithProviders(<AddAsanasDialog {...defaultProps} />)
 
     await waitFor(() => {
-      expect(global.fetch).toHaveBeenCalledWith('/api/poses')
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringMatching(/^\/api\/poses\?_t=\d+$/),
+        expect.objectContaining({
+          cache: 'no-store',
+          headers: expect.objectContaining({
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            Pragma: 'no-cache',
+            Expires: '0',
+          }),
+        })
+      )
     })
 
     await waitFor(() => {
-      expect(screen.getByText('Mountain Pose (Tadasana)')).toBeInTheDocument()
+      expect(screen.getByText('mountain-pose (Tadasana)')).toBeInTheDocument()
       expect(
-        screen.getByText('Warrior Pose (Virabhadrasana)')
+        screen.getByText('warrior-pose (Virabhadrasana)')
       ).toBeInTheDocument()
     })
   })
@@ -98,15 +108,15 @@ describe('AddAsanasDialog', () => {
     renderWithProviders(<AddAsanasDialog {...defaultProps} />)
 
     await waitFor(() => {
-      expect(screen.getByText('Mountain Pose (Tadasana)')).toBeInTheDocument()
+      expect(screen.getByText('mountain-pose (Tadasana)')).toBeInTheDocument()
     })
 
     const searchInput = screen.getByPlaceholderText(/Search asanas/)
     fireEvent.change(searchInput, { target: { value: 'mountain' } })
 
-    expect(screen.getByText('Mountain Pose (Tadasana)')).toBeInTheDocument()
+    expect(screen.getByText('mountain-pose (Tadasana)')).toBeInTheDocument()
     expect(
-      screen.queryByText('Warrior Pose (Virabhadrasana)')
+      screen.queryByText('warrior-pose (Virabhadrasana)')
     ).not.toBeInTheDocument()
   })
 
@@ -114,7 +124,7 @@ describe('AddAsanasDialog', () => {
     renderWithProviders(<AddAsanasDialog {...defaultProps} />)
 
     await waitFor(() => {
-      expect(screen.getByText('Mountain Pose (Tadasana)')).toBeInTheDocument()
+      expect(screen.getByText('mountain-pose (Tadasana)')).toBeInTheDocument()
     })
 
     // Select an asana
@@ -122,7 +132,7 @@ describe('AddAsanasDialog', () => {
     fireEvent.click(mountainPoseCheckbox)
 
     expect(screen.getByText('Selected Asanas (1):')).toBeInTheDocument()
-    expect(screen.getAllByText('Mountain Pose (Tadasana)')).toHaveLength(2) // One in list, one in chip
+    expect(screen.getAllByText('mountain-pose (Tadasana)')).toHaveLength(2) // One in list, one in chip
 
     // Deselect by clicking chip delete
     const chip = screen.getByTestId('CancelIcon')
@@ -135,7 +145,7 @@ describe('AddAsanasDialog', () => {
     renderWithProviders(<AddAsanasDialog {...defaultProps} />)
 
     await waitFor(() => {
-      expect(screen.getByText('Mountain Pose (Tadasana)')).toBeInTheDocument()
+      expect(screen.getByText('mountain-pose (Tadasana)')).toBeInTheDocument()
     })
 
     // Select an asana
@@ -159,10 +169,10 @@ describe('AddAsanasDialog', () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByText('Mountain Pose (Tadasana)')
+        screen.queryByText('mountain-pose (Tadasana)')
       ).not.toBeInTheDocument()
       expect(
-        screen.getByText('Warrior Pose (Virabhadrasana)')
+        screen.getByText('warrior-pose (Virabhadrasana)')
       ).toBeInTheDocument()
     })
   })
@@ -190,7 +200,7 @@ describe('AddAsanasDialog', () => {
     renderWithProviders(<AddAsanasDialog {...defaultProps} />)
 
     await waitFor(() => {
-      expect(screen.getByText('Mountain Pose (Tadasana)')).toBeInTheDocument()
+      expect(screen.getByText('mountain-pose (Tadasana)')).toBeInTheDocument()
     })
 
     const addButton = screen.getByRole('button', { name: /Add 0 Asanas/ })

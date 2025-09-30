@@ -66,7 +66,7 @@ export default function ImageUploadFallbackDemo() {
           🧪 Test Instructions
         </Typography>
         <Typography variant="body2" color="text.secondary" paragraph>
-          1. Try uploading an image with your invalid Cloudflare token
+          1. Try uploading an image when Vercel Blob fails
           <br />
           2. The upload should fail and show a fallback dialog
           <br />
