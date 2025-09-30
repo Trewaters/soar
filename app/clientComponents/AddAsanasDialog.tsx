@@ -179,15 +179,18 @@ export default function AddAsanasDialog({
     }
 
     const filtered = availableAsanas.filter((asana) => {
-      // Get the primary name (first english name or sort_english_name as fallback)
+      // Get the primary name (sort_english_name is the canonical name)
       const primaryName = (
-        asana.english_names[0] ||
         asana.sort_english_name ||
+        asana.english_names[0] ||
         ''
       ).toLowerCase()
 
-      // Get individual variant names for separate matching
-      const variantNames = asana.english_names.map((name) => name.toLowerCase())
+      // Get individual variant names for separate matching (including the canonical name)
+      const allNames = [asana.sort_english_name, ...asana.english_names].filter(
+        Boolean
+      )
+      const variantNames = allNames.map((name) => name.toLowerCase())
 
       const sanskritName =
         typeof asana.sanskrit_names === 'string'
@@ -198,7 +201,7 @@ export default function AddAsanasDialog({
 
       const searchLower = searchTerm.toLowerCase()
 
-      // Search in primary name, any individual variant, sanskrit name, category, or difficulty
+      // Search in primary name (sort_english_name), any individual variant, sanskrit name, category, or difficulty
       const matches =
         primaryName.includes(searchLower) ||
         variantNames.some((variant) => variant.includes(searchLower)) ||
@@ -210,8 +213,9 @@ export default function AddAsanasDialog({
       if (searchTerm && matches) {
         console.log('✅ Search match found:', {
           searchTerm,
+          sortEnglishName: asana.sort_english_name,
           primaryName,
-          variantNames,
+          allNames,
           sanskritName,
           asanaId: asana.id,
         })
@@ -259,7 +263,8 @@ export default function AddAsanasDialog({
     selectedAsanas.some((selected) => selected.id === asana.id)
 
   const getAsanaDisplayName = (asana: AsanaOption) => {
-    const englishName = asana.english_names[0] || asana.sort_english_name
+    // Prioritize sort_english_name as the canonical display name
+    const englishName = asana.sort_english_name || asana.english_names[0]
     const sanskritName =
       typeof asana.sanskrit_names === 'string' ? asana.sanskrit_names : ''
     return sanskritName ? `${englishName} (${sanskritName})` : englishName
