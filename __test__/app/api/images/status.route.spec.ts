@@ -9,7 +9,7 @@ jest.mock('next/server', () => ({
 }))
 
 // Mock Prisma singleton used by the route
-jest.mock('../../../prisma/generated/client', () => ({
+jest.mock('../../../../prisma/generated/client', () => ({
   __esModule: true,
   default: {
     asanaPosture: {
@@ -20,13 +20,13 @@ jest.mock('../../../prisma/generated/client', () => ({
 }))
 
 // Mock auth
-jest.mock('../../../auth', () => ({
+jest.mock('../../../../auth', () => ({
   auth: jest.fn(),
 }))
 
-const prisma = require('../../../prisma/generated/client')
-const { auth } = require('../../../auth')
-const route = require('../../../app/api/images/status/route')
+const prisma = require('../../../../prisma/generated/client')
+const { auth } = require('../../../../auth')
+const route = require('../../../../app/api/images/status/route')
 
 describe('GET /api/images/status', () => {
   beforeEach(() => {

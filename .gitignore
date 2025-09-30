@@ -48,8 +48,8 @@ postures.json
 datalogmongod.log*
 
 # Ai scripts
-/scripts*
-/scripts/*
+scripts*
+scripts/*
 
 # Prisma generated files
 prisma/generated/

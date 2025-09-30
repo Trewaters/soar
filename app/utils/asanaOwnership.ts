@@ -69,14 +69,11 @@ export function canManageImages(
 
 /**
  * Check if an asana is user-created (as opposed to system/default asana)
- * Backwards compatible: considers asana user-created if it has created_by field set
  * @param asana - The asana data to check
  * @returns boolean - True if asana is user-created
  */
 export function isUserCreatedAsana(asana: AsanaPostureData): boolean {
-  // Backwards compatible: if asana has a created_by value, treat as user-created
-  // regardless of isUserCreated flag
-  return Boolean(asana.created_by)
+  return asana.isUserCreated === true
 }
 
 /**
