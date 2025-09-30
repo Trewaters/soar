@@ -174,8 +174,21 @@ export default function AddAsanasDialog({
 
   // Filter asanas based on search term
   useEffect(() => {
+    if (searchTerm) {
+      console.log('🔍 AddAsanasDialog: Searching for:', searchTerm)
+    }
+
     const filtered = availableAsanas.filter((asana) => {
-      const englishNames = asana.english_names.join(' ').toLowerCase()
+      // Get the primary name (first english name or sort_english_name as fallback)
+      const primaryName = (
+        asana.english_names[0] ||
+        asana.sort_english_name ||
+        ''
+      ).toLowerCase()
+
+      // Get individual variant names for separate matching
+      const variantNames = asana.english_names.map((name) => name.toLowerCase())
+
       const sanskritName =
         typeof asana.sanskrit_names === 'string'
           ? asana.sanskrit_names.toLowerCase()
@@ -185,13 +198,34 @@ export default function AddAsanasDialog({
 
       const searchLower = searchTerm.toLowerCase()
 
-      return (
-        englishNames.includes(searchLower) ||
+      // Search in primary name, any individual variant, sanskrit name, category, or difficulty
+      const matches =
+        primaryName.includes(searchLower) ||
+        variantNames.some((variant) => variant.includes(searchLower)) ||
         sanskritName.includes(searchLower) ||
         category.includes(searchLower) ||
         difficulty.includes(searchLower)
-      )
+
+      // Debug logging for search matches
+      if (searchTerm && matches) {
+        console.log('✅ Search match found:', {
+          searchTerm,
+          primaryName,
+          variantNames,
+          sanskritName,
+          asanaId: asana.id,
+        })
+      }
+
+      return matches
     })
+
+    if (searchTerm) {
+      console.log(
+        `🔍 AddAsanasDialog: Search for "${searchTerm}" found ${filtered.length} results`
+      )
+    }
+
     setFilteredAsanas(filtered)
   }, [availableAsanas, searchTerm])
 
