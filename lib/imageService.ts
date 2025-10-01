@@ -88,22 +88,43 @@ export async function getUserPoseImages(
 
     if (postureId) {
       params.append('postureId', postureId)
+      params.append('includeOwnership', 'true')
+      params.append('orderBy', 'displayOrder')
     }
     if (postureName) {
       params.append('postureName', postureName)
+      params.append('orderBy', 'displayOrder')
     }
 
-    const response = await fetch(`/api/images/upload?${params}`, {
+    const url = `/api/images?${params}`
+    console.log('🔍 getUserPoseImages: Making request to', {
+      url,
+      postureId,
+      postureName,
+      limit,
+      offset,
+    })
+
+    const response = await fetch(url, {
       method: 'GET',
     })
 
+    console.log('🔍 getUserPoseImages: Response status', response.status)
+
     if (!response.ok) {
       const errorData = await response.json()
+      console.error('🔍 getUserPoseImages: API error', {
+        status: response.status,
+        errorData,
+      })
       throw new Error(errorData.error || 'Failed to fetch images')
     }
 
-    return await response.json()
+    const result = await response.json()
+    console.log('🔍 getUserPoseImages: API response', result)
+    return result
   } catch (error) {
+    console.error('🔍 getUserPoseImages: Service error', error)
     logServiceError(error, 'imageService', 'getUserPoseImages', {
       operation: 'fetch_user_images',
       limit,
@@ -120,12 +141,9 @@ export async function getUserPoseImages(
  */
 export async function deletePoseImage(imageId: string): Promise<void> {
   try {
-    const response = await fetch(
-      `/api/images/upload?id=${encodeURIComponent(imageId)}`,
-      {
-        method: 'DELETE',
-      }
-    )
+    const response = await fetch(`/api/images/${encodeURIComponent(imageId)}`, {
+      method: 'DELETE',
+    })
 
     if (!response.ok) {
       const errorData = await response.json()

@@ -64,14 +64,35 @@ const usePostureImages = (postureId?: string, postureName?: string) => {
 
   useEffect(() => {
     const fetchImages = async () => {
-      if (!session?.user?.id || (!postureId && !postureName)) return
+      if (!session?.user?.id || (!postureId && !postureName)) {
+        console.log('🔍 usePostureImages: Missing requirements', {
+          hasSession: !!session?.user?.id,
+          postureId,
+          postureName,
+        })
+        return
+      }
 
       try {
         setLoading(true)
+        console.log('🔍 usePostureImages: Fetching images for', {
+          postureId,
+          postureName,
+          userId: session.user.id,
+        })
         const response = await getUserPoseImages(50, 0, postureId, postureName)
+        console.log('🔍 usePostureImages: Response received', {
+          imageCount: response.images.length,
+          total: response.total,
+          hasMore: response.hasMore,
+          images: response.images,
+        })
         setImages(response.images)
       } catch (error) {
-        console.error('Error fetching posture images:', error)
+        console.error(
+          '🔍 usePostureImages: Error fetching posture images:',
+          error
+        )
         setImages([])
       } finally {
         setLoading(false)
@@ -536,61 +557,7 @@ export default function PostureActivityDetail({
               </Box>
             )}
           </Box>
-        ) : (
-          // Fallback to text layout when no images available
-          <Stack
-            direction={'column'}
-            alignSelf={'center'}
-            sx={{ position: 'relative', zIndex: 1 }}
-          >
-            <Stack>
-              <Typography
-                variant="h3"
-                component="h2"
-                sx={{
-                  color: 'white',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.7)',
-                }}
-              >
-                {posture?.sort_english_name}
-              </Typography>
-
-              {/* Category badge on image */}
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top: -40,
-                  right: 16,
-                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                  borderRadius: '12px',
-                  px: 2,
-                  py: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 1,
-                }}
-              >
-                <Image
-                  alt={`${posture?.category} icon`}
-                  height={24}
-                  width={24}
-                  src={getAsanaIconUrl(posture?.category)}
-                />
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: 'text.primary',
-                    fontWeight: 'medium',
-                  }}
-                >
-                  {posture?.category}
-                </Typography>
-              </Box>
-            </Stack>
-          </Stack>
-        )}
+        ) : null}
 
         {/* Category badge when no uploaded images are available */}
         {(!postureImages || postureImages.length === 0) && (
@@ -681,7 +648,9 @@ export default function PostureActivityDetail({
         />
         <Stack direction={'column'} spacing={0}>
           <AsanaDetails
-            details={posture?.sort_english_name}
+            details={
+              posture?.english_names?.join(', ') || 'No variant names available'
+            }
             label={posture?.label ?? 'English Variant Names'}
             sx={{
               mb: '32px',
