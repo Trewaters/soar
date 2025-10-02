@@ -257,7 +257,7 @@ describe('PostureImageGallery Integration Tests', () => {
     // Verify delete API was called
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
-        '/api/images/upload?id=img1',
+        '/api/images/img1',
         expect.objectContaining({
           method: 'DELETE',
         })
@@ -311,7 +311,7 @@ describe('PostureImageGallery Integration Tests', () => {
       expect(global.fetch).toHaveBeenCalledWith(
         '/api/asana/posture1/images/reorder',
         expect.objectContaining({
-          method: 'PATCH',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },

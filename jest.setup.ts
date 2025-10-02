@@ -1,6 +1,94 @@
 import '@testing-library/jest-dom'
 import { configureAxe, toHaveNoViolations } from 'jest-axe'
 import type { JestAxeConfigureOptions } from 'jest-axe'
+// Provide minimal global Request/Response shims for Jest environment so Next/server imports don't throw
+if (typeof (global as any).Request === 'undefined') {
+  try {
+    // Prefer undici's WHATWG Request if available
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const undici = require('undici')
+    if (undici && undici.Request) {
+      ;(global as any).Request = undici.Request
+      ;(global as any).Response = undici.Response
+    }
+  } catch (e) {
+    // Lightweight fallback shim
+    ;(global as any).Request = class {
+      url: string
+      method: string
+      headers: any
+      constructor(url: string, init?: any) {
+        this.url = url
+        this.method = (init && init.method) || 'GET'
+        this.headers = (init && init.headers) || {}
+      }
+      clone() {
+        return this
+      }
+    }
+    ;(global as any).Response = class {
+      status: number
+      body: any
+      constructor(body?: any, init?: any) {
+        this.body = body
+        this.status = init?.status || 200
+      }
+      async json() {
+        try {
+          return JSON.parse(this.body)
+        } catch {
+          return this.body
+        }
+      }
+    }
+  }
+}
+
+// Provide TextEncoder/TextDecoder for packages that depend on Web API globals (undici, busboy)
+if (
+  typeof (global as any).TextEncoder === 'undefined' ||
+  typeof (global as any).TextDecoder === 'undefined'
+) {
+  try {
+    // Node >= 11 has util.TextEncoder/TextDecoder
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { TextEncoder, TextDecoder } = require('util')
+    ;(global as any).TextEncoder = TextEncoder
+    ;(global as any).TextDecoder = TextDecoder
+  } catch (e) {
+    // Lightweight fallback implementations
+    ;(global as any).TextEncoder = class TextEncoder {
+      encode(input: string) {
+        return Buffer.from(input, 'utf-8')
+      }
+    }
+    ;(global as any).TextDecoder = class TextDecoder {
+      decode(input: Uint8Array | Buffer) {
+        // If running in Node and input is already a Buffer, return directly.
+        if (typeof Buffer !== 'undefined' && Buffer.isBuffer(input)) {
+          return input.toString('utf-8')
+        }
+
+        // If input is a Uint8Array, construct a Buffer from its underlying ArrayBuffer
+        // using byteOffset/byteLength to avoid type overload issues.
+        if (typeof Buffer !== 'undefined' && input instanceof Uint8Array) {
+          return Buffer.from(
+            input.buffer,
+            input.byteOffset,
+            input.byteLength
+          ).toString('utf-8')
+        }
+
+        // Fallback: coerce to string safely
+        try {
+          return String(input)
+        } catch {
+          return ''
+        }
+      }
+    }
+  }
+}
 // Globally mock next-auth/react to avoid ESM import issues in Jest and allow tests to override session state
 const mockUseSession = jest.fn(() => ({
   data: null,

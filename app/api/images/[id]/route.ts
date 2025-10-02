@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
-import { PrismaClient } from '../../../../prisma/generated/client'
+import { PrismaClient } from '@prisma/client'
 import { storageManager } from '../../../../lib/storage/manager'
 import { AsanaOwnershipError } from '../../../utils/asanaOwnership'
 import { ImageDeleteResponse } from '../../../../types/images'
@@ -128,7 +128,7 @@ export async function DELETE(
 
     // For multi-image scenarios, we need to reorder remaining images
     if (image.postureId) {
-      await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx: any) => {
         // Delete the image from database
         await tx.poseImage.delete({
           where: { id: imageId },
@@ -168,7 +168,7 @@ export async function DELETE(
 
       const response: ImageDeleteResponse = {
         success: true,
-        remainingImages: updatedRemainingImages.map((img) => ({
+        remainingImages: updatedRemainingImages.map((img: any) => ({
           ...img,
           postureId: img.postureId || undefined,
           postureName: img.postureName || undefined,

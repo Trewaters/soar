@@ -1,10 +1,10 @@
-import { DELETE } from '../../../../../app/api/images/[id]/route'
-import { NextRequest } from 'next/server'
-import { auth } from '../../../../../auth'
-import { PrismaClient } from '@prisma/client'
-import { storageManager } from '../../../../../lib/storage/manager'
-
-jest.mock('@/auth')
+// Ensure these external dependencies are mocked before importing the route module
+// Provide an explicit factory so the real auth implementation (which imports ESM-only packages)
+// is never executed in the Jest environment.
+jest.mock('../../../../../auth', () => ({
+  __esModule: true,
+  auth: jest.fn(),
+}))
 jest.mock('@prisma/client', () => ({
   PrismaClient: jest.fn().mockImplementation(() => ({
     userData: {
@@ -22,7 +22,13 @@ jest.mock('@prisma/client', () => ({
     $transaction: jest.fn(),
   })),
 }))
-jest.mock('@/lib/storage/manager')
+jest.mock('../../../../../lib/storage/manager')
+
+import { DELETE } from '../../../../../app/api/images/[id]/route'
+import { NextRequest } from 'next/server'
+import { auth } from '../../../../../auth'
+import { PrismaClient } from '@prisma/client'
+import { storageManager } from '../../../../../lib/storage/manager'
 
 const mockAuth = auth as jest.Mock
 const prisma = new PrismaClient()

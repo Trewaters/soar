@@ -43,6 +43,7 @@ const customJestConfig: Config = {
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
     '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
   },
+  setupFiles: ['<rootDir>/jest.env.ts'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   transformIgnorePatterns: [
     '/node_modules/(?!(next-auth|@auth|@testing-library|@mui|jest-axe|axe-core|react-jsx-runtime|@next-auth)/)',
