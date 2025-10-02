@@ -5,8 +5,12 @@ jest.mock('../../../../../auth', () => ({
   __esModule: true,
   auth: jest.fn(),
 }))
-jest.mock('@prisma/client', () => ({
-  PrismaClient: jest.fn().mockImplementation(() => ({
+jest.mock('@prisma/client', () => {
+  // Create a shared mock prisma instance so both the test file and the route
+  // module (which calls `new PrismaClient()` at import time) receive the same
+  // mocked object. This ensures the test can control the behavior observed by
+  // the route implementation.
+  const mockPrisma = {
     userData: {
       findUnique: jest.fn(),
     },
@@ -20,8 +24,12 @@ jest.mock('@prisma/client', () => ({
       update: jest.fn(),
     },
     $transaction: jest.fn(),
-  })),
-}))
+  }
+
+  return {
+    PrismaClient: jest.fn().mockImplementation(() => mockPrisma),
+  }
+})
 jest.mock('../../../../../lib/storage/manager')
 
 import { DELETE } from '../../../../../app/api/images/[id]/route'
@@ -39,16 +47,30 @@ describe('DELETE /api/images/[id]', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     req = new NextRequest('http://localhost/api/images/some-image-id')
-    // Mock transaction to just execute the operations
-    ;(prisma.$transaction as jest.Mock).mockImplementation(
-      async (operations) => {
-        const results = []
-        for (const op of operations) {
+    // Mock transaction to support both calling with an array of operations
+    // or with an async function (tx => { ... }) as used by the route.
+    ;(prisma.$transaction as jest.Mock).mockImplementation(async (arg: any) => {
+      if (typeof arg === 'function') {
+        // Create a tx proxy that uses the same mocked model methods
+        const tx = {
+          poseImage: prisma.poseImage,
+          asanaPosture: prisma.asanaPosture,
+          userData: prisma.userData,
+        }
+        return await arg(tx)
+      }
+
+      if (Array.isArray(arg)) {
+        const results: any[] = []
+        for (const op of arg) {
           results.push(await op)
         }
         return results
       }
-    )
+
+      // Fallback: return arg
+      return arg
+    })
   })
 
   describe('when user is not authenticated', () => {
@@ -199,8 +221,24 @@ describe('DELETE /api/images/[id]', () => {
       const remainingImages = mockImages.filter(
         (img) => img.id !== imageIdToDelete
       )
+      // When called inside the transaction, return the remaining images with
+      // their original displayOrder so the route will detect gaps and call
+      // update. After the transaction, the route fetches the updated list;
+      // have the mock return the reordered list for that call.
+      const originalRemaining = remainingImages.map((img) => ({ ...img }))
+      const reorderedRemaining = remainingImages.map((img, i) => ({
+        ...img,
+        displayOrder: i + 1,
+      }))
+
+      // First call (inside tx) => original order (1 and 3)
+      ;(prisma.poseImage.findMany as jest.Mock).mockImplementationOnce(() =>
+        Promise.resolve(originalRemaining)
+      )
+
+      // Subsequent calls (after tx) => reordered (1 and 2)
       ;(prisma.poseImage.findMany as jest.Mock).mockResolvedValue(
-        remainingImages.map((img, i) => ({ ...img, displayOrder: i + 1 }))
+        reorderedRemaining
       )
     })
 
