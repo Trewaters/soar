@@ -9,10 +9,10 @@ import { auth } from '../../../../../../auth'
 
 export async function PUT(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id: postureId } = context.params
+    const postureId = params.id
     // Check authentication
     const session = await auth()
     if (!session?.user?.id) {
