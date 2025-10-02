@@ -7,6 +7,7 @@ import { UseUser } from '../../context/UserContext'
 import { getUserProfileImages } from '@lib/profileImageService'
 import { useSession } from 'next-auth/react'
 import type { PoseImageData } from './ImageUpload'
+import { PoseImage } from './types'
 
 function ProfileImageManagerWithContext() {
   const { state, dispatch } = UseUser()
@@ -149,6 +150,7 @@ interface ImageManagementProps {
   showUploadButton?: boolean
   showGallery?: boolean
   variant?: 'full' | 'upload-only' | 'gallery-only' | 'profile-only'
+  asanaId?: string
 }
 
 /**
@@ -160,9 +162,11 @@ export default function ImageManagement({
   showUploadButton = false,
   showGallery = false,
   variant = 'full',
+  asanaId,
 }: ImageManagementProps) {
   const [tabValue, setTabValue] = useState(0)
   const [refreshGallery, setRefreshGallery] = useState(0)
+  const [images, setImages] = useState<PoseImage[]>([])
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
@@ -176,6 +180,27 @@ export default function ImageManagement({
     if (showGallery) {
       setTabValue(1)
     }
+  }
+
+  useEffect(() => {
+    if (asanaId) {
+      const fetchImages = async () => {
+        try {
+          const res = await fetch(`/api/asana/${asanaId}/images`)
+          if (res.ok) {
+            const data = await res.json()
+            setImages(data.images)
+          }
+        } catch (error) {
+          console.error('Failed to fetch asana images:', error)
+        }
+      }
+      fetchImages()
+    }
+  }, [asanaId, refreshGallery])
+
+  const handleImagesChange = (updatedImages: PoseImage[]) => {
+    setImages(updatedImages)
   }
 
   if (variant === 'upload-only') {
@@ -195,7 +220,12 @@ export default function ImageManagement({
         <Typography variant="h6" gutterBottom>
           {title}
         </Typography>
-        <ImageGallery key={refreshGallery} />
+        <ImageGallery
+          key={refreshGallery}
+          asanaId={asanaId || ''}
+          initialImages={images}
+          onImagesChange={handleImagesChange}
+        />
       </Paper>
     )
   }
@@ -243,7 +273,12 @@ export default function ImageManagement({
 
       {showGallery && (
         <TabPanel value={tabValue} index={showUploadButton ? 1 : 0}>
-          <ImageGallery key={refreshGallery} />
+          <ImageGallery
+            key={refreshGallery}
+            asanaId={asanaId || ''}
+            initialImages={images}
+            onImagesChange={handleImagesChange}
+          />
         </TabPanel>
       )}
 

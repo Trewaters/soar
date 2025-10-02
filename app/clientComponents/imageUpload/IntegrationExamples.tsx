@@ -125,6 +125,7 @@ export function QuickUploadExample() {
 
 import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
 import { FullAsanaData } from '@context/AsanaPostureContext'
+import { PoseImage } from './types'
 
 import {
   Box,
@@ -144,12 +145,37 @@ import { FormEvent, useState } from 'react'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 
 export function GalleryOnlyExample() {
+  const mockImages: PoseImage[] = [
+    {
+      id: '1',
+      url: '/images/asana-placeholder.png',
+      altText: 'mock image 1',
+      displayOrder: 1,
+      uploadedAt: new Date().toISOString(),
+    },
+    {
+      id: '2',
+      url: '/images/asana-placeholder.png',
+      altText: 'mock image 2',
+      displayOrder: 2,
+      uploadedAt: new Date().toISOString(),
+    },
+  ]
+
+  const handleImagesChange = (images: PoseImage[]) => {
+    console.log('Images changed:', images)
+  }
+
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h6" gutterBottom>
         My Pose Images
       </Typography>
-      <ImageGallery />
+      <ImageGallery
+        asanaId="mock-asana-id"
+        initialImages={mockImages}
+        onImagesChange={handleImagesChange}
+      />
     </Box>
   )
 }
