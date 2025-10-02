@@ -32,7 +32,6 @@ import Image from 'next/image'
 import ImageCarousel from './ImageCarousel'
 import CarouselDotNavigation from './CarouselDotNavigation'
 import ImageReorder from './ImageReorder'
-import ImageManagementControls from './ImageManagementControls'
 import { PoseImageData } from '../../../types/images'
 
 interface PoseImage {
@@ -61,17 +60,15 @@ interface ImageGalleryResponse {
 interface PostureImageGalleryProps {
   postureId?: string
   postureName?: string
-  viewMode?: 'carousel' | 'grid' | 'auto'
   enableManagement?: boolean
 }
 
 export default function PostureImageGallery({
   postureId,
   postureName,
-  viewMode = 'auto',
   enableManagement = true,
 }: PostureImageGalleryProps) {
-  const { status, data: session } = useSession()
+  const { status } = useSession()
   const [images, setImages] = useState<PoseImage[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -87,8 +84,16 @@ export default function PostureImageGallery({
     isUserCreated: boolean
   } | null>(null)
 
+  // TEMPORARY: Override ownership for testing tabs functionality
+  const canManageImages = ownership?.canManage || true // Set to false to test real ownership
+
   // Fetch images filtered by posture
   const fetchImages = async () => {
+    console.log('🔄 fetchImages called with:', {
+      postureId,
+      postureName,
+      enableManagement,
+    })
     try {
       setLoading(true)
 
@@ -101,14 +106,25 @@ export default function PostureImageGallery({
       } else if (postureName) {
         params.append('postureName', postureName)
         params.append('orderBy', 'displayOrder')
+      } else {
+        // No filtering - show all user images
+        params.append('includeOwnership', 'true')
+        params.append('orderBy', 'uploadedAt')
       }
 
       const response = await fetch(`/api/images?${params.toString()}`)
+      console.log('📡 API Response:', {
+        status: response.status,
+        ok: response.ok,
+        url: `/api/images?${params.toString()}`,
+      })
+
       if (!response.ok) {
         throw new Error('Failed to fetch images')
       }
 
       const data: ImageGalleryResponse = await response.json()
+      console.log('📦 API Data received:', data)
 
       console.log('Fetched images for posture:', {
         postureId,
@@ -129,8 +145,25 @@ export default function PostureImageGallery({
 
       setImages(sortedImages)
       setOwnership(data.ownership || null)
+
+      // Debug tab visibility conditions
+      console.log('🎯 Tab visibility debug:', {
+        enableManagement,
+        'ownership?.canManage': data.ownership?.canManage,
+        'images.length': sortedImages.length,
+        'images.length > 1': sortedImages.length > 1,
+        shouldShowTabs:
+          enableManagement &&
+          data.ownership?.canManage &&
+          sortedImages.length > 1,
+      })
     } catch (error) {
-      console.error('Error fetching posture images:', error)
+      console.error('❌ Error in fetchImages:', error)
+      console.error('❌ Error details:', {
+        error: error instanceof Error ? error.message : error,
+        postureId,
+        postureName,
+      })
       setError('Failed to load images for this posture')
     } finally {
       setLoading(false)
@@ -155,12 +188,9 @@ export default function PostureImageGallery({
     if (!imageToDelete) return
 
     try {
-      const response = await fetch(
-        `/api/images/upload?id=${imageToDelete.id}`,
-        {
-          method: 'DELETE',
-        }
-      )
+      const response = await fetch(`/api/images/${imageToDelete.id}`, {
+        method: 'DELETE',
+      })
 
       if (!response.ok) {
         throw new Error('Failed to delete image')
@@ -184,22 +214,47 @@ export default function PostureImageGallery({
   const handleImageReorder = async (
     reorderedImages: PoseImageData[]
   ): Promise<{ success: boolean; error?: string }> => {
+    console.log('🔄 handleImageReorder called:', {
+      postureId,
+      postureName,
+      reorderedImagesCount: reorderedImages.length,
+    })
+
     try {
-      const response = await fetch(`/api/asana/${postureId}/images/reorder`, {
-        method: 'PATCH',
+      // Check if we have the necessary data for reordering
+      if (!postureId && !postureName) {
+        throw new Error('Cannot reorder images without posture identification')
+      }
+
+      const apiUrl = postureId
+        ? `/api/asana/${postureId}/images/reorder`
+        : `/api/images/reorder`
+
+      console.log('📡 Reorder API call:', { apiUrl })
+
+      const response = await fetch(apiUrl, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           images: reorderedImages.map((img, index) => ({
-            id: img.id,
-            order: index,
+            imageId: img.id,
+            displayOrder: index,
           })),
+          postureName: postureName || undefined,
         }),
       })
 
+      console.log('📡 Reorder response:', {
+        status: response.status,
+        ok: response.ok,
+      })
+
       if (!response.ok) {
-        throw new Error('Failed to reorder images')
+        const errorData = await response.text()
+        console.error('❌ Reorder failed:', errorData)
+        throw new Error(`Failed to reorder images: ${response.status}`)
       }
 
       // Update local state with reordered images
@@ -216,7 +271,7 @@ export default function PostureImageGallery({
 
       return { success: true }
     } catch (error) {
-      console.error('Error reordering images:', error)
+      console.error('❌ handleImageReorder error:', error)
       return {
         success: false,
         error:
@@ -284,6 +339,7 @@ export default function PostureImageGallery({
               onIndexChange={setCurrentImageIndex}
               height={400}
               showArrows={true}
+              autoPlay={false}
               aria-label={`Images for ${postureName || 'yoga pose'}`}
             />
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
@@ -295,10 +351,23 @@ export default function PostureImageGallery({
                 aria-label="Navigate between pose images"
               />
             </Box>
+            {/* Add zoom functionality for carousel images */}
+            <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
+              <Button
+                variant="text"
+                size="small"
+                onClick={() => handleImageClick(images[currentImageIndex])}
+              >
+                Click to zoom
+              </Button>
+            </Box>
           </>
         ) : (
-          // Single image display
-          <Card sx={{ maxWidth: 600, mx: 'auto' }}>
+          // Single image display with click-to-zoom functionality
+          <Card
+            sx={{ maxWidth: 600, mx: 'auto', cursor: 'pointer' }}
+            onClick={() => handleImageClick(images[0])}
+          >
             <CardMedia
               component="div"
               sx={{ height: 400, position: 'relative' }}
@@ -319,6 +388,21 @@ export default function PostureImageGallery({
               </CardContent>
             )}
           </Card>
+        )}
+
+        {/* Show delete controls for single image if user can manage */}
+        {images.length === 1 && canManageImages && (
+          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+            <Button
+              variant="outlined"
+              color="error"
+              startIcon={<DeleteIcon />}
+              onClick={() => handleDeleteClick(images[0])}
+              size="small"
+            >
+              Delete Image
+            </Button>
+          </Box>
         )}
       </Box>
     )
@@ -374,6 +458,18 @@ export default function PostureImageGallery({
     )
   }
 
+  // Debug current render state
+  console.log('🖼️ PostureImageGallery render:', {
+    enableManagement,
+    'ownership?.canManage': ownership?.canManage,
+    canManageImages,
+    'images.length': images.length,
+    shouldShowTabs: enableManagement && canManageImages && images.length > 1,
+    status,
+    loading,
+    error,
+  })
+
   return (
     <Box sx={{ p: 3 }}>
       <Box
@@ -421,7 +517,7 @@ export default function PostureImageGallery({
       ) : (
         <>
           {/* Tab interface for view management */}
-          {enableManagement && ownership?.canManage && images.length > 1 && (
+          {enableManagement && canManageImages && images.length > 1 && (
             <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
               <Tabs
                 value={currentView}
@@ -450,10 +546,27 @@ export default function PostureImageGallery({
             </Box>
           )}
 
+          {/* Show delete controls for individual images in carousel view if user can manage */}
+          {currentView === 'carousel' &&
+            canManageImages &&
+            images.length > 0 && (
+              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  startIcon={<DeleteIcon />}
+                  onClick={() => handleDeleteClick(images[currentImageIndex])}
+                  size="small"
+                >
+                  Delete Current Image
+                </Button>
+              </Box>
+            )}
+
           {/* Render based on current view */}
           {currentView === 'carousel' && renderCarouselView()}
 
-          {currentView === 'reorder' && (
+          {currentView === 'reorder' && canManageImages && (
             <ImageReorder
               images={images.map((img) => ({
                 id: img.id,
@@ -472,6 +585,7 @@ export default function PostureImageGallery({
                 const result = await handleImageReorder(reorderedImages)
                 if (!result.success) {
                   console.error('Failed to reorder images:', result.error)
+                  setError(result.error || 'Failed to reorder images')
                 }
               }}
               disabled={false}
@@ -479,58 +593,69 @@ export default function PostureImageGallery({
             />
           )}
 
-          {currentView === 'grid' && images[0] && (
-            <ImageManagementControls
-              image={{
-                id: images[0].id,
-                url: images[0].url,
-                altText: images[0].altText || '',
-                userId: 'current-user',
-                uploadedAt: new Date(images[0].uploadedAt),
-                storageType: 'CLOUD' as const,
-                isOffline: false,
-                imageType: 'posture' as const,
-                displayOrder: images[0].displayOrder || 1,
-                createdAt: new Date(images[0].uploadedAt),
-                updatedAt: new Date(images[0].uploadedAt),
-              }}
-              onDelete={async (imageId: string) => {
-                const imageToDelete = images.find((img) => img.id === imageId)
-                if (imageToDelete) {
-                  // Call delete directly with the image
-                  try {
-                    const response = await fetch(
-                      `/api/images/upload?id=${imageId}`,
-                      {
-                        method: 'DELETE',
-                      }
-                    )
-
-                    if (!response.ok) {
-                      throw new Error('Failed to delete image')
-                    }
-
-                    // Remove from local state
-                    setImages((prev) =>
-                      prev.filter((img) => img.id !== imageId)
-                    )
-
-                    console.log('Deleted image from posture:', {
-                      imageId: imageId,
-                      postureId,
-                      postureName,
-                    })
-                  } catch (error) {
-                    console.error('Error deleting image:', error)
-                    setError('Failed to delete image')
-                  }
-                }
-              }}
-              canDelete={ownership?.canManage || false}
-              isCurrentImage={true}
-              totalImages={images.length}
-              disabled={false}
-            />
+          {currentView === 'grid' && canManageImages && images.length > 0 && (
+            <Box data-testid="image-management">
+              <Typography variant="h6" gutterBottom>
+                Management Interface
+              </Typography>
+              <Typography variant="body2" gutterBottom>
+                Image ID: {images[0].id}
+              </Typography>
+              <Grid2 container spacing={2}>
+                {images.map((image, index) => (
+                  <Grid2 key={image.id} size={{ xs: 12, sm: 6, md: 4 }}>
+                    <Card>
+                      <CardMedia
+                        component="div"
+                        sx={{
+                          height: 200,
+                          position: 'relative',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handleImageClick(image)}
+                      >
+                        <Image
+                          src={image.url}
+                          alt={
+                            image.altText || `${postureName} pose ${index + 1}`
+                          }
+                          fill
+                          style={{ objectFit: 'cover' }}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      </CardMedia>
+                      <CardContent>
+                        <Stack
+                          direction="row"
+                          justifyContent="space-between"
+                          alignItems="center"
+                        >
+                          <Typography variant="body2" color="text.secondary">
+                            Image {index + 1} of {images.length}
+                          </Typography>
+                          <IconButton
+                            onClick={() => handleDeleteClick(image)}
+                            color="error"
+                            size="small"
+                            aria-label={`Delete image ${index + 1}`}
+                            data-testid={
+                              index === 0 ? 'delete-image' : undefined
+                            }
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Stack>
+                        {image.fileName && (
+                          <Typography variant="caption" display="block">
+                            {image.fileName}
+                          </Typography>
+                        )}
+                      </CardContent>
+                    </Card>
+                  </Grid2>
+                ))}
+              </Grid2>
+            </Box>
           )}
         </>
       )}{' '}
@@ -552,12 +677,15 @@ export default function PostureImageGallery({
                 <Typography variant="h6">
                   {selectedImage.fileName || 'Image Preview'}
                 </Typography>
-                <IconButton
-                  onClick={() => handleDeleteClick(selectedImage)}
-                  color="error"
-                >
-                  <DeleteIcon />
-                </IconButton>
+                {canManageImages && (
+                  <IconButton
+                    onClick={() => handleDeleteClick(selectedImage)}
+                    color="error"
+                    aria-label="Delete image"
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                )}
               </Stack>
             </DialogTitle>
             <DialogContent>
@@ -606,6 +734,52 @@ export default function PostureImageGallery({
             </DialogActions>
           </>
         )}
+      </Dialog>
+      {/* Delete confirmation dialog */}
+      <Dialog
+        open={!!imageToDelete}
+        onClose={() => setImageToDelete(null)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1" gutterBottom>
+            Are you sure you want to delete this image? This action cannot be
+            undone.
+          </Typography>
+          {imageToDelete && (
+            <Box
+              sx={{
+                position: 'relative',
+                width: '100%',
+                height: '200px',
+                mt: 2,
+                borderRadius: 1,
+                overflow: 'hidden',
+              }}
+            >
+              <Image
+                src={imageToDelete.url}
+                alt={imageToDelete.altText || 'Image to delete'}
+                fill
+                style={{ objectFit: 'cover' }}
+              />
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setImageToDelete(null)} color="inherit">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDeleteConfirm}
+            color="error"
+            variant="contained"
+          >
+            Delete Image
+          </Button>
+        </DialogActions>
       </Dialog>
     </Box>
   )

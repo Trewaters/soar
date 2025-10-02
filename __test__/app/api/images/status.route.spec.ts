@@ -13,6 +13,12 @@ const mockPrismaInstance = {
   asanaPosture: {
     findUnique: jest.fn(),
   },
+  userData: {
+    findUnique: jest.fn(),
+  },
+  poseImage: {
+    count: jest.fn(),
+  },
   $disconnect: jest.fn(),
 }
 
@@ -111,6 +117,10 @@ describe('GET /api/images/status', () => {
       created_by: 'creator@example.com',
       imageCount: 1,
     })
+    mockPrismaInstance.userData.findUnique.mockResolvedValue({
+      id: 'user-object-id-123',
+    })
+    mockPrismaInstance.poseImage.count.mockResolvedValue(1)
 
     const req: any = {
       url: `${baseUrl}?postureId=abc&userId=creator@example.com`,

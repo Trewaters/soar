@@ -246,13 +246,23 @@ describe('PostureImageGallery Integration Tests', () => {
     // Trigger delete
     fireEvent.click(screen.getByTestId('delete-image'))
 
+    // Wait for confirmation dialog to appear
+    await waitFor(() => {
+      expect(screen.getByText('Confirm Delete')).toBeInTheDocument()
+    })
+
+    // Confirm the delete in the dialog
+    fireEvent.click(screen.getByText('Delete Image'))
+
     // Verify delete API was called
-    expect(global.fetch).toHaveBeenCalledWith(
-      '/api/images/upload?id=img1',
-      expect.objectContaining({
-        method: 'DELETE',
-      })
-    )
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalledWith(
+        '/api/images/upload?id=img1',
+        expect.objectContaining({
+          method: 'DELETE',
+        })
+      )
+    })
   })
 
   it('should handle reorder API calls', async () => {

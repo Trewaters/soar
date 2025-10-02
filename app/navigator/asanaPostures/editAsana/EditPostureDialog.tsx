@@ -23,8 +23,8 @@ import {
   deletePosture,
 } from '@lib/postureService'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import DeleteIcon from '@mui/icons-material/Delete'
+import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 interface EditPostureDialogProps {
@@ -42,11 +42,12 @@ export default function EditPostureDialog({
   onSave,
 }: EditPostureDialogProps) {
   const { data: session } = useSession()
-  const router = useRouter()
   const [difficulty, setDifficulty] = useState('')
   const [sideways, setSideways] = useState('No')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const [images, setImages] = useState<any[]>([])
 
   // Available categories for autocomplete
   const categories = [
@@ -104,6 +105,7 @@ export default function EditPostureDialog({
         preferred_side: posture.preferred_side || '',
         sideways: posture.sideways ? 'Yes' : 'No',
       })
+      setImages(posture.poseImages || [])
       setEnglishVariationsInput(
         Array.isArray(posture.english_names)
           ? posture.english_names.join(', ')
@@ -191,13 +193,64 @@ export default function EditPostureDialog({
     }
 
     try {
-      const data = await updatePosture(posture.id, updatedAsana)
-      console.log('Posture updated successfully:', data)
+      // 1. Update the posture text data
+      const updatedPostureData = await updatePosture(posture.id, updatedAsana)
+      console.log('Posture updated successfully:', updatedPostureData)
+
+      // 2. Update the image order
+      const imageReorderPayload = images.map((image) => ({
+        imageId: image.id,
+        displayOrder: image.displayOrder,
+      }))
+
+      const reorderResponse = await fetch(
+        `/api/asana/${posture.id}/images/reorder`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ images: imageReorderPayload }),
+        }
+      )
+
+      if (!reorderResponse.ok) {
+        const errorData = await reorderResponse.json()
+        throw new Error(errorData.error || 'Failed to update image order')
+      }
+
+      console.log('Image order updated successfully')
+
       onSave()
       onClose()
     } catch (error: Error | any) {
       console.error('Error updating posture:', error.message)
       setError(error.message || 'Failed to update posture')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!session?.user?.email) {
+      setError('You must be logged in to delete postures')
+      return
+    }
+
+    if (posture.created_by !== session.user.email) {
+      setError('You can only delete postures you created')
+      return
+    }
+
+    setIsSubmitting(true)
+    setError(null)
+
+    try {
+      await deletePosture(posture.id)
+      console.log('Posture deleted successfully')
+      onSave() // This will trigger a refetch in the parent
+      onClose()
+    } catch (error: Error | any) {
+      console.error('Error deleting posture:', error.message)
+      setError(error.message || 'Failed to delete posture')
     } finally {
       setIsSubmitting(false)
     }
@@ -224,12 +277,17 @@ export default function EditPostureDialog({
   }
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
       <DialogTitle>Edit Posture</DialogTitle>
       <DialogContent>
+        {error && (
+          <Typography color="error" sx={{ mt: 2, textAlign: 'center' }}>
+            {error}
+          </Typography>
+        )}
         <Box sx={{ pt: 2 }}>
           <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
+            <Grid container spacing={4}>
               {/* Basic Information Section */}
               <Grid size={12}>
                 <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
@@ -281,6 +339,20 @@ export default function EditPostureDialog({
                       </FormControl>
                     </Grid>
                   </Grid>
+                </Paper>
+              </Grid>
+
+              {/* Image Gallery Section */}
+              <Grid size={12}>
+                <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
+                  <Typography variant="h6" gutterBottom color="primary">
+                    Image Gallery
+                  </Typography>
+                  <ImageGallery
+                    asanaId={posture.id}
+                    initialImages={images}
+                    onImagesChange={setImages}
+                  />
                 </Paper>
               </Grid>
 
@@ -386,54 +458,30 @@ export default function EditPostureDialog({
                 </Paper>
               </Grid>
             </Grid>
-
-            {error && (
-              <Typography color="error" sx={{ mt: 2, mb: 2 }}>
-                {error}
-              </Typography>
-            )}
           </form>
         </Box>
       </DialogContent>
-      <DialogActions>
-        {canEdit && (
-          <Button
-            color="error"
-            variant="outlined"
-            startIcon={<DeleteIcon />}
-            disabled={isSubmitting}
-            onClick={async () => {
-              if (!posture?.id) return
-              const confirmed = window.confirm(
-                'Delete this asana? This cannot be undone.'
-              )
-              if (!confirmed) return
-              try {
-                setIsSubmitting(true)
-                await deletePosture(posture.id)
-                onClose()
-                router.push('/navigator/asanaPostures')
-              } catch (e: any) {
-                setError(e?.message || 'Failed to delete posture')
-              } finally {
-                setIsSubmitting(false)
-              }
-            }}
-            sx={{ mr: 'auto' }}
-          >
-            Delete
-          </Button>
-        )}
-        <Button onClick={onClose} disabled={isSubmitting}>
-          Cancel
-        </Button>
+      <DialogActions sx={{ justifyContent: 'space-between', p: 2 }}>
         <Button
-          onClick={handleSubmit}
-          variant="contained"
+          onClick={handleDelete}
+          color="error"
+          startIcon={<DeleteIcon />}
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Saving...' : 'Save Changes'}
+          Delete Posture
         </Button>
+        <Box>
+          <Button onClick={onClose} disabled={isSubmitting}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            variant="contained"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Saving...' : 'Save Changes'}
+          </Button>
+        </Box>
       </DialogActions>
     </Dialog>
   )

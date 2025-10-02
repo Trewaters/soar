@@ -28,6 +28,7 @@ interface ImageUploadProps {
   onUploadSuccess?: (imageData: UploadedImageData) => void
   onClose?: () => void
   open?: boolean
+  asanaId?: string
 }
 
 interface UploadedImageData {
@@ -43,6 +44,7 @@ export default function ImageUploadComponent({
   onUploadSuccess,
   onClose,
   open = false,
+  asanaId,
 }: ImageUploadProps) {
   const { data: session } = useSession()
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -93,6 +95,9 @@ export default function ImageUploadComponent({
       formData.append('file', selectedFile)
       formData.append('altText', altText)
       formData.append('userId', session.user.id)
+      if (asanaId) {
+        formData.append('asanaId', asanaId)
+      }
 
       const response = await fetch('/api/images/upload', {
         method: 'POST',

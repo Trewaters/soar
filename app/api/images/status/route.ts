@@ -49,13 +49,31 @@ export async function GET(request: NextRequest) {
       select: {
         isUserCreated: true,
         created_by: true,
-        imageCount: true,
       },
     })
 
     if (!asana) {
       return NextResponse.json({ error: 'Asana not found' }, { status: 404 })
     }
+
+    // Count actual images in the database instead of relying on imageCount field
+    // Note: userId field in poseImage may contain email addresses, not ObjectIDs
+    // So we need to find the user first to get their proper ObjectID or use email-based lookup
+    const user = await prisma.userData.findUnique({
+      where: { email: session.user.email },
+      select: { id: true },
+    })
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    const actualImageCount = await prisma.poseImage.count({
+      where: {
+        postureId: postureId,
+        userId: user.id, // Use the actual ObjectID from UserData
+      },
+    })
 
     // Check if user can upload images to this asana
     // created_by is expected to be the creator's email per project convention
@@ -67,7 +85,7 @@ export async function GET(request: NextRequest) {
     const isUserOwned = createdBy === sessionEmail
     const canManage = isUserOwned
     const maxAllowed = isUserOwned ? MAX_IMAGES_PER_ASANA : 1
-    const currentCount = asana.imageCount || 0
+    const currentCount = actualImageCount // Use actual count instead of stale imageCount field
     const remainingSlots = Math.max(0, maxAllowed - currentCount)
     const canUpload = canManage && remainingSlots > 0
 

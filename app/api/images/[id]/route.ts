@@ -15,14 +15,30 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    console.log('🗑️ DELETE /api/images/[id] called')
+
     // Check authentication
     const session = await auth()
-    if (!session?.user?.id) {
+    if (!session?.user?.email) {
       return NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }
       )
     }
+
+    console.log('🗑️ User email:', session.user.email)
+
+    // Find the user to get their ObjectID
+    const user = await prisma.userData.findUnique({
+      where: { email: session.user.email },
+      select: { id: true },
+    })
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    console.log('🗑️ User ObjectID:', user.id)
 
     const resolvedParams = await params
     const imageId = resolvedParams.id
@@ -54,23 +70,44 @@ export async function DELETE(
       return NextResponse.json({ error: 'Image not found' }, { status: 404 })
     }
 
-    if (image.userId !== session.user.id) {
+    console.log('🗑️ Ownership check:', {
+      imageUserId: image.userId,
+      userObjectId: user.id,
+      match: image.userId === user.id,
+    })
+
+    if (image.userId !== user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
     // For posture images, verify user owns the asana
     if (image.postureId && image.posture) {
+      console.log('🗑️ Asana check:', {
+        postureId: image.postureId,
+        isUserCreated: image.posture.isUserCreated,
+        created_by: image.posture.created_by,
+        sessionEmail: session.user.email,
+        emailMatch: image.posture.created_by === session.user.email,
+      })
+
       if (!image.posture.isUserCreated) {
-        return NextResponse.json(
-          {
-            error: 'Cannot delete images from system asanas',
-            code: 'SYSTEM_ASANA',
-          },
-          { status: 400 }
-        )
+        // Check if user created it by email match, even if isUserCreated is false
+        if (image.posture.created_by === session.user.email) {
+          console.log(
+            '🗑️ Allowing deletion: user created asana even though isUserCreated is false'
+          )
+        } else {
+          return NextResponse.json(
+            {
+              error: 'Cannot delete images from system asanas',
+              code: 'SYSTEM_ASANA',
+            },
+            { status: 400 }
+          )
+        }
       }
 
-      if (image.posture.created_by !== session.user.id) {
+      if (image.posture.created_by !== session.user.email) {
         return NextResponse.json(
           {
             error: 'You can only delete images from asanas you created',

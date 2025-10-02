@@ -15,12 +15,12 @@ import {
   Button,
   Skeleton,
   Alert,
-  Fab,
 } from '@mui/material'
 import {
   Delete as DeleteIcon,
-  Add as AddIcon,
   ZoomIn as ZoomInIcon,
+  ArrowUpward as ArrowUpwardIcon,
+  ArrowDownward as ArrowDownwardIcon,
 } from '@mui/icons-material'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -37,50 +37,58 @@ interface PoseImage {
   fileName?: string
   fileSize?: number
   uploadedAt: string
+  displayOrder: number
 }
 
-interface ImageGalleryResponse {
-  images: PoseImage[]
-  total: number
-  hasMore: boolean
+interface ImageGalleryProps {
+  asanaId: string
+  initialImages: PoseImage[]
+  onImagesChange: (images: PoseImage[]) => void
 }
 
-export default function ImageGallery() {
+export default function ImageGallery({
+  asanaId,
+  initialImages,
+  onImagesChange,
+}: ImageGalleryProps) {
   const { status } = useSession()
-  const [images, setImages] = useState<PoseImage[]>([])
-  const [loading, setLoading] = useState(true)
+  const [images, setImages] = useState<PoseImage[]>(initialImages)
   const [error, setError] = useState<string | null>(null)
   const [selectedImage, setSelectedImage] = useState<PoseImage | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [imageToDelete, setImageToDelete] = useState<PoseImage | null>(null)
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-  const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
-
-  // Fetch images
-  const fetchImages = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch('/api/images/upload')
-      if (!response.ok) {
-        throw new Error('Failed to fetch images')
-      }
-      const data: ImageGalleryResponse = await response.json()
-      setImages(data.images)
-    } catch (error) {
-      console.error('Error fetching images:', error)
-      setError('Failed to load images')
-    } finally {
-      setLoading(false)
-    }
-  }
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      fetchImages()
-    } else if (status === 'unauthenticated') {
-      setLoading(false)
+    // Sort initial images by displayOrder
+    const sortedImages = [...initialImages].sort(
+      (a, b) => a.displayOrder - b.displayOrder
+    )
+    setImages(sortedImages)
+  }, [initialImages])
+
+  const handleMove = (index: number, direction: 'up' | 'down') => {
+    const newImages = [...images]
+    const targetIndex = direction === 'up' ? index - 1 : index + 1
+
+    if (targetIndex < 0 || targetIndex >= newImages.length) {
+      return // Cannot move further
     }
-  }, [status])
+
+    // Swap elements
+    ;[newImages[index], newImages[targetIndex]] = [
+      newImages[targetIndex],
+      newImages[index],
+    ]
+
+    // Update displayOrder for all images
+    const updatedImagesWithOrder = newImages.map((image, idx) => ({
+      ...image,
+      displayOrder: idx + 1,
+    }))
+
+    setImages(updatedImagesWithOrder)
+    onImagesChange(updatedImagesWithOrder)
+  }
 
   // Handle delete
   const handleDeleteClick = (image: PoseImage) => {
@@ -103,8 +111,11 @@ export default function ImageGallery() {
         throw new Error('Failed to delete image')
       }
 
-      // Remove from local state
-      setImages((prev) => prev.filter((img) => img.id !== imageToDelete.id))
+      // Remove from local state and notify parent
+      const updatedImages = images.filter((img) => img.id !== imageToDelete.id)
+      setImages(updatedImages)
+      onImagesChange(updatedImages)
+
       setDeleteDialogOpen(false)
       setImageToDelete(null)
     } catch (error) {
@@ -120,7 +131,9 @@ export default function ImageGallery() {
 
   // Handle upload success
   const handleUploadSuccess = (newImage: PoseImage) => {
-    setImages((prev) => [newImage, ...prev])
+    const updatedImages = [...images, newImage]
+    setImages(updatedImages)
+    onImagesChange(updatedImages)
   }
 
   // Handle image click for zoom
@@ -132,7 +145,7 @@ export default function ImageGallery() {
     setSelectedImage(null)
   }
 
-  if (status === 'loading' || loading) {
+  if (status === 'loading') {
     return (
       <Box sx={{ p: 3 }}>
         <Typography variant="h5" gutterBottom>
@@ -171,8 +184,8 @@ export default function ImageGallery() {
         <Alert
           severity="error"
           action={
-            <Button color="inherit" size="small" onClick={fetchImages}>
-              Retry
+            <Button color="inherit" size="small" onClick={() => setError(null)}>
+              Dismiss
             </Button>
           }
         >
@@ -195,7 +208,10 @@ export default function ImageGallery() {
         <Typography variant="h5">
           My Yoga Pose Images ({images.length})
         </Typography>
-        <ImageUploadButton onUploadSuccess={handleUploadSuccess} />
+        <ImageUploadButton
+          onUploadSuccess={handleUploadSuccess}
+          asanaId={asanaId}
+        />
       </Box>
 
       {images.length === 0 ? (
@@ -215,109 +231,96 @@ export default function ImageGallery() {
             Start building your yoga pose collection by uploading your first
             image
           </Typography>
-          <ImageUploadButton onUploadSuccess={handleUploadSuccess} />
+          <ImageUploadButton
+            onUploadSuccess={handleUploadSuccess}
+            asanaId={asanaId}
+          />
         </Box>
       ) : (
         <Grid2 container spacing={2}>
-          {images.map((image) => (
+          {images.map((image, index) => (
             <Grid2 key={image.id} size={{ xs: 12, sm: 6, md: 4 }}>
-              <Card
-                sx={{
-                  position: 'relative',
-                  transition: 'transform 0.2s',
-                  '&:hover': {
-                    transform: 'scale(1.02)',
-                    '& .image-overlay': {
-                      opacity: 1,
-                    },
-                  },
-                }}
-              >
-                <Box sx={{ position: 'relative' }}>
-                  <CardMedia
-                    component="div"
-                    sx={{
-                      height: 200,
-                      position: 'relative',
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => handleImageClick(image)}
-                  >
-                    {image.url && !image.url.startsWith('local://') && (
-                      <Image
-                        src={image.url}
-                        alt={image.altText || 'Yoga pose'}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                      />
-                    )}
-                    {(!image.url || image.url.startsWith('local://')) && (
-                      <Image
-                        src={PLACEHOLDER_IMAGE}
-                        alt={image.altText || 'Yoga pose'}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                      />
-                    )}
-                  </CardMedia>
+              <Card sx={{ position: 'relative' }}>
+                <CardMedia
+                  sx={{
+                    height: 200,
+                    cursor: 'pointer',
+                    position: 'relative',
+                  }}
+                  onClick={() => handleImageClick(image)}
+                >
+                  <Image
+                    src={image.url || PLACEHOLDER_IMAGE}
+                    alt={image.altText || `Pose image ${index + 1}`}
+                    fill
+                    style={{ objectFit: 'cover' }}
+                    sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
+                    priority={index < 3} // Prioritize loading for first few images
+                  />
                   <Box
-                    className="image-overlay"
                     sx={{
                       position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
+                      top: 8,
+                      right: 8,
+                      display: 'flex',
+                      gap: 1,
                       backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      opacity: 0,
-                      transition: 'opacity 0.2s',
+                      borderRadius: '4px',
+                      padding: '2px',
                     }}
                   >
-                    <IconButton
-                      sx={{ color: 'white' }}
-                      onClick={() => handleImageClick(image)}
-                    >
-                      <ZoomInIcon />
-                    </IconButton>
-                  </Box>
-                </Box>
-                <CardContent sx={{ pb: 1 }}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-start',
-                    }}
-                  >
-                    <Box sx={{ flex: 1, mr: 1 }}>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                        }}
-                      >
-                        {image.altText || image.fileName || 'Yoga pose'}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {new Date(image.uploadedAt).toLocaleDateString()}
-                      </Typography>
-                    </Box>
                     <IconButton
                       size="small"
-                      color="error"
-                      onClick={() => handleDeleteClick(image)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleMove(index, 'up')
+                      }}
+                      disabled={index === 0}
+                      sx={{ color: 'white' }}
+                    >
+                      <ArrowUpwardIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleMove(index, 'down')
+                      }}
+                      disabled={index === images.length - 1}
+                      sx={{ color: 'white' }}
+                    >
+                      <ArrowDownwardIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleDeleteClick(image)
+                      }}
+                      sx={{ color: 'white' }}
                     >
                       <DeleteIcon fontSize="small" />
                     </IconButton>
                   </Box>
+                </CardMedia>
+                <CardContent
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    p: 1,
+                    '&:last-child': { pb: 1 },
+                  }}
+                >
+                  <Typography variant="caption" color="text.secondary">
+                    Order: {image.displayOrder + 1}
+                  </Typography>
+                  <IconButton
+                    size="small"
+                    onClick={() => handleImageClick(image)}
+                  >
+                    <ZoomInIcon fontSize="small" />
+                  </IconButton>
                 </CardContent>
               </Card>
             </Grid2>
@@ -325,51 +328,8 @@ export default function ImageGallery() {
         </Grid2>
       )}
 
-      {/* Floating Action Button for mobile */}
-      <Fab
-        color="primary"
-        aria-label="add image"
-        onClick={() => setUploadDialogOpen(true)}
-        sx={{
-          position: 'fixed',
-          bottom: 16,
-          right: 16,
-          display: { xs: 'flex', sm: 'none' },
-        }}
-      >
-        <AddIcon />
-      </Fab>
-
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
-        <DialogTitle>Delete Image</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Are you sure you want to delete this image? This action cannot be
-            undone.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteCancel} color="inherit">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleDeleteConfirm}
-            color="error"
-            variant="contained"
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Image Zoom Dialog */}
-      <Dialog
-        open={!!selectedImage}
-        onClose={handleCloseZoom}
-        maxWidth="md"
-        fullWidth
-      >
+      {/* Zoom Dialog */}
+      <Dialog open={!!selectedImage} onClose={handleCloseZoom} maxWidth="md">
         {selectedImage && (
           <>
             <DialogTitle>
@@ -377,24 +337,12 @@ export default function ImageGallery() {
             </DialogTitle>
             <DialogContent sx={{ p: 0 }}>
               <Box sx={{ position: 'relative', width: '100%', height: 400 }}>
-                {selectedImage.url &&
-                  !selectedImage.url.startsWith('local://') && (
-                    <Image
-                      src={selectedImage.url}
-                      alt={selectedImage.altText || 'Yoga pose'}
-                      fill
-                      style={{ objectFit: 'contain' }}
-                    />
-                  )}
-                {(!selectedImage.url ||
-                  selectedImage.url.startsWith('local://')) && (
-                  <Image
-                    src={PLACEHOLDER_IMAGE}
-                    alt={selectedImage.altText || 'Yoga pose'}
-                    fill
-                    style={{ objectFit: 'contain' }}
-                  />
-                )}
+                <Image
+                  src={selectedImage.url || PLACEHOLDER_IMAGE}
+                  alt={selectedImage.altText || 'Yoga pose'}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                />
               </Box>
             </DialogContent>
             <DialogActions>
@@ -402,6 +350,23 @@ export default function ImageGallery() {
             </DialogActions>
           </>
         )}
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete this image? This action cannot be
+            undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel}>Cancel</Button>
+          <Button onClick={handleDeleteConfirm} color="error">
+            Delete
+          </Button>
+        </DialogActions>
       </Dialog>
     </Box>
   )

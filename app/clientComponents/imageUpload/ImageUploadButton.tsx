@@ -11,6 +11,7 @@ interface ImageUploadButtonProps {
   fullWidth?: boolean
   // eslint-disable-next-line no-unused-vars
   onUploadSuccess?: (imageData: any) => void
+  asanaId?: string
 }
 
 export default function ImageUploadButton({
@@ -19,6 +20,7 @@ export default function ImageUploadButton({
   disabled = false,
   fullWidth = false,
   onUploadSuccess,
+  asanaId,
 }: ImageUploadButtonProps) {
   const [open, setOpen] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
@@ -62,6 +64,7 @@ export default function ImageUploadButton({
         open={open}
         onClose={handleClose}
         onUploadSuccess={handleUploadSuccess}
+        asanaId={asanaId}
       />
 
       <Snackbar

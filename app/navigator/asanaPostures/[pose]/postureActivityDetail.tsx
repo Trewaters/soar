@@ -33,6 +33,7 @@ import CarouselDotNavigation from '@app/clientComponents/imageUpload/CarouselDot
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 import { deletePosture } from '@lib/postureService'
 import PostureImageUpload from '@app/clientComponents/imageUpload/PostureImageUpload'
+import PostureImageManagement from '@app/clientComponents/imageUpload/PostureImageManagement'
 import EditPostureDialog from '@app/navigator/asanaPostures/editAsana/EditPostureDialog'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 
@@ -714,6 +715,26 @@ export default function PostureActivityDetail({
             label="Sideways"
             // sx={{ mb: '32px' }}
           />
+
+          {/* Enhanced Image Gallery */}
+          {posture &&
+            (() => {
+              console.log('🎯 PostureImageManagement props:', {
+                postureId: posture.id?.toString(),
+                postureName: posture.sort_english_name,
+                title: `Images for ${posture.sort_english_name}`,
+              })
+              return (
+                <Box sx={{ mt: 4, mb: 4, mx: { xs: 0, sm: 2 } }}>
+                  <PostureImageManagement
+                    title={`Images for ${posture.sort_english_name}`}
+                    postureId={posture.id?.toString()}
+                    postureName={posture.sort_english_name}
+                    variant="full"
+                  />
+                </Box>
+              )
+            })()}
 
           {/* Activity Tracker Component */}
           {posture && posture.id && (

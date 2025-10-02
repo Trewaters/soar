@@ -95,6 +95,7 @@ export default function PostureImageManagement({
           key={refreshGallery}
           postureId={postureId}
           postureName={postureName}
+          enableManagement={true}
         />
       </Paper>
     )
@@ -133,6 +134,7 @@ export default function PostureImageManagement({
             key={refreshGallery}
             postureId={postureId}
             postureName={postureName}
+            enableManagement={true}
           />
         </TabPanel>
       )}
