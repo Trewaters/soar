@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
-import { PrismaClient } from '@prisma/generated/client'
+import { PrismaClient } from '@prisma/client'
 import { storageManager } from '../../../../lib/storage/manager'
 import { AsanaOwnershipError } from '../../../utils/asanaOwnership'
 import { ImageDeleteResponse } from '../../../../types/images'
@@ -29,16 +29,6 @@ export async function DELETE(
     console.log('🗑️ User email:', session.user.email)
 
     // Find the user to get their ObjectID
-    const user = await prisma.userData.findUnique({
-      where: { email: session.user.email },
-      select: { id: true },
-    })
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
-    }
-
-    console.log('🗑️ User ObjectID:', user.id)
 
     const resolvedParams = await params
     const imageId = resolvedParams.id
@@ -47,7 +37,8 @@ export async function DELETE(
       return NextResponse.json({ error: 'Image ID required' }, { status: 400 })
     }
 
-    // Find the image and verify ownership
+    // Find the image first so we can return image-specific errors before
+    // attempting to resolve the user record.
     const image = await prisma.poseImage.findUnique({
       where: { id: imageId },
       select: {
@@ -69,6 +60,18 @@ export async function DELETE(
     if (!image) {
       return NextResponse.json({ error: 'Image not found' }, { status: 404 })
     }
+
+    // Find the user to get their ObjectID
+    const user = await prisma.userData.findUnique({
+      where: { email: session.user.email },
+      select: { id: true },
+    })
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    console.log('🗑️ User ObjectID:', user.id)
 
     console.log('🗑️ Ownership check:', {
       imageUserId: image.userId,
