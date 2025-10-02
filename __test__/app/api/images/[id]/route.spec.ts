@@ -5,7 +5,7 @@ jest.mock('../../../../../auth', () => ({
   __esModule: true,
   auth: jest.fn(),
 }))
-jest.mock('@prisma/client', () => {
+jest.mock('../../../../../prisma/generated/client', () => {
   // Create a shared mock prisma instance so both the test file and the route
   // module (which calls `new PrismaClient()` at import time) receive the same
   // mocked object. This ensures the test can control the behavior observed by
@@ -35,7 +35,7 @@ jest.mock('../../../../../lib/storage/manager')
 import { DELETE } from '../../../../../app/api/images/[id]/route'
 import { NextRequest } from 'next/server'
 import { auth } from '../../../../../auth'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '../../../../../prisma/generated/client'
 import { storageManager } from '../../../../../lib/storage/manager'
 
 const mockAuth = auth as jest.Mock

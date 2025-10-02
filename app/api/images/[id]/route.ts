@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '../../../../prisma/generated/client'
 import { storageManager } from '../../../../lib/storage/manager'
 import { AsanaOwnershipError } from '../../../utils/asanaOwnership'
 import { ImageDeleteResponse } from '../../../../types/images'
