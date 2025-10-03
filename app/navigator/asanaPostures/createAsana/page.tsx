@@ -428,26 +428,59 @@ export default function Page() {
             />
           </Box>
 
-          {/* Submit Button */}
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            size="large"
-            disabled={isSubmitting || successState.isNavigating}
-            sx={{
-              borderRadius: '12px',
-              mt: 3,
-              py: 2,
-              fontSize: '1.1rem',
-              fontWeight: 600,
-            }}
-          >
-            {successState.isNavigating
-              ? 'Redirecting to your new asana...'
-              : isSubmitting
-                ? 'Creating Asana...'
-                : 'Create Asana'}
-          </Button>
+          {/* Action Buttons: Create and Cancel */}
+          <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              size="large"
+              disabled={isSubmitting || successState.isNavigating}
+              sx={{
+                borderRadius: '12px',
+                py: 2,
+                fontSize: '1.1rem',
+                fontWeight: 600,
+              }}
+            >
+              {successState.isNavigating
+                ? 'Redirecting to your new asana...'
+                : isSubmitting
+                  ? 'Creating Asana...'
+                  : 'Create Asana'}
+            </Button>
+
+            <Button
+              onClick={() => {
+                // Clear form inputs and uploaded images
+                setFormData({
+                  sort_english_name: '',
+                  english_names: [],
+                  description: '',
+                  category: '',
+                  difficulty: '',
+                  breath_direction_default: 'Neutral',
+                  preferred_side: '',
+                  sideways: 'No',
+                  created_by: session?.user?.email ?? 'error-undefined-user',
+                  dristi: '',
+                })
+                setUploadedImages([])
+
+                // Redirect to Practice Asana (search) page
+                router.push('/navigator/asanaPostures')
+              }}
+              variant="outlined"
+              size="large"
+              sx={{
+                borderRadius: '12px',
+                py: 2,
+                fontSize: '1.1rem',
+                fontWeight: 600,
+              }}
+            >
+              Cancel
+            </Button>
+          </Stack>
         </Stack>
       </Stack>
 
