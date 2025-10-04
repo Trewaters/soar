@@ -285,7 +285,7 @@ export default function ImageUploadWithFallback({
           const formData = new FormData()
           formData.append('file', file)
           formData.append('altText', '')
-          formData.append('userId', session.user.id)
+          formData.append('userId', session.user.email || '')
           formData.append(
             'imageType',
             postureId || postureName ? 'posture' : 'gallery'
@@ -344,7 +344,7 @@ export default function ImageUploadWithFallback({
         formData.append('file', selectedFile)
       }
       formData.append('altText', altText.trim() || '')
-      formData.append('userId', session.user.id)
+      formData.append('userId', session.user.email || '')
       formData.append(
         'imageType',
         postureId || postureName ? 'posture' : 'gallery'

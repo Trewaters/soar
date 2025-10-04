@@ -94,7 +94,7 @@ export default function ImageUploadComponent({
       const formData = new FormData()
       formData.append('file', selectedFile)
       formData.append('altText', altText)
-      formData.append('userId', session.user.id)
+      formData.append('userId', session.user.email || '')
       if (asanaId) {
         formData.append('asanaId', asanaId)
       }
