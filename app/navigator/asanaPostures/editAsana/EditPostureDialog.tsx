@@ -199,8 +199,8 @@ export default function EditPostureDialog({
 
       // 2. Update the image order
       const imageReorderPayload = images.map((image) => ({
-        imageId: image.id,
-        displayOrder: image.displayOrder,
+        id: image.id,
+        displayOrder: Number(image.displayOrder),
       }))
 
       const reorderResponse = await fetch(
