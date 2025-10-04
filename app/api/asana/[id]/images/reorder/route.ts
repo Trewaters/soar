@@ -5,7 +5,7 @@ import prisma from '@app/prisma/generated/client'
 // Next.js dynamic route handlers receive a second argument with params; params must be awaited
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id?: string } }
+  { params }: { params: Promise<{ id?: string }> }
 ) {
   try {
     const session = await auth()
@@ -13,7 +13,9 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const asanaId = params?.id
+    // `params` is provided as a Promise by Next.js dynamic route handlers; await it
+    const resolvedParams = await params
+    const asanaId = resolvedParams?.id
     if (!asanaId) {
       return NextResponse.json(
         { error: 'Asana ID is required' },
