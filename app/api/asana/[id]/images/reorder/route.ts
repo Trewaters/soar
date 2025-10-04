@@ -2,14 +2,18 @@ import { NextResponse, NextRequest } from 'next/server'
 import { auth } from 'auth'
 import prisma from '@app/prisma/generated/client'
 
-export async function PUT(req: NextRequest, ctx: any) {
+// Next.js dynamic route handlers receive a second argument with params; params must be awaited
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id?: string } }
+) {
   try {
     const session = await auth()
     if (!session || !session.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const asanaId = ctx?.params?.id
+    const asanaId = params?.id
     if (!asanaId) {
       return NextResponse.json(
         { error: 'Asana ID is required' },
@@ -40,12 +44,13 @@ export async function PUT(req: NextRequest, ctx: any) {
       )
     }
 
-    // Verify ownership
+    // Verify ownership: `created_by` stores the creator's email in this project
     const asana = await prisma.asanaPosture.findUnique({
       where: { id: asanaId },
       select: { created_by: true },
     })
-    if (!asana || asana.created_by !== session.user.id) {
+    const creatorEmail = asana?.created_by
+    if (!asana || creatorEmail !== session.user?.email) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 

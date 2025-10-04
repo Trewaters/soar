@@ -980,14 +980,14 @@ export default function PostureActivityDetail({
             </Stack>
           </Box>
         )}
-      {/* Edit Posture Dialog */}
       <EditPostureDialog
         open={editDialogOpen}
         onClose={() => setEditDialogOpen(false)}
         posture={posture}
         onSave={() => {
-          // Refresh the page to show updated data
-          window.location.reload()
+          // Close dialog and redirect to practice asana page after save
+          setEditDialogOpen(false)
+          router.push('/navigator/asanaPostures/practiceAsanas')
         }}
       />
 
