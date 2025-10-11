@@ -755,7 +755,7 @@ export default function Page() {
               <ListItemText
                 primary='"Pick Series": Add a series to
                   your sequence by selecting them from the "Pick Series"
-                  dropdown below. View the asana postures in the series below "Pick Series" Click the "X" to enter a new series. "Remove One (-1)" will remove the last series added. "Clear" will remove all series so you can start over.'
+                  dropdown below. View the asana poses in the series below "Pick Series" Click the "X" to enter a new series. "Remove One (-1)" will remove the last series added. "Clear" will remove all series so you can start over.'
               />
             </ListItem>
             <ListItem>

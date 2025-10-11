@@ -1013,7 +1013,7 @@ export default function PostureActivityDetail({
         disableScrollLock={true}
       >
         <Typography variant="body1" sx={{ p: 2 }}>
-          View detailed information about this asana posture. You can track your
+          View detailed information about this asana pose. You can track your
           practice activity, set difficulty levels, and access additional pose
           details and benefits. Use the practice view button to see the pose in
           action.

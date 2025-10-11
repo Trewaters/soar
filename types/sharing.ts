@@ -71,9 +71,9 @@ export function createShareStrategy(
 }
 
 /**
- * Share strategy for individual asana postures/asanas
+ * Share strategy for individual asana poses/asanas
  * Implements exact format specification from PRD with mandatory format:
- * "The asana posture [Asana Posture sort name] was shared with you. Below is the description:
+ * "The asana pose [Asana Pose sort name] was shared with you. Below is the description:
  * Practice with Uvuyoga! https://www.happyyoga.app/navigator/flows/practiceSeries (www.happyyoga.app)"
  */
 export class AsanaShareStrategy implements ShareStrategy {
@@ -84,7 +84,7 @@ export class AsanaShareStrategy implements ShareStrategy {
     const shareUrl = 'https://www.happyyoga.app/navigator/flows/practiceSeries'
 
     // Implement exact PRD format specification
-    const shareText = `The asana posture ${postureName} was shared with you. Below is the description:
+    const shareText = `The asana pose ${postureName} was shared with you. Below is the description:
 
 Practice with Uvuyoga!
 
@@ -93,7 +93,7 @@ ${shareUrl}
 (www.happyyoga.app)`
 
     return {
-      title: `The asana posture "${postureName}" was shared with you. Below is the description:`,
+      title: `The asana pose "${postureName}" was shared with you. Below is the description:`,
       text: shareText,
       url: shareUrl,
       shareType: 'asana',

@@ -142,7 +142,7 @@ export default function Page() {
   const formFields: AsanaEditFieldProps[] = [
     {
       type: 'text',
-      label: 'Asana Posture Name',
+      label: 'Asana Pose Name',
       value: formFullAsanaPoseData.sort_english_name,
       onChange: (value: string) =>
         setFormFullAsanaPoseData({
@@ -583,8 +583,8 @@ export default function Page() {
 
       <Drawer anchor="bottom" open={open} onClose={() => setOpen(false)}>
         <Typography variant="body1" sx={{ p: 2 }}>
-          Fill out the form to create a new asana posture. All fields are
-          required except for preferred side.
+          Fill out the form to create a new asana pose. All fields are required
+          except for preferred side.
         </Typography>
       </Drawer>
 

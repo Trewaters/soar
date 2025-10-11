@@ -192,7 +192,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (error: any) {
-    console.error('Error fetching all asana postures:', error)
+    console.error('Error fetching all asana poses:', error)
     return NextResponse.json(
       { error: 'Internal server error. Please try again later.' },
       { status: 500 }

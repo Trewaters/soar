@@ -19,13 +19,13 @@ interface PostureSearchProps {
 }
 
 /**
- * A search component for asana postures that provides autocomplete functionality.
+ * A search component for asana poses that provides autocomplete functionality.
  *
  * @component
  * @param props - The component props
  * @param props.posturePropData - Array of full asana data objects to search through
  *
- * @returns A search interface with autocomplete dropdown for selecting asana postures
+ * @returns A search interface with autocomplete dropdown for selecting asana poses
  *
  * @example
  * ```tsx
@@ -33,7 +33,7 @@ interface PostureSearchProps {
  * ```
  *
  * @remarks
- * - Updates the global asana posture state when a selection is made
+ * - Updates the global asana pose state when a selection is made
  * - Navigates to the selected posture's detail page
  * - Filters postures by English name using case-insensitive matching
  * - Displays a search icon and custom styling for the input field

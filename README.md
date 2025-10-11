@@ -29,8 +29,8 @@ Improve a meaningful app that helps yogis worldwide. Collaborate on a [NextJS](h
 
 _Asanas_
 
-- View Asana postures details.
-- Create Asana posture.
+- View Asana poses details.
+- Create Asana pose.
 
 _Flows_
 
@@ -222,6 +222,14 @@ View the style guide page to see fonts, colors, and letter sizing across the web
 
 1. Prettier
 2. Eslint
+
+### Documentation
+
+npm script will output docs to "docs/api" folder.
+
+```
+npm run docs
+```
 
 ### Deployment
 

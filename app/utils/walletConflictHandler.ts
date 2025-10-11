@@ -3,7 +3,7 @@
 
 declare global {
   interface Window {
-    dataLayer?: any[]
+    dataLayer?: Object[]
     gtag: (...args: any[]) => void
     conflux?: any
     ethereum?: any

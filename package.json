@@ -27,7 +27,8 @@
     "pretty": "prettier --l .",
     "pretty-fix": "prettier --write . && prettier --list-different .",
     "postinstall": "prisma generate && prisma db push",
-    "mongo": "mongod --config C:/data/config/mongod.conf"
+    "mongo": "mongod --config C:/data/config/mongod.conf",
+    "docs": "typedoc"
   },
   "dependencies": {
     "@auth/core": "^0.37.3",
@@ -102,6 +103,8 @@
     "semantic-release": "^23.0.8",
     "ts-jest": "^29.3.4",
     "ts-node": "^10.9.2",
+    "typedoc": "^0.28.14",
+    "typedoc-plugin-markdown": "^4.9.0",
     "typescript": "^5.2.2"
   },
   "engines": {

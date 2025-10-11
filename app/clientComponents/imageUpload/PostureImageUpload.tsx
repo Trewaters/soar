@@ -65,7 +65,7 @@ interface PostureImageUploadProps {
 }
 
 /**
- * A React component for uploading images associated with a specific asana posture.
+ * A React component for uploading images associated with a specific asana pose.
  *
  * Supports both "button" and "dropzone" variants for file selection, drag-and-drop,
  * file type and size validation, image preview, alt text input for accessibility,

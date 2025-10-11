@@ -35,7 +35,7 @@ export default function Page() {
         />
         <Box height={'32px'} />
 
-        {/* Practice Asana Postures Button with embedded search */}
+        {/* Practice Asana Poses Button with embedded search */}
         <Box
           sx={{
             width: '100%',
@@ -48,7 +48,7 @@ export default function Page() {
         >
           <SplashNavButton
             title="Practice Asanas"
-            description="Search and practice asana postures."
+            description="Search and practice asana poses."
             image="/images/asana/practice-asana-posture-210x363.png"
             sx={{
               backgroundImage:
@@ -59,10 +59,10 @@ export default function Page() {
           />
         </Box>
 
-        {/* Create Asana Postures Button */}
+        {/* Create Asana Poses Button */}
         <SplashNavButton
-          title="Create Asana Posture"
-          description="Customize your practice by creating new Asana postures."
+          title="Create Asana Pose"
+          description="Customize your practice by creating new Asana poses."
           image="/images/asana/create-asana-splash-header-bw.png"
           premium
           sx={{

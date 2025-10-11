@@ -537,7 +537,7 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
       const shareConfig = strategy.generateShareConfig(testAsanaData)
 
       // Verify the exact format matches PRD specification
-      const expectedText = `The asana posture Warrior I was shared with you. Below is the description:
+      const expectedText = `The asana pose Warrior I was shared with you. Below is the description:
 
 Practice with Uvuyoga!
 
@@ -547,7 +547,7 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
 
       expect(shareConfig.text).toBe(expectedText)
       expect(shareConfig.title).toBe(
-        'The asana posture "Warrior I" was shared with you. Below is the description:'
+        'The asana pose "Warrior I" was shared with you. Below is the description:'
       )
       expect(shareConfig.url).toBe(
         'https://www.happyyoga.app/navigator/flows/practiceSeries'
@@ -600,7 +600,7 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
       const shareConfig = strategy.generateShareConfig(specialAsanaData)
 
       // Should handle special characters correctly
-      const expectedText = `The asana posture Child's Pose was shared with you. Below is the description:
+      const expectedText = `The asana pose Child's Pose was shared with you. Below is the description:
 
 Practice with Uvuyoga!
 
@@ -610,7 +610,7 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
 
       expect(shareConfig.text).toBe(expectedText)
       expect(shareConfig.title).toBe(
-        'The asana posture "Child\'s Pose" was shared with you. Below is the description:'
+        'The asana pose "Child\'s Pose" was shared with you. Below is the description:'
       )
     })
   })

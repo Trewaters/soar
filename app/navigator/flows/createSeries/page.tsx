@@ -581,7 +581,7 @@ export default function Page() {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary='"Flow Series": Add asana postures to
+                  primary='"Flow Series": Add asana poses to
                   your series by selecting them from the "Flow Series"
                   dropdown below. Click the "X" to enter a new posture.'
                 />
