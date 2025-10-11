@@ -405,7 +405,7 @@ describe('AsanaPostureContext', () => {
       const singleImageAsana: AsanaPose = {
         ...mockAsana,
         imageCount: 1,
-        poseImages: [], // No multi-image data
+        poseImages: [], // legacy single-image asanas don't populate poseImages
       }
 
       act(() => {
@@ -415,9 +415,11 @@ describe('AsanaPostureContext', () => {
         })
       })
 
-      expect(result.current.state.postures.poseImages).toBe('single-image.jpg')
+      // AsanaPose now separates imageCount from poseImages. For legacy single-image
+      // records the `poseImages` array may be empty while `imageCount` is 1.
       expect(result.current.state.postures.imageCount).toBe(1)
-      expect(result.current.state.postures.poseImages).toBeUndefined()
+      expect(Array.isArray(result.current.state.postures.poseImages)).toBe(true)
+      expect(result.current.state.postures.poseImages).toHaveLength(0)
     })
   })
 
