@@ -9,13 +9,11 @@ import {
   Tooltip,
 } from '@mui/material'
 import IosShareIcon from '@mui/icons-material/IosShare'
-import {
-  FullAsanaData,
-  useAsanaPosture,
-} from '@app/context/AsanaPostureContext'
+import { useAsanaPosture } from '@app/context/AsanaPostureContext'
 import { FlowSeriesData, useFlowSeries } from '@app/context/AsanaSeriesContext'
 import { SequenceData, useSequence } from '@app/context/SequenceContext'
 import { ShareableContent, createShareStrategy } from '../../types/sharing'
+import { AsanaPose } from 'types/asana'
 
 // New discriminated union props interface
 interface PostureShareButtonProps {
@@ -26,7 +24,7 @@ interface PostureShareButtonProps {
 
 // Legacy props interface for backward compatibility
 interface LegacyPostureShareButtonProps {
-  postureData?: FullAsanaData | null
+  postureData?: AsanaPose | null
   seriesData?: FlowSeriesData | null
   showDetails?: boolean
   enableContextIntegration?: boolean
@@ -106,7 +104,7 @@ function convertLegacyProps(
  * @component
  * @param {CombinedPostureShareButtonProps} props - The properties for the component.
  * @param {ShareableContent} props.content - The yoga content to share (discriminated union).
- * @param {FullAsanaData} [props.postureData] - Legacy: The data for a single asana posture (deprecated).
+ * @param {AsanaPose} [props.postureData] - Legacy: The data for a single asana posture (deprecated).
  * @param {FlowSeriesData} [props.seriesData] - Legacy: The data for a series of asana postures (deprecated).
  * @param {boolean} [props.showDetails=false] - Flag to indicate whether to show detailed information.
  *
@@ -225,7 +223,7 @@ const PostureShareButton: React.FC<CombinedPostureShareButtonProps> = (
       try {
         switch (content.contentType) {
           case 'asana': {
-            const asanaData = content.data as FullAsanaData
+            const asanaData = content.data as AsanaPose
             const contextAsana = asanaContext?.state?.postures
 
             if (contextAsana && contextAsana.id) {
@@ -340,7 +338,7 @@ const PostureShareButton: React.FC<CombinedPostureShareButtonProps> = (
 
     switch (content.contentType) {
       case 'asana': {
-        const asanaData = content.data as FullAsanaData
+        const asanaData = content.data as AsanaPose
         return !!(
           asanaData.sort_english_name || asanaData.english_names?.length
         )
@@ -920,7 +918,7 @@ const PostureShareButton: React.FC<CombinedPostureShareButtonProps> = (
 
     switch (content.contentType) {
       case 'asana':
-        return (content.data as FullAsanaData).sort_english_name || 'Asana'
+        return (content.data as AsanaPose).sort_english_name || 'Asana'
       case 'series':
         return (content.data as FlowSeriesData).seriesName || 'Series'
       case 'sequence':
@@ -937,8 +935,7 @@ const PostureShareButton: React.FC<CombinedPostureShareButtonProps> = (
     switch (content.contentType) {
       case 'asana':
         return (
-          (content.data as FullAsanaData).description ||
-          'No description available'
+          (content.data as AsanaPose).description || 'No description available'
         )
       case 'series':
         return (

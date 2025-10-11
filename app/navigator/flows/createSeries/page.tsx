@@ -28,7 +28,6 @@ import Looks3Icon from '@mui/icons-material/Looks3'
 import Looks4Icon from '@mui/icons-material/Looks4'
 import Looks5Icon from '@mui/icons-material/Looks5'
 import { useRouter } from 'next/navigation'
-import { FullAsanaData } from '@context/AsanaPostureContext'
 import { getAccessiblePostures } from '@lib/postureService'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SplashHeader from '@app/clientComponents/splash-header'
@@ -40,13 +39,14 @@ import {
   formatSeriesPostureEntry,
   splitSeriesPostureEntry,
 } from '@app/utils/asana/seriesPostureLabels'
+import { AsanaPose } from 'types/asana'
 
 export default function Page() {
   const { data: session } = useSession()
   const { state, dispatch } = useFlowSeries()
   const { seriesName, seriesPostures, breath, description, duration, image } =
     state.flowSeries
-  const [postures, setPostures] = useState<FullAsanaData[]>([])
+  const [postures, setPostures] = useState<AsanaPose[]>([])
   const router = useRouter()
   const [open, setOpen] = React.useState(false)
   const [isDirty, setIsDirty] = useState(false)
@@ -122,14 +122,13 @@ export default function Page() {
 
   function handleSelect(
     event: React.SyntheticEvent<Element, Event>,
-    value: FullAsanaData | null
+    value: AsanaPose | null
   ) {
     event.preventDefault()
     if (value) {
       const simplifiedName =
-        Array.isArray(value.sanskrit_names) &&
-        value.sanskrit_names[0]?.simplified
-          ? value.sanskrit_names[0].simplified
+        Array.isArray(value.sanskrit_names) && value.sanskrit_names[0]
+          ? value.sanskrit_names[0]
           : ''
       const formattedEntry = formatSeriesPostureEntry(
         value.sort_english_name,
@@ -262,10 +261,10 @@ export default function Page() {
                       a.sort_english_name.localeCompare(b.sort_english_name)
                     )}
                     getOptionLabel={(option) =>
-                      (option as FullAsanaData).sort_english_name
+                      (option as AsanaPose).sort_english_name
                     }
                     renderOption={(props, option) => {
-                      const postureOption = option as FullAsanaData
+                      const postureOption = option as AsanaPose
                       return (
                         <li {...props} key={postureOption.id}>
                           {postureOption.sort_english_name}
@@ -274,7 +273,7 @@ export default function Page() {
                     }}
                     placeholder="Add a pose to your series"
                     onChange={(event, value) =>
-                      handleSelect(event, value as FullAsanaData | null)
+                      handleSelect(event, value as AsanaPose | null)
                     }
                     renderInput={() => <TextField placeholder="Search..." />}
                   />

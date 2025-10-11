@@ -73,7 +73,7 @@ export function CreateAsanaWithImages() {
 export function PostureDetailWithImages({
   postureCardProp,
 }: {
-  postureCardProp: FullAsanaData
+  postureCardProp: AsanaPose
 }) {
   return (
     <Paper sx={{ mt: '-2.2px', backgroundColor: 'navSplash.dark' }}>
@@ -124,7 +124,6 @@ export function QuickUploadExample() {
 // For viewing existing images
 
 import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
-import { FullAsanaData } from '@context/AsanaPostureContext'
 import { PoseImage } from './types'
 
 import {
@@ -143,6 +142,7 @@ import {
 } from '@mui/material'
 import { FormEvent, useState } from 'react'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import { AsanaPose } from 'types/asana'
 
 export function GalleryOnlyExample() {
   const mockImages: PoseImage[] = [

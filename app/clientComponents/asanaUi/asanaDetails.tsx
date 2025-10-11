@@ -3,7 +3,7 @@ import React, { ComponentProps } from 'react'
 import Image from 'next/image'
 
 interface AsanaDetailsProps {
-  details: string
+  details: string | string[] | null | undefined
   label: string
 }
 

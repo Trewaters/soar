@@ -4,7 +4,7 @@ import { getPosture } from '@lib/postureService'
 import PostureActivityDetail from './postureActivityDetail'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { QuickTimer } from '@app/clientComponents/quickTimer'
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
+import { AsanaPose } from 'types/asana'
 
 export default function Page({
   params,
@@ -12,7 +12,7 @@ export default function Page({
   params: Promise<{ pose: string }>
 }) {
   const { pose } = use(params)
-  const [viewPose, setViewPose] = useState<FullAsanaData | null>(null)
+  const [viewPose, setViewPose] = useState<AsanaPose | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 

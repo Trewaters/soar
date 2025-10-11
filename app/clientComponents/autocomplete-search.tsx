@@ -2,14 +2,14 @@ import React from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
 import TextField from '@mui/material/TextField'
 import SearchIcon from '@mui/icons-material/Search'
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
+import { AsanaPose } from 'types/asana'
 
 interface AnotherOptionType {
   id: string
   name: string
 }
 
-type AutocompleteOption = FullAsanaData | AnotherOptionType
+type AutocompleteOption = AsanaPose | AnotherOptionType
 
 interface CustomAutocompleteProps
   extends React.ComponentProps<typeof Autocomplete> {

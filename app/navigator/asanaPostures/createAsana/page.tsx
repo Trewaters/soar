@@ -25,6 +25,7 @@ import {
   FreemiumNotification,
   useFreemiumNotification,
 } from '@app/clientComponents/freemiumNotification'
+import { AsanaActivity } from 'types/asana'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -55,6 +56,26 @@ export default function Page() {
   const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // “Full”, Abbreviated Posture 1
+  /* 
+    id: string
+    sort_english_name: string
+    category: string
+    english_names: string[]
+    description: string
+    difficulty: string
+    dristi?: string
+    sanskrit_names: string[] // use first element for primary sanskrit name
+    alternative_english_names: string[]
+    setup_cues?: string
+    deepening_cues?: string
+
+    poseImages: PoseImageData[] // Relation to PoseImage
+    asanaActivities: AsanaActivity[] // Relation to AsanaActivity
+    activity_completed?: boolean
+    activity_practice?: boolean
+  */
+
   // Available categories for autocomplete
   const categories = [
     'Arm Leg Support',
@@ -76,29 +97,45 @@ export default function Page() {
     'Twist',
   ]
 
-  const [formData, setFormData] = useState<{
+  const [formFullAsanaPoseData, setFormFullAsanaPoseData] = useState<{
     sort_english_name: string
     english_names: string[]
     description: string
     category: string
     difficulty: string
-    breath_direction_default: string
+    // breath_direction_default: string
     preferred_side: string
     sideways: string
     created_by: string
     dristi?: string
+    sanskrit_names: string[] // use first element for primary sanskrit name
+    alternative_english_names: string[]
+    poseImages: PoseImageData[] // Relation to PoseImage
+    activity_completed?: boolean
+    asanaActivities: AsanaActivity[] // Relation to AsanaActivity
+    activity_practice?: boolean
+    setup_cues?: string
+    deepening_cues?: string
   }>({
     sort_english_name: '',
     english_names: [],
     description: '',
     category: '',
     difficulty: '',
-    breath_direction_default: 'Neutral',
+    // breath_direction_default: 'Neutral',
     preferred_side: '',
     sideways: 'No',
     // created_by should be the user's email (project convention)
     created_by: session?.user?.email ?? 'error-undefined-user',
     dristi: '',
+    sanskrit_names: [], // use first element for primary sanskrit name
+    alternative_english_names: [],
+    poseImages: [],
+    activity_completed: false,
+    asanaActivities: [],
+    activity_practice: false,
+    setup_cues: '',
+    deepening_cues: '',
   })
 
   // Create field configurations for AsanaDetailsEdit
@@ -106,66 +143,118 @@ export default function Page() {
     {
       type: 'text',
       label: 'Asana Posture Name',
-      value: formData.sort_english_name,
+      value: formFullAsanaPoseData.sort_english_name,
       onChange: (value: string) =>
-        setFormData({ ...formData, sort_english_name: value }),
+        setFormFullAsanaPoseData({
+          ...formFullAsanaPoseData,
+          sort_english_name: value,
+        }),
       required: true,
       placeholder: 'Enter the name of the asana',
     },
     {
       type: 'autocomplete',
       label: 'Category',
-      value: formData.category,
+      value: formFullAsanaPoseData.category,
       options: categories,
       onChange: (value: string) =>
-        setFormData({ ...formData, category: value }),
+        setFormFullAsanaPoseData({ ...formFullAsanaPoseData, category: value }),
       placeholder: 'Select a Category',
       freeSolo: true,
     },
     {
       type: 'variations',
       label: 'Name Variations',
-      value: formData.english_names,
+      value: formFullAsanaPoseData.english_names,
       onChange: (value: string[]) =>
-        setFormData({ ...formData, english_names: value }),
+        setFormFullAsanaPoseData({
+          ...formFullAsanaPoseData,
+          english_names: value,
+        }),
       placeholder: 'e.g. "Downward Dog, Adho Mukha Svanasana"',
       helperText: 'Separate name variants with commas',
     },
     {
       type: 'multiline',
       label: 'Description',
-      value: formData.description,
+      value: formFullAsanaPoseData.description,
       onChange: (value: string) =>
-        setFormData({ ...formData, description: value }),
+        setFormFullAsanaPoseData({
+          ...formFullAsanaPoseData,
+          description: value,
+        }),
       placeholder: 'Enter a detailed description...',
       rows: 4,
     },
     {
       type: 'buttonGroup',
       label: 'Difficulty Level',
-      value: formData.difficulty,
+      value: formFullAsanaPoseData.difficulty,
       options: ['Easy', 'Average', 'Difficult'],
       onChange: (value: string) =>
-        setFormData({ ...formData, difficulty: value }),
+        setFormFullAsanaPoseData({
+          ...formFullAsanaPoseData,
+          difficulty: value,
+        }),
       helperText: 'Select the difficulty level for this asana',
     },
     {
       type: 'text',
-      label: 'Breath Action',
-      value: formData.breath_direction_default,
+      label: 'Sanskrit Name(s)',
+      value: formFullAsanaPoseData.sanskrit_names[0] || '',
       onChange: (value: string) =>
-        setFormData({ ...formData, breath_direction_default: value }),
-      placeholder: 'e.g. Inhale, Exhale, Neutral',
+        setFormFullAsanaPoseData({
+          ...formFullAsanaPoseData,
+          sanskrit_names: [value],
+        }),
+      placeholder: 'e.g. Tadasana, Vrikshasana',
     },
     {
       type: 'text',
       label: 'Dristi (Gaze Point)',
-      value: formData.dristi || '',
-      onChange: (value: string) => setFormData({ ...formData, dristi: value }),
+      value: formFullAsanaPoseData.dristi || '',
+      onChange: (value: string) =>
+        setFormFullAsanaPoseData({ ...formFullAsanaPoseData, dristi: value }),
       placeholder:
         'e.g. "Tip of the nose", "Between the eyebrows", "Hand", "Toes", "Upward to the sky"',
       helperText:
         'Type your own or use suggestions like: Tip of the nose, Between the eyebrows, Hand, Toes, Upward to the sky',
+    },
+    {
+      type: 'variations',
+      label: 'English Name Variations',
+      value: formFullAsanaPoseData.alternative_english_names,
+      onChange: (value: string[]) =>
+        setFormFullAsanaPoseData({
+          ...formFullAsanaPoseData,
+          alternative_english_names: value,
+        }),
+      placeholder: 'e.g. "Downward Dog"',
+      helperText: 'Separate name variants with commas',
+    },
+    {
+      type: 'multiline',
+      label: 'Setup Cues',
+      value: formFullAsanaPoseData.setup_cues || '',
+      onChange: (value: string) =>
+        setFormFullAsanaPoseData({
+          ...formFullAsanaPoseData,
+          setup_cues: value,
+        }),
+      placeholder: 'Enter a detailed description...',
+      rows: 4,
+    },
+    {
+      type: 'multiline',
+      label: 'Deepening Cues',
+      value: formFullAsanaPoseData.deepening_cues || '',
+      onChange: (value: string) =>
+        setFormFullAsanaPoseData({
+          ...formFullAsanaPoseData,
+          deepening_cues: value,
+        }),
+      placeholder: 'Enter a detailed description...',
+      rows: 4,
     },
   ]
 
@@ -195,14 +284,14 @@ export default function Page() {
     const initialUploadedImages = [...uploadedImages]
 
     const updatedAsana = {
-      sort_english_name: formData.sort_english_name,
-      english_names: formData.english_names,
-      description: formData.description,
-      category: formData.category,
-      difficulty: formData.difficulty,
-      breath_direction_default: formData.breath_direction_default,
-      preferred_side: formData.preferred_side,
-      sideways: formData.sideways,
+      sort_english_name: formFullAsanaPoseData.sort_english_name,
+      english_names: formFullAsanaPoseData.english_names,
+      description: formFullAsanaPoseData.description,
+      category: formFullAsanaPoseData.category,
+      difficulty: formFullAsanaPoseData.difficulty,
+      // breath_direction_default: formFullAsanaPoseData.breath_direction_default,
+      preferred_side: formFullAsanaPoseData.preferred_side,
+      sideways: formFullAsanaPoseData.sideways,
       // created_by should be the user's email
       created_by: session?.user?.email ?? 'unknown',
     }
@@ -268,11 +357,11 @@ export default function Page() {
 
       if (isDuplicateName) {
         const suggestedName = generateAlternativeName(
-          formData.sort_english_name
+          formFullAsanaPoseData.sort_english_name
         )
         setErrorState({
           showToast: true,
-          message: `An asana with the name "${formData.sort_english_name}" already exists. Try "${suggestedName}" instead, or choose a different name.`,
+          message: `An asana with the name "${formFullAsanaPoseData.sort_english_name}" already exists. Try "${suggestedName}" instead, or choose a different name.`,
           isDuplicateName: true,
         })
       } else {
@@ -424,7 +513,7 @@ export default function Page() {
               acceptedTypes={['image/jpeg', 'image/png', 'image/svg']}
               variant="dropzone"
               onImageUploaded={handleImageUploaded}
-              postureName={formData.sort_english_name}
+              postureName={formFullAsanaPoseData.sort_english_name}
             />
           </Box>
 
@@ -452,17 +541,25 @@ export default function Page() {
             <Button
               onClick={() => {
                 // Clear form inputs and uploaded images
-                setFormData({
+                setFormFullAsanaPoseData({
                   sort_english_name: '',
                   english_names: [],
                   description: '',
                   category: '',
                   difficulty: '',
-                  breath_direction_default: 'Neutral',
+                  // breath_direction_default: 'Neutral',
                   preferred_side: '',
                   sideways: 'No',
                   created_by: session?.user?.email ?? 'error-undefined-user',
                   dristi: '',
+                  sanskrit_names: [],
+                  alternative_english_names: [],
+                  poseImages: [],
+                  activity_completed: false,
+                  asanaActivities: [],
+                  activity_practice: false,
+                  setup_cues: '',
+                  deepening_cues: '',
                 })
                 setUploadedImages([])
 

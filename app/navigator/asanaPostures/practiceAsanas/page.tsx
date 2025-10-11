@@ -6,13 +6,13 @@ import { getAccessiblePostures } from '@lib/postureService'
 import SplashHeader from '@app/clientComponents/splash-header'
 import PostureSearch from '@app/navigator/asanaPostures/posture-search'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
 import { useSession } from 'next-auth/react'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import { AsanaPose } from 'types/asana'
 
 export default function Page() {
   const { data: session } = useSession()
-  const [posturePropData, setPosturePropData] = useState<FullAsanaData[]>([])
+  const [posturePropData, setPosturePropData] = useState<AsanaPose[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
@@ -29,7 +29,7 @@ export default function Page() {
         session?.user?.email || undefined
       )
       setPosturePropData(
-        data.sort((a: FullAsanaData, b: FullAsanaData) => {
+        data.sort((a: AsanaPose, b: AsanaPose) => {
           if (a.sort_english_name < b.sort_english_name) return -1
           if (a.sort_english_name > b.sort_english_name) return 1
           return 0

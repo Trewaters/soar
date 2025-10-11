@@ -13,14 +13,14 @@ import {
   FormGroup,
   IconButton,
 } from '@mui/material'
-import { FullAsanaData } from '@context/AsanaPostureContext'
 import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
+import { AsanaPose } from 'types/asana'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
 interface PostureCardProps {
-  postureCardProp: FullAsanaData
+  postureCardProp: AsanaPose
 }
 
 export default function PostureCard({ postureCardProp }: PostureCardProps) {

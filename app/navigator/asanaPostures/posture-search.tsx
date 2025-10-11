@@ -4,7 +4,7 @@ import React, { useState, useEffect, SyntheticEvent, useMemo } from 'react'
 import TextField from '@mui/material/TextField'
 import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
-import { FullAsanaData, useAsanaPosture } from '@context/AsanaPostureContext'
+import { useAsanaPosture } from '@context/AsanaPostureContext'
 import { useRouter } from 'next/navigation'
 import SearchIcon from '@mui/icons-material/Search'
 import getAsanaTitle from '@app/utils/search/getAsanaTitle'
@@ -12,9 +12,10 @@ import getAsanaTitle from '@app/utils/search/getAsanaTitle'
 import { FEATURES } from '@app/FEATURES'
 import getAlphaUserIds from '@app/lib/alphaUsers'
 import { useSession } from 'next-auth/react'
+import { AsanaPose } from 'types/asana'
 
 interface PostureSearchProps {
-  posturePropData: FullAsanaData[]
+  posturePropData: AsanaPose[]
 }
 
 /**
@@ -40,7 +41,7 @@ interface PostureSearchProps {
  */
 export default function PostureSearch({ posturePropData }: PostureSearchProps) {
   const { state, dispatch } = useAsanaPosture()
-  const [postures, setPostures] = useState<FullAsanaData[]>(posturePropData)
+  const [postures, setPostures] = useState<AsanaPose[]>(posturePropData)
   const router = useRouter()
 
   const defaultPosture = postures?.find((p) => p.sort_english_name === '')
@@ -51,16 +52,14 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
 
   function handleChange(
     event: SyntheticEvent<Element, Event>,
-    value: FullAsanaData | { section: 'Mine' | 'Alpha' | 'Others' } | null,
+    value: AsanaPose | { section: 'Mine' | 'Alpha' | 'Others' } | null,
     reason: any,
     details?: any
   ) {
     // Ignore section header selections
     if (value && 'section' in value) return
     dispatch({ type: 'SET_POSTURES', payload: value ?? state.postures })
-    router.push(
-      `/navigator/asanaPostures/${(value as FullAsanaData)?.id || ''}/`
-    )
+    router.push(`/navigator/asanaPostures/${(value as AsanaPose)?.id || ''}/`)
   }
   // Get current user id from session
   const { data: session } = useSession()
@@ -121,9 +120,8 @@ export default function PostureSearch({ posturePropData }: PostureSearchProps) {
     alphaCreated.sort(sortByTitle)
     others.sort(sortByTitle)
     // Insert section headers
-    const result: Array<
-      FullAsanaData | { section: 'Mine' | 'Alpha' | 'Others' }
-    > = []
+    const result: Array<AsanaPose | { section: 'Mine' | 'Alpha' | 'Others' }> =
+      []
     if (userCreated.length > 0) {
       result.push({ section: 'Mine' })
       userCreated.forEach((item) => result.push(item))

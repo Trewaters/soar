@@ -1,12 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* This file contains interface definitions where parameter names are required for documentation
-   but flagged as unused by eslint. The parameters are properly used in implementing classes. */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-import { FullAsanaData } from '@context/AsanaPostureContext'
 import { FlowSeriesData } from '@context/AsanaSeriesContext'
 import { SequenceData } from '@context/SequenceContext'
 import { generateUrlWithFallbacks } from '../app/utils/urlGeneration'
+import { AsanaPose } from './asana'
 
 /**
  * Discriminated union for different types of shareable yoga content
@@ -15,7 +10,7 @@ import { generateUrlWithFallbacks } from '../app/utils/urlGeneration'
 export type ShareableContent =
   | {
       contentType: 'asana'
-      data: FullAsanaData
+      data: AsanaPose
     }
   | {
       contentType: 'series'
@@ -82,7 +77,7 @@ export function createShareStrategy(
  * Practice with Uvuyoga! https://www.happyyoga.app/navigator/flows/practiceSeries (www.happyyoga.app)"
  */
 export class AsanaShareStrategy implements ShareStrategy {
-  generateShareConfig(data: FullAsanaData): ShareConfig {
+  generateShareConfig(data: AsanaPose): ShareConfig {
     const postureName = data.sort_english_name
 
     // According to PRD, asana sharing must always use the production URL

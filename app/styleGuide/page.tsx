@@ -46,7 +46,7 @@ import {
   Settings as SettingsIcon,
 } from '@mui/icons-material'
 import { useState } from 'react'
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
+import { AsanaPose } from 'types/asana'
 
 export default function StyleGuide() {
   const theme = useTheme()
@@ -80,11 +80,11 @@ export default function StyleGuide() {
   )
 
   // Sample data for components
-  const autocompleteOptions: FullAsanaData[] = [
-    { id: '1', sort_english_name: 'Option 1' } as FullAsanaData,
-    { id: '2', sort_english_name: 'Option 2' } as FullAsanaData,
-    { id: '3', sort_english_name: 'Option 3' } as FullAsanaData,
-    { id: '4', sort_english_name: 'Option 4' } as FullAsanaData,
+  const autocompleteOptions: AsanaPose[] = [
+    { id: '1', sort_english_name: 'Option 1' } as AsanaPose,
+    { id: '2', sort_english_name: 'Option 2' } as AsanaPose,
+    { id: '3', sort_english_name: 'Option 3' } as AsanaPose,
+    { id: '4', sort_english_name: 'Option 4' } as AsanaPose,
   ]
   const listItems = ['Home', 'Profile', 'Settings', 'About']
 
@@ -359,9 +359,7 @@ export default function StyleGuide() {
                   )
                 }
                 id="search-poses"
-                getOptionLabel={(option: FullAsanaData) =>
-                  option.sort_english_name
-                }
+                getOptionLabel={(option: AsanaPose) => option.sort_english_name}
                 renderOption={(props, option) => (
                   <li {...props} key={option.id}>
                     {option.sort_english_name}

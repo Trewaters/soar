@@ -10,10 +10,10 @@ import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import AsanaPostureProvider, {
   useAsanaPosture,
-  FullAsanaData,
 } from '../../../app/context/AsanaPostureContext'
 import { PoseImageData } from '../../../types/images'
 import { theme } from '../../../styles/theme'
+import { AsanaPose } from 'types/asana'
 
 // Mock NextAuth
 jest.mock('next-auth/react')
@@ -39,32 +39,28 @@ const TestWrapper = ({ children }: { children: ReactNode }) => (
 )
 
 // Mock data
-const mockAsana: FullAsanaData = {
+const mockAsana: AsanaPose = {
   id: 'test-asana-1',
   english_names: ['Warrior I'],
-  sanskrit_names: 'Virabhadrasana I',
+  sanskrit_names: ['Virabhadrasana I'],
   sort_english_name: 'Warrior I',
   description: 'A powerful standing pose',
   benefits: 'Strengthens legs and core',
   category: 'standing',
   difficulty: 'beginner',
   lore: 'Named after a fierce warrior',
-  breath_direction_default: 'inhale to lift, exhale to ground',
+  breath: ['inhale to lift, exhale to ground'],
   dristi: 'forward',
-  variations: ['High lunge', 'Low lunge'],
-  modifications: ['Use blocks', 'Shorten stance'],
+  alignment_cues: 'High lunge',
   label: 'Foundational pose',
   suggested_postures: ['Warrior II', 'Warrior III'],
   preparatory_postures: ['Mountain Pose', 'Standing Forward Fold'],
-  preferred_side: 'right',
-  sideways: false,
-  image: 'warrior-1.jpg',
-  created_on: '2024-01-01T00:00:00Z',
-  updated_on: '2024-01-02T00:00:00Z',
+  poseImages: [],
+  created_on: '2024-01-01T00:00:00Z' as unknown as Date,
+  updated_on: '2024-01-02T00:00:00Z' as unknown as Date,
   activity_completed: false,
   activity_practice: true,
-  posture_intent: 'Strength and stability',
-  breath_series: ['Ujjayi'],
+  asana_intention: 'Strength and stability',
   duration_asana: '30 seconds',
   transition_cues_out: 'Step back to downward dog',
   transition_cues_in: 'Step forward from downward dog',
@@ -77,7 +73,10 @@ const mockAsana: FullAsanaData = {
   created_by: 'test-user-id',
   isUserCreated: true,
   imageCount: 0,
-  poseImages: [],
+  pose_modifications: ['Use blocks under hands'],
+  alternative_english_names: ['Warrior I', 'Virabhadrasana I'],
+  asanaActivities: [],
+  pose_variations: ['High lunge', 'Low lunge'],
 }
 
 const mockPoseImage: PoseImageData = {
@@ -377,7 +376,7 @@ describe('AsanaPostureContext', () => {
         wrapper: TestWrapper,
       })
 
-      const asanaWithImages: FullAsanaData = {
+      const asanaWithImages: AsanaPose = {
         ...mockAsana,
         imageCount: 2,
         poseImages: [
@@ -403,11 +402,10 @@ describe('AsanaPostureContext', () => {
         wrapper: TestWrapper,
       })
 
-      const singleImageAsana: FullAsanaData = {
+      const singleImageAsana: AsanaPose = {
         ...mockAsana,
-        image: 'single-image.jpg',
         imageCount: 1,
-        poseImages: undefined, // No multi-image data
+        poseImages: [], // No multi-image data
       }
 
       act(() => {
@@ -417,7 +415,7 @@ describe('AsanaPostureContext', () => {
         })
       })
 
-      expect(result.current.state.postures.image).toBe('single-image.jpg')
+      expect(result.current.state.postures.poseImages).toBe('single-image.jpg')
       expect(result.current.state.postures.imageCount).toBe(1)
       expect(result.current.state.postures.poseImages).toBeUndefined()
     })
@@ -429,9 +427,9 @@ describe('AsanaPostureContext', () => {
         wrapper: TestWrapper,
       })
 
-      const asanaWithoutImages: FullAsanaData = {
+      const asanaWithoutImages: AsanaPose = {
         ...mockAsana,
-        poseImages: undefined,
+        poseImages: [],
       }
 
       act(() => {

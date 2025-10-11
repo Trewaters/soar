@@ -27,8 +27,8 @@ import AsanaTimer from '@app/clientComponents/asanaTimer'
 import { useTimer } from '@context/timerContext'
 import { useRouter } from 'next/navigation'
 import { getPostureByName } from '@lib/postureService'
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
 import Image from 'next/image'
+import { AsanaPose } from 'types/asana'
 
 export default function ViewAsanaPractice({
   params,
@@ -36,7 +36,7 @@ export default function ViewAsanaPractice({
   params: Promise<{ pose: string }>
 }) {
   const { pose } = use(params)
-  const [viewPose, setViewPose] = useState<FullAsanaData>()
+  const [viewPose, setViewPose] = useState<AsanaPose>()
   const [elapsedTime, setElapsedTime] = useState(0)
   const [totalTime] = useState(300) // Default 5 minutes
   const [isFullscreen, setIsFullscreen] = useState(false)
@@ -271,7 +271,7 @@ export default function ViewAsanaPractice({
               <strong>Difficulty:</strong> {viewPose?.difficulty}
             </Typography>
             <Typography variant="body1" color="white" sx={{ mb: 1 }}>
-              <strong>Breath:</strong> {viewPose?.breath_direction_default}
+              <strong>Breath:</strong> {viewPose?.breath}
             </Typography>
             {viewPose?.description && (
               <Typography variant="body2" color="white">

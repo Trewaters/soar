@@ -3,9 +3,78 @@
  * Consolidated type definitions for asana-related data structures
  */
 
+import { UserData } from 'app/context/UserContext'
 import { PoseImageData } from './images'
 
-// Core Asana interfaces
+// REPLACES AsanaPosture, found in this file
+export interface AsanaPose {
+  // “Full”, Abbreviated Posture 1
+  id: string
+  sort_english_name: string
+  sanskrit_names: string[] // use first element for primary sanskrit name
+  english_names: string[]
+  alternative_english_names: string[]
+  poseImages: PoseImageData[] // Relation to PoseImage
+  description: string
+  category: string
+  difficulty: string
+  activity_completed?: boolean
+  asanaActivities: AsanaActivity[] // Relation to AsanaActivity
+  activity_practice?: boolean
+  dristi?: string
+  setup_cues?: string
+  deepening_cues?: string
+  // “Advance”, Abbreviated Posture 2
+  alignment_cues?: string
+  joint_action?: string
+  muscle_action?: string
+  transition_cues_out?: string
+  transition_cues_in?: string
+  additional_cues?: string
+  benefits?: string
+  customize_asana?: string
+  // “Personal”, Abbreviated Posture 3
+  pose_modifications: string[]
+  pose_variations: string[]
+  breath: string[]
+  duration_asana?: string
+  lore?: string
+  asana_intention?: string
+  label?: string // verify how it is used
+  suggested_postures: string[] // verify how it is used
+  preparatory_postures: string[] // verify how it is used
+  isUserCreated: boolean // default(false) // verify how it is used, don't think it is needed // Flag to identify user-created asanas
+  created_on?: Date // default(now()) // Necessary
+  updated_on?: Date // updatedAt // Necessary
+  created_by?: string // Necessary // Should be the user email address.
+  imageCount: number // default(0) // verify how it is used // Cache for number of images (performance optimization)
+}
+
+export interface AsanaActivity {
+  id: string
+  userId: string
+  postureId: string
+  poseId?: string
+  postureName: string
+  sort_english_name: string
+  duration: number
+  datePerformed: Date
+  notes?: string
+  sensations?: string
+  completionStatus: string
+  difficulty?: string
+  user: UserData
+  // posture: asanaposture
+  pose: AsanaPose
+  createdAt: Date
+  updatedAt: Date
+}
+
+/**
+ * @deprecated Use AsanaPose from 'types/asana.ts' instead
+ * This interface will be removed in a future version.
+ * Migration: Replace AsanaPosture with AsanaPose for consistent typing across the application.
+ */
 export interface AsanaPosture {
   id: string
   english_names: string[]

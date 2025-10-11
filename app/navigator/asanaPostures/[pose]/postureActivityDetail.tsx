@@ -16,7 +16,6 @@ import {
 } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { FullAsanaData } from '@context/AsanaPostureContext'
 import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
@@ -36,6 +35,7 @@ import PostureImageUpload from '@app/clientComponents/imageUpload/PostureImageUp
 import PostureImageManagement from '@app/clientComponents/imageUpload/PostureImageManagement'
 import EditPostureDialog from '@app/navigator/asanaPostures/editAsana/EditPostureDialog'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import { AsanaPose } from 'types/asana'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
@@ -54,7 +54,7 @@ Prioritized Details...
 */
 
 interface PostureCardProps {
-  postureCardProp: FullAsanaData
+  postureCardProp: AsanaPose
 }
 
 // Custom hook to fetch posture images
@@ -664,11 +664,7 @@ export default function PostureActivityDetail({
               mb: '32px',
             }}
           />
-          {/* <AsanaDetails
-            details={posture?.sanskrit_names[0] ?? 'Sanskrit Name not-found'}
-            label="Sanskrit Name"
-            sx={{ mb: '32px' }}
-          /> 
+          {/* 
           <AsanaDetails
             details={posture?.posture_intent ?? 'Feel into the asana.'}
             label="Meaning of Posture"
@@ -677,16 +673,6 @@ export default function PostureActivityDetail({
           <AsanaDetails
             details={posture?.benefits}
             label="Benefits"
-            sx={{ mb: '32px' }}
-          />
-          <AsanaDetails
-            details={posture?.dristi ?? 'optimal gaze'}
-            label="Dristi"
-            sx={{ mb: '32px' }}
-          />
-          <AsanaDetails
-            details={posture?.dristi ?? 'optimal gaze'}
-            label="Activities"
             sx={{ mb: '32px' }}
           />
           */}
@@ -701,19 +687,42 @@ export default function PostureActivityDetail({
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={posture?.breath_direction_default ?? 'Inhale/Exhale'}
+            details={posture?.breath ?? ['Inhale', 'Exhale']}
             label="Breath (default)"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={posture?.preferred_side ?? 'No preferred side'}
-            label="Preferred Side"
+            details={posture?.alignment_cues ?? 'No alignment cues'}
+            label="Alignment Cues"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={posture?.sideways ? 'True' : 'False'}
-            label="Sideways"
-            // sx={{ mb: '32px' }}
+            details={posture?.dristi ?? 'optimal gaze'}
+            label="Dristi"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={posture?.sanskrit_names?.[0] ?? 'Sanskrit Name not-found'}
+            label="Sanskrit Name"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={
+              posture?.alternative_english_names?.[0] ??
+              'Alternative English Name not-found'
+            }
+            label="Alternative English Name"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={posture?.setup_cues ?? 'Setup Cues not-found'}
+            label="Setup Cues"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={posture?.deepening_cues ?? 'Deepening Cues not-found'}
+            label="Deepening Cues"
+            sx={{ mb: '32px' }}
           />
 
           {/* Enhanced Image Gallery */}

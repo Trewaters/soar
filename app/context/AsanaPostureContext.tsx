@@ -8,10 +8,7 @@ import {
   useReducer,
 } from 'react'
 import { PoseImageData } from '../../types/images'
-
-// Full Posture Data Interface
-// ! udpate name to 'FullAsanaData' ( 2024-11-10 12:27:15 )
-// Full Asana Posture Data, “AsanaPosture” is all data for Asana. Update name to [FullAsanaData]
+import { AsanaPose } from 'types/asana'
 
 /*  
 include the following fields:
@@ -45,48 +42,6 @@ Abbreviated Posture 1
 •	Muscle action
 
 */
-
-export interface FullAsanaData {
-  id: string
-  english_names: string[]
-  sanskrit_names: string
-  sort_english_name: string
-  description: string
-  benefits: string
-  category: string
-  difficulty: string
-  lore: string
-  breath_direction_default: string
-  dristi: string
-  variations: string[]
-  modifications: string[]
-  label: string
-  suggested_postures: string[]
-  preparatory_postures: string[]
-  preferred_side: string
-  sideways: boolean
-  image: string
-  created_on: string
-  updated_on: string
-  activity_completed: boolean
-  activity_practice: boolean
-  posture_intent: string
-  breath_series: string[]
-  duration_asana: string
-  transition_cues_out: string
-  transition_cues_in: string
-  setup_cues: string
-  deepening_cues: string
-  customize_asana: string
-  additional_cues: string
-  joint_action: string
-  muscle_action: string
-  created_by: string
-  // New fields for multi-image support
-  isUserCreated?: boolean
-  imageCount?: number
-  poseImages?: PoseImageData[]
-}
 
 export interface displayAsanaPosture {
   id: number
@@ -259,16 +214,15 @@ export interface PostureCardFields {
 }
 
 export interface AsanaPosturePageState {
-  postures: FullAsanaData
+  postures: AsanaPose
   // New multi-image carousel state
   currentImageIndex: number
   isReordering: boolean
   uploadProgress: number | null
-  // selectedPosture: FullAsanaData | undefined
 }
 
 type AsanaPostureAction =
-  | { type: 'SET_POSTURES'; payload: FullAsanaData }
+  | { type: 'SET_POSTURES'; payload: AsanaPose }
   | { type: 'SET_CURRENT_IMAGE_INDEX'; payload: number }
   | { type: 'UPDATE_IMAGE_COUNT'; payload: number }
   | { type: 'ADD_POSE_IMAGE'; payload: PoseImageData }
@@ -282,29 +236,27 @@ const initialState: AsanaPosturePageState = {
   postures: {
     id: '',
     english_names: [],
-    sanskrit_names: '',
+    sanskrit_names: [],
     sort_english_name: '',
     description: '',
     benefits: '',
     category: '',
     difficulty: '',
     lore: '',
-    breath_direction_default: '',
+    breath: [],
     dristi: '',
-    variations: [],
-    modifications: [],
+    pose_variations: [],
+    pose_modifications: [],
     label: '',
     suggested_postures: [],
     preparatory_postures: [],
-    preferred_side: '',
-    sideways: false,
-    image: '',
-    created_on: '',
-    updated_on: '',
+    alignment_cues: '',
+    poseImages: [],
+    created_on: new Date(),
+    updated_on: new Date(),
     activity_completed: false,
     activity_practice: false,
-    posture_intent: '',
-    breath_series: [],
+    asana_intention: '',
     duration_asana: '',
     transition_cues_out: '',
     transition_cues_in: '',
@@ -317,7 +269,8 @@ const initialState: AsanaPosturePageState = {
     created_by: '',
     isUserCreated: false,
     imageCount: 0,
-    poseImages: [],
+    alternative_english_names: [],
+    asanaActivities: [],
   },
   currentImageIndex: 0,
   isReordering: false,

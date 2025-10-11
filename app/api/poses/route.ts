@@ -201,25 +201,3 @@ export async function GET(request: NextRequest) {
     await prisma.$disconnect()
   }
 }
-
-// route pulls from alternate web source
-/* export async function GET() {
-  const url = 'https://www.pocketyoga.com/poses.json'
-  try {
-    const response = await fetch(url)
-    if (!response.ok) {
-      throw new Error(`Error fetching data: ${response.status}`)
-    }
-    const data = await response.json()
-    const dataWithId: FullAsanaData[] = data.map(
-      (item: FullAsanaData, index: number) => ({
-        ...item,
-        id: index + 1,
-      })
-    )
-    return NextResponse.json(dataWithId)
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
-}
- */

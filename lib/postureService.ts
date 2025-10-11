@@ -1,6 +1,6 @@
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
 import { logServiceError } from './errorLogger'
 import { getAlphaUserIds } from '@app/lib/alphaUsers'
+import { AsanaPose } from 'types/asana'
 
 export type CreatePostureInput = {
   sort_english_name: string
@@ -8,7 +8,7 @@ export type CreatePostureInput = {
   description: string
   category: string
   difficulty: string
-  breath_direction_default: string
+  // breath_direction_default: string
   preferred_side: string
   sideways: string
   created_by: string
@@ -20,7 +20,7 @@ export type UpdatePostureInput = {
   description: string
   category: string
   difficulty: string
-  breath_direction_default: string
+  breath: string[]
   preferred_side: string
   sideways: string
 }
@@ -28,7 +28,7 @@ export type UpdatePostureInput = {
 /**
  * Get all postures
  */
-export async function getAllPostures(): Promise<FullAsanaData[]> {
+export async function getAllPostures(): Promise<AsanaPose[]> {
   try {
     // Add timestamp to ensure fresh data
     const timestamp = Date.now()
@@ -55,9 +55,7 @@ export async function getAllPostures(): Promise<FullAsanaData[]> {
 /**
  * Get postures created by a specific user
  */
-export async function getUserPostures(
-  createdBy: string
-): Promise<FullAsanaData[]> {
+export async function getUserPostures(createdBy: string): Promise<AsanaPose[]> {
   try {
     // Add timestamp to ensure fresh data
     const timestamp = Date.now()
@@ -91,7 +89,7 @@ export async function getUserPostures(
  */
 export async function getAccessiblePostures(
   currentUserEmail?: string
-): Promise<FullAsanaData[]> {
+): Promise<AsanaPose[]> {
   try {
     // Get alpha user IDs
     const alphaUserIds = getAlphaUserIds()
@@ -134,7 +132,7 @@ export async function getAccessiblePostures(
     }
 
     // For authenticated users, fetch both user postures and alpha postures in parallel
-    const fetchPromises: Promise<FullAsanaData[]>[] = []
+    const fetchPromises: Promise<AsanaPose[]>[] = []
 
     // Add user postures promise
     fetchPromises.push(getUserPostures(currentUserEmail))
@@ -199,7 +197,7 @@ export async function getAccessiblePostures(
 /**
  * Get posture by ID (ObjectId)
  */
-export async function getPostureById(id: string): Promise<FullAsanaData> {
+export async function getPostureById(id: string): Promise<AsanaPose> {
   try {
     const response = await fetch(`/api/poses/?id=${encodeURIComponent(id)}`, {
       cache: 'no-store',
@@ -220,7 +218,7 @@ export async function getPostureById(id: string): Promise<FullAsanaData> {
 /**
  * Get posture by sort_english_name
  */
-export async function getPostureByName(name: string): Promise<FullAsanaData> {
+export async function getPostureByName(name: string): Promise<AsanaPose> {
   try {
     const response = await fetch(
       `/api/poses/?sort_english_name=${encodeURIComponent(name)}`,
@@ -242,7 +240,7 @@ export async function getPostureByName(name: string): Promise<FullAsanaData> {
 /**
  * Get posture by ID or name (flexible lookup)
  */
-export async function getPosture(idOrName: string): Promise<FullAsanaData> {
+export async function getPosture(idOrName: string): Promise<AsanaPose> {
   try {
     // First try by ID (if it looks like an ObjectId)
     if (idOrName.match(/^[0-9a-fA-F]{24}$/)) {
@@ -284,7 +282,7 @@ export async function getPostureIdByName(name: string): Promise<string | null> {
  */
 export async function createPosture(
   input: CreatePostureInput
-): Promise<FullAsanaData> {
+): Promise<AsanaPose> {
   try {
     const response = await fetch('/api/poses/createAsana', {
       method: 'POST',
@@ -328,7 +326,7 @@ export async function createPosture(
 export async function updatePosture(
   id: string,
   input: UpdatePostureInput
-): Promise<FullAsanaData> {
+): Promise<AsanaPose> {
   try {
     const response = await fetch(`/api/poses/${id}`, {
       method: 'PUT',

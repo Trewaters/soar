@@ -10,7 +10,6 @@ import {
   Tooltip,
 } from '@mui/material'
 import { useSession } from 'next-auth/react'
-import { FullAsanaData } from '@context/AsanaPostureContext'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
@@ -19,9 +18,10 @@ import {
   getPostureWeeklyActivity,
   type WeeklyActivityData,
 } from '@lib/asanaActivityClientService'
+import { AsanaPose } from 'types/asana'
 
 interface ActivityTrackerProps {
-  posture: FullAsanaData
+  posture: AsanaPose
   variant?: 'compact' | 'detailed'
   refreshTrigger?: number // Add a prop to trigger refresh when activities change
 }

@@ -4,11 +4,11 @@ import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
 import '@testing-library/jest-dom'
 import PostureShareButton from '@app/clientComponents/postureShareButton'
-import type { FullAsanaData } from '@app/context/AsanaPostureContext'
 import type { FlowSeriesData } from '@app/context/AsanaSeriesContext'
 import type { SequenceData } from '@app/context/SequenceContext'
 import type { ShareableContent } from '../../../types/sharing'
 import theme from '../../../styles/theme'
+import { AsanaPose } from 'types/asana'
 
 // Mock Next.js navigation
 jest.mock('next/navigation')
@@ -46,7 +46,7 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => (
 )
 
 // Minimal mock data for testing
-const mockAsanaData: FullAsanaData = {
+const mockAsanaData: AsanaPose = {
   id: 'test-asana-1',
   english_names: ['Warrior Pose'],
   sort_english_name: 'Warrior Pose',
@@ -54,24 +54,22 @@ const mockAsanaData: FullAsanaData = {
   benefits: 'Strengthens legs',
   category: 'Standing',
   difficulty: 'Beginner',
-  sanskrit_names: 'Virabhadrasana',
+  sanskrit_names: ['Virabhadrasana'],
   lore: 'Ancient pose',
-  breath_direction_default: 'Inhale',
   dristi: 'Forward',
-  variations: ['Warrior I'],
-  modifications: ['Use blocks'],
+  pose_variations: ['Warrior I'],
+  pose_modifications: ['Use blocks'],
   label: 'Warrior Pose',
   suggested_postures: ['Mountain Pose'],
   preparatory_postures: ['Forward Fold'],
-  preferred_side: 'Both',
-  sideways: false,
-  image: 'warrior.jpg',
-  created_on: '2024-01-01',
-  updated_on: '2024-01-01',
+  alignment_cues: 'Both',
+  poseImages: [],
+  created_on: '2024-01-01' as unknown as Date,
+  updated_on: '2024-01-01' as unknown as Date,
   activity_completed: false,
   activity_practice: false,
-  posture_intent: 'Strength',
-  breath_series: ['4 count'],
+  asana_intention: 'Strength',
+  breath: ['4 count'],
   duration_asana: '30 seconds',
   transition_cues_out: 'Step back',
   transition_cues_in: 'Step forward',
@@ -82,6 +80,10 @@ const mockAsanaData: FullAsanaData = {
   joint_action: 'Hip flexion',
   muscle_action: 'Quadriceps',
   created_by: 'test-user',
+  alternative_english_names: ['Child Pose'],
+  asanaActivities: [],
+  isUserCreated: false,
+  imageCount: 0,
 }
 
 const mockSeriesData: FlowSeriesData = {
@@ -105,7 +107,7 @@ const mockSequenceData: SequenceData = {
 }
 
 // Context data variations for testing
-const contextAsanaData: FullAsanaData = {
+const contextAsanaData: AsanaPose = {
   ...mockAsanaData,
   id: 'context-asana-1',
   sort_english_name: 'Warrior Pose',
@@ -489,7 +491,7 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
   describe('Asana Share Format Specification', () => {
     it('should generate exact PRD-specified format for asana sharing', () => {
       // Create test asana data for testing the exact format
-      const testAsanaData: FullAsanaData = {
+      const testAsanaData: AsanaPose = {
         id: 'test-asana-format',
         english_names: ['Warrior I'],
         sort_english_name: 'Warrior I',
@@ -497,24 +499,22 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
         benefits: 'Strengthens legs and core',
         category: 'Standing',
         difficulty: 'Beginner',
-        sanskrit_names: 'Virabhadrasana I',
+        sanskrit_names: ['Virabhadrasana I'],
         lore: 'Named after the fierce warrior Virabhadra',
-        breath_direction_default: 'Inhale',
+        breath: ['Inhale'],
         dristi: 'Forward',
-        variations: ['Warrior I with blocks'],
-        modifications: ['Use wall for support'],
+        pose_variations: ['Warrior I with blocks'],
+        pose_modifications: ['Use wall for support'],
         label: 'Warrior I Pose',
         suggested_postures: ['Mountain Pose'],
         preparatory_postures: ['Forward Fold'],
-        preferred_side: 'Both',
-        sideways: false,
-        image: 'warrior1.jpg',
-        created_on: '2024-01-01',
-        updated_on: '2024-01-01',
+        alignment_cues: 'Both',
+        poseImages: [],
+        created_on: '2024-01-01' as unknown as Date,
+        updated_on: '2024-01-01' as unknown as Date,
         activity_completed: false,
         activity_practice: false,
-        posture_intent: 'Strength',
-        breath_series: ['4 count inhale'],
+        asana_intention: 'Strength',
         duration_asana: '30 seconds',
         transition_cues_out: 'Step back to mountain',
         transition_cues_in: 'Step forward into lunge',
@@ -525,6 +525,10 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
         joint_action: 'Hip flexion',
         muscle_action: 'Quadriceps engagement',
         created_by: 'instructor',
+        alternative_english_names: ['Warrior I Pose'],
+        asanaActivities: [],
+        isUserCreated: false,
+        imageCount: 0,
       }
 
       // Import the actual AsanaShareStrategy to test directly
@@ -552,7 +556,7 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
     })
 
     it('should handle asana names with special characters correctly', () => {
-      const specialAsanaData: FullAsanaData = {
+      const specialAsanaData: AsanaPose = {
         id: 'special-asana',
         english_names: ["Child's Pose"],
         sort_english_name: "Child's Pose",
@@ -560,24 +564,21 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
         benefits: 'Calming',
         category: 'Restorative',
         difficulty: 'Beginner',
-        sanskrit_names: 'Balasana',
+        sanskrit_names: ['Balasana'],
         lore: 'Ancient resting pose',
-        breath_direction_default: 'Natural',
+        breath: ['Natural'],
         dristi: 'Down',
-        variations: ["Extended Child's Pose"],
-        modifications: ['Use bolster'],
+        pose_variations: ["Extended Child's Pose"],
+        pose_modifications: ['Use bolster'],
         label: "Child's Pose",
         suggested_postures: ['Cat Pose'],
         preparatory_postures: ['Table Top'],
-        preferred_side: 'Center',
-        sideways: false,
-        image: 'childs.jpg',
-        created_on: '2024-01-01',
-        updated_on: '2024-01-01',
+        poseImages: [],
+        created_on: '2024-01-01' as unknown as Date,
+        updated_on: '2024-01-01' as unknown as Date,
         activity_completed: false,
         activity_practice: false,
-        posture_intent: 'Rest',
-        breath_series: ['Natural breathing'],
+        asana_intention: 'Rest',
         duration_asana: '1-5 minutes',
         transition_cues_out: 'Slowly rise up',
         transition_cues_in: 'Sit back on heels',
@@ -588,6 +589,10 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
         joint_action: 'Spinal flexion',
         muscle_action: 'Full body relaxation',
         created_by: 'instructor',
+        alternative_english_names: ['Child Pose'],
+        asanaActivities: [],
+        isUserCreated: false,
+        imageCount: 0,
       }
 
       const { AsanaShareStrategy } = require('../../../types/sharing')
@@ -1697,10 +1702,10 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
 
   describe('Sanskrit Content and Yoga Terminology', () => {
     it('should handle Sanskrit names correctly in sharing text', () => {
-      const sanskritAsanaData: FullAsanaData = {
+      const sanskritAsanaData: AsanaPose = {
         ...mockAsanaData,
         sort_english_name: 'Warrior I',
-        sanskrit_names: 'Vīrabhadrāsana I',
+        sanskrit_names: ['Vīrabhadrāsana I'],
         english_names: ['Warrior I', 'Warrior Pose I'],
       }
 
@@ -1743,7 +1748,7 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
     })
 
     it('should handle special characters in pose descriptions', () => {
-      const specialCharAsanaData: FullAsanaData = {
+      const specialCharAsanaData: AsanaPose = {
         ...mockAsanaData,
         description:
           'A powerful standing pose that strengthens the legs & core (मुख्य आसन)',

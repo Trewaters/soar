@@ -16,7 +16,6 @@ import {
   DialogActions,
   Chip,
 } from '@mui/material'
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
 import {
   updatePosture,
   type UpdatePostureInput,
@@ -25,12 +24,13 @@ import {
 import { useSession } from 'next-auth/react'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
+import { AsanaPose } from 'types/asana'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 interface EditPostureDialogProps {
   open: boolean
   onClose: () => void
-  posture: FullAsanaData
+  posture: AsanaPose
   onSave: () => void
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
@@ -78,7 +78,7 @@ export default function EditPostureDialog({
     description: string
     category: string
     difficulty: string
-    breath_direction_default: string
+    breath: string[]
     preferred_side: string
     sideways: string
   }>({
@@ -87,7 +87,7 @@ export default function EditPostureDialog({
     description: '',
     category: '',
     difficulty: '',
-    breath_direction_default: 'Neutral',
+    breath: [],
     preferred_side: '',
     sideways: 'No',
   })
@@ -101,9 +101,9 @@ export default function EditPostureDialog({
         description: posture.description || '',
         category: posture.category || '',
         difficulty: posture.difficulty || '',
-        breath_direction_default: posture.breath_direction_default || 'Neutral',
-        preferred_side: posture.preferred_side || '',
-        sideways: posture.sideways ? 'Yes' : 'No',
+        breath: posture.breath || [],
+        preferred_side: posture.alignment_cues || '',
+        sideways: posture.alignment_cues ? 'Yes' : 'No',
       })
       setImages(posture.poseImages || [])
       setEnglishVariationsInput(
@@ -112,7 +112,7 @@ export default function EditPostureDialog({
           : ''
       )
       setDifficulty(posture.difficulty || '')
-      setSideways(posture.sideways ? 'Yes' : 'No')
+      setSideways(posture.alignment_cues ? 'Right' : 'Left')
       setError(null)
     }
   }, [posture, open])
@@ -187,7 +187,7 @@ export default function EditPostureDialog({
       description: formData.description,
       category: formData.category,
       difficulty: formData.difficulty,
-      breath_direction_default: formData.breath_direction_default,
+      breath: formData.breath,
       preferred_side: formData.preferred_side,
       sideways: formData.sideways,
     }
@@ -411,8 +411,8 @@ export default function EditPostureDialog({
                       <FormControl sx={{ width: '100%', mb: 3 }}>
                         <TextField
                           label="Breath Direction (Default)"
-                          name="breath_direction_default"
-                          value={formData.breath_direction_default}
+                          name="breath"
+                          value={formData.breath}
                           onChange={handleChange}
                           placeholder="e.g., Inhale, Exhale, Neutral"
                         />

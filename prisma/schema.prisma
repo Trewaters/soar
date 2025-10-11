@@ -10,29 +10,29 @@ generator client {
 }
 
 model UserData {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
-  provider_id   String?       @unique
-  name          String?
-  email         String?         @unique
-  emailVerified DateTime?
-  image         String?
-  pronouns      String?
-  profile       Json?
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  firstName         String
-  lastName          String
-  bio               String
-  headline          String
-  location          String
-  websiteURL        String
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  provider_id      String?   @unique
+  name             String?
+  email            String?   @unique
+  emailVerified    DateTime?
+  image            String?
+  pronouns         String?
+  profile          Json?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  firstName        String
+  lastName         String
+  bio              String
+  headline         String
+  location         String
+  websiteURL       String
   shareQuick       String?
-  yogaStyle         String?
-  yogaExperience    String?
-  company           String?
-  socialURL         String?
-  isLocationPublic  String?
-  role              String?
+  yogaStyle        String?
+  yogaExperience   String?
+  company          String?
+  socialURL        String?
+  isLocationPublic String?
+  role             String?
 
   // emailPublic       String
   // emailInternal     String
@@ -52,33 +52,33 @@ model UserData {
   // timezone          String
   // exportAccountInfo String
   // deleteAccountInfo String
-  providerAccounts      ProviderAccount[]
-  asanaActivities AsanaActivity[] // Relation to AsanaActivity
-  seriesActivities SeriesActivity[] // Relation to SeriesActivity
+  providerAccounts   ProviderAccount[]
+  asanaActivities    AsanaActivity[] // Relation to AsanaActivity
+  seriesActivities   SeriesActivity[] // Relation to SeriesActivity
   sequenceActivities SequenceActivity[] // Relation to SequenceActivity
-  userLogins      UserLogin[] // Relation to UserLogin
-  poseImages      PoseImage[] // Relation to PoseImage
-  glossaryTerms   GlossaryTerm[] // User-created glossary terms
+  userLogins         UserLogin[] // Relation to UserLogin
+  poseImages         PoseImage[] // Relation to PoseImage
+  glossaryTerms      GlossaryTerm[] // User-created glossary terms
 
-    /// Profile image management fields
-  profileImages   String[] @db.String // Array of image URLs or IDs, max 3 enforced in backend
+  /// Profile image management fields
+  profileImages      String[]           @db.String // Array of image URLs or IDs, max 3 enforced in backend
   activeProfileImage String? // URL or ID of the active profile image
-  tz                String   @default("America/Los_Angeles") // store IANA TZ
-  reminders         Reminder[]
-  pushSubscriptions PushSubscription[]
+  tz                 String             @default("America/Los_Angeles") // store IANA TZ
+  reminders          Reminder[]
+  pushSubscriptions  PushSubscription[]
 }
 
 model Reminder {
-  id        String   @id @default(cuid()) @map("_id")
-  userId    String   @db.ObjectId
-  user      UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                        String    @id @default(cuid()) @map("_id")
+  userId                    String    @db.ObjectId
+  user                      UserData  @relation(fields: [userId], references: [id], onDelete: Cascade)
   // store preferred local times; one or many
-  timeOfDay String // "07:30" 24h format
-  days      String[] // ["Mon","Tue","Wed","Thu","Fri"] or ["Sun",...]
-  enabled   Boolean  @default(true)
-  message   String   @default("🧘 Practice time")
-  lastSent  DateTime? // to avoid double-sends within a window
-  emailNotificationsEnabled Boolean @default(true) // Allow users to disable email fallback
+  timeOfDay                 String // "07:30" 24h format
+  days                      String[] // ["Mon","Tue","Wed","Thu","Fri"] or ["Sun",...]
+  enabled                   Boolean   @default(true)
+  message                   String    @default("🧘 Practice time")
+  lastSent                  DateTime? // to avoid double-sends within a window
+  emailNotificationsEnabled Boolean   @default(true) // Allow users to disable email fallback
 
   @@index([userId])
 }
@@ -96,153 +96,198 @@ model PushSubscription {
 }
 
 model ProviderAccount {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId @unique
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     Json?
-  credentials_password       String?
+  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId               String  @unique @db.ObjectId
+  type                 String
+  provider             String
+  providerAccountId    String
+  refresh_token        String?
+  access_token         String?
+  expires_at           Int?
+  token_type           String?
+  scope                String?
+  id_token             String?
+  session_state        Json?
+  credentials_password String?
 
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user              UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // @@unique([provider, providerAccountId])
 }
 
 /// Represents a yoga Asana in the app.
+model AsanaPose {
+   // “Full”, Abbreviated Posture 1
+  id                        String          @id @default(auto()) @map("_id") @db.ObjectId
+  sort_english_name         String          @unique // “Full”, Abbreviated Posture 1, Unique name for pose, expected in English
+  sanskrit_names            String[] // “Full”, Abbreviated Posture 1 // use first element for primary sanskrit name
+  english_names             String[] // “Full”, Abbreviated Posture 1
+  alternative_english_names String[] // “Full”, Abbreviated Posture 1
+  poseImages                PoseImage[] // “Full”, Abbreviated Posture 1 // Relation to PoseImage
+  description               String? // “Full”, Abbreviated Posture 1
+  category                  String? // “Full”, Abbreviated Posture 1
+  difficulty                String? // “Full”, Abbreviated Posture 1
+  activity_completed        Boolean? // “Full”, Abbreviated Posture 1
+  asanaActivities           AsanaActivity[] // “Full”, Abbreviated Posture 1 // Relation to AsanaActivity
+  activity_practice         Boolean? // “Full”, Abbreviated Posture 1
+  dristi                    String? // “Full”, Abbreviated Posture 1
+  setup_cues                String? // “Full”, Abbreviated Posture 1
+  deepening_cues            String? // “Full”, Abbreviated Posture 1
+  // “Advance”, Abbreviated Posture 2
+  alignment_cues      String? // “Advance”, Abbreviated Posture 2
+  joint_action        String? // “Advance”, Abbreviated Posture 2
+  muscle_action       String? // “Advance”, Abbreviated Posture 2
+  transition_cues_out String? // “Advance”, Abbreviated Posture 2
+  transition_cues_in  String? // “Advance”, Abbreviated Posture 2
+  additional_cues     String? // “Advance”, Abbreviated Posture 2
+  benefits            String? // “Advance”, Abbreviated Posture 2
+  customize_asana     String? // “Advance”, Abbreviated Posture 2
+  // “Personal”, Abbreviated Posture 3
+  pose_modifications String[] // “Personal”, Abbreviated Posture 3
+  pose_variations    String[] // “Personal”, Abbreviated Posture 3
+  breath             String[] // “Personal”, Abbreviated Posture 3
+  duration_asana     String? // “Personal”, Abbreviated Posture 3
+  lore               String? // “Personal”, Abbreviated Posture 3
+  asana_intention    String? // “Personal”, Abbreviated Posture 3
+
+  label                String? // verify how it is used
+  suggested_postures   String[] // verify how it is used
+  preparatory_postures String[] // verify how it is used
+  isUserCreated        Boolean   @default(false) // verify how it is used, don't think it is needed // Flag to identify user-created asanas
+  created_on           DateTime? @default(now()) // Necessary
+  updated_on           DateTime? @updatedAt // Necessary
+  created_by           String? // Necessary // Should be the user email address.
+  imageCount           Int       @default(0) // verify how it is used // Cache for number of images (performance optimization)
+}
+
+// DEPRECATED: Use AsanaPose instead of AsanaPosture
 model AsanaPosture {
-  id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  english_names            String [] 
-  sanskrit_names  Json?
-  sort_english_name   String @unique
-  description     String?
-  benefits        String?
-  category        String?
-  difficulty      String?
-  lore            String?
-  breath_direction_default String?
-  dristi            String?
-  variations      String[]
-  modifications   String[]
-  label           String?
-  suggested_postures    String[]
-  preparatory_postures    String[]
-  preferred_side  String?
-  sideways       Boolean?
-  image           String?
-  created_on       DateTime? @default(now())
-  updated_on       DateTime? @updatedAt
-  acitivity_completed Boolean?
-  acitivity_practice  Boolean?
-  posture_intent    String?
-  breath_series           String[]
-  duration_asana         String?
-  transition_cues_out   String?
-  transition_cues_in    String?
-  setup_cues           String?
-  deepening_cues       String?
-  customize_asana      String?
-  additional_cues      String?
-  joint_action         String?
-  muscle_action        String?
-  created_by          String?
-  isUserCreated       Boolean @default(false) // Flag to identify user-created asanas
-  imageCount          Int @default(0) // Cache for number of images (performance optimization)
-  asanaActivities AsanaActivity[] // Relation to AsanaActivity
-  poseImages      PoseImage[]     // Relation to PoseImage
+  id                       String          @id @default(auto()) @map("_id") @db.ObjectId
+  english_names            String[]
+  sanskrit_names           Json?
+  sort_english_name        String          @unique
+  description              String?
+  benefits                 String?
+  category                 String?
+  difficulty               String?
+  lore                     String?
+  breath_direction_default String? // <DEPRECATED> legacy; use `breath` instead
+  dristi                   String?
+  variations               String[] // <DEPRECATED> legacy; use `pose_variations` instead
+  modifications            String[] // <DEPRECATED> legacy; use `pose_modifications` instead
+  label                    String?
+  suggested_postures       String[]
+  preparatory_postures     String[]
+  preferred_side           String? // <DEPRECATED> legacy; use `alignment_cues` instead
+  sideways                 Boolean? // <DEPRECATED> legacy; alignment info moved to `alignment_cues`
+  image                    String? // <DEPRECATED> legacy single image field; prefer `poseImages` relation
+  created_on               DateTime?       @default(now())
+  updated_on               DateTime?       @updatedAt
+  acitivity_completed      Boolean? // <DEPRECATED> typo: use `activity_completed` instead (mapped)
+  acitivity_practice       Boolean? // <DEPRECATED> typo: use `activity_practice` instead (mapped)
+  posture_intent           String? // <DEPRECATED> legacy; use `asana_intention` instead
+  breath_series            String[] // <DEPRECATED> legacy; use `breath` instead
+  duration_asana           String?
+  transition_cues_out      String?
+  transition_cues_in       String?
+  setup_cues               String?
+  deepening_cues           String?
+  customize_asana          String?
+  additional_cues          String?
+  joint_action             String?
+  muscle_action            String?
+  created_by               String?
+  isUserCreated            Boolean         @default(false) // Flag to identify user-created asanas
+  imageCount               Int             @default(0) // Cache for number of images (performance optimization)
+  asanaActivities          AsanaActivity[] // Relation to AsanaActivity
+  poseImages               PoseImage[] // Relation to PoseImage
 }
 
 model AsanaSeries {
-  id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  seriesName      String
-  seriesPostures  String[]
-  breathSeries    String[]
-  description     String?
-  durationSeries  String?
-  image           String? // Legacy single image field - kept for backward compatibility
-  images          String[] @default([]) // Multiple image URLs for the series
-  created_by      String
-  createdAt       DateTime? @default(now())
-  updatedAt       DateTime? @updatedAt
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  seriesName     String
+  seriesPostures String[]
+  breathSeries   String[]
+  description    String?
+  durationSeries String?
+  image          String? // Legacy single image field - kept for backward compatibility
+  images         String[]  @default([]) // Multiple image URLs for the series
+  created_by     String
+  createdAt      DateTime? @default(now())
+  updatedAt      DateTime? @updatedAt
 }
 
 model AsanaSequence {
-  id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  nameSequence    String
-  sequencesSeries   Json[]
-  description     String?
-  durationSequence        String?
-  image           String?
-  breath_direction           String?
-  created_by      String?
-  createdAt       DateTime? @default(now())
-  updatedAt       DateTime? @updatedAt
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  nameSequence     String
+  sequencesSeries  Json[]
+  description      String?
+  durationSequence String?
+  image            String?
+  breath_direction String?
+  created_by       String?
+  createdAt        DateTime? @default(now())
+  updatedAt        DateTime? @updatedAt
 }
 
 /// Records a user's daily asana activity.
 model AsanaActivity {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String   @db.ObjectId
-  postureId     String   // Reference to AsanaPosture.id
-  postureName   String   // e.g., Adho Mukha Svanasana
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String   @db.ObjectId
+  postureId         String   @db.ObjectId // Reference to AsanaPosture.id (native type set for MongoDB join)
+  poseId            String?  @db.ObjectId // Optional reference to AsanaPose.id during migration transition
+  postureName       String // e.g., Adho Mukha Svanasana
   sort_english_name String // For routing - e.g., "Downward Facing Dog"
-  duration      Int      // Duration held (in seconds)
-  datePerformed DateTime // Date performed
-  notes         String?  // User notes (optional)
-  sensations    String?  // Body sensations or mood (optional)
-  completionStatus String // e.g., "complete", "skipped", "partial"
-  difficulty    String?  // User-selected difficulty: "easy", "average", "difficult"
-
-  user          UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
-  posture       AsanaPosture @relation(fields: [postureId], references: [id], onDelete: Cascade)
-
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  duration          Int // Duration held (in seconds)
+  datePerformed     DateTime // Date performed
+  notes             String? // User notes (optional)
+  sensations        String? // Body sensations or mood (optional)
+  completionStatus  String // e.g., "complete", "skipped", "partial"
+  difficulty        String? // User-selected difficulty: "easy", "average", "difficult"
+  user    UserData     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  posture AsanaPosture @relation(fields: [postureId], references: [id], onDelete: Cascade)
+  pose    AsanaPose?   @relation(fields: [poseId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 /// Records a user's series practice activity.
 model SeriesActivity {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String   @db.ObjectId
-  seriesId      String   // Reference to AsanaSeries.id
-  seriesName    String   // e.g., "Sun Salutation A"
-  datePerformed DateTime // Date performed
-  difficulty    String?  // User-selected difficulty: "easy", "average", "difficult"
-  completionStatus String @default("complete") // e.g., "complete", "skipped", "partial"
-  duration      Int      @default(0) // Duration in seconds
-  notes         String?  // User notes (optional)
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @db.ObjectId
+  seriesId         String // Reference to AsanaSeries.id
+  seriesName       String // e.g., "Sun Salutation A"
+  datePerformed    DateTime // Date performed
+  difficulty       String? // User-selected difficulty: "easy", "average", "difficult"
+  completionStatus String   @default("complete") // e.g., "complete", "skipped", "partial"
+  duration         Int      @default(0) // Duration in seconds
+  notes            String? // User notes (optional)
 
-  user          UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 /// Records a user's sequence practice activity.
 model SequenceActivity {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String   @db.ObjectId
-  sequenceId    String   // Reference to AsanaSequence.id
-  sequenceName  String   // e.g., "Morning Flow"
-  datePerformed DateTime // Date performed
-  difficulty    String?  // User-selected difficulty: "easy", "average", "difficult"
-  completionStatus String @default("complete") // e.g., "complete", "skipped", "partial"
-  duration      Int      @default(0) // Duration in seconds
-  notes         String?  // User notes (optional)
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @db.ObjectId
+  sequenceId       String // Reference to AsanaSequence.id
+  sequenceName     String // e.g., "Morning Flow"
+  datePerformed    DateTime // Date performed
+  difficulty       String? // User-selected difficulty: "easy", "average", "difficult"
+  completionStatus String   @default("complete") // e.g., "complete", "skipped", "partial"
+  duration         Int      @default(0) // Duration in seconds
+  notes            String? // User notes (optional)
 
-  user          UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 /// Records user login events for activity streak calculation.
@@ -250,11 +295,11 @@ model UserLogin {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String   @db.ObjectId
   loginDate DateTime @default(now())
-  ipAddress String?  // Optional for analytics
-  userAgent String?  // Optional for analytics
-  provider  String?  // e.g., "google", "github", "credentials"
+  ipAddress String? // Optional for analytics
+  userAgent String? // Optional for analytics
+  provider  String? // e.g., "google", "github", "credentials"
 
-  user      UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
@@ -266,23 +311,24 @@ model PoseImage {
   id             String      @id @default(auto()) @map("_id") @db.ObjectId
   userId         String      @db.ObjectId
   postureId      String?     @db.ObjectId // Optional association with a specific posture
-  postureName    String?     // Store the sort_english_name for easier querying
-  url            String      // Image URL (Vercel Blob or local reference)
-  altText        String?     // Alternative text for accessibility
-  fileName       String?     // Original filename
-  fileSize       Int?        // File size in bytes
+  postureName    String? // Store the sort_english_name for easier querying
+  url            String // Image URL (Vercel Blob or local reference)
+  altText        String? // Alternative text for accessibility
+  fileName       String? // Original filename
+  fileSize       Int? // File size in bytes
   uploadedAt     DateTime    @default(now())
   storageType    StorageType @default(CLOUD) // Where the image is stored
-  localStorageId String?     // Local storage identifier for browser storage
+  localStorageId String? // Local storage identifier for browser storage
   isOffline      Boolean     @default(false) // True if saved offline due to API failure
   imageType      String      @default("posture") // 'profile', 'posture', 'gallery', etc.
   displayOrder   Int         @default(1) // Order for carousel display (1-3)
 
-  user       UserData      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  posture    AsanaPosture? @relation(fields: [postureId], references: [id], onDelete: SetNull)
+  user    UserData      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  posture AsanaPosture? @relation(fields: [postureId], references: [id], onDelete: SetNull)
+  pose    AsanaPose?    @relation(fields: [postureId], references: [id], onDelete: SetNull)
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@index([postureId])
@@ -294,33 +340,33 @@ model PoseImage {
 
 /// Enum for image storage types
 enum StorageType {
-  CLOUD    // Stored in Vercel Blob
-  LOCAL    // Stored locally in browser storage
-  HYBRID   // Has both cloud and local copies
+  CLOUD // Stored in Vercel Blob
+  LOCAL // Stored locally in browser storage
+  HYBRID // Has both cloud and local copies
 }
 
 model GlossaryTerm {
-  id          String   @id @default(cuid()) @map("_id")
-  term        String   @unique
-  meaning     String
-  whyMatters  String
-  category    String?          // e.g. foundational, breath, meditation
-  sanskrit    String?          // Sanskrit representation with diacritics
-  pronunciation String?        // Phonetic guide for accessibility
-  source      GlossarySource @default(DEFAULT)
-  userId      String?   @db.ObjectId // Owner when source = USER
-  readOnly    Boolean   @default(false) // Prevent edits for default seeded terms
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id            String         @id @default(cuid()) @map("_id")
+  term          String         @unique
+  meaning       String
+  whyMatters    String
+  category      String? // e.g. foundational, breath, meditation
+  sanskrit      String? // Sanskrit representation with diacritics
+  pronunciation String? // Phonetic guide for accessibility
+  source        GlossarySource @default(DEFAULT)
+  userId        String?        @db.ObjectId // Owner when source = USER
+  readOnly      Boolean        @default(false) // Prevent edits for default seeded terms
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
-  user        UserData? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user UserData? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([source])
   @@index([userId])
 }
 
 enum GlossarySource {
-  DEFAULT     // Bundled with app
-  ALPHA_USER  // Contributed by approved alpha users
-  USER        // Regular user-created term
+  DEFAULT // Bundled with app
+  ALPHA_USER // Contributed by approved alpha users
+  USER // Regular user-created term
 }

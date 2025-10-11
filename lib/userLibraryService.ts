@@ -1,12 +1,12 @@
-import { FullAsanaData } from '@app/context/AsanaPostureContext'
 import { SeriesData } from './seriesService'
 import { SequenceData } from './sequenceService'
 import { logServiceError } from './errorLogger'
+import { AsanaPose } from 'types/asana'
 
 // Types for user-specific data
-export interface UserAsanaData extends FullAsanaData {
-  created_on: string
-  updated_on: string
+export interface UserAsanaData extends AsanaPose {
+  created_on: Date
+  updated_on: Date
   created_by: string
 }
 
