@@ -65,7 +65,7 @@ describe('EightLimbs Component', () => {
     if (asanaItem) {
       fireEvent.click(asanaItem)
       expect(mockPush).toHaveBeenCalledTimes(1)
-      expect(mockPush).toHaveBeenCalledWith('/navigator/asanaPostures')
+      expect(mockPush).toHaveBeenCalledWith('/navigator/asanaPoses')
     }
   })
 

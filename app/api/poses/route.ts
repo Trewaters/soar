@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '../../../prisma/generated/client'
 import { auth } from '../../../auth'
 import { getAlphaUserIds } from '@app/lib/alphaUsers'
+import { PrismaClient } from '@prisma/generated/client'
 
 const prisma = new PrismaClient()
 
@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
   // Handle ID lookup first (if provided)
   if (id) {
     try {
-      const pose = await prisma.asanaPosture.findUnique({
+      const pose = await prisma.asanaPose.findUnique({
         where: { id: id },
       })
 
@@ -50,8 +50,8 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Access denied' }, { status: 403 })
       }
 
-      if (pose.breath_direction_default === null) {
-        pose.breath_direction_default = ''
+      if (pose.breath === null) {
+        pose.breath = []
       }
 
       return NextResponse.json(pose)
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
 
   if (sortEnglishName) {
     try {
-      const pose = await prisma.asanaPosture.findUnique({
+      const pose = await prisma.asanaPose.findUnique({
         where: { sort_english_name: sortEnglishName },
       })
 
@@ -87,8 +87,8 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Access denied' }, { status: 403 })
       }
 
-      if (pose.breath_direction_default === null) {
-        pose.breath_direction_default = ''
+      if (pose.breath === null) {
+        pose.breath = []
       }
 
       return NextResponse.json(pose)
@@ -156,32 +156,60 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const data = await prisma.asanaPosture.findMany({
+    const data = await prisma.asanaPose.findMany({
       where: whereClause,
       orderBy: {
         created_on: 'desc', // Show newest first to help verify new creations
       },
     })
 
+    // Type definitions for the poses API
+    interface AsanaPose {
+      id: string
+      english_names: string | string[]
+      created_by: string | null
+      created_on: Date | null
+      sort_english_name?: string
+      breath: string[] | null
+    }
+
+    interface QueryWhereClause {
+      created_by?: string | { in: string[] }
+    }
+
+    interface QueryLogData {
+      whereClause: QueryWhereClause
+      totalFound: number
+      recentAsanas: Array<{
+        id: string
+        english_names: string | string[]
+        created_by: string | null
+        created_on: Date
+      }>
+    }
+
+    // The selected code with proper typing
     console.log('📊 /api/poses: Query results:', {
       whereClause,
       totalFound: data.length,
-      recentAsanas: data.slice(0, 3).map((asana) => ({
+      recentAsanas: data.slice(0, 3).map((asana: AsanaPose) => ({
         id: asana.id,
         english_names: asana.english_names,
         created_by: asana.created_by,
         created_on: asana.created_on,
       })),
-    })
+    } as QueryLogData)
 
-    const dataWithId = data.map((item) => ({
+    const dataWithId = data.map((item: { breath: string | any[] | null }) => ({
       ...item,
       // Preserve the actual MongoDB ObjectId
-      // Ensure breath_direction_default is not null
-      breath_direction_default:
-        item.breath_direction_default === null
+      // Ensure breath is not null
+      breath:
+        item.breath === null
           ? 'neutral'
-          : item.breath_direction_default,
+          : item.breath.length === 0
+            ? ['neutral']
+            : item.breath,
     }))
 
     return NextResponse.json(dataWithId, {

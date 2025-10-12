@@ -80,16 +80,10 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    // Get the images to verify they belong to the same posture
-    const imageDetails = await prisma.poseImage.findMany({
-      where: {
-        id: { in: imageIds },
-      },
-      select: {
-        id: true,
-        postureId: true,
-        userId: true,
-      },
+    // Get the images to verify they belong to the same pose
+    // Fetch full records (no select) to tolerate schema rename (posture -> pose)
+    const imageDetails: any = await prisma.poseImage.findMany({
+      where: { id: { in: imageIds } },
     })
 
     // Check if all images exist
@@ -100,9 +94,11 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    // Verify all images belong to the same posture
-    const postureIds = new Set(imageDetails.map((img) => img.postureId))
-    if (postureIds.size > 1) {
+    // Verify all images belong to the same pose
+    const poseIds = new Set(
+      imageDetails.map((img: any) => img.poseId ?? img.postureId)
+    )
+    if (poseIds.size > 1) {
       return NextResponse.json(
         {
           error: 'All images must belong to the same asana',
@@ -111,8 +107,8 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    const postureId = imageDetails[0].postureId
-    if (!postureId) {
+    const poseId = imageDetails[0].poseId ?? imageDetails[0].postureId
+    if (!poseId) {
       return NextResponse.json(
         {
           error: 'Cannot reorder images not associated with an asana',
@@ -122,7 +118,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Verify user owns the asana
-    const ownsAsana = await verifyAsanaOwnership(postureId, session.user.id)
+    const ownsAsana = await verifyAsanaOwnership(poseId, session.user.id)
     if (!ownsAsana) {
       return NextResponse.json(
         {
@@ -145,21 +141,25 @@ export async function PUT(request: NextRequest) {
     })
 
     // Fetch the updated images for response
+    const whereClause: any = {}
+    // Use the field present in the row (poseId or postureId)
+    if (imageDetails[0].poseId) {
+      whereClause.poseId = imageDetails[0].poseId
+    } else if (imageDetails[0].postureId) {
+      whereClause.postureId = imageDetails[0].postureId
+    }
+
     const updatedImages = await prisma.poseImage.findMany({
-      where: {
-        postureId,
-      },
-      orderBy: {
-        displayOrder: 'asc',
-      },
+      where: whereClause,
+      orderBy: { displayOrder: 'asc' },
     })
 
     const response: ImageReorderResponse = {
       success: true,
-      images: updatedImages.map((img) => ({
+      images: updatedImages.map((img: any) => ({
         ...img,
-        postureId: img.postureId || undefined,
-        postureName: img.postureName || undefined,
+        poseId: img.poseId ?? img.postureId ?? undefined,
+        poseName: img.poseName ?? img.postureName ?? undefined,
         altText: img.altText || undefined,
         fileName: img.fileName || undefined,
         fileSize: img.fileSize || undefined,

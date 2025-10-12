@@ -5,8 +5,8 @@ export const config = {
   matcher: [
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
     // '/flows/:path*',
-    '/navigator/asanaPostures/createAsana/:path*',
-    // '/navigator/asanaPostures/:path*',
+    '/navigator/asanaPoses/createAsana/:path*',
+    // '/navigator/asanaPoses/:path*',
     // '/api/:path*', // API routes
   ],
 }

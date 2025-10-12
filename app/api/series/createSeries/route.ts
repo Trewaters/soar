@@ -9,10 +9,10 @@ const prisma = new PrismaClient()
 export async function POST(request: Request) {
   const body = await request.json()
   const seriesName = body.seriesName
-  const seriesPostures: string[] = Array.isArray(body.seriesPostures)
-    ? body.seriesPostures
-    : typeof body.seriesPostures === 'string'
-      ? [body.seriesPostures]
+  const seriesPoses: string[] = Array.isArray(body.seriesPoses)
+    ? body.seriesPoses
+    : typeof body.seriesPoses === 'string'
+      ? [body.seriesPoses]
       : []
   const rawBreath = body.breathSeries ?? body.breath ?? []
   const breathSeries: string[] = Array.isArray(rawBreath)
@@ -43,20 +43,40 @@ export async function POST(request: Request) {
     const session = await auth().catch(() => null)
     const createdBy = session?.user?.email ?? 'guest'
 
-    const newSeries = await prisma.asanaSeries.create({
-      data: {
-        seriesName,
-        seriesPostures,
-        breathSeries,
-        description,
-        durationSeries,
-        image,
-        images: image ? [image] : [], // Initialize images array with legacy image if present
-        created_by: createdBy,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    })
+    // Try create with `seriesPoses` field first, fallback to `seriesPostures` if needed
+    let newSeries: any
+    try {
+      newSeries = await prisma.asanaSeries.create({
+        data: {
+          seriesName,
+          seriesPoses,
+          breathSeries,
+          description,
+          durationSeries,
+          image,
+          images: image ? [image] : [], // Initialize images array with legacy image if present
+          created_by: createdBy,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        } as any,
+      })
+    } catch (e) {
+      // Fallback to older field name `seriesPostures`
+      newSeries = await prisma.asanaSeries.create({
+        data: {
+          seriesName,
+          seriesPostures: seriesPoses,
+          breathSeries,
+          description,
+          durationSeries,
+          image,
+          images: image ? [image] : [],
+          created_by: createdBy,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        } as any,
+      })
+    }
     const timestamp = Date.now().toString()
     return Response.json(
       {

@@ -24,8 +24,8 @@ jest.mock('next-auth/react', () => ({
 jest.mock('@/app/context/UserContext', () => ({
   UserStateProvider: ({ children }: any) => <>{children}</>,
 }))
-jest.mock('@/app/context/AsanaPostureContext', () => ({
-  AsanaPostureProvider: ({ children }: any) => <>{children}</>,
+jest.mock('@/app/context/AsanaPoseContext', () => ({
+  AsanaPoseProvider: ({ children }: any) => <>{children}</>,
 }))
 jest.mock('@/app/context/AsanaSeriesContext', () => ({
   FlowSeriesProvider: ({ children }: any) => <>{children}</>,

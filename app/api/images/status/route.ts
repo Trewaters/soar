@@ -19,15 +19,12 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const postureId = searchParams.get('postureId')
+    const poseId = searchParams.get('poseId')
     const userId = searchParams.get('userId')
 
     // Validate inputs
-    if (!postureId) {
-      return NextResponse.json(
-        { error: 'postureId is required' },
-        { status: 400 }
-      )
+    if (!poseId) {
+      return NextResponse.json({ error: 'poseId is required' }, { status: 400 })
     }
 
     if (!userId) {
@@ -44,8 +41,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Get asana information
-    const asana = await prisma.asanaPosture.findUnique({
-      where: { id: postureId },
+    const asana = await prisma.asanaPose.findUnique({
+      where: { id: poseId },
       select: {
         isUserCreated: true,
         created_by: true,
@@ -68,12 +65,18 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    const actualImageCount = await prisma.poseImage.count({
-      where: {
-        postureId: postureId,
-        userId: user.id, // Use the actual ObjectID from UserData
-      },
-    })
+    // Try counting using the new `poseId` field first, fallback to `postureId` if needed
+    let actualImageCount = 0
+    try {
+      actualImageCount = await prisma.poseImage.count({
+        where: { poseId: poseId, userId: user.id } as any,
+      })
+    } catch (e) {
+      // Fallback to postureId
+      actualImageCount = await prisma.poseImage.count({
+        where: { postureId: poseId, userId: user.id } as any,
+      })
+    }
 
     // Check if user can upload images to this asana
     // created_by is expected to be the creator's email per project convention

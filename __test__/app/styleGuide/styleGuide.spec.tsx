@@ -260,7 +260,7 @@ describe('StyleGuide Component', () => {
         renderWithTheme(<StyleGuide />)
 
         expect(
-          screen.getByPlaceholderText('Search for a Yoga Posture')
+          screen.getByPlaceholderText('Search for a Yoga Pose')
         ).toBeInTheDocument()
       })
 
@@ -423,9 +423,7 @@ describe('StyleGuide Component', () => {
     it('allows autocomplete interaction', () => {
       renderWithTheme(<StyleGuide />)
 
-      const autocomplete = screen.getByPlaceholderText(
-        'Search for a Yoga Posture'
-      )
+      const autocomplete = screen.getByPlaceholderText('Search for a Yoga Pose')
       fireEvent.click(autocomplete)
       fireEvent.change(autocomplete, { target: { value: 'Option' } })
 
@@ -478,7 +476,7 @@ describe('StyleGuide Component', () => {
       // Check for proper form accessibility
       expect(screen.getByLabelText('Text Field')).toBeInTheDocument()
       expect(
-        screen.getByPlaceholderText('Search for a Yoga Posture')
+        screen.getByPlaceholderText('Search for a Yoga Pose')
       ).toBeInTheDocument()
       expect(screen.getByLabelText('Checkbox Primary')).toBeInTheDocument()
     })

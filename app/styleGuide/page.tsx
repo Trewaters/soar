@@ -339,7 +339,7 @@ export default function StyleGuide() {
                   <TextField
                     {...params}
                     sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
-                    placeholder="Search for a Yoga Posture"
+                    placeholder="Search for a Yoga Pose"
                     InputProps={{
                       ...params.InputProps,
                       startAdornment: (
@@ -365,7 +365,7 @@ export default function StyleGuide() {
                     {option.sort_english_name}
                   </li>
                 )}
-                // defaultValue={defaultPosture}
+                // defaultValue={defaultPose}
                 autoSelect={true}
                 onChange={(_, newValue) => setAutocompleteValue('')}
               />

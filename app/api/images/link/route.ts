@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { imageId, postureId, postureName } = await request.json()
+    const { imageId, poseId, poseName } = await request.json()
 
     // Validate inputs
     if (!imageId) {
@@ -28,9 +28,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    if (!postureId && !postureName) {
+    if (!poseId && !poseName) {
       return NextResponse.json(
-        { error: 'Either postureId or postureName is required' },
+        { error: 'Either poseId or poseName is required' },
         { status: 400 }
       )
     }
@@ -50,13 +50,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Update the image with posture information
+    // Update the image with pose information
     const updateData: any = {}
-    if (postureId) {
-      updateData.postureId = postureId
+    if (poseId) {
+      updateData.poseId = poseId
     }
-    if (postureName) {
-      updateData.postureName = postureName
+    if (poseName) {
+      updateData.poseName = poseName
     }
 
     const updatedImage = await prisma.poseImage.update({

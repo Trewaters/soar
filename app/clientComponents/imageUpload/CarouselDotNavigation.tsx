@@ -102,8 +102,8 @@ export const CarouselDotNavigation: React.FC<CarouselDotNavigationProps> = ({
     const image = sortedImages[index]
     const baseText = `Image ${index + 1} of ${totalImages}`
 
-    if (showLabels && (image.altText || image.postureName)) {
-      return `${baseText}: ${image.altText || image.postureName}`
+    if (showLabels && (image.altText || image.poseName)) {
+      return `${baseText}: ${image.altText || image.poseName}`
     }
 
     return baseText
@@ -196,8 +196,8 @@ export const CarouselDotNavigation: React.FC<CarouselDotNavigationProps> = ({
         Currently viewing image {activeIndex + 1} of {totalImages}
         {sortedImages[activeIndex] &&
           (sortedImages[activeIndex].altText ||
-            sortedImages[activeIndex].postureName) &&
-          `: ${sortedImages[activeIndex].altText || sortedImages[activeIndex].postureName}`}
+            sortedImages[activeIndex].poseName) &&
+          `: ${sortedImages[activeIndex].altText || sortedImages[activeIndex].poseName}`}
       </Box>
     </Box>
   )

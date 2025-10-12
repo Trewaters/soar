@@ -1,5 +1,5 @@
 /**
- * Service functions for checking image status and limits for yoga postures
+ * Service functions for checking image status and limits for yoga poses
  */
 
 export interface ImageStatus {
@@ -16,15 +16,15 @@ export interface ImageStatusResponse {
 }
 
 /**
- * Get image upload status for a specific posture
+ * Get image upload status for a specific pose
  */
 export async function getImageUploadStatus(
-  postureId: string,
+  poseId: string,
   userId: string
 ): Promise<ImageStatusResponse> {
   try {
     const response = await fetch(
-      `/api/images/status?postureId=${postureId}&userId=${userId}`,
+      `/api/images/status?poseId=${poseId}&userId=${userId}`,
       {
         method: 'GET',
         headers: {

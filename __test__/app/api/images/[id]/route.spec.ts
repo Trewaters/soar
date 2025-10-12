@@ -20,7 +20,7 @@ jest.mock('../../../../../prisma/generated/client', () => {
       findMany: jest.fn(),
       update: jest.fn(),
     },
-    asanaPosture: {
+    asanaPose: {
       update: jest.fn(),
     },
     $transaction: jest.fn(),
@@ -54,7 +54,7 @@ describe('DELETE /api/images/[id]', () => {
         // Create a tx proxy that uses the same mocked model methods
         const tx = {
           poseImage: prisma.poseImage,
-          asanaPosture: prisma.asanaPosture,
+          asanaPose: prisma.asanaPose,
           userData: prisma.userData,
         }
         return await arg(tx)
@@ -135,8 +135,8 @@ describe('DELETE /api/images/[id]', () => {
       ;(prisma.poseImage.findUnique as jest.Mock).mockResolvedValue({
         id: 'image-1',
         userId: 'user-1',
-        postureId: 'asana-1',
-        posture: {
+        poseId: 'asana-1',
+        pose: {
           isUserCreated: false,
           created_by: 'system',
         },
@@ -161,8 +161,8 @@ describe('DELETE /api/images/[id]', () => {
       ;(prisma.poseImage.findUnique as jest.Mock).mockResolvedValue({
         id: 'image-1',
         userId: 'user-1',
-        postureId: 'asana-1',
-        posture: {
+        poseId: 'asana-1',
+        pose: {
           isUserCreated: true,
           created_by: 'another-user@example.com',
         },
@@ -182,16 +182,16 @@ describe('DELETE /api/images/[id]', () => {
 
   describe('when deletion is successful', () => {
     const imageIdToDelete = 'image-2'
-    const postureId = 'asana-1'
+    const poseId = 'asana-1'
     const mockImages = [
-      { id: 'image-1', displayOrder: 1, postureId },
+      { id: 'image-1', displayOrder: 1, poseId },
       {
         id: imageIdToDelete,
         displayOrder: 2,
-        postureId,
+        poseId,
         url: 'http://storage/image-2.jpg',
       },
-      { id: 'image-3', displayOrder: 3, postureId },
+      { id: 'image-3', displayOrder: 3, poseId },
     ]
 
     beforeEach(() => {
@@ -205,7 +205,7 @@ describe('DELETE /api/images/[id]', () => {
             ? {
                 ...mockImages.find((img) => img.id === args.where.id),
                 userId: 'user-1',
-                posture: {
+                pose: {
                   isUserCreated: true,
                   created_by: 'test@example.com',
                 },
@@ -266,8 +266,8 @@ describe('DELETE /api/images/[id]', () => {
     it('should update the imageCount on the asana', async () => {
       await DELETE(req, { params: Promise.resolve({ id: imageIdToDelete }) })
 
-      expect(prisma.asanaPosture.update).toHaveBeenCalledWith({
-        where: { id: postureId },
+      expect(prisma.asanaPose.update).toHaveBeenCalledWith({
+        where: { id: poseId },
         data: { imageCount: 2 },
       })
     })

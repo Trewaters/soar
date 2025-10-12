@@ -10,7 +10,7 @@ jest.mock('next/server', () => ({
 
 // Mock Prisma singleton used by the route
 const mockPrismaInstance = {
-  asanaPosture: {
+  asanaPose: {
     findUnique: jest.fn(),
   },
   userData: {
@@ -45,7 +45,7 @@ describe('GET /api/images/status', () => {
     ;(auth as jest.Mock).mockResolvedValue(null)
 
     const req: any = {
-      url: `${baseUrl}?postureId=abc&userId=creator@example.com`,
+      url: `${baseUrl}?poseId=abc&userId=creator@example.com`,
     }
 
     const res = await route.GET(req)
@@ -54,7 +54,7 @@ describe('GET /api/images/status', () => {
     expect(body).toEqual({ error: 'Authentication required' })
   })
 
-  it('returns 400 when postureId missing', async () => {
+  it('returns 400 when poseId missing', async () => {
     ;(auth as jest.Mock).mockResolvedValue({
       user: { email: 'creator@example.com' },
     })
@@ -63,14 +63,14 @@ describe('GET /api/images/status', () => {
     const res = await route.GET(req)
     expect(res.status).toBe(400)
     const body = await res.json()
-    expect(body).toEqual({ error: 'postureId is required' })
+    expect(body).toEqual({ error: 'poseId is required' })
   })
 
   it('returns 400 when userId missing', async () => {
     ;(auth as jest.Mock).mockResolvedValue({
       user: { email: 'creator@example.com' },
     })
-    const req: any = { url: `${baseUrl}?postureId=abc` }
+    const req: any = { url: `${baseUrl}?poseId=abc` }
 
     const res = await route.GET(req)
     expect(res.status).toBe(400)
@@ -83,7 +83,7 @@ describe('GET /api/images/status', () => {
       user: { email: 'someone@x.com' },
     })
     const req: any = {
-      url: `${baseUrl}?postureId=abc&userId=creator@example.com`,
+      url: `${baseUrl}?poseId=abc&userId=creator@example.com`,
     }
 
     const res = await route.GET(req)
@@ -96,10 +96,10 @@ describe('GET /api/images/status', () => {
     ;(auth as jest.Mock).mockResolvedValue({
       user: { email: 'creator@example.com' },
     })
-    mockPrismaInstance.asanaPosture.findUnique.mockResolvedValue(null)
+    mockPrismaInstance.asanaPose.findUnique.mockResolvedValue(null)
 
     const req: any = {
-      url: `${baseUrl}?postureId=missing&userId=creator@example.com`,
+      url: `${baseUrl}?poseId=missing&userId=creator@example.com`,
     }
 
     const res = await route.GET(req)
@@ -112,7 +112,7 @@ describe('GET /api/images/status', () => {
     ;(auth as jest.Mock).mockResolvedValue({
       user: { email: 'creator@example.com' },
     })
-    mockPrismaInstance.asanaPosture.findUnique.mockResolvedValue({
+    mockPrismaInstance.asanaPose.findUnique.mockResolvedValue({
       isUserCreated: true,
       created_by: 'creator@example.com',
       imageCount: 1,
@@ -123,7 +123,7 @@ describe('GET /api/images/status', () => {
     mockPrismaInstance.poseImage.count.mockResolvedValue(1)
 
     const req: any = {
-      url: `${baseUrl}?postureId=abc&userId=creator@example.com`,
+      url: `${baseUrl}?poseId=abc&userId=creator@example.com`,
     }
 
     const res = await route.GET(req)

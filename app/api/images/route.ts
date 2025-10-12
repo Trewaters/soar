@@ -25,8 +25,8 @@ interface PoseImage {
   fileName?: string
   fileSize?: number
   uploadedAt: string
-  postureId?: string
-  postureName?: string
+  poseId?: string
+  poseName?: string
   displayOrder: number
 }
 
@@ -42,8 +42,8 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const postureId = searchParams.get('postureId')
-    const postureName = searchParams.get('postureName')
+    const poseId = searchParams.get('poseId')
+    const poseName = searchParams.get('poseName')
     const includeOwnership = searchParams.get('includeOwnership') === 'true'
     const orderBy = searchParams.get('orderBy') || 'uploadedAt'
     const limit = parseInt(searchParams.get('limit') || '50')
@@ -54,40 +54,22 @@ export async function GET(request: NextRequest) {
       userId: session.user.id,
     }
 
-    if (postureId) {
-      where.postureId = postureId
-    } else if (postureName) {
-      where.posture = {
+    if (poseId) {
+      where.poseId = poseId
+    } else if (poseName) {
+      where.pose = {
         OR: [
-          { sort_english_name: { contains: postureName, mode: 'insensitive' } },
-          { english_names: { contains: postureName, mode: 'insensitive' } },
-          { sanskrit_names: { contains: postureName, mode: 'insensitive' } },
+          { sort_english_name: { contains: poseName, mode: 'insensitive' } },
+          { english_names: { contains: poseName, mode: 'insensitive' } },
+          { sanskrit_names: { contains: poseName, mode: 'insensitive' } },
         ],
       }
     }
 
-    // Fetch images with optional posture data
-    const images = await prisma.poseImage.findMany({
+    // Fetch images with optional pose/posture data. Use full record (no select)
+    // to tolerate schema changes during the posture->pose rename.
+    const images: any = await prisma.poseImage.findMany({
       where,
-      select: {
-        id: true,
-        url: true,
-        altText: true,
-        fileName: true,
-        fileSize: true,
-        uploadedAt: true,
-        displayOrder: true,
-        postureId: true,
-        posture: {
-          select: {
-            id: true,
-            sort_english_name: true,
-            english_names: true,
-            isUserCreated: true,
-            created_by: true,
-          },
-        },
-      },
       orderBy:
         orderBy === 'displayOrder'
           ? { displayOrder: 'asc' }
@@ -100,16 +82,19 @@ export async function GET(request: NextRequest) {
     const totalCount = await prisma.poseImage.count({ where })
 
     // Transform data for response
-    const transformedImages: PoseImage[] = images.map((image) => ({
+    const transformedImages: PoseImage[] = images.map((image: any) => ({
       id: image.id,
       url: image.url,
       altText: image.altText || undefined,
       fileName: image.fileName || undefined,
       fileSize: image.fileSize || undefined,
       uploadedAt: image.uploadedAt.toISOString(),
-      postureId: image.postureId || undefined,
-      postureName:
-        image.posture?.sort_english_name ||
+      poseId: image.poseId ?? image.postureId ?? undefined,
+      poseName:
+        (image.pose?.sort_english_name ?? image.posture?.sort_english_name) ||
+        (Array.isArray(image.pose?.english_names)
+          ? image.pose?.english_names[0]
+          : image.pose?.english_names) ||
         (Array.isArray(image.posture?.english_names)
           ? image.posture?.english_names[0]
           : image.posture?.english_names) ||
@@ -119,21 +104,20 @@ export async function GET(request: NextRequest) {
 
     // Calculate ownership info if requested
     let ownership = undefined
-    if (includeOwnership && postureId) {
-      const posture = await prisma.asanaPosture.findUnique({
-        where: { id: postureId },
+    if (includeOwnership && poseId) {
+      const pose = await prisma.asanaPose.findUnique({
+        where: { id: poseId },
         select: {
           isUserCreated: true,
           created_by: true,
         },
       })
 
-      if (posture) {
+      if (pose) {
         ownership = {
-          canManage:
-            posture.isUserCreated && posture.created_by === session.user.id,
-          isOwner: posture.created_by === session.user.id,
-          isUserCreated: posture.isUserCreated,
+          canManage: pose.isUserCreated && pose.created_by === session.user.id,
+          isOwner: pose.created_by === session.user.id,
+          isUserCreated: pose.isUserCreated,
         }
       }
     }
@@ -146,8 +130,8 @@ export async function GET(request: NextRequest) {
     }
 
     console.log('📸 GET /api/images: Returning images', {
-      postureId,
-      postureName,
+      poseId,
+      poseName,
       imageCount: transformedImages.length,
       totalCount,
       hasMore: response.hasMore,

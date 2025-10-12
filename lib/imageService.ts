@@ -11,16 +11,16 @@ export interface PoseImageData {
   storageType?: 'CLOUD' | 'LOCAL' | 'HYBRID'
   isOffline?: boolean
   localStorageId?: string | null
-  postureId?: string | null
-  postureName?: string | null
+  poseId?: string | null
+  poseName?: string | null
 }
 
 export interface UploadImageInput {
   file: File
   altText?: string
   userId: string
-  postureId?: string
-  postureName?: string
+  poseId?: string
+  poseName?: string
 }
 
 export interface GetImagesResponse {
@@ -42,11 +42,11 @@ export async function uploadPoseImage(
     if (input.altText) {
       formData.append('altText', input.altText)
     }
-    if (input.postureId) {
-      formData.append('postureId', input.postureId)
+    if (input.poseId) {
+      formData.append('poseId', input.poseId)
     }
-    if (input.postureName) {
-      formData.append('postureName', input.postureName)
+    if (input.poseName) {
+      formData.append('poseName', input.poseName)
     }
 
     const response = await fetch('/api/images/upload', {
@@ -77,8 +77,8 @@ export async function uploadPoseImage(
 export async function getUserPoseImages(
   limit: number = 10,
   offset: number = 0,
-  postureId?: string,
-  postureName?: string
+  poseId?: string,
+  poseName?: string
 ): Promise<GetImagesResponse> {
   try {
     const params = new URLSearchParams({
@@ -86,21 +86,21 @@ export async function getUserPoseImages(
       offset: offset.toString(),
     })
 
-    if (postureId) {
-      params.append('postureId', postureId)
+    if (poseId) {
+      params.append('poseId', poseId)
       params.append('includeOwnership', 'true')
       params.append('orderBy', 'displayOrder')
     }
-    if (postureName) {
-      params.append('postureName', postureName)
+    if (poseName) {
+      params.append('poseName', poseName)
       params.append('orderBy', 'displayOrder')
     }
 
     const url = `/api/images?${params}`
     console.log('🔍 getUserPoseImages: Making request to', {
       url,
-      postureId,
-      postureName,
+      poseId,
+      poseName,
       limit,
       offset,
     })
@@ -129,8 +129,8 @@ export async function getUserPoseImages(
       operation: 'fetch_user_images',
       limit,
       offset,
-      postureId,
-      postureName,
+      poseId,
+      poseName,
     })
     throw error
   }

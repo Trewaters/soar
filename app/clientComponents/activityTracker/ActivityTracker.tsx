@@ -15,19 +15,19 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 import {
-  getPostureWeeklyActivity,
+  getPoseWeeklyActivity,
   type WeeklyActivityData,
 } from '@lib/asanaActivityClientService'
 import { AsanaPose } from 'types/asana'
 
 interface ActivityTrackerProps {
-  posture: AsanaPose
+  pose: AsanaPose
   variant?: 'compact' | 'detailed'
   refreshTrigger?: number // Add a prop to trigger refresh when activities change
 }
 
 export default function ActivityTracker({
-  posture,
+  pose,
   variant = 'compact',
   refreshTrigger = 0,
 }: ActivityTrackerProps) {
@@ -38,15 +38,15 @@ export default function ActivityTracker({
 
   useEffect(() => {
     const fetchWeeklyData = async () => {
-      if (!session?.user?.id || !posture?.id) return
+      if (!session?.user?.id || !pose?.id) return
 
       setLoading(true)
       setError(null)
 
       try {
-        const data = await getPostureWeeklyActivity(
+        const data = await getPoseWeeklyActivity(
           session.user.id,
-          posture.id.toString()
+          pose.id.toString()
         )
         setWeeklyData(data)
       } catch (e: any) {
@@ -58,7 +58,7 @@ export default function ActivityTracker({
     }
 
     fetchWeeklyData()
-  }, [session?.user?.id, posture?.id, refreshTrigger])
+  }, [session?.user?.id, pose?.id, refreshTrigger])
 
   const formatLastPerformed = (
     activities: WeeklyActivityData['activities']

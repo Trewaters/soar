@@ -18,7 +18,7 @@ import {
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { getPostureNavigationUrlSync } from '@app/utils/navigation/postureNavigation'
+import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import EditIcon from '@mui/icons-material/Edit'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
@@ -35,7 +35,7 @@ import SequenceActivityTracker from '@app/clientComponents/sequenceActivityTrack
 import { FEATURES } from '@app/FEATURES'
 import { useSession } from 'next-auth/react'
 import getAlphaUserIds from '@app/lib/alphaUsers'
-import { orderPosturesForSearch } from '@app/utils/search/orderPosturesForSearch'
+import { orderPosesForSearch } from '@app/utils/search/orderPosesForSearch'
 
 export default function Page() {
   const router = useRouter()
@@ -80,7 +80,7 @@ export default function Page() {
           typeof s.id !== 'undefined' && !!s.nameSequence && !!s.sequencesSeries
       )
       .map((s) => ({ ...s, id: String(s.id) }))
-    const allOrdered = orderPosturesForSearch(
+    const allOrdered = orderPosesForSearch(
       validSequences,
       currentUserId,
       alphaUserIds,
@@ -182,7 +182,7 @@ export default function Page() {
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
     const handlePopState = () => {
-      console.log('Navigation detected, refreshing posture data...')
+      console.log('Navigation detected, refreshing pose data...')
       fetchSequences('popstate')
     }
 
@@ -225,7 +225,7 @@ export default function Page() {
               return {
                 ...sequenceSeries, // Keep sequence-specific fields like id
                 seriesName: currentSeriesData.seriesName,
-                seriesPostures: currentSeriesData.seriesPostures,
+                seriesPoses: currentSeriesData.seriesPoses,
                 description: currentSeriesData.description,
                 duration: currentSeriesData.duration,
                 image: currentSeriesData.image,
@@ -678,7 +678,7 @@ export default function Page() {
                         }
                       />
                       <CardContent className="lines" sx={{ p: 0 }}>
-                        {seriesMini.seriesPostures.map((asana, asanaIndex) => (
+                        {seriesMini.seriesPoses.map((asana, asanaIndex) => (
                           <Box
                             key={asanaIndex}
                             alignItems={'center'}
@@ -718,7 +718,7 @@ export default function Page() {
                             >
                               {(() => {
                                 const poseName = asana.split(';')[0]
-                                const href = getPostureNavigationUrlSync(asana)
+                                const href = getPoseNavigationUrlSync(asana)
 
                                 return (
                                   <Link

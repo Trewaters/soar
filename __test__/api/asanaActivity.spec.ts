@@ -35,8 +35,8 @@ describe('/api/asanaActivity Service Tests', () => {
       const mockActivity = {
         id: '1',
         userId: 'user123',
-        postureId: 'posture123',
-        postureName: 'Mountain Pose',
+        poseId: 'pose123',
+        poseName: 'Mountain Pose',
         duration: 60,
         datePerformed: new Date(),
         notes: null,
@@ -52,8 +52,8 @@ describe('/api/asanaActivity Service Tests', () => {
 
       const activityData = {
         userId: 'user123',
-        postureId: 'posture123',
-        postureName: 'Mountain Pose',
+        poseId: 'pose123',
+        poseName: 'Mountain Pose',
         duration: 60,
         datePerformed: new Date(),
         completionStatus: 'complete',
@@ -72,13 +72,10 @@ describe('/api/asanaActivity Service Tests', () => {
         deleteAsanaActivity as jest.MockedFunction<typeof deleteAsanaActivity>
       mockDeleteAsanaActivity.mockResolvedValue({ count: 1 })
 
-      const result = await deleteAsanaActivity('user123', 'posture123')
+      const result = await deleteAsanaActivity('user123', 'pose123')
 
       expect(result).toEqual({ count: 1 })
-      expect(mockDeleteAsanaActivity).toHaveBeenCalledWith(
-        'user123',
-        'posture123'
-      )
+      expect(mockDeleteAsanaActivity).toHaveBeenCalledWith('user123', 'pose123')
     })
   })
 
@@ -88,8 +85,8 @@ describe('/api/asanaActivity Service Tests', () => {
         {
           id: '1',
           userId: 'user123',
-          postureId: 'posture123',
-          postureName: 'Mountain Pose',
+          poseId: 'pose123',
+          poseName: 'Mountain Pose',
           datePerformed: new Date(),
           duration: 60,
           completionStatus: 'complete',
@@ -101,8 +98,8 @@ describe('/api/asanaActivity Service Tests', () => {
         {
           id: '2',
           userId: 'user123',
-          postureId: 'posture456',
-          postureName: 'Warrior I',
+          poseId: 'pose456',
+          poseName: 'Warrior I',
           datePerformed: new Date(),
           duration: 90,
           completionStatus: 'complete',
@@ -140,8 +137,8 @@ describe('/api/asanaActivity Service Tests', () => {
       const mockActivity = {
         id: '1',
         userId: 'user123',
-        postureId: 'posture123',
-        postureName: 'Mountain Pose',
+        poseId: 'pose123',
+        poseName: 'Mountain Pose',
         datePerformed: new Date(),
         duration: 60,
         completionStatus: 'complete',
@@ -157,12 +154,12 @@ describe('/api/asanaActivity Service Tests', () => {
         >
       mockCheckExistingActivity.mockResolvedValue(mockActivity)
 
-      const result = await checkExistingActivity('user123', 'posture123')
+      const result = await checkExistingActivity('user123', 'pose123')
 
       expect(result).toEqual(mockActivity)
       expect(mockCheckExistingActivity).toHaveBeenCalledWith(
         'user123',
-        'posture123'
+        'pose123'
       )
     })
 
@@ -173,12 +170,12 @@ describe('/api/asanaActivity Service Tests', () => {
         >
       mockCheckExistingActivity.mockResolvedValue(null)
 
-      const result = await checkExistingActivity('user123', 'posture123')
+      const result = await checkExistingActivity('user123', 'pose123')
 
       expect(result).toBeNull()
       expect(mockCheckExistingActivity).toHaveBeenCalledWith(
         'user123',
-        'posture123'
+        'pose123'
       )
     })
   })
@@ -187,23 +184,23 @@ describe('/api/asanaActivity Service Tests', () => {
     it('should validate required fields for POST', () => {
       const data = {
         userId: 'user123',
-        postureId: 'posture123',
-        postureName: 'Mountain Pose',
+        poseId: 'pose123',
+        poseName: 'Mountain Pose',
         duration: 60,
         datePerformed: new Date(),
         completionStatus: 'complete',
       }
 
       // Test validation logic
-      const isValid = !!(data.userId && data.postureId && data.postureName)
+      const isValid = !!(data.userId && data.poseId && data.poseName)
       expect(isValid).toBe(true)
 
       // Test invalid data
       const invalidData = { userId: 'user123' }
       const isInvalid = !!(
         invalidData.userId &&
-        (invalidData as any).postureId &&
-        (invalidData as any).postureName
+        (invalidData as any).poseId &&
+        (invalidData as any).poseName
       )
       expect(isInvalid).toBe(false)
     })
@@ -211,32 +208,32 @@ describe('/api/asanaActivity Service Tests', () => {
     it('should validate required fields for DELETE', () => {
       const data = {
         userId: 'user123',
-        postureId: 'posture123',
+        poseId: 'pose123',
       }
 
       // Test validation logic
-      const isValid = !!(data.userId && data.postureId)
+      const isValid = !!(data.userId && data.poseId)
       expect(isValid).toBe(true)
 
       // Test invalid data
       const invalidData = { userId: 'user123' }
-      const isInvalid = !!(invalidData.userId && (invalidData as any).postureId)
+      const isInvalid = !!(invalidData.userId && (invalidData as any).poseId)
       expect(isInvalid).toBe(false)
     })
 
     it('should validate required query params for GET', () => {
-      // Test with both userId and postureId (existing activity check)
+      // Test with both userId and poseId (existing activity check)
       const url1 = new URL(
-        'http://localhost:3000/api/asanaActivity?userId=user123&postureId=posture123'
+        'http://localhost:3000/api/asanaActivity?userId=user123&poseId=pose123'
       )
       const userId1 = url1.searchParams.get('userId')
-      const postureId1 = url1.searchParams.get('postureId')
+      const poseId1 = url1.searchParams.get('poseId')
 
       expect(userId1).toBe('user123')
-      expect(postureId1).toBe('posture123')
+      expect(poseId1).toBe('pose123')
 
       // Test validation logic for existing activity check
-      const isValidForActivityCheck = !!(userId1 && postureId1)
+      const isValidForActivityCheck = !!(userId1 && poseId1)
       expect(isValidForActivityCheck).toBe(true)
 
       // Test with only userId (get all user activities)
@@ -244,10 +241,10 @@ describe('/api/asanaActivity Service Tests', () => {
         'http://localhost:3000/api/asanaActivity?userId=user123'
       )
       const userId2 = url2.searchParams.get('userId')
-      const postureId2 = url2.searchParams.get('postureId')
+      const poseId2 = url2.searchParams.get('poseId')
 
       expect(userId2).toBe('user123')
-      expect(postureId2).toBeNull()
+      expect(poseId2).toBeNull()
 
       // Test validation logic for getting all user activities
       const isValidForUserActivities = !!userId2
@@ -291,7 +288,7 @@ describe('/api/asanaActivity Service Tests', () => {
         'recordAsanaActivity',
         {
           userId: 'user123',
-          postureId: 'posture123',
+          poseId: 'pose123',
         }
       )
 
@@ -301,7 +298,7 @@ describe('/api/asanaActivity Service Tests', () => {
         'recordAsanaActivity',
         expect.objectContaining({
           userId: 'user123',
-          postureId: 'posture123',
+          poseId: 'pose123',
         })
       )
     })
@@ -309,7 +306,7 @@ describe('/api/asanaActivity Service Tests', () => {
     it('should log database errors with query context', async () => {
       const { logDatabaseError } = require('../../lib/errorLogger')
       const testError = new Error('Database connection failed')
-      const query = { userId: 'user123', postureId: 'posture123' }
+      const query = { userId: 'user123', poseId: 'pose123' }
 
       logDatabaseError(testError, 'create', 'AsanaActivity', query)
 

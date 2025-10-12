@@ -13,7 +13,7 @@ export const defaultGlossaryTerms: RawGlossaryDefaultTerm[] = [
   {
     term: 'Asana',
     definition:
-      'A physical posture or pose in yoga practice designed to build strength, flexibility, and awareness.',
+      'A physical pose or pose in yoga practice designed to build strength, flexibility, and awareness.',
     category: 'foundational',
     source: 'default',
     sanskrit: 'Āsana',

@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if an asana with this name already exists
-    const existingAsana = await prisma.asanaPosture.findFirst({
+    const existingAsana = await prisma.asanaPose.findFirst({
       where: {
         sort_english_name: name,
       },

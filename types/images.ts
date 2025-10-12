@@ -7,8 +7,8 @@
 export interface PoseImageData {
   id: string
   userId: string
-  postureId?: string
-  postureName?: string
+  poseId?: string
+  poseName?: string
   url: string
   altText?: string
   fileName?: string
@@ -23,8 +23,8 @@ export interface PoseImageData {
   updatedAt: Date
 }
 
-// Enhanced AsanaPosture interface with new multi-image fields
-export interface AsanaPostureData {
+// Enhanced AsanaPose interface with new multi-image fields
+export interface AsanaPoseData {
   id: string
   english_names: string[]
   sanskrit_names?: any
@@ -39,8 +39,8 @@ export interface AsanaPostureData {
   variations: string[]
   modifications: string[]
   label?: string
-  suggested_postures: string[]
-  preparatory_postures: string[]
+  suggested_poses: string[]
+  preparatory_poses: string[]
   preferred_side?: string
   sideways?: boolean
   image?: string
@@ -48,7 +48,7 @@ export interface AsanaPostureData {
   updated_on?: Date
   acitivity_completed?: boolean
   acitivity_practice?: boolean
-  posture_intent?: string
+  pose_intent?: string
   breath_series: string[]
   duration_asana?: string
   transition_cues_out?: string
@@ -71,8 +71,8 @@ export interface ImageUploadRequest {
   file: File
   altText?: string
   userId: string
-  postureId?: string
-  postureName?: string
+  poseId?: string
+  poseName?: string
   imageType?: string
   displayOrder?: number
 }
@@ -105,8 +105,8 @@ export interface ImageReorderResponse {
 }
 
 export interface ImageQueryRequest {
-  postureId?: string
-  postureName?: string
+  poseId?: string
+  poseName?: string
   imageType?: string
   orderBy?: 'uploadedAt' | 'displayOrder'
   includeOwnership?: boolean
@@ -182,10 +182,10 @@ export function isPoseImageData(obj: any): obj is PoseImageData {
   )
 }
 
-export function isUserCreatedAsana(asana: AsanaPostureData): boolean {
+export function isUserCreatedAsana(asana: AsanaPoseData): boolean {
   return asana.isUserCreated === true
 }
 
-export function canHaveMultipleImages(asana: AsanaPostureData): boolean {
+export function canHaveMultipleImages(asana: AsanaPoseData): boolean {
   return isUserCreatedAsana(asana)
 }

@@ -25,7 +25,7 @@ const mockSeries = [
   {
     id: '1',
     seriesName: 'Morning Flow',
-    seriesPostures: ['mountain-pose', 'warrior-pose'],
+    seriesPoses: ['mountain-pose', 'warrior-pose'],
     description: 'A gentle morning flow series',
     image: 'https://example.com/image1.jpg',
     durationSeries: '15 minutes',
@@ -34,7 +34,7 @@ const mockSeries = [
   {
     id: '2',
     seriesName: 'Power Flow',
-    seriesPostures: ['warrior-pose', 'downward-dog', 'plank'],
+    seriesPoses: ['warrior-pose', 'downward-dog', 'plank'],
     description: 'An energizing power flow series',
     image: 'https://example.com/image2.jpg',
     durationSeries: '30 minutes',
@@ -101,7 +101,7 @@ describe('AddSeriesDialog', () => {
     })
 
     expect(screen.getByText('A gentle morning flow series')).toBeInTheDocument()
-    expect(screen.getByText('2 postures')).toBeInTheDocument()
+    expect(screen.getByText('2 poses')).toBeInTheDocument()
     expect(screen.getByText('15 minutes')).toBeInTheDocument()
   })
 
@@ -131,7 +131,7 @@ describe('AddSeriesDialog', () => {
     fireEvent.click(morningFlowCheckbox)
 
     expect(screen.getByText('Selected Series (1):')).toBeInTheDocument()
-    expect(screen.getByText('Morning Flow (2 postures)')).toBeInTheDocument()
+    expect(screen.getByText('Morning Flow (2 poses)')).toBeInTheDocument()
 
     // Deselect by clicking chip delete
     const chip = screen.getByTestId('CancelIcon')

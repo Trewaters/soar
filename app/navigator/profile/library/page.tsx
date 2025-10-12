@@ -29,7 +29,7 @@ import EditSeriesDialog, {
   Asana as EditAsanaShape,
 } from '@app/navigator/flows/editSeries/EditSeriesDialog'
 import { updateSeries, deleteSeries } from '@lib/seriesService'
-import { splitSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
+import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
@@ -308,7 +308,7 @@ function AsanasLibrary({
         </Typography>
         <Button
           variant="contained"
-          onClick={() => router.push('/navigator/asanaPostures/createAsana')}
+          onClick={() => router.push('/navigator/asanaPoses/createAsana')}
         >
           Create Your First Asana
         </Button>
@@ -537,7 +537,7 @@ function AsanaCard({ asana }: { asana: UserAsanaData }) {
         <Stack direction="row" spacing={1}>
           <IconButton
             size="small"
-            onClick={() => router.push(`/navigator/asanaPostures/${asana.id}`)}
+            onClick={() => router.push(`/navigator/asanaPoses/${asana.id}`)}
             title="View"
           >
             <VisibilityIcon />
@@ -568,8 +568,8 @@ function SeriesCard({ series }: { series: UserSeriesData }) {
     name: series.seriesName,
     description: series.description || '',
     difficulty: 'beginner',
-    asanas: (series.seriesPostures || []).map((sp, idx) => {
-      const { name, secondary } = splitSeriesPostureEntry(sp)
+    asanas: (series.seriesPoses || []).map((sp, idx) => {
+      const { name, secondary } = splitSeriesPoseEntry(sp)
       const resolvedName = name || `asana-${idx}`
       const asana: EditAsanaShape = {
         id: `${idx}-${resolvedName}`,
@@ -615,8 +615,8 @@ function SeriesCard({ series }: { series: UserSeriesData }) {
         </Typography>
 
         <Typography variant="body2" sx={{ mb: 1 }}>
-          {series.seriesPostures.length} posture
-          {series.seriesPostures.length !== 1 ? 's' : ''}
+          {series.seriesPoses.length} pose
+          {series.seriesPoses.length !== 1 ? 's' : ''}
         </Typography>
 
         <Typography variant="caption" color="text.secondary">

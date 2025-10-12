@@ -12,7 +12,7 @@ import WorkspacesIcon from '@mui/icons-material/Workspaces'
 const links = [
   {
     name: 'Asanas',
-    href: '/navigator/asanaPostures',
+    href: '/navigator/asanaPoses',
     // icon: <WaterDropOutlinedIcon />,
     icon: <Brightness1OutlinedIcon />,
   },

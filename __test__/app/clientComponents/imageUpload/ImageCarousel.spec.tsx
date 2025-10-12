@@ -39,7 +39,7 @@ const mockImages: PoseImageData[] = [
   {
     id: '1',
     userId: 'user-1',
-    postureId: 'pose-1',
+    poseId: 'pose-1',
     url: 'https://example.com/image1.jpg',
     displayOrder: 1,
     fileName: 'image1.jpg',
@@ -54,7 +54,7 @@ const mockImages: PoseImageData[] = [
   {
     id: '2',
     userId: 'user-1',
-    postureId: 'pose-1',
+    poseId: 'pose-1',
     url: 'https://example.com/image2.jpg',
     displayOrder: 2,
     fileName: 'image2.jpg',
@@ -69,7 +69,7 @@ const mockImages: PoseImageData[] = [
   {
     id: '3',
     userId: 'user-1',
-    postureId: 'pose-1',
+    poseId: 'pose-1',
     url: 'https://example.com/image3.jpg',
     displayOrder: 3,
     fileName: 'image3.jpg',
@@ -603,7 +603,7 @@ describe('ImageCarousel', () => {
           imageType: 'original',
           createdAt: new Date(),
           updatedAt: new Date(),
-          // Missing optional properties like altText, postureName
+          // Missing optional properties like altText, poseName
         },
       ]
 

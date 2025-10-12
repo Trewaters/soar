@@ -53,8 +53,8 @@ const mockImages: PoseImageData[] = [
     url: '/test-image-1.jpg',
     altText: 'Warrior I Pose',
     displayOrder: 0,
-    postureId: 'pose-1',
-    postureName: 'Warrior I',
+    poseId: 'pose-1',
+    poseName: 'Warrior I',
     uploadedAt: new Date('2024-01-01'),
     storageType: 'CLOUD',
     isOffline: false,
@@ -68,8 +68,8 @@ const mockImages: PoseImageData[] = [
     url: '/test-image-2.jpg',
     altText: 'Downward Dog Pose',
     displayOrder: 1,
-    postureId: 'pose-1',
-    postureName: 'Downward Dog',
+    poseId: 'pose-1',
+    poseName: 'Downward Dog',
     uploadedAt: new Date('2024-01-02'),
     storageType: 'CLOUD',
     isOffline: false,
@@ -83,8 +83,8 @@ const mockImages: PoseImageData[] = [
     url: '/test-image-3.jpg',
     altText: "Child's Pose",
     displayOrder: 2,
-    postureId: 'pose-1',
-    postureName: "Child's Pose",
+    poseId: 'pose-1',
+    poseName: "Child's Pose",
     uploadedAt: new Date('2024-01-03'),
     storageType: 'CLOUD',
     isOffline: false,
@@ -101,8 +101,8 @@ const mockUnsortedImages: PoseImageData[] = [
     url: '/test-image-1.jpg',
     altText: 'Warrior I Pose',
     displayOrder: 2,
-    postureId: 'pose-1',
-    postureName: 'Warrior I',
+    poseId: 'pose-1',
+    poseName: 'Warrior I',
     uploadedAt: new Date('2024-01-01'),
     storageType: 'CLOUD',
     isOffline: false,
@@ -116,8 +116,8 @@ const mockUnsortedImages: PoseImageData[] = [
     url: '/test-image-2.jpg',
     altText: 'Downward Dog Pose',
     displayOrder: 0,
-    postureId: 'pose-1',
-    postureName: 'Downward Dog',
+    poseId: 'pose-1',
+    poseName: 'Downward Dog',
     uploadedAt: new Date('2024-01-02'),
     storageType: 'CLOUD',
     isOffline: false,
@@ -131,8 +131,8 @@ const mockUnsortedImages: PoseImageData[] = [
     url: '/test-image-3.jpg',
     altText: "Child's Pose",
     displayOrder: 1,
-    postureId: 'pose-1',
-    postureName: "Child's Pose",
+    poseId: 'pose-1',
+    poseName: "Child's Pose",
     uploadedAt: new Date('2024-01-03'),
     storageType: 'CLOUD',
     isOffline: false,
@@ -663,11 +663,11 @@ describe('CarouselDotNavigation', () => {
       })
     })
 
-    it('should fall back to basic tooltip when no altText or postureName', async () => {
+    it('should fall back to basic tooltip when no altText or poseName', async () => {
       const imagesWithoutLabels = mockImages.map((img) => ({
         ...img,
         altText: undefined,
-        postureName: undefined,
+        poseName: undefined,
       }))
 
       render(
@@ -819,13 +819,13 @@ describe('CarouselDotNavigation', () => {
           id: 'img-1',
           url: '/test1.jpg',
           displayOrder: 0,
-          postureId: 'pose-1',
+          poseId: 'pose-1',
         },
         {
           id: 'img-2',
           url: '/test2.jpg',
           displayOrder: 1,
-          postureId: 'pose-1',
+          poseId: 'pose-1',
         },
       ] as PoseImageData[]
 
@@ -877,8 +877,8 @@ describe('CarouselDotNavigation', () => {
         url: `/test-image-${index}.jpg`,
         altText: `Pose ${index + 1}`,
         displayOrder: index,
-        postureId: 'pose-1',
-        postureName: `Pose ${index + 1}`,
+        poseId: 'pose-1',
+        poseName: `Pose ${index + 1}`,
         uploadedAt: new Date(),
         storageType: 'CLOUD' as const,
         isOffline: false,

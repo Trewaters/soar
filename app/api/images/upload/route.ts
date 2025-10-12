@@ -33,15 +33,15 @@ export async function GET(request: NextRequest) {
 
     // Get query parameters for image status
     const { searchParams } = new URL(request.url)
-    const postureId = searchParams.get('postureId')
+    const poseId = searchParams.get('poseId')
 
-    if (!postureId) {
-      return NextResponse.json({ error: 'postureId required' }, { status: 400 })
+    if (!poseId) {
+      return NextResponse.json({ error: 'poseId required' }, { status: 400 })
     }
 
     // Get the asana to check ownership and image count
-    const asana = await prisma.asanaPosture.findUnique({
-      where: { id: postureId },
+    const asana = await prisma.asanaPose.findUnique({
+      where: { id: poseId },
       select: {
         id: true,
         isUserCreated: true,
@@ -109,9 +109,9 @@ export async function POST(request: NextRequest) {
     const file = formData.get('file') as File
     const altText = formData.get('altText') as string
     const userId = formData.get('userId') as string
-    const postureId = formData.get('postureId') as string
-    const postureName = formData.get('postureName') as string
-    const imageType = (formData.get('imageType') as string) || 'posture'
+    const poseId = formData.get('poseId') as string
+    const poseName = formData.get('poseName') as string
+    const imageType = (formData.get('imageType') as string) || 'pose'
     const displayOrderParam = formData.get('displayOrder') as string
 
     // Validate inputs
@@ -143,11 +143,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // For posture images, validate multi-image constraints
-    if (postureId && imageType === 'posture') {
+    // For pose images, validate multi-image constraints
+    if (poseId && imageType === 'pose') {
       // Get the asana to check if it's user-created and current image count
-      const asana = await prisma.asanaPosture.findUnique({
-        where: { id: postureId },
+      const asana = await prisma.asanaPose.findUnique({
+        where: { id: poseId },
         select: {
           id: true,
           isUserCreated: true,
@@ -200,8 +200,8 @@ export async function POST(request: NextRequest) {
     let displayOrder = 1
     if (displayOrderParam) {
       displayOrder = parseInt(displayOrderParam)
-    } else if (postureId && imageType === 'posture') {
-      displayOrder = await getNextDisplayOrder(postureId)
+    } else if (poseId && imageType === 'pose') {
+      displayOrder = await getNextDisplayOrder(poseId)
     }
 
     // Convert file to buffer for upload
@@ -244,13 +244,13 @@ export async function POST(request: NextRequest) {
     const imageData = {
       userId: user.id, // Use the ObjectId, not the email
       fileName: filename,
-      altText: altText || `${postureName || imageType} image`,
+      altText: altText || `${poseName || imageType} image`,
       fileSize: file.size,
       imageType: imageType,
       url: uploadResult.url,
       displayOrder: displayOrder,
-      ...(postureId && { postureId }),
-      ...(postureName && { postureName }),
+      ...(poseId && { poseId }),
+      ...(poseName && { poseName }),
     }
 
     console.log('💾 Saving to database:', { ...imageData, fileSize: file.size })
@@ -261,10 +261,10 @@ export async function POST(request: NextRequest) {
 
     console.log('✅ Database save successful:', savedImage.id)
 
-    // Update asana image count if this is a posture image
-    if (postureId && imageType === 'posture') {
-      await prisma.asanaPosture.update({
-        where: { id: postureId },
+    // Update asana image count if this is a pose image
+    if (poseId && imageType === 'pose') {
+      await prisma.asanaPose.update({
+        where: { id: poseId },
         data: {
           imageCount: {
             increment: 1,

@@ -17,7 +17,7 @@ import { useSession } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import EditSequence, { EditableSequence } from '@clientComponents/EditSequence'
 import { getAllSeries } from '@lib/seriesService'
-import { splitSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
+import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 import Image from 'next/image'
 
 type Props = {
@@ -64,7 +64,7 @@ export default function SequenceViewWithEdit({
             return {
               ...sequenceSeries, // Keep sequence-specific fields like id
               seriesName: currentSeriesData.seriesName,
-              seriesPostures: currentSeriesData.seriesPostures,
+              seriesPoses: currentSeriesData.seriesPoses,
               description: currentSeriesData.description,
               duration: currentSeriesData.duration,
               image: currentSeriesData.image,
@@ -372,10 +372,10 @@ export default function SequenceViewWithEdit({
                       }
                     />
                     <CardContent className="lines" sx={{ p: 0 }}>
-                      {seriesMini.seriesPostures?.length ? (
-                        seriesMini.seriesPostures.map((posture, index) => {
+                      {seriesMini.seriesPoses?.length ? (
+                        seriesMini.seriesPoses.map((pose, index) => {
                           const { name: englishName, secondary: sanskritName } =
-                            splitSeriesPostureEntry(posture)
+                            splitSeriesPoseEntry(pose)
                           return (
                             <Stack
                               key={`${englishName}-${index}`}
@@ -415,7 +415,7 @@ export default function SequenceViewWithEdit({
                           color="text.secondary"
                           sx={{ p: 2 }}
                         >
-                          No postures in this series
+                          No poses in this series
                         </Typography>
                       )}
                     </CardContent>

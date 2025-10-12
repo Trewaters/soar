@@ -31,7 +31,7 @@ const fallbackGlossaryTerms = [
   {
     id: 'fallback-1',
     term: 'Asana',
-    meaning: 'A yoga pose or posture',
+    meaning: 'A yoga pose or pose',
     whyMatters:
       'Asanas are the physical foundation of yoga practice, helping to build strength, flexibility, and mindfulness.',
     category: 'foundational',

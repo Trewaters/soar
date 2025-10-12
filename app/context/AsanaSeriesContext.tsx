@@ -11,7 +11,7 @@ import {
 export interface FlowSeriesData {
   id?: string
   seriesName: string
-  seriesPostures: string[]
+  seriesPoses: string[]
   // breath will be a string of the breath count and type (inhale, exhale)
   breath?: string
   description?: string
@@ -25,7 +25,7 @@ export interface FlowSeriesData {
 export interface FlowSeriesSequence {
   id?: string
   seriesName: string
-  seriesPostures: string[]
+  seriesPoses: string[]
   breath?: string
   duration?: string
   image?: string
@@ -45,7 +45,7 @@ type FlowSeriesAction = {
 const initialState: FlowSeriesPageState = {
   flowSeries: {
     seriesName: '',
-    seriesPostures: [],
+    seriesPoses: [],
     breath: '',
     description: '',
     duration: '',
@@ -77,7 +77,7 @@ function FlowSeriesReducer(
         ...state,
         flowSeries: {
           seriesName: '',
-          seriesPostures: [],
+          seriesPoses: [],
           breath: '',
           description: '',
           duration: '',

@@ -6,14 +6,13 @@
 import { UserData } from 'app/context/UserContext'
 import { PoseImageData } from './images'
 
-// REPLACES AsanaPosture, found in this file
+// REPLACES AsanaPose, found in this file
 export interface AsanaPose {
-  // “Full”, Abbreviated Posture 1
+  // “Full”, Abbreviated Pose 1
   id: string
   sort_english_name: string
   sanskrit_names: string[] // use first element for primary sanskrit name
   english_names: string[]
-  alternative_english_names: string[]
   poseImages: PoseImageData[] // Relation to PoseImage
   description: string
   category: string
@@ -24,7 +23,7 @@ export interface AsanaPose {
   dristi?: string
   setup_cues?: string
   deepening_cues?: string
-  // “Advance”, Abbreviated Posture 2
+  // “Advance”, Abbreviated Pose 2
   alignment_cues?: string
   joint_action?: string
   muscle_action?: string
@@ -33,7 +32,7 @@ export interface AsanaPose {
   additional_cues?: string
   benefits?: string
   customize_asana?: string
-  // “Personal”, Abbreviated Posture 3
+  // “Personal”, Abbreviated Pose 3
   pose_modifications: string[]
   pose_variations: string[]
   breath: string[]
@@ -41,8 +40,8 @@ export interface AsanaPose {
   lore?: string
   asana_intention?: string
   label?: string // verify how it is used
-  suggested_postures: string[] // verify how it is used
-  preparatory_postures: string[] // verify how it is used
+  suggested_poses: string[] // verify how it is used
+  preparatory_poses: string[] // verify how it is used
   isUserCreated: boolean // default(false) // verify how it is used, don't think it is needed // Flag to identify user-created asanas
   created_on?: Date // default(now()) // Necessary
   updated_on?: Date // updatedAt // Necessary
@@ -53,9 +52,9 @@ export interface AsanaPose {
 export interface AsanaActivity {
   id: string
   userId: string
-  postureId: string
-  poseId?: string
-  postureName: string
+  poseId: string
+  postureId?: string
+  poseName: string
   sort_english_name: string
   duration: number
   datePerformed: Date
@@ -64,16 +63,16 @@ export interface AsanaActivity {
   completionStatus: string
   difficulty?: string
   user: UserData
-  // posture: asanaposture
+  // pose: asanaPose
   pose: AsanaPose
   createdAt: Date
   updatedAt: Date
 }
 
 /**
- * @deprecated Use AsanaPose from 'types/asana.ts' instead
+ * @deprecated Legacy posture shape (renamed to AsanaPose).
+ * Keep this around temporarily during the posture -> pose migration.
  * This interface will be removed in a future version.
- * Migration: Replace AsanaPosture with AsanaPose for consistent typing across the application.
  */
 export interface AsanaPosture {
   id: string
@@ -90,8 +89,8 @@ export interface AsanaPosture {
   variations: string[]
   modifications: string[]
   label: string
-  suggested_postures: string[]
-  preparatory_postures: string[]
+  suggested_poses: string[]
+  preparatory_poses: string[]
   preferred_side: string
   sideways: boolean
   image: string
@@ -99,7 +98,7 @@ export interface AsanaPosture {
   updated_on: string
   activity_completed: boolean
   activity_practice: boolean
-  posture_intent: string
+  pose_intent: string
   breath_series: string[]
   duration_asana: string
   transition_cues_out: string
@@ -117,8 +116,8 @@ export interface AsanaPosture {
   poseImages?: PoseImageData[]
 }
 
-// Display interface for abbreviated posture data
-export interface DisplayAsanaPosture {
+// Display interface for abbreviated pose data
+export interface DisplayAsanaPose {
   id: number
   english_names: string[]
   sanskrit_names: string
@@ -135,13 +134,13 @@ export interface DisplayAsanaPosture {
   updated_on: string
   activity_completed: boolean
   activity_practice: boolean
-  posture_intent: string
+  pose_intent: string
   duration_asana: string
   created_by: string
 }
 
-// Interface for posture card display fields
-export interface PostureCardFields {
+// Interface for pose card display fields
+export interface PoseCardFields {
   id: number
   description: string
   simplified_english_name: string
@@ -149,7 +148,7 @@ export interface PostureCardFields {
   sanskrit_names: {
     simplified: string
   }[]
-  posture_meaning: string
+  pose_meaning: string
   benefits: string
   breath: string
   dristi: string
@@ -160,7 +159,7 @@ export interface PostureCardFields {
   acitivity_easy: boolean
   acitivity_difficult: boolean
   acitivity_practice: boolean
-  posture_intent: string
+  pose_intent: string
 }
 
 // API Request/Response types for asana management
@@ -180,11 +179,11 @@ export interface CreateAsanaRequest {
   variations?: string[]
   modifications?: string[]
   label?: string
-  suggested_postures?: string[]
-  preparatory_postures?: string[]
+  suggested_poses?: string[]
+  preparatory_poses?: string[]
   preferred_side?: string
   sideways?: boolean
-  posture_intent?: string
+  pose_intent?: string
   breath_series?: string[]
   duration_asana?: string
   transition_cues_out?: string
@@ -213,7 +212,7 @@ export interface AsanaQueryParams {
 }
 
 export interface AsanaQueryResponse {
-  asanas: AsanaPosture[]
+  asanas: AsanaPose[]
   total: number
   hasMore: boolean
   filters: {
@@ -233,8 +232,8 @@ export interface AsanaImageState {
 
 // Action types for asana management
 export type AsanaAction =
-  | { type: 'SET_ASANA'; payload: AsanaPosture }
-  | { type: 'UPDATE_ASANA'; payload: Partial<AsanaPosture> }
+  | { type: 'SET_ASANA'; payload: AsanaPose }
+  | { type: 'UPDATE_ASANA'; payload: Partial<AsanaPose> }
   | { type: 'SET_CURRENT_IMAGE_INDEX'; payload: number }
   | { type: 'UPDATE_IMAGE_COUNT'; payload: number }
   | { type: 'ADD_POSE_IMAGE'; payload: PoseImageData }
@@ -258,7 +257,7 @@ export interface AsanaError {
 }
 
 // Utility type guards
-export function isAsanaPosture(obj: any): obj is AsanaPosture {
+export function isAsanaPose(obj: any): obj is AsanaPose {
   return (
     obj &&
     typeof obj.id === 'string' &&
@@ -268,11 +267,11 @@ export function isAsanaPosture(obj: any): obj is AsanaPosture {
   )
 }
 
-export function isUserCreatedAsana(asana: AsanaPosture): boolean {
+export function isUserCreatedAsana(asana: AsanaPose): boolean {
   return asana.isUserCreated === true
 }
 
-export function hasMultipleImages(asana: AsanaPosture): boolean {
+export function hasMultipleImages(asana: AsanaPose): boolean {
   return (asana.imageCount || 0) > 1
 }
 

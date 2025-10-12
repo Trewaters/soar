@@ -227,7 +227,7 @@ describe('Header Component', () => {
       )
       expect(screen.getByRole('link', { name: /asanas/i })).toHaveAttribute(
         'href',
-        '/navigator/asanaPostures'
+        '/navigator/asanaPoses'
       )
       expect(screen.getByRole('link', { name: /series/i })).toHaveAttribute(
         'href',

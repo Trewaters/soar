@@ -1,6 +1,6 @@
 import {
-  getPostureWeeklyCount,
-  getAllPosturesWeeklyCount,
+  getPoseWeeklyCount,
+  getAllPosesWeeklyCount,
 } from '@lib/asanaActivityService'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = req.nextUrl
     const userId = searchParams.get('userId')
-    const postureId = searchParams.get('postureId')
+    const poseId = searchParams.get('poseId')
 
     if (!userId) {
       return NextResponse.json(
@@ -22,13 +22,13 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    if (postureId) {
-      // Get weekly count for specific posture
-      const weeklyData = await getPostureWeeklyCount(userId, postureId)
+    if (poseId) {
+      // Get weekly count for specific pose
+      const weeklyData = await getPoseWeeklyCount(userId, poseId)
       return NextResponse.json(weeklyData, { status: 200 })
     } else {
-      // Get weekly summary for all postures
-      const allWeeklyData = await getAllPosturesWeeklyCount(userId)
+      // Get weekly summary for all poses
+      const allWeeklyData = await getAllPosesWeeklyCount(userId)
       return NextResponse.json(allWeeklyData, { status: 200 })
     }
   } catch (error) {

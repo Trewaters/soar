@@ -64,8 +64,8 @@ jest.mock('@app/FEATURES', () => ({
 }))
 
 // Mock search utility
-jest.mock('@app/utils/search/orderPosturesForSearch', () => ({
-  orderPosturesForSearch: jest.fn(
+jest.mock('@app/utils/search/orderPosesForSearch', () => ({
+  orderPosesForSearch: jest.fn(
     (
       series: any[],
       userId: string,
@@ -155,15 +155,15 @@ jest.mock('@serverComponents/navBottom', () => {
   return MockNavBottom
 })
 
-// Mock PostureShareButton component
-jest.mock('@app/clientComponents/postureShareButton', () => {
-  const MockPostureShareButton = ({ content }: any) => (
-    <div data-testid="posture-share-button">
+// Mock PoseShareButton component
+jest.mock('@app/clientComponents/poseShareButton', () => {
+  const MockPoseShareButton = ({ content }: any) => (
+    <div data-testid="pose-share-button">
       Share: {content?.data?.seriesName || ''}
     </div>
   )
-  MockPostureShareButton.displayName = 'MockPostureShareButton'
-  return MockPostureShareButton
+  MockPoseShareButton.displayName = 'MockPoseShareButton'
+  return MockPoseShareButton
 })
 
 // Mock Next.js Image component
@@ -219,7 +219,7 @@ const mockSeriesData: (FlowSeriesData & { createdBy?: string })[] = [
   {
     id: '1',
     seriesName: 'Sun Salutation A',
-    seriesPostures: [
+    seriesPoses: [
       'Mountain Pose;Stand tall with feet together',
       'Forward Fold;Bend forward from hips',
       'Chaturanga;Lower down with control',
@@ -233,7 +233,7 @@ const mockSeriesData: (FlowSeriesData & { createdBy?: string })[] = [
   {
     id: '2',
     seriesName: 'Hip Opening Series',
-    seriesPostures: [
+    seriesPoses: [
       'Pigeon Pose;Deep hip opener',
       'Butterfly Pose;Gentle hip stretch',
       'Low Lunge;Hip flexor stretch',
@@ -247,7 +247,7 @@ const mockSeriesData: (FlowSeriesData & { createdBy?: string })[] = [
   {
     id: '3',
     seriesName: 'Backbend Flow',
-    seriesPostures: [
+    seriesPoses: [
       'Camel Pose;Heart opening backbend',
       'Bridge Pose;Gentle backbend',
       'Wheel Pose;Advanced backbend',
@@ -277,7 +277,7 @@ describe('Practice Series Page', () => {
         {
           id: '1',
           seriesName: 'User Series',
-          seriesPostures: ['Pose1;Desc'],
+          seriesPoses: ['Pose1;Desc'],
           description: 'User created',
           createdBy: userEmail,
           canonicalAsanaId: 'A',
@@ -285,7 +285,7 @@ describe('Practice Series Page', () => {
         {
           id: '2',
           seriesName: 'Alpha Series',
-          seriesPostures: ['Pose2;Desc'],
+          seriesPoses: ['Pose2;Desc'],
           description: 'Alpha created',
           createdBy: alphaEmail,
           canonicalAsanaId: 'B',
@@ -293,7 +293,7 @@ describe('Practice Series Page', () => {
         {
           id: '3',
           seriesName: 'Other Series',
-          seriesPostures: ['Pose3;Desc'],
+          seriesPoses: ['Pose3;Desc'],
           description: 'Other',
           createdBy: 'other@example.com',
           canonicalAsanaId: 'C',
@@ -301,7 +301,7 @@ describe('Practice Series Page', () => {
         {
           id: '4',
           seriesName: 'Another Series',
-          seriesPostures: ['Pose4;Desc'],
+          seriesPoses: ['Pose4;Desc'],
           description: 'Other',
           createdBy: 'other2@example.com',
           canonicalAsanaId: 'D',
@@ -338,7 +338,7 @@ describe('Practice Series Page', () => {
         {
           id: '1',
           seriesName: 'User Series',
-          seriesPostures: ['Pose1;Desc'],
+          seriesPoses: ['Pose1;Desc'],
           description: 'User created',
           createdBy: 'test@uvuyoga.com', // match the mock session user
           canonicalAsanaId: 'A',
@@ -346,7 +346,7 @@ describe('Practice Series Page', () => {
         {
           id: '2',
           seriesName: 'Other Series',
-          seriesPostures: ['Pose2;Desc'],
+          seriesPoses: ['Pose2;Desc'],
           description: 'Other',
           createdBy: 'alpha@example.com', // alpha user so it appears in dropdown
           canonicalAsanaId: 'B',
@@ -610,7 +610,7 @@ describe('Practice Series Page', () => {
       })
     })
 
-    it('displays all postures with links', async () => {
+    it('displays all poses with links', async () => {
       const user = userEvent.setup()
       renderWithTheme(<Page />)
 
@@ -623,13 +623,13 @@ describe('Practice Series Page', () => {
       await user.click(screen.getByText('Sun Salutation A'))
 
       await waitFor(() => {
-        // Check for posture links
+        // Check for pose links
         const mountainPoseLink = screen.getByRole('link', {
           name: 'Mountain Pose',
         })
         expect(mountainPoseLink).toHaveAttribute(
           'href',
-          '/navigator/asanaPostures/Mountain%20Pose'
+          '/navigator/asanaPoses/Mountain%20Pose'
         )
 
         const forwardFoldLink = screen.getByRole('link', {
@@ -637,7 +637,7 @@ describe('Practice Series Page', () => {
         })
         expect(forwardFoldLink).toHaveAttribute(
           'href',
-          '/navigator/asanaPostures/Forward%20Fold'
+          '/navigator/asanaPoses/Forward%20Fold'
         )
       })
     })
@@ -664,7 +664,7 @@ describe('Practice Series Page', () => {
       })
     })
 
-    it('shows PostureShareButton when series is selected', async () => {
+    it('shows PoseShareButton when series is selected', async () => {
       const user = userEvent.setup()
       renderWithTheme(<Page />)
 
@@ -677,7 +677,7 @@ describe('Practice Series Page', () => {
       await user.click(screen.getByText('Backbend Flow'))
 
       await waitFor(() => {
-        expect(screen.getByTestId('posture-share-button')).toBeInTheDocument()
+        expect(screen.getByTestId('pose-share-button')).toBeInTheDocument()
         expect(screen.getByText('Share: Backbend Flow')).toBeInTheDocument()
       })
     })
@@ -840,7 +840,7 @@ describe('Practice Series Page', () => {
         {
           id: '1',
           seriesName: 'Test Series',
-          seriesPostures: ['Invalid;Posture;Format;With;Too;Many;Parts'],
+          seriesPoses: ['Invalid;Pose;Format;With;Too;Many;Parts'],
           description: 'Test description',
           createdBy: 'test@uvuyoga.com', // Match the mock session user
         },

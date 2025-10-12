@@ -49,7 +49,7 @@ import { logServiceError } from './errorLogger'
 export type SeriesData = {
   id?: string
   seriesName: string
-  seriesPostures: string[]
+  seriesPoses: string[]
   breath?: string
   description?: string
   duration?: string
@@ -61,7 +61,7 @@ export type SeriesData = {
 
 export type CreateSeriesInput = {
   seriesName: string
-  seriesPostures: string[]
+  seriesPoses: string[]
   breath: string
   description: string
   duration: string

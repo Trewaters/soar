@@ -5,23 +5,23 @@
 
 import { PrismaClient } from '../../prisma/generated/client'
 import { Session } from 'next-auth'
-import { AsanaPostureData } from '../../types/images'
+import { AsanaPoseData } from '../../types/images'
 
 const prisma = new PrismaClient()
 
 /**
  * Verify if a user owns a specific asana
- * @param postureId - The ID of the asana to check
+ * @param poseId - The ID of the asana to check
  * @param userIdentifier - The user identifier to verify ownership for. Can be either the user's email or their internal id.
  * @returns Promise<boolean> - True if user owns the asana
  */
 export async function verifyAsanaOwnership(
-  postureId: string,
+  poseId: string,
   userIdentifier: string
 ): Promise<boolean> {
   try {
-    const asana = await prisma.asanaPosture.findUnique({
-      where: { id: postureId },
+    const asana = await prisma.asanaPose.findUnique({
+      where: { id: poseId },
       select: { created_by: true },
     })
 
@@ -47,7 +47,7 @@ export async function verifyAsanaOwnership(
  * @returns boolean - True if user can manage images
  */
 export function canManageImages(
-  asana: AsanaPostureData,
+  asana: AsanaPoseData,
   session: Session | null
 ): boolean {
   // Require an authenticated session
@@ -72,7 +72,7 @@ export function canManageImages(
  * @param asana - The asana data to check
  * @returns boolean - True if asana is user-created
  */
-export function isUserCreatedAsana(asana: AsanaPostureData): boolean {
+export function isUserCreatedAsana(asana: AsanaPoseData): boolean {
   return asana.isUserCreated === true
 }
 
@@ -83,7 +83,7 @@ export function isUserCreatedAsana(asana: AsanaPostureData): boolean {
  * @returns Object with permission details
  */
 export function getImageManagementPermissions(
-  asana: AsanaPostureData,
+  asana: AsanaPoseData,
   session: Session | null
 ) {
   const canManage = canManageImages(asana, session)
@@ -143,24 +143,27 @@ export async function verifyMultipleImageOwnership(
  * @param asana - The asana to check
  * @returns boolean - True if asana supports multiple images
  */
-export function canHaveMultipleImages(asana: AsanaPostureData): boolean {
+export function canHaveMultipleImages(asana: AsanaPoseData): boolean {
   return isUserCreatedAsana(asana)
 }
 
 /**
  * Get the next available display order for an asana
- * @param postureId - The asana ID to check
+ * @param poseId - The asana ID to check
  * @returns Promise<number> - The next available display order (1-3)
  */
-export async function getNextDisplayOrder(postureId: string): Promise<number> {
+export async function getNextDisplayOrder(poseId: string): Promise<number> {
   try {
-    const existingImages = await prisma.poseImage.findMany({
-      where: { postureId },
-      select: { displayOrder: true },
+    // Support migration: some records may use `postureId` while newer records use `poseId`.
+    const whereClause: any = { OR: [{ poseId }, { postureId: poseId }] }
+
+    // Fetch minimal fields without a typed `select` to avoid Prisma client type mismatches
+    const existingImages: any[] = await prisma.poseImage.findMany({
+      where: whereClause,
       orderBy: { displayOrder: 'asc' },
     })
 
-    const existingOrders = existingImages.map((img) => img.displayOrder)
+    const existingOrders = existingImages.map((img: any) => img.displayOrder)
 
     // Find the first available slot (1, 2, or 3)
     for (let order = 1; order <= 3; order++) {
@@ -207,13 +210,23 @@ export class AsanaOwnershipError extends Error {
 }
 
 export class ImageLimitError extends Error {
-  constructor(
-    message: string,
-    public limit: number,
-    public current: number
-  ) {
+  private _limit: number
+  private _current: number
+
+  constructor(message: string, limit: number, current: number) {
     super(message)
     this.name = 'ImageLimitError'
+    this._limit = limit
+    this._current = current
+  }
+
+  // Preserve legacy public properties via getters
+  public get limit(): number {
+    return this._limit
+  }
+
+  public get current(): number {
+    return this._current
   }
 }
 

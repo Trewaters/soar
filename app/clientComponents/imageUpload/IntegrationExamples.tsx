@@ -33,7 +33,7 @@ export function ProfileWithImages() {
 }
 
 // 2. Integration with Asana Creation Page
-// Modify app/navigator/asanaPostures/createAsana/page.tsx
+// Modify app/navigator/asanaPoses/createAsana/page.tsx
 
 export function CreateAsanaWithImages() {
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -67,22 +67,22 @@ export function CreateAsanaWithImages() {
   )
 }
 
-// 3. Integration with Posture Detail Page
-// Add to app/navigator/asanaPostures/[pose]/postureActivityDetail.tsx
+// 3. Integration with Pose Detail Page
+// Add to app/navigator/asanaPoses/[pose]/poseActivityDetail.tsx
 
-export function PostureDetailWithImages({
-  postureCardProp,
+export function PoseDetailWithImages({
+  poseCardProp,
 }: {
-  postureCardProp: AsanaPose
+  poseCardProp: AsanaPose
 }) {
   return (
     <Paper sx={{ mt: '-2.2px', backgroundColor: 'navSplash.dark' }}>
-      {/* Existing posture detail content */}
+      {/* Existing pose detail content */}
 
       {/* Add images section */}
       <Box sx={{ mt: 3, px: 2 }}>
         <ImageManagement
-          title={`Images for ${postureCardProp.sort_english_name}`}
+          title={`Images for ${poseCardProp.sort_english_name}`}
           variant="full"
         />
       </Box>

@@ -55,8 +55,8 @@ interface ImageUploadWithFallbackProps {
   maxFileSize?: number // in MB
   acceptedTypes?: string[]
   variant?: 'button' | 'dropzone'
-  postureId?: string
-  postureName?: string
+  poseId?: string
+  poseName?: string
 }
 
 interface FallbackDialogState {
@@ -109,8 +109,8 @@ export default function ImageUploadWithFallback({
   maxFileSize = 10,
   acceptedTypes = ['image/jpeg', 'image/png', 'image/webp'],
   variant = 'button',
-  postureId,
-  postureName,
+  poseId,
+  poseName,
 }: ImageUploadWithFallbackProps) {
   const { data: session } = useSession()
   const [open, setOpen] = useState(false)
@@ -159,9 +159,9 @@ export default function ImageUploadWithFallback({
     initStorage()
   }, [])
 
-  // Load staged images when creating a new asana (no postureId)
+  // Load staged images when creating a new asana (no poseId)
   React.useEffect(() => {
-    if (postureId) return
+    if (poseId) return
     try {
       const raw = localStorage.getItem(STAGED_KEY)
       if (raw) {
@@ -171,14 +171,14 @@ export default function ImageUploadWithFallback({
     } catch (e) {
       // ignore
     }
-  }, [postureId])
+  }, [poseId])
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
     if (!files.length) return
 
-    // If no postureId, allow selecting multiple files and stage them
-    if (!postureId) {
+    // If no poseId, allow selecting multiple files and stage them
+    if (!poseId) {
       processSelectedFilesForStaging(files)
       return
     }
@@ -286,12 +286,9 @@ export default function ImageUploadWithFallback({
           formData.append('file', file)
           formData.append('altText', '')
           formData.append('userId', session.user.email || '')
-          formData.append(
-            'imageType',
-            postureId || postureName ? 'posture' : 'gallery'
-          )
-          if (postureId) formData.append('postureId', postureId)
-          if (postureName) formData.append('postureName', postureName)
+          formData.append('imageType', poseId || poseName ? 'pose' : 'gallery')
+          if (poseId) formData.append('poseId', poseId)
+          if (poseName) formData.append('poseName', poseName)
 
           const response = await fetch('/api/images/upload', {
             method: 'POST',
@@ -345,17 +342,14 @@ export default function ImageUploadWithFallback({
       }
       formData.append('altText', altText.trim() || '')
       formData.append('userId', session.user.email || '')
-      formData.append(
-        'imageType',
-        postureId || postureName ? 'posture' : 'gallery'
-      ) // Tag as posture image if posture info provided
+      formData.append('imageType', poseId || poseName ? 'pose' : 'gallery') // Tag as pose image if pose info provided
 
-      // Add posture information if available
-      if (postureId) {
-        formData.append('postureId', postureId)
+      // Add pose information if available
+      if (poseId) {
+        formData.append('poseId', poseId)
       }
-      if (postureName) {
-        formData.append('postureName', postureName)
+      if (poseName) {
+        formData.append('poseName', poseName)
       }
 
       const response = await fetch('/api/images/upload', {
@@ -532,7 +526,7 @@ export default function ImageUploadWithFallback({
     const files = Array.from(event.dataTransfer.files || [])
     if (!files.length) return
 
-    if (!postureId) {
+    if (!poseId) {
       processSelectedFilesForStaging(files)
       return
     }
@@ -613,7 +607,7 @@ export default function ImageUploadWithFallback({
         Drag and drop an image here, or click to select
       </Typography>
       {/* helper: allow multiple selection when creating a new asana */}
-      {!postureId && (
+      {!poseId && (
         <Typography
           variant="caption"
           color="text.secondary"
@@ -679,7 +673,7 @@ export default function ImageUploadWithFallback({
                   type="file"
                   accept={acceptedTypes.join(',')}
                   onChange={handleFileSelect}
-                  multiple={!postureId}
+                  multiple={!poseId}
                   style={{ display: 'none' }}
                 />
                 <Paper
@@ -704,7 +698,7 @@ export default function ImageUploadWithFallback({
                   </Typography>
                 </Paper>
                 {/* Show staged previews when creating a new asana */}
-                {!postureId && stagedImages.length > 0 && (
+                {!poseId && stagedImages.length > 0 && (
                   <Box sx={{ mt: 2 }}>
                     <Typography variant="subtitle2">
                       Staged images (not yet saved)

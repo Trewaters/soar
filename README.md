@@ -173,11 +173,11 @@ _Export collection_
 ```
 mongoexport --collection=<coll> <options> <connection-string> --jsonArray
 
-mongoexport --collection=AsanaPosture mongodb://localhost:27017/yogaDBSandbox
+mongoexport --collection=AsanaPose mongodb://localhost:27017/yogaDBSandbox
 ```
 
 ```
-mongoexport --collection=AsanaPosture mongodb://localhost:27017/yogaDBSandbox --out=C:/data/export/exported_AsanaPosture.json
+mongoexport --collection=AsanaPose mongodb://localhost:27017/yogaDBSandbox --out=C:/data/export/exported_AsanaPose.json
 
 mongoexport --collection=AsanaSequence mongodb://localhost:27017/yogaDBSandbox --out=C:/data/export/exported_AsanaSequence.json
 
@@ -209,7 +209,7 @@ _Running end-to-end tests_
 
 execute the end-to-end tests via **?Test Kit** [Protractor](http://www.protractortest.org/).
 
-Originally Found yoga poses [here](https://www.pocketyoga.com/pose/). Currently used for test data. Final version of the application will have user generated data for postures.
+Originally Found yoga poses [here](https://www.pocketyoga.com/pose/). Currently used for test data. Final version of the application will have user generated data for poses.
 
 ### Visual/UI Style Guide
 
@@ -326,7 +326,7 @@ I create branches with the name of the feature I plan to work on. This way I kee
 - _"feature/auth":_ Develop authentication, user roles, general app security, etc.
 - _"feature/nav":_ Application navigation elements
 - _"feature/profile":_ Work on the yogi user profile. Allow view, edit and shareable link of profile data.
-- _"feature/posture-cards":_ Work on asana features. Allow view, edit, and create postures.
+- _"feature/pose-cards":_ Work on asana features. Allow view, edit, and create poses.
 - _"feature/core":_ Core work in the app like data connections, env variables, etc.
 
 The "version" branches are locked after release.

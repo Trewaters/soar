@@ -5,8 +5,8 @@ const prisma = new PrismaClient()
 
 export type AsanaActivityInput = {
   userId: string
-  postureId: string
-  postureName: string
+  poseId: string
+  poseName: string
   sort_english_name: string
   duration: number
   datePerformed: Date | string // Accept both Date and string, convert in function
@@ -27,8 +27,16 @@ export async function recordAsanaActivity(input: AsanaActivityInput) {
           : new Date(input.datePerformed),
     }
 
+    // Prisma schema may still expect legacy posture fields during migration.
+    // Populate them from the incoming pose fields to be tolerant.
+    const dbData: any = {
+      ...data,
+      postureId: input.poseId,
+      postureName: input.poseName,
+    }
+
     const result = await prisma.asanaActivity.create({
-      data,
+      data: dbData,
     })
 
     return result
@@ -43,10 +51,10 @@ export async function recordAsanaActivity(input: AsanaActivityInput) {
 }
 
 /**
- * Delete an activity for a specific user and posture on today's date only.
+ * Delete an activity for a specific user and pose on today's date only.
  * This is used for streak tracking - only removes today's activity, preserving historical data.
  */
-export async function deleteAsanaActivity(userId: string, postureId: string) {
+export async function deleteAsanaActivity(userId: string, poseId: string) {
   try {
     // Get today's date range (start and end of today)
     const today = new Date()
@@ -56,27 +64,27 @@ export async function deleteAsanaActivity(userId: string, postureId: string) {
     const endOfToday = new Date(today)
     endOfToday.setHours(23, 59, 59, 999)
 
-    // Delete only today's activity for this user and posture
+    // Delete only today's activity for this user and pose
     const result = await prisma.asanaActivity.deleteMany({
       where: {
         userId,
-        postureId,
+        poseId,
         datePerformed: {
           gte: startOfToday,
           lte: endOfToday,
         },
-      },
+      } as any,
     })
 
     return result
   } catch (error) {
     logDatabaseError(error, 'deleteMany', 'AsanaActivity', {
       userId,
-      postureId,
+      poseId,
     })
     logServiceError(error, 'asanaActivityService', 'deleteAsanaActivity', {
       userId,
-      postureId,
+      poseId,
       operation: 'delete_activity',
     })
     throw error
@@ -84,10 +92,10 @@ export async function deleteAsanaActivity(userId: string, postureId: string) {
 }
 
 /**
- * Check if an activity exists for a specific user and posture on today's date.
+ * Check if an activity exists for a specific user and pose on today's date.
  * This is used for streak tracking - only activities performed today count for the current streak.
  */
-export async function checkExistingActivity(userId: string, postureId: string) {
+export async function checkExistingActivity(userId: string, poseId: string) {
   try {
     // Get today's date range (start and end of today)
     const today = new Date()
@@ -100,12 +108,12 @@ export async function checkExistingActivity(userId: string, postureId: string) {
     const activity = await prisma.asanaActivity.findFirst({
       where: {
         userId,
-        postureId,
+        poseId,
         datePerformed: {
           gte: startOfToday,
           lte: endOfToday,
         },
-      },
+      } as any,
       orderBy: {
         datePerformed: 'desc',
       },
@@ -115,11 +123,11 @@ export async function checkExistingActivity(userId: string, postureId: string) {
   } catch (error) {
     logDatabaseError(error, 'findFirst', 'AsanaActivity', {
       userId,
-      postureId,
+      poseId,
     })
     logServiceError(error, 'asanaActivityService', 'checkExistingActivity', {
       userId,
-      postureId,
+      poseId,
       operation: 'check_activity',
     })
     throw error
@@ -141,7 +149,7 @@ export async function getDailyAsanaSummary(userId: string, date: Date) {
           gte: start,
           lte: end,
         },
-      },
+      } as any,
       orderBy: { datePerformed: 'asc' },
     })
   } catch (error) {
@@ -153,7 +161,7 @@ export async function getDailyAsanaSummary(userId: string, date: Date) {
 export async function getUserAsanaHistory(userId: string) {
   try {
     return await prisma.asanaActivity.findMany({
-      where: { userId },
+      where: { userId } as any,
       orderBy: { datePerformed: 'desc' },
     })
   } catch (error) {
@@ -169,7 +177,7 @@ export async function getUserAsanaHistory(userId: string) {
   }
 }
 
-export async function getPostureWeeklyCount(userId: string, postureId: string) {
+export async function getPoseWeeklyCount(userId: string, poseId: string) {
   try {
     // Get activities for the past 7 days
     const startDate = new Date()
@@ -182,12 +190,12 @@ export async function getPostureWeeklyCount(userId: string, postureId: string) {
     const activities = await prisma.asanaActivity.findMany({
       where: {
         userId,
-        postureId,
+        poseId,
         datePerformed: {
           gte: startDate,
           lte: endDate,
         },
-      },
+      } as any,
       orderBy: { datePerformed: 'desc' },
     })
 
@@ -202,19 +210,19 @@ export async function getPostureWeeklyCount(userId: string, postureId: string) {
   } catch (error) {
     logDatabaseError(error, 'findMany', 'AsanaActivity', {
       userId,
-      postureId,
+      poseId,
       operation: 'weekly_count',
     })
-    logServiceError(error, 'asanaActivityService', 'getPostureWeeklyCount', {
+    logServiceError(error, 'asanaActivityService', 'getPoseWeeklyCount', {
       userId,
-      postureId,
+      poseId,
       operation: 'get_weekly_count',
     })
     throw error
   }
 }
 
-export async function getAllPosturesWeeklyCount(userId: string) {
+export async function getAllPosesWeeklyCount(userId: string) {
   try {
     // Get all activities for the past 7 days
     const startDate = new Date()
@@ -231,44 +239,48 @@ export async function getAllPosturesWeeklyCount(userId: string) {
           gte: startDate,
           lte: endDate,
         },
-      },
+      } as any,
       orderBy: { datePerformed: 'desc' },
     })
 
-    // Group by postureId and count
-    const postureStats: Record<
+    // Group by poseId (fallback to postureId) and count
+    const poseStats: Record<
       string,
       {
         count: number
-        postureName: string
+        poseName: string
         lastPerformed: Date
         activities: typeof activities
       }
     > = {}
 
     activities.forEach((activity) => {
-      if (!postureStats[activity.postureId]) {
-        postureStats[activity.postureId] = {
+      // Some records may still use postureId during migration; prefer poseId but fall back to postureId
+      const key =
+        (activity as any).poseId || (activity as any).postureId || 'unknown'
+
+      if (!poseStats[key]) {
+        poseStats[key] = {
           count: 0,
-          postureName: activity.postureName,
+          poseName:
+            (activity as any).poseName || (activity as any).postureName || '',
           lastPerformed: activity.datePerformed,
           activities: [],
         }
       }
-      postureStats[activity.postureId].count++
-      postureStats[activity.postureId].activities.push(activity)
+
+      poseStats[key].count++
+      poseStats[key].activities.push(activity)
 
       // Update last performed if this activity is more recent
-      if (
-        activity.datePerformed > postureStats[activity.postureId].lastPerformed
-      ) {
-        postureStats[activity.postureId].lastPerformed = activity.datePerformed
+      if (activity.datePerformed > poseStats[key].lastPerformed) {
+        poseStats[key].lastPerformed = activity.datePerformed
       }
     })
 
     return {
       totalActivities: activities.length,
-      postureStats,
+      poseStats,
       dateRange: {
         start: startDate,
         end: endDate,
@@ -279,15 +291,10 @@ export async function getAllPosturesWeeklyCount(userId: string) {
       userId,
       operation: 'weekly_summary',
     })
-    logServiceError(
-      error,
-      'asanaActivityService',
-      'getAllPosturesWeeklyCount',
-      {
-        userId,
-        operation: 'get_weekly_summary',
-      }
-    )
+    logServiceError(error, 'asanaActivityService', 'getAllPosesWeeklyCount', {
+      userId,
+      operation: 'get_weekly_summary',
+    })
     throw error
   }
 }

@@ -55,28 +55,28 @@ const mockSeriesData = [
   {
     id: '1',
     seriesName: 'My Personal Series',
-    seriesPostures: ['Pose 1', 'Pose 2'],
+    seriesPoses: ['Pose 1', 'Pose 2'],
     description: 'My series',
     createdBy: 'testuser@example.com', // User's own series (matches email)
   },
   {
     id: '2',
     seriesName: 'My ID Series',
-    seriesPostures: ['Pose 1b', 'Pose 2b'],
+    seriesPoses: ['Pose 1b', 'Pose 2b'],
     description: 'My other series',
     createdBy: 'user123', // User's own series (matches ID)
   },
   {
     id: '3',
     seriesName: 'Alpha User Series',
-    seriesPostures: ['Pose 3', 'Pose 4'],
+    seriesPoses: ['Pose 3', 'Pose 4'],
     description: 'Alpha series',
     createdBy: 'alpha1@uvuyoga.com', // Alpha user series
   },
   {
     id: '4',
     seriesName: 'Another User Series',
-    seriesPostures: ['Pose 5', 'Pose 6'],
+    seriesPoses: ['Pose 5', 'Pose 6'],
     description: 'Other series',
     createdBy: 'other@example.com', // Regular user series (should not appear)
   },

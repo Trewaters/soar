@@ -248,7 +248,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
       onMouseLeave={handleMouseLeave}
       tabIndex={0}
       role="img"
-      aria-label={`${ariaLabel}. Image ${safeActiveIndex + 1} of ${totalImages}. ${currentImage?.altText || currentImage?.postureName || 'Yoga pose'}`}
+      aria-label={`${ariaLabel}. Image ${safeActiveIndex + 1} of ${totalImages}. ${currentImage?.altText || currentImage?.poseName || 'Yoga pose'}`}
       aria-live="polite"
     >
       {/* Main Image Display */}
@@ -283,7 +283,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
               src={currentImage?.url || ''}
               alt={
                 currentImage?.altText ||
-                currentImage?.postureName ||
+                currentImage?.poseName ||
                 `Yoga pose ${safeActiveIndex + 1}`
               }
               fill

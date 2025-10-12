@@ -5,11 +5,11 @@
 
 import '@testing-library/jest-dom'
 import { Session } from 'next-auth'
-import { AsanaPostureData } from '../../../types/images'
+import { AsanaPoseData } from '../../../types/images'
 
 // Mock Prisma Client - create mock before importing the module that uses it
 const mockPrisma = {
-  asanaPosture: {
+  asanaPose: {
     findUnique: jest.fn(),
   },
   poseImage: {
@@ -56,7 +56,7 @@ const mockOtherUserSession = {
 } as Session
 
 // Mock asana data
-const mockUserCreatedAsana: AsanaPostureData = {
+const mockUserCreatedAsana: AsanaPoseData = {
   id: 'user-asana-1',
   english_names: ['Custom Warrior'],
   sanskrit_names: 'Virabhadrasana Custom',
@@ -71,8 +71,8 @@ const mockUserCreatedAsana: AsanaPostureData = {
   variations: [],
   modifications: [],
   label: 'custom',
-  suggested_postures: [],
-  preparatory_postures: [],
+  suggested_poses: [],
+  preparatory_poses: [],
   preferred_side: 'both',
   sideways: false,
   image: 'custom-warrior.jpg',
@@ -80,7 +80,7 @@ const mockUserCreatedAsana: AsanaPostureData = {
   updated_on: new Date('2024-01-02'),
   acitivity_completed: false,
   acitivity_practice: true,
-  posture_intent: 'strength and balance',
+  pose_intent: 'strength and balance',
   breath_series: [],
   duration_asana: '30 seconds',
   transition_cues_out: 'step back',
@@ -97,7 +97,7 @@ const mockUserCreatedAsana: AsanaPostureData = {
   poseImages: [],
 }
 
-const mockSystemAsana: AsanaPostureData = {
+const mockSystemAsana: AsanaPoseData = {
   ...mockUserCreatedAsana,
   id: 'system-asana-1',
   english_names: ['Traditional Warrior I'],
@@ -114,21 +114,21 @@ describe('Asana Ownership Verification Utilities', () => {
 
   describe('verifyAsanaOwnership', () => {
     it('should return true when user owns the asana', async () => {
-      mockPrisma.asanaPosture.findUnique.mockResolvedValue({
+      mockPrisma.asanaPose.findUnique.mockResolvedValue({
         created_by: 'test-user-id',
       })
 
       const result = await verifyAsanaOwnership('asana-1', 'test-user-id')
 
       expect(result).toBe(true)
-      expect(mockPrisma.asanaPosture.findUnique).toHaveBeenCalledWith({
+      expect(mockPrisma.asanaPose.findUnique).toHaveBeenCalledWith({
         where: { id: 'asana-1' },
         select: { created_by: true },
       })
     })
 
     it('should return false when user does not own the asana', async () => {
-      mockPrisma.asanaPosture.findUnique.mockResolvedValue({
+      mockPrisma.asanaPose.findUnique.mockResolvedValue({
         created_by: 'other-user-id',
       })
 
@@ -138,7 +138,7 @@ describe('Asana Ownership Verification Utilities', () => {
     })
 
     it('should return false when asana does not exist', async () => {
-      mockPrisma.asanaPosture.findUnique.mockResolvedValue(null)
+      mockPrisma.asanaPose.findUnique.mockResolvedValue(null)
 
       const result = await verifyAsanaOwnership('non-existent', 'test-user-id')
 
@@ -147,7 +147,7 @@ describe('Asana Ownership Verification Utilities', () => {
 
     it('should return false and log error when database query fails', async () => {
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
-      mockPrisma.asanaPosture.findUnique.mockRejectedValue(
+      mockPrisma.asanaPose.findUnique.mockRejectedValue(
         new Error('Database error')
       )
 

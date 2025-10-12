@@ -25,7 +25,7 @@ import Divider from '@mui/material/Divider'
 import Box from '@mui/material/Box'
 import SeriesImageManager from '@app/clientComponents/SeriesImageManager'
 import AddAsanasDialog from '@clientComponents/AddAsanasDialog'
-import { sanitizeSeriesSecondaryLabel } from '@app/utils/asana/seriesPostureLabels'
+import { sanitizeSeriesSecondaryLabel } from '@app/utils/asana/seriesPoseLabels'
 
 export interface Asana {
   id: string

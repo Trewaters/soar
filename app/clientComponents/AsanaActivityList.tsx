@@ -193,8 +193,8 @@ export default function AsanaActivityList() {
                   </Link>
                 ) : (
                   <Link
-                    href={`/navigator/asanaPostures/${
-                      activity.type === 'asana' ? activity.postureId : '#'
+                    href={`/navigator/asanaPoses/${
+                      activity.type === 'asana' ? activity.poseId : '#'
                     }`}
                   >
                     <Typography
@@ -205,7 +205,7 @@ export default function AsanaActivityList() {
                         whiteSpace: 'nowrap',
                       }}
                     >
-                      {activity.postureName}
+                      {activity.poseName}
                     </Typography>
                   </Link>
                 )}

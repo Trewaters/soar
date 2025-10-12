@@ -2,7 +2,7 @@
 import { useSession } from 'next-auth/react'
 import { FEATURES } from '@app/FEATURES'
 import { FlowSeriesData } from '@context/AsanaSeriesContext'
-import { orderPosturesForSearch } from '@app/utils/search/orderPosturesForSearch'
+import { orderPosesForSearch } from '@app/utils/search/orderPosesForSearch'
 import getAlphaUserIds from '@app/lib/alphaUsers'
 import {
   Autocomplete,
@@ -18,12 +18,12 @@ import {
   CardMedia,
 } from '@mui/material'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
-import { getPostureNavigationUrlSync } from '@app/utils/navigation/postureNavigation'
+import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
-import PostureShareButton from '@app/clientComponents/postureShareButton'
+import PoseShareButton from '@app/clientComponents/poseShareButton'
 import { getAllSeries, deleteSeries, updateSeries } from '@lib/seriesService'
 import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
 import SeriesWeeklyActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesWeeklyActivityTracker'
@@ -34,7 +34,7 @@ import EditSeriesDialog, {
   Series as EditSeriesShape,
   Asana as EditAsanaShape,
 } from '@app/navigator/flows/editSeries/EditSeriesDialog'
-import { splitSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
+import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -87,12 +87,12 @@ export default function Page() {
         id: s.id ? String(s.id) : '',
       }))
     const validSeries = authorizedSeries
-      .filter((s) => !!s.id && !!s.seriesName && !!s.seriesPostures)
+      .filter((s) => !!s.id && !!s.seriesName && !!s.seriesPoses)
       .map((s) => ({
         ...s,
         id: s.id ? String(s.id) : '',
       }))
-    const allOrdered = orderPosturesForSearch(
+    const allOrdered = orderPosesForSearch(
       validSeries,
       currentUserId,
       alphaUserIds,
@@ -251,9 +251,9 @@ export default function Page() {
   // Map FlowSeriesData to EditSeriesDialog expected shape
   const dialogSeries: EditSeriesShape | null = useMemo(() => {
     if (!flow) return null
-    const asanas: EditAsanaShape[] = (flow.seriesPostures || []).map(
+    const asanas: EditAsanaShape[] = (flow.seriesPoses || []).map(
       (entry, idx) => {
-        const { name, secondary } = splitSeriesPostureEntry(entry)
+        const { name, secondary } = splitSeriesPoseEntry(entry)
         const resolvedName = name || `asana-${idx}`
 
         return {
@@ -534,10 +534,10 @@ export default function Page() {
                   </Box>
                 )}
                 <Stack>
-                  {flow.seriesPostures.map((pose) => {
+                  {flow.seriesPoses.map((pose) => {
                     const { name: poseName, secondary } =
-                      splitSeriesPostureEntry(pose)
-                    const href = getPostureNavigationUrlSync(pose)
+                      splitSeriesPoseEntry(pose)
+                    const href = getPoseNavigationUrlSync(pose)
                     const resolvedName = poseName || pose
 
                     return (
@@ -562,7 +562,7 @@ export default function Page() {
                     )
                   })}
                 </Stack>
-                {/* Series image (if uploaded) - shown between posture list and description */}
+                {/* Series image (if uploaded) - shown between pose list and description */}
                 {imageUrl ? (
                   <Box sx={{ width: '100%', maxWidth: 600, mt: 2 }}>
                     <Card
@@ -631,7 +631,7 @@ export default function Page() {
                 />
               </Box>
 
-              <PostureShareButton
+              <PoseShareButton
                 content={{
                   contentType: 'series',
                   data: flow,

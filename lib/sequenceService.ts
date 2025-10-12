@@ -6,7 +6,7 @@ export type SequenceData = {
   sequencesSeries: Array<{
     id: number
     seriesName: string
-    seriesPostures: string[]
+    seriesPoses: string[]
     breath?: string
     description?: string
     duration?: string
@@ -25,7 +25,7 @@ export type CreateSequenceInput = {
   sequencesSeries: Array<{
     id: number
     seriesName: string
-    seriesPostures: string[]
+    seriesPoses: string[]
     breath?: string
     description?: string
     duration?: string

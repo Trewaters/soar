@@ -47,7 +47,7 @@ export async function PUT(
     }
 
     // Verify ownership: `created_by` stores the creator's email in this project
-    const asana = await prisma.asanaPosture.findUnique({
+    const asana = await prisma.asanaPose.findUnique({
       where: { id: asanaId },
       select: { created_by: true },
     })

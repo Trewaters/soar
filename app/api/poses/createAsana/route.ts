@@ -9,26 +9,19 @@ export async function POST(request: Request) {
     description,
     category,
     difficulty,
-    breath_direction_default,
-    preferred_side,
-    sideways,
+    breath,
     created_by,
   } = await request.json()
 
   try {
-    // Convert sideways string to boolean
-    const sidewaysBoolean = sideways === 'Yes' || sideways === true
-
-    const createdPosture = await prisma.asanaPosture.create({
+    const createdPose = await prisma.asanaPose.create({
       data: {
         english_names,
         sort_english_name,
         description,
         category,
         difficulty,
-        breath_direction_default,
-        preferred_side,
-        sideways: sidewaysBoolean,
+        breath,
         created_by,
         // Mark as user-created when a creator identifier is supplied
         isUserCreated: Boolean(created_by),
@@ -36,21 +29,18 @@ export async function POST(request: Request) {
       },
     })
 
-    // Return the created posture with consistent formatting
+    // Return the created pose with consistent formatting
     // Use the actual database ID instead of a temporary one
-    const postureWithId = {
-      ...createdPosture,
-      breath_direction_default:
-        createdPosture.breath_direction_default || 'neutral',
+    const poseWithId = {
+      ...createdPose,
+      breath: createdPose.breath || 'neutral',
     }
 
-    return Response.json(postureWithId)
+    return Response.json(poseWithId)
   } catch (error: any) {
-    console.error('Error creating posture in database:', {
+    console.error('Error creating pose in database:', {
       error: error.message,
       stack: error.stack,
-      sideways,
-      typeof_sideways: typeof sideways,
     })
     return Response.json({ error: error.message }, { status: 500 })
   } finally {

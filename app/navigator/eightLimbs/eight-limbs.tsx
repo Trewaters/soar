@@ -20,11 +20,11 @@ import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
 export const eightLimbsData = [
   {
     primary: 'Asana',
-    secondary: 'Physical Postures',
+    secondary: 'Physical Poses',
     // icon: <WaterDropOutlinedIcon />,
     icon: <Brightness1OutlinedIcon />,
     onClick: (router: ReturnType<typeof useRouter>) =>
-      router.push('/navigator/asanaPostures'),
+      router.push('/navigator/asanaPoses'),
     iconSx: { color: 'primary.main', pl: 3 },
     textSx: {
       color: 'primary.main',

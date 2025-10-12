@@ -39,7 +39,7 @@ import { ArrowBack, ArrowForward } from '@mui/icons-material'
 import Image from 'next/image'
 import NavBottom from '@serverComponents/navBottom'
 import { AppText } from '@app/navigator/constants/Strings'
-import { splitSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
+import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 import getAlphaUserIds from '@app/lib/alphaUsers'
 import { getAllSeries } from '@lib/seriesService'
 
@@ -64,7 +64,7 @@ export default function Page() {
 
   const [flowSeries, setFlowSeries] = useState<FlowSeriesData[]>([])
   const [seriesNameSet, setSeriesNameSet] = useState<string[]>([])
-  const [postures, setPostures] = useState<string[]>([])
+  const [poses, setPoses] = useState<string[]>([])
   const [open, setOpen] = useState(false)
 
   // Get alpha user IDs (synchronous function like in practiceSeries)
@@ -164,7 +164,7 @@ export default function Page() {
     getData()
   }, [router, session])
 
-  // Ensure postures are updated when a new series is added
+  // Ensure poses are updated when a new series is added
   function handleSelect(
     event: ChangeEvent<object>,
     value: FlowSeriesData | null
@@ -175,14 +175,14 @@ export default function Page() {
         ...prevSeriesNameSet,
         value.seriesName,
       ])
-      setPostures(value.seriesPostures)
+      setPoses(value.seriesPoses)
       setSequences({
         ...sequences,
         sequencesSeries: [...sequences.sequencesSeries, value],
       })
       const newIndex = seriesNameSet.length // Update index when a new series is added
       setCurrentSeriesIndex(newIndex)
-      updatePostures(newIndex)
+      updatePoses(newIndex)
     }
   }
 
@@ -268,29 +268,29 @@ export default function Page() {
     setOpen(newOpen)
   }
 
-  // Function to update postures based on the current series index
-  const updatePostures = (index: number) => {
+  // Function to update poses based on the current series index
+  const updatePoses = (index: number) => {
     const seriesName = seriesNameSet[index]
     const series = flowSeries.find((s) => s.seriesName === seriesName)
     if (series) {
-      setPostures(series.seriesPostures)
+      setPoses(series.seriesPoses)
     }
   }
 
-  // Update handleNextSeries to call updatePostures
+  // Update handleNextSeries to call updatePoses
   const handleNextSeries = () => {
     setCurrentSeriesIndex((prevIndex) => {
       const newIndex = Math.min(prevIndex + 1, seriesNameSet.length - 1)
-      updatePostures(newIndex)
+      updatePoses(newIndex)
       return newIndex
     })
   }
 
-  // Update handlePreviousSeries to call updatePostures
+  // Update handlePreviousSeries to call updatePoses
   const handlePreviousSeries = () => {
     setCurrentSeriesIndex((prevIndex) => {
       const newIndex = Math.max(prevIndex - 1, 0)
-      updatePostures(newIndex)
+      updatePoses(newIndex)
       return newIndex
     })
   }
@@ -538,7 +538,7 @@ export default function Page() {
                     </Stack>
                   </FormControl>
 
-                  {postures?.length > 0 && (
+                  {poses?.length > 0 && (
                     <>
                       <FormControl sx={{ mt: 4 }} className="journal">
                         <FormLabel className="journalTitle">
@@ -546,9 +546,9 @@ export default function Page() {
                         </FormLabel>
 
                         <List className="lines">
-                          {postures.map((series, index) => {
+                          {poses.map((series, index) => {
                             const { name, secondary } =
-                              splitSeriesPostureEntry(series)
+                              splitSeriesPoseEntry(series)
 
                             return (
                               <ListItem

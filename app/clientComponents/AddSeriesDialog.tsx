@@ -28,7 +28,7 @@ import { useSession } from 'next-auth/react'
 interface SeriesOption {
   id: string
   seriesName: string
-  seriesPostures: string[]
+  seriesPoses: string[]
   description?: string
   image?: string
   durationSeries?: string
@@ -94,14 +94,14 @@ export default function AddSeriesDialog({
     const filtered = availableSeries.filter((series) => {
       const seriesName = series.seriesName?.toLowerCase() || ''
       const description = series.description?.toLowerCase() || ''
-      const postureCount = series.seriesPostures?.length.toString() || ''
+      const poseCount = series.seriesPoses?.length.toString() || ''
 
       const searchLower = searchTerm.toLowerCase()
 
       return (
         seriesName.includes(searchLower) ||
         description.includes(searchLower) ||
-        postureCount.includes(searchLower)
+        poseCount.includes(searchLower)
       )
     })
     setFilteredSeries(filtered)
@@ -147,7 +147,7 @@ export default function AddSeriesDialog({
         <Box sx={{ mb: 2 }}>
           <TextField
             fullWidth
-            placeholder="Search series by name, description, or posture count..."
+            placeholder="Search series by name, description, or pose count..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             InputProps={{
@@ -169,7 +169,7 @@ export default function AddSeriesDialog({
                 {selectedSeries.map((series) => (
                   <Chip
                     key={series.id}
-                    label={`${series.seriesName} (${series.seriesPostures?.length || 0} postures)`}
+                    label={`${series.seriesName} (${series.seriesPoses?.length || 0} poses)`}
                     onDelete={() => handleSeriesToggle(series)}
                     color="primary"
                     variant="outlined"
@@ -234,7 +234,7 @@ export default function AddSeriesDialog({
                         )}
                         <Box sx={{ display: 'flex', gap: 1 }}>
                           <Chip
-                            label={`${series.seriesPostures?.length || 0} postures`}
+                            label={`${series.seriesPoses?.length || 0} poses`}
                             size="small"
                             color="primary"
                             variant="outlined"

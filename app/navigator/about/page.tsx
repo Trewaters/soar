@@ -20,9 +20,9 @@ export default function Page() {
           Welcome to uvuyoga, your all-in-one yoga companion designed to guide
           practitioners of all levels along the transformative Eight-Limb Path
           of yoga. Whether you’re new to the mat or a seasoned yogi, uvuyoga
-          provides a supportive space to explore asanas (postures), build
-          dynamic flows, deepen your breathwork, and cultivate a holistic
-          practice rooted in yogic tradition.
+          provides a supportive space to explore asanas (poses), build dynamic
+          flows, deepen your breathwork, and cultivate a holistic practice
+          rooted in yogic tradition.
         </Typography>
         <Typography variant="h6" component="h2">
           Key Highlights
@@ -32,7 +32,7 @@ export default function Page() {
         </Typography>
         <Typography variant="body1" sx={{ marginBottom: 2 }}>
           Access a growing library of asanas, flows, and sequences—complete with
-          timing tools, safety cues, and posture breakdowns—so you can practice
+          timing tools, safety cues, and pose breakdowns—so you can practice
           anytime, anywhere.
         </Typography>
         <Typography variant="body1" sx={{ fontWeight: 'bold' }}>

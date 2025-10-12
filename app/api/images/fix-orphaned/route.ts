@@ -22,15 +22,20 @@ export async function POST() {
       )
     }
 
-    // Find images that have postureName but no postureId
-    const orphanedImages = await prisma.poseImage.findMany({
+    // Find images that have poseName (may be orphaned). We'll filter for missing pose/posture IDs in JS
+    // Current Prisma schema uses `postureName`/`postureId`. Query by that field
+    const imagesWithName = await prisma.poseImage.findMany({
       where: {
         userId: session.user.id, // Only fix current user's images
-        postureId: null,
         postureName: {
           not: null,
         },
       },
+    })
+
+    // Filter images that are missing either poseId or postureId
+    const orphanedImages = imagesWithName.filter((img: any) => {
+      return !(img.poseId ?? img.postureId)
     })
 
     if (orphanedImages.length === 0) {
@@ -49,22 +54,29 @@ export async function POST() {
     for (const image of orphanedImages) {
       try {
         // Find the asana with matching name
-        const matchingAsana = await prisma.asanaPosture.findFirst({
+        const imageName = (image as any).poseName ?? (image as any).postureName
+
+        const matchingAsana = await prisma.asanaPose.findFirst({
           where: {
-            sort_english_name: image.postureName!,
+            sort_english_name: imageName,
           },
         })
 
         if (matchingAsana) {
-          // Update the image with the postureId
-          await prisma.poseImage.update({
-            where: {
-              id: image.id,
-            },
-            data: {
-              postureId: matchingAsana.id.toString(),
-            },
-          })
+          // Update the image with the poseId
+          try {
+            // Try setting `poseId` (new schema)
+            await prisma.poseImage.update({
+              where: { id: image.id },
+              data: { poseId: matchingAsana.id.toString() } as any,
+            })
+          } catch (e1) {
+            // Fallback to `postureId` (old schema)
+            await prisma.poseImage.update({
+              where: { id: image.id },
+              data: { postureId: matchingAsana.id.toString() } as any,
+            })
+          }
 
           linkedCount++
           results.push({
@@ -75,12 +87,12 @@ export async function POST() {
           })
         } else {
           console.log(
-            `❌ No matching asana found for image ${image.id} with postureName: "${image.postureName}"`
+            `❌ No matching asana found for image ${image.id} with poseName: "${imageName}"`
           )
           errorCount++
           results.push({
             imageId: image.id,
-            postureName: image.postureName,
+            poseName: imageName,
             status: 'no_match',
           })
         }

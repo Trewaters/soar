@@ -35,10 +35,10 @@ export default function AutocompleteComponent(props: CustomAutocompleteProps) {
         renderOption={(props, option) => {
           const typedOption = option as AutocompleteOption
           if ('sort_english_name' in typedOption) {
-            const postureOption = typedOption
+            const poseOption = typedOption
             return (
-              <li {...props} key={postureOption.id}>
-                {postureOption.sort_english_name}
+              <li {...props} key={poseOption.id}>
+                {poseOption.sort_english_name}
               </li>
             )
           }

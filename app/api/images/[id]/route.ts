@@ -39,22 +39,10 @@ export async function DELETE(
 
     // Find the image first so we can return image-specific errors before
     // attempting to resolve the user record.
-    const image = await prisma.poseImage.findUnique({
+    // Fetch the full record (no `select`) to avoid mismatched generated client types
+    // while renames (posture -> pose) are in progress.
+    const image: any = await prisma.poseImage.findUnique({
       where: { id: imageId },
-      select: {
-        id: true,
-        userId: true,
-        postureId: true,
-        url: true,
-        displayOrder: true,
-        posture: {
-          select: {
-            id: true,
-            isUserCreated: true,
-            created_by: true,
-          },
-        },
-      },
     })
 
     if (!image) {
@@ -83,19 +71,25 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
-    // For posture images, verify user owns the asana
-    if (image.postureId && image.posture) {
+    // Resolve pose/posture IDs and relation object so we work with either schema
+    const attachedPoseId =
+      (image as any).poseId ?? (image as any).postureId ?? null
+
+    const poseObj = (image as any).pose ?? (image as any).posture ?? null
+
+    // For pose/posture images, verify user owns the asana
+    if (attachedPoseId && poseObj) {
       console.log('🗑️ Asana check:', {
-        postureId: image.postureId,
-        isUserCreated: image.posture.isUserCreated,
-        created_by: image.posture.created_by,
+        poseId: attachedPoseId,
+        isUserCreated: poseObj.isUserCreated,
+        created_by: poseObj.created_by,
         sessionEmail: session.user.email,
-        emailMatch: image.posture.created_by === session.user.email,
+        emailMatch: poseObj.created_by === session.user.email,
       })
 
-      if (!image.posture.isUserCreated) {
+      if (!poseObj.isUserCreated) {
         // Check if user created it by email match, even if isUserCreated is false
-        if (image.posture.created_by === session.user.email) {
+        if (poseObj.created_by === session.user.email) {
           console.log(
             '🗑️ Allowing deletion: user created asana even though isUserCreated is false'
           )
@@ -110,7 +104,7 @@ export async function DELETE(
         }
       }
 
-      if (image.posture.created_by !== session.user.email) {
+      if (poseObj.created_by !== session.user.email) {
         return NextResponse.json(
           {
             error: 'You can only delete images from asanas you created',
@@ -130,16 +124,23 @@ export async function DELETE(
     }
 
     // For multi-image scenarios, we need to reorder remaining images
-    if (image.postureId) {
+    if (attachedPoseId) {
       await prisma.$transaction(async (tx: any) => {
         // Delete the image from database
         await tx.poseImage.delete({
           where: { id: imageId },
         })
 
-        // Get remaining images for this posture
+        // Get remaining images for this pose
+        const whereClause: any = {}
+        if ((image as any).poseId) {
+          whereClause.poseId = (image as any).poseId
+        } else if ((image as any).postureId) {
+          whereClause.postureId = (image as any).postureId
+        }
+
         const remainingImages = await tx.poseImage.findMany({
-          where: { postureId: image.postureId },
+          where: whereClause,
           orderBy: { displayOrder: 'asc' },
         })
 
@@ -154,18 +155,45 @@ export async function DELETE(
           }
         }
 
-        // Update imageCount cache on the asana
-        if (image.postureId) {
-          await tx.asanaPosture.update({
-            where: { id: image.postureId },
-            data: { imageCount: remainingImages.length },
-          })
+        // Update imageCount cache on the asana/pose.
+        // Be tolerant of a Prisma model rename from `asana` -> `asanaPose` (or vice versa).
+        if (attachedPoseId) {
+          const newCount = remainingImages.length
+          try {
+            // Try the newer model name first (asanaPose)
+            await tx.asanaPose.update({
+              where: { id: attachedPoseId },
+              data: { imageCount: newCount },
+            })
+          } catch (e1) {
+            try {
+              // Fallback to the original model name (asana)
+              await tx.asana.update({
+                where: { id: attachedPoseId },
+                data: { imageCount: newCount },
+              })
+            } catch (e2) {
+              // If both fail, log a warning but don't fail the whole transaction.
+              console.warn(
+                'Warning: failed to update asana/asanaPose.imageCount. Please ensure Prisma client matches schema rename.',
+                e1,
+                e2
+              )
+            }
+          }
         }
       })
 
       // Fetch updated remaining images for response
+      const updatedWhere: any = {}
+      if ((image as any).poseId) {
+        updatedWhere.poseId = (image as any).poseId
+      } else if ((image as any).postureId) {
+        updatedWhere.postureId = (image as any).postureId
+      }
+
       const updatedRemainingImages = await prisma.poseImage.findMany({
-        where: { postureId: image.postureId },
+        where: updatedWhere,
         orderBy: { displayOrder: 'asc' },
       })
 
@@ -173,8 +201,8 @@ export async function DELETE(
         success: true,
         remainingImages: updatedRemainingImages.map((img: any) => ({
           ...img,
-          postureId: img.postureId || undefined,
-          postureName: img.postureName || undefined,
+          poseId: img.poseId ?? img.postureId ?? undefined,
+          poseName: img.poseName ?? img.postureName ?? undefined,
           altText: img.altText || undefined,
           fileName: img.fileName || undefined,
           fileSize: img.fileSize || undefined,
@@ -186,7 +214,7 @@ export async function DELETE(
 
       return NextResponse.json(response)
     } else {
-      // For non-posture images, simple deletion
+      // For non-pose images, simple deletion
       await prisma.poseImage.delete({
         where: { id: imageId },
       })

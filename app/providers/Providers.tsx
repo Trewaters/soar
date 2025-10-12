@@ -6,7 +6,7 @@ import { theme } from '@styles/theme'
 import { CssBaseline } from '@mui/material'
 import UserStateProvider from '@context/UserContext'
 import FlowSeriesProvider from '@context/AsanaSeriesContext'
-import AsanaPostureProvider from '@context/AsanaPostureContext'
+import AsanaPoseProvider from '@context/AsanaPoseContext'
 import TimerProvider from '@context/timerContext'
 import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import GlobalNavigationOverlay from '@clientComponents/GlobalNavigationOverlay'
@@ -48,10 +48,10 @@ export function Providers({
             <UserStateProvider>
               <TimerProvider>
                 <FlowSeriesProvider>
-                  <AsanaPostureProvider>
+                  <AsanaPoseProvider>
                     {children}
                     <GlobalNavigationOverlay />
-                  </AsanaPostureProvider>
+                  </AsanaPoseProvider>
                 </FlowSeriesProvider>
               </TimerProvider>
             </UserStateProvider>

@@ -13,7 +13,7 @@ type AsanaDetailsComponentProps = ComponentProps<typeof Stack> &
   AsanaDetailsProps
 
 // Memoize component to prevent unnecessary re-renders since it's used extensively
-// in postureActivityDetail.tsx (10+ times with potentially different props)
+// in poseActivityDetail.tsx (10+ times with potentially different props)
 
 /**
  * Displays detailed information about an Asana item in a styled definition list format.

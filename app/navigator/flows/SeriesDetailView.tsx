@@ -6,9 +6,9 @@ import Image from 'next/image'
 import { FlowSeriesData } from '@context/AsanaSeriesContext'
 import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
 import SeriesWeeklyActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesWeeklyActivityTracker'
-import PostureShareButton from '@app/clientComponents/postureShareButton'
-import { getPostureIdByName } from '@lib/postureService'
-import { splitSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
+import PoseShareButton from '@app/clientComponents/poseShareButton'
+import { getPoseIdByName } from '@lib/poseService'
+import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 
 interface SeriesDetailViewProps {
   series: FlowSeriesData
@@ -17,7 +17,7 @@ interface SeriesDetailViewProps {
 export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
   const [flow, setFlow] = useState<FlowSeriesData>(series)
   const [images, setImages] = useState<string[]>([])
-  const [postureIds, setPostureIds] = useState<{
+  const [poseIds, setPoseIds] = useState<{
     [poseName: string]: string | null
   }>({})
 
@@ -29,18 +29,18 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
   // Resolve asana IDs for navigation
   useEffect(() => {
     let mounted = true
-    async function resolvePostureIds() {
-      if (!flow?.seriesPostures?.length) {
-        if (mounted) setPostureIds({})
+    async function resolvePoseIds() {
+      if (!flow?.seriesPoses?.length) {
+        if (mounted) setPoseIds({})
         return
       }
 
       const idsMap: { [poseName: string]: string | null } = {}
 
-      for (const pose of flow.seriesPostures) {
-        const { name: poseName } = splitSeriesPostureEntry(pose)
+      for (const pose of flow.seriesPoses) {
+        const { name: poseName } = splitSeriesPoseEntry(pose)
         try {
-          const id = await getPostureIdByName(poseName)
+          const id = await getPoseIdByName(poseName)
           idsMap[poseName] = id
         } catch (error) {
           console.warn(`Failed to resolve ID for pose: ${poseName}`, error)
@@ -48,14 +48,14 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
         }
       }
 
-      if (mounted) setPostureIds(idsMap)
+      if (mounted) setPoseIds(idsMap)
     }
 
-    resolvePostureIds()
+    resolvePoseIds()
     return () => {
       mounted = false
     }
-  }, [flow?.seriesPostures])
+  }, [flow?.seriesPoses])
 
   // Fetch images array for the selected series
   useEffect(() => {
@@ -154,16 +154,16 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
         </Card>
       )}
 
-      {/* Series Postures */}
+      {/* Series Poses */}
       <Stack spacing={1} sx={{ width: '100%', mb: 3 }}>
-        {flow.seriesPostures?.map((pose, index) => {
-          const { name: poseName, secondary } = splitSeriesPostureEntry(pose)
-          const postureId = postureIds[poseName]
+        {flow.seriesPoses?.map((pose, index) => {
+          const { name: poseName, secondary } = splitSeriesPoseEntry(pose)
+          const poseId = poseIds[poseName]
 
           // Use ID if available, fallback to name (encoded) for backwards compatibility
-          const href = postureId
-            ? `/navigator/asanaPostures/${postureId}`
-            : `/navigator/asanaPostures/${encodeURIComponent(poseName)}`
+          const href = poseId
+            ? `/navigator/asanaPoses/${poseId}`
+            : `/navigator/asanaPoses/${encodeURIComponent(poseName)}`
 
           return (
             <Box key={`${pose}-${index}`} className="lines">
@@ -249,7 +249,7 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
 
       {/* Share Button */}
       <Box sx={{ mt: 2 }}>
-        <PostureShareButton />
+        <PoseShareButton />
       </Box>
     </Box>
   )

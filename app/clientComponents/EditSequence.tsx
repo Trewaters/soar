@@ -257,7 +257,7 @@ export default function EditSequence({
     const seriesToAdd = newSeries.map((series) => ({
       id: series.id,
       seriesName: series.seriesName,
-      seriesPostures: series.seriesPostures || [],
+      seriesPoses: series.seriesPoses || [],
       image: series.image || '',
       breath: '',
       duration: series.durationSeries || '',
@@ -583,8 +583,8 @@ export default function EditSequence({
                           <ListItemText
                             primary={s.seriesName}
                             secondary={
-                              s.seriesPostures?.length
-                                ? `${s.seriesPostures.length} postures`
+                              s.seriesPoses?.length
+                                ? `${s.seriesPoses.length} poses`
                                 : undefined
                             }
                           />

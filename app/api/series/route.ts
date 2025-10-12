@@ -63,17 +63,6 @@ export async function GET(request: Request) {
       // Filter to only series created by provided email; do NOT select created_by
       data = await prisma.asanaSeries.findMany({
         where: { created_by: createdByParam },
-        select: {
-          id: true,
-          seriesName: true,
-          seriesPostures: true,
-          breathSeries: true,
-          description: true,
-          durationSeries: true,
-          image: true,
-          createdAt: true,
-          updatedAt: true,
-        },
         orderBy: { createdAt: 'desc' },
       })
       // All returned belong to createdByParam
@@ -84,23 +73,7 @@ export async function GET(request: Request) {
 
       // Fetch only series created by current user or alpha users
       data = await prisma.asanaSeries.findMany({
-        where: {
-          created_by: {
-            in: allowedCreators,
-          },
-        },
-        select: {
-          id: true,
-          seriesName: true,
-          seriesPostures: true,
-          breathSeries: true,
-          description: true,
-          durationSeries: true,
-          image: true,
-          createdAt: true,
-          updatedAt: true,
-          created_by: true, // Include this to determine ownership
-        },
+        where: { created_by: { in: allowedCreators } },
         orderBy: { createdAt: 'desc' },
       })
 
@@ -115,9 +88,11 @@ export async function GET(request: Request) {
     const normalized = data.map((item: any) => ({
       id: item.id,
       seriesName: item.seriesName || '',
-      seriesPostures: Array.isArray(item.seriesPostures)
-        ? item.seriesPostures
-        : [],
+      seriesPoses: Array.isArray(item.seriesPoses)
+        ? item.seriesPoses
+        : Array.isArray(item.seriesPostures)
+          ? item.seriesPostures
+          : [],
       breath: Array.isArray(item.breathSeries)
         ? item.breathSeries.join(', ')
         : '',

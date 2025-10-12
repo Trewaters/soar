@@ -28,7 +28,7 @@ import Looks3Icon from '@mui/icons-material/Looks3'
 import Looks4Icon from '@mui/icons-material/Looks4'
 import Looks5Icon from '@mui/icons-material/Looks5'
 import { useRouter } from 'next/navigation'
-import { getAccessiblePostures } from '@lib/postureService'
+import { getAccessiblePoses } from '@lib/poseService'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SplashHeader from '@app/clientComponents/splash-header'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
@@ -36,17 +36,17 @@ import AutocompleteComponent from '@app/clientComponents/autocomplete-search'
 import Image from 'next/image'
 import { AppText } from '@app/navigator/constants/Strings'
 import {
-  formatSeriesPostureEntry,
-  splitSeriesPostureEntry,
-} from '@app/utils/asana/seriesPostureLabels'
+  formatSeriesPoseEntry,
+  splitSeriesPoseEntry,
+} from '@app/utils/asana/seriesPoseLabels'
 import { AsanaPose } from 'types/asana'
 
 export default function Page() {
   const { data: session } = useSession()
   const { state, dispatch } = useFlowSeries()
-  const { seriesName, seriesPostures, breath, description, duration, image } =
+  const { seriesName, seriesPoses, breath, description, duration, image } =
     state.flowSeries
-  const [postures, setPostures] = useState<AsanaPose[]>([])
+  const [poses, setPoses] = useState<AsanaPose[]>([])
   const router = useRouter()
   const [open, setOpen] = React.useState(false)
   const [isDirty, setIsDirty] = useState(false)
@@ -56,14 +56,12 @@ export default function Page() {
     setOpen(newOpen)
   }
 
-  const fetchPostures = async () => {
+  const fetchPoses = async () => {
     try {
-      const postures = await getAccessiblePostures(
-        session?.user?.email || undefined
-      )
-      setPostures(postures)
+      const poses = await getAccessiblePoses(session?.user?.email || undefined)
+      setPoses(poses)
     } catch (error: Error | any) {
-      console.error('Error fetching postures:', error.message)
+      console.error('Error fetching poses:', error.message)
     }
   }
 
@@ -80,17 +78,17 @@ export default function Page() {
       router.push('/navigator/flows')
     }
 
-    fetchPostures()
+    fetchPoses()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, session])
 
-  // Refetch postures when the page becomes visible (e.g., when returning from create asana page)
+  // Refetch poses when the page becomes visible (e.g., when returning from create asana page)
   // This ensures that newly created asanas appear in the autocomplete search
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
-        console.log('Page became visible, refreshing posture data...')
-        fetchPostures()
+        console.log('Page became visible, refreshing pose data...')
+        fetchPoses()
       }
     }
 
@@ -98,16 +96,16 @@ export default function Page() {
 
     // Also listen for focus events as a fallback
     const handleFocus = () => {
-      console.log('Window gained focus, refreshing posture data...')
-      fetchPostures()
+      console.log('Window gained focus, refreshing pose data...')
+      fetchPoses()
     }
 
     window.addEventListener('focus', handleFocus)
 
     // Listen for popstate events (browser back/forward navigation)
     const handlePopState = () => {
-      console.log('Navigation detected, refreshing posture data...')
-      fetchPostures()
+      console.log('Navigation detected, refreshing pose data...')
+      fetchPoses()
     }
 
     window.addEventListener('popstate', handlePopState)
@@ -130,7 +128,7 @@ export default function Page() {
         Array.isArray(value.sanskrit_names) && value.sanskrit_names[0]
           ? value.sanskrit_names[0]
           : ''
-      const formattedEntry = formatSeriesPostureEntry(
+      const formattedEntry = formatSeriesPoseEntry(
         value.sort_english_name,
         simplifiedName
       )
@@ -138,7 +136,7 @@ export default function Page() {
         type: 'SET_FLOW_SERIES',
         payload: {
           ...state.flowSeries,
-          seriesPostures: [...state.flowSeries.seriesPostures, formattedEntry],
+          seriesPoses: [...state.flowSeries.seriesPoses, formattedEntry],
         },
       })
     }
@@ -149,7 +147,7 @@ export default function Page() {
     const updatedSeries = {
       ...state.flowSeries,
       seriesName,
-      seriesPostures,
+      seriesPoses,
       breath,
       description,
       duration,
@@ -160,7 +158,7 @@ export default function Page() {
       type: 'RESET_FLOW_SERIES',
       payload: {
         seriesName: '',
-        seriesPostures: [],
+        seriesPoses: [],
         breath: '',
         description: '',
         duration: '',
@@ -224,7 +222,7 @@ export default function Page() {
       type: 'RESET_FLOW_SERIES',
       payload: {
         seriesName: '',
-        seriesPostures: [],
+        seriesPoses: [],
       },
     })
   }
@@ -257,17 +255,17 @@ export default function Page() {
               <Box sx={{ px: 4 }}>
                 <FormControl sx={{ width: '100%', mb: 3 }}>
                   <AutocompleteComponent
-                    options={postures.sort((a, b) =>
+                    options={poses.sort((a, b) =>
                       a.sort_english_name.localeCompare(b.sort_english_name)
                     )}
                     getOptionLabel={(option) =>
                       (option as AsanaPose).sort_english_name
                     }
                     renderOption={(props, option) => {
-                      const postureOption = option as AsanaPose
+                      const poseOption = option as AsanaPose
                       return (
-                        <li {...props} key={postureOption.id}>
-                          {postureOption.sort_english_name}
+                        <li {...props} key={poseOption.id}>
+                          {poseOption.sort_english_name}
                         </li>
                       )
                     }}
@@ -339,9 +337,8 @@ export default function Page() {
                         mx: 4,
                       }}
                     >
-                      {seriesPostures.map((word, index) => {
-                        const { name, secondary } =
-                          splitSeriesPostureEntry(word)
+                      {seriesPoses.map((word, index) => {
+                        const { name, secondary } = splitSeriesPoseEntry(word)
 
                         return (
                           <Stack
@@ -362,8 +359,8 @@ export default function Page() {
                                     type: 'SET_FLOW_SERIES',
                                     payload: {
                                       ...state.flowSeries,
-                                      seriesPostures:
-                                        state.flowSeries.seriesPostures.filter(
+                                      seriesPoses:
+                                        state.flowSeries.seriesPoses.filter(
                                           (item) => item !== word
                                         ),
                                     },
@@ -416,8 +413,8 @@ export default function Page() {
                             type: 'SET_FLOW_SERIES',
                             payload: {
                               ...state.flowSeries,
-                              seriesPostures:
-                                state.flowSeries.seriesPostures.slice(0, -1),
+                              seriesPoses:
+                                state.flowSeries.seriesPoses.slice(0, -1),
                             },
                           })
                         }
@@ -433,7 +430,7 @@ export default function Page() {
                           type: 'SET_FLOW_SERIES',
                           payload: {
                             ...state.flowSeries,
-                            seriesPostures: [],
+                            seriesPoses: [],
                           },
                         })
                       }
@@ -583,7 +580,7 @@ export default function Page() {
                 <ListItemText
                   primary='"Flow Series": Add asana poses to
                   your series by selecting them from the "Flow Series"
-                  dropdown below. Click the "X" to enter a new posture.'
+                  dropdown below. Click the "X" to enter a new pose.'
                 />
               </ListItem>
               <ListItem>

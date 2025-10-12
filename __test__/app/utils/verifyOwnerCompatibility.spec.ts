@@ -3,7 +3,7 @@ import { Session } from 'next-auth'
 
 // Mock Prisma Client before importing utilities under test
 const mockPrisma = {
-  asanaPosture: {
+  asanaPose: {
     findUnique: jest.fn(),
   },
 }
@@ -33,7 +33,7 @@ describe('Owner matching compatibility', () => {
   })
 
   it('verifyAsanaOwnership returns true when created_by matches email', async () => {
-    mockPrisma.asanaPosture.findUnique.mockResolvedValue({
+    mockPrisma.asanaPose.findUnique.mockResolvedValue({
       created_by: 'creator@example.com',
     })
 
@@ -43,14 +43,14 @@ describe('Owner matching compatibility', () => {
     )
 
     expect(result).toBe(true)
-    expect(mockPrisma.asanaPosture.findUnique).toHaveBeenCalledWith({
+    expect(mockPrisma.asanaPose.findUnique).toHaveBeenCalledWith({
       where: { id: 'asana-abc' },
       select: { created_by: true },
     })
   })
 
   it('verifyAsanaOwnership returns true when created_by matches user id (legacy records)', async () => {
-    mockPrisma.asanaPosture.findUnique.mockResolvedValue({
+    mockPrisma.asanaPose.findUnique.mockResolvedValue({
       created_by: 'user-id-123',
     })
 

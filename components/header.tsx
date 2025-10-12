@@ -92,7 +92,7 @@ export default function Header() {
       },
       {
         name: 'Asanas',
-        href: '/navigator/asanaPostures',
+        href: '/navigator/asanaPoses',
         // icon: <WaterDropOutlinedIcon color="primary" />,
         icon: <Brightness1OutlinedIcon color="primary" />,
         action: null,

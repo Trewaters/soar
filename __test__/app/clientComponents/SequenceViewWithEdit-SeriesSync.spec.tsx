@@ -52,7 +52,7 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
         {
           id: 'series-1',
           seriesName: 'Sun Salutation',
-          seriesPostures: ['Old Pose 1', 'Old Pose 2'], // Stale data
+          seriesPoses: ['Old Pose 1', 'Old Pose 2'], // Stale data
           description: 'Old description',
           duration: '10 minutes',
         },
@@ -65,7 +65,7 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
       {
         id: 'real-series-id-123',
         seriesName: 'Sun Salutation',
-        seriesPostures: ['Updated Pose 1', 'Updated Pose 2', 'New Pose 3'], // Fresh data
+        seriesPoses: ['Updated Pose 1', 'Updated Pose 2', 'New Pose 3'], // Fresh data
         description: 'Updated description',
         duration: '15 minutes',
       },
@@ -107,7 +107,7 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
         {
           id: 'series-1',
           seriesName: 'Deleted Series',
-          seriesPostures: ['Pose 1', 'Pose 2'],
+          seriesPoses: ['Pose 1', 'Pose 2'],
           description: 'This series was deleted',
         },
       ],
@@ -119,7 +119,7 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
       {
         id: 'other-series-id',
         seriesName: 'Other Series',
-        seriesPostures: ['Other Pose'],
+        seriesPoses: ['Other Pose'],
       },
     ])
 
@@ -155,7 +155,7 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
         {
           id: 'series-1',
           seriesName: 'Test Series',
-          seriesPostures: ['Pose 1'],
+          seriesPoses: ['Pose 1'],
         },
       ],
       created_by: 'test@example.com',
@@ -183,7 +183,7 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
       {
         id: 'series-1',
         seriesName: 'Test Series',
-        seriesPostures: ['Updated Pose'],
+        seriesPoses: ['Updated Pose'],
       },
     ])
 
@@ -206,7 +206,7 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
         {
           id: 'series-1',
           seriesName: 'Test Series',
-          seriesPostures: ['Original Pose'],
+          seriesPoses: ['Original Pose'],
         },
       ],
       created_by: 'test@example.com',
@@ -245,12 +245,12 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
         {
           id: 'series-1',
           seriesName: 'Morning Series',
-          seriesPostures: ['Old Morning Pose'],
+          seriesPoses: ['Old Morning Pose'],
         },
         {
           id: 'series-2',
           seriesName: 'Evening Series',
-          seriesPostures: ['Old Evening Pose'],
+          seriesPoses: ['Old Evening Pose'],
         },
       ],
       created_by: 'test@example.com',
@@ -261,12 +261,12 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
       {
         id: 'real-morning-id',
         seriesName: 'Morning Series',
-        seriesPostures: ['New Morning Pose 1', 'New Morning Pose 2'],
+        seriesPoses: ['New Morning Pose 1', 'New Morning Pose 2'],
       },
       {
         id: 'real-evening-id',
         seriesName: 'Evening Series',
-        seriesPostures: ['New Evening Pose 1', 'New Evening Pose 2'],
+        seriesPoses: ['New Evening Pose 1', 'New Evening Pose 2'],
       },
     ]
 

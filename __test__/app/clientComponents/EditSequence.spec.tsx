@@ -72,7 +72,7 @@ jest.mock('@clientComponents/AddSeriesDialog', () => {
               {
                 id: 'new-series-1',
                 seriesName: 'Power Flow',
-                seriesPostures: ['warrior-1', 'warrior-2'],
+                seriesPoses: ['warrior-1', 'warrior-2'],
                 image: 'https://example.com/power-flow.jpg',
                 duration: '20 minutes',
               },
@@ -106,13 +106,13 @@ const baseSequence = (
       id: 'base-series-1',
       seriesName: 'Warmup',
       image: '/img/1.png',
-      seriesPostures: [{ id: 'p1' }],
+      seriesPoses: [{ id: 'p1' }],
     } as any,
     {
       id: 'base-series-2',
       seriesName: 'Sun Salutation',
       image: '/img/2.png',
-      seriesPostures: [{ id: 'p2' }, { id: 'p3' }],
+      seriesPoses: [{ id: 'p2' }, { id: 'p3' }],
     } as any,
   ],
   description: 'Gentle warmup and sun salutation',
@@ -444,7 +444,7 @@ describe('EditSequence', () => {
         expect.objectContaining({
           id: 'new-series-1',
           seriesName: 'Power Flow',
-          seriesPostures: ['warrior-1', 'warrior-2'],
+          seriesPoses: ['warrior-1', 'warrior-2'],
           image: 'https://example.com/power-flow.jpg',
           breath: '',
           duration: '', // duration comes from durationSeries which is undefined in mock
@@ -477,7 +477,7 @@ describe('EditSequence', () => {
         expect.objectContaining({
           id: 'new-series-1',
           seriesName: 'Power Flow',
-          seriesPostures: ['warrior-1', 'warrior-2'],
+          seriesPoses: ['warrior-1', 'warrior-2'],
           image: 'https://example.com/power-flow.jpg',
           breath: '',
           duration: '',
@@ -534,7 +534,7 @@ describe('EditSequence', () => {
           {
             id: 'existing-series',
             seriesName: 'Existing Flow',
-            seriesPostures: ['mountain-pose'],
+            seriesPoses: ['mountain-pose'],
             image: 'https://example.com/existing.jpg',
             duration: '10 minutes',
           },
@@ -558,7 +558,7 @@ describe('EditSequence', () => {
         expect.objectContaining({
           id: 'new-series-1',
           seriesName: 'Power Flow',
-          seriesPostures: ['warrior-1', 'warrior-2'],
+          seriesPoses: ['warrior-1', 'warrior-2'],
           image: 'https://example.com/power-flow.jpg',
           breath: '',
           duration: '',

@@ -1,4 +1,6 @@
-import { PrismaClient } from '@prisma/client'
+// Note: Do not initialize a runtime Prisma client at module scope here. These utilities accept
+// a PrismaClient instance as a parameter. Import the type from the generated client for typing.
+import type { PrismaClient } from '../../prisma/generated/client'
 
 /**
  * Database optimization utilities for image carousel queries
@@ -6,7 +8,7 @@ import { PrismaClient } from '@prisma/client'
  */
 
 interface ImageQueryOptions {
-  postureId: string
+  poseId: string
   includeMetadata?: boolean
   limit?: number
   orderBy?: 'displayOrder' | 'uploadedAt'
@@ -18,7 +20,7 @@ interface ImageQueryResult {
     url: string
     displayOrder: number
     altText?: string
-    postureName?: string
+    poseName?: string
     uploadedAt: Date
   }>
   totalCount: number
@@ -27,40 +29,42 @@ interface ImageQueryResult {
 
 /**
  * Optimized query for carousel images with proper indexing
- * Uses composite index [postureId, displayOrder] for efficient sorting
+ * Uses composite index [poseId, displayOrder] for efficient sorting
  */
 export async function getCarouselImages(
   prisma: PrismaClient,
   options: ImageQueryOptions
 ): Promise<ImageQueryResult> {
   const {
-    postureId,
+    poseId,
     includeMetadata = false,
     limit = 3,
     orderBy = 'displayOrder',
   } = options
 
   try {
-    // Optimized query using composite index
+    // Optimized query using composite index. Support both `poseId` and legacy `postureId`.
+    const whereClause: any = { OR: [{ poseId }, { postureId: poseId }] }
+
     const images = await prisma.poseImage.findMany({
-      where: {
-        postureId,
-      },
+      where: whereClause as any,
       select: {
         id: true,
         url: true,
         displayOrder: true,
         altText: includeMetadata,
         uploadedAt: includeMetadata,
-        // Only include posture data if metadata is requested
-        ...(includeMetadata && {
-          posture: {
-            select: {
-              name: true,
-              englishName: true,
-            },
-          },
-        }),
+        // Include pose relation only when metadata requested; keep as `any` to avoid type coupling
+        ...(includeMetadata
+          ? ({
+              pose: {
+                select: {
+                  sort_english_name: true,
+                  english_names: true,
+                },
+              },
+            } as any)
+          : {}),
       },
       orderBy: {
         [orderBy]: 'asc',
@@ -77,9 +81,9 @@ export async function getCarouselImages(
       url: image.url,
       displayOrder: image.displayOrder,
       altText: image.altText || undefined,
-      postureName:
-        includeMetadata && 'posture' in image
-          ? image.posture?.englishName || image.posture?.name
+      poseName:
+        includeMetadata && 'pose' in image
+          ? image.pose?.englishName || image.pose?.name
           : undefined,
       uploadedAt: image.uploadedAt || new Date(),
     }))
@@ -97,17 +101,15 @@ export async function getCarouselImages(
 
 /**
  * Efficient count query for image limit enforcement
- * Uses indexed postureId for fast counting
+ * Uses indexed poseId for fast counting
  */
 export async function getImageCount(
   prisma: PrismaClient,
-  postureId: string
+  poseId: string
 ): Promise<number> {
   try {
     const count = await prisma.poseImage.count({
-      where: {
-        postureId,
-      },
+      where: { OR: [{ poseId }, { postureId: poseId }] } as any,
     })
     return count
   } catch (error) {
@@ -148,7 +150,7 @@ export async function updateImageOrder(
 export async function deleteImageWithReorder(
   prisma: PrismaClient,
   imageId: string,
-  postureId: string
+  poseId: string
 ): Promise<boolean> {
   try {
     await prisma.$transaction(async (tx: any) => {
@@ -170,7 +172,7 @@ export async function deleteImageWithReorder(
       // Update displayOrder of remaining images to fill the gap
       await tx.poseImage.updateMany({
         where: {
-          postureId,
+          poseId,
           displayOrder: {
             gt: imageToDelete.displayOrder,
           },
@@ -250,12 +252,12 @@ export function validateImageIndexes(): Array<{
   return [
     {
       table: 'PoseImage',
-      index: 'postureId_displayOrder_idx',
+      index: 'poseId_displayOrder_idx',
       purpose: 'Efficient carousel ordering queries',
     },
     {
       table: 'PoseImage',
-      index: 'postureId_idx',
+      index: 'poseId_idx',
       purpose: 'Fast image counting and filtering',
     },
     {

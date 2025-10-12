@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '../../../../prisma/generated/client'
 import { auth } from '../../../../auth'
 import getAlphaUserIds from '@app/lib/alphaUsers'
-import { formatSeriesPostureEntry } from '@app/utils/asana/seriesPostureLabels'
+import { formatSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 
 const prisma = new PrismaClient()
 
@@ -20,20 +20,9 @@ export async function GET(
     }
     const resolvedParams = await params
 
-    const series = await prisma.asanaSeries.findUnique({
+    // Fetch full series record (no select) to tolerate schema rename from posture->pose
+    const series: any = await prisma.asanaSeries.findUnique({
       where: { id: resolvedParams.id },
-      select: {
-        id: true,
-        seriesName: true,
-        seriesPostures: true,
-        breathSeries: true,
-        description: true,
-        durationSeries: true,
-        image: true,
-        createdAt: true,
-        updatedAt: true,
-        created_by: true,
-      },
     })
 
     if (!series) {
@@ -53,9 +42,12 @@ export async function GET(
     const normalized = {
       id: series.id,
       seriesName: series.seriesName || '',
-      seriesPostures: Array.isArray(series.seriesPostures)
-        ? series.seriesPostures
-        : [],
+      // support either `seriesPoses` (new) or `seriesPostures` (old)
+      seriesPoses: Array.isArray(series.seriesPoses)
+        ? series.seriesPoses
+        : Array.isArray(series.seriesPostures)
+          ? series.seriesPostures
+          : [],
       breath: Array.isArray(series.breathSeries)
         ? series.breathSeries.join(', ')
         : '',
@@ -125,8 +117,8 @@ export async function PATCH(
     if (typeof description === 'string') updateData.description = description
     if (typeof name === 'string') updateData.seriesName = name
     if (Array.isArray(asanas)) {
-      updateData.seriesPostures = asanas.map((a) =>
-        formatSeriesPostureEntry(a.name, a.difficulty)
+      updateData.seriesPoses = asanas.map((a) =>
+        formatSeriesPoseEntry(a.name, a.difficulty)
       )
     }
     if (Array.isArray(breathInput)) {
@@ -139,10 +131,27 @@ export async function PATCH(
       updateData.durationSeries = durationInput
     if (typeof imageInput === 'string') updateData.image = imageInput
 
-    const updated = await prisma.asanaSeries.update({
-      where: { id: resolvedParams.id },
-      data: updateData,
-    })
+    // Try updating using `seriesPoses` first, fall back to `seriesPostures` if update fails
+    let updated: any
+    try {
+      updated = await prisma.asanaSeries.update({
+        where: { id: resolvedParams.id },
+        data: updateData,
+      })
+    } catch (e) {
+      // fallback: map seriesPoses -> seriesPostures
+      if (updateData.seriesPoses) {
+        const fallbackData = { ...updateData }
+        fallbackData.seriesPostures = fallbackData.seriesPoses
+        delete fallbackData.seriesPoses
+        updated = await prisma.asanaSeries.update({
+          where: { id: resolvedParams.id },
+          data: fallbackData,
+        })
+      } else {
+        throw e
+      }
+    }
 
     return NextResponse.json(updated)
   } catch (error: any) {

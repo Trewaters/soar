@@ -26,7 +26,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import AsanaTimer from '@app/clientComponents/asanaTimer'
 import { useTimer } from '@context/timerContext'
 import { useRouter } from 'next/navigation'
-import { getPostureByName } from '@lib/postureService'
+import { getPoseByName } from '@lib/poseService'
 import Image from 'next/image'
 import { AsanaPose } from 'types/asana'
 
@@ -142,10 +142,10 @@ export default function ViewAsanaPractice({
     const getViewPose = async () => {
       try {
         const decodedPose = decodeURIComponent(pose)
-        const responseData = await getPostureByName(decodedPose)
+        const responseData = await getPoseByName(decodedPose)
         setViewPose(responseData)
       } catch (error) {
-        console.error('Error fetching posture:', error)
+        console.error('Error fetching pose:', error)
       }
     }
     getViewPose()
@@ -187,7 +187,7 @@ export default function ViewAsanaPractice({
           <Grid size={2}>
             <Tooltip title="Back to Asanas">
               <IconButton
-                onClick={() => router.push('/navigator/asanaPostures')}
+                onClick={() => router.push('/navigator/asanaPoses')}
                 sx={{ color: 'white' }}
               >
                 <HomeIcon />
@@ -237,7 +237,7 @@ export default function ViewAsanaPractice({
         </Grid>
       </Box>
 
-      {/* Center Content - Posture info and timer */}
+      {/* Center Content - Pose info and timer */}
       <Box
         sx={{
           flex: 1,

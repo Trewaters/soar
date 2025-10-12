@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '../../../../prisma/generated/client'
+import { PrismaClient } from '@prisma/generated/client'
 import { auth } from '../../../../auth'
+import { NextRequest, NextResponse } from '../../../../node_modules/next/server'
 
 const prisma = new PrismaClient()
 
@@ -25,32 +25,28 @@ export async function PUT(
       description,
       category,
       difficulty,
-      breath_direction_default,
-      preferred_side,
-      sideways,
+      breath,
+      alignment_cues,
     } = await request.json()
 
-    // First, get the existing posture to check ownership
-    const existingPosture = await prisma.asanaPosture.findUnique({
+    // First, get the existing pose to check ownership
+    const existingPose = await prisma.asanaPose.findUnique({
       where: { id: resolvedParams.id },
     })
 
-    if (!existingPosture) {
-      return NextResponse.json({ error: 'Posture not found' }, { status: 404 })
+    if (!existingPose) {
+      return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
     }
 
-    // Check if the user is authorized to edit this posture
-    if (existingPosture.created_by !== session.user.email) {
+    // Check if the user is authorized to edit this pose
+    if (existingPose.created_by !== session.user.email) {
       return NextResponse.json(
-        { error: 'Unauthorized: You can only edit postures you created' },
+        { error: 'Unauthorized: You can only edit poses you created' },
         { status: 403 }
       )
     }
 
-    // Convert sideways string to boolean
-    const sidewaysBoolean = sideways === 'Yes' || sideways === true
-
-    const updatedPosture = await prisma.asanaPosture.update({
+    const updatedPose = await prisma.asanaPose.update({
       where: { id: resolvedParams.id },
       data: {
         english_names,
@@ -58,25 +54,23 @@ export async function PUT(
         description,
         category,
         difficulty,
-        breath_direction_default,
-        preferred_side,
-        sideways: sidewaysBoolean,
+        breath,
+        alignment_cues,
         // Note: updated_on is handled by Prisma defaults, created_by should not be changed
       },
     })
-    // Return the updated posture with consistent formatting
-    const postureWithFormattedData = {
-      ...updatedPosture,
-      breath_direction_default:
-        updatedPosture.breath_direction_default || 'neutral',
+    // Return the updated pose with consistent formatting
+    const poseWithFormattedData = {
+      ...updatedPose,
+      breath: updatedPose.breath || 'neutral',
     }
 
-    return NextResponse.json(postureWithFormattedData)
+    return NextResponse.json(poseWithFormattedData)
   } catch (error: any) {
-    console.error('Error updating posture in database:', {
+    console.error('Error updating pose in database:', {
       error: error.message,
       stack: error.stack,
-      postureId: resolvedParams.id,
+      poseId: resolvedParams.id,
     })
     return NextResponse.json({ error: error.message }, { status: 500 })
   } finally {
@@ -99,30 +93,30 @@ export async function DELETE(
       )
     }
 
-    // Get the posture to verify ownership
-    const existingPosture = await prisma.asanaPosture.findUnique({
+    // Get the pose to verify ownership
+    const existingPose = await prisma.asanaPose.findUnique({
       where: { id: resolvedParams.id },
     })
 
-    if (!existingPosture) {
-      return NextResponse.json({ error: 'Posture not found' }, { status: 404 })
+    if (!existingPose) {
+      return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
     }
 
-    if (existingPosture.created_by !== session.user.email) {
+    if (existingPose.created_by !== session.user.email) {
       return NextResponse.json(
-        { error: 'Unauthorized: You can only delete postures you created' },
+        { error: 'Unauthorized: You can only delete poses you created' },
         { status: 403 }
       )
     }
 
-    await prisma.asanaPosture.delete({ where: { id: resolvedParams.id } })
+    await prisma.asanaPose.delete({ where: { id: resolvedParams.id } })
 
     return NextResponse.json({ success: true })
   } catch (error: any) {
-    console.error('Error deleting posture from database:', {
+    console.error('Error deleting pose from database:', {
       error: error.message,
       stack: error.stack,
-      postureId: resolvedParams.id,
+      poseId: resolvedParams.id,
     })
     return NextResponse.json({ error: error.message }, { status: 500 })
   } finally {
