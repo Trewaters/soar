@@ -126,7 +126,7 @@ model AsanaPose {
   sanskrit_names            String[] // “Full”, Abbreviated Posture 1 // use first element for primary sanskrit name
   english_names             String[] // “Full”, Abbreviated Posture 1
   alternative_english_names String[] // “Full”, Abbreviated Posture 1
-  poseImages                PoseImage[] // “Full”, Abbreviated Posture 1 // Relation to PoseImage
+  poseImages                PoseImage[] // “Full”, Abbreviated Posture 1 // Relation to PoseImage, string to array
   description               String? // “Full”, Abbreviated Posture 1
   category                  String? // “Full”, Abbreviated Posture 1
   difficulty                String? // “Full”, Abbreviated Posture 1
@@ -137,7 +137,7 @@ model AsanaPose {
   setup_cues                String? // “Full”, Abbreviated Posture 1
   deepening_cues            String? // “Full”, Abbreviated Posture 1
   // “Advance”, Abbreviated Posture 2
-  alignment_cues      String? // “Advance”, Abbreviated Posture 2
+  alignment_cues      String? // “Advance”, Abbreviated Posture 2, string & boolean to string
   joint_action        String? // “Advance”, Abbreviated Posture 2
   muscle_action       String? // “Advance”, Abbreviated Posture 2
   transition_cues_out String? // “Advance”, Abbreviated Posture 2
@@ -148,7 +148,7 @@ model AsanaPose {
   // “Personal”, Abbreviated Posture 3
   pose_modifications String[] // “Personal”, Abbreviated Posture 3
   pose_variations    String[] // “Personal”, Abbreviated Posture 3
-  breath             String[] // “Personal”, Abbreviated Posture 3
+  breath             String[] // “Personal”, Abbreviated Posture 3, string & array to array
   duration_asana     String? // “Personal”, Abbreviated Posture 3
   lore               String? // “Personal”, Abbreviated Posture 3
   asana_intention    String? // “Personal”, Abbreviated Posture 3

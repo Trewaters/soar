@@ -49,40 +49,121 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
 
-    // Build where clause for filtering
-    const where: any = {
+    // Build base where clause for filtering by owner (user)
+    const baseWhere: any = {
       userId: session.user.id,
     }
 
+    // If caller provided a poseId, use it for server-side filtering.
+    // Note: The PoseImage model uses `postureId` as the field name (not `poseId`)
+    // to maintain compatibility during the posture->pose migration.
+    // If caller provided a poseName, avoid relation-based filtering here because
+    // the relation name changed during migration (posture -> pose) and referencing
+    // a non-existent relation will cause Prisma to throw. We'll filter by name
+    // in JavaScript after fetching the DB records.
+    const useServerSideIdFilter = Boolean(poseId)
+
     if (poseId) {
-      where.poseId = poseId
-    } else if (poseName) {
-      where.pose = {
-        OR: [
-          { sort_english_name: { contains: poseName, mode: 'insensitive' } },
-          { english_names: { contains: poseName, mode: 'insensitive' } },
-          { sanskrit_names: { contains: poseName, mode: 'insensitive' } },
-        ],
-      }
+      baseWhere.postureId = poseId // Use the actual DB field name
     }
 
-    // Fetch images with optional pose/posture data. Use full record (no select)
-    // to tolerate schema changes during the posture->pose rename.
-    const images: any = await prisma.poseImage.findMany({
-      where,
-      orderBy:
-        orderBy === 'displayOrder'
-          ? { displayOrder: 'asc' }
-          : { uploadedAt: 'desc' },
-      take: limit,
-      skip: offset,
-    })
+    // Fetch images with optional pose/posture relation populated. Use full record
+    // (no select) to tolerate schema changes during the posture->pose rename.
+    // Note: Both pose and posture relations use the same postureId field, so we
+    // fetch images first, then manually populate the relations in a second pass.
+    let images: any[] = []
 
-    // Get total count for pagination
-    const totalCount = await prisma.poseImage.count({ where })
+    try {
+      if (useServerSideIdFilter) {
+        images = await prisma.poseImage.findMany({
+          where: baseWhere,
+          orderBy:
+            orderBy === 'displayOrder'
+              ? { displayOrder: 'asc' }
+              : { uploadedAt: 'desc' },
+          take: limit,
+          skip: offset,
+        })
+      } else {
+        // No poseId provided (maybe poseName). Fetch a superset and apply
+        // text-based filtering locally to avoid Prisma relation name errors.
+        images = await prisma.poseImage.findMany({
+          where: baseWhere,
+          orderBy:
+            orderBy === 'displayOrder'
+              ? { displayOrder: 'asc' }
+              : { uploadedAt: 'desc' },
+        })
+      }
+
+      // Manually populate pose/posture relations for each image
+      // Try new AsanaPose first, fall back to AsanaPosture
+      for (const image of images) {
+        if (image.postureId) {
+          try {
+            const pose = await prisma.asanaPose.findUnique({
+              where: { id: image.postureId },
+            })
+            if (pose) {
+              image.pose = pose
+            }
+          } catch (e) {
+            // Try fallback to AsanaPosture
+            try {
+              const posture = await prisma.asanaPosture.findUnique({
+                where: { id: image.postureId },
+              })
+              if (posture) {
+                image.posture = posture
+              }
+            } catch (e2) {
+              // Both failed, leave as null
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching images from database:', error)
+      throw error
+    }
+
+    // Get total count for pagination (when using server-side filtering, this is
+    // accurate; when using client-side filtering we will recompute after filtering)
+    let totalCount = 0
+    if (useServerSideIdFilter) {
+      totalCount = await prisma.poseImage.count({ where: baseWhere })
+    } else {
+      totalCount = images.length
+    }
 
     // Transform data for response
-    const transformedImages: PoseImage[] = images.map((image: any) => ({
+    // If poseName was provided, apply a text filter against pose/posture fields
+    const filteredImages = poseName
+      ? images.filter((image: any) => {
+          const name =
+            image.pose?.sort_english_name ?? image.posture?.sort_english_name
+          const englishNames =
+            image.pose?.english_names ?? image.posture?.english_names
+          const sanskritNames =
+            image.pose?.sanskrit_names ?? image.posture?.sanskrit_names
+
+          const lower = (s: any) => (s ? String(s).toLowerCase() : '')
+          const needle = poseName.toLowerCase()
+
+          if (lower(name).includes(needle)) return true
+          if (Array.isArray(englishNames)) {
+            if (englishNames.some((n: string) => lower(n).includes(needle)))
+              return true
+          } else if (lower(englishNames).includes(needle)) return true
+          if (Array.isArray(sanskritNames)) {
+            if (sanskritNames.some((n: string) => lower(n).includes(needle)))
+              return true
+          } else if (lower(sanskritNames).includes(needle)) return true
+          return false
+        })
+      : images
+
+    const transformedImages: PoseImage[] = filteredImages.map((image: any) => ({
       id: image.id,
       url: image.url,
       altText: image.altText || undefined,
@@ -105,13 +186,27 @@ export async function GET(request: NextRequest) {
     // Calculate ownership info if requested
     let ownership = undefined
     if (includeOwnership && poseId) {
-      const pose = await prisma.asanaPose.findUnique({
-        where: { id: poseId },
-        select: {
-          isUserCreated: true,
-          created_by: true,
-        },
-      })
+      // Try the new model first, fall back to the deprecated AsanaPosture model
+      let pose: any = null
+      try {
+        pose = await prisma.asanaPose.findUnique({
+          where: { id: poseId },
+          select: { isUserCreated: true, created_by: true },
+        })
+      } catch (e) {
+        // ignore and try fallback
+      }
+
+      if (!pose) {
+        try {
+          pose = await prisma.asanaPosture.findUnique({
+            where: { id: poseId },
+            select: { isUserCreated: true, created_by: true },
+          })
+        } catch (e) {
+          // ignore - ownership will remain undefined
+        }
+      }
 
       if (pose) {
         ownership = {

@@ -236,11 +236,12 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
           ) => {
             if ('section' in option) return null
             const sectionLabel = sectionHeaderMap[index] || null
+            // Extract key from props to pass it directly to JSX
+            const { key, ...otherProps } = props as any
             return (
-              <>
+              <React.Fragment key={option.id}>
                 {sectionLabel && (
                   <Typography
-                    key={sectionLabel + '-header'}
                     component="div"
                     sx={{
                       fontWeight: 'bold',
@@ -252,10 +253,10 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
                     {sectionLabel}
                   </Typography>
                 )}
-                <li {...props} key={option.id}>
+                <li key={key} {...otherProps}>
                   {option.sort_english_name}
                 </li>
-              </>
+              </React.Fragment>
             )
           }
           renderOptionFn.displayName = 'PoseAutocompleteRenderOption'

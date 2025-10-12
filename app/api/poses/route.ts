@@ -28,12 +28,54 @@ export async function GET(request: NextRequest) {
     createdBy,
   })
 
+  // Helper: normalize posture record (AsanaPosture) to AsanaPose-like shape
+  const normalizePostureToPose = (postureRecord: any) => {
+    if (!postureRecord) return null
+    return {
+      ...postureRecord,
+      // Ensure english_names is an array
+      english_names: Array.isArray(postureRecord.english_names)
+        ? postureRecord.english_names
+        : postureRecord.english_names
+          ? [postureRecord.english_names]
+          : [],
+      // Ensure breath is an array (posture may use breath_series)
+      breath: postureRecord.breath || postureRecord.breath_series || [],
+      // Map created_on if available
+      created_on: postureRecord.created_on || postureRecord.createdOn || null,
+      sort_english_name:
+        postureRecord.sort_english_name || postureRecord.sortEnglishName,
+    }
+  }
+
   // Handle ID lookup first (if provided)
   if (id) {
     try {
-      const pose = await prisma.asanaPose.findUnique({
-        where: { id: id },
-      })
+      // Try new model first
+      let pose = null
+      try {
+        pose = await prisma.asanaPose.findUnique({ where: { id } })
+      } catch (innerErr) {
+        // If the new model lookup fails (migration halfway), we'll try the deprecated model
+        const msg = (innerErr as any)?.message || String(innerErr)
+        console.warn(
+          'asanaPose lookup failed, falling back to asanaPosture:',
+          msg
+        )
+      }
+
+      if (!pose) {
+        // Fallback to deprecated model
+        try {
+          const posture = await prisma.asanaPosture.findUnique({
+            where: { id },
+          })
+          pose = normalizePostureToPose(posture)
+        } catch (postureErr) {
+          const msg = (postureErr as any)?.message || String(postureErr)
+          console.warn('asanaPosture lookup failed for id:', id, msg)
+        }
+      }
 
       if (!pose) {
         return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
@@ -68,9 +110,35 @@ export async function GET(request: NextRequest) {
 
   if (sortEnglishName) {
     try {
-      const pose = await prisma.asanaPose.findUnique({
-        where: { sort_english_name: sortEnglishName },
-      })
+      // Try new model first
+      let pose = null
+      try {
+        pose = await prisma.asanaPose.findUnique({
+          where: { sort_english_name: sortEnglishName },
+        })
+      } catch (innerErr) {
+        const msg = (innerErr as any)?.message || String(innerErr)
+        console.warn(
+          'asanaPose lookup by name failed, falling back to asanaPosture:',
+          msg
+        )
+      }
+
+      if (!pose) {
+        try {
+          const posture = await prisma.asanaPosture.findUnique({
+            where: { sort_english_name: sortEnglishName },
+          })
+          pose = normalizePostureToPose(posture)
+        } catch (postureErr) {
+          const msg = (postureErr as any)?.message || String(postureErr)
+          console.warn(
+            'asanaPosture lookup by name failed for:',
+            sortEnglishName,
+            msg
+          )
+        }
+      }
 
       if (!pose) {
         return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
@@ -156,12 +224,29 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const data = await prisma.asanaPose.findMany({
-      where: whereClause,
-      orderBy: {
-        created_on: 'desc', // Show newest first to help verify new creations
-      },
-    })
+    // Attempt to query the new model first. If the migration isn't fully applied
+    // or Prisma client doesn't support the new relation yet, fall back to the
+    // deprecated `asanaPosture` table and normalize its shape.
+    let data: any[] = []
+    try {
+      data = await prisma.asanaPose.findMany({
+        where: whereClause,
+        orderBy: {
+          created_on: 'desc', // Show newest first to help verify new creations
+        },
+      })
+    } catch (e) {
+      const msg = (e as any)?.message || String(e)
+      console.warn(
+        'asanaPose.findMany failed, falling back to asanaPosture.findMany:',
+        msg
+      )
+      const postureData = await prisma.asanaPosture.findMany({
+        where: whereClause,
+        orderBy: { created_on: 'desc' },
+      })
+      data = postureData.map(normalizePostureToPose)
+    }
 
     // Type definitions for the poses API
     interface AsanaPose {
