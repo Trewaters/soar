@@ -29,7 +29,7 @@ export default function Page() {
         }}
       >
         <SplashHeader
-          src={'/images/asana-postures-splash-header.png'}
+          src={'/images/asana-poses-splash-header.png'}
           alt={'Asana'}
           title="Asana"
         />
@@ -49,10 +49,10 @@ export default function Page() {
           <SplashNavButton
             title="Practice Asanas"
             description="Search and practice asana poses."
-            image="/images/asana/practice-asana-posture-210x363.png"
+            image="/images/asana/practice-asana-pose-210x363.png"
             sx={{
               backgroundImage:
-                "url('/images/asana/practice-asana-posture-210x363.png')",
+                "url('/images/asana/practice-asana-pose-210x363.png')",
               mb: 2,
             }}
             onClick={handlePracticeAsanaClick}
