@@ -163,49 +163,6 @@ model AsanaPose {
   imageCount           Int       @default(0) // verify how it is used // Cache for number of images (performance optimization)
 }
 
-// DEPRECATED: Use AsanaPose instead of AsanaPosture
-model AsanaPosture {
-  id                       String          @id @default(auto()) @map("_id") @db.ObjectId
-  english_names            String[]
-  sanskrit_names           Json?
-  sort_english_name        String          @unique
-  description              String?
-  benefits                 String?
-  category                 String?
-  difficulty               String?
-  lore                     String?
-  breath_direction_default String? // <DEPRECATED> legacy; use `breath` instead
-  dristi                   String?
-  variations               String[] // <DEPRECATED> legacy; use `pose_variations` instead
-  modifications            String[] // <DEPRECATED> legacy; use `pose_modifications` instead
-  label                    String?
-  suggested_postures       String[]
-  preparatory_postures     String[]
-  preferred_side           String? // <DEPRECATED> legacy; use `alignment_cues` instead
-  sideways                 Boolean? // <DEPRECATED> legacy; alignment info moved to `alignment_cues`
-  image                    String? // <DEPRECATED> legacy single image field; prefer `poseImages` relation
-  created_on               DateTime?       @default(now())
-  updated_on               DateTime?       @updatedAt
-  acitivity_completed      Boolean? // <DEPRECATED> typo: use `activity_completed` instead (mapped)
-  acitivity_practice       Boolean? // <DEPRECATED> typo: use `activity_practice` instead (mapped)
-  posture_intent           String? // <DEPRECATED> legacy; use `asana_intention` instead
-  breath_series            String[] // <DEPRECATED> legacy; use `breath` instead
-  duration_asana           String?
-  transition_cues_out      String?
-  transition_cues_in       String?
-  setup_cues               String?
-  deepening_cues           String?
-  customize_asana          String?
-  additional_cues          String?
-  joint_action             String?
-  muscle_action            String?
-  created_by               String?
-  isUserCreated            Boolean         @default(false) // Flag to identify user-created asanas
-  imageCount               Int             @default(0) // Cache for number of images (performance optimization)
-  asanaActivities          AsanaActivity[] // Relation to AsanaActivity
-  poseImages               PoseImage[] // Relation to PoseImage
-}
-
 model AsanaSeries {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   seriesName     String
@@ -237,8 +194,7 @@ model AsanaSequence {
 model AsanaActivity {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
   userId            String   @db.ObjectId
-  postureId         String   @db.ObjectId // Reference to AsanaPosture.id (native type set for MongoDB join)
-  poseId            String?  @db.ObjectId // Optional reference to AsanaPose.id during migration transition
+  poseId            String   @db.ObjectId // Reference to AsanaPose.id
   postureName       String // e.g., Adho Mukha Svanasana
   sort_english_name String // For routing - e.g., "Downward Facing Dog"
   duration          Int // Duration held (in seconds)
@@ -247,9 +203,8 @@ model AsanaActivity {
   sensations        String? // Body sensations or mood (optional)
   completionStatus  String // e.g., "complete", "skipped", "partial"
   difficulty        String? // User-selected difficulty: "easy", "average", "difficult"
-  user    UserData     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  posture AsanaPosture @relation(fields: [postureId], references: [id], onDelete: Cascade)
-  pose    AsanaPose?   @relation(fields: [poseId], references: [id], onDelete: SetNull)
+  user UserData  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pose AsanaPose @relation(fields: [poseId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -323,9 +278,8 @@ model PoseImage {
   imageType      String      @default("posture") // 'profile', 'posture', 'gallery', etc.
   displayOrder   Int         @default(1) // Order for carousel display (1-3)
 
-  user    UserData      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  posture AsanaPosture? @relation(fields: [postureId], references: [id], onDelete: SetNull)
-  pose    AsanaPose?    @relation(fields: [postureId], references: [id], onDelete: SetNull)
+  user UserData   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pose AsanaPose? @relation(fields: [postureId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

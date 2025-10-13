@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const poseId = searchParams.get('poseId')
     const poseName = searchParams.get('poseName')
+    const imageType = searchParams.get('imageType')
     const includeOwnership = searchParams.get('includeOwnership') === 'true'
     const orderBy = searchParams.get('orderBy') || 'uploadedAt'
     const limit = parseInt(searchParams.get('limit') || '50')
@@ -52,6 +53,11 @@ export async function GET(request: NextRequest) {
     // Build base where clause for filtering by owner (user)
     const baseWhere: any = {
       userId: session.user.id,
+    }
+
+    // Filter by imageType if provided (e.g., 'profile', 'posture', 'gallery')
+    if (imageType) {
+      baseWhere.imageType = imageType
     }
 
     // If caller provided a poseId, use it for server-side filtering.
@@ -96,29 +102,14 @@ export async function GET(request: NextRequest) {
         })
       }
 
-      // Manually populate pose/posture relations for each image
-      // Try new AsanaPose first, fall back to AsanaPosture
+      // Manually populate pose relations for each image
       for (const image of images) {
         if (image.postureId) {
-          try {
-            const pose = await prisma.asanaPose.findUnique({
-              where: { id: image.postureId },
-            })
-            if (pose) {
-              image.pose = pose
-            }
-          } catch (e) {
-            // Try fallback to AsanaPosture
-            try {
-              const posture = await prisma.asanaPosture.findUnique({
-                where: { id: image.postureId },
-              })
-              if (posture) {
-                image.posture = posture
-              }
-            } catch (e2) {
-              // Both failed, leave as null
-            }
+          const pose = await prisma.asanaPose.findUnique({
+            where: { id: image.postureId },
+          })
+          if (pose) {
+            image.pose = pose
           }
         }
       }
@@ -137,15 +128,12 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform data for response
-    // If poseName was provided, apply a text filter against pose/posture fields
+    // If poseName was provided, apply a text filter against pose fields
     const filteredImages = poseName
       ? images.filter((image: any) => {
-          const name =
-            image.pose?.sort_english_name ?? image.posture?.sort_english_name
-          const englishNames =
-            image.pose?.english_names ?? image.posture?.english_names
-          const sanskritNames =
-            image.pose?.sanskrit_names ?? image.posture?.sanskrit_names
+          const name = image.pose?.sort_english_name
+          const englishNames = image.pose?.english_names
+          const sanskritNames = image.pose?.sanskrit_names
 
           const lower = (s: any) => (s ? String(s).toLowerCase() : '')
           const needle = poseName.toLowerCase()
@@ -170,15 +158,12 @@ export async function GET(request: NextRequest) {
       fileName: image.fileName || undefined,
       fileSize: image.fileSize || undefined,
       uploadedAt: image.uploadedAt.toISOString(),
-      poseId: image.poseId ?? image.postureId ?? undefined,
+      poseId: image.postureId ?? undefined,
       poseName:
-        (image.pose?.sort_english_name ?? image.posture?.sort_english_name) ||
+        image.pose?.sort_english_name ||
         (Array.isArray(image.pose?.english_names)
           ? image.pose?.english_names[0]
           : image.pose?.english_names) ||
-        (Array.isArray(image.posture?.english_names)
-          ? image.posture?.english_names[0]
-          : image.posture?.english_names) ||
         undefined,
       displayOrder: image.displayOrder || 1,
     }))
@@ -186,27 +171,10 @@ export async function GET(request: NextRequest) {
     // Calculate ownership info if requested
     let ownership = undefined
     if (includeOwnership && poseId) {
-      // Try the new model first, fall back to the deprecated AsanaPosture model
-      let pose: any = null
-      try {
-        pose = await prisma.asanaPose.findUnique({
-          where: { id: poseId },
-          select: { isUserCreated: true, created_by: true },
-        })
-      } catch (e) {
-        // ignore and try fallback
-      }
-
-      if (!pose) {
-        try {
-          pose = await prisma.asanaPosture.findUnique({
-            where: { id: poseId },
-            select: { isUserCreated: true, created_by: true },
-          })
-        } catch (e) {
-          // ignore - ownership will remain undefined
-        }
-      }
+      const pose = await prisma.asanaPose.findUnique({
+        where: { id: poseId },
+        select: { isUserCreated: true, created_by: true },
+      })
 
       if (pose) {
         ownership = {

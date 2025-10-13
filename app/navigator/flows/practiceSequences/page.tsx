@@ -422,8 +422,12 @@ export default function Page() {
                   ) => {
                     if ('section' in option) return null
                     const sectionLabel = sectionHeaderMap[index] || null
+
+                    // Extract key from props to avoid spreading it
+                    const { key, ...otherProps } = props as any
+
                     return (
-                      <>
+                      <React.Fragment key={option.id}>
                         {sectionLabel && (
                           <ListSubheader
                             key={sectionLabel + '-header'}
@@ -434,10 +438,8 @@ export default function Page() {
                             {sectionLabel}
                           </ListSubheader>
                         )}
-                        <li {...props} key={option.id}>
-                          {option.nameSequence}
-                        </li>
-                      </>
+                        <li {...otherProps}>{option.nameSequence}</li>
+                      </React.Fragment>
                     )
                   }
                   renderOptionFn.displayName =
@@ -678,7 +680,7 @@ export default function Page() {
                         }
                       />
                       <CardContent className="lines" sx={{ p: 0 }}>
-                        {seriesMini.seriesPoses.map((asana, asanaIndex) => (
+                        {seriesMini.seriesPoses?.map((asana, asanaIndex) => (
                           <Box
                             key={asanaIndex}
                             alignItems={'center'}

@@ -69,53 +69,6 @@ export interface AsanaActivity {
   updatedAt: Date
 }
 
-/**
- * @deprecated Legacy posture shape (renamed to AsanaPose).
- * Keep this around temporarily during the posture -> pose migration.
- * This interface will be removed in a future version.
- */
-export interface AsanaPosture {
-  id: string
-  english_names: string[]
-  sanskrit_names: string
-  sort_english_name: string
-  description: string
-  benefits: string
-  category: string
-  difficulty: string
-  lore: string
-  breath_direction_default: string
-  dristi: string
-  variations: string[]
-  modifications: string[]
-  label: string
-  suggested_poses: string[]
-  preparatory_poses: string[]
-  preferred_side: string
-  sideways: boolean
-  image: string
-  created_on: string
-  updated_on: string
-  activity_completed: boolean
-  activity_practice: boolean
-  pose_intent: string
-  breath_series: string[]
-  duration_asana: string
-  transition_cues_out: string
-  transition_cues_in: string
-  setup_cues: string
-  deepening_cues: string
-  customize_asana: string
-  additional_cues: string
-  joint_action: string
-  muscle_action: string
-  created_by: string
-  // New fields for multi-image support
-  isUserCreated: boolean
-  imageCount: number
-  poseImages?: PoseImageData[]
-}
-
 // Display interface for abbreviated pose data
 export interface DisplayAsanaPose {
   id: number
