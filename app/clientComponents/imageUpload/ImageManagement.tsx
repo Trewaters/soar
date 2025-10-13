@@ -151,6 +151,8 @@ interface ImageManagementProps {
   showGallery?: boolean
   variant?: 'full' | 'upload-only' | 'gallery-only' | 'profile-only'
   asanaId?: string
+  // eslint-disable-next-line no-unused-vars
+  onImageUploaded?: (image: PoseImageData) => void
 }
 
 /**
@@ -163,6 +165,7 @@ export default function ImageManagement({
   showGallery = false,
   variant = 'full',
   asanaId,
+  onImageUploaded,
 }: ImageManagementProps) {
   const [tabValue, setTabValue] = useState(0)
   const [refreshGallery, setRefreshGallery] = useState(0)
@@ -174,6 +177,8 @@ export default function ImageManagement({
 
   const handleImageUploaded = (image: PoseImageData) => {
     console.log('Image uploaded:', image)
+    // Call parent callback if provided
+    onImageUploaded?.(image)
     // Refresh the gallery
     setRefreshGallery((prev) => prev + 1)
     // Switch to gallery tab to show the new image

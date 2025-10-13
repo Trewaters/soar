@@ -9,6 +9,8 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
 import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUpload'
+import ImageIcon from '@mui/icons-material/Image'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 
 export default function CreateAsanaWithImages() {
   const { data: session } = useSession()
@@ -45,6 +47,21 @@ export default function CreateAsanaWithImages() {
       router.push('/navigator/asanaPoses')
     }
   }, [router, session])
+
+  // Debug effect to monitor uploadedImages state changes
+  useEffect(() => {
+    console.log('📸 uploadedImages state changed:', uploadedImages)
+  }, [uploadedImages])
+
+  // Handle image upload callback
+  const handleImageUploaded = (image: PoseImageData) => {
+    console.log('📸 Image uploaded callback received:', image)
+    setUploadedImages((prev) => {
+      const updated = [...prev, image]
+      console.log('📸 Updated images array:', updated)
+      return updated
+    })
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -211,14 +228,90 @@ export default function CreateAsanaWithImages() {
                   associated with your user profile.
                 </Typography>
 
-                <ImageManagement title="" variant="upload-only" />
+                <ImageManagement
+                  title=""
+                  variant="upload-only"
+                  onImageUploaded={handleImageUploaded}
+                />
+
+                {/* Debug: Always show this section to verify state */}
+                <Box
+                  sx={{ mt: 2, p: 2, bgcolor: 'info.lighter', borderRadius: 1 }}
+                >
+                  <Typography variant="caption" color="text.secondary">
+                    Debug: Uploaded images count: {uploadedImages.length}
+                  </Typography>
+                </Box>
 
                 {uploadedImages.length > 0 && (
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="body2" color="success.main">
-                      ✓ {uploadedImages.length} image(s) uploaded for this
-                      session
+                  <Box sx={{ mt: 3 }}>
+                    <Typography
+                      variant="body2"
+                      color="success.main"
+                      gutterBottom
+                    >
+                      <CheckCircleIcon
+                        sx={{ fontSize: 16, mr: 0.5, verticalAlign: 'middle' }}
+                      />
+                      {uploadedImages.length} image(s) uploaded for this session
                     </Typography>
+                    <Grid container spacing={2} sx={{ mt: 1 }}>
+                      {uploadedImages.map((img, index) => (
+                        <Grid
+                          size={{ xs: 6, sm: 4, md: 3 }}
+                          key={img.id || index}
+                        >
+                          <Paper
+                            elevation={2}
+                            sx={{
+                              borderRadius: '8px',
+                              overflow: 'hidden',
+                              border: '2px solid',
+                              borderColor: 'success.light',
+                            }}
+                          >
+                            <Box
+                              component="img"
+                              src={img.url}
+                              alt={img.altText || `Uploaded image ${index + 1}`}
+                              sx={{
+                                width: '100%',
+                                height: 120,
+                                objectFit: 'cover',
+                                display: 'block',
+                              }}
+                            />
+                            <Box sx={{ p: 1, bgcolor: 'success.lighter' }}>
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: 0.5,
+                                }}
+                              >
+                                <ImageIcon sx={{ fontSize: 14 }} />
+                                {img.fileName || `Image ${index + 1}`}
+                              </Typography>
+                              {img.altText && (
+                                <Typography
+                                  variant="caption"
+                                  color="text.secondary"
+                                  sx={{
+                                    display: 'block',
+                                    mt: 0.5,
+                                    fontSize: '0.7rem',
+                                  }}
+                                >
+                                  {img.altText}
+                                </Typography>
+                              )}
+                            </Box>
+                          </Paper>
+                        </Grid>
+                      ))}
+                    </Grid>
                   </Box>
                 )}
               </Paper>
