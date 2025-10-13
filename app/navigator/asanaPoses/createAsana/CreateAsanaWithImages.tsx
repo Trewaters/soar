@@ -27,6 +27,12 @@ export default function CreateAsanaWithImages() {
     preferred_side: string
     sideways: string
     created_by: string
+    // optional extended fields
+    sanskrit_names?: string[]
+    dristi?: string
+    setup_cues?: string
+    deepening_cues?: string
+    breath?: string[]
   }>({
     sort_english_name: '',
     english_names: [],
@@ -36,6 +42,11 @@ export default function CreateAsanaWithImages() {
     breath_direction_default: '',
     preferred_side: '',
     sideways: '',
+    sanskrit_names: [],
+    dristi: '',
+    setup_cues: '',
+    deepening_cues: '',
+    breath: [],
     // created_by should be the user's email (project convention)
     created_by: session?.user?.email ?? 'error-undefined-user',
   })
@@ -88,6 +99,12 @@ export default function CreateAsanaWithImages() {
       description: formData.description,
       category: formData.category,
       difficulty: formData.difficulty,
+      // include extended fields if provided
+      sanskrit_names: formData.sanskrit_names,
+      dristi: formData.dristi,
+      setup_cues: formData.setup_cues,
+      deepening_cues: formData.deepening_cues,
+      breath: formData.breath,
       breath_direction_default: formData.breath_direction_default,
       preferred_side: formData.preferred_side,
       sideways: formData.sideways,

@@ -8,6 +8,12 @@ export type CreatePoseInput = {
   description: string
   category: string
   difficulty: string
+  // Optional extended fields to match Prisma and app types
+  breath?: string[]
+  sanskrit_names?: string[]
+  dristi?: string
+  setup_cues?: string
+  deepening_cues?: string
   // breath_direction_default: string
   preferred_side: string
   sideways: string
@@ -21,6 +27,10 @@ export type UpdatePoseInput = {
   category: string
   difficulty: string
   breath: string[]
+  sanskrit_names?: string[]
+  dristi?: string
+  setup_cues?: string
+  deepening_cues?: string
   preferred_side: string
   sideways: string
 }

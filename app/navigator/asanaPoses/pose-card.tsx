@@ -51,7 +51,7 @@ export default function PoseCard({ poseCardProp }: PoseCardProps) {
             },
           }}
           title={pose?.sort_english_name}
-          subheader={pose?.sanskrit_names}
+          subheader={pose?.sanskrit_names?.[0] ?? ''}
         />
         <CardMedia sx={{ width: '50%', margin: 'auto' }}>
           <Image
@@ -129,7 +129,7 @@ export default function PoseCard({ poseCardProp }: PoseCardProps) {
                   borderBottomRightRadius: { xs: 0, sm: 75 },
                 }}
               >
-                {pose?.sanskrit_names ?? 'Sanskrit Name not-found'}
+                {pose?.sanskrit_names?.[0] ?? 'Sanskrit Name not-found'}
               </Typography>
             </Grid>
             {/* 

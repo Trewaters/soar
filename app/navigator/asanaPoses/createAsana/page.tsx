@@ -274,6 +274,12 @@ export default function Page() {
       description: formFullAsanaPoseData.description,
       category: formFullAsanaPoseData.category,
       difficulty: formFullAsanaPoseData.difficulty,
+      // Include optional, more detailed fields
+      sanskrit_names: formFullAsanaPoseData.sanskrit_names,
+      dristi: formFullAsanaPoseData.dristi,
+      setup_cues: formFullAsanaPoseData.setup_cues,
+      deepening_cues: formFullAsanaPoseData.deepening_cues,
+      breath: (formFullAsanaPoseData as any).breath ?? undefined,
       // breath_direction_default: formFullAsanaPoseData.breath_direction_default,
       preferred_side: formFullAsanaPoseData.preferred_side,
       sideways: formFullAsanaPoseData.sideways,
