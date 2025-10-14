@@ -55,27 +55,28 @@ export async function GET(request: NextRequest) {
       userId: session.user.id,
     }
 
-    // Filter by imageType if provided (e.g., 'profile', 'posture', 'gallery')
+    // Filter by imageType if provided (e.g., 'profile', 'pose', 'gallery')
     if (imageType) {
       baseWhere.imageType = imageType
     }
 
     // If caller provided a poseId, use it for server-side filtering.
-    // Note: The PoseImage model uses `postureId` as the field name (not `poseId`)
-    // to maintain compatibility during the posture->pose migration.
+    // Note: The PoseImage model uses `poseId` as the field name (not `poseId`)
+    // to maintain compatibility during the pose->pose migration.
     // If caller provided a poseName, avoid relation-based filtering here because
-    // the relation name changed during migration (posture -> pose) and referencing
+    // the relation name changed during migration (pose -> pose) and referencing
     // a non-existent relation will cause Prisma to throw. We'll filter by name
     // in JavaScript after fetching the DB records.
     const useServerSideIdFilter = Boolean(poseId)
 
     if (poseId) {
-      baseWhere.postureId = poseId // Use the actual DB field name
+      // Prefer poseId (new schema); keep poseId for backward compatibility
+      baseWhere.OR = [{ poseId }, { poseId: poseId }]
     }
 
-    // Fetch images with optional pose/posture relation populated. Use full record
-    // (no select) to tolerate schema changes during the posture->pose rename.
-    // Note: Both pose and posture relations use the same postureId field, so we
+    // Fetch images with optional pose/pose relation populated. Use full record
+    // (no select) to tolerate schema changes during the pose->pose rename.
+    // Note: Both pose and pose relations use the same poseId field, so we
     // fetch images first, then manually populate the relations in a second pass.
     let images: any[] = []
 
@@ -104,9 +105,10 @@ export async function GET(request: NextRequest) {
 
       // Manually populate pose relations for each image
       for (const image of images) {
-        if (image.postureId) {
+        if (image.poseId ?? image.poseId) {
+          const idToLookup = image.poseId ?? image.poseId
           const pose = await prisma.asanaPose.findUnique({
-            where: { id: image.postureId },
+            where: { id: idToLookup },
           })
           if (pose) {
             image.pose = pose
@@ -158,7 +160,7 @@ export async function GET(request: NextRequest) {
       fileName: image.fileName || undefined,
       fileSize: image.fileSize || undefined,
       uploadedAt: image.uploadedAt.toISOString(),
-      poseId: image.postureId ?? undefined,
+      poseId: image.poseId ?? image.poseId ?? undefined,
       poseName:
         image.pose?.sort_english_name ||
         (Array.isArray(image.pose?.english_names)

@@ -43,8 +43,8 @@ export async function getCarouselImages(
   } = options
 
   try {
-    // Optimized query using composite index. Support both `poseId` and legacy `postureId`.
-    const whereClause: any = { OR: [{ poseId }, { postureId: poseId }] }
+    // Optimized query using composite index. Support both `poseId` and legacy `poseId`.
+    const whereClause: any = { OR: [{ poseId }, { poseId: poseId }] }
 
     const images = await prisma.poseImage.findMany({
       where: whereClause as any,
@@ -109,7 +109,7 @@ export async function getImageCount(
 ): Promise<number> {
   try {
     const count = await prisma.poseImage.count({
-      where: { OR: [{ poseId }, { postureId: poseId }] } as any,
+      where: { OR: [{ poseId }, { poseId: poseId }] } as any,
     })
     return count
   } catch (error) {

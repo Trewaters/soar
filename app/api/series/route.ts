@@ -90,8 +90,8 @@ export async function GET(request: Request) {
       seriesName: item.seriesName || '',
       seriesPoses: Array.isArray(item.seriesPoses)
         ? item.seriesPoses
-        : Array.isArray(item.seriesPostures)
-          ? item.seriesPostures
+        : Array.isArray(item.seriesPoses)
+          ? item.seriesPoses
           : [],
       breath: Array.isArray(item.breathSeries)
         ? item.breathSeries.join(', ')

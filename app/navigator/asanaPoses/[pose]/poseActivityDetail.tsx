@@ -683,11 +683,6 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={pose?.alignment_cues ?? 'No alignment cues'}
-            label="Alignment Cues"
-            sx={{ mb: '32px' }}
-          />
-          <AsanaDetails
             details={pose?.dristi ?? 'optimal gaze'}
             label="Dristi"
             sx={{ mb: '32px' }}

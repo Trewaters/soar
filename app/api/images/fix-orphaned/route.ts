@@ -22,20 +22,20 @@ export async function POST() {
       )
     }
 
-    // Find images that have poseName (may be orphaned). We'll filter for missing pose/posture IDs in JS
-    // Current Prisma schema uses `postureName`/`postureId`. Query by that field
+    // Find images that have poseName (may be orphaned). We'll look for missing poseId
+    // Current Prisma schema uses `poseName`/`poseId`
     const imagesWithName = await prisma.poseImage.findMany({
       where: {
         userId: session.user.id, // Only fix current user's images
-        postureName: {
+        poseName: {
           not: null,
         },
       },
     })
 
-    // Filter images that are missing either poseId or postureId
+    // Filter images that are missing poseId
     const orphanedImages = imagesWithName.filter((img: any) => {
-      return !(img.poseId ?? img.postureId)
+      return !img.poseId
     })
 
     if (orphanedImages.length === 0) {
@@ -54,7 +54,7 @@ export async function POST() {
     for (const image of orphanedImages) {
       try {
         // Find the asana with matching name
-        const imageName = (image as any).poseName ?? (image as any).postureName
+        const imageName = (image as any).poseName
 
         const matchingAsana = await prisma.asanaPose.findFirst({
           where: {
@@ -63,20 +63,11 @@ export async function POST() {
         })
 
         if (matchingAsana) {
-          // Update the image with the poseId
-          try {
-            // Try setting `poseId` (new schema)
-            await prisma.poseImage.update({
-              where: { id: image.id },
-              data: { poseId: matchingAsana.id.toString() } as any,
-            })
-          } catch (e1) {
-            // Fallback to `postureId` (old schema)
-            await prisma.poseImage.update({
-              where: { id: image.id },
-              data: { postureId: matchingAsana.id.toString() } as any,
-            })
-          }
+          // Update the image with the poseId (schema uses poseId)
+          await prisma.poseImage.update({
+            where: { id: image.id },
+            data: { poseId: matchingAsana.id.toString() } as any,
+          })
 
           linkedCount++
           results.push({

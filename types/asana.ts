@@ -53,7 +53,6 @@ export interface AsanaActivity {
   id: string
   userId: string
   poseId: string
-  postureId?: string
   poseName: string
   sort_english_name: string
   duration: number

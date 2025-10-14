@@ -20,7 +20,7 @@ export async function GET(
     }
     const resolvedParams = await params
 
-    // Fetch full series record (no select) to tolerate schema rename from posture->pose
+    // Fetch full series record (no select) to tolerate schema rename from pose->pose
     const series: any = await prisma.asanaSeries.findUnique({
       where: { id: resolvedParams.id },
     })
@@ -42,11 +42,11 @@ export async function GET(
     const normalized = {
       id: series.id,
       seriesName: series.seriesName || '',
-      // support either `seriesPoses` (new) or `seriesPostures` (old)
+      // support either `seriesPoses` (new) or `seriesPoses` (old)
       seriesPoses: Array.isArray(series.seriesPoses)
         ? series.seriesPoses
-        : Array.isArray(series.seriesPostures)
-          ? series.seriesPostures
+        : Array.isArray(series.seriesPoses)
+          ? series.seriesPoses
           : [],
       breath: Array.isArray(series.breathSeries)
         ? series.breathSeries.join(', ')
@@ -131,7 +131,7 @@ export async function PATCH(
       updateData.durationSeries = durationInput
     if (typeof imageInput === 'string') updateData.image = imageInput
 
-    // Try updating using `seriesPoses` first, fall back to `seriesPostures` if update fails
+    // Try updating using `seriesPoses` first, fall back to `seriesPoses` if update fails
     let updated: any
     try {
       updated = await prisma.asanaSeries.update({
@@ -139,10 +139,11 @@ export async function PATCH(
         data: updateData,
       })
     } catch (e) {
-      // fallback: map seriesPoses -> seriesPostures
+      // fallback: map seriesPoses -> seriesPoses
       if (updateData.seriesPoses) {
         const fallbackData = { ...updateData }
-        fallbackData.seriesPostures = fallbackData.seriesPoses
+        // map new `seriesPoses` to legacy `series_poses` (alternate schema name) before deleting the new key
+        fallbackData.series_poses = fallbackData.seriesPoses
         delete fallbackData.seriesPoses
         updated = await prisma.asanaSeries.update({
           where: { id: resolvedParams.id },

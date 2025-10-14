@@ -154,8 +154,8 @@ export function canHaveMultipleImages(asana: AsanaPoseData): boolean {
  */
 export async function getNextDisplayOrder(poseId: string): Promise<number> {
   try {
-    // Support migration: some records may use `postureId` while newer records use `poseId`.
-    const whereClause: any = { OR: [{ poseId }, { postureId: poseId }] }
+    // Use the schema field `poseId` (legacy `poseId` has been migrated to `poseId`)
+    const whereClause: any = { poseId }
 
     // Fetch minimal fields without a typed `select` to avoid Prisma client type mismatches
     const existingImages: any[] = await prisma.poseImage.findMany({
@@ -200,12 +200,12 @@ export function validateDisplayOrders(orders: number[]): boolean {
  * Error classes for ownership-related errors
  */
 export class AsanaOwnershipError extends Error {
-  constructor(
-    message: string,
-    public code: string
-  ) {
+  public code: string
+
+  constructor(message: string, code: string) {
     super(message)
     this.name = 'AsanaOwnershipError'
+    this.code = code
   }
 }
 

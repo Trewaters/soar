@@ -120,42 +120,42 @@ model ProviderAccount {
 
 /// Represents a yoga Asana in the app.
 model AsanaPose {
-   // “Full”, Abbreviated Posture 1
+  // “Full”, Abbreviated Pose 1
   id                        String          @id @default(auto()) @map("_id") @db.ObjectId
-  sort_english_name         String          @unique // “Full”, Abbreviated Posture 1, Unique name for pose, expected in English
-  sanskrit_names            String[] // “Full”, Abbreviated Posture 1 // use first element for primary sanskrit name
-  english_names             String[] // “Full”, Abbreviated Posture 1
-  alternative_english_names String[] // “Full”, Abbreviated Posture 1
-  poseImages                PoseImage[] // “Full”, Abbreviated Posture 1 // Relation to PoseImage, string to array
-  description               String? // “Full”, Abbreviated Posture 1
-  category                  String? // “Full”, Abbreviated Posture 1
-  difficulty                String? // “Full”, Abbreviated Posture 1
-  activity_completed        Boolean? // “Full”, Abbreviated Posture 1
-  asanaActivities           AsanaActivity[] // “Full”, Abbreviated Posture 1 // Relation to AsanaActivity
-  activity_practice         Boolean? // “Full”, Abbreviated Posture 1
-  dristi                    String? // “Full”, Abbreviated Posture 1
-  setup_cues                String? // “Full”, Abbreviated Posture 1
-  deepening_cues            String? // “Full”, Abbreviated Posture 1
-  // “Advance”, Abbreviated Posture 2
-  alignment_cues      String? // “Advance”, Abbreviated Posture 2, string & boolean to string
-  joint_action        String? // “Advance”, Abbreviated Posture 2
-  muscle_action       String? // “Advance”, Abbreviated Posture 2
-  transition_cues_out String? // “Advance”, Abbreviated Posture 2
-  transition_cues_in  String? // “Advance”, Abbreviated Posture 2
-  additional_cues     String? // “Advance”, Abbreviated Posture 2
-  benefits            String? // “Advance”, Abbreviated Posture 2
-  customize_asana     String? // “Advance”, Abbreviated Posture 2
-  // “Personal”, Abbreviated Posture 3
-  pose_modifications String[] // “Personal”, Abbreviated Posture 3
-  pose_variations    String[] // “Personal”, Abbreviated Posture 3
-  breath             String[] // “Personal”, Abbreviated Posture 3, string & array to array
-  duration_asana     String? // “Personal”, Abbreviated Posture 3
-  lore               String? // “Personal”, Abbreviated Posture 3
-  asana_intention    String? // “Personal”, Abbreviated Posture 3
+  sort_english_name         String          @unique // “Full”, Abbreviated Pose 1, Unique name for pose, expected in English
+  sanskrit_names            String[] // “Full”, Abbreviated Pose 1 // use first element for primary sanskrit name
+  english_names             String[] // “Full”, Abbreviated Pose 1
+  alternative_english_names String[] // “Full”, Abbreviated Pose 1
+  poseImages                PoseImage[] // “Full”, Abbreviated Pose 1 // Relation to PoseImage, string to array
+  description               String? // “Full”, Abbreviated Pose 1
+  category                  String? // “Full”, Abbreviated Pose 1
+  difficulty                String? // “Full”, Abbreviated Pose 1
+  activity_completed        Boolean? // “Full”, Abbreviated Pose 1
+  asanaActivities           AsanaActivity[] // “Full”, Abbreviated Pose 1 // Relation to AsanaActivity
+  activity_practice         Boolean? // “Full”, Abbreviated Pose 1
+  dristi                    String? // “Full”, Abbreviated Pose 1
+  setup_cues                String? // “Full”, Abbreviated Pose 1
+  deepening_cues            String? // “Full”, Abbreviated Pose 1
+  // “Advance”, Abbreviated Pose 2
+  alignment_cues      String? // “Advance”, Abbreviated Pose 2, string & boolean to string
+  joint_action        String? // “Advance”, Abbreviated Pose 2
+  muscle_action       String? // “Advance”, Abbreviated Pose 2
+  transition_cues_out String? // “Advance”, Abbreviated Pose 2
+  transition_cues_in  String? // “Advance”, Abbreviated Pose 2
+  additional_cues     String? // “Advance”, Abbreviated Pose 2
+  benefits            String? // “Advance”, Abbreviated Pose 2
+  customize_asana     String? // “Advance”, Abbreviated Pose 2
+  // “Personal”, Abbreviated Pose 3
+  pose_modifications String[] // “Personal”, Abbreviated Pose 3
+  pose_variations    String[] // “Personal”, Abbreviated Pose 3
+  breath             String[] // “Personal”, Abbreviated Pose 3, string & array to array
+  duration_asana     String? // “Personal”, Abbreviated Pose 3
+  lore               String? // “Personal”, Abbreviated Pose 3
+  asana_intention    String? // “Personal”, Abbreviated Pose 3
 
   label                String? // verify how it is used
-  suggested_postures   String[] // verify how it is used
-  preparatory_postures String[] // verify how it is used
+  suggested_poses   String[] // renamed for clarity (was suggested_postures)
+  preparatory_poses String[] // renamed for clarity (was preparatory_postures)
   isUserCreated        Boolean   @default(false) // verify how it is used, don't think it is needed // Flag to identify user-created asanas
   created_on           DateTime? @default(now()) // Necessary
   updated_on           DateTime? @updatedAt // Necessary
@@ -166,7 +166,7 @@ model AsanaPose {
 model AsanaSeries {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   seriesName     String
-  seriesPostures String[]
+  seriesPoses String[]
   breathSeries   String[]
   description    String?
   durationSeries String?
@@ -195,7 +195,7 @@ model AsanaActivity {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
   userId            String   @db.ObjectId
   poseId            String   @db.ObjectId // Reference to AsanaPose.id
-  postureName       String // e.g., Adho Mukha Svanasana
+  poseName       String // e.g., Adho Mukha Svanasana
   sort_english_name String // For routing - e.g., "Downward Facing Dog"
   duration          Int // Duration held (in seconds)
   datePerformed     DateTime // Date performed
@@ -265,8 +265,8 @@ model UserLogin {
 model PoseImage {
   id             String      @id @default(auto()) @map("_id") @db.ObjectId
   userId         String      @db.ObjectId
-  postureId      String?     @db.ObjectId // Optional association with a specific posture
-  postureName    String? // Store the sort_english_name for easier querying
+  poseId      String?     @db.ObjectId // Optional association with a specific pose
+  poseName    String? // Store the sort_english_name for easier querying
   url            String // Image URL (Vercel Blob or local reference)
   altText        String? // Alternative text for accessibility
   fileName       String? // Original filename
@@ -275,21 +275,21 @@ model PoseImage {
   storageType    StorageType @default(CLOUD) // Where the image is stored
   localStorageId String? // Local storage identifier for browser storage
   isOffline      Boolean     @default(false) // True if saved offline due to API failure
-  imageType      String      @default("posture") // 'profile', 'posture', 'gallery', etc.
+  imageType      String      @default("pose") @map("imageType") // 'profile', 'pose', 'gallery', etc. DB field preserved
   displayOrder   Int         @default(1) // Order for carousel display (1-3)
 
   user UserData   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  pose AsanaPose? @relation(fields: [postureId], references: [id], onDelete: SetNull)
+  pose AsanaPose? @relation(fields: [poseId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([userId])
-  @@index([postureId])
-  @@index([postureName])
+  @@index([poseId])
+  @@index([poseName])
   @@index([storageType])
   @@index([imageType])
-  @@index([postureId, displayOrder]) // Composite index for efficient carousel queries
+  @@index([poseId, displayOrder]) // Composite index for efficient carousel queries
 }
 
 /// Enum for image storage types

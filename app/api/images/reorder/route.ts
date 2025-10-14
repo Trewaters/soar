@@ -81,7 +81,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Get the images to verify they belong to the same pose
-    // Fetch full records (no select) to tolerate schema rename (posture -> pose)
+    // Fetch full records (no select) to tolerate schema rename (pose -> asana)
     const imageDetails: any = await prisma.poseImage.findMany({
       where: { id: { in: imageIds } },
     })
@@ -94,9 +94,9 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    // Verify all images belong to the same pose
+    // Verify all images belong to the same pose/asana (support both field names)
     const poseIds = new Set(
-      imageDetails.map((img: any) => img.poseId ?? img.postureId)
+      imageDetails.map((img: any) => img.poseId ?? img.asanaId)
     )
     if (poseIds.size > 1) {
       return NextResponse.json(
@@ -107,7 +107,7 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    const poseId = imageDetails[0].poseId ?? imageDetails[0].postureId
+    const poseId = imageDetails[0].poseId ?? imageDetails[0].asanaId
     if (!poseId) {
       return NextResponse.json(
         {
@@ -142,11 +142,11 @@ export async function PUT(request: NextRequest) {
 
     // Fetch the updated images for response
     const whereClause: any = {}
-    // Use the field present in the row (poseId or postureId)
+    // Use the field present in the row (poseId or asanaId)
     if (imageDetails[0].poseId) {
       whereClause.poseId = imageDetails[0].poseId
-    } else if (imageDetails[0].postureId) {
-      whereClause.postureId = imageDetails[0].postureId
+    } else if (imageDetails[0].asanaId) {
+      whereClause.asanaId = imageDetails[0].asanaId
     }
 
     const updatedImages = await prisma.poseImage.findMany({
@@ -158,8 +158,8 @@ export async function PUT(request: NextRequest) {
       success: true,
       images: updatedImages.map((img: any) => ({
         ...img,
-        poseId: img.poseId ?? img.postureId ?? undefined,
-        poseName: img.poseName ?? img.postureName ?? undefined,
+        poseId: img.poseId ?? img.asanaId ?? undefined,
+        poseName: img.poseName ?? img.asanaName ?? undefined,
         altText: img.altText || undefined,
         fileName: img.fileName || undefined,
         fileSize: img.fileSize || undefined,

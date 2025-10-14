@@ -24,7 +24,14 @@ import {
   Checkbox,
 } from '@mui/material'
 import { useSession } from 'next-auth/react'
-import { ChangeEvent, FormEvent, useEffect, useState, useMemo } from 'react'
+import {
+  ChangeEvent,
+  FormEvent,
+  Fragment,
+  useEffect,
+  useState,
+  useMemo,
+} from 'react'
 import { LooksOne } from '@mui/icons-material'
 import LooksTwoIcon from '@mui/icons-material/LooksTwo'
 import Looks3Icon from '@mui/icons-material/Looks3'
@@ -378,10 +385,10 @@ export default function Page() {
                   }
                   const sectionLabel = sectionHeaderMap[index] || null
                   return (
-                    <>
+                    <Fragment key={opt.id ?? `option-${index}`}>
                       {sectionLabel && (
                         <ListSubheader
-                          key={sectionLabel + '-header'}
+                          key={`${sectionLabel}-header-${index}`}
                           component="div"
                           disableSticky
                           role="presentation"
@@ -389,10 +396,10 @@ export default function Page() {
                           {sectionLabel}
                         </ListSubheader>
                       )}
-                      <li {...props} key={opt.id}>
+                      <li {...props} key={opt.id ?? `option-${index}`}>
                         {opt.seriesName}
                       </li>
-                    </>
+                    </Fragment>
                   )
                 }
                 renderOptionFn.displayName = 'SeriesAutocompleteRenderOption'

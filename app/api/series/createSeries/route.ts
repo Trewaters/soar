@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     const session = await auth().catch(() => null)
     const createdBy = session?.user?.email ?? 'guest'
 
-    // Try create with `seriesPoses` field first, fallback to `seriesPostures` if needed
+    // Try create with `seriesPoses` field first, fallback to `seriesPoses` if needed
     let newSeries: any
     try {
       newSeries = await prisma.asanaSeries.create({
@@ -61,11 +61,11 @@ export async function POST(request: Request) {
         } as any,
       })
     } catch (e) {
-      // Fallback to older field name `seriesPostures`
+      // Fallback to older field name `seriesPoses`
       newSeries = await prisma.asanaSeries.create({
         data: {
           seriesName,
-          seriesPostures: seriesPoses,
+          seriesPoses: seriesPoses,
           breathSeries,
           description,
           durationSeries,

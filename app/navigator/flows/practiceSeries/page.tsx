@@ -17,7 +17,14 @@ import {
   Card,
   CardMedia,
 } from '@mui/material'
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  ChangeEvent,
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
@@ -398,10 +405,10 @@ export default function Page() {
                 }
                 const sectionLabel = sectionHeaderMap[index] || null
                 return (
-                  <>
+                  <Fragment key={opt.id ?? `option-${index}`}>
                     {sectionLabel && (
                       <ListSubheader
-                        key={sectionLabel + '-header'}
+                        key={`${sectionLabel}-header-${index}`}
                         component="div"
                         disableSticky
                         role="presentation"
@@ -409,10 +416,10 @@ export default function Page() {
                         {sectionLabel}
                       </ListSubheader>
                     )}
-                    <li {...props} key={opt.id}>
+                    <li {...props} key={opt.id ?? `option-${index}`}>
                       {opt.seriesName}
                     </li>
-                  </>
+                  </Fragment>
                 )
               }
               renderOptionFn.displayName = 'SeriesAutocompleteRenderOption'

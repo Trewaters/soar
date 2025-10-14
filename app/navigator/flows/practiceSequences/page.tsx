@@ -427,10 +427,10 @@ export default function Page() {
                     const { key, ...otherProps } = props as any
 
                     return (
-                      <React.Fragment key={option.id}>
+                      <React.Fragment key={option.id ?? `option-${index}`}>
                         {sectionLabel && (
                           <ListSubheader
-                            key={sectionLabel + '-header'}
+                            key={`${sectionLabel}-header-${index}`}
                             component="div"
                             disableSticky
                             role="presentation"
@@ -438,7 +438,12 @@ export default function Page() {
                             {sectionLabel}
                           </ListSubheader>
                         )}
-                        <li {...otherProps}>{option.nameSequence}</li>
+                        <li
+                          key={option.id ?? `option-${index}`}
+                          {...otherProps}
+                        >
+                          {option.nameSequence}
+                        </li>
                       </React.Fragment>
                     )
                   }

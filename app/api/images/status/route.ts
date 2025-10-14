@@ -65,16 +65,16 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    // Try counting using the new `poseId` field first, fallback to `postureId` if needed
+    // Try counting using the new `poseId` field first, fallback to `poseId` if needed
     let actualImageCount = 0
     try {
       actualImageCount = await prisma.poseImage.count({
         where: { poseId: poseId, userId: user.id } as any,
       })
     } catch (e) {
-      // Fallback to postureId
+      // Fallback to poseId
       actualImageCount = await prisma.poseImage.count({
-        where: { postureId: poseId, userId: user.id } as any,
+        where: { poseId: poseId, userId: user.id } as any,
       })
     }
 

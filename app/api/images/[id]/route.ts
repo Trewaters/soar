@@ -40,7 +40,7 @@ export async function DELETE(
     // Find the image first so we can return image-specific errors before
     // attempting to resolve the user record.
     // Fetch the full record (no `select`) to avoid mismatched generated client types
-    // while renames (posture -> pose) are in progress.
+    // while renames (pose -> pose) are in progress.
     const image: any = await prisma.poseImage.findUnique({
       where: { id: imageId },
     })
@@ -71,13 +71,14 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
-    // Resolve pose/posture IDs and relation object so we work with either schema
+    // Resolve pose/pose IDs and relation object so we work with either schema
+    // Support both `poseId`/`pose` and a renamed variant `asanaId`/`asana`.
     const attachedPoseId =
-      (image as any).poseId ?? (image as any).postureId ?? null
+      (image as any).poseId ?? (image as any).asanaId ?? null
 
-    const poseObj = (image as any).pose ?? (image as any).posture ?? null
+    const poseObj = (image as any).pose ?? (image as any).asana ?? null
 
-    // For pose/posture images, verify user owns the asana
+    // For pose/pose images, verify user owns the asana
     if (attachedPoseId && poseObj) {
       console.log('🗑️ Asana check:', {
         poseId: attachedPoseId,
@@ -131,12 +132,12 @@ export async function DELETE(
           where: { id: imageId },
         })
 
-        // Get remaining images for this pose
+        // Get remaining images for this pose (support both `poseId` and `asanaId`)
         const whereClause: any = {}
         if ((image as any).poseId) {
           whereClause.poseId = (image as any).poseId
-        } else if ((image as any).postureId) {
-          whereClause.postureId = (image as any).postureId
+        } else if ((image as any).asanaId) {
+          whereClause.poseId = (image as any).asanaId
         }
 
         const remainingImages = await tx.poseImage.findMany({
@@ -188,8 +189,8 @@ export async function DELETE(
       const updatedWhere: any = {}
       if ((image as any).poseId) {
         updatedWhere.poseId = (image as any).poseId
-      } else if ((image as any).postureId) {
-        updatedWhere.postureId = (image as any).postureId
+      } else if ((image as any).asanaId) {
+        updatedWhere.poseId = (image as any).asanaId
       }
 
       const updatedRemainingImages = await prisma.poseImage.findMany({
@@ -201,8 +202,8 @@ export async function DELETE(
         success: true,
         remainingImages: updatedRemainingImages.map((img: any) => ({
           ...img,
-          poseId: img.poseId ?? img.postureId ?? undefined,
-          poseName: img.poseName ?? img.postureName ?? undefined,
+          poseId: img.poseId ?? img.asanaId ?? undefined,
+          poseName: img.poseName ?? img.asanaName ?? undefined,
           altText: img.altText || undefined,
           fileName: img.fileName || undefined,
           fileSize: img.fileSize || undefined,

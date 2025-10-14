@@ -27,12 +27,12 @@ export async function recordAsanaActivity(input: AsanaActivityInput) {
           : new Date(input.datePerformed),
     }
 
-    // Prisma schema may still expect legacy posture fields during migration.
+    // Prisma schema may still expect legacy pose fields during migration.
     // Populate them from the incoming pose fields to be tolerant.
     const dbData: any = {
       ...data,
-      postureId: input.poseId,
-      postureName: input.poseName,
+      poseId: input.poseId,
+      poseName: input.poseName,
     }
 
     const result = await prisma.asanaActivity.create({
@@ -243,7 +243,7 @@ export async function getAllPosesWeeklyCount(userId: string) {
       orderBy: { datePerformed: 'desc' },
     })
 
-    // Group by poseId (fallback to postureId) and count
+    // Group by poseId (fallback to poseId) and count
     const poseStats: Record<
       string,
       {
@@ -255,15 +255,15 @@ export async function getAllPosesWeeklyCount(userId: string) {
     > = {}
 
     activities.forEach((activity) => {
-      // Some records may still use postureId during migration; prefer poseId but fall back to postureId
+      // Some records may still use poseId during migration; prefer poseId but fall back to poseId
       const key =
-        (activity as any).poseId || (activity as any).postureId || 'unknown'
+        (activity as any).poseId || (activity as any).poseId || 'unknown'
 
       if (!poseStats[key]) {
         poseStats[key] = {
           count: 0,
           poseName:
-            (activity as any).poseName || (activity as any).postureName || '',
+            (activity as any).poseName || (activity as any).poseName || '',
           lastPerformed: activity.datePerformed,
           activities: [],
         }
