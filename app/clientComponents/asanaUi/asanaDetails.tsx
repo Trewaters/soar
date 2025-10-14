@@ -37,6 +37,39 @@ type AsanaDetailsComponentProps = ComponentProps<typeof Stack> &
 export default React.memo(function AsanaDetails(
   props: AsanaDetailsComponentProps
 ) {
+  // If there is no meaningful details to show, render nothing.
+  // Treat: undefined, null, empty string, empty array as "no data".
+  const { details } = props
+
+  // If details is an array, determine whether it contains any non-empty string entries
+  const arrayHasNonEmptyEntries = Array.isArray(details)
+    ? details.filter((d) => typeof d === 'string' && d.trim() !== '').length > 0
+    : false
+
+  const isEmpty =
+    details === undefined ||
+    details === null ||
+    (typeof details === 'string' && details.trim() === '') ||
+    (Array.isArray(details) && !arrayHasNonEmptyEntries)
+
+  if (isEmpty) return undefined
+
+  // Narrow type for use below. At this point details is guaranteed non-null/non-empty.
+  const safeDetails = details as string | string[]
+
+  // If details is an array, produce a cleaned array with only non-empty trimmed entries
+  const cleanedArray = Array.isArray(safeDetails)
+    ? (safeDetails as string[])
+        .map((s) => (s ?? '').toString().trim())
+        .filter((s) => s !== '')
+    : null
+
+  const ariaLabel = cleanedArray
+    ? `${props.label}: ${cleanedArray.join(' ')}`
+    : `${props.label}: ${safeDetails}`
+
+  const content = cleanedArray ? cleanedArray.join('\n') : safeDetails
+
   return (
     <Box
       component="dl"
@@ -59,7 +92,7 @@ export default React.memo(function AsanaDetails(
           aria-hidden="true"
           width={16}
           height={20}
-        ></Image>
+        />
         <Typography
           variant="subtitle1"
           component="dt"
@@ -83,9 +116,9 @@ export default React.memo(function AsanaDetails(
             whiteSpace: 'pre-line',
             ...props.sx,
           }}
-          aria-label={`${props.label}: ${props.details || 'No details available'}`}
+          aria-label={ariaLabel}
         >
-          {props.details || 'No details available'}
+          {content}
         </Typography>
       </Stack>
     </Box>

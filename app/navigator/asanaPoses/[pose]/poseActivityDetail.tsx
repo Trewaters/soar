@@ -640,9 +640,7 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
         />
         <Stack direction={'column'} spacing={0}>
           <AsanaDetails
-            details={
-              pose?.english_names?.join(', ') || 'No variant names available'
-            }
+            details={pose?.english_names?.join(', ')}
             label={pose?.label ?? 'English Variant Names'}
             sx={{
               mb: '32px',
@@ -672,33 +670,34 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
             label="Category"
             sx={{ mb: '32px' }}
           />
+
           <AsanaDetails
             details={pose?.difficulty}
             label="Difficulty"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={pose?.breath ?? ['Inhale', 'Exhale']}
+            details={pose?.breath}
             label="Breath (default)"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={pose?.dristi ?? 'optimal gaze'}
+            details={pose?.dristi}
             label="Dristi"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={pose?.sanskrit_names?.[0] ?? 'Sanskrit Name not-found'}
+            details={pose?.sanskrit_names?.[0]}
             label="Sanskrit Name"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={pose?.setup_cues ?? 'Setup Cues not-found'}
+            details={pose?.setup_cues}
             label="Setup Cues"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={pose?.deepening_cues ?? 'Deepening Cues not-found'}
+            details={pose?.deepening_cues}
             label="Deepening Cues"
             sx={{ mb: '32px' }}
           />
