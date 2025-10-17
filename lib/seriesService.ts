@@ -46,10 +46,22 @@ export async function deleteSeries(id: string): Promise<{ success: boolean }> {
 }
 import { logServiceError } from './errorLogger'
 
+// New shape for per-series pose metadata. Matches AsanaSeriesContext.FlowSeriesPose
+export interface FlowSeriesPose {
+  poseId?: string
+  sort_english_name: string
+  // optional secondary label (e.g., sanskrit name or difficulty tag)
+  secondary?: string
+  // per-pose alignment cues (max 1000 chars, validated server-side)
+  alignment_cues?: string
+}
+
 export type SeriesData = {
   id?: string
   seriesName: string
-  seriesPoses: string[]
+  // seriesPoses supports both legacy string[] format and new object format with per-pose metadata
+  // This union type maintains backward compatibility while enabling alignment_cues per pose
+  seriesPoses: Array<string | FlowSeriesPose>
   breath?: string
   description?: string
   duration?: string
@@ -61,7 +73,8 @@ export type SeriesData = {
 
 export type CreateSeriesInput = {
   seriesName: string
-  seriesPoses: string[]
+  // Accept both formats for backward compatibility
+  seriesPoses: Array<string | FlowSeriesPose>
   breath: string
   description: string
   duration: string

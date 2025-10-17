@@ -569,7 +569,16 @@ function SeriesCard({ series }: { series: UserSeriesData }) {
     description: series.description || '',
     difficulty: 'beginner',
     asanas: (series.seriesPoses || []).map((sp, idx) => {
-      const { name, secondary } = splitSeriesPoseEntry(sp)
+      let name = ''
+      let secondary = ''
+      if (typeof sp === 'string') {
+        const parsed = splitSeriesPoseEntry(sp)
+        name = parsed.name
+        secondary = parsed.secondary
+      } else {
+        name = (sp as any).sort_english_name || ''
+        secondary = (sp as any).secondary || ''
+      }
       const resolvedName = name || `asana-${idx}`
       const asana: EditAsanaShape = {
         id: `${idx}-${resolvedName}`,

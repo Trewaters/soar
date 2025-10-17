@@ -102,9 +102,6 @@ export default function Page() {
     description: string
     category: string
     difficulty: string
-    // breath_direction_default: string
-    preferred_side: string
-    sideways: string
     created_by: string
     dristi?: string
     sanskrit_names: string[] // use first element for primary sanskrit name
@@ -120,9 +117,6 @@ export default function Page() {
     description: '',
     category: '',
     difficulty: '',
-    // breath_direction_default: 'Neutral',
-    preferred_side: '',
-    sideways: 'No',
     // created_by should be the user's email (project convention)
     created_by: session?.user?.email ?? 'error-undefined-user',
     dristi: '',
@@ -280,9 +274,6 @@ export default function Page() {
       setup_cues: formFullAsanaPoseData.setup_cues,
       deepening_cues: formFullAsanaPoseData.deepening_cues,
       breath: (formFullAsanaPoseData as any).breath ?? undefined,
-      // breath_direction_default: formFullAsanaPoseData.breath_direction_default,
-      preferred_side: formFullAsanaPoseData.preferred_side,
-      sideways: formFullAsanaPoseData.sideways,
       // created_by should be the user's email
       created_by: session?.user?.email ?? 'unknown',
     }
@@ -538,9 +529,6 @@ export default function Page() {
                   description: '',
                   category: '',
                   difficulty: '',
-                  // breath_direction_default: 'Neutral',
-                  preferred_side: '',
-                  sideways: 'No',
                   created_by: session?.user?.email ?? 'error-undefined-user',
                   dristi: '',
                   sanskrit_names: [],

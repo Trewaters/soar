@@ -8,7 +8,6 @@ import {
   Autocomplete,
   Box,
   Drawer,
-  Link,
   Stack,
   TextField,
   Typography,
@@ -42,6 +41,7 @@ import EditSeriesDialog, {
   Asana as EditAsanaShape,
 } from '@app/navigator/flows/editSeries/EditSeriesDialog'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
+import SeriesPoseList from '@app/clientComponents/SeriesPoseList'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -260,13 +260,28 @@ export default function Page() {
     if (!flow) return null
     const asanas: EditAsanaShape[] = (flow.seriesPoses || []).map(
       (entry, idx) => {
-        const { name, secondary } = splitSeriesPoseEntry(entry)
+        // Handle both string and object formats
+        let name = ''
+        let secondary = ''
+        let alignmentCues = ''
+
+        if (typeof entry === 'string') {
+          const split = splitSeriesPoseEntry(entry)
+          name = split.name
+          secondary = split.secondary
+        } else if (entry && typeof entry === 'object') {
+          name = (entry as any).sort_english_name || ''
+          secondary = (entry as any).secondary || ''
+          alignmentCues = (entry as any).alignment_cues || ''
+        }
+
         const resolvedName = name || `asana-${idx}`
 
         return {
           id: `${idx}-${resolvedName}`,
           name: resolvedName,
           difficulty: secondary,
+          alignment_cues: alignmentCues,
         }
       }
     )
@@ -540,35 +555,12 @@ export default function Page() {
                     </IconButton>
                   </Box>
                 )}
-                <Stack>
-                  {flow.seriesPoses.map((pose) => {
-                    const { name: poseName, secondary } =
-                      splitSeriesPoseEntry(pose)
-                    const href = getPoseNavigationUrlSync(pose)
-                    const resolvedName = poseName || pose
-
-                    return (
-                      <Box key={pose} className="lines">
-                        <Box className="journalLine">
-                          <Typography textAlign={'left'} variant="body1">
-                            <Link
-                              underline="hover"
-                              color="primary.contrastText"
-                              href={href}
-                            >
-                              {resolvedName}
-                            </Link>
-                          </Typography>
-                          {secondary && (
-                            <Typography textAlign={'left'} variant="body2">
-                              {secondary}
-                            </Typography>
-                          )}
-                        </Box>
-                      </Box>
-                    )
-                  })}
-                </Stack>
+                <SeriesPoseList
+                  seriesPoses={flow.seriesPoses}
+                  getHref={(poseName) => getPoseNavigationUrlSync(poseName)}
+                  linkColor="primary.contrastText"
+                  dataTestIdPrefix="practice-series-pose"
+                />
                 {/* Series image (if uploaded) - shown between pose list and description */}
                 {imageUrl ? (
                   <Box sx={{ width: '100%', maxWidth: 600, mt: 2 }}>

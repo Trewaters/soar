@@ -39,7 +39,6 @@ export default function EditPoseDialog({
 }: EditPoseDialogProps) {
   const { data: session } = useSession()
   const [difficulty, setDifficulty] = useState('')
-  const [sideways, setSideways] = useState('No')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -75,8 +74,6 @@ export default function EditPoseDialog({
     category: string
     difficulty: string
     breath: string[]
-    preferred_side: string
-    sideways: string
   }>({
     sort_english_name: '',
     english_names: [],
@@ -84,8 +81,6 @@ export default function EditPoseDialog({
     category: '',
     difficulty: '',
     breath: [],
-    preferred_side: '',
-    sideways: 'No',
   })
 
   // Initialize form data when pose changes
@@ -98,15 +93,12 @@ export default function EditPoseDialog({
         category: pose.category || '',
         difficulty: pose.difficulty || '',
         breath: pose.breath || [],
-        preferred_side: pose.alignment_cues || '',
-        sideways: pose.alignment_cues ? 'Yes' : 'No',
       })
       setImages(pose.poseImages || [])
       setEnglishVariationsInput(
         Array.isArray(pose.english_names) ? pose.english_names.join(', ') : ''
       )
       setDifficulty(pose.difficulty || '')
-      setSideways(pose.alignment_cues ? 'Right' : 'Left')
       setError(null)
     }
   }, [pose, open])
@@ -134,14 +126,6 @@ export default function EditPoseDialog({
     setFormData({
       ...formData,
       difficulty: value,
-    })
-  }
-
-  const handleSidewaysChange = (value: string) => {
-    setSideways(value)
-    setFormData({
-      ...formData,
-      sideways: value,
     })
   }
 
@@ -182,8 +166,6 @@ export default function EditPoseDialog({
       category: formData.category,
       difficulty: formData.difficulty,
       breath: formData.breath,
-      preferred_side: formData.preferred_side,
-      sideways: formData.sideways,
     }
 
     try {
@@ -410,42 +392,6 @@ export default function EditPoseDialog({
                           onChange={handleChange}
                           placeholder="e.g., Inhale, Exhale, Neutral"
                         />
-                      </FormControl>
-                    </Grid>
-
-                    <Grid size={6}>
-                      <FormControl sx={{ width: '100%', mb: 3 }}>
-                        <TextField
-                          label="Preferred Side"
-                          name="preferred_side"
-                          value={formData.preferred_side}
-                          onChange={handleChange}
-                          placeholder="e.g., Right, Left, None"
-                        />
-                      </FormControl>
-                    </Grid>
-
-                    <Grid size={12}>
-                      <FormControl sx={{ width: '100%', mb: 3 }}>
-                        <Typography variant="subtitle2" gutterBottom>
-                          Is this a sideways pose?
-                        </Typography>
-                        <Stack direction="row" spacing={1}>
-                          {['Yes', 'No'].map((option) => (
-                            <Chip
-                              key={option}
-                              label={option}
-                              clickable
-                              variant={
-                                sideways === option ? 'filled' : 'outlined'
-                              }
-                              color={
-                                sideways === option ? 'primary' : 'default'
-                              }
-                              onClick={() => handleSidewaysChange(option)}
-                            />
-                          ))}
-                        </Stack>
                       </FormControl>
                     </Grid>
                   </Grid>

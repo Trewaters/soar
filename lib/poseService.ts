@@ -14,9 +14,6 @@ export type CreatePoseInput = {
   dristi?: string
   setup_cues?: string
   deepening_cues?: string
-  // breath_direction_default: string
-  preferred_side: string
-  sideways: string
   created_by: string
 }
 
@@ -31,8 +28,6 @@ export type UpdatePoseInput = {
   dristi?: string
   setup_cues?: string
   deepening_cues?: string
-  preferred_side: string
-  sideways: string
 }
 
 /**

@@ -21,8 +21,6 @@ describe('EditPoseDialog Delete', () => {
     category: '',
     difficulty: '',
     breath_direction_default: '',
-    preferred_side: '',
-    sideways: false,
     created_by: 'me@example.com',
   }
 

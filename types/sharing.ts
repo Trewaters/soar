@@ -115,8 +115,16 @@ export class SeriesShareStrategy implements ShareStrategy {
     // Format poses with exactly the required format: "* [Pose Name],"
     const posesText = data.seriesPoses
       .map((pose, index) => {
-        // Clean pose name and add comma except for last item
-        const cleanPose = pose.replace(/;/g, '')
+        // Support both string entries and object-shaped entries
+        let cleanPose = ''
+        if (typeof pose === 'string') {
+          cleanPose = pose.replace(/;/g, '').trim()
+        } else {
+          cleanPose = (
+            (pose as any).sort_english_name ||
+            String((pose as any).poseId || '')
+          ).trim()
+        }
         return index === data.seriesPoses.length - 1
           ? `* ${cleanPose}`
           : `* ${cleanPose},`

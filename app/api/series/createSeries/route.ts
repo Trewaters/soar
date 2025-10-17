@@ -9,11 +9,27 @@ const prisma = new PrismaClient()
 export async function POST(request: Request) {
   const body = await request.json()
   const seriesName = body.seriesName
-  const seriesPoses: string[] = Array.isArray(body.seriesPoses)
-    ? body.seriesPoses
-    : typeof body.seriesPoses === 'string'
-      ? [body.seriesPoses]
-      : []
+  // Accept either an array of strings (legacy) or array of objects { poseId, sort_english_name, alignment_cues? }
+  const rawSeriesPoses = body.seriesPoses ?? body.series_poses
+  let seriesPoses: any[] = []
+  if (Array.isArray(rawSeriesPoses)) {
+    seriesPoses = rawSeriesPoses.map((item: any) => {
+      if (item && typeof item === 'object' && !Array.isArray(item)) {
+        // sanitize alignment_cues
+        if (typeof item.alignment_cues === 'string') {
+          item.alignment_cues = item.alignment_cues.slice(0, 1000)
+        }
+        return item
+      }
+      // legacy string entry
+      return item
+    })
+  } else if (
+    typeof rawSeriesPoses === 'string' &&
+    rawSeriesPoses.trim().length > 0
+  ) {
+    seriesPoses = [rawSeriesPoses]
+  }
   const rawBreath = body.breathSeries ?? body.breath ?? []
   const breathSeries: string[] = Array.isArray(rawBreath)
     ? rawBreath
@@ -49,6 +65,7 @@ export async function POST(request: Request) {
       newSeries = await prisma.asanaSeries.create({
         data: {
           seriesName,
+          // seriesPoses is now Json[] per schema; pass the array (strings or objects)
           seriesPoses,
           breathSeries,
           description,
@@ -61,11 +78,11 @@ export async function POST(request: Request) {
         } as any,
       })
     } catch (e) {
-      // Fallback to older field name `seriesPoses`
+      // Fallback to older field name `series_poses` for legacy schemas
       newSeries = await prisma.asanaSeries.create({
         data: {
           seriesName,
-          seriesPoses: seriesPoses,
+          series_poses: seriesPoses,
           breathSeries,
           description,
           durationSeries,

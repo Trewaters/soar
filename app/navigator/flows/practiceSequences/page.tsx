@@ -122,8 +122,7 @@ export default function Page() {
     createdAt: '',
     updatedAt: '',
   })
-  const [isLoadingFreshSeriesData, setIsLoadingFreshSeriesData] =
-    useState<boolean>(false)
+  const [, setIsLoadingFreshSeriesData] = useState<boolean>(false)
   const [, setRefreshTrigger] = useState(0)
 
   const [page, setPage] = useState(1)
@@ -262,7 +261,7 @@ export default function Page() {
     }
 
     refreshSeriesData()
-  }, [singleSequence.id]) // Only re-run when sequence ID changes
+  }, [singleSequence]) // Only re-run when sequence ID changes
 
   // Helper function to resolve series ID and navigate
   const handleSeriesNavigation = async (seriesMini: any) => {
@@ -421,10 +420,11 @@ export default function Page() {
                     { index }: { index: number }
                   ) => {
                     if ('section' in option) return null
+
                     const sectionLabel = sectionHeaderMap[index] || null
 
-                    // Extract key from props to avoid spreading it
-                    const { key, ...otherProps } = props as any
+                    // Use props directly; avoid extracting 'key' which is unused
+                    const otherProps = props as any
 
                     return (
                       <React.Fragment key={option.id ?? `option-${index}`}>
@@ -724,8 +724,21 @@ export default function Page() {
                               }}
                             >
                               {(() => {
-                                const poseName = asana.split(';')[0]
-                                const href = getPoseNavigationUrlSync(asana)
+                                // asana may be a legacy string reference or an object with metadata
+                                let poseName = ''
+                                let href = '#'
+                                if (typeof asana === 'string') {
+                                  poseName = asana.split(';')[0]
+                                  href = getPoseNavigationUrlSync(asana)
+                                } else {
+                                  poseName =
+                                    (asana as any).sort_english_name || ''
+                                  // Prefer poseId if available, otherwise use the name
+                                  const poseRef = String(
+                                    (asana as any).poseId ?? poseName
+                                  )
+                                  href = getPoseNavigationUrlSync(poseRef)
+                                }
 
                                 return (
                                   <Link

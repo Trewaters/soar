@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Box, Stack, Typography, Card, CardMedia, Link } from '@mui/material'
+import { Box, Stack, Typography, Card, CardMedia } from '@mui/material'
 import Image from 'next/image'
 import { FlowSeriesData } from '@context/AsanaSeriesContext'
 import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
@@ -9,6 +9,7 @@ import SeriesWeeklyActivityTracker from '@app/clientComponents/seriesActivityTra
 import PoseShareButton from '@app/clientComponents/poseShareButton'
 import { getPoseIdByName } from '@lib/poseService'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
+import SeriesPoseList from '@app/clientComponents/SeriesPoseList'
 
 interface SeriesDetailViewProps {
   series: FlowSeriesData
@@ -38,7 +39,17 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
       const idsMap: { [poseName: string]: string | null } = {}
 
       for (const pose of flow.seriesPoses) {
-        const { name: poseName } = splitSeriesPoseEntry(pose)
+        // Handle both string and object formats
+        let poseName = ''
+        if (typeof pose === 'string') {
+          const { name } = splitSeriesPoseEntry(pose)
+          poseName = name
+        } else if (pose && typeof pose === 'object') {
+          poseName = (pose as any).sort_english_name || ''
+        }
+
+        if (!poseName) continue
+
         try {
           const id = await getPoseIdByName(poseName)
           idsMap[poseName] = id
@@ -155,41 +166,12 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
       )}
 
       {/* Series Poses */}
-      <Stack spacing={1} sx={{ width: '100%', mb: 3 }}>
-        {flow.seriesPoses?.map((pose, index) => {
-          const { name: poseName, secondary } = splitSeriesPoseEntry(pose)
-          const poseId = poseIds[poseName]
-
-          // Use ID if available, fallback to name (encoded) for backwards compatibility
-          const href = poseId
-            ? `/navigator/asanaPoses/${poseId}`
-            : `/navigator/asanaPoses/${encodeURIComponent(poseName)}`
-
-          return (
-            <Box key={`${pose}-${index}`} className="lines">
-              <Box
-                className="journalLine"
-                sx={{ p: 2, borderBottom: '1px solid #eee' }}
-              >
-                <Typography textAlign="left" variant="body1">
-                  <Link underline="hover" color="primary.main" href={href}>
-                    {poseName}
-                  </Link>
-                </Typography>
-                {secondary && (
-                  <Typography
-                    textAlign="left"
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                    {secondary}
-                  </Typography>
-                )}
-              </Box>
-            </Box>
-          )
-        })}
-      </Stack>
+      <SeriesPoseList
+        seriesPoses={flow.seriesPoses || []}
+        poseIds={poseIds}
+        linkColor="primary.main"
+        dataTestIdPrefix="series-detail-pose"
+      />
 
       {/* Description Section */}
       {flow.description && (

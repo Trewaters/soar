@@ -41,8 +41,6 @@ export interface AsanaPoseData {
   label?: string
   suggested_poses: string[]
   preparatory_poses: string[]
-  preferred_side?: string
-  sideways?: boolean
   image?: string
   created_on?: Date
   updated_on?: Date

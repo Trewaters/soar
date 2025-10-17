@@ -337,40 +337,85 @@ export default function Page() {
                         mx: 4,
                       }}
                     >
-                      {seriesPoses.map((word, index) => {
-                        const { name, secondary } = splitSeriesPoseEntry(word)
+                      {seriesPoses.map((entry, index) => {
+                        // entry may be legacy string or new object
+                        let name = ''
+                        let secondary = ''
+                        let alignmentCues = ''
+
+                        if (typeof entry === 'string') {
+                          const split = splitSeriesPoseEntry(entry)
+                          name = split.name
+                          secondary = split.secondary
+                        } else if (entry && typeof entry === 'object') {
+                          name = (entry as any).sort_english_name || ''
+                          secondary = (entry as any).secondary || ''
+                          alignmentCues = (entry as any).alignment_cues || ''
+                        }
+
+                        const handleRemove = () => {
+                          dispatch({
+                            type: 'SET_FLOW_SERIES',
+                            payload: {
+                              ...state.flowSeries,
+                              seriesPoses: state.flowSeries.seriesPoses.filter(
+                                (_, i) => i !== index
+                              ),
+                            },
+                          })
+                        }
+
+                        const handleCueChange = (e: React.ChangeEvent<any>) => {
+                          const newVal = e.target.value.slice(0, 1000)
+                          const newSeries = state.flowSeries.seriesPoses.map(
+                            (it, i) => {
+                              if (i !== index) return it
+                              if (typeof it === 'string') {
+                                // convert legacy string to object when user edits cues
+                                const s = splitSeriesPoseEntry(it)
+                                return {
+                                  poseId: undefined,
+                                  sort_english_name: s.name,
+                                  secondary: s.secondary,
+                                  alignment_cues: newVal,
+                                }
+                              }
+                              return {
+                                ...(it as any),
+                                alignment_cues: newVal,
+                              }
+                            }
+                          )
+                          dispatch({
+                            type: 'SET_FLOW_SERIES',
+                            payload: {
+                              ...state.flowSeries,
+                              seriesPoses: newSeries,
+                            },
+                          })
+                        }
 
                         return (
                           <Stack
                             className="journalLine"
-                            key={`${word}+${index}`}
+                            key={`${String(name)}+${index}`}
                             sx={{
                               alignItems: 'center',
                               display: 'flex',
                               flexDirection: 'row',
+                              gap: 2,
                             }}
                           >
                             <Stack>
                               <IconButton
                                 disableRipple
                                 sx={{ color: 'error.light' }}
-                                onClick={() =>
-                                  dispatch({
-                                    type: 'SET_FLOW_SERIES',
-                                    payload: {
-                                      ...state.flowSeries,
-                                      seriesPoses:
-                                        state.flowSeries.seriesPoses.filter(
-                                          (item) => item !== word
-                                        ),
-                                    },
-                                  })
-                                }
+                                onClick={handleRemove}
                               >
                                 <DeleteForeverIcon />
                               </IconButton>
                             </Stack>
-                            <Stack>
+                            <Stack sx={{ flex: 1 }}>
                               <Typography
                                 variant="body1"
                                 sx={{
@@ -393,6 +438,25 @@ export default function Page() {
                                   {secondary}
                                 </Typography>
                               )}
+                              <TextField
+                                placeholder="Optional alignment cues (max 1000 chars)"
+                                variant="standard"
+                                multiline
+                                minRows={1}
+                                value={alignmentCues}
+                                onChange={handleCueChange}
+                                inputProps={{
+                                  maxLength: 1000,
+                                  'data-testid': `alignment-cues-${index}`,
+                                }}
+                                sx={{ mt: 1 }}
+                              />
+                              <Typography
+                                variant="caption"
+                                sx={{ color: 'text.secondary' }}
+                              >
+                                {alignmentCues.length}/1000
+                              </Typography>
                             </Stack>
                           </Stack>
                         )

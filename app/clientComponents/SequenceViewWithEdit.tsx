@@ -374,8 +374,19 @@ export default function SequenceViewWithEdit({
                     <CardContent className="lines" sx={{ p: 0 }}>
                       {seriesMini.seriesPoses?.length ? (
                         seriesMini.seriesPoses.map((pose, index) => {
-                          const { name: englishName, secondary: sanskritName } =
-                            splitSeriesPoseEntry(pose)
+                          // Handle both string and object formats
+                          let englishName = ''
+                          let sanskritName = ''
+
+                          if (typeof pose === 'string') {
+                            const split = splitSeriesPoseEntry(pose)
+                            englishName = split.name
+                            sanskritName = split.secondary
+                          } else if (pose && typeof pose === 'object') {
+                            englishName = (pose as any).sort_english_name || ''
+                            sanskritName = (pose as any).secondary || ''
+                          }
+
                           return (
                             <Stack
                               key={`${englishName}-${index}`}

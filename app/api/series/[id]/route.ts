@@ -116,7 +116,21 @@ export async function PATCH(
     }
     if (typeof description === 'string') updateData.description = description
     if (typeof name === 'string') updateData.seriesName = name
-    if (Array.isArray(asanas)) {
+    // Accept either `asanas` (legacy) or `seriesPoses` (new JSON entries)
+    const rawSeriesPoses = body?.seriesPoses ?? body?.series_poses
+    if (Array.isArray(rawSeriesPoses)) {
+      // Preserve objects as-is but sanitize alignment_cues
+      updateData.seriesPoses = rawSeriesPoses.map((item: any) => {
+        if (item && typeof item === 'object' && !Array.isArray(item)) {
+          if (typeof item.alignment_cues === 'string') {
+            item.alignment_cues = item.alignment_cues.slice(0, 1000)
+          }
+          return item
+        }
+        // fallback: if a string was provided, keep as label
+        return item
+      })
+    } else if (Array.isArray(asanas)) {
       updateData.seriesPoses = asanas.map((a) =>
         formatSeriesPoseEntry(a.name, a.difficulty)
       )

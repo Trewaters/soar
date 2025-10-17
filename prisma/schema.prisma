@@ -136,8 +136,8 @@ model AsanaPose {
   dristi                    String? // “Full”, Abbreviated Pose 1
   setup_cues                String? // “Full”, Abbreviated Pose 1
   deepening_cues            String? // “Full”, Abbreviated Pose 1
-  // “Advance”, Abbreviated Pose 2
-  alignment_cues      String? // “Advance”, Abbreviated Pose 2, string & boolean to string
+  // "Advance", Abbreviated Pose 2
+  // NOTE: `alignment_cues` moved to series-level on AsanaSeries.seriesPoses
   joint_action        String? // “Advance”, Abbreviated Pose 2
   muscle_action       String? // “Advance”, Abbreviated Pose 2
   transition_cues_out String? // “Advance”, Abbreviated Pose 2
@@ -166,7 +166,10 @@ model AsanaPose {
 model AsanaSeries {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   seriesName     String
-  seriesPoses String[]
+  // seriesPoses stores per-series pose entries. Each element shape:
+  // { poseId: string, sort_english_name: string, alignment_cues?: string }
+  // Use Json[] to allow flexible per-pose metadata attached to a series.
+  seriesPoses Json[]
   breathSeries   String[]
   description    String?
   durationSeries String?

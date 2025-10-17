@@ -62,7 +62,7 @@ const mockAsanaData: AsanaPose = {
   label: 'Warrior Pose',
   suggested_poses: ['Mountain Pose'],
   preparatory_poses: ['Forward Fold'],
-  alignment_cues: 'Both',
+  // alignment_cues removed - now stored per-series in AsanaSeries.seriesPoses
   poseImages: [],
   created_on: '2024-01-01' as unknown as Date,
   updated_on: '2024-01-01' as unknown as Date,
@@ -507,7 +507,7 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
         label: 'Warrior I Pose',
         suggested_poses: ['Mountain Pose'],
         preparatory_poses: ['Forward Fold'],
-        alignment_cues: 'Both',
+        // alignment_cues removed - now stored per-series in AsanaSeries.seriesPoses
         poseImages: [],
         created_on: '2024-01-01' as unknown as Date,
         updated_on: '2024-01-01' as unknown as Date,

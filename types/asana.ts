@@ -23,8 +23,7 @@ export interface AsanaPose {
   dristi?: string
   setup_cues?: string
   deepening_cues?: string
-  // “Advance”, Abbreviated Pose 2
-  alignment_cues?: string
+  // "Advance", Abbreviated Pose 2
   joint_action?: string
   muscle_action?: string
   transition_cues_out?: string
@@ -80,8 +79,6 @@ export interface DisplayAsanaPose {
   difficulty: string
   lore: string
   dristi: string
-  preferred_side: string
-  sideways: boolean
   created_on: string
   updated_on: string
   activity_completed: boolean
@@ -133,8 +130,6 @@ export interface CreateAsanaRequest {
   label?: string
   suggested_poses?: string[]
   preparatory_poses?: string[]
-  preferred_side?: string
-  sideways?: boolean
   pose_intent?: string
   breath_series?: string[]
   duration_asana?: string

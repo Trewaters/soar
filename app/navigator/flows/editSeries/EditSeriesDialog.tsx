@@ -31,6 +31,7 @@ export interface Asana {
   id: string
   name: string
   difficulty: string
+  alignment_cues?: string
 }
 
 export interface Series {
@@ -262,60 +263,95 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
               {asanas.map((asana, idx) => (
                 <ListItem
                   key={asana.id}
-                  secondaryAction={
-                    <>
-                      <IconButton
-                        edge="end"
-                        aria-label={`Remove ${asana.name}`}
-                        onClick={() => {
-                          if (!isCreator) return
-                          setAsanas((prev) => prev.filter((_, i) => i !== idx))
-                        }}
-                        disabled={!isCreator}
-                        color="error"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                      <IconButton
-                        edge="end"
-                        aria-label={`Move ${asana.name} up`}
-                        onClick={() => {
-                          if (!isCreator || idx === 0) return
-                          setAsanas((prev) => {
-                            const arr = [...prev]
-                            const temp = arr[idx - 1]
-                            arr[idx - 1] = arr[idx]
-                            arr[idx] = temp
-                            return arr
-                          })
-                        }}
-                        disabled={!isCreator || idx === 0}
-                        sx={{ ml: 1 }}
-                      >
-                        <ArrowUpwardIcon />
-                      </IconButton>
-                      <IconButton
-                        edge="end"
-                        aria-label={`Move ${asana.name} down`}
-                        onClick={() => {
-                          if (!isCreator || idx === asanas.length - 1) return
-                          setAsanas((prev) => {
-                            const arr = [...prev]
-                            const temp = arr[idx + 1]
-                            arr[idx + 1] = arr[idx]
-                            arr[idx] = temp
-                            return arr
-                          })
-                        }}
-                        disabled={!isCreator || idx === asanas.length - 1}
-                        sx={{ ml: 1 }}
-                      >
-                        <ArrowDownwardIcon />
-                      </IconButton>
-                    </>
-                  }
+                  sx={{ flexDirection: 'column', alignItems: 'stretch', py: 2 }}
                 >
-                  <ListItemText primary={asana.name} />
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      width: '100%',
+                      mb: 1,
+                    }}
+                  >
+                    <ListItemText primary={asana.name} sx={{ flex: 1 }} />
+                    <IconButton
+                      edge="end"
+                      aria-label={`Remove ${asana.name}`}
+                      onClick={() => {
+                        if (!isCreator) return
+                        setAsanas((prev) => prev.filter((_, i) => i !== idx))
+                      }}
+                      disabled={!isCreator}
+                      color="error"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      aria-label={`Move ${asana.name} up`}
+                      onClick={() => {
+                        if (!isCreator || idx === 0) return
+                        setAsanas((prev) => {
+                          const arr = [...prev]
+                          const temp = arr[idx - 1]
+                          arr[idx - 1] = arr[idx]
+                          arr[idx] = temp
+                          return arr
+                        })
+                      }}
+                      disabled={!isCreator || idx === 0}
+                      sx={{ ml: 1 }}
+                    >
+                      <ArrowUpwardIcon />
+                    </IconButton>
+                    <IconButton
+                      edge="end"
+                      aria-label={`Move ${asana.name} down`}
+                      onClick={() => {
+                        if (!isCreator || idx === asanas.length - 1) return
+                        setAsanas((prev) => {
+                          const arr = [...prev]
+                          const temp = arr[idx + 1]
+                          arr[idx + 1] = arr[idx]
+                          arr[idx] = temp
+                          return arr
+                        })
+                      }}
+                      disabled={!isCreator || idx === asanas.length - 1}
+                      sx={{ ml: 1 }}
+                    >
+                      <ArrowDownwardIcon />
+                    </IconButton>
+                  </Box>
+                  {/* Alignment Cues TextField */}
+                  <TextField
+                    placeholder="Optional alignment cues (max 1000 chars)"
+                    variant="standard"
+                    multiline
+                    minRows={1}
+                    value={asana.alignment_cues || ''}
+                    onChange={(e) => {
+                      if (!isCreator) return
+                      const newVal = e.target.value.slice(0, 1000)
+                      setAsanas((prev) =>
+                        prev.map((a, i) =>
+                          i === idx ? { ...a, alignment_cues: newVal } : a
+                        )
+                      )
+                    }}
+                    disabled={!isCreator}
+                    inputProps={{
+                      maxLength: 1000,
+                      'data-testid': `edit-alignment-cues-${idx}`,
+                    }}
+                    sx={{ mt: 1 }}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{ color: 'text.secondary', mt: 0.5 }}
+                  >
+                    {(asana.alignment_cues || '').length}/1000
+                  </Typography>
                 </ListItem>
               ))}
             </List>

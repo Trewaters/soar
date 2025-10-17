@@ -71,7 +71,7 @@ export default function Page() {
 
   const [flowSeries, setFlowSeries] = useState<FlowSeriesData[]>([])
   const [seriesNameSet, setSeriesNameSet] = useState<string[]>([])
-  const [poses, setPoses] = useState<string[]>([])
+  const [poses, setPoses] = useState<Array<string | any>>([])
   const [open, setOpen] = useState(false)
 
   // Get alpha user IDs (synchronous function like in practiceSeries)

@@ -73,8 +73,6 @@ const mockUserCreatedAsana: AsanaPoseData = {
   label: 'custom',
   suggested_poses: [],
   preparatory_poses: [],
-  preferred_side: 'both',
-  sideways: false,
   image: 'custom-warrior.jpg',
   created_on: new Date('2024-01-01'),
   updated_on: new Date('2024-01-02'),

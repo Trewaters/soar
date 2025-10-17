@@ -21,8 +21,6 @@ describe('EditPoseDialog Save', () => {
     category: '',
     difficulty: '',
     breath_direction_default: '',
-    preferred_side: '',
-    sideways: false,
     created_by: 'me@example.com',
     poseImages: [
       { id: 'img-1', displayOrder: 1, url: 'http://example.com/1.jpg' },

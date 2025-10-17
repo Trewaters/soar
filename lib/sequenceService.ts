@@ -1,12 +1,21 @@
 import { logServiceError } from './errorLogger'
 
+// Import FlowSeriesPose type for per-pose metadata support
+export interface FlowSeriesPose {
+  poseId?: string
+  sort_english_name: string
+  secondary?: string
+  alignment_cues?: string
+}
+
 export type SequenceData = {
   id: number
   nameSequence: string
   sequencesSeries: Array<{
     id: number
     seriesName: string
-    seriesPoses: string[]
+    // Support both legacy string[] and new object format with alignment_cues
+    seriesPoses: Array<string | FlowSeriesPose>
     breath?: string
     description?: string
     duration?: string
@@ -25,7 +34,8 @@ export type CreateSequenceInput = {
   sequencesSeries: Array<{
     id: number
     seriesName: string
-    seriesPoses: string[]
+    // Support both legacy string[] and new object format with alignment_cues
+    seriesPoses: Array<string | FlowSeriesPose>
     breath?: string
     description?: string
     duration?: string

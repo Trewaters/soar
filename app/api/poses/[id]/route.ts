@@ -26,7 +26,6 @@ export async function PUT(
       category,
       difficulty,
       breath,
-      alignment_cues,
     } = await request.json()
 
     // First, get the existing pose to check ownership
@@ -55,7 +54,6 @@ export async function PUT(
         category,
         difficulty,
         breath,
-        alignment_cues,
         // Note: updated_on is handled by Prisma defaults, created_by should not be changed
       },
     })

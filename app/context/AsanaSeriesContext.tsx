@@ -11,7 +11,10 @@ import {
 export interface FlowSeriesData {
   id?: string
   seriesName: string
-  seriesPoses: string[]
+  // seriesPoses may be legacy strings or the new object shape that includes
+  // poseId, sort_english_name, optional secondary/sanskrit and alignment_cues.
+  // Keep this union to remain backward compatible with existing code/tests.
+  seriesPoses: Array<string | FlowSeriesPose>
   // breath will be a string of the breath count and type (inhale, exhale)
   breath?: string
   description?: string
@@ -25,12 +28,21 @@ export interface FlowSeriesData {
 export interface FlowSeriesSequence {
   id?: string
   seriesName: string
-  seriesPoses: string[]
+  seriesPoses: Array<string | FlowSeriesPose>
   breath?: string
   duration?: string
   image?: string
   createdAt?: string
   updatedAt?: string
+}
+
+// New shape for per-series pose metadata. Stored in Prisma as Json[] elements.
+export interface FlowSeriesPose {
+  poseId?: string
+  sort_english_name: string
+  // optional secondary label (e.g., sanskrit name or difficulty tag)
+  secondary?: string
+  alignment_cues?: string
 }
 
 export type FlowSeriesPageState = {
