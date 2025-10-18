@@ -417,7 +417,7 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
         open={showAddAsanasDialog}
         onClose={() => setShowAddAsanasDialog(false)}
         onAdd={handleAddAsanas}
-        excludeAsanaIds={asanas.map((a) => a.id)}
+        excludeAsanaIds={[]} // Allow adding duplicate poses - users can add same pose multiple times
         refreshTrigger={asanaRefreshTrigger}
       />
     </Dialog>

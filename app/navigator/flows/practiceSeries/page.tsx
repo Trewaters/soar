@@ -297,7 +297,20 @@ export default function Page() {
 
   const handleEditSave = async (updated: EditSeriesShape) => {
     try {
-      await updateSeries(updated.id, updated)
+      // Transform asanas array to seriesPoses format to preserve alignment_cues
+      const seriesPoses = updated.asanas.map((asana) => ({
+        sort_english_name: asana.name,
+        secondary: asana.difficulty,
+        alignment_cues: asana.alignment_cues || '',
+      }))
+
+      // Send with seriesPoses instead of asanas to preserve alignment_cues
+      const payload = {
+        ...updated,
+        seriesPoses,
+      }
+
+      await updateSeries(updated.id, payload as any)
       // refresh list and reselect the updated series so UI reflects changes immediately
       await fetchSeries(updated.id)
       setEditOpen(false)
