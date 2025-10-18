@@ -21,7 +21,6 @@ import {
   CircularProgress,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
-import RefreshIcon from '@mui/icons-material/Refresh'
 import { useSession } from 'next-auth/react'
 
 interface AsanaOption {
@@ -37,6 +36,7 @@ interface AsanaOption {
 interface AddAsanasDialogProps {
   open: boolean
   onClose: () => void
+  // eslint-disable-next-line no-unused-vars
   onAdd: (asanas: AsanaOption[]) => void
   excludeAsanaIds?: string[]
   refreshTrigger?: number // Add this to trigger data refresh
@@ -57,67 +57,9 @@ export default function AddAsanasDialog({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Add a manual refresh function
-  const refreshAsanas = async () => {
-    console.log('🔄 AddAsanasDialog: Manual refresh triggered')
-    setLoading(true)
-    setError(null)
-
-    try {
-      // Add cache-busting parameter to ensure fresh data
-      const timestamp = new Date().getTime()
-      const fetchUrl = `/api/poses?_t=${timestamp}`
-      console.log('📡 AddAsanasDialog: Manual refresh fetching from:', fetchUrl)
-
-      const response = await fetch(fetchUrl, {
-        // Force cache bypass
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          Pragma: 'no-cache',
-          Expires: '0',
-        },
-      })
-      if (!response.ok) {
-        throw new Error('Failed to fetch asanas')
-      }
-
-      const asanas: AsanaOption[] = await response.json()
-      console.log(
-        '✅ AddAsanasDialog: Manual refresh received asanas:',
-        asanas.length,
-        'total'
-      )
-
-      // Filter out asanas that are already in the series
-      const filtered = asanas.filter(
-        (asana) => !excludeAsanaIds.includes(asana.id)
-      )
-      console.log(
-        '🔍 AddAsanasDialog: Manual refresh filtered asanas:',
-        filtered.length,
-        'available to add'
-      )
-
-      setAvailableAsanas(filtered)
-      setFilteredAsanas(filtered)
-    } catch (err) {
-      console.error('❌ AddAsanasDialog: Manual refresh error:', err)
-      setError(err instanceof Error ? err.message : 'Failed to load asanas')
-    } finally {
-      setLoading(false)
-    }
-  }
-
   // Fetch available asanas when dialog opens or when refreshTrigger changes
   useEffect(() => {
     const fetchAvailableAsanas = async () => {
-      console.log('🔄 AddAsanasDialog: Fetching asanas...', {
-        open,
-        userEmail: session?.user?.email,
-        refreshTrigger,
-        excludeAsanaIds: excludeAsanaIds.length,
-      })
       setLoading(true)
       setError(null)
 
@@ -125,7 +67,6 @@ export default function AddAsanasDialog({
         // Add cache-busting parameter to ensure fresh data
         const timestamp = new Date().getTime()
         const fetchUrl = `/api/poses?_t=${timestamp}`
-        console.log('📡 AddAsanasDialog: Fetching from:', fetchUrl)
 
         const response = await fetch(fetchUrl, {
           // Force cache bypass
@@ -141,26 +82,15 @@ export default function AddAsanasDialog({
         }
 
         const asanas: AsanaOption[] = await response.json()
-        console.log(
-          '✅ AddAsanasDialog: Received asanas:',
-          asanas.length,
-          'total'
-        )
 
         // Filter out asanas that are already in the series
         const filtered = asanas.filter(
           (asana) => !excludeAsanaIds.includes(asana.id)
         )
-        console.log(
-          '🔍 AddAsanasDialog: Filtered asanas:',
-          filtered.length,
-          'available to add'
-        )
 
         setAvailableAsanas(filtered)
         setFilteredAsanas(filtered)
       } catch (err) {
-        console.error('❌ AddAsanasDialog: Error fetching asanas:', err)
         setError(err instanceof Error ? err.message : 'Failed to load asanas')
       } finally {
         setLoading(false)
@@ -174,10 +104,6 @@ export default function AddAsanasDialog({
 
   // Filter asanas based on search term
   useEffect(() => {
-    if (searchTerm) {
-      console.log('🔍 AddAsanasDialog: Searching for:', searchTerm)
-    }
-
     const filtered = availableAsanas.filter((asana) => {
       // Get the primary name (sort_english_name is the canonical name)
       const primaryName = (
@@ -209,26 +135,8 @@ export default function AddAsanasDialog({
         category.includes(searchLower) ||
         difficulty.includes(searchLower)
 
-      // Debug logging for search matches
-      if (searchTerm && matches) {
-        console.log('✅ Search match found:', {
-          searchTerm,
-          sortEnglishName: asana.sort_english_name,
-          primaryName,
-          allNames,
-          sanskritName,
-          asanaId: asana.id,
-        })
-      }
-
       return matches
     })
-
-    if (searchTerm) {
-      console.log(
-        `🔍 AddAsanasDialog: Search for "${searchTerm}" found ${filtered.length} results`
-      )
-    }
 
     setFilteredAsanas(filtered)
   }, [availableAsanas, searchTerm])
@@ -282,31 +190,20 @@ export default function AddAsanasDialog({
 
       <DialogContent>
         <Box sx={{ mb: 2 }}>
-          <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-            <TextField
-              fullWidth
-              placeholder="Search asanas by name, category, or difficulty..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <Button
-              onClick={refreshAsanas}
-              disabled={loading}
-              startIcon={<RefreshIcon />}
-              variant="outlined"
-              sx={{ minWidth: 'auto', px: 2 }}
-              title="Refresh asana list"
-            >
-              Refresh
-            </Button>
-          </Box>
+          <TextField
+            fullWidth
+            placeholder="Search asanas by name, category, or difficulty..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ mb: 2 }}
+          />
 
           {selectedAsanas.length > 0 && (
             <Box sx={{ mb: 2 }}>
@@ -380,6 +277,7 @@ export default function AddAsanasDialog({
                         )}
                       </Box>
                     }
+                    secondaryTypographyProps={{ component: 'div' }}
                   />
                   <ListItemSecondaryAction>
                     <Checkbox

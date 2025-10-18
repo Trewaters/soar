@@ -197,12 +197,6 @@ export default function ReminderSettings() {
         setPushSubscribed(true)
         setPermissionStatus('granted')
         showNotification('success', 'Push notifications enabled successfully!')
-
-        // Log successful diagnostics for debugging
-        console.log(
-          'Push notifications enabled with diagnostics:',
-          result.diagnostics
-        )
       } else {
         // Enhanced error reporting with diagnostics
         console.error(
@@ -376,12 +370,6 @@ export default function ReminderSettings() {
     setLoading(true)
     try {
       const debugInfo = await debugPushNotifications()
-
-      console.group('🔍 Push Notification Debug Report')
-      console.log('📊 Diagnostics:', debugInfo.diagnostics)
-      console.log('💡 Recommendations:', debugInfo.recommendations)
-      console.log('🔧 Can Attempt Fix:', debugInfo.canAttemptFix)
-      console.groupEnd()
 
       // Show comprehensive debug info to user
       const debugMessage = [
@@ -895,22 +883,13 @@ export default function ReminderSettings() {
                   variant="outlined"
                   size="small"
                   onClick={() => {
+                    // Environment diagnostic logging (intentional)
                     console.clear()
                     console.log('🧘‍♀️ ENVIRONMENT INFO:')
                     console.log(
                       '- VAPID Key:',
                       !!process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
                     )
-                    console.log('- Permission:', Notification.permission)
-                    console.log(
-                      '- Service Worker Support:',
-                      'serviceWorker' in navigator
-                    )
-                    console.log(
-                      '- Push Manager Support:',
-                      'PushManager' in window
-                    )
-                    console.log('- User Agent:', navigator.userAgent)
                   }}
                 >
                   Environment Info

@@ -243,7 +243,6 @@ export default function Page() {
   }
 
   function handleActivityToggle(isTracked: boolean) {
-    console.log('Series activity tracked:', isTracked)
     // Trigger refresh of any activity components that might be listening
     setRefreshTrigger((prev) => prev + 1)
   }

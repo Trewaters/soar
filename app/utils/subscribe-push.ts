@@ -42,8 +42,6 @@ async function registerServiceWorker(): Promise<ServiceWorkerRegistration> {
       scope: '/',
     })
 
-    console.log('Service Worker registered successfully:', registration.scope)
-
     // Wait for the service worker to be ready
     await navigator.serviceWorker.ready
 
@@ -98,7 +96,6 @@ async function subscribeToPush(
       ) as BufferSource,
     })
 
-    console.log('Push subscription successful:', subscription.endpoint)
     return subscription
   } catch (error) {
     console.error('Push subscription failed:', error)
@@ -141,8 +138,6 @@ async function saveSubscription(subscription: PushSubscription): Promise<void> {
       const errorData = await response.json()
       throw new Error(errorData.message || 'Failed to save subscription')
     }
-
-    console.log('Subscription saved successfully')
   } catch (error) {
     console.error('Error saving subscription:', error)
     throw error
@@ -219,7 +214,6 @@ export async function disablePushNotifications(): Promise<{
     const unsubscribed = await subscription.unsubscribe()
 
     if (unsubscribed) {
-      console.log('Successfully unsubscribed from push notifications')
       return { success: true }
     } else {
       throw new Error('Failed to unsubscribe from push notifications')

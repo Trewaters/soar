@@ -102,7 +102,8 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
 
   const handleAddAsanas = (newAsanas: any[]) => {
     const asanaToAdd: Asana[] = newAsanas.map((asana) => {
-      const englishName = asana.english_names[0] || asana.sort_english_name
+      // Use sort_english_name (canonical search name) as the primary display name
+      const englishName = asana.sort_english_name || asana.english_names[0]
       const sanskritName =
         typeof asana.sanskrit_names === 'string' ? asana.sanskrit_names : ''
 
@@ -228,17 +229,7 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
                   startIcon={<AddIcon />}
                   onClick={() => {
                     // Trigger a refresh when opening the dialog to ensure new asanas appear
-                    console.log('🔄 EditSeriesDialog: Triggering asana refresh')
-                    setAsanaRefreshTrigger((prev) => {
-                      const newValue = prev + 1
-                      console.log(
-                        '🔄 EditSeriesDialog: Refresh trigger updated:',
-                        prev,
-                        '→',
-                        newValue
-                      )
-                      return newValue
-                    })
+                    setAsanaRefreshTrigger((prev) => prev + 1)
                     setShowAddAsanasDialog(true)
                   }}
                   size="small"

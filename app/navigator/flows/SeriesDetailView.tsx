@@ -97,8 +97,8 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
 
   const imageUrl = images && images.length > 0 ? images[0] : flow?.image || ''
 
-  const handleActivityToggle = (isTracked: boolean) => {
-    console.log('Series activity tracked:', isTracked)
+  const handleActivityToggle = () => {
+    // Activity tracking handled by backend
   }
 
   if (!flow) {

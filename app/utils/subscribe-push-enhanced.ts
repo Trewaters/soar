@@ -188,24 +188,16 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
   while (attempt < maxAttempts) {
     try {
       attempt++
-      console.log(
-        `🔧 Service Worker registration attempt ${attempt}/${maxAttempts}`
-      )
 
       // AGGRESSIVE CLEANUP: Always clean up on first attempt and retry scenarios
       if (attempt === 1 || attempt === 2) {
         try {
-          console.log('🧹 Starting aggressive service worker cleanup...')
-
           // Get all registrations and unregister them
           const registrations = await navigator.serviceWorker.getRegistrations()
-          console.log(`Found ${registrations.length} existing registrations`)
 
           for (const reg of registrations) {
-            console.log('🗑️ Unregistering service worker:', reg.scope)
             try {
               await reg.unregister()
-              console.log('✅ Successfully unregistered:', reg.scope)
             } catch (unregError) {
               console.warn('⚠️ Failed to unregister:', reg.scope, unregError)
             }
@@ -216,7 +208,6 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
             'serviceWorker' in navigator &&
             navigator.serviceWorker.controller
           ) {
-            console.log('🔄 Clearing service worker controller state...')
             try {
               // Post message to current SW to self-destruct if possible
               navigator.serviceWorker.controller.postMessage({
@@ -229,7 +220,6 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
 
           // Extended wait for cleanup on retry attempts
           const cleanupWait = attempt === 1 ? 500 : 2000
-          console.log(`⏱️ Waiting ${cleanupWait}ms for cleanup...`)
           await new Promise((resolve) => setTimeout(resolve, cleanupWait))
         } catch (cleanupError) {
           console.warn('⚠️ Service worker cleanup failed:', cleanupError)
@@ -237,19 +227,12 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
         }
       }
 
-      console.log('📝 Registering new service worker...')
       const registration = await navigator.serviceWorker.register('/sw.js', {
         scope: '/',
         updateViaCache: 'none', // Prevent caching issues
       })
 
-      console.log(
-        '✅ Service Worker registered successfully:',
-        registration.scope
-      )
-
       // Enhanced readiness check with multiple strategies
-      console.log('⏳ Waiting for service worker to be ready...')
 
       // Strategy 1: Use the standard ready promise with timeout
       const readyPromise = navigator.serviceWorker.ready
@@ -273,7 +256,6 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
         !navigator.serviceWorker.controller &&
         activeWait < 10000
       ) {
-        console.log('⏳ Waiting for service worker to become active...')
         await new Promise((resolve) => setTimeout(resolve, 500))
         activeWait += 500
       }
@@ -282,7 +264,6 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
         readyRegistration.active || navigator.serviceWorker.controller
 
       if (!activeWorker) {
-        console.log('🚦 Waiting for service worker controller takeover...')
         try {
           activeWorker = await waitForServiceWorkerController(10000)
         } catch (controllerError) {
@@ -311,7 +292,6 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
 
       if (attempt === maxAttempts) {
         const errorAnalysis = analyzePushError(error)
-        console.error('🔍 Final attempt failed with analysis:', errorAnalysis)
         throw new Error(
           `Failed to register service worker after ${maxAttempts} attempts. ${errorAnalysis.userMessage} Technical details: ${errorAnalysis.technicalDetails}`
         )
@@ -319,7 +299,6 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
 
       // Progressive backoff: 1s, 3s, 6s
       const backoffTime = 1000 * Math.pow(2, attempt - 1) + attempt * 1000
-      console.log(`⏱️ Waiting ${backoffTime}ms before retry...`)
       await new Promise((resolve) => setTimeout(resolve, backoffTime))
     }
   }
@@ -551,12 +530,10 @@ async function subscribeToPushWithRetry(
   while (attempt < maxAttempts) {
     try {
       attempt++
-      console.log(`Push subscription attempt ${attempt}/${maxAttempts}`)
 
       // Check for existing subscription and unsubscribe
       const existing = await registration.pushManager.getSubscription()
       if (existing) {
-        console.log('Unsubscribing from existing subscription')
         await existing.unsubscribe()
         // Brief wait after unsubscribing
         await new Promise((resolve) => setTimeout(resolve, 500))
@@ -569,27 +546,21 @@ async function subscribeToPushWithRetry(
         applicationServerKey: applicationServerKey as BufferSource,
       })
 
-      console.log('Push subscription successful:', subscription.endpoint)
       return subscription
     } catch (error) {
       console.error(`Push subscription attempt ${attempt} failed:`, error)
 
       // Use enhanced error analysis
       const errorAnalysis = analyzePushError(error)
-      console.error('Error analysis:', errorAnalysis)
 
       // Specific handling for AbortError
       if (errorAnalysis.errorType === 'AbortError') {
-        console.error('AbortError detected - attempting recovery strategies:')
-
         // For AbortError, try more aggressive recovery strategies
         if (attempt === 1) {
           try {
-            console.log('Clearing cached push manager state...')
             const existingSub = await registration.pushManager.getSubscription()
             if (existingSub) {
               await existingSub.unsubscribe()
-              console.log('Unsubscribed from cached subscription')
             }
 
             // Wait longer before retry for AbortError
@@ -599,26 +570,18 @@ async function subscribeToPushWithRetry(
           }
           // On second failure, try re-registering the service worker
           try {
-            console.log(
-              '🔄 Re-registering service worker for AbortError recovery...'
-            )
-
             // Unregister all service workers aggressively
             const registrations =
               await navigator.serviceWorker.getRegistrations()
-            console.log(`Found ${registrations.length} registrations to clear`)
 
             for (const reg of registrations) {
-              console.log('🗑️ Force unregistering:', reg.scope)
               await reg.unregister()
             }
 
             // Extended wait for cleanup - AbortErrors need more time
-            console.log('⏱️ Extended cleanup wait for AbortError recovery...')
             await new Promise((resolve) => setTimeout(resolve, 3000))
 
             // Re-register fresh service worker with more explicit options
-            console.log('📝 Fresh service worker registration...')
             const newRegistration = await navigator.serviceWorker.register(
               '/sw.js',
               {
@@ -629,7 +592,6 @@ async function subscribeToPushWithRetry(
             )
 
             // Enhanced wait for readiness
-            console.log('⏳ Waiting for new registration to be ready...')
             const readyReg = await navigator.serviceWorker.ready
 
             // Verify it's actually the new registration
@@ -641,7 +603,6 @@ async function subscribeToPushWithRetry(
 
             // Update registration reference
             registration = readyReg
-            console.log('✅ Service worker re-registered successfully')
           } catch (reregisterError) {
             console.warn(
               'Failed to re-register service worker:',
@@ -793,7 +754,6 @@ export async function enablePushNotificationsEnhanced(): Promise<{
 
     // Use enhanced error analysis for better user feedback
     const errorAnalysis = analyzePushError(error)
-    console.error('Enhanced error analysis:', errorAnalysis)
 
     // In production, if we get persistent AbortErrors, provide graceful fallback
     const isProduction =
@@ -896,7 +856,6 @@ async function saveSubscriptionToServer(
         throw new Error(errorData.message || `HTTP ${response.status}`)
       }
 
-      console.log('Subscription saved successfully')
       return
     } catch (error) {
       console.error(`Server save attempt ${attempt} failed:`, error)

@@ -16,31 +16,15 @@ export function useNavigationWithLoading() {
 
   // Monitor pathname changes to detect when navigation completes
   useEffect(() => {
-    console.log(
-      `useEffect triggered - Current path: ${currentPathRef.current}, New pathname: ${pathname}, isNavigating: ${state.isNavigating}`
-    )
-
     // Always update current path ref
     if (currentPathRef.current !== pathname) {
-      console.log(
-        `Navigation completed: ${currentPathRef.current} -> ${pathname}`
-      )
       currentPathRef.current = pathname
 
       // If we're currently navigating, end the navigation immediately
       if (state.isNavigating) {
-        console.log('Ending navigation - route change detected')
         endNavigation()
         navigationStartTimeRef.current = null
-      } else {
-        console.log(
-          'Path changed but not currently navigating - this might be a browser back/forward'
-        )
       }
-    } else {
-      console.log(
-        'Path unchanged, but useEffect triggered due to other dependencies'
-      )
     }
   }, [pathname, state.isNavigating, endNavigation]) // Cleanup timeout on unmount
   useEffect(() => {
@@ -65,31 +49,22 @@ export function useNavigationWithLoading() {
         scroll?: boolean
       }
     ) => {
-      console.log(`🔄 navigateWithLoading called for path: ${path}`)
-      console.log(`   Current pathname: ${pathname}`)
-      console.log(`   Current loading state: ${state.isNavigating}`)
-
       // Don't start new navigation if already navigating
       if (state.isNavigating) {
-        console.log(`   Already navigating, skipping`)
         return
       }
 
       // Start loading state and record navigation start time
-      console.log(`   Starting navigation loading for: ${path}`)
       startNavigation(path, elementId)
       navigationStartTimeRef.current = Date.now()
 
       try {
         // Perform navigation
         if (options?.replace) {
-          console.log(`   Calling router.replace(${path})`)
           router.replace(path)
         } else {
-          console.log(`   Calling router.push(${path})`)
           router.push(path)
         }
-        console.log(`   Router navigation method called successfully`)
 
         // Navigation completion is handled by pathname monitoring - no artificial timeouts needed
       } catch (error) {
@@ -98,7 +73,7 @@ export function useNavigationWithLoading() {
         navigationStartTimeRef.current = null
       }
     },
-    [router, startNavigation, endNavigation, state.isNavigating, pathname]
+    [router, startNavigation, endNavigation, state.isNavigating]
   )
 
   /**
