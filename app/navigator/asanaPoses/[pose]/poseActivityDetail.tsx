@@ -66,28 +66,12 @@ const usePoseImages = (poseId?: string, poseName?: string) => {
   useEffect(() => {
     const fetchImages = async () => {
       if (!session?.user?.id || (!poseId && !poseName)) {
-        console.log('🔍 usePoseImages: Missing requirements', {
-          hasSession: !!session?.user?.id,
-          poseId,
-          poseName,
-        })
         return
       }
 
       try {
         setLoading(true)
-        console.log('🔍 usePoseImages: Fetching images for', {
-          poseId,
-          poseName,
-          userId: session.user.id,
-        })
         const response = await getUserPoseImages(50, 0, poseId, poseName)
-        console.log('🔍 usePoseImages: Response received', {
-          imageCount: response.images.length,
-          total: response.total,
-          hasMore: response.hasMore,
-          images: response.images,
-        })
         setImages(response.images)
       } catch (error) {
         console.error('🔍 usePoseImages: Error fetching pose images:', error)
@@ -703,24 +687,16 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
           />
 
           {/* Enhanced Image Gallery */}
-          {pose &&
-            (() => {
-              console.log('🎯 PoseImageManagement props:', {
-                poseId: pose.id?.toString(),
-                poseName: pose.sort_english_name,
-                title: `Images for ${pose.sort_english_name}`,
-              })
-              return (
-                <Box sx={{ mt: 4, mb: 4, mx: { xs: 0, sm: 2 } }}>
-                  <PoseImageManagement
-                    title={`Images for ${pose.sort_english_name}`}
-                    poseId={pose.id?.toString()}
-                    poseName={pose.sort_english_name}
-                    variant="full"
-                  />
-                </Box>
-              )
-            })()}
+          {pose && (
+            <Box sx={{ mt: 4, mb: 4, mx: { xs: 0, sm: 2 } }}>
+              <PoseImageManagement
+                title={`Images for ${pose.sort_english_name}`}
+                poseId={pose.id?.toString()}
+                poseName={pose.sort_english_name}
+                variant="full"
+              />
+            </Box>
+          )}
 
           {/* Activity Tracker Component */}
           {pose && pose.id && (

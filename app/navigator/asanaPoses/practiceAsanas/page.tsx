@@ -57,7 +57,6 @@ export default function Page() {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
-        console.log('Page became visible, refreshing pose data...')
         fetchData()
       }
     }
@@ -66,7 +65,6 @@ export default function Page() {
 
     // Also listen for focus events as a fallback
     const handleFocus = () => {
-      console.log('Window gained focus, refreshing pose data...')
       fetchData()
     }
 

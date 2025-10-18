@@ -97,19 +97,10 @@ export async function getUserPoseImages(
     }
 
     const url = `/api/images?${params}`
-    console.log('🔍 getUserPoseImages: Making request to', {
-      url,
-      poseId,
-      poseName,
-      limit,
-      offset,
-    })
 
     const response = await fetch(url, {
       method: 'GET',
     })
-
-    console.log('🔍 getUserPoseImages: Response status', response.status)
 
     if (!response.ok) {
       const errorData = await response.json()
@@ -121,7 +112,6 @@ export async function getUserPoseImages(
     }
 
     const result = await response.json()
-    console.log('🔍 getUserPoseImages: API response', result)
     return result
   } catch (error) {
     console.error('🔍 getUserPoseImages: Service error', error)

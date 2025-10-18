@@ -47,7 +47,6 @@ export function NavigationLoadingProvider({
       timeoutRef.current = null
     }
 
-    console.log(`Starting navigation to: ${targetPath}`)
     setState({
       isNavigating: true,
       targetPath,
@@ -58,9 +57,6 @@ export function NavigationLoadingProvider({
     timeoutRef.current = setTimeout(() => {
       setState((prev) => {
         if (prev.targetPath === targetPath && prev.isNavigating) {
-          console.warn(
-            `Emergency navigation timeout for ${targetPath} - clearing stuck loading state`
-          )
           return initialState
         }
         return prev
@@ -70,7 +66,6 @@ export function NavigationLoadingProvider({
   }
 
   const endNavigation = () => {
-    console.log('Ending navigation')
     // Clear timeout when navigation ends successfully
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)

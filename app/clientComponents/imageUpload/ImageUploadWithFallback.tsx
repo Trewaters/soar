@@ -130,15 +130,6 @@ export default function ImageUploadWithFallback({
     preview: null,
   })
 
-  // Add console log to track fallback dialog state changes
-  React.useEffect(() => {
-    console.log('🔄 Fallback dialog state changed:', {
-      open: fallbackDialog.open,
-      error: fallbackDialog.error,
-      hasFile: !!fallbackDialog.file,
-      hasPreview: !!fallbackDialog.preview,
-    })
-  }, [fallbackDialog])
   const [storageInfo, setStorageInfo] = useState<{
     available: number
     quota: number

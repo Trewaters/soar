@@ -227,12 +227,8 @@ const PoseShareButton: React.FC<CombinedPoseShareButtonProps> = (props) => {
             if (contextAsana && contextAsana.id) {
               result.source = 'hybrid'
 
-              // Validate data consistency between prop and context
-              if (asanaData.id !== contextAsana.id) {
-                result.warnings.push(
-                  'Asana data mismatch between props and context. Using props data.'
-                )
-              }
+              // Note: ID mismatch is expected when viewing different asanas
+              // The component correctly prioritizes props data over context
 
               // Check for missing critical data
               if (

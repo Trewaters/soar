@@ -238,7 +238,6 @@ export default function Page() {
   ]
 
   const handleImageUploaded = (image: PoseImageData) => {
-    console.log('Image uploaded for asana creation:', image)
     setUploadedImages((prev) => [...prev, image])
   }
 
@@ -280,7 +279,6 @@ export default function Page() {
 
     try {
       const data = await createPose(updatedAsana)
-      console.log('Pose created successfully:', data)
 
       // Link uploaded images to the newly created pose
       if (initialUploadedImages.length > 0) {
@@ -498,6 +496,84 @@ export default function Page() {
               poseName={formFullAsanaPoseData.sort_english_name}
             />
           </Box>
+
+          {/* Uploaded Images Gallery */}
+          {uploadedImages.length > 0 && (
+            <Box sx={{ pl: 4 }}>
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  fontWeight: 'bold',
+                  color: 'primary.main',
+                  mb: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                }}
+              >
+                <Box
+                  component="img"
+                  src="/icons/asanas/label_name_leaf.png"
+                  alt=""
+                  sx={{ width: 16, height: 20 }}
+                />
+                Uploaded Images ({uploadedImages.length})
+              </Typography>
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+                  gap: 2,
+                  mt: 2,
+                }}
+              >
+                {uploadedImages.map((image, index) => (
+                  <Box
+                    key={image.id || index}
+                    sx={{
+                      position: 'relative',
+                      borderRadius: '8px',
+                      overflow: 'hidden',
+                      border: '2px solid',
+                      borderColor: 'primary.light',
+                      aspectRatio: '1',
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src={image.url}
+                      alt={image.altText || `Uploaded image ${index + 1}`}
+                      sx={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                      }}
+                    />
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        bgcolor: 'rgba(0, 0, 0, 0.7)',
+                        color: 'white',
+                        p: 0.5,
+                        fontSize: '0.75rem',
+                        textAlign: 'center',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {image.fileName || `Image ${index + 1}`}
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          )}
 
           {/* Action Buttons: Create and Cancel */}
           <Stack direction="row" spacing={2} sx={{ mt: 3 }}>

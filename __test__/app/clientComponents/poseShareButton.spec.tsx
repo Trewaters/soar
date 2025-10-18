@@ -862,11 +862,7 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
     })
 
     describe('Context Data Validation', () => {
-      it('should warn about data mismatch between props and context', () => {
-        const mockConsoleWarn = jest
-          .spyOn(console, 'warn')
-          .mockImplementation(() => {})
-
+      it('should handle asana data from props when context has different ID', () => {
         useAsanaPose.mockReturnValue({
           state: { poses: contextAsanaData },
           dispatch: jest.fn(),
@@ -883,16 +879,8 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
           </TestWrapper>
         )
 
-        expect(mockConsoleWarn).toHaveBeenCalledWith(
-          'PoseShareButton context warnings:',
-          expect.arrayContaining([
-            expect.stringContaining(
-              'Asana data mismatch between props and context'
-            ),
-          ])
-        )
-
-        mockConsoleWarn.mockRestore()
+        // Should render successfully with props data
+        expect(screen.getByRole('button')).toBeInTheDocument()
       })
 
       it('should handle validation errors for incomplete data', async () => {
@@ -1050,11 +1038,7 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
     })
 
     describe('Legacy Props Support with Context', () => {
-      it('should support legacy poseData prop with context validation', () => {
-        const mockConsoleWarn = jest
-          .spyOn(console, 'warn')
-          .mockImplementation(() => {})
-
+      it('should support legacy poseData prop with context integration', () => {
         useAsanaPose.mockReturnValue({
           state: { poses: contextAsanaData },
           dispatch: jest.fn(),
@@ -1068,18 +1052,6 @@ https://www.happyyoga.app/navigator/flows/practiceSeries
 
         expect(screen.getByText('Warrior Pose')).toBeInTheDocument()
         expect(screen.getByRole('button')).toBeInTheDocument()
-
-        // Should warn about data mismatch
-        expect(mockConsoleWarn).toHaveBeenCalledWith(
-          'PoseShareButton context warnings:',
-          expect.arrayContaining([
-            expect.stringContaining(
-              'Asana data mismatch between props and context'
-            ),
-          ])
-        )
-
-        mockConsoleWarn.mockRestore()
       })
 
       it('should support legacy seriesData prop with context validation', () => {

@@ -113,8 +113,6 @@ export default function CreateAsanaWithImages() {
 
     try {
       const data = await createPose(updatedAsana)
-      console.log('Pose created successfully:', data)
-      console.log('Associated images:', uploadedImages)
 
       // Clear the form
       setFormData({
