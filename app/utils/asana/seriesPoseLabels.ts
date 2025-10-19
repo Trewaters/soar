@@ -33,7 +33,7 @@ export function splitSeriesPoseEntry(entry: string | any): {
   // Handle new object format (FlowSeriesPose or similar Asana objects)
   if (typeof entry === 'object' && entry !== null) {
     return {
-      name: entry.sort_english_name || entry.name || '',
+      name: entry.sort_english_name || '',
       secondary: sanitizeSeriesSecondaryLabel(
         entry.secondary || entry.difficulty
       ),

@@ -99,13 +99,7 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
 
   const handleAddAsanas = (items: any[]) => {
     const asanaToAdd: Asana[] = items.map((asanaItem) => {
-      const englishName =
-        (Array.isArray(asanaItem.english_names) &&
-          asanaItem.english_names[0]) ||
-        asanaItem.sort_english_name ||
-        asanaItem.english_name ||
-        asanaItem.name ||
-        ''
+      const englishName = asanaItem.sort_english_name || ''
       const sanskritName =
         typeof asanaItem.sanskrit_names === 'string'
           ? asanaItem.sanskrit_names
