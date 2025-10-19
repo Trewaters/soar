@@ -216,7 +216,7 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
             <List dense aria-label="Asana list">
               {asanas.map((asana, idx) => (
                 <ListItem
-                  key={asana.id}
+                  key={`${asana.id}-${idx}`}
                   sx={{ flexDirection: 'column', alignItems: 'stretch', py: 2 }}
                 >
                   <Box
@@ -356,7 +356,7 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
         open={showAddAsanasDialog}
         onClose={() => setShowAddAsanasDialog(false)}
         onAdd={handleAddAsanas}
-        excludeAsanaIds={asanas.map((a) => a.id)}
+        excludeAsanaIds={[]} // Allow duplicate asanas in series
         refreshTrigger={asanaRefreshTrigger}
       />
 
