@@ -555,6 +555,14 @@ export default function Page() {
                             const { name, secondary } =
                               splitSeriesPoseEntry(series)
 
+                            // Extract alignment cues for object format
+                            const alignmentCues =
+                              typeof series === 'object' &&
+                              series !== null &&
+                              series.alignment_cues
+                                ? String(series.alignment_cues).split('\n')[0]
+                                : ''
+
                             // Generate a stable key that works for both string and object formats
                             const itemKey =
                               typeof series === 'string'
@@ -572,6 +580,22 @@ export default function Page() {
                                     <>
                                       <Typography variant="body1">
                                         {name}
+                                        {alignmentCues && (
+                                          <Typography
+                                            component="span"
+                                            variant="body2"
+                                            color="text.secondary"
+                                            sx={{
+                                              ml: 1,
+                                              overflow: 'hidden',
+                                              textOverflow: 'ellipsis',
+                                              whiteSpace: 'nowrap',
+                                              display: 'inline',
+                                            }}
+                                          >
+                                            ({alignmentCues})
+                                          </Typography>
+                                        )}
                                       </Typography>
                                       {secondary && (
                                         <Typography

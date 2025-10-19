@@ -675,82 +675,106 @@ export default function Page() {
                         }
                       />
                       <CardContent className="lines" sx={{ p: 0 }}>
-                        {seriesMini.seriesPoses?.map((asana, asanaIndex) => (
-                          <Box
-                            key={asanaIndex}
-                            alignItems={'center'}
-                            display={'flex'}
-                            flexDirection={'row'}
-                            flexWrap={'nowrap'}
-                            className="journalLine"
-                            sx={{
-                              maxWidth: '100%',
-                              width: '100%',
-                              minWidth: 'unset',
-                              justifyContent: 'flex-start',
-                              alignItems: 'flex-start',
-                              gap: 2,
-                            }}
-                          >
-                            <Typography
-                              variant="body1"
-                              fontWeight="bold"
-                              sx={{
-                                width: '35px',
-                                textAlign: 'right',
-                                flexShrink: 0,
-                                lineHeight: 1.5,
-                              }}
-                            >
-                              {asanaIndex + 1}.
-                            </Typography>
-                            <Typography
-                              textAlign={'left'}
-                              variant="body1"
-                              sx={{
-                                flex: '1 1 auto',
-                                minWidth: 0,
-                                lineHeight: 1.5,
-                              }}
-                            >
-                              {(() => {
-                                // asana may be a legacy string reference or an object with metadata
-                                let poseName = ''
-                                let href = '#'
-                                if (typeof asana === 'string') {
-                                  poseName = asana.split(';')[0]
-                                  href = getPoseNavigationUrlSync(asana)
-                                } else {
-                                  poseName =
-                                    (asana as any).sort_english_name || ''
-                                  // Prefer poseId if available, otherwise use the name
-                                  const poseRef = String(
-                                    (asana as any).poseId ?? poseName
-                                  )
-                                  href = getPoseNavigationUrlSync(poseRef)
-                                }
+                        {seriesMini.seriesPoses?.map((asana, asanaIndex) => {
+                          // asana may be a legacy string reference or an object with metadata
+                          let poseName = ''
+                          let href = '#'
+                          let alignmentCues = ''
 
-                                return (
-                                  <Link
-                                    underline="hover"
-                                    color="primary.contrastText"
-                                    href={href}
+                          if (typeof asana === 'string') {
+                            poseName = asana.split(';')[0]
+                            href = getPoseNavigationUrlSync(asana)
+                          } else {
+                            poseName = (asana as any).sort_english_name || ''
+                            alignmentCues = (asana as any).alignment_cues || ''
+                            // Prefer poseId if available, otherwise use the name
+                            const poseRef = String(
+                              (asana as any).poseId ?? poseName
+                            )
+                            href = getPoseNavigationUrlSync(poseRef)
+                          }
+
+                          // Extract first line of alignment cue for inline display
+                          const alignmentCuesInline = alignmentCues
+                            ? String(alignmentCues).split('\n')[0]
+                            : ''
+
+                          return (
+                            <Box
+                              key={asanaIndex}
+                              alignItems={'center'}
+                              display={'flex'}
+                              flexDirection={'row'}
+                              flexWrap={'nowrap'}
+                              className="journalLine"
+                              sx={{
+                                maxWidth: '100%',
+                                width: '100%',
+                                minWidth: 'unset',
+                                justifyContent: 'flex-start',
+                                alignItems: 'flex-start',
+                                gap: 2,
+                              }}
+                            >
+                              <Typography
+                                variant="body1"
+                                fontWeight="bold"
+                                sx={{
+                                  width: '35px',
+                                  textAlign: 'right',
+                                  flexShrink: 0,
+                                  lineHeight: 1.5,
+                                }}
+                              >
+                                {asanaIndex + 1}.
+                              </Typography>
+                              <Typography
+                                textAlign={'left'}
+                                variant="body1"
+                                sx={{
+                                  flex: '1 1 auto',
+                                  minWidth: 0,
+                                  lineHeight: 1.5,
+                                  display: 'flex',
+                                  alignItems: 'baseline',
+                                  gap: 1,
+                                  flexWrap: 'wrap',
+                                }}
+                              >
+                                <Link
+                                  underline="hover"
+                                  color="primary.contrastText"
+                                  href={href}
+                                  sx={{
+                                    wordWrap: 'break-word',
+                                    overflowWrap: 'break-word',
+                                    hyphens: 'auto',
+                                    display: 'inline',
+                                    lineHeight: 1.5,
+                                  }}
+                                >
+                                  {poseName}
+                                </Link>
+                                {alignmentCuesInline && (
+                                  <Typography
+                                    component="span"
+                                    variant="body2"
+                                    color="text.secondary"
                                     sx={{
-                                      wordWrap: 'break-word',
-                                      overflowWrap: 'break-word',
-                                      hyphens: 'auto',
-                                      display: 'inline-block',
-                                      maxWidth: '100%',
-                                      lineHeight: 1.5,
+                                      fontStyle: 'normal',
+                                      whiteSpace: 'nowrap',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      maxWidth: '60%',
                                     }}
                                   >
-                                    {poseName}
-                                  </Link>
-                                )
-                              })()}
-                            </Typography>
-                          </Box>
-                        ))}
+                                    ({alignmentCuesInline})
+                                  </Typography>
+                                )}
+                              </Typography>
+                            </Box>
+                          )
+                        })}
                       </CardContent>
                     </Card>
                   ))}
