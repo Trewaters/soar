@@ -653,13 +653,18 @@ function SeriesCard({ series }: { series: UserSeriesData }) {
           </IconButton>
         </Stack>
       </Box>
-      <EditSeriesDialog
-        open={editOpen}
-        onClose={() => setEditOpen(false)}
-        series={dialogSeries}
-        onSave={handleSave}
-        onDelete={handleDelete}
-      />
+      {editOpen ? (
+        <Box sx={{ p: 2 }}>
+          <EditSeriesDialog
+            inline
+            open={editOpen}
+            onClose={() => setEditOpen(false)}
+            series={dialogSeries}
+            onSave={handleSave}
+            onDelete={handleDelete}
+          />
+        </Box>
+      ) : null}
     </Card>
   )
 }

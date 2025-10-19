@@ -21,17 +21,34 @@ export function formatSeriesPoseEntry(
   return sanitizedSecondary ? `${safeName}; ${sanitizedSecondary}` : safeName
 }
 
-export function splitSeriesPoseEntry(entry: string): {
+export function splitSeriesPoseEntry(entry: string | any): {
   name: string
   secondary: string
 } {
+  // Handle null/undefined
   if (!entry) {
     return { name: '', secondary: '' }
   }
 
-  const [namePart = '', secondaryPart = ''] = entry.split(';')
-  return {
-    name: namePart.trim(),
-    secondary: sanitizeSeriesSecondaryLabel(secondaryPart),
+  // Handle new object format (FlowSeriesPose or similar Asana objects)
+  if (typeof entry === 'object' && entry !== null) {
+    return {
+      name: entry.sort_english_name || entry.name || '',
+      secondary: sanitizeSeriesSecondaryLabel(
+        entry.secondary || entry.difficulty
+      ),
+    }
   }
+
+  // Handle legacy string format "name; secondary"
+  if (typeof entry === 'string') {
+    const [namePart = '', secondaryPart = ''] = entry.split(';')
+    return {
+      name: namePart.trim(),
+      secondary: sanitizeSeriesSecondaryLabel(secondaryPart),
+    }
+  }
+
+  // Fallback for unexpected types
+  return { name: '', secondary: '' }
 }

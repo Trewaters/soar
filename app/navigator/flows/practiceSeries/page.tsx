@@ -241,7 +241,7 @@ export default function Page() {
     setOpen(!open)
   }
 
-  function handleActivityToggle(isTracked: boolean) {
+  function handleActivityToggle() {
     // Trigger refresh of any activity components that might be listening
     setRefreshTrigger((prev) => prev + 1)
   }
@@ -525,120 +525,132 @@ export default function Page() {
         </Stack>
         {flow && (
           <Box width="100%" sx={{ p: 2, maxWidth: '600px' }} key={flow.id}>
-            <Box
-              display={'flex'}
-              flexDirection={'column'}
-              alignItems={'center'}
-            >
-              {/* Title + optional Edit button for owners */}
-              <Box className="journal">
-                <Typography
-                  variant="h3"
-                  className="journalTitle"
-                  textAlign={'center'}
+            {/* If editing, render the EditSeriesDialog inline here so the editor replaces the series content */}
+            {editOpen ? (
+              <EditSeriesDialog
+                inline
+                open={editOpen}
+                onClose={() => setEditOpen(false)}
+                series={dialogSeries!}
+                onSave={handleEditSave}
+                onDelete={handleEditDelete}
+              />
+            ) : (
+              <Box
+                display={'flex'}
+                flexDirection={'column'}
+                alignItems={'center'}
+              >
+                {/* Title + optional Edit button for owners */}
+                <Box className="journal">
+                  <Typography
+                    variant="h3"
+                    className="journalTitle"
+                    textAlign={'center'}
+                    sx={{
+                      marginTop: 2,
+                      color: `${theme.palette.primary.main}`,
+                    }}
+                  >
+                    {flow.seriesName}
+                  </Typography>
+                  {isOwner && (
+                    <Box
+                      sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}
+                    >
+                      <IconButton
+                        aria-label="Edit series"
+                        onClick={() => setEditOpen(true)}
+                        color="primary"
+                        size="small"
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </Box>
+                  )}
+                  <SeriesPoseList
+                    seriesPoses={flow.seriesPoses}
+                    getHref={(poseName) => getPoseNavigationUrlSync(poseName)}
+                    linkColor="primary.contrastText"
+                    dataTestIdPrefix="practice-series-pose"
+                  />
+                  {/* Series image (if uploaded) - shown between pose list and description */}
+                  {imageUrl ? (
+                    <Box sx={{ width: '100%', maxWidth: 600, mt: 2 }}>
+                      <Card
+                        sx={{
+                          position: 'relative',
+                          boxShadow: 'none',
+                          backgroundColor: 'transparent',
+                        }}
+                      >
+                        <CardMedia
+                          component="img"
+                          height={300}
+                          image={imageUrl}
+                          alt={`${flow.seriesName} image`}
+                          sx={{ objectFit: 'cover', borderRadius: 2 }}
+                        />
+                      </Card>
+                    </Box>
+                  ) : null}
+                </Box>
+                <Box
+                  className={'journal'}
                   sx={{
-                    marginTop: 2,
-                    color: `${theme.palette.primary.main}`,
+                    marginTop: '32px',
+                    p: 4,
+                    color: 'primary.main',
+                    backgroundColor: 'navSplash.dark',
                   }}
                 >
-                  {flow.seriesName}
-                </Typography>
-                {isOwner && (
-                  <Box
-                    sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}
+                  <Stack flexDirection={'row'} alignItems={'center'}>
+                    <Typography variant="h3" sx={{ mr: 2 }}>
+                      Description
+                    </Typography>
+                    <Image
+                      src={'/icons/designImages/leaf-2.svg'}
+                      alt={'leaf icon'}
+                      height={21}
+                      width={21}
+                    ></Image>
+                  </Stack>
+                  <Typography
+                    color="primary.contrastText"
+                    variant="body1"
+                    sx={{ whiteSpace: 'pre-line' }}
                   >
-                    <IconButton
-                      aria-label="Edit series"
-                      onClick={() => setEditOpen(true)}
-                      color="primary"
-                      size="small"
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </Box>
-                )}
-                <SeriesPoseList
-                  seriesPoses={flow.seriesPoses}
-                  getHref={(poseName) => getPoseNavigationUrlSync(poseName)}
-                  linkColor="primary.contrastText"
-                  dataTestIdPrefix="practice-series-pose"
-                />
-                {/* Series image (if uploaded) - shown between pose list and description */}
-                {imageUrl ? (
-                  <Box sx={{ width: '100%', maxWidth: 600, mt: 2 }}>
-                    <Card
-                      sx={{
-                        position: 'relative',
-                        boxShadow: 'none',
-                        backgroundColor: 'transparent',
-                      }}
-                    >
-                      <CardMedia
-                        component="img"
-                        height={300}
-                        image={imageUrl}
-                        alt={`${flow.seriesName} image`}
-                        sx={{ objectFit: 'cover', borderRadius: 2 }}
-                      />
-                    </Card>
-                  </Box>
-                ) : null}
-              </Box>
-              <Box
-                className={'journal'}
-                sx={{
-                  marginTop: '32px',
-                  p: 4,
-                  color: 'primary.main',
-                  backgroundColor: 'navSplash.dark',
-                }}
-              >
-                <Stack flexDirection={'row'} alignItems={'center'}>
-                  <Typography variant="h3" sx={{ mr: 2 }}>
-                    Description
+                    {flow.description}
                   </Typography>
-                  <Image
-                    src={'/icons/designImages/leaf-2.svg'}
-                    alt={'leaf icon'}
-                    height={21}
-                    width={21}
-                  ></Image>
-                </Stack>
-                <Typography
-                  color="primary.contrastText"
-                  variant="body1"
-                  sx={{ whiteSpace: 'pre-line' }}
-                >
-                  {flow.description}
-                </Typography>
-              </Box>
+                </Box>
 
-              {/* Series Activity Tracker */}
-              <Box sx={{ mt: 3 }}>
-                <SeriesActivityTracker
-                  seriesId={flow.id?.toString() || ''}
-                  seriesName={flow.seriesName}
-                  onActivityToggle={handleActivityToggle}
+                {/* Series Activity Tracker */}
+                <Box sx={{ mt: 3 }}>
+                  <SeriesActivityTracker
+                    seriesId={flow.id?.toString() || ''}
+                    seriesName={flow.seriesName}
+                    onActivityToggle={handleActivityToggle}
+                  />
+                </Box>
+
+                {/* Series Weekly Activity Tracker */}
+                <Box sx={{ mt: 3 }}>
+                  <SeriesWeeklyActivityTracker
+                    seriesId={flow.id?.toString() || ''}
+                    seriesName={flow.seriesName}
+                    variant="detailed"
+                    refreshTrigger={refreshTrigger}
+                  />
+                </Box>
+
+                <PoseShareButton
+                  content={{
+                    contentType: 'series',
+                    data: flow,
+                  }}
                 />
               </Box>
-
-              {/* Series Weekly Activity Tracker */}
-              <Box sx={{ mt: 3 }}>
-                <SeriesWeeklyActivityTracker
-                  seriesId={flow.id?.toString() || ''}
-                  seriesName={flow.seriesName}
-                  variant="detailed"
-                  refreshTrigger={refreshTrigger}
-                />
-              </Box>
-
-              <PoseShareButton
-                content={{
-                  contentType: 'series',
-                  data: flow,
-                }}
-              />
-            </Box>
+            )}
           </Box>
         )}
       </Box>
@@ -651,15 +663,7 @@ export default function Page() {
         <Typography variant="body1">Pick a Series to practice.</Typography>
       </Drawer>
 
-      {dialogSeries && (
-        <EditSeriesDialog
-          open={editOpen}
-          onClose={() => setEditOpen(false)}
-          series={dialogSeries}
-          onSave={handleEditSave}
-          onDelete={handleEditDelete}
-        />
-      )}
+      {/* Dialog rendering removed to keep editor inline only. */}
     </Box>
   )
 }

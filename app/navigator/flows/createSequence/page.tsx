@@ -536,10 +536,8 @@ export default function Page() {
                           sx={{ pl: 4 }}
                           className="journalLine"
                         >
-                          <Typography sx={{ mr: 2 }} key={index}>
-                            {index + 1}.
-                          </Typography>
-                          <Typography key={index}>{series}</Typography>
+                          <Typography sx={{ mr: 2 }}>{index + 1}.</Typography>
+                          <Typography>{series}</Typography>
                         </Box>
                       ))}
                     </Stack>
@@ -557,11 +555,17 @@ export default function Page() {
                             const { name, secondary } =
                               splitSeriesPoseEntry(series)
 
+                            // Generate a stable key that works for both string and object formats
+                            const itemKey =
+                              typeof series === 'string'
+                                ? `${series}-${index}`
+                                : `${series.id || series.name || name}-${index}`
+
                             return (
                               <ListItem
                                 className="journalLine"
                                 sx={{ whiteSpace: 'collapse' }}
-                                key={`${series}${index}`}
+                                key={itemKey}
                               >
                                 <ListItemText
                                   primary={
