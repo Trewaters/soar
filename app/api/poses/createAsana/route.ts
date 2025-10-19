@@ -5,6 +5,7 @@ const prisma = new PrismaClient()
 export async function POST(request: Request) {
   const {
     english_names,
+    alternative_english_names,
     sort_english_name,
     description,
     category,
@@ -21,6 +22,11 @@ export async function POST(request: Request) {
     const createdPose = await prisma.asanaPose.create({
       data: {
         english_names,
+        alternative_english_names: Array.isArray(alternative_english_names)
+          ? alternative_english_names
+          : alternative_english_names
+            ? [alternative_english_names]
+            : [],
         sort_english_name,
         description,
         category,

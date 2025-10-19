@@ -252,11 +252,13 @@ export default function ViewAsanaPractice({
         {showInfo && (
           <Box
             sx={{
-              backgroundColor: 'rgba(0,0,0,0.8)',
+              backgroundColor: 'rgba(0,0,0,0.9)',
               borderRadius: 2,
               p: 3,
               mb: 3,
-              maxWidth: '500px',
+              maxWidth: '600px',
+              maxHeight: '70vh',
+              overflowY: 'auto',
               opacity: showControls ? 1 : 0,
               transition: 'opacity 0.3s ease',
             }}
@@ -264,19 +266,80 @@ export default function ViewAsanaPractice({
             <Typography variant="h6" color="white" gutterBottom>
               Pose Information
             </Typography>
-            <Typography variant="body1" color="white" sx={{ mb: 1 }}>
-              <strong>Category:</strong> {viewPose?.category}
-            </Typography>
-            <Typography variant="body1" color="white" sx={{ mb: 1 }}>
-              <strong>Difficulty:</strong> {viewPose?.difficulty}
-            </Typography>
-            <Typography variant="body1" color="white" sx={{ mb: 1 }}>
-              <strong>Breath:</strong> {viewPose?.breath}
-            </Typography>
+
+            {/* Basic Info */}
+            {viewPose?.category && (
+              <Typography variant="body1" color="white" sx={{ mb: 1 }}>
+                <strong>Category:</strong> {viewPose.category}
+              </Typography>
+            )}
+            {viewPose?.difficulty && (
+              <Typography variant="body1" color="white" sx={{ mb: 1 }}>
+                <strong>Difficulty:</strong> {viewPose.difficulty}
+              </Typography>
+            )}
+            {viewPose?.breath &&
+              Array.isArray(viewPose.breath) &&
+              viewPose.breath.length > 0 && (
+                <Typography variant="body1" color="white" sx={{ mb: 1 }}>
+                  <strong>Breath:</strong> {viewPose.breath.join(', ')}
+                </Typography>
+              )}
+
+            {/* Names */}
+            {viewPose?.sanskrit_names &&
+              Array.isArray(viewPose.sanskrit_names) &&
+              viewPose.sanskrit_names.length > 0 && (
+                <Typography variant="body1" color="white" sx={{ mb: 1 }}>
+                  <strong>Sanskrit:</strong>{' '}
+                  {viewPose.sanskrit_names.join(', ')}
+                </Typography>
+              )}
+            {viewPose?.english_names &&
+              Array.isArray(viewPose.english_names) &&
+              viewPose.english_names.length > 0 && (
+                <Typography variant="body1" color="white" sx={{ mb: 1 }}>
+                  <strong>Also Known As:</strong>{' '}
+                  {viewPose.english_names.join(', ')}
+                </Typography>
+              )}
+
+            {/* Description */}
             {viewPose?.description && (
-              <Typography variant="body2" color="white">
+              <Typography variant="body2" color="white" sx={{ mb: 2 }}>
                 {viewPose.description}
               </Typography>
+            )}
+
+            {/* Dristi */}
+            {viewPose?.dristi && (
+              <Typography variant="body2" color="white" sx={{ mb: 1 }}>
+                <strong>Dristi (Gaze):</strong> {viewPose.dristi}
+              </Typography>
+            )}
+
+            {/* Setup Cues */}
+            {viewPose?.setup_cues && (
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="body1" color="white" sx={{ mb: 0.5 }}>
+                  <strong>Setup Cues:</strong>
+                </Typography>
+                <Typography variant="body2" color="white">
+                  {viewPose.setup_cues}
+                </Typography>
+              </Box>
+            )}
+
+            {/* Deepening Cues */}
+            {viewPose?.deepening_cues && (
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="body1" color="white" sx={{ mb: 0.5 }}>
+                  <strong>Deepening Cues:</strong>
+                </Typography>
+                <Typography variant="body2" color="white">
+                  {viewPose.deepening_cues}
+                </Typography>
+              </Box>
             )}
           </Box>
         )}

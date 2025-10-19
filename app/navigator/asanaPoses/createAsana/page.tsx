@@ -56,25 +56,6 @@ export default function Page() {
   const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // “Full”, Abbreviated Pose 1
-  /* 
-    id: string
-    sort_english_name: string
-    category: string
-    english_names: string[]
-    description: string
-    difficulty: string
-    dristi?: string
-    sanskrit_names: string[] // use first element for primary sanskrit name
-    setup_cues?: string
-    deepening_cues?: string
-
-    poseImages: PoseImageData[] // Relation to PoseImage
-    asanaActivities: AsanaActivity[] // Relation to AsanaActivity
-    activity_completed?: boolean
-    activity_practice?: boolean
-  */
-
   // Available categories for autocomplete
   const categories = [
     'Arm Leg Support',
@@ -99,6 +80,7 @@ export default function Page() {
   const [formFullAsanaPoseData, setFormFullAsanaPoseData] = useState<{
     sort_english_name: string
     english_names: string[]
+    alternative_english_names: string[] // Custom names for asana
     description: string
     category: string
     difficulty: string
@@ -114,6 +96,7 @@ export default function Page() {
   }>({
     sort_english_name: '',
     english_names: [],
+    alternative_english_names: [],
     description: '',
     category: '',
     difficulty: '',
@@ -235,6 +218,18 @@ export default function Page() {
       placeholder: 'Enter a detailed description...',
       rows: 4,
     },
+    {
+      type: 'variations',
+      label: 'Alternative Names (Custom/Nicknames)',
+      value: formFullAsanaPoseData.alternative_english_names,
+      onChange: (value: string[]) =>
+        setFormFullAsanaPoseData({
+          ...formFullAsanaPoseData,
+          alternative_english_names: value,
+        }),
+      placeholder: 'e.g. "My favorite twist, Pretzel pose"',
+      helperText: 'Add your own custom names or nicknames for this pose',
+    },
   ]
 
   const handleImageUploaded = (image: PoseImageData) => {
@@ -264,6 +259,8 @@ export default function Page() {
     const updatedAsana = {
       sort_english_name: formFullAsanaPoseData.sort_english_name,
       english_names: formFullAsanaPoseData.english_names,
+      alternative_english_names:
+        formFullAsanaPoseData.alternative_english_names,
       description: formFullAsanaPoseData.description,
       category: formFullAsanaPoseData.category,
       difficulty: formFullAsanaPoseData.difficulty,
@@ -602,6 +599,7 @@ export default function Page() {
                 setFormFullAsanaPoseData({
                   sort_english_name: '',
                   english_names: [],
+                  alternative_english_names: [],
                   description: '',
                   category: '',
                   difficulty: '',
