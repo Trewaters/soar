@@ -17,10 +17,11 @@ import {
   Box,
   Chip,
   InputAdornment,
+  IconButton,
   Alert,
   CircularProgress,
 } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
+import SearchField from './form/SearchField'
 import { useSession } from 'next-auth/react'
 
 interface AsanaOption {
@@ -190,18 +191,11 @@ export default function AddAsanasDialog({
 
       <DialogContent>
         <Box sx={{ mb: 2 }}>
-          <TextField
-            fullWidth
-            placeholder="Search asanas by name, category, or difficulty..."
+          <SearchField
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
+            placeholder="Search asanas by name, category, or difficulty..."
+            onClear={() => setSearchTerm('')}
             sx={{ mb: 2 }}
           />
 

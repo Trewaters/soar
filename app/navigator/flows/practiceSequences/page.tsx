@@ -9,7 +9,6 @@ import {
   CardHeader,
   Link,
   Stack,
-  TextField,
   Typography,
   ListSubheader,
   IconButton,
@@ -24,7 +23,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
-import SearchIcon from '@mui/icons-material/Search'
+import { AutocompleteInput } from '@app/clientComponents/form'
 import { SequenceData, getAllSequences } from '@lib/sequenceService'
 import { getAllSeries } from '@lib/seriesService'
 import React from 'react'
@@ -510,19 +509,10 @@ export default function Page() {
                   },
                 }}
                 renderInput={(params) => (
-                  <TextField
-                    sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
-                    {...params}
+                  <AutocompleteInput
+                    params={params}
                     placeholder="Search for a Sequence"
-                    InputProps={{
-                      ...params.InputProps,
-                      startAdornment: (
-                        <>
-                          <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
-                          {params.InputProps.startAdornment}
-                        </>
-                      ),
-                    }}
+                    sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
                   />
                 )}
                 onChange={(event, value) => {

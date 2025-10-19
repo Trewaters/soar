@@ -120,6 +120,24 @@ describe('AddAsanasDialog', () => {
     ).not.toBeInTheDocument()
   })
 
+  it('clears search when clear button is clicked', async () => {
+    renderWithProviders(<AddAsanasDialog {...defaultProps} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('mountain-pose (Tadasana)')).toBeInTheDocument()
+    })
+
+    const searchInput = screen.getByPlaceholderText(/Search asanas/)
+    fireEvent.change(searchInput, { target: { value: 'mountain' } })
+
+    expect(searchInput).toHaveValue('mountain')
+
+    const clearButton = await screen.findByTestId('clear-search-button')
+    fireEvent.click(clearButton)
+
+    expect(searchInput).toHaveValue('')
+  })
+
   it('allows selecting and deselecting asanas', async () => {
     renderWithProviders(<AddAsanasDialog {...defaultProps} />)
 

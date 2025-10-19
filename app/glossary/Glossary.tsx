@@ -9,7 +9,6 @@ import {
   Grid,
   Typography,
   Tooltip,
-  TextField,
   Select,
   MenuItem,
   FormControl,
@@ -23,6 +22,7 @@ import {
   DialogActions,
   Button,
 } from '@mui/material'
+import SearchField from '@app/clientComponents/form/SearchField'
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -156,12 +156,13 @@ export const Glossary: React.FC = () => {
         highlighted with a badge.
       </Typography>
       <Box mb={2} display="flex" flexWrap="wrap" gap={2} alignItems="flex-end">
-        <TextField
-          label="Search"
+        <SearchField
           value={search}
-          size="small"
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setSearch(e.target.value)
+          }
           placeholder="Search term, definition, Sanskrit"
+          sx={{ maxWidth: 360 }}
         />
         <FormControl size="small" sx={{ minWidth: 140 }}>
           <InputLabel id="glossary-category-label">Category</InputLabel>

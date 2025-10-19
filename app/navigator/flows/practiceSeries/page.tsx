@@ -9,7 +9,6 @@ import {
   Box,
   Drawer,
   Stack,
-  TextField,
   Typography,
   useTheme,
   ListSubheader,
@@ -28,7 +27,7 @@ import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
-import SearchIcon from '@mui/icons-material/Search'
+import { AutocompleteInput } from '@app/clientComponents/form'
 import PoseShareButton from '@app/clientComponents/poseShareButton'
 import { getAllSeries, deleteSeries, updateSeries } from '@lib/seriesService'
 import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
@@ -508,20 +507,11 @@ export default function Page() {
               },
             }}
             renderInput={(params) => (
-              <TextField
-                sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
-                {...params}
+              <AutocompleteInput
+                params={params}
                 placeholder="Search for a Series"
-                InputProps={{
-                  ...params.InputProps,
-                  onClick: () => setAcOpen(true),
-                  startAdornment: (
-                    <>
-                      <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
-                      {params.InputProps.startAdornment}
-                    </>
-                  ),
-                }}
+                sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+                onClick={() => setAcOpen(true)}
               />
             )}
             onChange={(event, value) => {

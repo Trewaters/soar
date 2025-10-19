@@ -102,8 +102,11 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
 
   const handleAddAsanas = (newAsanas: any[]) => {
     const asanaToAdd: Asana[] = newAsanas.map((asana) => {
-      // Use sort_english_name (canonical search name) as the primary display name
-      const englishName = asana.sort_english_name || asana.english_names[0]
+      // Prefer the human-friendly English name when available
+      const englishName =
+        (Array.isArray(asana.english_names) && asana.english_names[0]) ||
+        asana.sort_english_name ||
+        ''
       const sanskritName =
         typeof asana.sanskrit_names === 'string' ? asana.sanskrit_names : ''
 
@@ -267,7 +270,8 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
                     <ListItemText primary={asana.name} sx={{ flex: 1 }} />
                     <IconButton
                       edge="end"
-                      aria-label={`Remove ${asana.name}`}
+                      aria-label={`Delete, Remove ${asana.name}`}
+                      data-testid={`remove-${asana.id}`}
                       onClick={() => {
                         if (!isCreator) return
                         setAsanas((prev) => prev.filter((_, i) => i !== idx))
@@ -279,7 +283,8 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
                     </IconButton>
                     <IconButton
                       edge="end"
-                      aria-label={`Move ${asana.name} up`}
+                      aria-label={`Move up, Move ${asana.name} up`}
+                      data-testid={`move-up-${asana.id}`}
                       onClick={() => {
                         if (!isCreator || idx === 0) return
                         setAsanas((prev) => {
@@ -297,7 +302,8 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
                     </IconButton>
                     <IconButton
                       edge="end"
-                      aria-label={`Move ${asana.name} down`}
+                      aria-label={`Move down, Move ${asana.name} down`}
+                      data-testid={`move-down-${asana.id}`}
                       onClick={() => {
                         if (!isCreator || idx === asanas.length - 1) return
                         setAsanas((prev) => {
@@ -316,8 +322,8 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
                   </Box>
                   {/* Alignment Cues TextField */}
                   <TextField
-                    placeholder="Optional alignment cues (max 1000 chars)"
-                    variant="standard"
+                    placeholder="Optional alignment cues (max 1000 characters)"
+                    variant="outlined"
                     multiline
                     minRows={1}
                     value={asana.alignment_cues || ''}
@@ -334,6 +340,7 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
                     inputProps={{
                       maxLength: 1000,
                       'data-testid': `edit-alignment-cues-${idx}`,
+                      'aria-label': `Alignment cues for ${asana.name}`,
                     }}
                     sx={{ mt: 1 }}
                   />
@@ -408,7 +415,7 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
         open={showAddAsanasDialog}
         onClose={() => setShowAddAsanasDialog(false)}
         onAdd={handleAddAsanas}
-        excludeAsanaIds={[]} // Allow adding duplicate poses - users can add same pose multiple times
+        excludeAsanaIds={asanas.map((a) => a.id)}
         refreshTrigger={asanaRefreshTrigger}
       />
     </Dialog>

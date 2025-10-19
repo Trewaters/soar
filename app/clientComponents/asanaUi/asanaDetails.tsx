@@ -52,7 +52,65 @@ export default React.memo(function AsanaDetails(
     (typeof details === 'string' && details.trim() === '') ||
     (Array.isArray(details) && !arrayHasNonEmptyEntries)
 
-  if (isEmpty) return undefined
+  // When there's no meaningful details, render a standardized fallback so
+  // tests and accessibility checks can rely on a consistent text and aria-label.
+  const fallbackText = 'No details available'
+  if (isEmpty) {
+    const ariaLabelFallback = `${props.label}: ${fallbackText}`
+    return (
+      <Box
+        component="dl"
+        sx={{
+          width: {
+            xs: '100%',
+            md: '50vw',
+          },
+          px: { xs: '8px', sm: '8px' },
+          margin: 0, // Reset default dl margins
+        }}
+        alignSelf={'center'}
+        role="group"
+        aria-label={`Asana detail: ${props.label}`}
+      >
+        <Stack direction={'row'} gap={3} display={'flex'} alignItems={'center'}>
+          <Image
+            src={'/icons/asanas/label_name_leaf.png'}
+            alt={props.label}
+            aria-hidden="true"
+            width={16}
+            height={20}
+          />
+          <Typography
+            variant="subtitle1"
+            component="dt"
+            sx={{
+              fontWeight: 'bold',
+              mr: 2,
+              color: 'primary.main',
+            }}
+          >
+            {props.label}:
+          </Typography>
+        </Stack>
+        <Stack sx={{ py: 2, pl: 4 }}>
+          <Typography
+            variant="body1"
+            component="dd"
+            sx={{
+              color: 'primary.contrastText',
+              borderTopRightRadius: { xs: 0, sm: 75 },
+              borderBottomRightRadius: { xs: 0, sm: 75 },
+              whiteSpace: 'pre-line',
+              ...props.sx,
+            }}
+            aria-label={ariaLabelFallback}
+          >
+            {fallbackText}
+          </Typography>
+        </Stack>
+      </Box>
+    )
+  }
 
   // Narrow type for use below. At this point details is guaranteed non-null/non-empty.
   const safeDetails = details as string | string[]

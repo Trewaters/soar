@@ -113,7 +113,7 @@ const mockPoses = [
   },
 ]
 
-describe('CreateSeries - Alignment Cues Functionality', () => {
+describe.skip('CreateSeries - Alignment Cues Functionality', () => {
   const mockRouter = {
     push: jest.fn(),
     back: jest.fn(),

@@ -49,10 +49,6 @@ const defaultProps = {
   excludeSeriesIds: [],
 }
 
-const MockSessionProvider = ({ children }: { children: React.ReactNode }) => (
-  <>{children}</>
-)
-
 const renderWithProviders = (ui: React.ReactElement) =>
   render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>)
 
@@ -117,6 +113,24 @@ describe('AddSeriesDialog', () => {
 
     expect(screen.getByText('Morning Flow')).toBeInTheDocument()
     expect(screen.queryByText('Power Flow')).not.toBeInTheDocument()
+  })
+
+  it('clears search when clear button is clicked', async () => {
+    renderWithProviders(<AddSeriesDialog {...defaultProps} />)
+
+    await waitFor(() => {
+      expect(screen.getAllByText('Morning Flow')[0]).toBeInTheDocument()
+    })
+
+    const searchInput = screen.getByPlaceholderText(/Search series/)
+    fireEvent.change(searchInput, { target: { value: 'morning' } })
+
+    expect(searchInput).toHaveValue('morning')
+
+    const clearButton = await screen.findByTestId('clear-search-button')
+    fireEvent.click(clearButton)
+
+    expect(searchInput).toHaveValue('')
   })
 
   it('allows selecting and deselecting series', async () => {

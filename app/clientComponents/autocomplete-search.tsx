@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
-import TextField from '@mui/material/TextField'
-import SearchIcon from '@mui/icons-material/Search'
+import { AutocompleteInput } from '@app/clientComponents/form'
 import { AsanaPose } from 'types/asana'
 
 interface AnotherOptionType {
@@ -17,6 +16,7 @@ interface CustomAutocompleteProps
 }
 
 export default function AutocompleteComponent(props: CustomAutocompleteProps) {
+  const [inputValue, setInputValue] = useState('')
   return (
     <>
       <Autocomplete
@@ -82,22 +82,15 @@ export default function AutocompleteComponent(props: CustomAutocompleteProps) {
           },
         }}
         disablePortal
+        inputValue={inputValue}
+        onInputChange={(_event, newInputValue) => setInputValue(newInputValue)}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            sx={{
-              '& .MuiInputBase-input': { color: 'primary.main' },
-            }}
+          <AutocompleteInput
+            params={params}
             placeholder={props.placeholder || 'Search...'}
-            InputProps={{
-              ...params.InputProps,
-              startAdornment: (
-                <>
-                  <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
-                  {params.InputProps.startAdornment}
-                </>
-              ),
-            }}
+            sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+            inputValue={inputValue}
+            onClear={() => setInputValue('')}
           />
         )}
         onChange={props.onChange}

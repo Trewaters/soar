@@ -16,13 +16,12 @@ import {
   Typography,
   Box,
   Chip,
-  InputAdornment,
   Alert,
   CircularProgress,
   Avatar,
   ListItemAvatar,
 } from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search'
+import SearchField from './form/SearchField'
 import { useSession } from 'next-auth/react'
 
 interface SeriesOption {
@@ -145,18 +144,11 @@ export default function AddSeriesDialog({
 
       <DialogContent>
         <Box sx={{ mb: 2 }}>
-          <TextField
-            fullWidth
-            placeholder="Search series by name, description, or pose count..."
+          <SearchField
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
+            placeholder="Search series by name, description, or pose count..."
+            onClear={() => setSearchTerm('')}
             sx={{ mb: 2 }}
           />
 

@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { useFlowSeries } from '@context/AsanaSeriesContext'
+import { useFlowSeries } from '@app/context/AsanaSeriesContext'
 import { FEATURES } from '@app/FEATURES'
 import {
   Avatar,
@@ -439,7 +439,7 @@ export default function Page() {
                                 </Typography>
                               )}
                               <TextField
-                                placeholder="Optional alignment cues (max 1000 chars)"
+                                placeholder="Optional alignment cues (max 1000 characters)"
                                 variant="standard"
                                 multiline
                                 minRows={1}
@@ -448,6 +448,7 @@ export default function Page() {
                                 inputProps={{
                                   maxLength: 1000,
                                   'data-testid': `alignment-cues-${index}`,
+                                  'aria-label': `Alignment cues for ${name}`,
                                 }}
                                 sx={{ mt: 1 }}
                               />
@@ -604,8 +605,6 @@ export default function Page() {
             </Typography>
             <List
               sx={{
-                // width: 'auto',
-                // maxWidth: 360,
                 bgcolor: 'background.helper',
                 alignSelf: 'center',
                 borderRadius: 4,
@@ -619,22 +618,31 @@ export default function Page() {
               >
                 Welcome to the series creation page
               </ListSubheader>
+
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>
                     <LooksOne />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary="If you can't find a series you like, create your own!" />
+                <ListItemText
+                  primary={
+                    "If you can't find a series you like, create your own!"
+                  }
+                />
               </ListItem>
+
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>
                     <LooksTwoIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary='"Series Name": Type a unique name for your series.' />
+                <ListItemText
+                  primary={'"Series Name": Type a unique name for your series.'}
+                />
               </ListItem>
+
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>
@@ -642,19 +650,23 @@ export default function Page() {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary='"Flow Series": Add asana poses to
-                  your series by selecting them from the "Flow Series"
-                  dropdown below. Click the "X" to enter a new pose.'
+                  primary={
+                    '"Flow Series": Add asana poses to your series by selecting them from the "Flow Series" dropdown below.'
+                  }
                 />
               </ListItem>
+
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>
                     <Looks4Icon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary='"Description": Type a description of your series.' />
+                <ListItemText
+                  primary={'"Description": Type a description of your series.'}
+                />
               </ListItem>
+
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>

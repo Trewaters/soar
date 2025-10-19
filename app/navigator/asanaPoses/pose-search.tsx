@@ -1,12 +1,12 @@
 'use client'
 import { Typography } from '@mui/material'
 import React, { useState, useEffect, SyntheticEvent, useMemo } from 'react'
-import TextField from '@mui/material/TextField'
+// TextField replaced by AutocompleteInput wrapper
 import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
 import { useAsanaPose } from '@context/AsanaPoseContext'
 import { useRouter } from 'next/navigation'
-import SearchIcon from '@mui/icons-material/Search'
+import { AutocompleteInput } from '@app/clientComponents/form'
 import getAsanaTitle from '@app/utils/search/getAsanaTitle'
 
 import { FEATURES } from '@app/FEATURES'
@@ -162,19 +162,10 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
           },
         }}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+          <AutocompleteInput
+            params={params}
             placeholder="Search for a Yoga Pose"
-            InputProps={{
-              ...params.InputProps,
-              startAdornment: (
-                <>
-                  <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
-                  {params.InputProps.startAdornment}
-                </>
-              ),
-            }}
+            sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
           />
         )}
         filterOptions={(options, state) => {

@@ -42,16 +42,17 @@ import {
   Home as HomeIcon,
   Menu as MenuIcon,
   Person as PersonIcon,
-  Search as SearchIcon,
   Settings as SettingsIcon,
 } from '@mui/icons-material'
+import { AutocompleteInput } from '@app/clientComponents/form'
+import SearchIcon from '@mui/icons-material/Search'
 import { useState } from 'react'
 import { AsanaPose } from 'types/asana'
 
 export default function StyleGuide() {
   const theme = useTheme()
   const [tabValue, setTabValue] = useState(0)
-  const [autocompleteValue, setAutocompleteValue] = useState('')
+
   const [expanded, setExpanded] = useState(false)
 
   // Generate dynamic color palette from theme
@@ -336,19 +337,10 @@ export default function StyleGuide() {
                   },
                 }}
                 renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+                  <AutocompleteInput
+                    params={params}
                     placeholder="Search for a Yoga Pose"
-                    InputProps={{
-                      ...params.InputProps,
-                      startAdornment: (
-                        <>
-                          <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
-                          {params.InputProps.startAdornment}
-                        </>
-                      ),
-                    }}
+                    sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
                   />
                 )}
                 filterOptions={(options, state) =>
@@ -367,7 +359,7 @@ export default function StyleGuide() {
                 )}
                 // defaultValue={defaultPose}
                 autoSelect={true}
-                onChange={(_, newValue) => setAutocompleteValue('')}
+                onChange={() => {}}
               />
               <FormControl>
                 <FormGroup>
