@@ -341,7 +341,7 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
     }
   }
 
-  const getAsanaIconUrl = (category: string) => {
+  const getAsanaIconUrl = (category?: string) => {
     switch (category?.toLowerCase()) {
       case 'prone':
         return '/icons/designImages/asana-standing.svg'
@@ -361,7 +361,7 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
         return '/stick-tree-pose-400x400.png'
     }
   }
-  const getAsanaBackgroundUrl = (category: string) => {
+  const getAsanaBackgroundUrl = (category?: string) => {
     switch (category?.toLowerCase()) {
       case 'prone':
         return `url('/icons/designImages/asana-back-pattern 1.svg')`
@@ -675,6 +675,35 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
           <AsanaDetails
             details={pose?.sanskrit_names?.[0]}
             label="Sanskrit Name"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={
+              Array.isArray(pose?.sanskrit_names)
+                ? pose.sanskrit_names.join(', ')
+                : (pose?.sanskrit_names as any) || ''
+            }
+            label="All Sanskrit Names"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={Array.isArray(pose?.breath) ? pose.breath.join(', ') : ''}
+            label="Breath"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={(pose as any)?.breath_direction_default}
+            label="Breath Direction"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={(pose as any)?.preferred_side}
+            label="Preferred Side"
+            sx={{ mb: '32px' }}
+          />
+          <AsanaDetails
+            details={pose?.sideways === 'true' ? 'Yes' : 'No'}
+            label="Sideways Pose"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails

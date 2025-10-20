@@ -66,6 +66,8 @@ export default function EditPoseDialog({
   ]
 
   const [englishVariationsInput, setEnglishVariationsInput] = useState('')
+  const [sanskritInput, setSanskritInput] = useState('')
+  const [breathInput, setBreathInput] = useState('')
 
   const [formData, setFormData] = useState<{
     sort_english_name: string
@@ -74,6 +76,13 @@ export default function EditPoseDialog({
     category: string
     difficulty: string
     breath: string[]
+    sanskrit_names?: string[]
+    dristi?: string
+    setup_cues?: string
+    deepening_cues?: string
+    breath_direction_default?: string
+    preferred_side?: string
+    sideways?: string
   }>({
     sort_english_name: '',
     english_names: [],
@@ -81,6 +90,13 @@ export default function EditPoseDialog({
     category: '',
     difficulty: '',
     breath: [],
+    sanskrit_names: [],
+    dristi: '',
+    setup_cues: '',
+    deepening_cues: '',
+    breath_direction_default: '',
+    preferred_side: '',
+    sideways: '',
   })
 
   // Initialize form data when pose changes
@@ -93,11 +109,22 @@ export default function EditPoseDialog({
         category: pose.category || '',
         difficulty: pose.difficulty || '',
         breath: pose.breath || [],
+        sanskrit_names: pose.sanskrit_names || [],
+        dristi: pose.dristi || '',
+        setup_cues: pose.setup_cues || '',
+        deepening_cues: pose.deepening_cues || '',
+        breath_direction_default: (pose as any).breath_direction_default || '',
+        preferred_side: (pose as any).preferred_side || '',
+        sideways: (pose as any).sideways || '',
       })
       setImages(pose.poseImages || [])
       setEnglishVariationsInput(
         Array.isArray(pose.english_names) ? pose.english_names.join(', ') : ''
       )
+      setSanskritInput(
+        Array.isArray(pose.sanskrit_names) ? pose.sanskrit_names.join(', ') : ''
+      )
+      setBreathInput(Array.isArray(pose.breath) ? pose.breath.join(', ') : '')
       setDifficulty(pose.difficulty || '')
       setError(null)
     }
@@ -142,6 +169,32 @@ export default function EditPoseDialog({
     })
   }
 
+  const handleSanskritChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setSanskritInput(value)
+    const arr = value
+      .split(',')
+      .map((v) => v.trim())
+      .filter(Boolean)
+    setFormData({
+      ...formData,
+      sanskrit_names: arr,
+    })
+  }
+
+  const handleBreathChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setBreathInput(value)
+    const arr = value
+      .split(',')
+      .map((v) => v.trim())
+      .filter(Boolean)
+    setFormData({
+      ...formData,
+      breath: arr,
+    })
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -166,6 +219,14 @@ export default function EditPoseDialog({
       category: formData.category,
       difficulty: formData.difficulty,
       breath: formData.breath,
+      // include optional extended fields if present
+      sanskrit_names: formData.sanskrit_names,
+      dristi: formData.dristi,
+      setup_cues: formData.setup_cues,
+      deepening_cues: formData.deepening_cues,
+      breath_direction_default: formData.breath_direction_default,
+      preferred_side: formData.preferred_side,
+      sideways: formData.sideways,
     }
 
     try {
@@ -303,6 +364,20 @@ export default function EditPoseDialog({
                     <Grid size={12}>
                       <FormControl sx={{ width: '100%', mb: 3 }}>
                         <TextField
+                          label="Sanskrit Names"
+                          value={sanskritInput}
+                          onChange={handleSanskritChange}
+                          placeholder="e.g., Virabhadrasana I, ..."
+                          helperText="Separate multiple names with commas"
+                          multiline
+                          rows={2}
+                        />
+                      </FormControl>
+                    </Grid>
+
+                    <Grid size={12}>
+                      <FormControl sx={{ width: '100%', mb: 3 }}>
+                        <TextField
                           label="Description"
                           name="description"
                           value={formData.description}
@@ -383,17 +458,115 @@ export default function EditPoseDialog({
                       </FormControl>
                     </Grid>
 
+                    <Grid size={12}>
+                      <FormControl sx={{ width: '100%', mb: 3 }}>
+                        <TextField
+                          select
+                          label="Breath Direction Default"
+                          name="breath_direction_default"
+                          value={formData.breath_direction_default || ''}
+                          onChange={handleChange}
+                          SelectProps={{ native: true }}
+                        >
+                          <option value=""></option>
+                          <option value="Neutral">Neutral</option>
+                          <option value="Inhale">Inhale</option>
+                          <option value="Exhale">Exhale</option>
+                        </TextField>
+                      </FormControl>
+                    </Grid>
+
                     <Grid size={6}>
                       <FormControl sx={{ width: '100%', mb: 3 }}>
                         <TextField
-                          label="Breath Direction (Default)"
-                          name="breath"
-                          value={formData.breath}
+                          label="Preferred Side"
+                          name="preferred_side"
+                          placeholder='e.g. "Right" or "Left"'
+                          value={formData.preferred_side || ''}
                           onChange={handleChange}
-                          placeholder="e.g., Inhale, Exhale, Neutral"
                         />
                       </FormControl>
                     </Grid>
+
+                    <Grid size={6}>
+                      <FormControl sx={{ width: '100%', mb: 3 }}>
+                        <label
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                          }}
+                        >
+                          <input
+                            type="checkbox"
+                            name="sideways"
+                            checked={formData.sideways === 'true'}
+                            onChange={(e) => {
+                              const { checked } = e.target
+                              setFormData({
+                                ...formData,
+                                sideways: checked ? 'true' : 'false',
+                              })
+                            }}
+                          />
+                          Sideways pose (practiced on both sides)
+                        </label>
+                      </FormControl>
+                    </Grid>
+
+                    <Grid size={12}>
+                      <FormControl sx={{ width: '100%', mb: 3 }}>
+                        <TextField
+                          label="Dristi"
+                          name="dristi"
+                          value={formData.dristi || ''}
+                          onChange={handleChange}
+                          placeholder="Gaze point"
+                        />
+                      </FormControl>
+                    </Grid>
+
+                    <Grid size={12}>
+                      <FormControl sx={{ width: '100%', mb: 3 }}>
+                        <TextField
+                          label="Setup Cues"
+                          name="setup_cues"
+                          value={formData.setup_cues || ''}
+                          onChange={handleChange}
+                          multiline
+                          rows={2}
+                        />
+                      </FormControl>
+                    </Grid>
+
+                    <Grid size={12}>
+                      <FormControl sx={{ width: '100%', mb: 3 }}>
+                        <TextField
+                          label="Deepening Cues"
+                          name="deepening_cues"
+                          value={formData.deepening_cues || ''}
+                          onChange={handleChange}
+                          multiline
+                          rows={2}
+                        />
+                      </FormControl>
+                    </Grid>
+
+                    <Grid size={12}>
+                      <FormControl sx={{ width: '100%', mb: 3 }}>
+                        <TextField
+                          label="Breath (comma separated)"
+                          value={breathInput}
+                          onChange={handleBreathChange}
+                          placeholder="e.g., Inhale, Exhale"
+                          helperText="Comma separated breath cues"
+                          multiline
+                          rows={1}
+                        />
+                      </FormControl>
+                    </Grid>
+
+                    {/* Breath field removed - breath is managed elsewhere or via create/edit flow */}
                   </Grid>
                 </Paper>
               </Grid>

@@ -13,11 +13,10 @@ export interface AsanaPose {
   sort_english_name: string
   sanskrit_names: string[] // use first element for primary sanskrit name
   english_names: string[]
-  // Relations
   poseImages?: PoseImageData[] // Relation to PoseImage (optional when not included in queries)
-  description: string
-  category: string
-  difficulty: string
+  description?: string
+  category?: string
+  difficulty?: string
   activity_completed?: boolean
   asanaActivities?: AsanaActivity[] // Relation to AsanaActivity (optional)
   activity_practice?: boolean
@@ -34,16 +33,20 @@ export interface AsanaPose {
   benefits?: string
   customize_asana?: string
   // “Personal”, Abbreviated Pose 3
-  pose_modifications: string[]
-  pose_variations: string[]
-  breath: string[]
+  pose_modifications?: string[]
+  pose_variations?: string[]
+  breath?: string[]
   duration_asana?: string
   lore?: string
   asana_intention?: string
   label?: string // verify how it is used
-  suggested_poses: string[] // verify how it is used
-  preparatory_poses: string[] // verify how it is used
+  suggested_poses?: string[] // verify how it is used
+  preparatory_poses?: string[] // verify how it is used
   isUserCreated?: boolean // Flag to identify user-created asanas
+  // Additional fields supported by the Create form
+  breath_direction_default?: string
+  preferred_side?: string
+  sideways?: string
   // Timestamps may come as ISO strings from API responses or Dates in runtime
   created_on?: string | Date | null // default(now())
   updated_on?: string | Date | null // updatedAt

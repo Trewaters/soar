@@ -23,11 +23,16 @@ export type UpdatePoseInput = {
   description: string
   category: string
   difficulty: string
-  breath: string[]
+  // make breath optional on update to match create semantics
+  breath?: string[]
   sanskrit_names?: string[]
   dristi?: string
   setup_cues?: string
   deepening_cues?: string
+  // Additional optional fields accepted by the update endpoint
+  breath_direction_default?: string
+  preferred_side?: string
+  sideways?: string
 }
 
 /**
