@@ -267,12 +267,10 @@ const renderWithTheme = (component: React.ReactElement) => {
 describe('Practice Series Page', () => {
   describe('Grouped Rendering and Ordering', () => {
     it('renders grouped sections with user/alpha series at top and others alphabetical', async () => {
-      // Add createdBy and canonicalAsanaId to mock data for partitioning
       const userEmail = 'test@uvuyoga.com' // match the mock session user
       const alphaEmail = 'alpha@example.com'
       const testSeriesData: (FlowSeriesData & {
         createdBy?: string
-        canonicalAsanaId?: string
       })[] = [
         {
           id: '1',
@@ -280,7 +278,6 @@ describe('Practice Series Page', () => {
           seriesPoses: ['Pose1;Desc'],
           description: 'User created',
           createdBy: userEmail,
-          canonicalAsanaId: 'A',
         },
         {
           id: '2',
@@ -288,7 +285,6 @@ describe('Practice Series Page', () => {
           seriesPoses: ['Pose2;Desc'],
           description: 'Alpha created',
           createdBy: alphaEmail,
-          canonicalAsanaId: 'B',
         },
         {
           id: '3',
@@ -296,7 +292,6 @@ describe('Practice Series Page', () => {
           seriesPoses: ['Pose3;Desc'],
           description: 'Other',
           createdBy: 'other@example.com',
-          canonicalAsanaId: 'C',
         },
         {
           id: '4',
@@ -304,7 +299,6 @@ describe('Practice Series Page', () => {
           seriesPoses: ['Pose4;Desc'],
           description: 'Other',
           createdBy: 'other2@example.com',
-          canonicalAsanaId: 'D',
         },
       ]
       mockGetAllSeries.mockResolvedValue(testSeriesData as FlowSeriesData[])
@@ -341,7 +335,6 @@ describe('Practice Series Page', () => {
           seriesPoses: ['Pose1;Desc'],
           description: 'User created',
           createdBy: 'test@uvuyoga.com', // match the mock session user
-          canonicalAsanaId: 'A',
         },
         {
           id: '2',
@@ -349,12 +342,8 @@ describe('Practice Series Page', () => {
           seriesPoses: ['Pose2;Desc'],
           description: 'Other',
           createdBy: 'alpha@example.com', // alpha user so it appears in dropdown
-          canonicalAsanaId: 'B',
         },
-      ] as (FlowSeriesData & {
-        createdBy: string
-        canonicalAsanaId: string
-      })[] as FlowSeriesData[])
+      ] as (FlowSeriesData & { createdBy: string })[] as FlowSeriesData[])
 
       renderWithTheme(<Page />)
 

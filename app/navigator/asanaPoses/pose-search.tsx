@@ -72,7 +72,6 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
     return poses.map((p) => ({
       ...p,
       createdBy: (p as any).created_by ?? undefined,
-      canonicalAsanaId: (p as any).canonicalAsanaId ?? (p as any).id,
     }))
   }, [poses])
   const orderedOptions = useMemo(() => {
@@ -83,7 +82,7 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
     const others: typeof enrichedPoses = []
     const seenIds = new Set<string>()
     for (const pose of enrichedPoses) {
-      const key = pose.canonicalAsanaId || pose.id
+      const key = pose.id
       if (seenIds.has(key)) continue
       seenIds.add(key)
       if (

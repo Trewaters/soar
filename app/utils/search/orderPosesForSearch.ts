@@ -4,11 +4,12 @@
 export type OrderPosesForSearchOpts<T> = {
   currentUserId?: string | null
   alphaUserIds: string[]
-  getTitle: (item: T) => string
+  getTitle: (_: T) => string
 }
 
 /**
- * Orders poses for search: user-created, alpha-created, others (alphabetical), deduped by canonicalAsanaId (fallback to id).
+ * Orders poses for search: user-created, alpha-created, others (alphabetical).
+ * Dedupe is performed by the pose's own `id`.
  * @param poses Array of pose objects
  * @param currentUserId Current user's id
  * @param alphaUserIds Array of alpha user ids
@@ -16,12 +17,12 @@ export type OrderPosesForSearchOpts<T> = {
  * @returns Ordered array: user-created, alpha, others
  */
 export function orderPosesForSearch<
-  T extends { canonicalAsanaId?: string; id: string; createdBy?: string },
+  T extends { id: string; createdBy?: string },
 >(
   poses: T[],
   currentUserId: string | null | undefined,
   alphaUserIds: string[],
-  getTitle: (item: T) => string
+  getTitle: (_: T) => string
 ): T[] {
   // Partition
   const userCreated: T[] = []
@@ -30,7 +31,7 @@ export function orderPosesForSearch<
   const seenIds = new Set<string>()
 
   for (const pose of poses) {
-    const key = pose.canonicalAsanaId || pose.id
+    const key = pose.id
     if (seenIds.has(key)) continue
     seenIds.add(key)
     if (pose.createdBy === currentUserId) {

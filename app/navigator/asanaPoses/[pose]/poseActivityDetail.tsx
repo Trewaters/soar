@@ -631,6 +631,13 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
             }}
           />
           <AsanaDetails
+            details={pose?.alternative_english_names?.join(', ')}
+            label={pose?.label ?? 'Alternative Names (Custom/Nicknames)'}
+            sx={{
+              mb: '32px',
+            }}
+          />
+          <AsanaDetails
             details={pose?.description}
             label="Description"
             sx={{
@@ -658,11 +665,6 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
           <AsanaDetails
             details={pose?.difficulty}
             label="Difficulty"
-            sx={{ mb: '32px' }}
-          />
-          <AsanaDetails
-            details={pose?.breath}
-            label="Breath (default)"
             sx={{ mb: '32px' }}
           />
           <AsanaDetails

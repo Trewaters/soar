@@ -13,16 +13,18 @@ export interface AsanaPose {
   sort_english_name: string
   sanskrit_names: string[] // use first element for primary sanskrit name
   english_names: string[]
-  poseImages: PoseImageData[] // Relation to PoseImage
+  // Relations
+  poseImages?: PoseImageData[] // Relation to PoseImage (optional when not included in queries)
   description: string
   category: string
   difficulty: string
   activity_completed?: boolean
-  asanaActivities: AsanaActivity[] // Relation to AsanaActivity
+  asanaActivities?: AsanaActivity[] // Relation to AsanaActivity (optional)
   activity_practice?: boolean
   dristi?: string
   setup_cues?: string
   deepening_cues?: string
+  alternative_english_names?: string[]
   // "Advance", Abbreviated Pose 2
   joint_action?: string
   muscle_action?: string
@@ -41,11 +43,14 @@ export interface AsanaPose {
   label?: string // verify how it is used
   suggested_poses: string[] // verify how it is used
   preparatory_poses: string[] // verify how it is used
-  isUserCreated: boolean // default(false) // verify how it is used, don't think it is needed // Flag to identify user-created asanas
-  created_on?: Date // default(now()) // Necessary
-  updated_on?: Date // updatedAt // Necessary
-  created_by?: string // Necessary // Should be the user email address.
-  imageCount: number // default(0) // verify how it is used // Cache for number of images (performance optimization)
+  isUserCreated?: boolean // Flag to identify user-created asanas
+  // Timestamps may come as ISO strings from API responses or Dates in runtime
+  created_on?: string | Date | null // default(now())
+  updated_on?: string | Date | null // updatedAt
+  // Creator may be nullable in some records
+  created_by?: string | null // Should be the user email address when present
+  // Cached image count (optional)
+  imageCount?: number // default(0)
 }
 
 export interface AsanaActivity {

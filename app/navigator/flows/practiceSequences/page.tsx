@@ -50,7 +50,6 @@ export default function Page() {
       (sequences || []).map((s) => ({
         ...s,
         createdBy: (s as any).createdBy ?? (s as any).created_by ?? undefined,
-        canonicalAsanaId: (s as any).canonicalAsanaId ?? (s as any).id,
       })),
     [sequences]
   )

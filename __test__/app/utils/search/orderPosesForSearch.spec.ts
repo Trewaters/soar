@@ -7,7 +7,6 @@ describe('orderPosesForSearch', () => {
 
   const make = (overrides: Partial<any>) => ({
     id: overrides.id || Math.random().toString(36).slice(2),
-    canonicalAsanaId: overrides.canonicalAsanaId,
     createdBy: overrides.createdBy,
     displayName: overrides.displayName,
     englishName: overrides.englishName,
@@ -18,19 +17,16 @@ describe('orderPosesForSearch', () => {
     const poses = [
       make({
         id: 'a',
-        canonicalAsanaId: 'x',
         createdBy: 'user1',
         displayName: 'User Pose',
       }),
       make({
         id: 'b',
-        canonicalAsanaId: 'y',
         createdBy: 'alpha1',
         displayName: 'Alpha Pose',
       }),
       make({
         id: 'c',
-        canonicalAsanaId: 'z',
         createdBy: 'other',
         displayName: 'Other Pose',
       }),
@@ -48,17 +44,15 @@ describe('orderPosesForSearch', () => {
     ])
   })
 
-  it('dedupes by canonicalAsanaId, fallback to id', () => {
+  it('dedupes by id', () => {
     const poses = [
       make({
         id: 'a',
-        canonicalAsanaId: 'x',
         createdBy: 'user1',
         displayName: 'Pose X',
       }),
       make({
         id: 'b',
-        canonicalAsanaId: 'x',
         createdBy: 'alpha1',
         displayName: 'Pose X Alpha',
       }),
@@ -71,7 +65,9 @@ describe('orderPosesForSearch', () => {
       alphaUserIds,
       getTitle
     )
-    expect(result.map(getTitle)).toEqual(['Pose X', 'Pose C'])
+    // we only dedupe by `id`, so both 'Pose X' and
+    // 'Pose X Alpha' remain because they have different ids ('a' and 'b').
+    expect(result.map(getTitle)).toEqual(['Pose X', 'Pose X Alpha', 'Pose C'])
   })
 
   it('sorts each group alphabetically by display title', () => {
@@ -99,7 +95,7 @@ describe('orderPosesForSearch', () => {
     ])
   })
 
-  it('handles missing canonicalAsanaId and dedupes by id', () => {
+  it('handles duplicates and dedupes by id', () => {
     const poses = [
       make({ id: 'a', createdBy: 'user1', displayName: 'Pose A' }),
       make({ id: 'a', createdBy: 'alpha1', displayName: 'Pose A Alpha' }),
