@@ -1,11 +1,7 @@
 import { redirect } from 'next/navigation'
 
-export default function PracticeSequenceIdPage({
-  params,
-}: {
-  params: { id: string }
-}) {
-  const { id } = params
+export default function PracticeSequenceIdPage({ params }: { params: any }) {
+  const { id } = params as { id: string }
 
   // Server-side redirect to the canonical practiceSequences page which
   // handles rendering based on the `sequenceId` search param. This keeps

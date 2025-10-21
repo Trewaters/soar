@@ -226,8 +226,6 @@ export default function Page() {
                 description: currentSeriesData.description,
                 duration: currentSeriesData.duration,
                 image: currentSeriesData.image,
-                // Add timestamp to track freshness
-                lastRefreshed: new Date().toISOString(),
               }
             } else {
               // If series no longer exists, keep original data but mark as stale
@@ -242,11 +240,23 @@ export default function Page() {
           }
         )
 
-        // Update the singleSequence with fresh series data
-        setSingleSequence((prevSequence) => ({
-          ...prevSequence,
-          sequencesSeries: refreshedSeriesData,
-        }))
+        // Only update state if refreshed data is meaningfully different to avoid loops
+        try {
+          const prev = JSON.stringify(singleSequence.sequencesSeries || [])
+          const next = JSON.stringify(refreshedSeriesData || [])
+          if (prev !== next) {
+            setSingleSequence((prevSequence) => ({
+              ...prevSequence,
+              sequencesSeries: refreshedSeriesData,
+            }))
+          }
+        } catch (e) {
+          // Fallback: if serialization fails, still update once
+          setSingleSequence((prevSequence) => ({
+            ...prevSequence,
+            sequencesSeries: refreshedSeriesData,
+          }))
+        }
       } catch (error) {
         console.error(
           'Failed to fetch fresh series data for practice sequences:',
