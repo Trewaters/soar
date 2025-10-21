@@ -89,6 +89,33 @@ if (
     }
   }
 }
+// Provide a minimal global.fetch implementation for the Jest environment so
+// components that call fetch() (image uploads, reorder APIs, etc.) don't
+// throw during tests. Prefer undici.fetch if available, otherwise use a
+// lightweight jest.fn that resolves with a simple ok/json shape.
+if (typeof (global as any).fetch === 'undefined') {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const undici = require('undici')
+    if (undici && undici.fetch) {
+      ;(global as any).fetch = undici.fetch
+    } else {
+      ;(global as any).fetch = jest.fn(async () => ({
+        ok: true,
+        status: 200,
+        json: async () => ({}),
+        text: async () => '',
+      }))
+    }
+  } catch (e) {
+    ;(global as any).fetch = jest.fn(async () => ({
+      ok: true,
+      status: 200,
+      json: async () => ({}),
+      text: async () => '',
+    }))
+  }
+}
 // Globally mock next-auth/react to avoid ESM import issues in Jest and allow tests to override session state
 const mockUseSession = jest.fn(() => ({
   data: null,

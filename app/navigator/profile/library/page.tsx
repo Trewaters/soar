@@ -604,7 +604,10 @@ function SeriesCard({ series }: { series: UserSeriesData }) {
     try {
       await deleteSeries(id)
       setEditOpen(false)
-      // optionally refresh list; omitted here
+      // Force page refresh to update the series list
+      router.refresh()
+      // Optionally redirect to the library to ensure clean state
+      window.location.reload()
     } catch (e) {
       console.error('Failed to delete series', e)
     }

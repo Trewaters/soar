@@ -40,13 +40,15 @@ describe('AsanaDetails (clean copy)', () => {
     expect(c3.firstChild).toBeNull()
   })
 
-  it('renders string and array details (filters empty entries)', () => {
+  it('renders string details correctly', () => {
     render(<AsanaDetails label="Dristi" details={'Gaze forward'} />, {
       wrapper: Wrapper,
     })
     expect(screen.getByText(/Dristi:/)).toBeInTheDocument()
     expect(screen.getByText(/Gaze forward/)).toBeInTheDocument()
+  })
 
+  it('renders array details and filters empty entries', () => {
     render(
       <AsanaDetails
         label="Notes"
@@ -54,8 +56,12 @@ describe('AsanaDetails (clean copy)', () => {
       />,
       { wrapper: Wrapper }
     )
-    expect(screen.getByText('One')).toBeInTheDocument()
-    expect(screen.getByText('Two')).toBeInTheDocument()
-    expect(screen.getByText('Three')).toBeInTheDocument()
+    // Array details are joined with newlines into a single text node
+    const detailsText = screen.getByRole('definition')
+    expect(detailsText).toHaveTextContent('One')
+    expect(detailsText).toHaveTextContent('Two')
+    expect(detailsText).toHaveTextContent('Three')
+    // Verify empty strings were filtered out (no extra whitespace)
+    expect(detailsText.textContent).toBe('One\nTwo\nThree')
   })
 })

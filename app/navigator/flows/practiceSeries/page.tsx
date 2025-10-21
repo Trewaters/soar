@@ -191,27 +191,37 @@ export default function Page() {
   // Fetch images array for the selected series (prefer images[0] over legacy flow.image)
   useEffect(() => {
     let mounted = true
+    const abortController = new AbortController()
+
     async function fetchImages() {
       if (!flow?.id) {
         if (mounted) setImages([])
         return
       }
       try {
-        const res = await fetch(`/api/series/${flow.id}/images`)
+        const res = await fetch(`/api/series/${flow.id}/images`, {
+          signal: abortController.signal,
+        })
         if (!res.ok) {
+          // Silently handle 404 - series may not have images or may not exist
           if (mounted) setImages([])
           return
         }
         const data = await res.json()
         if (mounted) setImages(Array.isArray(data.images) ? data.images : [])
-      } catch (e) {
-        console.error('Failed to fetch series images', e)
+      } catch (e: any) {
+        // Ignore aborted requests
+        if (e.name === 'AbortError') {
+          return
+        }
+        // Silently handle other errors
         if (mounted) setImages([])
       }
     }
     fetchImages()
     return () => {
       mounted = false
+      abortController.abort()
     }
   }, [flow?.id])
 
@@ -319,10 +329,11 @@ export default function Page() {
   const handleEditDelete = async (id: string) => {
     try {
       await deleteSeries(id)
-      // Clear selection and refresh
+      // Clear the selected flow to prevent stale data
       setFlow(undefined)
-      await fetchSeries()
       setEditOpen(false)
+      // Force a complete page reload to ensure clean state
+      window.location.href = '/navigator/flows/practiceSeries'
     } catch (e) {
       console.error('Failed to delete series', e)
     }

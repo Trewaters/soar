@@ -13,9 +13,15 @@ import {
   Checkbox,
   FormControlLabel,
   Drawer,
+  TextField,
+  FormControl,
+  Autocomplete,
 } from '@mui/material'
+import Grid from '@mui/material/Grid2'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import SaveIcon from '@mui/icons-material/Save'
+import CancelIcon from '@mui/icons-material/Cancel'
 import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
@@ -30,11 +36,11 @@ import {
 import ImageCarousel from '@app/clientComponents/imageUpload/ImageCarousel'
 import CarouselDotNavigation from '@app/clientComponents/imageUpload/CarouselDotNavigation'
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
-import { deletePose } from '@lib/poseService'
+import { deletePose, updatePose, type UpdatePoseInput } from '@lib/poseService'
 import PoseImageUpload from '@app/clientComponents/imageUpload/PoseImageUpload'
 import PoseImageManagement from '@app/clientComponents/imageUpload/PoseImageManagement'
-import EditPoseDialog from '@app/navigator/asanaPoses/editAsana/EditPoseDialog'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
 import { AsanaPose } from 'types/asana'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
@@ -108,8 +114,64 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
   const [error, setError] = useState<string | null>(null)
   const [activityRefreshTrigger, setActivityRefreshTrigger] = useState(0)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [editDialogOpen, setEditDialogOpen] = useState(false)
   const [open, setOpen] = useState(false)
+
+  // Inline Edit Mode State
+  const [isEditing, setIsEditing] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [images, setImages] = useState<any[]>([])
+
+  // Available categories for autocomplete
+  const categories = [
+    'Arm Leg Support',
+    'Backbend',
+    'Balance',
+    'Bandha',
+    'Core',
+    'Forward Bend',
+    'Hip Opener',
+    'Inversion',
+    'Lateral Bend',
+    'Mudra',
+    'Neutral',
+    'Prone',
+    'Restorative',
+    'Seated',
+    'Standing',
+    'Supine',
+    'Twist',
+  ]
+
+  const [englishVariationsInput, setEnglishVariationsInput] = useState('')
+  const [alternativeNamesInput, setAlternativeNamesInput] = useState('')
+  const [sanskritInput, setSanskritInput] = useState('')
+  const [difficulty, setDifficulty] = useState('')
+
+  const [formData, setFormData] = useState<{
+    sort_english_name: string
+    english_names: string[]
+    description: string
+    category: string
+    difficulty: string
+    sanskrit_names?: string[]
+    alternative_english_names?: string[]
+    dristi?: string
+    setup_cues?: string
+    deepening_cues?: string
+    breath_direction_default?: string
+  }>({
+    sort_english_name: '',
+    english_names: [],
+    description: '',
+    category: '',
+    difficulty: '',
+    sanskrit_names: [],
+    alternative_english_names: [],
+    dristi: '',
+    setup_cues: '',
+    deepening_cues: '',
+    breath_direction_default: '',
+  })
 
   const handleInfoClick = () => {
     setOpen(!open)
@@ -394,6 +456,202 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
     )
   }
 
+  // Initialize form data when entering edit mode
+  useEffect(() => {
+    if (isEditing && pose) {
+      setFormData({
+        sort_english_name: pose.sort_english_name || '',
+        english_names: pose.english_names || [],
+        alternative_english_names: pose.alternative_english_names || [],
+        description: pose.description || '',
+        category: pose.category || '',
+        difficulty: pose.difficulty || '',
+        sanskrit_names: pose.sanskrit_names || [],
+        dristi: pose.dristi || '',
+        setup_cues: pose.setup_cues || '',
+        deepening_cues: pose.deepening_cues || '',
+        breath_direction_default: (pose as any).breath_direction_default || '',
+      })
+      setImages(pose.poseImages || [])
+      setEnglishVariationsInput(
+        Array.isArray(pose.english_names) ? pose.english_names.join(', ') : ''
+      )
+      setAlternativeNamesInput(
+        Array.isArray(pose.alternative_english_names)
+          ? pose.alternative_english_names.join(', ')
+          : ''
+      )
+      setSanskritInput(
+        Array.isArray(pose.sanskrit_names) ? pose.sanskrit_names.join(', ') : ''
+      )
+      setDifficulty(pose.difficulty || '')
+      setError(null)
+    }
+  }, [isEditing, pose])
+
+  // Edit mode form handlers
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData({
+      ...formData,
+      [name]: value,
+    })
+  }
+
+  const handleCategoryChange = (
+    event: React.SyntheticEvent,
+    value: string | null
+  ) => {
+    setFormData({
+      ...formData,
+      category: value || '',
+    })
+  }
+
+  const handleDifficultyChange = (value: string) => {
+    setDifficulty(value)
+    setFormData({
+      ...formData,
+      difficulty: value,
+    })
+  }
+
+  const handleVariationsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setEnglishVariationsInput(value)
+    const variations = value
+      .split(',')
+      .map((v) => v.trim())
+      .filter(Boolean)
+    setFormData({
+      ...formData,
+      english_names: variations,
+    })
+  }
+
+  const handleAlternativeNamesChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = e.target.value
+    setAlternativeNamesInput(value)
+    const arr = value
+      .split(',')
+      .map((v) => v.trim())
+      .filter(Boolean)
+    setFormData({
+      ...formData,
+      alternative_english_names: arr,
+    })
+  }
+
+  const handleSanskritChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setSanskritInput(value)
+    const arr = value
+      .split(',')
+      .map((v) => v.trim())
+      .filter(Boolean)
+    setFormData({
+      ...formData,
+      sanskrit_names: arr,
+    })
+  }
+
+  const handleEditToggle = () => {
+    if (!session?.user?.email) {
+      setError('You must be logged in to edit poses')
+      return
+    }
+
+    if (pose.created_by !== session.user.email) {
+      setError('You can only edit poses you created')
+      return
+    }
+
+    setIsEditing(!isEditing)
+    if (!isEditing) {
+      // Entering edit mode - form data will be initialized by useEffect
+    } else {
+      // Canceling edit - clear error
+      setError(null)
+    }
+  }
+
+  const handleSaveEdit = async () => {
+    setIsSubmitting(true)
+    setError(null)
+
+    if (!session?.user?.email) {
+      setError('You must be logged in to edit poses')
+      setIsSubmitting(false)
+      return
+    }
+
+    if (pose.created_by !== session.user.email) {
+      setError('You can only edit poses you created')
+      setIsSubmitting(false)
+      return
+    }
+
+    const updatedAsana: UpdatePoseInput = {
+      sort_english_name: formData.sort_english_name,
+      english_names: formData.english_names,
+      description: formData.description,
+      category: formData.category,
+      difficulty: formData.difficulty,
+      sanskrit_names: formData.sanskrit_names,
+      dristi: formData.dristi,
+      setup_cues: formData.setup_cues,
+      deepening_cues: formData.deepening_cues,
+      alternative_english_names: formData.alternative_english_names,
+      breath_direction_default: formData.breath_direction_default,
+    }
+
+    try {
+      // Update the pose text data
+      const updatedPoseData = await updatePose(pose.id, updatedAsana)
+      console.log('Pose updated successfully:', updatedPoseData)
+
+      // Update the image order if images were changed
+      if (images.length > 0) {
+        const imageReorderPayload = images.map((image) => ({
+          id: image.id,
+          displayOrder: Number(image.displayOrder),
+        }))
+
+        const reorderResponse = await fetch(
+          `/api/asana/${pose.id}/images/reorder`,
+          {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ images: imageReorderPayload }),
+          }
+        )
+
+        if (!reorderResponse.ok) {
+          const errorData = await reorderResponse.json()
+          throw new Error(errorData.error || 'Failed to update image order')
+        }
+
+        console.log('Image order updated successfully')
+      }
+
+      // Exit edit mode and refresh the page data
+      setIsEditing(false)
+      router.refresh()
+    } catch (error: Error | any) {
+      console.error('Error updating pose:', error.message)
+      setError(error.message || 'Failed to update pose')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditing(false)
+    setError(null)
+  }
+
   return (
     <Paper
       sx={{
@@ -623,75 +881,266 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
           onClick={handleInfoClick}
         />
         <Stack direction={'column'} spacing={0}>
-          <AsanaDetails
-            details={pose?.english_names?.join(', ')}
-            label={pose?.label ?? 'English Variant Names'}
-            sx={{
-              mb: '32px',
-            }}
-          />
-          <AsanaDetails
-            details={pose?.alternative_english_names?.join(', ')}
-            label={pose?.label ?? 'Alternative Names (Custom/Nicknames)'}
-            sx={{
-              mb: '32px',
-            }}
-          />
-          <AsanaDetails
-            details={pose?.description}
-            label="Description"
-            sx={{
-              mb: '32px',
-            }}
-          />
-          {/* 
-          <AsanaDetails
-            details={pose?.pose_intent ?? 'Feel into the asana.'}
-            label="Meaning of Pose"
-            sx={{ mb: '32px' }}
-          />
-          <AsanaDetails
-            details={pose?.benefits}
-            label="Benefits"
-            sx={{ mb: '32px' }}
-          />
-          */}
-          <AsanaDetails
-            details={`${pose?.category}`}
-            label="Category"
-            sx={{ mb: '32px' }}
-          />
+          {!isEditing ? (
+            <>
+              {/* View Mode */}
+              <AsanaDetails
+                details={pose?.english_names?.join(', ')}
+                label={pose?.label ?? 'English Variant Names'}
+                sx={{
+                  mb: '32px',
+                }}
+              />
+              <AsanaDetails
+                details={pose?.alternative_english_names?.join(', ')}
+                label={pose?.label ?? 'Alternative Names (Custom/Nicknames)'}
+                sx={{
+                  mb: '32px',
+                }}
+              />
+              <AsanaDetails
+                details={pose?.description}
+                label="Description"
+                sx={{
+                  mb: '32px',
+                }}
+              />
+              <AsanaDetails
+                details={`${pose?.category}`}
+                label="Category"
+                sx={{ mb: '32px' }}
+              />
+              <AsanaDetails
+                details={pose?.difficulty}
+                label="Difficulty"
+                sx={{ mb: '32px' }}
+              />
+              <AsanaDetails
+                details={pose?.dristi}
+                label="Dristi"
+                sx={{ mb: '32px' }}
+              />
+              <AsanaDetails
+                details={
+                  Array.isArray(pose?.sanskrit_names)
+                    ? pose.sanskrit_names.join(', ')
+                    : (pose?.sanskrit_names as any) || ''
+                }
+                label="Sanskrit Names"
+                sx={{ mb: '32px' }}
+              />
+              <AsanaDetails
+                details={pose?.setup_cues}
+                label="Setup Cues"
+                sx={{ mb: '32px' }}
+              />
+              <AsanaDetails
+                details={pose?.deepening_cues}
+                label="Deepening Cues"
+                sx={{ mb: '32px' }}
+              />
+            </>
+          ) : (
+            <>
+              {/* Edit Mode */}
+              <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
+                <Typography variant="h6" gutterBottom color="primary">
+                  Basic Information
+                </Typography>
 
-          <AsanaDetails
-            details={pose?.difficulty}
-            label="Difficulty"
-            sx={{ mb: '32px' }}
-          />
-          <AsanaDetails
-            details={pose?.dristi}
-            label="Dristi"
-            sx={{ mb: '32px' }}
-          />
-          <AsanaDetails
-            details={
-              Array.isArray(pose?.sanskrit_names)
-                ? pose.sanskrit_names.join(', ')
-                : (pose?.sanskrit_names as any) || ''
-            }
-            label="Sanskrit Names"
-            sx={{ mb: '32px' }}
-          />
-          {/* preferred_side and sideways fields removed from app */}
-          <AsanaDetails
-            details={pose?.setup_cues}
-            label="Setup Cues"
-            sx={{ mb: '32px' }}
-          />
-          <AsanaDetails
-            details={pose?.deepening_cues}
-            label="Deepening Cues"
-            sx={{ mb: '32px' }}
-          />
+                <Grid container spacing={2}>
+                  <Grid size={12}>
+                    <FormControl sx={{ width: '100%', mb: 3 }}>
+                      <TextField
+                        label="Sort English Name"
+                        name="sort_english_name"
+                        value={formData.sort_english_name}
+                        onChange={handleChange}
+                        required
+                        placeholder="e.g., Tree Pose"
+                        helperText="This is the primary name for the pose"
+                      />
+                    </FormControl>
+                  </Grid>
+
+                  <Grid size={12}>
+                    <FormControl sx={{ width: '100%', mb: 3 }}>
+                      <TextField
+                        label="English Name Variations"
+                        value={englishVariationsInput}
+                        onChange={handleVariationsChange}
+                        placeholder="e.g., Warrior I, Warrior One, High Lunge"
+                        helperText="Separate multiple names with commas"
+                        multiline
+                        rows={2}
+                      />
+                    </FormControl>
+                  </Grid>
+
+                  <Grid size={12}>
+                    <FormControl sx={{ width: '100%', mb: 3 }}>
+                      <TextField
+                        label="Custom name for asana"
+                        name="alternative_english_names"
+                        value={alternativeNamesInput}
+                        onChange={handleAlternativeNamesChange}
+                        placeholder="e.g., My favorite twist, Pretzel pose"
+                        helperText="Multiple nicknames separated by commas"
+                        multiline
+                        rows={2}
+                      />
+                    </FormControl>
+                  </Grid>
+
+                  <Grid size={12}>
+                    <FormControl sx={{ width: '100%', mb: 3 }}>
+                      <TextField
+                        label="Sanskrit Names"
+                        value={sanskritInput}
+                        onChange={handleSanskritChange}
+                        placeholder="e.g., Virabhadrasana I, ..."
+                        helperText="Separate multiple names with commas"
+                        multiline
+                        rows={2}
+                      />
+                    </FormControl>
+                  </Grid>
+
+                  <Grid size={12}>
+                    <FormControl sx={{ width: '100%', mb: 3 }}>
+                      <TextField
+                        label="Description"
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        required
+                        multiline
+                        rows={4}
+                        placeholder="Describe the pose alignment, position, and key characteristics..."
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Paper>
+
+              {/* Image Gallery Section in Edit Mode */}
+              <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
+                <Typography variant="h6" gutterBottom color="primary">
+                  Image Gallery
+                </Typography>
+                <ImageGallery
+                  asanaId={pose.id}
+                  initialImages={images}
+                  onImagesChange={setImages}
+                />
+              </Paper>
+
+              <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
+                <Typography variant="h6" gutterBottom color="primary">
+                  Pose Details
+                </Typography>
+
+                <Grid container spacing={2}>
+                  <Grid size={6}>
+                    <FormControl sx={{ width: '100%', mb: 3 }}>
+                      <Autocomplete
+                        options={categories}
+                        value={formData.category}
+                        onChange={handleCategoryChange}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label="Category"
+                            required
+                            placeholder="Select or type category"
+                          />
+                        )}
+                        freeSolo
+                      />
+                    </FormControl>
+                  </Grid>
+
+                  <Grid size={6}>
+                    <FormControl sx={{ width: '100%', mb: 3 }}>
+                      <Typography variant="subtitle2" gutterBottom>
+                        Difficulty Level
+                      </Typography>
+                      <Stack direction="row" spacing={1}>
+                        {['Easy', 'Average', 'Difficult'].map((level) => (
+                          <Chip
+                            key={level}
+                            label={level}
+                            clickable
+                            variant={
+                              difficulty === level ? 'filled' : 'outlined'
+                            }
+                            color={difficulty === level ? 'primary' : 'default'}
+                            onClick={() => handleDifficultyChange(level)}
+                          />
+                        ))}
+                      </Stack>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid size={12}>
+                    <FormControl sx={{ width: '100%', mb: 3 }}>
+                      <TextField
+                        select
+                        label="Breath Direction Default"
+                        name="breath_direction_default"
+                        value={formData.breath_direction_default || ''}
+                        onChange={handleChange}
+                        SelectProps={{ native: true }}
+                      >
+                        <option value=""></option>
+                        <option value="Neutral">Neutral</option>
+                        <option value="Inhale">Inhale</option>
+                        <option value="Exhale">Exhale</option>
+                      </TextField>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid size={12}>
+                    <FormControl sx={{ width: '100%', mb: 3 }}>
+                      <TextField
+                        label="Dristi"
+                        name="dristi"
+                        value={formData.dristi || ''}
+                        onChange={handleChange}
+                        placeholder="Gaze point"
+                      />
+                    </FormControl>
+                  </Grid>
+
+                  <Grid size={12}>
+                    <FormControl sx={{ width: '100%', mb: 3 }}>
+                      <TextField
+                        label="Setup Cues"
+                        name="setup_cues"
+                        value={formData.setup_cues || ''}
+                        onChange={handleChange}
+                        multiline
+                        rows={2}
+                      />
+                    </FormControl>
+                  </Grid>
+
+                  <Grid size={12}>
+                    <FormControl sx={{ width: '100%', mb: 3 }}>
+                      <TextField
+                        label="Deepening Cues"
+                        name="deepening_cues"
+                        value={formData.deepening_cues || ''}
+                        onChange={handleChange}
+                        multiline
+                        rows={2}
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </>
+          )}
 
           {/* Enhanced Image Gallery */}
           {pose && (
@@ -902,53 +1351,94 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
             }}
           >
             <Stack direction="row" spacing={2}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setEditDialogOpen(true)}
-                startIcon={<EditIcon />}
-                sx={{
-                  borderRadius: '12px',
-                  px: 3,
-                  py: 1.5,
-                  textTransform: 'none',
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                }}
-              >
-                Edit Pose
-              </Button>
-              {session.user.email === pose?.created_by && (
-                <Button
-                  variant="outlined"
-                  color="error"
-                  startIcon={<DeleteIcon />}
-                  sx={{
-                    borderRadius: '12px',
-                    px: 3,
-                    py: 1.5,
-                    textTransform: 'none',
-                  }}
-                  onClick={async () => {
-                    if (!pose?.id) return
-                    const confirmed = window.confirm(
-                      'Delete this asana? This cannot be undone.'
-                    )
-                    if (!confirmed) return
-                    try {
-                      await deletePose(pose.id)
-                      // Navigate back to list after delete
-                      router.push('/navigator/asanaPoses')
-                    } catch (e: any) {
-                      alert(e?.message || 'Failed to delete pose')
-                    }
-                  }}
-                >
-                  Delete
-                </Button>
+              {!isEditing ? (
+                <>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleEditToggle}
+                    startIcon={<EditIcon />}
+                    sx={{
+                      borderRadius: '12px',
+                      px: 3,
+                      py: 1.5,
+                      textTransform: 'none',
+                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                    }}
+                  >
+                    Edit Pose
+                  </Button>
+                  {session.user.email === pose?.created_by && (
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      startIcon={<DeleteIcon />}
+                      sx={{
+                        borderRadius: '12px',
+                        px: 3,
+                        py: 1.5,
+                        textTransform: 'none',
+                      }}
+                      onClick={async () => {
+                        if (!pose?.id) return
+                        const confirmed = window.confirm(
+                          'Delete this asana? This cannot be undone.'
+                        )
+                        if (!confirmed) return
+                        try {
+                          await deletePose(pose.id)
+                          // Force refresh and navigate to practice asanas page
+                          router.refresh()
+                          router.replace('/navigator/asanaPoses/practiceAsanas')
+                        } catch (e: any) {
+                          alert(e?.message || 'Failed to delete pose')
+                        }
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={handleSaveEdit}
+                    startIcon={<SaveIcon />}
+                    disabled={isSubmitting}
+                    sx={{
+                      borderRadius: '12px',
+                      px: 3,
+                      py: 1.5,
+                      textTransform: 'none',
+                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                    }}
+                  >
+                    {isSubmitting ? 'Saving...' : 'Save Changes'}
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={handleCancelEdit}
+                    startIcon={<CancelIcon />}
+                    disabled={isSubmitting}
+                    sx={{
+                      borderRadius: '12px',
+                      px: 3,
+                      py: 1.5,
+                      textTransform: 'none',
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </>
               )}
             </Stack>
           </Box>
         )}
+      {/* EditPoseDialog removed - inline editing is now used */}
+      {/*
       <EditPoseDialog
         open={editDialogOpen}
         onClose={() => setEditDialogOpen(false)}
@@ -959,6 +1449,7 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
           router.push('/navigator/asanaPoses/practiceAsanas')
         }}
       />
+      */}
 
       <Drawer
         anchor="bottom"
