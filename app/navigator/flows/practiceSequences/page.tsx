@@ -540,48 +540,67 @@ export default function Page() {
               <Box
                 sx={{
                   mt: 4,
+                  width: '100%',
+                  maxWidth: '600px',
+                  alignSelf: 'center',
                 }}
               >
-                <Typography
-                  variant="body1"
-                  component="h3"
-                  textAlign="center"
+                {/* Sequence title with inline edit icon to the right */}
+                <Box
                   sx={{
-                    backgroundColor: 'primary.main',
-                    borderTopLeftRadius: '12px',
-                    borderTopRightRadius: '12px',
                     width: '100%',
-                    maxWidth: '600px',
-                    alignSelf: 'center',
-                    pr: 7,
-                    pl: 2,
-                    fontWeight: 'bold',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-around',
+                    gap: 2,
+                    px: 6,
                   }}
                 >
-                  {singleSequence.nameSequence}
-                </Typography>
-                {singleSequence?.id ? (
+                  {/* Title block - constrained width, original theme colors */}
                   <Box
                     sx={{
-                      width: '100%',
-                      maxWidth: '600px',
-                      alignSelf: 'center',
-                      mt: 1,
+                      width: { xs: '50%', sm: '40%', md: '30%' },
+                      backgroundColor: 'primary.main',
+                      borderTopLeftRadius: '12px',
+                      borderTopRightRadius: '12px',
+                      px: 2,
+                      py: 0.75,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      sx={{
+                        color: 'primary.contrastText',
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {singleSequence.nameSequence}
+                    </Typography>
+                  </Box>
+
+                  {/* Inline edit icon to the right of the narrow title */}
+                  {singleSequence?.id ? (
                     <IconButton
-                      color="primary"
                       onClick={() => {
                         const editUrl = `/navigator/sequences/${singleSequence.id}?edit=true`
                         router.push(editUrl)
                       }}
                       aria-label={`Edit ${singleSequence.nameSequence}`}
-                      sx={{ minWidth: 0, p: 1 }}
+                      sx={{
+                        color: 'primary.main',
+                        p: 1,
+                        minWidth: 0,
+                      }}
                     >
                       <EditIcon />
                     </IconButton>
-                  </Box>
-                ) : null}
+                  ) : null}
+                </Box>
               </Box>
               {singleSequence?.id ? (
                 <Stack rowGap={3} alignItems="center">
