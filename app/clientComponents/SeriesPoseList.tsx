@@ -8,6 +8,8 @@ export type SeriesPoseEntry =
   | {
       sort_english_name?: string
       secondary?: string
+      // Prisma/Asana model stores Sanskrit names as an array on `sanskrit_names`
+      sanskrit_names?: string[]
       alignment_cues?: string
       poseId?: string
     }
@@ -83,7 +85,11 @@ export default function SeriesPoseList({
           secondary = split.secondary
         } else if (pose && typeof pose === 'object') {
           poseName = pose.sort_english_name || ''
-          secondary = pose.secondary || ''
+          // Prefer explicit `secondary`, otherwise use the first element of `sanskrit_names` from the model
+          secondary =
+            pose.secondary ||
+            (Array.isArray(pose.sanskrit_names) && pose.sanskrit_names[0]) ||
+            ''
           alignmentCues = pose.alignment_cues || ''
         }
 
@@ -144,15 +150,22 @@ export default function SeriesPoseList({
                 )}
               </Typography>
               {showSecondary && secondary && (
-                <Typography
-                  textAlign="left"
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ fontStyle: 'italic', mt: 0.5 }}
-                  data-testid={`${dataTestIdPrefix}-${index}-secondary`}
-                >
-                  {secondary}
-                </Typography>
+                // place secondary on its own block so it appears below the name
+                <Box sx={{ width: '100%', mt: 0.5 }}>
+                  <Typography
+                    textAlign="left"
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      fontStyle: 'italic',
+                      display: 'block',
+                      width: '100%',
+                    }}
+                    data-testid={`${dataTestIdPrefix}-${index}-secondary`}
+                  >
+                    {secondary}
+                  </Typography>
+                </Box>
               )}
             </Box>
           </Box>

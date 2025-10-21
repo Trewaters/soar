@@ -79,7 +79,6 @@ const usePoseImages = (poseId?: string, poseName?: string) => {
         const response = await getUserPoseImages(50, 0, poseId, poseName)
         setImages(response.images)
       } catch (error) {
-        console.error('🔍 usePoseImages: Error fetching pose images:', error)
         setImages([])
       } finally {
         setLoading(false)
@@ -296,24 +295,8 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
   const updateActivityState = async (isChecked: boolean) => {
     setChecked(isChecked)
 
-    // Enhanced logging for debugging
-    console.log('Activity state change initiated:', {
-      isChecked,
-      sessionExists: !!session,
-      userId: session?.user?.id,
-      poseId: poseCardProp.id,
-      poseName: poseCardProp.sort_english_name,
-      timestamp: new Date().toISOString(),
-    })
-
     if (!session?.user?.id) {
       const errorMessage = 'Please log in to track your activity'
-      console.error('Authentication error:', {
-        error: errorMessage,
-        sessionData: session,
-        operation: 'updateActivityState',
-        timestamp: new Date().toISOString(),
-      })
       setError(errorMessage)
       setChecked(false)
       return
@@ -336,32 +319,15 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
     try {
       if (isChecked) {
         // Create new activity
-        console.log('Creating activity with data:', requestData)
 
         await createAsanaActivity(requestData)
-
-        console.log('Activity recorded successfully:', {
-          requestData,
-          timestamp: new Date().toISOString(),
-        })
 
         // Trigger refresh of ActivityTracker
         setActivityRefreshTrigger((prev) => prev + 1)
       } else {
         // Delete existing activity
-        const deleteData = {
-          userId: session.user.id,
-          poseId: poseCardProp.id,
-        }
-
-        console.log('Deleting activity with data:', deleteData)
 
         await deleteAsanaActivity(session.user.id, poseCardProp.id.toString())
-
-        console.log('Activity removed successfully:', {
-          deleteData,
-          timestamp: new Date().toISOString(),
-        })
 
         // Reset difficulty selection when activity is removed
         setSelectedDifficulty(null)
@@ -373,39 +339,10 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
         setActivityRefreshTrigger((prev) => prev + 1)
       }
     } catch (e: any) {
-      console.error('Error updating activity - Full Context:', {
-        error: {
-          message: e.message,
-          name: e.name,
-          stack: e.stack,
-        },
-        operation: isChecked ? 'create' : 'delete',
-        context: {
-          userId: session.user.id,
-          poseId: poseCardProp.id,
-          poseName: poseCardProp.sort_english_name,
-          isChecked,
-          requestData: isChecked
-            ? requestData
-            : { userId: session.user.id, poseId: poseCardProp.id },
-        },
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent,
-        url: window.location.href,
-      })
-
       setError(e.message || 'Failed to update activity')
       setChecked(!isChecked) // Revert checkbox state on error
     } finally {
       setLoading(false)
-      console.log('Checkbox change completed:', {
-        finalState: {
-          checked: !loading ? checked : 'loading',
-          loading: false,
-          error: error || null,
-        },
-        timestamp: new Date().toISOString(),
-      })
     }
   }
 
@@ -616,7 +553,6 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
     try {
       // Update the pose text data
       const updatedPoseData = await updatePose(pose.id, updatedAsana)
-      console.log('Pose updated successfully:', updatedPoseData)
 
       // Update the image order if images were changed
       if (images.length > 0) {
@@ -638,15 +574,12 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
           const errorData = await reorderResponse.json()
           throw new Error(errorData.error || 'Failed to update image order')
         }
-
-        console.log('Image order updated successfully')
       }
 
       // Exit edit mode and refresh the page data
       setIsEditing(false)
       router.refresh()
     } catch (error: Error | any) {
-      console.error('Error updating pose:', error.message)
       setError(error.message || 'Failed to update pose')
     } finally {
       setIsSubmitting(false)
@@ -885,7 +818,7 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
         }}
       >
         <SubNavHeader
-          title="Asana"
+          title="Asanas"
           link="/navigator/asanaPoses"
           onClick={handleInfoClick}
         />
@@ -1214,12 +1147,27 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
               sx={{
                 display: 'flex',
                 flexDirection: { xs: 'column', sm: 'row' },
-                alignItems: 'center',
+                // On mobile we want the chips to left-align when they wrap;
+                // on larger screens keep them vertically centered with the tracker.
+                alignItems: { xs: 'flex-start', sm: 'center' },
                 justifyContent: 'space-between',
                 gap: 2,
               }}
             >
-              <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{
+                  flexWrap: 'wrap',
+                  // Make the chip stack take full width on small screens so
+                  // wrapped lines align to the left edge of the container.
+                  width: { xs: '100%', sm: 'auto' },
+                  // When the chips wrap to multiple lines, alignContent controls
+                  // how the lines are positioned. Use flex-start on xs to left-align
+                  // wrapped rows.
+                  alignContent: { xs: 'flex-start', sm: 'center' },
+                }}
+              >
                 {[
                   {
                     label: 'Easy',
