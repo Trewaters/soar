@@ -309,6 +309,26 @@ describe('SeriesPoseList', () => {
         whiteSpace: 'nowrap',
       })
     })
+
+    it('should use first element of sanskrit_names array when present', () => {
+      const boatPose = {
+        sort_english_name: 'Boat Pose',
+        // Prisma model stores sanskrit names as an array
+        // component should display the first element when `secondary` not given
+        sanskrit_names: ['Navasana', 'Naukasana'],
+      } as unknown as SeriesPoseEntry
+
+      const poseWithSanskritArray: SeriesPoseEntry[] = [boatPose]
+
+      render(<SeriesPoseList seriesPoses={poseWithSanskritArray} />, {
+        wrapper: TestWrapper,
+      })
+
+      expect(screen.getByText('Boat Pose')).toBeInTheDocument()
+      expect(screen.getByText('Navasana')).toBeInTheDocument()
+      // Ensure the second element is not displayed
+      expect(screen.queryByText('Naukasana')).not.toBeInTheDocument()
+    })
   })
 
   describe('Accessibility', () => {

@@ -1,4 +1,12 @@
 'use client'
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  Fragment,
+  ChangeEvent,
+} from 'react'
 import { useSession } from 'next-auth/react'
 import { FEATURES } from '@app/FEATURES'
 import { FlowSeriesData } from '@context/AsanaSeriesContext'
@@ -15,14 +23,6 @@ import {
   Card,
   CardMedia,
 } from '@mui/material'
-import {
-  ChangeEvent,
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
 import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
@@ -50,6 +50,11 @@ export default function Page() {
   const seriesId = searchParams.get('id')
   const [series, setSeries] = useState<FlowSeriesData[]>([])
   const [flow, setFlow] = useState<FlowSeriesData>()
+  const flowRef = React.useRef<FlowSeriesData | undefined>(flow)
+
+  useEffect(() => {
+    flowRef.current = flow
+  }, [flow])
   const [open, setOpen] = useState(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -139,6 +144,11 @@ export default function Page() {
     return result
   }, [enrichedSeries, currentUserId, alphaUserIds, session?.user?.email])
 
+  // We intentionally omit `flow` from the dependency array to avoid a
+  // feedback loop where setting `flow` (even to an equivalent id) would
+  // re-trigger fetchSeries. We use `flowRef` to read the current value.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchSeries = useCallback(
     async (selectId?: string) => {
       setLoading(true)
@@ -152,14 +162,27 @@ export default function Page() {
               (s) => String(s.id) === String(seriesId)
             )
             if (selectedSeries) {
-              setFlow(selectedSeries)
+              // Only update flow if the selected id differs from current to avoid
+              // re-render loops where setting an equivalent object repeatedly
+              // would recreate `flow` and retrigger this effect.
+              if (String(selectedSeries.id) !== String(flowRef.current?.id)) {
+                setFlow(selectedSeries)
+              }
             }
           } else if (selectId) {
             const selectedSeries = seriesData.find((s) => s.id === selectId)
-            if (selectedSeries) setFlow(selectedSeries)
+            if (selectedSeries) {
+              if (String(selectedSeries.id) !== String(flowRef.current?.id)) {
+                setFlow(selectedSeries)
+              }
+            }
           } else if (flow?.id) {
             const selectedSeries = seriesData.find((s) => s.id === flow.id)
-            if (selectedSeries) setFlow(selectedSeries)
+            if (selectedSeries) {
+              if (String(selectedSeries.id) !== String(flowRef.current?.id)) {
+                setFlow(selectedSeries)
+              }
+            }
           }
         }
       } catch (error) {
@@ -168,7 +191,7 @@ export default function Page() {
         setLoading(false)
       }
     },
-    [seriesId, flow?.id]
+    [seriesId]
   )
 
   useEffect(() => {
