@@ -24,8 +24,6 @@ export default function CreateAsanaWithImages() {
     category: string
     difficulty: string
     breath_direction_default: string
-    preferred_side: string
-    sideways: string
     created_by: string
     // optional extended fields
     sanskrit_names?: string[]
@@ -40,8 +38,7 @@ export default function CreateAsanaWithImages() {
     category: '',
     difficulty: '',
     breath_direction_default: '',
-    preferred_side: '',
-    sideways: '',
+    // preferred_side and sideways removed
     sanskrit_names: [],
     dristi: '',
     setup_cues: '',
@@ -106,8 +103,6 @@ export default function CreateAsanaWithImages() {
       deepening_cues: formData.deepening_cues,
       breath: formData.breath,
       breath_direction_default: formData.breath_direction_default,
-      preferred_side: formData.preferred_side,
-      sideways: formData.sideways,
       created_by: session?.user?.email ?? 'unknown',
     }
 
@@ -122,8 +117,7 @@ export default function CreateAsanaWithImages() {
         category: '',
         difficulty: '',
         breath_direction_default: '',
-        preferred_side: '',
-        sideways: '',
+        // preferred_side and sideways removed
         created_by: 'alpha users',
       })
       setEnglishVariationsInput('')
@@ -405,44 +399,7 @@ export default function CreateAsanaWithImages() {
                       </TextField>
                     </FormControl>
                   </Grid>
-
-                  <Grid size={6}>
-                    <FormControl sx={{ width: '100%', mb: 3 }}>
-                      <TextField
-                        label="Preferred Side"
-                        name="preferred_side"
-                        placeholder='e.g. "Right" or "Left"'
-                        value={formData.preferred_side}
-                        onChange={handleChange}
-                      />
-                    </FormControl>
-                  </Grid>
-
-                  <Grid size={12}>
-                    <FormControl sx={{ width: '100%', mb: 3 }}>
-                      <label
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                        }}
-                      >
-                        <input
-                          type="checkbox"
-                          name="sideways"
-                          checked={formData.sideways === 'true'}
-                          onChange={(e) => {
-                            const { checked } = e.target
-                            setFormData({
-                              ...formData,
-                              sideways: checked ? 'true' : 'false',
-                            })
-                          }}
-                        />
-                        Sideways pose (practiced on both sides)
-                      </label>
-                    </FormControl>
-                  </Grid>
+                  {/* preferred_side and sideways removed from Create form */}
                 </Grid>
               </Paper>
             </Grid>

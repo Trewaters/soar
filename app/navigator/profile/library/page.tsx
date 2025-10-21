@@ -513,7 +513,7 @@ function AsanaCard({ asana }: { asana: UserAsanaData }) {
         </Stack>
 
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          {asana.description?.length > 100
+          {asana.description && asana.description.length > 100
             ? `${asana.description.substring(0, 100)}...`
             : asana.description}
         </Typography>

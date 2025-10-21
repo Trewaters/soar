@@ -69,7 +69,6 @@ const mockAsanaData: AsanaPose = {
   activity_completed: false,
   activity_practice: false,
   asana_intention: 'Strength',
-  breath: ['4 count'],
   duration_asana: '30 seconds',
   transition_cues_out: 'Step back',
   transition_cues_in: 'Step forward',

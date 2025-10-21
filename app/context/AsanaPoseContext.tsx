@@ -11,39 +11,6 @@ import {
 import { PoseImageData } from '../../types/images'
 import { AsanaPose } from 'types/asana'
 
-/*  
-include the following fields:
-Abbreviated Pose 1
-
-•	Category
-•	English names [0]
-•	Sanskrit name
-•	Description
-•	Benefits
-•	Difficulty
-•	Lore
-•	Breath default
-•	Dristi
-•	Activities
-•	Variations
-•	Modifications
-•	Suggested poses
-•	Preparatory poses
-•	Sideways
-•	Image
-•	Activities – completed, practice
-•	Pose intent
-•	Duration asana
-•	Transition in/out
-•	Setupcues
-•	Deepening cues
-•	Customize asana
-•	Additional cues
-•	Joint action
-•	Muscle action
-
-*/
-
 export interface displayAsanaPose {
   id: number
   english_names: string[]
@@ -55,8 +22,7 @@ export interface displayAsanaPose {
   difficulty: string
   lore: string
   dristi: string
-  preferred_side: string
-  sideways: boolean
+  // preferred_side and sideways removed from app
   created_on: string
   updated_on: string
   activity_completed: boolean
@@ -65,130 +31,6 @@ export interface displayAsanaPose {
   duration_asana: string
   created_by: string
 }
-
-// export interface PoseData {
-//   id: number
-
-//   // aka: string[]
-//   alternate_english_name: string[]
-
-//   benefits: string
-//   category: string
-//   description: string
-//   difficulty: string
-
-//   // simplified_english_name: string
-//   simplified_english_name: string
-
-//   // name: string
-//   english_name: string
-
-//   next_poses: string[]
-//   preferred_side: string
-//   previous_poses: string[]
-//   sanskrit_names: {
-//     latin: string
-//     devanagari: string
-//     simplified: string
-//     translation: {
-//       latin: string
-//       devanagari: string
-//       simplified: string
-//       description: string
-//     }[]
-//   }[]
-//   sideways: boolean
-
-//   // sort_name: string
-//   sort_english_name: string
-
-//   // subcategory: string ('backbend', 'forward_bend', 'standing', 'seated', 'twist', 'neutral', 'balancing', 'inversion', 'mudra', 'bandha', 'lateral_bend')
-//   subcategory: string
-
-//   two_sided: boolean
-
-//   // variations: null | any
-//   variations_english_name: string[]
-
-//   // visibility: ('primary', 'secondary', 'tertiary')
-//   visibility: string
-//   image?: string
-//   createdAt?: string
-//   updatedAt?: string
-//   acitivity_completed?: boolean
-//   acitivity_easy?: boolean
-//   acitivity_difficult?: boolean
-//   acitivity_practice?: boolean
-//   pose_intent?: string
-//   pose_meaning?: string
-//   dristi?: string
-//   breath?: string
-//   // duration?: string
-// }
-
-//
-// Abbreviated Pose 1, display in Asanas > Poses
-// ! displayAsanaPose
-
-// Abbreviated Pose 2, display in Asanas > Practice view
-// ! displayAsanaPracticeView
-
-// Abbreviated Pose 3, display in Flows > Practice Series
-// ! displayAsanaFlowSeries
-
-// interface poseDataAbbreviated3 {
-//   id: number
-//   alternate_english_name: string[]
-//   benefits: string
-//   category: string
-//   simplified_english_name: string
-//   english_name: string
-//   sanskrit_names: {
-//     latin: string
-//     simplified: string
-//   }[]
-//   sort_english_name: string
-//   subcategory: string
-// }
-
-// interface poseDataAbbreviated2 {
-//   id: number
-//   alternate_english_name: string[]
-//   benefits: string
-//   category: string
-//   difficulty: string
-//   simplified_english_name: string
-//   english_name: string
-//   sanskrit_names: {
-//     latin: string
-//     simplified: string
-//   }[]
-//   sort_english_name: string
-//   subcategory: string
-//   variations_english_name: null | any
-// }
-
-// interface poseDataAbbreviated1 {
-//   id: number
-//   alternate_english_name: string[]
-//   benefits: string
-//   category: string
-//   description: string
-//   difficulty: string
-//   simplified_english_name: string
-//   english_name: string
-//   next_poses: string[]
-//   preferred_side: string
-//   previous_poses: string[]
-//   sanskrit_names: {
-//     latin: string
-//     simplified: string
-//   }[]
-//   sort_english_name: string
-//   subcategory: string
-//   variations_english_name: null | any
-//   visibility: string
-// }
 
 // PoseCard fields
 export interface PoseCardFields {
@@ -202,7 +44,6 @@ export interface PoseCardFields {
   // duration: string
   pose_meaning: string
   benefits: string
-  breath: string
   dristi: string
   difficulty: string
   category: string

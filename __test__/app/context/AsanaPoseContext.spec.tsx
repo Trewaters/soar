@@ -49,7 +49,6 @@ const mockAsana: AsanaPose = {
   category: 'standing',
   difficulty: 'beginner',
   lore: 'Named after a fierce warrior',
-  breath: ['inhale to lift, exhale to ground'],
   dristi: 'forward',
   // alignment_cues removed - now stored per-series in AsanaSeries.seriesPoses
   label: 'Foundational pose',

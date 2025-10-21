@@ -45,8 +45,6 @@ export interface AsanaPose {
   isUserCreated?: boolean // Flag to identify user-created asanas
   // Additional fields supported by the Create form
   breath_direction_default?: string
-  preferred_side?: string
-  sideways?: string
   // Timestamps may come as ISO strings from API responses or Dates in runtime
   created_on?: string | Date | null // default(now())
   updated_on?: string | Date | null // updatedAt
@@ -107,7 +105,6 @@ export interface PoseCardFields {
   }[]
   pose_meaning: string
   benefits: string
-  breath: string
   dristi: string
   difficulty: string
   category: string

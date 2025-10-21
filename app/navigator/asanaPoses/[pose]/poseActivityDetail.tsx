@@ -673,39 +673,15 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
             sx={{ mb: '32px' }}
           />
           <AsanaDetails
-            details={pose?.sanskrit_names?.[0]}
-            label="Sanskrit Name"
-            sx={{ mb: '32px' }}
-          />
-          <AsanaDetails
             details={
               Array.isArray(pose?.sanskrit_names)
                 ? pose.sanskrit_names.join(', ')
                 : (pose?.sanskrit_names as any) || ''
             }
-            label="All Sanskrit Names"
+            label="Sanskrit Names"
             sx={{ mb: '32px' }}
           />
-          <AsanaDetails
-            details={Array.isArray(pose?.breath) ? pose.breath.join(', ') : ''}
-            label="Breath"
-            sx={{ mb: '32px' }}
-          />
-          <AsanaDetails
-            details={(pose as any)?.breath_direction_default}
-            label="Breath Direction"
-            sx={{ mb: '32px' }}
-          />
-          <AsanaDetails
-            details={(pose as any)?.preferred_side}
-            label="Preferred Side"
-            sx={{ mb: '32px' }}
-          />
-          <AsanaDetails
-            details={pose?.sideways === 'true' ? 'Yes' : 'No'}
-            label="Sideways Pose"
-            sx={{ mb: '32px' }}
-          />
+          {/* preferred_side and sideways fields removed from app */}
           <AsanaDetails
             details={pose?.setup_cues}
             label="Setup Cues"

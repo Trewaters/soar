@@ -66,37 +66,36 @@ export default function EditPoseDialog({
   ]
 
   const [englishVariationsInput, setEnglishVariationsInput] = useState('')
+  const [alternativeNamesInput, setAlternativeNamesInput] = useState('')
   const [sanskritInput, setSanskritInput] = useState('')
-  const [breathInput, setBreathInput] = useState('')
 
+  // Pose-level breath removed from PoseCardFields; pose-level breath is not edited here
   const [formData, setFormData] = useState<{
     sort_english_name: string
     english_names: string[]
     description: string
     category: string
     difficulty: string
-    breath: string[]
     sanskrit_names?: string[]
+    alternative_english_names?: string[]
     dristi?: string
     setup_cues?: string
     deepening_cues?: string
     breath_direction_default?: string
-    preferred_side?: string
-    sideways?: string
+    // preferred_side and sideways deprecated and removed
   }>({
     sort_english_name: '',
     english_names: [],
     description: '',
     category: '',
     difficulty: '',
-    breath: [],
     sanskrit_names: [],
+    alternative_english_names: [],
     dristi: '',
     setup_cues: '',
     deepening_cues: '',
     breath_direction_default: '',
-    preferred_side: '',
-    sideways: '',
+    // preferred_side and sideways removed
   })
 
   // Initialize form data when pose changes
@@ -105,17 +104,16 @@ export default function EditPoseDialog({
       setFormData({
         sort_english_name: pose.sort_english_name || '',
         english_names: pose.english_names || [],
+        alternative_english_names: pose.alternative_english_names || [],
         description: pose.description || '',
         category: pose.category || '',
         difficulty: pose.difficulty || '',
-        breath: pose.breath || [],
+        // breath intentionally omitted from pose edit form
         sanskrit_names: pose.sanskrit_names || [],
         dristi: pose.dristi || '',
         setup_cues: pose.setup_cues || '',
         deepening_cues: pose.deepening_cues || '',
         breath_direction_default: (pose as any).breath_direction_default || '',
-        preferred_side: (pose as any).preferred_side || '',
-        sideways: (pose as any).sideways || '',
       })
       setImages(pose.poseImages || [])
       setEnglishVariationsInput(
@@ -124,7 +122,6 @@ export default function EditPoseDialog({
       setSanskritInput(
         Array.isArray(pose.sanskrit_names) ? pose.sanskrit_names.join(', ') : ''
       )
-      setBreathInput(Array.isArray(pose.breath) ? pose.breath.join(', ') : '')
       setDifficulty(pose.difficulty || '')
       setError(null)
     }
@@ -169,6 +166,21 @@ export default function EditPoseDialog({
     })
   }
 
+  const handleAlternativeNamesChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = e.target.value
+    setAlternativeNamesInput(value)
+    const arr = value
+      .split(',')
+      .map((v) => v.trim())
+      .filter(Boolean)
+    setFormData({
+      ...formData,
+      alternative_english_names: arr,
+    })
+  }
+
   const handleSanskritChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setSanskritInput(value)
@@ -182,18 +194,7 @@ export default function EditPoseDialog({
     })
   }
 
-  const handleBreathChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setBreathInput(value)
-    const arr = value
-      .split(',')
-      .map((v) => v.trim())
-      .filter(Boolean)
-    setFormData({
-      ...formData,
-      breath: arr,
-    })
-  }
+  // breath handling removed from pose edit dialog - series-level breath remains elsewhere
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -218,15 +219,15 @@ export default function EditPoseDialog({
       description: formData.description,
       category: formData.category,
       difficulty: formData.difficulty,
-      breath: formData.breath,
+      // breath: formData.breath, // breath is not edited at pose level
       // include optional extended fields if present
       sanskrit_names: formData.sanskrit_names,
       dristi: formData.dristi,
       setup_cues: formData.setup_cues,
       deepening_cues: formData.deepening_cues,
+      alternative_english_names: formData.alternative_english_names,
       breath_direction_default: formData.breath_direction_default,
-      preferred_side: formData.preferred_side,
-      sideways: formData.sideways,
+      // preferred_side and sideways removed
     }
 
     try {
@@ -364,6 +365,21 @@ export default function EditPoseDialog({
                     <Grid size={12}>
                       <FormControl sx={{ width: '100%', mb: 3 }}>
                         <TextField
+                          label="Custom name for asana"
+                          name="alternative_english_names"
+                          value={alternativeNamesInput}
+                          onChange={handleAlternativeNamesChange}
+                          placeholder="e.g., My favorite twist, Pretzel pose"
+                          helperText="Multiple nicknames separated by commas"
+                          multiline
+                          rows={2}
+                        />
+                      </FormControl>
+                    </Grid>
+
+                    <Grid size={12}>
+                      <FormControl sx={{ width: '100%', mb: 3 }}>
+                        <TextField
                           label="Sanskrit Names"
                           value={sanskritInput}
                           onChange={handleSanskritChange}
@@ -476,44 +492,6 @@ export default function EditPoseDialog({
                       </FormControl>
                     </Grid>
 
-                    <Grid size={6}>
-                      <FormControl sx={{ width: '100%', mb: 3 }}>
-                        <TextField
-                          label="Preferred Side"
-                          name="preferred_side"
-                          placeholder='e.g. "Right" or "Left"'
-                          value={formData.preferred_side || ''}
-                          onChange={handleChange}
-                        />
-                      </FormControl>
-                    </Grid>
-
-                    <Grid size={6}>
-                      <FormControl sx={{ width: '100%', mb: 3 }}>
-                        <label
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                          }}
-                        >
-                          <input
-                            type="checkbox"
-                            name="sideways"
-                            checked={formData.sideways === 'true'}
-                            onChange={(e) => {
-                              const { checked } = e.target
-                              setFormData({
-                                ...formData,
-                                sideways: checked ? 'true' : 'false',
-                              })
-                            }}
-                          />
-                          Sideways pose (practiced on both sides)
-                        </label>
-                      </FormControl>
-                    </Grid>
-
                     <Grid size={12}>
                       <FormControl sx={{ width: '100%', mb: 3 }}>
                         <TextField
@@ -552,21 +530,7 @@ export default function EditPoseDialog({
                       </FormControl>
                     </Grid>
 
-                    <Grid size={12}>
-                      <FormControl sx={{ width: '100%', mb: 3 }}>
-                        <TextField
-                          label="Breath (comma separated)"
-                          value={breathInput}
-                          onChange={handleBreathChange}
-                          placeholder="e.g., Inhale, Exhale"
-                          helperText="Comma separated breath cues"
-                          multiline
-                          rows={1}
-                        />
-                      </FormControl>
-                    </Grid>
-
-                    {/* Breath field removed - breath is managed elsewhere or via create/edit flow */}
+                    {/* Pose-level breath field intentionally omitted (series breath remains intact elsewhere) */}
                   </Grid>
                 </Paper>
               </Grid>

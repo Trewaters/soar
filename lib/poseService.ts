@@ -31,8 +31,8 @@ export type UpdatePoseInput = {
   deepening_cues?: string
   // Additional optional fields accepted by the update endpoint
   breath_direction_default?: string
-  preferred_side?: string
-  sideways?: string
+  // preferred_side and sideways deprecated and removed
+  alternative_english_names?: string[]
 }
 
 /**

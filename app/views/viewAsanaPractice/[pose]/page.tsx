@@ -278,13 +278,7 @@ export default function ViewAsanaPractice({
                 <strong>Difficulty:</strong> {viewPose.difficulty}
               </Typography>
             )}
-            {viewPose?.breath &&
-              Array.isArray(viewPose.breath) &&
-              viewPose.breath.length > 0 && (
-                <Typography variant="body1" color="white" sx={{ mb: 1 }}>
-                  <strong>Breath:</strong> {viewPose.breath.join(', ')}
-                </Typography>
-              )}
+            {/* Pose-level breath intentionally hidden; series-level breath is still supported */}
 
             {/* Names */}
             {viewPose?.sanskrit_names &&
