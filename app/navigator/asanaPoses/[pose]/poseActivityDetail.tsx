@@ -6,7 +6,6 @@ import Image from 'next/image'
 import {
   Box,
   Button,
-  ButtonGroup,
   Chip,
   IconButton,
   Stack,
@@ -37,7 +36,7 @@ import ImageCarousel from '@app/clientComponents/imageUpload/ImageCarousel'
 import CarouselDotNavigation from '@app/clientComponents/imageUpload/CarouselDotNavigation'
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 import { deletePose, updatePose, type UpdatePoseInput } from '@lib/poseService'
-import PoseImageUpload from '@app/clientComponents/imageUpload/PoseImageUpload'
+// PoseImageUpload removed from this page; image upload is managed via PoseImageManagement
 import PoseImageManagement from '@app/clientComponents/imageUpload/PoseImageManagement'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
@@ -175,6 +174,13 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
 
   const handleInfoClick = () => {
     setOpen(!open)
+  }
+
+  let buttonLabel = 'Mark for Activity Tracker'
+  if (loading) {
+    buttonLabel = 'Saving...'
+  } else if (checked) {
+    buttonLabel = 'Tracked in Activity'
   }
 
   // Fetch uploaded images for this pose
@@ -844,20 +850,23 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
                 </Typography>
               </Box>
             </Paper>
-            <Stack>
+            <Stack alignItems="center">
               <Typography
                 variant="h1"
                 component={'h2'}
                 sx={{
-                  pl: 2,
                   pt: 2,
                   height: '200px',
-                  width: '400px',
+                  width: { xs: '100%', sm: '400px' },
                   backgroundColor: 'info.contrastText',
                   color: 'primary.main',
                   borderRadius: '12px',
-                  alignContent: 'center',
+                  textAlign: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   boxShadow: '0 2px 2px 2px rgba(211, 211, 211, 0.5)',
+                  px: 2,
                 }}
               >
                 {pose?.sort_english_name}
@@ -1180,94 +1189,113 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
             </Box>
           )}
 
-          {/* Difficulty Chips */}
-          <Stack
-            direction="row"
-            spacing={1}
-            justifyContent="center"
+          {/* Group difficulty chips and activity tracker together so users know the chips set difficulty for the tracker */}
+          <Paper
+            elevation={0}
             sx={{
               p: 2,
               mt: 2,
               mx: 'auto',
-              maxWidth: 'fit-content',
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              backdropFilter: 'blur(10px)',
-              borderRadius: '16px',
+              width: '100%',
+              maxWidth: '600px',
+              backgroundColor: 'rgba(255,255,255,0.04)',
+              borderRadius: '12px',
+              border: '1px solid rgba(255,255,255,0.04)',
             }}
           >
-            {[
-              {
-                label: 'Easy',
-                variant: easyChipVariant,
-                onClick: handleEasyChipClick,
-                color:
-                  easyChipVariant === 'filled'
-                    ? ('success' as const)
-                    : ('default' as const),
-              },
-              {
-                label: 'Average',
-                variant: averageChipVariant,
-                onClick: handleAverageChipClick,
-                color:
-                  averageChipVariant === 'filled'
-                    ? ('info' as const)
-                    : ('default' as const),
-              },
-              {
-                label: 'Difficult',
-                variant: difficultChipVariant,
-                onClick: handleDifficultChipClick,
-                color:
-                  difficultChipVariant === 'filled'
-                    ? ('error' as const)
-                    : ('default' as const),
-              },
-            ].map((chip) => (
-              <Chip
-                key={chip.label}
-                label={chip.label}
-                variant={chip.variant}
-                color={chip.color}
-                onClick={chip.onClick}
-                sx={{ cursor: 'pointer' }}
-              />
-            ))}
-          </Stack>
+            <Typography
+              variant="subtitle2"
+              sx={{ mb: 1, color: 'text.secondary' }}
+            >
+              Difficulty (sets activity tracker difficulty)
+            </Typography>
 
-          {/* Activity Tracker Toggle - Button and Checkbox */}
-          <Stack sx={{ mt: 2, mb: 2, alignItems: 'center' }}>
-            <Stack direction="row" spacing={2}>
-              <Button
-                variant={checked ? 'contained' : 'outlined'}
-                color={checked ? 'success' : 'primary'}
-                onClick={handleButtonToggle}
-                disabled={loading}
-                sx={{
-                  minWidth: '200px',
-                  textTransform: 'none',
-                }}
-              >
-                {loading
-                  ? 'Saving...'
-                  : checked
-                    ? 'Tracked in Activity'
-                    : 'Mark for Activity Tracker'}
-              </Button>
-
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={checked}
-                    onChange={handleCheckboxChange}
-                    disabled={loading}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 2,
+              }}
+            >
+              <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
+                {[
+                  {
+                    label: 'Easy',
+                    variant: easyChipVariant,
+                    onClick: handleEasyChipClick,
+                    color:
+                      easyChipVariant === 'filled'
+                        ? ('success' as const)
+                        : ('default' as const),
+                  },
+                  {
+                    label: 'Average',
+                    variant: averageChipVariant,
+                    onClick: handleAverageChipClick,
+                    color:
+                      averageChipVariant === 'filled'
+                        ? ('info' as const)
+                        : ('default' as const),
+                  },
+                  {
+                    label: 'Difficult',
+                    variant: difficultChipVariant,
+                    onClick: handleDifficultChipClick,
+                    color:
+                      difficultChipVariant === 'filled'
+                        ? ('error' as const)
+                        : ('default' as const),
+                  },
+                ].map((chip) => (
+                  <Chip
+                    key={chip.label}
+                    label={chip.label}
+                    variant={chip.variant}
+                    color={chip.color}
+                    onClick={chip.onClick}
+                    sx={{ cursor: 'pointer' }}
                   />
-                }
-                label=""
-                sx={{ m: 0 }}
-              />
-            </Stack>
-          </Stack>
+                ))}
+              </Stack>
+
+              {/* Activity Tracker Toggle - Button and Checkbox */}
+              <Stack sx={{ alignItems: 'center' }}>
+                <Stack
+                  direction={{ xs: 'column', sm: 'row' }}
+                  spacing={2}
+                  sx={{ alignItems: 'center' }}
+                >
+                  <Button
+                    variant={checked ? 'contained' : 'outlined'}
+                    color={checked ? 'success' : 'primary'}
+                    onClick={handleButtonToggle}
+                    disabled={loading}
+                    sx={{
+                      minWidth: { xs: '100%', sm: '200px' },
+                      textTransform: 'none',
+                      width: { xs: '100%', sm: 'auto' },
+                    }}
+                  >
+                    {buttonLabel}
+                  </Button>
+
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={checked}
+                        onChange={handleCheckboxChange}
+                        disabled={loading}
+                      />
+                    }
+                    label=""
+                    sx={{ m: 0 }}
+                  />
+                </Stack>
+              </Stack>
+            </Box>
+          </Paper>
 
           {error && (
             <Typography color="error" sx={{ mt: 1, mb: 1 }}>
@@ -1292,13 +1320,33 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
         </Stack>
       </Box>
       {pose && FEATURES.SHOW_PRACTICE_VIEW_ASANA && (
-        <ButtonGroup
-          variant="outlined"
-          aria-label="Basic button group"
-          sx={{ mx: 2, display: 'flex', justifyContent: 'space-around' }}
+        // Ensure actions are stacked vertically on small screens to avoid jumbled layout
+        <Box
+          sx={{
+            mx: 2,
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 1,
+          }}
         >
-          <Stack sx={{ m: 2, border: '1px solid black', borderRadius: '12px' }}>
-            <IconButton disableRipple onClick={handleClick}>
+          <Stack
+            direction="row"
+            sx={{
+              m: 0,
+              border: '1px solid transparent',
+              borderRadius: '12px',
+              width: { xs: '100%', sm: 'auto' },
+              justifyContent: 'center',
+            }}
+          >
+            <IconButton
+              disableRipple
+              onClick={handleClick}
+              sx={{ width: { xs: '100%', sm: 'auto' } }}
+              aria-label="Open practice view"
+            >
               <Image
                 src={yogaMatWoman}
                 alt="practice view"
@@ -1307,31 +1355,32 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
               />
             </IconButton>
           </Stack>
-          <Stack sx={{ m: 2, border: '1px solid black', borderRadius: '12px' }}>
-            <PoseShareButton
-              content={{
-                contentType: 'asana',
-                data: pose,
-              }}
-            />
-          </Stack>
-        </ButtonGroup>
-      )}
 
-      {/* Image Management Section */}
-      {session && pose && (
-        <Box sx={{ mt: 3, px: 2, pb: 3 }}>
-          <PoseImageUpload
-            acceptedTypes={[
-              'image/jpeg',
-              'image/png',
-              'image/gif',
-              'image/svg',
-            ]}
-            maxFileSize={5} // 5 MB
-            poseId={pose.id?.toString()}
-            poseName={pose.sort_english_name}
-          />
+          <Stack
+            direction="row"
+            sx={{
+              m: 0,
+              border: '1px solid transparent',
+              borderRadius: '12px',
+              width: { xs: '100%', sm: 'auto' },
+              justifyContent: 'center',
+            }}
+          >
+            <Box
+              sx={{
+                width: { xs: '100%', sm: 'auto' },
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <PoseShareButton
+                content={{
+                  contentType: 'asana',
+                  data: pose,
+                }}
+              />
+            </Box>
+          </Stack>
         </Box>
       )}
 
@@ -1348,9 +1397,15 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
               mt: 3,
               mb: 2,
               px: 2,
+              width: '100%',
             }}
           >
-            <Stack direction="row" spacing={2}>
+            {/* Make edit/delete buttons stack vertically on xs and row on sm+ */}
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              spacing={2}
+              sx={{ width: { xs: '100%', sm: 'auto' }, alignItems: 'center' }}
+            >
               {!isEditing ? (
                 <>
                   <Button
@@ -1364,6 +1419,7 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
                       py: 1.5,
                       textTransform: 'none',
                       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                      width: { xs: '100%', sm: 'auto' },
                     }}
                   >
                     Edit Pose
@@ -1378,6 +1434,7 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
                         px: 3,
                         py: 1.5,
                         textTransform: 'none',
+                        width: { xs: '100%', sm: 'auto' },
                       }}
                       onClick={async () => {
                         if (!pose?.id) return
@@ -1413,6 +1470,7 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
                       py: 1.5,
                       textTransform: 'none',
                       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                      width: { xs: '100%', sm: 'auto' },
                     }}
                   >
                     {isSubmitting ? 'Saving...' : 'Save Changes'}
@@ -1428,6 +1486,7 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
                       px: 3,
                       py: 1.5,
                       textTransform: 'none',
+                      width: { xs: '100%', sm: 'auto' },
                     }}
                   >
                     Cancel

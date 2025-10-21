@@ -1,13 +1,12 @@
 /**
  * @jest-environment node
  */
-import { deletePose } from '../../lib/poseService'
-
 describe('poseService.deletePose', () => {
   const originalFetch = global.fetch
 
   beforeEach(() => {
-    jest.resetAllMocks()
+    jest.resetModules()
+    jest.clearAllMocks()
   })
 
   afterEach(() => {
@@ -15,6 +14,11 @@ describe('poseService.deletePose', () => {
   })
 
   it('calls DELETE /api/poses/:id and returns success', async () => {
+    // Import the actual implementation from the library (bypass any jest.mock in setup)
+    const { deletePose } = jest.requireActual(
+      '../../lib/poseService'
+    ) as typeof import('../../lib/poseService')
+
     const mockResponse = { success: true }
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
@@ -32,6 +36,10 @@ describe('poseService.deletePose', () => {
   })
 
   it('throws with server error message when response not ok', async () => {
+    const { deletePose } = jest.requireActual(
+      '../../lib/poseService'
+    ) as typeof import('../../lib/poseService')
+
     global.fetch = jest.fn().mockResolvedValue({
       ok: false,
       status: 403,

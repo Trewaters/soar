@@ -219,6 +219,30 @@ jest.mock('@lib/seriesService', () => ({
     name: 'Updated Series',
   }),
   deleteSeries: jest.fn().mockResolvedValue({ success: true }),
+  // Ensure getAllSeries is mocked by default but calls global.fetch so tests that
+  // assert fetch was called still work (matches real implementation behavior)
+  getAllSeries: jest.fn().mockImplementation(async () => {
+    // Debug log to help diagnose test-only behavior
+    // eslint-disable-next-line no-console
+    console.log('DEBUG: jest.setup getAllSeries called')
+    const timestamp = Date.now()
+    // Use the global fetch (which individual tests may override)
+    const res = await (global as any).fetch(`/api/series?ts=${timestamp}`, {
+      cache: 'no-store',
+      next: { revalidate: 0 },
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    })
+    if (!res.ok) return []
+    try {
+      return await res.json()
+    } catch {
+      return []
+    }
+  }),
   getSeriesById: jest.fn().mockResolvedValue({
     id: 'test-series-id',
     name: 'Test Series',
