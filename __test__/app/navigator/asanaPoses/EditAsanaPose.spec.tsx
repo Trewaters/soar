@@ -11,7 +11,7 @@ import type { AsanaPose } from 'types/asana'
 
 // Mock dependencies
 jest.mock('next-auth/react')
-jest.mock('@lib/poseService')
+// Note: @lib/poseService is now centrally mocked in jest.setup.ts
 jest.mock('@app/clientComponents/imageUpload/ImageGallery', () => ({
   __esModule: true,
   default: jest.fn(() => <div data-testid="image-gallery">Image Gallery</div>),

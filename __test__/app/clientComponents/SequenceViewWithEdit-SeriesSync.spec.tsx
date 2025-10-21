@@ -13,7 +13,9 @@ import theme from '@styles/theme'
 jest.mock('next/navigation')
 jest.mock('next-auth/react')
 jest.mock('@app/hooks/useNavigationWithLoading')
-jest.mock('@lib/seriesService')
+jest.mock('@lib/seriesService', () => ({
+  getAllSeries: jest.fn(),
+}))
 
 const mockGetAllSeries = getAllSeries as jest.MockedFunction<
   typeof getAllSeries

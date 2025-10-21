@@ -70,7 +70,7 @@ export default function SeriesPoseList({
   const hrefResolver = getHref || defaultGetHref
 
   return (
-    <Stack spacing={1} sx={{ width: '100%', ...containerSx }}>
+    <Stack spacing={0} sx={{ width: '100%', ...containerSx }}>
       {seriesPoses.map((pose, index) => {
         // Normalize pose entry to extract name, secondary, and alignment cues
         let poseName = ''
@@ -105,7 +105,12 @@ export default function SeriesPoseList({
           >
             <Box
               className="journalLine"
-              sx={{ p: 2, borderBottom: '1px solid #eee', ...poseSx }}
+              sx={{
+                // p: 2,
+                // borderBottom: '1px solid #eee',
+                // backgroundColor: 'limegreen',
+                ...poseSx,
+              }}
             >
               <Typography
                 textAlign="left"

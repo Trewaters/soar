@@ -329,11 +329,9 @@ export default function Page() {
   const handleEditDelete = async (id: string) => {
     try {
       await deleteSeries(id)
-      // Clear the selected flow to prevent stale data
-      setFlow(undefined)
-      setEditOpen(false)
-      // Force a complete page reload to ensure clean state
-      window.location.href = '/navigator/flows/practiceSeries'
+      // Force refresh and navigate back to series list to prevent showing stale data
+      router.refresh()
+      router.replace('/navigator/flows/practiceSeries')
     } catch (e) {
       console.error('Failed to delete series', e)
     }
@@ -553,21 +551,17 @@ export default function Page() {
               >
                 {/* Title + optional Edit button for owners */}
                 <Box className="journal">
-                  <Typography
-                    variant="h3"
-                    className="journalTitle"
-                    textAlign={'center'}
-                    sx={{
-                      marginTop: 2,
-                      color: `${theme.palette.primary.main}`,
-                    }}
-                  >
-                    {flow.seriesName}
-                  </Typography>
-                  {isOwner && (
-                    <Box
-                      sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}
+                  <Box className="journalTitleContainer">
+                    <Typography
+                      variant="h3"
+                      textAlign={'center'}
+                      sx={{
+                        color: `${theme.palette.primary.main}`,
+                      }}
                     >
+                      {flow.seriesName}
+                    </Typography>
+                    {isOwner && (
                       <IconButton
                         aria-label="Edit series"
                         onClick={() => setEditOpen(true)}
@@ -576,8 +570,8 @@ export default function Page() {
                       >
                         <EditIcon />
                       </IconButton>
-                    </Box>
-                  )}
+                    )}
+                  </Box>
                   <SeriesPoseList
                     seriesPoses={flow.seriesPoses}
                     getHref={(poseName) => getPoseNavigationUrlSync(poseName)}

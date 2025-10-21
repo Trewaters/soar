@@ -146,6 +146,92 @@ jest.mock('next/navigation', () => ({
 ;(globalThis as any).mockUsePathname = mockUsePathname
 ;(globalThis as any).mockUseRouter = mockUseRouter
 
+// Centralized service mocks - commonly used across multiple test suites
+// These can be overridden in individual tests using require() and mockResolvedValue/mockImplementation
+
+// Mock poseService - used in create/edit/delete pose tests
+jest.mock('@lib/poseService', () => ({
+  __esModule: true,
+  createPose: jest.fn().mockResolvedValue({
+    id: 'test-pose-id',
+    sort_english_name: 'Test Pose',
+  }),
+  updatePose: jest.fn().mockResolvedValue({
+    id: 'test-pose-id',
+    sort_english_name: 'Updated Pose',
+  }),
+  deletePose: jest.fn().mockResolvedValue({ success: true }),
+  getPoseById: jest.fn().mockResolvedValue({
+    id: 'test-pose-id',
+    sort_english_name: 'Test Pose',
+  }),
+  getAllPoses: jest.fn().mockResolvedValue([]),
+  getUserPoses: jest.fn().mockResolvedValue([]),
+  getAccessiblePoses: jest.fn().mockResolvedValue([]),
+  getPoseByName: jest.fn().mockResolvedValue({
+    id: 'test-pose-id',
+    sort_english_name: 'Test Pose',
+  }),
+  getPose: jest.fn().mockResolvedValue({
+    id: 'test-pose-id',
+    sort_english_name: 'Test Pose',
+  }),
+  getPoseIdByName: jest.fn().mockResolvedValue('test-pose-id'),
+}))
+
+// Mock imageService - used in pose view and image management tests
+jest.mock('@lib/imageService', () => ({
+  __esModule: true,
+  getUserPoseImages: jest.fn().mockResolvedValue({
+    images: [],
+    total: 0,
+  }),
+  uploadPoseImage: jest.fn().mockResolvedValue({
+    imageId: 'test-image-id',
+    url: 'https://example.com/image.jpg',
+  }),
+  deletePoseImage: jest.fn().mockResolvedValue({ success: true }),
+}))
+
+// Mock asanaActivityClientService - used in pose activity tracking tests
+jest.mock('@lib/asanaActivityClientService', () => ({
+  __esModule: true,
+  checkActivityExists: jest.fn().mockResolvedValue(false),
+  createActivity: jest.fn().mockResolvedValue({
+    id: 'test-activity-id',
+    poseId: 'test-pose-id',
+  }),
+  updateActivity: jest.fn().mockResolvedValue({
+    id: 'test-activity-id',
+    completed: true,
+  }),
+}))
+
+// Mock seriesService - used in series creation/edit tests
+jest.mock('@lib/seriesService', () => ({
+  __esModule: true,
+  createSeries: jest.fn().mockResolvedValue({
+    id: 'test-series-id',
+    name: 'Test Series',
+  }),
+  updateSeries: jest.fn().mockResolvedValue({
+    id: 'test-series-id',
+    name: 'Updated Series',
+  }),
+  deleteSeries: jest.fn().mockResolvedValue({ success: true }),
+  getSeriesById: jest.fn().mockResolvedValue({
+    id: 'test-series-id',
+    name: 'Test Series',
+  }),
+}))
+
+// Mock alphaUsers - used to control feature flag behavior in tests
+jest.mock('@app/lib/alphaUsers', () => ({
+  __esModule: true,
+  isAlphaUser: jest.fn().mockReturnValue(false),
+  alphaUsers: [],
+}))
+
 // Mock browser audio APIs that are not available in JSDOM
 beforeAll(() => {
   // Mock AudioContext

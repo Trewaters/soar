@@ -12,8 +12,7 @@ jest.mock('next-auth/react')
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }))
-jest.mock('@lib/asanaActivityClientService')
-jest.mock('@lib/imageService')
+// Note: @lib/asanaActivityClientService and @lib/imageService are now centrally mocked in jest.setup.ts
 jest.mock('@app/clientComponents/imageUpload/ImageCarousel', () => ({
   __esModule: true,
   default: jest.fn(() => (

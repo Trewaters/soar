@@ -17,7 +17,8 @@ import { useSession } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import EditSequence, { EditableSequence } from '@clientComponents/EditSequence'
 import { getAllSeries } from '@lib/seriesService'
-import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
+import SeriesPoseList from '@clientComponents/SeriesPoseList'
+import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import Image from 'next/image'
 
 type Props = {
@@ -373,53 +374,23 @@ export default function SequenceViewWithEdit({
                     />
                     <CardContent className="lines" sx={{ p: 0 }}>
                       {seriesMini.seriesPoses?.length ? (
-                        seriesMini.seriesPoses.map((pose, index) => {
-                          // Handle both string and object formats
-                          let englishName = ''
-                          let sanskritName = ''
-
-                          if (typeof pose === 'string') {
-                            const split = splitSeriesPoseEntry(pose)
-                            englishName = split.name
-                            sanskritName = split.secondary
-                          } else if (pose && typeof pose === 'object') {
-                            englishName = (pose as any).sort_english_name || ''
-                            sanskritName = (pose as any).secondary || ''
+                        <SeriesPoseList
+                          seriesPoses={seriesMini.seriesPoses}
+                          getHref={(poseName) =>
+                            getPoseNavigationUrlSync(poseName)
                           }
-
-                          return (
-                            <Stack
-                              key={`${englishName}-${index}`}
-                              sx={{
-                                px: 3,
-                                py: 1,
-                                '&:hover': {
-                                  backgroundColor: '#f0f0f0',
-                                  transition: 'all 0.2s',
-                                },
-                              }}
-                            >
-                              <Typography
-                                variant="body1"
-                                sx={{ fontWeight: 'normal' }}
-                              >
-                                {englishName}
-                              </Typography>
-                              {sanskritName && (
-                                <Typography
-                                  variant="body2"
-                                  sx={{
-                                    fontStyle: 'italic',
-                                    color: 'text.secondary',
-                                    fontSize: '0.9rem',
-                                  }}
-                                >
-                                  {sanskritName.trim()}
-                                </Typography>
-                              )}
-                            </Stack>
-                          )
-                        })
+                          linkColor="primary.main"
+                          containerSx={{ width: '100%' }}
+                          poseSx={{
+                            px: 3,
+                            py: 1,
+                            '&:hover': {
+                              backgroundColor: '#f0f0f0',
+                              transition: 'all 0.2s',
+                            },
+                          }}
+                          dataTestIdPrefix={`sequence-series-${i}-pose`}
+                        />
                       ) : (
                         <Typography
                           variant="body2"

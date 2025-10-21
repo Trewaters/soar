@@ -16,7 +16,7 @@ jest.mock('next/navigation', () => ({
 jest.mock('@app/context/AsanaPoseContext', () => ({
   useAsanaPose: jest.fn(),
 }))
-jest.mock('@lib/poseService')
+// Note: @lib/poseService is now centrally mocked in jest.setup.ts
 jest.mock('@app/clientComponents/imageUpload/ImageManagement', () => ({
   __esModule: true,
   default: jest.fn(() => (

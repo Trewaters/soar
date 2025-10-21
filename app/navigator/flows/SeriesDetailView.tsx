@@ -176,12 +176,14 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
       )}
 
       {/* Series Poses */}
-      <SeriesPoseList
-        seriesPoses={flow.seriesPoses || []}
-        poseIds={poseIds}
-        linkColor="primary.main"
-        dataTestIdPrefix="series-detail-pose"
-      />
+      <Box className="journal" sx={{ width: '100%', mb: 3 }}>
+        <SeriesPoseList
+          seriesPoses={flow.seriesPoses || []}
+          poseIds={poseIds}
+          linkColor="primary.contrastText"
+          dataTestIdPrefix="series-detail-pose"
+        />
+      </Box>
 
       {/* Description Section */}
       {flow.description && (
