@@ -324,6 +324,20 @@ export default function Page() {
     if (value) {
       // Restore original behavior: select sequence locally for practice UI
       setSingleSequence(value)
+      // Update the url to include the sequenceId as a search param so the page
+      // can be linked to directly. Use replace to avoid creating history entries
+      // for each selection.
+      try {
+        const sid = String(value.id)
+        router.replace(
+          `/navigator/flows/practiceSequences?sequenceId=${encodeURIComponent(
+            sid
+          )}`
+        )
+      } catch (e) {
+        // ignore router errors in client-side navigation
+        console.error('Failed to update sequenceId in URL', e)
+      }
     }
   }
 
