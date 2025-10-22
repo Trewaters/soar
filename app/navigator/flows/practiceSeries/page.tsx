@@ -61,6 +61,7 @@ export default function Page() {
   const [acOpen, setAcOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const [images, setImages] = useState<string[]>([])
+  const [searchInputValue, setSearchInputValue] = useState('')
 
   // Partitioned, grouped search data using centralized ordering utility
   const enrichedSeries = useMemo(
@@ -410,6 +411,10 @@ export default function Page() {
             loadingText="Loading series..."
             noOptionsText={loading ? 'Loading series...' : 'No series found'}
             options={orderedSeriesOptions}
+            inputValue={searchInputValue}
+            onInputChange={(event, newInputValue) => {
+              setSearchInputValue(newInputValue)
+            }}
             getOptionLabel={(option) => {
               const opt = option as any
               if ('section' in opt) return ''
@@ -543,6 +548,8 @@ export default function Page() {
                 placeholder="Search for a Series"
                 sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
                 onClick={() => setAcOpen(true)}
+                inputValue={searchInputValue}
+                onClear={() => setSearchInputValue('')}
               />
             )}
             onChange={(event, value) => {

@@ -122,6 +122,7 @@ export default function Page() {
   })
   const [, setIsLoadingFreshSeriesData] = useState<boolean>(false)
   const [, setRefreshTrigger] = useState(0)
+  const [searchInputValue, setSearchInputValue] = useState('')
 
   const [page, setPage] = useState(1)
   const itemsPerPage = 1
@@ -420,6 +421,10 @@ export default function Page() {
                 disablePortal
                 id="combo-box-sequence-search"
                 options={orderedSequenceOptions}
+                inputValue={searchInputValue}
+                onInputChange={(event, newInputValue) => {
+                  setSearchInputValue(newInputValue)
+                }}
                 getOptionLabel={(option) => {
                   if ('section' in option) return ''
                   return option.nameSequence
@@ -536,6 +541,8 @@ export default function Page() {
                     params={params}
                     placeholder="Search for a Sequence"
                     sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+                    inputValue={searchInputValue}
+                    onClear={() => setSearchInputValue('')}
                   />
                 )}
                 onChange={(event, value) => {
