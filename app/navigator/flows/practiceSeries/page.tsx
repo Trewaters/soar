@@ -29,7 +29,12 @@ import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import { AutocompleteInput } from '@app/clientComponents/form'
 import PoseShareButton from '@app/clientComponents/poseShareButton'
-import { getAllSeries, deleteSeries, updateSeries } from '@lib/seriesService'
+import {
+  getAllSeries,
+  deleteSeries,
+  updateSeries,
+  getSingleSeries,
+} from '@lib/seriesService'
 import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
 import SeriesWeeklyActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesWeeklyActivityTracker'
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -171,11 +176,11 @@ export default function Page() {
               }
             }
           } else if (selectId) {
+            // When explicitly refreshing a specific series (e.g., after save),
+            // always update to show fresh data even if it's the same ID
             const selectedSeries = seriesData.find((s) => s.id === selectId)
             if (selectedSeries) {
-              if (String(selectedSeries.id) !== String(flowRef.current?.id)) {
-                setFlow(selectedSeries)
-              }
+              setFlow(selectedSeries)
             }
           } else if (flow?.id) {
             const selectedSeries = seriesData.find((s) => s.id === flow.id)
@@ -336,15 +341,48 @@ export default function Page() {
       }))
 
       // Send with seriesPoses instead of asanas to preserve alignment_cues
+      // Remove the asanas property to avoid confusion - the API uses seriesPoses
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+      const { asanas, ...restOfUpdated } = updated
       const payload = {
-        ...updated,
+        ...restOfUpdated,
         seriesPoses,
       }
 
+      // Update series on server
       await updateSeries(updated.id, payload as any)
-      // refresh list and reselect the updated series so UI reflects changes immediately
-      await fetchSeries(updated.id)
+
+      // Optimistically update the UI immediately with the edited data
+      // This provides instant feedback without waiting for the server
+      const optimisticUpdate: FlowSeriesData = {
+        id: updated.id,
+        seriesName: updated.name,
+        description: updated.description || '',
+        seriesPoses: seriesPoses,
+        // Keep existing fields
+        breath: flow?.breath || '',
+        duration: flow?.duration || '',
+        image: flow?.image || '',
+      }
+
+      // Immediately update the flow state for instant UI feedback
+      setFlow(optimisticUpdate)
+
+      // Close dialog immediately
       setEditOpen(false)
+
+      // Fetch fresh data from server in the background to ensure consistency
+      // This runs asynchronously without blocking the UI
+      Promise.all([getSingleSeries(updated.id), getAllSeries()])
+        .then(([freshSeries, updatedSeriesList]) => {
+          // Update with server data when it arrives
+          setFlow({ ...freshSeries } as FlowSeriesData)
+          setSeries(updatedSeriesList as FlowSeriesData[])
+        })
+        .catch((err) => {
+          console.error('Failed to refresh series data:', err)
+          // Keep the optimistic update on error
+        })
     } catch (e) {
       console.error('Failed to save series update', e)
     }

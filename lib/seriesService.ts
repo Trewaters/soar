@@ -114,10 +114,15 @@ export async function getAllSeries(): Promise<SeriesData[]> {
  */
 export async function getSingleSeries(id: string): Promise<SeriesData> {
   try {
-    const response = await fetch(`/api/series/${id}`, {
+    // Add timestamp to prevent caching
+    const timestamp = Date.now()
+    const response = await fetch(`/api/series/${id}?ts=${timestamp}`, {
       cache: 'no-store',
+      next: { revalidate: 0 },
       headers: {
-        'Cache-Control': 'no-cache',
+        'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+        Pragma: 'no-cache',
+        Expires: '0',
       },
     })
 
