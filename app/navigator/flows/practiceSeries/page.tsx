@@ -658,10 +658,15 @@ export default function Page() {
                       >
                         <CardMedia
                           component="img"
-                          height={300}
                           image={imageUrl}
                           alt={`${flow.seriesName} image`}
-                          sx={{ objectFit: 'cover', borderRadius: 2 }}
+                          sx={{
+                            width: '100%',
+                            height: 'auto',
+                            maxHeight: '400px',
+                            objectFit: 'contain',
+                            borderRadius: 2,
+                          }}
                         />
                       </Card>
                     </Box>

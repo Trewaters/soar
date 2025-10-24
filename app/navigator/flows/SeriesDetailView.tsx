@@ -159,7 +159,8 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
           <CardMedia
             component="div"
             sx={{
-              height: 200,
+              width: '100%',
+              paddingTop: '56.25%', // 16:9 aspect ratio
               position: 'relative',
               overflow: 'hidden',
             }}
@@ -170,6 +171,7 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
               fill
               sizes="(max-width: 600px) 100vw, 400px"
               style={{ objectFit: 'cover' }}
+              priority
             />
           </CardMedia>
         </Card>

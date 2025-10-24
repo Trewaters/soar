@@ -115,10 +115,13 @@ export async function POST(
     const currentImages = series.images || []
     const updatedImages = [...currentImages, uploadResult.url]
 
+    // Update both images array and legacy image field for backward compatibility
+    // The image field should always be the first image in the array
     await prisma.asanaSeries.update({
       where: { id: seriesId },
       data: {
         images: updatedImages,
+        image: updatedImages[0] || null, // Sync legacy field with first image
         updatedAt: new Date(),
       },
     })
@@ -182,10 +185,13 @@ export async function DELETE(
       (url: string) => url !== imageUrl
     )
 
+    // Update both images array and legacy image field for backward compatibility
+    // The image field should always be the first image in the array (or null if empty)
     await prisma.asanaSeries.update({
       where: { id: seriesId },
       data: {
         images: updatedImages,
+        image: updatedImages[0] || null, // Sync legacy field with first image
         updatedAt: new Date(),
       },
     })
