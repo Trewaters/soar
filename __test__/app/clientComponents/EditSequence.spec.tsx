@@ -89,6 +89,27 @@ jest.mock('@clientComponents/AddSeriesDialog', () => {
   }
 })
 
+// Mock ImageUpload
+jest.mock('@clientComponents/imageUpload/ImageUpload', () => {
+  return function MockImageUpload({ onImageUploaded }: any) {
+    return (
+      <button
+        onClick={() => {
+          if (onImageUploaded) {
+            onImageUploaded({
+              id: 'test-image-id',
+              url: 'https://example.com/uploaded.jpg',
+              uploadedAt: new Date().toISOString(),
+            })
+          }
+        }}
+      >
+        Upload Image
+      </button>
+    )
+  }
+})
+
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
   <ThemeProvider theme={theme}>
     <CssBaseline />
@@ -290,7 +311,9 @@ describe('EditSequence', () => {
         wrapper: TestWrapper,
       })
 
-      const deleteBtn = screen.getByRole('button', { name: /delete sequence/i })
+      const deleteBtn = screen.getByRole('button', {
+        name: /^delete sequence$/i,
+      })
       expect(deleteBtn).toBeInTheDocument()
 
       await user.click(deleteBtn)
@@ -566,6 +589,137 @@ describe('EditSequence', () => {
           updatedAt: expect.any(String),
         }),
       ])
+    })
+  })
+
+  describe('Image Management', () => {
+    it('should display image when sequence has an image URL', () => {
+      mockUseSession.mockReturnValue({
+        data: { user: { email: 'test@uvuyoga.com' } },
+        status: 'authenticated',
+      })
+
+      const sequenceWithImage = baseSequence()
+
+      render(<EditSequence sequence={sequenceWithImage} />, {
+        wrapper: TestWrapper,
+      })
+
+      const imageGroup = screen.getByRole('group', { name: /sequence-image/i })
+      expect(imageGroup).toBeInTheDocument()
+
+      // Check that the image URL field has the value
+      const imageUrlInput = screen.getByLabelText(/image url/i)
+      expect(imageUrlInput).toHaveValue('https://example.com/img.png')
+    })
+
+    it('should show delete button when image exists', () => {
+      mockUseSession.mockReturnValue({
+        data: { user: { email: 'test@uvuyoga.com' } },
+        status: 'authenticated',
+      })
+
+      const sequenceWithImage = baseSequence()
+
+      render(<EditSequence sequence={sequenceWithImage} />, {
+        wrapper: TestWrapper,
+      })
+
+      // Verify image is shown and delete button exists
+      const imageGroup = screen.getByRole('group', { name: /sequence-image/i })
+      const deleteButton = within(imageGroup).getByRole('button', {
+        name: /delete sequence image/i,
+      })
+      expect(deleteButton).toBeInTheDocument()
+    })
+
+    it('should delete image when delete button is clicked', async () => {
+      const user = userEvent.setup()
+      mockUseSession.mockReturnValue({
+        data: { user: { email: 'test@uvuyoga.com' } },
+        status: 'authenticated',
+      })
+
+      const sequenceWithImage = baseSequence()
+
+      render(<EditSequence sequence={sequenceWithImage} />, {
+        wrapper: TestWrapper,
+      })
+
+      const imageGroup = screen.getByRole('group', { name: /sequence-image/i })
+      const deleteButton = within(imageGroup).getByRole('button', {
+        name: /delete sequence image/i,
+      })
+
+      // Click delete button
+      await user.click(deleteButton)
+
+      // Image URL should be cleared
+      await new Promise((r) => setTimeout(r, 0))
+      const imageUrlInput = screen.getByLabelText(/image url/i)
+      expect(imageUrlInput).toHaveValue('')
+
+      // Delete button should also be gone
+      expect(
+        within(imageGroup).queryByRole('button', {
+          name: /delete sequence image/i,
+        })
+      ).not.toBeInTheDocument()
+    })
+
+    it('should not show delete button when there is no image', () => {
+      mockUseSession.mockReturnValue({
+        data: { user: { email: 'test@uvuyoga.com' } },
+        status: 'authenticated',
+      })
+
+      const sequenceWithoutImage = baseSequence({
+        image: '',
+      })
+
+      render(<EditSequence sequence={sequenceWithoutImage} />, {
+        wrapper: TestWrapper,
+      })
+
+      const imageGroup = screen.getByRole('group', { name: /sequence-image/i })
+      expect(
+        within(imageGroup).queryByRole('button', {
+          name: /delete sequence image/i,
+        })
+      ).not.toBeInTheDocument()
+    })
+
+    it('should allow re-uploading after deleting an image', async () => {
+      const user = userEvent.setup()
+      mockUseSession.mockReturnValue({
+        data: { user: { email: 'test@uvuyoga.com' } },
+        status: 'authenticated',
+      })
+
+      const sequenceWithImage = baseSequence()
+
+      render(<EditSequence sequence={sequenceWithImage} />, {
+        wrapper: TestWrapper,
+      })
+
+      const imageGroup = screen.getByRole('group', { name: /sequence-image/i })
+
+      // Delete the image
+      const deleteButton = within(imageGroup).getByRole('button', {
+        name: /delete sequence image/i,
+      })
+      await user.click(deleteButton)
+
+      // Wait for state update
+      await new Promise((r) => setTimeout(r, 0))
+
+      // Image URL field should be empty and editable
+      const imageUrlInput = screen.getByLabelText(/image url/i)
+      expect(imageUrlInput).toHaveValue('')
+
+      // Can type in a new URL
+      await user.type(imageUrlInput, 'https://example.com/new-image.jpg')
+      expect(imageUrlInput).toHaveValue('https://example.com/new-image.jpg')
     })
   })
 

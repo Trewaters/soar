@@ -195,20 +195,6 @@ export default function SequenceViewWithEdit({
     }
   }
 
-  // Debug logging
-  useEffect(() => {
-    console.log('SequenceViewWithEdit render state:', {
-      isOwner,
-      showEdit,
-      defaultShowEdit,
-      shouldRenderEdit: isOwner && showEdit,
-      model_created_by: model.created_by,
-      user_email: session?.user?.email,
-    })
-    console.log('Sequence model data:', model)
-    console.log('Sequence series data:', model.sequencesSeries)
-  }, [isOwner, showEdit, defaultShowEdit, model, session?.user?.email])
-
   const handleSequenceUpdate = (updatedSequence: EditableSequence) => {
     // Update the model with the saved data
     setModel(updatedSequence)

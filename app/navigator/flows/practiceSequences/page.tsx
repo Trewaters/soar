@@ -142,11 +142,7 @@ export default function Page() {
     // Consolidated function to fetch sequences
     const fetchSequences = async (debugContext = 'unknown') => {
       try {
-        console.log(`Fetching sequences from ${debugContext}`)
         const newSequences = await getAllSequences()
-        console.log(
-          `Successfully fetched ${newSequences.length} sequences from ${debugContext}`
-        )
         setSequences(newSequences)
 
         // If there's a sequence ID in the URL, auto-select that sequence
@@ -166,7 +162,6 @@ export default function Page() {
     fetchSequences('initial load')
 
     const handleFocus = () => {
-      console.log('Practice sequences page focused, refreshing sequences...')
       fetchSequences('focus')
     }
 
@@ -182,7 +177,6 @@ export default function Page() {
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
     const handlePopState = () => {
-      console.log('Navigation detected, refreshing pose data...')
       fetchSequences('popstate')
     }
 

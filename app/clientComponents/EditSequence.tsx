@@ -89,6 +89,20 @@ export default function EditSequence({
     created_by: sequence.created_by ?? null,
   })
 
+  // Sync form state when sequence ID changes (new sequence loaded)
+  useEffect(() => {
+    if (sequence.id !== form.id) {
+      setForm({
+        id: sequence.id,
+        nameSequence: sequence.nameSequence || '',
+        sequencesSeries: sequence.sequencesSeries || [],
+        description: sequence.description || '',
+        image: sequence.image || '',
+        created_by: sequence.created_by ?? null,
+      })
+    }
+  }, [sequence.id, sequence, form.id])
+
   const [confirm, setConfirm] = useState<{
     open: boolean
     index: number | null
@@ -457,6 +471,15 @@ export default function EditSequence({
                         errors.image || 'You can paste a URL or upload below'
                       }
                     />
+                    <Tooltip title="Delete image">
+                      <IconButton
+                        onClick={() => setField('image', '')}
+                        color="error"
+                        aria-label="Delete sequence image"
+                      >
+                        <DeleteForeverIcon />
+                      </IconButton>
+                    </Tooltip>
                   </Box>
                 ) : (
                   <TextField
