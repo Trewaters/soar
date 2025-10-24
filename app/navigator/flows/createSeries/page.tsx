@@ -40,6 +40,10 @@ import {
   splitSeriesPoseEntry,
 } from '@app/utils/asana/seriesPoseLabels'
 import { AsanaPose } from 'types/asana'
+import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
+import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUpload'
+import ImageIcon from '@mui/icons-material/Image'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -47,6 +51,7 @@ export default function Page() {
   const { seriesName, seriesPoses, breath, description, duration, image } =
     state.flowSeries
   const [poses, setPoses] = useState<AsanaPose[]>([])
+  const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
   const router = useRouter()
   const [open, setOpen] = React.useState(false)
   const [isDirty, setIsDirty] = useState(false)
@@ -81,6 +86,11 @@ export default function Page() {
     fetchPoses()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, session])
+
+  // Debug effect to monitor uploadedImages state changes
+  useEffect(() => {
+    console.log('📸 uploadedImages state changed:', uploadedImages)
+  }, [uploadedImages])
 
   // Refetch poses when the page becomes visible (e.g., when returning from create asana page)
   // This ensures that newly created asanas appear in the autocomplete search
@@ -217,6 +227,20 @@ export default function Page() {
     }
   }
 
+  const handleImageUploaded = (img: PoseImageData) => {
+    console.log('📸 Image uploaded callback received:', img)
+    // Only keep one image - replace the array instead of appending
+    setUploadedImages([img])
+    console.log('📸 Series image set:', img)
+    dispatch({
+      type: 'SET_FLOW_SERIES',
+      payload: {
+        ...state.flowSeries,
+        image: img.url,
+      },
+    })
+  }
+
   function handleCancel() {
     dispatch({
       type: 'RESET_FLOW_SERIES',
@@ -328,6 +352,109 @@ export default function Page() {
                     />
                   </Grid2> */}
                   </FormControl>
+
+                  {/* Reference Images Section */}
+                  <Grid2 size={12}>
+                    <Box sx={{ mb: 3 }}>
+                      <Typography variant="h6" gutterBottom color="primary">
+                        Series Image
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ mb: 2 }}
+                      >
+                        Upload one image to represent this series. This will
+                        help identify your series in the library.
+                      </Typography>
+
+                      {uploadedImages.length === 0 ? (
+                        <ImageManagement
+                          title=""
+                          variant="upload-only"
+                          onImageUploaded={handleImageUploaded}
+                          uploadTitle="Upload Series Image"
+                          uploadSubtitle="Drag and drop an image here, or click to select (one image only)"
+                        />
+                      ) : (
+                        <Box sx={{ mt: 2 }}>
+                          <Typography
+                            variant="body2"
+                            color="success.main"
+                            gutterBottom
+                          >
+                            <CheckCircleIcon
+                              sx={{
+                                fontSize: 16,
+                                mr: 0.5,
+                                verticalAlign: 'middle',
+                              }}
+                            />
+                            Series image uploaded successfully
+                          </Typography>
+                          <Box
+                            sx={{
+                              mt: 2,
+                              maxWidth: 300,
+                              borderRadius: '8px',
+                              overflow: 'hidden',
+                              border: '2px solid',
+                              borderColor: 'success.light',
+                            }}
+                          >
+                            <Box
+                              component="img"
+                              src={uploadedImages[0].url}
+                              alt={uploadedImages[0].altText || 'Series image'}
+                              sx={{
+                                width: '100%',
+                                height: 200,
+                                objectFit: 'cover',
+                                display: 'block',
+                              }}
+                            />
+                            <Box
+                              sx={{
+                                p: 1.5,
+                                bgcolor: 'success.lighter',
+                              }}
+                            >
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: 0.5,
+                                }}
+                              >
+                                <ImageIcon sx={{ fontSize: 14 }} />
+                                {uploadedImages[0].fileName || 'Series Image'}
+                              </Typography>
+                            </Box>
+                          </Box>
+                          <Button
+                            variant="outlined"
+                            color="error"
+                            size="small"
+                            onClick={() => {
+                              setUploadedImages([])
+                              dispatch({
+                                type: 'SET_FLOW_SERIES',
+                                payload: {
+                                  ...state.flowSeries,
+                                  image: '',
+                                },
+                              })
+                            }}
+                            sx={{ mt: 2 }}
+                          >
+                            Remove Image
+                          </Button>
+                        </Box>
+                      )}
+                    </Box>
+                  </Grid2>
 
                   <FormControl>
                     <Stack
@@ -651,7 +778,7 @@ export default function Page() {
                 </ListItemAvatar>
                 <ListItemText
                   primary={
-                    '"Flow Series": Add asana poses to your series by selecting them from the "Flow Series" dropdown below.'
+                    '"Image Upload": Optionally add an image to represent your series.'
                   }
                 />
               </ListItem>
@@ -660,6 +787,19 @@ export default function Page() {
                 <ListItemAvatar>
                   <Avatar>
                     <Looks4Icon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={
+                    '"Flow Series": Add asana poses to your series by selecting them from the "Flow Series" dropdown below.'
+                  }
+                />
+              </ListItem>
+
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <Looks5Icon />
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText

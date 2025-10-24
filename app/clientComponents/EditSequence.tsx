@@ -31,6 +31,7 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import AddIcon from '@mui/icons-material/Add'
+import SelfImprovementIcon from '@mui/icons-material/SelfImprovement'
 import { useSession } from 'next-auth/react'
 import { FlowSeriesSequence } from '@context/AsanaSeriesContext'
 import {
@@ -115,6 +116,10 @@ export default function EditSequence({
   >('idle')
   const [saveError, setSaveError] = useState<string | null>(null)
   const [showAddSeriesDialog, setShowAddSeriesDialog] = useState(false)
+  // Track image load errors for series avatars
+  const [seriesImageErrors, setSeriesImageErrors] = useState<
+    Record<number, boolean>
+  >({})
 
   const model: EditableSequence = usingContext
     ? (ctx.state.sequences as unknown as EditableSequence)
@@ -527,93 +532,110 @@ export default function EditSequence({
                 </Box>
                 {model.sequencesSeries?.length ? (
                   <List dense>
-                    {model.sequencesSeries.map((s, idx) => (
-                      <ListItem
-                        key={`${s.seriesName}-${idx}`}
-                        draggable
-                        onDragStart={() => onDragStart(idx)}
-                        onDragOver={onDragOver}
-                        onDrop={() => onDrop(idx)}
-                        aria-grabbed={dragIndex === idx ? 'true' : 'false'}
-                        secondaryAction={
+                    {model.sequencesSeries.map((s, idx) => {
+                      const hasImageError = seriesImageErrors[idx]
+                      const shouldShowImage = s.image && !hasImageError
+                      return (
+                        <ListItem
+                          key={`${s.seriesName}-${idx}`}
+                          draggable
+                          onDragStart={() => onDragStart(idx)}
+                          onDragOver={onDragOver}
+                          onDrop={() => onDrop(idx)}
+                          aria-grabbed={dragIndex === idx ? 'true' : 'false'}
+                          secondaryAction={
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 0.5,
+                              }}
+                            >
+                              <Tooltip title="Move up">
+                                <span>
+                                  <IconButton
+                                    aria-label={`move ${s.seriesName} up`}
+                                    onClick={() => moveItem(idx, idx - 1)}
+                                    disabled={idx === 0}
+                                    size="small"
+                                  >
+                                    <ArrowUpwardIcon fontSize="small" />
+                                  </IconButton>
+                                </span>
+                              </Tooltip>
+                              <Tooltip title="Move down">
+                                <span>
+                                  <IconButton
+                                    aria-label={`move ${s.seriesName} down`}
+                                    onClick={() => moveItem(idx, idx + 1)}
+                                    disabled={
+                                      idx === model.sequencesSeries.length - 1
+                                    }
+                                    size="small"
+                                  >
+                                    <ArrowDownwardIcon fontSize="small" />
+                                  </IconButton>
+                                </span>
+                              </Tooltip>
+                              <Tooltip title="Remove from sequence">
+                                <IconButton
+                                  edge="end"
+                                  aria-label={`remove series ${s.seriesName}`}
+                                  onClick={() => requestRemoveSeries(idx)}
+                                  color="error"
+                                >
+                                  <DeleteForeverIcon />
+                                </IconButton>
+                              </Tooltip>
+                            </Box>
+                          }
+                        >
+                          <ListItemAvatar>
+                            <Avatar
+                              src={shouldShowImage ? s.image : undefined}
+                              alt={s.seriesName}
+                              imgProps={{
+                                onError: () => {
+                                  setSeriesImageErrors((prev) => ({
+                                    ...prev,
+                                    [idx]: true,
+                                  }))
+                                },
+                              }}
+                            >
+                              {!shouldShowImage && <SelfImprovementIcon />}
+                            </Avatar>
+                          </ListItemAvatar>
                           <Box
                             sx={{
                               display: 'flex',
                               alignItems: 'center',
-                              gap: 0.5,
+                              gap: 1,
+                              flex: 1,
                             }}
                           >
-                            <Tooltip title="Move up">
-                              <span>
-                                <IconButton
-                                  aria-label={`move ${s.seriesName} up`}
-                                  onClick={() => moveItem(idx, idx - 1)}
-                                  disabled={idx === 0}
-                                  size="small"
-                                >
-                                  <ArrowUpwardIcon fontSize="small" />
-                                </IconButton>
-                              </span>
-                            </Tooltip>
-                            <Tooltip title="Move down">
-                              <span>
-                                <IconButton
-                                  aria-label={`move ${s.seriesName} down`}
-                                  onClick={() => moveItem(idx, idx + 1)}
-                                  disabled={
-                                    idx === model.sequencesSeries.length - 1
-                                  }
-                                  size="small"
-                                >
-                                  <ArrowDownwardIcon fontSize="small" />
-                                </IconButton>
-                              </span>
-                            </Tooltip>
-                            <Tooltip title="Remove from sequence">
+                            <Tooltip title="Drag to reorder">
                               <IconButton
-                                edge="end"
-                                aria-label={`remove series ${s.seriesName}`}
-                                onClick={() => requestRemoveSeries(idx)}
-                                color="error"
+                                size="small"
+                                edge="start"
+                                aria-label={`drag ${s.seriesName}`}
+                                sx={{ cursor: 'grab' }}
                               >
-                                <DeleteForeverIcon />
+                                <DragIndicatorIcon fontSize="small" />
                               </IconButton>
                             </Tooltip>
+                            <ListItemText
+                              primary={s.seriesName}
+                              secondary={
+                                s.seriesPoses?.length
+                                  ? `${s.seriesPoses.length} poses`
+                                  : undefined
+                              }
+                            />
                           </Box>
-                        }
-                      >
-                        <ListItemAvatar>
-                          <Avatar src={s.image} alt={s.seriesName} />
-                        </ListItemAvatar>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1,
-                            flex: 1,
-                          }}
-                        >
-                          <Tooltip title="Drag to reorder">
-                            <IconButton
-                              size="small"
-                              edge="start"
-                              aria-label={`drag ${s.seriesName}`}
-                              sx={{ cursor: 'grab' }}
-                            >
-                              <DragIndicatorIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                          <ListItemText
-                            primary={s.seriesName}
-                            secondary={
-                              s.seriesPoses?.length
-                                ? `${s.seriesPoses.length} poses`
-                                : undefined
-                            }
-                          />
-                        </Box>
-                      </ListItem>
-                    ))}
+                        </ListItem>
+                      )
+                    })}
                   </List>
                 ) : (
                   <Alert severity="info" sx={{ mt: 1 }}>

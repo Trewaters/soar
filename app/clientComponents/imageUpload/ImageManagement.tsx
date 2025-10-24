@@ -153,6 +153,8 @@ interface ImageManagementProps {
   asanaId?: string
   // eslint-disable-next-line no-unused-vars
   onImageUploaded?: (image: PoseImageData) => void
+  uploadTitle?: string
+  uploadSubtitle?: string
 }
 
 /**
@@ -166,6 +168,8 @@ export default function ImageManagement({
   variant = 'full',
   asanaId,
   onImageUploaded,
+  uploadTitle,
+  uploadSubtitle,
 }: ImageManagementProps) {
   const [tabValue, setTabValue] = useState(0)
   const [refreshGallery, setRefreshGallery] = useState(0)
@@ -214,7 +218,12 @@ export default function ImageManagement({
         <Typography variant="h6" gutterBottom>
           {title}
         </Typography>
-        <ImageUpload onImageUploaded={handleImageUploaded} variant="dropzone" />
+        <ImageUpload
+          onImageUploaded={handleImageUploaded}
+          variant="dropzone"
+          uploadTitle={uploadTitle}
+          uploadSubtitle={uploadSubtitle}
+        />
       </Paper>
     )
   }

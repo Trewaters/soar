@@ -40,6 +40,8 @@ interface ImageUploadProps {
   maxFileSize?: number // in MB
   acceptedTypes?: string[]
   variant?: 'button' | 'dropzone'
+  uploadTitle?: string
+  uploadSubtitle?: string
 }
 
 export default function ImageUpload({
@@ -47,6 +49,8 @@ export default function ImageUpload({
   maxFileSize = 10,
   acceptedTypes = ['image/jpeg', 'image/png', 'image/webp'],
   variant = 'button',
+  uploadTitle = 'Upload Yoga Pose Image',
+  uploadSubtitle = 'Drag and drop an image here, or click to select',
 }: ImageUploadProps) {
   const { data: session } = useSession()
   const [open, setOpen] = useState(false)
@@ -197,10 +201,10 @@ export default function ImageUpload({
     >
       <CloudUploadIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
       <Typography variant="h6" color="primary.main" gutterBottom>
-        Upload Yoga Pose Image
+        {uploadTitle}
       </Typography>
       <Typography variant="body2" color="text.secondary">
-        Drag and drop an image here, or click to select
+        {uploadSubtitle}
       </Typography>
       <Typography
         variant="caption"
