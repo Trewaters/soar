@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, within, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import theme from '@styles/theme'
@@ -593,6 +593,20 @@ describe('EditSequence', () => {
   })
 
   describe('Image Management', () => {
+    beforeEach(() => {
+      // Reset context mocks to default (inactive) state
+      // This is important because the "Add Series Feature" tests override these
+      require('@context/SequenceContext').useSequence = jest.fn(() => ({
+        active: false,
+        state: { sequences: {} },
+      }))
+      require('@context/SequenceContext').useSequenceEditor = jest.fn(() => ({
+        updateField: jest.fn(),
+        removeSeriesAt: jest.fn(),
+        reorderSeries: jest.fn(),
+      }))
+    })
+
     it('should display image when sequence has an image URL', () => {
       mockUseSession.mockReturnValue({
         data: { user: { email: 'test@uvuyoga.com' } },
@@ -710,16 +724,23 @@ describe('EditSequence', () => {
       })
       await user.click(deleteButton)
 
-      // Wait for state update
-      await new Promise((r) => setTimeout(r, 0))
+      // Wait for state update and re-query the input field
+      // (the TextField is re-rendered in a different conditional branch)
+      await waitFor(() => {
+        const updatedImageUrlInput = screen.getByLabelText(/image url/i)
+        expect(updatedImageUrlInput).toHaveValue('')
+      })
 
-      // Image URL field should be empty and editable
-      const imageUrlInput = screen.getByLabelText(/image url/i)
-      expect(imageUrlInput).toHaveValue('')
+      // Re-query the input field for typing
+      const updatedImageUrlInput = screen.getByLabelText(/image url/i)
 
-      // Can type in a new URL
-      await user.type(imageUrlInput, 'https://example.com/new-image.jpg')
-      expect(imageUrlInput).toHaveValue('https://example.com/new-image.jpg')
+      // Can paste in a new URL (using paste instead of type to avoid MUI re-render issues)
+      await user.clear(updatedImageUrlInput)
+      await user.click(updatedImageUrlInput)
+      await user.paste('https://example.com/new-image.jpg')
+      expect(updatedImageUrlInput).toHaveValue(
+        'https://example.com/new-image.jpg'
+      )
     })
   })
 

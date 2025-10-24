@@ -59,16 +59,14 @@ export default function Page() {
     nameSequence: '',
     sequencesSeries: [],
     description: '',
-    duration: '',
+    durationSequence: '',
     image: '',
-    breath_direction: '',
   })
 
   const [nameSequence, setNameSequence] = useState('')
   const [description, setDescription] = useState('')
   const [duration, setDuration] = useState('')
   const [image, setImage] = useState('')
-  const [breath_direction, setBreathDirection] = useState('')
 
   const [flowSeries, setFlowSeries] = useState<FlowSeriesData[]>([])
   const [seriesNameSet, setSeriesNameSet] = useState<string[]>([])
@@ -202,7 +200,6 @@ export default function Page() {
       description,
       duration,
       image,
-      breath_direction,
     }
 
     try {
@@ -257,9 +254,6 @@ export default function Page() {
         break
       case 'image':
         setImage(value)
-        break
-      case 'breath_direction':
-        setBreathDirection(value)
         break
     }
   }

@@ -17,9 +17,8 @@ export interface SequenceData {
   nameSequence: string
   sequencesSeries: FlowSeriesSequence[]
   description?: string
-  duration?: string
+  durationSequence?: string
   image?: string
-  breath_direction?: string
   created_by?: string | null
   createdAt?: string
   updatedAt?: string
@@ -43,10 +42,8 @@ const initialState: SequencePageState = {
     nameSequence: '',
     sequencesSeries: [],
     description: '',
-    duration: '',
+    durationSequence: '',
     image: '',
-    // ! REMOVE: breath_direction is not need. (2024-08-27 16:49:10)
-    breath_direction: '',
     createdAt: '',
     updatedAt: '',
   },

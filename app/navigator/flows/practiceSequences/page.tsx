@@ -116,9 +116,8 @@ export default function Page() {
     nameSequence: '',
     sequencesSeries: [],
     description: '',
-    duration: '',
+    durationSequence: '',
     image: '',
-    breath_direction: '',
     createdAt: '',
     updatedAt: '',
   })
@@ -702,8 +701,11 @@ export default function Page() {
                                   },
                                 }}
                               >
-                                {singleSequence.sequencesSeries[page - 2]
-                                  ?.seriesName || 'Previous'}
+                                {(
+                                  singleSequence.sequencesSeries[
+                                    page - 2
+                                  ] as any
+                                )?.seriesName || 'Previous'}
                               </Button>
 
                               <Button
@@ -738,7 +740,7 @@ export default function Page() {
                                   },
                                 }}
                               >
-                                {singleSequence.sequencesSeries[page]
+                                {(singleSequence.sequencesSeries[page] as any)
                                   ?.seriesName || 'Next'}
                               </Button>
                             </Stack>

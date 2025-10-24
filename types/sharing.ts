@@ -176,7 +176,7 @@ export class SequenceShareStrategy implements ShareStrategy {
 
     return {
       title: `The yoga sequence "${sequenceName}" was shared with you. Below is the flow:`,
-      text: `Description: ${data.description || 'A custom yoga sequence'}\n\nSeries included: ${seriesNames}\n\nDuration: ${data.duration || 'Varies'}\n\nPractice with us at Uvuyoga!`,
+      text: `Description: ${data.description || 'A custom yoga sequence'}\n\nSeries included: ${seriesNames}\n\nDuration: ${data.durationSequence || 'Varies'}\n\nPractice with us at Uvuyoga!`,
       url: shareUrl,
       shareType: 'sequence',
     }

@@ -14,7 +14,6 @@ export async function POST(request: Request) {
     description,
     durationSequence,
     image,
-    breath_direction,
   } = await request.json()
 
   try {
@@ -26,7 +25,6 @@ export async function POST(request: Request) {
         description,
         durationSequence,
         image,
-        breath_direction,
         created_by: session.user.email,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),

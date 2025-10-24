@@ -68,8 +68,6 @@ export async function PATCH(
       allowed.sequencesSeries = body.sequencesSeries
     if (typeof body.durationSequence === 'string')
       allowed.durationSequence = body.durationSequence
-    if (typeof body.breath_direction === 'string')
-      allowed.breath_direction = body.breath_direction
     // Never allow client to change created_by
     allowed.updatedAt = new Date()
 

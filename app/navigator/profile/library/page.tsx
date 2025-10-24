@@ -692,9 +692,9 @@ function SequenceCard({ sequence }: { sequence: UserSequenceData }) {
           {sequence.sequencesSeries.length} series
         </Typography>
 
-        {sequence.duration && (
+        {sequence.durationSequence && (
           <Typography variant="body2" sx={{ mb: 1 }}>
-            Duration: {sequence.duration}
+            Duration: {sequence.durationSequence}
           </Typography>
         )}
 

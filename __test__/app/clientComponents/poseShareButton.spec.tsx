@@ -97,9 +97,8 @@ const mockSequenceData: SequenceData = {
   nameSequence: 'Power Sequence',
   description: 'High-energy flow',
   sequencesSeries: [mockSeriesData],
-  duration: '45',
+  durationSequence: '45',
   image: 'sequence.jpg',
-  breath_direction: 'In and Out',
   createdAt: '2024-01-01',
   updatedAt: '2024-01-01',
 }

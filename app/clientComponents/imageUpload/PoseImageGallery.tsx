@@ -89,11 +89,6 @@ export default function PoseImageGallery({
 
   // Fetch images filtered by pose
   const fetchImages = async () => {
-    console.log('🔄 fetchImages called with:', {
-      poseId,
-      poseName,
-      enableManagement,
-    })
     try {
       setLoading(true)
 
@@ -113,30 +108,12 @@ export default function PoseImageGallery({
       }
 
       const response = await fetch(`/api/images?${params.toString()}`)
-      console.log('📡 API Response:', {
-        status: response.status,
-        ok: response.ok,
-        url: `/api/images?${params.toString()}`,
-      })
 
       if (!response.ok) {
         throw new Error('Failed to fetch images')
       }
 
       const data: ImageGalleryResponse = await response.json()
-      console.log('📦 API Data received:', data)
-
-      console.log('Fetched images for pose:', {
-        poseId,
-        poseName,
-        imageCount: data.images.length,
-        ownership: data.ownership,
-        images: data.images.map((img) => ({
-          id: img.id,
-          fileName: img.fileName,
-          displayOrder: img.displayOrder,
-        })),
-      })
 
       // Sort images by displayOrder for carousel
       const sortedImages = [...data.images].sort(
@@ -145,18 +122,6 @@ export default function PoseImageGallery({
 
       setImages(sortedImages)
       setOwnership(data.ownership || null)
-
-      // Debug tab visibility conditions
-      console.log('🎯 Tab visibility debug:', {
-        enableManagement,
-        'ownership?.canManage': data.ownership?.canManage,
-        'images.length': sortedImages.length,
-        'images.length > 1': sortedImages.length > 1,
-        shouldShowTabs:
-          enableManagement &&
-          data.ownership?.canManage &&
-          sortedImages.length > 1,
-      })
     } catch (error) {
       console.error('❌ Error in fetchImages:', error)
       console.error('❌ Error details:', {
@@ -199,12 +164,6 @@ export default function PoseImageGallery({
       // Remove from local state
       setImages((prev) => prev.filter((img) => img.id !== imageToDelete.id))
       setImageToDelete(null)
-
-      console.log('Deleted image from pose:', {
-        imageId: imageToDelete.id,
-        poseId,
-        poseName,
-      })
     } catch (error) {
       console.error('Error deleting image:', error)
       setError('Failed to delete image')
@@ -214,12 +173,6 @@ export default function PoseImageGallery({
   const handleImageReorder = async (
     reorderedImages: PoseImageData[]
   ): Promise<{ success: boolean; error?: string }> => {
-    console.log('🔄 handleImageReorder called:', {
-      poseId,
-      poseName,
-      reorderedImagesCount: reorderedImages.length,
-    })
-
     try {
       // Check if we have the necessary data for reordering
       if (!poseId && !poseName) {
@@ -229,8 +182,6 @@ export default function PoseImageGallery({
       const apiUrl = poseId
         ? `/api/asana/${poseId}/images/reorder`
         : `/api/images/reorder`
-
-      console.log('📡 Reorder API call:', { apiUrl })
 
       const response = await fetch(apiUrl, {
         method: 'PUT',
@@ -244,11 +195,6 @@ export default function PoseImageGallery({
           })),
           poseName: poseName || undefined,
         }),
-      })
-
-      console.log('📡 Reorder response:', {
-        status: response.status,
-        ok: response.ok,
       })
 
       if (!response.ok) {
@@ -458,18 +404,7 @@ export default function PoseImageGallery({
     )
   }
 
-  // Debug current render state
-  console.log('🖼️ PoseImageGallery render:', {
-    enableManagement,
-    'ownership?.canManage': ownership?.canManage,
-    canManageImages,
-    'images.length': images.length,
-    shouldShowTabs: enableManagement && canManageImages && images.length > 1,
-    status,
-    loading,
-    error,
-  })
-
+  // Determine which tabs to show
   return (
     <Box sx={{ p: 3 }}>
       <Box

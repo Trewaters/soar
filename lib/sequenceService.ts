@@ -8,23 +8,26 @@ export interface FlowSeriesPose {
   alignment_cues?: string
 }
 
+// Import FlowSeriesSequence for proper typing
+export interface FlowSeriesSequence {
+  id?: string
+  seriesName: string
+  seriesPoses: Array<string | FlowSeriesPose>
+  breath?: string
+  duration?: string
+  image?: string
+  createdAt?: string
+  updatedAt?: string
+}
+
 export type SequenceData = {
   id: number
   nameSequence: string
-  sequencesSeries: Array<{
-    id: number
-    seriesName: string
-    // Support both legacy string[] and new object format with alignment_cues
-    seriesPoses: Array<string | FlowSeriesPose>
-    breath?: string
-    description?: string
-    duration?: string
-    image?: string
-  }>
+  sequencesSeries: FlowSeriesSequence[]
   description?: string
-  duration?: string
+  durationSequence?: string
   image?: string
-  breath_direction?: string
+  created_by?: string
   createdAt?: string
   updatedAt?: string
 }
@@ -44,7 +47,6 @@ export type CreateSequenceInput = {
   description: string
   duration: string
   image: string
-  breath_direction: string
 }
 
 /**
