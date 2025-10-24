@@ -374,4 +374,404 @@ describe('SequenceViewWithEdit', () => {
       expect(screen.queryByText('(Test alignment)')).not.toBeInTheDocument()
     })
   })
+
+  describe('View Toggle and Navigation Features', () => {
+    let mockPush: jest.Mock
+
+    beforeEach(() => {
+      mockPush = (global as any).__routerPushMock
+      mockPush.mockClear()
+    })
+
+    describe('View Toggle Icons', () => {
+      it('should display view toggle icons with list view disabled and scroll view enabled', () => {
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'user@example.com' } },
+          status: 'authenticated',
+        })
+
+        render(<SequenceViewWithEdit sequence={baseSequence()} />, {
+          wrapper: Wrapper,
+        })
+
+        // List view icon should be disabled (current view)
+        const listViewButton = screen.getByRole('button', {
+          name: /currently in list view/i,
+        })
+        expect(listViewButton).toBeInTheDocument()
+        expect(listViewButton).toBeDisabled()
+
+        // Scroll view icon should be enabled (can navigate to it)
+        const scrollViewButton = screen.getByRole('button', {
+          name: /switch to scroll view for Morning Flow/i,
+        })
+        expect(scrollViewButton).toBeInTheDocument()
+        expect(scrollViewButton).not.toBeDisabled()
+      })
+
+      it('should navigate to scroll view when scroll view icon is clicked', async () => {
+        const user = userEvent.setup()
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'user@example.com' } },
+          status: 'authenticated',
+        })
+
+        const sequence = baseSequence({ id: 'test-sequence-123' })
+
+        render(<SequenceViewWithEdit sequence={sequence} />, {
+          wrapper: Wrapper,
+        })
+
+        const scrollViewButton = screen.getByRole('button', {
+          name: /switch to scroll view/i,
+        })
+
+        await user.click(scrollViewButton)
+
+        // Verify navigation.push was called with correct scroll view URL
+        expect(mockPush).toHaveBeenCalledWith(
+          '/navigator/flows/practiceSequences?sequenceId=test-sequence-123'
+        )
+      })
+
+      it('should display tooltips on view toggle icons', () => {
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'user@example.com' } },
+          status: 'authenticated',
+        })
+
+        render(<SequenceViewWithEdit sequence={baseSequence()} />, {
+          wrapper: Wrapper,
+        })
+
+        const listViewButton = screen.getByRole('button', {
+          name: /currently in list view/i,
+        })
+        expect(listViewButton).toHaveAttribute('title', 'List View (current)')
+
+        const scrollViewButton = screen.getByRole('button', {
+          name: /switch to scroll view/i,
+        })
+        expect(scrollViewButton).toHaveAttribute('title', 'Scroll View')
+      })
+
+      it('should not navigate when list view icon is clicked (disabled)', async () => {
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'owner@uvuyoga.com' } },
+          status: 'authenticated',
+        })
+
+        render(<SequenceViewWithEdit sequence={baseSequence()} />, {
+          wrapper: Wrapper,
+        })
+
+        const listViewButton = screen.getByRole('button', {
+          name: /currently in list view/i,
+        })
+
+        // Button should be disabled, so we just verify it's disabled
+        // Clicking disabled buttons with pointer-events:none throws errors
+        expect(listViewButton).toBeDisabled()
+
+        // Navigation should not be called
+        expect(mockPush).not.toHaveBeenCalled()
+      })
+
+      it('should keep view toggle icons visible when entering edit mode', async () => {
+        const user = userEvent.setup()
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'owner@uvuyoga.com' } },
+          status: 'authenticated',
+        })
+
+        render(<SequenceViewWithEdit sequence={baseSequence()} />, {
+          wrapper: Wrapper,
+        })
+
+        const editButton = screen.getByRole('button', { name: /show edit/i })
+        await user.click(editButton)
+
+        // View toggle icons should still be visible in edit mode
+        expect(
+          screen.getByRole('button', { name: /currently in list view/i })
+        ).toBeInTheDocument()
+        expect(
+          screen.getByRole('button', { name: /switch to scroll view/i })
+        ).toBeInTheDocument()
+      })
+
+      it('should allow navigation to scroll view while in edit mode', async () => {
+        const user = userEvent.setup()
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'owner@uvuyoga.com' } },
+          status: 'authenticated',
+        })
+
+        const sequence = baseSequence({ id: 'edit-test-789' })
+
+        render(<SequenceViewWithEdit sequence={sequence} />, {
+          wrapper: Wrapper,
+        })
+
+        // Enter edit mode
+        const editButton = screen.getByRole('button', { name: /show edit/i })
+        await user.click(editButton)
+
+        // Click scroll view icon
+        const scrollViewButton = screen.getByRole('button', {
+          name: /switch to scroll view/i,
+        })
+        await user.click(scrollViewButton)
+
+        // Should navigate even in edit mode
+        expect(mockPush).toHaveBeenCalledWith(
+          '/navigator/flows/practiceSequences?sequenceId=edit-test-789'
+        )
+      })
+
+      it('should handle missing sequence ID gracefully when clicking scroll view', async () => {
+        const user = userEvent.setup()
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'user@example.com' } },
+          status: 'authenticated',
+        })
+
+        const sequenceWithoutId = baseSequence({ id: undefined })
+
+        render(<SequenceViewWithEdit sequence={sequenceWithoutId} />, {
+          wrapper: Wrapper,
+        })
+
+        const scrollViewButton = screen.getByRole('button', {
+          name: /switch to scroll view/i,
+        })
+
+        await user.click(scrollViewButton)
+
+        // Should not navigate when ID is missing
+        expect(mockPush).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('Back Navigation Button', () => {
+      it('should display back navigation button with correct label', () => {
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'user@example.com' } },
+          status: 'authenticated',
+        })
+
+        render(<SequenceViewWithEdit sequence={baseSequence()} />, {
+          wrapper: Wrapper,
+        })
+
+        const backButton = screen.getByRole('button', {
+          name: /navigate back to Morning Flow sequence practice/i,
+        })
+        expect(backButton).toBeInTheDocument()
+        expect(backButton).toHaveTextContent('Back to Morning Flow')
+      })
+
+      it('should navigate to scroll view when back button is clicked', async () => {
+        const user = userEvent.setup()
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'user@example.com' } },
+          status: 'authenticated',
+        })
+
+        const sequence = baseSequence({ id: 'test-sequence-456' })
+
+        render(<SequenceViewWithEdit sequence={sequence} />, {
+          wrapper: Wrapper,
+        })
+
+        const backButton = screen.getByRole('button', {
+          name: /navigate back to .* sequence practice/i,
+        })
+
+        await user.click(backButton)
+
+        // Verify navigation.push was called with scroll view URL
+        expect(mockPush).toHaveBeenCalledWith(
+          '/navigator/flows/practiceSequences?sequenceId=test-sequence-456'
+        )
+      })
+
+      it('should use navigation.back() when sequence ID is missing', async () => {
+        const user = userEvent.setup()
+        const mockBack = jest.fn()
+
+        // Override the router mock for this test
+        jest.spyOn(require('next/navigation'), 'useRouter').mockReturnValue({
+          push: mockPush,
+          back: mockBack,
+          replace: jest.fn(),
+          refresh: jest.fn(),
+          forward: jest.fn(),
+          prefetch: jest.fn(),
+        })
+
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'user@example.com' } },
+          status: 'authenticated',
+        })
+
+        const sequenceWithoutId = baseSequence({ id: null })
+
+        render(<SequenceViewWithEdit sequence={sequenceWithoutId} />, {
+          wrapper: Wrapper,
+        })
+
+        const backButton = screen.getByRole('button', {
+          name: /navigate back to/i,
+        })
+
+        await user.click(backButton)
+
+        // Should call navigation.back() when ID is missing
+        expect(mockBack).toHaveBeenCalled()
+        expect(mockPush).not.toHaveBeenCalled()
+      })
+
+      it('should prevent default event behavior when back button is clicked', async () => {
+        const user = userEvent.setup()
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'user@example.com' } },
+          status: 'authenticated',
+        })
+
+        render(<SequenceViewWithEdit sequence={baseSequence()} />, {
+          wrapper: Wrapper,
+        })
+
+        const backButton = screen.getByRole('button', {
+          name: /navigate back to/i,
+        })
+
+        await user.click(backButton)
+
+        // Navigation should be called (verifies event handler executed)
+        expect(mockPush).toHaveBeenCalled()
+      })
+    })
+
+    describe('Accessibility for View Toggle', () => {
+      it('should have proper ARIA labels for all navigation controls', () => {
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'user@example.com' } },
+          status: 'authenticated',
+        })
+
+        const sequence = baseSequence({ nameSequence: 'Evening Relaxation' })
+
+        render(<SequenceViewWithEdit sequence={sequence} />, {
+          wrapper: Wrapper,
+        })
+
+        // Back button
+        expect(
+          screen.getByRole('button', {
+            name: /navigate back to Evening Relaxation sequence practice/i,
+          })
+        ).toBeInTheDocument()
+
+        // List view button
+        expect(
+          screen.getByRole('button', {
+            name: /currently in list view/i,
+          })
+        ).toBeInTheDocument()
+
+        // Scroll view button
+        expect(
+          screen.getByRole('button', {
+            name: /switch to scroll view for Evening Relaxation/i,
+          })
+        ).toBeInTheDocument()
+      })
+
+      it('should indicate disabled state for current view icon', () => {
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'user@example.com' } },
+          status: 'authenticated',
+        })
+
+        render(<SequenceViewWithEdit sequence={baseSequence()} />, {
+          wrapper: Wrapper,
+        })
+
+        const listViewButton = screen.getByRole('button', {
+          name: /currently in list view/i,
+        })
+
+        // Should be disabled since it's the current view
+        expect(listViewButton).toBeDisabled()
+      })
+    })
+
+    describe('URL Parameter Handling', () => {
+      it('should construct correct URL with sequence ID for scroll view navigation', async () => {
+        const user = userEvent.setup()
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'user@example.com' } },
+          status: 'authenticated',
+        })
+
+        const testSequences = [
+          { id: '507f1f77bcf86cd799439011', name: 'MongoDB ObjectId' },
+          { id: 'simple-123', name: 'Simple ID' },
+          { id: 'complex-id-with-dashes', name: 'Dashed ID' },
+        ]
+
+        for (const testSeq of testSequences) {
+          mockPush.mockClear()
+
+          const sequence = baseSequence({
+            id: testSeq.id,
+            nameSequence: testSeq.name,
+          })
+
+          const { unmount } = render(
+            <SequenceViewWithEdit sequence={sequence} />,
+            { wrapper: Wrapper }
+          )
+
+          const scrollViewButton = screen.getByRole('button', {
+            name: /switch to scroll view/i,
+          })
+
+          await user.click(scrollViewButton)
+
+          expect(mockPush).toHaveBeenCalledWith(
+            `/navigator/flows/practiceSequences?sequenceId=${testSeq.id}`
+          )
+
+          unmount()
+        }
+      })
+
+      it('should include sequence ID in back navigation URL', async () => {
+        const user = userEvent.setup()
+        mockUseSession.mockReturnValue({
+          data: { user: { email: 'user@example.com' } },
+          status: 'authenticated',
+        })
+
+        const sequence = baseSequence({ id: 'back-nav-test-id' })
+
+        render(<SequenceViewWithEdit sequence={sequence} />, {
+          wrapper: Wrapper,
+        })
+
+        const backButton = screen.getByRole('button', {
+          name: /navigate back to/i,
+        })
+
+        await user.click(backButton)
+
+        expect(mockPush).toHaveBeenCalledWith(
+          '/navigator/flows/practiceSequences?sequenceId=back-nav-test-id'
+        )
+      })
+    })
+  })
 })

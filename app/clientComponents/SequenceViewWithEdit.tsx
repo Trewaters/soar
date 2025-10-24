@@ -11,8 +11,11 @@ import {
   CardHeader,
   Button,
   CircularProgress,
+  IconButton,
 } from '@mui/material'
 import { ArrowBack as ArrowBackIcon } from '@mui/icons-material'
+import ViewStreamIcon from '@mui/icons-material/ViewStream'
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import { useSession } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import EditSequence, { EditableSequence } from '@clientComponents/EditSequence'
@@ -219,9 +222,11 @@ export default function SequenceViewWithEdit({
     e?.preventDefault()
     e?.stopPropagation()
 
-    // Navigate back to sequences page
+    // Navigate back to scroll view practice sequences page
     if (model.id) {
-      navigation.push(`/navigator/sequences/${model.id}`)
+      navigation.push(
+        `/navigator/flows/practiceSequences?sequenceId=${model.id}`
+      )
     } else {
       // Fallback to general navigation back
       navigation.back()
@@ -255,26 +260,82 @@ export default function SequenceViewWithEdit({
         <Box
           sx={{
             mt: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: 2,
           }}
         >
-          <Typography
-            variant="body1"
-            component="h1"
-            textAlign="center"
+          <Box
             sx={{
-              backgroundColor: 'primary.main',
-              borderTopLeftRadius: '12px',
-              borderTopRightRadius: '12px',
-              width: 'fit-content',
-              ml: 5,
-              pr: 7,
-              pl: 2,
-              fontWeight: 'bold',
-              fontSize: '1.25rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              width: '100%',
             }}
           >
-            {model.nameSequence}
-          </Typography>
+            <Typography
+              variant="body1"
+              component="h1"
+              textAlign="center"
+              sx={{
+                backgroundColor: 'primary.main',
+                borderTopLeftRadius: '12px',
+                borderTopRightRadius: '12px',
+                width: 'fit-content',
+                ml: 5,
+                pr: 7,
+                pl: 2,
+                fontWeight: 'bold',
+                fontSize: '1.25rem',
+              }}
+            >
+              {model.nameSequence}
+            </Typography>
+
+            {/* View toggle icons */}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+              }}
+            >
+              <IconButton
+                disabled
+                aria-label="Currently in list view"
+                sx={{
+                  color: 'primary.main',
+                  p: 1,
+                  minWidth: 0,
+                  opacity: 0.5,
+                }}
+                title="List View (current)"
+              >
+                <FormatListBulletedIcon />
+              </IconButton>
+
+              <IconButton
+                onClick={() => {
+                  if (model.id) {
+                    navigation.push(
+                      `/navigator/flows/practiceSequences?sequenceId=${model.id}`
+                    )
+                  }
+                }}
+                aria-label={`Switch to scroll view for ${model.nameSequence}`}
+                sx={{
+                  color: 'primary.main',
+                  p: 1,
+                  minWidth: 0,
+                }}
+                title="Scroll View"
+              >
+                <ViewStreamIcon />
+              </IconButton>
+            </Box>
+          </Box>
+
           {isOwner && (
             <Button
               variant="outlined"
@@ -286,6 +347,7 @@ export default function SequenceViewWithEdit({
               aria-label={showEdit ? 'hide edit' : 'show edit'}
               aria-expanded={showEdit}
               aria-controls="sequence-edit-region"
+              sx={{ ml: 5 }}
             >
               {showEdit ? 'Close edit' : 'Edit'}
             </Button>

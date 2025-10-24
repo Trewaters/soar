@@ -21,6 +21,8 @@ import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import EditIcon from '@mui/icons-material/Edit'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import ViewStreamIcon from '@mui/icons-material/ViewStream'
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import { AutocompleteInput } from '@app/clientComponents/form'
@@ -600,23 +602,66 @@ export default function Page() {
                     </Typography>
                   </Box>
 
-                  {/* Inline edit icon to the right of the narrow title */}
-                  {singleSequence?.id ? (
-                    <IconButton
-                      onClick={() => {
-                        const editUrl = `/navigator/sequences/${singleSequence.id}?edit=true`
-                        router.push(editUrl)
-                      }}
-                      aria-label={`Edit ${singleSequence.nameSequence}`}
-                      sx={{
-                        color: 'primary.main',
-                        p: 1,
-                        minWidth: 0,
-                      }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  ) : null}
+                  {/* Action buttons: View toggle, Edit */}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                    }}
+                  >
+                    {/* View toggle icons */}
+                    {singleSequence?.id ? (
+                      <>
+                        <IconButton
+                          onClick={() => {
+                            router.push(
+                              `/navigator/sequences/${singleSequence.id}`
+                            )
+                          }}
+                          aria-label={`Switch to list view for ${singleSequence.nameSequence}`}
+                          sx={{
+                            color: 'primary.main',
+                            p: 1,
+                            minWidth: 0,
+                          }}
+                          title="List View"
+                        >
+                          <FormatListBulletedIcon />
+                        </IconButton>
+
+                        <IconButton
+                          disabled
+                          aria-label="Currently in scroll view"
+                          sx={{
+                            color: 'primary.main',
+                            p: 1,
+                            minWidth: 0,
+                            opacity: 0.5,
+                          }}
+                          title="Scroll View (current)"
+                        >
+                          <ViewStreamIcon />
+                        </IconButton>
+
+                        <IconButton
+                          onClick={() => {
+                            const editUrl = `/navigator/sequences/${singleSequence.id}?edit=true`
+                            router.push(editUrl)
+                          }}
+                          aria-label={`Edit ${singleSequence.nameSequence}`}
+                          sx={{
+                            color: 'primary.main',
+                            p: 1,
+                            minWidth: 0,
+                          }}
+                          title="Edit Sequence"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </>
+                    ) : null}
+                  </Box>
                 </Box>
               </Box>
               {singleSequence?.id ? (
