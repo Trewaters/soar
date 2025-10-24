@@ -445,8 +445,9 @@ export default function Page() {
 
                     const sectionLabel = sectionHeaderMap[index] || null
 
-                    // Use props directly; avoid extracting 'key' which is unused
-                    const otherProps = props as any
+                    // Extract key from props to avoid spreading it into JSX
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+                    const { key, ...otherProps } = props as any
 
                     return (
                       <React.Fragment key={option.id ?? `option-${index}`}>
