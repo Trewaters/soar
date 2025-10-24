@@ -49,6 +49,7 @@ import { AppText } from '@app/navigator/constants/Strings'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 import getAlphaUserIds from '@app/lib/alphaUsers'
 import { getAllSeries } from '@lib/seriesService'
+import ImageUpload from '@clientComponents/imageUpload/ImageUpload'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -736,6 +737,71 @@ export default function Page() {
                         ),
                       }}
                     />
+                  </FormControl>
+
+                  {/* Image Upload Section */}
+                  <FormControl
+                    sx={{
+                      width: '100%',
+                      mt: 3,
+                      border: '1px solid black',
+                      borderRadius: '12px',
+                      p: 2,
+                    }}
+                  >
+                    <Stack gap={2} flexDirection={'row'} alignItems={'center'}>
+                      <Typography color={'primary.main'} variant="h3">
+                        Sequence Image
+                      </Typography>
+                      <Image
+                        src={'/icons/flows/leaf-3.svg'}
+                        alt={'leaf icon'}
+                        height={21}
+                        width={21}
+                      />
+                    </Stack>
+                    <Box sx={{ mt: 2 }}>
+                      <ImageUpload
+                        onImageUploaded={(imageData) => {
+                          setImage(imageData.url)
+                          setSequences((prev) => ({
+                            ...prev,
+                            image: imageData.url,
+                          }))
+                        }}
+                        onImageDeleted={() => {
+                          setImage('')
+                          setSequences((prev) => ({
+                            ...prev,
+                            image: '',
+                          }))
+                        }}
+                        variant="dropzone"
+                      />
+                    </Box>
+                    {image && (
+                      <Box
+                        sx={{
+                          mt: 2,
+                          width: '100%',
+                          maxWidth: '400px',
+                          borderRadius: 2,
+                          overflow: 'hidden',
+                        }}
+                      >
+                        <Image
+                          src={image}
+                          alt="Sequence preview"
+                          width={400}
+                          height={300}
+                          style={{
+                            width: '100%',
+                            height: 'auto',
+                            objectFit: 'contain',
+                          }}
+                        />
+                      </Box>
+                    )}
                   </FormControl>
                 </FormGroup>
               </>

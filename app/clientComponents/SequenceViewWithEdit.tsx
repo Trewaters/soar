@@ -359,20 +359,31 @@ export default function SequenceViewWithEdit({
           <Box sx={{ display: 'flex', justifyContent: 'center', px: 2 }}>
             <Box
               sx={{
-                position: 'relative',
                 width: { xs: '100%', sm: '400px' },
-                height: 200,
+                maxHeight: '400px',
                 borderRadius: 2,
                 overflow: 'hidden',
                 boxShadow: 3,
+                '& img': {
+                  width: '100%',
+                  height: 'auto',
+                  maxHeight: '400px',
+                  objectFit: 'contain',
+                },
               }}
             >
               <Image
                 src={model.image}
                 alt={model.nameSequence || 'Sequence image'}
-                fill
+                width={400}
+                height={400}
                 sizes="(max-width: 600px) 100vw, 400px"
-                style={{ objectFit: 'cover' }}
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  maxHeight: '400px',
+                  objectFit: 'contain',
+                }}
               />
             </Box>
           </Box>

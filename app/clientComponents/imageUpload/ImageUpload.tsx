@@ -65,7 +65,7 @@ export default function ImageUpload({
   }
 
   const handleUpload = async () => {
-    if (!selectedFile || !session?.user?.id) {
+    if (!selectedFile || !session?.user?.email) {
       setError('Please select a file and ensure you are logged in')
       return
     }
@@ -77,7 +77,7 @@ export default function ImageUpload({
       const uploadedImage = await uploadPoseImage({
         file: selectedFile,
         altText: altText.trim() || undefined,
-        userId: session.user.id,
+        userId: session.user.email, // Use email as userId for ownership check
       })
 
       onImageUploaded?.(uploadedImage)
