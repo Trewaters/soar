@@ -224,6 +224,24 @@ const authConfig = {
           console.error('Error creating new user:', error)
           throw error
         }
+      } else if (existingUser && user.image && !existingUser.image) {
+        // Update existing user's OAuth provider image if it's missing
+        // This handles cases where the database was reset or image field is empty
+        try {
+          await prisma.userData.update({
+            where: { email: email ?? undefined },
+            data: {
+              image: user.image,
+              updatedAt: new Date(),
+            },
+          })
+          console.log(
+            `Updated OAuth provider image for existing user: ${email}`
+          )
+        } catch (error) {
+          console.error('Error updating user OAuth image:', error)
+          // Don't throw - allow sign-in to continue even if update fails
+        }
       }
       return true
     },

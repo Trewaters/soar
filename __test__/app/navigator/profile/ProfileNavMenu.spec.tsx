@@ -252,6 +252,18 @@ describe('ProfileNavMenu', () => {
     })
 
     it('should fall back to OAuth provider image when no custom image is uploaded', () => {
+      const userDataWithOAuthOnly = {
+        ...defaultUserData,
+        profileImages: [], // No uploaded images
+        activeProfileImage: undefined,
+        image: 'https://example.com/oauth-provider.jpg', // OAuth provider image
+      }
+
+      mockUseUser.mockReturnValue({
+        state: { userData: userDataWithOAuthOnly },
+        dispatch: mockDispatch,
+      })
+
       mockUseActiveProfileImage.mockReturnValue({
         activeImage: 'https://example.com/oauth-provider.jpg',
         isPlaceholder: false,
@@ -266,6 +278,13 @@ describe('ProfileNavMenu', () => {
       expect(
         screen.queryByAltText('Default profile icon')
       ).not.toBeInTheDocument()
+
+      // Should display OAuth provider image
+      const avatarImg = screen.getByRole('img', { hidden: true })
+      expect(avatarImg).toHaveAttribute(
+        'src',
+        'https://example.com/oauth-provider.jpg'
+      )
     })
 
     it('should handle multiple uploaded images and show the active one', () => {
@@ -298,6 +317,41 @@ describe('ProfileNavMenu', () => {
       expect(
         screen.queryByAltText('Default profile icon')
       ).not.toBeInTheDocument()
+    })
+
+    it('should prioritize uploaded images over OAuth provider image', () => {
+      const userDataWithBothImages = {
+        ...defaultUserData,
+        profileImages: ['https://example.com/uploaded.jpg'],
+        activeProfileImage: 'https://example.com/uploaded.jpg',
+        image: 'https://example.com/oauth-provider.jpg', // Should NOT use this
+      }
+
+      mockUseUser.mockReturnValue({
+        state: { userData: userDataWithBothImages },
+        dispatch: mockDispatch,
+      })
+
+      mockUseActiveProfileImage.mockReturnValue({
+        activeImage: 'https://example.com/uploaded.jpg',
+        isPlaceholder: false,
+        hasCustomImage: true,
+        imageCount: 1,
+        isDefaultImage: false,
+      })
+
+      render(<ProfileNavMenu />, { wrapper: TestWrapper })
+
+      // Should use uploaded image, not OAuth provider image
+      const avatarImg = screen.getByRole('img', { hidden: true })
+      expect(avatarImg).toHaveAttribute(
+        'src',
+        'https://example.com/uploaded.jpg'
+      )
+      expect(avatarImg).not.toHaveAttribute(
+        'src',
+        'https://example.com/oauth-provider.jpg'
+      )
     })
   })
 
