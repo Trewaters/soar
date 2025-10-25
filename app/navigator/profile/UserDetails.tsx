@@ -15,6 +15,7 @@ import Image from 'next/image'
 import { UseUser } from '@app/context/UserContext'
 import { UserAvatar } from '@app/clientComponents/UserAvatar'
 import { useSession } from 'next-auth/react'
+import ProfileDetails from '@app/clientComponents/profileUi/ProfileDetails'
 
 import ShareIcon from '@mui/icons-material/Share'
 
@@ -293,76 +294,43 @@ export default function UserDetails() {
           </Typography>
         )}
 
-        <Typography variant="body1" sx={{ mb: 1 }}>
-          Username
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{ mb: 1, backgroundColor: 'lightgray' }}
-        >
-          {userData.name ?? 'N/A'}
-        </Typography>
+        <ProfileDetails
+          label="Username"
+          details={userData.name}
+          highlightBackground
+        />
+
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
           <Box sx={{ width: '100%' }}>
-            <Typography variant="body1" sx={{ mb: 1 }}>
-              First Name
-            </Typography>
-            <Typography variant="body1">
-              {userData.firstName ?? 'N/A'}
-            </Typography>
+            <ProfileDetails label="First Name" details={userData.firstName} />
           </Box>
           <Box sx={{ width: '100%' }}>
-            <Typography variant="body1" sx={{ mb: 1 }}>
-              Last Name
-            </Typography>
-            <Typography variant="body1">
-              {userData.lastName ?? 'N/A'}
-            </Typography>
+            <ProfileDetails label="Last Name" details={userData.lastName} />
           </Box>
         </Stack>
-        <Box sx={{ width: '100%' }}>
-          <Typography variant="body1" sx={{ mb: 1 }}>
-            Pronouns
-          </Typography>
-          <Typography variant="body1">{userData.pronouns ?? 'N/A'}</Typography>
-        </Box>
-        <Box sx={{ width: '100%' }}>
-          <Typography variant="body1" sx={{ mb: 1 }}>
-            Headline
-          </Typography>
-          <Typography variant="body1">
-            {userData.headline || 'I am a Yoga instructor.'}
-          </Typography>
-        </Box>
-        <Box sx={{ width: '100%' }}>
-          <Typography variant="body1" sx={{ mb: 1 }}>
-            Description/About/Bio
-          </Typography>
-          <Typography variant="body1">{userData.bio || 'N/A'}</Typography>
-        </Box>
-        <Box sx={{ width: '100%' }}>
-          <Typography variant="body1" sx={{ mb: 1 }}>
-            Website URL
-          </Typography>
-          <Typography variant="body1">
-            {userData.websiteURL || 'N/A'}
-          </Typography>
-        </Box>
-        <Box sx={{ width: '100%' }}>
-          <Typography variant="body1" sx={{ mb: 1 }}>
-            My Location
-          </Typography>
-          <Typography variant="body1">{userData.location || 'N/A'}</Typography>
-        </Box>
-        <Typography variant="body1" sx={{ mb: 1 }}>
-          Email Address (primary/internal)
-        </Typography>
-        <Typography
-          variant="body1"
-          sx={{ mb: 1, backgroundColor: 'lightgray' }}
-        >
-          {userData.email ?? 'N/A'}
-        </Typography>
+
+        <ProfileDetails label="Pronouns" details={userData.pronouns} />
+
+        <ProfileDetails
+          label="Headline"
+          details={userData.headline || 'I am a Yoga instructor.'}
+        />
+
+        <ProfileDetails
+          label="Description/About/Bio"
+          details={userData.bio}
+          variant="multiline"
+        />
+
+        <ProfileDetails label="Website URL" details={userData.websiteURL} />
+
+        <ProfileDetails label="My Location" details={userData.location} />
+
+        <ProfileDetails
+          label="Email Address (primary/internal)"
+          details={userData.email}
+          highlightBackground
+        />
       </Stack>
     </Paper>
   )

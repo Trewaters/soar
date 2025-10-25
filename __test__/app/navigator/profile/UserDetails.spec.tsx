@@ -612,4 +612,279 @@ describe('UserDetails Avatar Display', () => {
       expect(shareButton).not.toBeDisabled()
     })
   })
+
+  describe('ProfileDetails Component Integration', () => {
+    it('should render all profile fields using ProfileDetails component', () => {
+      const userData = {
+        id: '1',
+        email: 'yogi@example.com',
+        name: 'YogaMaster123',
+        firstName: 'Yoga',
+        lastName: 'Master',
+        pronouns: 'they/them',
+        headline: 'Passionate yoga instructor',
+        bio: 'Teaching yoga for 10 years\nSpecializing in Vinyasa flow',
+        websiteURL: 'https://yogamaster.com',
+        location: 'San Francisco, CA',
+        createdAt: '2023-01-01T00:00:00.000Z',
+      }
+
+      mockUseUser.mockReturnValue({
+        state: { userData },
+        dispatch: mockDispatch,
+      })
+
+      render(<UserDetails />, { wrapper: TestWrapper })
+
+      // Verify all profile fields are displayed using ARIA labels
+      expect(screen.getByText('Username')).toBeInTheDocument()
+      expect(
+        screen.getByLabelText('Username: YogaMaster123')
+      ).toBeInTheDocument()
+
+      expect(screen.getByText('First Name')).toBeInTheDocument()
+      expect(screen.getByLabelText('First Name: Yoga')).toBeInTheDocument()
+
+      expect(screen.getByText('Last Name')).toBeInTheDocument()
+      expect(screen.getByLabelText('Last Name: Master')).toBeInTheDocument()
+
+      expect(screen.getByText('Pronouns')).toBeInTheDocument()
+      expect(screen.getByLabelText('Pronouns: they/them')).toBeInTheDocument()
+
+      expect(screen.getByText('Headline')).toBeInTheDocument()
+      expect(
+        screen.getByLabelText('Headline: Passionate yoga instructor')
+      ).toBeInTheDocument()
+
+      expect(screen.getByText('Description/About/Bio')).toBeInTheDocument()
+      expect(
+        screen.getByLabelText(
+          /Description\/About\/Bio: Teaching yoga for 10 years/
+        )
+      ).toBeInTheDocument()
+
+      expect(screen.getByText('Website URL')).toBeInTheDocument()
+      expect(
+        screen.getByLabelText('Website URL: https://yogamaster.com')
+      ).toBeInTheDocument()
+
+      expect(screen.getByText('My Location')).toBeInTheDocument()
+      expect(
+        screen.getByLabelText('My Location: San Francisco, CA')
+      ).toBeInTheDocument()
+
+      expect(
+        screen.getByText('Email Address (primary/internal)')
+      ).toBeInTheDocument()
+      expect(
+        screen.getByLabelText(
+          'Email Address (primary/internal): yogi@example.com'
+        )
+      ).toBeInTheDocument()
+    })
+
+    it('should display N/A for empty profile fields', () => {
+      const userData = {
+        id: '1',
+        email: 'test@example.com',
+        name: 'TestUser',
+        firstName: null,
+        lastName: null,
+        pronouns: null,
+        headline: null,
+        bio: null,
+        websiteURL: null,
+        location: null,
+        createdAt: '2023-01-01T00:00:00.000Z',
+      }
+
+      mockUseUser.mockReturnValue({
+        state: { userData },
+        dispatch: mockDispatch,
+      })
+
+      render(<UserDetails />, { wrapper: TestWrapper })
+
+      // Username should display the name value using ARIA label
+      expect(screen.getByLabelText('Username: TestUser')).toBeInTheDocument()
+
+      // Count N/A occurrences - should be displayed for empty fields
+      const naElements = screen.getAllByText('N/A')
+      // firstName, lastName, pronouns, bio, websiteURL, location = 6 N/A values
+      expect(naElements.length).toBeGreaterThanOrEqual(6)
+    })
+
+    it('should display default headline when headline is empty', () => {
+      const userData = {
+        id: '1',
+        email: 'test@example.com',
+        name: 'TestUser',
+        headline: null,
+        createdAt: '2023-01-01T00:00:00.000Z',
+      }
+
+      mockUseUser.mockReturnValue({
+        state: { userData },
+        dispatch: mockDispatch,
+      })
+
+      render(<UserDetails />, { wrapper: TestWrapper })
+
+      expect(screen.getByText('Headline')).toBeInTheDocument()
+      expect(screen.getByText('I am a Yoga instructor.')).toBeInTheDocument()
+    })
+
+    it('should apply highlighted background to username and email fields', () => {
+      const userData = {
+        id: '1',
+        email: 'highlighted@example.com',
+        name: 'HighlightedUser',
+        createdAt: '2023-01-01T00:00:00.000Z',
+      }
+
+      mockUseUser.mockReturnValue({
+        state: { userData },
+        dispatch: mockDispatch,
+      })
+
+      render(<UserDetails />, { wrapper: TestWrapper })
+
+      // Find username and email text elements using ARIA labels
+      const usernameElement = screen.getByLabelText('Username: HighlightedUser')
+      const emailElement = screen.getByLabelText(
+        'Email Address (primary/internal): highlighted@example.com'
+      )
+
+      // Both should have lightgray background
+      expect(usernameElement).toHaveStyle({ backgroundColor: 'lightgray' })
+      expect(emailElement).toHaveStyle({ backgroundColor: 'lightgray' })
+    })
+
+    it('should handle multiline bio text correctly', () => {
+      const userData = {
+        id: '1',
+        email: 'test@example.com',
+        name: 'TestUser',
+        bio: 'Line 1 of bio\nLine 2 of bio\nLine 3 of bio',
+        createdAt: '2023-01-01T00:00:00.000Z',
+      }
+
+      mockUseUser.mockReturnValue({
+        state: { userData },
+        dispatch: mockDispatch,
+      })
+
+      render(<UserDetails />, { wrapper: TestWrapper })
+
+      // Bio should be displayed with multiline variant
+      const bioElement = screen.getByText((content) =>
+        content.includes('Line 1 of bio')
+      )
+      expect(bioElement).toBeInTheDocument()
+      expect(bioElement).toHaveStyle({ whiteSpace: 'pre-line' })
+    })
+
+    it('should use semantic definition list markup for accessibility', () => {
+      const userData = {
+        id: '1',
+        email: 'accessible@example.com',
+        name: 'AccessibleUser',
+        firstName: 'Accessible',
+        createdAt: '2023-01-01T00:00:00.000Z',
+      }
+
+      mockUseUser.mockReturnValue({
+        state: { userData },
+        dispatch: mockDispatch,
+      })
+
+      const { container } = render(<UserDetails />, { wrapper: TestWrapper })
+
+      // ProfileDetails components should use <dl>, <dt>, <dd> tags
+      const definitionLists = container.querySelectorAll('dl')
+      expect(definitionLists.length).toBeGreaterThan(0)
+
+      const definitionTerms = container.querySelectorAll('dt')
+      expect(definitionTerms.length).toBeGreaterThan(0)
+
+      const definitionDescriptions = container.querySelectorAll('dd')
+      expect(definitionDescriptions.length).toBeGreaterThan(0)
+    })
+
+    it('should have proper ARIA labels for profile details', () => {
+      const userData = {
+        id: '1',
+        email: 'aria@example.com',
+        name: 'AriaUser',
+        firstName: 'Aria',
+        lastName: 'User',
+        createdAt: '2023-01-01T00:00:00.000Z',
+      }
+
+      mockUseUser.mockReturnValue({
+        state: { userData },
+        dispatch: mockDispatch,
+      })
+
+      render(<UserDetails />, { wrapper: TestWrapper })
+
+      // Each ProfileDetails component should have a group role with aria-label
+      expect(
+        screen.getByRole('group', { name: /Profile detail: Username/i })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('group', { name: /Profile detail: First Name/i })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('group', { name: /Profile detail: Last Name/i })
+      ).toBeInTheDocument()
+    })
+
+    it('should render profile fields in correct visual order', () => {
+      const userData = {
+        id: '1',
+        email: 'order@example.com',
+        name: 'OrderTest',
+        firstName: 'Order',
+        lastName: 'Test',
+        pronouns: 'she/her',
+        headline: 'Test headline',
+        bio: 'Test bio',
+        websiteURL: 'https://test.com',
+        location: 'Test City',
+        createdAt: '2023-01-01T00:00:00.000Z',
+      }
+
+      mockUseUser.mockReturnValue({
+        state: { userData },
+        dispatch: mockDispatch,
+      })
+
+      const { container } = render(<UserDetails />, { wrapper: TestWrapper })
+
+      // Get all definition lists (each ProfileDetails component uses one)
+      const allText = container.textContent || ''
+
+      // Verify the order of fields as they appear in the component
+      const usernameIndex = allText.indexOf('Username')
+      const firstNameIndex = allText.indexOf('First Name')
+      const lastNameIndex = allText.indexOf('Last Name')
+      const pronounsIndex = allText.indexOf('Pronouns')
+      const headlineIndex = allText.indexOf('Headline')
+      const bioIndex = allText.indexOf('Description/About/Bio')
+      const websiteIndex = allText.indexOf('Website URL')
+      const locationIndex = allText.indexOf('My Location')
+      const emailIndex = allText.lastIndexOf('Email Address')
+
+      // Verify they appear in the expected order
+      expect(usernameIndex).toBeLessThan(firstNameIndex)
+      expect(firstNameIndex).toBeLessThan(lastNameIndex)
+      expect(lastNameIndex).toBeLessThan(pronounsIndex)
+      expect(pronounsIndex).toBeLessThan(headlineIndex)
+      expect(headlineIndex).toBeLessThan(bioIndex)
+      expect(bioIndex).toBeLessThan(websiteIndex)
+      expect(websiteIndex).toBeLessThan(locationIndex)
+      expect(locationIndex).toBeLessThan(emailIndex)
+    })
+  })
 })
