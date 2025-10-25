@@ -43,6 +43,7 @@ const ProfileNavMenu: React.FC = () => {
   const router = useNavigationWithLoading()
   const {
     state: { userData },
+    dispatch,
   } = UseUser()
   const { activeImage, isPlaceholder } = useActiveProfileImage()
 
@@ -53,6 +54,30 @@ const ProfileNavMenu: React.FC = () => {
       setCurrentPath(window.location.pathname)
     }
   }, [])
+
+  // Fetch user data if session exists but userData is not populated
+  React.useEffect(() => {
+    const fetchUserData = async () => {
+      if (session?.user?.email && (!userData?.email || userData.email === '')) {
+        try {
+          const response = await fetch(
+            `/api/user/?email=${encodeURIComponent(session.user.email)}`,
+            { cache: 'no-store' }
+          )
+          if (response.ok) {
+            const result = await response.json()
+            if (result.data) {
+              dispatch({ type: 'SET_USER', payload: result.data })
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching user data in ProfileNavMenu:', error)
+        }
+      }
+    }
+
+    fetchUserData()
+  }, [session, userData?.email, dispatch])
 
   const handleSignOut = async () => {
     try {

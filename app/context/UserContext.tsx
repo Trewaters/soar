@@ -10,129 +10,13 @@ import React, {
   useEffect,
 } from 'react'
 import { isMobileDevice } from '@app/utils/mobileInputHelpers'
-
-export type UserData = {
-  // 'id' is not editable
-  id: string
-  // 'provider_id' is not editable
-  provider_id: string
-  // 'name' is username and not editable
-  name: string
-  // 'email' is not editable
-  email: string
-  // 'image' is not editable
-  image: string
-  // 'createdAt' is not editable
-  createdAt: Date
-  // following fields are editable
-  updatedAt: Date
-  pronouns: string
-  headline: string
-  websiteURL: string
-  location: string
-  firstName: string
-  lastName: string
-  bio: string
-  shareQuick: string
-  yogaStyle: string
-  yogaExperience: string
-  company: string
-  socialURL: string
-  isLocationPublic: string
-  role: string
-
-  emailVerified: Date
-  profile: Record<string, any>
-  // Profile image management fields
-  profileImages: string[]
-  activeProfileImage?: string
-}
-
-export type UserGithubProfile = {
-  login: string
-  id: number
-  node_id: string
-  avatar_url: string
-  gravatar_id: string
-  url: string
-  html_url: string
-  followers_url: string
-  following_url: string
-  gists_url: string
-  starred_url: string
-  subscriptions_url: string
-  organizations_url: string
-  repos_url: string
-  events_url: string
-  received_events_url: string
-  type: string
-  site_admin: boolean
-  name: string
-  company: string
-  blog: string
-  location: string
-  email: string
-  hireable: boolean
-  bio: string
-  twitter_username: string
-  public_repos: number
-  public_gists: number
-  followers: number
-  following: number
-  created_at: string
-  updated_at: string
-  private_gists: number
-  total_private_repos: number
-  owned_private_repos: number
-  disk_usage: number
-  collaborators: number
-  two_factor_authentication: boolean
-  plan: {
-    name: string
-    space: number
-    collaborators: number
-    private_repos: number
-  }
-}
-
-export type UserGoogleProfile = {
-  iss: string
-  azp: string
-  aud: string
-  sub: string
-  email: string
-  email_verified: boolean
-  at_hash: string
-  name: string
-  picture: string
-  given_name: string
-  family_name: string
-  iat: number
-  exp: number
-}
-
-export type UserProfilePageState = {
-  userData: UserData
-  userGithubProfile: UserGithubProfile
-  userGoogleProfile: UserGoogleProfile
-  isMobile?: boolean
-  deviceInfo?: {
-    isMobile: boolean
-    userAgent?: string
-    screenWidth?: number
-    touchSupport?: boolean
-  }
-}
-
-type UserAction =
-  | { type: 'SET_USER'; payload: UserData }
-  | { type: 'SET_GITHUB_PROFILE'; payload: UserGithubProfile }
-  | { type: 'SET_GOOGLE_PROFILE'; payload: UserGoogleProfile }
-  | { type: 'SET_DEVICE_INFO'; payload: UserProfilePageState['deviceInfo'] }
-  | {
-      type: 'SET_PROFILE_IMAGES'
-      payload: { images: string[]; active: string | null }
-    }
+import type {
+  UserData,
+  UserGithubProfile,
+  UserGoogleProfile,
+  UserProfilePageState,
+  UserAction,
+} from '../../types/models/user'
 
 const initialState: UserProfilePageState = {
   userData: {

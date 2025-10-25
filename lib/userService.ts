@@ -1,20 +1,5 @@
 import { logServiceError } from './errorLogger'
-
-export type UserData = {
-  id: string
-  email: string
-  name?: string
-  provider_id?: string
-  createdAt: Date
-  updatedAt: Date
-}
-
-export type UserStreakData = {
-  currentStreak: number
-  longestStreak: number
-  lastLoginDate: string | null
-  isActiveToday: boolean
-}
+import type { UserData, UserStreakData } from '../types/models/user'
 
 /**
  * Get user by email

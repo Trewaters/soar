@@ -235,14 +235,14 @@ export default function UserDetails() {
           <Stack alignItems="center" flex={1} sx={{ position: 'relative' }}>
             <UserAvatar
               size="large"
-              showPlaceholderIndicator={true}
+              showPlaceholderIndicator={false}
               sx={{
                 bgcolor: red[500],
                 width: { xs: 120, md: 150 },
                 height: { xs: 120, md: 150 },
               }}
               aria-label="name initial"
-              enableUpload={true}
+              enableUpload={false}
             />
           </Stack>
           <Stack flex={3} spacing={2}>

@@ -3,7 +3,7 @@
  * Consolidated type definitions for asana-related data structures
  */
 
-import { UserData } from 'app/context/UserContext'
+import type { UserData } from './models/user'
 import { PoseImageData } from './images'
 
 // REPLACES AsanaPose, found in this file

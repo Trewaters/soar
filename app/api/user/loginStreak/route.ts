@@ -1,28 +1,3 @@
-/**
- * Login Streak API Route - Enhanced for Production Debugging
- *
- * This API calculates user login streaks with comprehensive logging to troubleshoot
- * production issues where the feature works locally but fails in production.
- *
- * Enhanced logging includes:
- * - Request tracking with unique request IDs
- * - Environment and deployment diagnostics
- * - Database connection testing and timing
- * - User lookup diagnostics with collection inspection
- * - Detailed error context with stack traces
- * - Performance timing measurements
- * - Network and browser information
- * - Debug information (excluded in production responses)
- *
- * Troubleshooting production issues:
- * 1. Check Vercel logs for detailed error messages
- * 2. Look for database connection timeouts or failures
- * 3. Verify environment variables are properly set
- * 4. Check if user exists in UserData collection
- * 5. Monitor UserLogin collection for missing data
- * 6. Review request IDs to trace specific failures
- */
-
 import { PrismaClient } from '../../../../prisma/generated/client'
 import { NextRequest, NextResponse } from 'next/server'
 import { logApiError } from '../../../../lib/errorLogger'
@@ -222,35 +197,6 @@ export async function GET(req: NextRequest) {
         operation: 'user_lookup',
       })
 
-      // Check if UserData collection exists and has any records
-      try {
-        const totalUsersCount = await client.userData.count()
-        const recentUsers = await client.userData.findMany({
-          take: 5,
-          select: { id: true, email: true, createdAt: true },
-          orderBy: { createdAt: 'desc' },
-        })
-
-        console.warn('UserData collection diagnostics:', {
-          requestId,
-          userId,
-          timestamp,
-          totalUsersCount,
-          recentUserIds: recentUsers.map((u) => u.id),
-          recentUserEmails: recentUsers.map((u) => u.email),
-          userIdType: typeof userId,
-          userIdLength: userId.length,
-        })
-      } catch (diagError) {
-        console.error('Failed to run user diagnostics:', {
-          requestId,
-          userId,
-          timestamp,
-          diagError:
-            diagError instanceof Error ? diagError.message : String(diagError),
-        })
-      }
-
       return NextResponse.json(
         {
           error: 'User not found',
@@ -267,31 +213,9 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    console.log('User found, proceeding to calculate login streak:', {
-      requestId,
-      userId,
-      timestamp,
-      userEmail: user.email,
-    })
-
-    // Calculate login streak using UserLogin table
-    console.log('About to calculate login streak for userId:', {
-      requestId,
-      userId,
-      timestamp,
-    })
-
     const streakCalculationStart = Date.now()
     const streakData = await calculateLoginStreak(userId, client)
     const streakCalculationTime = Date.now() - streakCalculationStart
-
-    console.log('Successfully calculated streak data:', {
-      requestId,
-      userId,
-      streakData,
-      timestamp,
-      calculationTimeMs: streakCalculationTime,
-    })
 
     return NextResponse.json(
       {
@@ -329,8 +253,6 @@ export async function GET(req: NextRequest) {
       envConfig,
       userAgent: req.headers.get('user-agent'),
     }
-
-    console.error('LoginStreak API Error:', errorDetails)
 
     logApiError(error, req, 'GET /api/user/loginStreak', errorDetails)
 
