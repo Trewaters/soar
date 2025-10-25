@@ -16,7 +16,6 @@ import {
 } from '@mui/material'
 import {
   LibraryBooks as LibraryIcon,
-  Edit as EditIcon,
   Settings as SettingsIcon,
   Logout as LogoutIcon,
   Person as PersonIcon,
@@ -25,7 +24,9 @@ import {
 import { useSession, signOut } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { UseUser } from '@context/UserContext'
+import { useActiveProfileImage } from '@app/hooks/useActiveProfileImage'
 import { AppText } from '../constants/Strings'
+import Image from 'next/image'
 
 interface ProfileNavMenuItem {
   id: string
@@ -43,6 +44,7 @@ const ProfileNavMenu: React.FC = () => {
   const {
     state: { userData },
   } = UseUser()
+  const { activeImage, isPlaceholder } = useActiveProfileImage()
 
   // Get current pathname for highlighting
   const [currentPath, setCurrentPath] = React.useState<string>('')
@@ -111,11 +113,16 @@ const ProfileNavMenu: React.FC = () => {
         >
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar
-              src={userData?.image || session?.user?.image || undefined}
+              src={isPlaceholder ? undefined : activeImage}
               sx={{ width: 60, height: 60 }}
             >
-              {!userData?.image && !session?.user?.image && (
-                <PersonIcon fontSize="large" />
+              {isPlaceholder && (
+                <Image
+                  src="/icons/profile/profile-person.svg"
+                  width={36}
+                  height={36}
+                  alt="Default profile icon"
+                />
               )}
             </Avatar>
             <Box>

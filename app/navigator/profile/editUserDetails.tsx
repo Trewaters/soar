@@ -32,6 +32,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import LinkIcon from '@mui/icons-material/Link'
 import ShareIcon from '@mui/icons-material/Share'
 import MapIcon from '@mui/icons-material/Map'
+import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import { styled } from '@mui/material/styles'
 import { LocationPicker } from '@app/clientComponents/locationPicker'
 import TextInputField from '@app/clientComponents/inputComponents/TextInputField'
@@ -564,28 +565,75 @@ export default function EditUserDetails({
                   flex={1}
                   sx={{ position: 'relative' }}
                 >
-                  <Avatar
+                  <Box
                     sx={{
-                      bgcolor: red[500],
-                      width: { xs: 120, md: 150 },
-                      height: { xs: 120, md: 150 },
+                      position: 'relative',
+                      cursor: 'pointer',
+                      '&:hover .camera-overlay': {
+                        opacity: 1,
+                      },
                     }}
-                    aria-label="name initial"
-                    src={
-                      activeProfileImage ||
-                      userData?.image ||
-                      profilePlaceholder
-                    }
+                    onClick={() => setImageManagerOpen(true)}
+                    role="button"
+                    aria-label="Click to manage profile images"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        setImageManagerOpen(true)
+                      }
+                    }}
                   >
-                    {!(activeProfileImage || userData?.image) && (
-                      <Image
-                        src={profilePlaceholder}
-                        width={50}
-                        height={50}
-                        alt="Generic profile image icon"
+                    <Avatar
+                      sx={{
+                        bgcolor: red[500],
+                        width: { xs: 120, md: 150 },
+                        height: { xs: 120, md: 150 },
+                      }}
+                      aria-label="name initial"
+                      src={
+                        activeProfileImage ||
+                        userData?.image ||
+                        profilePlaceholder
+                      }
+                    >
+                      {!(activeProfileImage || userData?.image) && (
+                        <Image
+                          src={profilePlaceholder}
+                          width={50}
+                          height={50}
+                          alt="Generic profile image icon"
+                        />
+                      )}
+                    </Avatar>
+                    {/* Camera icon overlay */}
+                    <Box
+                      className="camera-overlay"
+                      sx={{
+                        position: 'absolute',
+                        bottom: 0,
+                        right: 0,
+                        bgcolor: 'primary.main',
+                        borderRadius: '50%',
+                        width: { xs: 36, md: 44 },
+                        height: { xs: 36, md: 44 },
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: 2,
+                        opacity: 0.9,
+                        transition: 'opacity 0.2s ease-in-out',
+                        border: '3px solid white',
+                      }}
+                    >
+                      <CameraAltIcon
+                        sx={{
+                          color: 'white',
+                          fontSize: { xs: 20, md: 24 },
+                        }}
                       />
-                    )}
-                  </Avatar>
+                    </Box>
+                  </Box>
                   {/* Profile Image Manager Modal */}
                   <Modal
                     open={imageManagerOpen}
