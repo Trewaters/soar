@@ -1,8 +1,9 @@
-import { Box, Container, Typography, Paper, Stack } from '@mui/material'
+import { Container, Typography, Paper, Stack } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { SessionProvider } from 'next-auth/react'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
 import { auth } from '../../../../auth'
+import theme from '@styles/theme'
 
 export default async function SettingsPage() {
   const session = await auth()
@@ -18,90 +19,228 @@ export default async function SettingsPage() {
 
           {/* Settings Content */}
           <Grid size={{ xs: 12, md: 8 }}>
-            <Paper elevation={2} sx={{ p: 4, borderRadius: 2 }}>
-              <Stack spacing={3}>
-                <Typography variant="h1" component="h1" gutterBottom>
-                  Account Settings
-                </Typography>
+            <Stack spacing={2}>
+              <Typography
+                variant="h1"
+                component="h1"
+                sx={{ color: theme.palette.success.main, textAlign: 'center' }}
+                gutterBottom
+              >
+                Account Settings
+              </Typography>
 
-                <Typography variant="body1" color="text.secondary">
-                  You can modify your profile information from the Profile
-                  Overview page.
+              {/* Privacy */}
+              <Paper
+                component="a"
+                href="/navigator/profile/privacy-policy"
+                elevation={0}
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  borderBottom: '2px solid',
+                  borderColor: 'primary.main',
+                  textDecoration: 'none',
+                  display: 'block',
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    elevation: 2,
+                    transform: 'translateY(-2px)',
+                    boxShadow: 2,
+                  },
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: 'primary.main',
+                    fontWeight: 500,
+                    textAlign: 'center',
+                  }}
+                >
+                  Privacy Policy
                 </Typography>
+              </Paper>
 
-                <Box component="ul" sx={{ pl: 3 }}>
-                  {/* 
-                  <Typography component="li" variant="body2" sx={{ mb: 1 }}>
-                    Privacy settings
-                  </Typography>
-                  <Typography component="li" variant="body2" sx={{ mb: 1 }}>
-                    Notification preferences
-                  </Typography>
-                  <Typography component="li" variant="body2" sx={{ mb: 1 }}>
-                    Account security options
-                  </Typography>
-                  <Typography component="li" variant="body2" sx={{ mb: 1 }}>
-                    Data export and deletion
-                  </Typography>
-                  <Typography component="li" variant="body2" sx={{ mb: 1 }}>
-                    Connected accounts management
-                  </Typography>
-                   */}
-                  <Typography component="li" variant="body2" sx={{ mb: 1 }}>
-                    <Box
-                      component="a"
-                      href="/navigator/profile/feedback"
-                      sx={{
-                        color: 'primary.main',
-                        textDecoration: 'none',
-                        '&:hover': { textDecoration: 'underline' },
-                      }}
-                    >
-                      Send feedback to developer
-                    </Box>
-                  </Typography>
-                  <Typography component="li" variant="body2" sx={{ mb: 1 }}>
-                    <Box
-                      component="a"
-                      href="/compliance/terms"
-                      sx={{
-                        color: 'primary.main',
-                        textDecoration: 'none',
-                        '&:hover': { textDecoration: 'underline' },
-                      }}
-                    >
-                      Terms and conditions
-                    </Box>
-                  </Typography>
-                  <Typography component="li" variant="body2" sx={{ mb: 1 }}>
-                    <Box
-                      component="a"
-                      href="/navigator/profile/privacy-policy"
-                      sx={{
-                        color: 'primary.main',
-                        textDecoration: 'none',
-                        '&:hover': { textDecoration: 'underline' },
-                      }}
-                    >
-                      Privacy Policy
-                    </Box>
-                  </Typography>
-                  <Typography component="li" variant="body2" sx={{ mb: 1 }}>
-                    <Box
-                      component="a"
-                      href="/navigator/profile/settings/notifications"
-                      sx={{
-                        color: 'primary.main',
-                        textDecoration: 'none',
-                        '&:hover': { textDecoration: 'underline' },
-                      }}
-                    >
-                      Notification Preferences
-                    </Box>
-                  </Typography>
-                </Box>
-              </Stack>
-            </Paper>
+              {/* Privacy Settings */}
+              <Paper
+                component="a"
+                href="/navigator/profile/privacy-settings"
+                elevation={0}
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  borderBottom: '2px solid',
+                  borderColor: 'primary.main',
+                  textDecoration: 'none',
+                  display: 'block',
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    elevation: 2,
+                    transform: 'translateY(-2px)',
+                    boxShadow: 2,
+                  },
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: 'primary.main',
+                    fontWeight: 500,
+                    textAlign: 'center',
+                  }}
+                >
+                  Privacy Settings
+                </Typography>
+              </Paper>
+
+              {/* Notifications */}
+              <Paper
+                component="a"
+                href="/navigator/profile/settings/notifications"
+                elevation={0}
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  borderBottom: '2px solid',
+                  borderColor: 'primary.main',
+                  textDecoration: 'none',
+                  display: 'block',
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    elevation: 2,
+                    transform: 'translateY(-2px)',
+                    boxShadow: 2,
+                  },
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: 'primary.main',
+                    fontWeight: 500,
+                    textAlign: 'center',
+                  }}
+                >
+                  Notification Preferences
+                </Typography>
+              </Paper>
+
+              {/* Account Security */}
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  borderBottom: '2px solid',
+                  borderColor: 'primary.main',
+                  textDecoration: 'none',
+                  display: 'block',
+                  opacity: 0.6,
+                  cursor: 'not-allowed',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: 'primary.main',
+                    fontWeight: 500,
+                    textAlign: 'center',
+                  }}
+                >
+                  Account Security
+                </Typography>
+              </Paper>
+
+              {/* Connected Accounts */}
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  borderBottom: '2px solid',
+                  borderColor: 'primary.main',
+                  textDecoration: 'none',
+                  display: 'block',
+                  opacity: 0.6,
+                  cursor: 'not-allowed',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: 'primary.main',
+                    fontWeight: 500,
+                    textAlign: 'center',
+                  }}
+                >
+                  Connected Accounts
+                </Typography>
+              </Paper>
+
+              {/* Terms and Conditions */}
+              <Paper
+                component="a"
+                href="/compliance/terms"
+                elevation={0}
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  borderBottom: '2px solid',
+                  borderColor: 'primary.main',
+                  textDecoration: 'none',
+                  display: 'block',
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    elevation: 2,
+                    transform: 'translateY(-2px)',
+                    boxShadow: 2,
+                  },
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: 'primary.main',
+                    fontWeight: 500,
+                    textAlign: 'center',
+                  }}
+                >
+                  Terms and Conditions
+                </Typography>
+              </Paper>
+
+              {/* Send Feedback */}
+              <Paper
+                component="a"
+                href="/navigator/profile/feedback"
+                elevation={0}
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  borderBottom: '2px solid',
+                  borderColor: 'primary.main',
+                  textDecoration: 'none',
+                  display: 'block',
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    elevation: 2,
+                    transform: 'translateY(-2px)',
+                    boxShadow: 2,
+                  },
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: 'primary.main',
+                    fontWeight: 500,
+                    textAlign: 'center',
+                  }}
+                >
+                  Send Feedback to Developer
+                </Typography>
+              </Paper>
+            </Stack>
           </Grid>
         </Grid>
       </SessionProvider>
