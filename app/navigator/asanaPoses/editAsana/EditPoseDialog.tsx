@@ -477,24 +477,6 @@ export default function EditPoseDialog({
                     <Grid size={12}>
                       <FormControl sx={{ width: '100%', mb: 3 }}>
                         <TextField
-                          select
-                          label="Breath Direction Default"
-                          name="breath_direction_default"
-                          value={formData.breath_direction_default || ''}
-                          onChange={handleChange}
-                          SelectProps={{ native: true }}
-                        >
-                          <option value=""></option>
-                          <option value="Neutral">Neutral</option>
-                          <option value="Inhale">Inhale</option>
-                          <option value="Exhale">Exhale</option>
-                        </TextField>
-                      </FormControl>
-                    </Grid>
-
-                    <Grid size={12}>
-                      <FormControl sx={{ width: '100%', mb: 3 }}>
-                        <TextField
                           label="Dristi"
                           name="dristi"
                           value={formData.dristi || ''}

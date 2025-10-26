@@ -182,10 +182,6 @@ describe('CreateAsanaWithImages - Happy Path', () => {
       )
       await user.selectOptions(screen.getByLabelText(/category/i), 'Standing')
       await user.selectOptions(screen.getByLabelText(/difficulty/i), 'Easy')
-      await user.selectOptions(
-        screen.getByLabelText(/breath direction default/i),
-        'Neutral'
-      )
 
       // Submit the form
       const submitButton = screen.getByRole('button', { name: /create asana/i })
@@ -228,10 +224,6 @@ describe('CreateAsanaWithImages - Happy Path', () => {
       await user.type(screen.getByLabelText(/description/i), 'Balance pose')
       await user.selectOptions(screen.getByLabelText(/category/i), 'Balance')
       await user.selectOptions(screen.getByLabelText(/difficulty/i), 'Easy')
-      await user.selectOptions(
-        screen.getByLabelText(/breath direction default/i),
-        'Neutral'
-      )
 
       // Submit form
       await user.click(screen.getByRole('button', { name: /create asana/i }))
@@ -273,10 +265,6 @@ describe('CreateAsanaWithImages - Happy Path', () => {
       await user.type(descInput, 'Resting pose')
       await user.selectOptions(screen.getByLabelText(/category/i), 'Seated')
       await user.selectOptions(screen.getByLabelText(/difficulty/i), 'Easy')
-      await user.selectOptions(
-        screen.getByLabelText(/breath direction default/i),
-        'Neutral'
-      )
 
       await user.click(screen.getByRole('button', { name: /create asana/i }))
 
@@ -308,10 +296,6 @@ describe('CreateAsanaWithImages - Happy Path', () => {
       await user.type(screen.getByLabelText(/description/i), 'Test description')
       await user.selectOptions(screen.getByLabelText(/category/i), 'Standing')
       await user.selectOptions(screen.getByLabelText(/difficulty/i), 'Average')
-      await user.selectOptions(
-        screen.getByLabelText(/breath direction default/i),
-        'Neutral'
-      )
 
       await user.click(screen.getByRole('button', { name: /create asana/i }))
 
@@ -353,10 +337,6 @@ describe('CreateAsanaWithImages - Happy Path', () => {
       await user.type(screen.getByLabelText(/description/i), 'Strong pose')
       await user.selectOptions(screen.getByLabelText(/category/i), 'Standing')
       await user.selectOptions(screen.getByLabelText(/difficulty/i), 'Average')
-      await user.selectOptions(
-        screen.getByLabelText(/breath direction default/i),
-        'Neutral'
-      )
 
       await user.click(screen.getByRole('button', { name: /create asana/i }))
 
