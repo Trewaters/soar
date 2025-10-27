@@ -127,6 +127,8 @@ export default async function SettingsPage() {
 
               {/* Account Security */}
               <Paper
+                component="a"
+                href="/navigator/profile/settings/account-security"
                 elevation={0}
                 sx={{
                   p: 3,
@@ -135,8 +137,12 @@ export default async function SettingsPage() {
                   borderColor: 'primary.main',
                   textDecoration: 'none',
                   display: 'block',
-                  opacity: 0.6,
-                  cursor: 'not-allowed',
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    elevation: 2,
+                    transform: 'translateY(-2px)',
+                    boxShadow: 2,
+                  },
                 }}
               >
                 <Typography
