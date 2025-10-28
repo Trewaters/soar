@@ -32,7 +32,7 @@ export default async function SettingsPage() {
               {/* Privacy */}
               <Paper
                 component="a"
-                href="/navigator/profile/privacy-policy"
+                href="/navigator/profile/settings/legal"
                 elevation={0}
                 sx={{
                   p: 3,
@@ -57,7 +57,7 @@ export default async function SettingsPage() {
                     textAlign: 'center',
                   }}
                 >
-                  Privacy Policy
+                  Legal &amp; Community
                 </Typography>
               </Paper>
 
@@ -186,38 +186,6 @@ export default async function SettingsPage() {
                   }}
                 >
                   Connected Accounts
-                </Typography>
-              </Paper>
-
-              {/* Terms and Conditions */}
-              <Paper
-                component="a"
-                href="/compliance/terms"
-                elevation={0}
-                sx={{
-                  p: 3,
-                  borderRadius: 2,
-                  borderBottom: '2px solid',
-                  borderColor: 'primary.main',
-                  textDecoration: 'none',
-                  display: 'block',
-                  transition: 'all 0.2s',
-                  '&:hover': {
-                    elevation: 2,
-                    transform: 'translateY(-2px)',
-                    boxShadow: 2,
-                  },
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    color: 'primary.main',
-                    fontWeight: 500,
-                    textAlign: 'center',
-                  }}
-                >
-                  Terms and Conditions
                 </Typography>
               </Paper>
 
