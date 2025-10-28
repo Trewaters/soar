@@ -10,13 +10,17 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Chip,
   Paper,
   Stack,
   CircularProgress,
   Alert,
   IconButton,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { useSession } from 'next-auth/react'
@@ -24,14 +28,13 @@ import { useRouter } from 'next/navigation'
 import { UseUser } from '@app/context/UserContext'
 import Image from 'next/image'
 import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 import EditSeriesDialog, {
   Series as EditSeriesShape,
   Asana as EditAsanaShape,
 } from '@app/navigator/flows/editSeries/EditSeriesDialog'
 import { updateSeries, deleteSeries } from '@lib/seriesService'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 import {
   UserAsanaData,
@@ -441,6 +444,7 @@ function AsanaCard({ asana }: { asana: UserAsanaData }) {
   const router = useRouter()
   const [images, setImages] = useState<PoseImageData[]>([])
   const [imagesLoading, setImagesLoading] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -463,9 +467,52 @@ function AsanaCard({ asana }: { asana: UserAsanaData }) {
     fetchImages()
   }, [asana.id, asana.sort_english_name])
 
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation() // Prevent card click navigation
+    setDeleteDialogOpen(true)
+  }
+
+  const handleDeleteConfirm = async () => {
+    try {
+      // TODO: Implement delete asana functionality
+      console.log('Delete asana:', asana.id)
+      setDeleteDialogOpen(false)
+      // After successful delete, refresh the page or update state
+    } catch (error) {
+      console.error('Error deleting asana:', error)
+    }
+  }
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false)
+  }
+
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <CardMedia sx={{ height: 200, position: 'relative', overflow: 'hidden' }}>
+    <Card
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 2,
+        cursor: 'pointer',
+        transition: 'transform 0.2s, box-shadow 0.2s',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: 4,
+        },
+      }}
+      onClick={() => router.push(`/navigator/asanaPoses/${asana.id}`)}
+    >
+      <CardMedia
+        sx={{
+          height: 180,
+          position: 'relative',
+          overflow: 'hidden',
+          borderRadius: 2,
+          m: 1.5,
+          mb: 0,
+        }}
+      >
         {imagesLoading ? (
           <Box
             sx={{
@@ -474,6 +521,7 @@ function AsanaCard({ asana }: { asana: UserAsanaData }) {
               justifyContent: 'center',
               height: '100%',
               bgcolor: 'grey.100',
+              borderRadius: 2,
             }}
           >
             <CircularProgress size={30} />
@@ -483,7 +531,7 @@ function AsanaCard({ asana }: { asana: UserAsanaData }) {
             src={images[0].url}
             alt={images[0].altText || asana.sort_english_name}
             fill
-            style={{ objectFit: 'cover' }}
+            style={{ objectFit: 'cover', borderRadius: '8px' }}
           />
         ) : (
           <Box
@@ -493,6 +541,7 @@ function AsanaCard({ asana }: { asana: UserAsanaData }) {
               justifyContent: 'center',
               height: '100%',
               bgcolor: 'grey.100',
+              borderRadius: 2,
             }}
           >
             <Typography variant="body2" color="text.secondary">
@@ -502,58 +551,72 @@ function AsanaCard({ asana }: { asana: UserAsanaData }) {
         )}
       </CardMedia>
 
-      <CardContent sx={{ flexGrow: 1 }}>
-        <Typography variant="h6" component="h3" gutterBottom>
+      <CardContent sx={{ flexGrow: 1, pb: 1 }}>
+        <Typography
+          variant="body1"
+          component="h3"
+          gutterBottom
+          sx={{ fontWeight: 500, textAlign: 'center' }}
+        >
           {asana.sort_english_name}
         </Typography>
-
-        <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-          <Chip label={asana.category} size="small" />
-          <Chip label={asana.difficulty} size="small" variant="outlined" />
-        </Stack>
-
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          {asana.description && asana.description.length > 100
-            ? `${asana.description.substring(0, 100)}...`
-            : asana.description}
-        </Typography>
-
-        <Typography variant="caption" color="text.secondary">
-          Created: {new Date(asana.created_on).toLocaleDateString()}
-        </Typography>
-
-        {images.length > 0 && (
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ display: 'block' }}
-          >
-            {images.length} image{images.length > 1 ? 's' : ''}
-          </Typography>
-        )}
       </CardContent>
 
-      <Box sx={{ p: 2, pt: 0 }}>
-        <Stack direction="row" spacing={1}>
-          <IconButton
-            size="small"
-            onClick={() => router.push(`/navigator/asanaPoses/${asana.id}`)}
-            title="View"
-          >
-            <VisibilityIcon />
-          </IconButton>
-          <IconButton
-            size="small"
-            title="Edit"
-            onClick={() => {
-              // TODO: Create edit functionality
-              console.log('Edit asana:', asana.id)
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-        </Stack>
+      <Box
+        sx={{
+          px: 2,
+          pb: 2,
+          pt: 0,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <IconButton
+          size="small"
+          title="Edit"
+          onClick={(e) => {
+            e.stopPropagation() // Prevent card click navigation
+            router.push(`/navigator/asanaPoses/${asana.id}?edit=true`)
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
+          <EditIcon fontSize="small" />
+        </IconButton>
+        <IconButton
+          size="small"
+          title="Delete"
+          onClick={handleDeleteClick}
+          sx={{ color: 'error.main' }}
+        >
+          <DeleteIcon fontSize="small" />
+        </IconButton>
       </Box>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        aria-labelledby="delete-asana-dialog-title"
+        aria-describedby="delete-asana-dialog-description"
+        onClick={(e) => e.stopPropagation()} // Prevent card click when clicking dialog
+      >
+        <DialogTitle id="delete-asana-dialog-title">Delete Asana?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-asana-dialog-description">
+            Are you sure you want to delete &quot;{asana.sort_english_name}
+            &quot;? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Card>
   )
 }
@@ -614,7 +677,22 @@ function SeriesCard({ series }: { series: UserSeriesData }) {
   }
 
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Card
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        cursor: 'pointer',
+        transition: 'transform 0.2s, box-shadow 0.2s',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: 4,
+        },
+      }}
+      onClick={() =>
+        router.push(`/navigator/flows/practiceSeries?id=${series.id}`)
+      }
+    >
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography variant="h6" component="h3" gutterBottom>
           {series.seriesName}
@@ -640,17 +718,11 @@ function SeriesCard({ series }: { series: UserSeriesData }) {
         <Stack direction="row" spacing={1}>
           <IconButton
             size="small"
-            onClick={() =>
-              router.push(`/navigator/flows/practiceSeries?id=${series.id}`)
-            }
-            title="View"
-          >
-            <VisibilityIcon />
-          </IconButton>
-          <IconButton
-            size="small"
             title="Edit"
-            onClick={() => setEditOpen(true)}
+            onClick={(e) => {
+              e.stopPropagation() // Prevent card click navigation
+              setEditOpen(true)
+            }}
           >
             <EditIcon />
           </IconButton>
@@ -676,7 +748,20 @@ function SequenceCard({ sequence }: { sequence: UserSequenceData }) {
   const router = useRouter()
 
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <Card
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        cursor: 'pointer',
+        transition: 'transform 0.2s, box-shadow 0.2s',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: 4,
+        },
+      }}
+      onClick={() => router.push(`/navigator/sequences/${sequence.id}`)}
+    >
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography variant="h6" component="h3" gutterBottom>
           {sequence.nameSequence}
@@ -707,15 +792,9 @@ function SequenceCard({ sequence }: { sequence: UserSequenceData }) {
         <Stack direction="row" spacing={1}>
           <IconButton
             size="small"
-            onClick={() => router.push(`/navigator/sequences/${sequence.id}`)}
-            title="View"
-          >
-            <VisibilityIcon />
-          </IconButton>
-          <IconButton
-            size="small"
             title="Edit"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation() // Prevent card click navigation
               // TODO: Create edit functionality
               console.log('Edit sequence:', sequence.id)
             }}

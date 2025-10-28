@@ -5,6 +5,7 @@ import { getPose } from '../../../../lib/poseService'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { QuickTimer } from '@app/clientComponents/quickTimer'
 import { AsanaPose } from 'types/asana'
+import { useSearchParams } from 'next/navigation'
 
 export default function Page({
   params,
@@ -12,6 +13,8 @@ export default function Page({
   params: Promise<{ pose: string }>
 }) {
   const { pose } = use(params)
+  const searchParams = useSearchParams()
+  const shouldEdit = searchParams.get('edit') === 'true'
   const [viewPose, setViewPose] = useState<AsanaPose | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -108,7 +111,10 @@ export default function Page({
           pb: '60px',
         }}
       >
-        <PoseActivityDetail poseCardProp={viewPose} />
+        <PoseActivityDetail
+          poseCardProp={viewPose}
+          initialEditMode={shouldEdit}
+        />
         <Box sx={{ height: '60px' }} />
 
         {/* Quick Timer Section */}

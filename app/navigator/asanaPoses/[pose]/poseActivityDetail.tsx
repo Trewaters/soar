@@ -60,6 +60,7 @@ Prioritized Details...
 
 interface PoseCardProps {
   poseCardProp: AsanaPose
+  initialEditMode?: boolean
 }
 
 // Custom hook to fetch pose images
@@ -91,7 +92,10 @@ const usePoseImages = (poseId?: string, poseName?: string) => {
   return { images, loading }
 }
 
-export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
+export default function PoseActivityDetail({
+  poseCardProp,
+  initialEditMode = false,
+}: PoseCardProps) {
   const pose = poseCardProp
   const router = useRouter()
   const { data: session } = useSession()
@@ -115,7 +119,7 @@ export default function PoseActivityDetail({ poseCardProp }: PoseCardProps) {
   const [open, setOpen] = useState(false)
 
   // Inline Edit Mode State
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(initialEditMode)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [images, setImages] = useState<any[]>([])
 
