@@ -34,6 +34,7 @@ import EditSeriesDialog, {
   Asana as EditAsanaShape,
 } from '@app/navigator/flows/editSeries/EditSeriesDialog'
 import { updateSeries, deleteSeries } from '@lib/seriesService'
+import { deletePose } from '@lib/poseService'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 import {
@@ -252,7 +253,11 @@ export default function LibraryPage() {
 
             {/* Asanas Tab */}
             <TabPanel value={tabValue} index={0}>
-              <AsanasLibrary asanas={asanas} loading={asanasLoading} />
+              <AsanasLibrary
+                asanas={asanas}
+                loading={asanasLoading}
+                onAsanaDeleted={fetchUserAsanas}
+              />
             </TabPanel>
 
             {/* Series Tab */}
@@ -283,9 +288,11 @@ export default function LibraryPage() {
 function AsanasLibrary({
   asanas,
   loading,
+  onAsanaDeleted,
 }: {
   asanas: UserAsanaData[]
   loading: boolean
+  onAsanaDeleted: () => void
 }) {
   const router = useRouter()
 
@@ -324,7 +331,7 @@ function AsanasLibrary({
       <Grid container spacing={3}>
         {asanas.map((asana) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={asana.id}>
-            <AsanaCard asana={asana} />
+            <AsanaCard asana={asana} onDeleted={onAsanaDeleted} />
           </Grid>
         ))}
       </Grid>
@@ -440,11 +447,18 @@ function SequencesLibrary({
 }
 
 // Individual Card Components
-function AsanaCard({ asana }: { asana: UserAsanaData }) {
+function AsanaCard({
+  asana,
+  onDeleted,
+}: {
+  asana: UserAsanaData
+  onDeleted: () => void
+}) {
   const router = useRouter()
   const [images, setImages] = useState<PoseImageData[]>([])
   const [imagesLoading, setImagesLoading] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -473,13 +487,16 @@ function AsanaCard({ asana }: { asana: UserAsanaData }) {
   }
 
   const handleDeleteConfirm = async () => {
+    setIsDeleting(true)
     try {
-      // TODO: Implement delete asana functionality
-      console.log('Delete asana:', asana.id)
+      await deletePose(asana.id)
       setDeleteDialogOpen(false)
-      // After successful delete, refresh the page or update state
+      // Refresh the asanas list after successful deletion
+      onDeleted()
     } catch (error) {
       console.error('Error deleting asana:', error)
+      // TODO: Show error message to user
+      setIsDeleting(false)
     }
   }
 
@@ -609,11 +626,20 @@ function AsanaCard({ asana }: { asana: UserAsanaData }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCancel} color="primary">
+          <Button
+            onClick={handleDeleteCancel}
+            color="primary"
+            disabled={isDeleting}
+          >
             Cancel
           </Button>
-          <Button onClick={handleDeleteConfirm} color="error">
-            Delete
+          <Button
+            onClick={handleDeleteConfirm}
+            color="error"
+            disabled={isDeleting}
+            startIcon={isDeleting ? <CircularProgress size={16} /> : null}
+          >
+            {isDeleting ? 'Deleting...' : 'Delete'}
           </Button>
         </DialogActions>
       </Dialog>

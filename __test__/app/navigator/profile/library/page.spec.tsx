@@ -187,6 +187,12 @@ jest.mock('@lib/imageService', () => ({
   getUserPoseImages: () => mockGetUserPoseImages(),
 }))
 
+// Mock pose service
+const mockDeletePose = jest.fn()
+jest.mock('@lib/poseService', () => ({
+  deletePose: (id: string) => mockDeletePose(id),
+}))
+
 describe('LibraryPage - AsanaCard Delete Feature', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -202,6 +208,7 @@ describe('LibraryPage - AsanaCard Delete Feature', () => {
       ],
       totalCount: 1,
     })
+    mockDeletePose.mockResolvedValue({ success: true })
 
     mockUseUser.mockReturnValue({
       state: mockUserState,
@@ -287,7 +294,6 @@ describe('LibraryPage - AsanaCard Delete Feature', () => {
 
   it('should handle delete confirmation', async () => {
     const user = userEvent.setup()
-    const consoleLogSpy = jest.spyOn(console, 'log').mockImplementation()
     const mockAsanas = [
       {
         id: 'asana1',
@@ -313,15 +319,18 @@ describe('LibraryPage - AsanaCard Delete Feature', () => {
     })
     await user.click(confirmDeleteButton)
 
-    // Check that delete was called (currently logs to console)
-    expect(consoleLogSpy).toHaveBeenCalledWith('Delete asana:', 'asana1')
+    // Check that deletePose was called with the correct ID
+    expect(mockDeletePose).toHaveBeenCalledWith('asana1')
+
+    // Check that the asanas list was refreshed
+    await waitFor(() => {
+      expect(mockGetUserCreatedAsanas).toHaveBeenCalledTimes(2) // Once on mount, once after delete
+    })
 
     // Dialog should close
     await waitFor(() => {
       expect(screen.queryByText('Delete Asana?')).not.toBeInTheDocument()
     })
-
-    consoleLogSpy.mockRestore()
   })
 
   it('should not trigger card navigation when delete button is clicked', async () => {
