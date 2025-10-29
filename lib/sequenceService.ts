@@ -107,3 +107,34 @@ export async function createSequence(
     throw error
   }
 }
+
+/**
+ * Delete a sequence by ID
+ */
+export async function deleteSequence(
+  id: string
+): Promise<{ success: boolean }> {
+  try {
+    const response = await fetch(`/api/sequences/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to delete sequence')
+    }
+
+    return await response.json()
+  } catch (error) {
+    logServiceError(error, 'sequenceService', 'deleteSequence', {
+      operation: 'delete_sequence',
+      sequenceId: id,
+    })
+    throw error
+  }
+}

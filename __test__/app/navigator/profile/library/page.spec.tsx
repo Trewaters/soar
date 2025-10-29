@@ -193,6 +193,19 @@ jest.mock('@lib/poseService', () => ({
   deletePose: (id: string) => mockDeletePose(id),
 }))
 
+// Mock series service
+const mockDeleteSeries = jest.fn()
+jest.mock('@lib/seriesService', () => ({
+  updateSeries: jest.fn(),
+  deleteSeries: (id: string) => mockDeleteSeries(id),
+}))
+
+// Mock sequence service
+const mockDeleteSequence = jest.fn()
+jest.mock('@lib/sequenceService', () => ({
+  deleteSequence: (id: string) => mockDeleteSequence(id),
+}))
+
 describe('LibraryPage - AsanaCard Delete Feature', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -603,5 +616,556 @@ describe('LibraryPage - SeriesCard and SequenceCard Click to View', () => {
     expect(mockPush).not.toHaveBeenCalledWith(
       '/navigator/flows/practiceSeries?id=series1'
     )
+  })
+})
+
+describe('LibraryPage - SeriesCard Delete Feature', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockGetUserCreatedAsanas.mockResolvedValue([])
+    mockGetUserCreatedSequences.mockResolvedValue([])
+    mockDeleteSeries.mockResolvedValue({ success: true })
+
+    // Setup default UserContext mock
+    mockUseUser.mockReturnValue({
+      state: mockUserState,
+      dispatch: mockDispatch,
+    })
+  })
+
+  it('should display delete icon on series cards', async () => {
+    const user = userEvent.setup()
+    const mockSeries = [
+      {
+        id: 'series1',
+        seriesName: 'Sun Salutation',
+        description: 'A flowing series of poses',
+        seriesPoses: ['Warrior I', 'Warrior II'],
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSeries.mockResolvedValue(mockSeries)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Series tab
+    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    await user.click(seriesTab)
+
+    await screen.findByText('Sun Salutation')
+
+    // Check that delete button is present
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+    expect(deleteButtons.length).toBeGreaterThan(0)
+  })
+
+  it('should open confirmation dialog when delete button is clicked', async () => {
+    const user = userEvent.setup()
+    const mockSeries = [
+      {
+        id: 'series1',
+        seriesName: 'Sun Salutation',
+        description: 'A flowing series of poses',
+        seriesPoses: ['Warrior I', 'Warrior II'],
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSeries.mockResolvedValue(mockSeries)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Series tab
+    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    await user.click(seriesTab)
+
+    await screen.findByText('Sun Salutation')
+
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+    await user.click(deleteButtons[0])
+
+    // Check that the dialog appears
+    expect(screen.getByText('Delete Series?')).toBeInTheDocument()
+    expect(
+      screen.getByText(/Are you sure you want to delete "Sun Salutation"/i)
+    ).toBeInTheDocument()
+  })
+
+  it('should close dialog when cancel button is clicked', async () => {
+    const user = userEvent.setup()
+    const mockSeries = [
+      {
+        id: 'series1',
+        seriesName: 'Sun Salutation',
+        description: 'A flowing series of poses',
+        seriesPoses: ['Warrior I', 'Warrior II'],
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSeries.mockResolvedValue(mockSeries)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Series tab
+    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    await user.click(seriesTab)
+
+    await screen.findByText('Sun Salutation')
+
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+    await user.click(deleteButtons[0])
+
+    // Dialog should be open
+    expect(screen.getByText('Delete Series?')).toBeInTheDocument()
+
+    const cancelButton = screen.getByRole('button', { name: /cancel/i })
+    await user.click(cancelButton)
+
+    // Dialog should be closed
+    await waitFor(() => {
+      expect(screen.queryByText('Delete Series?')).not.toBeInTheDocument()
+    })
+  })
+
+  it('should handle delete confirmation', async () => {
+    const user = userEvent.setup()
+    const mockSeries = [
+      {
+        id: 'series1',
+        seriesName: 'Sun Salutation',
+        description: 'A flowing series of poses',
+        seriesPoses: ['Warrior I', 'Warrior II'],
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSeries.mockResolvedValue(mockSeries)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Series tab
+    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    await user.click(seriesTab)
+
+    await screen.findByText('Sun Salutation')
+
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+    await user.click(deleteButtons[0])
+
+    // Dialog should be open
+    expect(screen.getByText('Delete Series?')).toBeInTheDocument()
+
+    const confirmDeleteButtons = screen.getAllByRole('button', {
+      name: /^delete$/i,
+    })
+    // Get the button inside the dialog (should be the last one)
+    const confirmDeleteButton =
+      confirmDeleteButtons[confirmDeleteButtons.length - 1]
+    await user.click(confirmDeleteButton)
+
+    // Check that deleteSeries was called with the correct ID
+    expect(mockDeleteSeries).toHaveBeenCalledWith('series1')
+
+    // Check that the series list was refreshed
+    await waitFor(() => {
+      expect(mockGetUserCreatedSeries).toHaveBeenCalledTimes(2) // Once on mount, once after delete
+    })
+
+    // Dialog should close
+    await waitFor(() => {
+      expect(screen.queryByText('Delete Series?')).not.toBeInTheDocument()
+    })
+  })
+
+  it('should not trigger card navigation when delete button is clicked', async () => {
+    const user = userEvent.setup()
+    const mockSeries = [
+      {
+        id: 'series1',
+        seriesName: 'Sun Salutation',
+        description: 'A flowing series of poses',
+        seriesPoses: ['Warrior I', 'Warrior II'],
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSeries.mockResolvedValue(mockSeries)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Series tab
+    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    await user.click(seriesTab)
+
+    await screen.findByText('Sun Salutation')
+
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+    await user.click(deleteButtons[0])
+
+    // Should not navigate when delete button is clicked
+    expect(mockPush).not.toHaveBeenCalled()
+  })
+
+  it('should display both edit and delete buttons on series cards', async () => {
+    const user = userEvent.setup()
+    const mockSeries = [
+      {
+        id: 'series1',
+        seriesName: 'Sun Salutation',
+        description: 'A flowing series of poses',
+        seriesPoses: ['Warrior I', 'Warrior II'],
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSeries.mockResolvedValue(mockSeries)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Series tab
+    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    await user.click(seriesTab)
+
+    await screen.findByText('Sun Salutation')
+
+    // Check that both edit and delete buttons are present
+    const editButtons = screen.getAllByRole('button', { name: /edit/i })
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+
+    expect(editButtons.length).toBeGreaterThan(0)
+    expect(deleteButtons.length).toBeGreaterThan(0)
+  })
+
+  it('should show loading state during deletion', async () => {
+    const user = userEvent.setup()
+    const mockSeries = [
+      {
+        id: 'series1',
+        seriesName: 'Sun Salutation',
+        description: 'A flowing series of poses',
+        seriesPoses: ['Warrior I', 'Warrior II'],
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSeries.mockResolvedValue(mockSeries)
+
+    // Make delete slow to observe loading state
+    mockDeleteSeries.mockImplementation(
+      () =>
+        new Promise((resolve) =>
+          setTimeout(() => resolve({ success: true }), 100)
+        )
+    )
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Series tab
+    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    await user.click(seriesTab)
+
+    await screen.findByText('Sun Salutation')
+
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+    await user.click(deleteButtons[0])
+
+    // Confirm deletion
+    const confirmDeleteButtons = screen.getAllByRole('button', {
+      name: /^delete$/i,
+    })
+    const confirmDeleteButton =
+      confirmDeleteButtons[confirmDeleteButtons.length - 1]
+    await user.click(confirmDeleteButton)
+
+    // Should show "Deleting..." text
+    await waitFor(() => {
+      expect(screen.getByText('Deleting...')).toBeInTheDocument()
+    })
+
+    // Wait for deletion to complete
+    await waitFor(() => {
+      expect(screen.queryByText('Deleting...')).not.toBeInTheDocument()
+    })
+  })
+})
+
+describe('LibraryPage - SequenceCard Delete Feature', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockGetUserCreatedAsanas.mockResolvedValue([])
+    mockGetUserCreatedSeries.mockResolvedValue([])
+    mockDeleteSequence.mockResolvedValue({ success: true })
+
+    // Setup default UserContext mock
+    mockUseUser.mockReturnValue({
+      state: mockUserState,
+      dispatch: mockDispatch,
+    })
+  })
+
+  it('should display delete icon on sequence cards', async () => {
+    const user = userEvent.setup()
+    const mockSequences = [
+      {
+        id: 1,
+        nameSequence: 'Morning Flow',
+        description: 'A gentle morning sequence',
+        sequencesSeries: ['series1', 'series2'],
+        durationSequence: '30 minutes',
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSequences.mockResolvedValue(mockSequences)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Sequences tab
+    const sequencesTab = screen.getByRole('tab', { name: /Sequences/i })
+    await user.click(sequencesTab)
+
+    await screen.findByText('Morning Flow')
+
+    // Check that delete button is present
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+    expect(deleteButtons.length).toBeGreaterThan(0)
+  })
+
+  it('should open confirmation dialog when delete button is clicked', async () => {
+    const user = userEvent.setup()
+    const mockSequences = [
+      {
+        id: 1,
+        nameSequence: 'Morning Flow',
+        description: 'A gentle morning sequence',
+        sequencesSeries: ['series1', 'series2'],
+        durationSequence: '30 minutes',
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSequences.mockResolvedValue(mockSequences)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Sequences tab
+    const sequencesTab = screen.getByRole('tab', { name: /Sequences/i })
+    await user.click(sequencesTab)
+
+    await screen.findByText('Morning Flow')
+
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+    await user.click(deleteButtons[0])
+
+    // Check that the dialog appears
+    expect(screen.getByText('Delete Sequence?')).toBeInTheDocument()
+    expect(
+      screen.getByText(/Are you sure you want to delete "Morning Flow"/i)
+    ).toBeInTheDocument()
+  })
+
+  it('should close dialog when cancel button is clicked', async () => {
+    const user = userEvent.setup()
+    const mockSequences = [
+      {
+        id: 1,
+        nameSequence: 'Morning Flow',
+        description: 'A gentle morning sequence',
+        sequencesSeries: ['series1', 'series2'],
+        durationSequence: '30 minutes',
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSequences.mockResolvedValue(mockSequences)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Sequences tab
+    const sequencesTab = screen.getByRole('tab', { name: /Sequences/i })
+    await user.click(sequencesTab)
+
+    await screen.findByText('Morning Flow')
+
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+    await user.click(deleteButtons[0])
+
+    // Dialog should be open
+    expect(screen.getByText('Delete Sequence?')).toBeInTheDocument()
+
+    const cancelButton = screen.getByRole('button', { name: /cancel/i })
+    await user.click(cancelButton)
+
+    // Dialog should be closed
+    await waitFor(() => {
+      expect(screen.queryByText('Delete Sequence?')).not.toBeInTheDocument()
+    })
+  })
+
+  it('should handle delete confirmation', async () => {
+    const user = userEvent.setup()
+    const mockSequences = [
+      {
+        id: 1,
+        nameSequence: 'Morning Flow',
+        description: 'A gentle morning sequence',
+        sequencesSeries: ['series1', 'series2'],
+        durationSequence: '30 minutes',
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSequences.mockResolvedValue(mockSequences)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Sequences tab
+    const sequencesTab = screen.getByRole('tab', { name: /Sequences/i })
+    await user.click(sequencesTab)
+
+    await screen.findByText('Morning Flow')
+
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+    await user.click(deleteButtons[0])
+
+    // Dialog should be open
+    expect(screen.getByText('Delete Sequence?')).toBeInTheDocument()
+
+    const confirmDeleteButtons = screen.getAllByRole('button', {
+      name: /^delete$/i,
+    })
+    // Get the button inside the dialog (should be the last one)
+    const confirmDeleteButton =
+      confirmDeleteButtons[confirmDeleteButtons.length - 1]
+    await user.click(confirmDeleteButton)
+
+    // Check that deleteSequence was called with the correct ID
+    expect(mockDeleteSequence).toHaveBeenCalledWith('1')
+
+    // Check that the sequences list was refreshed
+    await waitFor(() => {
+      expect(mockGetUserCreatedSequences).toHaveBeenCalledTimes(2) // Once on mount, once after delete
+    })
+
+    // Dialog should close
+    await waitFor(() => {
+      expect(screen.queryByText('Delete Sequence?')).not.toBeInTheDocument()
+    })
+  })
+
+  it('should not trigger card navigation when delete button is clicked', async () => {
+    const user = userEvent.setup()
+    const mockSequences = [
+      {
+        id: 1,
+        nameSequence: 'Morning Flow',
+        description: 'A gentle morning sequence',
+        sequencesSeries: ['series1', 'series2'],
+        durationSequence: '30 minutes',
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSequences.mockResolvedValue(mockSequences)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Sequences tab
+    const sequencesTab = screen.getByRole('tab', { name: /Sequences/i })
+    await user.click(sequencesTab)
+
+    await screen.findByText('Morning Flow')
+
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+    await user.click(deleteButtons[0])
+
+    // Should not navigate when delete button is clicked
+    expect(mockPush).not.toHaveBeenCalled()
+  })
+
+  it('should display both edit and delete buttons on sequence cards', async () => {
+    const user = userEvent.setup()
+    const mockSequences = [
+      {
+        id: 1,
+        nameSequence: 'Morning Flow',
+        description: 'A gentle morning sequence',
+        sequencesSeries: ['series1', 'series2'],
+        durationSequence: '30 minutes',
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSequences.mockResolvedValue(mockSequences)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Sequences tab
+    const sequencesTab = screen.getByRole('tab', { name: /Sequences/i })
+    await user.click(sequencesTab)
+
+    await screen.findByText('Morning Flow')
+
+    // Check that both edit and delete buttons are present
+    const editButtons = screen.getAllByRole('button', { name: /edit/i })
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+
+    expect(editButtons.length).toBeGreaterThan(0)
+    expect(deleteButtons.length).toBeGreaterThan(0)
+  })
+
+  it('should show loading state during deletion', async () => {
+    const user = userEvent.setup()
+    const mockSequences = [
+      {
+        id: 1,
+        nameSequence: 'Morning Flow',
+        description: 'A gentle morning sequence',
+        sequencesSeries: ['series1', 'series2'],
+        durationSequence: '30 minutes',
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSequences.mockResolvedValue(mockSequences)
+
+    // Make delete slow to observe loading state
+    mockDeleteSequence.mockImplementation(
+      () =>
+        new Promise((resolve) =>
+          setTimeout(() => resolve({ success: true }), 100)
+        )
+    )
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Sequences tab
+    const sequencesTab = screen.getByRole('tab', { name: /Sequences/i })
+    await user.click(sequencesTab)
+
+    await screen.findByText('Morning Flow')
+
+    const deleteButtons = screen.getAllByRole('button', { name: /delete/i })
+    await user.click(deleteButtons[0])
+
+    // Confirm deletion
+    const confirmDeleteButtons = screen.getAllByRole('button', {
+      name: /^delete$/i,
+    })
+    const confirmDeleteButton =
+      confirmDeleteButtons[confirmDeleteButtons.length - 1]
+    await user.click(confirmDeleteButton)
+
+    // Should show "Deleting..." text
+    await waitFor(() => {
+      expect(screen.getByText('Deleting...')).toBeInTheDocument()
+    })
+
+    // Wait for deletion to complete
+    await waitFor(() => {
+      expect(screen.queryByText('Deleting...')).not.toBeInTheDocument()
+    })
   })
 })

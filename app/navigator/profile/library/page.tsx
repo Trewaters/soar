@@ -11,7 +11,6 @@ import {
   CardContent,
   CardMedia,
   Paper,
-  Stack,
   CircularProgress,
   Alert,
   IconButton,
@@ -29,13 +28,9 @@ import { UseUser } from '@app/context/UserContext'
 import Image from 'next/image'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
-import EditSeriesDialog, {
-  Series as EditSeriesShape,
-  Asana as EditAsanaShape,
-} from '@app/navigator/flows/editSeries/EditSeriesDialog'
-import { updateSeries, deleteSeries } from '@lib/seriesService'
+import { deleteSeries } from '@lib/seriesService'
 import { deletePose } from '@lib/poseService'
-import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
+import { deleteSequence } from '@lib/sequenceService'
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 import {
   UserAsanaData,
@@ -262,7 +257,11 @@ export default function LibraryPage() {
 
             {/* Series Tab */}
             <TabPanel value={tabValue} index={1}>
-              <SeriesLibrary series={series} loading={seriesLoading} />
+              <SeriesLibrary
+                series={series}
+                loading={seriesLoading}
+                onSeriesDeleted={fetchUserSeries}
+              />
             </TabPanel>
 
             {/* Sequences Tab */}
@@ -270,6 +269,7 @@ export default function LibraryPage() {
               <SequencesLibrary
                 sequences={sequences}
                 loading={sequencesLoading}
+                onSequenceDeleted={fetchUserSequences}
               />
             </TabPanel>
 
@@ -343,9 +343,11 @@ function AsanasLibrary({
 function SeriesLibrary({
   series,
   loading,
+  onSeriesDeleted,
 }: {
   series: UserSeriesData[]
   loading: boolean
+  onSeriesDeleted?: () => void
 }) {
   const router = useRouter()
 
@@ -384,7 +386,7 @@ function SeriesLibrary({
       <Grid container spacing={3}>
         {series.map((seriesItem) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={seriesItem.id}>
-            <SeriesCard series={seriesItem} />
+            <SeriesCard series={seriesItem} onDeleted={onSeriesDeleted} />
           </Grid>
         ))}
       </Grid>
@@ -396,9 +398,11 @@ function SeriesLibrary({
 function SequencesLibrary({
   sequences,
   loading,
+  onSequenceDeleted,
 }: {
   sequences: UserSequenceData[]
   loading: boolean
+  onSequenceDeleted?: () => void
 }) {
   const router = useRouter()
 
@@ -438,7 +442,7 @@ function SequencesLibrary({
       <Grid container spacing={3}>
         {sequences.map((sequence) => (
           <Grid size={{ xs: 12, sm: 6, md: 4 }} key={sequence.id}>
-            <SequenceCard sequence={sequence} />
+            <SequenceCard sequence={sequence} onDeleted={onSequenceDeleted} />
           </Grid>
         ))}
       </Grid>
@@ -647,58 +651,41 @@ function AsanaCard({
   )
 }
 
-function SeriesCard({ series }: { series: UserSeriesData }) {
+function SeriesCard({
+  series,
+  onDeleted,
+}: {
+  series: UserSeriesData
+  onDeleted?: () => void
+}) {
   const router = useRouter()
-  const [editOpen, setEditOpen] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
-  // Map UserSeriesData to EditSeriesDialog shape
-  const dialogSeries: EditSeriesShape = {
-    id: series.id || '',
-    name: series.seriesName,
-    description: series.description || '',
-    difficulty: 'beginner',
-    asanas: (series.seriesPoses || []).map((sp, idx) => {
-      let name = ''
-      let secondary = ''
-      if (typeof sp === 'string') {
-        const parsed = splitSeriesPoseEntry(sp)
-        name = parsed.name
-        secondary = parsed.secondary
-      } else {
-        name = (sp as any).sort_english_name || ''
-        secondary = (sp as any).secondary || ''
-      }
-      const resolvedName = name || `asana-${idx}`
-      const asana: EditAsanaShape = {
-        id: `${idx}-${resolvedName}`,
-        name: resolvedName,
-        difficulty: secondary,
-      }
-      return asana
-    }),
-    created_by: series.createdBy || '',
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation() // Prevent card click navigation
+    setDeleteDialogOpen(true)
   }
 
-  const handleSave = async (updated: EditSeriesShape) => {
-    try {
-      await updateSeries(updated.id, updated)
-      setEditOpen(false)
-      // optionally trigger a refresh via router or a parent callback; omitted here
-    } catch (e) {
-      console.error('Failed to update series', e)
-    }
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false)
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDeleteConfirm = async () => {
+    if (!series.id) return
+
+    setIsDeleting(true)
     try {
-      await deleteSeries(id)
-      setEditOpen(false)
-      // Force page refresh to update the series list
-      router.refresh()
-      // Optionally redirect to the library to ensure clean state
-      window.location.reload()
-    } catch (e) {
-      console.error('Failed to delete series', e)
+      await deleteSeries(series.id)
+      setDeleteDialogOpen(false)
+      // Call the onDeleted callback to refresh the list
+      if (onDeleted) {
+        onDeleted()
+      }
+    } catch (error) {
+      console.error('Failed to delete series:', error)
+      setIsDeleting(false)
+      // Keep dialog open on error so user can try again
     }
   }
 
@@ -734,44 +721,117 @@ function SeriesCard({ series }: { series: UserSeriesData }) {
           {series.seriesPoses.length} pose
           {series.seriesPoses.length !== 1 ? 's' : ''}
         </Typography>
-
-        <Typography variant="caption" color="text.secondary">
-          Created: {new Date(series.createdAt).toLocaleDateString()}
-        </Typography>
       </CardContent>
 
-      <Box sx={{ p: 2, pt: 0 }}>
-        <Stack direction="row" spacing={1}>
-          <IconButton
-            size="small"
-            title="Edit"
-            onClick={(e) => {
-              e.stopPropagation() // Prevent card click navigation
-              setEditOpen(true)
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-        </Stack>
+      <Box
+        sx={{
+          px: 2,
+          pb: 2,
+          pt: 0,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <IconButton
+          size="small"
+          title="Edit"
+          onClick={(e) => {
+            e.stopPropagation() // Prevent card click navigation
+            router.push(
+              `/navigator/flows/practiceSeries?id=${series.id}&edit=true`
+            )
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
+          <EditIcon fontSize="small" />
+        </IconButton>
+        <IconButton
+          size="small"
+          title="Delete"
+          onClick={handleDeleteClick}
+          sx={{ color: 'error.main' }}
+        >
+          <DeleteIcon fontSize="small" />
+        </IconButton>
       </Box>
-      {editOpen ? (
-        <Box sx={{ p: 2 }}>
-          <EditSeriesDialog
-            inline
-            open={editOpen}
-            onClose={() => setEditOpen(false)}
-            series={dialogSeries}
-            onSave={handleSave}
-            onDelete={handleDelete}
-          />
-        </Box>
-      ) : null}
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        aria-labelledby="delete-series-dialog-title"
+        aria-describedby="delete-series-dialog-description"
+        onClick={(e) => e.stopPropagation()} // Prevent card click when clicking dialog
+      >
+        <DialogTitle id="delete-series-dialog-title">
+          Delete Series?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-series-dialog-description">
+            Are you sure you want to delete &quot;{series.seriesName}&quot;?
+            This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleDeleteCancel}
+            color="primary"
+            disabled={isDeleting}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDeleteConfirm}
+            color="error"
+            disabled={isDeleting}
+            startIcon={isDeleting ? <CircularProgress size={16} /> : null}
+          >
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Card>
   )
 }
 
-function SequenceCard({ sequence }: { sequence: UserSequenceData }) {
+function SequenceCard({
+  sequence,
+  onDeleted,
+}: {
+  sequence: UserSequenceData
+  onDeleted?: () => void
+}) {
   const router = useRouter()
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation() // Prevent card click navigation
+    setDeleteDialogOpen(true)
+  }
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!sequence.id) return
+
+    setIsDeleting(true)
+    try {
+      await deleteSequence(String(sequence.id))
+      setDeleteDialogOpen(false)
+      // Call the onDeleted callback to refresh the list
+      if (onDeleted) {
+        onDeleted()
+      }
+    } catch (error) {
+      console.error('Failed to delete sequence:', error)
+      setIsDeleting(false)
+      // Keep dialog open on error so user can try again
+    }
+  }
 
   return (
     <Card
@@ -808,27 +868,74 @@ function SequenceCard({ sequence }: { sequence: UserSequenceData }) {
             Duration: {sequence.durationSequence}
           </Typography>
         )}
-
-        <Typography variant="caption" color="text.secondary">
-          Created: {new Date(sequence.createdAt).toLocaleDateString()}
-        </Typography>
       </CardContent>
 
-      <Box sx={{ p: 2, pt: 0 }}>
-        <Stack direction="row" spacing={1}>
-          <IconButton
-            size="small"
-            title="Edit"
-            onClick={(e) => {
-              e.stopPropagation() // Prevent card click navigation
-              // TODO: Create edit functionality
-              console.log('Edit sequence:', sequence.id)
-            }}
-          >
-            <EditIcon />
-          </IconButton>
-        </Stack>
+      <Box
+        sx={{
+          px: 2,
+          pb: 2,
+          pt: 0,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <IconButton
+          size="small"
+          title="Edit"
+          onClick={(e) => {
+            e.stopPropagation() // Prevent card click navigation
+            router.push(`/navigator/sequences/${sequence.id}?edit=true`)
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
+          <EditIcon fontSize="small" />
+        </IconButton>
+        <IconButton
+          size="small"
+          title="Delete"
+          onClick={handleDeleteClick}
+          sx={{ color: 'error.main' }}
+        >
+          <DeleteIcon fontSize="small" />
+        </IconButton>
       </Box>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        aria-labelledby="delete-sequence-dialog-title"
+        aria-describedby="delete-sequence-dialog-description"
+        onClick={(e) => e.stopPropagation()} // Prevent card click when clicking dialog
+      >
+        <DialogTitle id="delete-sequence-dialog-title">
+          Delete Sequence?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-sequence-dialog-description">
+            Are you sure you want to delete &quot;{sequence.nameSequence}
+            &quot;? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleDeleteCancel}
+            color="primary"
+            disabled={isDeleting}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDeleteConfirm}
+            color="error"
+            disabled={isDeleting}
+            startIcon={isDeleting ? <CircularProgress size={16} /> : null}
+          >
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Card>
   )
 }
