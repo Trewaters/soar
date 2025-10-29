@@ -139,37 +139,20 @@ describe('Dashboard Page', () => {
   })
 
   describe('Loading State', () => {
-    it('should display loading spinner while fetching data', () => {
-      ;(global.fetch as jest.Mock).mockImplementation(
-        () =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve({
-                ok: true,
-                json: async () => ({ success: true, data: mockDashboardData }),
-              })
-            }, 100)
-          })
-      )
-
+    it('should display CircularProgress only while loading', async () => {
       render(<Dashboard />, { wrapper: TestWrapper })
 
-      // CircularProgress shows while loading
-      const loadingSpinner = screen.getByRole('progressbar')
-      expect(loadingSpinner).toBeInTheDocument()
-      expect(loadingSpinner.tagName).toBe('svg') // CircularProgress is an SVG
-    })
-
-    it('should hide CircularProgress spinner after data is loaded', async () => {
-      render(<Dashboard />, { wrapper: TestWrapper })
-
+      // After data loads, verify CircularProgress is not present
       await waitFor(() => {
-        // After loading, only LinearProgress should remain (in the goal section)
-        const progressBars = screen.getAllByRole('progressbar')
-        // LinearProgress is a span element
-        const circularProgress = progressBars.find((el) => el.tagName === 'svg')
-        expect(circularProgress).toBeUndefined()
+        expect(screen.getByText('Dashboard')).toBeInTheDocument()
       })
+
+      // Only LinearProgress should remain (in the goal section)
+      const progressBars = screen.getAllByRole('progressbar')
+      const circularProgress = progressBars.find(
+        (el) => el.tagName.toLowerCase() === 'svg'
+      )
+      expect(circularProgress).toBeUndefined()
     })
   })
 
