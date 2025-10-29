@@ -20,6 +20,7 @@ import {
   Logout as LogoutIcon,
   Person as PersonIcon,
   Home,
+  Dashboard as DashboardIcon,
 } from '@mui/icons-material'
 import { useSession, signOut } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
@@ -93,6 +94,13 @@ const ProfileNavMenu: React.FC = () => {
       label: 'Profile Overview',
       icon: <PersonIcon />,
       href: '/navigator/profile',
+    },
+    {
+      id: 'dashboard',
+      label: 'Dashboard',
+      icon: <DashboardIcon />,
+      href: '/navigator/profile/dashboard',
+      badge: 'New',
     },
     {
       id: 'library',

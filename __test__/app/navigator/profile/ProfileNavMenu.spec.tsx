@@ -150,10 +150,18 @@ describe('ProfileNavMenu', () => {
       render(<ProfileNavMenu />, { wrapper: TestWrapper })
 
       expect(screen.getByText('Profile Overview')).toBeInTheDocument()
+      expect(screen.getByText('Dashboard')).toBeInTheDocument()
       expect(screen.getByText('My Library')).toBeInTheDocument()
       expect(screen.getByText('Account Settings')).toBeInTheDocument()
       expect(screen.getByText('Home Page')).toBeInTheDocument()
       expect(screen.getByText('Logout')).toBeInTheDocument()
+    })
+
+    it('should display Dashboard menu item with "New" badge', () => {
+      render(<ProfileNavMenu />, { wrapper: TestWrapper })
+
+      expect(screen.getByText('Dashboard')).toBeInTheDocument()
+      expect(screen.getByText('New')).toBeInTheDocument()
     })
 
     it('should display yoga style chip when available', () => {
@@ -364,6 +372,16 @@ describe('ProfileNavMenu', () => {
       await user.click(profileOverviewButton)
 
       expect(mockPush).toHaveBeenCalledWith('/navigator/profile')
+    })
+
+    it('should navigate to dashboard when clicked', async () => {
+      const user = userEvent.setup()
+      render(<ProfileNavMenu />, { wrapper: TestWrapper })
+
+      const dashboardButton = screen.getByText('Dashboard')
+      await user.click(dashboardButton)
+
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
 
     it('should navigate to library when clicked', async () => {
