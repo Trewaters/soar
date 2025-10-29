@@ -100,7 +100,6 @@ const ProfileNavMenu: React.FC = () => {
       label: 'Dashboard',
       icon: <DashboardIcon />,
       href: '/navigator/profile/dashboard',
-      badge: 'New',
     },
     {
       id: 'library',

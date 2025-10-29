@@ -34,7 +34,6 @@ global.fetch = jest.fn()
 interface DashboardData {
   loginStreak: number
   activityStreak: number
-  longestStreak: number
   practiceHistory: Array<{ month: string; days: number }>
   mostCommonAsanas: Array<{ name: string; count: number }>
   mostCommonSeries: Array<{ name: string; count: number }>
@@ -50,7 +49,6 @@ interface DashboardData {
 const mockDashboardData: DashboardData = {
   loginStreak: 7,
   activityStreak: 5,
-  longestStreak: 14,
   practiceHistory: [
     { month: 'Nov 24', days: 12 },
     { month: 'Dec 24', days: 15 },
@@ -227,22 +225,12 @@ describe('Dashboard Page', () => {
       })
     })
 
-    it('should display longest streak card with correct value', async () => {
-      render(<Dashboard />, { wrapper: TestWrapper })
-
-      await waitFor(() => {
-        expect(screen.getByText('Longest Streak')).toBeInTheDocument()
-        expect(screen.getByText('🔥 14 Days')).toBeInTheDocument()
-      })
-    })
-
-    it('should display all three streak cards', async () => {
+    it('should display both streak cards', async () => {
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
         expect(screen.getByText('Login Streak')).toBeInTheDocument()
         expect(screen.getByText('Activity Streak')).toBeInTheDocument()
-        expect(screen.getByText('Longest Streak')).toBeInTheDocument()
       })
     })
   })

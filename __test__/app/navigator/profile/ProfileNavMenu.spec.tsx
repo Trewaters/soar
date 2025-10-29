@@ -157,13 +157,6 @@ describe('ProfileNavMenu', () => {
       expect(screen.getByText('Logout')).toBeInTheDocument()
     })
 
-    it('should display Dashboard menu item with "New" badge', () => {
-      render(<ProfileNavMenu />, { wrapper: TestWrapper })
-
-      expect(screen.getByText('Dashboard')).toBeInTheDocument()
-      expect(screen.getByText('New')).toBeInTheDocument()
-    })
-
     it('should display yoga style chip when available', () => {
       render(<ProfileNavMenu />, { wrapper: TestWrapper })
 

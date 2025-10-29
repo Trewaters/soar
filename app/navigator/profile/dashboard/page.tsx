@@ -29,7 +29,6 @@ interface StatCardProps {
 interface DashboardData {
   loginStreak: number
   activityStreak: number
-  longestStreak: number
   practiceHistory: Array<{ month: string; days: number }>
   mostCommonAsanas: Array<{ name: string; count: number }>
   mostCommonSeries: Array<{ name: string; count: number }>
@@ -91,6 +90,24 @@ const Dashboard: React.FC = () => {
         setLoading(true)
         setError(null)
 
+        // First, ensure login is recorded and get current login streak
+        const loginStreakResponse = await fetch('/api/user/recordActivity', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            activityType: 'view_dashboard',
+          }),
+        })
+
+        let currentLoginStreak = 0
+        if (loginStreakResponse.ok) {
+          const loginData = await loginStreakResponse.json()
+          currentLoginStreak = loginData.streakData?.currentStreak || 0
+        }
+
+        // Then fetch other dashboard statistics
         const response = await fetch('/api/dashboard/stats', {
           cache: 'no-store',
         })
@@ -104,7 +121,11 @@ const Dashboard: React.FC = () => {
         if (result.success && result.data) {
           console.log('Dashboard data loaded:', result.data)
           console.log('Practice history:', result.data.practiceHistory)
-          setDashboardData(result.data)
+          // Override the loginStreak with the one from recordActivity API
+          setDashboardData({
+            ...result.data,
+            loginStreak: currentLoginStreak,
+          })
         } else {
           throw new Error('Invalid response format')
         }
@@ -149,7 +170,6 @@ const Dashboard: React.FC = () => {
   const {
     loginStreak,
     activityStreak,
-    longestStreak,
     practiceHistory,
     mostCommonAsanas,
     mostCommonSeries,
@@ -202,13 +222,6 @@ const Dashboard: React.FC = () => {
                 <StatCard
                   title="Activity Streak"
                   value={`🔥 ${activityStreak} Days`}
-                  color={theme.palette.warning.main}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <StatCard
-                  title="Longest Streak"
-                  value={`🔥 ${longestStreak} Days`}
                   color={theme.palette.warning.main}
                 />
               </Grid>

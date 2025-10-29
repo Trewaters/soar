@@ -15,7 +15,6 @@ interface MostCommonItem {
 interface DashboardStats {
   loginStreak: number
   activityStreak: number
-  longestStreak: number
   practiceHistory: PracticeHistoryItem[]
   mostCommonAsanas: MostCommonItem[]
   mostCommonSeries: MostCommonItem[]
@@ -83,6 +82,13 @@ export async function calculateLoginStreak(userId: string): Promise<number> {
 
 /**
  * Calculate activity streak from practice activities
+ *
+ * This calculates consecutive days where ANY activity was performed
+ * (asana poses, series, or sequences). Multiple activities on the same
+ * day count as a single day towards the streak.
+ *
+ * The streak is broken if there's a gap of more than 1 day between activities.
+ * Activities from today or yesterday keep the streak alive.
  */
 export async function calculateActivityStreak(userId: string): Promise<number> {
   // Get all practice activities (asanas, series, sequences)
@@ -102,6 +108,7 @@ export async function calculateActivityStreak(userId: string): Promise<number> {
       }),
     ])
 
+  // Combine all activities into one array
   const allActivities: Date[] = [
     ...asanaActivities.map((a: { datePerformed: Date }) => a.datePerformed),
     ...seriesActivities.map((a: { datePerformed: Date }) => a.datePerformed),
@@ -110,7 +117,7 @@ export async function calculateActivityStreak(userId: string): Promise<number> {
 
   if (allActivities.length === 0) return 0
 
-  // Get unique days with activity
+  // Get unique days with activity (normalize to midnight UTC)
   const uniqueDays = new Set<string>()
   for (const activity of allActivities) {
     const activityDate = new Date(activity)
@@ -118,19 +125,22 @@ export async function calculateActivityStreak(userId: string): Promise<number> {
     uniqueDays.add(activityDate.toISOString().split('T')[0])
   }
 
+  // Sort days in descending order (most recent first)
   const sortedDays = Array.from(uniqueDays).sort().reverse()
 
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  // Check if there's activity today or yesterday
+  // Check if there's activity today or yesterday to keep streak alive
   const lastActivity = new Date(sortedDays[0])
   const daysDiff = Math.floor(
     (today.getTime() - lastActivity.getTime()) / (1000 * 60 * 60 * 24)
   )
 
+  // If last activity was more than 1 day ago, streak is broken
   if (daysDiff > 1) return 0
 
+  // Count consecutive days backwards from today
   let streak = 0
   for (let i = 0; i < sortedDays.length; i++) {
     const currentDate = new Date(sortedDays[i])
@@ -373,7 +383,6 @@ export async function getDashboardStats(
   const [
     loginStreak,
     activityStreak,
-    longestStreak,
     practiceHistory,
     mostCommonAsanas,
     mostCommonSeries,
@@ -381,7 +390,6 @@ export async function getDashboardStats(
   ] = await Promise.all([
     calculateLoginStreak(userId),
     calculateActivityStreak(userId),
-    calculateLongestStreak(userId),
     getPracticeHistory(userId),
     getMostCommonAsanas(userId),
     getMostCommonSeries(userId),
@@ -407,7 +415,6 @@ export async function getDashboardStats(
   return {
     loginStreak,
     activityStreak,
-    longestStreak,
     practiceHistory,
     mostCommonAsanas,
     mostCommonSeries,
