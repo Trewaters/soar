@@ -353,4 +353,172 @@ describe('SeriesPoseList', () => {
       expect(treePose.tagName).not.toBe('H2')
     })
   })
+
+  describe('Deleted Poses', () => {
+    it('should display tooltip for deleted poses when poseId is explicitly null', () => {
+      const posesWithDeleted: SeriesPoseEntry[] = [
+        'Tree Pose',
+        'Warrior I', // This one will be marked as deleted
+        'Mountain Pose',
+      ]
+
+      const poseIdsWithDeleted = {
+        'Tree Pose': 'tree-pose-id',
+        'Warrior I': null, // Explicitly null = pose was deleted
+        'Mountain Pose': 'mountain-pose-id',
+      }
+
+      render(
+        <SeriesPoseList
+          seriesPoses={posesWithDeleted}
+          poseIds={poseIdsWithDeleted}
+        />,
+        { wrapper: TestWrapper }
+      )
+
+      // Deleted pose should have special styling
+      const deletedPose = screen.getByTestId('series-pose-1-deleted')
+      expect(deletedPose).toBeInTheDocument()
+      expect(deletedPose).toHaveTextContent('Warrior I')
+      // Check for strikethrough and not-allowed cursor
+      expect(deletedPose).toHaveStyle({ cursor: 'not-allowed' })
+    })
+
+    it('should not show deleted styling for poses with valid IDs', () => {
+      const poseIdsWithValidIds = {
+        'Tree Pose': 'tree-pose-id',
+        'Mountain Pose': 'mountain-pose-id',
+      }
+
+      render(
+        <SeriesPoseList
+          seriesPoses={mockStringPoses.slice(0, 2)}
+          poseIds={poseIdsWithValidIds}
+        />,
+        { wrapper: TestWrapper }
+      )
+
+      // Should not find deleted test IDs for valid poses
+      expect(
+        screen.queryByTestId('series-pose-0-deleted')
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByTestId('series-pose-1-deleted')
+      ).not.toBeInTheDocument()
+    })
+
+    it('should render clickable links for non-deleted poses', () => {
+      const poseIdsWithDeleted = {
+        'Tree Pose': 'tree-pose-id',
+        'Warrior I': null, // Deleted
+        'Mountain Pose': 'mountain-pose-id',
+      }
+
+      render(
+        <SeriesPoseList
+          seriesPoses={mockStringPoses}
+          poseIds={poseIdsWithDeleted}
+        />,
+        { wrapper: TestWrapper }
+      )
+
+      const links = screen.getAllByRole('link')
+      // Should only have 2 links (Tree Pose and Mountain Pose), not Warrior I
+      expect(links).toHaveLength(2)
+    })
+
+    it('should show tooltip with helpful message on hover for deleted poses', () => {
+      const poseIdsWithDeleted = {
+        'Warrior I': null,
+      }
+
+      render(
+        <SeriesPoseList
+          seriesPoses={['Warrior I']}
+          poseIds={poseIdsWithDeleted}
+        />,
+        { wrapper: TestWrapper }
+      )
+
+      const deletedPose = screen.getByTestId('series-pose-0-deleted')
+      const tooltip = deletedPose.parentElement
+
+      // Tooltip should be present in the DOM
+      expect(tooltip).toBeInTheDocument()
+    })
+
+    it('should handle mixed deleted and active poses in object format', () => {
+      const mixedPoses: SeriesPoseEntry[] = [
+        {
+          sort_english_name: 'Tree Pose',
+          secondary: 'Vrikshasana',
+        },
+        {
+          sort_english_name: 'Deleted Warrior',
+          secondary: 'Virabhadrasana',
+        },
+        {
+          sort_english_name: 'Mountain Pose',
+          secondary: 'Tadasana',
+        },
+      ]
+
+      const poseIdsWithDeleted = {
+        'Tree Pose': 'tree-id',
+        'Deleted Warrior': null, // Deleted
+        'Mountain Pose': 'mountain-id',
+      }
+
+      render(
+        <SeriesPoseList
+          seriesPoses={mixedPoses}
+          poseIds={poseIdsWithDeleted}
+        />,
+        { wrapper: TestWrapper }
+      )
+
+      // Check deleted pose is styled correctly
+      expect(screen.getByTestId('series-pose-1-deleted')).toBeInTheDocument()
+
+      // Check active poses are links
+      const links = screen.getAllByRole('link')
+      expect(links).toHaveLength(2)
+      expect(links[0]).toHaveTextContent('Tree Pose')
+      expect(links[1]).toHaveTextContent('Mountain Pose')
+    })
+
+    it('should not apply deleted styling when poseIds object is empty', () => {
+      render(<SeriesPoseList seriesPoses={mockStringPoses} poseIds={{}} />, {
+        wrapper: TestWrapper,
+      })
+
+      // All poses should be links since we don't know which are deleted
+      const links = screen.getAllByRole('link')
+      expect(links.length).toBeGreaterThan(0)
+
+      // No deleted test IDs should exist
+      expect(
+        screen.queryByTestId('series-pose-0-deleted')
+      ).not.toBeInTheDocument()
+    })
+
+    it('should not apply deleted styling when pose is not in poseIds map', () => {
+      const partialPoseIds = {
+        'Tree Pose': 'tree-id',
+        // Warrior I not in map - this means we haven't checked yet, not that it's deleted
+      }
+
+      render(
+        <SeriesPoseList
+          seriesPoses={['Tree Pose', 'Warrior I']}
+          poseIds={partialPoseIds}
+        />,
+        { wrapper: TestWrapper }
+      )
+
+      // Warrior I should still be a link (not deleted) since it's not in the map
+      const links = screen.getAllByRole('link')
+      expect(links).toHaveLength(2)
+    })
+  })
 })

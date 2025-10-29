@@ -1,6 +1,14 @@
 'use client'
 
-import { Box, Link, Stack, Typography, SxProps, Theme } from '@mui/material'
+import {
+  Box,
+  Link,
+  Stack,
+  Typography,
+  SxProps,
+  Theme,
+  Tooltip,
+} from '@mui/material'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 
 export type SeriesPoseEntry =
@@ -96,6 +104,19 @@ export default function SeriesPoseList({
         const resolvedName = poseName || `pose-${index}`
         const poseId = poseIds[poseName] || null
         const href = hrefResolver(poseName, poseId)
+        const isPoseDeleted =
+          poseName && poseIds.hasOwnProperty(poseName) && poseId === null
+
+        // Debug logging
+        if (poseName) {
+          console.log('SeriesPoseList render:', {
+            poseName,
+            hasPoseIds: Object.keys(poseIds).length > 0,
+            poseIdValue: poseIds[poseName],
+            hasOwnProperty: poseIds.hasOwnProperty(poseName),
+            isPoseDeleted,
+          })
+        }
 
         // Extract first line of alignment cue for inline display
         const alignmentCuesInline =
@@ -128,9 +149,29 @@ export default function SeriesPoseList({
                   flexWrap: 'wrap',
                 }}
               >
-                <Link underline="hover" color={linkColor} href={href}>
-                  {resolvedName}
-                </Link>
+                {isPoseDeleted ? (
+                  <Tooltip
+                    title="This pose has been deleted and is no longer available"
+                    arrow
+                    placement="top"
+                  >
+                    <Typography
+                      component="span"
+                      sx={{
+                        color: 'text.disabled',
+                        textDecoration: 'line-through',
+                        cursor: 'not-allowed',
+                      }}
+                      data-testid={`${dataTestIdPrefix}-${index}-deleted`}
+                    >
+                      {resolvedName}
+                    </Typography>
+                  </Tooltip>
+                ) : (
+                  <Link underline="hover" color={linkColor} href={href}>
+                    {resolvedName}
+                  </Link>
+                )}
                 {alignmentCuesInline && (
                   <Typography
                     component="span"

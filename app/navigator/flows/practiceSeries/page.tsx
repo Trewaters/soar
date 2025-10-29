@@ -46,6 +46,7 @@ import EditSeriesDialog, {
 } from '@app/navigator/flows/editSeries/EditSeriesDialog'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 import SeriesPoseList from '@app/clientComponents/SeriesPoseList'
+import { getPoseIdByName } from '@lib/poseService'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -56,6 +57,9 @@ export default function Page() {
   const [series, setSeries] = useState<FlowSeriesData[]>([])
   const [flow, setFlow] = useState<FlowSeriesData>()
   const flowRef = React.useRef<FlowSeriesData | undefined>(flow)
+  const [poseIds, setPoseIds] = useState<{
+    [poseName: string]: string | null
+  }>({})
 
   useEffect(() => {
     flowRef.current = flow
@@ -253,6 +257,47 @@ export default function Page() {
       abortController.abort()
     }
   }, [flow?.id])
+
+  // Resolve asana IDs for navigation and deleted pose detection
+  useEffect(() => {
+    let mounted = true
+    async function resolvePoseIds() {
+      if (!flow?.seriesPoses?.length) {
+        if (mounted) setPoseIds({})
+        return
+      }
+
+      const idsMap: { [poseName: string]: string | null } = {}
+
+      for (const pose of flow.seriesPoses) {
+        // Handle both string and object formats
+        let poseName = ''
+        if (typeof pose === 'string') {
+          const { name } = splitSeriesPoseEntry(pose)
+          poseName = name
+        } else if (pose && typeof pose === 'object') {
+          poseName = (pose as any).sort_english_name || ''
+        }
+
+        if (!poseName) continue
+
+        try {
+          const id = await getPoseIdByName(poseName)
+          idsMap[poseName] = id
+        } catch (error) {
+          console.warn(`Failed to resolve ID for pose: ${poseName}`, error)
+          idsMap[poseName] = null
+        }
+      }
+
+      if (mounted) setPoseIds(idsMap)
+    }
+
+    resolvePoseIds()
+    return () => {
+      mounted = false
+    }
+  }, [flow?.seriesPoses])
 
   const imageUrl = useMemo(() => {
     if (images && images.length > 0) return images[0]
@@ -642,6 +687,7 @@ export default function Page() {
                   </Box>
                   <SeriesPoseList
                     seriesPoses={flow.seriesPoses}
+                    poseIds={poseIds}
                     getHref={(poseName) => getPoseNavigationUrlSync(poseName)}
                     linkColor="primary.contrastText"
                     dataTestIdPrefix="practice-series-pose"
