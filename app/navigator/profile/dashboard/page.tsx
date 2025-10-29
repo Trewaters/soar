@@ -18,6 +18,8 @@ import {
 import Grid2 from '@mui/material/Grid2'
 import PracticeHistoryChart from '@clientComponents/PracticeHistoryChart'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
+import { useSession } from 'next-auth/react'
+import { UseUser } from '@context/UserContext'
 
 interface StatCardProps {
   title: string
@@ -80,6 +82,10 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => {
 
 const Dashboard: React.FC = () => {
   const theme = useTheme()
+  const { data: session } = useSession()
+  const {
+    state: { userData },
+  } = UseUser()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
@@ -90,6 +96,17 @@ const Dashboard: React.FC = () => {
         setLoading(true)
         setError(null)
 
+        // Get userId from userData or session
+        const userId = userData?.id || session?.user?.id
+
+        if (!userId) {
+          console.error('Dashboard - No userId available')
+          setError('User session not found')
+          return
+        }
+
+        console.log('Dashboard - Using userId:', userId)
+
         // First, ensure login is recorded and get current login streak
         const loginStreakResponse = await fetch('/api/user/recordActivity', {
           method: 'POST',
@@ -97,6 +114,7 @@ const Dashboard: React.FC = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            userId: userId,
             activityType: 'view_dashboard',
           }),
         })
@@ -104,7 +122,17 @@ const Dashboard: React.FC = () => {
         let currentLoginStreak = 0
         if (loginStreakResponse.ok) {
           const loginData = await loginStreakResponse.json()
+          console.log('Dashboard - recordActivity API response:', loginData)
+          console.log(
+            'Dashboard - Login streak from API:',
+            loginData.streakData?.currentStreak
+          )
           currentLoginStreak = loginData.streakData?.currentStreak || 0
+        } else {
+          console.error('Dashboard - recordActivity API failed:', {
+            status: loginStreakResponse.status,
+            statusText: loginStreakResponse.statusText,
+          })
         }
 
         // Then fetch other dashboard statistics
@@ -119,13 +147,23 @@ const Dashboard: React.FC = () => {
         const result = await response.json()
 
         if (result.success && result.data) {
-          console.log('Dashboard data loaded:', result.data)
-          console.log('Practice history:', result.data.practiceHistory)
+          console.log('Dashboard - Stats API response:', result.data)
+          console.log(
+            'Dashboard - Login streak from stats API:',
+            result.data.loginStreak
+          )
+          console.log(
+            'Dashboard - Login streak from recordActivity API:',
+            currentLoginStreak
+          )
+
           // Override the loginStreak with the one from recordActivity API
-          setDashboardData({
+          const finalData = {
             ...result.data,
             loginStreak: currentLoginStreak,
-          })
+          }
+          console.log('Dashboard - Final merged data:', finalData)
+          setDashboardData(finalData)
         } else {
           throw new Error('Invalid response format')
         }
@@ -140,6 +178,7 @@ const Dashboard: React.FC = () => {
     }
 
     fetchDashboardData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (loading) {
