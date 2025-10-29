@@ -367,8 +367,7 @@ export default function LocationPicker({
           }
         }}
         onBlur={() => {
-          // Delay hiding predictions to allow for clicks
-          setTimeout(() => setShowPredictions(false), 150)
+          setShowPredictions(false)
         }}
       />
 
@@ -391,7 +390,11 @@ export default function LocationPicker({
             {predictions.map((prediction) => (
               <ListItem key={prediction.place_id} disablePadding>
                 <ListItemButton
-                  onClick={() => handlePredictionSelect(prediction)}
+                  onMouseDown={(e) => {
+                    // Prevent blur event from firing
+                    e.preventDefault()
+                    handlePredictionSelect(prediction)
+                  }}
                   sx={{ py: 1 }}
                 >
                   <LocationOnIcon sx={{ mr: 2, color: 'text.secondary' }} />

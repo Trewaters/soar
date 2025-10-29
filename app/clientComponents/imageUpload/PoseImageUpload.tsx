@@ -280,10 +280,8 @@ export default function PoseImageUpload({
       // Reload image status after successful upload
       await loadImageStatus()
 
-      // Auto-close dialog after short delay for better UX
-      setTimeout(() => {
-        handleClose()
-      }, 1000)
+      // Close dialog immediately after upload
+      handleClose()
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Upload failed')
       setUploadProgress(0)

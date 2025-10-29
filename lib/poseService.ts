@@ -232,14 +232,23 @@ export async function getPoseByName(name: string): Promise<AsanaPose> {
       { cache: 'no-store' }
     )
     if (!response.ok) {
+      // Don't log 404s as errors - they're expected when poses are deleted or don't exist
+      if (response.status === 404) {
+        throw new Error(`Pose not found: ${name}`)
+      }
       throw new Error('Failed to fetch pose')
     }
     return await response.json()
   } catch (error) {
-    logServiceError(error, 'poseService', 'getPoseByName', {
-      operation: 'fetch_pose_by_name',
-      name,
-    })
+    // Only log errors that aren't 404s
+    if (
+      !(error instanceof Error && error.message.includes('Pose not found:'))
+    ) {
+      logServiceError(error, 'poseService', 'getPoseByName', {
+        operation: 'fetch_pose_by_name',
+        name,
+      })
+    }
     throw error
   }
 }
@@ -272,14 +281,20 @@ export async function getPose(idOrName: string): Promise<AsanaPose> {
 /**
  * Get pose ID by name (for navigation purposes)
  * Used to convert pose names from series data to ObjectIds for navigation
+ * Returns null if pose doesn't exist (e.g., deleted poses in series)
  */
 export async function getPoseIdByName(name: string): Promise<string | null> {
   try {
     const pose = await getPoseByName(name)
     return pose.id
   } catch (error) {
-    // If pose not found, return null instead of throwing
-    console.warn(`Pose not found for name: ${name}`)
+    // If pose not found, silently return null - this is expected behavior
+    // for deleted poses that are still referenced in series
+    if (error instanceof Error && error.message.includes('Pose not found:')) {
+      return null
+    }
+    // Log unexpected errors
+    console.error(`Unexpected error fetching pose by name "${name}":`, error)
     return null
   }
 }

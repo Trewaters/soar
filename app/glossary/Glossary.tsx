@@ -53,10 +53,9 @@ export const Glossary: React.FC = () => {
     severity: 'success' | 'error'
   }>({ open: false, msg: '', severity: 'success' })
 
-  // Debounce search input
+  // Update search immediately without debounce
   useEffect(() => {
-    const id = setTimeout(() => setDebounced(search.trim().toLowerCase()), 300)
-    return () => clearTimeout(id)
+    setDebounced(search.trim().toLowerCase())
   }, [search])
 
   const categories = useMemo(() => {

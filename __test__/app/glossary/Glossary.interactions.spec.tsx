@@ -69,11 +69,23 @@ describe('Glossary interactions', () => {
     render(<Glossary />, { wrapper: Wrapper })
     // default terms loaded from static list present; pick a known term e.g., Asana
     expect(await screen.findByText(/āsana/i)).toBeInTheDocument()
+
+    // Verify Pranayama is initially visible
+    expect(screen.getByText(/pranayama/i)).toBeInTheDocument()
+
     const search = screen.getByLabelText(/search/i)
-    fireEvent.change(search, { target: { value: 'prāṇa' } })
-    await waitFor(() => {
-      // term with prāṇa should appear
-      expect(screen.getByText(/prāṇāyāma/i)).toBeInTheDocument()
-    })
+
+    // Type the search term - search for "breath" which should match Pranayama's category and description
+    fireEvent.change(search, { target: { value: 'breath' } })
+
+    // Wait for React to update with filtered results
+    await waitFor(
+      () => {
+        expect(screen.getByText(/pranayama/i)).toBeInTheDocument()
+        // Asana should NOT be visible anymore since it doesn't match "breath"
+        expect(screen.queryByText(/^Asana$/)).not.toBeInTheDocument()
+      },
+      { timeout: 3000 }
+    )
   })
 })

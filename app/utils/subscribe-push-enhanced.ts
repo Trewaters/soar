@@ -135,32 +135,21 @@ function analyzePushError(error: any): {
   }
 }
 
-function waitForServiceWorkerController(
-  timeoutMs = 15000
-): Promise<ServiceWorker> {
+function waitForServiceWorkerController(): Promise<ServiceWorker> {
   if (navigator.serviceWorker.controller) {
     return Promise.resolve(navigator.serviceWorker.controller)
   }
 
   return new Promise((resolve, reject) => {
-    let settled = false
-
-    const cleanup = () => {
-      if (settled) return
-      settled = true
+    const onControllerChange = () => {
       navigator.serviceWorker.removeEventListener(
         'controllerchange',
         onControllerChange
       )
-      if (timeoutId) {
-        window.clearTimeout(timeoutId)
-      }
-    }
-
-    const onControllerChange = () => {
       if (navigator.serviceWorker.controller) {
-        cleanup()
         resolve(navigator.serviceWorker.controller)
+      } else {
+        reject(new Error('Service worker controller not available'))
       }
     }
 
@@ -168,15 +157,6 @@ function waitForServiceWorkerController(
       'controllerchange',
       onControllerChange
     )
-
-    const timeoutId = window.setTimeout(() => {
-      cleanup()
-      reject(
-        new Error(
-          `Service worker controller not available after ${timeoutMs}ms`
-        )
-      )
-    }, timeoutMs)
   })
 }
 
@@ -217,55 +197,28 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
               console.warn('Could not message service worker:', postError)
             }
           }
-
-          // Extended wait for cleanup on retry attempts
-          const cleanupWait = attempt === 1 ? 500 : 2000
-          await new Promise((resolve) => setTimeout(resolve, cleanupWait))
         } catch (cleanupError) {
           console.warn('⚠️ Service worker cleanup failed:', cleanupError)
           // Continue anyway - don't let cleanup failures stop us
         }
       }
 
-      const registration = await navigator.serviceWorker.register('/sw.js', {
+      await navigator.serviceWorker.register('/sw.js', {
         scope: '/',
         updateViaCache: 'none', // Prevent caching issues
       })
 
-      // Enhanced readiness check with multiple strategies
-
-      // Strategy 1: Use the standard ready promise with timeout
-      const readyPromise = navigator.serviceWorker.ready
-      const timeoutPromise = new Promise<ServiceWorkerRegistration>(
-        (_, reject) =>
-          setTimeout(
-            () => reject(new Error('Service Worker ready timeout after 15s')),
-            15000 // Increased timeout
-          )
-      )
-
-      const readyRegistration = await Promise.race([
-        readyPromise,
-        timeoutPromise,
-      ])
+      // Use the standard ready promise
+      const readyRegistration = await navigator.serviceWorker.ready
 
       // Strategy 2: Verify the registration is actually active
-      let activeWait = 0
-      while (
-        !readyRegistration.active &&
-        !navigator.serviceWorker.controller &&
-        activeWait < 10000
-      ) {
-        await new Promise((resolve) => setTimeout(resolve, 500))
-        activeWait += 500
-      }
-
+      // Get active worker
       let activeWorker =
         readyRegistration.active || navigator.serviceWorker.controller
 
       if (!activeWorker) {
         try {
-          activeWorker = await waitForServiceWorkerController(10000)
+          activeWorker = await waitForServiceWorkerController()
         } catch (controllerError) {
           console.error(
             '⚠️ Service worker controller did not resolve:',
@@ -296,10 +249,6 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
           `Failed to register service worker after ${maxAttempts} attempts. ${errorAnalysis.userMessage} Technical details: ${errorAnalysis.technicalDetails}`
         )
       }
-
-      // Progressive backoff: 1s, 3s, 6s
-      const backoffTime = 1000 * Math.pow(2, attempt - 1) + attempt * 1000
-      await new Promise((resolve) => setTimeout(resolve, backoffTime))
     }
   }
 
@@ -535,8 +484,6 @@ async function subscribeToPushWithRetry(
       const existing = await registration.pushManager.getSubscription()
       if (existing) {
         await existing.unsubscribe()
-        // Brief wait after unsubscribing
-        await new Promise((resolve) => setTimeout(resolve, 500))
       }
 
       const applicationServerKey = urlBase64ToUint8Array(publicVapidKey)
@@ -562,9 +509,6 @@ async function subscribeToPushWithRetry(
             if (existingSub) {
               await existingSub.unsubscribe()
             }
-
-            // Wait longer before retry for AbortError
-            await new Promise((resolve) => setTimeout(resolve, 1000))
           } catch (clearError) {
             console.warn('Failed to clear push state:', clearError)
           }
@@ -577,9 +521,6 @@ async function subscribeToPushWithRetry(
             for (const reg of registrations) {
               await reg.unregister()
             }
-
-            // Extended wait for cleanup - AbortErrors need more time
-            await new Promise((resolve) => setTimeout(resolve, 3000))
 
             // Re-register fresh service worker with more explicit options
             const newRegistration = await navigator.serviceWorker.register(
@@ -618,11 +559,6 @@ async function subscribeToPushWithRetry(
           `Failed to subscribe to push notifications after ${maxAttempts} attempts. ${errorAnalysis.userMessage} Technical details: ${errorAnalysis.technicalDetails}`
         )
       }
-
-      // Exponential backoff - wait longer between retries
-      await new Promise((resolve) =>
-        setTimeout(resolve, 1000 * Math.pow(2, attempt - 1))
-      )
     }
   }
 
@@ -682,19 +618,11 @@ export async function enablePushNotificationsEnhanced(): Promise<{
       }
     }
 
-    // Request notification permission with timeout
+    // Request notification permission
     let permission: NotificationPermission
     try {
       if (Notification.permission === 'default') {
-        const permissionPromise = Notification.requestPermission()
-        const timeoutPromise = new Promise<NotificationPermission>(
-          (_, reject) =>
-            setTimeout(
-              () => reject(new Error('Permission request timeout')),
-              10000
-            )
-        )
-        permission = await Promise.race([permissionPromise, timeoutPromise])
+        permission = await Notification.requestPermission()
       } else {
         permission = Notification.permission
       }
@@ -863,8 +791,6 @@ async function saveSubscriptionToServer(
       if (attempt === maxAttempts) {
         throw error
       }
-
-      await new Promise((resolve) => setTimeout(resolve, 1000 * attempt))
     }
   }
 }

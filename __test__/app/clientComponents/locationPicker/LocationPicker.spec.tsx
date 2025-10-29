@@ -350,7 +350,9 @@ describe('LocationPicker', () => {
         expect(screen.getByText('CA, USA')).toBeInTheDocument()
       })
 
-      await user.click(screen.getByText('San Diego'))
+      // Use mouseDown since we changed the component to use onMouseDown for immediate response
+      const prediction = screen.getByText('San Diego')
+      fireEvent.mouseDown(prediction)
 
       await waitFor(() => {
         expect(onChange).toHaveBeenCalledWith(
@@ -420,7 +422,9 @@ describe('LocationPicker', () => {
         expect(screen.getByText('Japan')).toBeInTheDocument()
       })
 
-      await user.click(screen.getByText('Tokyo'))
+      // Use mouseDown since we changed the component to use onMouseDown for immediate response
+      const prediction = screen.getByText('Tokyo')
+      fireEvent.mouseDown(prediction)
 
       await waitFor(() => {
         expect(onChange).toHaveBeenCalledWith(

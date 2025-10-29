@@ -156,31 +156,21 @@ export default function QuickTimer({
       }
 
       const playBeep = (frequency: number, delay: number = 0) => {
-        setTimeout(() => {
-          const oscillator = audioContext.createOscillator()
-          const gainNode = audioContext.createGain()
+        const oscillator = audioContext.createOscillator()
+        const gainNode = audioContext.createGain()
 
-          oscillator.connect(gainNode)
-          gainNode.connect(audioContext.destination)
+        oscillator.connect(gainNode)
+        gainNode.connect(audioContext.destination)
 
-          // Create a pleasant alarm tone
-          oscillator.frequency.setValueAtTime(
-            frequency,
-            audioContext.currentTime
-          )
-          gainNode.gain.setValueAtTime(0, audioContext.currentTime)
-          gainNode.gain.linearRampToValueAtTime(
-            0.3,
-            audioContext.currentTime + 0.01
-          )
-          gainNode.gain.exponentialRampToValueAtTime(
-            0.001,
-            audioContext.currentTime + 0.3
-          )
+        // Create a pleasant alarm tone with delay if specified
+        const startTime = audioContext.currentTime + delay / 1000
+        oscillator.frequency.setValueAtTime(frequency, startTime)
+        gainNode.gain.setValueAtTime(0, startTime)
+        gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.01)
+        gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + 0.3)
 
-          oscillator.start(audioContext.currentTime)
-          oscillator.stop(audioContext.currentTime + 0.3)
-        }, delay)
+        oscillator.start(startTime)
+        oscillator.stop(startTime + 0.3)
       }
 
       // Play three beeps for better audio notification
@@ -298,17 +288,13 @@ export default function QuickTimer({
       setTimerEndTime(endTime)
       setIsTimerActive(true)
 
-      // For zero or very short timers, ensure we show the display briefly
+      // For zero or very short timers, end immediately
       if (timerDurationInMs === 0) {
         setTimerSeconds(0)
         onTimerUpdate?.(0)
-
-        // Use setTimeout to allow display to render before ending
-        setTimeout(() => {
-          setIsTimerActive(false)
-          setTimerEndTime(null)
-          onTimerEnd?.()
-        }, 100)
+        setIsTimerActive(false)
+        setTimerEndTime(null)
+        onTimerEnd?.()
       } else {
         startTimer(endTime)
       }

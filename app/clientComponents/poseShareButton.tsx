@@ -720,7 +720,7 @@ const PoseShareButton: React.FC<CombinedPoseShareButtonProps> = (props) => {
     []
   )
 
-  // Enhanced Web Share API call with timeout and retry logic
+  // Enhanced Web Share API call with retry logic
   const shareWithNativeAPI = useCallback(
     async (shareData: {
       title: string
@@ -728,13 +728,7 @@ const PoseShareButton: React.FC<CombinedPoseShareButtonProps> = (props) => {
       url: string
     }): Promise<{ success: boolean; error?: string }> => {
       try {
-        // Create a timeout promise to handle unresponsive share dialogs
-        const sharePromise = navigator.share(shareData)
-        const timeoutPromise = new Promise<never>((_, reject) => {
-          setTimeout(() => reject(new Error('Share timeout')), 10000) // 10 second timeout
-        })
-
-        await Promise.race([sharePromise, timeoutPromise])
+        await navigator.share(shareData)
         return { success: true }
       } catch (error) {
         const errorMessage = (error as Error).message || 'Unknown error'
@@ -746,13 +740,6 @@ const PoseShareButton: React.FC<CombinedPoseShareButtonProps> = (props) => {
         ) {
           // User cancelled - this is not an error
           return { success: false, error: 'cancelled' }
-        }
-
-        if (errorMessage.includes('timeout')) {
-          return {
-            success: false,
-            error: 'Share dialog timed out. Please try again.',
-          }
         }
 
         if (errorMessage.includes('NotAllowedError')) {

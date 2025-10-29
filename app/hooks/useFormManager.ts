@@ -159,12 +159,10 @@ export const useFormManager = ({
         const field = fieldRefs.current[name]
         if (field) {
           // Smooth scroll to field if needed
-          setTimeout(() => {
-            field.scrollIntoView({
-              behavior: 'smooth',
-              block: 'center',
-            })
-          }, 100)
+          field.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          })
         }
       }
     },

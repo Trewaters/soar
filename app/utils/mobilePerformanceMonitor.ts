@@ -399,14 +399,11 @@ export function useMobilePerformanceMonitor() {
  */
 export const performanceOptimizations = {
   /**
-   * Debounce function for input handlers
+   * Debounce function - executes immediately without delay
+   * @deprecated Debounce delays removed for better app responsiveness
    */
-  debounce: <T extends Function>(func: T, delay: number): T => {
-    let timeoutId: NodeJS.Timeout
-    return ((...args: any[]) => {
-      clearTimeout(timeoutId)
-      timeoutId = setTimeout(() => (func as any)(...args), delay)
-    }) as unknown as T
+  debounce: <T extends Function>(func: T): T => {
+    return func
   },
 
   /**

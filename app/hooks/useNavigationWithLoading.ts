@@ -132,15 +132,6 @@ export function useNavigationWithLoading() {
       startNavigation('refresh', 'refresh-button')
       navigationStartTimeRef.current = Date.now()
       router.refresh()
-
-      // Safety timeout for refresh - slightly longer since page reloads
-      setTimeout(() => {
-        if (state.isNavigating && navigationStartTimeRef.current) {
-          console.warn('Page refresh safety timeout reached')
-          endNavigation()
-          navigationStartTimeRef.current = null
-        }
-      }, 1500) // 1.5 second safety timeout for refresh
     } catch (error) {
       // Handle navigation errors gracefully
       console.warn('Page refresh failed:', error)

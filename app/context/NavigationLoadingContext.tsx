@@ -1,12 +1,5 @@
 'use client'
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useRef,
-  useEffect,
-} from 'react'
+import React, { createContext, useContext, useState, ReactNode } from 'react'
 
 interface NavigationLoadingState {
   isNavigating: boolean
@@ -32,56 +25,22 @@ const initialState: NavigationLoadingState = {
   elementId: null,
 }
 
-export function NavigationLoadingProvider({
+export const NavigationLoadingProvider: React.FC<{ children: ReactNode }> = ({
   children,
-}: {
-  children: ReactNode
-}) {
+}) => {
   const [state, setState] = useState<NavigationLoadingState>(initialState)
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const startNavigation = (targetPath: string, elementId?: string) => {
-    // Clear any existing timeout
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-      timeoutRef.current = null
-    }
-
     setState({
       isNavigating: true,
       targetPath,
       elementId: elementId || null,
     })
-
-    // Ultra-conservative safety timeout - only triggers if everything fails
-    timeoutRef.current = setTimeout(() => {
-      setState((prev) => {
-        if (prev.targetPath === targetPath && prev.isNavigating) {
-          return initialState
-        }
-        return prev
-      })
-      timeoutRef.current = null
-    }, 3000) // 3 second emergency timeout - longer than safety timeouts
   }
 
   const endNavigation = () => {
-    // Clear timeout when navigation ends successfully
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-      timeoutRef.current = null
-    }
     setState(initialState)
   }
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
-      }
-    }
-  }, [])
 
   const isNavigatingTo = (path: string) => {
     return state.isNavigating && state.targetPath === path

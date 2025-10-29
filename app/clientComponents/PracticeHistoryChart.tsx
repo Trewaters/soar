@@ -28,12 +28,8 @@ const PracticeHistoryChart: React.FC<PracticeHistoryChartProps> = ({
     // Update on window resize
     window.addEventListener('resize', updateDimensions)
 
-    // Retry after a short delay to ensure layout is complete
-    const timer = setTimeout(updateDimensions, 100)
-
     return () => {
       window.removeEventListener('resize', updateDimensions)
-      clearTimeout(timer)
     }
   }, [])
 

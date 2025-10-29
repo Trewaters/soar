@@ -65,12 +65,10 @@ export function preventMobileKeyboardDismiss(
   }
 
   // For mobile devices, prevent accidental blur by returning focus
-  setTimeout(() => {
-    const currentTarget = event.currentTarget as HTMLInputElement
-    if (currentTarget && document.activeElement !== currentTarget) {
-      currentTarget.focus()
-    }
-  }, 100)
+  const currentTarget = event.currentTarget as HTMLInputElement
+  if (currentTarget && document.activeElement !== currentTarget) {
+    currentTarget.focus()
+  }
 
   return true
 }
@@ -92,11 +90,9 @@ export function maintainInputFocus(
   // Prevent focus loss during virtual keyboard changes
   const handleVisibilityChange = () => {
     if (!document.hidden && element) {
-      setTimeout(() => {
-        if (document.activeElement !== element) {
-          element.focus()
-        }
-      }, 100)
+      if (document.activeElement !== element) {
+        element.focus()
+      }
     }
   }
 

@@ -126,8 +126,8 @@ describe('Mobile Input Helpers', () => {
       const result = preventMobileKeyboardDismiss(mockEvent)
 
       expect(result).toBe(true)
-      // The function uses setTimeout to restore focus, not preventDefault
-      expect(setTimeout).toHaveBeenCalled()
+      // Focus is restored immediately without setTimeout
+      expect(mockInput.focus).toHaveBeenCalled()
     })
 
     it('should allow blur when related target exists on mobile', () => {
@@ -208,6 +208,7 @@ describe('Integration Tests', () => {
 
     // Test event handling
     const mockInput = document.createElement('input')
+    mockInput.focus = jest.fn()
     document.body.appendChild(mockInput)
 
     const blurEvent = new FocusEvent('blur', { relatedTarget: null })
@@ -218,7 +219,8 @@ describe('Integration Tests', () => {
 
     const shouldPrevent = preventMobileKeyboardDismiss(blurEvent)
     expect(shouldPrevent).toBe(true)
-    expect(setTimeout).toHaveBeenCalled()
+    // Focus is restored immediately without setTimeout
+    expect(mockInput.focus).toHaveBeenCalled()
 
     document.body.removeChild(mockInput)
   })

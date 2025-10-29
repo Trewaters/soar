@@ -456,13 +456,16 @@ describe('QuickTimer Component', () => {
         configurable: true,
       })
 
-      render(<QuickTimer timerMinutes={0} />)
+      const onTimerEnd = jest.fn()
+      render(<QuickTimer timerMinutes={0} onTimerEnd={onTimerEnd} />)
 
       const button = screen.getByRole('button')
       fireEvent.click(button)
 
-      // Should start immediately and show 0:00
-      expect(screen.getByText('0:00')).toBeInTheDocument()
+      // For zero timer, it ends immediately without showing timer display
+      expect(onTimerEnd).toHaveBeenCalled()
+      // Timer display should not be shown for instant completion
+      expect(screen.queryByText('0:00')).not.toBeInTheDocument()
     })
   })
 

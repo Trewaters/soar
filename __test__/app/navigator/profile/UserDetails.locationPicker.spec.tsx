@@ -508,7 +508,9 @@ describe('EditUserDetails - LocationPicker Integration', () => {
       expect(screen.getByText('CA, USA')).toBeInTheDocument()
     })
 
-    await user.click(screen.getByText('San Diego'))
+    // Use mouseDown since we changed the component to use onMouseDown for immediate response
+    const prediction = screen.getByText('San Diego')
+    fireEvent.mouseDown(prediction)
 
     // Wait for location chips to appear
     await waitFor(() => {

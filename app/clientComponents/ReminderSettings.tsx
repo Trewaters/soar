@@ -161,7 +161,6 @@ export default function ReminderSettings() {
   const showNotification = useCallback(
     (type: 'success' | 'error' | 'info' | 'warning', message: string) => {
       setNotification({ type, message })
-      setTimeout(() => setNotification(null), 5000)
     },
     []
   )
@@ -395,12 +394,10 @@ export default function ReminderSettings() {
         r.startsWith('❌')
       )
       if (criticalIssues.length > 0) {
-        setTimeout(() => {
-          showNotification(
-            'error',
-            `Critical Issues Found:\n${criticalIssues.join('\n')}`
-          )
-        }, 1000)
+        showNotification(
+          'error',
+          `Critical Issues Found:\n${criticalIssues.join('\n')}`
+        )
       }
     } catch (error) {
       console.error('Debug check failed:', error)
