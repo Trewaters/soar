@@ -107,17 +107,6 @@ export default function SeriesPoseList({
         const isPoseDeleted =
           poseName && poseIds.hasOwnProperty(poseName) && poseId === null
 
-        // Debug logging
-        if (poseName) {
-          console.log('SeriesPoseList render:', {
-            poseName,
-            hasPoseIds: Object.keys(poseIds).length > 0,
-            poseIdValue: poseIds[poseName],
-            hasOwnProperty: poseIds.hasOwnProperty(poseName),
-            isPoseDeleted,
-          })
-        }
-
         // Extract first line of alignment cue for inline display
         const alignmentCuesInline =
           showAlignmentInline && alignmentCues

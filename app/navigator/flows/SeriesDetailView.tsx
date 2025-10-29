@@ -36,10 +36,9 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
         return
       }
 
-      const idsMap: { [poseName: string]: string | null } = {}
-
+      // Extract all pose names first
+      const poseNames: string[] = []
       for (const pose of flow.seriesPoses) {
-        // Handle both string and object formats
         let poseName = ''
         if (typeof pose === 'string') {
           const { name } = splitSeriesPoseEntry(pose)
@@ -47,19 +46,45 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
         } else if (pose && typeof pose === 'object') {
           poseName = (pose as any).sort_english_name || ''
         }
-
-        if (!poseName) continue
-
-        try {
-          const id = await getPoseIdByName(poseName)
-          idsMap[poseName] = id
-        } catch (error) {
-          console.warn(`Failed to resolve ID for pose: ${poseName}`, error)
-          idsMap[poseName] = null
-        }
+        if (poseName) poseNames.push(poseName)
       }
 
-      if (mounted) setPoseIds(idsMap)
+      // Fetch all pose IDs in parallel for faster resolution
+      const idPromises = poseNames.map(async (poseName) => {
+        try {
+          const id = await getPoseIdByName(poseName)
+          return { poseName, id }
+        } catch (error) {
+          console.warn(`Failed to resolve ID for pose: ${poseName}`, error)
+          return { poseName, id: null }
+        }
+      })
+
+      // Update state incrementally as each ID resolves
+      idPromises.forEach((promise) => {
+        promise.then(({ poseName, id }) => {
+          if (mounted) {
+            setPoseIds((prev) => ({ ...prev, [poseName]: id }))
+          }
+        })
+      })
+
+      // Also wait for all to complete to ensure we have the full set
+      try {
+        const results = await Promise.all(idPromises)
+        if (mounted) {
+          const idsMap = results.reduce(
+            (acc, { poseName, id }) => {
+              acc[poseName] = id
+              return acc
+            },
+            {} as { [poseName: string]: string | null }
+          )
+          setPoseIds(idsMap)
+        }
+      } catch (error) {
+        console.error('Error resolving pose IDs:', error)
+      }
     }
 
     resolvePoseIds()
