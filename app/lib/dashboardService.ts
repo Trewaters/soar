@@ -117,38 +117,44 @@ export async function calculateActivityStreak(userId: string): Promise<number> {
 
   if (allActivities.length === 0) return 0
 
-  // Get unique days with activity (normalize to midnight UTC)
+  // Get unique days with activity (use UTC date strings for consistency)
   const uniqueDays = new Set<string>()
   for (const activity of allActivities) {
     const activityDate = new Date(activity)
-    activityDate.setHours(0, 0, 0, 0)
-    uniqueDays.add(activityDate.toISOString().split('T')[0])
+    // Use UTC date parts to avoid timezone issues
+    const dateStr = activityDate.toISOString().split('T')[0]
+    uniqueDays.add(dateStr)
   }
 
   // Sort days in descending order (most recent first)
   const sortedDays = Array.from(uniqueDays).sort().reverse()
 
+  // Get today's date in UTC format
   const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const todayStr = today.toISOString().split('T')[0]
 
   // Check if there's activity today or yesterday to keep streak alive
-  const lastActivity = new Date(sortedDays[0])
+  const lastActivityStr = sortedDays[0]
+  const lastActivityDate = new Date(lastActivityStr + 'T00:00:00.000Z')
+  const todayDate = new Date(todayStr + 'T00:00:00.000Z')
+
   const daysDiff = Math.floor(
-    (today.getTime() - lastActivity.getTime()) / (1000 * 60 * 60 * 24)
+    (todayDate.getTime() - lastActivityDate.getTime()) / (1000 * 60 * 60 * 24)
   )
 
   // If last activity was more than 1 day ago, streak is broken
-  if (daysDiff > 1) return 0
+  if (daysDiff > 1) {
+    return 0
+  }
 
   // Count consecutive days backwards from today
   let streak = 0
   for (let i = 0; i < sortedDays.length; i++) {
-    const currentDate = new Date(sortedDays[i])
-    const expectedDate = new Date(today)
-    expectedDate.setDate(today.getDate() - i)
-    expectedDate.setHours(0, 0, 0, 0)
+    const expectedDate = new Date(todayDate)
+    expectedDate.setUTCDate(todayDate.getUTCDate() - i)
+    const expectedStr = expectedDate.toISOString().split('T')[0]
 
-    if (currentDate.getTime() === expectedDate.getTime()) {
+    if (sortedDays[i] === expectedStr) {
       streak++
     } else {
       break
@@ -265,7 +271,8 @@ export async function getPracticeHistory(
 
   for (const activity of allActivities) {
     const date = new Date(activity)
-    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+    // Use UTC date parts to avoid timezone issues
+    const monthKey = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`
     const dayKey = date.toISOString().split('T')[0]
 
     if (!monthCounts.has(monthKey)) {
@@ -292,16 +299,14 @@ export async function getPracticeHistory(
   ]
 
   for (let i = 11; i >= 0; i--) {
-    const date = new Date()
-    date.setMonth(now.getMonth() - i)
+    // Create a new date from now for each iteration to avoid mutation issues
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
 
+    // Use UTC to match how we're storing the activity month keys
     const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
     const monthName = monthNames[date.getMonth()]
     const yearShort = String(date.getFullYear()).slice(2)
-    const label =
-      date.getFullYear() === now.getFullYear()
-        ? `${monthName} ${yearShort}`
-        : `${monthName} ${yearShort}`
+    const label = `${monthName} ${yearShort}`
 
     const days = monthCounts.get(monthKey)?.size || 0
 
@@ -320,9 +325,20 @@ export async function getPracticeHistory(
 export async function getMostCommonAsanas(
   userId: string
 ): Promise<MostCommonItem[]> {
+  // Calculate date 12 months ago (UTC)
+  const now = new Date()
+  const twelveMonthsAgo = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 11, 1, 0, 0, 0, 0)
+  )
+
   const activities = await prisma.asanaActivity.groupBy({
     by: ['poseName'],
-    where: { userId },
+    where: {
+      userId,
+      datePerformed: {
+        gte: twelveMonthsAgo,
+      },
+    },
     _count: { poseName: true },
     orderBy: { _count: { poseName: 'desc' } },
     take: 3,
@@ -340,9 +356,20 @@ export async function getMostCommonAsanas(
 export async function getMostCommonSeries(
   userId: string
 ): Promise<MostCommonItem[]> {
+  // Calculate date 12 months ago (UTC)
+  const now = new Date()
+  const twelveMonthsAgo = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 11, 1, 0, 0, 0, 0)
+  )
+
   const activities = await prisma.seriesActivity.groupBy({
     by: ['seriesName'],
-    where: { userId },
+    where: {
+      userId,
+      datePerformed: {
+        gte: twelveMonthsAgo,
+      },
+    },
     _count: { seriesName: true },
     orderBy: { _count: { seriesName: 'desc' } },
     take: 3,
@@ -360,9 +387,20 @@ export async function getMostCommonSeries(
 export async function getMostCommonSequences(
   userId: string
 ): Promise<MostCommonItem[]> {
+  // Calculate date 12 months ago (UTC)
+  const now = new Date()
+  const twelveMonthsAgo = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 11, 1, 0, 0, 0, 0)
+  )
+
   const activities = await prisma.sequenceActivity.groupBy({
     by: ['sequenceName'],
-    where: { userId },
+    where: {
+      userId,
+      datePerformed: {
+        gte: twelveMonthsAgo,
+      },
+    },
     _count: { sequenceName: true },
     orderBy: { _count: { sequenceName: 'desc' } },
     take: 3,

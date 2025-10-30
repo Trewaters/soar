@@ -100,12 +100,15 @@ const Dashboard: React.FC = () => {
         const userId = userData?.id || session?.user?.id
 
         if (!userId) {
-          console.error('Dashboard - No userId available')
           setError('User session not found')
           return
         }
 
-        console.log('Dashboard - Using userId:', userId)
+        // Skip if using default/initial userData (id='1' is the placeholder)
+        if (userId === '1') {
+          setLoading(false)
+          return
+        }
 
         // First, ensure login is recorded and get current login streak
         const loginStreakResponse = await fetch('/api/user/recordActivity', {
@@ -215,12 +218,6 @@ const Dashboard: React.FC = () => {
     mostCommonSequences,
     nextGoal,
   } = dashboardData
-
-  console.log('Extracted practiceHistory:', practiceHistory)
-  console.log('practiceHistory type:', typeof practiceHistory)
-  console.log('practiceHistory is array:', Array.isArray(practiceHistory))
-  console.log('practiceHistory length:', practiceHistory?.length)
-  console.log('Theme warning color:', theme.palette.warning.main)
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
