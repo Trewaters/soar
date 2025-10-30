@@ -10,12 +10,15 @@ import {
   Switch,
   Button,
   Box,
+  IconButton,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { SessionProvider } from 'next-auth/react'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
 import { auth } from '../../../../auth'
 import theme from '@styles/theme'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import Link from 'next/link'
 
 export const metadata = {
   title: 'Privacy Settings | Uvuyoga',
@@ -37,14 +40,32 @@ export default async function PrivacySettingsPage() {
           {/* Privacy Settings Content */}
           <Grid size={{ xs: 12, md: 8 }}>
             <Stack spacing={3}>
-              <Typography
-                variant="h1"
-                component="h1"
-                sx={{ color: theme.palette.success.main }}
-                gutterBottom
-              >
-                Privacy
-              </Typography>
+              {/* Header with Back Button */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <IconButton
+                  component={Link}
+                  href="/navigator/profile/settings"
+                  sx={{
+                    color: 'primary.main',
+                    '&:hover': {
+                      bgcolor: 'primary.light',
+                    },
+                  }}
+                  aria-label="Back to Account Settings"
+                >
+                  <ArrowBackIcon />
+                </IconButton>
+                <Typography
+                  variant="h1"
+                  component="h1"
+                  sx={{
+                    color: theme.palette.success.main,
+                    fontSize: { xs: '1.75rem', md: '2.5rem' },
+                  }}
+                >
+                  Privacy
+                </Typography>
+              </Box>
 
               {/* Profile Visibility */}
               <Paper

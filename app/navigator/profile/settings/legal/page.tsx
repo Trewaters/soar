@@ -1,4 +1,4 @@
-import { Container, Typography, Stack } from '@mui/material'
+import { Container, Typography, Stack, Box, IconButton } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { SessionProvider } from 'next-auth/react'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
@@ -28,33 +28,32 @@ export default async function LegalPage() {
           {/* Legal Content */}
           <Grid size={{ xs: 12, md: 8 }}>
             <Stack spacing={3}>
-              {/* Back Button */}
-              <Link
-                href="/navigator/profile/settings"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  textDecoration: 'none',
-                  color: theme.palette.primary.main,
-                  width: 'fit-content',
-                }}
-              >
-                <ArrowBackIcon sx={{ mr: 1 }} />
-                <Typography variant="body1">Back</Typography>
-              </Link>
-
-              {/* Page Title */}
-              <Typography
-                variant="h1"
-                component="h1"
-                sx={{
-                  color: theme.palette.success.main,
-                  textAlign: 'center',
-                  mb: 2,
-                }}
-              >
-                Legal
-              </Typography>
+              {/* Header with Back Button */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <IconButton
+                  component={Link}
+                  href="/navigator/profile/settings"
+                  sx={{
+                    color: 'primary.main',
+                    '&:hover': {
+                      bgcolor: 'primary.light',
+                    },
+                  }}
+                  aria-label="Back to Account Settings"
+                >
+                  <ArrowBackIcon />
+                </IconButton>
+                <Typography
+                  variant="h1"
+                  component="h1"
+                  sx={{
+                    color: theme.palette.success.main,
+                    fontSize: { xs: '1.75rem', md: '2.5rem' },
+                  }}
+                >
+                  Legal
+                </Typography>
+              </Box>
 
               <Typography
                 variant="h2"
