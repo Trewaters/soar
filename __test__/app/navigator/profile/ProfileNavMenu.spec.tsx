@@ -153,7 +153,6 @@ describe('ProfileNavMenu', () => {
       expect(screen.getByText('Dashboard')).toBeInTheDocument()
       expect(screen.getByText('My Library')).toBeInTheDocument()
       expect(screen.getByText('Account Settings')).toBeInTheDocument()
-      expect(screen.getByText('Home Page')).toBeInTheDocument()
       expect(screen.getByText('Logout')).toBeInTheDocument()
     })
 
@@ -395,16 +394,6 @@ describe('ProfileNavMenu', () => {
       await user.click(settingsButton)
 
       expect(mockPush).toHaveBeenCalledWith('/navigator/profile/settings')
-    })
-
-    it('should navigate to home page when clicked', async () => {
-      const user = userEvent.setup()
-      render(<ProfileNavMenu />, { wrapper: TestWrapper })
-
-      const homeButton = screen.getByText('Home Page')
-      await user.click(homeButton)
-
-      expect(mockPush).toHaveBeenCalledWith('/navigator')
     })
 
     it('should call signOut when logout button is clicked', async () => {
