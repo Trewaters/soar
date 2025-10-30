@@ -1169,3 +1169,318 @@ describe('LibraryPage - SequenceCard Delete Feature', () => {
     })
   })
 })
+
+describe('LibraryPage - Asanas View Toggle Feature', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockGetUserCreatedSeries.mockResolvedValue([])
+    mockGetUserCreatedSequences.mockResolvedValue([])
+    mockGetUserPoseImages.mockResolvedValue({
+      images: [
+        {
+          id: 'img1',
+          url: '/test-image.jpg',
+          altText: 'Test Asana',
+        },
+      ],
+      totalCount: 1,
+    })
+
+    mockUseUser.mockReturnValue({
+      state: mockUserState,
+      dispatch: mockDispatch,
+    })
+  })
+
+  it('should display view toggle icons in Asanas tab', async () => {
+    const mockAsanas = [
+      {
+        id: 'asana1',
+        sort_english_name: 'Warrior Pose',
+        created_by: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedAsanas.mockResolvedValue(mockAsanas)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    await screen.findByText('Warrior Pose')
+
+    // Check for card view icon
+    const cardViewButton = screen.getByRole('button', {
+      name: /Currently in card view/i,
+    })
+    expect(cardViewButton).toBeInTheDocument()
+    expect(cardViewButton).toBeDisabled()
+
+    // Check for list view icon
+    const listViewButton = screen.getByRole('button', {
+      name: /Switch to list view/i,
+    })
+    expect(listViewButton).toBeInTheDocument()
+    expect(listViewButton).not.toBeDisabled()
+  })
+
+  it('should toggle from card view to list view in Asanas tab', async () => {
+    const user = userEvent.setup()
+    const mockAsanas = [
+      {
+        id: 'asana1',
+        sort_english_name: 'Warrior Pose',
+        created_by: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+      {
+        id: 'asana2',
+        sort_english_name: 'Tree Pose',
+        created_by: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedAsanas.mockResolvedValue(mockAsanas)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    await screen.findByText('Warrior Pose')
+
+    // Click list view button
+    const listViewButton = screen.getByRole('button', {
+      name: /Switch to list view/i,
+    })
+    await user.click(listViewButton)
+
+    // Now list view should be disabled (active) and card view enabled
+    await waitFor(() => {
+      const activeListViewButton = screen.getByRole('button', {
+        name: /Currently in list view/i,
+      })
+      expect(activeListViewButton).toBeDisabled()
+
+      const inactiveCardViewButton = screen.getByRole('button', {
+        name: /Switch to card view/i,
+      })
+      expect(inactiveCardViewButton).not.toBeDisabled()
+    })
+
+    // Asanas should still be visible
+    expect(screen.getByText('Warrior Pose')).toBeInTheDocument()
+    expect(screen.getByText('Tree Pose')).toBeInTheDocument()
+  })
+
+  it('should allow clicking asana in list view to navigate', async () => {
+    const user = userEvent.setup()
+    const mockAsanas = [
+      {
+        id: 'asana1',
+        sort_english_name: 'Warrior Pose',
+        created_by: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedAsanas.mockResolvedValue(mockAsanas)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    await screen.findByText('Warrior Pose')
+
+    // Switch to list view
+    const listViewButton = screen.getByRole('button', {
+      name: /Switch to list view/i,
+    })
+    await user.click(listViewButton)
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: /Currently in list view/i })
+      ).toBeInTheDocument()
+    })
+
+    // Click on the asana name (the entire paper should be clickable)
+    const asanaName = screen.getByText('Warrior Pose')
+    await user.click(asanaName)
+
+    // Should navigate to the asana detail page
+    expect(mockPush).toHaveBeenCalledWith('/navigator/asanaPoses/asana1')
+  })
+})
+
+describe('LibraryPage - Series View Toggle Feature', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockGetUserCreatedAsanas.mockResolvedValue([])
+    mockGetUserCreatedSequences.mockResolvedValue([])
+
+    mockUseUser.mockReturnValue({
+      state: mockUserState,
+      dispatch: mockDispatch,
+    })
+  })
+
+  it('should display view toggle icons in Series tab', async () => {
+    const user = userEvent.setup()
+    const mockSeries = [
+      {
+        id: 'series1',
+        seriesName: 'Sun Salutation',
+        description: 'A classic yoga series',
+        seriesPoses: ['pose1', 'pose2'],
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSeries.mockResolvedValue(mockSeries)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Series tab
+    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    await user.click(seriesTab)
+
+    await screen.findByText('Sun Salutation')
+
+    // Check for view toggle icons
+    const cardViewButton = screen.getByRole('button', {
+      name: /Currently in card view/i,
+    })
+    expect(cardViewButton).toBeInTheDocument()
+    expect(cardViewButton).toBeDisabled()
+
+    const listViewButton = screen.getByRole('button', {
+      name: /Switch to list view/i,
+    })
+    expect(listViewButton).toBeInTheDocument()
+    expect(listViewButton).not.toBeDisabled()
+  })
+
+  it('should toggle from card view to list view in Series tab', async () => {
+    const user = userEvent.setup()
+    const mockSeries = [
+      {
+        id: 'series1',
+        seriesName: 'Sun Salutation',
+        description: 'A classic yoga series',
+        seriesPoses: ['pose1', 'pose2'],
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSeries.mockResolvedValue(mockSeries)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Series tab
+    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    await user.click(seriesTab)
+
+    await screen.findByText('Sun Salutation')
+
+    // Click list view button
+    const listViewButton = screen.getByRole('button', {
+      name: /Switch to list view/i,
+    })
+    await user.click(listViewButton)
+
+    // Now list view should be disabled (active)
+    await waitFor(() => {
+      const activeListViewButton = screen.getByRole('button', {
+        name: /Currently in list view/i,
+      })
+      expect(activeListViewButton).toBeDisabled()
+    })
+
+    // Series should still be visible
+    expect(screen.getByText('Sun Salutation')).toBeInTheDocument()
+  })
+})
+
+describe('LibraryPage - Sequences View Toggle Feature', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockGetUserCreatedAsanas.mockResolvedValue([])
+    mockGetUserCreatedSeries.mockResolvedValue([])
+
+    mockUseUser.mockReturnValue({
+      state: mockUserState,
+      dispatch: mockDispatch,
+    })
+  })
+
+  it('should display view toggle icons in Sequences tab', async () => {
+    const user = userEvent.setup()
+    const mockSequences = [
+      {
+        id: 1,
+        nameSequence: 'Morning Flow',
+        description: 'A gentle morning sequence',
+        sequencesSeries: ['series1', 'series2'],
+        durationSequence: '30 minutes',
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSequences.mockResolvedValue(mockSequences)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Sequences tab
+    const sequencesTab = screen.getByRole('tab', { name: /Sequences/i })
+    await user.click(sequencesTab)
+
+    await screen.findByText('Morning Flow')
+
+    // Check for view toggle icons
+    const cardViewButton = screen.getByRole('button', {
+      name: /Currently in card view/i,
+    })
+    expect(cardViewButton).toBeInTheDocument()
+    expect(cardViewButton).toBeDisabled()
+
+    const listViewButton = screen.getByRole('button', {
+      name: /Switch to list view/i,
+    })
+    expect(listViewButton).toBeInTheDocument()
+    expect(listViewButton).not.toBeDisabled()
+  })
+
+  it('should toggle from card view to list view in Sequences tab', async () => {
+    const user = userEvent.setup()
+    const mockSequences = [
+      {
+        id: 1,
+        nameSequence: 'Morning Flow',
+        description: 'A gentle morning sequence',
+        sequencesSeries: ['series1', 'series2'],
+        durationSequence: '30 minutes',
+        createdBy: 'test@example.com',
+        createdAt: new Date().toISOString(),
+      },
+    ]
+    mockGetUserCreatedSequences.mockResolvedValue(mockSequences)
+
+    render(<LibraryPage />, { wrapper: TestWrapper })
+
+    // Switch to Sequences tab
+    const sequencesTab = screen.getByRole('tab', { name: /Sequences/i })
+    await user.click(sequencesTab)
+
+    await screen.findByText('Morning Flow')
+
+    // Click list view button
+    const listViewButton = screen.getByRole('button', {
+      name: /Switch to list view/i,
+    })
+    await user.click(listViewButton)
+
+    // Now list view should be disabled (active)
+    await waitFor(() => {
+      const activeListViewButton = screen.getByRole('button', {
+        name: /Currently in list view/i,
+      })
+      expect(activeListViewButton).toBeDisabled()
+    })
+
+    // Sequences should still be visible
+    expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+  })
+})

@@ -28,6 +28,8 @@ import { UseUser } from '@app/context/UserContext'
 import Image from 'next/image'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import ViewModuleIcon from '@mui/icons-material/ViewModule'
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import { deleteSeries } from '@lib/seriesService'
 import { deletePose } from '@lib/poseService'
 import { deleteSequence } from '@lib/sequenceService'
@@ -295,6 +297,7 @@ function AsanasLibrary({
   onAsanaDeleted: () => void
 }) {
   const router = useRouter()
+  const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
 
   if (loading) {
     return (
@@ -328,13 +331,77 @@ function AsanasLibrary({
 
   return (
     <Box sx={{ p: 3 }}>
-      <Grid container spacing={3}>
-        {asanas.map((asana) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={asana.id}>
-            <AsanaCard asana={asana} onDeleted={onAsanaDeleted} />
-          </Grid>
-        ))}
-      </Grid>
+      {/* View Toggle Controls */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          mb: 2,
+          gap: 1,
+        }}
+      >
+        <IconButton
+          onClick={() => setViewMode('card')}
+          disabled={viewMode === 'card'}
+          aria-label={
+            viewMode === 'card'
+              ? 'Currently in card view'
+              : 'Switch to card view'
+          }
+          sx={{
+            color: 'primary.main',
+            p: 1,
+            minWidth: 0,
+            opacity: viewMode === 'card' ? 0.5 : 1,
+          }}
+          title={viewMode === 'card' ? 'Card View (current)' : 'Card View'}
+        >
+          <ViewModuleIcon />
+        </IconButton>
+
+        <IconButton
+          onClick={() => setViewMode('list')}
+          disabled={viewMode === 'list'}
+          aria-label={
+            viewMode === 'list'
+              ? 'Currently in list view'
+              : 'Switch to list view'
+          }
+          sx={{
+            color: 'primary.main',
+            p: 1,
+            minWidth: 0,
+            opacity: viewMode === 'list' ? 0.5 : 1,
+          }}
+          title={viewMode === 'list' ? 'List View (current)' : 'List View'}
+        >
+          <FormatListBulletedIcon />
+        </IconButton>
+      </Box>
+
+      {/* Card View */}
+      {viewMode === 'card' && (
+        <Grid container spacing={3}>
+          {asanas.map((asana) => (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={asana.id}>
+              <AsanaCard asana={asana} onDeleted={onAsanaDeleted} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+
+      {/* List View */}
+      {viewMode === 'list' && (
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {asanas.map((asana) => (
+            <AsanaListItem
+              key={asana.id}
+              asana={asana}
+              onDeleted={onAsanaDeleted}
+            />
+          ))}
+        </Box>
+      )}
     </Box>
   )
 }
@@ -350,6 +417,7 @@ function SeriesLibrary({
   onSeriesDeleted?: () => void
 }) {
   const router = useRouter()
+  const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
 
   if (loading) {
     return (
@@ -383,13 +451,77 @@ function SeriesLibrary({
 
   return (
     <Box sx={{ p: 3 }}>
-      <Grid container spacing={3}>
-        {series.map((seriesItem) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={seriesItem.id}>
-            <SeriesCard series={seriesItem} onDeleted={onSeriesDeleted} />
-          </Grid>
-        ))}
-      </Grid>
+      {/* View Toggle Controls */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          mb: 2,
+          gap: 1,
+        }}
+      >
+        <IconButton
+          onClick={() => setViewMode('card')}
+          disabled={viewMode === 'card'}
+          aria-label={
+            viewMode === 'card'
+              ? 'Currently in card view'
+              : 'Switch to card view'
+          }
+          sx={{
+            color: 'primary.main',
+            p: 1,
+            minWidth: 0,
+            opacity: viewMode === 'card' ? 0.5 : 1,
+          }}
+          title={viewMode === 'card' ? 'Card View (current)' : 'Card View'}
+        >
+          <ViewModuleIcon />
+        </IconButton>
+
+        <IconButton
+          onClick={() => setViewMode('list')}
+          disabled={viewMode === 'list'}
+          aria-label={
+            viewMode === 'list'
+              ? 'Currently in list view'
+              : 'Switch to list view'
+          }
+          sx={{
+            color: 'primary.main',
+            p: 1,
+            minWidth: 0,
+            opacity: viewMode === 'list' ? 0.5 : 1,
+          }}
+          title={viewMode === 'list' ? 'List View (current)' : 'List View'}
+        >
+          <FormatListBulletedIcon />
+        </IconButton>
+      </Box>
+
+      {/* Card View */}
+      {viewMode === 'card' && (
+        <Grid container spacing={3}>
+          {series.map((seriesItem) => (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={seriesItem.id}>
+              <SeriesCard series={seriesItem} onDeleted={onSeriesDeleted} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+
+      {/* List View */}
+      {viewMode === 'list' && (
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {series.map((seriesItem) => (
+            <SeriesListItem
+              key={seriesItem.id}
+              series={seriesItem}
+              onDeleted={onSeriesDeleted}
+            />
+          ))}
+        </Box>
+      )}
     </Box>
   )
 }
@@ -405,6 +537,7 @@ function SequencesLibrary({
   onSequenceDeleted?: () => void
 }) {
   const router = useRouter()
+  const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
 
   if (loading) {
     return (
@@ -439,14 +572,567 @@ function SequencesLibrary({
 
   return (
     <Box sx={{ p: 3 }}>
-      <Grid container spacing={3}>
-        {sequences.map((sequence) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={sequence.id}>
-            <SequenceCard sequence={sequence} onDeleted={onSequenceDeleted} />
-          </Grid>
-        ))}
-      </Grid>
+      {/* View Toggle Controls */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          mb: 2,
+          gap: 1,
+        }}
+      >
+        <IconButton
+          onClick={() => setViewMode('card')}
+          disabled={viewMode === 'card'}
+          aria-label={
+            viewMode === 'card'
+              ? 'Currently in card view'
+              : 'Switch to card view'
+          }
+          sx={{
+            color: 'primary.main',
+            p: 1,
+            minWidth: 0,
+            opacity: viewMode === 'card' ? 0.5 : 1,
+          }}
+          title={viewMode === 'card' ? 'Card View (current)' : 'Card View'}
+        >
+          <ViewModuleIcon />
+        </IconButton>
+
+        <IconButton
+          onClick={() => setViewMode('list')}
+          disabled={viewMode === 'list'}
+          aria-label={
+            viewMode === 'list'
+              ? 'Currently in list view'
+              : 'Switch to list view'
+          }
+          sx={{
+            color: 'primary.main',
+            p: 1,
+            minWidth: 0,
+            opacity: viewMode === 'list' ? 0.5 : 1,
+          }}
+          title={viewMode === 'list' ? 'List View (current)' : 'List View'}
+        >
+          <FormatListBulletedIcon />
+        </IconButton>
+      </Box>
+
+      {/* Card View */}
+      {viewMode === 'card' && (
+        <Grid container spacing={3}>
+          {sequences.map((sequence) => (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={sequence.id}>
+              <SequenceCard sequence={sequence} onDeleted={onSequenceDeleted} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+
+      {/* List View */}
+      {viewMode === 'list' && (
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {sequences.map((sequence) => (
+            <SequenceListItem
+              key={sequence.id}
+              sequence={sequence}
+              onDeleted={onSequenceDeleted}
+            />
+          ))}
+        </Box>
+      )}
     </Box>
+  )
+}
+
+// Individual List Item Component for Asanas
+function AsanaListItem({
+  asana,
+  onDeleted,
+}: {
+  asana: UserAsanaData
+  onDeleted: () => void
+}) {
+  const router = useRouter()
+  const [images, setImages] = useState<PoseImageData[]>([])
+  const [imagesLoading, setImagesLoading] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      setImagesLoading(true)
+      try {
+        const response = await getUserPoseImages(
+          1,
+          0,
+          asana.id,
+          asana.sort_english_name
+        )
+        setImages(response.images)
+      } catch (error) {
+        console.error('Error fetching asana images:', error)
+      } finally {
+        setImagesLoading(false)
+      }
+    }
+
+    fetchImages()
+  }, [asana.id, asana.sort_english_name])
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setDeleteDialogOpen(true)
+  }
+
+  const handleDeleteConfirm = async () => {
+    setIsDeleting(true)
+    try {
+      await deletePose(asana.id)
+      setDeleteDialogOpen(false)
+      onDeleted()
+    } catch (error) {
+      console.error('Error deleting asana:', error)
+      setIsDeleting(false)
+    }
+  }
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false)
+  }
+
+  return (
+    <Paper
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        p: 2,
+        cursor: 'pointer',
+        transition: 'box-shadow 0.2s',
+        '&:hover': {
+          boxShadow: 4,
+        },
+      }}
+      onClick={() => router.push(`/navigator/asanaPoses/${asana.id}`)}
+    >
+      {/* Image thumbnail */}
+      <Box
+        sx={{
+          width: 80,
+          height: 80,
+          position: 'relative',
+          overflow: 'hidden',
+          borderRadius: 1,
+          flexShrink: 0,
+          mr: 2,
+        }}
+      >
+        {imagesLoading ? (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100%',
+              bgcolor: 'grey.100',
+            }}
+          >
+            <CircularProgress size={20} />
+          </Box>
+        ) : images.length > 0 ? (
+          <Image
+            src={images[0].url}
+            alt={images[0].altText || asana.sort_english_name}
+            fill
+            style={{ objectFit: 'cover' }}
+          />
+        ) : (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: '100%',
+              bgcolor: 'grey.100',
+            }}
+          >
+            <Typography variant="caption" color="text.secondary">
+              No image
+            </Typography>
+          </Box>
+        )}
+      </Box>
+
+      {/* Asana name */}
+      <Typography
+        variant="body1"
+        sx={{
+          flexGrow: 1,
+          fontWeight: 500,
+        }}
+      >
+        {asana.sort_english_name}
+      </Typography>
+
+      {/* Action buttons */}
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 1,
+          flexShrink: 0,
+        }}
+      >
+        <IconButton
+          size="small"
+          title="Edit"
+          onClick={(e) => {
+            e.stopPropagation()
+            router.push(`/navigator/asanaPoses/${asana.id}?edit=true`)
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
+          <EditIcon fontSize="small" />
+        </IconButton>
+        <IconButton
+          size="small"
+          title="Delete"
+          onClick={handleDeleteClick}
+          sx={{ color: 'error.main' }}
+        >
+          <DeleteIcon fontSize="small" />
+        </IconButton>
+      </Box>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        aria-labelledby="delete-asana-list-dialog-title"
+        aria-describedby="delete-asana-list-dialog-description"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <DialogTitle id="delete-asana-list-dialog-title">
+          Delete Asana?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-asana-list-dialog-description">
+            Are you sure you want to delete &quot;{asana.sort_english_name}
+            &quot;? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleDeleteCancel}
+            color="primary"
+            disabled={isDeleting}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDeleteConfirm}
+            color="error"
+            disabled={isDeleting}
+            startIcon={isDeleting ? <CircularProgress size={16} /> : null}
+          >
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Paper>
+  )
+}
+
+// Individual List Item Component for Series
+function SeriesListItem({
+  series,
+  onDeleted,
+}: {
+  series: UserSeriesData
+  onDeleted?: () => void
+}) {
+  const router = useRouter()
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setDeleteDialogOpen(true)
+  }
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!series.id) return
+
+    setIsDeleting(true)
+    try {
+      await deleteSeries(series.id)
+      setDeleteDialogOpen(false)
+      if (onDeleted) {
+        onDeleted()
+      }
+    } catch (error) {
+      console.error('Failed to delete series:', error)
+      setIsDeleting(false)
+    }
+  }
+
+  return (
+    <Paper
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        p: 2,
+        cursor: 'pointer',
+        transition: 'box-shadow 0.2s',
+        '&:hover': {
+          boxShadow: 4,
+        },
+      }}
+      onClick={() =>
+        router.push(`/navigator/flows/practiceSeries?id=${series.id}`)
+      }
+    >
+      {/* Series info */}
+      <Box sx={{ flexGrow: 1, mr: 2 }}>
+        <Typography
+          variant="body1"
+          sx={{
+            fontWeight: 500,
+            mb: 0.5,
+          }}
+        >
+          {series.seriesName}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+          {series.description && series.description.length > 100
+            ? `${series.description.substring(0, 100)}...`
+            : series.description || 'No description provided'}
+        </Typography>
+        <Typography variant="caption" color="text.secondary">
+          {series.seriesPoses.length} pose
+          {series.seriesPoses.length !== 1 ? 's' : ''}
+        </Typography>
+      </Box>
+
+      {/* Action buttons */}
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 1,
+          flexShrink: 0,
+        }}
+      >
+        <IconButton
+          size="small"
+          title="Edit"
+          onClick={(e) => {
+            e.stopPropagation()
+            router.push(
+              `/navigator/flows/practiceSeries?id=${series.id}&edit=true`
+            )
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
+          <EditIcon fontSize="small" />
+        </IconButton>
+        <IconButton
+          size="small"
+          title="Delete"
+          onClick={handleDeleteClick}
+          sx={{ color: 'error.main' }}
+        >
+          <DeleteIcon fontSize="small" />
+        </IconButton>
+      </Box>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        aria-labelledby="delete-series-list-dialog-title"
+        aria-describedby="delete-series-list-dialog-description"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <DialogTitle id="delete-series-list-dialog-title">
+          Delete Series?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-series-list-dialog-description">
+            Are you sure you want to delete &quot;{series.seriesName}&quot;?
+            This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleDeleteCancel}
+            color="primary"
+            disabled={isDeleting}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDeleteConfirm}
+            color="error"
+            disabled={isDeleting}
+            startIcon={isDeleting ? <CircularProgress size={16} /> : null}
+          >
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Paper>
+  )
+}
+
+// Individual List Item Component for Sequences
+function SequenceListItem({
+  sequence,
+  onDeleted,
+}: {
+  sequence: UserSequenceData
+  onDeleted?: () => void
+}) {
+  const router = useRouter()
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setDeleteDialogOpen(true)
+  }
+
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false)
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!sequence.id) return
+
+    setIsDeleting(true)
+    try {
+      await deleteSequence(String(sequence.id))
+      setDeleteDialogOpen(false)
+      if (onDeleted) {
+        onDeleted()
+      }
+    } catch (error) {
+      console.error('Failed to delete sequence:', error)
+      setIsDeleting(false)
+    }
+  }
+
+  return (
+    <Paper
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        p: 2,
+        cursor: 'pointer',
+        transition: 'box-shadow 0.2s',
+        '&:hover': {
+          boxShadow: 4,
+        },
+      }}
+      onClick={() => router.push(`/navigator/sequences/${sequence.id}`)}
+    >
+      {/* Sequence info */}
+      <Box sx={{ flexGrow: 1, mr: 2 }}>
+        <Typography
+          variant="body1"
+          sx={{
+            fontWeight: 500,
+            mb: 0.5,
+          }}
+        >
+          {sequence.nameSequence}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+          {sequence.description && sequence.description.length > 100
+            ? `${sequence.description.substring(0, 100)}...`
+            : sequence.description || 'No description provided'}
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <Typography variant="caption" color="text.secondary">
+            {sequence.sequencesSeries.length} series
+          </Typography>
+          {sequence.durationSequence && (
+            <Typography variant="caption" color="text.secondary">
+              Duration: {sequence.durationSequence}
+            </Typography>
+          )}
+        </Box>
+      </Box>
+
+      {/* Action buttons */}
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 1,
+          flexShrink: 0,
+        }}
+      >
+        <IconButton
+          size="small"
+          title="Edit"
+          onClick={(e) => {
+            e.stopPropagation()
+            router.push(`/navigator/sequences/${sequence.id}?edit=true`)
+          }}
+          sx={{ color: 'text.secondary' }}
+        >
+          <EditIcon fontSize="small" />
+        </IconButton>
+        <IconButton
+          size="small"
+          title="Delete"
+          onClick={handleDeleteClick}
+          sx={{ color: 'error.main' }}
+        >
+          <DeleteIcon fontSize="small" />
+        </IconButton>
+      </Box>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleDeleteCancel}
+        aria-labelledby="delete-sequence-list-dialog-title"
+        aria-describedby="delete-sequence-list-dialog-description"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <DialogTitle id="delete-sequence-list-dialog-title">
+          Delete Sequence?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-sequence-list-dialog-description">
+            Are you sure you want to delete &quot;{sequence.nameSequence}
+            &quot;? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleDeleteCancel}
+            color="primary"
+            disabled={isDeleting}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDeleteConfirm}
+            color="error"
+            disabled={isDeleting}
+            startIcon={isDeleting ? <CircularProgress size={16} /> : null}
+          >
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Paper>
   )
 }
 

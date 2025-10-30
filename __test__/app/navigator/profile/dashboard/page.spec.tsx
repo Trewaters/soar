@@ -97,9 +97,26 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => (
 describe('Dashboard Page', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(global.fetch as jest.Mock).mockResolvedValue({
-      ok: true,
-      json: async () => ({ success: true, data: mockDashboardData }),
+    // Mock fetch to handle both API calls
+    ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
+      if (url === '/api/user/recordActivity') {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            success: true,
+            streakData: {
+              currentStreak: mockDashboardData.loginStreak,
+            },
+          }),
+        })
+      }
+      if (url === '/api/dashboard/stats') {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ success: true, data: mockDashboardData }),
+        })
+      }
+      return Promise.reject(new Error('Unknown URL'))
     })
   })
 
@@ -156,9 +173,20 @@ describe('Dashboard Page', () => {
 
   describe('Error Handling', () => {
     it('should display error message when fetch fails', async () => {
-      ;(global.fetch as jest.Mock).mockResolvedValue({
-        ok: false,
-        status: 500,
+      ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
+        if (url === '/api/user/recordActivity') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              success: true,
+              streakData: { currentStreak: 0 },
+            }),
+          })
+        }
+        return Promise.resolve({
+          ok: false,
+          status: 500,
+        })
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
@@ -171,9 +199,20 @@ describe('Dashboard Page', () => {
     })
 
     it('should display error message when response format is invalid', async () => {
-      ;(global.fetch as jest.Mock).mockResolvedValue({
-        ok: true,
-        json: async () => ({ success: false }),
+      ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
+        if (url === '/api/user/recordActivity') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              success: true,
+              streakData: { currentStreak: 0 },
+            }),
+          })
+        }
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ success: false }),
+        })
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
@@ -184,7 +223,18 @@ describe('Dashboard Page', () => {
     })
 
     it('should display error message when fetch throws exception', async () => {
-      ;(global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'))
+      ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
+        if (url === '/api/user/recordActivity') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              success: true,
+              streakData: { currentStreak: 0 },
+            }),
+          })
+        }
+        return Promise.reject(new Error('Network error'))
+      })
 
       render(<Dashboard />, { wrapper: TestWrapper })
 
@@ -194,7 +244,18 @@ describe('Dashboard Page', () => {
     })
 
     it('should display generic error message for non-Error exceptions', async () => {
-      ;(global.fetch as jest.Mock).mockRejectedValue('Unknown error')
+      ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
+        if (url === '/api/user/recordActivity') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              success: true,
+              streakData: { currentStreak: 0 },
+            }),
+          })
+        }
+        return Promise.reject('Unknown error')
+      })
 
       render(<Dashboard />, { wrapper: TestWrapper })
 
@@ -265,12 +326,23 @@ describe('Dashboard Page', () => {
     })
 
     it('should display "No practice data" message when history is empty', async () => {
-      ;(global.fetch as jest.Mock).mockResolvedValue({
-        ok: true,
-        json: async () => ({
-          success: true,
-          data: { ...mockDashboardData, practiceHistory: [] },
-        }),
+      ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
+        if (url === '/api/user/recordActivity') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              success: true,
+              streakData: { currentStreak: mockDashboardData.loginStreak },
+            }),
+          })
+        }
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({
+            success: true,
+            data: { ...mockDashboardData, practiceHistory: [] },
+          }),
+        })
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
@@ -417,10 +489,17 @@ describe('Dashboard Page', () => {
   })
 
   describe('Data Fetching', () => {
-    it('should fetch data from correct API endpoint', async () => {
+    it('should fetch data from correct API endpoints', async () => {
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalledWith('/api/user/recordActivity', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: expect.any(String),
+        })
         expect(global.fetch).toHaveBeenCalledWith('/api/dashboard/stats', {
           cache: 'no-store',
         })
@@ -431,7 +510,8 @@ describe('Dashboard Page', () => {
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
-        expect(global.fetch).toHaveBeenCalledTimes(1)
+        // Should call both endpoints (recordActivity + stats)
+        expect(global.fetch).toHaveBeenCalledTimes(2)
       })
     })
   })
@@ -456,20 +536,30 @@ describe('Dashboard Page', () => {
         ...mockDashboardData,
         loginStreak: 0,
         activityStreak: 0,
-        longestStreak: 0,
       }
 
-      ;(global.fetch as jest.Mock).mockResolvedValue({
-        ok: true,
-        json: async () => ({ success: true, data: zeroStreakData }),
+      ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
+        if (url === '/api/user/recordActivity') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              success: true,
+              streakData: { currentStreak: 0 },
+            }),
+          })
+        }
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ success: true, data: zeroStreakData }),
+        })
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
-        // All three streak cards should show "🔥 0 Days"
+        // Only two streak cards should show "🔥 0 Days" (Login and Activity)
         const zeroStreaks = screen.getAllByText('🔥 0 Days')
-        expect(zeroStreaks).toHaveLength(3)
+        expect(zeroStreaks).toHaveLength(2)
       })
     })
 
@@ -481,9 +571,20 @@ describe('Dashboard Page', () => {
         mostCommonSequences: [],
       }
 
-      ;(global.fetch as jest.Mock).mockResolvedValue({
-        ok: true,
-        json: async () => ({ success: true, data: emptyListsData }),
+      ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
+        if (url === '/api/user/recordActivity') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              success: true,
+              streakData: { currentStreak: mockDashboardData.loginStreak },
+            }),
+          })
+        }
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ success: true, data: emptyListsData }),
+        })
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
@@ -496,12 +597,23 @@ describe('Dashboard Page', () => {
     it('should handle very high streak values', async () => {
       const highStreakData = {
         ...mockDashboardData,
-        longestStreak: 365,
+        loginStreak: 365,
       }
 
-      ;(global.fetch as jest.Mock).mockResolvedValue({
-        ok: true,
-        json: async () => ({ success: true, data: highStreakData }),
+      ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
+        if (url === '/api/user/recordActivity') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              success: true,
+              streakData: { currentStreak: 365 },
+            }),
+          })
+        }
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ success: true, data: highStreakData }),
+        })
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
