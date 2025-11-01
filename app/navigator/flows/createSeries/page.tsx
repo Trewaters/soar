@@ -61,14 +61,14 @@ export default function Page() {
     setOpen(newOpen)
   }
 
-  const fetchPoses = async () => {
+  const fetchPoses = React.useCallback(async () => {
     try {
       const poses = await getAccessiblePoses(session?.user?.email || undefined)
       setPoses(poses)
     } catch (error: Error | any) {
       console.error('Error fetching poses:', error.message)
     }
-  }
+  }, [session?.user?.email])
 
   useEffect(() => {
     // console.log('create series session', session)
@@ -94,39 +94,34 @@ export default function Page() {
 
   // Refetch poses when the page becomes visible (e.g., when returning from create asana page)
   // This ensures that newly created asanas appear in the autocomplete search
-  useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        console.log('Page became visible, refreshing pose data...')
-        fetchPoses()
-      }
+  const handleVisibilityChange = React.useCallback(() => {
+    if (!document.hidden) {
+      console.log('Page became visible, refreshing pose data...')
+      fetchPoses()
     }
+  }, [fetchPoses])
 
+  const handleFocus = React.useCallback(() => {
+    console.log('Window gained focus, refreshing pose data...')
+    fetchPoses()
+  }, [fetchPoses])
+
+  const handlePopState = React.useCallback(() => {
+    console.log('Navigation detected, refreshing pose data...')
+    fetchPoses()
+  }, [fetchPoses])
+
+  React.useEffect(() => {
     document.addEventListener('visibilitychange', handleVisibilityChange)
-
-    // Also listen for focus events as a fallback
-    const handleFocus = () => {
-      console.log('Window gained focus, refreshing pose data...')
-      fetchPoses()
-    }
-
     window.addEventListener('focus', handleFocus)
-
-    // Listen for popstate events (browser back/forward navigation)
-    const handlePopState = () => {
-      console.log('Navigation detected, refreshing pose data...')
-      fetchPoses()
-    }
-
     window.addEventListener('popstate', handlePopState)
-
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       window.removeEventListener('focus', handleFocus)
       window.removeEventListener('popstate', handlePopState)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [handleVisibilityChange, handleFocus, handlePopState])
 
   function handleSelect(
     event: React.SyntheticEvent<Element, Event>,

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '../../../../prisma/generated/client'
+import { prisma } from '../../../../app/lib/prismaClient'
 import { auth } from '../../../../auth'
 import getAlphaUserIds from '@app/lib/alphaUsers'
 import { formatSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 
-const prisma = new PrismaClient()
+// Use shared prisma client
 
 export async function GET(
   request: NextRequest,
@@ -62,8 +62,6 @@ export async function GET(
     return NextResponse.json(normalized)
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
-  } finally {
-    await prisma.$disconnect()
   }
 }
 
@@ -171,8 +169,6 @@ export async function PATCH(
     return NextResponse.json(updated)
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
-  } finally {
-    await prisma.$disconnect()
   }
 }
 
@@ -215,7 +211,5 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 })
-  } finally {
-    await prisma.$disconnect()
   }
 }

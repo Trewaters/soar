@@ -1,11 +1,11 @@
 import { notFound } from 'next/navigation'
 import { Box } from '@mui/material'
 import SequenceViewWithEdit from '@clientComponents/SequenceViewWithEdit'
-import { PrismaClient } from '../../../prisma/generated/client'
+import { prisma } from '../../../app/lib/prismaClient'
 
 export const dynamic = 'force-dynamic'
 
-const prisma = new PrismaClient()
+// use shared prisma client
 
 export default async function SequenceDetailPage({
   params,

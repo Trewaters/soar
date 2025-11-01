@@ -90,7 +90,10 @@ export default function NavBottom(props: {
 
     // Handle regular navigation
     const targetPath = typeof path === 'function' ? path() : path
-    router.push(targetPath)
+    // Provide an elementId so the NavigationLoadingProvider can track
+    // bottom-nav initiated navigations separately and avoid races.
+    const elementId = `nav-bottom-${itemId || 'item'}`
+    router.push(targetPath, elementId)
   }
 
   return (

@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server'
-import { PrismaClient } from '../../../../prisma/generated/client'
+import { prisma } from '../../../../app/lib/prismaClient'
 import { sendWebPush } from '../../../../lib/webPush'
 import { sendReminderEmail } from '../../../../lib/email'
 import { fromZonedTime, toZonedTime, format } from 'date-fns-tz'
 
 export const runtime = 'nodejs' // needs node for web-push
 
-const prisma = new PrismaClient()
+// use shared prisma client
 const WINDOW_SECONDS = 1800 // 30 minutes
 
 export async function GET() {

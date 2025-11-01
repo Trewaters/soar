@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '../../../../prisma/generated/client'
+import { prisma } from '../../../../app/lib/prismaClient'
 import { hashPassword, comparePassword } from '../../../utils/password'
 
-const prisma = new PrismaClient()
+// Use shared prisma client
 
 export async function POST(request: NextRequest) {
   try {
@@ -117,7 +117,5 @@ export async function POST(request: NextRequest) {
       },
       { status: 500 }
     )
-  } finally {
-    await prisma.$disconnect()
   }
 }

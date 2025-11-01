@@ -1,6 +1,4 @@
-import { PrismaClient } from '../../../../prisma/generated/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '../../../../app/lib/prismaClient'
 
 export async function POST(request: Request) {
   const {
@@ -69,7 +67,5 @@ export async function POST(request: Request) {
       stack: error.stack,
     })
     return Response.json({ error: error.message }, { status: 500 })
-  } finally {
-    await prisma.$disconnect()
   }
 }

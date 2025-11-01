@@ -9,6 +9,7 @@ import React, {
   useCallback,
   useEffect,
 } from 'react'
+import { useSession } from 'next-auth/react'
 import { isMobileDevice } from '@app/utils/mobileInputHelpers'
 import type {
   UserData,
@@ -161,6 +162,22 @@ export default function UserStateProvider({
   children: ReactNode
 }) {
   const [state, dispatch] = useReducer(UserReducer, initialState)
+  const { data: session, status: sessionStatus } = useSession()
+  // ...existing code...
+
+  // Hydrate userData.email from session when authenticated
+  useEffect(() => {
+    if (
+      sessionStatus === 'authenticated' &&
+      session?.user?.email &&
+      state.userData.email !== session.user.email
+    ) {
+      dispatch({
+        type: 'SET_USER',
+        payload: { ...state.userData, email: session.user.email },
+      })
+    }
+  }, [session, sessionStatus, state.userData.email])
 
   // Detect device capabilities on mount
   useEffect(() => {
@@ -171,7 +188,6 @@ export default function UserStateProvider({
         screenWidth: window.screen.width,
         touchSupport: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
       }
-
       dispatch({ type: 'SET_DEVICE_INFO', payload: deviceInfo })
     }
   }, [])
@@ -187,6 +203,23 @@ export default function UserStateProvider({
         )
         if (!userResponse.ok) {
           const errorText = await userResponse.text()
+          // Sometimes the dev server or middleware returns an HTML error page
+          // (for example a 404 HTML document). Don't throw raw HTML into an
+          // exception — instead log and return early so the app can continue
+          // to function while we investigate why the API returned HTML.
+          if (
+            typeof errorText === 'string' &&
+            (errorText.trim().startsWith('<!DOCTYPE') ||
+              errorText.includes('<html'))
+          ) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              'User API returned HTML error page when fetching user data',
+              errorText.substring(0, 200)
+            )
+            return
+          }
+
           throw new Error(`Failed to fetch user data: ${errorText}`)
         }
         fetchUser = await userResponse.json()
@@ -254,7 +287,17 @@ export default function UserStateProvider({
 
   useEffect(() => {
     if (state.userData.email) {
-      fetchUserData(state.userData.email)
+      // Call fetchUserData but catch errors to avoid uncaught promise rejections
+      // which surface as console errors during navigation. We still surface the
+      // error to console for debugging, but avoid throwing unhandled exceptions
+      // that interrupt client navigation flows.
+      fetchUserData(state.userData.email).catch((err) => {
+        // Log a friendly message; deeper investigation may be needed if this
+        // occurs frequently (e.g., API returning HTML error pages).
+        // Keep the app usable even if user data fetch fails.
+        // eslint-disable-next-line no-console
+        console.warn('fetchUserData failed:', err)
+      })
     }
   }, [state.userData.email, fetchUserData])
 

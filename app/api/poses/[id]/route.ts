@@ -1,8 +1,6 @@
-import { PrismaClient } from '../../../../prisma/generated/client'
 import { auth } from '../../../../auth'
-import { NextRequest, NextResponse } from '../../../../node_modules/next/server'
-
-const prisma = new PrismaClient()
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '../../../../app/lib/prismaClient'
 
 export async function PUT(
   request: NextRequest,
@@ -71,8 +69,6 @@ export async function PUT(
       poseId: resolvedParams.id,
     })
     return NextResponse.json({ error: error.message }, { status: 500 })
-  } finally {
-    await prisma.$disconnect()
   }
 }
 
@@ -117,7 +113,5 @@ export async function DELETE(
       poseId: resolvedParams.id,
     })
     return NextResponse.json({ error: error.message }, { status: 500 })
-  } finally {
-    await prisma.$disconnect()
   }
 }

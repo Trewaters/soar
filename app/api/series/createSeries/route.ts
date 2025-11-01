@@ -1,10 +1,10 @@
-import { PrismaClient } from '../../../../prisma/generated/client'
+import { prisma } from '../../../../app/lib/prismaClient'
 import { auth } from '../../../../auth'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-const prisma = new PrismaClient()
+// Use shared prisma client
 
 export async function POST(request: Request) {
   const body = await request.json()
@@ -118,7 +118,5 @@ export async function POST(request: Request) {
     )
   } catch (error: any) {
     return Response.json({ error: error.message }, { status: 500 })
-  } finally {
-    await prisma.$disconnect()
   }
 }

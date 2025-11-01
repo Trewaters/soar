@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
-import { PrismaClient } from '../../../../prisma/generated/client'
+import { prisma } from '../../../../app/lib/prismaClient'
 import { MAX_IMAGES_PER_ASANA } from '../../../../types/images'
 
-const prisma = new PrismaClient()
+// use shared prisma client
 
 export const dynamic = 'force-dynamic'
 
@@ -108,7 +108,5 @@ export async function GET(request: NextRequest) {
       { error: 'Internal server error' },
       { status: 500 }
     )
-  } finally {
-    await prisma.$disconnect()
   }
 }

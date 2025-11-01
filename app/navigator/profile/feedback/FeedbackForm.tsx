@@ -23,6 +23,7 @@ import {
   Send as SendIcon,
 } from '@mui/icons-material'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 interface FeedbackData {
   name: string
@@ -116,13 +117,33 @@ const ScaleRating: React.FC<{
 )
 
 const FeedbackForm: React.FC = () => {
-  const { data: session } = useSession()
+  const router = useRouter()
+  const { data: session, status } = useSession()
   const [formData, setFormData] = useState<FeedbackData>({
     ...initialFormData,
-    name: session?.user?.name || '',
-    email: session?.user?.email || '',
-    sessionDate: new Date().toISOString().split('T')[0],
+    name: '',
+    email: '',
+    sessionDate: '', // Set after mount to avoid hydration mismatch
   })
+
+  // Set sessionDate and session user fields on client only to avoid hydration mismatch
+  React.useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      name: session?.user?.name || '',
+      email: session?.user?.email || '',
+      sessionDate: prev.sessionDate || new Date().toISOString().split('T')[0],
+    }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session])
+
+  // Client-side redirect for unauthenticated users
+  React.useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.replace('/auth/signin')
+    }
+  }, [status, router])
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
@@ -268,7 +289,12 @@ ${formData.name || 'A SOAR Yoga App User'}
   }
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 800 }}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{ maxWidth: 800 }}
+      suppressHydrationWarning
+    >
       {error && (
         <Alert severity="error" sx={{ mb: 3 }}>
           {error}

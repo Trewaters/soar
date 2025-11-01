@@ -1,6 +1,4 @@
-import { PrismaClient } from '../../../prisma/generated/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '../../../app/lib/prismaClient'
 // const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
 // Force this route to be dynamic since it requires query parameters
@@ -38,8 +36,6 @@ export async function GET(req: Request) {
       JSON.stringify({ error: 'Failed to fetch user data' }),
       { status: 500 }
     )
-  } finally {
-    await prisma.$disconnect()
   }
 
   return new Response(JSON.stringify({ data: user }), {

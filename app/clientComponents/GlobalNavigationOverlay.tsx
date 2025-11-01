@@ -16,8 +16,24 @@ import { useNavigationLoading } from '@context/NavigationLoadingContext'
 export default function GlobalNavigationOverlay() {
   const { state } = useNavigationLoading()
 
+  // Development-only visibility tracing to help debug stuck overlays
+  if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
+    console.debug('[navigation] GlobalNavigationOverlay render', {
+      isNavigating: state.isNavigating,
+      targetPath: state.targetPath,
+      elementId: state.elementId,
+    })
+  }
+
   return (
     <Backdrop
+      // Key the backdrop by navId (fallback to targetPath) so React will
+      // remount the overlay when a new navigation starts. This prevents a
+      // stale DOM/backdrop from remaining visible if endNavigation() was
+      // called but some portal/state race left the element mounted.
+      key={state.navId ?? state.targetPath ?? 'global-navigation-overlay'}
+      data-testid="global-navigation-overlay"
       open={state.isNavigating}
       sx={{
         color: '#fff',

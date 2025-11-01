@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
-import { PrismaClient } from '../../../../prisma/generated/client'
+import { prisma } from '../../../../app/lib/prismaClient'
 
-const prisma = new PrismaClient()
+// use shared prisma client
 
 // POST endpoint to save local image metadata to database
 export async function POST(request: NextRequest) {

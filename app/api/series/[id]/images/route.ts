@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../../../auth'
-import { PrismaClient } from '../../../../../prisma/generated/client'
+import { prisma } from '../../../../../app/lib/prismaClient'
 import { storageManager } from '../../../../../lib/storage/manager'
 
-const prisma = new PrismaClient()
+// Use shared prisma client
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -43,8 +43,6 @@ export async function GET(
       { error: 'Internal server error' },
       { status: 500 }
     )
-  } finally {
-    await prisma.$disconnect()
   }
 }
 
@@ -137,8 +135,6 @@ export async function POST(
       { error: 'Internal server error' },
       { status: 500 }
     )
-  } finally {
-    await prisma.$disconnect()
   }
 }
 
@@ -214,7 +210,5 @@ export async function DELETE(
       { error: 'Internal server error' },
       { status: 500 }
     )
-  } finally {
-    await prisma.$disconnect()
   }
 }

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '../../../prisma/generated/client'
+import { prisma } from '../../../app/lib/prismaClient'
 import { auth } from '../../../auth'
 
-const prisma = new PrismaClient()
+// Use shared prisma client
 
 export async function GET() {
   const session = await auth()

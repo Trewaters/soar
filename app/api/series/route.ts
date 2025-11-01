@@ -1,9 +1,7 @@
-import { PrismaClient } from '../../../prisma/generated/client'
 import { NextResponse } from 'next/server'
 import { auth } from '../../../auth'
 import getAlphaUserIds from '@app/lib/alphaUsers'
-
-const prisma = new PrismaClient()
+import { prisma } from '../../lib/prismaClient'
 
 // Force this route to be dynamic since it requires query parameters
 export const dynamic = 'force-dynamic'
@@ -130,7 +128,5 @@ export async function GET(request: Request) {
   } catch (error: any) {
     console.error('Error fetching series:', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
-  } finally {
-    await prisma.$disconnect()
   }
 }

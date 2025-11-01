@@ -12,28 +12,10 @@
  * - Handles timezone differences properly
  */
 
-import { PrismaClient } from '../../../../prisma/generated/client'
+import { prisma } from '../../../../app/lib/prismaClient'
 import { NextRequest, NextResponse } from 'next/server'
 import { logApiError } from '../../../../lib/errorLogger'
 import { randomUUID } from 'crypto'
-
-// Initialize Prisma client with error handling
-let prisma: PrismaClient | null = null
-
-function getPrismaClient() {
-  if (!prisma) {
-    try {
-      prisma = new PrismaClient({
-        log: ['error', 'warn'],
-        errorFormat: 'pretty',
-      })
-    } catch (error) {
-      console.error('Failed to initialize Prisma client:', error)
-      throw new Error('Database connection failed')
-    }
-  }
-  return prisma
-}
 
 export async function POST(req: NextRequest) {
   const requestId = randomUUID()
@@ -48,10 +30,10 @@ export async function POST(req: NextRequest) {
     environment: process.env.NODE_ENV,
   })
 
-  let client: PrismaClient | null = null
+  // use shared prisma client
 
   try {
-    client = getPrismaClient()
+    // use shared prisma client
 
     const body = await req.json()
     const { userId, activityType = 'view_streaks' } = body
@@ -75,7 +57,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Verify user exists
-    const user = await client.userData.findUnique({
+    const user = await prisma.userData.findUnique({
       where: { id: userId },
       select: { id: true, email: true },
     })
@@ -134,7 +116,7 @@ export async function POST(req: NextRequest) {
     })
 
     // Check if user already has a login record for today
-    const existingLoginToday = await client.userLogin.findFirst({
+    const existingLoginToday = await prisma.userLogin.findFirst({
       where: {
         userId: userId,
         loginDate: {
@@ -154,7 +136,7 @@ export async function POST(req: NextRequest) {
         timestamp,
       })
 
-      await client.userLogin.create({
+      await prisma.userLogin.create({
         data: {
           userId: userId,
           loginDate: new Date(),
@@ -184,7 +166,7 @@ export async function POST(req: NextRequest) {
       timestamp,
     })
 
-    const streakData = await calculateLoginStreak(userId, client)
+    const streakData = await calculateLoginStreak(userId)
 
     console.log('Activity recording completed successfully:', {
       requestId,
@@ -237,33 +219,10 @@ export async function POST(req: NextRequest) {
       },
       { status: 500 }
     )
-  } finally {
-    // Clean up database connection
-    if (client) {
-      try {
-        await client.$disconnect()
-        console.log('Database client disconnected successfully:', {
-          requestId,
-          timestamp,
-        })
-      } catch (disconnectError) {
-        console.warn('Failed to disconnect database client:', {
-          requestId,
-          timestamp,
-          disconnectError:
-            disconnectError instanceof Error
-              ? disconnectError.message
-              : String(disconnectError),
-        })
-      }
-    }
   }
 }
 
-async function calculateLoginStreak(
-  userId: string,
-  prismaClient: PrismaClient
-) {
+async function calculateLoginStreak(userId: string) {
   const functionStartTime = Date.now()
   console.log('=== calculateLoginStreak called from recordActivity ===', {
     userId,
@@ -272,7 +231,7 @@ async function calculateLoginStreak(
 
   try {
     // Get user's login events ordered by date (most recent first)
-    const loginEvents = await prismaClient.userLogin.findMany({
+    const loginEvents = await prisma.userLogin.findMany({
       where: { userId },
       orderBy: { loginDate: 'desc' },
       select: {

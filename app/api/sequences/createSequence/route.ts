@@ -1,7 +1,5 @@
-import { PrismaClient } from '../../../../prisma/generated/client'
 import { auth } from '../../../../auth'
-
-const prisma = new PrismaClient()
+import { prisma } from '../../../../app/lib/prismaClient'
 
 export async function POST(request: Request) {
   const session = await auth()
@@ -47,7 +45,5 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error('Error creating sequence:', error)
     return Response.json({ error: error.message }, { status: 500 })
-  } finally {
-    await prisma.$disconnect()
   }
 }

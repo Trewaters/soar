@@ -54,36 +54,31 @@ export default function Page() {
   }, [fetchData])
 
   // Refetch data when the page becomes visible (e.g., when returning from create page)
+  const handleVisibilityChange = useCallback(() => {
+    if (!document.hidden) {
+      fetchData()
+    }
+  }, [fetchData])
+
+  const handleFocus = useCallback(() => {
+    fetchData()
+  }, [fetchData])
+
+  const handlePopState = useCallback(() => {
+    console.log('Navigation detected, refreshing pose data...')
+    fetchData()
+  }, [fetchData])
+
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        fetchData()
-      }
-    }
-
     document.addEventListener('visibilitychange', handleVisibilityChange)
-
-    // Also listen for focus events as a fallback
-    const handleFocus = () => {
-      fetchData()
-    }
-
     window.addEventListener('focus', handleFocus)
-
-    // Listen for popstate events (browser back/forward navigation)
-    const handlePopState = () => {
-      console.log('Navigation detected, refreshing pose data...')
-      fetchData()
-    }
-
     window.addEventListener('popstate', handlePopState)
-
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
       window.removeEventListener('focus', handleFocus)
       window.removeEventListener('popstate', handlePopState)
     }
-  }, [fetchData])
+  }, [handleVisibilityChange, handleFocus, handlePopState])
 
   return (
     <>

@@ -53,7 +53,6 @@ describe('Connected Accounts API Routes', () => {
 
       expect(response.status).toBe(401)
       expect(data).toEqual({ error: 'Unauthorized' })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return 401 if session has no user email', async () => {
@@ -67,7 +66,6 @@ describe('Connected Accounts API Routes', () => {
 
       expect(response.status).toBe(401)
       expect(data).toEqual({ error: 'Unauthorized' })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return 404 if user is not found', async () => {
@@ -86,7 +84,6 @@ describe('Connected Accounts API Routes', () => {
         where: { email: 'test@example.com' },
         include: { providerAccounts: true },
       })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return connected accounts successfully with google and github', async () => {
@@ -134,7 +131,6 @@ describe('Connected Accounts API Routes', () => {
         ],
         totalCount: 2,
       })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return empty accounts array for user with no provider accounts', async () => {
@@ -158,7 +154,6 @@ describe('Connected Accounts API Routes', () => {
         accounts: [],
         totalCount: 0,
       })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return 500 on database error', async () => {
@@ -181,7 +176,6 @@ describe('Connected Accounts API Routes', () => {
         'Error fetching connected accounts:',
         expect.any(Error)
       )
-      expect(prisma.$disconnect).toHaveBeenCalled()
 
       consoleErrorSpy.mockRestore()
     })
@@ -197,7 +191,6 @@ describe('Connected Accounts API Routes', () => {
 
       expect(response.status).toBe(401)
       expect(data).toEqual({ error: 'Unauthorized' })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return 401 if session has no user email', async () => {
@@ -212,7 +205,6 @@ describe('Connected Accounts API Routes', () => {
 
       expect(response.status).toBe(401)
       expect(data).toEqual({ error: 'Unauthorized' })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return 400 if provider is missing', async () => {
@@ -229,7 +221,6 @@ describe('Connected Accounts API Routes', () => {
       expect(data).toEqual({
         error: 'Invalid provider. Must be "google" or "github"',
       })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return 400 if provider is invalid', async () => {
@@ -246,7 +237,6 @@ describe('Connected Accounts API Routes', () => {
       expect(data).toEqual({
         error: 'Invalid provider. Must be "google" or "github"',
       })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return 404 if user is not found', async () => {
@@ -266,7 +256,6 @@ describe('Connected Accounts API Routes', () => {
         where: { email: 'test@example.com' },
         include: { providerAccounts: true },
       })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return 404 if provider account is not connected', async () => {
@@ -295,7 +284,6 @@ describe('Connected Accounts API Routes', () => {
 
       expect(response.status).toBe(404)
       expect(data).toEqual({ error: 'google account not connected' })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return 400 if trying to disconnect the only authentication method', async () => {
@@ -326,7 +314,6 @@ describe('Connected Accounts API Routes', () => {
       expect(data).toEqual({
         error: 'Cannot disconnect your only authentication method',
       })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should successfully disconnect google account when user has multiple providers', async () => {
@@ -371,7 +358,6 @@ describe('Connected Accounts API Routes', () => {
       expect(prisma.providerAccount.delete).toHaveBeenCalledWith({
         where: { id: 'account-1' },
       })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should successfully disconnect github account when user has multiple providers', async () => {
@@ -416,7 +402,6 @@ describe('Connected Accounts API Routes', () => {
       expect(prisma.providerAccount.delete).toHaveBeenCalledWith({
         where: { id: 'account-2' },
       })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return 500 on database error during delete', async () => {
@@ -460,7 +445,6 @@ describe('Connected Accounts API Routes', () => {
         'Error disconnecting account:',
         expect.any(Error)
       )
-      expect(prisma.$disconnect).toHaveBeenCalled()
 
       consoleErrorSpy.mockRestore()
     })
@@ -485,7 +469,6 @@ describe('Connected Accounts API Routes', () => {
         'Error disconnecting account:',
         expect.any(Error)
       )
-      expect(prisma.$disconnect).toHaveBeenCalled()
 
       consoleErrorSpy.mockRestore()
     })

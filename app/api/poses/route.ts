@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../auth'
 import { getAlphaUserIds } from '@app/lib/alphaUsers'
-import { PrismaClient } from '../../../prisma/generated/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '../../../app/lib/prismaClient'
 
 // Force this route to be dynamic since it requires query parameters
 export const dynamic = 'force-dynamic'
@@ -59,8 +57,6 @@ export async function GET(request: NextRequest) {
         { error: 'Internal server error. Please try again later.' },
         { status: 500 }
       )
-    } finally {
-      await prisma.$disconnect()
     }
   }
 
@@ -100,8 +96,6 @@ export async function GET(request: NextRequest) {
         { error: 'Internal server error. Please try again later.' },
         { status: 500 }
       )
-    } finally {
-      await prisma.$disconnect()
     }
   }
 
@@ -231,7 +225,5 @@ export async function GET(request: NextRequest) {
       { error: 'Internal server error. Please try again later.' },
       { status: 500 }
     )
-  } finally {
-    await prisma.$disconnect()
   }
 }

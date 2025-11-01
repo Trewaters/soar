@@ -1,10 +1,10 @@
-import { PrismaClient } from '../../../prisma/generated/client'
+import { prisma } from '../../../app/lib/prismaClient'
 import { NextRequest, NextResponse } from 'next/server'
 import { createHash } from 'crypto'
 import { auth } from '../../../auth'
 import getAlphaUserIds from '@app/lib/alphaUsers'
 
-const prisma = new PrismaClient()
+// Use shared prisma client
 
 // Force this route to be dynamic since it requires query parameters
 export const dynamic = 'force-dynamic'
@@ -149,8 +149,6 @@ export async function GET(request: NextRequest) {
         { status: 500 }
       )
     }
-  } finally {
-    await prisma.$disconnect()
   }
 }
 
@@ -190,7 +188,5 @@ export async function POST() {
         { status: 500 }
       )
     }
-  } finally {
-    await prisma.$disconnect()
   }
 }

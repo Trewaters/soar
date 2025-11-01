@@ -4,6 +4,35 @@ import { render, screen, waitFor } from '@testing-library/react'
 import { ThemeProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
 import theme from '../../../../../styles/theme'
+
+// Mock next-auth/react useSession
+jest.mock('next-auth/react', () => ({
+  useSession: () => ({
+    data: {
+      user: {
+        id: 'test-user-id',
+        email: 'test@uvuyoga.com',
+        name: 'Test Yogi',
+      },
+      expires: '2099-12-31T23:59:59.999Z',
+    },
+    status: 'authenticated',
+  }),
+}))
+
+// Mock UserContext UseUser
+jest.mock('@context/UserContext', () => ({
+  UseUser: () => ({
+    state: {
+      userData: {
+        id: 'test-user-id',
+        email: 'test@uvuyoga.com',
+        name: 'Test Yogi',
+      },
+    },
+  }),
+}))
+
 import Dashboard from '../../../../../app/navigator/profile/dashboard/page'
 
 // Mock PracticeHistoryChart component
@@ -27,6 +56,28 @@ jest.mock('@app/navigator/profile/ProfileNavMenu', () => ({
     <div data-testid="profile-nav-menu">Profile Navigation Menu</div>
   ),
 }))
+
+// Helper to set up the main fetch mock implementation
+function setupMainFetchMock(loginStreak = 7) {
+  ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
+    if (url === '/api/user/recordActivity') {
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({
+          success: true,
+          streakData: { currentStreak: loginStreak },
+        }),
+      })
+    }
+    if (url === '/api/dashboard/stats') {
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ success: true, data: mockDashboardData }),
+      })
+    }
+    return Promise.reject(new Error('Unknown URL'))
+  })
+}
 
 // Mock fetch API
 global.fetch = jest.fn()
@@ -97,27 +148,7 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => (
 describe('Dashboard Page', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    // Mock fetch to handle both API calls
-    ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
-      if (url === '/api/user/recordActivity') {
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({
-            success: true,
-            streakData: {
-              currentStreak: mockDashboardData.loginStreak,
-            },
-          }),
-        })
-      }
-      if (url === '/api/dashboard/stats') {
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({ success: true, data: mockDashboardData }),
-        })
-      }
-      return Promise.reject(new Error('Unknown URL'))
-    })
+    setupMainFetchMock()
   })
 
   afterEach(() => {
@@ -177,16 +208,16 @@ describe('Dashboard Page', () => {
         if (url === '/api/user/recordActivity') {
           return Promise.resolve({
             ok: true,
-            json: async () => ({
-              success: true,
-              streakData: { currentStreak: 0 },
-            }),
+            json: async () => ({ success: true }),
           })
         }
-        return Promise.resolve({
-          ok: false,
-          status: 500,
-        })
+        if (url === '/api/dashboard/stats') {
+          return Promise.resolve({
+            ok: false,
+            status: 500,
+          })
+        }
+        return Promise.reject(new Error('Unknown URL'))
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
@@ -203,16 +234,16 @@ describe('Dashboard Page', () => {
         if (url === '/api/user/recordActivity') {
           return Promise.resolve({
             ok: true,
-            json: async () => ({
-              success: true,
-              streakData: { currentStreak: 0 },
-            }),
+            json: async () => ({ success: true }),
           })
         }
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({ success: false }),
-        })
+        if (url === '/api/dashboard/stats') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ success: false }),
+          })
+        }
+        return Promise.reject(new Error('Unknown URL'))
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
@@ -227,13 +258,13 @@ describe('Dashboard Page', () => {
         if (url === '/api/user/recordActivity') {
           return Promise.resolve({
             ok: true,
-            json: async () => ({
-              success: true,
-              streakData: { currentStreak: 0 },
-            }),
+            json: async () => ({ success: true }),
           })
         }
-        return Promise.reject(new Error('Network error'))
+        if (url === '/api/dashboard/stats') {
+          return Promise.reject(new Error('Network error'))
+        }
+        return Promise.reject(new Error('Unknown URL'))
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
@@ -248,13 +279,13 @@ describe('Dashboard Page', () => {
         if (url === '/api/user/recordActivity') {
           return Promise.resolve({
             ok: true,
-            json: async () => ({
-              success: true,
-              streakData: { currentStreak: 0 },
-            }),
+            json: async () => ({ success: true }),
           })
         }
-        return Promise.reject('Unknown error')
+        if (url === '/api/dashboard/stats') {
+          return Promise.reject('Unknown error')
+        }
+        return Promise.reject(new Error('Unknown URL'))
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
@@ -269,6 +300,7 @@ describe('Dashboard Page', () => {
 
   describe('Streak Cards Display', () => {
     it('should display login streak card with correct value', async () => {
+      setupMainFetchMock(7)
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
@@ -330,19 +362,19 @@ describe('Dashboard Page', () => {
         if (url === '/api/user/recordActivity') {
           return Promise.resolve({
             ok: true,
+            json: async () => ({ success: true }),
+          })
+        }
+        if (url === '/api/dashboard/stats') {
+          return Promise.resolve({
+            ok: true,
             json: async () => ({
               success: true,
-              streakData: { currentStreak: mockDashboardData.loginStreak },
+              data: { ...mockDashboardData, practiceHistory: [] },
             }),
           })
         }
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({
-            success: true,
-            data: { ...mockDashboardData, practiceHistory: [] },
-          }),
-        })
+        return Promise.reject(new Error('Unknown URL'))
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
@@ -537,30 +569,32 @@ describe('Dashboard Page', () => {
         loginStreak: 0,
         activityStreak: 0,
       }
-
       ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
         if (url === '/api/user/recordActivity') {
           return Promise.resolve({
             ok: true,
-            json: async () => ({
-              success: true,
-              streakData: { currentStreak: 0 },
-            }),
+            json: async () => ({ success: true }),
           })
         }
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({ success: true, data: zeroStreakData }),
-        })
+        if (url === '/api/dashboard/stats') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ success: true, data: zeroStreakData }),
+          })
+        }
+        return Promise.reject(new Error('Unknown URL'))
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
         // Only two streak cards should show "🔥 0 Days" (Login and Activity)
-        const zeroStreaks = screen.getAllByText('🔥 0 Days')
+        const zeroStreaks = screen.getAllByText(/0\s*Days/)
         expect(zeroStreaks).toHaveLength(2)
       })
+
+      // Restore the main fetch mock for other tests
+      setupMainFetchMock()
     })
 
     it('should handle empty most common lists gracefully', async () => {
@@ -570,21 +604,20 @@ describe('Dashboard Page', () => {
         mostCommonSeries: [],
         mostCommonSequences: [],
       }
-
       ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
         if (url === '/api/user/recordActivity') {
           return Promise.resolve({
             ok: true,
-            json: async () => ({
-              success: true,
-              streakData: { currentStreak: mockDashboardData.loginStreak },
-            }),
+            json: async () => ({ success: true }),
           })
         }
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({ success: true, data: emptyListsData }),
-        })
+        if (url === '/api/dashboard/stats') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ success: true, data: emptyListsData }),
+          })
+        }
+        return Promise.reject(new Error('Unknown URL'))
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
@@ -592,6 +625,8 @@ describe('Dashboard Page', () => {
       await waitFor(() => {
         expect(screen.getByText('Most Common Asanas')).toBeInTheDocument()
       })
+
+      setupMainFetchMock()
     })
 
     it('should handle very high streak values', async () => {
@@ -599,7 +634,6 @@ describe('Dashboard Page', () => {
         ...mockDashboardData,
         loginStreak: 365,
       }
-
       ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
         if (url === '/api/user/recordActivity') {
           return Promise.resolve({
@@ -610,17 +644,22 @@ describe('Dashboard Page', () => {
             }),
           })
         }
-        return Promise.resolve({
-          ok: true,
-          json: async () => ({ success: true, data: highStreakData }),
-        })
+        if (url === '/api/dashboard/stats') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ success: true, data: highStreakData }),
+          })
+        }
+        return Promise.reject(new Error('Unknown URL'))
       })
 
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('🔥 365 Days')).toBeInTheDocument()
+        expect(screen.getByText(/365\s*Days/)).toBeInTheDocument()
       })
+
+      setupMainFetchMock()
     })
   })
 

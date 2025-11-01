@@ -75,7 +75,7 @@ export default function SplashHeader({
   }
 
   return (
-    <Stack spacing={spacing}>
+    <Stack spacing={spacing} data-testid="splash-header">
       <Box
         sx={{
           display: 'flex',

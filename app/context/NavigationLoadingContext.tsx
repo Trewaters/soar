@@ -5,12 +5,17 @@ interface NavigationLoadingState {
   isNavigating: boolean
   targetPath: string | null
   elementId: string | null
+  navId: string | null
 }
 
 interface NavigationLoadingContextType {
   state: NavigationLoadingState
-  startNavigation: (targetPath: string, elementId?: string) => void
-  endNavigation: () => void
+  startNavigation: (
+    targetPath: string,
+    elementId?: string,
+    navId?: string
+  ) => void
+  endNavigation: (navId?: string) => void
   isNavigatingTo: (path: string) => boolean
   isElementLoading: (elementId: string) => boolean
 }
@@ -23,6 +28,7 @@ const initialState: NavigationLoadingState = {
   isNavigating: false,
   targetPath: null,
   elementId: null,
+  navId: null,
 }
 
 export const NavigationLoadingProvider: React.FC<{ children: ReactNode }> = ({
@@ -30,15 +36,50 @@ export const NavigationLoadingProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [state, setState] = useState<NavigationLoadingState>(initialState)
 
-  const startNavigation = (targetPath: string, elementId?: string) => {
+  const startNavigation = (
+    targetPath: string,
+    elementId?: string,
+    navId?: string
+  ) => {
+    // Generate a navId to disambiguate quick successive navigations.
+    const id =
+      navId || `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
+      console.debug('[navigation] startNavigation (provider)', {
+        targetPath,
+        elementId: elementId || null,
+        navId: id,
+      })
+    }
+
     setState({
       isNavigating: true,
       targetPath,
       elementId: elementId || null,
+      navId: id,
     })
   }
 
-  const endNavigation = () => {
+  const endNavigation = (navId?: string) => {
+    // If a navId is provided, only clear navigation state when it matches
+    // the currently active navId. This prevents races where a later
+    // navigation starts before an earlier one finishes and accidentally
+    // clears the wrong navigation state.
+    if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
+      console.debug('[navigation] endNavigation (provider)', {
+        prevTarget: state.targetPath,
+        navId: state.navId,
+        requestedNavId: navId || null,
+      })
+    }
+
+    if (navId && state.navId && navId !== state.navId) {
+      // Different navigation - do not clear
+      return
+    }
+
     setState(initialState)
   }
 

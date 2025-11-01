@@ -86,7 +86,6 @@ describe('Dashboard Stats API Route', () => {
 
       expect(response.status).toBe(401)
       expect(data).toEqual({ error: 'Unauthorized - Please sign in' })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return 401 if session has no user', async () => {
@@ -99,7 +98,6 @@ describe('Dashboard Stats API Route', () => {
 
       expect(response.status).toBe(401)
       expect(data).toEqual({ error: 'Unauthorized - Please sign in' })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return 401 if session user has no email', async () => {
@@ -113,7 +111,6 @@ describe('Dashboard Stats API Route', () => {
 
       expect(response.status).toBe(401)
       expect(data).toEqual({ error: 'Unauthorized - Please sign in' })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return 404 if user data is not found', async () => {
@@ -131,7 +128,6 @@ describe('Dashboard Stats API Route', () => {
       expect(prisma.userData.findUnique).toHaveBeenCalledWith({
         where: { email: 'test@example.com' },
       })
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should return dashboard stats successfully', async () => {
@@ -160,7 +156,6 @@ describe('Dashboard Stats API Route', () => {
         where: { email: 'test@example.com' },
       })
       expect(mockGetDashboardStats).toHaveBeenCalledWith('user-123')
-      expect(prisma.$disconnect).toHaveBeenCalled()
     })
 
     it('should include all dashboard data properties', async () => {
@@ -217,7 +212,6 @@ describe('Dashboard Stats API Route', () => {
         'Error fetching dashboard stats:',
         expect.any(Error)
       )
-      expect(prisma.$disconnect).toHaveBeenCalled()
 
       consoleErrorSpy.mockRestore()
     })
@@ -251,35 +245,8 @@ describe('Dashboard Stats API Route', () => {
         'Error fetching dashboard stats:',
         expect.any(Error)
       )
-      expect(prisma.$disconnect).toHaveBeenCalled()
 
       consoleErrorSpy.mockRestore()
-    })
-
-    it('should always disconnect from Prisma', async () => {
-      mockAuth.mockResolvedValue(null)
-
-      await GET()
-
-      expect(prisma.$disconnect).toHaveBeenCalled()
-    })
-
-    it('should disconnect from Prisma even on error', async () => {
-      jest.spyOn(console, 'error').mockImplementation(() => {})
-
-      mockAuth.mockResolvedValue({
-        user: { email: 'test@example.com' },
-        expires: new Date().toISOString(),
-      } as any)
-      ;(prisma.userData.findUnique as jest.Mock).mockRejectedValue(
-        new Error('Test error')
-      )
-
-      await GET()
-
-      expect(prisma.$disconnect).toHaveBeenCalled()
-
-      jest.restoreAllMocks()
     })
 
     it('should handle empty practice history', async () => {

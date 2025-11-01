@@ -11,7 +11,6 @@ import TimerProvider from '@context/timerContext'
 import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import GlobalNavigationOverlay from '@clientComponents/GlobalNavigationOverlay'
 import { SessionProvider } from 'next-auth/react'
-import ReactDOM from 'react-dom'
 
 export function Providers({
   children,
@@ -25,7 +24,8 @@ export function Providers({
     if (process.env.NODE_ENV === 'development') {
       import('@axe-core/react')
         .then((axe) => {
-          axe.default(React, ReactDOM, 1000)
+          // For React 18+, axe-core/react auto-detects the renderer
+          axe.default(React, undefined, 1000)
         })
         .catch((error) => {
           console.warn('Failed to load @axe-core/react:', error)

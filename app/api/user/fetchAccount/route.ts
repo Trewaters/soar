@@ -1,6 +1,4 @@
-import { PrismaClient } from '../../../../prisma/generated/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '../../../../app/lib/prismaClient'
 
 // Force this route to be dynamic since it requires query parameters
 export const dynamic = 'force-dynamic'
@@ -42,8 +40,6 @@ export async function GET(req: Request) {
           JSON.stringify({ error: 'Failed to fetch account data' }),
           { status: 500 }
         )
-      } finally {
-        await prisma.$disconnect()
       }
     }
     return new Response(JSON.stringify({ error: 'Account not provided' }), {
@@ -68,8 +64,6 @@ export async function GET(req: Request) {
       JSON.stringify({ error: 'Failed to fetch account data' }),
       { status: 500 }
     )
-  } finally {
-    await prisma.$disconnect()
   }
 
   return new Response(JSON.stringify({ data: account }), {

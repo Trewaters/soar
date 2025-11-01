@@ -14,24 +14,21 @@ const PracticeHistoryChart: React.FC<PracticeHistoryChartProps> = ({
   const containerRef = useRef<HTMLDivElement>(null)
   const [dimensions, setDimensions] = useState({ width: 0, height: 300 })
 
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (containerRef.current) {
-        const width = containerRef.current.offsetWidth
-        setDimensions({ width: width > 0 ? width : 800, height: 300 })
-      }
+  const updateDimensions = React.useCallback(() => {
+    if (containerRef.current) {
+      const width = containerRef.current.offsetWidth
+      setDimensions({ width: width > 0 ? width : 800, height: 300 })
     }
+  }, [])
 
+  useEffect(() => {
     // Initial measurement
     updateDimensions()
-
-    // Update on window resize
     window.addEventListener('resize', updateDimensions)
-
     return () => {
       window.removeEventListener('resize', updateDimensions)
     }
-  }, [])
+  }, [updateDimensions])
 
   if (!data || data.length === 0) {
     return null

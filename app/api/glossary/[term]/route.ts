@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
-import { PrismaClient } from '../../../../prisma/generated/client'
+import { prisma } from '../../../../app/lib/prismaClient'
 import getAlphaUserIds from '@app/lib/alphaUsers'
 
-const prisma = new PrismaClient()
+// use shared prisma client
 
 function canEdit(source: string | undefined) {
   // DEFAULT terms are read-only

@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '../../../../prisma/generated/client'
+import { prisma } from '../../../../app/lib/prismaClient'
 import { auth } from '../../../../auth'
-
-const prisma = new PrismaClient()
 
 export async function POST(req: NextRequest) {
   const session = await auth()

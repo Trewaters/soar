@@ -1,7 +1,5 @@
-import { PrismaClient } from '../prisma/generated/client'
+import { prisma } from './prismaClient'
 import { logDatabaseError, logServiceError } from './errorLogger'
-
-const prisma = new PrismaClient()
 
 export interface SeriesActivityData {
   id: string

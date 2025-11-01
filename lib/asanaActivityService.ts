@@ -1,7 +1,5 @@
-import { PrismaClient } from '../prisma/generated/client'
+import { prisma } from './prismaClient'
 import { logServiceError, logDatabaseError } from './errorLogger'
-
-const prisma = new PrismaClient()
 
 export type AsanaActivityInput = {
   userId: string

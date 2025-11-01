@@ -1,5 +1,5 @@
 'use client'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef } from 'react'
 import { useNavigationLoading } from '@context/NavigationLoadingContext'
 
@@ -10,28 +10,135 @@ import { useNavigationLoading } from '@context/NavigationLoadingContext'
 export function useNavigationWithLoading() {
   const router = useRouter()
   const pathname = usePathname()
+
+  // Some test environments (Jest) mock `next/navigation` without `useSearchParams`.
+  // Guard the hook call so tests don't throw when that function is not present.
+  const _useSearchParams =
+    typeof useSearchParams === 'function' ? useSearchParams : undefined
+  const searchParams = _useSearchParams ? _useSearchParams() : null
   const { startNavigation, endNavigation, state } = useNavigationLoading()
-  const currentPathRef = useRef(pathname)
-  const navigationStartTimeRef = useRef<number | null>(null)
+  // Track a combined location (pathname + search) so we detect navigations that only
+  // change query params or when router.refresh() is used (which doesn't change pathname).
+  const currentLocationRef = useRef(
+    `${pathname}${searchParams ? `?${searchParams.toString()}` : ''}`
+  )
+  // Record the location where a navigation started from. This helps detect
+  // completion when redirects or server-side rewrites move the user to a
+  // different final pathname than the requested targetPath. We set this when
+  // `state.isNavigating` becomes true and compare against subsequent location
+  // changes to decide when to call `endNavigation()`.
+  const navigationStartedFromRef = useRef(currentLocationRef.current)
+  // Track the navId generated when starting a navigation so we only end the
+  // same navigation (prevents races across quick successive navigations).
+  const navigationIdRef = useRef<string | null>(null)
 
-  // Monitor pathname changes to detect when navigation completes
+  // Monitor pathname + search and Next's navigation state to detect when navigation completes.
   useEffect(() => {
-    // Always update current path ref
-    if (currentPathRef.current !== pathname) {
-      currentPathRef.current = pathname
+    const combined = `${pathname}${searchParams ? `?${searchParams.toString()}` : ''}`
 
-      // If we're currently navigating, end the navigation immediately
+    // If location changed compared to our ref, update ref. If we're currently
+    // navigating and the current location is different from where the
+    // navigation started from, treat that as navigation completion and end it.
+    if (currentLocationRef.current !== combined) {
+      currentLocationRef.current = combined
+
       if (state.isNavigating) {
-        endNavigation()
-        navigationStartTimeRef.current = null
+        const origin = navigationStartedFromRef.current
+
+        if (process.env.NODE_ENV === 'development') {
+          // eslint-disable-next-line no-console
+          console.debug('[navigation] location changed', {
+            origin,
+            newLocation: combined,
+            isNavigating: state.isNavigating,
+          })
+        }
+
+        // More aggressive safety: if we've landed on a different location than
+        // the intended `targetPath` (for example server redirects that
+        // route `/` -> `/navigator`) end the navigation. Checking this first
+        // ensures we dismiss the overlay even in cases where origin === combined
+        // but the final route doesn't match what was requested.
+        if (state.targetPath && combined !== state.targetPath) {
+          endNavigation(navigationIdRef.current || undefined)
+        } else if (origin && origin !== combined) {
+          // If we have a recorded origin for this navigation, and the location
+          // now differs from that origin, consider navigation complete and end it.
+          endNavigation(navigationIdRef.current || undefined)
+        } else if (!origin) {
+          // Fallback: if we don't have an origin recorded, end navigation on
+          // any location change.
+          endNavigation(navigationIdRef.current || undefined)
+        }
       }
     }
-  }, [pathname, state.isNavigating, endNavigation]) // Cleanup timeout on unmount
+  }, [
+    pathname,
+    searchParams,
+    state.isNavigating,
+    state.targetPath,
+    endNavigation,
+  ])
+
+  // Event-driven fallback (no timers): listen for native browser navigation
+  // events which fire on full-page navigations, redirects, or history changes
+  // so we can end navigation even when Next's client hooks don't report a
+  // pathname/search update in time. These events are deterministic and avoid
+  // polling/timers.
   useEffect(() => {
-    return () => {
-      // No cleanup needed for immediate navigation approach
+    if (typeof window === 'undefined') return
+
+    const checkLocation = () => {
+      try {
+        const href = `${window.location.pathname}${window.location.search || ''}`
+
+        if (!state.isNavigating) return
+
+        // If we've landed somewhere different than requested, end navigation.
+        if (state.targetPath && href !== state.targetPath) {
+          endNavigation(navigationIdRef.current || undefined)
+          return
+        }
+
+        // If the browser location differs from where navigation started,
+        // consider the navigation complete.
+        if (
+          navigationStartedFromRef.current &&
+          href !== navigationStartedFromRef.current
+        ) {
+          endNavigation(navigationIdRef.current || undefined)
+          return
+        }
+
+        // As a final safety, if currentLocationRef (our last-observed router
+        // location) is different from the real window.location, end navigation.
+        if (currentLocationRef.current !== href) {
+          endNavigation(navigationIdRef.current || undefined)
+        }
+      } catch (err) {
+        // Defensive: don't throw from event handler
+        // eslint-disable-next-line no-console
+        console.debug && console.debug('[navigation] checkLocation error', err)
+      }
     }
-  }, [])
+
+    window.addEventListener('popstate', checkLocation)
+    window.addEventListener('pageshow', checkLocation)
+    window.addEventListener('focus', checkLocation)
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') checkLocation()
+    })
+
+    return () => {
+      window.removeEventListener('popstate', checkLocation)
+      window.removeEventListener('pageshow', checkLocation)
+      window.removeEventListener('focus', checkLocation)
+      document.removeEventListener('visibilitychange', checkLocation)
+    }
+  }, [state.isNavigating, state.targetPath, endNavigation])
+
+  // No timers: rely on combined location monitoring to end navigation.
+  // (Removed previous timeout-based fallback per performance guidance.)
 
   /**
    * Navigate to a new route with loading state feedback
@@ -40,7 +147,7 @@ export function useNavigationWithLoading() {
    * @param options - Additional navigation options
    */
   const navigateWithLoading = useCallback(
-    (
+    async (
       path: string,
       elementId?: string,
       options?: {
@@ -54,26 +161,50 @@ export function useNavigationWithLoading() {
         return
       }
 
-      // Start loading state and record navigation start time
-      startNavigation(path, elementId)
-      navigationStartTimeRef.current = Date.now()
+      // Generate a navId and start loading state. Pass the navId through so
+      // the provider can use it to avoid races.
+      const navId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+      navigationIdRef.current = navId
+      startNavigation(path, elementId, navId)
+      // Record where the navigation started from so we can detect when the
+      // browser actually moved away from this location (useful for redirects).
+      navigationStartedFromRef.current = `${pathname}${
+        searchParams ? `?${searchParams.toString()}` : ''
+      }`
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.debug('[navigation] startNavigation', {
+          origin: navigationStartedFromRef.current,
+          target: path,
+          elementId,
+        })
+      }
 
       try {
-        // Perform navigation
+        // Perform navigation and await completion when supported by the router API
         if (options?.replace) {
-          router.replace(path)
+          // router.replace may return a promise in newer Next versions
+          await (router as any).replace(path)
         } else {
-          router.push(path)
+          await (router as any).push(path)
         }
-
-        // Navigation completion is handled by pathname monitoring - no artificial timeouts needed
+        // Do NOT call endNavigation() here — rely on pathname+search monitoring to
+        // detect the location change and call endNavigation(). Calling endNavigation()
+        // immediately can clear the `targetPath` before UI or tests can observe it.
       } catch (error) {
         console.error('Navigation error:', error)
-        endNavigation()
-        navigationStartTimeRef.current = null
+        // Ensure we don't leave the app stuck in navigating state on error.
+        endNavigation(navigationIdRef.current || undefined)
       }
     },
-    [router, startNavigation, endNavigation, state.isNavigating]
+    [
+      router,
+      startNavigation,
+      endNavigation,
+      state.isNavigating,
+      pathname,
+      searchParams,
+    ]
   )
 
   /**
@@ -85,16 +216,16 @@ export function useNavigationWithLoading() {
     }
 
     try {
-      startNavigation('back', 'back-button')
-      navigationStartTimeRef.current = Date.now()
+      const navId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+      navigationIdRef.current = navId
+      startNavigation('back', 'back-button', navId)
       router.back()
 
       // Navigation completion handled by pathname monitoring
     } catch (error) {
       // Handle navigation errors gracefully
       console.warn('Back navigation failed:', error)
-      endNavigation()
-      navigationStartTimeRef.current = null
+      endNavigation(navigationIdRef.current || undefined)
     }
   }, [router, startNavigation, endNavigation, state.isNavigating])
 
@@ -107,16 +238,16 @@ export function useNavigationWithLoading() {
     }
 
     try {
-      startNavigation('forward', 'forward-button')
-      navigationStartTimeRef.current = Date.now()
+      const navId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+      navigationIdRef.current = navId
+      startNavigation('forward', 'forward-button', navId)
       router.forward()
 
       // Navigation completion handled by pathname monitoring
     } catch (error) {
       // Handle navigation errors gracefully
       console.warn('Forward navigation failed:', error)
-      endNavigation()
-      navigationStartTimeRef.current = null
+      endNavigation(navigationIdRef.current || undefined)
     }
   }, [router, startNavigation, endNavigation, state.isNavigating])
 
@@ -129,14 +260,14 @@ export function useNavigationWithLoading() {
     }
 
     try {
-      startNavigation('refresh', 'refresh-button')
-      navigationStartTimeRef.current = Date.now()
+      const navId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+      navigationIdRef.current = navId
+      startNavigation('refresh', 'refresh-button', navId)
       router.refresh()
     } catch (error) {
       // Handle navigation errors gracefully
       console.warn('Page refresh failed:', error)
-      endNavigation()
-      navigationStartTimeRef.current = null
+      endNavigation(navigationIdRef.current || undefined)
     }
   }, [router, startNavigation, endNavigation, state.isNavigating])
 

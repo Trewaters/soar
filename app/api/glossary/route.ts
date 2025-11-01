@@ -1,30 +1,7 @@
-import { PrismaClient } from '../../../prisma/generated/client'
+import { prisma } from '../../../../app/lib/prismaClient'
 import { NextResponse } from 'next/server'
 
-// Create a singleton instance with proper error handling
-let prisma: PrismaClient | null = null
-
-function getPrismaClient() {
-  if (!prisma) {
-    try {
-      prisma = new PrismaClient({
-        log: ['error', 'warn'],
-        errorFormat: 'pretty',
-      })
-    } catch (error) {
-      console.error(
-        'Failed to initialize Prisma client:',
-        error,
-        'Database URL exists:',
-        !!process.env.DATABASE_URL,
-        'Database URL prefix:',
-        process.env.DATABASE_URL?.substring(0, 20)
-      )
-      throw new Error('Database connection failed')
-    }
-  }
-  return prisma
-}
+// Use shared cached Prisma client (created in app/lib/prismaClient)
 
 // Lightweight fallback when DB unreachable (subset of default bundled terms)
 const fallbackGlossaryTerms = [
@@ -49,16 +26,12 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   try {
-    const prismaClient = getPrismaClient()
-
-    await prismaClient.$connect()
-
-    const terms = await prismaClient.glossaryTerm.findMany({
+    const terms = await prisma.glossaryTerm.findMany({
       orderBy: { term: 'asc' },
     })
 
     return NextResponse.json(
-      terms.map((t) => ({
+      terms.map((t: any) => ({
         id: t.id,
         term: t.term,
         meaning: t.meaning,
@@ -89,8 +62,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
   try {
-    const prismaClient = getPrismaClient()
-    await prismaClient.$connect()
+    // Use shared prisma client
     const body = await req.json()
 
     // Backend validation
@@ -151,7 +123,7 @@ export async function POST(req: Request) {
     }
 
     // Check for duplicate terms
-    const existing = await prismaClient.glossaryTerm.findUnique({
+    const existing = await prisma.glossaryTerm.findUnique({
       where: { term },
     })
     if (existing) {
@@ -170,7 +142,7 @@ export async function POST(req: Request) {
       ? 'ALPHA_USER'
       : 'USER'
 
-    const created = await prismaClient.glossaryTerm.create({
+    const created = await prisma.glossaryTerm.create({
       data: {
         term,
         meaning,

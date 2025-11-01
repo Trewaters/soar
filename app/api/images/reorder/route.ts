@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
-import { PrismaClient } from '../../../../prisma/generated/client'
+import { prisma } from '../../../../app/lib/prismaClient'
 import {
   verifyAsanaOwnership,
   verifyMultipleImageOwnership,
@@ -12,7 +12,7 @@ import {
   ImageReorderResponse,
 } from '../../../../types/images'
 
-const prisma = new PrismaClient()
+// Use shared prisma client
 
 // Force this route to be dynamic since it requires authentication
 export const dynamic = 'force-dynamic'

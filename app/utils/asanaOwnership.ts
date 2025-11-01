@@ -3,11 +3,11 @@
  * Provides consistent ownership checks for multi-image management
  */
 
-import { PrismaClient } from '../../prisma/generated/client'
+import { prisma } from '../lib/prismaClient'
 import { Session } from 'next-auth'
 import { AsanaPoseData } from '../../types/images'
 
-const prisma = new PrismaClient()
+// use shared prisma client
 
 /**
  * Verify if a user owns a specific asana

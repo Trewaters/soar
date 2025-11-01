@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
-import { PrismaClient } from '../../../../prisma/generated/client'
+import { prisma } from '../../../../app/lib/prismaClient'
 import { storageManager } from '../../../../lib/storage/manager'
 import {
   getNextDisplayOrder,
@@ -15,7 +15,7 @@ import {
   ImageUploadResponse,
 } from '../../../../types/images'
 
-const prisma = new PrismaClient()
+// use shared prisma client
 
 // Force this route to be dynamic since it requires query parameters and authentication
 export const dynamic = 'force-dynamic'

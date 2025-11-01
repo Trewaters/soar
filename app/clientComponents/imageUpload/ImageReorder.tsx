@@ -182,99 +182,98 @@ export default function ImageReorder({
   // dispatch plain Event objects (with a dataTransfer property) observe
   // mutations we perform on the original Event instance. This is a
   // best-effort shim for the test harness that fires raw Events.
+  const onDragStartNative = React.useCallback((e: Event) => {
+    try {
+      const dt = (e as any).dataTransfer
+      if (dt) {
+        dt.effectAllowed = 'move'
+        dt.setData?.('text/html', '')
+      }
+      // Derive index from closest card element and update mutable ref
+      const target = e.target as HTMLElement | null
+      const card = target?.closest?.('[data-index]') as HTMLElement | null
+      if (card) {
+        const idx = card.getAttribute('data-index')
+        if (typeof idx === 'string') {
+          const parsed = Number(idx)
+          if (!Number.isNaN(parsed)) {
+            setDraggedIndex(parsed)
+            draggedIndexRef.current = parsed
+          }
+        }
+      }
+    } catch (err) {
+      // ignore
+    }
+  }, [])
+
+  const onDragOverNative = React.useCallback((e: Event) => {
+    try {
+      e.preventDefault?.()
+      const dt = (e as any).dataTransfer
+      if (dt) dt.dropEffect = 'move'
+    } catch (err) {
+      // ignore
+    }
+  }, [])
+
+  const onDropNative = React.useCallback((e: Event) => {
+    try {
+      e.preventDefault?.()
+
+      const target = e.target as HTMLElement | null
+      const card = target?.closest?.('[data-index]') as HTMLElement | null
+      if (card) {
+        const idxStr = card.getAttribute('data-index')
+        if (typeof idxStr === 'string') {
+          const dropIdx = Number(idxStr)
+          const startIdx = draggedIndexRef.current
+          if (
+            !Number.isNaN(dropIdx) &&
+            startIdx !== null &&
+            startIdx !== dropIdx
+          ) {
+            // Update local state directly to ensure tests observe the change
+            setLocalImages((prev) => {
+              const newImages = [...prev]
+              const [moved] = newImages.splice(startIdx, 1)
+              newImages.splice(dropIdx, 0, moved)
+              const updated = newImages.map((img, i) => ({
+                ...img,
+                displayOrder: i + 1,
+              }))
+              setHasChanges(true)
+              return updated
+            })
+            draggedIndexRef.current = null
+            setDraggedIndex(null)
+          }
+        }
+      }
+    } catch (err) {
+      // ignore
+    }
+  }, [])
+
+  const onDragEndNative = React.useCallback(() => {
+    setDraggedIndex(null)
+    draggedIndexRef.current = null
+  }, [])
+
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
-    const onDragStartNative = (e: Event) => {
-      try {
-        const dt = (e as any).dataTransfer
-        if (dt) {
-          dt.effectAllowed = 'move'
-          dt.setData?.('text/html', '')
-        }
-        // Derive index from closest card element and update mutable ref
-        const target = e.target as HTMLElement | null
-        const card = target?.closest?.('[data-index]') as HTMLElement | null
-        if (card) {
-          const idx = card.getAttribute('data-index')
-          if (typeof idx === 'string') {
-            const parsed = Number(idx)
-            if (!Number.isNaN(parsed)) {
-              setDraggedIndex(parsed)
-              draggedIndexRef.current = parsed
-            }
-          }
-        }
-      } catch (err) {
-        // ignore
-      }
-    }
-
-    const onDragOverNative = (e: Event) => {
-      try {
-        e.preventDefault?.()
-        const dt = (e as any).dataTransfer
-        if (dt) dt.dropEffect = 'move'
-      } catch (err) {
-        // ignore
-      }
-    }
-
-    const onDropNative = (e: Event) => {
-      try {
-        e.preventDefault?.()
-
-        const target = e.target as HTMLElement | null
-        const card = target?.closest?.('[data-index]') as HTMLElement | null
-        if (card) {
-          const idxStr = card.getAttribute('data-index')
-          if (typeof idxStr === 'string') {
-            const dropIdx = Number(idxStr)
-            const startIdx = draggedIndexRef.current
-            if (
-              !Number.isNaN(dropIdx) &&
-              startIdx !== null &&
-              startIdx !== dropIdx
-            ) {
-              // Update local state directly to ensure tests observe the change
-              setLocalImages((prev) => {
-                const newImages = [...prev]
-                const [moved] = newImages.splice(startIdx, 1)
-                newImages.splice(dropIdx, 0, moved)
-                const updated = newImages.map((img, i) => ({
-                  ...img,
-                  displayOrder: i + 1,
-                }))
-                setHasChanges(true)
-                return updated
-              })
-              draggedIndexRef.current = null
-              setDraggedIndex(null)
-            }
-          }
-        }
-      } catch (err) {
-        // ignore
-      }
-    }
-
-    const onDragEndNative = () => {
-      setDraggedIndex(null)
-      draggedIndexRef.current = null
-    }
-
     el.addEventListener('dragstart', onDragStartNative, true)
     el.addEventListener('dragover', onDragOverNative, true)
     el.addEventListener('drop', onDropNative, true)
     el.addEventListener('dragend', onDragEndNative, true)
-
     return () => {
       el.removeEventListener('dragstart', onDragStartNative, true)
       el.removeEventListener('dragover', onDragOverNative, true)
       el.removeEventListener('drop', onDropNative, true)
       el.removeEventListener('dragend', onDragEndNative, true)
     }
-  }, [])
+  }, [onDragStartNative, onDragOverNative, onDropNative, onDragEndNative])
 
   if (localImages.length <= 1) {
     return null // No reordering needed for single image

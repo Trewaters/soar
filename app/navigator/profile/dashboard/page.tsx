@@ -125,11 +125,6 @@ const Dashboard: React.FC = () => {
         let currentLoginStreak = 0
         if (loginStreakResponse.ok) {
           const loginData = await loginStreakResponse.json()
-          console.log('Dashboard - recordActivity API response:', loginData)
-          console.log(
-            'Dashboard - Login streak from API:',
-            loginData.streakData?.currentStreak
-          )
           currentLoginStreak = loginData.streakData?.currentStreak || 0
         } else {
           console.error('Dashboard - recordActivity API failed:', {
@@ -150,22 +145,11 @@ const Dashboard: React.FC = () => {
         const result = await response.json()
 
         if (result.success && result.data) {
-          console.log('Dashboard - Stats API response:', result.data)
-          console.log(
-            'Dashboard - Login streak from stats API:',
-            result.data.loginStreak
-          )
-          console.log(
-            'Dashboard - Login streak from recordActivity API:',
-            currentLoginStreak
-          )
-
           // Override the loginStreak with the one from recordActivity API
           const finalData = {
             ...result.data,
             loginStreak: currentLoginStreak,
           }
-          console.log('Dashboard - Final merged data:', finalData)
           setDashboardData(finalData)
         } else {
           throw new Error('Invalid response format')
