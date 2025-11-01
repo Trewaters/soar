@@ -51,6 +51,7 @@ const customJestConfig: Config = {
   globals: {
     'ts-jest': {
       useESM: true,
+      tsconfig: 'tsconfig.test.json',
     },
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],

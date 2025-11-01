@@ -150,7 +150,7 @@ const createMockSequence = (
   nameSequence: 'Morning Flow',
   sequencesSeries: [
     {
-      id: 1,
+      id: '1',
       seriesName: 'Sun Salutation A',
       seriesPoses: [
         {

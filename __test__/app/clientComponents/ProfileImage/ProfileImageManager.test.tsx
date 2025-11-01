@@ -10,6 +10,10 @@ describe('ProfileImageManager', () => {
         active={'/img1.png'}
         placeholder={'/placeholder.png'}
         onChange={jest.fn()}
+        onUpload={jest.fn(() => Promise.resolve())}
+        onDelete={jest.fn(() => Promise.resolve())}
+        onSelect={jest.fn(() => Promise.resolve())}
+        loading={false}
       />
     )
     expect(screen.getByText('Profile Images')).toBeInTheDocument()

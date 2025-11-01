@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "strict": false,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "types": ["jest", "node"]
+  },
+  "include": ["__test__/**/*", "jest.setup.ts", "jest.env.ts"]
+}

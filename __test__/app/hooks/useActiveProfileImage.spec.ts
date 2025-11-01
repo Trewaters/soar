@@ -1,11 +1,141 @@
 import { renderHook } from '@testing-library/react'
 import { useActiveProfileImage } from '../../../app/hooks/useActiveProfileImage'
 import { UseUser } from '../../../app/context/UserContext'
+import type {
+  UserData,
+  UserGithubProfile,
+  UserGoogleProfile,
+} from '../../../types/models/user'
 import '@testing-library/jest-dom'
 
 // Mock the UserContext
 jest.mock('../../../app/context/UserContext')
 const mockUseUser = UseUser as jest.MockedFunction<typeof UseUser>
+
+// Helper to create a fully-typed UserData fixture with sensible defaults
+const makeUserData = (overrides: Partial<UserData> = {}): UserData => ({
+  id: '1',
+  provider_id: 'prov-1',
+  name: 'Test User',
+  email: 'test@example.com',
+  emailVerified: new Date(),
+  image: 'https://oauth-provider.com/avatar.jpg',
+  pronouns: '',
+  profile: {},
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  firstName: 'Test',
+  lastName: 'User',
+  bio: '',
+  headline: '',
+  location: '',
+  websiteURL: '',
+  shareQuick: '',
+  yogaStyle: '',
+  yogaExperience: '',
+  company: '',
+  socialURL: '',
+  isLocationPublic: '',
+  role: 'user',
+  profileImages: [],
+  activeProfileImage: undefined,
+  tz: 'UTC',
+  ...overrides,
+})
+
+// Minimal default OAuth profile objects to satisfy UserProfilePageState shape in tests
+const defaultGithubProfile: UserGithubProfile = {
+  login: 'test',
+  id: 1,
+  node_id: 'node',
+  avatar_url: '',
+  gravatar_id: '',
+  url: '',
+  html_url: '',
+  followers_url: '',
+  following_url: '',
+  gists_url: '',
+  starred_url: '',
+  subscriptions_url: '',
+  organizations_url: '',
+  repos_url: '',
+  events_url: '',
+  received_events_url: '',
+  type: 'User',
+  site_admin: false,
+  name: 'Test User',
+  company: '',
+  blog: '',
+  location: '',
+  email: 'test@example.com',
+  hireable: false,
+  bio: '',
+  twitter_username: '',
+  public_repos: 0,
+  public_gists: 0,
+  followers: 0,
+  following: 0,
+  created_at: '',
+  updated_at: '',
+  private_gists: 0,
+  total_private_repos: 0,
+  owned_private_repos: 0,
+  disk_usage: 0,
+  collaborators: 0,
+  two_factor_authentication: false,
+  plan: { name: '', space: 0, collaborators: 0, private_repos: 0 },
+}
+
+const defaultGoogleProfile: UserGoogleProfile = {
+  iss: '',
+  azp: '',
+  aud: '',
+  sub: '',
+  email: 'test@example.com',
+  email_verified: true,
+  at_hash: '',
+  name: 'Test User',
+  picture: '',
+  given_name: 'Test',
+  family_name: 'User',
+  iat: 0,
+  exp: 0,
+}
+
+// Helper to construct a full UserProfilePageState-like mock for UseUser
+const makeUserProfileContext = (userDataOverrides: any = undefined) => {
+  // Normalize nulls in overrides to types acceptable by UserData
+  const safeOverrides: any = { ...(userDataOverrides || {}) }
+  if (
+    Object.prototype.hasOwnProperty.call(safeOverrides, 'activeProfileImage') &&
+    safeOverrides.activeProfileImage === null
+  ) {
+    safeOverrides.activeProfileImage = undefined
+  }
+  if (
+    Object.prototype.hasOwnProperty.call(safeOverrides, 'image') &&
+    safeOverrides.image === null
+  ) {
+    safeOverrides.image = undefined
+  }
+  if (
+    Object.prototype.hasOwnProperty.call(safeOverrides, 'profileImages') &&
+    safeOverrides.profileImages === null
+  ) {
+    safeOverrides.profileImages = []
+  }
+
+  return {
+    state: {
+      userData: makeUserData(safeOverrides) as UserData as UserData,
+      userGithubProfile: defaultGithubProfile,
+      userGoogleProfile: defaultGoogleProfile,
+      isMobile: false,
+      deviceInfo: { isMobile: false },
+    },
+    dispatch: jest.fn(),
+  }
+}
 
 describe('useActiveProfileImage', () => {
   const mockProfileImages = [
@@ -14,14 +144,10 @@ describe('useActiveProfileImage', () => {
     'https://example.com/image3.jpg',
   ]
 
-  const mockUserData = {
-    id: '1',
-    email: 'test@example.com',
-    name: 'Test User',
-    image: 'https://oauth-provider.com/avatar.jpg',
+  const mockUserData = makeUserData({
     profileImages: mockProfileImages,
     activeProfileImage: mockProfileImages[0],
-  }
+  })
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -29,10 +155,7 @@ describe('useActiveProfileImage', () => {
 
   describe('Active Image Priority Logic', () => {
     it('should return active profile image when set and valid', () => {
-      mockUseUser.mockReturnValue({
-        state: { userData: mockUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(mockUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -47,10 +170,7 @@ describe('useActiveProfileImage', () => {
         activeProfileImage: 'https://invalid-url.com/image.jpg', // Not in profileImages
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: invalidActiveUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(invalidActiveUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -65,10 +185,9 @@ describe('useActiveProfileImage', () => {
         activeProfileImage: null,
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: noProfileImagesUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(
+        makeUserProfileContext(noProfileImagesUserData)
+      )
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -87,10 +206,7 @@ describe('useActiveProfileImage', () => {
         image: null,
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: noImagesUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(noImagesUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -106,10 +222,9 @@ describe('useActiveProfileImage', () => {
         activeProfileImage: null,
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: nullProfileImagesUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(
+        makeUserProfileContext(nullProfileImagesUserData)
+      )
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -127,10 +242,9 @@ describe('useActiveProfileImage', () => {
         activeProfileImage: null,
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: undefinedProfileImagesUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(
+        makeUserProfileContext(undefinedProfileImagesUserData)
+      )
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -144,10 +258,7 @@ describe('useActiveProfileImage', () => {
 
   describe('hasCustomImage Logic', () => {
     it('should return true when user has active profile image', () => {
-      mockUseUser.mockReturnValue({
-        state: { userData: mockUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(mockUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -160,10 +271,7 @@ describe('useActiveProfileImage', () => {
         activeProfileImage: null,
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: noActiveUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(noActiveUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -177,10 +285,7 @@ describe('useActiveProfileImage', () => {
         activeProfileImage: null,
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: noImagesUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(noImagesUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -190,10 +295,7 @@ describe('useActiveProfileImage', () => {
 
   describe('Image Count Logic', () => {
     it('should return correct count for multiple images', () => {
-      mockUseUser.mockReturnValue({
-        state: { userData: mockUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(mockUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -207,10 +309,7 @@ describe('useActiveProfileImage', () => {
         activeProfileImage: null,
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: noImagesUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(noImagesUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -224,10 +323,7 @@ describe('useActiveProfileImage', () => {
         activeProfileImage: null,
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: nullImagesUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(nullImagesUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -241,10 +337,7 @@ describe('useActiveProfileImage', () => {
         activeProfileImage: mockProfileImages[0],
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: singleImageUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(singleImageUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -259,10 +352,7 @@ describe('useActiveProfileImage', () => {
         activeProfileImage: '',
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: emptyActiveUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(emptyActiveUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -276,10 +366,9 @@ describe('useActiveProfileImage', () => {
         activeProfileImage: '   ',
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: whitespaceActiveUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(
+        makeUserProfileContext(whitespaceActiveUserData)
+      )
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -295,10 +384,7 @@ describe('useActiveProfileImage', () => {
         activeProfileImage: specialCharUrl,
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: specialCharUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(specialCharUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -315,10 +401,7 @@ describe('useActiveProfileImage', () => {
         activeProfileImage: longUrl,
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: longUrlUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(longUrlUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -330,10 +413,7 @@ describe('useActiveProfileImage', () => {
 
   describe('Memoization', () => {
     it('should return same values when userData has not changed', () => {
-      const mockState = {
-        state: { userData: mockUserData },
-        dispatch: jest.fn(),
-      }
+      const mockState = makeUserProfileContext(mockUserData)
       mockUseUser.mockReturnValue(mockState)
 
       const { result, rerender } = renderHook(() => useActiveProfileImage())
@@ -348,10 +428,7 @@ describe('useActiveProfileImage', () => {
     })
 
     it('should update when userData changes', () => {
-      const initialState = {
-        state: { userData: mockUserData },
-        dispatch: jest.fn(),
-      }
+      const initialState = makeUserProfileContext(mockUserData)
       mockUseUser.mockReturnValue(initialState)
 
       const { result, rerender } = renderHook(() => useActiveProfileImage())
@@ -363,10 +440,7 @@ describe('useActiveProfileImage', () => {
         ...mockUserData,
         activeProfileImage: mockProfileImages[1],
       }
-      mockUseUser.mockReturnValue({
-        state: { userData: updatedUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(updatedUserData))
 
       rerender()
 
@@ -376,10 +450,7 @@ describe('useActiveProfileImage', () => {
 
   describe('Integration with UserContext', () => {
     it('should handle UserContext returning undefined state', () => {
-      mockUseUser.mockReturnValue({
-        state: { userData: {} },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext({}))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -393,10 +464,7 @@ describe('useActiveProfileImage', () => {
         email: 'test@example.com',
       }
 
-      mockUseUser.mockReturnValue({
-        state: { userData: minimalUserData },
-        dispatch: jest.fn(),
-      })
+      mockUseUser.mockReturnValue(makeUserProfileContext(minimalUserData))
 
       const { result } = renderHook(() => useActiveProfileImage())
 

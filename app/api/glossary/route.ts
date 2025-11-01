@@ -1,4 +1,4 @@
-import { prisma } from '../../../../app/lib/prismaClient'
+import { prisma } from '../../lib/prismaClient'
 import { NextResponse } from 'next/server'
 
 // Use shared cached Prisma client (created in app/lib/prismaClient)
