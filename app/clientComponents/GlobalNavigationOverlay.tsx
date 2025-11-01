@@ -16,15 +16,7 @@ import { useNavigationLoading } from '@context/NavigationLoadingContext'
 export default function GlobalNavigationOverlay() {
   const { state } = useNavigationLoading()
 
-  // Development-only visibility tracing to help debug stuck overlays
-  if (process.env.NODE_ENV === 'development') {
-    // eslint-disable-next-line no-console
-    console.debug('[navigation] GlobalNavigationOverlay render', {
-      isNavigating: state.isNavigating,
-      targetPath: state.targetPath,
-      elementId: state.elementId,
-    })
-  }
+  // development-only logging removed
 
   return (
     <Backdrop

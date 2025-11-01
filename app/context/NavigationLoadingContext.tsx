@@ -44,14 +44,7 @@ export const NavigationLoadingProvider: React.FC<{ children: ReactNode }> = ({
     // Generate a navId to disambiguate quick successive navigations.
     const id =
       navId || `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
-    if (process.env.NODE_ENV === 'development') {
-      // eslint-disable-next-line no-console
-      console.debug('[navigation] startNavigation (provider)', {
-        targetPath,
-        elementId: elementId || null,
-        navId: id,
-      })
-    }
+    // development-only logging removed
 
     setState({
       isNavigating: true,
@@ -66,14 +59,7 @@ export const NavigationLoadingProvider: React.FC<{ children: ReactNode }> = ({
     // the currently active navId. This prevents races where a later
     // navigation starts before an earlier one finishes and accidentally
     // clears the wrong navigation state.
-    if (process.env.NODE_ENV === 'development') {
-      // eslint-disable-next-line no-console
-      console.debug('[navigation] endNavigation (provider)', {
-        prevTarget: state.targetPath,
-        navId: state.navId,
-        requestedNavId: navId || null,
-      })
-    }
+    // development-only logging removed
 
     if (navId && state.navId && navId !== state.navId) {
       // Different navigation - do not clear

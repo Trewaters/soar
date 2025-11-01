@@ -45,14 +45,7 @@ export function useNavigationWithLoading() {
       if (state.isNavigating) {
         const origin = navigationStartedFromRef.current
 
-        if (process.env.NODE_ENV === 'development') {
-          // eslint-disable-next-line no-console
-          console.debug('[navigation] location changed', {
-            origin,
-            newLocation: combined,
-            isNavigating: state.isNavigating,
-          })
-        }
+        // development-only logging removed
 
         // More aggressive safety: if we've landed on a different location than
         // the intended `targetPath` (for example server redirects that
@@ -117,8 +110,7 @@ export function useNavigationWithLoading() {
         }
       } catch (err) {
         // Defensive: don't throw from event handler
-        // eslint-disable-next-line no-console
-        console.debug && console.debug('[navigation] checkLocation error', err)
+        // development-only logging removed
       }
     }
 
@@ -171,14 +163,7 @@ export function useNavigationWithLoading() {
       navigationStartedFromRef.current = `${pathname}${
         searchParams ? `?${searchParams.toString()}` : ''
       }`
-      if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
-        console.debug('[navigation] startNavigation', {
-          origin: navigationStartedFromRef.current,
-          target: path,
-          elementId,
-        })
-      }
+      // development-only logging removed
 
       try {
         // Perform navigation and await completion when supported by the router API
