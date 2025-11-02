@@ -173,9 +173,17 @@ export function useNavigationWithLoading() {
         } else {
           await (router as any).push(path)
         }
-        // Do NOT call endNavigation() here — rely on pathname+search monitoring to
-        // detect the location change and call endNavigation(). Calling endNavigation()
-        // immediately can clear the `targetPath` before UI or tests can observe it.
+        // After the push/replace promise resolves, end the navigation for this
+        // navId. This makes client-side navigations reliably dismiss the loading
+        // overlay even when pathname monitoring lags. The pathname/search
+        // observer and native event listeners remain as safety fallbacks.
+        try {
+          endNavigation(navId)
+        } catch (err) {
+          // Defensive: don't throw from navigation flow
+          // eslint-disable-next-line no-console
+          console.warn('endNavigation failed after router promise', err)
+        }
       } catch (error) {
         console.error('Navigation error:', error)
         // Ensure we don't leave the app stuck in navigating state on error.
