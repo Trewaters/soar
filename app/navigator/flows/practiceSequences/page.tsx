@@ -1,99 +1,116 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import ListSubheader from '@mui/material/ListSubheader'
-import Autocomplete from '@mui/material/Autocomplete'
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Link,
+  Stack,
+  Typography,
+  ListSubheader,
+  IconButton,
+  Drawer,
+} from '@mui/material'
+import { ChangeEvent, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+
+import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import EditIcon from '@mui/icons-material/Edit'
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ViewStreamIcon from '@mui/icons-material/ViewStream'
-import { useRouter, useSearchParams } from 'next/navigation'
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
+import SplashHeader from '@app/clientComponents/splash-header'
+import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import { AutocompleteInput } from '@app/clientComponents/form'
+import { SequenceData, getAllSequences } from '@lib/sequenceService'
+import { getAllSeries } from '@lib/seriesService'
+import React from 'react'
+import Image from 'next/image'
+import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
+import { useSearchParams } from 'next/navigation'
+import SequenceActivityTracker from '@app/clientComponents/sequenceActivityTracker/SequenceActivityTracker'
+import { FEATURES } from '@app/FEATURES'
+import { useSession } from 'next-auth/react'
+import getAlphaUserIds from '@app/lib/alphaUsers'
+import { orderPosesForSearch } from '@app/utils/search/orderPosesForSearch'
 
-import { SequenceData } from '@lib/sequenceService'
-import SplashHeader from '../../../clientComponents/splash-header'
-const SubNavHeader = (props: any) => <div />
-const AutocompleteInput = (props: any) => <div />
-
-// Stubs for missing MUI and custom components/helpers
-const Card = (props: any) => <div>{props.children}</div>
-const CardHeader = (props: any) => <div>{props.title}</div>
-const CardContent = (props: any) => <div>{props.children}</div>
-const Button = (props: any) => <button {...props}>{props.children}</button>
-const ChevronLeftIcon = () => <span>{'<'}</span>
-const ChevronRightIcon = () => <span>{'>'}</span>
-const Link = (props: any) => <a href={props.href}>{props.children}</a>
-const CustomPaginationCircles = ({
-  count,
-  page,
-  onChange,
-}: {
-  count: number
-  page: number
-  onChange: (event: React.ChangeEvent<unknown>, value: number) => void
-}) => <div />
-const SequenceActivityTracker = (props: {
-  sequenceId: string
-  sequenceName: string
-  onActivityToggle: () => void
-}) => <div />
-const Image = (props: any) => <img alt={props.alt} src={props.src} {...props} />
-const handleSeriesNavigation = (...args: any[]) => {}
-const getPoseNavigationUrlSync = (...args: any[]) => '#'
-const handleChange = () => {}
-const Drawer = (props: any) => <div>{props.children}</div>
-
-export default function PracticeSequencesPage() {
+export default function Page() {
   const router = useRouter()
-  // Removed unused: const alphaUserIds: string[] = []
-  const [orderedSequenceOptions, setOrderedSequenceOptions] = useState<any[]>(
-    []
-  )
-  const [paginatedData, setPaginatedData] = useState<any[]>([])
-  // Data fetching logic
   const searchParams = useSearchParams()
-  const sequenceIdParam = searchParams.get('id')
-  // Removed unused: const [loading, setLoading] = useState(true)
+  const sequenceId = searchParams.get('sequenceId')
+  const { data: session } = useSession()
+  // const userId = session?.user?.id ?? null // no longer used
+  const [sequences, setSequences] = useState<SequenceData[]>([])
+  // Centralized ordering: user/alpha-created at top, deduped, then others alphabetical
+  const alphaUserIds = getAlphaUserIds()
+  const enrichedSequences = React.useMemo(
+    () =>
+      (sequences || []).map((s) => ({
+        ...s,
+        createdBy: (s as any).createdBy ?? (s as any).created_by ?? undefined,
+      })),
+    [sequences]
+  )
+  // Partition/group using the new utility (user/alpha at top, deduped, then others alpha)
+  const currentUserId = session?.user?.id || session?.user?.email || ''
+  const userIdentifiers = [session?.user?.id, session?.user?.email].filter(
+    Boolean
+  ) as string[]
+  const orderedSequenceOptions = React.useMemo(() => {
+    // Filter sequences to only show those created by current user or alpha users
+    const authorizedSequences = enrichedSequences.filter((s) => {
+      const createdBy = (s as any).createdBy
+      // Allow sequences created by current user or alpha users only
+      return (
+        (createdBy && userIdentifiers.includes(createdBy)) ||
+        (createdBy && alphaUserIds.includes(createdBy))
+      )
+    })
 
-  useEffect(() => {
-    let isMounted = true
-    async function fetchData() {
-      // setLoading(true) // removed unused
-      // Dynamically import to avoid SSR issues
-      const { getAllSequences } = await import('@lib/sequenceService')
-      const sequences = await getAllSequences()
-      if (!isMounted) return
-      setOrderedSequenceOptions(sequences)
-      let selected = sequences[0]
-      if (sequenceIdParam) {
-        const found = sequences.find(
-          (s: any) => String(s.id) === String(sequenceIdParam)
-        )
-        if (found) selected = found
+    if (!FEATURES.PRIORITIZE_USER_ENTRIES_IN_SEARCH) return authorizedSequences
+
+    // Convert id to string for ordering, then map back to SequenceData
+    const validSequences = authorizedSequences
+      .filter(
+        (s) =>
+          typeof s.id !== 'undefined' && !!s.nameSequence && !!s.sequencesSeries
+      )
+      .map((s) => ({ ...s, id: String(s.id) }))
+    const allOrdered = orderPosesForSearch(
+      validSequences,
+      currentUserId,
+      alphaUserIds,
+      (item) => String(item.nameSequence || '')
+    )
+    // Partition for section headers: Mine, Alpha (no Others since we filtered them out)
+    const mine: typeof allOrdered = []
+    const alpha: typeof allOrdered = []
+    allOrdered.forEach((item) => {
+      const createdBy = (item as any).createdBy
+      if (createdBy && userIdentifiers.includes(createdBy)) {
+        mine.push(item)
+      } else if (createdBy && alphaUserIds.includes(createdBy)) {
+        alpha.push(item)
       }
-      setSingleSequence(selected)
-      setPaginatedData(selected?.sequencesSeries || [])
-      // setLoading(false) // removed unused
+    })
+    // Compose with section header markers (no Others section)
+    const result: Array<
+      (typeof allOrdered)[number] | { section: 'Mine' | 'Alpha' | 'Others' }
+    > = []
+    if (mine.length > 0) {
+      result.push({ section: 'Mine' })
+      mine.forEach((item) => result.push(item))
     }
-    fetchData()
-    return () => {
-      isMounted = false
+    if (alpha.length > 0) {
+      result.push({ section: 'Alpha' })
+      alpha.forEach((item) => result.push(item))
     }
-  }, [sequenceIdParam])
-
-  function handleSelect(event: any, value: SequenceData | null) {
-    if (value) {
-      setSingleSequence(value)
-      setPaginatedData(value.sequencesSeries || [])
-    }
-  }
-  function handleActivityToggle() {
-    // Implement activity toggle logic here
-  }
-  // Removed unused: const { data: session } = useSession()
-  // Removed unused: const [sequences, setSequences] = useState<SequenceData[]>([])
+    return result
+  }, [enrichedSequences, currentUserId, alphaUserIds, userIdentifiers])
   const [singleSequence, setSingleSequence] = useState<SequenceData>({
     id: 0,
     nameSequence: '',
@@ -104,16 +121,237 @@ export default function PracticeSequencesPage() {
     createdAt: '',
     updatedAt: '',
   })
-  // Removed unused: const [isLoadingFreshSeriesData, setIsLoadingFreshSeriesData] = useState(false)
-  // Removed unused: const [refreshTrigger, setRefreshTrigger] = useState(0)
+  const [, setIsLoadingFreshSeriesData] = useState<boolean>(false)
+  const [, setRefreshTrigger] = useState(0)
   const [searchInputValue, setSearchInputValue] = useState('')
+
   const [page, setPage] = useState(1)
   const itemsPerPage = 1
 
-  // TODO: Get sequenceId from router/query params if needed
-  // Removed unused: const sequenceId = undefined
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value)
+  }
 
-  // Removed unused: fetchSequences useCallback
+  const paginatedData = singleSequence.sequencesSeries.slice(
+    (page - 1) * itemsPerPage,
+    page * itemsPerPage
+  )
+
+  useEffect(() => {
+    // Consolidated function to fetch sequences
+    const fetchSequences = async (debugContext = 'unknown') => {
+      try {
+        const newSequences = await getAllSequences()
+        setSequences(newSequences)
+
+        // If there's a sequence ID in the URL, auto-select that sequence
+        if (sequenceId && newSequences.length > 0) {
+          const selectedSequence = newSequences.find(
+            (s) => s.id?.toString() === sequenceId
+          )
+          if (selectedSequence) {
+            setSingleSequence(selectedSequence)
+          }
+        }
+      } catch (error) {
+        console.error(`Error fetching sequences from ${debugContext}:`, error)
+      }
+    }
+
+    fetchSequences('initial load')
+
+    const handleFocus = () => {
+      fetchSequences('focus')
+    }
+
+    window.addEventListener('focus', handleFocus)
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        // Page became visible, refetch data
+        fetchSequences('visibility change')
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    const handlePopState = () => {
+      fetchSequences('popstate')
+    }
+
+    window.addEventListener('popstate', handlePopState)
+
+    return () => {
+      window.removeEventListener('focus', handleFocus)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('popstate', handlePopState)
+    }
+  }, [sequenceId]) // Add sequenceId as dependency
+
+  // Fetch fresh series data to ensure sequences show current series content
+  useEffect(() => {
+    const refreshSeriesData = async () => {
+      if (
+        !singleSequence ||
+        !singleSequence.sequencesSeries ||
+        singleSequence.sequencesSeries.length === 0 ||
+        singleSequence.id === 0
+      ) {
+        return
+      }
+
+      setIsLoadingFreshSeriesData(true)
+      try {
+        // Get all current series data from the database
+        const allSeries = await getAllSeries()
+
+        // For each series in the sequence, find the matching current series data
+        const refreshedSeriesData = singleSequence.sequencesSeries.map(
+          (sequenceSeries: any) => {
+            // Find the matching series by name (series names should be unique)
+            const currentSeriesData = allSeries.find(
+              (dbSeries) => dbSeries.seriesName === sequenceSeries.seriesName
+            )
+
+            if (currentSeriesData) {
+              // Use current series data from database
+              return {
+                ...sequenceSeries, // Keep sequence-specific fields like id
+                seriesName: currentSeriesData.seriesName,
+                seriesPoses: currentSeriesData.seriesPoses,
+                description: currentSeriesData.description,
+                duration: currentSeriesData.duration,
+                image: currentSeriesData.image,
+              }
+            } else {
+              // If series no longer exists, keep original data but mark as stale
+              console.warn(
+                `Series "${sequenceSeries.seriesName}" not found in current database`
+              )
+              return {
+                ...sequenceSeries,
+                isStale: true,
+              }
+            }
+          }
+        )
+
+        // Only update state if refreshed data is meaningfully different to avoid loops
+        try {
+          const prev = JSON.stringify(singleSequence.sequencesSeries || [])
+          const next = JSON.stringify(refreshedSeriesData || [])
+          if (prev !== next) {
+            setSingleSequence((prevSequence) => ({
+              ...prevSequence,
+              sequencesSeries: refreshedSeriesData,
+            }))
+          }
+        } catch (e) {
+          // Fallback: if serialization fails, still update once
+          setSingleSequence((prevSequence) => ({
+            ...prevSequence,
+            sequencesSeries: refreshedSeriesData,
+          }))
+        }
+      } catch (error) {
+        console.error(
+          'Failed to fetch fresh series data for practice sequences:',
+          error
+        )
+        // On error, keep using original sequence data (no action needed)
+      } finally {
+        setIsLoadingFreshSeriesData(false)
+      }
+    }
+
+    refreshSeriesData()
+  }, [singleSequence]) // Only re-run when sequence ID changes
+
+  // Helper function to resolve series ID and navigate
+  const handleSeriesNavigation = async (seriesMini: any) => {
+    try {
+      console.log('=== PRACTICE SEQUENCES - SERIES NAVIGATION DEBUG ===')
+      console.log('Series data from sequence:', seriesMini)
+      console.log('Series ID (likely pagination ID):', seriesMini.id)
+      console.log('Series name to resolve:', seriesMini.seriesName)
+
+      if (!seriesMini.seriesName) {
+        console.error('No series name available for resolution')
+        alert('Cannot navigate: Series name is missing')
+        return
+      }
+
+      console.log('Fetching all series to find match...')
+      const allSeries = await getAllSeries()
+      console.log(`Found ${allSeries.length} total series in database`)
+
+      // Try to find matching series by name
+      const matchingSeries = allSeries.find(
+        (series) =>
+          series.seriesName === seriesMini.seriesName ||
+          series.seriesName.toLowerCase() ===
+            seriesMini.seriesName.toLowerCase() ||
+          series.seriesName.trim().toLowerCase() ===
+            seriesMini.seriesName.trim().toLowerCase()
+      )
+
+      if (matchingSeries?.id) {
+        console.log('✅ SUCCESS: Found matching series!')
+        console.log('Series name:', matchingSeries.seriesName)
+        console.log('MongoDB ObjectId:', matchingSeries.id)
+        router.push(`/navigator/flows/practiceSeries?id=${matchingSeries.id}`)
+      } else {
+        console.error('❌ FAILED: Could not resolve series by name')
+        console.error('Looking for series name:', seriesMini.seriesName)
+        console.error(
+          'Available series names:',
+          allSeries.map((s) => s.seriesName)
+        )
+        alert(`Cannot find series named "${seriesMini.seriesName}"`)
+      }
+    } catch (error) {
+      console.error('❌ ERROR during series resolution:', error)
+      alert(
+        `Error loading series: ${error instanceof Error ? error.message : 'Unknown error'}`
+      )
+    } finally {
+      console.log('=== END PRACTICE SEQUENCES - SERIES NAVIGATION DEBUG ===')
+    }
+  }
+
+  // Resolve asana IDs for navigation
+  function handleSelect(
+    event: ChangeEvent<object>,
+    value: SequenceData | null
+  ) {
+    // Logs the type of event (e.g., 'click')
+    // Logs the element that triggered the event
+    event.preventDefault()
+    if (value) {
+      // Restore original behavior: select sequence locally for practice UI
+      setSingleSequence(value)
+      // Update the url to include the sequenceId as a search param so the page
+      // can be linked to directly. Use replace to avoid creating history entries
+      // for each selection.
+      try {
+        const sid = String(value.id)
+        router.replace(
+          `/navigator/flows/practiceSequences?sequenceId=${encodeURIComponent(
+            sid
+          )}`
+        )
+      } catch (e) {
+        // ignore router errors in client-side navigation
+        console.error('Failed to update sequenceId in URL', e)
+      }
+    }
+  }
+
+  function handleActivityToggle(isTracked: boolean) {
+    console.log('Sequence activity tracked:', isTracked)
+    // Trigger refresh of any activity components that might be listening
+    setRefreshTrigger((prev) => prev + 1)
+  }
 
   const [open, setOpen] = useState(false)
   return (
@@ -311,18 +549,27 @@ export default function PracticeSequencesPage() {
               />
             </Box>
 
-            {/* Only render sequence-specific UI if a valid sequence is selected */}
-            {singleSequence && singleSequence.id !== 0 && (
-              <React.Fragment key={singleSequence.id}>
+            <React.Fragment key={singleSequence.id}>
+              <Box
+                sx={{
+                  mt: 4,
+                  width: '100%',
+                  maxWidth: '600px',
+                  alignSelf: 'center',
+                }}
+              >
+                {/* Sequence title with inline edit icon to the right */}
                 <Box
                   sx={{
-                    mt: 4,
                     width: '100%',
-                    maxWidth: '600px',
-                    alignSelf: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-around',
+                    gap: 2,
+                    px: 6,
                   }}
                 >
-                  {/* Sequence title with inline edit icon to the right */}
+                  {/* Title block - constrained width, original theme colors */}
                   <Box
                     sx={{
                       width: { xs: '50%', sm: '40%', md: '30%' },
@@ -348,6 +595,7 @@ export default function PracticeSequencesPage() {
                       {singleSequence.nameSequence}
                     </Typography>
                   </Box>
+
                   {/* Action buttons: View toggle, Edit */}
                   <Box
                     sx={{
@@ -357,52 +605,60 @@ export default function PracticeSequencesPage() {
                     }}
                   >
                     {/* View toggle icons */}
-                    <IconButton
-                      onClick={() => {
-                        router.push(`/navigator/sequences/${singleSequence.id}`)
-                      }}
-                      aria-label={`Switch to list view for ${singleSequence.nameSequence}`}
-                      sx={{
-                        color: 'primary.main',
-                        p: 1,
-                        minWidth: 0,
-                      }}
-                      title="List View"
-                    >
-                      <FormatListBulletedIcon />
-                    </IconButton>
+                    {singleSequence?.id ? (
+                      <>
+                        <IconButton
+                          onClick={() => {
+                            router.push(
+                              `/navigator/sequences/${singleSequence.id}`
+                            )
+                          }}
+                          aria-label={`Switch to list view for ${singleSequence.nameSequence}`}
+                          sx={{
+                            color: 'primary.main',
+                            p: 1,
+                            minWidth: 0,
+                          }}
+                          title="List View"
+                        >
+                          <FormatListBulletedIcon />
+                        </IconButton>
 
-                    <IconButton
-                      disabled
-                      aria-label="Currently in scroll view"
-                      sx={{
-                        color: 'primary.main',
-                        p: 1,
-                        minWidth: 0,
-                        opacity: 0.5,
-                      }}
-                      title="Scroll View (current)"
-                    >
-                      <ViewStreamIcon />
-                    </IconButton>
+                        <IconButton
+                          disabled
+                          aria-label="Currently in scroll view"
+                          sx={{
+                            color: 'primary.main',
+                            p: 1,
+                            minWidth: 0,
+                            opacity: 0.5,
+                          }}
+                          title="Scroll View (current)"
+                        >
+                          <ViewStreamIcon />
+                        </IconButton>
 
-                    <IconButton
-                      onClick={() => {
-                        const editUrl = `/navigator/sequences/${singleSequence.id}?edit=true`
-                        router.push(editUrl)
-                      }}
-                      aria-label={`Edit ${singleSequence.nameSequence}`}
-                      sx={{
-                        color: 'primary.main',
-                        p: 1,
-                        minWidth: 0,
-                      }}
-                      title="Edit Sequence"
-                    >
-                      <EditIcon />
-                    </IconButton>
+                        <IconButton
+                          onClick={() => {
+                            const editUrl = `/navigator/sequences/${singleSequence.id}?edit=true`
+                            router.push(editUrl)
+                          }}
+                          aria-label={`Edit ${singleSequence.nameSequence}`}
+                          sx={{
+                            color: 'primary.main',
+                            p: 1,
+                            minWidth: 0,
+                          }}
+                          title="Edit Sequence"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </>
+                    ) : null}
                   </Box>
                 </Box>
+              </Box>
+              {singleSequence?.id ? (
                 <Stack rowGap={3} alignItems="center">
                   {paginatedData.map((seriesMini, i) => (
                     <Card
@@ -510,109 +766,106 @@ export default function PracticeSequencesPage() {
                         }
                       />
                       <CardContent className="lines" sx={{ p: 0 }}>
-                        {seriesMini.seriesPoses?.map(
-                          (asana: any, asanaIndex: any) => {
-                            // asana may be a legacy string reference or an object with metadata
-                            let poseName = ''
-                            let href = '#'
-                            let alignmentCues = ''
+                        {seriesMini.seriesPoses?.map((asana, asanaIndex) => {
+                          // asana may be a legacy string reference or an object with metadata
+                          let poseName = ''
+                          let href = '#'
+                          let alignmentCues = ''
 
-                            if (typeof asana === 'string') {
-                              poseName = asana.split(';')[0]
-                              href = getPoseNavigationUrlSync(asana)
-                            } else {
-                              poseName = (asana as any).sort_english_name || ''
-                              alignmentCues =
-                                (asana as any).alignment_cues || ''
-                              // Prefer poseId if available, otherwise use the name
-                              const poseRef = String(
-                                (asana as any).poseId ?? poseName
-                              )
-                              href = getPoseNavigationUrlSync(poseRef)
-                            }
+                          if (typeof asana === 'string') {
+                            poseName = asana.split(';')[0]
+                            href = getPoseNavigationUrlSync(asana)
+                          } else {
+                            poseName = (asana as any).sort_english_name || ''
+                            alignmentCues = (asana as any).alignment_cues || ''
+                            // Prefer poseId if available, otherwise use the name
+                            const poseRef = String(
+                              (asana as any).poseId ?? poseName
+                            )
+                            href = getPoseNavigationUrlSync(poseRef)
+                          }
 
-                            // Extract first line of alignment cue for inline display
-                            const alignmentCuesInline = alignmentCues
-                              ? String(alignmentCues).split('\n')[0]
-                              : ''
+                          // Extract first line of alignment cue for inline display
+                          const alignmentCuesInline = alignmentCues
+                            ? String(alignmentCues).split('\n')[0]
+                            : ''
 
-                            return (
-                              <Box
-                                key={asanaIndex}
-                                alignItems={'center'}
-                                display={'flex'}
-                                flexDirection={'row'}
-                                flexWrap={'nowrap'}
-                                className="journalLine"
+                          return (
+                            <Box
+                              key={asanaIndex}
+                              alignItems={'center'}
+                              display={'flex'}
+                              flexDirection={'row'}
+                              flexWrap={'nowrap'}
+                              className="journalLine"
+                              sx={{
+                                maxWidth: '100%',
+                                width: '100%',
+                                minWidth: 'unset',
+                                justifyContent: 'flex-start',
+                                alignItems: 'flex-start',
+                                gap: 2,
+                              }}
+                            >
+                              <Typography
+                                variant="body1"
+                                fontWeight="bold"
                                 sx={{
-                                  maxWidth: '100%',
-                                  width: '100%',
-                                  minWidth: 'unset',
-                                  justifyContent: 'flex-start',
-                                  alignItems: 'flex-start',
-                                  gap: 2,
+                                  width: '35px',
+                                  textAlign: 'right',
+                                  flexShrink: 0,
+                                  lineHeight: 1.5,
                                 }}
                               >
-                                <Typography
-                                  variant="body1"
-                                  fontWeight="bold"
+                                {asanaIndex + 1}.
+                              </Typography>
+                              <Typography
+                                textAlign={'left'}
+                                variant="body1"
+                                sx={{
+                                  flex: '1 1 auto',
+                                  minWidth: 0,
+                                  lineHeight: 1.5,
+                                  display: 'flex',
+                                  alignItems: 'baseline',
+                                  gap: 1,
+                                  flexWrap: 'wrap',
+                                }}
+                              >
+                                <Link
+                                  underline="hover"
+                                  color="primary.contrastText"
+                                  href={href}
                                   sx={{
-                                    width: '35px',
-                                    textAlign: 'right',
-                                    flexShrink: 0,
+                                    wordWrap: 'break-word',
+                                    overflowWrap: 'break-word',
+                                    hyphens: 'auto',
+                                    display: 'inline',
                                     lineHeight: 1.5,
                                   }}
                                 >
-                                  {asanaIndex + 1}.
-                                </Typography>
-                                <Typography
-                                  textAlign={'left'}
-                                  variant="body1"
-                                  sx={{
-                                    flex: '1 1 auto',
-                                    minWidth: 0,
-                                    lineHeight: 1.5,
-                                    display: 'flex',
-                                    alignItems: 'baseline',
-                                    gap: 1,
-                                    flexWrap: 'wrap',
-                                  }}
-                                >
-                                  <Link
-                                    underline="hover"
-                                    color="primary.contrastText"
-                                    href={href}
+                                  {poseName}
+                                </Link>
+                                {alignmentCuesInline && (
+                                  <Typography
+                                    component="span"
+                                    variant="body2"
+                                    color="text.secondary"
                                     sx={{
-                                      wordWrap: 'break-word',
-                                      overflowWrap: 'break-word',
-                                      hyphens: 'auto',
-                                      display: 'inline',
-                                      lineHeight: 1.5,
+                                      fontStyle: 'normal',
+                                      whiteSpace: 'nowrap',
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis',
+                                      maxWidth: '60%',
                                     }}
                                   >
-                                    {poseName}
-                                  </Link>
-                                  {alignmentCuesInline && (
-                                    <Typography
-                                      component="span"
-                                      variant="body2"
-                                      color="text.secondary"
-                                      sx={{
-                                        fontStyle: 'normal',
-                                        whiteSpace: 'nowrap',
-                                        overflow: 'hidden',
-                                        textOverflow: 'ellipsis',
-                                        maxWidth: '60%',
-                                      }}
-                                    >
-                                      ({alignmentCuesInline})
-                                    </Typography>
-                                  )}
-                                </Typography>
-                              </Box>
-                            )
-                          }
-                        )}
+                                    ({alignmentCuesInline})
+                                  </Typography>
+                                )}
+                              </Typography>
+                            </Box>
+                          )
+                        })}
                       </CardContent>
                     </Card>
                   ))}
@@ -720,8 +973,8 @@ export default function PracticeSequencesPage() {
                     </Box>
                   )}
                 </Stack>
-              </React.Fragment>
-            )}
+              ) : null}
+            </React.Fragment>
           </Stack>
         </Stack>
       </Box>
