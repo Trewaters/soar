@@ -52,7 +52,7 @@ export default function NavBottom(props: {
           : 'Login to access profile',
       icon: isInProfileSection ? <HomeIcon /> : <PersonIcon />,
       path: isInProfileSection
-        ? '/'
+        ? '/navigator'
         : isAuthenticated
           ? '/navigator/profile'
           : '/auth/signin',
