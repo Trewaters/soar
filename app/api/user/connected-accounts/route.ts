@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
-import { prisma } from '../../../../app/lib/prismaClient'
+import { PrismaClient } from '../../../../prisma/generated/client'
+
+const prisma = new PrismaClient()
 
 // Force this route to be dynamic
 export const dynamic = 'force-dynamic'
@@ -47,6 +49,8 @@ export async function GET() {
       { error: 'Failed to fetch connected accounts' },
       { status: 500 }
     )
+  } finally {
+    await prisma.$disconnect()
   }
 }
 
@@ -122,5 +126,7 @@ export async function DELETE(request: Request) {
       { error: 'Failed to disconnect account' },
       { status: 500 }
     )
+  } finally {
+    await prisma.$disconnect()
   }
 }
