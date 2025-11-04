@@ -7,11 +7,14 @@ import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import GlobalNavigationOverlay from '@clientComponents/GlobalNavigationOverlay'
 import React, { ReactNode } from 'react'
 
+// Create a mock router push function that returns a promise
+const mockPush = jest.fn(() => new Promise(() => {})) // Never-resolving promise to keep loading state
+
 // Mock Next.js navigation
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
+    push: mockPush,
+    replace: jest.fn(() => new Promise(() => {})),
     refresh: jest.fn(),
     back: jest.fn(),
     forward: jest.fn(),
@@ -47,6 +50,7 @@ const TestWrapper = ({ children }: { children: ReactNode }) => (
 describe('NavigationLoadingSystem', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockPush.mockClear()
   })
 
   describe('NavigationButton', () => {
@@ -140,7 +144,9 @@ describe('NavigationLoadingSystem', () => {
       })
 
       // Should show target path information
-      expect(screen.getByText('Going to /test-page')).toBeInTheDocument()
+      await waitFor(() => {
+        expect(screen.getByText('Going to /test-page')).toBeInTheDocument()
+      })
     })
   })
 

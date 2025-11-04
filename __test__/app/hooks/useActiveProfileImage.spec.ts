@@ -450,7 +450,7 @@ describe('useActiveProfileImage', () => {
 
   describe('Integration with UserContext', () => {
     it('should handle UserContext returning undefined state', () => {
-      mockUseUser.mockReturnValue(makeUserProfileContext({}))
+      mockUseUser.mockReturnValue(makeUserProfileContext({ image: undefined }))
 
       const { result } = renderHook(() => useActiveProfileImage())
 
@@ -462,6 +462,7 @@ describe('useActiveProfileImage', () => {
     it('should handle minimal user data structure', () => {
       const minimalUserData = {
         email: 'test@example.com',
+        image: undefined, // No OAuth image
       }
 
       mockUseUser.mockReturnValue(makeUserProfileContext(minimalUserData))
