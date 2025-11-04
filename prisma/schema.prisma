@@ -97,7 +97,7 @@ model PushSubscription {
 
 model ProviderAccount {
   id                   String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId               String  @unique @db.ObjectId
+  userId               String  @db.ObjectId
   type                 String
   provider             String
   providerAccountId    String
@@ -115,7 +115,7 @@ model ProviderAccount {
 
   user UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // @@unique([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
 }
 
 /// Represents a yoga Asana in the app.

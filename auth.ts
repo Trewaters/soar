@@ -166,11 +166,17 @@ const authConfig = {
     }) {
       const email = user.email
 
+      // Skip provider account linking for credentials provider
+      if (account?.provider === 'credentials') {
+        return true
+      }
+
       const existingUser = await prisma.userData.findUnique({
         where: { email: email ?? undefined },
       })
 
       if (!existingUser && account) {
+        // Create new user with OAuth provider
         try {
           await prisma.userData.create({
             data: {
@@ -224,23 +230,64 @@ const authConfig = {
           console.error('Error creating new user:', error)
           throw error
         }
-      } else if (existingUser && user.image && !existingUser.image) {
+      } else if (existingUser && account) {
+        // User exists - check if this OAuth provider is already linked
+        const existingProviderAccount = await prisma.providerAccount.findFirst({
+          where: {
+            userId: existingUser.id,
+            provider: account.provider,
+          },
+        })
+
+        if (!existingProviderAccount) {
+          // Link new OAuth provider to existing user account
+          try {
+            await prisma.providerAccount.create({
+              data: {
+                userId: existingUser.id,
+                provider: account.provider,
+                providerAccountId: account.providerAccountId,
+                refresh_token: account.refresh_token ?? undefined,
+                access_token: account.access_token ?? undefined,
+                expires_at: account.expires_at ?? undefined,
+                token_type: account.token_type ?? undefined,
+                scope: account.scope ?? undefined,
+                id_token: account.id_token ?? undefined,
+                session_state: JSON.stringify(account.session_state),
+                type: account.type,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+              },
+            })
+            console.log(
+              `Linked ${account.provider} account to existing user: ${email}`
+            )
+          } catch (error) {
+            console.error(
+              'Error linking OAuth provider to existing user:',
+              error
+            )
+            throw error
+          }
+        }
+
         // Update existing user's OAuth provider image if it's missing
-        // This handles cases where the database was reset or image field is empty
-        try {
-          await prisma.userData.update({
-            where: { email: email ?? undefined },
-            data: {
-              image: user.image,
-              updatedAt: new Date(),
-            },
-          })
-          console.log(
-            `Updated OAuth provider image for existing user: ${email}`
-          )
-        } catch (error) {
-          console.error('Error updating user OAuth image:', error)
-          // Don't throw - allow sign-in to continue even if update fails
+        if (user.image && !existingUser.image) {
+          try {
+            await prisma.userData.update({
+              where: { email: email ?? undefined },
+              data: {
+                image: user.image,
+                updatedAt: new Date(),
+              },
+            })
+            console.log(
+              `Updated OAuth provider image for existing user: ${email}`
+            )
+          } catch (error) {
+            console.error('Error updating user OAuth image:', error)
+            // Don't throw - allow sign-in to continue even if update fails
+          }
         }
       }
       return true
