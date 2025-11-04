@@ -9,7 +9,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const userId = searchParams.get('userId')
   const userEmail = searchParams.get('email') || undefined
-  let account, providerAccount
+  let account
 
   if (!userId) {
     if (userEmail) {
@@ -26,17 +26,23 @@ export async function GET(req: Request) {
           })
         }
 
-        providerAccount = await prisma.providerAccount.findUnique({
+        // Since users can now have multiple provider accounts, return all of them
+        const providerAccounts = await prisma.providerAccount.findMany({
           where: { userId: account.id },
         })
 
-        // If provider account is not found, return a consistent 200 response with null data
-        return new Response(JSON.stringify({ data: providerAccount ?? null }), {
-          status: 200,
-          headers: {
-            'Cache-Control': 'no-store',
-          },
-        })
+        // Return all provider accounts for this user
+        return new Response(
+          JSON.stringify({
+            data: providerAccounts.length > 0 ? providerAccounts : null,
+          }),
+          {
+            status: 200,
+            headers: {
+              'Cache-Control': 'no-store',
+            },
+          }
+        )
       } catch (error) {
         return new Response(
           JSON.stringify({ error: 'Failed to fetch account data' }),
@@ -52,17 +58,26 @@ export async function GET(req: Request) {
   }
 
   try {
-    account = await prisma.providerAccount.findUnique({
+    // Since users can now have multiple provider accounts, return all of them
+    const accounts = await prisma.providerAccount.findMany({
       where: { userId: userId },
     })
 
-    if (!account) {
+    if (!accounts || accounts.length === 0) {
       // Return consistent success response with null data when no providerAccount exists
       return new Response(JSON.stringify({ data: null }), {
         status: 200,
         headers: { 'Cache-Control': 'no-store' },
       })
     }
+
+    // Return all provider accounts for this user
+    return new Response(JSON.stringify({ data: accounts }), {
+      status: 200,
+      headers: {
+        'Cache-Control': 'no-store',
+      },
+    })
   } catch (error) {
     return new Response(
       JSON.stringify({ error: 'Failed to fetch account data' }),
@@ -71,11 +86,4 @@ export async function GET(req: Request) {
   } finally {
     await prisma.$disconnect()
   }
-
-  return new Response(JSON.stringify({ data: account }), {
-    status: 200,
-    headers: {
-      'Cache-Control': 'no-store',
-    },
-  })
 }

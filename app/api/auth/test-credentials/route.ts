@@ -84,8 +84,11 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 })
       }
 
-      const providerAccount = await prisma.providerAccount.findUnique({
-        where: { userId: user.id },
+      const providerAccount = await prisma.providerAccount.findFirst({
+        where: {
+          userId: user.id,
+          provider: 'credentials',
+        },
       })
 
       if (!providerAccount || !providerAccount.credentials_password) {
