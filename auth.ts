@@ -52,8 +52,12 @@ try {
 const USER_EXISTENCE_CHECK_INTERVAL_MS = 1000 * 60 * 5
 
 const providers: Provider[] = [
-  GitHub,
-  Google,
+  GitHub({
+    allowDangerousEmailAccountLinking: true,
+  }),
+  Google({
+    allowDangerousEmailAccountLinking: true,
+  }),
   Credentials({
     credentials: {
       email: { label: 'Email', type: 'email' },
