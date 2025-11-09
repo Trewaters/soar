@@ -4,8 +4,8 @@ import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 import Credentials from 'next-auth/providers/credentials'
 import { PrismaClient } from './prisma/generated/client'
-import { MongoDBAdapter } from '@auth/mongodb-adapter'
-import client from '@lib/mongoDb'
+// import { MongoDBAdapter } from '@auth/mongodb-adapter' // Disabled - using custom Prisma-based user management
+// import client from '@lib/mongoDb' // Disabled - using custom Prisma-based user management
 import { hashPassword } from '@app/utils/password'
 
 /*
@@ -52,12 +52,8 @@ try {
 const USER_EXISTENCE_CHECK_INTERVAL_MS = 1000 * 60 * 5
 
 const providers: Provider[] = [
-  GitHub({
-    allowDangerousEmailAccountLinking: true,
-  }),
-  Google({
-    allowDangerousEmailAccountLinking: true,
-  }),
+  GitHub,
+  Google,
   Credentials({
     credentials: {
       email: { label: 'Email', type: 'email' },
@@ -156,7 +152,7 @@ export const providerMap = providers
 const authConfig = {
   providers,
   theme: { logo: 'https://authjs.dev/img/logo-sm.png' },
-  adapter: MongoDBAdapter(client),
+  // adapter: MongoDBAdapter(client), // Disabled - using custom Prisma-based user management in signIn callback
   basePath: '/api/auth',
   callbacks: {
     async signIn({
