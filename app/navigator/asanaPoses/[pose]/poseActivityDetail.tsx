@@ -1122,17 +1122,10 @@ export default function PoseActivityDetail({
               border: '1px solid rgba(255,255,255,0.04)',
             }}
           >
-            <Typography
-              variant="subtitle2"
-              sx={{ mb: 1, color: 'text.secondary' }}
-            >
-              Difficulty (sets activity tracker difficulty)
-            </Typography>
-
             <Box
               sx={{
                 display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
+                flexDirection: 'column',
                 // On mobile we want the chips to left-align when they wrap;
                 // on larger screens keep them vertically centered with the tracker.
                 alignItems: { xs: 'flex-start', sm: 'center' },
@@ -1140,6 +1133,12 @@ export default function PoseActivityDetail({
                 gap: 2,
               }}
             >
+              <Typography
+                variant="subtitle2"
+                sx={{ mb: 1, color: 'text.secondary' }}
+              >
+                Difficulty (sets activity tracker difficulty)
+              </Typography>
               <Stack
                 direction="row"
                 spacing={1}
@@ -1236,75 +1235,54 @@ export default function PoseActivityDetail({
               {error}
             </Typography>
           )}
-          {/* <Typography
-            variant="body1"
-            sx={{
-              padding: 4,
-              marginTop: 2,
-              borderTopRightRadius: { xs: 0, sm: 75 },
-              borderBottomRightRadius: { xs: 0, sm: 75 },
-              ml: { xs: 0, md: '23%' },
-            }}
-          >
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="" />
-              <FormControlLabel control={<Checkbox />} label="Difficult" />
-            </FormGroup>
-          </Typography> */}
         </Stack>
       </Box>
       {pose && FEATURES.SHOW_PRACTICE_VIEW_ASANA && (
-        // Ensure actions are stacked vertically on small screens to avoid jumbled layout
         <Box
           sx={{
-            mx: 2,
             display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            alignItems: 'center',
             justifyContent: 'center',
-            gap: 1,
+            alignItems: 'center',
+            mt: 2,
+            mb: 3,
+            px: 2,
+            width: '100%',
           }}
         >
           <Stack
-            direction="row"
+            direction={'column'}
+            spacing={2}
             sx={{
-              m: 0,
-              border: '1px solid transparent',
-              borderRadius: '12px',
               width: { xs: '100%', sm: 'auto' },
-              justifyContent: 'center',
+              alignItems: 'stretch',
             }}
           >
-            <IconButton
-              disableRipple
+            <Button
+              variant="contained"
+              color="primary"
               onClick={handleClick}
-              sx={{ width: { xs: '100%', sm: 'auto' } }}
+              startIcon={
+                <Image src={yogaMatWoman} alt="" width={20} height={20} />
+              }
+              sx={{
+                borderRadius: '12px',
+                px: 3,
+                py: 1.5,
+                textTransform: 'none',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                width: { xs: '100%', sm: 'auto' },
+                minWidth: { sm: '180px' },
+              }}
               aria-label="Open practice view"
             >
-              <Image
-                src={yogaMatWoman}
-                alt="practice view"
-                width={24}
-                height={24}
-              />
-            </IconButton>
-          </Stack>
+              Practice View
+            </Button>
 
-          <Stack
-            direction="row"
-            sx={{
-              m: 0,
-              border: '1px solid transparent',
-              borderRadius: '12px',
-              width: { xs: '100%', sm: 'auto' },
-              justifyContent: 'center',
-            }}
-          >
             <Box
               sx={{
-                width: { xs: '100%', sm: 'auto' },
                 display: 'flex',
                 justifyContent: 'center',
+                width: { xs: '100%', sm: 'auto' },
               }}
             >
               <PoseShareButton
