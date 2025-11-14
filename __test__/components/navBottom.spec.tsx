@@ -32,9 +32,9 @@ jest.mock('@mui/icons-material/Person', () => ({
   default: () => <div data-testid="person-icon" />,
 }))
 
-jest.mock('@mui/icons-material/ArrowBack', () => ({
+jest.mock('@mui/icons-material/Dashboard', () => ({
   __esModule: true,
-  default: (props: any) => <div data-testid="arrow-back-icon" {...props} />,
+  default: (props: any) => <div data-testid="dashboard-icon" {...props} />,
 }))
 
 const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>
@@ -77,7 +77,7 @@ describe('NavBottom Component', () => {
       expect(screen.getByRole('navigation')).toBeInTheDocument()
       expect(screen.getByTestId('menu-icon')).toBeInTheDocument()
       expect(screen.getByTestId('person-icon')).toBeInTheDocument()
-      expect(screen.getByTestId('arrow-back-icon')).toBeInTheDocument()
+      expect(screen.getByTestId('dashboard-icon')).toBeInTheDocument()
     })
 
     it('has correct aria-label for navigation', () => {
@@ -106,14 +106,14 @@ describe('NavBottom Component', () => {
       expect(mockMenuToggle).toHaveBeenCalledTimes(1)
     })
 
-    it('navigates back when back button is clicked', () => {
+    it('navigates to login when dashboard button is clicked while unauthenticated', () => {
       render(<NavBottom subRoute="/dashboard" />, { wrapper: TestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Login to access dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
-      expect(mockPush).not.toHaveBeenCalled()
+      expect(mockPush).toHaveBeenCalledWith('/auth/signin')
+      expect(mockBack).not.toHaveBeenCalled()
     })
 
     it('applies correct colors for unauthenticated state', () => {
@@ -121,7 +121,7 @@ describe('NavBottom Component', () => {
 
       const menuIcon = screen.getByTestId('menu-icon')
       const personIcon = screen.getByTestId('person-icon')
-      const backIcon = screen.getByTestId('arrow-back-icon')
+      const dashboardIcon = screen.getByTestId('dashboard-icon')
 
       // Menu icon should always be primary.main
       expect(menuIcon).toHaveStyle({ color: 'primary.main' })
@@ -129,8 +129,8 @@ describe('NavBottom Component', () => {
       // Person icon should be grey when not authenticated
       expect(personIcon).toHaveStyle({ color: 'grey.500' })
 
-      // Back icon should always be primary.contrastText
-      expect(backIcon).toHaveStyle({ color: 'primary.contrastText' })
+      // Dashboard icon should be grey when not authenticated
+      expect(dashboardIcon).toHaveStyle({ color: 'grey.500' })
     })
   })
 
@@ -170,7 +170,7 @@ describe('NavBottom Component', () => {
 
       const menuIcon = screen.getByTestId('menu-icon')
       const personIcon = screen.getByTestId('person-icon')
-      const backIcon = screen.getByTestId('arrow-back-icon')
+      const dashboardIcon = screen.getByTestId('dashboard-icon')
 
       // Menu icon should always be primary.main
       expect(menuIcon).toHaveStyle({ color: 'primary.main' })
@@ -178,8 +178,8 @@ describe('NavBottom Component', () => {
       // Person icon should be green when authenticated
       expect(personIcon).toHaveStyle({ color: 'success.main' })
 
-      // Back icon should always be primary.contrastText
-      expect(backIcon).toHaveStyle({ color: 'primary.contrastText' })
+      // Dashboard icon should be primary when authenticated
+      expect(dashboardIcon).toHaveStyle({ color: 'primary.main' })
     })
   })
 
@@ -252,30 +252,25 @@ describe('NavBottom Component', () => {
       expect(
         screen.getByLabelText('Navigate to user profile')
       ).toBeInTheDocument()
-      expect(
-        screen.getByLabelText('Navigate back to previous page')
-      ).toBeInTheDocument()
+      expect(screen.getByLabelText('Navigate to dashboard')).toBeInTheDocument()
     })
 
-    it('back button has proper accessibility attributes', () => {
+    it('dashboard button has proper accessibility attributes', () => {
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
 
       // Check that the button has proper accessibility attributes
-      expect(backButton).toHaveAttribute(
+      expect(dashboardButton).toHaveAttribute(
         'aria-label',
-        'Navigate back to previous page'
+        'Navigate to dashboard'
       )
-      expect(backButton).toHaveAttribute(
-        'title',
-        'Navigate back to previous page'
-      )
-      expect(backButton).toHaveAttribute('role', 'button')
+      expect(dashboardButton).toHaveAttribute('title', 'Navigate to dashboard')
+      expect(dashboardButton).toHaveAttribute('role', 'button')
 
       // Check that the icon has aria-hidden
-      const backIcon = screen.getByTestId('arrow-back-icon')
-      expect(backIcon).toHaveAttribute('aria-hidden', 'true')
+      const dashboardIcon = screen.getByTestId('dashboard-icon')
+      expect(dashboardIcon).toHaveAttribute('aria-hidden', 'true')
     })
 
     it('supports keyboard interaction', () => {
@@ -296,48 +291,68 @@ describe('NavBottom Component', () => {
     })
   })
 
-  describe('back navigation handling', () => {
-    it('calls router.back() when back button is clicked', () => {
+  describe('dashboard navigation handling', () => {
+    it('navigates to dashboard when dashboard button is clicked and authenticated', () => {
+      mockUseSession.mockReturnValue({
+        data: {
+          user: {
+            name: 'Test User',
+            email: 'test@example.com',
+          },
+          expires: '2025-12-31T23:59:59.999Z',
+        },
+        status: 'authenticated',
+        update: jest.fn(),
+      })
+
       render(<NavBottom subRoute="/custom-route" />, { wrapper: TestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
-      expect(mockPush).not.toHaveBeenCalled()
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockBack).not.toHaveBeenCalled()
     })
 
-    it('back navigation ignores subRoute prop', () => {
+    it('redirects to login when dashboard button is clicked and unauthenticated', () => {
+      mockUseSession.mockReturnValue({
+        data: null,
+        status: 'unauthenticated',
+        update: jest.fn(),
+      })
+
       render(<NavBottom subRoute="/should-not-be-used" />, {
         wrapper: TestWrapper,
       })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Login to access dashboard')
+      fireEvent.click(dashboardButton)
 
-      // Should call router.back(), not push to subRoute
-      expect(mockBack).toHaveBeenCalledTimes(1)
-      expect(mockPush).not.toHaveBeenCalledWith('/should-not-be-used')
+      // Should redirect to login
+      expect(mockPush).toHaveBeenCalledWith('/auth/signin')
+      expect(mockBack).not.toHaveBeenCalled()
     })
 
     it('integrates with loading states properly', () => {
+      mockUseSession.mockReturnValue({
+        data: {
+          user: {
+            name: 'Test User',
+            email: 'test@example.com',
+          },
+          expires: '2025-12-31T23:59:59.999Z',
+        },
+        status: 'authenticated',
+        update: jest.fn(),
+      })
+
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      // Verify that router.back() was called (loading state is handled by the hook)
-      expect(mockBack).toHaveBeenCalledTimes(1)
-    })
-
-    it('handles edge case when no browser history exists', () => {
-      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
-
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
-
-      // Component should still call router.back() - the router handles the edge case
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      // Verify that router.push() was called with dashboard path
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
 
     it('handles menu toggle correctly', () => {
@@ -356,15 +371,27 @@ describe('NavBottom Component', () => {
   })
 
   describe('prop validation', () => {
-    it('accepts subRoute prop but back button ignores it', () => {
+    it('accepts subRoute prop for navigation context', () => {
+      mockUseSession.mockReturnValue({
+        data: {
+          user: {
+            name: 'Test User',
+            email: 'test@example.com',
+          },
+          expires: '2025-12-31T23:59:59.999Z',
+        },
+        status: 'authenticated',
+        update: jest.fn(),
+      })
+
       const testRoute = '/custom-dashboard'
       render(<NavBottom subRoute={testRoute} />, { wrapper: TestWrapper })
 
-      // Back button should not use the subRoute prop
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      // Dashboard button should navigate to dashboard, not use subRoute prop
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
       expect(mockPush).not.toHaveBeenCalledWith(testRoute)
     })
   })
@@ -409,7 +436,7 @@ describe('NavBottom Component', () => {
       )
       expect(buttons[2]).toHaveAttribute(
         'aria-label',
-        'Navigate back to previous page'
+        'Login to access dashboard'
       )
     })
   })

@@ -10,7 +10,6 @@ import { useRouter, usePathname } from 'next/navigation'
 
 // Mock next/navigation
 const mockPush = jest.fn()
-const mockBack = jest.fn()
 const mockPathname = jest.fn()
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
@@ -33,9 +32,9 @@ jest.mock('@mui/icons-material/Person', () => ({
   default: () => <div data-testid="person-icon" />,
 }))
 
-jest.mock('@mui/icons-material/ArrowBack', () => ({
+jest.mock('@mui/icons-material/Dashboard', () => ({
   __esModule: true,
-  default: (props: any) => <div data-testid="arrow-back-icon" {...props} />,
+  default: (props: any) => <div data-testid="dashboard-icon" {...props} />,
 }))
 
 const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>
@@ -55,7 +54,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
     mockUseRouter.mockReturnValue({
       push: mockPush,
       replace: jest.fn(),
-      back: mockBack,
+      back: jest.fn(),
       forward: jest.fn(),
       refresh: jest.fn(),
       prefetch: jest.fn(),
@@ -90,10 +89,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
     it('should work with standard History API in modern browsers', async () => {
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
 
     it('should handle browsers with limited History API support', async () => {
@@ -108,10 +107,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
 
     it('should work when history.length is 1 (no previous history)', async () => {
@@ -125,11 +124,11 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
       // Should still call back - browser will handle gracefully
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
   })
 
@@ -146,10 +145,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
     it('should work correctly in Chrome desktop environment', async () => {
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
 
     it('should handle Chrome mobile navigation correctly', async () => {
@@ -162,28 +161,28 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
 
       // Test touch interaction for mobile Chrome
-      fireEvent.touchStart(backButton)
-      fireEvent.touchEnd(backButton)
-      fireEvent.click(backButton)
+      fireEvent.touchStart(dashboardButton)
+      fireEvent.touchEnd(dashboardButton)
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
 
     it('should work with Chrome loading states integration', async () => {
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
       // Verify loading state integration works in Chrome
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
 
       // Wait for any async loading state updates
       await waitFor(() => {
-        expect(backButton).toBeInTheDocument()
+        expect(dashboardButton).toBeInTheDocument()
       })
     })
   })
@@ -201,10 +200,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
     it('should work correctly in Firefox desktop environment', async () => {
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
 
     it('should handle Firefox mobile navigation correctly', async () => {
@@ -216,10 +215,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
 
     it('should work with Firefox private browsing mode', async () => {
@@ -234,10 +233,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
   })
 
@@ -254,10 +253,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
     it('should work correctly in Safari desktop environment', async () => {
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
 
     it('should handle Safari iOS mobile navigation correctly', async () => {
@@ -270,14 +269,14 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
 
       // Test touch interaction for Safari iOS
-      fireEvent.touchStart(backButton)
-      fireEvent.touchEnd(backButton)
-      fireEvent.click(backButton)
+      fireEvent.touchStart(dashboardButton)
+      fireEvent.touchEnd(dashboardButton)
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
 
     it('should work with Safari tab management and history', async () => {
@@ -292,10 +291,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
   })
 
@@ -312,10 +311,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
     it('should work correctly in Edge desktop environment', async () => {
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
 
     it('should handle Edge mobile navigation correctly', async () => {
@@ -328,10 +327,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
 
     it('should work with Edge InPrivate browsing mode', async () => {
@@ -346,10 +345,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
   })
 
@@ -386,21 +385,19 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
         render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-        const backButton = screen.getByLabelText(
-          'Navigate back to previous page'
-        )
+        const dashboardButton = screen.getByLabelText('Navigate to dashboard')
 
         // Test loading state integration
-        fireEvent.click(backButton)
+        fireEvent.click(dashboardButton)
 
-        expect(mockBack).toHaveBeenCalledTimes(1)
+        expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
 
         // Verify button remains accessible during loading
         await waitFor(() => {
-          expect(backButton).toBeInTheDocument()
-          expect(backButton).toHaveAttribute(
+          expect(dashboardButton).toBeInTheDocument()
+          expect(dashboardButton).toHaveAttribute(
             'aria-label',
-            'Navigate back to previous page'
+            'Navigate to dashboard'
           )
         })
       })
@@ -425,19 +422,17 @@ describe('NavBottom - Browser Compatibility Testing', () => {
           wrapper: BrowserTestWrapper,
         })
 
-        const backButton = screen.getByLabelText(
-          'Navigate back to previous page'
-        )
+        const dashboardButton = screen.getByLabelText('Navigate to dashboard')
 
         // Test touch sequence
-        fireEvent.touchStart(backButton)
-        fireEvent.touchEnd(backButton)
-        fireEvent.click(backButton)
+        fireEvent.touchStart(dashboardButton)
+        fireEvent.touchEnd(dashboardButton)
+        fireEvent.click(dashboardButton)
 
-        expect(mockBack).toHaveBeenCalled()
+        expect(mockPush).toHaveBeenCalled()
 
         unmount()
-        mockBack.mockClear()
+        mockPush.mockClear()
       }
     })
 
@@ -451,15 +446,15 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
 
       // Verify button is properly sized and accessible on mobile
-      expect(backButton).toBeInTheDocument()
-      expect(backButton).not.toBeDisabled()
+      expect(dashboardButton).toBeInTheDocument()
+      expect(dashboardButton).not.toBeDisabled()
 
       // Touch target should be adequate (this is tested through MUI IconButton)
-      const buttonStyles = window.getComputedStyle(backButton)
-      expect(backButton.tagName.toLowerCase()).toBe('button')
+      const buttonStyles = window.getComputedStyle(dashboardButton)
+      expect(dashboardButton.tagName.toLowerCase()).toBe('button')
     })
   })
 
@@ -468,8 +463,8 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       const browsers = ['Chrome', 'Firefox', 'Safari', 'Edge']
 
       for (const browser of browsers) {
-        // Simulate navigation error by making router.back throw
-        mockBack.mockImplementationOnce(() => {
+        // Simulate navigation error by making router.push throw
+        mockPush.mockImplementationOnce(() => {
           throw new Error(`${browser} navigation error`)
         })
 
@@ -477,17 +472,15 @@ describe('NavBottom - Browser Compatibility Testing', () => {
           wrapper: BrowserTestWrapper,
         })
 
-        const backButton = screen.getByLabelText(
-          'Navigate back to previous page'
-        )
+        const dashboardButton = screen.getByLabelText('Navigate to dashboard')
 
         // Should not crash the component
         expect(() => {
-          fireEvent.click(backButton)
+          fireEvent.click(dashboardButton)
         }).not.toThrow()
 
         unmount()
-        mockBack.mockClear()
+        mockPush.mockClear()
       }
     })
 
@@ -504,11 +497,11 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
 
       // Should still call the navigation method despite restrictions
-      fireEvent.click(backButton)
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      fireEvent.click(dashboardButton)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
   })
 
@@ -518,30 +511,30 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
-      fireEvent.click(backButton)
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+      fireEvent.click(dashboardButton)
 
       const endTime = performance.now()
       const executionTime = endTime - startTime
 
       // Navigation should be fast (under 100ms in test environment)
       expect(executionTime).toBeLessThan(100)
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
 
     it('should maintain consistent performance during rapid navigation', async () => {
       render(<NavBottom subRoute="/test" />, { wrapper: BrowserTestWrapper })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
 
       // Rapid clicks should not cause issues - but React batches them
       // So we expect only one call due to event batching
       for (let i = 0; i < 5; i++) {
-        fireEvent.click(backButton)
+        fireEvent.click(dashboardButton)
       }
 
       // Should handle rapid clicks gracefully (batched to 1 call)
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
   })
 
@@ -559,15 +552,13 @@ describe('NavBottom - Browser Compatibility Testing', () => {
           wrapper: BrowserTestWrapper,
         })
 
-        const backButton = screen.getByLabelText(
-          'Navigate back to previous page'
-        )
-        fireEvent.click(backButton)
+        const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+        fireEvent.click(dashboardButton)
 
-        expect(mockBack).toHaveBeenCalled()
+        expect(mockPush).toHaveBeenCalled()
 
         unmount()
-        mockBack.mockClear()
+        mockPush.mockClear()
       }
     })
 
@@ -576,17 +567,17 @@ describe('NavBottom - Browser Compatibility Testing', () => {
         wrapper: BrowserTestWrapper,
       })
 
-      const backButton = screen.getByLabelText('Navigate back to previous page')
+      const dashboardButton = screen.getByLabelText('Navigate to dashboard')
 
       // Should maintain proper ARIA attributes across browsers
-      expect(backButton).toHaveAttribute(
+      expect(dashboardButton).toHaveAttribute(
         'aria-label',
-        'Navigate back to previous page'
+        'Navigate to dashboard'
       )
-      expect(backButton).toHaveAttribute('role', 'button')
+      expect(dashboardButton).toHaveAttribute('role', 'button')
 
-      fireEvent.click(backButton)
-      expect(mockBack).toHaveBeenCalledTimes(1)
+      fireEvent.click(dashboardButton)
+      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
     })
   })
 })

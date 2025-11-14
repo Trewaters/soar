@@ -4,7 +4,8 @@ import { Box, IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import PersonIcon from '@mui/icons-material/Person'
 import HomeIcon from '@mui/icons-material/Home'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { useSession } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
@@ -34,6 +35,9 @@ export default function NavBottom(props: {
   // Check if we're in the profile section
   const isInProfileSection = pathname?.includes('/navigator/profile')
 
+  // Check if we're on the dashboard page
+  const isOnDashboard = pathname === '/navigator/profile/dashboard'
+
   const navItems: NavItem[] = [
     {
       id: 'menu',
@@ -60,12 +64,28 @@ export default function NavBottom(props: {
         isAuthenticated ? 'success.main' : 'grey.500', // Green when logged in, gray when logged out
     },
     {
-      id: 'back',
-      label: 'Navigate back to previous page',
-      icon: <ArrowBackIcon aria-hidden="true" />,
-      path: 'back',
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      getColor: (_isAuthenticated: boolean) => 'primary.contrastText', // Always primary.contrastText
+      id: isOnDashboard ? 'library' : 'dashboard',
+      label: isOnDashboard
+        ? isAuthenticated
+          ? 'Navigate to library'
+          : 'Login to access library'
+        : isAuthenticated
+          ? 'Navigate to dashboard'
+          : 'Login to access dashboard',
+      icon: isOnDashboard ? (
+        <LibraryBooksIcon aria-hidden="true" />
+      ) : (
+        <DashboardIcon aria-hidden="true" />
+      ),
+      path: isOnDashboard
+        ? isAuthenticated
+          ? '/navigator/profile/library'
+          : '/auth/signin'
+        : isAuthenticated
+          ? '/navigator/profile/dashboard'
+          : '/auth/signin',
+      getColor: (isAuthenticated: boolean) =>
+        isAuthenticated ? 'primary.main' : 'grey.500', // Primary when logged in, gray when logged out
     },
   ]
 
@@ -78,13 +98,6 @@ export default function NavBottom(props: {
       if (props.onMenuToggle) {
         props.onMenuToggle()
       }
-      return
-    }
-
-    // Handle back navigation specially
-    if (itemId === 'back' || path === 'back') {
-      // Use the router.back() method with loading states
-      router.back()
       return
     }
 

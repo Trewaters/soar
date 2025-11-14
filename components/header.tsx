@@ -8,7 +8,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import MenuIcon from '@mui/icons-material/Menu'
 import FlareIcon from '@mui/icons-material/Flare'
 import TipsAndUpdatesOutlinedIcon from '@mui/icons-material/TipsAndUpdatesOutlined'
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts'
+import PersonIcon from '@mui/icons-material/Person'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import {
@@ -80,6 +80,9 @@ export default function Header() {
     return session ? 'Logout' : 'Login'
   }
 
+  // Check if we're in the profile section
+  const isInProfileSection = currentPath?.includes('/navigator/profile')
+
   // Memoize the navLinks to prevent unnecessary re-renders
   const navLinks = useMemo(
     () => [
@@ -131,7 +134,7 @@ export default function Header() {
       {
         name: 'Profile',
         href: '/navigator/profile',
-        icon: <ManageAccountsIcon />,
+        icon: isInProfileSection ? <HomeIcon /> : <PersonIcon />,
         action: null,
         color: 'gray',
       },
@@ -151,7 +154,7 @@ export default function Header() {
         color: 'gray',
       },
     ],
-    [handleAuthAction]
+    [handleAuthAction, isInProfileSection]
   )
 
   const DrawerList = (
