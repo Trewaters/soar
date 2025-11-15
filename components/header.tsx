@@ -80,9 +80,6 @@ export default function Header() {
     return session ? 'Logout' : 'Login'
   }
 
-  // Check if we're in the profile section
-  const isInProfileSection = currentPath?.includes('/navigator/profile')
-
   // Memoize the navLinks to prevent unnecessary re-renders
   const navLinks = useMemo(
     () => [
@@ -134,7 +131,7 @@ export default function Header() {
       {
         name: 'Profile',
         href: '/navigator/profile',
-        icon: isInProfileSection ? <HomeIcon /> : <PersonIcon />,
+        icon: <PersonIcon />,
         action: null,
         color: 'gray',
       },
@@ -154,7 +151,7 @@ export default function Header() {
         color: 'gray',
       },
     ],
-    [handleAuthAction, isInProfileSection]
+    [handleAuthAction]
   )
 
   const DrawerList = (
