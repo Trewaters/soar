@@ -36,7 +36,7 @@ import {
   getSingleSeries,
 } from '@lib/seriesService'
 import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
-import SeriesWeeklyActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesWeeklyActivityTracker'
+import WeeklyActivityTracker from '@app/clientComponents/WeeklyActivityTracker'
 import { useSearchParams, useRouter } from 'next/navigation'
 import EditIcon from '@mui/icons-material/Edit'
 import IconButton from '@mui/material/IconButton'
@@ -783,9 +783,10 @@ export default function Page() {
 
                 {/* Series Weekly Activity Tracker */}
                 <Box sx={{ mt: 3 }}>
-                  <SeriesWeeklyActivityTracker
-                    seriesId={flow.id?.toString() || ''}
-                    seriesName={flow.seriesName}
+                  <WeeklyActivityTracker
+                    entityId={flow.id?.toString() || ''}
+                    entityName={flow.seriesName}
+                    entityType="series"
                     variant="detailed"
                     refreshTrigger={refreshTrigger}
                   />

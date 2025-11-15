@@ -228,9 +228,13 @@ export async function getSequenceWeeklyActivity(
   sequenceId: string
 ): Promise<WeeklySequenceActivityData> {
   try {
+    // Calculate Monday-to-Sunday calendar week
     const now = new Date()
+    const dayOfWeek = now.getDay() // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1 // Convert to days from Monday
+
     const startOfWeek = new Date(now)
-    startOfWeek.setDate(now.getDate() - now.getDay())
+    startOfWeek.setDate(now.getDate() - daysFromMonday)
     startOfWeek.setHours(0, 0, 0, 0)
 
     const endOfWeek = new Date(startOfWeek)
@@ -301,9 +305,13 @@ export async function getAllSequenceWeeklyActivity(userId: string): Promise<{
   }
 }> {
   try {
+    // Calculate Monday-to-Sunday calendar week
     const now = new Date()
+    const dayOfWeek = now.getDay() // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1 // Convert to days from Monday
+
     const startOfWeek = new Date(now)
-    startOfWeek.setDate(now.getDate() - now.getDay())
+    startOfWeek.setDate(now.getDate() - daysFromMonday)
     startOfWeek.setHours(0, 0, 0, 0)
 
     const endOfWeek = new Date(startOfWeek)

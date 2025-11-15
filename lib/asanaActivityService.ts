@@ -177,12 +177,17 @@ export async function getUserAsanaHistory(userId: string) {
 
 export async function getPoseWeeklyCount(userId: string, poseId: string) {
   try {
-    // Get activities for the past 7 days
-    const startDate = new Date()
-    startDate.setDate(startDate.getDate() - 7)
+    // Calculate Monday-to-Sunday calendar week
+    const now = new Date()
+    const dayOfWeek = now.getDay() // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1 // Convert to days from Monday
+
+    const startDate = new Date(now)
+    startDate.setDate(now.getDate() - daysFromMonday)
     startDate.setHours(0, 0, 0, 0)
 
-    const endDate = new Date()
+    const endDate = new Date(startDate)
+    endDate.setDate(startDate.getDate() + 6)
     endDate.setHours(23, 59, 59, 999)
 
     const activities = await prisma.asanaActivity.findMany({
@@ -222,12 +227,17 @@ export async function getPoseWeeklyCount(userId: string, poseId: string) {
 
 export async function getAllPosesWeeklyCount(userId: string) {
   try {
-    // Get all activities for the past 7 days
-    const startDate = new Date()
-    startDate.setDate(startDate.getDate() - 7)
+    // Calculate Monday-to-Sunday calendar week
+    const now = new Date()
+    const dayOfWeek = now.getDay() // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1 // Convert to days from Monday
+
+    const startDate = new Date(now)
+    startDate.setDate(now.getDate() - daysFromMonday)
     startDate.setHours(0, 0, 0, 0)
 
-    const endDate = new Date()
+    const endDate = new Date(startDate)
+    endDate.setDate(startDate.getDate() + 6)
     endDate.setHours(23, 59, 59, 999)
 
     const activities = await prisma.asanaActivity.findMany({

@@ -5,7 +5,7 @@ import { Box, Stack, Typography, Card, CardMedia } from '@mui/material'
 import Image from 'next/image'
 import { FlowSeriesData } from '@context/AsanaSeriesContext'
 import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
-import SeriesWeeklyActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesWeeklyActivityTracker'
+import WeeklyActivityTracker from '@app/clientComponents/WeeklyActivityTracker'
 import PoseShareButton from '@app/clientComponents/poseShareButton'
 import { getPoseIdByName } from '@lib/poseService'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
@@ -261,9 +261,10 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
 
       {flow.id && (
         <Box sx={{ width: '100%', mb: 3 }}>
-          <SeriesWeeklyActivityTracker
-            seriesId={flow.id.toString()}
-            seriesName={flow.seriesName}
+          <WeeklyActivityTracker
+            entityId={flow.id.toString()}
+            entityName={flow.seriesName}
+            entityType="series"
           />
         </Box>
       )}
