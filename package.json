@@ -28,7 +28,11 @@
     "pretty-fix": "prettier --write . && prettier --list-different .",
     "postinstall": "prisma generate && prisma db push",
     "mongo": "mongod --config C:/data/config/mongod.conf",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "import:asana-activity": "ts-node scripts/migrations/import-asana-activity.ts",
+    "import:series-activity": "ts-node scripts/migrations/import-series-activity.ts",
+    "import:sequence-activity": "ts-node scripts/migrations/import-sequence-activity.ts",
+    "import:all-activities": "npm run import:asana-activity && npm run import:series-activity && npm run import:sequence-activity"
   },
   "dependencies": {
     "@auth/core": "^0.37.3",

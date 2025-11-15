@@ -196,8 +196,8 @@ model AsanaSequence {
 model AsanaActivity {
   id                String   @id @default(auto()) @map("_id") @db.ObjectId
   userId            String   @db.ObjectId
-  poseId            String   @db.ObjectId // Reference to AsanaPose.id
-  poseName       String // e.g., Adho Mukha Svanasana
+  asanaId           String   @db.ObjectId // Reference to AsanaPose.id
+  asanaName         String // e.g., Adho Mukha Svanasana
   sort_english_name String // For routing - e.g., "Downward Facing Dog"
   duration          Int // Duration held (in seconds)
   datePerformed     DateTime // Date performed
@@ -206,7 +206,7 @@ model AsanaActivity {
   completionStatus  String // e.g., "complete", "skipped", "partial"
   difficulty        String? // User-selected difficulty: "easy", "average", "difficult"
   user UserData  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  pose AsanaPose @relation(fields: [poseId], references: [id], onDelete: Cascade)
+  pose AsanaPose @relation(fields: [asanaId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

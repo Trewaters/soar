@@ -8,8 +8,8 @@
 export interface AsanaActivityData {
   id: string
   userId: string
-  poseId: string
-  poseName: string
+  asanaId: string
+  asanaName: string
   sort_english_name: string
   duration: number
   datePerformed: string
@@ -38,8 +38,8 @@ export interface WeeklyActivityData {
 
 export interface CreateActivityInput {
   userId: string
-  poseId: string
-  poseName: string
+  asanaId: string
+  asanaName: string
   sort_english_name: string
   duration: number
   datePerformed: Date
@@ -79,13 +79,13 @@ export async function createAsanaActivity(
  */
 export async function deleteAsanaActivity(
   userId: string,
-  poseId: string
+  asanaId: string
 ): Promise<void> {
   try {
     const response = await fetch('/api/asanaActivity', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, poseId }),
+      body: JSON.stringify({ userId, asanaId }),
     })
 
     if (!response.ok) {
@@ -99,15 +99,15 @@ export async function deleteAsanaActivity(
 }
 
 /**
- * Check if an activity exists for a user and pose
+ * Check if an activity exists for a user and asana
  */
 export async function checkActivityExists(
   userId: string,
-  poseId: string
+  asanaId: string
 ): Promise<{ exists: boolean; activity?: AsanaActivityData }> {
   try {
     const response = await fetch(
-      `/api/asanaActivity?userId=${encodeURIComponent(userId)}&poseId=${encodeURIComponent(poseId)}`
+      `/api/asanaActivity?userId=${encodeURIComponent(userId)}&asanaId=${encodeURIComponent(asanaId)}`
     )
 
     if (!response.ok) {
@@ -146,15 +146,15 @@ export async function getUserActivities(
 }
 
 /**
- * Get weekly activity data for a specific pose
+ * Get weekly activity data for a specific asana
  */
-export async function getPoseWeeklyActivity(
+export async function getAsanaWeeklyActivity(
   userId: string,
-  poseId: string
+  asanaId: string
 ): Promise<WeeklyActivityData> {
   try {
     const response = await fetch(
-      `/api/asanaActivity/weekly?userId=${encodeURIComponent(userId)}&poseId=${encodeURIComponent(poseId)}`
+      `/api/asanaActivity/weekly?userId=${encodeURIComponent(userId)}&asanaId=${encodeURIComponent(asanaId)}`
     )
 
     if (!response.ok) {
@@ -170,9 +170,9 @@ export async function getPoseWeeklyActivity(
 }
 
 /**
- * Get weekly activity summary for all poses for a user
+ * Get weekly activity summary for all asanas for a user
  */
-export async function getAllPosesWeeklyActivity(userId: string): Promise<any> {
+export async function getAllAsanasWeeklyActivity(userId: string): Promise<any> {
   try {
     const response = await fetch(
       `/api/asanaActivity/weekly?userId=${encodeURIComponent(userId)}`

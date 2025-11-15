@@ -194,7 +194,7 @@ export default function AsanaActivityList() {
                 ) : (
                   <Link
                     href={`/navigator/asanaPoses/${
-                      activity.type === 'asana' ? activity.poseId : '#'
+                      activity.type === 'asana' ? activity.asanaId : '#'
                     }`}
                   >
                     <Typography
@@ -205,7 +205,7 @@ export default function AsanaActivityList() {
                         whiteSpace: 'nowrap',
                       }}
                     >
-                      {activity.poseName}
+                      {activity.asanaName}
                     </Typography>
                   </Link>
                 )}

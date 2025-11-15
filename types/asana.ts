@@ -57,8 +57,8 @@ export interface AsanaPose {
 export interface AsanaActivity {
   id: string
   userId: string
-  poseId: string
-  poseName: string
+  asanaId: string
+  asanaName: string
   sort_english_name: string
   duration: number
   datePerformed: Date

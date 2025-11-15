@@ -958,8 +958,6 @@ export default function PoseActivityDetail({
                 setActivityRefreshTrigger((prev) => prev + 1)
               }
               additionalActivityData={{
-                poseId: pose.id.toString(),
-                poseName: pose.sort_english_name,
                 sort_english_name: pose.sort_english_name,
                 duration: 0,
               }}

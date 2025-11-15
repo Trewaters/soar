@@ -18,7 +18,7 @@ import WbTwilightIcon from '@mui/icons-material/WbTwilight'
 import NightsStayIcon from '@mui/icons-material/NightsStay'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 import {
-  getPoseWeeklyActivity,
+  getAsanaWeeklyActivity,
   type WeeklyActivityData as AsanaWeeklyActivityData,
 } from '@lib/asanaActivityClientService'
 import {
@@ -68,7 +68,7 @@ export default function WeeklyActivityTracker({
 
         switch (entityType) {
           case 'asana':
-            data = await getPoseWeeklyActivity(session.user.id, entityId)
+            data = await getAsanaWeeklyActivity(session.user.id, entityId)
             break
           case 'series':
             data = await getSeriesWeeklyActivity(session.user.id, entityId)

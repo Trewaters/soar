@@ -15,7 +15,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 import {
-  getPoseWeeklyActivity,
+  getAsanaWeeklyActivity,
   type WeeklyActivityData,
 } from '@lib/asanaActivityClientService'
 import { AsanaPose } from 'types/asana'
@@ -44,7 +44,7 @@ export default function ActivityTracker({
       setError(null)
 
       try {
-        const data = await getPoseWeeklyActivity(
+        const data = await getAsanaWeeklyActivity(
           session.user.id,
           pose.id.toString()
         )

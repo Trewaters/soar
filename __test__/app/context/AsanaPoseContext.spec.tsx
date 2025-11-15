@@ -80,8 +80,8 @@ const mockAsana: AsanaPose = {
 const mockPoseImage: PoseImageData = {
   id: 'image-1',
   userId: 'test-user-id',
-  poseId: 'test-asana-1',
-  poseName: 'Warrior I',
+  asanaId: 'test-asana-1',
+  asanaName: 'Warrior I',
   url: 'https://example.com/warrior1.jpg',
   altText: 'Warrior I demonstration',
   fileName: 'warrior1.jpg',

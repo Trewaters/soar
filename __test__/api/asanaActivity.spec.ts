@@ -35,8 +35,8 @@ describe('/api/asanaActivity Service Tests', () => {
       const mockActivity = {
         id: '1',
         userId: 'user123',
-        poseId: 'pose123',
-        poseName: 'Mountain Pose',
+        asanaId: 'pose123',
+        asanaName: 'Mountain Pose',
         sort_english_name: 'Mountain Pose',
         duration: 60,
         datePerformed: new Date(),
@@ -54,8 +54,8 @@ describe('/api/asanaActivity Service Tests', () => {
 
       const activityData = {
         userId: 'user123',
-        poseId: 'pose123',
-        poseName: 'Mountain Pose',
+        asanaId: 'pose123',
+        asanaName: 'Mountain Pose',
         sort_english_name: 'Mountain Pose',
         duration: 60,
         datePerformed: new Date(),
@@ -88,8 +88,8 @@ describe('/api/asanaActivity Service Tests', () => {
         {
           id: '1',
           userId: 'user123',
-          poseId: 'pose123',
-          poseName: 'Mountain Pose',
+          asanaId: 'pose123',
+          asanaName: 'Mountain Pose',
           sort_english_name: 'Mountain Pose',
           datePerformed: new Date(),
           duration: 60,
@@ -103,8 +103,8 @@ describe('/api/asanaActivity Service Tests', () => {
         {
           id: '2',
           userId: 'user123',
-          poseId: 'pose456',
-          poseName: 'Warrior I',
+          asanaId: 'pose456',
+          asanaName: 'Warrior I',
           sort_english_name: 'Warrior I',
           datePerformed: new Date(),
           duration: 90,
@@ -144,8 +144,8 @@ describe('/api/asanaActivity Service Tests', () => {
       const mockActivity = {
         id: '1',
         userId: 'user123',
-        poseId: 'pose123',
-        poseName: 'Mountain Pose',
+        asanaId: 'pose123',
+        asanaName: 'Mountain Pose',
         sort_english_name: 'Mountain Pose',
         datePerformed: new Date(),
         duration: 60,
@@ -193,23 +193,23 @@ describe('/api/asanaActivity Service Tests', () => {
     it('should validate required fields for POST', () => {
       const data = {
         userId: 'user123',
-        poseId: 'pose123',
-        poseName: 'Mountain Pose',
+        asanaId: 'pose123',
+        asanaName: 'Mountain Pose',
         duration: 60,
         datePerformed: new Date(),
         completionStatus: 'complete',
       }
 
       // Test validation logic
-      const isValid = !!(data.userId && data.poseId && data.poseName)
+      const isValid = !!(data.userId && data.asanaId && data.asanaName)
       expect(isValid).toBe(true)
 
       // Test invalid data
       const invalidData = { userId: 'user123' }
       const isInvalid = !!(
         invalidData.userId &&
-        (invalidData as any).poseId &&
-        (invalidData as any).poseName
+        (invalidData as any).asanaId &&
+        (invalidData as any).asanaName
       )
       expect(isInvalid).toBe(false)
     })
@@ -217,32 +217,32 @@ describe('/api/asanaActivity Service Tests', () => {
     it('should validate required fields for DELETE', () => {
       const data = {
         userId: 'user123',
-        poseId: 'pose123',
+        asanaId: 'pose123',
       }
 
       // Test validation logic
-      const isValid = !!(data.userId && data.poseId)
+      const isValid = !!(data.userId && data.asanaId)
       expect(isValid).toBe(true)
 
       // Test invalid data
       const invalidData = { userId: 'user123' }
-      const isInvalid = !!(invalidData.userId && (invalidData as any).poseId)
+      const isInvalid = !!(invalidData.userId && (invalidData as any).asanaId)
       expect(isInvalid).toBe(false)
     })
 
     it('should validate required query params for GET', () => {
-      // Test with both userId and poseId (existing activity check)
+      // Test with both userId and asanaId (existing activity check)
       const url1 = new URL(
-        'http://localhost:3000/api/asanaActivity?userId=user123&poseId=pose123'
+        'http://localhost:3000/api/asanaActivity?userId=user123&asanaId=pose123'
       )
       const userId1 = url1.searchParams.get('userId')
-      const poseId1 = url1.searchParams.get('poseId')
+      const asanaId1 = url1.searchParams.get('asanaId')
 
       expect(userId1).toBe('user123')
-      expect(poseId1).toBe('pose123')
+      expect(asanaId1).toBe('pose123')
 
       // Test validation logic for existing activity check
-      const isValidForActivityCheck = !!(userId1 && poseId1)
+      const isValidForActivityCheck = !!(userId1 && asanaId1)
       expect(isValidForActivityCheck).toBe(true)
 
       // Test with only userId (get all user activities)
@@ -250,10 +250,10 @@ describe('/api/asanaActivity Service Tests', () => {
         'http://localhost:3000/api/asanaActivity?userId=user123'
       )
       const userId2 = url2.searchParams.get('userId')
-      const poseId2 = url2.searchParams.get('poseId')
+      const asanaId2 = url2.searchParams.get('asanaId')
 
       expect(userId2).toBe('user123')
-      expect(poseId2).toBeNull()
+      expect(asanaId2).toBeNull()
 
       // Test validation logic for getting all user activities
       const isValidForUserActivities = !!userId2
@@ -297,7 +297,7 @@ describe('/api/asanaActivity Service Tests', () => {
         'recordAsanaActivity',
         {
           userId: 'user123',
-          poseId: 'pose123',
+          asanaId: 'pose123',
         }
       )
 
@@ -307,7 +307,7 @@ describe('/api/asanaActivity Service Tests', () => {
         'recordAsanaActivity',
         expect.objectContaining({
           userId: 'user123',
-          poseId: 'pose123',
+          asanaId: 'pose123',
         })
       )
     })
@@ -315,7 +315,7 @@ describe('/api/asanaActivity Service Tests', () => {
     it('should log database errors with query context', async () => {
       const { logDatabaseError } = require('../../lib/errorLogger')
       const testError = new Error('Database connection failed')
-      const query = { userId: 'user123', poseId: 'pose123' }
+      const query = { userId: 'user123', asanaId: 'pose123' }
 
       logDatabaseError(testError, 'create', 'AsanaActivity', query)
 

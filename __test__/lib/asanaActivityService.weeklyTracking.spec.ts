@@ -4,7 +4,7 @@
  * @jest-environment node
  */
 import {
-  getPoseWeeklyCount,
+  getAsanaWeeklyCount,
   getAllPosesWeeklyCount,
 } from '../../lib/asanaActivityService'
 import { prisma } from '../../lib/prismaClient'
@@ -32,7 +32,7 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
     jest.useRealTimers()
   })
 
-  describe('getPoseWeeklyCount - Monday-Sunday Calendar Week', () => {
+  describe('getAsanaWeeklyCount - Monday-Sunday Calendar Week', () => {
     /**
      * Test the happy path: Verify that the date range calculation
      * correctly identifies Monday as the start of the week
@@ -43,14 +43,14 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
       jest.setSystemTime(new Date('2024-11-13T14:30:00.000Z'))
 
       const userId = 'user-123'
-      const poseId = 'pose-456'
+      const asanaId = 'pose-456'
 
       const mockActivities = [
         {
           id: 'activity-1',
           userId: userId,
-          poseId: poseId,
-          poseName: 'Warrior I',
+          asanaId: asanaId,
+          asanaName: 'Warrior I',
           sort_english_name: 'Warrior I',
           datePerformed: new Date('2024-11-11T10:00:00.000Z'), // Monday
           duration: 300,
@@ -64,8 +64,8 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
         {
           id: 'activity-2',
           userId: userId,
-          poseId: poseId,
-          poseName: 'Warrior I',
+          asanaId: asanaId,
+          asanaName: 'Warrior I',
           sort_english_name: 'Warrior I',
           datePerformed: new Date('2024-11-13T15:00:00.000Z'), // Wednesday (today)
           duration: 360,
@@ -83,7 +83,7 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
       )
 
       // Act: Call the function
-      const result = await getPoseWeeklyCount(userId, poseId)
+      const result = await getAsanaWeeklyCount(userId, asanaId)
 
       // Assert: Verify the results
       expect(result.count).toBe(2)
@@ -100,7 +100,7 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
       expect(prisma.asanaActivity.findMany).toHaveBeenCalledWith({
         where: {
           userId,
-          poseId,
+          asanaId,
           datePerformed: {
             gte: expect.any(Date),
             lte: expect.any(Date),
@@ -119,12 +119,12 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
       jest.setSystemTime(new Date('2024-11-17T14:30:00.000Z'))
 
       const userId = 'user-123'
-      const poseId = 'pose-456'
+      const asanaId = 'pose-456'
 
       ;(prisma.asanaActivity.findMany as jest.Mock).mockResolvedValue([])
 
       // Act
-      const result = await getPoseWeeklyCount(userId, poseId)
+      const result = await getAsanaWeeklyCount(userId, asanaId)
 
       // Assert: Week should start from Monday Nov 11
       expect(result.dateRange.start.getDay()).toBe(1) // Monday
@@ -142,12 +142,12 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
       jest.setSystemTime(new Date('2024-11-11T14:30:00.000Z'))
 
       const userId = 'user-123'
-      const poseId = 'pose-456'
+      const asanaId = 'pose-456'
 
       ;(prisma.asanaActivity.findMany as jest.Mock).mockResolvedValue([])
 
       // Act
-      const result = await getPoseWeeklyCount(userId, poseId)
+      const result = await getAsanaWeeklyCount(userId, asanaId)
 
       // Assert: Week should start from today (Monday Nov 11)
       expect(result.dateRange.start.getDay()).toBe(1) // Monday
@@ -165,12 +165,12 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
       jest.setSystemTime(new Date('2024-11-13T14:30:00.000Z'))
 
       const userId = 'user-123'
-      const poseId = 'pose-456'
+      const asanaId = 'pose-456'
 
       ;(prisma.asanaActivity.findMany as jest.Mock).mockResolvedValue([])
 
       // Act
-      const result = await getPoseWeeklyCount(userId, poseId)
+      const result = await getAsanaWeeklyCount(userId, asanaId)
 
       // Assert
       expect(result.count).toBe(0)
@@ -195,8 +195,8 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
         {
           id: 'activity-1',
           userId: userId,
-          poseId: 'pose-warrior1',
-          poseName: 'Warrior I',
+          asanaId: 'pose-warrior1',
+          asanaName: 'Warrior I',
           sort_english_name: 'Warrior I',
           datePerformed: new Date('2024-11-11T10:00:00.000Z'), // Monday
           duration: 300,
@@ -210,8 +210,8 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
         {
           id: 'activity-2',
           userId: userId,
-          poseId: 'pose-warrior1',
-          poseName: 'Warrior I',
+          asanaId: 'pose-warrior1',
+          asanaName: 'Warrior I',
           sort_english_name: 'Warrior I',
           datePerformed: new Date('2024-11-13T15:00:00.000Z'), // Wednesday
           duration: 360,
@@ -225,8 +225,8 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
         {
           id: 'activity-3',
           userId: userId,
-          poseId: 'pose-downdog',
-          poseName: 'Downward Dog',
+          asanaId: 'pose-downdog',
+          asanaName: 'Downward Dog',
           sort_english_name: 'Downward Dog',
           datePerformed: new Date('2024-11-12T09:00:00.000Z'), // Tuesday
           duration: 180,
@@ -248,17 +248,17 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
 
       // Assert
       expect(result.totalActivities).toBe(3)
-      expect(Object.keys(result.poseStats)).toHaveLength(2)
+      expect(Object.keys(result.asanaStats)).toHaveLength(2)
 
       // Verify Warrior I stats
-      expect(result.poseStats['pose-warrior1'].count).toBe(2)
-      expect(result.poseStats['pose-warrior1'].poseName).toBe('Warrior I')
-      expect(result.poseStats['pose-warrior1'].activities).toHaveLength(2)
+      expect(result.asanaStats['pose-warrior1'].count).toBe(2)
+      expect(result.asanaStats['pose-warrior1'].asanaName).toBe('Warrior I')
+      expect(result.asanaStats['pose-warrior1'].activities).toHaveLength(2)
 
       // Verify Downward Dog stats
-      expect(result.poseStats['pose-downdog'].count).toBe(1)
-      expect(result.poseStats['pose-downdog'].poseName).toBe('Downward Dog')
-      expect(result.poseStats['pose-downdog'].activities).toHaveLength(1)
+      expect(result.asanaStats['pose-downdog'].count).toBe(1)
+      expect(result.asanaStats['pose-downdog'].asanaName).toBe('Downward Dog')
+      expect(result.asanaStats['pose-downdog'].activities).toHaveLength(1)
 
       // Verify date range is Monday-Sunday
       expect(result.dateRange.start.getDay()).toBe(1) // Monday
@@ -296,8 +296,8 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
         {
           id: 'activity-current',
           userId: userId,
-          poseId: 'pose-warrior1',
-          poseName: 'Warrior I',
+          asanaId: 'pose-warrior1',
+          asanaName: 'Warrior I',
           sort_english_name: 'Warrior I',
           datePerformed: new Date('2024-11-11T10:00:00.000Z'), // Monday (current week)
           duration: 300,
@@ -344,7 +344,7 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
 
       // Assert
       expect(result.totalActivities).toBe(0)
-      expect(Object.keys(result.poseStats)).toHaveLength(0)
+      expect(Object.keys(result.asanaStats)).toHaveLength(0)
       expect(result.dateRange.start.getDay()).toBe(1) // Monday
       expect(result.dateRange.end.getDay()).toBe(0) // Sunday
     })
@@ -363,8 +363,8 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
         {
           id: 'activity-1',
           userId: userId,
-          poseId: 'pose-warrior1',
-          poseName: 'Warrior I',
+          asanaId: 'pose-warrior1',
+          asanaName: 'Warrior I',
           sort_english_name: 'Warrior I',
           datePerformed: new Date('2024-11-11T10:00:00.000Z'), // Monday (older)
           duration: 300,
@@ -378,8 +378,8 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
         {
           id: 'activity-2',
           userId: userId,
-          poseId: 'pose-warrior1',
-          poseName: 'Warrior I',
+          asanaId: 'pose-warrior1',
+          asanaName: 'Warrior I',
           sort_english_name: 'Warrior I',
           datePerformed: new Date('2024-11-13T15:00:00.000Z'), // Wednesday (newer)
           duration: 360,
@@ -400,7 +400,7 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
       const result = await getAllPosesWeeklyCount(userId)
 
       // Assert: Should track the most recent date (Wednesday)
-      const warriorStats = result.poseStats['pose-warrior1']
+      const warriorStats = result.asanaStats['pose-warrior1']
       expect(warriorStats.lastPerformed.toISOString()).toBe(
         new Date('2024-11-13T15:00:00.000Z').toISOString()
       )
@@ -417,12 +417,12 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
       jest.setSystemTime(new Date('2024-11-16T14:30:00.000Z'))
 
       const userId = 'user-123'
-      const poseId = 'pose-456'
+      const asanaId = 'pose-456'
 
       ;(prisma.asanaActivity.findMany as jest.Mock).mockResolvedValue([])
 
       // Act
-      const result = await getPoseWeeklyCount(userId, poseId)
+      const result = await getAsanaWeeklyCount(userId, asanaId)
 
       // Assert: Week should be Mon Nov 11 to Sun Nov 17
       expect(result.dateRange.start.getDay()).toBe(1) // Monday
@@ -441,12 +441,12 @@ describe('Asana Activity Service - Weekly Tracking (Monday-Sunday)', () => {
       jest.setSystemTime(new Date('2024-10-30T14:30:00.000Z'))
 
       const userId = 'user-123'
-      const poseId = 'pose-456'
+      const asanaId = 'pose-456'
 
       ;(prisma.asanaActivity.findMany as jest.Mock).mockResolvedValue([])
 
       // Act
-      const result = await getPoseWeeklyCount(userId, poseId)
+      const result = await getAsanaWeeklyCount(userId, asanaId)
 
       // Assert
       expect(result.dateRange.start.getDay()).toBe(1) // Monday

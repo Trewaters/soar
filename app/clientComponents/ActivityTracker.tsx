@@ -248,8 +248,7 @@ export default function ActivityTracker({
     try {
       if (isChecked) {
         // Create new activity
-        // For asana, the field names are poseId/poseName (handled via additionalActivityData)
-        // For series/sequence, use dynamic naming: seriesId/seriesName or sequenceId/sequenceName
+        // Use dynamic naming for all entity types: asanaId/asanaName, seriesId/seriesName, sequenceId/sequenceName
         const activityData: any = {
           userId: session.user.id,
           difficulty: selectedDifficulty || undefined,
@@ -258,11 +257,9 @@ export default function ActivityTracker({
           ...additionalActivityData,
         }
 
-        // Only add dynamic fields for series and sequence (not asana)
-        if (entityType !== 'asana') {
-          activityData[`${entityType}Id`] = entityId
-          activityData[`${entityType}Name`] = entityName
-        }
+        // Add dynamic entity fields for all types (unified approach)
+        activityData[`${entityType}Id`] = entityId
+        activityData[`${entityType}Name`] = entityName
 
         await createActivity(activityData)
 

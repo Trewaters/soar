@@ -12,9 +12,9 @@ export async function POST(req: NextRequest) {
     const data = await req.json()
 
     // Validate required fields (sort_english_name is optional now)
-    if (!data.userId || !data.poseId || !data.poseName) {
+    if (!data.userId || !data.asanaId || !data.asanaName) {
       const validationError = new Error(
-        'Missing required fields: userId, poseId, and poseName are required'
+        'Missing required fields: userId, asanaId, and asanaName are required'
       )
       logApiError(
         validationError,
@@ -24,23 +24,23 @@ export async function POST(req: NextRequest) {
           receivedData: data,
           missingFields: {
             userId: !data.userId,
-            poseId: !data.poseId,
-            poseName: !data.poseName,
+            asanaId: !data.asanaId,
+            asanaName: !data.asanaName,
           },
         }
       )
       return NextResponse.json(
         {
           error:
-            'Missing required fields: userId, poseId, and poseName are required',
+            'Missing required fields: userId, asanaId, and asanaName are required',
         },
         { status: 400 }
       )
     }
 
-    // Ensure sort_english_name is provided, fallback to poseName if empty
+    // Ensure sort_english_name is provided, fallback to asanaName if empty
     if (!data.sort_english_name || data.sort_english_name.trim() === '') {
-      data.sort_english_name = data.poseName
+      data.sort_english_name = data.asanaName
     }
 
     const activity = await recordAsanaActivity(data)
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
       error.message.includes('Foreign key constraint')
     ) {
       return NextResponse.json(
-        { error: 'Invalid user ID or pose ID provided' },
+        { error: 'Invalid user ID or asana ID provided' },
         { status: 400 }
       )
     }
@@ -76,9 +76,9 @@ export async function DELETE(req: NextRequest) {
     const data = await req.json()
 
     // Validate required fields
-    if (!data.userId || !data.poseId) {
+    if (!data.userId || !data.asanaId) {
       const validationError = new Error(
-        'Missing required fields: userId and poseId are required'
+        'Missing required fields: userId and asanaId are required'
       )
       logApiError(
         validationError,
@@ -88,19 +88,19 @@ export async function DELETE(req: NextRequest) {
           receivedData: data,
           missingFields: {
             userId: !data.userId,
-            poseId: !data.poseId,
+            asanaId: !data.asanaId,
           },
         }
       )
       return NextResponse.json(
         {
-          error: 'Missing required fields: userId and poseId are required',
+          error: 'Missing required fields: userId and asanaId are required',
         },
         { status: 400 }
       )
     }
 
-    await deleteAsanaActivity(data.userId, data.poseId)
+    await deleteAsanaActivity(data.userId, data.asanaId)
     return NextResponse.json(
       { message: 'Activity deleted successfully' },
       { status: 200 }
@@ -124,14 +124,14 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
     const userId = searchParams.get('userId')
-    const poseId = searchParams.get('poseId')
+    const asanaId = searchParams.get('asanaId')
 
     if (!userId) {
       const validationError = new Error(
         'Missing required query parameter: userId'
       )
       logApiError(validationError, req, 'GET /api/asanaActivity - validation', {
-        queryParams: { userId, poseId },
+        queryParams: { userId, asanaId },
         url: req.url,
       })
       return NextResponse.json(
@@ -142,9 +142,9 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    if (poseId) {
-      // Check if specific activity exists for user and pose
-      const activity = await checkExistingActivity(userId, poseId)
+    if (asanaId) {
+      // Check if specific activity exists for user and asana
+      const activity = await checkExistingActivity(userId, asanaId)
       return NextResponse.json(
         { exists: !!activity, activity },
         { status: 200 }
