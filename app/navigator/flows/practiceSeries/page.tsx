@@ -35,7 +35,12 @@ import {
   updateSeries,
   getSingleSeries,
 } from '@lib/seriesService'
-import SeriesActivityTracker from '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker'
+import ActivityTracker from '@app/clientComponents/ActivityTracker'
+import {
+  checkSeriesActivityExists,
+  createSeriesActivity,
+  deleteSeriesActivity,
+} from '@lib/seriesActivityClientService'
 import WeeklyActivityTracker from '@app/clientComponents/WeeklyActivityTracker'
 import { useSearchParams, useRouter } from 'next/navigation'
 import EditIcon from '@mui/icons-material/Edit'
@@ -774,9 +779,14 @@ export default function Page() {
 
                 {/* Series Activity Tracker */}
                 <Box sx={{ mt: 3 }}>
-                  <SeriesActivityTracker
-                    seriesId={flow.id?.toString() || ''}
-                    seriesName={flow.seriesName}
+                  <ActivityTracker
+                    entityId={flow.id?.toString() || ''}
+                    entityName={flow.seriesName}
+                    entityType="series"
+                    variant="card"
+                    checkActivity={checkSeriesActivityExists}
+                    createActivity={createSeriesActivity}
+                    deleteActivity={deleteSeriesActivity}
                     onActivityToggle={handleActivityToggle}
                   />
                 </Box>

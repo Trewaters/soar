@@ -32,7 +32,12 @@ import React from 'react'
 import Image from 'next/image'
 import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
 import { useSearchParams } from 'next/navigation'
-import SequenceActivityTracker from '@app/clientComponents/sequenceActivityTracker/SequenceActivityTracker'
+import ActivityTracker from '@app/clientComponents/ActivityTracker'
+import {
+  checkSequenceActivityExists,
+  createSequenceActivity,
+  deleteSequenceActivity,
+} from '@lib/sequenceActivityClientService'
 import WeeklyActivityTracker from '@app/clientComponents/WeeklyActivityTracker'
 import { FEATURES } from '@app/FEATURES'
 import { useSession } from 'next-auth/react'
@@ -966,9 +971,14 @@ export default function Page() {
                   {/* Sequence Activity Tracker */}
                   {singleSequence.id && singleSequence.id !== 0 && (
                     <Box sx={{ mt: 3 }}>
-                      <SequenceActivityTracker
-                        sequenceId={singleSequence.id.toString()}
-                        sequenceName={singleSequence.nameSequence}
+                      <ActivityTracker
+                        entityId={singleSequence.id.toString()}
+                        entityName={singleSequence.nameSequence}
+                        entityType="sequence"
+                        variant="card"
+                        checkActivity={checkSequenceActivityExists}
+                        createActivity={createSequenceActivity}
+                        deleteActivity={deleteSequenceActivity}
                         onActivityToggle={handleActivityToggle}
                       />
                     </Box>

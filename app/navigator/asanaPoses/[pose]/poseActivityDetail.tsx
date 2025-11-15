@@ -26,6 +26,7 @@ import { useRouter } from 'next/navigation'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 import PoseShareButton from '@app/clientComponents/poseShareButton'
 import WeeklyActivityTracker from '@app/clientComponents/WeeklyActivityTracker'
+import ActivityTracker from '@app/clientComponents/ActivityTracker'
 import { useSession } from 'next-auth/react'
 import {
   checkActivityExists,
@@ -99,22 +100,8 @@ export default function PoseActivityDetail({
   const pose = poseCardProp
   const router = useRouter()
   const { data: session } = useSession()
-  const [easyChipVariant, setEasyChipVariant] = useState<'filled' | 'outlined'>(
-    'outlined'
-  )
-  const [averageChipVariant, setAverageChipVariant] = useState<
-    'filled' | 'outlined'
-  >('outlined')
-  const [difficultChipVariant, setDifficultChipVariant] = useState<
-    'filled' | 'outlined'
-  >('outlined')
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string | null>(
-    null
-  )
-  const [checked, setChecked] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [activityRefreshTrigger, setActivityRefreshTrigger] = useState(0)
+  const [error, setError] = useState<string | null>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [open, setOpen] = useState(false)
 
@@ -179,13 +166,6 @@ export default function PoseActivityDetail({
     setOpen(!open)
   }
 
-  let buttonLabel = 'Mark for Activity Tracker'
-  if (loading) {
-    buttonLabel = 'Saving...'
-  } else if (checked) {
-    buttonLabel = 'Tracked in Activity'
-  }
-
   // Fetch uploaded images for this pose
   const { images: poseImages } = usePoseImages(
     pose?.id?.toString(),
@@ -195,159 +175,6 @@ export default function PoseActivityDetail({
   // Handle carousel image index changes
   const handleCarouselIndexChange = (index: number) => {
     setCurrentImageIndex(index)
-  }
-
-  // Check if activity already exists on component mount
-  useEffect(() => {
-    const checkExistingActivity = async () => {
-      if (session?.user?.id && poseCardProp.id) {
-        try {
-          const result = await checkActivityExists(
-            session.user.id,
-            poseCardProp.id.toString()
-          )
-          setChecked(result.exists)
-
-          // Set difficulty state based on existing activity
-          if (result.exists && result.activity?.difficulty) {
-            setSelectedDifficulty(result.activity.difficulty)
-            // Set the appropriate chip variant
-            if (result.activity.difficulty === 'easy') {
-              setEasyChipVariant('filled')
-              setAverageChipVariant('outlined')
-              setDifficultChipVariant('outlined')
-            } else if (result.activity.difficulty === 'average') {
-              setEasyChipVariant('outlined')
-              setAverageChipVariant('filled')
-              setDifficultChipVariant('outlined')
-            } else if (result.activity.difficulty === 'difficult') {
-              setEasyChipVariant('outlined')
-              setAverageChipVariant('outlined')
-              setDifficultChipVariant('filled')
-            }
-          } else {
-            // Reset difficulty state if no activity or no difficulty stored
-            setSelectedDifficulty(null)
-            setEasyChipVariant('outlined')
-            setAverageChipVariant('outlined')
-            setDifficultChipVariant('outlined')
-          }
-        } catch (error) {
-          console.error('Error checking existing activity:', error)
-          // Don't show error to user for this check, just default to unchecked
-        }
-      }
-    }
-
-    checkExistingActivity()
-  }, [session?.user?.id, poseCardProp.id])
-
-  const handleEasyChipClick = () => {
-    const newVariant = easyChipVariant === 'outlined' ? 'filled' : 'outlined'
-    setEasyChipVariant(newVariant)
-
-    if (newVariant === 'filled') {
-      setSelectedDifficulty('easy')
-      // Reset other chips
-      setAverageChipVariant('outlined')
-      setDifficultChipVariant('outlined')
-    } else {
-      setSelectedDifficulty(null)
-    }
-  }
-
-  const handleAverageChipClick = () => {
-    const newVariant = averageChipVariant === 'outlined' ? 'filled' : 'outlined'
-    setAverageChipVariant(newVariant)
-
-    if (newVariant === 'filled') {
-      setSelectedDifficulty('average')
-      // Reset other chips
-      setEasyChipVariant('outlined')
-      setDifficultChipVariant('outlined')
-    } else {
-      setSelectedDifficulty(null)
-    }
-  }
-
-  const handleDifficultChipClick = () => {
-    const newVariant =
-      difficultChipVariant === 'outlined' ? 'filled' : 'outlined'
-    setDifficultChipVariant(newVariant)
-
-    if (newVariant === 'filled') {
-      setSelectedDifficulty('difficult')
-      // Reset other chips
-      setEasyChipVariant('outlined')
-      setAverageChipVariant('outlined')
-    } else {
-      setSelectedDifficulty(null)
-    }
-  }
-
-  const handleCheckboxChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const isChecked = event.target.checked
-    await updateActivityState(isChecked)
-  }
-
-  const handleButtonToggle = async () => {
-    await updateActivityState(!checked)
-  }
-
-  const updateActivityState = async (isChecked: boolean) => {
-    setChecked(isChecked)
-
-    if (!session?.user?.id) {
-      const errorMessage = 'Please log in to track your activity'
-      setError(errorMessage)
-      setChecked(false)
-      return
-    }
-
-    setLoading(true)
-    setError(null)
-
-    const requestData = {
-      userId: session.user.id,
-      poseId: poseCardProp.id.toString(),
-      poseName: poseCardProp.sort_english_name,
-      sort_english_name: poseCardProp.sort_english_name,
-      duration: 0,
-      datePerformed: new Date(),
-      completionStatus: 'complete',
-      difficulty: selectedDifficulty || undefined,
-    }
-
-    try {
-      if (isChecked) {
-        // Create new activity
-
-        await createAsanaActivity(requestData)
-
-        // Trigger refresh of ActivityTracker
-        setActivityRefreshTrigger((prev) => prev + 1)
-      } else {
-        // Delete existing activity
-
-        await deleteAsanaActivity(session.user.id, poseCardProp.id.toString())
-
-        // Reset difficulty selection when activity is removed
-        setSelectedDifficulty(null)
-        setEasyChipVariant('outlined')
-        setAverageChipVariant('outlined')
-        setDifficultChipVariant('outlined')
-
-        // Trigger refresh of ActivityTracker
-        setActivityRefreshTrigger((prev) => prev + 1)
-      }
-    } catch (e: any) {
-      setError(e.message || 'Failed to update activity')
-      setChecked(!isChecked) // Revert checkbox state on error
-    } finally {
-      setLoading(false)
-    }
   }
 
   const getAsanaIconUrl = (category?: string) => {
@@ -1110,139 +937,34 @@ export default function PoseActivityDetail({
             </Box>
           )}
 
-          {/* Group difficulty chips and activity tracker together so users know the chips set difficulty for the tracker */}
-          <Paper
-            elevation={0}
+          {/* Unified Activity Tracker Component */}
+          <Box
             sx={{
-              p: 2,
               mt: 2,
               mx: 'auto',
               width: '100%',
               maxWidth: '600px',
-              backgroundColor: 'rgba(255,255,255,0.04)',
-              borderRadius: '12px',
-              border: '1px solid rgba(255,255,255,0.04)',
             }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                // On mobile we want the chips to left-align when they wrap;
-                // on larger screens keep them vertically centered with the tracker.
-                alignItems: { xs: 'flex-start', sm: 'center' },
-                justifyContent: 'space-between',
-                gap: 2,
+            <ActivityTracker
+              entityId={pose.id.toString()}
+              entityName={pose.sort_english_name}
+              entityType="asana"
+              variant="inline"
+              checkActivity={checkActivityExists}
+              createActivity={createAsanaActivity}
+              deleteActivity={deleteAsanaActivity}
+              onActivityRefresh={() =>
+                setActivityRefreshTrigger((prev) => prev + 1)
+              }
+              additionalActivityData={{
+                poseId: pose.id.toString(),
+                poseName: pose.sort_english_name,
+                sort_english_name: pose.sort_english_name,
+                duration: 0,
               }}
-            >
-              <Typography
-                variant="subtitle2"
-                sx={{ mb: 1, color: 'text.secondary' }}
-              >
-                Difficulty (sets activity tracker difficulty)
-              </Typography>
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{
-                  flexWrap: 'wrap',
-                  // Make the chip stack take full width on small screens so
-                  // wrapped lines align to the left edge of the container.
-                  width: { xs: '100%', sm: 'auto' },
-                  // When the chips wrap to multiple lines, alignContent controls
-                  // how the lines are positioned. Use flex-start on xs to left-align
-                  // wrapped rows.
-                  alignContent: { xs: 'flex-start', sm: 'center' },
-                }}
-              >
-                {[
-                  {
-                    label: 'Easy',
-                    variant: easyChipVariant,
-                    onClick: handleEasyChipClick,
-                    color:
-                      easyChipVariant === 'filled'
-                        ? ('success' as const)
-                        : ('default' as const),
-                  },
-                  {
-                    label: 'Average',
-                    variant: averageChipVariant,
-                    onClick: handleAverageChipClick,
-                    color:
-                      averageChipVariant === 'filled'
-                        ? ('info' as const)
-                        : ('default' as const),
-                  },
-                  {
-                    label: 'Difficult',
-                    variant: difficultChipVariant,
-                    onClick: handleDifficultChipClick,
-                    color:
-                      difficultChipVariant === 'filled'
-                        ? ('error' as const)
-                        : ('default' as const),
-                  },
-                ].map((chip) => (
-                  <Chip
-                    key={chip.label}
-                    label={chip.label}
-                    variant={chip.variant}
-                    color={chip.color}
-                    onClick={chip.onClick}
-                    sx={{
-                      cursor: 'pointer',
-                      fontWeight: chip.variant === 'filled' ? 700 : 400,
-                      '& .MuiChip-label': {
-                        color: chip.variant === 'filled' ? 'white' : 'inherit',
-                      },
-                    }}
-                  />
-                ))}
-              </Stack>
-
-              {/* Activity Tracker Toggle - Button and Checkbox */}
-              <Stack sx={{ alignItems: 'center' }}>
-                <Stack
-                  direction={{ xs: 'column', sm: 'row' }}
-                  spacing={2}
-                  sx={{ alignItems: 'center' }}
-                >
-                  <Button
-                    variant={checked ? 'contained' : 'outlined'}
-                    color={checked ? 'success' : 'primary'}
-                    onClick={handleButtonToggle}
-                    disabled={loading}
-                    sx={{
-                      minWidth: { xs: '100%', sm: '200px' },
-                      textTransform: 'none',
-                      width: { xs: '100%', sm: 'auto' },
-                    }}
-                  >
-                    {buttonLabel}
-                  </Button>
-
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={checked}
-                        onChange={handleCheckboxChange}
-                        disabled={loading}
-                      />
-                    }
-                    label=""
-                    sx={{ m: 0 }}
-                  />
-                </Stack>
-              </Stack>
-            </Box>
-          </Paper>
-
-          {error && (
-            <Typography color="error" sx={{ mt: 1, mb: 1 }}>
-              {error}
-            </Typography>
-          )}
+            />
+          </Box>
         </Stack>
       </Box>
       {pose && FEATURES.SHOW_PRACTICE_VIEW_ASANA && (

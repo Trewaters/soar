@@ -87,19 +87,16 @@ jest.mock('@lib/seriesService', () => ({
   updateSeries: jest.fn(),
 }))
 
-// Mock SeriesActivityTracker to avoid NextAuth import issues
-jest.mock(
-  '@app/clientComponents/seriesActivityTracker/SeriesActivityTracker',
-  () => {
-    const MockSeriesActivityTracker = ({ seriesId }: any) => (
-      <div data-testid="series-activity-tracker">
-        Activity Tracker for series: {seriesId}
-      </div>
-    )
-    MockSeriesActivityTracker.displayName = 'MockSeriesActivityTracker'
-    return MockSeriesActivityTracker
-  }
-)
+// Mock ActivityTracker to avoid NextAuth import issues
+jest.mock('@app/clientComponents/ActivityTracker', () => {
+  const MockActivityTracker = ({ entityId, entityType }: any) => (
+    <div data-testid="activity-tracker">
+      Activity Tracker for {entityType}: {entityId}
+    </div>
+  )
+  MockActivityTracker.displayName = 'MockActivityTracker'
+  return MockActivityTracker
+})
 
 // Mock WeeklyActivityTracker to avoid NextAuth import issues
 jest.mock('@app/clientComponents/WeeklyActivityTracker', () => {

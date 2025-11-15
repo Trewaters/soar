@@ -93,28 +93,26 @@ jest.mock('@lib/seriesService', () => ({
   getAllSeries: (...args: any[]) => mockGetAllSeries(...args),
 }))
 
-// Mock SequenceActivityTracker
-jest.mock(
-  '@app/clientComponents/sequenceActivityTracker/SequenceActivityTracker',
-  () => {
-    const MockSequenceActivityTracker = ({
-      sequenceId,
-      onActivityToggle,
-    }: any) => (
-      <div data-testid="sequence-activity-tracker">
-        Activity Tracker for sequence: {sequenceId}
-        <button
-          data-testid="mock-activity-toggle"
-          onClick={() => onActivityToggle?.(true)}
-        >
-          Toggle Activity
-        </button>
-      </div>
-    )
-    MockSequenceActivityTracker.displayName = 'MockSequenceActivityTracker'
-    return MockSequenceActivityTracker
-  }
-)
+// Mock ActivityTracker
+jest.mock('@app/clientComponents/ActivityTracker', () => {
+  const MockActivityTracker = ({
+    entityId,
+    entityType,
+    onActivityToggle,
+  }: any) => (
+    <div data-testid="activity-tracker">
+      Activity Tracker for {entityType}: {entityId}
+      <button
+        data-testid="mock-activity-toggle"
+        onClick={() => onActivityToggle?.(true)}
+      >
+        Toggle Activity
+      </button>
+    </div>
+  )
+  MockActivityTracker.displayName = 'MockActivityTracker'
+  return MockActivityTracker
+})
 
 // Mock WeeklyActivityTracker (unified component)
 jest.mock('@app/clientComponents/WeeklyActivityTracker', () => {
@@ -625,7 +623,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
   })
 
   describe('Sequence Activity Tracking', () => {
-    it('should display the SequenceActivityTracker when a sequence is selected', async () => {
+    it('should display the ActivityTracker when a sequence is selected', async () => {
       const mockSequence = createMockSequence({ id: 123 })
       mockGetAllSequences.mockResolvedValue([mockSequence])
       mockGet.mockReturnValue('123')
@@ -638,7 +636,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
         ).toBeInTheDocument()
       })
 
-      const activityTracker = screen.getByTestId('sequence-activity-tracker')
+      const activityTracker = screen.getByTestId('activity-tracker')
       expect(activityTracker).toBeInTheDocument()
       expect(activityTracker).toHaveTextContent(
         'Activity Tracker for sequence: 123'
@@ -733,9 +731,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       })
 
       // Activity trackers should not be present
-      expect(
-        screen.queryByTestId('sequence-activity-tracker')
-      ).not.toBeInTheDocument()
+      expect(screen.queryByTestId('activity-tracker')).not.toBeInTheDocument()
       expect(
         screen.queryByTestId('sequence-weekly-activity-tracker')
       ).not.toBeInTheDocument()
@@ -754,9 +750,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       })
 
       // Activity trackers should not be present for id 0
-      expect(
-        screen.queryByTestId('sequence-activity-tracker')
-      ).not.toBeInTheDocument()
+      expect(screen.queryByTestId('activity-tracker')).not.toBeInTheDocument()
       expect(
         screen.queryByTestId('sequence-weekly-activity-tracker')
       ).not.toBeInTheDocument()
@@ -776,7 +770,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       })
 
       // Both trackers should be present
-      const activityTracker = screen.getByTestId('sequence-activity-tracker')
+      const activityTracker = screen.getByTestId('activity-tracker')
       const weeklyTracker = screen.getByTestId('weekly-activity-tracker')
 
       expect(activityTracker).toBeInTheDocument()
