@@ -33,6 +33,7 @@ import Image from 'next/image'
 import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
 import { useSearchParams } from 'next/navigation'
 import SequenceActivityTracker from '@app/clientComponents/sequenceActivityTracker/SequenceActivityTracker'
+import WeeklyActivityTracker from '@app/clientComponents/WeeklyActivityTracker'
 import { FEATURES } from '@app/FEATURES'
 import { useSession } from 'next-auth/react'
 import getAlphaUserIds from '@app/lib/alphaUsers'
@@ -122,7 +123,7 @@ export default function Page() {
     updatedAt: '',
   })
   const [, setIsLoadingFreshSeriesData] = useState<boolean>(false)
-  const [, setRefreshTrigger] = useState(0)
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [searchInputValue, setSearchInputValue] = useState('')
 
   const [page, setPage] = useState(1)
@@ -969,6 +970,19 @@ export default function Page() {
                         sequenceId={singleSequence.id.toString()}
                         sequenceName={singleSequence.nameSequence}
                         onActivityToggle={handleActivityToggle}
+                      />
+                    </Box>
+                  )}
+
+                  {/* Sequence Weekly Activity Tracker */}
+                  {singleSequence.id && singleSequence.id !== 0 && (
+                    <Box sx={{ mt: 3 }}>
+                      <WeeklyActivityTracker
+                        entityId={singleSequence.id.toString()}
+                        entityName={singleSequence.nameSequence}
+                        entityType="sequence"
+                        variant="detailed"
+                        refreshTrigger={refreshTrigger}
                       />
                     </Box>
                   )}

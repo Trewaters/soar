@@ -344,19 +344,6 @@ export default function WeeklyActivityTracker({
                 </Typography>
               </Stack>
             )}
-
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <Typography variant="body2" color="text.secondary">
-                Total duration:
-              </Typography>
-              <Typography variant="body2" fontWeight="medium">
-                {weeklyData.activities.reduce(
-                  (sum, activity) => sum + activity.duration,
-                  0
-                )}{' '}
-                seconds
-              </Typography>
-            </Stack>
           </Stack>
         </Stack>
 
@@ -407,9 +394,6 @@ export default function WeeklyActivityTracker({
                       </Typography>
                     </Stack>
                     <Stack direction="row" spacing={1} alignItems="center">
-                      <Typography variant="caption" color="text.secondary">
-                        {activity.duration > 0 ? `${activity.duration}s` : '-'}
-                      </Typography>
                       <Chip
                         label={activity.completionStatus}
                         size="small"

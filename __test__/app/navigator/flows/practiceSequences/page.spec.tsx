@@ -97,15 +97,45 @@ jest.mock('@lib/seriesService', () => ({
 jest.mock(
   '@app/clientComponents/sequenceActivityTracker/SequenceActivityTracker',
   () => {
-    const MockSequenceActivityTracker = ({ sequenceId }: any) => (
+    const MockSequenceActivityTracker = ({
+      sequenceId,
+      onActivityToggle,
+    }: any) => (
       <div data-testid="sequence-activity-tracker">
         Activity Tracker for sequence: {sequenceId}
+        <button
+          data-testid="mock-activity-toggle"
+          onClick={() => onActivityToggle?.(true)}
+        >
+          Toggle Activity
+        </button>
       </div>
     )
     MockSequenceActivityTracker.displayName = 'MockSequenceActivityTracker'
     return MockSequenceActivityTracker
   }
 )
+
+// Mock WeeklyActivityTracker (unified component)
+jest.mock('@app/clientComponents/WeeklyActivityTracker', () => {
+  const MockWeeklyActivityTracker = ({
+    entityId,
+    entityName,
+    entityType,
+    variant,
+    refreshTrigger,
+  }: any) => (
+    <div data-testid="weekly-activity-tracker">
+      Weekly Activity Tracker for {entityType}: {entityId}
+      <span data-testid="entity-name">{entityName}</span>
+      <span data-testid="entity-type">{entityType}</span>
+      <span data-testid="tracker-variant">{variant}</span>
+      <span data-testid="refresh-trigger">{refreshTrigger}</span>
+    </div>
+  )
+  MockWeeklyActivityTracker.displayName = 'MockWeeklyActivityTracker'
+  return MockWeeklyActivityTracker
+})
 
 // Mock SplashHeader
 jest.mock('@app/clientComponents/splash-header', () => {
@@ -185,7 +215,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       render(<Page />, { wrapper: Wrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
       })
 
       // List view icon should be visible and clickable
@@ -217,7 +249,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       render(<Page />, { wrapper: Wrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
       })
 
       const listViewButton = screen.getByRole('button', {
@@ -266,7 +300,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       render(<Page />, { wrapper: Wrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
       })
 
       const listViewButton = screen.getByRole('button', {
@@ -300,7 +336,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
         const { unmount } = render(<Page />, { wrapper: Wrapper })
 
         await waitFor(() => {
-          expect(screen.getByText(testSeq.name)).toBeInTheDocument()
+          expect(
+            screen.getByRole('heading', { name: testSeq.name })
+          ).toBeInTheDocument()
         })
 
         const listViewButton = screen.getByRole('button', {
@@ -325,7 +363,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       render(<Page />, { wrapper: Wrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
       })
 
       const scrollViewButton = screen.getByRole('button', {
@@ -350,7 +390,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       render(<Page />, { wrapper: Wrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
       })
 
       const editButton = screen.getByRole('button', {
@@ -374,7 +416,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       render(<Page />, { wrapper: Wrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
       })
 
       const editButton = screen.getByRole('button', {
@@ -399,7 +443,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       render(<Page />, { wrapper: Wrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
       })
 
       const scrollViewButton = screen.getByRole('button', {
@@ -419,7 +465,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       render(<Page />, { wrapper: Wrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
       })
 
       const listViewButton = screen.getByRole('button', {
@@ -442,7 +490,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       render(<Page />, { wrapper: Wrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Evening Relaxation')).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', { name: 'Evening Relaxation' })
+        ).toBeInTheDocument()
       })
 
       // List view button
@@ -475,7 +525,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       render(<Page />, { wrapper: Wrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
       })
 
       const scrollViewButton = screen.getByRole('button', {
@@ -499,7 +551,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       render(<Page />, { wrapper: Wrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
       })
 
       // Verify initial state
@@ -522,11 +576,15 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       render(<Page />, { wrapper: Wrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
       })
 
       // Title should be present
-      expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+      expect(
+        screen.getByRole('heading', { name: 'Morning Flow' })
+      ).toBeInTheDocument()
 
       // View toggle icons should be present
       expect(
@@ -548,17 +606,245 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       render(<Page />, { wrapper: Wrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
       })
 
       // Sequence should remain selected
-      expect(screen.getByText('Morning Flow')).toBeInTheDocument()
+      expect(
+        screen.getByRole('heading', { name: 'Morning Flow' })
+      ).toBeInTheDocument()
 
       // View toggle should reference the correct sequence
       const listViewButton = screen.getByRole('button', {
         name: /switch to list view for Morning Flow/i,
       })
       expect(listViewButton).toBeInTheDocument()
+    })
+  })
+
+  describe('Sequence Activity Tracking', () => {
+    it('should display the SequenceActivityTracker when a sequence is selected', async () => {
+      const mockSequence = createMockSequence({ id: 123 })
+      mockGetAllSequences.mockResolvedValue([mockSequence])
+      mockGet.mockReturnValue('123')
+
+      render(<Page />, { wrapper: Wrapper })
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
+      })
+
+      const activityTracker = screen.getByTestId('sequence-activity-tracker')
+      expect(activityTracker).toBeInTheDocument()
+      expect(activityTracker).toHaveTextContent(
+        'Activity Tracker for sequence: 123'
+      )
+    })
+
+    it('should display the WeeklyActivityTracker when a sequence is selected', async () => {
+      const mockSequence = createMockSequence({ id: 456 })
+      mockGetAllSequences.mockResolvedValue([mockSequence])
+      mockGet.mockReturnValue('456')
+
+      render(<Page />, { wrapper: Wrapper })
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
+      })
+
+      const weeklyTracker = screen.getByTestId('weekly-activity-tracker')
+      expect(weeklyTracker).toBeInTheDocument()
+      expect(weeklyTracker).toHaveTextContent(
+        'Weekly Activity Tracker for sequence: 456'
+      )
+    })
+
+    it('should pass the correct props to WeeklyActivityTracker', async () => {
+      const mockSequence = createMockSequence({
+        id: 789,
+        nameSequence: 'Evening Wind Down',
+      })
+      mockGetAllSequences.mockResolvedValue([mockSequence])
+      mockGet.mockReturnValue('789')
+
+      render(<Page />, { wrapper: Wrapper })
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', { name: 'Evening Wind Down' })
+        ).toBeInTheDocument()
+      })
+
+      const weeklyTracker = screen.getByTestId('weekly-activity-tracker')
+      expect(weeklyTracker).toBeInTheDocument()
+
+      // Check that props are correctly passed
+      expect(screen.getByTestId('entity-name')).toHaveTextContent(
+        'Evening Wind Down'
+      )
+      expect(screen.getByTestId('entity-type')).toHaveTextContent('sequence')
+      expect(screen.getByTestId('tracker-variant')).toHaveTextContent(
+        'detailed'
+      )
+      expect(screen.getByTestId('refresh-trigger')).toHaveTextContent('0')
+    })
+
+    it('should update refreshTrigger when activity is toggled', async () => {
+      const user = userEvent.setup()
+      const mockSequence = createMockSequence({ id: 555 })
+      mockGetAllSequences.mockResolvedValue([mockSequence])
+      mockGet.mockReturnValue('555')
+
+      render(<Page />, { wrapper: Wrapper })
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
+      })
+
+      // Initial refreshTrigger should be 0
+      expect(screen.getByTestId('refresh-trigger')).toHaveTextContent('0')
+
+      // Click the activity toggle button
+      const toggleButton = screen.getByTestId('mock-activity-toggle')
+      await user.click(toggleButton)
+
+      // refreshTrigger should increment to 1
+      await waitFor(() => {
+        expect(screen.getByTestId('refresh-trigger')).toHaveTextContent('1')
+      })
+    })
+
+    it('should not display activity trackers when no sequence is selected', async () => {
+      mockGetAllSequences.mockResolvedValue([])
+      mockGet.mockReturnValue(null)
+
+      render(<Page />, { wrapper: Wrapper })
+
+      await waitFor(() => {
+        expect(screen.getByTestId('splash-header')).toBeInTheDocument()
+      })
+
+      // Activity trackers should not be present
+      expect(
+        screen.queryByTestId('sequence-activity-tracker')
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByTestId('sequence-weekly-activity-tracker')
+      ).not.toBeInTheDocument()
+    })
+
+    it('should not display activity trackers for sequence with id 0', async () => {
+      const mockSequence = createMockSequence({ id: 0 })
+      mockGetAllSequences.mockResolvedValue([mockSequence])
+      mockGet.mockReturnValue('0')
+
+      render(<Page />, { wrapper: Wrapper })
+
+      await waitFor(() => {
+        // The sequence might still render
+        expect(screen.queryByText('Morning Flow')).toBeInTheDocument()
+      })
+
+      // Activity trackers should not be present for id 0
+      expect(
+        screen.queryByTestId('sequence-activity-tracker')
+      ).not.toBeInTheDocument()
+      expect(
+        screen.queryByTestId('sequence-weekly-activity-tracker')
+      ).not.toBeInTheDocument()
+    })
+
+    it('should display both activity trackers together when sequence is selected', async () => {
+      const mockSequence = createMockSequence({ id: 999 })
+      mockGetAllSequences.mockResolvedValue([mockSequence])
+      mockGet.mockReturnValue('999')
+
+      render(<Page />, { wrapper: Wrapper })
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
+      })
+
+      // Both trackers should be present
+      const activityTracker = screen.getByTestId('sequence-activity-tracker')
+      const weeklyTracker = screen.getByTestId('weekly-activity-tracker')
+
+      expect(activityTracker).toBeInTheDocument()
+      expect(weeklyTracker).toBeInTheDocument()
+
+      // Both should reference the same sequence
+      expect(activityTracker).toHaveTextContent('sequence: 999')
+      expect(weeklyTracker).toHaveTextContent('sequence: 999')
+    })
+
+    it('should maintain refreshTrigger state across multiple activity toggles', async () => {
+      const user = userEvent.setup()
+      const mockSequence = createMockSequence({ id: 111 })
+      mockGetAllSequences.mockResolvedValue([mockSequence])
+      mockGet.mockReturnValue('111')
+
+      render(<Page />, { wrapper: Wrapper })
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
+      })
+
+      const toggleButton = screen.getByTestId('mock-activity-toggle')
+      const refreshTriggerElement = screen.getByTestId('refresh-trigger')
+
+      // Initial state
+      expect(refreshTriggerElement).toHaveTextContent('0')
+
+      // First toggle
+      await user.click(toggleButton)
+      await waitFor(() => {
+        expect(refreshTriggerElement).toHaveTextContent('1')
+      })
+
+      // Second toggle
+      await user.click(toggleButton)
+      await waitFor(() => {
+        expect(refreshTriggerElement).toHaveTextContent('2')
+      })
+
+      // Third toggle
+      await user.click(toggleButton)
+      await waitFor(() => {
+        expect(refreshTriggerElement).toHaveTextContent('3')
+      })
+    })
+
+    it('should render activity trackers with correct sequence name', async () => {
+      const mockSequence = createMockSequence({
+        id: 777,
+        nameSequence: 'Sunrise Flow',
+      })
+      mockGetAllSequences.mockResolvedValue([mockSequence])
+      mockGet.mockReturnValue('777')
+
+      render(<Page />, { wrapper: Wrapper })
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', { name: 'Sunrise Flow' })
+        ).toBeInTheDocument()
+      })
+
+      // Check that the sequence name is passed correctly
+      const sequenceNameElement = screen.getByTestId('entity-name')
+      expect(sequenceNameElement).toHaveTextContent('Sunrise Flow')
     })
   })
 })
