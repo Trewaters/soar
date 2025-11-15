@@ -384,7 +384,7 @@ describe('SequenceViewWithEdit', () => {
     })
 
     describe('View Toggle Icons', () => {
-      it('should display view toggle icons with list view disabled and scroll view enabled', () => {
+      it('should display view toggle icons with list view active (orange) and scroll view inactive (gray)', () => {
         mockUseSession.mockReturnValue({
           data: { user: { email: 'user@example.com' } },
           status: 'authenticated',
@@ -394,14 +394,14 @@ describe('SequenceViewWithEdit', () => {
           wrapper: Wrapper,
         })
 
-        // List view icon should be disabled (current view)
+        // List view icon should be non-clickable (current view) with orange color
         const listViewButton = screen.getByRole('button', {
           name: /currently in list view/i,
         })
         expect(listViewButton).toBeInTheDocument()
-        expect(listViewButton).toBeDisabled()
+        expect(listViewButton).toHaveAttribute('title', 'List View (current)')
 
-        // Scroll view icon should be enabled (can navigate to it)
+        // Scroll view icon should be enabled (can navigate to it) with gray color
         const scrollViewButton = screen.getByRole('button', {
           name: /switch to scroll view for Morning Flow/i,
         })
@@ -455,7 +455,7 @@ describe('SequenceViewWithEdit', () => {
         expect(scrollViewButton).toHaveAttribute('title', 'Scroll View')
       })
 
-      it('should not navigate when list view icon is clicked (disabled)', async () => {
+      it('should not navigate when list view icon is clicked (current view with pointer-events: none)', async () => {
         mockUseSession.mockReturnValue({
           data: { user: { email: 'owner@uvuyoga.com' } },
           status: 'authenticated',
@@ -469,9 +469,12 @@ describe('SequenceViewWithEdit', () => {
           name: /currently in list view/i,
         })
 
-        // Button should be disabled, so we just verify it's disabled
-        // Clicking disabled buttons with pointer-events:none throws errors
-        expect(listViewButton).toBeDisabled()
+        // Button should be present and styled as current view
+        expect(listViewButton).toBeInTheDocument()
+
+        // Verify it has pointer-events: none styling (non-clickable)
+        const buttonStyle = window.getComputedStyle(listViewButton)
+        expect(buttonStyle.pointerEvents).toBe('none')
 
         // Navigation should not be called
         expect(mockPush).not.toHaveBeenCalled()

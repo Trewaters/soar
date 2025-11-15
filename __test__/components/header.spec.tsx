@@ -92,6 +92,11 @@ jest.mock('@mui/icons-material/MenuBook', () => ({
   default: () => <div data-testid="menu-book-icon" />,
 }))
 
+jest.mock('@mui/icons-material/Person', () => ({
+  __esModule: true,
+  default: () => <div data-testid="person-icon" />,
+}))
+
 // Test wrapper component with all required providers
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
   <ThemeProvider theme={theme}>
@@ -324,6 +329,84 @@ describe('Header Component', () => {
       )
       expect(logoImage).toHaveAttribute('width', '150')
       expect(logoImage).toHaveAttribute('height', '20')
+    })
+  })
+
+  describe('Profile icon behavior', () => {
+    it('should always show PersonIcon for Profile menu item regardless of current path', () => {
+      mockUseSession.mockReturnValue({
+        data: null,
+        status: 'unauthenticated',
+        update: jest.fn(),
+      })
+
+      render(<Header />, { wrapper: TestWrapper })
+
+      // Open the drawer
+      const menuButton = screen.getByRole('button', {
+        name: /open main navigation/i,
+      })
+      fireEvent.click(menuButton)
+
+      // Check that PersonIcon is rendered (not HomeIcon)
+      const personIcon = screen.getByTestId('person-icon')
+      expect(personIcon).toBeInTheDocument()
+    })
+
+    it('should show PersonIcon even when on profile page', () => {
+      // Mock usePathname to return a profile path
+      jest
+        .spyOn(require('next/navigation'), 'usePathname')
+        .mockReturnValue('/navigator/profile')
+
+      mockUseSession.mockReturnValue({
+        data: {
+          user: { email: 'test@example.com' },
+          expires: '2023-10-05T14:48:00.000Z',
+        },
+        status: 'authenticated',
+        update: jest.fn(),
+      })
+
+      render(<Header />, { wrapper: TestWrapper })
+
+      // Open the drawer
+      const menuButton = screen.getByRole('button', {
+        name: /open main navigation/i,
+      })
+      fireEvent.click(menuButton)
+
+      // Verify PersonIcon is still shown (not swapped to HomeIcon)
+      const personIcon = screen.getByTestId('person-icon')
+      expect(personIcon).toBeInTheDocument()
+    })
+
+    it('should show PersonIcon when on profile dashboard page', () => {
+      // Mock usePathname to return profile dashboard path
+      jest
+        .spyOn(require('next/navigation'), 'usePathname')
+        .mockReturnValue('/navigator/profile/dashboard')
+
+      mockUseSession.mockReturnValue({
+        data: {
+          user: { email: 'test@example.com' },
+          expires: '2023-10-05T14:48:00.000Z',
+        },
+        status: 'authenticated',
+        update: jest.fn(),
+      })
+
+      render(<Header />, { wrapper: TestWrapper })
+
+      // Open the drawer
+      const menuButton = screen.getByRole('button', {
+        name: /open main navigation/i,
+      })
+      fireEvent.click(menuButton)
+
+      // Verify PersonIcon is consistently shown
+      const personIcon = screen.getByTestId('person-icon')
+      expect(personIcon).toBeInTheDocument()
     })
   })
 })

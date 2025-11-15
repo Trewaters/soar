@@ -288,13 +288,12 @@ export default function SequenceViewWithEdit({
               }}
             >
               <IconButton
-                disabled
                 aria-label="Currently in list view"
                 sx={{
                   color: 'primary.main',
                   p: 1,
                   minWidth: 0,
-                  opacity: 0.5,
+                  pointerEvents: 'none',
                 }}
                 title="List View (current)"
               >
@@ -311,7 +310,7 @@ export default function SequenceViewWithEdit({
                 }}
                 aria-label={`Switch to scroll view for ${model.nameSequence}`}
                 sx={{
-                  color: 'primary.main',
+                  color: 'grey.500',
                   p: 1,
                   minWidth: 0,
                 }}

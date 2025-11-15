@@ -433,7 +433,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
   })
 
   describe('View Toggle Icon States', () => {
-    it('should show scroll view icon as disabled with reduced opacity', async () => {
+    it('should show scroll view icon as current view with orange color', async () => {
       const mockSequence = createMockSequence()
       mockGetAllSequences.mockResolvedValue([mockSequence])
       mockGet.mockReturnValue('1')
@@ -450,12 +450,14 @@ describe('Practice Sequences Page - View Toggle Features', () => {
         name: /currently in scroll view/i,
       })
 
-      expect(scrollViewButton).toBeDisabled()
-      // Check for opacity styling (disabled state)
-      expect(scrollViewButton).toHaveStyle({ opacity: 0.5 })
+      // Should be non-clickable (pointer-events: none)
+      expect(scrollViewButton).toBeInTheDocument()
+      // Should have orange color (primary.main)
+      const buttonStyle = window.getComputedStyle(scrollViewButton)
+      expect(buttonStyle.pointerEvents).toBe('none')
     })
 
-    it('should show list view icon as enabled and clickable', async () => {
+    it('should show list view icon as clickable with gray color', async () => {
       const mockSequence = createMockSequence()
       mockGetAllSequences.mockResolvedValue([mockSequence])
       mockGet.mockReturnValue('1')
@@ -473,7 +475,53 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       })
 
       expect(listViewButton).not.toBeDisabled()
-      expect(listViewButton).not.toHaveStyle({ opacity: 0.5 })
+      // Should be clickable
+      expect(listViewButton).toBeEnabled()
+    })
+
+    it('should display scroll view icon with primary color indicating active state', async () => {
+      const mockSequence = createMockSequence()
+      mockGetAllSequences.mockResolvedValue([mockSequence])
+      mockGet.mockReturnValue('1')
+
+      render(<Page />, { wrapper: Wrapper })
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
+      })
+
+      const scrollViewButton = screen.getByRole('button', {
+        name: /currently in scroll view/i,
+      })
+
+      // Verify the button is rendered and has the correct title
+      expect(scrollViewButton).toBeInTheDocument()
+      expect(scrollViewButton).toHaveAttribute('title', 'Scroll View (current)')
+    })
+
+    it('should display list view icon with gray color for inactive state', async () => {
+      const mockSequence = createMockSequence()
+      mockGetAllSequences.mockResolvedValue([mockSequence])
+      mockGet.mockReturnValue('1')
+
+      render(<Page />, { wrapper: Wrapper })
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', { name: 'Morning Flow' })
+        ).toBeInTheDocument()
+      })
+
+      const listViewButton = screen.getByRole('button', {
+        name: /switch to list view/i,
+      })
+
+      // Verify the button is rendered and clickable
+      expect(listViewButton).toBeInTheDocument()
+      expect(listViewButton).toHaveAttribute('title', 'List View')
+      expect(listViewButton).toBeEnabled()
     })
   })
 

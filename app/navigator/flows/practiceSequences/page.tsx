@@ -621,7 +621,7 @@ export default function Page() {
                           }}
                           aria-label={`Switch to list view for ${singleSequence.nameSequence}`}
                           sx={{
-                            color: 'primary.main',
+                            color: 'grey.500',
                             p: 1,
                             minWidth: 0,
                           }}
@@ -631,13 +631,12 @@ export default function Page() {
                         </IconButton>
 
                         <IconButton
-                          disabled
                           aria-label="Currently in scroll view"
                           sx={{
                             color: 'primary.main',
                             p: 1,
                             minWidth: 0,
-                            opacity: 0.5,
+                            pointerEvents: 'none',
                           }}
                           title="Scroll View (current)"
                         >
