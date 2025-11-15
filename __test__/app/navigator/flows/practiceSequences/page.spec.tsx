@@ -225,12 +225,13 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       expect(listViewButton).toBeInTheDocument()
       expect(listViewButton).not.toBeDisabled()
 
-      // Scroll view icon should be visible but disabled (current view)
+      // Scroll view icon should be visible (current view) with pointer-events: none
       const scrollViewButton = screen.getByRole('button', {
         name: /currently in scroll view/i,
       })
       expect(scrollViewButton).toBeInTheDocument()
-      expect(scrollViewButton).toBeDisabled()
+      // Current view icon is not disabled but has pointer-events: none
+      expect(scrollViewButton).not.toBeDisabled()
 
       // Edit icon should also be visible
       const editButton = screen.getByRole('button', {
@@ -353,7 +354,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       }
     })
 
-    it('should not navigate when scroll view icon is clicked (disabled)', async () => {
+    it('should not navigate when scroll view icon is clicked (current view with pointer-events: none)', async () => {
       const mockSequence = createMockSequence()
       mockGetAllSequences.mockResolvedValue([mockSequence])
       mockGet.mockReturnValue('1')
@@ -370,8 +371,13 @@ describe('Practice Sequences Page - View Toggle Features', () => {
         name: /currently in scroll view/i,
       })
 
-      // Should be disabled (cannot click disabled buttons in tests)
-      expect(scrollViewButton).toBeDisabled()
+      // Should be present and styled as current view (not disabled but has pointer-events: none)
+      expect(scrollViewButton).toBeInTheDocument()
+      expect(scrollViewButton).not.toBeDisabled()
+
+      // Verify it has pointer-events: none styling
+      const buttonStyle = window.getComputedStyle(scrollViewButton)
+      expect(buttonStyle.pointerEvents).toBe('none')
 
       // Navigation should not be called
       expect(mockPush).not.toHaveBeenCalled()
@@ -580,7 +586,10 @@ describe('Practice Sequences Page - View Toggle Features', () => {
         name: /currently in scroll view/i,
       })
 
-      expect(scrollViewButton).toBeDisabled()
+      // Current view icon is not disabled but has pointer-events: none
+      expect(scrollViewButton).not.toBeDisabled()
+      const buttonStyle = window.getComputedStyle(scrollViewButton)
+      expect(buttonStyle.pointerEvents).toBe('none')
       expect(scrollViewButton.getAttribute('aria-label')).toContain('Currently')
     })
   })

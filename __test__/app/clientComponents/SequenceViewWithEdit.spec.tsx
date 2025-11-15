@@ -692,7 +692,7 @@ describe('SequenceViewWithEdit', () => {
         ).toBeInTheDocument()
       })
 
-      it('should indicate disabled state for current view icon', () => {
+      it('should indicate current state for list view icon', () => {
         mockUseSession.mockReturnValue({
           data: { user: { email: 'user@example.com' } },
           status: 'authenticated',
@@ -706,8 +706,10 @@ describe('SequenceViewWithEdit', () => {
           name: /currently in list view/i,
         })
 
-        // Should be disabled since it's the current view
-        expect(listViewButton).toBeDisabled()
+        // Should be present but have pointer-events: none since it's the current view
+        expect(listViewButton).not.toBeDisabled()
+        const buttonStyle = window.getComputedStyle(listViewButton)
+        expect(buttonStyle.pointerEvents).toBe('none')
       })
     })
 
