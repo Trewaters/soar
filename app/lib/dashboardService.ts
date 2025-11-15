@@ -330,21 +330,21 @@ export async function getMostCommonAsanas(
   )
 
   const activities = await prisma.asanaActivity.groupBy({
-    by: ['poseName'],
+    by: ['asanaName'],
     where: {
       userId,
       datePerformed: {
         gte: twelveMonthsAgo,
       },
     },
-    _count: { poseName: true },
-    orderBy: { _count: { poseName: 'desc' } },
+    _count: { asanaName: true },
+    orderBy: { _count: { asanaName: 'desc' } },
     take: 3,
   })
 
   return activities.map((activity) => ({
-    name: activity.poseName,
-    count: activity._count.poseName,
+    name: activity.asanaName,
+    count: activity._count.asanaName,
   }))
 }
 
