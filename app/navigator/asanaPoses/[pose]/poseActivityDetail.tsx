@@ -1190,7 +1190,13 @@ export default function PoseActivityDetail({
                     variant={chip.variant}
                     color={chip.color}
                     onClick={chip.onClick}
-                    sx={{ cursor: 'pointer' }}
+                    sx={{
+                      cursor: 'pointer',
+                      fontWeight: chip.variant === 'filled' ? 700 : 400,
+                      '& .MuiChip-label': {
+                        color: chip.variant === 'filled' ? 'white' : 'inherit',
+                      },
+                    }}
                   />
                 ))}
               </Stack>

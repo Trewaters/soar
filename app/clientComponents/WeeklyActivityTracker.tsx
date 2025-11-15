@@ -13,6 +13,9 @@ import { useSession } from 'next-auth/react'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import WbSunnyIcon from '@mui/icons-material/WbSunny'
+import WbTwilightIcon from '@mui/icons-material/WbTwilight'
+import NightsStayIcon from '@mui/icons-material/NightsStay'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 import {
   getPoseWeeklyActivity,
@@ -135,11 +138,13 @@ export default function WeeklyActivityTracker({
     if (completionStatus === 'complete' && difficulty) {
       switch (difficulty.toLowerCase()) {
         case 'easy':
-          return 'success' // Green
+          return 'success' // Green with white text
         case 'average':
-          return 'info' // Blue
+        case 'medium':
+          return 'info' // Blue with white text
         case 'difficult':
-          return 'error' // Red
+        case 'hard':
+          return 'error' // Red with white text
         default:
           return 'success'
       }
@@ -189,6 +194,22 @@ export default function WeeklyActivityTracker({
         return 'All Activity This Week'
       default:
         return 'All Activity This Week'
+    }
+  }
+
+  const getTimeOfDayIcon = (datePerformed: string) => {
+    const date = new Date(datePerformed)
+    const hour = date.getHours()
+
+    if (hour >= 5 && hour < 12) {
+      // Morning: 5 AM to 11:59 AM
+      return <WbTwilightIcon fontSize="small" sx={{ color: 'warning.main' }} />
+    } else if (hour >= 20 || hour < 5) {
+      // Night: 8 PM to 4:59 AM
+      return <NightsStayIcon fontSize="small" sx={{ color: 'info.main' }} />
+    } else {
+      // Day: 12 PM to 7:59 PM
+      return <WbSunnyIcon fontSize="small" sx={{ color: 'warning.light' }} />
     }
   }
 
@@ -383,25 +404,35 @@ export default function WeeklyActivityTracker({
                           }
                         )}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {new Date(activity.datePerformed).toLocaleTimeString(
-                          'en-US',
-                          {
-                            hour: 'numeric',
-                            minute: '2-digit',
-                          }
-                        )}
-                      </Typography>
+                      <Stack direction="row" spacing={0.5} alignItems="center">
+                        <Typography variant="caption" color="text.secondary">
+                          {new Date(activity.datePerformed).toLocaleTimeString(
+                            'en-US',
+                            {
+                              hour: 'numeric',
+                              minute: '2-digit',
+                            }
+                          )}
+                        </Typography>
+                        {getTimeOfDayIcon(activity.datePerformed)}
+                      </Stack>
                     </Stack>
                     <Stack direction="row" spacing={1} alignItems="center">
                       <Chip
-                        label={activity.completionStatus}
+                        label={activity.difficulty || activity.completionStatus}
                         size="small"
-                        variant="outlined"
+                        variant="filled"
                         color={getDifficultyColor(
                           activity.difficulty,
                           activity.completionStatus
                         )}
+                        sx={{
+                          fontWeight: 700,
+                          textTransform: 'capitalize',
+                          '& .MuiChip-label': {
+                            color: 'white',
+                          },
+                        }}
                       />
                     </Stack>
                   </Box>
