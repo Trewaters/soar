@@ -37,6 +37,9 @@ export async function GET() {
       provider: account.provider,
       providerAccountId: account.providerAccountId,
       connectedAt: account.createdAt,
+      type: account.type,
+      hasPassword:
+        account.provider === 'credentials' && !!account.credentials_password,
     }))
 
     return NextResponse.json({
@@ -72,9 +75,12 @@ export async function DELETE(request: Request) {
     const body = await request.json()
     const { provider } = body
 
-    if (!provider || !['google', 'github'].includes(provider)) {
+    if (!provider || !['google', 'github', 'credentials'].includes(provider)) {
       return NextResponse.json(
-        { error: 'Invalid provider. Must be "google" or "github"' },
+        {
+          error:
+            'Invalid provider. Must be "google", "github", or "credentials"',
+        },
         { status: 400 }
       )
     }

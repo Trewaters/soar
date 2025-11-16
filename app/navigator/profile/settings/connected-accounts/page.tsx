@@ -18,13 +18,21 @@ import {
   AddCircleOutline as AddIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material'
+import ConfirmationDialog from '@clientComponents/ConfirmationDialog'
+import AddLoginMethodDialog from '@clientComponents/AddLoginMethodDialog'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
 import theme from '@styles/theme'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 
 // Provider metadata for displaying accounts
 const PROVIDER_METADATA = {
+  credentials: {
+    name: 'Email & Password',
+    icon: '/icons/profile/auth-credentials.svg',
+    available: true,
+  },
   google: {
     name: 'Google',
     icon: '/icons/profile/auth-google.svg',
@@ -46,6 +54,8 @@ interface ConnectedAccount {
   provider: string
   providerAccountId: string
   connectedAt: Date
+  type?: string
+  hasPassword?: boolean
 }
 
 export default function ConnectedAccountsPage() {
@@ -55,6 +65,12 @@ export default function ConnectedAccountsPage() {
   >([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [providerToDisconnect, setProviderToDisconnect] = useState<
+    string | null
+  >(null)
+  const [addDialogOpen, setAddDialogOpen] = useState(false)
+  const searchParams = useSearchParams()
 
   // Fetch connected accounts on mount
   useEffect(() => {
@@ -62,6 +78,19 @@ export default function ConnectedAccountsPage() {
       fetchConnectedAccounts()
     }
   }, [session])
+
+  // Check for OAuth callback success
+  useEffect(() => {
+    const action = searchParams.get('action')
+    const provider = searchParams.get('provider')
+
+    if (action === 'link-success' && provider) {
+      // Refresh accounts list after OAuth link
+      fetchConnectedAccounts()
+      // Optionally show success message
+      // Could add a success state here if desired
+    }
+  }, [searchParams])
 
   const fetchConnectedAccounts = async () => {
     try {
@@ -87,19 +116,12 @@ export default function ConnectedAccountsPage() {
   }
 
   const handleDisconnect = async (provider: string) => {
-    // Prevent disconnecting if it's the only account
-    if (connectedAccounts.length === 1) {
-      alert('Cannot disconnect your only authentication method')
-      return
-    }
+    setProviderToDisconnect(provider)
+    setDialogOpen(true)
+  }
 
-    if (
-      !confirm(
-        `Are you sure you want to disconnect your ${PROVIDER_METADATA[provider as keyof typeof PROVIDER_METADATA]?.name || provider} account?`
-      )
-    ) {
-      return
-    }
+  const confirmDisconnect = async () => {
+    if (!providerToDisconnect) return
 
     try {
       const response = await fetch('/api/user/connected-accounts', {
@@ -107,30 +129,39 @@ export default function ConnectedAccountsPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ provider }),
+        body: JSON.stringify({ provider: providerToDisconnect }),
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to disconnect account')
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to disconnect account')
       }
 
-      // Refresh the connected accounts list
+      // Refresh the list
       await fetchConnectedAccounts()
     } catch (err) {
-      console.error('Error disconnecting account:', err)
-      alert(
-        err instanceof Error
-          ? err.message
-          : 'Failed to disconnect account. Please try again.'
+      console.error('Failed to disconnect:', err)
+      setError(
+        err instanceof Error ? err.message : 'Failed to disconnect account'
       )
+    } finally {
+      setDialogOpen(false)
+      setProviderToDisconnect(null)
     }
   }
 
+  const cancelDisconnect = () => {
+    setDialogOpen(false)
+    setProviderToDisconnect(null)
+  }
+
   const handleAddAccount = () => {
-    // This would open a dialog or redirect to add new login method
-    // For now, just show a message
-    alert('Adding new login methods is coming soon!')
+    setAddDialogOpen(true)
+  }
+
+  const handleAddSuccess = () => {
+    // Refresh the connected accounts list
+    fetchConnectedAccounts()
   }
 
   // Check if a provider is connected
@@ -251,6 +282,7 @@ export default function ConnectedAccountsPage() {
                       ([providerId, metadata]) => {
                         const isConnected = isProviderConnected(providerId)
                         const isAvailable = metadata.available
+                        const isCredentials = providerId === 'credentials'
 
                         return (
                           <Paper
@@ -259,9 +291,15 @@ export default function ConnectedAccountsPage() {
                             sx={{
                               p: 2,
                               borderRadius: 2,
-                              bgcolor: 'background.default',
+                              bgcolor:
+                                isCredentials && isConnected
+                                  ? 'action.hover'
+                                  : 'background.default',
                               border: '1px solid',
-                              borderColor: 'divider',
+                              borderColor:
+                                isCredentials && isConnected
+                                  ? 'primary.main'
+                                  : 'divider',
                               opacity: !isAvailable ? 0.6 : 1,
                             }}
                           >
@@ -297,15 +335,28 @@ export default function ConnectedAccountsPage() {
                                       height={32}
                                     />
                                   </Box>
-                                  <Typography
-                                    variant="body1"
-                                    sx={{
-                                      fontWeight: 500,
-                                      color: 'text.primary',
-                                    }}
-                                  >
-                                    {metadata.name}
-                                  </Typography>
+                                  <Box>
+                                    <Typography
+                                      variant="body1"
+                                      sx={{
+                                        fontWeight: 500,
+                                        color: 'text.primary',
+                                      }}
+                                    >
+                                      {metadata.name}
+                                    </Typography>
+                                    {isCredentials && isConnected && (
+                                      <Typography
+                                        variant="caption"
+                                        sx={{
+                                          color: 'text.secondary',
+                                          display: 'block',
+                                        }}
+                                      >
+                                        Password-based authentication
+                                      </Typography>
+                                    )}
+                                  </Box>
                                 </Box>
 
                                 {/* Disconnect Button - only for connected & available providers */}
@@ -384,6 +435,32 @@ export default function ConnectedAccountsPage() {
           </Stack>
         </Grid>
       </Grid>
+
+      <ConfirmationDialog
+        open={dialogOpen}
+        title="Disconnect Account"
+        message={
+          providerToDisconnect
+            ? `Are you sure you want to disconnect your ${
+                PROVIDER_METADATA[
+                  providerToDisconnect as keyof typeof PROVIDER_METADATA
+                ]?.name || providerToDisconnect
+              } account? You can reconnect it later.`
+            : ''
+        }
+        confirmText="Disconnect"
+        cancelText="Cancel"
+        onConfirm={confirmDisconnect}
+        onCancel={cancelDisconnect}
+        isWarning={true}
+      />
+
+      <AddLoginMethodDialog
+        open={addDialogOpen}
+        onClose={() => setAddDialogOpen(false)}
+        onSuccess={handleAddSuccess}
+        connectedProviders={connectedAccounts.map((acc) => acc.provider)}
+      />
     </Container>
   )
 }

@@ -6,7 +6,7 @@ import Credentials from 'next-auth/providers/credentials'
 import { PrismaClient } from './prisma/generated/client'
 // import { MongoDBAdapter } from '@auth/mongodb-adapter' // Disabled - using custom Prisma-based user management
 // import client from '@lib/mongoDb' // Disabled - using custom Prisma-based user management
-import { hashPassword } from '@app/utils/password'
+import { hashPassword, comparePassword } from '@app/utils/password'
 
 /*
  * use auth/core Facebook, https://authjs.dev/reference/core/providers/facebook
@@ -125,10 +125,34 @@ const providers: Provider[] = [
           return null
         }
 
+        // Verify password for credentials provider
+        const providerAccount = await prisma.providerAccount.findFirst({
+          where: {
+            userId: user.id,
+            provider: 'credentials',
+          },
+        })
+
+        if (!providerAccount || !providerAccount.credentials_password) {
+          console.log('No credentials provider found for user:', email)
+          return null
+        }
+
+        // Compare provided password with stored hash
+        const isValidPassword = await comparePassword(
+          password,
+          providerAccount.credentials_password
+        )
+
+        if (!isValidPassword) {
+          console.log('Invalid password for user:', email)
+          return null
+        }
+
         return {
-          id: user!.id,
-          name: user!.name,
-          email: user!.email,
+          id: user.id,
+          name: user.name,
+          email: user.email,
         }
       } catch (error) {
         console.error('Error in credentials authorize:', error)

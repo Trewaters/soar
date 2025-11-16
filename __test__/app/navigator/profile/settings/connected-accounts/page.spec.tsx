@@ -12,6 +12,9 @@ import React from 'react'
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
   usePathname: jest.fn(() => '/navigator/profile/settings/connected-accounts'),
+  useSearchParams: jest.fn(() => ({
+    get: jest.fn(() => null),
+  })),
 }))
 
 jest.mock('next/link', () => {
@@ -271,7 +274,6 @@ describe('ConnectedAccountsPage', () => {
   describe('User Interactions', () => {
     it('should handle add new login method button click', async () => {
       const user = userEvent.setup()
-      const alertSpy = jest.spyOn(window, 'alert').mockImplementation()
 
       renderPage()
 
@@ -284,15 +286,16 @@ describe('ConnectedAccountsPage', () => {
       })
       await user.click(addButton)
 
-      expect(alertSpy).toHaveBeenCalledWith(
-        'Adding new login methods is coming soon!'
-      )
-      alertSpy.mockRestore()
+      // Should open the AddLoginMethodDialog
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', { name: /Add Login Method/i })
+        ).toBeInTheDocument()
+      })
     })
 
     it('should handle disconnect button click for Google', async () => {
       const user = userEvent.setup()
-      const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true)
 
       renderPage()
 
@@ -311,16 +314,33 @@ describe('ConnectedAccountsPage', () => {
       })
       await user.click(disconnectButton)
 
-      expect(confirmSpy).toHaveBeenCalled()
-      expect(global.fetch).toHaveBeenCalledWith(
-        '/api/user/connected-accounts',
-        expect.objectContaining({
-          method: 'DELETE',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ provider: 'google' }),
-        })
-      )
-      confirmSpy.mockRestore()
+      // Wait for confirmation dialog to appear
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument()
+        expect(
+          screen.getByText(
+            /Are you sure you want to disconnect your Google account/i
+          )
+        ).toBeInTheDocument()
+      })
+
+      // Click the Disconnect button in the dialog
+      const confirmButton = screen.getByRole('button', {
+        name: /^Disconnect$/i,
+      })
+      await user.click(confirmButton)
+
+      // Verify API was called
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalledWith(
+          '/api/user/connected-accounts',
+          expect.objectContaining({
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ provider: 'google' }),
+          })
+        )
+      })
     })
 
     it('should prevent disconnecting when only one account is connected', async () => {
@@ -354,7 +374,6 @@ describe('ConnectedAccountsPage', () => {
 
     it('should cancel disconnect when user declines confirmation', async () => {
       const user = userEvent.setup()
-      const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false)
 
       renderPage()
 
@@ -367,13 +386,25 @@ describe('ConnectedAccountsPage', () => {
       })
       await user.click(disconnectButton)
 
-      expect(confirmSpy).toHaveBeenCalled()
+      // Wait for confirmation dialog to appear
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument()
+      })
+
+      // Click the Cancel button in the dialog
+      const cancelButton = screen.getByRole('button', { name: /^Cancel$/i })
+      await user.click(cancelButton)
+
+      // Dialog should close
+      await waitFor(() => {
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+      })
+
       // Should not make DELETE request
       expect(global.fetch).not.toHaveBeenCalledWith(
         '/api/user/connected-accounts',
         expect.objectContaining({ method: 'DELETE' })
       )
-      confirmSpy.mockRestore()
     })
   })
 
@@ -392,8 +423,6 @@ describe('ConnectedAccountsPage', () => {
 
     it('should handle disconnect API errors gracefully', async () => {
       const user = userEvent.setup()
-      const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true)
-      const alertSpy = jest.spyOn(window, 'alert').mockImplementation()
 
       renderPage()
 
@@ -410,12 +439,24 @@ describe('ConnectedAccountsPage', () => {
       })
       await user.click(disconnectButton)
 
+      // Wait for confirmation dialog to appear
       await waitFor(() => {
-        expect(alertSpy).toHaveBeenCalled()
+        expect(screen.getByRole('dialog')).toBeInTheDocument()
       })
 
-      confirmSpy.mockRestore()
-      alertSpy.mockRestore()
+      // Click the Disconnect button in the dialog
+      const confirmButton = screen.getByRole('button', {
+        name: /^Disconnect$/i,
+      })
+      await user.click(confirmButton)
+
+      // Wait for error alert to appear
+      await waitFor(() => {
+        expect(screen.getByRole('alert')).toBeInTheDocument()
+        expect(
+          screen.getByText(/Failed to disconnect account/i)
+        ).toBeInTheDocument()
+      })
     })
   })
 
@@ -498,6 +539,213 @@ describe('ConnectedAccountsPage', () => {
           name: /Disconnect Google/i,
         })
         expect(disconnectButton).toBeDisabled()
+      })
+    })
+  })
+
+  describe('Credentials Provider', () => {
+    it('should display credentials provider when user has email/password authentication', async () => {
+      ;(global.fetch as jest.Mock).mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          accounts: [
+            {
+              provider: 'credentials',
+              providerAccountId: 'user-123',
+              connectedAt: new Date('2024-01-01'),
+            },
+            {
+              provider: 'google',
+              providerAccountId: 'google-123',
+              connectedAt: new Date('2024-01-02'),
+            },
+          ],
+          totalCount: 2,
+        }),
+      })
+
+      renderPage()
+
+      await waitFor(() => {
+        expect(screen.getByText('Email & Password')).toBeInTheDocument()
+        const connectedStatuses = screen.getAllByText(/Status: Connected/i)
+        expect(connectedStatuses.length).toBeGreaterThanOrEqual(2)
+      })
+    })
+
+    it('should render credentials icon', async () => {
+      ;(global.fetch as jest.Mock).mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          accounts: [
+            {
+              provider: 'credentials',
+              providerAccountId: 'user-123',
+              connectedAt: new Date('2024-01-01'),
+            },
+          ],
+          totalCount: 1,
+        }),
+      })
+
+      renderPage()
+
+      await waitFor(() => {
+        const credentialsIcon = screen.getByAltText('Email & Password icon')
+        expect(credentialsIcon).toBeInTheDocument()
+        expect(credentialsIcon).toHaveAttribute(
+          'src',
+          '/icons/profile/auth-credentials.svg'
+        )
+      })
+    })
+
+    it('should allow disconnecting credentials when multiple providers exist', async () => {
+      ;(global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          accounts: [
+            {
+              provider: 'credentials',
+              providerAccountId: 'user-123',
+              connectedAt: new Date('2024-01-01'),
+            },
+            {
+              provider: 'google',
+              providerAccountId: 'google-123',
+              connectedAt: new Date('2024-01-02'),
+            },
+          ],
+          totalCount: 2,
+        }),
+      })
+
+      renderPage()
+
+      await waitFor(() => {
+        const disconnectButton = screen.getByRole('button', {
+          name: /Disconnect Email & Password/i,
+        })
+        expect(disconnectButton).toBeInTheDocument()
+        expect(disconnectButton).not.toBeDisabled()
+      })
+    })
+
+    it('should show credentials as "Not Connected" when user has no credentials provider', async () => {
+      ;(global.fetch as jest.Mock).mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          accounts: [
+            {
+              provider: 'google',
+              providerAccountId: 'google-123',
+              connectedAt: new Date('2024-01-01'),
+            },
+          ],
+          totalCount: 1,
+        }),
+      })
+
+      renderPage()
+
+      await waitFor(() => {
+        expect(screen.getByText('Email & Password')).toBeInTheDocument()
+        // Find the credentials section and verify it shows "Not Connected"
+        const credentialsSection = screen
+          .getByText('Email & Password')
+          .closest('[class*="MuiPaper"]')
+        expect(credentialsSection).toBeInTheDocument()
+        expect(
+          credentialsSection?.textContent?.includes('Not Connected')
+        ).toBeTruthy()
+      })
+    })
+
+    it('should successfully disconnect credentials provider via API', async () => {
+      const user = userEvent.setup()
+
+      // Initial fetch with credentials
+      ;(global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          accounts: [
+            {
+              provider: 'credentials',
+              providerAccountId: 'user-123',
+              connectedAt: new Date('2024-01-01'),
+            },
+            {
+              provider: 'google',
+              providerAccountId: 'google-123',
+              connectedAt: new Date('2024-01-02'),
+            },
+          ],
+          totalCount: 2,
+        }),
+      })
+
+      renderPage()
+
+      await waitFor(() => {
+        expect(screen.getByText('Email & Password')).toBeInTheDocument()
+      })
+
+      // Mock DELETE request
+      ;(global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          message: 'credentials account disconnected successfully',
+          provider: 'credentials',
+        }),
+      })
+
+      // Mock refetch after deletion
+      ;(global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          accounts: [
+            {
+              provider: 'google',
+              providerAccountId: 'google-123',
+              connectedAt: new Date('2024-01-02'),
+            },
+          ],
+          totalCount: 1,
+        }),
+      })
+
+      const disconnectButton = screen.getByRole('button', {
+        name: /Disconnect Email & Password/i,
+      })
+      await user.click(disconnectButton)
+
+      // Wait for confirmation dialog to appear
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument()
+        expect(
+          screen.getByText(
+            /Are you sure you want to disconnect your Email & Password account/i
+          )
+        ).toBeInTheDocument()
+      })
+
+      // Click the Disconnect button in the dialog
+      const confirmButton = screen.getByRole('button', {
+        name: /^Disconnect$/i,
+      })
+      await user.click(confirmButton)
+
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalledWith(
+          '/api/user/connected-accounts',
+          expect.objectContaining({
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ provider: 'credentials' }),
+          })
+        )
       })
     })
   })

@@ -122,11 +122,13 @@ describe('Connected Accounts API Routes', () => {
             provider: 'google',
             providerAccountId: 'google-123',
             connectedAt: new Date('2024-01-01').toISOString(),
+            hasPassword: false,
           },
           {
             provider: 'github',
             providerAccountId: 'github-456',
             connectedAt: new Date('2024-01-02').toISOString(),
+            hasPassword: false,
           },
         ],
         totalCount: 2,
@@ -219,7 +221,7 @@ describe('Connected Accounts API Routes', () => {
 
       expect(response.status).toBe(400)
       expect(data).toEqual({
-        error: 'Invalid provider. Must be "google" or "github"',
+        error: 'Invalid provider. Must be "google", "github", or "credentials"',
       })
     })
 
@@ -235,7 +237,7 @@ describe('Connected Accounts API Routes', () => {
 
       expect(response.status).toBe(400)
       expect(data).toEqual({
-        error: 'Invalid provider. Must be "google" or "github"',
+        error: 'Invalid provider. Must be "google", "github", or "credentials"',
       })
     })
 

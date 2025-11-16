@@ -792,7 +792,7 @@ export default function Page() {
                 </Box>
 
                 {/* Series Weekly Activity Tracker */}
-                {flow.id && flow.id !== 0 && (
+                {flow.id && flow.id !== '' && (
                   <Box sx={{ mt: 3 }}>
                     <WeeklyActivityViewer
                       entityId={flow.id.toString()}
