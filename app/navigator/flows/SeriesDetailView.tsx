@@ -10,7 +10,7 @@ import {
   createSeriesActivity,
   deleteSeriesActivity,
 } from '@lib/seriesActivityClientService'
-import WeeklyActivityTracker from '@app/clientComponents/WeeklyActivityTracker'
+import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import PoseShareButton from '@app/clientComponents/poseShareButton'
 import { getPoseIdByName } from '@lib/poseService'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
@@ -271,7 +271,7 @@ export default function SeriesDetailView({ series }: SeriesDetailViewProps) {
 
       {flow.id && (
         <Box sx={{ width: '100%', mb: 3 }}>
-          <WeeklyActivityTracker
+          <WeeklyActivityViewer
             entityId={flow.id.toString()}
             entityName={flow.seriesName}
             entityType="series"

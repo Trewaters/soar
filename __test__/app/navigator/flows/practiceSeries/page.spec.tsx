@@ -98,15 +98,15 @@ jest.mock('@app/clientComponents/ActivityTracker', () => {
   return MockActivityTracker
 })
 
-// Mock WeeklyActivityTracker to avoid NextAuth import issues
-jest.mock('@app/clientComponents/WeeklyActivityTracker', () => {
-  const MockWeeklyActivityTracker = ({ entityId, entityType }: any) => (
-    <div data-testid="weekly-activity-tracker">
-      Weekly Activity Tracker for {entityType}: {entityId}
+// Mock WeeklyActivityViewer to avoid NextAuth import issues
+jest.mock('@app/clientComponents/WeeklyActivityViewer', () => {
+  const MockWeeklyActivityViewer = ({ entityId, entityType }: any) => (
+    <div data-testid="weekly-activity-viewer">
+      Weekly Activity for {entityType} {entityId}
     </div>
   )
-  MockWeeklyActivityTracker.displayName = 'MockWeeklyActivityTracker'
-  return MockWeeklyActivityTracker
+  MockWeeklyActivityViewer.displayName = 'MockWeeklyActivityViewer'
+  return MockWeeklyActivityViewer
 })
 
 const mockGetAllSeries = getAllSeries as jest.MockedFunction<

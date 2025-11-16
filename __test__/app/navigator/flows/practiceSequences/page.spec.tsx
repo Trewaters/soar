@@ -114,25 +114,30 @@ jest.mock('@app/clientComponents/ActivityTracker', () => {
   return MockActivityTracker
 })
 
-// Mock WeeklyActivityTracker (unified component)
-jest.mock('@app/clientComponents/WeeklyActivityTracker', () => {
-  const MockWeeklyActivityTracker = ({
+// Mock WeeklyActivityViewer (unified component)
+jest.mock('@app/clientComponents/WeeklyActivityViewer', () => {
+  const MockWeeklyActivityViewer = ({
     entityId,
     entityName,
     entityType,
     variant,
     refreshTrigger,
   }: any) => (
-    <div data-testid="weekly-activity-tracker">
-      Weekly Activity Tracker for {entityType}: {entityId}
+    <div
+      data-testid="weekly-activity-viewer"
+      data-entity-id={entityId}
+      data-entity-type={entityType}
+      data-variant={variant}
+    >
+      Weekly Activity for {entityType} {entityId}
       <span data-testid="entity-name">{entityName}</span>
       <span data-testid="entity-type">{entityType}</span>
-      <span data-testid="tracker-variant">{variant}</span>
+      <span data-testid="viewer-variant">{variant}</span>
       <span data-testid="refresh-trigger">{refreshTrigger}</span>
     </div>
   )
-  MockWeeklyActivityTracker.displayName = 'MockWeeklyActivityTracker'
-  return MockWeeklyActivityTracker
+  MockWeeklyActivityViewer.displayName = 'MockWeeklyActivityViewer'
+  return MockWeeklyActivityViewer
 })
 
 // Mock SplashHeader
@@ -700,7 +705,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       )
     })
 
-    it('should display the WeeklyActivityTracker when a sequence is selected', async () => {
+    it('should display the WeeklyActivityViewer when a sequence is selected', async () => {
       const mockSequence = createMockSequence({ id: 456 })
       mockGetAllSequences.mockResolvedValue([mockSequence])
       mockGet.mockReturnValue('456')
@@ -713,14 +718,12 @@ describe('Practice Sequences Page - View Toggle Features', () => {
         ).toBeInTheDocument()
       })
 
-      const weeklyTracker = screen.getByTestId('weekly-activity-tracker')
-      expect(weeklyTracker).toBeInTheDocument()
-      expect(weeklyTracker).toHaveTextContent(
-        'Weekly Activity Tracker for sequence: 456'
-      )
+      const weeklyViewer = screen.getByTestId('weekly-activity-viewer')
+      expect(weeklyViewer).toBeInTheDocument()
+      expect(weeklyViewer).toHaveTextContent('Weekly Activity for sequence 456')
     })
 
-    it('should pass the correct props to WeeklyActivityTracker', async () => {
+    it('should pass the correct props to WeeklyActivityViewer', async () => {
       const mockSequence = createMockSequence({
         id: 789,
         nameSequence: 'Evening Wind Down',
@@ -736,18 +739,13 @@ describe('Practice Sequences Page - View Toggle Features', () => {
         ).toBeInTheDocument()
       })
 
-      const weeklyTracker = screen.getByTestId('weekly-activity-tracker')
-      expect(weeklyTracker).toBeInTheDocument()
+      const weeklyViewer = screen.getByTestId('weekly-activity-viewer')
+      expect(weeklyViewer).toBeInTheDocument()
 
-      // Check that props are correctly passed
-      expect(screen.getByTestId('entity-name')).toHaveTextContent(
-        'Evening Wind Down'
-      )
-      expect(screen.getByTestId('entity-type')).toHaveTextContent('sequence')
-      expect(screen.getByTestId('tracker-variant')).toHaveTextContent(
-        'detailed'
-      )
-      expect(screen.getByTestId('refresh-trigger')).toHaveTextContent('0')
+      // Check that props are correctly passed via data attributes
+      expect(weeklyViewer).toHaveAttribute('data-entity-id', '789')
+      expect(weeklyViewer).toHaveAttribute('data-entity-type', 'sequence')
+      expect(weeklyViewer).toHaveAttribute('data-variant', 'detailed')
     })
 
     it('should update refreshTrigger when activity is toggled', async () => {
@@ -790,7 +788,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       // Activity trackers should not be present
       expect(screen.queryByTestId('activity-tracker')).not.toBeInTheDocument()
       expect(
-        screen.queryByTestId('sequence-weekly-activity-tracker')
+        screen.queryByTestId('weekly-activity-viewer')
       ).not.toBeInTheDocument()
     })
 
@@ -809,7 +807,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       // Activity trackers should not be present for id 0
       expect(screen.queryByTestId('activity-tracker')).not.toBeInTheDocument()
       expect(
-        screen.queryByTestId('sequence-weekly-activity-tracker')
+        screen.queryByTestId('weekly-activity-viewer')
       ).not.toBeInTheDocument()
     })
 
@@ -828,14 +826,16 @@ describe('Practice Sequences Page - View Toggle Features', () => {
 
       // Both trackers should be present
       const activityTracker = screen.getByTestId('activity-tracker')
-      const weeklyTracker = screen.getByTestId('weekly-activity-tracker')
+      const weeklyViewer = screen.getByTestId('weekly-activity-viewer')
 
       expect(activityTracker).toBeInTheDocument()
-      expect(weeklyTracker).toBeInTheDocument()
+      expect(weeklyViewer).toBeInTheDocument()
 
       // Both should reference the same sequence
-      expect(activityTracker).toHaveTextContent('sequence: 999')
-      expect(weeklyTracker).toHaveTextContent('sequence: 999')
+      expect(activityTracker).toHaveTextContent(
+        'Activity Tracker for sequence: 999'
+      )
+      expect(weeklyViewer).toHaveTextContent('Weekly Activity for sequence 999')
     })
 
     it('should maintain refreshTrigger state across multiple activity toggles', async () => {

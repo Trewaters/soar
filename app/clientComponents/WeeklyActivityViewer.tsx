@@ -36,7 +36,7 @@ type WeeklyActivityData =
   | WeeklySeriesActivityData
   | WeeklySequenceActivityData
 
-interface WeeklyActivityTrackerProps {
+interface WeeklyActivityViewerProps {
   entityId: string
   entityName: string // Used for prop interface, may be used for future enhancements
   entityType: 'asana' | 'series' | 'sequence'
@@ -44,13 +44,13 @@ interface WeeklyActivityTrackerProps {
   refreshTrigger?: number
 }
 
-export default function WeeklyActivityTracker({
+export default function WeeklyActivityViewer({
   entityId,
   entityName: _entityName, // eslint-disable-line @typescript-eslint/no-unused-vars
   entityType,
   variant = 'compact',
   refreshTrigger = 0,
-}: WeeklyActivityTrackerProps) {
+}: WeeklyActivityViewerProps) {
   const { data: session } = useSession()
   const [weeklyData, setWeeklyData] = useState<WeeklyActivityData | null>(null)
   const [loading, setLoading] = useState(false)

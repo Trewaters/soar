@@ -23,6 +23,13 @@ import { getAllSeries } from '@lib/seriesService'
 import SeriesPoseList from '@clientComponents/SeriesPoseList'
 import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import Image from 'next/image'
+import ActivityTracker from '@app/clientComponents/ActivityTracker'
+import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
+import {
+  checkSequenceActivityExists,
+  createSequenceActivity,
+  deleteSequenceActivity,
+} from '@lib/sequenceActivityClientService'
 
 type Props = {
   sequence: EditableSequence
@@ -38,6 +45,7 @@ export default function SequenceViewWithEdit({
   const [showEdit, setShowEdit] = useState<boolean>(defaultShowEdit)
   const [model, setModel] = useState<EditableSequence>(sequence)
   const [isLoadingFreshData, setIsLoadingFreshData] = useState<boolean>(false)
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
 
   // Sync showEdit with defaultShowEdit prop changes
   useEffect(() => {
@@ -217,6 +225,12 @@ export default function SequenceViewWithEdit({
       // Fallback to general navigation back
       navigation.back()
     }
+  }
+
+  function handleActivityToggle(isTracked: boolean) {
+    console.log('Sequence activity tracked:', isTracked)
+    // Trigger refresh of any activity components that might be listening
+    setRefreshTrigger((prev) => prev + 1)
   }
 
   return (
@@ -503,6 +517,35 @@ export default function SequenceViewWithEdit({
             >
               {model.description}
             </Typography>
+          </Box>
+        )}
+
+        {/* Sequence Activity Tracker - Only show when NOT in edit mode */}
+        {!showEdit && model.id && model.id !== 0 && (
+          <Box sx={{ mt: 3 }}>
+            <ActivityTracker
+              entityId={model.id.toString()}
+              entityName={model.nameSequence}
+              entityType="sequence"
+              variant="card"
+              checkActivity={checkSequenceActivityExists}
+              createActivity={createSequenceActivity}
+              deleteActivity={deleteSequenceActivity}
+              onActivityToggle={handleActivityToggle}
+            />
+          </Box>
+        )}
+
+        {/* Sequence Weekly Activity Tracker - Only show when NOT in edit mode */}
+        {!showEdit && model.id && model.id !== 0 && (
+          <Box sx={{ mt: 3 }}>
+            <WeeklyActivityViewer
+              entityId={model.id.toString()}
+              entityName={model.nameSequence}
+              entityType="sequence"
+              variant="detailed"
+              refreshTrigger={refreshTrigger}
+            />
           </Box>
         )}
       </Stack>

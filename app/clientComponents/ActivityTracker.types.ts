@@ -66,7 +66,7 @@ export interface ActivityTrackerProps {
 
   // Integration callbacks
   onActivityToggle?: (isTracked: boolean) => void
-  onActivityRefresh?: () => void // For WeeklyActivityTracker refresh trigger
+  onActivityRefresh?: () => void // For WeeklyActivityViewer refresh trigger
 
   // Additional data for activity creation
   additionalActivityData?: Record<string, any>

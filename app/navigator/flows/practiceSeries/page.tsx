@@ -41,7 +41,7 @@ import {
   createSeriesActivity,
   deleteSeriesActivity,
 } from '@lib/seriesActivityClientService'
-import WeeklyActivityTracker from '@app/clientComponents/WeeklyActivityTracker'
+import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import { useSearchParams, useRouter } from 'next/navigation'
 import EditIcon from '@mui/icons-material/Edit'
 import IconButton from '@mui/material/IconButton'
@@ -792,15 +792,17 @@ export default function Page() {
                 </Box>
 
                 {/* Series Weekly Activity Tracker */}
-                <Box sx={{ mt: 3 }}>
-                  <WeeklyActivityTracker
-                    entityId={flow.id?.toString() || ''}
-                    entityName={flow.seriesName}
-                    entityType="series"
-                    variant="detailed"
-                    refreshTrigger={refreshTrigger}
-                  />
-                </Box>
+                {flow.id && flow.id !== 0 && (
+                  <Box sx={{ mt: 3 }}>
+                    <WeeklyActivityViewer
+                      entityId={flow.id.toString()}
+                      entityName={flow.seriesName}
+                      entityType="series"
+                      variant="detailed"
+                      refreshTrigger={refreshTrigger}
+                    />
+                  </Box>
+                )}
 
                 <PoseShareButton
                   content={{

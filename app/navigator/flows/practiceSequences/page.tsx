@@ -38,7 +38,7 @@ import {
   createSequenceActivity,
   deleteSequenceActivity,
 } from '@lib/sequenceActivityClientService'
-import WeeklyActivityTracker from '@app/clientComponents/WeeklyActivityTracker'
+import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import { FEATURES } from '@app/FEATURES'
 import { useSession } from 'next-auth/react'
 import getAlphaUserIds from '@app/lib/alphaUsers'
@@ -986,7 +986,7 @@ export default function Page() {
                   {/* Sequence Weekly Activity Tracker */}
                   {singleSequence.id && singleSequence.id !== 0 && (
                     <Box sx={{ mt: 3 }}>
-                      <WeeklyActivityTracker
+                      <WeeklyActivityViewer
                         entityId={singleSequence.id.toString()}
                         entityName={singleSequence.nameSequence}
                         entityType="sequence"

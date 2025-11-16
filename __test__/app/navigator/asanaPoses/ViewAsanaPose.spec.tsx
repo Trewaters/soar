@@ -29,11 +29,13 @@ jest.mock('@app/clientComponents/poseShareButton', () => ({
   __esModule: true,
   default: jest.fn(() => <button data-testid="share-button">Share</button>),
 }))
-jest.mock('@app/clientComponents/WeeklyActivityTracker', () => ({
+jest.mock('@app/clientComponents/ActivityTracker', () => ({
   __esModule: true,
-  default: jest.fn(() => (
-    <div data-testid="activity-tracker">Activity Tracker</div>
-  )),
+  default: () => <div data-testid="activity-tracker">Activity Tracker</div>,
+}))
+jest.mock('@app/clientComponents/WeeklyActivityViewer', () => ({
+  __esModule: true,
+  default: () => <div>Weekly Activity Viewer</div>,
 }))
 
 const mockPush = jest.fn()

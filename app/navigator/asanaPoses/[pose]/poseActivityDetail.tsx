@@ -25,7 +25,7 @@ import { FEATURES } from '@app/FEATURES'
 import { useRouter } from 'next/navigation'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 import PoseShareButton from '@app/clientComponents/poseShareButton'
-import WeeklyActivityTracker from '@app/clientComponents/WeeklyActivityTracker'
+import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import ActivityTracker from '@app/clientComponents/ActivityTracker'
 import { useSession } from 'next-auth/react'
 import {
@@ -927,7 +927,7 @@ export default function PoseActivityDetail({
                 },
               }}
             >
-              <WeeklyActivityTracker
+              <WeeklyActivityViewer
                 entityId={pose.id.toString()}
                 entityName={pose.english_names[0] || pose.sort_english_name}
                 entityType="asana"
