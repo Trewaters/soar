@@ -167,20 +167,22 @@ describe('ActivityTracker Component', () => {
       ).toBeInTheDocument()
     })
 
-    it('should return null without session', () => {
+    it('should show login message without session', () => {
       mockUseSession.mockReturnValue({
         data: null,
         status: 'unauthenticated',
         update: jest.fn(),
       } as any)
 
-      const { container } = render(
+      render(
         <TestWrapper>
           <ActivityTracker {...defaultProps} />
         </TestWrapper>
       )
 
-      expect(container.firstChild).toBeNull()
+      expect(
+        screen.getByText(/Log in to track your practice and build your streak/i)
+      ).toBeInTheDocument()
     })
   })
 
@@ -597,7 +599,7 @@ describe('ActivityTracker Component', () => {
   })
 
   describe('Session Integration Tests', () => {
-    it('should not render when session is missing', async () => {
+    it('should show login message when session is missing', async () => {
       // Set session to null before render
       mockUseSession.mockReturnValue({
         data: null,
@@ -605,14 +607,16 @@ describe('ActivityTracker Component', () => {
         update: jest.fn(),
       } as any)
 
-      const { container } = render(
+      render(
         <TestWrapper>
           <ActivityTracker {...defaultProps} />
         </TestWrapper>
       )
 
-      // Component should return null and render nothing
-      expect(container.firstChild).toBeNull()
+      // Component should show login prompt instead of null
+      expect(
+        screen.getByText(/Log in to track your practice and build your streak/i)
+      ).toBeInTheDocument()
       expect(mockCreateActivity).not.toHaveBeenCalled()
     })
 

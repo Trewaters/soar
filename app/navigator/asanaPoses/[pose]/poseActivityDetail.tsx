@@ -938,31 +938,33 @@ export default function PoseActivityDetail({
           )}
 
           {/* Unified Activity Tracker Component */}
-          <Box
-            sx={{
-              mt: 2,
-              mx: 'auto',
-              width: '100%',
-              maxWidth: '600px',
-            }}
-          >
-            <ActivityTracker
-              entityId={pose.id.toString()}
-              entityName={pose.sort_english_name}
-              entityType="asana"
-              variant="inline"
-              checkActivity={checkActivityExists}
-              createActivity={createAsanaActivity}
-              deleteActivity={deleteAsanaActivity}
-              onActivityRefresh={() =>
-                setActivityRefreshTrigger((prev) => prev + 1)
-              }
-              additionalActivityData={{
-                sort_english_name: pose.sort_english_name,
-                duration: 0,
+          {pose && pose.id && (
+            <Box
+              sx={{
+                mt: 2,
+                mx: 'auto',
+                width: '100%',
+                maxWidth: '600px',
               }}
-            />
-          </Box>
+            >
+              <ActivityTracker
+                entityId={pose.id.toString()}
+                entityName={pose.sort_english_name}
+                entityType="asana"
+                variant="inline"
+                checkActivity={checkActivityExists}
+                createActivity={createAsanaActivity}
+                deleteActivity={deleteAsanaActivity}
+                onActivityRefresh={() =>
+                  setActivityRefreshTrigger((prev) => prev + 1)
+                }
+                additionalActivityData={{
+                  sort_english_name: pose.sort_english_name,
+                  duration: 0,
+                }}
+              />
+            </Box>
+          )}
         </Stack>
       </Box>
       {pose && FEATURES.SHOW_PRACTICE_VIEW_ASANA && (

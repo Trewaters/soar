@@ -243,7 +243,40 @@ export default function WeeklyActivityViewer({
     )
   }
 
-  // Don't render component if there's no activity data or no activities
+  // Show login prompt if user is not authenticated
+  if (!session?.user?.id) {
+    return (
+      <Paper
+        elevation={2}
+        sx={{
+          p: 3,
+          textAlign: 'center',
+          backgroundColor: 'background.paper',
+          borderRadius: 2,
+          border: '1px solid',
+          borderColor: 'divider',
+        }}
+      >
+        <Typography variant="h6" gutterBottom color="text.secondary">
+          Track Your Practice
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          Log in to track your yoga practice and see your weekly activity
+          progress.
+        </Typography>
+        <Typography
+          variant="caption"
+          color="primary"
+          sx={{ fontStyle: 'italic' }}
+        >
+          Sign in to start building your practice streak!
+        </Typography>
+      </Paper>
+    )
+  }
+
+  // Only show when there's activity data for the current week
+  // If there's no activity this week, don't render anything (user can still use ActivityTracker)
   if (!weeklyData || weeklyData.count === 0) {
     return null
   }

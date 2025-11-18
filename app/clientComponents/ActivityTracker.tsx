@@ -305,9 +305,26 @@ export default function ActivityTracker({
     await updateActivityState(isChecked)
   }
 
-  // Don't render for unauthenticated users
+  // Show login prompt for unauthenticated users
   if (!session?.user?.id) {
-    return null
+    return (
+      <Paper
+        elevation={variant === 'card' ? 2 : 0}
+        sx={{
+          p: variant === 'card' ? 3 : 2,
+          textAlign: 'center',
+          backgroundColor:
+            variant === 'card' ? 'background.paper' : 'transparent',
+          borderRadius: variant === 'card' ? 2 : 1,
+          border: variant === 'card' ? '1px solid' : 'none',
+          borderColor: 'divider',
+        }}
+      >
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          Log in to track your practice and build your streak
+        </Typography>
+      </Paper>
+    )
   }
 
   // Determine which click handler to use based on variant
