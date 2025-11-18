@@ -123,7 +123,7 @@ export default function ActivityTracker({
   const displayShowSuccessMessage =
     showSuccessMessage !== undefined ? showSuccessMessage : variant === 'card'
 
-  // Check existing activity on mount
+  // Check existing activity on mount and automatically at midnight
   useEffect(() => {
     const checkExistingActivity = async () => {
       if (!session?.user?.id || !entityId) return
@@ -162,7 +162,38 @@ export default function ActivityTracker({
       }
     }
 
+    // Initial check on mount
     checkExistingActivity()
+
+    // Set up automatic refresh at midnight UTC
+    const scheduleNextMidnightRefresh = () => {
+      const now = new Date()
+      const nextMidnight = new Date(
+        Date.UTC(
+          now.getUTCFullYear(),
+          now.getUTCMonth(),
+          now.getUTCDate() + 1,
+          0,
+          0,
+          0,
+          0
+        )
+      )
+      const msUntilMidnight = nextMidnight.getTime() - now.getTime()
+
+      return setTimeout(() => {
+        checkExistingActivity()
+        // Schedule next refresh for the following midnight
+        scheduleNextMidnightRefresh()
+      }, msUntilMidnight)
+    }
+
+    const midnightTimer = scheduleNextMidnightRefresh()
+
+    // Cleanup timer on unmount
+    return () => {
+      clearTimeout(midnightTimer)
+    }
   }, [session?.user?.id, entityId, checkActivity])
 
   /**

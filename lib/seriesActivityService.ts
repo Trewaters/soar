@@ -102,18 +102,38 @@ export async function getUserSeriesHistory(
 
 /**
  * Check if a series activity exists for today
+ * Uses UTC timezone to ensure consistent calendar day tracking across all users.
  */
 export async function checkExistingSeriesActivity(
   userId: string,
   seriesId: string
 ): Promise<SeriesActivityData | null> {
   try {
-    const today = new Date()
-    const startOfToday = new Date(today)
-    startOfToday.setHours(0, 0, 0, 0)
+    // Get today's date range in UTC (start and end of today)
+    const now = new Date()
+    const startOfToday = new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        0,
+        0,
+        0,
+        0
+      )
+    )
 
-    const endOfToday = new Date(today)
-    endOfToday.setHours(23, 59, 59, 999)
+    const endOfToday = new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        23,
+        59,
+        59,
+        999
+      )
+    )
 
     const activity = await prisma.seriesActivity.findFirst({
       where: {
@@ -151,18 +171,38 @@ export async function checkExistingSeriesActivity(
 
 /**
  * Delete a series activity for today
+ * Uses UTC timezone to ensure consistent calendar day tracking.
  */
 export async function deleteSeriesActivity(
   userId: string,
   seriesId: string
 ): Promise<void> {
   try {
-    const today = new Date()
-    const startOfToday = new Date(today)
-    startOfToday.setHours(0, 0, 0, 0)
+    // Get today's date range in UTC (start and end of today)
+    const now = new Date()
+    const startOfToday = new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        0,
+        0,
+        0,
+        0
+      )
+    )
 
-    const endOfToday = new Date(today)
-    endOfToday.setHours(23, 59, 59, 999)
+    const endOfToday = new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        23,
+        59,
+        59,
+        999
+      )
+    )
 
     await prisma.seriesActivity.deleteMany({
       where: {
