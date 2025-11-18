@@ -15,11 +15,12 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  CircularProgress,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
 import theme from '@styles/theme'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import DevicesIcon from '@mui/icons-material/Devices'
@@ -27,6 +28,7 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import InfoIcon from '@mui/icons-material/Info'
 import Link from 'next/link'
 
 export default function AccountSecurityPage() {
@@ -38,8 +40,59 @@ export default function AccountSecurityPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [passwordSuccess, setPasswordSuccess] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [hasCredentialsAccount, setHasCredentialsAccount] = useState<
+    boolean | null
+  >(null)
+  const [isLoadingAccounts, setIsLoadingAccounts] = useState(true)
+  const [loginHistory, setLoginHistory] = useState<any[]>([])
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true)
 
-  const handlePasswordChange = () => {
+  // Check if user has credentials provider account on mount
+  useEffect(() => {
+    const checkCredentialsProvider = async () => {
+      try {
+        const response = await fetch('/api/user/connected-accounts')
+        if (response.ok) {
+          const data = await response.json()
+          const credentialsAccount = data.accounts?.find(
+            (account: any) => account.provider === 'credentials'
+          )
+          setHasCredentialsAccount(
+            credentialsAccount && credentialsAccount.hasPassword
+          )
+        }
+      } catch (error) {
+        console.error('Error checking credentials provider:', error)
+        setHasCredentialsAccount(false)
+      } finally {
+        setIsLoadingAccounts(false)
+      }
+    }
+
+    checkCredentialsProvider()
+  }, [])
+
+  // Fetch login history on mount
+  useEffect(() => {
+    const fetchLoginHistory = async () => {
+      try {
+        const response = await fetch('/api/user/login-history')
+        if (response.ok) {
+          const data = await response.json()
+          setLoginHistory(data.loginHistory || [])
+        }
+      } catch (error) {
+        console.error('Error fetching login history:', error)
+      } finally {
+        setIsLoadingHistory(false)
+      }
+    }
+
+    fetchLoginHistory()
+  }, [])
+
+  const handlePasswordChange = async () => {
     // Reset states
     setPasswordError('')
     setPasswordSuccess(false)
@@ -50,13 +103,33 @@ export default function AccountSecurityPage() {
       return
     }
 
-    if (currentPassword === 'wrongpassword') {
-      setPasswordError('Wrong password!')
+    if (!newPassword) {
+      setPasswordError('New password is required')
       return
     }
 
     if (newPassword.length < 8) {
-      setPasswordError('Try a stronger password.')
+      setPasswordError('Password must be at least 8 characters long')
+      return
+    }
+
+    if (!/[A-Z]/.test(newPassword)) {
+      setPasswordError('Password must contain at least one uppercase letter')
+      return
+    }
+
+    if (!/[a-z]/.test(newPassword)) {
+      setPasswordError('Password must contain at least one lowercase letter')
+      return
+    }
+
+    if (!/[0-9]/.test(newPassword)) {
+      setPasswordError('Password must contain at least one number')
+      return
+    }
+
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newPassword)) {
+      setPasswordError('Password must contain at least one special character')
       return
     }
 
@@ -65,19 +138,63 @@ export default function AccountSecurityPage() {
       return
     }
 
-    // Success
-    setPasswordSuccess(true)
-    setCurrentPassword('')
-    setNewPassword('')
-    setConfirmPassword('')
+    if (currentPassword === newPassword) {
+      setPasswordError('New password must be different from current password')
+      return
+    }
+
+    // Submit to API
+    setIsSubmitting(true)
+    try {
+      const response = await fetch('/api/user/change-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setPasswordSuccess(true)
+        setCurrentPassword('')
+        setNewPassword('')
+        setConfirmPassword('')
+      } else {
+        setPasswordError(data.error || 'Failed to change password')
+      }
+    } catch (error) {
+      console.error('Error changing password:', error)
+      setPasswordError('An error occurred. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
-  // Mock login history data
-  const loginHistory = [
-    { device: 'Chrome on Windows', location: 'San Francisco, CA' },
-    { device: 'Safari on iPhone', location: 'New York, NY' },
-    { device: 'Firefox on macOS', location: 'Austin, TX' },
-  ]
+  const formatLoginDate = (dateString: string) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffMs = now.getTime() - date.getTime()
+    const diffMins = Math.floor(diffMs / 60000)
+    const diffHours = Math.floor(diffMs / 3600000)
+    const diffDays = Math.floor(diffMs / 86400000)
+
+    if (diffMins < 1) return 'Just now'
+    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`
+    if (diffHours < 24)
+      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
+    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
+
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
+    })
+  }
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -134,241 +251,256 @@ export default function AccountSecurityPage() {
                 Change Password
               </Typography>
 
-              <Stack spacing={2.5}>
-                {/* Current Password */}
-                <Box>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: 'text.secondary', mb: 1 }}
-                  >
-                    Current Password*
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    type={showCurrentPassword ? 'text' : 'password'}
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                    placeholder="••••••"
-                    error={
-                      passwordError === 'Wrong password!' ||
-                      passwordError === 'Current password is required'
-                    }
-                    helperText={
-                      passwordError === 'Wrong password!' ||
-                      passwordError === 'Current password is required'
-                        ? passwordError
-                        : ''
-                    }
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2,
-                        '&.Mui-error': {
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'error.main',
-                          },
-                        },
-                      },
-                      '& .MuiFormHelperText-root': {
-                        color: 'error.main',
-                        fontWeight: 500,
-                      },
-                    }}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() =>
-                              setShowCurrentPassword(!showCurrentPassword)
-                            }
-                            edge="end"
-                          >
-                            {showCurrentPassword ? (
-                              <VisibilityOffIcon />
-                            ) : (
-                              <VisibilityIcon />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
+              {/* Loading State */}
+              {isLoadingAccounts && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
+                  <CircularProgress />
                 </Box>
+              )}
 
-                {/* New Password */}
-                <Box>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: 'text.secondary', mb: 1 }}
-                  >
-                    New Password*
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    type={showNewPassword ? 'text' : 'password'}
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="••••••"
-                    error={passwordError === 'Try a stronger password.'}
-                    helperText={
-                      passwordError === 'Try a stronger password.'
-                        ? passwordError
-                        : ''
-                    }
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2,
-                        '&.Mui-error': {
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'error.main',
-                          },
-                        },
-                      },
-                      '& .MuiFormHelperText-root': {
-                        color: 'error.main',
-                        fontWeight: 500,
-                      },
-                    }}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowNewPassword(!showNewPassword)}
-                            edge="end"
-                          >
-                            {showNewPassword ? (
-                              <VisibilityOffIcon />
-                            ) : (
-                              <VisibilityIcon />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Box>
-
-                {/* Confirm New Password */}
-                <Box>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: 'text.secondary', mb: 1 }}
-                  >
-                    Confirm New Password*
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="••••••"
-                    error={passwordError === 'Your passwords do not match!'}
-                    helperText={
-                      passwordError === 'Your passwords do not match!'
-                        ? passwordError
-                        : ''
-                    }
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2,
-                        '&.Mui-error': {
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'error.main',
-                          },
-                        },
-                      },
-                      '& .MuiFormHelperText-root': {
-                        color: 'error.main',
-                        fontWeight: 500,
-                      },
-                    }}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() =>
-                              setShowConfirmPassword(!showConfirmPassword)
-                            }
-                            edge="end"
-                          >
-                            {showConfirmPassword ? (
-                              <VisibilityOffIcon />
-                            ) : (
-                              <VisibilityIcon />
-                            )}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Box>
-
-                {/* Password Requirements */}
-                <Typography
-                  variant="caption"
-                  sx={{ color: 'text.secondary', display: 'block' }}
+              {/* Not Available for Social Accounts */}
+              {!isLoadingAccounts && !hasCredentialsAccount && (
+                <Alert
+                  severity="info"
+                  icon={<InfoIcon />}
+                  sx={{
+                    backgroundColor: 'info.light',
+                    color: 'info.dark',
+                    '& .MuiAlert-icon': {
+                      color: 'info.main',
+                    },
+                  }}
                 >
-                  A secure password contains at least one capital letter, one
-                  lowercase letter, a number, and a special symbol.
-                </Typography>
+                  Password change is only available for accounts created with
+                  email and password. You signed in with a social account
+                  (Google or GitHub). To manage your password, please visit your
+                  social account provider&apos;s settings.
+                </Alert>
+              )}
 
-                {/* Forgot Password Link */}
-                <Box>
-                  <Button
-                    variant="text"
-                    sx={{
-                      textTransform: 'none',
-                      color: 'text.primary',
-                      textDecoration: 'underline',
-                      p: 0,
-                      '&:hover': {
-                        backgroundColor: 'transparent',
-                        textDecoration: 'underline',
-                      },
-                    }}
-                  >
-                    Forgot password?
-                  </Button>
-                </Box>
+              {/* Password Change Form */}
+              {!isLoadingAccounts && hasCredentialsAccount && (
+                <Stack spacing={2.5}>
+                  {/* Current Password */}
+                  <Box>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: 'text.secondary', mb: 1 }}
+                    >
+                      Current Password*
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      type={showCurrentPassword ? 'text' : 'password'}
+                      value={currentPassword}
+                      onChange={(e) => {
+                        setCurrentPassword(e.target.value)
+                        setPasswordError('')
+                        setPasswordSuccess(false)
+                      }}
+                      placeholder="••••••"
+                      disabled={isSubmitting}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                        },
+                      }}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() =>
+                                setShowCurrentPassword(!showCurrentPassword)
+                              }
+                              edge="end"
+                              disabled={isSubmitting}
+                            >
+                              {showCurrentPassword ? (
+                                <VisibilityOffIcon />
+                              ) : (
+                                <VisibilityIcon />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Box>
 
-                {/* Success Message */}
-                {passwordSuccess && (
-                  <Alert
-                    severity="success"
-                    icon={<CheckCircleIcon />}
-                    sx={{
-                      backgroundColor: 'success.light',
-                      color: 'success.dark',
-                      '& .MuiAlert-icon': {
-                        color: 'success.main',
-                      },
-                    }}
-                  >
-                    Password updated successfully.
-                  </Alert>
-                )}
+                  {/* New Password */}
+                  <Box>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: 'text.secondary', mb: 1 }}
+                    >
+                      New Password*
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      type={showNewPassword ? 'text' : 'password'}
+                      value={newPassword}
+                      onChange={(e) => {
+                        setNewPassword(e.target.value)
+                        setPasswordError('')
+                        setPasswordSuccess(false)
+                      }}
+                      placeholder="••••••"
+                      disabled={isSubmitting}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                        },
+                      }}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() =>
+                                setShowNewPassword(!showNewPassword)
+                              }
+                              edge="end"
+                              disabled={isSubmitting}
+                            >
+                              {showNewPassword ? (
+                                <VisibilityOffIcon />
+                              ) : (
+                                <VisibilityIcon />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Box>
 
-                {/* Update Button */}
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <Button
-                    variant="contained"
-                    onClick={handlePasswordChange}
-                    sx={{
-                      backgroundColor: 'success.main',
-                      color: 'white',
-                      textTransform: 'none',
-                      fontWeight: 600,
-                      px: 4,
-                      py: 1,
-                      borderRadius: 2,
-                      '&:hover': {
-                        backgroundColor: 'success.dark',
-                      },
-                    }}
+                  {/* Confirm New Password */}
+                  <Box>
+                    <Typography
+                      variant="body2"
+                      sx={{ color: 'text.secondary', mb: 1 }}
+                    >
+                      Confirm New Password*
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      value={confirmPassword}
+                      onChange={(e) => {
+                        setConfirmPassword(e.target.value)
+                        setPasswordError('')
+                        setPasswordSuccess(false)
+                      }}
+                      placeholder="••••••"
+                      disabled={isSubmitting}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 2,
+                        },
+                      }}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() =>
+                                setShowConfirmPassword(!showConfirmPassword)
+                              }
+                              edge="end"
+                              disabled={isSubmitting}
+                            >
+                              {showConfirmPassword ? (
+                                <VisibilityOffIcon />
+                              ) : (
+                                <VisibilityIcon />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Box>
+
+                  {/* Password Requirements */}
+                  <Typography
+                    variant="caption"
+                    sx={{ color: 'text.secondary', display: 'block' }}
                   >
-                    Update Password
-                  </Button>
-                </Box>
-              </Stack>
+                    A secure password must contain at least 8 characters,
+                    including one uppercase letter, one lowercase letter, one
+                    number, and one special character (!@#$%^&*...).
+                  </Typography>
+
+                  {/* Error Message */}
+                  {passwordError && (
+                    <Alert
+                      severity="error"
+                      sx={{
+                        backgroundColor: 'error.light',
+                        color: 'error.dark',
+                        '& .MuiAlert-icon': {
+                          color: 'error.main',
+                        },
+                      }}
+                    >
+                      {passwordError}
+                    </Alert>
+                  )}
+
+                  {/* Success Message */}
+                  {passwordSuccess && (
+                    <Alert
+                      severity="success"
+                      icon={<CheckCircleIcon />}
+                      sx={{
+                        backgroundColor: 'success.light',
+                        color: 'success.dark',
+                        '& .MuiAlert-icon': {
+                          color: 'success.main',
+                        },
+                      }}
+                    >
+                      Password updated successfully. Your new password is now
+                      active.
+                    </Alert>
+                  )}
+
+                  {/* Update Button */}
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button
+                      variant="contained"
+                      onClick={handlePasswordChange}
+                      disabled={isSubmitting}
+                      sx={{
+                        backgroundColor: 'success.main',
+                        color: 'white',
+                        textTransform: 'none',
+                        fontWeight: 600,
+                        px: 4,
+                        py: 1,
+                        borderRadius: 2,
+                        '&:hover': {
+                          backgroundColor: 'success.dark',
+                        },
+                        '&:disabled': {
+                          backgroundColor: 'action.disabledBackground',
+                          color: 'action.disabled',
+                        },
+                      }}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <CircularProgress
+                            size={20}
+                            sx={{ mr: 1, color: 'inherit' }}
+                          />
+                          Updating...
+                        </>
+                      ) : (
+                        'Update Password'
+                      )}
+                    </Button>
+                  </Box>
+                </Stack>
+              )}
             </Paper>
 
             {/* Login History Section */}
@@ -388,63 +520,112 @@ export default function AccountSecurityPage() {
                 Login History
               </Typography>
 
-              <List sx={{ p: 0 }}>
-                {loginHistory.map((login, index) => (
-                  <ListItem
-                    key={index}
-                    sx={{
-                      px: 0,
-                      py: 2,
-                      borderBottom:
-                        index !== loginHistory.length - 1
-                          ? '1px solid'
-                          : 'none',
-                      borderColor: 'divider',
-                    }}
-                    secondaryAction={
-                      <IconButton edge="end">
-                        <OpenInNewIcon sx={{ color: 'text.secondary' }} />
-                      </IconButton>
-                    }
-                  >
-                    <ListItemIcon>
-                      <DevicesIcon sx={{ color: 'text.secondary' }} />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={
-                        <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                          Device, location
-                        </Typography>
-                      }
-                      secondary={
-                        <Typography
-                          variant="body2"
-                          sx={{ color: 'text.secondary' }}
-                        >
-                          {login.device} • {login.location}
-                        </Typography>
-                      }
-                    />
-                  </ListItem>
-                ))}
-              </List>
+              {/* Loading State */}
+              {isLoadingHistory && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
+                  <CircularProgress />
+                </Box>
+              )}
 
-              {/* Sign out all devices */}
-              <Button
-                variant="text"
-                startIcon={<LogoutIcon />}
-                sx={{
-                  color: 'error.main',
-                  textTransform: 'none',
-                  fontWeight: 600,
-                  mt: 2,
-                  '&:hover': {
-                    backgroundColor: 'error.light',
-                  },
-                }}
-              >
-                Sign out of all devices.
-              </Button>
+              {/* No History */}
+              {!isLoadingHistory && loginHistory.length === 0 && (
+                <Alert
+                  severity="info"
+                  icon={<InfoIcon />}
+                  sx={{
+                    backgroundColor: 'info.light',
+                    color: 'info.dark',
+                    '& .MuiAlert-icon': {
+                      color: 'info.main',
+                    },
+                  }}
+                >
+                  No login history available yet. Your login activities will
+                  appear here.
+                </Alert>
+              )}
+
+              {/* Login History List */}
+              {!isLoadingHistory && loginHistory.length > 0 && (
+                <>
+                  <List sx={{ p: 0 }}>
+                    {loginHistory.map((login, index) => (
+                      <ListItem
+                        key={login.id}
+                        sx={{
+                          px: 0,
+                          py: 2,
+                          borderBottom:
+                            index !== loginHistory.length - 1
+                              ? '1px solid'
+                              : 'none',
+                          borderColor: 'divider',
+                        }}
+                      >
+                        <ListItemIcon>
+                          <DevicesIcon sx={{ color: 'text.secondary' }} />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1,
+                                flexWrap: 'wrap',
+                              }}
+                            >
+                              <Typography
+                                variant="body1"
+                                sx={{ fontWeight: 500 }}
+                              >
+                                {login.device}
+                              </Typography>
+                              {login.provider && (
+                                <Typography
+                                  variant="caption"
+                                  sx={{
+                                    px: 1,
+                                    py: 0.5,
+                                    borderRadius: 1,
+                                    backgroundColor: 'primary.light',
+                                    color: 'primary.main',
+                                    fontWeight: 600,
+                                  }}
+                                >
+                                  {login.provider}
+                                </Typography>
+                              )}
+                            </Box>
+                          }
+                          secondary={
+                            <Typography
+                              variant="body2"
+                              sx={{ color: 'text.secondary', mt: 0.5 }}
+                            >
+                              {formatLoginDate(login.loginDate)} •{' '}
+                              {login.location}
+                            </Typography>
+                          }
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      display: 'block',
+                      mt: 2,
+                      color: 'text.secondary',
+                      textAlign: 'center',
+                    }}
+                  >
+                    Showing your {loginHistory.length} most recent login
+                    {loginHistory.length !== 1 ? 's' : ''}
+                  </Typography>
+                </>
+              )}
             </Paper>
           </Stack>
         </Grid>
