@@ -52,6 +52,11 @@ interface ReminderData {
   emailNotificationsEnabled?: boolean // Add email notifications preference
 }
 
+interface ReminderSettingsProps {
+  inAppNotificationsEnabled?: boolean
+  emailNotificationsEnabled?: boolean
+}
+
 const TIMEZONES = [
   'America/Los_Angeles',
   'America/Denver',
@@ -79,7 +84,10 @@ const DAYS_OF_WEEK = [
   { value: 'Sun', label: 'Sunday' },
 ]
 
-export default function ReminderSettings() {
+export default function ReminderSettings({
+  inAppNotificationsEnabled = true,
+  emailNotificationsEnabled = true,
+}: ReminderSettingsProps = {}) {
   const { data: session } = useSession()
   const [reminderData, setReminderData] = useState<ReminderData>({
     timeOfDay: '08:00',
@@ -100,6 +108,14 @@ export default function ReminderSettings() {
   const [browserSupport, setBrowserSupport] = useState(true)
   const [permissionStatus, setPermissionStatus] =
     useState<NotificationPermission>('default')
+
+  // Sync parent emailNotificationsEnabled prop with internal state
+  useEffect(() => {
+    setReminderData((prev) => ({
+      ...prev,
+      emailNotificationsEnabled: emailNotificationsEnabled,
+    }))
+  }, [emailNotificationsEnabled])
 
   // Check browser support and existing subscription on load
   useEffect(() => {
@@ -348,7 +364,6 @@ export default function ReminderSettings() {
       })
 
       if (response.ok) {
-        const result = await response.json()
         showNotification(
           'success',
           `Test email sent to ${session.user.email}! Check your inbox.`
@@ -473,6 +488,8 @@ export default function ReminderSettings() {
                 borderRadius: 1,
                 border: '1px solid',
                 borderColor: 'divider',
+                opacity: inAppNotificationsEnabled ? 1 : 0.5,
+                transition: 'opacity 0.3s ease',
               }}
             >
               <Stack
@@ -527,7 +544,7 @@ export default function ReminderSettings() {
                           variant="outlined"
                           onClick={handleTestNotification}
                           size="small"
-                          disabled={loading}
+                          disabled={loading || !inAppNotificationsEnabled}
                         >
                           Test
                         </Button>
@@ -535,7 +552,7 @@ export default function ReminderSettings() {
                           variant="outlined"
                           color="error"
                           onClick={handleDisablePushNotifications}
-                          disabled={loading}
+                          disabled={loading || !inAppNotificationsEnabled}
                           startIcon={<NotificationsOffIcon />}
                           size="small"
                         >
@@ -546,7 +563,7 @@ export default function ReminderSettings() {
                       <Button
                         variant="contained"
                         onClick={handleEnablePushNotifications}
-                        disabled={loading}
+                        disabled={loading || !inAppNotificationsEnabled}
                         startIcon={
                           loading ? (
                             <CircularProgress size={16} />
@@ -563,6 +580,14 @@ export default function ReminderSettings() {
                   </Stack>
                 </Box>
               </Stack>
+
+              {/* Alert when In-App notifications are disabled */}
+              {!inAppNotificationsEnabled && (
+                <Alert severity="info" sx={{ mt: 1 }}>
+                  In-App notifications are disabled. Enable them in the
+                  preferences above to use instant browser notifications.
+                </Alert>
+              )}
             </Box>
 
             {/* Email Notifications Status */}
@@ -574,6 +599,8 @@ export default function ReminderSettings() {
                 borderRadius: 1,
                 border: '1px solid',
                 borderColor: 'divider',
+                opacity: emailNotificationsEnabled ? 1 : 0.5,
+                transition: 'opacity 0.3s ease',
               }}
             >
               <Stack
@@ -622,40 +649,26 @@ export default function ReminderSettings() {
                 </Box>
 
                 <Box sx={{ flexShrink: 0 }}>
-                  {session?.user?.email && (
-                    <Stack direction="row" spacing={1} alignItems="center">
-                      {reminderData.emailNotificationsEnabled && (
-                        <Button
-                          variant="outlined"
-                          onClick={handleTestEmailNotification}
-                          size="small"
-                          disabled={loading}
-                        >
-                          Test Email
-                        </Button>
-                      )}
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={
-                              reminderData.emailNotificationsEnabled ?? true
-                            }
-                            onChange={(e) =>
-                              handleInputChange(
-                                'emailNotificationsEnabled',
-                                e.target.checked
-                              )
-                            }
-                            size="small"
-                          />
-                        }
-                        label=""
-                        sx={{ m: 0 }}
-                      />
-                    </Stack>
+                  {session?.user?.email && emailNotificationsEnabled && (
+                    <Button
+                      variant="outlined"
+                      onClick={handleTestEmailNotification}
+                      size="small"
+                      disabled={loading}
+                    >
+                      Test Email
+                    </Button>
                   )}
                 </Box>
               </Stack>
+
+              {/* Alert when Email notifications are disabled */}
+              {!emailNotificationsEnabled && session?.user?.email && (
+                <Alert severity="info" sx={{ mt: 1 }}>
+                  Email notifications are disabled. Enable them in the
+                  preferences above to use email reminders.
+                </Alert>
+              )}
             </Box>
 
             {/* Notification Status Alerts */}
