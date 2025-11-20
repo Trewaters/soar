@@ -19,6 +19,7 @@ import { auth } from '../../../../auth'
 import theme from '@styles/theme'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import Link from 'next/link'
+import DownloadDataButton from '@clientComponents/DownloadDataButton'
 
 export const metadata = {
   title: 'Privacy Settings | Uvuyoga',
@@ -261,7 +262,7 @@ export default async function PrivacySettingsPage() {
                 </Box>
               </Paper>
 
-              {/* Download my data */}
+              {/* Download my data - GDPR Compliant */}
               <Paper
                 elevation={0}
                 sx={{
@@ -275,45 +276,25 @@ export default async function PrivacySettingsPage() {
                   variant="h6"
                   sx={{ color: 'text.primary', fontWeight: 600, mb: 1 }}
                 >
-                  Download my data
+                  Download My Data
                 </Typography>
                 <Typography
                   variant="body2"
-                  sx={{ color: 'text.secondary', mb: 2 }}
+                  sx={{ color: 'text.secondary', mb: 1 }}
                 >
-                  Request a copy of your personal information.
+                  Get a complete copy of your personal information in JSON
+                  format.
                 </Typography>
                 <Typography
                   variant="caption"
                   sx={{ color: 'text.secondary', mb: 2, display: 'block' }}
                 >
-                  We&apos;ll email you a download link within 24 hours.
+                  Includes: profile information, activity history, created
+                  content, preferences, and notification history. Complies with
+                  GDPR Article 15 (Right of Access) and Article 20 (Right to
+                  Data Portability).
                 </Typography>
-                <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: 'primary.main',
-                    color: 'white',
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    px: 3,
-                    '&:hover': {
-                      backgroundColor: 'primary.dark',
-                    },
-                  }}
-                  startIcon={
-                    <Box
-                      component="span"
-                      sx={{
-                        fontSize: '1.2rem',
-                      }}
-                    >
-                      ⬇
-                    </Box>
-                  }
-                >
-                  Download
-                </Button>
+                <DownloadDataButton />
               </Paper>
 
               {/* Delete My Account */}

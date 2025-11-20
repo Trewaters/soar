@@ -1,9 +1,10 @@
-import { Container, Typography, Paper, Stack } from '@mui/material'
+import { Container, Typography, Paper, Stack, Box } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { SessionProvider } from 'next-auth/react'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
 import { auth } from '../../../../auth'
 import theme from '@styles/theme'
+import DownloadDataButton from '@clientComponents/DownloadDataButton'
 
 export default async function SettingsPage() {
   const session = await auth()
@@ -219,6 +220,51 @@ export default async function SettingsPage() {
                 >
                   Send Feedback to Developer
                 </Typography>
+              </Paper>
+
+              {/* Download My Data - GDPR Compliant */}
+              <Paper
+                elevation={0}
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  border: '2px solid',
+                  borderColor: 'success.main',
+                  backgroundColor: 'success.light',
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: 'text.primary',
+                    fontWeight: 600,
+                    mb: 1,
+                    textAlign: 'center',
+                  }}
+                >
+                  Download My Data
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ color: 'text.secondary', mb: 2, textAlign: 'center' }}
+                >
+                  Get a complete copy of your personal information in JSON
+                  format.
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: 'text.secondary',
+                    mb: 2,
+                    display: 'block',
+                    textAlign: 'center',
+                  }}
+                >
+                  GDPR-compliant data export (Article 15 & 20)
+                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <DownloadDataButton />
+                </Box>
               </Paper>
             </Stack>
           </Grid>
