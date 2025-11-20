@@ -125,37 +125,33 @@ export async function getUserSequenceHistory(
 
 /**
  * Check if a sequence activity exists for today
- * Uses UTC timezone to ensure consistent calendar day tracking across all users.
+ * Uses local timezone to align with user's calendar day.
  */
 export async function checkExistingSequenceActivity(
   userId: string,
   sequenceId: string
 ): Promise<SequenceActivityData | null> {
   try {
-    // Get today's date range in UTC (start and end of today)
+    // Get today's date range in local timezone (start and end of today)
     const now = new Date()
     const startOfToday = new Date(
-      Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate(),
-        0,
-        0,
-        0,
-        0
-      )
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+      0
     )
 
     const endOfToday = new Date(
-      Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate(),
-        23,
-        59,
-        59,
-        999
-      )
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23,
+      59,
+      59,
+      999
     )
 
     const activity = await prisma.sequenceActivity.findFirst({
@@ -203,37 +199,33 @@ export async function checkExistingSequenceActivity(
 
 /**
  * Delete a sequence activity for today
- * Uses UTC timezone to ensure consistent calendar day tracking.
+ * Uses local timezone to align with user's calendar day.
  */
 export async function deleteSequenceActivity(
   userId: string,
   sequenceId: string
 ): Promise<void> {
   try {
-    // Get today's date range in UTC (start and end of today)
+    // Get today's date range in local timezone (start and end of today)
     const now = new Date()
     const startOfToday = new Date(
-      Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate(),
-        0,
-        0,
-        0,
-        0
-      )
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+      0
     )
 
     const endOfToday = new Date(
-      Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate(),
-        23,
-        59,
-        59,
-        999
-      )
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23,
+      59,
+      59,
+      999
     )
 
     await prisma.sequenceActivity.deleteMany({

@@ -165,19 +165,17 @@ export default function ActivityTracker({
     // Initial check on mount
     checkExistingActivity()
 
-    // Set up automatic refresh at midnight UTC
+    // Set up automatic refresh at local midnight
     const scheduleNextMidnightRefresh = () => {
       const now = new Date()
       const nextMidnight = new Date(
-        Date.UTC(
-          now.getUTCFullYear(),
-          now.getUTCMonth(),
-          now.getUTCDate() + 1,
-          0,
-          0,
-          0,
-          0
-        )
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 1,
+        0,
+        0,
+        0,
+        0
       )
       const msUntilMidnight = nextMidnight.getTime() - now.getTime()
 

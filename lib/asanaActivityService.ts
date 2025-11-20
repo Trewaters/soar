@@ -43,33 +43,30 @@ export async function recordAsanaActivity(input: AsanaActivityInput) {
 /**
  * Delete an activity for a specific user and asana on today's date only.
  * This is used for streak tracking - only removes today's activity, preserving historical data.
+ * Uses local timezone to align with user's calendar day.
  */
 export async function deleteAsanaActivity(userId: string, asanaId: string) {
   try {
-    // Get today's date range in UTC (start and end of today)
+    // Get today's date range in local timezone (start and end of today)
     const now = new Date()
     const startOfToday = new Date(
-      Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate(),
-        0,
-        0,
-        0,
-        0
-      )
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+      0
     )
 
     const endOfToday = new Date(
-      Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate(),
-        23,
-        59,
-        59,
-        999
-      )
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23,
+      59,
+      59,
+      999
     )
 
     // Delete only today's activity for this user and asana
@@ -102,34 +99,30 @@ export async function deleteAsanaActivity(userId: string, asanaId: string) {
 /**
  * Check if an activity exists for a specific user and asana on today's date.
  * This is used for streak tracking - only activities performed today count for the current streak.
- * Uses UTC timezone to ensure consistent calendar day tracking across all users.
+ * Uses local timezone to align with user's calendar day.
  */
 export async function checkExistingActivity(userId: string, asanaId: string) {
   try {
-    // Get today's date range in UTC (start and end of today)
+    // Get today's date range in local timezone (start and end of today)
     const now = new Date()
     const startOfToday = new Date(
-      Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate(),
-        0,
-        0,
-        0,
-        0
-      )
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+      0
     )
 
     const endOfToday = new Date(
-      Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate(),
-        23,
-        59,
-        59,
-        999
-      )
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23,
+      59,
+      59,
+      999
     )
 
     const activity = await prisma.asanaActivity.findFirst({
