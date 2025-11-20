@@ -1,49 +1,109 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Typography, Paper, Stack, Switch, Box, Divider } from '@mui/material'
+import React from 'react'
+import {
+  Typography,
+  Paper,
+  Stack,
+  Switch,
+  Box,
+  Divider,
+  FormControlLabel,
+} from '@mui/material'
+
+interface NotificationPreferencesData {
+  inApp: boolean
+  email: boolean
+  inAppSubPreferences: {
+    dailyPractice: boolean
+    newFeatures: boolean
+    progressMilestones: boolean
+    loginStreak: boolean
+    activityStreak: boolean
+  }
+  emailSubPreferences: {
+    dailyPractice: boolean
+    newFeatures: boolean
+    progressMilestones: boolean
+    loginStreak: boolean
+    activityStreak: boolean
+  }
+}
 
 interface NotificationPreferencesProps {
+  preferences: NotificationPreferencesData
   // eslint-disable-next-line no-unused-vars
-  onInAppChange: (value: boolean) => void
-  // eslint-disable-next-line no-unused-vars
-  onEmailChange: (value: boolean) => void
-  inAppEnabled: boolean
-  emailEnabled: boolean
+  onPreferencesChange: (preferences: NotificationPreferencesData) => void
 }
 
 export default function NotificationPreferences({
-  onInAppChange,
-  onEmailChange,
-  inAppEnabled,
-  emailEnabled,
+  preferences,
+  onPreferencesChange,
 }: NotificationPreferencesProps) {
-  // Sub-preferences for email notifications
-  const [emailPrefs, setEmailPrefs] = useState({
-    dailyPractice: true,
-    newFeatures: true,
-    progress: true,
-    loginStreak: true,
-    activityStreak: true,
-  })
+  console.log('NotificationPreferences rendered with:', preferences)
 
-  // Sub-preferences for in-app notifications
-  const [inAppPrefs, setInAppPrefs] = useState({
-    dailyPractice: true,
-    newFeatures: true,
-    progress: true,
-    loginStreak: true,
-    activityStreak: true,
-  })
+  const handleInAppToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.checked
+    console.log('In-App toggle:', preferences.inApp, '->', newValue)
 
-  const handleInAppToggle = () => {
-    const newValue = !inAppEnabled
-    onInAppChange(newValue)
+    onPreferencesChange({
+      ...preferences,
+      inApp: newValue,
+    })
   }
 
-  const handleEmailToggle = () => {
-    const newValue = !emailEnabled
-    onEmailChange(newValue)
+  const handleEmailToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.checked
+    console.log('Email toggle:', preferences.email, '->', newValue)
+
+    onPreferencesChange({
+      ...preferences,
+      email: newValue,
+    })
+  }
+
+  const handleInAppSubPrefChange = (
+    key: keyof NotificationPreferencesData['inAppSubPreferences'],
+    value: boolean
+  ) => {
+    console.log(
+      'In-App sub-pref',
+      key,
+      ':',
+      preferences.inAppSubPreferences[key],
+      '->',
+      value
+    )
+
+    onPreferencesChange({
+      ...preferences,
+      inAppSubPreferences: {
+        ...preferences.inAppSubPreferences,
+        [key]: value,
+      },
+    })
+  }
+
+  const handleEmailSubPrefChange = (
+    key: keyof NotificationPreferencesData['emailSubPreferences'],
+    value: boolean
+  ) => {
+    console.log(
+      'Email sub-pref',
+      key,
+      ':',
+      preferences.emailSubPreferences[key],
+      '->',
+      value
+    )
+
+    onPreferencesChange({
+      ...preferences,
+      emailSubPreferences: {
+        ...preferences.emailSubPreferences,
+        [key]: value,
+      },
+    })
   }
 
   return (
@@ -65,384 +125,340 @@ export default function NotificationPreferences({
 
       <Stack spacing={2}>
         {/* In-App Notifications Section */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Box>
-            <Typography
-              variant="body1"
-              sx={{ color: 'text.primary', fontWeight: 500 }}
-            >
-              In-App Notifications
-            </Typography>
-            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-              Instant browser notifications
-            </Typography>
-          </Box>
-          <Switch
-            checked={inAppEnabled}
-            onClick={handleInAppToggle}
-            inputProps={{ 'aria-label': 'In-App Notifications toggle' }}
-            sx={{
-              '& .MuiSwitch-switchBase.Mui-checked': {
-                color: 'primary.main',
-              },
-              '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                backgroundColor: 'primary.main',
-              },
-            }}
+        <Box>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={preferences.inApp}
+                onChange={handleInAppToggle}
+                sx={{
+                  '& .MuiSwitch-switchBase.Mui-checked': {
+                    color: 'primary.main',
+                  },
+                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                    backgroundColor: 'primary.main',
+                  },
+                }}
+              />
+            }
+            label={
+              <Box>
+                <Typography
+                  variant="body1"
+                  sx={{ color: 'text.primary', fontWeight: 500 }}
+                >
+                  In-App Notifications
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                  Instant browser notifications
+                </Typography>
+              </Box>
+            }
+            sx={{ alignItems: 'flex-start', mb: 2 }}
           />
         </Box>
 
         {/* In-App sub-options */}
         <Box sx={{ pl: 3 }}>
           <Stack spacing={1.5}>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Daily Practice Reminders
-              </Typography>
-              <Switch
-                checked={inAppPrefs.dailyPractice}
-                onChange={(e) =>
-                  setInAppPrefs((prev) => ({
-                    ...prev,
-                    dailyPractice: e.target.checked,
-                  }))
-                }
-                disabled={!inAppEnabled}
-                size="small"
-                sx={{
-                  '& .MuiSwitch-switchBase.Mui-checked': {
-                    color: 'primary.main',
-                  },
-                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                    backgroundColor: 'primary.main',
-                  },
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                New Feature Announcements
-              </Typography>
-              <Switch
-                checked={inAppPrefs.newFeatures}
-                onChange={(e) =>
-                  setInAppPrefs((prev) => ({
-                    ...prev,
-                    newFeatures: e.target.checked,
-                  }))
-                }
-                disabled={!inAppEnabled}
-                size="small"
-                sx={{
-                  '& .MuiSwitch-switchBase.Mui-checked': {
-                    color: 'primary.main',
-                  },
-                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                    backgroundColor: 'primary.main',
-                  },
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Progress Milestones
-              </Typography>
-              <Switch
-                checked={inAppPrefs.progress}
-                onChange={(e) =>
-                  setInAppPrefs((prev) => ({
-                    ...prev,
-                    progress: e.target.checked,
-                  }))
-                }
-                disabled={!inAppEnabled}
-                size="small"
-                sx={{
-                  '& .MuiSwitch-switchBase.Mui-checked': {
-                    color: 'primary.main',
-                  },
-                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                    backgroundColor: 'primary.main',
-                  },
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Login streak reminders
-              </Typography>
-              <Switch
-                checked={inAppPrefs.loginStreak}
-                onChange={(e) =>
-                  setInAppPrefs((prev) => ({
-                    ...prev,
-                    loginStreak: e.target.checked,
-                  }))
-                }
-                disabled={!inAppEnabled}
-                size="small"
-                sx={{
-                  '& .MuiSwitch-switchBase.Mui-checked': {
-                    color: 'primary.main',
-                  },
-                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                    backgroundColor: 'primary.main',
-                  },
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Activity streak reminders
-              </Typography>
-              <Switch
-                checked={inAppPrefs.activityStreak}
-                onChange={(e) =>
-                  setInAppPrefs((prev) => ({
-                    ...prev,
-                    activityStreak: e.target.checked,
-                  }))
-                }
-                disabled={!inAppEnabled}
-                size="small"
-                sx={{
-                  '& .MuiSwitch-switchBase.Mui-checked': {
-                    color: 'primary.main',
-                  },
-                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                    backgroundColor: 'primary.main',
-                  },
-                }}
-              />
-            </Box>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.inAppSubPreferences.dailyPractice}
+                  onChange={(e) =>
+                    handleInAppSubPrefChange('dailyPractice', e.target.checked)
+                  }
+                  disabled={!preferences.inApp}
+                  size="small"
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: 'primary.main',
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: 'primary.main',
+                    },
+                  }}
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Daily Practice Reminders
+                </Typography>
+              }
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.inAppSubPreferences.newFeatures}
+                  onChange={(e) =>
+                    handleInAppSubPrefChange('newFeatures', e.target.checked)
+                  }
+                  disabled={!preferences.inApp}
+                  size="small"
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: 'primary.main',
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: 'primary.main',
+                    },
+                  }}
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  New Feature Announcements
+                </Typography>
+              }
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.inAppSubPreferences.progressMilestones}
+                  onChange={(e) =>
+                    handleInAppSubPrefChange(
+                      'progressMilestones',
+                      e.target.checked
+                    )
+                  }
+                  disabled={!preferences.inApp}
+                  size="small"
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: 'primary.main',
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: 'primary.main',
+                    },
+                  }}
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Progress Milestones
+                </Typography>
+              }
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.inAppSubPreferences.loginStreak}
+                  onChange={(e) =>
+                    handleInAppSubPrefChange('loginStreak', e.target.checked)
+                  }
+                  disabled={!preferences.inApp}
+                  size="small"
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: 'primary.main',
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: 'primary.main',
+                    },
+                  }}
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Login streak reminders
+                </Typography>
+              }
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.inAppSubPreferences.activityStreak}
+                  onChange={(e) =>
+                    handleInAppSubPrefChange('activityStreak', e.target.checked)
+                  }
+                  disabled={!preferences.inApp}
+                  size="small"
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: 'primary.main',
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: 'primary.main',
+                    },
+                  }}
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Activity streak reminders
+                </Typography>
+              }
+            />
           </Stack>
         </Box>
 
         <Divider sx={{ my: 2 }} />
 
         {/* Email Notifications Section */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Box>
-            <Typography
-              variant="body1"
-              sx={{ color: 'text.primary', fontWeight: 500 }}
-            >
-              Email Notifications
-            </Typography>
-            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-              Backup when push notifications fail
-            </Typography>
-          </Box>
-          <Switch
-            checked={emailEnabled}
-            onClick={handleEmailToggle}
-            inputProps={{ 'aria-label': 'Email Notifications toggle' }}
-            sx={{
-              '& .MuiSwitch-switchBase.Mui-checked': {
-                color: 'primary.main',
-              },
-              '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                backgroundColor: 'primary.main',
-              },
-            }}
+        <Box>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={preferences.email}
+                onChange={handleEmailToggle}
+                sx={{
+                  '& .MuiSwitch-switchBase.Mui-checked': {
+                    color: 'primary.main',
+                  },
+                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                    backgroundColor: 'primary.main',
+                  },
+                }}
+              />
+            }
+            label={
+              <Box>
+                <Typography
+                  variant="body1"
+                  sx={{ color: 'text.primary', fontWeight: 500 }}
+                >
+                  Email Notifications
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                  Backup when push notifications fail
+                </Typography>
+              </Box>
+            }
+            sx={{ alignItems: 'flex-start', mb: 2 }}
           />
         </Box>
 
-        {/* Email sub-options */}
+        {/* Email sub-options - Same structure as in-app */}
         <Box sx={{ pl: 3 }}>
           <Stack spacing={1.5}>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Daily Practice Reminders
-              </Typography>
-              <Switch
-                checked={emailPrefs.dailyPractice}
-                onChange={(e) =>
-                  setEmailPrefs((prev) => ({
-                    ...prev,
-                    dailyPractice: e.target.checked,
-                  }))
-                }
-                disabled={!emailEnabled}
-                size="small"
-                sx={{
-                  '& .MuiSwitch-switchBase.Mui-checked': {
-                    color: 'primary.main',
-                  },
-                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                    backgroundColor: 'primary.main',
-                  },
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                New Feature Announcements
-              </Typography>
-              <Switch
-                checked={emailPrefs.newFeatures}
-                onChange={(e) =>
-                  setEmailPrefs((prev) => ({
-                    ...prev,
-                    newFeatures: e.target.checked,
-                  }))
-                }
-                disabled={!emailEnabled}
-                size="small"
-                sx={{
-                  '& .MuiSwitch-switchBase.Mui-checked': {
-                    color: 'primary.main',
-                  },
-                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                    backgroundColor: 'primary.main',
-                  },
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Progress Milestones
-              </Typography>
-              <Switch
-                checked={emailPrefs.progress}
-                onChange={(e) =>
-                  setEmailPrefs((prev) => ({
-                    ...prev,
-                    progress: e.target.checked,
-                  }))
-                }
-                disabled={!emailEnabled}
-                size="small"
-                sx={{
-                  '& .MuiSwitch-switchBase.Mui-checked': {
-                    color: 'primary.main',
-                  },
-                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                    backgroundColor: 'primary.main',
-                  },
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Login streak reminders
-              </Typography>
-              <Switch
-                checked={emailPrefs.loginStreak}
-                onChange={(e) =>
-                  setEmailPrefs((prev) => ({
-                    ...prev,
-                    loginStreak: e.target.checked,
-                  }))
-                }
-                disabled={!emailEnabled}
-                size="small"
-                sx={{
-                  '& .MuiSwitch-switchBase.Mui-checked': {
-                    color: 'primary.main',
-                  },
-                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                    backgroundColor: 'primary.main',
-                  },
-                }}
-              />
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Activity streak reminders
-              </Typography>
-              <Switch
-                checked={emailPrefs.activityStreak}
-                onChange={(e) =>
-                  setEmailPrefs((prev) => ({
-                    ...prev,
-                    activityStreak: e.target.checked,
-                  }))
-                }
-                disabled={!emailEnabled}
-                size="small"
-                sx={{
-                  '& .MuiSwitch-switchBase.Mui-checked': {
-                    color: 'primary.main',
-                  },
-                  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-                    backgroundColor: 'primary.main',
-                  },
-                }}
-              />
-            </Box>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.emailSubPreferences.dailyPractice}
+                  onChange={(e) =>
+                    handleEmailSubPrefChange('dailyPractice', e.target.checked)
+                  }
+                  disabled={!preferences.email}
+                  size="small"
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: 'primary.main',
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: 'primary.main',
+                    },
+                  }}
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Daily Practice Reminders
+                </Typography>
+              }
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.emailSubPreferences.newFeatures}
+                  onChange={(e) =>
+                    handleEmailSubPrefChange('newFeatures', e.target.checked)
+                  }
+                  disabled={!preferences.email}
+                  size="small"
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: 'primary.main',
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: 'primary.main',
+                    },
+                  }}
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  New Feature Announcements
+                </Typography>
+              }
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.emailSubPreferences.progressMilestones}
+                  onChange={(e) =>
+                    handleEmailSubPrefChange(
+                      'progressMilestones',
+                      e.target.checked
+                    )
+                  }
+                  disabled={!preferences.email}
+                  size="small"
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: 'primary.main',
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: 'primary.main',
+                    },
+                  }}
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Progress Milestones
+                </Typography>
+              }
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.emailSubPreferences.loginStreak}
+                  onChange={(e) =>
+                    handleEmailSubPrefChange('loginStreak', e.target.checked)
+                  }
+                  disabled={!preferences.email}
+                  size="small"
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: 'primary.main',
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: 'primary.main',
+                    },
+                  }}
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Login streak reminders
+                </Typography>
+              }
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.emailSubPreferences.activityStreak}
+                  onChange={(e) =>
+                    handleEmailSubPrefChange('activityStreak', e.target.checked)
+                  }
+                  disabled={!preferences.email}
+                  size="small"
+                  sx={{
+                    '& .MuiSwitch-switchBase.Mui-checked': {
+                      color: 'primary.main',
+                    },
+                    '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+                      backgroundColor: 'primary.main',
+                    },
+                  }}
+                />
+              }
+              label={
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  Activity streak reminders
+                </Typography>
+              }
+            />
           </Stack>
         </Box>
       </Stack>

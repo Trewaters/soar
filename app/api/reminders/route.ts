@@ -42,6 +42,7 @@ export async function GET() {
       message: reminder.message,
       enabled: reminder.enabled,
       emailNotificationsEnabled: reminder.emailNotificationsEnabled ?? true,
+      notificationPreferences: reminder.notificationPreferences || null,
     })
   } catch (error) {
     console.error('Error fetching reminder settings:', error)
@@ -58,8 +59,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
   }
 
-  const { timeOfDay, days, message, enabled, tz, emailNotificationsEnabled } =
-    await req.json()
+  const {
+    timeOfDay,
+    days,
+    message,
+    enabled,
+    tz,
+    emailNotificationsEnabled,
+    notificationPreferences,
+  } = await req.json()
 
   if (!timeOfDay || !days || !Array.isArray(days)) {
     return NextResponse.json({ error: 'bad payload' }, { status: 400 })
@@ -88,6 +96,7 @@ export async function POST(req: NextRequest) {
         message: message || '🧘 Practice time',
         enabled: enabled ?? true,
         emailNotificationsEnabled: emailNotificationsEnabled ?? true,
+        notificationPreferences: notificationPreferences || null,
       },
     })
   } else {
@@ -100,6 +109,7 @@ export async function POST(req: NextRequest) {
         message: message || '🧘 Practice time',
         enabled: enabled ?? true,
         emailNotificationsEnabled: emailNotificationsEnabled ?? true,
+        notificationPreferences: notificationPreferences || null,
       },
     })
   }

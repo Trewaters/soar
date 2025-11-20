@@ -79,6 +79,7 @@ model Reminder {
   message                   String    @default("🧘 Practice time")
   lastSent                  DateTime? // to avoid double-sends within a window
   emailNotificationsEnabled Boolean   @default(true) // Allow users to disable email fallback
+  notificationPreferences   Json? // Store the five sub-preferences
 
   @@index([userId])
 }
@@ -325,4 +326,51 @@ enum GlossarySource {
   DEFAULT // Bundled with app
   ALPHA_USER // Contributed by approved alpha users
   USER // Regular user-created term
+}
+
+/// Records notification delivery for tracking and preventing duplicates
+model NotificationLog {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String   @db.ObjectId
+  notificationType String // daily_practice, new_feature, progress_milestone, login_streak, activity_streak
+  triggerData      Json // Details about what triggered the notification
+  sentVia          String[] // ["email", "push"] - which methods were used
+  sentAt           DateTime @default(now())
+  readAt           DateTime?
+
+  @@map("notification_logs")
+  @@index([userId])
+  @@index([notificationType])
+  @@index([userId, notificationType])
+}
+
+/// Stores feature announcements to be sent to users
+model FeatureAnnouncement {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  content     String
+  releaseDate DateTime
+  targetUsers String // "all", "active", "new"
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("feature_announcements")
+  @@index([releaseDate])
+  @@index([active])
+}
+
+/// Tracks which users have received which feature announcements
+model UserNotificationDelivery {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  announcementId String   @db.ObjectId
+  deliveredAt    DateTime @default(now())
+  readAt         DateTime?
+
+  @@unique([userId, announcementId])
+  @@map("user_notification_deliveries")
+  @@index([userId])
+  @@index([announcementId])
 }

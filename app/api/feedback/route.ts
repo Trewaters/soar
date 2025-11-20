@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import nodemailer from 'nodemailer'
+import * as nodemailer from 'nodemailer'
 import { auth } from '../../../auth'
 
 // Force this route to be dynamic since it requires authentication
