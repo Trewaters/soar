@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     const data = await req.json()
-    const { userId, sequenceId } = data
+    const { userId, sequenceId, startDate, endDate } = data
 
     if (!userId || !sequenceId) {
       return NextResponse.json(
@@ -62,7 +62,8 @@ export async function DELETE(req: NextRequest) {
       )
     }
 
-    await deleteSequenceActivity(userId, sequenceId)
+    // startDate and endDate are optional ISO strings calculated by client in user's timezone
+    await deleteSequenceActivity(userId, sequenceId, startDate, endDate)
     return NextResponse.json(
       { message: 'Sequence activity deleted successfully' },
       { status: 200 }
@@ -81,6 +82,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const userId = searchParams.get('userId')
     const sequenceId = searchParams.get('sequenceId')
+    const startDate = searchParams.get('startDate') || undefined
+    const endDate = searchParams.get('endDate') || undefined
 
     if (!userId) {
       return NextResponse.json(
@@ -91,7 +94,13 @@ export async function GET(req: NextRequest) {
 
     if (sequenceId) {
       // Check if specific sequence activity exists for user
-      const activity = await checkExistingSequenceActivity(userId, sequenceId)
+      // startDate and endDate are optional ISO strings calculated by client in user's timezone
+      const activity = await checkExistingSequenceActivity(
+        userId,
+        sequenceId,
+        startDate,
+        endDate
+      )
       return NextResponse.json(
         { exists: !!activity, activity },
         { status: 200 }

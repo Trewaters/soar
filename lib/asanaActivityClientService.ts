@@ -75,17 +75,43 @@ export async function createAsanaActivity(
 }
 
 /**
- * Delete an asana activity
+ * Delete an asana activity for today (in user's local timezone)
  */
 export async function deleteAsanaActivity(
   userId: string,
   asanaId: string
 ): Promise<void> {
   try {
+    // Calculate today's date range in user's local timezone
+    const now = new Date()
+    const startOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+      0
+    )
+    const endOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23,
+      59,
+      59,
+      999
+    )
+
     const response = await fetch('/api/asanaActivity', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, asanaId }),
+      body: JSON.stringify({
+        userId,
+        asanaId,
+        startDate: startOfToday.toISOString(),
+        endDate: endOfToday.toISOString(),
+      }),
     })
 
     if (!response.ok) {
@@ -99,15 +125,39 @@ export async function deleteAsanaActivity(
 }
 
 /**
- * Check if an activity exists for a user and asana
+ * Check if an activity exists for a user and asana today (in user's local timezone)
  */
 export async function checkActivityExists(
   userId: string,
   asanaId: string
 ): Promise<{ exists: boolean; activity?: AsanaActivityData }> {
   try {
+    // Calculate today's date range in user's local timezone
+    const now = new Date()
+    const startOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+      0
+    )
+    const endOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23,
+      59,
+      59,
+      999
+    )
+
+    // Send date range as ISO strings (automatically converts to UTC)
     const response = await fetch(
-      `/api/asanaActivity?userId=${encodeURIComponent(userId)}&asanaId=${encodeURIComponent(asanaId)}`
+      `/api/asanaActivity?userId=${encodeURIComponent(userId)}&asanaId=${encodeURIComponent(asanaId)}` +
+        `&startDate=${encodeURIComponent(startOfToday.toISOString())}` +
+        `&endDate=${encodeURIComponent(endOfToday.toISOString())}`
     )
 
     if (!response.ok) {

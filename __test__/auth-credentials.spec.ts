@@ -215,9 +215,7 @@ describe('Credentials Provider Authorization', () => {
       }
 
       prisma.userData.findUnique.mockResolvedValue(mockUser)
-      prisma.providerAccount.findFirst.mockResolvedValue(
-        mockProviderAccount
-      )
+      prisma.providerAccount.findFirst.mockResolvedValue(mockProviderAccount)
       mockComparePassword.mockResolvedValue(true)
 
       const result = await authorizeFunction({
@@ -255,9 +253,7 @@ describe('Credentials Provider Authorization', () => {
       }
 
       prisma.userData.findUnique.mockResolvedValue(mockUser)
-      prisma.providerAccount.findFirst.mockResolvedValue(
-        mockProviderAccount
-      )
+      prisma.providerAccount.findFirst.mockResolvedValue(mockProviderAccount)
       mockComparePassword.mockResolvedValue(false)
 
       const result = await authorizeFunction({
@@ -384,9 +380,7 @@ describe('Credentials Provider Authorization', () => {
       }
 
       prisma.userData.findUnique.mockResolvedValue(mockUser)
-      prisma.providerAccount.findFirst.mockResolvedValue(
-        mockProviderAccount
-      )
+      prisma.providerAccount.findFirst.mockResolvedValue(mockProviderAccount)
       mockComparePassword.mockResolvedValue(true)
 
       await authorizeFunction({

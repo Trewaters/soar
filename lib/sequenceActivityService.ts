@@ -124,43 +124,38 @@ export async function getUserSequenceHistory(
 }
 
 /**
- * Check if a sequence activity exists for today
- * Uses local timezone to align with user's calendar day.
+ * Check if a sequence activity exists for a specific date range
+ * Date range should be calculated by the client in user's local timezone.
+ * Falls back to server's local time if dates not provided (backward compatibility).
+ *
+ * @param userId - User ID
+ * @param sequenceId - Sequence ID
+ * @param startDate - Optional ISO date string for start of day (from client)
+ * @param endDate - Optional ISO date string for end of day (from client)
  */
 export async function checkExistingSequenceActivity(
   userId: string,
-  sequenceId: string
+  sequenceId: string,
+  startDate?: string,
+  endDate?: string
 ): Promise<SequenceActivityData | null> {
   try {
-    // Get today's date range in local timezone (start and end of today)
-    const now = new Date()
-    const startOfToday = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      0,
-      0,
-      0,
-      0
-    )
+    // Use provided date range (from client) or fallback to server's local time
+    const startOfRange = startDate
+      ? new Date(startDate)
+      : new Date(new Date().setHours(0, 0, 0, 0))
 
-    const endOfToday = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      23,
-      59,
-      59,
-      999
-    )
+    const endOfRange = endDate
+      ? new Date(endDate)
+      : new Date(new Date().setHours(23, 59, 59, 999))
 
     const activity = await prisma.sequenceActivity.findFirst({
       where: {
         userId,
         sequenceId,
         datePerformed: {
-          gte: startOfToday,
-          lte: endOfToday,
+          gte: startOfRange,
+          lte: endOfRange,
         },
       },
       orderBy: {
@@ -198,43 +193,38 @@ export async function checkExistingSequenceActivity(
 }
 
 /**
- * Delete a sequence activity for today
- * Uses local timezone to align with user's calendar day.
+ * Delete a sequence activity for a specific date range
+ * Date range should be calculated by the client in user's local timezone.
+ * Falls back to server's local time if dates not provided (backward compatibility).
+ *
+ * @param userId - User ID
+ * @param sequenceId - Sequence ID
+ * @param startDate - Optional ISO date string for start of day (from client)
+ * @param endDate - Optional ISO date string for end of day (from client)
  */
 export async function deleteSequenceActivity(
   userId: string,
-  sequenceId: string
+  sequenceId: string,
+  startDate?: string,
+  endDate?: string
 ): Promise<void> {
   try {
-    // Get today's date range in local timezone (start and end of today)
-    const now = new Date()
-    const startOfToday = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      0,
-      0,
-      0,
-      0
-    )
+    // Use provided date range (from client) or fallback to server's local time
+    const startOfRange = startDate
+      ? new Date(startDate)
+      : new Date(new Date().setHours(0, 0, 0, 0))
 
-    const endOfToday = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      23,
-      59,
-      59,
-      999
-    )
+    const endOfRange = endDate
+      ? new Date(endDate)
+      : new Date(new Date().setHours(23, 59, 59, 999))
 
     await prisma.sequenceActivity.deleteMany({
       where: {
         userId,
         sequenceId,
         datePerformed: {
-          gte: startOfToday,
-          lte: endOfToday,
+          gte: startOfRange,
+          lte: endOfRange,
         },
       },
     })

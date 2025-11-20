@@ -100,7 +100,11 @@ export async function DELETE(req: NextRequest) {
       )
     }
 
-    await deleteAsanaActivity(data.userId, data.asanaId)
+    // Get optional date range from request body (ISO strings calculated by client in user's timezone)
+    const startDate = data.startDate
+    const endDate = data.endDate
+
+    await deleteAsanaActivity(data.userId, data.asanaId, startDate, endDate)
     return NextResponse.json(
       { message: 'Activity deleted successfully' },
       { status: 200 }
@@ -144,7 +148,16 @@ export async function GET(req: NextRequest) {
 
     if (asanaId) {
       // Check if specific activity exists for user and asana
-      const activity = await checkExistingActivity(userId, asanaId)
+      // Get optional date range from query params (ISO strings calculated by client in user's timezone)
+      const startDate = searchParams.get('startDate') || undefined
+      const endDate = searchParams.get('endDate') || undefined
+
+      const activity = await checkExistingActivity(
+        userId,
+        asanaId,
+        startDate,
+        endDate
+      )
       return NextResponse.json(
         { exists: !!activity, activity },
         { status: 200 }

@@ -41,42 +41,38 @@ export async function recordAsanaActivity(input: AsanaActivityInput) {
 }
 
 /**
- * Delete an activity for a specific user and asana on today's date only.
- * This is used for streak tracking - only removes today's activity, preserving historical data.
- * Uses local timezone to align with user's calendar day.
+ * Delete an activity for a specific user and asana within a date range.
+ * This is used for streak tracking - only removes activity within the specified range.
+ * Date range should be calculated by the client in the user's local timezone.
+ *
+ * @param userId - User ID
+ * @param asanaId - Asana ID
+ * @param startDate - Start of date range (ISO string or Date, typically start of day in user's timezone)
+ * @param endDate - End of date range (ISO string or Date, typically end of day in user's timezone)
  */
-export async function deleteAsanaActivity(userId: string, asanaId: string) {
+export async function deleteAsanaActivity(
+  userId: string,
+  asanaId: string,
+  startDate?: string | Date,
+  endDate?: string | Date
+) {
   try {
-    // Get today's date range in local timezone (start and end of today)
-    const now = new Date()
-    const startOfToday = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      0,
-      0,
-      0,
-      0
-    )
+    // Use provided date range, or default to "today" in server's timezone (for backward compatibility)
+    const startOfRange = startDate
+      ? new Date(startDate)
+      : new Date(new Date().setHours(0, 0, 0, 0))
+    const endOfRange = endDate
+      ? new Date(endDate)
+      : new Date(new Date().setHours(23, 59, 59, 999))
 
-    const endOfToday = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      23,
-      59,
-      59,
-      999
-    )
-
-    // Delete only today's activity for this user and asana
+    // Delete activity within the date range for this user and asana
     const result = await prisma.asanaActivity.deleteMany({
       where: {
         userId,
         asanaId,
         datePerformed: {
-          gte: startOfToday,
-          lte: endOfToday,
+          gte: startOfRange,
+          lte: endOfRange,
         },
       } as any,
     })
@@ -97,41 +93,37 @@ export async function deleteAsanaActivity(userId: string, asanaId: string) {
 }
 
 /**
- * Check if an activity exists for a specific user and asana on today's date.
- * This is used for streak tracking - only activities performed today count for the current streak.
- * Uses local timezone to align with user's calendar day.
+ * Check if an activity exists for a specific user and asana within a date range.
+ * This is used for streak tracking - checks if activity was performed within the specified range.
+ * Date range should be calculated by the client in the user's local timezone.
+ *
+ * @param userId - User ID
+ * @param asanaId - Asana ID
+ * @param startDate - Start of date range (ISO string or Date, typically start of day in user's timezone)
+ * @param endDate - End of date range (ISO string or Date, typically end of day in user's timezone)
  */
-export async function checkExistingActivity(userId: string, asanaId: string) {
+export async function checkExistingActivity(
+  userId: string,
+  asanaId: string,
+  startDate?: string | Date,
+  endDate?: string | Date
+) {
   try {
-    // Get today's date range in local timezone (start and end of today)
-    const now = new Date()
-    const startOfToday = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      0,
-      0,
-      0,
-      0
-    )
-
-    const endOfToday = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      23,
-      59,
-      59,
-      999
-    )
+    // Use provided date range, or default to "today" in server's timezone (for backward compatibility)
+    const startOfRange = startDate
+      ? new Date(startDate)
+      : new Date(new Date().setHours(0, 0, 0, 0))
+    const endOfRange = endDate
+      ? new Date(endDate)
+      : new Date(new Date().setHours(23, 59, 59, 999))
 
     const activity = await prisma.asanaActivity.findFirst({
       where: {
         userId,
         asanaId,
         datePerformed: {
-          gte: startOfToday,
-          lte: endOfToday,
+          gte: startOfRange,
+          lte: endOfRange,
         },
       } as any,
       orderBy: {

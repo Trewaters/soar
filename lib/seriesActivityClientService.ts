@@ -77,10 +77,36 @@ export async function deleteSeriesActivity(
   seriesId: string
 ): Promise<void> {
   try {
+    // Calculate date range in user's local timezone
+    const now = new Date()
+    const startOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+      0
+    )
+    const endOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23,
+      59,
+      59,
+      999
+    )
+
     const response = await fetch('/api/seriesActivity', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, seriesId }),
+      body: JSON.stringify({
+        userId,
+        seriesId,
+        startDate: startOfToday.toISOString(),
+        endDate: endOfToday.toISOString(),
+      }),
     })
 
     if (!response.ok) {
@@ -101,8 +127,29 @@ export async function checkSeriesActivityExists(
   seriesId: string
 ): Promise<{ exists: boolean; activity?: SeriesActivityData }> {
   try {
+    // Calculate date range in user's local timezone
+    const now = new Date()
+    const startOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+      0
+    )
+    const endOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23,
+      59,
+      59,
+      999
+    )
+
     const response = await fetch(
-      `/api/seriesActivity?userId=${encodeURIComponent(userId)}&seriesId=${encodeURIComponent(seriesId)}`
+      `/api/seriesActivity?userId=${encodeURIComponent(userId)}&seriesId=${encodeURIComponent(seriesId)}&startDate=${encodeURIComponent(startOfToday.toISOString())}&endDate=${encodeURIComponent(endOfToday.toISOString())}`
     )
 
     if (!response.ok) {

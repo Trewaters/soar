@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     const data = await req.json()
-    const { userId, seriesId } = data
+    const { userId, seriesId, startDate, endDate } = data
 
     if (!userId || !seriesId) {
       return NextResponse.json(
@@ -59,7 +59,8 @@ export async function DELETE(req: NextRequest) {
       )
     }
 
-    await deleteSeriesActivity(userId, seriesId)
+    // startDate and endDate are optional ISO strings calculated by client in user's timezone
+    await deleteSeriesActivity(userId, seriesId, startDate, endDate)
     return NextResponse.json(
       { message: 'Series activity deleted successfully' },
       { status: 200 }
@@ -78,6 +79,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const userId = searchParams.get('userId')
     const seriesId = searchParams.get('seriesId')
+    const startDate = searchParams.get('startDate') || undefined
+    const endDate = searchParams.get('endDate') || undefined
 
     if (!userId) {
       return NextResponse.json(
@@ -88,7 +91,13 @@ export async function GET(req: NextRequest) {
 
     if (seriesId) {
       // Check if specific series activity exists for user
-      const activity = await checkExistingSeriesActivity(userId, seriesId)
+      // startDate and endDate are optional ISO strings calculated by client in user's timezone
+      const activity = await checkExistingSeriesActivity(
+        userId,
+        seriesId,
+        startDate,
+        endDate
+      )
       return NextResponse.json(
         { exists: !!activity, activity },
         { status: 200 }

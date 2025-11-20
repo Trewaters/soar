@@ -77,10 +77,36 @@ export async function deleteSequenceActivity(
   sequenceId: string
 ): Promise<void> {
   try {
+    // Calculate date range in user's local timezone
+    const now = new Date()
+    const startOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+      0
+    )
+    const endOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23,
+      59,
+      59,
+      999
+    )
+
     const response = await fetch('/api/sequenceActivity', {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, sequenceId }),
+      body: JSON.stringify({
+        userId,
+        sequenceId,
+        startDate: startOfToday.toISOString(),
+        endDate: endOfToday.toISOString(),
+      }),
     })
 
     if (!response.ok) {
@@ -101,8 +127,29 @@ export async function checkSequenceActivityExists(
   sequenceId: string
 ): Promise<{ exists: boolean; activity?: SequenceActivityData }> {
   try {
+    // Calculate date range in user's local timezone
+    const now = new Date()
+    const startOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+      0
+    )
+    const endOfToday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      23,
+      59,
+      59,
+      999
+    )
+
     const response = await fetch(
-      `/api/sequenceActivity?userId=${userId}&sequenceId=${sequenceId}`
+      `/api/sequenceActivity?userId=${userId}&sequenceId=${sequenceId}&startDate=${encodeURIComponent(startOfToday.toISOString())}&endDate=${encodeURIComponent(endOfToday.toISOString())}`
     )
 
     if (!response.ok) {
