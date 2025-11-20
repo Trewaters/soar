@@ -115,26 +115,37 @@ export async function calculateActivityStreak(userId: string): Promise<number> {
 
   if (allActivities.length === 0) return 0
 
-  // Get unique days with activity (use UTC date strings for consistency)
+  // Get unique days with activity (use local date strings for user calendar alignment)
   const uniqueDays = new Set<string>()
   for (const activity of allActivities) {
     const activityDate = new Date(activity)
-    // Use UTC date parts to avoid timezone issues
-    const dateStr = activityDate.toISOString().split('T')[0]
+    // Use local date parts to match user's calendar day
+    const year = activityDate.getFullYear()
+    const month = String(activityDate.getMonth() + 1).padStart(2, '0')
+    const day = String(activityDate.getDate()).padStart(2, '0')
+    const dateStr = `${year}-${month}-${day}`
     uniqueDays.add(dateStr)
   }
 
   // Sort days in descending order (most recent first)
   const sortedDays = Array.from(uniqueDays).sort().reverse()
 
-  // Get today's date in UTC format
+  // Get today's date in local timezone format
   const today = new Date()
-  const todayStr = today.toISOString().split('T')[0]
+  const todayYear = today.getFullYear()
+  const todayMonth = String(today.getMonth() + 1).padStart(2, '0')
+  const todayDay = String(today.getDate()).padStart(2, '0')
+  const todayStr = `${todayYear}-${todayMonth}-${todayDay}`
 
   // Check if there's activity today or yesterday to keep streak alive
   const lastActivityStr = sortedDays[0]
-  const lastActivityDate = new Date(lastActivityStr + 'T00:00:00.000Z')
-  const todayDate = new Date(todayStr + 'T00:00:00.000Z')
+  const [lastYear, lastMonth, lastDay] = lastActivityStr.split('-').map(Number)
+  const lastActivityDate = new Date(lastYear, lastMonth - 1, lastDay)
+  const todayDate = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  )
 
   const daysDiff = Math.floor(
     (todayDate.getTime() - lastActivityDate.getTime()) / (1000 * 60 * 60 * 24)
@@ -148,9 +159,15 @@ export async function calculateActivityStreak(userId: string): Promise<number> {
   // Count consecutive days backwards from today
   let streak = 0
   for (let i = 0; i < sortedDays.length; i++) {
-    const expectedDate = new Date(todayDate)
-    expectedDate.setUTCDate(todayDate.getUTCDate() - i)
-    const expectedStr = expectedDate.toISOString().split('T')[0]
+    const expectedDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() - i
+    )
+    const expYear = expectedDate.getFullYear()
+    const expMonth = String(expectedDate.getMonth() + 1).padStart(2, '0')
+    const expDay = String(expectedDate.getDate()).padStart(2, '0')
+    const expectedStr = `${expYear}-${expMonth}-${expDay}`
 
     if (sortedDays[i] === expectedStr) {
       streak++
@@ -269,9 +286,12 @@ export async function getPracticeHistory(
 
   for (const activity of allActivities) {
     const date = new Date(activity)
-    // Use UTC date parts to avoid timezone issues
-    const monthKey = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`
-    const dayKey = date.toISOString().split('T')[0]
+    // Use local date parts to align with user's calendar
+    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const dayKey = `${year}-${month}-${day}`
 
     if (!monthCounts.has(monthKey)) {
       monthCounts.set(monthKey, new Set())
@@ -300,7 +320,7 @@ export async function getPracticeHistory(
     // Create a new date from now for each iteration to avoid mutation issues
     const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
 
-    // Use UTC to match how we're storing the activity month keys
+    // Use local timezone to match how we're storing the activity month keys
     const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
     const monthName = monthNames[date.getMonth()]
     const yearShort = String(date.getFullYear()).slice(2)
@@ -323,10 +343,16 @@ export async function getPracticeHistory(
 export async function getMostCommonAsanas(
   userId: string
 ): Promise<MostCommonItem[]> {
-  // Calculate date 12 months ago (UTC)
+  // Calculate date 12 months ago (local timezone)
   const now = new Date()
   const twelveMonthsAgo = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 11, 1, 0, 0, 0, 0)
+    now.getFullYear(),
+    now.getMonth() - 11,
+    1,
+    0,
+    0,
+    0,
+    0
   )
 
   const activities = await prisma.asanaActivity.groupBy({
@@ -354,10 +380,16 @@ export async function getMostCommonAsanas(
 export async function getMostCommonSeries(
   userId: string
 ): Promise<MostCommonItem[]> {
-  // Calculate date 12 months ago (UTC)
+  // Calculate date 12 months ago (local timezone)
   const now = new Date()
   const twelveMonthsAgo = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 11, 1, 0, 0, 0, 0)
+    now.getFullYear(),
+    now.getMonth() - 11,
+    1,
+    0,
+    0,
+    0,
+    0
   )
 
   const activities = await prisma.seriesActivity.groupBy({
@@ -385,10 +417,16 @@ export async function getMostCommonSeries(
 export async function getMostCommonSequences(
   userId: string
 ): Promise<MostCommonItem[]> {
-  // Calculate date 12 months ago (UTC)
+  // Calculate date 12 months ago (local timezone)
   const now = new Date()
   const twelveMonthsAgo = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 11, 1, 0, 0, 0, 0)
+    now.getFullYear(),
+    now.getMonth() - 11,
+    1,
+    0,
+    0,
+    0,
+    0
   )
 
   const activities = await prisma.sequenceActivity.groupBy({
