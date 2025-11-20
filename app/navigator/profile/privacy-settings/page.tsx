@@ -8,7 +8,6 @@ import {
   RadioGroup,
   Radio,
   Switch,
-  Button,
   Box,
   IconButton,
 } from '@mui/material'
@@ -20,6 +19,7 @@ import theme from '@styles/theme'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import Link from 'next/link'
 import DownloadDataButton from '@clientComponents/DownloadDataButton'
+import DeleteAccountButton from '@clientComponents/DeleteAccountButton'
 
 export const metadata = {
   title: 'Privacy Settings | Uvuyoga',
@@ -303,8 +303,9 @@ export default async function PrivacySettingsPage() {
                 sx={{
                   p: 3,
                   borderRadius: 2,
-                  border: '1px solid',
-                  borderColor: 'primary.main',
+                  border: '2px solid',
+                  borderColor: 'error.main',
+                  backgroundColor: 'error.light',
                 }}
               >
                 <Typography
@@ -315,36 +316,33 @@ export default async function PrivacySettingsPage() {
                 </Typography>
                 <Typography
                   variant="body2"
-                  sx={{ color: 'text.secondary', mb: 2 }}
+                  sx={{ color: 'text.secondary', mb: 1 }}
                 >
-                  Manage whether your data can be shared with trusted third
-                  party partners.
+                  Permanently delete your account and all associated data from
+                  our system.
                 </Typography>
                 <Typography
                   variant="body2"
                   sx={{
                     color: 'error.main',
                     fontWeight: 600,
-                    mb: 2,
+                    mb: 1,
                   }}
                 >
-                  This action cannot be reversed.
+                  ⚠️ WARNING: This action cannot be reversed!
                 </Typography>
-                <Button
-                  variant="contained"
+                <Typography
+                  variant="caption"
                   sx={{
-                    backgroundColor: 'error.main',
-                    color: 'white',
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    px: 3,
-                    '&:hover': {
-                      backgroundColor: 'error.dark',
-                    },
+                    color: 'text.secondary',
+                    mb: 2,
+                    display: 'block',
                   }}
                 >
-                  I understand
-                </Button>
+                  GDPR Right to Erasure (Article 17) - All your data will be
+                  permanently removed.
+                </Typography>
+                <DeleteAccountButton />
               </Paper>
 
               {/* Footer Message */}

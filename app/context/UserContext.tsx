@@ -176,6 +176,37 @@ export default function UserStateProvider({
         type: 'SET_USER',
         payload: { ...state.userData, email: session.user.email },
       })
+    } else if (
+      sessionStatus === 'unauthenticated' ||
+      (sessionStatus === 'authenticated' && !session)
+    ) {
+      // Clear user data when logged out or session is null (user deleted)
+      // If session is null but status is still "authenticated", it means the user was deleted
+      if (sessionStatus === 'authenticated' && !session) {
+        // User was deleted - force sign out
+        console.warn(
+          'User session invalidated - user may have been deleted. Signing out.'
+        )
+        import('next-auth/react').then(({ signOut }) => {
+          signOut({ redirect: true, callbackUrl: '/' })
+        })
+      }
+
+      dispatch({
+        type: 'SET_USER',
+        payload: {
+          id: '',
+          email: '',
+          name: '',
+          image: '',
+          firstName: '',
+          lastName: '',
+          bio: '',
+          location: '',
+          websiteURL: '',
+          headline: '',
+        },
+      })
     }
   }, [session, sessionStatus, state.userData.email])
 
@@ -223,6 +254,18 @@ export default function UserStateProvider({
           throw new Error(`Failed to fetch user data: ${errorText}`)
         }
         fetchUser = await userResponse.json()
+
+        // Check if user data exists (user might have been deleted)
+        if (!fetchUser?.data || !fetchUser.data.id) {
+          console.warn(
+            'User data not found - user may have been deleted. Signing out.'
+          )
+          // User was deleted - force sign out
+          const { signOut } = await import('next-auth/react')
+          await signOut({ redirect: true, callbackUrl: '/' })
+          return
+        }
+
         dispatch({ type: 'SET_USER', payload: fetchUser.data })
       } catch (error) {
         throw new Error(`Error fetching user data: ${error}`)

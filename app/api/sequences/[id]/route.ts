@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import prisma from '@app/prisma/generated/client'
+import { prisma } from '@lib/prismaClient'
 import { auth } from '../../../../auth'
 
 export const dynamic = 'force-dynamic'

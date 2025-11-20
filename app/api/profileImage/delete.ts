@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../auth'
-import prisma from '../../prisma/generated/client'
+import { prisma } from '@lib/prismaClient'
 
 export async function DELETE(req: NextRequest) {
   const session = await auth(req)

@@ -1,6 +1,6 @@
 // Note: Do not initialize a runtime Prisma client at module scope here. These utilities accept
 // a PrismaClient instance as a parameter. Import the type from the generated client for typing.
-import type { PrismaClient } from '../../prisma/generated/client'
+import type { PrismaClient } from '@prisma/client'
 
 /**
  * Database optimization utilities for image carousel queries

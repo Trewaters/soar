@@ -6,41 +6,41 @@
 import '@testing-library/jest-dom'
 
 // Mock Prisma client - must use factory function
-jest.mock('@/app/lib/prismaClient', () => ({
+jest.mock('@lib/prismaClient', () => ({
   prisma: {
     notificationLog: {
-      findFirst: jest.fn(),
-      create: jest.fn(),
+      findFirst: jest.fn() as any,
+      create: jest.fn() as any,
     },
     reminder: {
-      findFirst: jest.fn(),
-      findMany: jest.fn(),
+      findFirst: jest.fn() as any,
+      findMany: jest.fn() as any,
     },
     userData: {
-      findUnique: jest.fn(),
-      findMany: jest.fn(),
+      findUnique: jest.fn() as any,
+      findMany: jest.fn() as any,
     },
     userLogin: {
-      findMany: jest.fn(),
+      findMany: jest.fn() as any,
     },
     asanaActivity: {
-      findMany: jest.fn(),
-      count: jest.fn(),
+      findMany: jest.fn() as any,
+      count: jest.fn() as any,
     },
     seriesActivity: {
-      findMany: jest.fn(),
-      count: jest.fn(),
+      findMany: jest.fn() as any,
+      count: jest.fn() as any,
     },
     sequenceActivity: {
-      findMany: jest.fn(),
-      count: jest.fn(),
+      findMany: jest.fn() as any,
+      count: jest.fn() as any,
     },
     featureAnnouncement: {
-      findMany: jest.fn(),
+      findMany: jest.fn() as any,
     },
     userNotificationDelivery: {
-      findMany: jest.fn(),
-      create: jest.fn(),
+      findMany: jest.fn() as any,
+      create: jest.fn() as any,
     },
   },
 }))
@@ -57,7 +57,7 @@ import {
   type NotificationPreferences,
   type NotificationPayload,
 } from '../../../app/lib/notificationService'
-import { prisma } from '../../../app/lib/prismaClient'
+import { prisma } from '@lib/prismaClient'
 
 describe('Notification Service - Core Functions', () => {
   beforeEach(() => {

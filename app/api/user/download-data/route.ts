@@ -6,7 +6,7 @@
 
 import { NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
-import prisma from '@app/prisma/generated/client'
+import { prisma } from '@lib/prismaClient'
 
 /**
  * GET /api/user/download-data

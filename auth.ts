@@ -3,7 +3,7 @@ import type { Provider } from 'next-auth/providers'
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 import Credentials from 'next-auth/providers/credentials'
-import { PrismaClient } from './prisma/generated/client'
+import { PrismaClient } from '@prisma/client'
 // import { MongoDBAdapter } from '@auth/mongodb-adapter' // Disabled - using custom Prisma-based user management
 // import client from '@lib/mongoDb' // Disabled - using custom Prisma-based user management
 import { hashPassword, comparePassword } from '@app/utils/password'

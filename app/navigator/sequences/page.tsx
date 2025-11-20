@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Box, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { prisma } from '../../lib/prismaClient'
-import type { AsanaSequence } from '../../../prisma/generated/client'
+import type { AsanaSequence } from '@prisma/client'
 
 export const dynamic = 'force-dynamic'
 

@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server'
 import { auth } from 'auth'
-import prisma from '@app/prisma/generated/client'
+import { prisma } from '@lib/prismaClient'
 
 // Next.js dynamic route handlers receive a second argument with params; params must be awaited
 export async function PUT(

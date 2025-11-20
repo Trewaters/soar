@@ -133,20 +133,24 @@ This single-instance replica set satisfies Prisma's requirement while keeping yo
 Start using Prisma Client in Node.js (See: https://pris.ly/d/client)
 
 ```js
-import { PrismaClient } from './prisma/generated/client'
+import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 ```
 
 or start using Prisma Client at the edge (See: https://pris.ly/d/accelerate)
 
 ```js
-import { PrismaClient } from './prisma/generated/client/edge'
+import { PrismaClient } from '@prisma/client/edge'
 const prisma = new PrismaClient()
 ```
+
+Generate Prisma Client (required after schema changes):
 
 ```bash
 npx prisma generate
 ```
+
+Push schema changes to database:
 
 ```bash
 npm exec prisma db push

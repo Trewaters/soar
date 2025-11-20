@@ -1,4 +1,4 @@
-import { PrismaClient } from '../prisma/generated/client'
+import { PrismaClient } from '@prisma/client'
 import { hashPassword, comparePassword } from '@app/utils/password'
 
 // Mock dependencies

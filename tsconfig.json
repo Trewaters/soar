@@ -27,7 +27,6 @@
       "@interfaces/*": ["./app/interfaces/*"],
       "@lib/*": ["./lib/*"],
       "@poses/*": ["./app/navigator/asanaPoses/*"],
-      "@prisma/generated/client": ["./prisma/generated/client"],
       "@prismaSchema/*": ["./prisma/*"],
       "@providers/*": ["./app/providers/*"],
       "@serverComponents/*": ["./components/*"],

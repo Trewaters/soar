@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../auth'
-import prisma from '../../prisma/generated/client'
+import { prisma } from '@lib/prismaClient'
 import { storageManager } from '../../../lib/storage/manager'
 
 // Max 2MB file size
