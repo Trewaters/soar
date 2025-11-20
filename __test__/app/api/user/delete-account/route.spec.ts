@@ -5,7 +5,6 @@
 
 import '@testing-library/jest-dom'
 import { DELETE } from '../../../../../app/api/user/delete-account/route'
-import { NextResponse } from 'next/server'
 
 // Mock NextAuth
 jest.mock('../../../../../auth', () => ({
@@ -128,8 +127,16 @@ describe('DELETE /api/user/delete-account', () => {
       expect(responseData.deleted_email).toBe('test@example.com')
       expect(responseData.deleted_at).toBeDefined()
       expect(responseData.gdpr_compliance).toEqual({
-        article: 'Article 17',
-        right: 'Right to Erasure',
+        article_17: 'Right to Erasure',
+        data_removed: [
+          'User profile and account details',
+          'Activity history',
+          'Created content',
+          'Preferences and settings',
+          'Notification history',
+          'Connected accounts',
+          'Sessions',
+        ],
       })
 
       // Verify authentication was checked
@@ -346,7 +353,9 @@ describe('DELETE /api/user/delete-account', () => {
 
       // Assert
       expect(response.status).toBe(500)
-      expect(responseData.error).toBe('Failed to delete account')
+      expect(responseData.error).toBe(
+        'Failed to delete account. Please try again later.'
+      )
       expect(responseData.details).toBe('Database error')
     })
 
@@ -363,7 +372,9 @@ describe('DELETE /api/user/delete-account', () => {
 
       // Assert
       expect(response.status).toBe(500)
-      expect(responseData.error).toBe('Failed to delete account')
+      expect(responseData.error).toBe(
+        'Failed to delete account. Please try again later.'
+      )
       expect(responseData.details).toBe('Database connection error')
       expect(mockTransaction).not.toHaveBeenCalled()
     })
@@ -405,8 +416,16 @@ describe('DELETE /api/user/delete-account', () => {
 
       // Assert
       expect(responseData.gdpr_compliance).toEqual({
-        article: 'Article 17',
-        right: 'Right to Erasure',
+        article_17: 'Right to Erasure',
+        data_removed: [
+          'User profile and account details',
+          'Activity history',
+          'Created content',
+          'Preferences and settings',
+          'Notification history',
+          'Connected accounts',
+          'Sessions',
+        ],
       })
       expect(responseData.deleted_at).toBeDefined()
       expect(new Date(responseData.deleted_at)).toBeInstanceOf(Date)
