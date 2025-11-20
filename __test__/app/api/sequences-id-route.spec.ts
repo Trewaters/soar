@@ -9,9 +9,8 @@ jest.mock('next/server', () => ({
 }))
 
 // Mock Prisma singleton used by the route
-jest.mock('../../../app/prisma/generated/client', () => ({
-  __esModule: true,
-  default: {
+jest.mock('@lib/prismaClient', () => ({
+  prisma: {
     asanaSequence: {
       findUnique: jest.fn(),
       update: jest.fn(),
@@ -25,7 +24,7 @@ jest.mock('../../../auth', () => ({
   auth: jest.fn(),
 }))
 
-import prisma from '../../../app/prisma/generated/client'
+import { prisma } from '@lib/prismaClient'
 import { auth } from '../../../auth'
 import * as route from '../../../app/api/sequences/[id]/route'
 

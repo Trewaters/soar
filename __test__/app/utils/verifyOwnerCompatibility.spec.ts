@@ -2,17 +2,15 @@ import '@testing-library/jest-dom'
 import { Session } from 'next-auth'
 
 // Mock Prisma Client before importing utilities under test
-const mockPrisma = {
-  asanaPose: {
-    findUnique: jest.fn(),
+jest.mock('@lib/prismaClient', () => ({
+  prisma: {
+    asanaPose: {
+      findUnique: jest.fn(),
+    },
   },
-}
-
-jest.doMock('../../../prisma/generated/client', () => ({
-  PrismaClient: jest.fn().mockImplementation(() => mockPrisma),
 }))
 
-jest.resetModules()
+import { prisma } from '@lib/prismaClient'
 
 const {
   verifyAsanaOwnership,
@@ -33,7 +31,7 @@ describe('Owner matching compatibility', () => {
   })
 
   it('verifyAsanaOwnership returns true when created_by matches email', async () => {
-    mockPrisma.asanaPose.findUnique.mockResolvedValue({
+    prisma.asanaPose.findUnique.mockResolvedValue({
       created_by: 'creator@example.com',
     })
 
@@ -43,14 +41,14 @@ describe('Owner matching compatibility', () => {
     )
 
     expect(result).toBe(true)
-    expect(mockPrisma.asanaPose.findUnique).toHaveBeenCalledWith({
+    expect(prisma.asanaPose.findUnique).toHaveBeenCalledWith({
       where: { id: 'asana-abc' },
       select: { created_by: true },
     })
   })
 
   it('verifyAsanaOwnership returns true when created_by matches user id (legacy records)', async () => {
-    mockPrisma.asanaPose.findUnique.mockResolvedValue({
+    prisma.asanaPose.findUnique.mockResolvedValue({
       created_by: 'user-id-123',
     })
 

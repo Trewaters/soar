@@ -4,8 +4,8 @@ jest.mock('../../../../../auth', () => ({
   auth: jest.fn(),
 }))
 
-jest.mock('../../../../../prisma/generated/client', () => {
-  const mockPrisma = {
+jest.mock('@lib/prismaClient', () => ({
+  prisma: {
     userData: {
       findUnique: jest.fn(),
     },
@@ -13,20 +13,15 @@ jest.mock('../../../../../prisma/generated/client', () => {
       findMany: jest.fn(),
     },
     $disconnect: jest.fn(),
-  }
-
-  return {
-    PrismaClient: jest.fn().mockImplementation(() => mockPrisma),
-  }
-})
+  },
+}))
 
 import '@testing-library/jest-dom'
 import { GET } from '@app/api/user/login-history/route'
 import { auth } from '../../../../../auth'
-import { PrismaClient } from '../../../../../prisma/generated/client'
+import { prisma } from '@lib/prismaClient'
 
 const mockAuth = auth as jest.Mock
-const prisma = new PrismaClient()
 
 describe('GET /api/user/login-history', () => {
   beforeEach(() => {

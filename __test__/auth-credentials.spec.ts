@@ -1,11 +1,21 @@
-import { PrismaClient } from '@prisma/client'
 import { hashPassword, comparePassword } from '@app/utils/password'
+import { prisma } from '@lib/prismaClient'
 
 // Mock dependencies
-jest.mock('../prisma/generated/client')
+jest.mock('@lib/prismaClient', () => ({
+  prisma: {
+    userData: {
+      findUnique: jest.fn(),
+      create: jest.fn(),
+    },
+    providerAccount: {
+      findFirst: jest.fn(),
+      create: jest.fn(),
+    },
+  },
+}))
 jest.mock('@app/utils/password')
 
-const mockPrismaClient = PrismaClient as jest.MockedClass<typeof PrismaClient>
 const mockHashPassword = hashPassword as jest.MockedFunction<
   typeof hashPassword
 >
@@ -14,25 +24,10 @@ const mockComparePassword = comparePassword as jest.MockedFunction<
 >
 
 describe('Credentials Provider Authorization', () => {
-  let mockPrisma: any
   let authorizeFunction: any
 
   beforeEach(() => {
     jest.clearAllMocks()
-
-    // Setup Prisma mock
-    mockPrisma = {
-      userData: {
-        findUnique: jest.fn(),
-        create: jest.fn(),
-      },
-      providerAccount: {
-        findFirst: jest.fn(),
-        create: jest.fn(),
-      },
-    }
-
-    mockPrismaClient.mockImplementation(() => mockPrisma)
 
     // Mock the authorize function behavior
     authorizeFunction = async (credentials: any) => {
@@ -41,8 +36,6 @@ describe('Credentials Provider Authorization', () => {
       const email = credentials.email as string
       const password = credentials.password as string
       const isNewAccount = credentials.isNewAccount === 'true'
-
-      const prisma = new PrismaClient()
 
       try {
         let user = await prisma.userData.findUnique({
@@ -144,10 +137,10 @@ describe('Credentials Provider Authorization', () => {
         name: 'newuser',
       }
 
-      mockPrisma.userData.findUnique.mockResolvedValue(null)
-      mockPrisma.userData.create.mockResolvedValue(mockUser)
+      prisma.userData.findUnique.mockResolvedValue(null)
+      prisma.userData.create.mockResolvedValue(mockUser)
       mockHashPassword.mockResolvedValue('hashed_password_123')
-      mockPrisma.providerAccount.create.mockResolvedValue({})
+      prisma.providerAccount.create.mockResolvedValue({})
 
       const result = await authorizeFunction({
         email: 'newuser@example.com',
@@ -155,12 +148,12 @@ describe('Credentials Provider Authorization', () => {
         isNewAccount: 'true',
       })
 
-      expect(mockPrisma.userData.findUnique).toHaveBeenCalledWith({
+      expect(prisma.userData.findUnique).toHaveBeenCalledWith({
         where: { email: 'newuser@example.com' },
       })
-      expect(mockPrisma.userData.create).toHaveBeenCalled()
+      expect(prisma.userData.create).toHaveBeenCalled()
       expect(mockHashPassword).toHaveBeenCalledWith('SecurePassword123!')
-      expect(mockPrisma.providerAccount.create).toHaveBeenCalledWith(
+      expect(prisma.providerAccount.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             userId: 'user123',
@@ -184,8 +177,8 @@ describe('Credentials Provider Authorization', () => {
         name: 'existing',
       }
 
-      mockPrisma.userData.findUnique.mockResolvedValue(existingUser)
-      mockPrisma.providerAccount.findFirst.mockResolvedValue({
+      prisma.userData.findUnique.mockResolvedValue(existingUser)
+      prisma.providerAccount.findFirst.mockResolvedValue({
         id: 'provider123',
         credentials_password: 'hashed_password',
       })
@@ -197,7 +190,7 @@ describe('Credentials Provider Authorization', () => {
         isNewAccount: 'true',
       })
 
-      expect(mockPrisma.userData.create).not.toHaveBeenCalled()
+      expect(prisma.userData.create).not.toHaveBeenCalled()
       expect(result).toEqual({
         id: 'user123',
         name: 'existing',
@@ -221,8 +214,8 @@ describe('Credentials Provider Authorization', () => {
         credentials_password: 'hashed_password_123',
       }
 
-      mockPrisma.userData.findUnique.mockResolvedValue(mockUser)
-      mockPrisma.providerAccount.findFirst.mockResolvedValue(
+      prisma.userData.findUnique.mockResolvedValue(mockUser)
+      prisma.providerAccount.findFirst.mockResolvedValue(
         mockProviderAccount
       )
       mockComparePassword.mockResolvedValue(true)
@@ -233,10 +226,10 @@ describe('Credentials Provider Authorization', () => {
         isNewAccount: 'false',
       })
 
-      expect(mockPrisma.userData.findUnique).toHaveBeenCalledWith({
+      expect(prisma.userData.findUnique).toHaveBeenCalledWith({
         where: { email: 'test@example.com' },
       })
-      expect(mockPrisma.providerAccount.findFirst).toHaveBeenCalledWith({
+      expect(prisma.providerAccount.findFirst).toHaveBeenCalledWith({
         where: {
           userId: 'user123',
           provider: 'credentials',
@@ -261,8 +254,8 @@ describe('Credentials Provider Authorization', () => {
         credentials_password: 'hashed_password_123',
       }
 
-      mockPrisma.userData.findUnique.mockResolvedValue(mockUser)
-      mockPrisma.providerAccount.findFirst.mockResolvedValue(
+      prisma.userData.findUnique.mockResolvedValue(mockUser)
+      prisma.providerAccount.findFirst.mockResolvedValue(
         mockProviderAccount
       )
       mockComparePassword.mockResolvedValue(false)
@@ -281,7 +274,7 @@ describe('Credentials Provider Authorization', () => {
     })
 
     it('should return null when user does not exist', async () => {
-      mockPrisma.userData.findUnique.mockResolvedValue(null)
+      prisma.userData.findUnique.mockResolvedValue(null)
 
       const result = await authorizeFunction({
         email: 'nonexistent@example.com',
@@ -290,12 +283,12 @@ describe('Credentials Provider Authorization', () => {
       })
 
       expect(result).toBeNull()
-      expect(mockPrisma.providerAccount.findFirst).not.toHaveBeenCalled()
+      expect(prisma.providerAccount.findFirst).not.toHaveBeenCalled()
     })
 
     it('should return null when no credentials provider exists for user', async () => {
-      mockPrisma.userData.findUnique.mockResolvedValue(mockUser)
-      mockPrisma.providerAccount.findFirst.mockResolvedValue(null)
+      prisma.userData.findUnique.mockResolvedValue(mockUser)
+      prisma.providerAccount.findFirst.mockResolvedValue(null)
 
       const result = await authorizeFunction({
         email: 'test@example.com',
@@ -303,7 +296,7 @@ describe('Credentials Provider Authorization', () => {
         isNewAccount: 'false',
       })
 
-      expect(mockPrisma.providerAccount.findFirst).toHaveBeenCalledWith({
+      expect(prisma.providerAccount.findFirst).toHaveBeenCalledWith({
         where: {
           userId: 'user123',
           provider: 'credentials',
@@ -320,8 +313,8 @@ describe('Credentials Provider Authorization', () => {
         credentials_password: null,
       }
 
-      mockPrisma.userData.findUnique.mockResolvedValue(mockUser)
-      mockPrisma.providerAccount.findFirst.mockResolvedValue(
+      prisma.userData.findUnique.mockResolvedValue(mockUser)
+      prisma.providerAccount.findFirst.mockResolvedValue(
         mockProviderAccountWithoutPassword
       )
 
@@ -343,7 +336,7 @@ describe('Credentials Provider Authorization', () => {
     })
 
     it('should return null on database error', async () => {
-      mockPrisma.userData.findUnique.mockRejectedValue(
+      prisma.userData.findUnique.mockRejectedValue(
         new Error('Database connection failed')
       )
 
@@ -357,8 +350,8 @@ describe('Credentials Provider Authorization', () => {
     })
 
     it('should return null on password hashing error during account creation', async () => {
-      mockPrisma.userData.findUnique.mockResolvedValue(null)
-      mockPrisma.userData.create.mockResolvedValue({
+      prisma.userData.findUnique.mockResolvedValue(null)
+      prisma.userData.create.mockResolvedValue({
         id: 'user123',
         email: 'test@example.com',
         name: 'test',
@@ -390,8 +383,8 @@ describe('Credentials Provider Authorization', () => {
         credentials_password: 'hashed_password_123',
       }
 
-      mockPrisma.userData.findUnique.mockResolvedValue(mockUser)
-      mockPrisma.providerAccount.findFirst.mockResolvedValue(
+      prisma.userData.findUnique.mockResolvedValue(mockUser)
+      prisma.providerAccount.findFirst.mockResolvedValue(
         mockProviderAccount
       )
       mockComparePassword.mockResolvedValue(true)
@@ -407,8 +400,8 @@ describe('Credentials Provider Authorization', () => {
     })
 
     it('should not allow login without password verification', async () => {
-      mockPrisma.userData.findUnique.mockResolvedValue(mockUser)
-      mockPrisma.providerAccount.findFirst.mockResolvedValue({
+      prisma.userData.findUnique.mockResolvedValue(mockUser)
+      prisma.providerAccount.findFirst.mockResolvedValue({
         id: 'provider123',
         credentials_password: 'hashed_password',
       })

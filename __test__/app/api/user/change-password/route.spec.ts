@@ -4,8 +4,8 @@ jest.mock('../../../../../auth', () => ({
   auth: jest.fn(),
 }))
 
-jest.mock('../../../../../prisma/generated/client', () => {
-  const prisma = {
+jest.mock('@lib/prismaClient', () => ({
+  prisma: {
     userData: {
       findUnique: jest.fn(),
     },
@@ -14,12 +14,8 @@ jest.mock('../../../../../prisma/generated/client', () => {
       update: jest.fn(),
     },
     $disconnect: jest.fn(),
-  }
-
-  return {
-    PrismaClient: jest.fn().mockImplementation(() => prisma),
-  }
-})
+  },
+}))
 
 jest.mock('@app/utils/password', () => ({
   hashPassword: jest.fn(),
@@ -30,13 +26,12 @@ import '@testing-library/jest-dom'
 import { NextRequest } from 'next/server'
 import { POST } from '@app/api/user/change-password/route'
 import { auth } from '../../../../../auth'
-import { PrismaClient } from '../../../../../prisma/generated/client'
+import { prisma } from '@lib/prismaClient'
 import { hashPassword, comparePassword } from '@app/utils/password'
 
 const mockAuth = auth as jest.Mock
 const mockHashPassword = hashPassword as jest.Mock
 const mockComparePassword = comparePassword as jest.Mock
-const prisma = new PrismaClient()
 
 describe('POST /api/user/change-password', () => {
   beforeEach(() => {

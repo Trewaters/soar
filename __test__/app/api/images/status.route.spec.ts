@@ -9,21 +9,19 @@ jest.mock('next/server', () => ({
 }))
 
 // Mock Prisma singleton used by the route
-const mockPrismaInstance = {
-  asanaPose: {
-    findUnique: jest.fn(),
+jest.mock('@lib/prismaClient', () => ({
+  prisma: {
+    asanaPose: {
+      findUnique: jest.fn(),
+    },
+    userData: {
+      findUnique: jest.fn(),
+    },
+    poseImage: {
+      count: jest.fn(),
+    },
+    $disconnect: jest.fn(),
   },
-  userData: {
-    findUnique: jest.fn(),
-  },
-  poseImage: {
-    count: jest.fn(),
-  },
-  $disconnect: jest.fn(),
-}
-
-jest.mock('../../../../prisma/generated/client', () => ({
-  PrismaClient: jest.fn(() => mockPrismaInstance),
 }))
 
 // Mock auth

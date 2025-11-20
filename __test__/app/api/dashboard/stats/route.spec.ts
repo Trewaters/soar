@@ -4,18 +4,14 @@ jest.mock('../../../../../auth', () => ({
   auth: jest.fn(),
 }))
 
-jest.mock('../../../../../prisma/generated/client', () => {
-  const mockPrisma = {
+jest.mock('@lib/prismaClient', () => ({
+  prisma: {
     userData: {
       findUnique: jest.fn(),
     },
     $disconnect: jest.fn(),
-  }
-
-  return {
-    PrismaClient: jest.fn().mockImplementation(() => mockPrisma),
-  }
-})
+  },
+}))
 
 jest.mock('../../../../../app/lib/dashboardService', () => ({
   getDashboardStats: jest.fn(),
@@ -24,12 +20,11 @@ jest.mock('../../../../../app/lib/dashboardService', () => ({
 import '@testing-library/jest-dom'
 import { GET } from '@app/api/dashboard/stats/route'
 import { auth } from '../../../../../auth'
-import { PrismaClient } from '../../../../../prisma/generated/client'
+import { prisma } from '@lib/prismaClient'
 import { getDashboardStats } from '../../../../../app/lib/dashboardService'
 
 const mockAuth = auth as jest.Mock
 const mockGetDashboardStats = getDashboardStats as jest.Mock
-const prisma = new PrismaClient()
 
 describe('Dashboard Stats API Route', () => {
   const mockDashboardData = {

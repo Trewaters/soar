@@ -4,11 +4,8 @@ jest.mock('../../../../../auth', () => ({
   auth: jest.fn(),
 }))
 
-jest.mock('../../../../../prisma/generated/client', () => {
-  // Create a shared mock prisma instance so both the test file and the route
-  // module (which calls `new PrismaClient()` at import time) receive the same
-  // mocked object.
-  const mockPrisma = {
+jest.mock('@lib/prismaClient', () => ({
+  prisma: {
     userData: {
       findUnique: jest.fn(),
     },
@@ -16,21 +13,16 @@ jest.mock('../../../../../prisma/generated/client', () => {
       delete: jest.fn(),
     },
     $disconnect: jest.fn(),
-  }
-
-  return {
-    PrismaClient: jest.fn().mockImplementation(() => mockPrisma),
-  }
-})
+  },
+}))
 
 import '@testing-library/jest-dom'
 import { GET, DELETE } from '@app/api/user/connected-accounts/route'
 import { NextRequest } from 'next/server'
 import { auth } from '../../../../../auth'
-import { PrismaClient } from '../../../../../prisma/generated/client'
+import { prisma } from '@lib/prismaClient'
 
 const mockAuth = auth as jest.Mock
-const prisma = new PrismaClient()
 
 // Helper to create mock request
 function createMockRequest(body: any): NextRequest {
