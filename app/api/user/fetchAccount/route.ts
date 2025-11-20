@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '@lib/prismaClient'
 
 // Force this route to be dynamic since it requires query parameters
 export const dynamic = 'force-dynamic'

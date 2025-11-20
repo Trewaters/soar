@@ -1,8 +1,6 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import { auth } from '../../../../auth'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '@lib/prismaClient'
 
 // Force this route to be dynamic
 export const dynamic = 'force-dynamic'

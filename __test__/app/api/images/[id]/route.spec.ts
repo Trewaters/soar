@@ -31,7 +31,6 @@ import { prisma } from '@lib/prismaClient'
 import { storageManager } from '../../../../../lib/storage/manager'
 
 const mockAuth = auth as jest.Mock
-const prisma = new PrismaClient()
 
 describe('DELETE /api/images/[id]', () => {
   let req: NextRequest

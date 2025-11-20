@@ -29,6 +29,7 @@ jest.mock('../../../../auth', () => ({
   auth: jest.fn(),
 }))
 
+import { prisma } from '@lib/prismaClient'
 const { auth } = require('../../../../auth')
 const route = require('../../../../app/api/images/status/route')
 
@@ -94,7 +95,7 @@ describe('GET /api/images/status', () => {
     ;(auth as jest.Mock).mockResolvedValue({
       user: { email: 'creator@example.com' },
     })
-    mockPrismaInstance.asanaPose.findUnique.mockResolvedValue(null)
+    prisma.asanaPose.findUnique.mockResolvedValue(null)
 
     const req: any = {
       url: `${baseUrl}?poseId=missing&userId=creator@example.com`,
@@ -110,15 +111,15 @@ describe('GET /api/images/status', () => {
     ;(auth as jest.Mock).mockResolvedValue({
       user: { email: 'creator@example.com' },
     })
-    mockPrismaInstance.asanaPose.findUnique.mockResolvedValue({
+    prisma.asanaPose.findUnique.mockResolvedValue({
       isUserCreated: true,
       created_by: 'creator@example.com',
       imageCount: 1,
     })
-    mockPrismaInstance.userData.findUnique.mockResolvedValue({
+    prisma.userData.findUnique.mockResolvedValue({
       id: 'user-object-id-123',
     })
-    mockPrismaInstance.poseImage.count.mockResolvedValue(1)
+    prisma.poseImage.count.mockResolvedValue(1)
 
     const req: any = {
       url: `${baseUrl}?poseId=abc&userId=creator@example.com`,
