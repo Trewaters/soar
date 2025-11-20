@@ -176,21 +176,32 @@ export default function UserStateProvider({
         type: 'SET_USER',
         payload: { ...state.userData, email: session.user.email },
       })
-    } else if (
-      sessionStatus === 'unauthenticated' ||
-      (sessionStatus === 'authenticated' && !session)
-    ) {
-      // Clear user data when logged out or session is null (user deleted)
-      // If session is null but status is still "authenticated", it means the user was deleted
-      if (sessionStatus === 'authenticated' && !session) {
-        // User was deleted - force sign out
-        console.warn(
-          'User session invalidated - user may have been deleted. Signing out.'
-        )
-        import('next-auth/react').then(({ signOut }) => {
-          signOut({ redirect: true, callbackUrl: '/' })
-        })
-      }
+    } else if (sessionStatus === 'unauthenticated') {
+      // Clear user data when logged out
+      dispatch({
+        type: 'SET_USER',
+        payload: {
+          id: '',
+          email: '',
+          name: '',
+          image: '',
+          firstName: '',
+          lastName: '',
+          bio: '',
+          location: '',
+          websiteURL: '',
+          headline: '',
+        },
+      })
+    } else if (!session) {
+      // Session is null but status might still be loading/authenticated
+      // This could mean the user was deleted - force sign out
+      console.warn(
+        'User session invalidated - user may have been deleted. Signing out.'
+      )
+      import('next-auth/react').then(({ signOut }) => {
+        signOut({ redirect: true, callbackUrl: '/' })
+      })
 
       dispatch({
         type: 'SET_USER',

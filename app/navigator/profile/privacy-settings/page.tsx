@@ -10,6 +10,7 @@ import {
   Switch,
   Box,
   IconButton,
+  Chip,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { SessionProvider } from 'next-auth/react'
@@ -112,6 +113,7 @@ export default async function PrivacySettingsPage() {
                     />
                     <FormControlLabel
                       value="friends-only"
+                      disabled
                       control={
                         <Radio
                           sx={{
@@ -122,10 +124,23 @@ export default async function PrivacySettingsPage() {
                           }}
                         />
                       }
-                      label="Friends Only"
+                      label={
+                        <Box
+                          sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                        >
+                          <span>Friends Only</span>
+                          <Chip
+                            label="In Development"
+                            size="small"
+                            color="warning"
+                            sx={{ fontSize: '0.65rem', height: '20px' }}
+                          />
+                        </Box>
+                      }
                     />
                     <FormControlLabel
                       value="private"
+                      disabled
                       control={
                         <Radio
                           sx={{
@@ -136,7 +151,19 @@ export default async function PrivacySettingsPage() {
                           }}
                         />
                       }
-                      label="Private"
+                      label={
+                        <Box
+                          sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                        >
+                          <span>Private</span>
+                          <Chip
+                            label="In Development"
+                            size="small"
+                            color="warning"
+                            sx={{ fontSize: '0.65rem', height: '20px' }}
+                          />
+                        </Box>
+                      }
                     />
                   </RadioGroup>
                 </FormControl>
@@ -152,12 +179,22 @@ export default async function PrivacySettingsPage() {
                   borderColor: 'primary.main',
                 }}
               >
-                <Typography
-                  variant="h6"
-                  sx={{ color: 'text.primary', fontWeight: 600, mb: 1 }}
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}
                 >
-                  Activity Visibility
-                </Typography>
+                  <Typography
+                    variant="h6"
+                    sx={{ color: 'text.primary', fontWeight: 600 }}
+                  >
+                    Activity Visibility
+                  </Typography>
+                  <Chip
+                    label="In Development"
+                    size="small"
+                    color="warning"
+                    sx={{ fontSize: '0.65rem', height: '20px' }}
+                  />
+                </Box>
                 <Typography
                   variant="body2"
                   sx={{ color: 'text.secondary', mb: 2 }}
@@ -177,6 +214,7 @@ export default async function PrivacySettingsPage() {
                     </Typography>
                     <Switch
                       defaultChecked
+                      disabled
                       sx={{
                         '& .MuiSwitch-switchBase.Mui-checked': {
                           color: 'primary.main',
@@ -200,6 +238,7 @@ export default async function PrivacySettingsPage() {
                     </Typography>
                     <Switch
                       defaultChecked
+                      disabled
                       sx={{
                         '& .MuiSwitch-switchBase.Mui-checked': {
                           color: 'primary.main',
@@ -244,11 +283,20 @@ export default async function PrivacySettingsPage() {
                     alignItems: 'center',
                   }}
                 >
-                  <Typography variant="body2" sx={{ color: 'text.primary' }}>
-                    Allow third-party access
-                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Typography variant="body2" sx={{ color: 'text.primary' }}>
+                      Allow third-party access
+                    </Typography>
+                    <Chip
+                      label="In Development"
+                      size="small"
+                      color="warning"
+                      sx={{ fontSize: '0.65rem', height: '20px' }}
+                    />
+                  </Box>
                   <Switch
                     defaultChecked
+                    disabled
                     sx={{
                       '& .MuiSwitch-switchBase.Mui-checked': {
                         color: 'primary.main',
