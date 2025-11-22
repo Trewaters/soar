@@ -2,6 +2,14 @@
 
 const nextConfig = {
   output: 'standalone',
+  reactStrictMode: true,
+  swcMinify: true,
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === 'production'
+        ? { exclude: ['error', 'warn'] }
+        : false,
+  },
   images: {
     // Configure image domains and loaders
     domains: [],
