@@ -204,7 +204,6 @@ const ActivityStreakDebug: React.FC = () => {
             <Chip
               label={`Calculated Streak: ${debugData.calculatedStreak} days`}
               color="primary"
-              size="large"
             />
             <Chip
               label={`Last Activity: ${debugData.lastActivityDate || 'None'}`}
