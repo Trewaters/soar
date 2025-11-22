@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import CurrentTime from '@app/clientComponents/current-time'
 import { Box, Button, Divider, Stack, Typography } from '@mui/material'
 import Image from 'next/image'
 import AsanaActivityList from '@app/clientComponents/AsanaActivityList'
@@ -49,7 +48,6 @@ export default function Page() {
             quality={100}
             alt="Illustration of a person practicing yoga"
           />
-          <CurrentTime />
           <ActivityStreaks variant="compact" />
           <Divider
             color="#F6893D"

@@ -14,14 +14,6 @@ jest.mock('next-auth/react', () => ({
     },
     status: 'authenticated',
   })),
-}))
-
-jest.mock('@app/clientComponents/current-time', () => {
-  const MockedCurrentTime = () => (
-    <div data-testid="current-time">Mocked CurrentTime</div>
-  )
-  MockedCurrentTime.displayName = 'MockedCurrentTime'
-  return MockedCurrentTime
 })
 
 jest.mock('@app/clientComponents/landing-page', () => {
@@ -120,15 +112,6 @@ describe('Page Component', () => {
     const welcomeText = screen.getByText('Welcome Yogi')
     expect(welcomeText).toBeInTheDocument()
     expect(welcomeText).toHaveAttribute('id', 'page-title')
-  })
-
-  it('renders the CurrentTime component', () => {
-    render(
-      <ThemeProvider theme={theme}>
-        <Page />
-      </ThemeProvider>
-    )
-    expect(screen.getByTestId('current-time')).toBeInTheDocument()
   })
 
   it('renders the ActivityStreaks component', () => {
