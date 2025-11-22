@@ -342,17 +342,21 @@ function AsanasLibrary({
       >
         <IconButton
           onClick={() => setViewMode('card')}
-          disabled={viewMode === 'card'}
           aria-label={
             viewMode === 'card'
               ? 'Currently in card view'
               : 'Switch to card view'
           }
           sx={{
-            color: 'primary.main',
+            color: viewMode === 'card' ? 'primary.main' : 'text.secondary',
             p: 1,
             minWidth: 0,
-            opacity: viewMode === 'card' ? 0.5 : 1,
+            cursor: viewMode === 'card' ? 'default' : 'pointer',
+            pointerEvents: viewMode === 'card' ? 'none' : 'auto',
+            opacity: viewMode === 'card' ? 1 : 0.6,
+            '&:hover': {
+              opacity: 1,
+            },
           }}
           title={viewMode === 'card' ? 'Card View (current)' : 'Card View'}
         >
@@ -361,17 +365,21 @@ function AsanasLibrary({
 
         <IconButton
           onClick={() => setViewMode('list')}
-          disabled={viewMode === 'list'}
           aria-label={
             viewMode === 'list'
               ? 'Currently in list view'
               : 'Switch to list view'
           }
           sx={{
-            color: 'primary.main',
+            color: viewMode === 'list' ? 'primary.main' : 'text.secondary',
             p: 1,
             minWidth: 0,
-            opacity: viewMode === 'list' ? 0.5 : 1,
+            cursor: viewMode === 'list' ? 'default' : 'pointer',
+            pointerEvents: viewMode === 'list' ? 'none' : 'auto',
+            opacity: viewMode === 'list' ? 1 : 0.6,
+            '&:hover': {
+              opacity: 1,
+            },
           }}
           title={viewMode === 'list' ? 'List View (current)' : 'List View'}
         >
@@ -462,17 +470,21 @@ function SeriesLibrary({
       >
         <IconButton
           onClick={() => setViewMode('card')}
-          disabled={viewMode === 'card'}
           aria-label={
             viewMode === 'card'
               ? 'Currently in card view'
               : 'Switch to card view'
           }
           sx={{
-            color: 'primary.main',
+            color: viewMode === 'card' ? 'primary.main' : 'text.secondary',
             p: 1,
             minWidth: 0,
-            opacity: viewMode === 'card' ? 0.5 : 1,
+            cursor: viewMode === 'card' ? 'default' : 'pointer',
+            pointerEvents: viewMode === 'card' ? 'none' : 'auto',
+            opacity: viewMode === 'card' ? 1 : 0.6,
+            '&:hover': {
+              opacity: 1,
+            },
           }}
           title={viewMode === 'card' ? 'Card View (current)' : 'Card View'}
         >
@@ -481,17 +493,21 @@ function SeriesLibrary({
 
         <IconButton
           onClick={() => setViewMode('list')}
-          disabled={viewMode === 'list'}
           aria-label={
             viewMode === 'list'
               ? 'Currently in list view'
               : 'Switch to list view'
           }
           sx={{
-            color: 'primary.main',
+            color: viewMode === 'list' ? 'primary.main' : 'text.secondary',
             p: 1,
             minWidth: 0,
-            opacity: viewMode === 'list' ? 0.5 : 1,
+            cursor: viewMode === 'list' ? 'default' : 'pointer',
+            pointerEvents: viewMode === 'list' ? 'none' : 'auto',
+            opacity: viewMode === 'list' ? 1 : 0.6,
+            '&:hover': {
+              opacity: 1,
+            },
           }}
           title={viewMode === 'list' ? 'List View (current)' : 'List View'}
         >
@@ -583,17 +599,21 @@ function SequencesLibrary({
       >
         <IconButton
           onClick={() => setViewMode('card')}
-          disabled={viewMode === 'card'}
           aria-label={
             viewMode === 'card'
               ? 'Currently in card view'
               : 'Switch to card view'
           }
           sx={{
-            color: 'primary.main',
+            color: viewMode === 'card' ? 'primary.main' : 'text.secondary',
             p: 1,
             minWidth: 0,
-            opacity: viewMode === 'card' ? 0.5 : 1,
+            cursor: viewMode === 'card' ? 'default' : 'pointer',
+            pointerEvents: viewMode === 'card' ? 'none' : 'auto',
+            opacity: viewMode === 'card' ? 1 : 0.6,
+            '&:hover': {
+              opacity: 1,
+            },
           }}
           title={viewMode === 'card' ? 'Card View (current)' : 'Card View'}
         >
@@ -602,17 +622,21 @@ function SequencesLibrary({
 
         <IconButton
           onClick={() => setViewMode('list')}
-          disabled={viewMode === 'list'}
           aria-label={
             viewMode === 'list'
               ? 'Currently in list view'
               : 'Switch to list view'
           }
           sx={{
-            color: 'primary.main',
+            color: viewMode === 'list' ? 'primary.main' : 'text.secondary',
             p: 1,
             minWidth: 0,
-            opacity: viewMode === 'list' ? 0.5 : 1,
+            cursor: viewMode === 'list' ? 'default' : 'pointer',
+            pointerEvents: viewMode === 'list' ? 'none' : 'auto',
+            opacity: viewMode === 'list' ? 1 : 0.6,
+            '&:hover': {
+              opacity: 1,
+            },
           }}
           title={viewMode === 'list' ? 'List View (current)' : 'List View'}
         >
