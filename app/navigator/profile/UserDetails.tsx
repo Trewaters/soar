@@ -331,6 +331,63 @@ export default function UserDetails() {
           details={userData.email}
           highlightBackground
         />
+
+        {/* Achievement Badges Section */}
+        <Box sx={{ mt: 2 }}>
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 2,
+              color: 'primary.main',
+              fontWeight: 600,
+              textAlign: 'center',
+            }}
+          >
+            Achievements
+          </Typography>
+          <Stack
+            direction="row"
+            spacing={2}
+            justifyContent="center"
+            alignItems="center"
+            flexWrap="wrap"
+            sx={{ gap: 2 }}
+          >
+            <Box sx={{ textAlign: 'center' }}>
+              <Image
+                src="/icons/profile/login-streak-1.png"
+                width={64}
+                height={64}
+                alt="Login Streak Badge 1"
+              />
+              <Typography variant="caption" display="block" sx={{ mt: 0.5 }}>
+                Week Warrior
+              </Typography>
+            </Box>
+            <Box sx={{ textAlign: 'center' }}>
+              <Image
+                src="/icons/profile/login-streak-2.png"
+                width={64}
+                height={64}
+                alt="Login Streak Badge 2"
+              />
+              <Typography variant="caption" display="block" sx={{ mt: 0.5 }}>
+                Month Master
+              </Typography>
+            </Box>
+            <Box sx={{ textAlign: 'center' }}>
+              <Image
+                src="/icons/profile/login-streak-3.png"
+                width={64}
+                height={64}
+                alt="Login Streak Badge 3"
+              />
+              <Typography variant="caption" display="block" sx={{ mt: 0.5 }}>
+                Dedicated Yogi
+              </Typography>
+            </Box>
+          </Stack>
+        </Box>
       </Stack>
     </Paper>
   )

@@ -1,7 +1,19 @@
-import { Container, Typography, Paper } from '@mui/material'
+'use client'
+
+import {
+  Container,
+  Typography,
+  Paper,
+  Box,
+  IconButton,
+  Stack,
+} from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
 import FeedbackForm from './FeedbackForm'
+import theme from '@styles/theme'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import Link from 'next/link'
 
 export default function FeedbackPage() {
   return (
@@ -14,19 +26,46 @@ export default function FeedbackPage() {
 
         {/* Feedback Content */}
         <Grid size={{ xs: 12, md: 8 }}>
-          <Paper elevation={2} sx={{ p: 4, borderRadius: 2 }}>
-            <Typography variant="h1" component="h1" gutterBottom>
-              Send Feedback
-            </Typography>
+          <Stack spacing={3}>
+            {/* Header with Back Button */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <IconButton
+                component={Link}
+                href="/navigator/profile/settings"
+                sx={{
+                  color: 'primary.main',
+                  '&:hover': {
+                    bgcolor: 'primary.light',
+                  },
+                }}
+                aria-label="Back to Account Settings"
+              >
+                <ArrowBackIcon />
+              </IconButton>
+              <Typography
+                variant="h1"
+                component="h1"
+                sx={{
+                  color: theme.palette.success.main,
+                  fontSize: { xs: '1.75rem', md: '2.5rem' },
+                }}
+              >
+                Send Feedback
+              </Typography>
+            </Box>
 
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-              We value your feedback! Help us improve your yoga experience by
-              sharing your thoughts, suggestions, and any issues you&apos;ve
-              encountered.
-            </Typography>
+            <Paper elevation={2} sx={{ p: 4, borderRadius: 2 }}>
+              <Stack spacing={3}>
+                <Typography variant="body1" color="text.secondary">
+                  We value your feedback! Help us improve your yoga experience
+                  by sharing your thoughts, suggestions, and any issues
+                  you&apos;ve encountered.
+                </Typography>
 
-            <FeedbackForm />
-          </Paper>
+                <FeedbackForm />
+              </Stack>
+            </Paper>
+          </Stack>
         </Grid>
       </Grid>
     </Container>

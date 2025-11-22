@@ -20,6 +20,7 @@ import {
   Collapse,
   IconButton,
   Link,
+  Divider,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { red } from '@mui/material/colors'
@@ -27,12 +28,12 @@ import { useSession } from 'next-auth/react'
 import { UseUser } from '@context/UserContext'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import ActivityStreaks from '@app/clientComponents/activityStreaks/ActivityStreaks'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import LinkIcon from '@mui/icons-material/Link'
 import ShareIcon from '@mui/icons-material/Share'
 import MapIcon from '@mui/icons-material/Map'
 import CameraAltIcon from '@mui/icons-material/CameraAlt'
+import SaveIcon from '@mui/icons-material/Save'
 import { styled } from '@mui/material/styles'
 import { LocationPicker } from '@app/clientComponents/locationPicker'
 import TextInputField from '@app/clientComponents/inputComponents/TextInputField'
@@ -40,6 +41,7 @@ import {
   getMobileInputTheme,
   getMobileFormContainerTheme,
 } from '@app/utils/mobileThemeHelpers'
+import theme from '@styles/theme'
 
 interface EditUserDetailsProps {
   onSaveSuccess?: () => void
@@ -356,7 +358,7 @@ export default function EditUserDetails({
     },
     '& .MuiInputBase-input': {
       fontSize: '16px !important', // Critical for preventing iOS zoom
-      padding: '12px 16px',
+      padding: '8px 12px',
       WebkitAppearance: 'none',
     },
     '& .MuiFormLabel-root': {
@@ -522,53 +524,63 @@ export default function EditUserDetails({
       {session && (
         <>
           <Paper
-            elevation={1}
+            elevation={3}
             sx={{
               mx: { xs: 0, sm: 2, md: 4 },
               my: { xs: 0, sm: 2 },
               width: { xs: '100%', sm: '95%', md: '80%', lg: '65%' },
               maxWidth: 700,
               alignSelf: 'center',
-              ...getMobileFormContainerTheme(), // Mobile keyboard optimizations
+              borderRadius: 3,
+              overflow: 'hidden',
+              ...getMobileFormContainerTheme(),
             }}
           >
-            <Stack
-              spacing={3}
+            {/* Header Section with Green Background */}
+            <Box
               sx={{
-                p: { xs: 2, sm: 3, md: 4 },
-                width: '100%',
-                boxSizing: 'border-box',
+                bgcolor: theme.palette.success.main,
+                color: 'white',
+                p: 3,
               }}
-              component="form"
-              onSubmit={handleSubmit}
             >
-              {/* Header */}
-
               <Stack direction="row" spacing={2} alignItems="center">
                 <Image
                   src={'/icons/profile/leaf-orange.png'}
-                  width={24}
-                  height={29}
+                  width={32}
+                  height={38}
                   alt="Yoga Practitioner icon"
                 />
-                <Typography variant="h2" color="primary.main">
-                  Yoga Practitioner
+                <Typography variant="h4" fontWeight="bold">
+                  Edit Profile
                 </Typography>
               </Stack>
+            </Box>
 
+            {/* Content wrapper with padding */}
+            <Box
+              sx={{
+                p: { xs: 2, sm: 2.5, md: 3 },
+                px: { xs: 2, sm: 3, md: 4 },
+              }}
+            >
               <Stack
-                direction={{ xs: 'column', md: 'row' }}
-                spacing={{ xs: 2, md: 3 }}
+                spacing={3}
+                sx={{
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
+                component="form"
+                onSubmit={handleSubmit}
               >
-                <Stack
-                  alignItems="center"
-                  flex={1}
-                  sx={{ position: 'relative' }}
-                >
+                {/* Profile Image Section */}
+                <Stack spacing={2} sx={{ textAlign: 'center' }}>
                   <Box
                     sx={{
                       position: 'relative',
+                      display: 'inline-block',
                       cursor: 'pointer',
+                      alignSelf: 'center',
                       '&:hover .camera-overlay': {
                         opacity: 1,
                       },
@@ -587,8 +599,10 @@ export default function EditUserDetails({
                     <Avatar
                       sx={{
                         bgcolor: red[500],
-                        width: { xs: 120, md: 150 },
-                        height: { xs: 120, md: 150 },
+                        width: { xs: 140, md: 160 },
+                        height: { xs: 140, md: 160 },
+                        border: '4px solid',
+                        borderColor: theme.palette.success.main,
                       }}
                       aria-label="name initial"
                       src={
@@ -600,8 +614,8 @@ export default function EditUserDetails({
                       {!(activeProfileImage || userData?.image) && (
                         <Image
                           src={profilePlaceholder}
-                          width={50}
-                          height={50}
+                          width={60}
+                          height={60}
                           alt="Generic profile image icon"
                         />
                       )}
@@ -611,16 +625,16 @@ export default function EditUserDetails({
                       className="camera-overlay"
                       sx={{
                         position: 'absolute',
-                        bottom: 0,
-                        right: 0,
+                        bottom: 8,
+                        right: 8,
                         bgcolor: 'primary.main',
                         borderRadius: '50%',
-                        width: { xs: 36, md: 44 },
-                        height: { xs: 36, md: 44 },
+                        width: { xs: 40, md: 48 },
+                        height: { xs: 40, md: 48 },
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        boxShadow: 2,
+                        boxShadow: 3,
                         opacity: 0.9,
                         transition: 'opacity 0.2s ease-in-out',
                         border: '3px solid white',
@@ -629,102 +643,106 @@ export default function EditUserDetails({
                       <CameraAltIcon
                         sx={{
                           color: 'white',
-                          fontSize: { xs: 20, md: 24 },
+                          fontSize: { xs: 22, md: 26 },
                         }}
                       />
                     </Box>
                   </Box>
-                  {/* Profile Image Manager Modal */}
-                  <Modal
-                    open={imageManagerOpen}
-                    onClose={() => setImageManagerOpen(false)}
-                    aria-labelledby="profile-image-manager-title"
-                    aria-describedby="profile-image-manager-description"
-                  >
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        bgcolor: 'background.paper',
-                        boxShadow: 24,
-                        p: 4,
-                        borderRadius: 2,
-                        minWidth: { xs: 300, md: 400 },
-                        outline: 'none',
-                        maxHeight: '90vh',
-                        overflowY: 'auto',
-                      }}
-                    >
-                      <Typography
-                        id="profile-image-manager-title"
-                        variant="h6"
-                        sx={{ mb: 2 }}
-                      >
-                        Manage Profile Images
-                      </Typography>
-                      <ProfileImageManager
-                        images={profileImages}
-                        active={activeProfileImage}
-                        placeholder={profilePlaceholder}
-                        onChange={(imgs, active) => {
-                          setProfileImages(imgs)
-                          setActiveProfileImage(active)
-                        }}
-                        onUpload={handleProfileImageUpload}
-                        onDelete={handleProfileImageDelete}
-                        onSelect={handleProfileImageSelect}
-                        loading={imageLoading}
-                        maxImages={3}
-                      />
-                      <Button
-                        onClick={() => setImageManagerOpen(false)}
-                        sx={{ mt: 2 }}
-                        variant="outlined"
-                        fullWidth
-                        aria-label="Close profile image manager"
-                      >
-                        Close
-                      </Button>
-                    </Box>
-                  </Modal>
-                  {/*   {profileImageMode === 'active' && (
-                    <ProfileStatusIndicator
-                      mode="active"
-                      iconSrc="/icons/profile/profile-image-active.svg"
-                      alt="Active profile image icon"
-                    />
-                  )}
-                  {profileImageMode === 'inactive' && (
-                    <ProfileStatusIndicator
-                      mode="inactive"
-                      iconSrc="/icons/profile/profile-image-inactive.svg"
-                      alt="Inactive profile image icon"
-                    />
-                  )}
-                  {profileImageMode === 'edit' && (
-                    <ProfileStatusIndicator
-                      mode="edit"
-                      iconSrc="/icons/profile/profile-image-edit.svg"
-                      alt="Edit profile image icon"
-                    />
-                  )} */}
-                </Stack>
 
-                {/* User Details Section */}
-                <Stack flex={3} spacing={2}>
-                  <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+                  <Typography
+                    variant="h5"
+                    sx={{ mt: 2, fontWeight: 600, color: 'text.primary' }}
+                  >
                     {userData?.name ?? 'Yogi Name'}
                   </Typography>
-                  <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mt: 0.5 }}
+                  >
                     Member since {membershipDate ?? '6/9/2024'}
-                    {/* '6/9/2024' this is the date I started working on Uvuyoga */}
                   </Typography>
                 </Stack>
+
+                {/* Profile Image Manager Modal */}
+                <Modal
+                  open={imageManagerOpen}
+                  onClose={() => setImageManagerOpen(false)}
+                  aria-labelledby="profile-image-manager-title"
+                  aria-describedby="profile-image-manager-description"
+                >
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      bgcolor: 'background.paper',
+                      boxShadow: 24,
+                      p: 4,
+                      borderRadius: 2,
+                      minWidth: { xs: 300, md: 400 },
+                      outline: 'none',
+                      maxHeight: '90vh',
+                      overflowY: 'auto',
+                    }}
+                  >
+                    <Typography
+                      id="profile-image-manager-title"
+                      variant="h6"
+                      sx={{ mb: 2 }}
+                    >
+                      Manage Profile Images
+                    </Typography>
+                    <ProfileImageManager
+                      images={profileImages}
+                      active={activeProfileImage}
+                      placeholder={profilePlaceholder}
+                      onChange={(imgs, active) => {
+                        setProfileImages(imgs)
+                        setActiveProfileImage(active)
+                      }}
+                      onUpload={handleProfileImageUpload}
+                      onDelete={handleProfileImageDelete}
+                      onSelect={handleProfileImageSelect}
+                      loading={imageLoading}
+                      maxImages={3}
+                    />
+                    <Button
+                      onClick={() => setImageManagerOpen(false)}
+                      sx={{ mt: 2 }}
+                      variant="outlined"
+                      fullWidth
+                      aria-label="Close profile image manager"
+                    >
+                      Close
+                    </Button>
+                  </Box>
+                </Modal>
+                {/*   {profileImageMode === 'active' && (
+                  <ProfileStatusIndicator
+                    mode="active"
+                    iconSrc="/icons/profile/profile-image-active.svg"
+                    alt="Active profile image icon"
+                  />
+                )}
+                {profileImageMode === 'inactive' && (
+                  <ProfileStatusIndicator
+                    mode="inactive"
+                    iconSrc="/icons/profile/profile-image-inactive.svg"
+                    alt="Inactive profile image icon"
+                  />
+                )}
+                {profileImageMode === 'edit' && (
+                  <ProfileStatusIndicator
+                    mode="edit"
+                    iconSrc="/icons/profile/profile-image-edit.svg"
+                    alt="Edit profile image icon"
+                  />
+                )} */}
               </Stack>
 
-              <Card>
+              <Card sx={{ mt: 2 }}>
                 <CardContent>
                   <Typography variant="body2" color="text.secondary">
                     {userData?.headline ?? 'What does yoga mean to you?'}
@@ -839,7 +857,7 @@ export default function EditUserDetails({
               </Card>
 
               {/* Form Fields */}
-              <FormControl sx={{ width: '100%' }}>
+              <FormControl sx={{ width: '100%', mt: 2 }}>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   Username
                 </Typography>
@@ -854,7 +872,11 @@ export default function EditUserDetails({
                 />
               </FormControl>
 
-              <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+              <Stack
+                direction={{ xs: 'column', md: 'row' }}
+                spacing={2}
+                sx={{ mt: 2 }}
+              >
                 <FormControl sx={{ width: '100%' }}>
                   <Typography variant="body1" sx={{ mb: 1 }}>
                     First Name
@@ -894,7 +916,7 @@ export default function EditUserDetails({
                 </FormControl>
               </Stack>
 
-              <FormControl sx={{ width: '100%' }}>
+              <FormControl sx={{ width: '100%', mt: 2 }}>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   Pronouns
                 </Typography>
@@ -909,7 +931,7 @@ export default function EditUserDetails({
                 />
               </FormControl>
 
-              <FormControl sx={{ width: '100%' }}>
+              <FormControl sx={{ width: '100%', mt: 2 }}>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   Headline
                 </Typography>
@@ -926,7 +948,7 @@ export default function EditUserDetails({
                 />
               </FormControl>
 
-              <FormControl sx={{ width: '100%' }}>
+              <FormControl sx={{ width: '100%', mt: 2 }}>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   Description/About/Bio
                 </Typography>
@@ -943,7 +965,7 @@ export default function EditUserDetails({
                 />
               </FormControl>
 
-              <FormControl sx={{ width: '100%' }}>
+              <FormControl sx={{ width: '100%', mt: 2 }}>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   Website URL
                 </Typography>
@@ -958,7 +980,7 @@ export default function EditUserDetails({
                 />
               </FormControl>
 
-              <FormControl sx={{ width: '100%' }}>
+              <FormControl sx={{ width: '100%', mt: 2 }}>
                 <Typography variant="body1" sx={{ mb: 1 }}>
                   My Location
                 </Typography>
@@ -975,7 +997,7 @@ export default function EditUserDetails({
                 />
               </FormControl>
 
-              <Typography variant="body1" sx={{ mb: 1 }}>
+              <Typography variant="body1" sx={{ mb: 1, mt: 2 }}>
                 Email Address (primary/internal)
               </Typography>
               <Typography
@@ -989,15 +1011,19 @@ export default function EditUserDetails({
               </FormHelperText>
               {/* Move Manage Profile Images button above Save button */}
               <Stack
-                direction="row"
+                direction={{ xs: 'column', sm: 'row' }}
                 spacing={2}
-                justifyContent="space-around"
-                sx={{ width: '100%' }}
+                sx={{ pt: 2 }}
               >
                 <Button
                   variant="outlined"
-                  aria-label="Open profile image manager"
+                  fullWidth
                   onClick={() => setImageManagerOpen(true)}
+                  sx={{
+                    py: 1.5,
+                    fontSize: 16,
+                    borderRadius: 2,
+                  }}
                 >
                   Manage Profile Images
                 </Button>
@@ -1006,18 +1032,28 @@ export default function EditUserDetails({
                   type="submit"
                   disabled={loading}
                   variant="contained"
-                  sx={{ minWidth: 120, py: 1.5, fontSize: 16 }}
+                  fullWidth
+                  startIcon={loading ? null : <SaveIcon />}
+                  sx={{
+                    py: 1.5,
+                    fontSize: 16,
+                    fontWeight: 600,
+                    borderRadius: 2,
+                    bgcolor: theme.palette.success.main,
+                    '&:hover': {
+                      bgcolor: theme.palette.success.dark,
+                    },
+                  }}
                 >
-                  {loading ? <CircularProgress size={20} /> : 'Save'}
+                  {loading ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    'Save Changes'
+                  )}
                 </Button>
               </Stack>
-            </Stack>
+            </Box>
           </Paper>
-
-          {/* Detailed Activity Streaks Section */}
-          <Stack sx={{ mt: 3, mx: 3 }}>
-            <ActivityStreaks variant="detailed" />
-          </Stack>
         </>
       )}
     </>

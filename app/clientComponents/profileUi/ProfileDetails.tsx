@@ -94,12 +94,15 @@ export default React.memo(function ProfileDetails(
       <Stack spacing={0}>
         {/* Label Section */}
         <Typography
-          variant="body1"
+          variant="body2"
           component="dt"
           sx={{
-            fontWeight: 'normal',
-            mb: 1,
-            color: 'text.primary',
+            fontWeight: 600,
+            mb: 0.5,
+            color: 'text.secondary',
+            textTransform: 'uppercase',
+            fontSize: '0.75rem',
+            letterSpacing: '0.5px',
           }}
         >
           {props.label}
@@ -110,10 +113,14 @@ export default React.memo(function ProfileDetails(
           variant="body1"
           component="dd"
           sx={{
-            mb: 1,
+            mb: 2,
             ml: 0, // Reset default dd margin
             backgroundColor: highlightBackground ? 'lightgray' : 'transparent',
             whiteSpace: variant === 'multiline' ? 'pre-line' : 'normal',
+            color: 'text.primary',
+            fontWeight: 400,
+            p: highlightBackground ? 1 : 0,
+            borderRadius: highlightBackground ? 1 : 0,
             ...otherProps.sx,
           }}
           aria-label={ariaLabel}
