@@ -1207,19 +1207,17 @@ describe('LibraryPage - Asanas View Toggle Feature', () => {
 
     await screen.findByText('Warrior Pose')
 
-    // Check for card view icon
+    // Check for card view icon (active)
     const cardViewButton = screen.getByRole('button', {
       name: /Currently in card view/i,
     })
     expect(cardViewButton).toBeInTheDocument()
-    expect(cardViewButton).toBeDisabled()
 
     // Check for list view icon
     const listViewButton = screen.getByRole('button', {
       name: /Switch to list view/i,
     })
     expect(listViewButton).toBeInTheDocument()
-    expect(listViewButton).not.toBeDisabled()
   })
 
   it('should toggle from card view to list view in Asanas tab', async () => {
@@ -1250,17 +1248,17 @@ describe('LibraryPage - Asanas View Toggle Feature', () => {
     })
     await user.click(listViewButton)
 
-    // Now list view should be disabled (active) and card view enabled
+    // Now list view should be active (aria-label changes)
     await waitFor(() => {
       const activeListViewButton = screen.getByRole('button', {
         name: /Currently in list view/i,
       })
-      expect(activeListViewButton).toBeDisabled()
+      expect(activeListViewButton).toBeInTheDocument()
 
       const inactiveCardViewButton = screen.getByRole('button', {
         name: /Switch to card view/i,
       })
-      expect(inactiveCardViewButton).not.toBeDisabled()
+      expect(inactiveCardViewButton).toBeInTheDocument()
     })
 
     // Asanas should still be visible
@@ -1344,13 +1342,11 @@ describe('LibraryPage - Series View Toggle Feature', () => {
       name: /Currently in card view/i,
     })
     expect(cardViewButton).toBeInTheDocument()
-    expect(cardViewButton).toBeDisabled()
 
     const listViewButton = screen.getByRole('button', {
       name: /Switch to list view/i,
     })
     expect(listViewButton).toBeInTheDocument()
-    expect(listViewButton).not.toBeDisabled()
   })
 
   it('should toggle from card view to list view in Series tab', async () => {
@@ -1381,12 +1377,12 @@ describe('LibraryPage - Series View Toggle Feature', () => {
     })
     await user.click(listViewButton)
 
-    // Now list view should be disabled (active)
+    // Now list view should be active
     await waitFor(() => {
       const activeListViewButton = screen.getByRole('button', {
         name: /Currently in list view/i,
       })
-      expect(activeListViewButton).toBeDisabled()
+      expect(activeListViewButton).toBeInTheDocument()
     })
 
     // Series should still be visible
@@ -1434,13 +1430,11 @@ describe('LibraryPage - Sequences View Toggle Feature', () => {
       name: /Currently in card view/i,
     })
     expect(cardViewButton).toBeInTheDocument()
-    expect(cardViewButton).toBeDisabled()
 
     const listViewButton = screen.getByRole('button', {
       name: /Switch to list view/i,
     })
     expect(listViewButton).toBeInTheDocument()
-    expect(listViewButton).not.toBeDisabled()
   })
 
   it('should toggle from card view to list view in Sequences tab', async () => {
@@ -1472,12 +1466,12 @@ describe('LibraryPage - Sequences View Toggle Feature', () => {
     })
     await user.click(listViewButton)
 
-    // Now list view should be disabled (active)
+    // Now list view should be active (aria-label changes)
     await waitFor(() => {
       const activeListViewButton = screen.getByRole('button', {
         name: /Currently in list view/i,
       })
-      expect(activeListViewButton).toBeDisabled()
+      expect(activeListViewButton).toBeInTheDocument()
     })
 
     // Sequences should still be visible

@@ -572,6 +572,7 @@ export default function EditUserDetails({
                 }}
                 component="form"
                 onSubmit={handleSubmit}
+                data-testid="edit-user-details-form"
               >
                 {/* Profile Image Section */}
                 <Stack spacing={2} sx={{ textAlign: 'center' }}>

@@ -14,7 +14,7 @@ jest.mock('next-auth/react', () => ({
     },
     status: 'authenticated',
   })),
-})
+}))
 
 jest.mock('@app/clientComponents/landing-page', () => {
   const MockedLandingPage = () => (
