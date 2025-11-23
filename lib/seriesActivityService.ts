@@ -215,29 +215,46 @@ export async function deleteSeriesActivity(
  */
 export async function getSeriesWeeklyActivity(
   userId: string,
-  seriesId: string
+  seriesId: string,
+  startDate?: string | Date,
+  endDate?: string | Date
 ): Promise<WeeklySeriesActivityData> {
   try {
-    // Calculate Monday-to-Sunday calendar week
+    // Use provided date range (client local) or fallback to server-calculated week
+    const startOfRange = startDate ? new Date(startDate) : null
+    const endOfRange = endDate ? new Date(endDate) : null
+
     const now = new Date()
-    const dayOfWeek = now.getDay() // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1 // Convert to days from Monday
+    if (!startOfRange || !endOfRange) {
+      const dayOfWeek = now.getDay()
+      const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1
 
-    const startDate = new Date(now)
-    startDate.setDate(now.getDate() - daysFromMonday)
-    startDate.setHours(0, 0, 0, 0)
+      const computedStart = new Date(now)
+      computedStart.setDate(now.getDate() - daysFromMonday)
+      computedStart.setHours(0, 0, 0, 0)
 
-    const endDate = new Date(startDate)
-    endDate.setDate(startDate.getDate() + 6)
-    endDate.setHours(23, 59, 59, 999)
+      const computedEnd = new Date(computedStart)
+      computedEnd.setDate(computedStart.getDate() + 6)
+      computedEnd.setHours(23, 59, 59, 999)
+
+      if (!startOfRange) startDate = computedStart
+      if (!endOfRange) endDate = computedEnd
+    }
+
+    const start = startDate
+      ? new Date(startDate)
+      : new Date(new Date().setHours(0, 0, 0, 0))
+    const end = endDate
+      ? new Date(endDate)
+      : new Date(new Date().setHours(23, 59, 59, 999))
 
     const activities = await prisma.seriesActivity.findMany({
       where: {
         userId,
         seriesId,
         datePerformed: {
-          gte: startDate,
-          lte: endDate,
+          gte: start,
+          lte: end,
         },
       },
       orderBy: { datePerformed: 'desc' },
@@ -253,8 +270,8 @@ export async function getSeriesWeeklyActivity(
         difficulty: activity.difficulty ?? undefined,
       })),
       dateRange: {
-        start: startDate,
-        end: endDate,
+        start,
+        end,
       },
     }
   } catch (error) {
@@ -275,7 +292,11 @@ export async function getSeriesWeeklyActivity(
 /**
  * Get all series weekly activity summary for a user
  */
-export async function getAllSeriesWeeklyActivity(userId: string): Promise<{
+export async function getAllSeriesWeeklyActivity(
+  userId: string,
+  startDate?: string | Date,
+  endDate?: string | Date
+): Promise<{
   totalActivities: number
   seriesStats: Record<
     string,
@@ -292,25 +313,40 @@ export async function getAllSeriesWeeklyActivity(userId: string): Promise<{
   }
 }> {
   try {
-    // Calculate Monday-to-Sunday calendar week
+    // Use provided date range (client local) or fallback to server week
+    const startOfRange = startDate ? new Date(startDate) : null
+    const endOfRange = endDate ? new Date(endDate) : null
+
     const now = new Date()
-    const dayOfWeek = now.getDay() // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1 // Convert to days from Monday
+    if (!startOfRange || !endOfRange) {
+      const dayOfWeek = now.getDay()
+      const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1
 
-    const startDate = new Date(now)
-    startDate.setDate(now.getDate() - daysFromMonday)
-    startDate.setHours(0, 0, 0, 0)
+      const computedStart = new Date(now)
+      computedStart.setDate(now.getDate() - daysFromMonday)
+      computedStart.setHours(0, 0, 0, 0)
 
-    const endDate = new Date(startDate)
-    endDate.setDate(startDate.getDate() + 6)
-    endDate.setHours(23, 59, 59, 999)
+      const computedEnd = new Date(computedStart)
+      computedEnd.setDate(computedStart.getDate() + 6)
+      computedEnd.setHours(23, 59, 59, 999)
+
+      if (!startOfRange) startDate = computedStart
+      if (!endOfRange) endDate = computedEnd
+    }
+
+    const start = startDate
+      ? new Date(startDate)
+      : new Date(new Date().setHours(0, 0, 0, 0))
+    const end = endDate
+      ? new Date(endDate)
+      : new Date(new Date().setHours(23, 59, 59, 999))
 
     const activities = await prisma.seriesActivity.findMany({
       where: {
         userId,
         datePerformed: {
-          gte: startDate,
-          lte: endDate,
+          gte: start,
+          lte: end,
         },
       },
       orderBy: { datePerformed: 'desc' },
@@ -361,8 +397,8 @@ export async function getAllSeriesWeeklyActivity(userId: string): Promise<{
       totalActivities: activities.length,
       seriesStats,
       dateRange: {
-        start: startDate,
-        end: endDate,
+        start,
+        end,
       },
     }
   } catch (error) {

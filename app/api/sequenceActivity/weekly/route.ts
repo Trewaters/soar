@@ -21,13 +21,25 @@ export async function GET(req: NextRequest) {
       )
     }
 
+    const startDate = searchParams.get('startDate') || undefined
+    const endDate = searchParams.get('endDate') || undefined
+
     if (sequenceId) {
-      // Get weekly count for specific sequence
-      const weeklyData = await getSequenceWeeklyActivity(userId, sequenceId)
+      // Get weekly count for specific sequence using provided date range
+      const weeklyData = await getSequenceWeeklyActivity(
+        userId,
+        sequenceId,
+        startDate,
+        endDate
+      )
       return NextResponse.json(weeklyData, { status: 200 })
     } else {
       // Get weekly summary for all sequences
-      const allWeeklyData = await getAllSequenceWeeklyActivity(userId)
+      const allWeeklyData = await getAllSequenceWeeklyActivity(
+        userId,
+        startDate,
+        endDate
+      )
       return NextResponse.json(allWeeklyData, { status: 200 })
     }
   } catch (error) {

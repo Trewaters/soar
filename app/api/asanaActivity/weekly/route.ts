@@ -22,13 +22,25 @@ export async function GET(req: NextRequest) {
       )
     }
 
+    const startDate = searchParams.get('startDate') || undefined
+    const endDate = searchParams.get('endDate') || undefined
+
     if (asanaId) {
-      // Get weekly count for specific asana
-      const weeklyData = await getAsanaWeeklyCount(userId, asanaId)
+      // Get weekly count for specific asana using provided date range (client local)
+      const weeklyData = await getAsanaWeeklyCount(
+        userId,
+        asanaId,
+        startDate,
+        endDate
+      )
       return NextResponse.json(weeklyData, { status: 200 })
     } else {
-      // Get weekly summary for all asanas
-      const allWeeklyData = await getAllPosesWeeklyCount(userId)
+      // Get weekly summary for all asanas using provided date range (client local)
+      const allWeeklyData = await getAllPosesWeeklyCount(
+        userId,
+        startDate,
+        endDate
+      )
       return NextResponse.json(allWeeklyData, { status: 200 })
     }
   } catch (error) {

@@ -189,28 +189,50 @@ export async function getUserAsanaHistory(userId: string) {
   }
 }
 
-export async function getAsanaWeeklyCount(userId: string, asanaId: string) {
+export async function getAsanaWeeklyCount(
+  userId: string,
+  asanaId: string,
+  startDate?: string | Date,
+  endDate?: string | Date
+) {
   try {
-    // Calculate Monday-to-Sunday calendar week
+    // Use provided date range (from client local timezone) if present
+    const startOfRange = startDate ? new Date(startDate) : null
+    const endOfRange = endDate ? new Date(endDate) : null
+
+    // Fallback to server-calculated Monday-to-Sunday week if client didn't provide
     const now = new Date()
-    const dayOfWeek = now.getDay() // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1 // Convert to days from Monday
+    if (!startOfRange || !endOfRange) {
+      const dayOfWeek = now.getDay() // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+      const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1 // Convert to days from Monday
 
-    const startDate = new Date(now)
-    startDate.setDate(now.getDate() - daysFromMonday)
-    startDate.setHours(0, 0, 0, 0)
+      const computedStart = new Date(now)
+      computedStart.setDate(now.getDate() - daysFromMonday)
+      computedStart.setHours(0, 0, 0, 0)
 
-    const endDate = new Date(startDate)
-    endDate.setDate(startDate.getDate() + 6)
-    endDate.setHours(23, 59, 59, 999)
+      const computedEnd = new Date(computedStart)
+      computedEnd.setDate(computedStart.getDate() + 6)
+      computedEnd.setHours(23, 59, 59, 999)
+
+      // Use computed if not provided
+      if (!startOfRange) startDate = computedStart
+      if (!endOfRange) endDate = computedEnd
+    }
+
+    const start = startDate
+      ? new Date(startDate)
+      : new Date(new Date().setHours(0, 0, 0, 0))
+    const end = endDate
+      ? new Date(endDate)
+      : new Date(new Date().setHours(23, 59, 59, 999))
 
     const activities = await prisma.asanaActivity.findMany({
       where: {
         userId,
         asanaId,
         datePerformed: {
-          gte: startDate,
-          lte: endDate,
+          gte: start,
+          lte: end,
         },
       } as any,
       orderBy: { datePerformed: 'desc' },
@@ -220,8 +242,8 @@ export async function getAsanaWeeklyCount(userId: string, asanaId: string) {
       count: activities.length,
       activities,
       dateRange: {
-        start: startDate,
-        end: endDate,
+        start,
+        end,
       },
     }
   } catch (error) {
@@ -239,27 +261,46 @@ export async function getAsanaWeeklyCount(userId: string, asanaId: string) {
   }
 }
 
-export async function getAllPosesWeeklyCount(userId: string) {
+export async function getAllPosesWeeklyCount(
+  userId: string,
+  startDate?: string | Date,
+  endDate?: string | Date
+) {
   try {
-    // Calculate Monday-to-Sunday calendar week
+    // Use provided date range (client local) or fallback to server week
+    const startOfRange = startDate ? new Date(startDate) : null
+    const endOfRange = endDate ? new Date(endDate) : null
+
     const now = new Date()
-    const dayOfWeek = now.getDay() // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1 // Convert to days from Monday
+    if (!startOfRange || !endOfRange) {
+      const dayOfWeek = now.getDay()
+      const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1
 
-    const startDate = new Date(now)
-    startDate.setDate(now.getDate() - daysFromMonday)
-    startDate.setHours(0, 0, 0, 0)
+      const computedStart = new Date(now)
+      computedStart.setDate(now.getDate() - daysFromMonday)
+      computedStart.setHours(0, 0, 0, 0)
 
-    const endDate = new Date(startDate)
-    endDate.setDate(startDate.getDate() + 6)
-    endDate.setHours(23, 59, 59, 999)
+      const computedEnd = new Date(computedStart)
+      computedEnd.setDate(computedStart.getDate() + 6)
+      computedEnd.setHours(23, 59, 59, 999)
+
+      if (!startOfRange) startDate = computedStart
+      if (!endOfRange) endDate = computedEnd
+    }
+
+    const start = startDate
+      ? new Date(startDate)
+      : new Date(new Date().setHours(0, 0, 0, 0))
+    const end = endDate
+      ? new Date(endDate)
+      : new Date(new Date().setHours(23, 59, 59, 999))
 
     const activities = await prisma.asanaActivity.findMany({
       where: {
         userId,
         datePerformed: {
-          gte: startDate,
-          lte: endDate,
+          gte: start,
+          lte: end,
         },
       } as any,
       orderBy: { datePerformed: 'desc' },
@@ -301,8 +342,8 @@ export async function getAllPosesWeeklyCount(userId: string) {
       totalActivities: activities.length,
       asanaStats,
       dateRange: {
-        start: startDate,
-        end: endDate,
+        start,
+        end,
       },
     }
   } catch (error) {

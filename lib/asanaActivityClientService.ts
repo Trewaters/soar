@@ -203,9 +203,30 @@ export async function getAsanaWeeklyActivity(
   asanaId: string
 ): Promise<WeeklyActivityData> {
   try {
-    const response = await fetch(
-      `/api/asanaActivity/weekly?userId=${encodeURIComponent(userId)}&asanaId=${encodeURIComponent(asanaId)}`
+    // Calculate user's local Monday-Sunday week range and pass to API
+    const now = new Date()
+    const dayOfWeek = now.getDay() // 0 = Sunday, 1 = Monday
+    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1
+
+    const startOfWeek = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - daysFromMonday,
+      0,
+      0,
+      0,
+      0
     )
+    const endOfWeek = new Date(startOfWeek)
+    endOfWeek.setDate(startOfWeek.getDate() + 6)
+    endOfWeek.setHours(23, 59, 59, 999)
+
+    const qs =
+      `userId=${encodeURIComponent(userId)}&asanaId=${encodeURIComponent(asanaId)}` +
+      `&startDate=${encodeURIComponent(startOfWeek.toISOString())}` +
+      `&endDate=${encodeURIComponent(endOfWeek.toISOString())}`
+
+    const response = await fetch(`/api/asanaActivity/weekly?${qs}`)
 
     if (!response.ok) {
       const errorData = await response.json()

@@ -193,9 +193,30 @@ export async function getSequenceWeeklyActivity(
   sequenceId: string
 ): Promise<WeeklySequenceActivityData> {
   try {
-    const response = await fetch(
-      `/api/sequenceActivity/weekly?userId=${userId}&sequenceId=${sequenceId}`
+    // Calculate user's local Monday-Sunday week range and pass to API
+    const now = new Date()
+    const dayOfWeek = now.getDay()
+    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1
+
+    const startOfWeek = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() - daysFromMonday,
+      0,
+      0,
+      0,
+      0
     )
+    const endOfWeek = new Date(startOfWeek)
+    endOfWeek.setDate(startOfWeek.getDate() + 6)
+    endOfWeek.setHours(23, 59, 59, 999)
+
+    const qs =
+      `userId=${encodeURIComponent(userId)}&sequenceId=${encodeURIComponent(sequenceId)}` +
+      `&startDate=${encodeURIComponent(startOfWeek.toISOString())}` +
+      `&endDate=${encodeURIComponent(endOfWeek.toISOString())}`
+
+    const response = await fetch(`/api/sequenceActivity/weekly?${qs}`)
 
     if (!response.ok) {
       const errorData = await response.json()
