@@ -456,16 +456,10 @@ describe('EditUserDetails - LocationPicker Integration', () => {
           })
         }
         if (url.includes('/api/user/updateUserData/')) {
-          return new Promise((resolve) =>
-            setTimeout(
-              () =>
-                resolve({
-                  ok: true,
-                  json: () => Promise.resolve(mockUserData),
-                }),
-              100
-            )
-          )
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(mockUserData),
+          })
         }
         return Promise.resolve({
           ok: true,
