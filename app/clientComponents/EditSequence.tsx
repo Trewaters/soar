@@ -8,7 +8,6 @@ import {
   Typography,
   Alert,
   TextField,
-  Divider,
   List,
   ListItem,
   ListItemAvatar,
@@ -21,9 +20,7 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Card,
-  CardHeader,
-  CardContent,
+  Paper,
 } from '@mui/material'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
@@ -345,340 +342,456 @@ export default function EditSequence({
   }
 
   return (
-    <Box component="section" aria-label="edit-sequence" sx={{ p: 2 }}>
-      <Card variant="outlined" sx={{ borderRadius: 2 }}>
-        <CardHeader
-          title={
-            <Typography variant="h5" component="h1">
-              Edit Sequence
+    <Box component="section" aria-label="edit-sequence" sx={{ px: 2, pb: 12 }}>
+      {/* Page Title */}
+      <Typography
+        variant="h5"
+        component="h1"
+        sx={{
+          mb: 3,
+          fontWeight: 600,
+          color: 'text.primary',
+        }}
+      >
+        Edit Sequence
+      </Typography>
+
+      {/* Save Status Messages */}
+      {saveState === 'saved' && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          Changes saved successfully
+        </Alert>
+      )}
+      {saveState === 'error' && saveError && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {saveError}
+        </Alert>
+      )}
+
+      <form onSubmit={handleFormSubmit}>
+        <Stack spacing={3}>
+          {/* Sequence Name Section */}
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+            >
+              Sequence Name
             </Typography>
-          }
-          action={
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Button
-                variant="contained"
-                onClick={handleSave}
-                disabled={!canSave || saveState === 'saving'}
+            <TextField
+              label="Sequence Name"
+              value={model.nameSequence}
+              onChange={(e) => setField('nameSequence', e.target.value)}
+              onKeyDown={handleKeyDown}
+              required
+              fullWidth
+              inputProps={{ maxLength: 100 }}
+              error={!!errors.nameSequence}
+              helperText={
+                errors.nameSequence || 'Enter a concise, descriptive name'
+              }
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                },
+              }}
+            />
+          </Paper>
+
+          {/* Description Section */}
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+            >
+              Description
+            </Typography>
+            <TextField
+              label="Description"
+              value={model.description}
+              onChange={(e) => setField('description', e.target.value)}
+              onKeyDown={(e) => {
+                // Allow Enter in multiline description but prevent form submission
+                if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey) {
+                  e.stopPropagation()
+                }
+              }}
+              fullWidth
+              multiline
+              minRows={3}
+              inputProps={{ maxLength: 1000 }}
+              error={!!errors.description}
+              helperText={
+                errors.description ||
+                'Optional. Provide details about this sequence'
+              }
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                },
+              }}
+            />
+          </Paper>
+
+          {/* Image Section */}
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+            >
+              Image
+            </Typography>
+            {model.image ? (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box sx={{ position: 'relative', width: 160, height: 100 }}>
+                  <Image
+                    src={model.image as string}
+                    alt={model.nameSequence || 'Sequence image'}
+                    fill
+                    sizes="160px"
+                    style={{ objectFit: 'cover', borderRadius: 8 }}
+                  />
+                </Box>
+                <TextField
+                  label="Image URL"
+                  value={model.image}
+                  onChange={(e) => setField('image', e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  fullWidth
+                  error={!!errors.image}
+                  helperText={
+                    errors.image || 'You can paste a URL or upload below'
+                  }
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '12px',
+                    },
+                  }}
+                />
+                <Tooltip title="Delete image">
+                  <IconButton
+                    onClick={() => setField('image', '')}
+                    color="error"
+                    aria-label="Delete sequence image"
+                  >
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            ) : (
+              <TextField
+                label="Image URL"
+                value={model.image}
+                onChange={(e) => setField('image', e.target.value)}
+                onKeyDown={handleKeyDown}
+                fullWidth
+                error={!!errors.image}
+                helperText={
+                  errors.image || 'You can paste a URL or upload below'
+                }
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '12px',
+                  },
+                }}
+              />
+            )}
+            <Box sx={{ mt: 2 }}>
+              <ImageUpload onImageUploaded={handleImageUploaded} />
+            </Box>
+          </Paper>
+
+          {/* Flow Series Section */}
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                mb: 2,
+              }}
+            >
+              <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: 600, color: 'text.primary' }}
               >
-                {saveState === 'saving' ? 'Saving…' : 'Save changes'}
-              </Button>
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => setConfirmDeleteSeq(true)}
-                aria-label="Delete sequence"
-              >
-                Delete sequence
-              </Button>
-              {saveState === 'saved' && (
-                <Typography color="success.main" sx={{ ml: 1 }}>
-                  Saved
-                </Typography>
-              )}
-              {saveState === 'error' && saveError && (
-                <Typography color="error" sx={{ ml: 1 }}>
-                  {saveError}
-                </Typography>
+                Flow Series
+              </Typography>
+              {isOwner && (
+                <Button
+                  variant="outlined"
+                  startIcon={<AddIcon />}
+                  onClick={() => setShowAddSeriesDialog(true)}
+                  size="small"
+                  sx={{ borderRadius: '12px' }}
+                >
+                  Add Series
+                </Button>
               )}
             </Box>
-          }
-        />
-        <CardContent>
-          <form onSubmit={handleFormSubmit}>
-            <Stack spacing={3}>
-              {/* Details Section */}
-              <Box>
-                <Typography variant="h6" component="h2" sx={{ mb: 1 }}>
-                  Details
-                </Typography>
-                <Stack spacing={2}>
-                  <Box role="group" aria-label="sequence-name">
-                    <TextField
-                      label="Sequence Name"
-                      value={model.nameSequence}
-                      onChange={(e) => setField('nameSequence', e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      required
-                      fullWidth
-                      inputProps={{ maxLength: 100 }}
-                      error={!!errors.nameSequence}
-                      helperText={
-                        errors.nameSequence ||
-                        'Enter a concise, descriptive name'
-                      }
-                    />
-                  </Box>
-                  <Box role="group" aria-label="sequence-owner">
-                    <TextField
-                      label="Created by"
-                      value={sequence.created_by || 'Unknown'}
-                      fullWidth
-                      InputProps={{ readOnly: true }}
-                      helperText="Only the creator may edit this sequence"
-                    />
-                  </Box>
-                  <Box role="group" aria-label="sequence-description">
-                    <TextField
-                      label="Description"
-                      value={model.description}
-                      onChange={(e) => setField('description', e.target.value)}
-                      onKeyDown={(e) => {
-                        // Allow Enter in multiline description but prevent form submission
-                        if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey) {
-                          e.stopPropagation()
-                        }
-                      }}
-                      fullWidth
-                      multiline
-                      minRows={3}
-                      inputProps={{ maxLength: 1000 }}
-                      error={!!errors.description}
-                      helperText={
-                        errors.description ||
-                        'Optional. Provide details about this sequence'
-                      }
-                    />
-                  </Box>
-                </Stack>
-              </Box>
-
-              <Divider />
-
-              {/* Image Section */}
-              <Box role="group" aria-label="sequence-image">
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  color="primary.main"
-                  sx={{ mb: 1 }}
-                >
-                  Image
-                </Typography>
-                {model.image ? (
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Box sx={{ position: 'relative', width: 160, height: 100 }}>
-                      <Image
-                        src={model.image as string}
-                        alt={model.nameSequence || 'Sequence image'}
-                        fill
-                        sizes="160px"
-                        style={{ objectFit: 'cover', borderRadius: 8 }}
-                      />
-                    </Box>
-                    <TextField
-                      label="Image URL"
-                      value={model.image}
-                      onChange={(e) => setField('image', e.target.value)}
-                      onKeyDown={handleKeyDown}
-                      fullWidth
-                      error={!!errors.image}
-                      helperText={
-                        errors.image || 'You can paste a URL or upload below'
-                      }
-                    />
-                    <Tooltip title="Delete image">
-                      <IconButton
-                        onClick={() => setField('image', '')}
-                        color="error"
-                        aria-label="Delete sequence image"
-                      >
-                        <DeleteForeverIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
-                ) : (
-                  <TextField
-                    label="Image URL"
-                    value={model.image}
-                    onChange={(e) => setField('image', e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    fullWidth
-                    error={!!errors.image}
-                    helperText={
-                      errors.image || 'You can paste a URL or upload below'
-                    }
-                  />
-                )}
-                <Box sx={{ mt: 1 }}>
-                  <ImageUpload onImageUploaded={handleImageUploaded} />
-                </Box>
-              </Box>
-
-              <Divider />
-
-              {/* Flow Series Section */}
-              <Box role="group" aria-label="sequence-flow-series">
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    mb: 1,
-                  }}
-                >
-                  <Typography variant="h6" component="h2">
-                    Flow Series
-                  </Typography>
-                  {isOwner && (
-                    <Button
-                      variant="outlined"
-                      startIcon={<AddIcon />}
-                      onClick={() => setShowAddSeriesDialog(true)}
-                      size="small"
-                    >
-                      Add Series
-                    </Button>
-                  )}
-                </Box>
-                {model.sequencesSeries?.length ? (
-                  <List dense>
-                    {model.sequencesSeries.map((s, idx) => {
-                      const hasImageError = seriesImageErrors[idx]
-                      const shouldShowImage = s.image && !hasImageError
-                      return (
-                        <ListItem
-                          key={`${s.seriesName}-${idx}`}
-                          draggable
-                          onDragStart={() => onDragStart(idx)}
-                          onDragOver={onDragOver}
-                          onDrop={() => onDrop(idx)}
-                          aria-grabbed={dragIndex === idx ? 'true' : 'false'}
-                          secondaryAction={
-                            <Box
-                              sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 0.5,
-                              }}
-                            >
-                              <Tooltip title="Move up">
-                                <span>
-                                  <IconButton
-                                    aria-label={`move ${s.seriesName} up`}
-                                    onClick={() => moveItem(idx, idx - 1)}
-                                    disabled={idx === 0}
-                                    size="small"
-                                  >
-                                    <ArrowUpwardIcon fontSize="small" />
-                                  </IconButton>
-                                </span>
-                              </Tooltip>
-                              <Tooltip title="Move down">
-                                <span>
-                                  <IconButton
-                                    aria-label={`move ${s.seriesName} down`}
-                                    onClick={() => moveItem(idx, idx + 1)}
-                                    disabled={
-                                      idx === model.sequencesSeries.length - 1
-                                    }
-                                    size="small"
-                                  >
-                                    <ArrowDownwardIcon fontSize="small" />
-                                  </IconButton>
-                                </span>
-                              </Tooltip>
-                              <Tooltip title="Remove from sequence">
-                                <IconButton
-                                  edge="end"
-                                  aria-label={`remove series ${s.seriesName}`}
-                                  onClick={() => requestRemoveSeries(idx)}
-                                  color="error"
-                                >
-                                  <DeleteForeverIcon />
-                                </IconButton>
-                              </Tooltip>
-                            </Box>
-                          }
+            {model.sequencesSeries?.length ? (
+              <List dense>
+                {model.sequencesSeries.map((s, idx) => {
+                  const hasImageError = seriesImageErrors[idx]
+                  const shouldShowImage = s.image && !hasImageError
+                  return (
+                    <ListItem
+                      key={`${s.seriesName}-${idx}`}
+                      draggable
+                      onDragStart={() => onDragStart(idx)}
+                      onDragOver={onDragOver}
+                      onDrop={() => onDrop(idx)}
+                      aria-grabbed={dragIndex === idx ? 'true' : 'false'}
+                      secondaryAction={
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 0.5,
+                          }}
                         >
-                          <ListItemAvatar>
-                            <Avatar
-                              src={shouldShowImage ? s.image : undefined}
-                              alt={s.seriesName}
-                              imgProps={{
-                                onError: () => {
-                                  setSeriesImageErrors((prev) => ({
-                                    ...prev,
-                                    [idx]: true,
-                                  }))
-                                },
-                              }}
-                            >
-                              {!shouldShowImage && <SelfImprovementIcon />}
-                            </Avatar>
-                          </ListItemAvatar>
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 1,
-                              flex: 1,
-                            }}
-                          >
-                            <Tooltip title="Drag to reorder">
+                          <Tooltip title="Move up">
+                            <span>
                               <IconButton
+                                aria-label={`move ${s.seriesName} up`}
+                                onClick={() => moveItem(idx, idx - 1)}
+                                disabled={idx === 0}
                                 size="small"
-                                edge="start"
-                                aria-label={`drag ${s.seriesName}`}
-                                sx={{ cursor: 'grab' }}
                               >
-                                <DragIndicatorIcon fontSize="small" />
+                                <ArrowUpwardIcon fontSize="small" />
                               </IconButton>
-                            </Tooltip>
-                            <ListItemText
-                              primary={s.seriesName}
-                              secondary={
-                                s.seriesPoses?.length
-                                  ? `${s.seriesPoses.length} poses`
-                                  : undefined
-                              }
-                            />
-                          </Box>
-                        </ListItem>
-                      )
-                    })}
-                  </List>
-                ) : (
-                  <Alert severity="info" sx={{ mt: 1 }}>
-                    No flow series added yet.
-                  </Alert>
-                )}
-              </Box>
+                            </span>
+                          </Tooltip>
+                          <Tooltip title="Move down">
+                            <span>
+                              <IconButton
+                                aria-label={`move ${s.seriesName} down`}
+                                onClick={() => moveItem(idx, idx + 1)}
+                                disabled={
+                                  idx === model.sequencesSeries.length - 1
+                                }
+                                size="small"
+                              >
+                                <ArrowDownwardIcon fontSize="small" />
+                              </IconButton>
+                            </span>
+                          </Tooltip>
+                          <Tooltip title="Remove from sequence">
+                            <IconButton
+                              edge="end"
+                              aria-label={`remove series ${s.seriesName}`}
+                              onClick={() => requestRemoveSeries(idx)}
+                              color="error"
+                            >
+                              <DeleteForeverIcon />
+                            </IconButton>
+                          </Tooltip>
+                        </Box>
+                      }
+                    >
+                      <ListItemAvatar>
+                        <Avatar
+                          src={shouldShowImage ? s.image : undefined}
+                          alt={s.seriesName}
+                          imgProps={{
+                            onError: () => {
+                              setSeriesImageErrors((prev) => ({
+                                ...prev,
+                                [idx]: true,
+                              }))
+                            },
+                          }}
+                        >
+                          {!shouldShowImage && <SelfImprovementIcon />}
+                        </Avatar>
+                      </ListItemAvatar>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 1,
+                          flex: 1,
+                        }}
+                      >
+                        <Tooltip title="Drag to reorder">
+                          <IconButton
+                            size="small"
+                            edge="start"
+                            aria-label={`drag ${s.seriesName}`}
+                            sx={{ cursor: 'grab' }}
+                          >
+                            <DragIndicatorIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <ListItemText
+                          primary={s.seriesName}
+                          secondary={
+                            s.seriesPoses?.length
+                              ? `${s.seriesPoses.length} poses`
+                              : undefined
+                          }
+                        />
+                      </Box>
+                    </ListItem>
+                  )
+                })}
+              </List>
+            ) : (
+              <Alert severity="info" sx={{ mt: 1 }}>
+                No flow series added yet.
+              </Alert>
+            )}
+          </Paper>
 
-              <Dialog
-                open={confirm.open}
-                onClose={cancelRemoveSeries}
-                aria-labelledby="confirm-remove-series-title"
+          {/* Creator Info Section */}
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+            >
+              Creator Info
+            </Typography>
+            <TextField
+              label="Created by"
+              value={sequence.created_by || 'Unknown'}
+              fullWidth
+              InputProps={{ readOnly: true }}
+              helperText="Only the creator may edit this sequence"
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                },
+              }}
+            />
+          </Paper>
+
+          {/* Remove Series Confirmation Dialog */}
+          <Dialog
+            open={confirm.open}
+            onClose={cancelRemoveSeries}
+            aria-labelledby="confirm-remove-series-title"
+          >
+            <DialogTitle id="confirm-remove-series-title">
+              Remove series from sequence?
+            </DialogTitle>
+            <DialogContent>
+              <Typography>
+                This action will remove the selected series from this sequence.
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={cancelRemoveSeries} autoFocus>
+                Cancel
+              </Button>
+              <Button
+                onClick={confirmRemoveSeries}
+                color="error"
+                variant="contained"
               >
-                <DialogTitle id="confirm-remove-series-title">
-                  Remove series from sequence?
-                </DialogTitle>
-                <DialogContent>
-                  <Typography>
-                    This action will remove the selected series from this
-                    sequence.
-                  </Typography>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={cancelRemoveSeries} autoFocus>
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={confirmRemoveSeries}
-                    color="error"
-                    variant="contained"
-                  >
-                    Remove
-                  </Button>
-                </DialogActions>
-              </Dialog>
+                Remove
+              </Button>
+            </DialogActions>
+          </Dialog>
 
-              {/* Future: drag-and-drop reordering */}
-              {children}
-            </Stack>
-          </form>
-        </CardContent>
-      </Card>
+          {children}
+        </Stack>
+      </form>
 
+      {/* Sticky Action Bar */}
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: 'background.paper',
+          borderTop: '1px solid',
+          borderColor: 'divider',
+          py: 2,
+          px: 3,
+          zIndex: 1100,
+        }}
+      >
+        <Stack
+          direction="row"
+          spacing={2}
+          justifyContent="center"
+          sx={{ maxWidth: '600px', mx: 'auto' }}
+        >
+          <Button
+            variant="contained"
+            onClick={handleSave}
+            disabled={!canSave || saveState === 'saving'}
+            sx={{
+              borderRadius: '12px',
+              px: 4,
+              py: 1.5,
+              fontSize: '1.1rem',
+              fontWeight: 600,
+              flex: 1,
+            }}
+          >
+            {saveState === 'saving' ? 'Saving…' : 'Save Changes'}
+          </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => setConfirmDeleteSeq(true)}
+            aria-label="Delete sequence"
+            sx={{
+              borderRadius: '12px',
+              px: 4,
+              py: 1.5,
+              fontSize: '1.1rem',
+              fontWeight: 600,
+            }}
+          >
+            Delete
+          </Button>
+        </Stack>
+      </Box>
+
+      {/* Delete Sequence Confirmation Dialog */}
       <Dialog
         open={confirmDeleteSeq}
         onClose={() => setConfirmDeleteSeq(false)}

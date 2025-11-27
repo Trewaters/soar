@@ -186,19 +186,19 @@ describe('EditSequence', () => {
         wrapper: TestWrapper,
       })
 
-      // Fields render
+      // Fields render - use heading and textbox roles instead of group roles
       expect(
-        screen.getByRole('group', { name: /sequence-name/i })
+        screen.getByRole('heading', { name: /Sequence Name/i })
       ).toBeInTheDocument()
       expect(
-        screen.getByRole('group', { name: /sequence-owner/i })
+        screen.getByRole('heading', { name: /Description/i })
       ).toBeInTheDocument()
       expect(
-        screen.getByRole('group', { name: /sequence-description/i })
+        screen.getByRole('heading', { name: /Creator Info/i })
       ).toBeInTheDocument()
 
       // Edit name
-      const nameInput = screen.getByLabelText(/sequence name/i)
+      const nameInput = screen.getByRole('textbox', { name: /sequence name/i })
       await user.clear(nameInput)
       await user.type(nameInput, 'New Name')
 
@@ -206,8 +206,8 @@ describe('EditSequence', () => {
       const saveBtn = screen.getByRole('button', { name: /save changes/i })
       await user.click(saveBtn)
 
-      // Saved indicator appears
-      expect(await screen.findByText(/saved/i)).toBeInTheDocument()
+      // Saved indicator appears (now shown as an Alert)
+      expect(await screen.findByText(/saved successfully/i)).toBeInTheDocument()
 
       // Ensure API called with PATCH
       expect((global as any).fetch).toHaveBeenCalledWith(
@@ -227,11 +227,8 @@ describe('EditSequence', () => {
         wrapper: TestWrapper,
       })
 
-      // There should be two items initially
-      const group = screen.getByRole('group', {
-        name: /sequence-flow-series/i,
-      })
-      const list = within(group).getByRole('list')
+      // There should be two items initially - find the list directly
+      const list = screen.getByRole('list')
       expect(within(list).getAllByRole('listitem')).toHaveLength(2)
 
       // Click the first remove button
@@ -248,9 +245,10 @@ describe('EditSequence', () => {
       await user.click(screen.getByRole('button', { name: /remove/i }))
 
       // One item remains (wait for DOM update)
-      await screen.findByRole('group', { name: /sequence-flow-series/i })
-      await new Promise((r) => setTimeout(r, 0))
-      expect(within(list).getAllByRole('listitem')).toHaveLength(1)
+      await waitFor(() => {
+        const updatedList = screen.getByRole('list')
+        expect(within(updatedList).getAllByRole('listitem')).toHaveLength(1)
+      })
     })
 
     it('reorders items via move up/down buttons', async () => {
@@ -613,11 +611,13 @@ describe('EditSequence', () => {
         wrapper: TestWrapper,
       })
 
-      const imageGroup = screen.getByRole('group', { name: /sequence-image/i })
-      expect(imageGroup).toBeInTheDocument()
+      // Check for Image section heading
+      expect(
+        screen.getByRole('heading', { name: /^Image$/i })
+      ).toBeInTheDocument()
 
       // Check that the image URL field has the value
-      const imageUrlInput = screen.getByLabelText(/image url/i)
+      const imageUrlInput = screen.getByRole('textbox', { name: /image url/i })
       expect(imageUrlInput).toHaveValue('https://example.com/img.png')
     })
 
@@ -634,8 +634,7 @@ describe('EditSequence', () => {
       })
 
       // Verify image is shown and delete button exists
-      const imageGroup = screen.getByRole('group', { name: /sequence-image/i })
-      const deleteButton = within(imageGroup).getByRole('button', {
+      const deleteButton = screen.getByRole('button', {
         name: /delete sequence image/i,
       })
       expect(deleteButton).toBeInTheDocument()
@@ -654,8 +653,7 @@ describe('EditSequence', () => {
         wrapper: TestWrapper,
       })
 
-      const imageGroup = screen.getByRole('group', { name: /sequence-image/i })
-      const deleteButton = within(imageGroup).getByRole('button', {
+      const deleteButton = screen.getByRole('button', {
         name: /delete sequence image/i,
       })
 
@@ -664,12 +662,12 @@ describe('EditSequence', () => {
 
       // Image URL should be cleared
       await new Promise((r) => setTimeout(r, 0))
-      const imageUrlInput = screen.getByLabelText(/image url/i)
+      const imageUrlInput = screen.getByRole('textbox', { name: /image url/i })
       expect(imageUrlInput).toHaveValue('')
 
       // Delete button should also be gone
       expect(
-        within(imageGroup).queryByRole('button', {
+        screen.queryByRole('button', {
           name: /delete sequence image/i,
         })
       ).not.toBeInTheDocument()
@@ -689,9 +687,8 @@ describe('EditSequence', () => {
         wrapper: TestWrapper,
       })
 
-      const imageGroup = screen.getByRole('group', { name: /sequence-image/i })
       expect(
-        within(imageGroup).queryByRole('button', {
+        screen.queryByRole('button', {
           name: /delete sequence image/i,
         })
       ).not.toBeInTheDocument()
@@ -710,10 +707,8 @@ describe('EditSequence', () => {
         wrapper: TestWrapper,
       })
 
-      const imageGroup = screen.getByRole('group', { name: /sequence-image/i })
-
       // Delete the image
-      const deleteButton = within(imageGroup).getByRole('button', {
+      const deleteButton = screen.getByRole('button', {
         name: /delete sequence image/i,
       })
       await user.click(deleteButton)
@@ -721,12 +716,16 @@ describe('EditSequence', () => {
       // Wait for state update and re-query the input field
       // (the TextField is re-rendered in a different conditional branch)
       await waitFor(() => {
-        const updatedImageUrlInput = screen.getByLabelText(/image url/i)
+        const updatedImageUrlInput = screen.getByRole('textbox', {
+          name: /image url/i,
+        })
         expect(updatedImageUrlInput).toHaveValue('')
       })
 
       // Re-query the input field for typing
-      const updatedImageUrlInput = screen.getByLabelText(/image url/i)
+      const updatedImageUrlInput = screen.getByRole('textbox', {
+        name: /image url/i,
+      })
 
       // Can paste in a new URL (using paste instead of type to avoid MUI re-render issues)
       await user.clear(updatedImageUrlInput)

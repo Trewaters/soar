@@ -556,113 +556,111 @@ export default function Page() {
             </Box>
 
             <React.Fragment key={singleSequence.id}>
-              <Box
-                sx={{
-                  mt: 4,
-                  width: '100%',
-                  maxWidth: '600px',
-                  alignSelf: 'center',
-                }}
-              >
-                {/* Sequence title with inline edit icon to the right */}
+              {singleSequence?.id ? (
                 <Box
                   sx={{
+                    mt: 4,
                     width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-around',
-                    gap: 2,
-                    px: 6,
+                    maxWidth: '600px',
+                    alignSelf: 'center',
                   }}
                 >
-                  {/* Title block - constrained width, original theme colors */}
+                  {/* Sequence title with inline edit icon to the right */}
                   <Box
                     sx={{
-                      width: { xs: '50%', sm: '40%', md: '30%' },
-                      backgroundColor: 'primary.main',
-                      borderTopLeftRadius: '12px',
-                      borderTopRightRadius: '12px',
-                      px: 2,
-                      py: 0.75,
+                      width: '100%',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
+                      justifyContent: 'space-around',
+                      gap: 2,
+                      px: 6,
                     }}
                   >
-                    <Typography
-                      variant="h6"
-                      component="h3"
+                    {/* Title block - constrained width, original theme colors */}
+                    <Box
                       sx={{
-                        color: 'primary.contrastText',
-                        fontWeight: 'bold',
-                        textAlign: 'center',
+                        width: { xs: '50%', sm: '40%', md: '30%' },
+                        backgroundColor: 'primary.main',
+                        borderTopLeftRadius: '12px',
+                        borderTopRightRadius: '12px',
+                        px: 2,
+                        py: 0.75,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
-                      {singleSequence.nameSequence}
-                    </Typography>
-                  </Box>
+                      <Typography
+                        variant="h6"
+                        component="h3"
+                        sx={{
+                          color: 'primary.contrastText',
+                          fontWeight: 'bold',
+                          textAlign: 'center',
+                        }}
+                      >
+                        {singleSequence.nameSequence}
+                      </Typography>
+                    </Box>
 
-                  {/* Action buttons: View toggle, Edit */}
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1,
-                    }}
-                  >
-                    {/* View toggle icons */}
-                    {singleSequence?.id ? (
-                      <>
-                        <IconButton
-                          onClick={() => {
-                            router.push(
-                              `/navigator/sequences/${singleSequence.id}`
-                            )
-                          }}
-                          aria-label={`Switch to list view for ${singleSequence.nameSequence}`}
-                          sx={{
-                            color: 'grey.500',
-                            p: 1,
-                            minWidth: 0,
-                          }}
-                          title="List View"
-                        >
-                          <FormatListBulletedIcon />
-                        </IconButton>
+                    {/* Action buttons: View toggle, Edit */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                      }}
+                    >
+                      {/* View toggle icons */}
+                      <IconButton
+                        onClick={() => {
+                          router.push(
+                            `/navigator/sequences/${singleSequence.id}`
+                          )
+                        }}
+                        aria-label={`Switch to list view for ${singleSequence.nameSequence}`}
+                        sx={{
+                          color: 'grey.500',
+                          p: 1,
+                          minWidth: 0,
+                        }}
+                        title="List View"
+                      >
+                        <FormatListBulletedIcon />
+                      </IconButton>
 
-                        <IconButton
-                          aria-label="Currently in scroll view"
-                          sx={{
-                            color: 'primary.main',
-                            p: 1,
-                            minWidth: 0,
-                            pointerEvents: 'none',
-                          }}
-                          title="Scroll View (current)"
-                        >
-                          <ViewStreamIcon />
-                        </IconButton>
+                      <IconButton
+                        aria-label="Currently in scroll view"
+                        sx={{
+                          color: 'primary.main',
+                          p: 1,
+                          minWidth: 0,
+                          pointerEvents: 'none',
+                        }}
+                        title="Scroll View (current)"
+                      >
+                        <ViewStreamIcon />
+                      </IconButton>
 
-                        <IconButton
-                          onClick={() => {
-                            const editUrl = `/navigator/sequences/${singleSequence.id}?edit=true`
-                            router.push(editUrl)
-                          }}
-                          aria-label={`Edit ${singleSequence.nameSequence}`}
-                          sx={{
-                            color: 'primary.main',
-                            p: 1,
-                            minWidth: 0,
-                          }}
-                          title="Edit Sequence"
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      </>
-                    ) : null}
+                      <IconButton
+                        onClick={() => {
+                          const editUrl = `/navigator/sequences/${singleSequence.id}?edit=true`
+                          router.push(editUrl)
+                        }}
+                        aria-label={`Edit ${singleSequence.nameSequence}`}
+                        sx={{
+                          color: 'primary.main',
+                          p: 1,
+                          minWidth: 0,
+                        }}
+                        title="Edit Sequence"
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
+              ) : null}
               {singleSequence?.id ? (
                 <Stack rowGap={3} alignItems="center">
                   {paginatedData.map((seriesMini, i) => (

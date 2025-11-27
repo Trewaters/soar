@@ -17,6 +17,7 @@ import {
   ListItemAvatar,
   ListItemText,
   ListSubheader,
+  Paper,
   Stack,
   TextField,
   Typography,
@@ -42,6 +43,7 @@ import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { ArrowBack, ArrowForward } from '@mui/icons-material'
 import Image from 'next/image'
 import NavBottom from '@serverComponents/navBottom'
@@ -241,6 +243,7 @@ export default function Page() {
     switch (name) {
       case 'nameSequence':
         setNameSequence(value)
+        setIsDirtyName(value.length > 0)
         break
       case 'seriesName':
         setSeriesNameSet((prev) => [...prev, value])
@@ -262,6 +265,7 @@ export default function Page() {
     setNameSequence('')
     setDescription('')
     setSeriesNameSet([])
+    setIsDirtyName(false)
     setIsDirtyDescription(false)
   }
 
@@ -297,6 +301,7 @@ export default function Page() {
   }
 
   const currentSeriesName = seriesNameSet[currentSeriesIndex] || ''
+  const [isDirtyName, setIsDirtyName] = useState(false)
   const [isDirtyDescription, setIsDirtyDescription] = useState(false)
 
   return (
@@ -322,438 +327,472 @@ export default function Page() {
             link="/navigator/flows"
             onClick={toggleDrawer(!open)}
           />
-          <FormControl sx={{ px: 4, pb: 2 }}>
-            <Autocomplete
-              disablePortal
-              id="combo-box-series-search"
-              options={orderedSeriesOptions}
-              getOptionLabel={(option) => {
-                const opt = option as any
-                if ('section' in opt) return ''
-                return opt.seriesName
-              }}
-              // Render section headers for groups
-              renderOption={(() => {
-                // Build a map of option indices to section labels
-                let lastSection: string | null = null
-                const sectionHeaderMap: Record<number, string> = {}
-                orderedSeriesOptions.forEach((opt: any, idx: number) => {
-                  const o = opt as any
-                  if ('section' in o) {
-                    lastSection = o.section
-                  } else if (lastSection) {
-                    sectionHeaderMap[idx] = lastSection
-                    lastSection = null
-                  }
-                })
-
-                interface SectionOption {
-                  section: 'Mine' | 'Alpha' | 'Others'
-                }
-
-                interface SeriesOption extends FlowSeriesData {
-                  id: string
-                  seriesName: string
-                }
-
-                type AutocompleteOption = SeriesOption | SectionOption
-
-                interface RenderOptionProps {
-                  key?: string
-                  [key: string]: any
-                }
-
-                interface RenderOptionState {
-                  index: number
-                }
-
-                const renderOptionFn = (
-                  props: RenderOptionProps,
-                  option: AutocompleteOption,
-                  { index }: RenderOptionState
-                ) => {
-                  const opt = option as AutocompleteOption
-                  if ('section' in opt) {
-                    // Never render section as an option (handled below)
-                    return null
-                  }
-                  const sectionLabel = sectionHeaderMap[index] || null
-                  return (
-                    <Fragment key={opt.id ?? `option-${index}`}>
-                      {sectionLabel && (
-                        <ListSubheader
-                          key={`${sectionLabel}-header-${index}`}
-                          component="div"
-                          disableSticky
-                          role="presentation"
-                        >
-                          {sectionLabel}
-                        </ListSubheader>
-                      )}
-                      <li {...props} key={opt.id ?? `option-${index}`}>
-                        {opt.seriesName}
-                      </li>
-                    </Fragment>
-                  )
-                }
-                renderOptionFn.displayName = 'SeriesAutocompleteRenderOption'
-                return renderOptionFn
-              })()}
-              // Filter options with proper grouping
-              filterOptions={(options, state) => {
-                // Partition options into groups by section
-                const groups: Record<string, any[]> = {}
-                let currentSection: 'Mine' | 'Alpha' | null = null
-                for (const option of options) {
-                  const opt = option as any
-                  if ('section' in opt) {
-                    currentSection = opt.section as 'Mine' | 'Alpha'
-                    if (!groups[currentSection]) groups[currentSection] = []
-                  } else if (currentSection) {
-                    if (!groups[currentSection]) groups[currentSection] = []
-                    // Only add if matches search
-                    if (
-                      opt.seriesName &&
-                      opt.seriesName
-                        .toLowerCase()
-                        .includes(state.inputValue.toLowerCase())
-                    ) {
-                      groups[currentSection].push(opt)
-                    }
-                  }
-                }
-                // Flatten back to options array, inserting section header if group has any items
-                const filtered: typeof options = []
-                const sectionOrder: Array<'Mine' | 'Alpha'> = ['Mine', 'Alpha']
-                for (const section of sectionOrder) {
-                  if (groups[section] && groups[section].length > 0) {
-                    filtered.push({
-                      section: section as 'Mine' | 'Alpha' | 'Others',
-                    })
-                    filtered.push(...groups[section])
-                  }
-                }
-                return filtered
-              }}
-              // Prevent section headers from being selected
-              isOptionEqualToValue={(option, value) => {
-                const opt = option as any
-                const val = value as any
-                if ('section' in opt || 'section' in val) return false
-                return opt.id === val.id
-              }}
-              sx={{
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderRadius: '12px',
-                  borderColor: 'primary.main',
-                  boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-                },
-                '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
-                  {
-                    borderColor: 'primary.light', // Ensure border color does not change on hover
-                  },
-                '& .MuiAutocomplete-popupIndicator': {
-                  display: 'none',
-                },
-                my: 3,
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  sx={{
-                    '& .MuiInputBase-input': { color: 'primary.main' },
-                  }}
-                  placeholder="Add a Series to your Sequence..."
-                  InputProps={{
-                    ...params.InputProps,
-                    startAdornment: (
-                      <>
-                        <SearchIcon sx={{ color: 'primary.main', mr: 1 }} />
-                        {params.InputProps.startAdornment}
-                      </>
-                    ),
-                  }}
-                />
-              )}
-              onChange={(event, value) => {
-                const val = value as any
-                // Ignore section header clicks
-                if (val && 'section' in val) return
-                handleSelect(event as any, value as FlowSeriesData | null)
-              }}
-            />
-          </FormControl>
-          <Box sx={{ px: 2 }}>
+          <Box sx={{ px: 2, pb: 12 }}>
             {FEATURES.SHOW_CREATE_SEQUENCE && (
               <>
                 <FormGroup sx={{ mt: 4 }}>
-                  <FormControl>
+                  {/* Sequence Name Input - Primary field with improved visibility */}
+                  <Paper
+                    elevation={1}
+                    sx={{ p: 3, mb: 3, borderRadius: '12px' }}
+                  >
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      color="primary"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                    >
+                      <Image
+                        src={'/icons/asanas/label_name_leaf.png'}
+                        alt=""
+                        height={20}
+                        width={16}
+                      />
+                      Sequence Name *
+                    </Typography>
                     <TextField
-                      id="outlined-basic"
-                      variant="standard"
+                      fullWidth
+                      variant="outlined"
+                      id="sequence-name"
                       name="nameSequence"
                       value={nameSequence}
                       onChange={handleChange}
-                      placeholder="Give your Sequence a name"
+                      placeholder="Give your Sequence a name..."
+                      required
                       sx={{
-                        backgroundColor: 'primary.main',
-                        borderTopLeftRadius: '12px',
-                        borderTopRightRadius: '12px',
-                        width: '80%',
-                        height: '2em',
-                        ml: 5,
-                        pr: 7,
-                        pl: 2,
-                        fontWeight: 'bold',
-                        '& .MuiInputBase-input': {
-                          padding: '0.5em 0 0 0',
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '12px',
                         },
+                        '& .MuiInputBase-input': { color: 'primary.main' },
+                      }}
+                      InputProps={{
+                        endAdornment: isDirtyName ? (
+                          <CheckCircleIcon sx={{ color: 'success.main' }} />
+                        ) : null,
                       }}
                     />
-                  </FormControl>
+                  </Paper>
 
-                  <FormControl className="journal">
-                    <FormLabel className="journalTitle">
-                      List of Series in this Sequence
-                    </FormLabel>
-                    <Stack
-                      direction="column"
-                      spacing={2}
-                      justifyContent="flex-start"
-                      sx={{ mt: 3 }}
-                      className="lines"
+                  {/* Add Series to Sequence */}
+                  <Paper
+                    elevation={1}
+                    sx={{ p: 3, mb: 3, borderRadius: '12px' }}
+                  >
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      color="primary"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                     >
-                      {seriesNameSet.map((series, index) => (
-                        <Box
-                          key={`${series}+${index}`}
-                          display={'flex'}
-                          sx={{ pl: 4 }}
-                          className="journalLine"
-                        >
-                          <Typography sx={{ mr: 2 }}>{index + 1}.</Typography>
-                          <Typography>{series}</Typography>
-                        </Box>
-                      ))}
-                    </Stack>
-                  </FormControl>
-
-                  {poses?.length > 0 && (
-                    <>
-                      <FormControl sx={{ mt: 4 }} className="journal">
-                        <FormLabel className="journalTitle">
-                          {currentSeriesName}
-                        </FormLabel>
-
-                        <List className="lines">
-                          {poses.map((series, index) => {
-                            const { name, secondary } =
-                              splitSeriesPoseEntry(series)
-
-                            // Extract alignment cues for object format
-                            const alignmentCues =
-                              typeof series === 'object' &&
-                              series !== null &&
-                              series.alignment_cues
-                                ? String(series.alignment_cues).split('\n')[0]
-                                : ''
-
-                            // Generate a stable key that works for both string and object formats
-                            const itemKey =
-                              typeof series === 'string'
-                                ? `${series}-${index}`
-                                : `${series.id || series.name || name}-${index}`
-
+                      <Image
+                        src={'/icons/asanas/label_name_leaf.png'}
+                        alt=""
+                        height={20}
+                        width={16}
+                      />
+                      Add Series to Sequence
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mb: 2 }}
+                    >
+                      Search and select series (flows) to add to your sequence
+                    </Typography>
+                    <FormControl sx={{ width: '100%' }}>
+                      <Autocomplete
+                        disablePortal
+                        id="combo-box-series-search-inline"
+                        options={orderedSeriesOptions}
+                        getOptionLabel={(option) => {
+                          const opt = option as any
+                          if ('section' in opt) return ''
+                          return opt.seriesName
+                        }}
+                        renderOption={(() => {
+                          let lastSection: string | null = null
+                          const sectionHeaderMap: Record<number, string> = {}
+                          orderedSeriesOptions.forEach(
+                            (opt: any, idx: number) => {
+                              if ('section' in opt) {
+                                lastSection = opt.section
+                              } else if (lastSection) {
+                                sectionHeaderMap[idx] = lastSection
+                                lastSection = null
+                              }
+                            }
+                          )
+                          const renderOptionFn = (
+                            props: any,
+                            option: any,
+                            { index }: { index: number }
+                          ) => {
+                            if ('section' in option) return null
+                            const sectionLabel = sectionHeaderMap[index] || null
                             return (
-                              <ListItem
-                                className="journalLine"
-                                sx={{ whiteSpace: 'collapse' }}
-                                key={itemKey}
-                              >
-                                <ListItemText
-                                  primary={
-                                    <>
-                                      <Typography variant="body1">
-                                        {name}
-                                        {alignmentCues && (
-                                          <Typography
-                                            component="span"
-                                            variant="body2"
-                                            color="text.secondary"
-                                            sx={{
-                                              ml: 1,
-                                              overflow: 'hidden',
-                                              textOverflow: 'ellipsis',
-                                              whiteSpace: 'nowrap',
-                                              display: 'inline',
-                                            }}
-                                          >
-                                            ({alignmentCues})
-                                          </Typography>
-                                        )}
-                                      </Typography>
-                                      {secondary && (
-                                        <Typography
-                                          variant="body1"
-                                          sx={{ fontStyle: 'italic' }}
-                                        >
-                                          {secondary}
-                                        </Typography>
-                                      )}
-                                    </>
-                                  }
-                                />
-                              </ListItem>
+                              <Fragment key={option.id ?? `option-${index}`}>
+                                {sectionLabel && (
+                                  <ListSubheader
+                                    key={`${sectionLabel}-header-${index}`}
+                                    component="div"
+                                    disableSticky
+                                    role="presentation"
+                                  >
+                                    {sectionLabel}
+                                  </ListSubheader>
+                                )}
+                                <li
+                                  {...props}
+                                  key={option.id ?? `option-${index}`}
+                                >
+                                  {option.seriesName}
+                                </li>
+                              </Fragment>
                             )
-                          })}
-                        </List>
-                        <ListItem>
-                          <Stack>
-                            <Stack>
-                              <ListItemIcon
-                                sx={{ color: 'error.light' }}
-                                onClick={() =>
-                                  setSeriesNameSet((prev) => prev.slice(0, -1))
-                                }
-                              >
-                                <DeleteForeverIcon />
-                                <ListItemText primary="Remove series" />
-                              </ListItemIcon>
-                            </Stack>
-                            <Stack flexDirection={'row'} alignItems={'center'}>
-                              <Typography>
-                                {currentSeriesIndex > 0
-                                  ? seriesNameSet[currentSeriesIndex - 1]
-                                  : ''}
-                              </Typography>
-                              <IconButton
-                                onClick={handlePreviousSeries}
-                                disabled={currentSeriesIndex === 0}
-                              >
-                                <ArrowBack />
-                              </IconButton>
+                          }
+                          return renderOptionFn
+                        })()}
+                        filterOptions={(options, state) => {
+                          const groups: Record<string, any[]> = {}
+                          let currentSection: 'Mine' | 'Alpha' | null = null
+                          for (const option of options) {
+                            const opt = option as any
+                            if ('section' in opt) {
+                              currentSection = opt.section as 'Mine' | 'Alpha'
+                              if (!groups[currentSection])
+                                groups[currentSection] = []
+                            } else if (currentSection) {
+                              if (!groups[currentSection])
+                                groups[currentSection] = []
+                              if (
+                                opt.seriesName &&
+                                opt.seriesName
+                                  .toLowerCase()
+                                  .includes(state.inputValue.toLowerCase())
+                              ) {
+                                groups[currentSection].push(opt)
+                              }
+                            }
+                          }
+                          const filtered: typeof options = []
+                          const sectionOrder: Array<'Mine' | 'Alpha'> = [
+                            'Mine',
+                            'Alpha',
+                          ]
+                          for (const section of sectionOrder) {
+                            if (groups[section] && groups[section].length > 0) {
+                              filtered.push({
+                                section: section as 'Mine' | 'Alpha' | 'Others',
+                              })
+                              filtered.push(...groups[section])
+                            }
+                          }
+                          return filtered
+                        }}
+                        isOptionEqualToValue={(option, value) => {
+                          const opt = option as any
+                          const val = value as any
+                          if ('section' in opt || 'section' in val) return false
+                          return opt.id === val.id
+                        }}
+                        sx={{
+                          '& .MuiOutlinedInput-root': {
+                            borderRadius: '12px',
+                          },
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'primary.main',
+                          },
+                          '& .MuiAutocomplete-popupIndicator': {
+                            display: 'none',
+                          },
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            placeholder="Search for a Series to add..."
+                            sx={{
+                              '& .MuiInputBase-input': {
+                                color: 'primary.main',
+                              },
+                            }}
+                            InputProps={{
+                              ...params.InputProps,
+                              startAdornment: (
+                                <>
+                                  <SearchIcon
+                                    sx={{ color: 'primary.main', mr: 1 }}
+                                  />
+                                  {params.InputProps.startAdornment}
+                                </>
+                              ),
+                            }}
+                          />
+                        )}
+                        onChange={(event, value) => {
+                          const val = value as any
+                          if (val && 'section' in val) return
+                          handleSelect(
+                            event as any,
+                            value as FlowSeriesData | null
+                          )
+                        }}
+                      />
+                    </FormControl>
+                  </Paper>
 
-                              <IconButton
-                                onClick={handleNextSeries}
-                                disabled={
-                                  currentSeriesIndex ===
-                                  seriesNameSet.length - 1
+                  {/* List of Series in this Sequence */}
+                  <Paper
+                    elevation={1}
+                    sx={{ p: 3, mb: 3, borderRadius: '12px' }}
+                  >
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      color="primary"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                    >
+                      <Image
+                        src={'/icons/asanas/label_name_leaf.png'}
+                        alt=""
+                        height={20}
+                        width={16}
+                      />
+                      Your Sequence{' '}
+                      {seriesNameSet.length > 0 &&
+                        `(${seriesNameSet.length} series)`}
+                    </Typography>
+                    {seriesNameSet.length === 0 ? (
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ py: 2, textAlign: 'center' }}
+                      >
+                        No series added yet. Use the search above to add series
+                        to your sequence.
+                      </Typography>
+                    ) : (
+                      <Stack direction="column" spacing={1} sx={{ mt: 2 }}>
+                        {seriesNameSet.map((series, index) => (
+                          <Box
+                            key={`${series}+${index}`}
+                            display="flex"
+                            alignItems="center"
+                            sx={{
+                              pl: 2,
+                              py: 1,
+                              borderRadius: '8px',
+                              backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                              '&:hover': {
+                                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                              },
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                mr: 2,
+                                fontWeight: 'bold',
+                                color: 'primary.main',
+                              }}
+                            >
+                              {index + 1}.
+                            </Typography>
+                            <Typography sx={{ flex: 1 }}>{series}</Typography>
+                            <IconButton
+                              size="small"
+                              onClick={() => {
+                                setSeriesNameSet((prev) =>
+                                  prev.filter((_, i) => i !== index)
+                                )
+                                setSequences({
+                                  ...sequences,
+                                  sequencesSeries:
+                                    sequences.sequencesSeries.filter(
+                                      (_, i) => i !== index
+                                    ),
+                                })
+                              }}
+                              sx={{ color: 'error.light' }}
+                            >
+                              <DeleteForeverIcon />
+                            </IconButton>
+                          </Box>
+                        ))}
+                      </Stack>
+                    )}
+                  </Paper>
+
+                  {/* Poses Preview Section - Show poses from selected series */}
+                  {poses?.length > 0 && (
+                    <Paper
+                      elevation={1}
+                      sx={{ p: 3, mb: 3, borderRadius: '12px' }}
+                    >
+                      <Typography
+                        variant="h6"
+                        gutterBottom
+                        color="primary"
+                        sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                      >
+                        <Image
+                          src={'/icons/asanas/label_name_leaf.png'}
+                          alt=""
+                          height={20}
+                          width={16}
+                        />
+                        {currentSeriesName} - Poses Preview
+                      </Typography>
+                      <List dense>
+                        {poses.map((series, index) => {
+                          const { name, secondary } =
+                            splitSeriesPoseEntry(series)
+                          const alignmentCues =
+                            typeof series === 'object' &&
+                            series !== null &&
+                            series.alignment_cues
+                              ? String(series.alignment_cues).split('\n')[0]
+                              : ''
+                          const itemKey =
+                            typeof series === 'string'
+                              ? `${series}-${index}`
+                              : `${series.id || series.name || name}-${index}`
+
+                          return (
+                            <ListItem key={itemKey} sx={{ py: 0.5 }}>
+                              <ListItemText
+                                primary={
+                                  <Typography variant="body1">
+                                    {name}
+                                    {alignmentCues && (
+                                      <Typography
+                                        component="span"
+                                        variant="body2"
+                                        color="text.secondary"
+                                        sx={{ ml: 1 }}
+                                      >
+                                        ({alignmentCues})
+                                      </Typography>
+                                    )}
+                                  </Typography>
                                 }
-                              >
-                                <ArrowForward />
-                              </IconButton>
-                              <Typography>
-                                {currentSeriesIndex < seriesNameSet.length - 1
-                                  ? seriesNameSet[currentSeriesIndex + 1]
-                                  : ''}
-                              </Typography>
-                            </Stack>
-                          </Stack>
-                        </ListItem>
-                      </FormControl>
-                    </>
+                                secondary={
+                                  secondary && (
+                                    <Typography
+                                      variant="body2"
+                                      sx={{ fontStyle: 'italic' }}
+                                    >
+                                      {secondary}
+                                    </Typography>
+                                  )
+                                }
+                              />
+                            </ListItem>
+                          )
+                        })}
+                      </List>
+                      {seriesNameSet.length > 1 && (
+                        <Stack
+                          flexDirection="row"
+                          alignItems="center"
+                          justifyContent="center"
+                          sx={{ mt: 2 }}
+                        >
+                          <IconButton
+                            onClick={handlePreviousSeries}
+                            disabled={currentSeriesIndex === 0}
+                          >
+                            <ArrowBack />
+                          </IconButton>
+                          <Typography sx={{ mx: 2 }}>
+                            {currentSeriesIndex + 1} of {seriesNameSet.length}
+                          </Typography>
+                          <IconButton
+                            onClick={handleNextSeries}
+                            disabled={
+                              currentSeriesIndex === seriesNameSet.length - 1
+                            }
+                          >
+                            <ArrowForward />
+                          </IconButton>
+                        </Stack>
+                      )}
+                    </Paper>
                   )}
 
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="center"
-                    sx={{ mt: 4 }}
+                  {/* Description Section */}
+                  <Paper
+                    elevation={1}
+                    sx={{ p: 3, mb: 3, borderRadius: '12px' }}
                   >
-                    <Button
-                      variant="contained"
+                    <Typography
+                      variant="h6"
+                      gutterBottom
                       color="primary"
-                      onClick={handleSubmit}
-                      disabled={session === null}
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                     >
-                      {AppText.APP_BUTTON_SUBMIT}
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      color="inherit"
-                      sx={{ color: 'primary.contrastText' }}
-                      onClick={handleCancel}
-                    >
-                      Start Over
-                    </Button>
-                  </Stack>
-                  <FormControl
-                    sx={{
-                      width: '100%',
-                      mt: 3,
-                      border: '1px solid black',
-                      borderRadius: '12px',
-                      p: 2,
-                    }}
-                  >
-                    <Stack gap={2} flexDirection={'row'} alignItems={'center'}>
-                      <Typography color={'primary.main'} variant="h3">
-                        Description
-                      </Typography>
                       <Image
                         src={'/icons/flows/leaf-3.svg'}
-                        alt={'leaf icon'}
+                        alt=""
                         height={21}
                         width={21}
-                      ></Image>
-                    </Stack>
+                      />
+                      Description
+                    </Typography>
                     <TextField
                       id="description"
-                      // label="Description"
-                      placeholder="Type a description of your sequence"
+                      fullWidth
+                      placeholder="Add an optional description for your sequence..."
                       multiline
                       minRows={4}
-                      variant="standard"
+                      variant="outlined"
                       name="description"
                       value={description}
                       onChange={handleChange}
                       sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '12px',
+                        },
                         '& .MuiInputBase-input': { color: 'primary.main' },
-                        width: '100%',
-                        alignSelf: 'center',
-                        color: 'primary.main',
-                        backgroundColor: 'navSplash.dark',
                       }}
                       InputProps={{
-                        endAdornment: (
-                          <Checkbox
-                            checked={isDirtyDescription}
-                            onChange={handleChange}
+                        endAdornment: isDirtyDescription ? (
+                          <CheckCircleIcon
                             sx={{
-                              position: 'absolute',
-                              top: 0,
-                              right: 0,
-                              color: 'primary.main',
-                              '&.Mui-checked': {
-                                color: 'primary.main',
-                              },
+                              color: 'success.main',
+                              alignSelf: 'flex-start',
+                              mt: 1,
                             }}
                           />
-                        ),
+                        ) : null,
                       }}
                     />
-                  </FormControl>
+                  </Paper>
 
                   {/* Image Upload Section */}
-                  <FormControl
-                    sx={{
-                      width: '100%',
-                      mt: 3,
-                      border: '1px solid black',
-                      borderRadius: '12px',
-                      p: 2,
-                    }}
+                  <Paper
+                    elevation={1}
+                    sx={{ p: 3, mb: 3, borderRadius: '12px' }}
                   >
-                    <Stack gap={2} flexDirection={'row'} alignItems={'center'}>
-                      <Typography color={'primary.main'} variant="h3">
-                        Sequence Image
-                      </Typography>
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      color="primary"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                    >
                       <Image
                         src={'/icons/flows/leaf-3.svg'}
-                        alt={'leaf icon'}
+                        alt=""
                         height={21}
                         width={21}
                       />
-                    </Stack>
+                      Sequence Image
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mb: 2 }}
+                    >
+                      Upload an optional image to represent your sequence
+                    </Typography>
                     <Box sx={{ mt: 2 }}>
                       <ImageUpload
                         onImageUploaded={(imageData) => {
@@ -796,7 +835,64 @@ export default function Page() {
                         />
                       </Box>
                     )}
-                  </FormControl>
+                  </Paper>
+
+                  {/* Sticky Bottom Action Bar - Consistent with other pages */}
+                  <Box
+                    sx={{
+                      position: 'fixed',
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      backgroundColor: 'background.paper',
+                      borderTop: '1px solid',
+                      borderColor: 'divider',
+                      py: 2,
+                      px: 2,
+                      boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
+                      zIndex: 10,
+                    }}
+                  >
+                    <Stack
+                      direction={{ xs: 'column', sm: 'row' }}
+                      spacing={2}
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSubmit}
+                        disabled={session === null}
+                        sx={{
+                          borderRadius: '12px',
+                          px: 4,
+                          py: 1.5,
+                          fontSize: '1.1rem',
+                          fontWeight: 600,
+                          minWidth: { xs: '100%', sm: '200px' },
+                          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                        }}
+                      >
+                        {AppText.APP_BUTTON_SUBMIT}
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        sx={{
+                          borderRadius: '12px',
+                          px: 4,
+                          py: 1.5,
+                          fontSize: '1.1rem',
+                          fontWeight: 600,
+                          minWidth: { xs: '100%', sm: '160px' },
+                        }}
+                        onClick={handleCancel}
+                      >
+                        Start Over
+                      </Button>
+                    </Stack>
+                  </Box>
                 </FormGroup>
               </>
             )}
