@@ -681,7 +681,7 @@ describe('LibraryPage - SeriesCard Delete Feature', () => {
     await user.click(deleteButtons[0])
 
     // Check that the dialog appears
-    expect(screen.getByText('Delete Series?')).toBeInTheDocument()
+    expect(screen.getByText('Delete Flow?')).toBeInTheDocument()
     expect(
       screen.getByText(/Are you sure you want to delete "Sun Salutation"/i)
     ).toBeInTheDocument()
@@ -713,14 +713,14 @@ describe('LibraryPage - SeriesCard Delete Feature', () => {
     await user.click(deleteButtons[0])
 
     // Dialog should be open
-    expect(screen.getByText('Delete Series?')).toBeInTheDocument()
+    expect(screen.getByText('Delete Flow?')).toBeInTheDocument()
 
     const cancelButton = screen.getByRole('button', { name: /cancel/i })
     await user.click(cancelButton)
 
     // Dialog should be closed
     await waitFor(() => {
-      expect(screen.queryByText('Delete Series?')).not.toBeInTheDocument()
+      expect(screen.queryByText('Delete Flow?')).not.toBeInTheDocument()
     })
   })
 
@@ -750,7 +750,7 @@ describe('LibraryPage - SeriesCard Delete Feature', () => {
     await user.click(deleteButtons[0])
 
     // Dialog should be open
-    expect(screen.getByText('Delete Series?')).toBeInTheDocument()
+    expect(screen.getByText('Delete Flow?')).toBeInTheDocument()
 
     const confirmDeleteButtons = screen.getAllByRole('button', {
       name: /^delete$/i,
@@ -770,7 +770,7 @@ describe('LibraryPage - SeriesCard Delete Feature', () => {
 
     // Dialog should close
     await waitFor(() => {
-      expect(screen.queryByText('Delete Series?')).not.toBeInTheDocument()
+      expect(screen.queryByText('Delete Flow?')).not.toBeInTheDocument()
     })
   })
 

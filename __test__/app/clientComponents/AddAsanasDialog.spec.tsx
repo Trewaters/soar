@@ -75,7 +75,7 @@ describe('AddAsanasDialog', () => {
   it('renders correctly when open', () => {
     renderWithProviders(<AddAsanasDialog {...defaultProps} />)
 
-    expect(screen.getByText('Add Asanas to Series')).toBeInTheDocument()
+    expect(screen.getByText('Add Asanas to Flow')).toBeInTheDocument()
     expect(screen.getByPlaceholderText(/Search asanas/)).toBeInTheDocument()
   })
 

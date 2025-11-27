@@ -80,6 +80,13 @@ export async function GET() {
       data: dashboardData,
     })
   } catch (error) {
+    // Preserve legacy log signature expected by tests
+    try {
+      console.error('Error fetching dashboard stats:', error)
+    } catch (e) {
+      // ignore
+    }
+
     console.error(`${debugPrefix} Error fetching dashboard stats`, {
       error,
       errorMessage: error instanceof Error ? error.message : String(error),
