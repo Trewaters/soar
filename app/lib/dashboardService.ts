@@ -454,45 +454,119 @@ export async function getMostCommonSequences(
 export async function getDashboardStats(
   userId: string
 ): Promise<DashboardStats> {
-  const [
-    loginStreak,
-    activityStreak,
-    practiceHistory,
-    mostCommonAsanas,
-    mostCommonSeries,
-    mostCommonSequences,
-  ] = await Promise.all([
-    calculateLoginStreak(userId),
-    calculateActivityStreak(userId),
-    getPracticeHistory(userId),
-    getMostCommonAsanas(userId),
-    getMostCommonSeries(userId),
-    getMostCommonSequences(userId),
-  ])
+  const debugPrefix = '[DashboardService Debug]'
+  const startTime = Date.now()
 
-  // Calculate next goal based on current month's practice
-  const currentMonthDays =
-    practiceHistory[practiceHistory.length - 1]?.days || 0
-  const goalTarget = 30
-  const daysRemaining = goalTarget - currentMonthDays
+  console.log(`${debugPrefix} getDashboardStats called`, {
+    userId,
+    timestamp: new Date().toISOString(),
+  })
 
-  const nextGoal = {
-    text:
-      daysRemaining > 0
-        ? `Practice ${daysRemaining} More ${daysRemaining === 1 ? 'Day' : 'Days'}`
-        : 'Goal Achieved! 🎉',
-    current: currentMonthDays,
-    target: goalTarget,
-    progress: Math.min(Math.round((currentMonthDays / goalTarget) * 100), 100),
-  }
+  try {
+    const [
+      loginStreak,
+      activityStreak,
+      practiceHistory,
+      mostCommonAsanas,
+      mostCommonSeries,
+      mostCommonSequences,
+    ] = await Promise.all([
+      calculateLoginStreak(userId).catch((err) => {
+        console.error(`${debugPrefix} calculateLoginStreak failed`, {
+          userId,
+          error: err,
+        })
+        return 0
+      }),
+      calculateActivityStreak(userId).catch((err) => {
+        console.error(`${debugPrefix} calculateActivityStreak failed`, {
+          userId,
+          error: err,
+        })
+        return 0
+      }),
+      getPracticeHistory(userId).catch((err) => {
+        console.error(`${debugPrefix} getPracticeHistory failed`, {
+          userId,
+          error: err,
+        })
+        return []
+      }),
+      getMostCommonAsanas(userId).catch((err) => {
+        console.error(`${debugPrefix} getMostCommonAsanas failed`, {
+          userId,
+          error: err,
+        })
+        return []
+      }),
+      getMostCommonSeries(userId).catch((err) => {
+        console.error(`${debugPrefix} getMostCommonSeries failed`, {
+          userId,
+          error: err,
+        })
+        return []
+      }),
+      getMostCommonSequences(userId).catch((err) => {
+        console.error(`${debugPrefix} getMostCommonSequences failed`, {
+          userId,
+          error: err,
+        })
+        return []
+      }),
+    ])
 
-  return {
-    loginStreak,
-    activityStreak,
-    practiceHistory,
-    mostCommonAsanas,
-    mostCommonSeries,
-    mostCommonSequences,
-    nextGoal,
+    console.log(`${debugPrefix} All stats fetched`, {
+      userId,
+      loginStreak,
+      activityStreak,
+      practiceHistoryLength: practiceHistory.length,
+      mostCommonAsanasLength: mostCommonAsanas.length,
+      mostCommonSeriesLength: mostCommonSeries.length,
+      mostCommonSequencesLength: mostCommonSequences.length,
+      elapsedMs: Date.now() - startTime,
+    })
+
+    // Calculate next goal based on current month's practice
+    const currentMonthDays =
+      practiceHistory[practiceHistory.length - 1]?.days || 0
+    const goalTarget = 30
+    const daysRemaining = goalTarget - currentMonthDays
+
+    const nextGoal = {
+      text:
+        daysRemaining > 0
+          ? `Practice ${daysRemaining} More ${daysRemaining === 1 ? 'Day' : 'Days'}`
+          : 'Goal Achieved! 🎉',
+      current: currentMonthDays,
+      target: goalTarget,
+      progress: Math.min(
+        Math.round((currentMonthDays / goalTarget) * 100),
+        100
+      ),
+    }
+
+    console.log(`${debugPrefix} getDashboardStats complete`, {
+      userId,
+      elapsedMs: Date.now() - startTime,
+    })
+
+    return {
+      loginStreak,
+      activityStreak,
+      practiceHistory,
+      mostCommonAsanas,
+      mostCommonSeries,
+      mostCommonSequences,
+      nextGoal,
+    }
+  } catch (error) {
+    console.error(`${debugPrefix} getDashboardStats failed`, {
+      userId,
+      error,
+      errorMessage: error instanceof Error ? error.message : String(error),
+      errorStack: error instanceof Error ? error.stack : undefined,
+      elapsedMs: Date.now() - startTime,
+    })
+    throw error
   }
 }

@@ -92,6 +92,17 @@ const Dashboard: React.FC = () => {
 
   useEffect(() => {
     const fetchDashboardData = async () => {
+      const debugPrefix = '[Dashboard Debug]'
+      const startTime = Date.now()
+
+      console.log(`${debugPrefix} Starting dashboard data fetch`, {
+        timestamp: new Date().toISOString(),
+        sessionStatus: session?.user ? 'authenticated' : 'unauthenticated',
+        sessionUserId: session?.user?.id || 'none',
+        userDataId: userData?.id || 'none',
+        userDataEmail: userData?.email || 'none',
+      })
+
       try {
         setLoading(true)
         setError(null)
@@ -99,18 +110,43 @@ const Dashboard: React.FC = () => {
         // Get userId from userData or session
         const userId = userData?.id || session?.user?.id
 
+        console.log(`${debugPrefix} User ID resolution`, {
+          resolvedUserId: userId || 'none',
+          source: userData?.id
+            ? 'userData'
+            : session?.user?.id
+              ? 'session'
+              : 'none',
+        })
+
         if (!userId) {
+          console.warn(
+            `${debugPrefix} No user ID found - user session not found`,
+            {
+              userData: userData ? 'present' : 'null',
+              session: session ? 'present' : 'null',
+              sessionUser: session?.user ? 'present' : 'null',
+            }
+          )
           setError('User session not found')
           return
         }
 
         // Skip if using default/initial userData (id='1' is the placeholder)
         if (userId === '1') {
+          console.log(
+            `${debugPrefix} Skipping fetch - placeholder user ID detected`
+          )
           setLoading(false)
           return
         }
 
         // First, ensure login is recorded and get current login streak
+        console.log(`${debugPrefix} Calling recordActivity API`, {
+          userId,
+          activityType: 'view_dashboard',
+        })
+
         const loginStreakResponse = await fetch('/api/user/recordActivity', {
           method: 'POST',
           headers: {
@@ -126,23 +162,57 @@ const Dashboard: React.FC = () => {
         if (loginStreakResponse.ok) {
           const loginData = await loginStreakResponse.json()
           currentLoginStreak = loginData.streakData?.currentStreak || 0
+          console.log(`${debugPrefix} recordActivity API success`, {
+            loginRecorded: loginData.loginRecorded,
+            currentLoginStreak,
+            requestId: loginData.requestId,
+          })
         } else {
-          console.error('Dashboard - recordActivity API failed:', {
+          const errorText = await loginStreakResponse
+            .text()
+            .catch(() => 'Unable to read error body')
+          console.error(`${debugPrefix} recordActivity API failed`, {
             status: loginStreakResponse.status,
             statusText: loginStreakResponse.statusText,
+            errorBody: errorText,
+            userId,
           })
         }
 
         // Then fetch other dashboard statistics
+        console.log(`${debugPrefix} Calling dashboard/stats API`)
         const response = await fetch('/api/dashboard/stats', {
           cache: 'no-store',
         })
 
+        console.log(`${debugPrefix} dashboard/stats API response`, {
+          status: response.status,
+          statusText: response.statusText,
+          ok: response.ok,
+        })
+
         if (!response.ok) {
-          throw new Error('Failed to fetch dashboard statistics')
+          const errorText = await response
+            .text()
+            .catch(() => 'Unable to read error body')
+          console.error(`${debugPrefix} dashboard/stats API error response`, {
+            status: response.status,
+            statusText: response.statusText,
+            errorBody: errorText,
+          })
+          throw new Error(
+            `Failed to fetch dashboard statistics (HTTP ${response.status}: ${response.statusText})`
+          )
         }
 
         const result = await response.json()
+
+        console.log(`${debugPrefix} dashboard/stats API result`, {
+          success: result.success,
+          hasData: !!result.data,
+          error: result.error || 'none',
+          dataKeys: result.data ? Object.keys(result.data) : [],
+        })
 
         if (result.success && result.data) {
           // Override the loginStreak with the one from recordActivity API
@@ -150,17 +220,41 @@ const Dashboard: React.FC = () => {
             ...result.data,
             loginStreak: currentLoginStreak,
           }
+          console.log(`${debugPrefix} Setting dashboard data successfully`, {
+            loginStreak: finalData.loginStreak,
+            activityStreak: finalData.activityStreak,
+            practiceHistoryCount: finalData.practiceHistory?.length || 0,
+            mostCommonAsanasCount: finalData.mostCommonAsanas?.length || 0,
+            elapsedMs: Date.now() - startTime,
+          })
           setDashboardData(finalData)
         } else {
-          throw new Error('Invalid response format')
+          console.error(
+            `${debugPrefix} Invalid response format from dashboard/stats`,
+            {
+              success: result.success,
+              hasData: !!result.data,
+              error: result.error,
+              fullResult: result,
+            }
+          )
+          throw new Error(result.error || 'Invalid response format')
         }
       } catch (err) {
-        console.error('Error fetching dashboard data:', err)
-        setError(
+        const errorMessage =
           err instanceof Error ? err.message : 'Failed to load dashboard data'
-        )
+        console.error(`${debugPrefix} Error fetching dashboard data`, {
+          error: err,
+          errorMessage,
+          errorStack: err instanceof Error ? err.stack : undefined,
+          elapsedMs: Date.now() - startTime,
+        })
+        setError(errorMessage)
       } finally {
         setLoading(false)
+        console.log(`${debugPrefix} Dashboard fetch complete`, {
+          elapsedMs: Date.now() - startTime,
+        })
       }
     }
 
