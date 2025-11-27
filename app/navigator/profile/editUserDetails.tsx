@@ -1143,17 +1143,20 @@ export default function EditUserDetails({
           {/* Sticky Action Bar - Positioned above bottom navigation */}
           <Box
             sx={{
-              position: 'fixed',
-              bottom: 66, // Above bottom nav (66px height)
-              left: 0,
-              right: 0,
+              // Keep the action bar in the document flow so it appears
+              // directly beneath the profile content and above the bottom nav.
+              position: 'relative',
+              mt: 2,
+              mb: { xs: 18, sm: 12 }, // provide space above the bottom nav on small screens
+              left: 'auto',
+              right: 'auto',
               backgroundColor: 'background.paper',
               borderTop: '1px solid',
               borderColor: 'divider',
               py: 2.5,
               px: 3,
-              zIndex: 1100,
-              boxShadow: '0px -4px 12px rgba(0, 0, 0, 0.12)',
+              zIndex: 'auto',
+              boxShadow: 'none',
             }}
             data-testid="sticky-action-bar"
           >
