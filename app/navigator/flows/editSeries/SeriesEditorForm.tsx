@@ -329,27 +329,83 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
         </form>
       </Box>
 
-      <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
-        <Button onClick={onCancel} color="primary">
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSave}
-          color="primary"
-          variant="contained"
-          disabled={disabled}
+      {/* Sticky Bottom Action Bar - Consistent with Asana pages */}
+      <Box
+        sx={{
+          position: 'sticky',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: 'background.paper',
+          borderTop: '1px solid',
+          borderColor: 'divider',
+          py: 2,
+          px: 2,
+          mt: 3,
+          boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
+          zIndex: 10,
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            gap: 2,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
         >
-          {mode === 'create' ? 'Create' : 'Save Changes'}
-        </Button>
-        {mode === 'edit' && (
           <Button
-            onClick={() => setConfirmDeleteOpen(true)}
-            color="error"
+            onClick={handleSave}
+            color="primary"
+            variant="contained"
             disabled={disabled}
+            sx={{
+              borderRadius: '12px',
+              px: 4,
+              py: 1.5,
+              fontSize: '1.1rem',
+              fontWeight: 600,
+              minWidth: { xs: '100%', sm: '200px' },
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+            }}
           >
-            Delete Flow
+            {mode === 'create' ? 'Create Flow' : 'Save Changes'}
           </Button>
-        )}
+          {mode === 'edit' && (
+            <Button
+              onClick={() => setConfirmDeleteOpen(true)}
+              color="error"
+              variant="outlined"
+              disabled={disabled}
+              sx={{
+                borderRadius: '12px',
+                px: 4,
+                py: 1.5,
+                fontSize: '1.1rem',
+                fontWeight: 600,
+                minWidth: { xs: '100%', sm: '160px' },
+              }}
+            >
+              Delete Flow
+            </Button>
+          )}
+          <Button
+            onClick={onCancel}
+            color="secondary"
+            variant="outlined"
+            sx={{
+              borderRadius: '12px',
+              px: 4,
+              py: 1.5,
+              fontSize: '1.1rem',
+              fontWeight: 600,
+              minWidth: { xs: '100%', sm: '160px' },
+            }}
+          >
+            Cancel
+          </Button>
+        </Box>
       </Box>
 
       <AddAsanasDialog

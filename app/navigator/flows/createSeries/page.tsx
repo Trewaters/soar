@@ -16,6 +16,7 @@ import {
   ListItemAvatar,
   ListItemText,
   ListSubheader,
+  Paper,
   Stack,
   TextField,
   Typography,
@@ -271,444 +272,481 @@ export default function Page() {
           />
           {FEATURES.SHOW_CREATE_SERIES && (
             <form onSubmit={handleSubmit}>
-              <Box sx={{ px: 4 }}>
-                <FormControl sx={{ width: '100%', mb: 3 }}>
-                  <AutocompleteComponent
-                    options={poses.sort((a, b) =>
-                      a.sort_english_name.localeCompare(b.sort_english_name)
-                    )}
-                    getOptionLabel={(option) =>
-                      (option as AsanaPose).sort_english_name
-                    }
-                    renderOption={(props, option) => {
-                      const poseOption = option as AsanaPose
-                      return (
-                        <li {...props} key={poseOption.id}>
-                          {poseOption.sort_english_name}
-                        </li>
-                      )
-                    }}
-                    placeholder="Add a pose to your flow"
-                    onChange={(event, value) =>
-                      handleSelect(event, value as AsanaPose | null)
-                    }
-                    renderInput={() => <TextField placeholder="Search..." />}
-                  />
-                </FormControl>
-                <Box className="journal">
-                  <FormControl>
-                    <Grid2
-                      size={12}
-                      className="journalTitle"
-                      display={'flex'}
-                      direction={'row'}
-                    >
-                      <TextField
-                        sx={{
-                          '& .MuiInputBase-input': { color: 'primary.main' },
-                          width: '100%',
-                        }}
-                        variant="standard"
-                        id="series-name"
-                        placeholder="Give your Flow a name..."
-                        name="seriesName"
-                        value={seriesName}
-                        onChange={handleChange}
-                        InputProps={{
-                          style: { color: 'primary.main' },
-                        }}
-                      />
-                      <>
-                        <Checkbox
-                          checked={isDirty}
-                          sx={{
-                            color: 'primary.main',
-                            '&.Mui-checked': {
-                              color: 'primary.main',
-                            },
-                          }}
-                        />
-                      </>
-                    </Grid2>
-                    {/* <Grid2 size={12}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={isDirty}
-                          sx={{
-                            color: 'primary.main',
-                            '&.Mui-checked': {
-                              color: 'primary.main',
-                            },
-                          }}
-                        />
-                      }
-                      label="Text field is dirty"
+              <Box sx={{ px: 4, pb: 12 }}>
+                {/* Flow Name Input - Primary field with improved visibility */}
+                <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    color="primary"
+                    sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                  >
+                    <Image
+                      src={'/icons/asanas/label_name_leaf.png'}
+                      alt=""
+                      height={20}
+                      width={16}
                     />
-                  </Grid2> */}
-                  </FormControl>
+                    Flow Name *
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    id="series-name"
+                    placeholder="Give your Flow a name..."
+                    name="seriesName"
+                    value={seriesName}
+                    onChange={handleChange}
+                    required
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '12px',
+                      },
+                      '& .MuiInputBase-input': { color: 'primary.main' },
+                    }}
+                    InputProps={{
+                      endAdornment: isDirty ? (
+                        <CheckCircleIcon sx={{ color: 'success.main' }} />
+                      ) : null,
+                    }}
+                  />
+                </Paper>
 
-                  {/* Reference Images Section */}
-                  <Grid2 size={12}>
-                    <Box sx={{ mb: 3 }}>
-                      <Typography variant="h6" gutterBottom color="primary">
-                        Series Image
-                      </Typography>
+                {/* Add Poses to Flow */}
+                <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    color="primary"
+                    sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                  >
+                    <Image
+                      src={'/icons/asanas/label_name_leaf.png'}
+                      alt=""
+                      height={20}
+                      width={16}
+                    />
+                    Add Poses to Flow
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mb: 2 }}
+                  >
+                    Search and select poses to add to your flow sequence
+                  </Typography>
+                  <FormControl sx={{ width: '100%' }}>
+                    <AutocompleteComponent
+                      options={poses.sort((a, b) =>
+                        a.sort_english_name.localeCompare(b.sort_english_name)
+                      )}
+                      getOptionLabel={(option) =>
+                        (option as AsanaPose).sort_english_name
+                      }
+                      renderOption={(props, option) => {
+                        const poseOption = option as AsanaPose
+                        return (
+                          <li {...props} key={poseOption.id}>
+                            {poseOption.sort_english_name}
+                          </li>
+                        )
+                      }}
+                      placeholder="Search for a pose to add..."
+                      onChange={(event, value) =>
+                        handleSelect(event, value as AsanaPose | null)
+                      }
+                      renderInput={() => (
+                        <TextField placeholder="Search poses..." />
+                      )}
+                    />
+                  </FormControl>
+                </Paper>
+
+                <Box className="journal">
+                  {/* Series Image Section */}
+                  <Paper
+                    elevation={1}
+                    sx={{ p: 3, mb: 3, borderRadius: '12px' }}
+                  >
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      color="primary"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                    >
+                      <Image
+                        src={'/icons/asanas/label_name_leaf.png'}
+                        alt=""
+                        height={20}
+                        width={16}
+                      />
+                      Series Image
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mb: 2 }}
+                    >
+                      Upload one image to represent this series. This will help
+                      identify your series in the library.
+                    </Typography>
+
+                    {uploadedImages.length === 0 ? (
+                      <ImageManagement
+                        title=""
+                        variant="upload-only"
+                        onImageUploaded={handleImageUploaded}
+                        uploadTitle="Upload Series Image"
+                        uploadSubtitle="Drag and drop an image here, or click to select (one image only)"
+                      />
+                    ) : (
+                      <Box sx={{ mt: 2 }}>
+                        <Typography
+                          variant="body2"
+                          color="success.main"
+                          gutterBottom
+                        >
+                          <CheckCircleIcon
+                            sx={{
+                              fontSize: 16,
+                              mr: 0.5,
+                              verticalAlign: 'middle',
+                            }}
+                          />
+                          Series image uploaded successfully
+                        </Typography>
+                        <Box
+                          sx={{
+                            mt: 2,
+                            maxWidth: 300,
+                            borderRadius: '8px',
+                            overflow: 'hidden',
+                            border: '2px solid',
+                            borderColor: 'success.light',
+                          }}
+                        >
+                          <Box
+                            component="img"
+                            src={uploadedImages[0].url}
+                            alt={uploadedImages[0].altText || 'Series image'}
+                            sx={{
+                              width: '100%',
+                              height: 200,
+                              objectFit: 'cover',
+                              display: 'block',
+                            }}
+                          />
+                          <Box
+                            sx={{
+                              p: 1.5,
+                              bgcolor: 'success.lighter',
+                            }}
+                          >
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 0.5,
+                              }}
+                            >
+                              <ImageIcon sx={{ fontSize: 14 }} />
+                              {uploadedImages[0].fileName || 'Series Image'}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          size="small"
+                          onClick={() => {
+                            setUploadedImages([])
+                            dispatch({
+                              type: 'SET_FLOW_SERIES',
+                              payload: {
+                                ...state.flowSeries,
+                                image: '',
+                              },
+                            })
+                          }}
+                          sx={{ mt: 2 }}
+                        >
+                          Remove Image
+                        </Button>
+                      </Box>
+                    )}
+                  </Paper>
+
+                  {/* Pose List Section */}
+                  <Paper
+                    elevation={1}
+                    sx={{ p: 3, mb: 3, borderRadius: '12px' }}
+                  >
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      color="primary"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                    >
+                      <Image
+                        src={'/icons/asanas/label_name_leaf.png'}
+                        alt=""
+                        height={20}
+                        width={16}
+                      />
+                      Your Flow Sequence{' '}
+                      {seriesPoses.length > 0 &&
+                        `(${seriesPoses.length} poses)`}
+                    </Typography>
+                    {seriesPoses.length === 0 ? (
                       <Typography
                         variant="body2"
                         color="text.secondary"
-                        sx={{ mb: 2 }}
+                        sx={{ py: 2, textAlign: 'center' }}
                       >
-                        Upload one image to represent this series. This will
-                        help identify your series in the library.
+                        No poses added yet. Use the search above to add poses to
+                        your flow.
                       </Typography>
+                    ) : (
+                      <Stack className="lines" spacing={1} sx={{ mt: 2 }}>
+                        {seriesPoses.map((entry, index) => {
+                          // entry may be legacy string or new object
+                          let name = ''
+                          let secondary = ''
+                          let alignmentCues = ''
 
-                      {uploadedImages.length === 0 ? (
-                        <ImageManagement
-                          title=""
-                          variant="upload-only"
-                          onImageUploaded={handleImageUploaded}
-                          uploadTitle="Upload Series Image"
-                          uploadSubtitle="Drag and drop an image here, or click to select (one image only)"
-                        />
-                      ) : (
-                        <Box sx={{ mt: 2 }}>
-                          <Typography
-                            variant="body2"
-                            color="success.main"
-                            gutterBottom
-                          >
-                            <CheckCircleIcon
-                              sx={{
-                                fontSize: 16,
-                                mr: 0.5,
-                                verticalAlign: 'middle',
-                              }}
-                            />
-                            Series image uploaded successfully
-                          </Typography>
-                          <Box
-                            sx={{
-                              mt: 2,
-                              maxWidth: 300,
-                              borderRadius: '8px',
-                              overflow: 'hidden',
-                              border: '2px solid',
-                              borderColor: 'success.light',
-                            }}
-                          >
-                            <Box
-                              component="img"
-                              src={uploadedImages[0].url}
-                              alt={uploadedImages[0].altText || 'Series image'}
-                              sx={{
-                                width: '100%',
-                                height: 200,
-                                objectFit: 'cover',
-                                display: 'block',
-                              }}
-                            />
-                            <Box
-                              sx={{
-                                p: 1.5,
-                                bgcolor: 'success.lighter',
-                              }}
-                            >
-                              <Typography
-                                variant="caption"
-                                color="text.secondary"
-                                sx={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: 0.5,
-                                }}
-                              >
-                                <ImageIcon sx={{ fontSize: 14 }} />
-                                {uploadedImages[0].fileName || 'Series Image'}
-                              </Typography>
-                            </Box>
-                          </Box>
-                          <Button
-                            variant="outlined"
-                            color="error"
-                            size="small"
-                            onClick={() => {
-                              setUploadedImages([])
-                              dispatch({
-                                type: 'SET_FLOW_SERIES',
-                                payload: {
-                                  ...state.flowSeries,
-                                  image: '',
-                                },
-                              })
-                            }}
-                            sx={{ mt: 2 }}
-                          >
-                            Remove Image
-                          </Button>
-                        </Box>
-                      )}
-                    </Box>
-                  </Grid2>
+                          if (typeof entry === 'string') {
+                            const split = splitSeriesPoseEntry(entry)
+                            name = split.name
+                            secondary = split.secondary
+                          } else if (entry && typeof entry === 'object') {
+                            name = (entry as any).sort_english_name || ''
+                            secondary = (entry as any).secondary || ''
+                            alignmentCues = (entry as any).alignment_cues || ''
+                          }
 
-                  <FormControl>
-                    <Stack
-                      className="lines"
-                      spacing={1}
-                      sx={{
-                        mx: 4,
-                      }}
-                    >
-                      {seriesPoses.map((entry, index) => {
-                        // entry may be legacy string or new object
-                        let name = ''
-                        let secondary = ''
-                        let alignmentCues = ''
+                          const handleRemove = () => {
+                            dispatch({
+                              type: 'SET_FLOW_SERIES',
+                              payload: {
+                                ...state.flowSeries,
+                                seriesPoses:
+                                  state.flowSeries.seriesPoses.filter(
+                                    (_, i) => i !== index
+                                  ),
+                              },
+                            })
+                          }
 
-                        if (typeof entry === 'string') {
-                          const split = splitSeriesPoseEntry(entry)
-                          name = split.name
-                          secondary = split.secondary
-                        } else if (entry && typeof entry === 'object') {
-                          name = (entry as any).sort_english_name || ''
-                          secondary = (entry as any).secondary || ''
-                          alignmentCues = (entry as any).alignment_cues || ''
-                        }
-
-                        const handleRemove = () => {
-                          dispatch({
-                            type: 'SET_FLOW_SERIES',
-                            payload: {
-                              ...state.flowSeries,
-                              seriesPoses: state.flowSeries.seriesPoses.filter(
-                                (_, i) => i !== index
-                              ),
-                            },
-                          })
-                        }
-
-                        const handleCueChange = (e: React.ChangeEvent<any>) => {
-                          const newVal = e.target.value.slice(0, 1000)
-                          const newSeries = state.flowSeries.seriesPoses.map(
-                            (it, i) => {
-                              if (i !== index) return it
-                              if (typeof it === 'string') {
-                                // convert legacy string to object when user edits cues
-                                const s = splitSeriesPoseEntry(it)
+                          const handleCueChange = (
+                            e: React.ChangeEvent<any>
+                          ) => {
+                            const newVal = e.target.value.slice(0, 1000)
+                            const newSeries = state.flowSeries.seriesPoses.map(
+                              (it, i) => {
+                                if (i !== index) return it
+                                if (typeof it === 'string') {
+                                  // convert legacy string to object when user edits cues
+                                  const s = splitSeriesPoseEntry(it)
+                                  return {
+                                    poseId: undefined,
+                                    sort_english_name: s.name,
+                                    secondary: s.secondary,
+                                    alignment_cues: newVal,
+                                  }
+                                }
                                 return {
-                                  poseId: undefined,
-                                  sort_english_name: s.name,
-                                  secondary: s.secondary,
+                                  ...(it as any),
                                   alignment_cues: newVal,
                                 }
                               }
-                              return {
-                                ...(it as any),
-                                alignment_cues: newVal,
-                              }
-                            }
-                          )
-                          dispatch({
-                            type: 'SET_FLOW_SERIES',
-                            payload: {
-                              ...state.flowSeries,
-                              seriesPoses: newSeries,
-                            },
-                          })
-                        }
+                            )
+                            dispatch({
+                              type: 'SET_FLOW_SERIES',
+                              payload: {
+                                ...state.flowSeries,
+                                seriesPoses: newSeries,
+                              },
+                            })
+                          }
 
-                        return (
-                          <Stack
-                            className="journalLine"
-                            key={`${String(name)}+${index}`}
-                            sx={{
-                              alignItems: 'center',
-                              display: 'flex',
-                              flexDirection: 'row',
-                              gap: 2,
-                            }}
-                          >
-                            <Stack>
-                              <IconButton
-                                disableRipple
-                                sx={{ color: 'error.light' }}
-                                onClick={handleRemove}
-                              >
-                                <DeleteForeverIcon />
-                              </IconButton>
-                            </Stack>
-                            <Stack sx={{ flex: 1 }}>
-                              <Typography
-                                variant="body1"
-                                sx={{
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap',
-                                }}
-                              >
-                                {name}
-                              </Typography>
-                              {secondary && (
+                          return (
+                            <Stack
+                              className="journalLine"
+                              key={`${String(name)}+${index}`}
+                              sx={{
+                                alignItems: 'center',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                gap: 2,
+                              }}
+                            >
+                              <Stack>
+                                <IconButton
+                                  disableRipple
+                                  sx={{ color: 'error.light' }}
+                                  onClick={handleRemove}
+                                >
+                                  <DeleteForeverIcon />
+                                </IconButton>
+                              </Stack>
+                              <Stack sx={{ flex: 1 }}>
                                 <Typography
-                                  variant="body2"
+                                  variant="body1"
                                   sx={{
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
-                                    fontWeight: 'bold',
-                                    fontStyle: 'italic',
                                   }}
                                 >
-                                  {secondary}
+                                  {name}
                                 </Typography>
-                              )}
-                              <TextField
-                                placeholder="Optional alignment cues (max 1000 characters)"
-                                variant="standard"
-                                multiline
-                                minRows={1}
-                                value={alignmentCues}
-                                onChange={handleCueChange}
-                                inputProps={{
-                                  maxLength: 1000,
-                                  'data-testid': `alignment-cues-${index}`,
-                                  'aria-label': `Alignment cues for ${name}`,
-                                }}
-                                sx={{ mt: 1 }}
-                              />
-                              <Typography
-                                variant="caption"
-                                sx={{ color: 'text.secondary' }}
-                              >
-                                {alignmentCues.length}/1000
-                              </Typography>
+                                {secondary && (
+                                  <Typography
+                                    variant="body2"
+                                    sx={{
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      fontWeight: 'bold',
+                                      fontStyle: 'italic',
+                                    }}
+                                  >
+                                    {secondary}
+                                  </Typography>
+                                )}
+                                <TextField
+                                  placeholder="Optional alignment cues (max 1000 characters)"
+                                  variant="standard"
+                                  multiline
+                                  minRows={1}
+                                  value={alignmentCues}
+                                  onChange={handleCueChange}
+                                  inputProps={{
+                                    maxLength: 1000,
+                                    'data-testid': `alignment-cues-${index}`,
+                                    'aria-label': `Alignment cues for ${name}`,
+                                  }}
+                                  sx={{ mt: 1 }}
+                                />
+                                <Typography
+                                  variant="caption"
+                                  sx={{ color: 'text.secondary' }}
+                                >
+                                  {alignmentCues.length}/1000
+                                </Typography>
+                              </Stack>
                             </Stack>
-                          </Stack>
-                        )
-                      })}
-                    </Stack>
-                    <Stack
-                      direction="row"
-                      spacing={2}
-                      justifyContent="flex-end"
-                      sx={{ mt: 3 }}
+                          )
+                        })}
+                      </Stack>
+                    )}
+                  </Paper>
+
+                  {/* Description Section */}
+                  <Paper
+                    elevation={1}
+                    sx={{ p: 3, mb: 3, borderRadius: '12px' }}
+                  >
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      color="primary"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                     >
-                      {/* 
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() =>
-                          dispatch({
-                            type: 'SET_FLOW_SERIES',
-                            payload: {
-                              ...state.flowSeries,
-                              seriesPoses:
-                                state.flowSeries.seriesPoses.slice(0, -1),
-                            },
-                          })
-                        }
-                      >
-                        <Typography>Remove One (-1)</Typography>
-                      </Button>
- */}
-                      {/* <Button
+                      <Image
+                        src={'/icons/designImages/leaf-2.svg'}
+                        alt=""
+                        height={21}
+                        width={21}
+                      />
+                      Description
+                    </Typography>
+                    <TextField
+                      id="outlined-basic"
+                      fullWidth
+                      placeholder="Add an optional description for your flow..."
+                      multiline
+                      minRows={4}
+                      variant="outlined"
+                      name="description"
+                      value={description}
+                      onChange={handleChange}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '12px',
+                        },
+                        '& .MuiInputBase-input': { color: 'primary.main' },
+                      }}
+                      InputProps={{
+                        endAdornment: isDirtyDescription ? (
+                          <CheckCircleIcon
+                            sx={{
+                              color: 'success.main',
+                              alignSelf: 'flex-start',
+                              mt: 1,
+                            }}
+                          />
+                        ) : null,
+                      }}
+                    />
+                  </Paper>
+                </Box>
+
+                {/* Sticky Bottom Action Bar - Consistent with Asana pages */}
+                <Box
+                  sx={{
+                    position: 'fixed',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    backgroundColor: 'background.paper',
+                    borderTop: '1px solid',
+                    borderColor: 'divider',
+                    py: 2,
+                    px: 2,
+                    boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
+                    zIndex: 10,
+                  }}
+                >
+                  <Stack
+                    direction={{ xs: 'column', sm: 'row' }}
+                    spacing={2}
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Button
                       variant="contained"
                       color="primary"
-                      onClick={() =>
-                        dispatch({
-                          type: 'SET_FLOW_SERIES',
-                          payload: {
-                            ...state.flowSeries,
-                            seriesPoses: [],
-                          },
-                        })
-                      }
-                    >
-                      Clear
-                    </Button> */}
-                    </Stack>
-                  </FormControl>
-                  <Grid2 size={12} sx={{ mb: 3 }}>
-                    <Stack direction="row" spacing={2} justifyContent="center">
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        disabled={session === null}
-                        sx={{ borderRadius: '12px' }}
-                      >
-                        {AppText.APP_BUTTON_SUBMIT}
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="inherit"
-                        sx={{
-                          color: 'primary.contrastText',
-                          borderRadius: '12px',
-                        }}
-                        onClick={handleCancel}
-                      >
-                        Start Over
-                      </Button>
-                    </Stack>
-                  </Grid2>
-
-                  <Grid2 size={12} sx={{ mb: 2, mx: 2 }}>
-                    <FormControl
+                      type="submit"
+                      disabled={session === null}
                       sx={{
-                        width: '100%',
-                        border: '1px solid black',
                         borderRadius: '12px',
-                        p: 2,
+                        px: 4,
+                        py: 1.5,
+                        fontSize: '1.1rem',
+                        fontWeight: 600,
+                        minWidth: { xs: '100%', sm: '200px' },
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
                       }}
                     >
-                      <Stack
-                        gap={2}
-                        flexDirection={'row'}
-                        alignItems={'center'}
-                      >
-                        <Typography color={'primary.main'} variant="h3">
-                          Description
-                        </Typography>
-                        <Image
-                          src={'/icons/designImages/leaf-2.svg'}
-                          alt={'leaf icon'}
-                          height={21}
-                          width={21}
-                        ></Image>
-                      </Stack>
-                      <TextField
-                        id="outlined-basic"
-                        // label="Description"
-                        placeholder="Type a description..."
-                        multiline
-                        minRows={4}
-                        variant="standard"
-                        name="description"
-                        value={description}
-                        onChange={handleChange}
-                        sx={{
-                          '& .MuiInputBase-input': { color: 'primary.main' },
-                          width: '100%',
-                        }}
-                        InputProps={{
-                          endAdornment: (
-                            <Checkbox
-                              checked={isDirtyDescription}
-                              onChange={handleChange}
-                              sx={{
-                                position: 'absolute',
-                                top: 0,
-                                right: 0,
-                                color: 'primary.main',
-                                '&.Mui-checked': {
-                                  color: 'primary.main',
-                                },
-                              }}
-                            />
-                          ),
-                        }}
-                      />
-                    </FormControl>
-                  </Grid2>
+                      {AppText.APP_BUTTON_SUBMIT}
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      sx={{
+                        borderRadius: '12px',
+                        px: 4,
+                        py: 1.5,
+                        fontSize: '1.1rem',
+                        fontWeight: 600,
+                        minWidth: { xs: '100%', sm: '160px' },
+                      }}
+                      onClick={handleCancel}
+                    >
+                      Start Over
+                    </Button>
+                  </Stack>
                 </Box>
               </Box>
             </form>
