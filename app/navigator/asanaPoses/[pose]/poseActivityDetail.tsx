@@ -1027,26 +1027,33 @@ export default function PoseActivityDetail({
       )}
 
       {/* Edit/Delete Pose Buttons - Edit visible to creator or 'alpha users'; Delete only to actual creator */}
+      {/* Sticky Bottom Action Bar - Consistent with Create Asana page */}
       {session &&
         session.user &&
         (session.user.email === pose?.created_by ||
           pose?.created_by === 'alpha users') && (
           <Box
             sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              mt: 3,
-              mb: 2,
+              position: 'sticky',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              backgroundColor: 'background.paper',
+              borderTop: '1px solid',
+              borderColor: 'divider',
+              py: 2,
               px: 2,
-              width: '100%',
+              mt: 3,
+              boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
+              zIndex: 10,
             }}
           >
             {/* Make edit/delete buttons stack vertically on xs and row on sm+ */}
             <Stack
               direction={{ xs: 'column', sm: 'row' }}
               spacing={2}
-              sx={{ width: { xs: '100%', sm: 'auto' }, alignItems: 'center' }}
+              justifyContent="center"
+              alignItems="center"
             >
               {!isEditing ? (
                 <>
@@ -1057,11 +1064,13 @@ export default function PoseActivityDetail({
                     startIcon={<EditIcon />}
                     sx={{
                       borderRadius: '12px',
-                      px: 3,
+                      px: 4,
                       py: 1.5,
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
                       textTransform: 'none',
                       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                      width: { xs: '100%', sm: 'auto' },
+                      minWidth: { xs: '100%', sm: '200px' },
                     }}
                   >
                     Edit Pose
@@ -1073,10 +1082,12 @@ export default function PoseActivityDetail({
                       startIcon={<DeleteIcon />}
                       sx={{
                         borderRadius: '12px',
-                        px: 3,
+                        px: 4,
                         py: 1.5,
+                        fontSize: '1.1rem',
+                        fontWeight: 600,
                         textTransform: 'none',
-                        width: { xs: '100%', sm: 'auto' },
+                        minWidth: { xs: '100%', sm: '160px' },
                       }}
                       onClick={async () => {
                         if (!pose?.id) return
@@ -1108,11 +1119,13 @@ export default function PoseActivityDetail({
                     disabled={isSubmitting}
                     sx={{
                       borderRadius: '12px',
-                      px: 3,
+                      px: 4,
                       py: 1.5,
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
                       textTransform: 'none',
                       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                      width: { xs: '100%', sm: 'auto' },
+                      minWidth: { xs: '100%', sm: '200px' },
                     }}
                   >
                     {isSubmitting ? 'Saving...' : 'Save Changes'}
@@ -1125,10 +1138,12 @@ export default function PoseActivityDetail({
                     disabled={isSubmitting}
                     sx={{
                       borderRadius: '12px',
-                      px: 3,
+                      px: 4,
                       py: 1.5,
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
                       textTransform: 'none',
-                      width: { xs: '100%', sm: 'auto' },
+                      minWidth: { xs: '100%', sm: '160px' },
                     }}
                   >
                     Cancel

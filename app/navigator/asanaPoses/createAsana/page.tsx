@@ -572,64 +572,92 @@ export default function Page() {
             </Box>
           )}
 
-          {/* Action Buttons: Create and Cancel */}
-          <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
-            <Button
-              onClick={handleSubmit}
-              variant="contained"
-              size="large"
-              disabled={isSubmitting || successState.isNavigating}
-              sx={{
-                borderRadius: '12px',
-                py: 2,
-                fontSize: '1.1rem',
-                fontWeight: 600,
-              }}
+          {/* Action Buttons: Create and Cancel - Sticky Bottom Bar */}
+          <Box
+            sx={{
+              position: 'sticky',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              backgroundColor: 'background.paper',
+              borderTop: '1px solid',
+              borderColor: 'divider',
+              py: 2,
+              px: 2,
+              mt: 4,
+              mx: -4,
+              boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
+              zIndex: 10,
+            }}
+          >
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              spacing={2}
+              justifyContent="center"
+              alignItems="center"
             >
-              {successState.isNavigating
-                ? 'Redirecting to your new asana...'
-                : isSubmitting
-                  ? 'Creating Asana...'
-                  : 'Create Asana'}
-            </Button>
+              <Button
+                onClick={handleSubmit}
+                variant="contained"
+                size="large"
+                disabled={isSubmitting || successState.isNavigating}
+                sx={{
+                  borderRadius: '12px',
+                  py: 1.5,
+                  px: 4,
+                  fontSize: '1.1rem',
+                  fontWeight: 600,
+                  minWidth: { xs: '100%', sm: '200px' },
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                }}
+              >
+                {successState.isNavigating
+                  ? 'Redirecting to your new asana...'
+                  : isSubmitting
+                    ? 'Creating Asana...'
+                    : 'Create Asana'}
+              </Button>
 
-            <Button
-              onClick={() => {
-                // Clear form inputs and uploaded images
-                setFormFullAsanaPoseData({
-                  sort_english_name: '',
-                  english_names: [],
-                  alternative_english_names: [],
-                  description: '',
-                  category: '',
-                  difficulty: '',
-                  created_by: session?.user?.email ?? 'error-undefined-user',
-                  dristi: '',
-                  sanskrit_names: [],
-                  poseImages: [],
-                  activity_completed: false,
-                  asanaActivities: [],
-                  activity_practice: false,
-                  setup_cues: '',
-                  deepening_cues: '',
-                })
-                setUploadedImages([])
+              <Button
+                onClick={() => {
+                  // Clear form inputs and uploaded images
+                  setFormFullAsanaPoseData({
+                    sort_english_name: '',
+                    english_names: [],
+                    alternative_english_names: [],
+                    description: '',
+                    category: '',
+                    difficulty: '',
+                    created_by: session?.user?.email ?? 'error-undefined-user',
+                    dristi: '',
+                    sanskrit_names: [],
+                    poseImages: [],
+                    activity_completed: false,
+                    asanaActivities: [],
+                    activity_practice: false,
+                    setup_cues: '',
+                    deepening_cues: '',
+                  })
+                  setUploadedImages([])
 
-                // Redirect to Practice Asana (search) page
-                router.push('/navigator/asanaPoses')
-              }}
-              variant="outlined"
-              size="large"
-              sx={{
-                borderRadius: '12px',
-                py: 2,
-                fontSize: '1.1rem',
-                fontWeight: 600,
-              }}
-            >
-              Cancel
-            </Button>
-          </Stack>
+                  // Redirect to Practice Asana (search) page
+                  router.push('/navigator/asanaPoses')
+                }}
+                variant="outlined"
+                size="large"
+                sx={{
+                  borderRadius: '12px',
+                  py: 1.5,
+                  px: 4,
+                  fontSize: '1.1rem',
+                  fontWeight: 600,
+                  minWidth: { xs: '100%', sm: '160px' },
+                }}
+              >
+                Cancel
+              </Button>
+            </Stack>
+          </Box>
         </Stack>
       </Stack>
 

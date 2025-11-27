@@ -260,6 +260,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
             position: 'relative',
             boxShadow: 'none',
             borderRadius: 1,
+            backgroundColor: 'grey.50', // Subtle background for contained images
           }}
         >
           {isLoading && (
@@ -277,6 +278,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
               height: '100%',
               position: 'relative',
               overflow: 'hidden',
+              backgroundColor: 'grey.100', // Background for the image area when using contain
             }}
           >
             <Image
@@ -288,7 +290,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
               }
               fill
               style={{
-                objectFit: 'cover',
+                objectFit: 'contain',
                 transition: 'opacity 0.3s ease-in-out',
               }}
               sizes={getOptimizedSizes(safeActiveIndex)}
