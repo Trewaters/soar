@@ -14,8 +14,10 @@ import {
   CircularProgress,
   Alert,
   Container,
+  Chip,
 } from '@mui/material'
 import Grid2 from '@mui/material/Grid2'
+import Image from 'next/image'
 import PracticeHistoryChart from '@clientComponents/PracticeHistoryChart'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
 import { useSession } from 'next-auth/react'
@@ -483,6 +485,124 @@ const Dashboard: React.FC = () => {
                   {nextGoal.current} / {nextGoal.target} days
                 </Typography>
               </Box>
+            </Paper>
+
+            {/* Achievement Badges Section - Coming Soon */}
+            <Paper
+              elevation={2}
+              sx={{
+                p: 3,
+                mt: 4,
+                borderRadius: 2,
+                opacity: 0.6,
+                position: 'relative',
+              }}
+            >
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                sx={{ mb: 2 }}
+              >
+                <Typography
+                  variant="h6"
+                  fontWeight="bold"
+                  color="text.secondary"
+                >
+                  Achievements
+                </Typography>
+                <Chip
+                  label="Coming Soon"
+                  size="small"
+                  sx={{
+                    backgroundColor: theme.palette.grey[400],
+                    color: 'white',
+                    fontWeight: 600,
+                  }}
+                />
+              </Stack>
+              <Stack
+                direction="row"
+                spacing={2}
+                justifyContent="center"
+                alignItems="center"
+                flexWrap="wrap"
+                sx={{ gap: 2 }}
+              >
+                <Box sx={{ textAlign: 'center' }}>
+                  <Box
+                    sx={{
+                      filter: 'grayscale(100%)',
+                      opacity: 0.5,
+                    }}
+                  >
+                    <Image
+                      src="/icons/profile/login-streak-1.png"
+                      width={64}
+                      height={64}
+                      alt="Login Streak Badge 1 - Coming Soon"
+                    />
+                  </Box>
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    sx={{ mt: 0.5, color: 'text.disabled' }}
+                  >
+                    Week Warrior
+                  </Typography>
+                </Box>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Box
+                    sx={{
+                      filter: 'grayscale(100%)',
+                      opacity: 0.5,
+                    }}
+                  >
+                    <Image
+                      src="/icons/profile/login-streak-2.png"
+                      width={64}
+                      height={64}
+                      alt="Login Streak Badge 2 - Coming Soon"
+                    />
+                  </Box>
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    sx={{ mt: 0.5, color: 'text.disabled' }}
+                  >
+                    Month Master
+                  </Typography>
+                </Box>
+                <Box sx={{ textAlign: 'center' }}>
+                  <Box
+                    sx={{
+                      filter: 'grayscale(100%)',
+                      opacity: 0.5,
+                    }}
+                  >
+                    <Image
+                      src="/icons/profile/login-streak-3.png"
+                      width={64}
+                      height={64}
+                      alt="Login Streak Badge 3 - Coming Soon"
+                    />
+                  </Box>
+                  <Typography
+                    variant="caption"
+                    display="block"
+                    sx={{ mt: 0.5, color: 'text.disabled' }}
+                  >
+                    Dedicated Yogi
+                  </Typography>
+                </Box>
+              </Stack>
+              <Typography
+                variant="body2"
+                color="text.disabled"
+                sx={{ mt: 2, textAlign: 'center', fontStyle: 'italic' }}
+              >
+                Earn badges by maintaining your yoga practice streaks!
+              </Typography>
             </Paper>
           </Box>
         </Grid2>

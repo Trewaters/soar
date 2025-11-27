@@ -215,6 +215,8 @@ describe('Dashboard Page', () => {
           return Promise.resolve({
             ok: false,
             status: 500,
+            statusText: 'Internal Server Error',
+            text: async () => 'Server error',
           })
         }
         return Promise.reject(new Error('Unknown URL'))
@@ -224,7 +226,7 @@ describe('Dashboard Page', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText('Failed to fetch dashboard statistics')
+          screen.getByText(/Failed to fetch dashboard statistics/i)
         ).toBeInTheDocument()
       })
     })
