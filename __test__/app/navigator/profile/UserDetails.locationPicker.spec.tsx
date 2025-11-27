@@ -248,7 +248,7 @@ describe('EditUserDetails - LocationPicker Integration', () => {
       })
 
       const locationInput = screen.getByPlaceholderText(
-        'Search for your city, state, or country'
+        'e.g., San Francisco, CA, USA'
       )
       expect(locationInput).toBeInTheDocument()
       expect(locationInput).toHaveValue('San Diego, CA, USA')
@@ -274,7 +274,7 @@ describe('EditUserDetails - LocationPicker Integration', () => {
 
       await waitFor(() => {
         const locationInput = screen.getByPlaceholderText(
-          'Search for your city, state, or country'
+          'e.g., San Francisco, CA, USA'
         )
         expect(locationInput).toHaveValue('')
       })
@@ -551,13 +551,13 @@ describe('EditUserDetails - LocationPicker Integration', () => {
 
     await waitFor(() => {
       const locationInput = screen.getByPlaceholderText(
-        'Search for your city, state, or country'
+        'e.g., San Francisco, CA, USA'
       )
       expect(locationInput).toBeInTheDocument()
     })
 
     const locationInput = screen.getByPlaceholderText(
-      'Search for your city, state, or country'
+      'e.g., San Francisco, CA, USA'
     )
     await user.clear(locationInput)
     await user.type(locationInput, 'San Diego')
@@ -599,7 +599,7 @@ describe('Edge Cases and Boundary Conditions', () => {
 
     await waitFor(() => {
       const locationInput = screen.getByPlaceholderText(
-        'Search for your city, state, or country'
+        'e.g., San Francisco, CA, USA'
       )
       expect(locationInput).toBeInTheDocument()
       expect(locationInput).toHaveValue('')
@@ -615,13 +615,13 @@ describe('Edge Cases and Boundary Conditions', () => {
 
     await waitFor(() => {
       const locationInput = screen.getByPlaceholderText(
-        'Search for your city, state, or country'
+        'e.g., San Francisco, CA, USA'
       )
       expect(locationInput).toBeInTheDocument()
     })
 
     const locationInput = screen.getByPlaceholderText(
-      'Search for your city, state, or country'
+      'e.g., San Francisco, CA, USA'
     )
     await user.clear(locationInput)
     await user.type(locationInput, longLocationName)
@@ -638,13 +638,13 @@ describe('Edge Cases and Boundary Conditions', () => {
 
     await waitFor(() => {
       const locationInput = screen.getByPlaceholderText(
-        'Search for your city, state, or country'
+        'e.g., San Francisco, CA, USA'
       )
       expect(locationInput).toBeInTheDocument()
     })
 
     const locationInput = screen.getByPlaceholderText(
-      'Search for your city, state, or country'
+      'e.g., San Francisco, CA, USA'
     )
     await user.clear(locationInput)
     await user.type(locationInput, specialLocationName)
@@ -660,13 +660,13 @@ describe('Edge Cases and Boundary Conditions', () => {
 
     await waitFor(() => {
       const locationInput = screen.getByPlaceholderText(
-        'Search for your city, state, or country'
+        'e.g., San Francisco, CA, USA'
       )
       expect(locationInput).toBeInTheDocument()
     })
 
     const locationInput = screen.getByPlaceholderText(
-      'Search for your city, state, or country'
+      'e.g., San Francisco, CA, USA'
     )
     await user.clear(locationInput)
     await user.type(locationInput, 'Sa')

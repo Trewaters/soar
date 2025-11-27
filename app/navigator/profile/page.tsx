@@ -1,12 +1,10 @@
 'use client'
-import { Box, Container, IconButton, Tooltip } from '@mui/material'
+import { Box, Container } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import EditUserDetails from '@app/navigator/profile/editUserDetails'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
 import UserDetails from './UserDetails'
 import React, { useState } from 'react'
-import EditIcon from '@mui/icons-material/Edit'
-import NoteAltIcon from '@mui/icons-material/NoteAlt'
 
 export default function Page() {
   return (
@@ -33,6 +31,14 @@ function ClientWrapper() {
     setEditMode(false) // Switch back to view mode after successful save
   }
 
+  const handleEditClick = () => {
+    setEditMode(true)
+  }
+
+  const handleCancelEdit = () => {
+    setEditMode(false)
+  }
+
   return (
     <Box
       display={'flex'}
@@ -40,19 +46,13 @@ function ClientWrapper() {
       justifyContent={'center'}
       flexDirection={'column'}
     >
-      <Tooltip title={editMode ? 'View Profile' : 'Edit Profile'}>
-        <IconButton
-          aria-label={editMode ? 'View Profile' : 'Edit Profile'}
-          onClick={() => setEditMode((prev) => !prev)}
-          sx={{ alignSelf: 'flex-end', mb: 2 }}
-        >
-          {editMode ? <NoteAltIcon /> : <EditIcon />}
-        </IconButton>
-      </Tooltip>
       {editMode ? (
-        <EditUserDetails onSaveSuccess={handleSaveSuccess} />
+        <EditUserDetails
+          onSaveSuccess={handleSaveSuccess}
+          onCancel={handleCancelEdit}
+        />
       ) : (
-        <UserDetails />
+        <UserDetails onEditClick={handleEditClick} />
       )}
     </Box>
   )

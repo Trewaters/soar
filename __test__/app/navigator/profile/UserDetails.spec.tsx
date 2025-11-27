@@ -714,7 +714,7 @@ describe('UserDetails Avatar Display', () => {
       expect(naElements.length).toBeGreaterThanOrEqual(6)
     })
 
-    it('should display default headline when headline is empty', () => {
+    it('should display N/A when headline is empty', () => {
       const userData = {
         id: '1',
         email: 'test@example.com',
@@ -731,7 +731,9 @@ describe('UserDetails Avatar Display', () => {
       render(<UserDetails />, { wrapper: TestWrapper })
 
       expect(screen.getByText('Headline')).toBeInTheDocument()
-      expect(screen.getByText('I am a Yoga instructor.')).toBeInTheDocument()
+      // When headline is empty, should display N/A via ProfileDetails component
+      const headlineElements = screen.getAllByText('N/A')
+      expect(headlineElements.length).toBeGreaterThan(0)
     })
 
     it('should apply highlighted background to username and email fields', () => {
@@ -885,6 +887,74 @@ describe('UserDetails Avatar Display', () => {
       expect(bioIndex).toBeLessThan(websiteIndex)
       expect(websiteIndex).toBeLessThan(locationIndex)
       expect(locationIndex).toBeLessThan(emailIndex)
+    })
+  })
+
+  describe('Edit Profile Button', () => {
+    const userData = {
+      id: '1',
+      email: 'test@example.com',
+      name: 'Test User',
+      createdAt: '2023-01-01T00:00:00.000Z',
+    }
+
+    beforeEach(() => {
+      mockUseUser.mockReturnValue({
+        state: { userData },
+        dispatch: mockDispatch,
+      })
+    })
+
+    it('should display edit button in the green header banner when onEditClick is provided', () => {
+      const mockOnEditClick = jest.fn()
+      render(<UserDetails onEditClick={mockOnEditClick} />, {
+        wrapper: TestWrapper,
+      })
+
+      const editButton = screen.getByTestId('edit-profile-button')
+      expect(editButton).toBeInTheDocument()
+    })
+
+    it('should not display edit button when onEditClick is not provided', () => {
+      render(<UserDetails />, { wrapper: TestWrapper })
+
+      const editButton = screen.queryByTestId('edit-profile-button')
+      expect(editButton).not.toBeInTheDocument()
+    })
+
+    it('should call onEditClick when edit button is clicked', async () => {
+      const mockOnEditClick = jest.fn()
+      const user = userEvent.setup()
+
+      render(<UserDetails onEditClick={mockOnEditClick} />, {
+        wrapper: TestWrapper,
+      })
+
+      const editButton = screen.getByTestId('edit-profile-button')
+      await user.click(editButton)
+
+      expect(mockOnEditClick).toHaveBeenCalledTimes(1)
+    })
+
+    it('should have proper accessibility label for the edit button', () => {
+      const mockOnEditClick = jest.fn()
+      render(<UserDetails onEditClick={mockOnEditClick} />, {
+        wrapper: TestWrapper,
+      })
+
+      const editButton = screen.getByRole('button', { name: /edit profile/i })
+      expect(editButton).toBeInTheDocument()
+    })
+
+    it('should position edit button in the header next to the title', () => {
+      const mockOnEditClick = jest.fn()
+      render(<UserDetails onEditClick={mockOnEditClick} />, {
+        wrapper: TestWrapper,
+      })
+
+      // The edit button should exist and be visible in the header
+      const editButton = screen.getByTestId('edit-profile-button')
+      expect(editButton).toBeVisible()
     })
   })
 })

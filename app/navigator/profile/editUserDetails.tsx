@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState, useCallback } from 'react'
 import Modal from '@mui/material/Modal'
+import type { Theme } from '@mui/material/styles'
 import { ProfileImageManager } from '@app/clientComponents/ProfileImage/ProfileImageManager'
 import {
   Avatar,
@@ -20,7 +21,7 @@ import {
   Collapse,
   IconButton,
   Link,
-  Divider,
+  Alert,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { red } from '@mui/material/colors'
@@ -34,6 +35,7 @@ import ShareIcon from '@mui/icons-material/Share'
 import MapIcon from '@mui/icons-material/Map'
 import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import SaveIcon from '@mui/icons-material/Save'
+import CloseIcon from '@mui/icons-material/Close'
 import { styled } from '@mui/material/styles'
 import { LocationPicker } from '@app/clientComponents/locationPicker'
 import TextInputField from '@app/clientComponents/inputComponents/TextInputField'
@@ -45,6 +47,7 @@ import theme from '@styles/theme'
 
 interface EditUserDetailsProps {
   onSaveSuccess?: () => void
+  onCancel?: () => void
 }
 
 const yogaStyles = [
@@ -82,6 +85,7 @@ const ExpandMore = styled(
 
 export default function EditUserDetails({
   onSaveSuccess,
+  onCancel,
 }: EditUserDetailsProps = {}) {
   const { data: session } = useSession()
   // const session = {
@@ -352,7 +356,7 @@ export default function EditUserDetails({
   const textFieldStyles = {
     '& .MuiInputBase-root': {
       borderRadius: '12px',
-      boxShadow: '0 4px 4px 0 #CBCBCB',
+      boxShadow: (theme: Theme) => `0 4px 4px 0 ${theme.palette.grey[400]}`,
       fontSize: '16px', // Prevents mobile zoom
       minHeight: '48px', // Touch-friendly
     },
@@ -544,16 +548,39 @@ export default function EditUserDetails({
                 p: 3,
               }}
             >
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Image
-                  src={'/icons/profile/leaf-orange.png'}
-                  width={32}
-                  height={38}
-                  alt="Yoga Practitioner icon"
-                />
-                <Typography variant="h4" fontWeight="bold">
-                  Edit Profile
-                </Typography>
+              <Stack
+                direction="row"
+                spacing={2}
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Image
+                    src={'/icons/profile/leaf-orange.png'}
+                    width={32}
+                    height={38}
+                    alt="Yoga Practitioner icon"
+                  />
+                  <Typography variant="h4" fontWeight="bold">
+                    Edit Profile
+                  </Typography>
+                </Stack>
+                {onCancel && (
+                  <IconButton
+                    aria-label="Cancel editing and view profile"
+                    onClick={onCancel}
+                    sx={{
+                      color: 'white',
+                      bgcolor: 'rgba(255, 255, 255, 0.2)',
+                      '&:hover': {
+                        bgcolor: 'rgba(255, 255, 255, 0.3)',
+                      },
+                    }}
+                    data-testid="cancel-edit-header-button"
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                )}
               </Stack>
             </Box>
 
@@ -571,6 +598,7 @@ export default function EditUserDetails({
                   boxSizing: 'border-box',
                 }}
                 component="form"
+                id="edit-user-details-form"
                 onSubmit={handleSubmit}
                 data-testid="edit-user-details-form"
               >
@@ -865,8 +893,20 @@ export default function EditUserDetails({
                 </Card>
 
                 {/* Form Fields */}
-                <FormControl sx={{ width: '100%', mt: 2 }}>
-                  <Typography variant="body1" sx={{ mb: 1 }}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 3,
+                    borderRadius: '16px',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    mt: 2,
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+                  >
                     Username
                   </Typography>
                   <TextField
@@ -876,77 +916,100 @@ export default function EditUserDetails({
                     variant="filled"
                     disabled
                     fullWidth
+                    helperText="Username cannot be changed"
                     sx={{ ...textFieldStyles, width: '100%' }}
                   />
-                </FormControl>
+                </Paper>
 
-                <Stack
-                  direction={{ xs: 'column', md: 'row' }}
-                  spacing={2}
-                  sx={{ mt: 2 }}
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 3,
+                    borderRadius: '16px',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    mt: 2,
+                  }}
                 >
-                  <FormControl sx={{ width: '100%' }}>
-                    <Typography variant="body1" sx={{ mb: 1 }}>
-                      First Name
-                    </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+                  >
+                    Name
+                  </Typography>
+                  <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                     <TextInputField
                       name="firstName"
-                      placeholder="Enter First Name"
-                      value={formData.firstName ?? ''}
-                      onChange={(e) => {
-                        const { name, value } = e.target
-                        setFormData((prev) => ({
-                          ...prev,
-                          [name]: value,
-                        }))
-                      }}
+                      placeholder="e.g., Amara"
+                      value={formData.firstName}
+                      onChange={handleChange}
                       variant="outlined"
                       required
                       fullWidth
+                      label="First Name"
                       sx={{ ...textFieldStyles, width: '100%' }}
                     />
-                  </FormControl>
-
-                  <FormControl sx={{ width: '100%' }}>
-                    <Typography variant="body1" sx={{ mb: 1 }}>
-                      Last Name
-                    </Typography>
                     <TextInputField
                       name="lastName"
-                      placeholder="Enter Last Name"
+                      placeholder="e.g., Sharma"
                       value={formData.lastName}
                       onChange={handleChange}
                       variant="outlined"
                       required
                       fullWidth
+                      label="Last Name"
                       sx={{ ...textFieldStyles, width: '100%' }}
                     />
-                  </FormControl>
-                </Stack>
+                  </Stack>
+                </Paper>
 
-                <FormControl sx={{ width: '100%', mt: 2 }}>
-                  <Typography variant="body1" sx={{ mb: 1 }}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 3,
+                    borderRadius: '16px',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    mt: 2,
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+                  >
                     Pronouns
                   </Typography>
                   <TextInputField
                     name="pronouns"
-                    placeholder="Enter Pronouns"
+                    placeholder="e.g., she/her, he/him, they/them"
                     value={formData.pronouns}
                     onChange={handleChange}
                     variant="outlined"
                     fullWidth
                     sx={{ ...textFieldStyles, width: '100%' }}
                   />
-                </FormControl>
+                </Paper>
 
-                <FormControl sx={{ width: '100%', mt: 2 }}>
-                  <Typography variant="body1" sx={{ mb: 1 }}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 3,
+                    borderRadius: '16px',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    mt: 2,
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+                  >
                     Headline
                   </Typography>
                   <TextInputField
                     name="headline"
-                    placeholder="Enter...2 sentences"
-                    value={formData.headline || 'I am a Yoga instructor.'}
+                    placeholder="e.g., Yoga instructor passionate about mindfulness"
+                    value={formData.headline}
                     onChange={handleChange}
                     multiline
                     maxRows={6}
@@ -954,15 +1017,27 @@ export default function EditUserDetails({
                     fullWidth
                     sx={{ ...textFieldStyles, width: '100%' }}
                   />
-                </FormControl>
+                </Paper>
 
-                <FormControl sx={{ width: '100%', mt: 2 }}>
-                  <Typography variant="body1" sx={{ mb: 1 }}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 3,
+                    borderRadius: '16px',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    mt: 2,
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+                  >
                     Description/About/Bio
                   </Typography>
                   <TextInputField
                     name="bio"
-                    placeholder="Enter...Biography"
+                    placeholder="e.g., Share your yoga journey, teaching experience, and what inspires your practice..."
                     value={formData.bio}
                     onChange={handleChange}
                     multiline
@@ -971,31 +1046,55 @@ export default function EditUserDetails({
                     fullWidth
                     sx={{ ...textFieldStyles, width: '100%' }}
                   />
-                </FormControl>
+                </Paper>
 
-                <FormControl sx={{ width: '100%', mt: 2 }}>
-                  <Typography variant="body1" sx={{ mb: 1 }}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 3,
+                    borderRadius: '16px',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    mt: 2,
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+                  >
                     Website URL
                   </Typography>
                   <TextInputField
                     name="websiteURL"
-                    placeholder="Enter website URL"
+                    placeholder="e.g., https://myyogastudio.com"
                     value={formData.websiteURL}
                     onChange={handleChange}
                     variant="outlined"
                     fullWidth
                     sx={{ ...textFieldStyles, width: '100%' }}
                   />
-                </FormControl>
+                </Paper>
 
-                <FormControl sx={{ width: '100%', mt: 2 }}>
-                  <Typography variant="body1" sx={{ mb: 1 }}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 3,
+                    borderRadius: '16px',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    mt: 2,
+                  }}
+                >
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+                  >
                     My Location
                   </Typography>
                   <LocationPicker
                     value={formData.location}
                     onChange={handleLocationChange}
-                    placeholder="Search for your city, state, or country"
+                    placeholder="e.g., San Francisco, CA, USA"
                     variant="outlined"
                     fullWidth
                     showCurrentLocation={true}
@@ -1003,66 +1102,105 @@ export default function EditUserDetails({
                     helperText="Select your location to connect with local yoga practitioners"
                     sx={{ ...textFieldStyles, width: '100%' }}
                   />
-                </FormControl>
+                </Paper>
 
-                <Typography variant="body1" sx={{ mb: 1, mt: 2 }}>
-                  Email Address (primary/internal)
-                </Typography>
-                <Typography
-                  variant="body1"
-                  sx={{ mb: 1, backgroundColor: 'lightgray' }}
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 3,
+                    borderRadius: '16px',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    mt: 2,
+                    mb: 20, // Space for sticky action bar above bottom nav
+                  }}
                 >
-                  {userData?.email ?? 'N/A'}
-                </Typography>
-                <FormHelperText>
-                  Your email address cannot be changed.
-                </FormHelperText>
-                {/* Move Manage Profile Images button above Save button */}
-                <Stack
-                  direction={{ xs: 'column', sm: 'row' }}
-                  spacing={2}
-                  sx={{ pt: 2 }}
-                >
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    onClick={() => setImageManagerOpen(true)}
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+                  >
+                    Email Address (primary/internal)
+                  </Typography>
+                  <Typography
+                    variant="body1"
                     sx={{
-                      py: 1.5,
-                      fontSize: 16,
-                      borderRadius: 2,
+                      mb: 1,
+                      backgroundColor: 'grey.200',
+                      p: 1.5,
+                      borderRadius: '12px',
                     }}
                   >
-                    Manage Profile Images
-                  </Button>
-
-                  <Button
-                    type="submit"
-                    disabled={loading}
-                    variant="contained"
-                    fullWidth
-                    startIcon={loading ? null : <SaveIcon />}
-                    sx={{
-                      py: 1.5,
-                      fontSize: 16,
-                      fontWeight: 600,
-                      borderRadius: 2,
-                      bgcolor: theme.palette.success.main,
-                      '&:hover': {
-                        bgcolor: theme.palette.success.dark,
-                      },
-                    }}
-                  >
-                    {loading ? (
-                      <CircularProgress size={24} color="inherit" />
-                    ) : (
-                      'Save Changes'
-                    )}
-                  </Button>
-                </Stack>
+                    {userData?.email ?? 'N/A'}
+                  </Typography>
+                  <FormHelperText>
+                    Your email address cannot be changed.
+                  </FormHelperText>
+                </Paper>
               </Stack>
             </Box>
           </Paper>
+
+          {/* Sticky Action Bar - Positioned above bottom navigation */}
+          <Box
+            sx={{
+              position: 'fixed',
+              bottom: 66, // Above bottom nav (66px height)
+              left: 0,
+              right: 0,
+              backgroundColor: 'background.paper',
+              borderTop: '1px solid',
+              borderColor: 'divider',
+              py: 2.5,
+              px: 3,
+              zIndex: 1100,
+              boxShadow: '0px -4px 12px rgba(0, 0, 0, 0.12)',
+            }}
+            data-testid="sticky-action-bar"
+          >
+            <Stack
+              direction="row"
+              spacing={2}
+              justifyContent="center"
+              sx={{ maxWidth: '600px', mx: 'auto' }}
+            >
+              <Button
+                variant="outlined"
+                onClick={onCancel}
+                data-testid="cancel-edit-button"
+                sx={{
+                  borderRadius: '12px',
+                  px: 4,
+                  py: 1.5,
+                  fontSize: '1.1rem',
+                  fontWeight: 600,
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                form="edit-user-details-form"
+                disabled={loading}
+                variant="contained"
+                startIcon={loading ? null : <SaveIcon />}
+                data-testid="save-changes-button"
+                sx={{
+                  borderRadius: '12px',
+                  px: 4,
+                  py: 1.5,
+                  fontSize: '1.1rem',
+                  fontWeight: 600,
+                  flex: 1,
+                }}
+              >
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  'Save Changes'
+                )}
+              </Button>
+            </Stack>
+          </Box>
         </>
       )}
     </>

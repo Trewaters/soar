@@ -9,17 +9,23 @@ import {
   CardContent,
   CardActions,
   IconButton,
+  Avatar,
 } from '@mui/material'
 import { red } from '@mui/material/colors'
 import Image from 'next/image'
 import { UseUser } from '@app/context/UserContext'
-import { UserAvatar } from '@app/clientComponents/UserAvatar'
 import { useSession } from 'next-auth/react'
 import ProfileDetails from '@app/clientComponents/profileUi/ProfileDetails'
+import theme from '@styles/theme'
 
 import ShareIcon from '@mui/icons-material/Share'
+import EditIcon from '@mui/icons-material/Edit'
 
-export default function UserDetails() {
+interface UserDetailsProps {
+  onEditClick?: () => void
+}
+
+export default function UserDetails({ onEditClick }: UserDetailsProps) {
   const { data: session } = useSession()
   const {
     state: { userData },
@@ -198,140 +204,277 @@ export default function UserDetails() {
     ? new Date(userData.createdAt).toLocaleDateString()
     : 'N/A'
 
+  // Placeholder image
+  const profilePlaceholder = '/icons/profile/profile-person.svg'
+
   return (
     <Paper
-      elevation={1}
+      elevation={3}
       sx={{
         mx: { xs: 0, sm: 2, md: 4 },
         my: { xs: 0, sm: 2 },
         width: { xs: '100%', sm: '95%', md: '80%', lg: '65%' },
         maxWidth: 700,
         alignSelf: 'center',
+        borderRadius: 3,
+        overflow: 'hidden',
       }}
     >
-      <Stack
-        spacing={3}
+      {/* Header Section with Green Background */}
+      <Box
         sx={{
-          p: { xs: 2, sm: 3, md: 4 },
-          width: '100%',
-          boxSizing: 'border-box',
+          bgcolor: theme.palette.success.main,
+          color: 'white',
+          p: 3,
         }}
       >
-        {/* Header */}
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Image
-            src={'/icons/profile/leaf-orange.png'}
-            width={24}
-            height={29}
-            alt="Yoga Practitioner icon"
-          />
-          <Typography variant="h2" color="primary.main">
-            Yoga Practitioner
-          </Typography>
-        </Stack>
         <Stack
-          direction={{ xs: 'column', md: 'row' }}
-          spacing={{ xs: 2, md: 3 }}
+          direction="row"
+          spacing={2}
+          alignItems="center"
+          justifyContent="space-between"
         >
-          <Stack alignItems="center" flex={1} sx={{ position: 'relative' }}>
-            <UserAvatar
-              size="large"
-              showPlaceholderIndicator={false}
-              sx={{
-                bgcolor: red[500],
-                width: { xs: 120, md: 150 },
-                height: { xs: 120, md: 150 },
-              }}
-              aria-label="name initial"
-              enableUpload={false}
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Image
+              src={'/icons/profile/leaf-orange.png'}
+              width={32}
+              height={38}
+              alt="Yoga Practitioner icon"
             />
-          </Stack>
-          <Stack flex={3} spacing={2}>
-            <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
-              {userData.name ?? 'Yogi Name'}
+            <Typography variant="h4" fontWeight="bold">
+              Yoga Practitioner
             </Typography>
-            <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+          </Stack>
+          {onEditClick && (
+            <IconButton
+              aria-label="Edit Profile"
+              onClick={onEditClick}
+              sx={{
+                color: 'white',
+                bgcolor: 'rgba(255, 255, 255, 0.2)',
+                '&:hover': {
+                  bgcolor: 'rgba(255, 255, 255, 0.3)',
+                },
+              }}
+              data-testid="edit-profile-button"
+            >
+              <EditIcon />
+            </IconButton>
+          )}
+        </Stack>
+      </Box>
+
+      {/* Content wrapper with padding */}
+      <Box
+        sx={{
+          p: { xs: 2, sm: 2.5, md: 3 },
+          px: { xs: 2, sm: 3, md: 4 },
+        }}
+      >
+        <Stack spacing={3}>
+          {/* Profile Image and Name Section */}
+          <Stack spacing={2} sx={{ textAlign: 'center' }}>
+            <Box sx={{ alignSelf: 'center' }}>
+              <Avatar
+                sx={{
+                  bgcolor: red[500],
+                  width: { xs: 140, md: 160 },
+                  height: { xs: 140, md: 160 },
+                  border: '4px solid',
+                  borderColor: theme.palette.success.main,
+                }}
+                aria-label="name initial"
+                alt="User profile image"
+                src={
+                  userData?.activeProfileImage || userData?.image || undefined
+                }
+              >
+                {!(userData?.activeProfileImage || userData?.image) && (
+                  <Image
+                    src={profilePlaceholder}
+                    width={60}
+                    height={60}
+                    alt="Default profile icon"
+                  />
+                )}
+              </Avatar>
+            </Box>
+
+            <Typography
+              variant="h5"
+              sx={{ mt: 2, fontWeight: 600, color: 'text.primary' }}
+            >
+              {userData?.name ?? 'Yogi Name'}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
               Member since {membershipDate}
             </Typography>
           </Stack>
-        </Stack>
 
-        {/* Share Preview Card */}
-        <Card
-          sx={{
-            backgroundColor: 'grey.100',
-            border: '1px solid',
-            borderColor: 'grey.300',
-          }}
-        >
-          <CardContent>
+          {/* Share Preview Card */}
+          <Card
+            sx={{
+              backgroundColor: 'grey.100',
+              border: '1px solid',
+              borderColor: 'grey.300',
+            }}
+          >
+            <CardContent>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ whiteSpace: 'pre-line' }}
+              >
+                {getSharePreviewText()}
+              </Typography>
+            </CardContent>
+            <CardActions disableSpacing sx={{ pt: 0 }}>
+              <IconButton
+                aria-label="share profile"
+                onClick={handleShare}
+                sx={{ ml: 'auto' }}
+              >
+                <ShareIcon />
+              </IconButton>
+            </CardActions>
+          </Card>
+
+          {error && (
             <Typography
               variant="body2"
-              color="text.secondary"
-              sx={{ whiteSpace: 'pre-line' }}
+              color={error.includes('success') ? 'success.main' : 'error.main'}
+              sx={{ textAlign: 'center', py: 1 }}
             >
-              {getSharePreviewText()}
+              {error}
             </Typography>
-          </CardContent>
-          <CardActions disableSpacing sx={{ pt: 0 }}>
-            <IconButton
-              aria-label="share profile"
-              onClick={handleShare}
-              sx={{ ml: 'auto' }}
-            >
-              <ShareIcon />
-            </IconButton>
-          </CardActions>
-        </Card>
+          )}
 
-        {error && (
-          <Typography
-            variant="body2"
-            color={error.includes('success') ? 'success.main' : 'error.main'}
-            sx={{ textAlign: 'center', py: 1 }}
+          {/* Profile Fields */}
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
           >
-            {error}
-          </Typography>
-        )}
+            <ProfileDetails
+              label="Username"
+              details={userData.name}
+              highlightBackground
+            />
+          </Paper>
 
-        <ProfileDetails
-          label="Username"
-          details={userData.name}
-          highlightBackground
-        />
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Typography
+              variant="subtitle1"
+              sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+            >
+              Name
+            </Typography>
+            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+              <Box sx={{ width: '100%' }}>
+                <ProfileDetails
+                  label="First Name"
+                  details={userData.firstName}
+                />
+              </Box>
+              <Box sx={{ width: '100%' }}>
+                <ProfileDetails label="Last Name" details={userData.lastName} />
+              </Box>
+            </Stack>
+          </Paper>
 
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-          <Box sx={{ width: '100%' }}>
-            <ProfileDetails label="First Name" details={userData.firstName} />
-          </Box>
-          <Box sx={{ width: '100%' }}>
-            <ProfileDetails label="Last Name" details={userData.lastName} />
-          </Box>
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <ProfileDetails label="Pronouns" details={userData.pronouns} />
+          </Paper>
+
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <ProfileDetails label="Headline" details={userData.headline} />
+          </Paper>
+
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <ProfileDetails
+              label="Description/About/Bio"
+              details={userData.bio}
+              variant="multiline"
+            />
+          </Paper>
+
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <ProfileDetails label="Website URL" details={userData.websiteURL} />
+          </Paper>
+
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <ProfileDetails label="My Location" details={userData.location} />
+          </Paper>
+
+          <Paper
+            elevation={0}
+            sx={{
+              p: 3,
+              borderRadius: '16px',
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <ProfileDetails
+              label="Email Address (primary/internal)"
+              details={userData.email}
+              highlightBackground
+            />
+          </Paper>
         </Stack>
-
-        <ProfileDetails label="Pronouns" details={userData.pronouns} />
-
-        <ProfileDetails
-          label="Headline"
-          details={userData.headline || 'I am a Yoga instructor.'}
-        />
-
-        <ProfileDetails
-          label="Description/About/Bio"
-          details={userData.bio}
-          variant="multiline"
-        />
-
-        <ProfileDetails label="Website URL" details={userData.websiteURL} />
-
-        <ProfileDetails label="My Location" details={userData.location} />
-
-        <ProfileDetails
-          label="Email Address (primary/internal)"
-          details={userData.email}
-          highlightBackground
-        />
-      </Stack>
+      </Box>
     </Paper>
   )
 }
