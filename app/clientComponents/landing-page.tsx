@@ -17,7 +17,7 @@ const links = [
     icon: <Brightness1OutlinedIcon />,
   },
   {
-    name: 'Series',
+    name: 'Flows',
     href: '/navigator/flows/practiceSeries',
     // icon: <TimelapseOutlinedIcon />,
     icon: <WorkspacesIcon />,

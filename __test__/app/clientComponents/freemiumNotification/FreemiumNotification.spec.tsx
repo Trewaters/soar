@@ -64,7 +64,7 @@ describe('FreemiumNotification', () => {
 
       expect(screen.getByText('Login Required')).toBeInTheDocument()
       expect(
-        screen.getByText('Please log in to create custom series')
+        screen.getByText('Please log in to create custom flows')
       ).toBeInTheDocument()
       expect(
         screen.getByRole('button', { name: /log in/i })
@@ -199,7 +199,7 @@ describe('FreemiumNotification', () => {
     }> = [
       { type: 'createAsana', expectedText: 'custom asanas' },
       { type: 'createFlow', expectedText: 'custom flows' },
-      { type: 'createSeries', expectedText: 'custom series' },
+      { type: 'createSeries', expectedText: 'custom flows' },
       { type: 'createSequence', expectedText: 'custom sequences' },
     ]
 

@@ -165,7 +165,7 @@ describe('LibraryPage Profile Images Tab Count', () => {
       screen.getByRole('tab', { name: /Asanas \(1\)/i })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('tab', { name: /Series \(2\)/i })
+      screen.getByRole('tab', { name: /Flows \(2\)/i })
     ).toBeInTheDocument()
     expect(
       screen.getByRole('tab', { name: /Sequences \(0\)/i })
@@ -534,7 +534,7 @@ describe('LibraryPage - SeriesCard and SequenceCard Click to View', () => {
     render(<LibraryPage />, { wrapper: TestWrapper })
 
     // Switch to Series tab
-    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    const seriesTab = screen.getByRole('tab', { name: /Flows/i })
     await user.click(seriesTab)
 
     await screen.findByText('Sun Salutation')
@@ -599,7 +599,7 @@ describe('LibraryPage - SeriesCard and SequenceCard Click to View', () => {
     render(<LibraryPage />, { wrapper: TestWrapper })
 
     // Switch to Series tab
-    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    const seriesTab = screen.getByRole('tab', { name: /Flows/i })
     await user.click(seriesTab)
 
     await screen.findByText('Sun Salutation')
@@ -645,7 +645,7 @@ describe('LibraryPage - SeriesCard Delete Feature', () => {
     render(<LibraryPage />, { wrapper: TestWrapper })
 
     // Switch to Series tab
-    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    const seriesTab = screen.getByRole('tab', { name: /Flows/i })
     await user.click(seriesTab)
 
     await screen.findByText('Sun Salutation')
@@ -672,7 +672,7 @@ describe('LibraryPage - SeriesCard Delete Feature', () => {
     render(<LibraryPage />, { wrapper: TestWrapper })
 
     // Switch to Series tab
-    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    const seriesTab = screen.getByRole('tab', { name: /Flows/i })
     await user.click(seriesTab)
 
     await screen.findByText('Sun Salutation')
@@ -704,7 +704,7 @@ describe('LibraryPage - SeriesCard Delete Feature', () => {
     render(<LibraryPage />, { wrapper: TestWrapper })
 
     // Switch to Series tab
-    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    const seriesTab = screen.getByRole('tab', { name: /Flows/i })
     await user.click(seriesTab)
 
     await screen.findByText('Sun Salutation')
@@ -741,7 +741,7 @@ describe('LibraryPage - SeriesCard Delete Feature', () => {
     render(<LibraryPage />, { wrapper: TestWrapper })
 
     // Switch to Series tab
-    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    const seriesTab = screen.getByRole('tab', { name: /Flows/i })
     await user.click(seriesTab)
 
     await screen.findByText('Sun Salutation')
@@ -791,7 +791,7 @@ describe('LibraryPage - SeriesCard Delete Feature', () => {
     render(<LibraryPage />, { wrapper: TestWrapper })
 
     // Switch to Series tab
-    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    const seriesTab = screen.getByRole('tab', { name: /Flows/i })
     await user.click(seriesTab)
 
     await screen.findByText('Sun Salutation')
@@ -820,7 +820,7 @@ describe('LibraryPage - SeriesCard Delete Feature', () => {
     render(<LibraryPage />, { wrapper: TestWrapper })
 
     // Switch to Series tab
-    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    const seriesTab = screen.getByRole('tab', { name: /Flows/i })
     await user.click(seriesTab)
 
     await screen.findByText('Sun Salutation')
@@ -858,7 +858,7 @@ describe('LibraryPage - SeriesCard Delete Feature', () => {
     render(<LibraryPage />, { wrapper: TestWrapper })
 
     // Switch to Series tab
-    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    const seriesTab = screen.getByRole('tab', { name: /Flows/i })
     await user.click(seriesTab)
 
     await screen.findByText('Sun Salutation')
@@ -1327,7 +1327,7 @@ describe('LibraryPage - Series View Toggle Feature', () => {
     render(<LibraryPage />, { wrapper: TestWrapper })
 
     // Switch to Series tab
-    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    const seriesTab = screen.getByRole('tab', { name: /Flows/i })
     await user.click(seriesTab)
 
     await screen.findByText('Sun Salutation')
@@ -1361,7 +1361,7 @@ describe('LibraryPage - Series View Toggle Feature', () => {
     render(<LibraryPage />, { wrapper: TestWrapper })
 
     // Switch to Series tab
-    const seriesTab = screen.getByRole('tab', { name: /Series/i })
+    const seriesTab = screen.getByRole('tab', { name: /Flows/i })
     await user.click(seriesTab)
 
     await screen.findByText('Sun Salutation')

@@ -345,7 +345,7 @@ export default function Page() {
       setOpen(false)
       setAcOpen(false)
       // Update URL to show the series ID
-      router.push(`/navigator/flows/practiceSeries?id=${value.id}`, {
+      router.push(`/navigator/flows/practiceSeries?id=${value.id}`, undefined, {
         scroll: false,
       })
     }
@@ -486,8 +486,8 @@ export default function Page() {
     >
       <SplashHeader
         src={'/images/series/series-practice-splash-header.png'}
-        alt={'Practice Series'}
-        title="Practice Series"
+        alt={'Practice Flows'}
+        title="Practice Flows"
       />
       <Box
         sx={{
@@ -522,8 +522,8 @@ export default function Page() {
             }}
             onClose={() => setAcOpen(false)}
             loading={loading}
-            loadingText="Loading series..."
-            noOptionsText={loading ? 'Loading series...' : 'No series found'}
+            loadingText="Loading flows..."
+            noOptionsText={loading ? 'Loading flows...' : 'No flows found'}
             options={orderedSeriesOptions}
             inputValue={searchInputValue}
             onInputChange={(event, newInputValue) => {
@@ -659,7 +659,7 @@ export default function Page() {
             renderInput={(params) => (
               <AutocompleteInput
                 params={params}
-                placeholder="Search for a Series"
+                placeholder="Search for a Flow"
                 sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
                 onClick={() => setAcOpen(true)}
                 inputValue={searchInputValue}
@@ -707,7 +707,7 @@ export default function Page() {
                     </Typography>
                     {isOwner && (
                       <IconButton
-                        aria-label="Edit series"
+                        aria-label="Edit flow"
                         onClick={() => setEditOpen(true)}
                         color="primary"
                         size="small"
@@ -822,7 +822,7 @@ export default function Page() {
         open={open}
         onClose={() => setOpen(false)}
       >
-        <Typography variant="body1">Pick a Series to practice.</Typography>
+        <Typography variant="body1">Pick a Flow to practice.</Typography>
       </Drawer>
 
       {/* Dialog rendering removed to keep editor inline only. */}

@@ -145,12 +145,12 @@ describe('TabHeader Component', () => {
       })
       expect(practiceNav).toBeInTheDocument()
 
-      // Check for Series button from LandingPage (NavigationButton renders as button, not link)
+      // Check for Flows button from LandingPage (NavigationButton renders as button, not link)
       const seriesButton = screen.getByRole('button', {
-        name: /navigate to series section/i,
+        name: /navigate to flows section/i,
       })
       expect(seriesButton).toBeInTheDocument()
-      expect(seriesButton).toHaveTextContent('Series')
+      expect(seriesButton).toHaveTextContent('Flows')
     })
 
     it('switches to second tab panel when second tab is clicked', () => {
@@ -298,7 +298,7 @@ describe('TabHeader Component', () => {
       render(<TabHeader />, { wrapper: TestWrapper })
 
       // Should show LandingPage content in first tab
-      const seriesButton = screen.getByRole('button', { name: /series/i })
+      const seriesButton = screen.getByRole('button', { name: /flows/i })
       expect(seriesButton).toBeInTheDocument()
     })
 

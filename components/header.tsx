@@ -99,7 +99,7 @@ export default function Header() {
         color: 'primary',
       },
       {
-        name: 'Series',
+        name: 'Flows',
         href: '/navigator/flows/practiceSeries',
         // icon: <TimelapseOutlinedIcon color="primary" />,
         icon: <WorkspacesIcon color="primary" />,

@@ -162,7 +162,7 @@ export default function WeeklyActivityViewer({
       case 'asana':
         return 'Asana'
       case 'series':
-        return 'Series'
+        return 'Flow'
       case 'sequence':
         return 'Sequence'
       default:
@@ -189,7 +189,7 @@ export default function WeeklyActivityViewer({
       case 'asana':
         return 'All Activity This Week'
       case 'series':
-        return 'All Series Practice This Week'
+        return 'All Flow Practice This Week'
       case 'sequence':
         return 'All Activity This Week'
       default:

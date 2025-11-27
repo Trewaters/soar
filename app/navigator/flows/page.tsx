@@ -96,8 +96,8 @@ export default function Page() {
           title="Flows"
         />
         <SplashNavButton
-          title="Practice Series"
-          description="Series are made up of asana poses."
+          title="Practice Flows"
+          description="Flows are made up of asana poses."
           image="/images/practice-series-color.png"
           sx={{
             backgroundImage: "url('/images/practice-series-color.png')",
@@ -105,8 +105,8 @@ export default function Page() {
           onClick={handlePracticeSeriesClick}
         />
         <SplashNavButton
-          title="Create Series"
-          description="Create your own Series of asana poses."
+          title="Create Flow"
+          description="Create your own Flow of asana poses."
           image="/images/create-series-bw.png"
           premium
           sx={{
@@ -116,7 +116,7 @@ export default function Page() {
         />
         <SplashNavButton
           title="Practice Sequences"
-          description="Sequences are ordered series."
+          description="Sequences are ordered flows."
           image="/icons/designImages/beautiful-young-woman-practices-yoga-asana.png"
           sx={{
             backgroundImage:

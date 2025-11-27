@@ -305,7 +305,7 @@ describe('Practice Series Page', () => {
 
       // Click to open the autocomplete dropdown to see section headers
       const user = userEvent.setup()
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
       await user.click(searchInput)
 
       // Wait for dropdown to open and section headers to appear
@@ -346,7 +346,7 @@ describe('Practice Series Page', () => {
 
       // Open the autocomplete dropdown to see section headers
       const user = userEvent.setup()
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
       await user.click(searchInput)
 
       await waitFor(() => {
@@ -389,9 +389,9 @@ describe('Practice Series Page', () => {
 
       expect(screen.getByTestId('splash-header')).toBeInTheDocument()
       expect(screen.getByTestId('sub-nav-header')).toBeInTheDocument()
-      expect(screen.getAllByText('Practice Series')[0]).toBeInTheDocument()
+      expect(screen.getAllByText('Practice Flows')[0]).toBeInTheDocument()
       expect(
-        screen.getByPlaceholderText('Search for a Series')
+        screen.getByPlaceholderText('Search for a Flow')
       ).toBeInTheDocument()
     })
 
@@ -401,7 +401,7 @@ describe('Practice Series Page', () => {
       renderWithTheme(<Page />)
 
       const splashHeader = screen.getByTestId('splash-header')
-      expect(splashHeader).toHaveTextContent('Practice Series')
+      expect(splashHeader).toHaveTextContent('Practice Flows')
 
       const subNavHeader = screen.getByTestId('sub-nav-header')
       expect(subNavHeader).toHaveTextContent('Back to Flows')
@@ -412,7 +412,7 @@ describe('Practice Series Page', () => {
 
       renderWithTheme(<Page />)
 
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
       expect(searchInput).toBeInTheDocument()
       expect(screen.getByTestId('search-icon')).toBeInTheDocument()
     })
@@ -484,7 +484,7 @@ describe('Practice Series Page', () => {
         expect(mockGetAllSeries).toHaveBeenCalled()
       })
 
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
 
       // Type "Hip" to filter
       await user.type(searchInput, 'Hip')
@@ -502,7 +502,7 @@ describe('Practice Series Page', () => {
         expect(mockGetAllSeries).toHaveBeenCalled()
       })
 
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
 
       // Type and then clear
       await user.type(searchInput, 'Hip')
@@ -544,7 +544,7 @@ describe('Practice Series Page', () => {
         expect(mockGetAllSeries).toHaveBeenCalled()
       })
 
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
       await user.click(searchInput)
 
       await waitFor(() => {
@@ -569,7 +569,7 @@ describe('Practice Series Page', () => {
         expect(mockGetAllSeries).toHaveBeenCalled()
       })
 
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
       await user.click(searchInput)
 
       await waitFor(() => {
@@ -600,7 +600,7 @@ describe('Practice Series Page', () => {
         expect(mockGetAllSeries).toHaveBeenCalled()
       })
 
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
       await user.click(searchInput)
       await user.click(screen.getByText('Sun Salutation A'))
 
@@ -632,7 +632,7 @@ describe('Practice Series Page', () => {
         expect(mockGetAllSeries).toHaveBeenCalled()
       })
 
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
       await user.click(searchInput)
       await user.click(screen.getByText('Hip Opening Series'))
 
@@ -654,7 +654,7 @@ describe('Practice Series Page', () => {
         expect(mockGetAllSeries).toHaveBeenCalled()
       })
 
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
       await user.click(searchInput)
       await user.click(screen.getByText('Backbend Flow'))
 
@@ -668,7 +668,7 @@ describe('Practice Series Page', () => {
       renderWithTheme(<Page />)
 
       // Simulate selecting null (clearing selection)
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
       fireEvent.change(searchInput, { target: { value: '' } })
 
       // Should not display any series details
@@ -690,7 +690,7 @@ describe('Practice Series Page', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText('Pick a Series to practice.')
+          screen.getByText('Pick a Flow to practice.')
         ).toBeInTheDocument()
       })
     })
@@ -704,7 +704,7 @@ describe('Practice Series Page', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText('Pick a Series to practice.')
+          screen.getByText('Pick a Flow to practice.')
         ).toBeInTheDocument()
       })
 
@@ -716,7 +716,7 @@ describe('Practice Series Page', () => {
 
       await waitFor(() => {
         expect(
-          screen.queryByText('Pick a Series to practice.')
+          screen.queryByText('Pick a Flow to practice.')
         ).not.toBeInTheDocument()
       })
     })
@@ -731,7 +731,7 @@ describe('Practice Series Page', () => {
       fireEvent.click(helpButton)
       await waitFor(() => {
         expect(
-          screen.getByText('Pick a Series to practice.')
+          screen.getByText('Pick a Flow to practice.')
         ).toBeInTheDocument()
       })
 
@@ -739,7 +739,7 @@ describe('Practice Series Page', () => {
       fireEvent.click(helpButton)
       await waitFor(() => {
         expect(
-          screen.queryByText('Pick a Series to practice.')
+          screen.queryByText('Pick a Flow to practice.')
         ).not.toBeInTheDocument()
       })
     })
@@ -756,7 +756,7 @@ describe('Practice Series Page', () => {
         'src',
         '/images/series/series-practice-splash-header.png'
       )
-      expect(image).toHaveAttribute('alt', 'Practice Series')
+      expect(image).toHaveAttribute('alt', 'Practice Flows')
     })
 
     it('passes correct props to SubNavHeader', () => {
@@ -791,7 +791,7 @@ describe('Practice Series Page', () => {
         renderWithTheme(<Page />)
 
         const searchComponent = screen.getByPlaceholderText(
-          'Search for a Series'
+          'Search for a Flow'
         )
         expect(searchComponent).toBeInTheDocument()
       })
@@ -808,7 +808,7 @@ describe('Practice Series Page', () => {
         expect(mockGetAllSeries).toHaveBeenCalled()
       })
 
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
       expect(searchInput).toBeInTheDocument()
 
       // Should not crash when clicking on empty autocomplete
@@ -836,7 +836,7 @@ describe('Practice Series Page', () => {
         expect(mockGetAllSeries).toHaveBeenCalled()
       })
 
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
       await user.click(searchInput)
 
       await waitFor(() => {
@@ -868,7 +868,7 @@ describe('Practice Series Page', () => {
 
       // Check for proper labeling
       expect(
-        screen.getByPlaceholderText('Search for a Series')
+        screen.getByPlaceholderText('Search for a Flow')
       ).toBeInTheDocument()
     })
 
@@ -881,7 +881,7 @@ describe('Practice Series Page', () => {
         expect(mockGetAllSeries).toHaveBeenCalled()
       })
 
-      const searchInput = screen.getByPlaceholderText('Search for a Series')
+      const searchInput = screen.getByPlaceholderText('Search for a Flow')
 
       // Focus and navigate with keyboard
       await user.click(searchInput)

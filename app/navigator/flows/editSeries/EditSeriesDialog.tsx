@@ -71,7 +71,7 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
             Unauthorized
           </Typography>
           <Typography sx={{ mt: 1 }}>
-            You do not have permission to edit this series.
+            You do not have permission to edit this flow.
           </Typography>
           <Box sx={{ mt: 2 }}>
             <Button onClick={onClose} color="primary">
@@ -90,7 +90,7 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
       >
         <DialogTitle id="unauthorized-title">Unauthorized</DialogTitle>
         <DialogContent>
-          You do not have permission to edit this series.
+          You do not have permission to edit this flow.
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="primary">

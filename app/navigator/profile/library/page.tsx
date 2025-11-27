@@ -128,7 +128,7 @@ export default function LibraryPage() {
       setSeries(userSeries)
     } catch (error) {
       console.error('Error fetching user series:', error)
-      setError('Failed to load your series')
+      setError('Failed to load your flows')
     } finally {
       setSeriesLoading(false)
     }
@@ -236,7 +236,7 @@ export default function LibraryPage() {
                 variant="fullWidth"
               >
                 <Tab label={`Asanas (${asanas.length})`} {...a11yProps(0)} />
-                <Tab label={`Series (${series.length})`} {...a11yProps(1)} />
+                <Tab label={`Flows (${series.length})`} {...a11yProps(1)} />
                 <Tab
                   label={`Sequences (${sequences.length})`}
                   {...a11yProps(2)}

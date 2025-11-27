@@ -716,7 +716,7 @@ export async function checkProgressMilestones(): Promise<
               name: user.name || '',
               timezone: user.tz,
               milestoneType: 'first_time',
-              milestoneValue: `First ${firstSeries.seriesName || 'series'} completed`,
+              milestoneValue: `First ${firstSeries.seriesName || 'flow'} completed`,
             })
           }
         }

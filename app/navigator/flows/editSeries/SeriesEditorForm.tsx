@@ -119,12 +119,12 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
     <>
       <Box sx={{ mb: 2 }}>
         <Typography id="edit-series-title" variant="h5" color="primary">
-          {mode === 'create' ? 'Create Series' : 'Edit Series'}
+          {mode === 'create' ? 'Create Flow' : 'Edit Flow'}
         </Typography>
       </Box>
 
       <Box id="edit-series-content">
-        <form aria-label="Series Form">
+        <form aria-label="Flow Form">
           <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
             <Typography variant="h6" gutterBottom color="primary">
               Details
@@ -133,7 +133,7 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
             <FormControl fullWidth margin="normal">
               <TextField
                 id="series-name"
-                label="Series Name *"
+                label="Flow Name *"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 disabled={disabled}

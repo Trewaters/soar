@@ -43,7 +43,7 @@ const FreemiumNotification: React.FC<FreemiumNotificationProps> = ({
     const featureNames = {
       createAsana: 'custom asanas',
       createFlow: 'custom flows',
-      createSeries: 'custom series',
+      createSeries: 'custom flows',
       createSequence: 'custom sequences',
     }
 

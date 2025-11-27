@@ -207,7 +207,7 @@ describe('Header Component', () => {
       expect(screen.getByText('Home')).toBeInTheDocument()
       expect(screen.getByText('8 Limbs')).toBeInTheDocument()
       expect(screen.getByText('Asanas')).toBeInTheDocument()
-      expect(screen.getByText('Series')).toBeInTheDocument()
+      expect(screen.getByText('Flows')).toBeInTheDocument()
       expect(screen.getByText('Sequences')).toBeInTheDocument()
       expect(screen.getByText('About')).toBeInTheDocument()
       expect(screen.getByText('Profile')).toBeInTheDocument()
@@ -234,7 +234,7 @@ describe('Header Component', () => {
         'href',
         '/navigator/asanaPoses'
       )
-      expect(screen.getByRole('link', { name: /series/i })).toHaveAttribute(
+      expect(screen.getByRole('link', { name: /flows/i })).toHaveAttribute(
         'href',
         '/navigator/flows/practiceSeries'
       )

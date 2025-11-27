@@ -416,16 +416,16 @@ describe('Dashboard Page', () => {
     })
   })
 
-  describe('Most Common Series', () => {
-    it('should display most common series section', async () => {
+  describe('Most Common Flows', () => {
+    it('should display most common flows section', async () => {
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Most Common Series')).toBeInTheDocument()
+        expect(screen.getByText('Most Common Flows')).toBeInTheDocument()
       })
     })
 
-    it('should display all three most common series', async () => {
+    it('should display all three most common flows', async () => {
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
@@ -435,7 +435,7 @@ describe('Dashboard Page', () => {
       })
     })
 
-    it('should display count for each series', async () => {
+    it('should display count for each flow', async () => {
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
@@ -445,7 +445,7 @@ describe('Dashboard Page', () => {
         expect(screen.getByText('Core Strength')).toBeInTheDocument()
 
         // Check specific counts appear in document (they may appear elsewhere too)
-        const allText = screen.getByText('Most Common Series').closest('div')
+        const allText = screen.getByText('Most Common Flows').closest('div')
         expect(allText).toHaveTextContent('25')
         expect(allText).toHaveTextContent('18')
         expect(allText).toHaveTextContent('15')

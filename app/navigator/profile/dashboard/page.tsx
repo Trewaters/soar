@@ -295,10 +295,10 @@ const Dashboard: React.FC = () => {
               </Stack>
             </Paper>
 
-            {/* Most Common Series */}
+            {/* Most Common Flows */}
             <Paper elevation={2} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
               <Typography variant="h6" fontWeight="bold" gutterBottom>
-                Most Common Series
+                Most Common Flows
               </Typography>
               <Stack spacing={2} sx={{ mt: 2 }}>
                 {mostCommonSeries.map((series, index) => (

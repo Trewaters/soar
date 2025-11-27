@@ -261,8 +261,8 @@ export default function Page() {
         <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
           <SplashHeader
             src={'/icons/designImages/header-create-series.png'}
-            alt={'Create Series'}
-            title="Create Series"
+            alt={'Create Flow'}
+            title="Create Flow"
           />
           <SubNavHeader
             title="Flows"
@@ -288,7 +288,7 @@ export default function Page() {
                         </li>
                       )
                     }}
-                    placeholder="Add a pose to your series"
+                    placeholder="Add a pose to your flow"
                     onChange={(event, value) =>
                       handleSelect(event, value as AsanaPose | null)
                     }
@@ -310,7 +310,7 @@ export default function Page() {
                         }}
                         variant="standard"
                         id="series-name"
-                        placeholder="Give your Series a name..."
+                        placeholder="Give your Flow a name..."
                         name="seriesName"
                         value={seriesName}
                         onChange={handleChange}
