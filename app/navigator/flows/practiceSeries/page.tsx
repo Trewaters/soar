@@ -42,7 +42,8 @@ import {
   deleteSeriesActivity,
 } from '@lib/seriesActivityClientService'
 import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import EditIcon from '@mui/icons-material/Edit'
 import IconButton from '@mui/material/IconButton'
 import EditSeriesDialog, {
@@ -56,7 +57,7 @@ import { getPoseIdByName } from '@lib/poseService'
 export default function Page() {
   const { data: session } = useSession()
   const theme = useTheme()
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const searchParams = useSearchParams()
   const seriesId = searchParams.get('id')
   const [series, setSeries] = useState<FlowSeriesData[]>([])

@@ -25,7 +25,7 @@ import {
   CardHeader,
   CardContent,
 } from '@mui/material'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
@@ -68,7 +68,7 @@ export default function EditSequence({
   children,
 }: EditSequenceProps) {
   const { data: session, status } = useSession()
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const ctx = useSequence()
   const editor = useSequenceEditor()
   const ctxIsOwner = useSequenceOwnership()

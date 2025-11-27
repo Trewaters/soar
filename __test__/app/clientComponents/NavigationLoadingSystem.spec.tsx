@@ -3,14 +3,21 @@ import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider } from '@mui/material/styles'
 import { theme } from '@styles/theme'
 import NavigationButton from '@clientComponents/NavigationButton'
-import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import GlobalNavigationOverlay from '@clientComponents/GlobalNavigationOverlay'
 import React, { ReactNode } from 'react'
+
+// Unmock NavigationLoadingContext to use real implementation for integration testing
+jest.unmock('@context/NavigationLoadingContext')
+// We need to import the real provider after unmocking
+import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 
 // Create a mock router push function that returns a promise
 const mockPush = jest.fn(() => new Promise(() => {})) // Never-resolving promise to keep loading state
 
-// Mock Next.js navigation
+// Unmock and re-mock useNavigationWithLoading with a custom implementation for this test
+jest.unmock('@app/hooks/useNavigationWithLoading')
+
+// Mock Next.js navigation (needed by the real useNavigationWithLoading hook)
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,

@@ -7,7 +7,7 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import AirIcon from '@mui/icons-material/Air'
 import AdjustIcon from '@mui/icons-material/Adjust'
@@ -69,7 +69,7 @@ export const eightLimbsData = [
 ]
 
 export default function EightLimbs() {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   return (
     <>
       <Typography variant="h2" id="eight-limbs-of-yoga">

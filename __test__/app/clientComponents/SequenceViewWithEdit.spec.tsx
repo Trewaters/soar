@@ -3,8 +3,10 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import theme from '@styles/theme'
-import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import SequenceViewWithEdit from '@clientComponents/SequenceViewWithEdit'
+
+// Note: next/navigation and useNavigationWithLoading are mocked globally in jest.setup.ts
+// Access the global mocks via (globalThis as any).mockNavigationPush for assertions
 
 // Mock next/image to avoid DOM warnings from the "fill" prop
 jest.mock('next/image', () => ({
@@ -15,26 +17,7 @@ jest.mock('next/image', () => ({
   ),
 }))
 
-// Mock Next.js app router to avoid invariant errors when EditSequence uses useRouter
-jest.mock('next/navigation', () => {
-  const push = jest.fn()
-  ;(global as any).__routerPushMock = push
-  return {
-    __esModule: true,
-    useRouter: () => ({
-      push,
-      replace: jest.fn(),
-      refresh: jest.fn(),
-      back: jest.fn(),
-      forward: jest.fn(),
-      prefetch: jest.fn(),
-    }),
-    useSearchParams: () => new URLSearchParams(),
-    usePathname: () => '/',
-  }
-})
-
-// Mock NextAuth session
+// Mock NextAuth session (overrides global mock for custom behavior)
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),
 }))
@@ -49,7 +32,7 @@ const mockUseSession = require('next-auth/react').useSession as jest.Mock
 const Wrapper = ({ children }: { children: React.ReactNode }) => (
   <ThemeProvider theme={theme}>
     <CssBaseline />
-    <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
+    {children}
   </ThemeProvider>
 )
 
@@ -376,10 +359,10 @@ describe('SequenceViewWithEdit', () => {
   })
 
   describe('View Toggle and Navigation Features', () => {
-    let mockPush: jest.Mock
+    // Use global mock from jest.setup.ts
+    const mockPush = (globalThis as any).mockNavigationPush
 
     beforeEach(() => {
-      mockPush = (global as any).__routerPushMock
       mockPush.mockClear()
     })
 
@@ -601,17 +584,7 @@ describe('SequenceViewWithEdit', () => {
 
       it('should use navigation.back() when sequence ID is missing', async () => {
         const user = userEvent.setup()
-        const mockBack = jest.fn()
-
-        // Override the router mock for this test
-        jest.spyOn(require('next/navigation'), 'useRouter').mockReturnValue({
-          push: mockPush,
-          back: mockBack,
-          replace: jest.fn(),
-          refresh: jest.fn(),
-          forward: jest.fn(),
-          prefetch: jest.fn(),
-        })
+        const mockBack = (globalThis as any).mockNavigationBack
 
         mockUseSession.mockReturnValue({
           data: { user: { email: 'user@example.com' } },

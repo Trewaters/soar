@@ -6,7 +6,7 @@ import { Box, Button, FormControl, TextField, Paper } from '@mui/material'
 import { useAsanaPose } from '@app/context/AsanaPoseContext'
 import { createPose } from '@lib/poseService'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
 import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUpload'
 import ImageIcon from '@mui/icons-material/Image'
@@ -48,7 +48,7 @@ export default function CreateAsanaWithImages() {
     created_by: session?.user?.email ?? 'error-undefined-user',
   })
 
-  const router = useRouter()
+  const router = useNavigationWithLoading()
 
   useEffect(() => {
     if (session === null) {

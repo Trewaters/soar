@@ -11,7 +11,7 @@ const theme = createTheme()
 
 // Mock all the external dependencies
 jest.mock('next-auth/react')
-jest.mock('next/navigation')
+// Remove local next/navigation mock - use global mock from jest.setup.ts
 jest.mock('@app/context/UserContext')
 jest.mock('@lib/userLibraryService')
 
@@ -70,13 +70,8 @@ const mockUserState = {
 
 const mockDispatch = jest.fn()
 
-// Mock next/navigation
-const mockPush = jest.fn()
-jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: mockPush,
-  }),
-}))
+// Use global mock from jest.setup.ts for navigation
+const mockPush = (globalThis as any).mockNavigationPush
 
 // Mock UserContext
 const mockUseUser = jest.fn()

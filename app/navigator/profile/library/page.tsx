@@ -23,7 +23,7 @@ import {
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { UseUser } from '@app/context/UserContext'
 import Image from 'next/image'
 import EditIcon from '@mui/icons-material/Edit'
@@ -77,7 +77,7 @@ function a11yProps(index: number) {
 export default function LibraryPage() {
   const { data: session, status } = useSession()
   const { state } = UseUser()
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const [tabValue, setTabValue] = useState(0)
 
   // State for different content types
@@ -296,7 +296,7 @@ function AsanasLibrary({
   loading: boolean
   onAsanaDeleted: () => void
 }) {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
 
   if (loading) {
@@ -424,7 +424,7 @@ function SeriesLibrary({
   loading: boolean
   onSeriesDeleted?: () => void
 }) {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
 
   if (loading) {
@@ -552,7 +552,7 @@ function SequencesLibrary({
   loading: boolean
   onSequenceDeleted?: () => void
 }) {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
 
   if (loading) {
@@ -679,7 +679,7 @@ function AsanaListItem({
   asana: UserAsanaData
   onDeleted: () => void
 }) {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const [images, setImages] = useState<PoseImageData[]>([])
   const [imagesLoading, setImagesLoading] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -876,7 +876,7 @@ function SeriesListItem({
   series: UserSeriesData
   onDeleted?: () => void
 }) {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -1021,7 +1021,7 @@ function SequenceListItem({
   sequence: UserSequenceData
   onDeleted?: () => void
 }) {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -1168,7 +1168,7 @@ function AsanaCard({
   asana: UserAsanaData
   onDeleted: () => void
 }) {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const [images, setImages] = useState<PoseImageData[]>([])
   const [imagesLoading, setImagesLoading] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -1368,7 +1368,7 @@ function SeriesCard({
   series: UserSeriesData
   onDeleted?: () => void
 }) {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -1512,7 +1512,7 @@ function SequenceCard({
   sequence: UserSequenceData
   onDeleted?: () => void
 }) {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 

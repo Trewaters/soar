@@ -22,7 +22,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import SaveIcon from '@mui/icons-material/Save'
 import CancelIcon from '@mui/icons-material/Cancel'
 import { FEATURES } from '@app/FEATURES'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 import PoseShareButton from '@app/clientComponents/poseShareButton'
 import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
@@ -98,7 +98,7 @@ export default function PoseActivityDetail({
   initialEditMode = false,
 }: PoseCardProps) {
   const pose = poseCardProp
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const { data: session } = useSession()
   const [activityRefreshTrigger, setActivityRefreshTrigger] = useState(0)
   const [error, setError] = useState<string | null>(null)

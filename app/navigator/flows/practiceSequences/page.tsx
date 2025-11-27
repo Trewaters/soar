@@ -15,7 +15,7 @@ import {
   Drawer,
 } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 
 import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import EditIcon from '@mui/icons-material/Edit'
@@ -45,7 +45,7 @@ import getAlphaUserIds from '@app/lib/alphaUsers'
 import { orderPosesForSearch } from '@app/utils/search/orderPosesForSearch'
 
 export default function Page() {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const searchParams = useSearchParams()
   const sequenceId = searchParams.get('sequenceId')
   const { data: session } = useSession()

@@ -3,18 +3,13 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { ThemeProvider } from '@mui/material/styles'
 import { theme } from '@styles/theme'
-import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import TabHeader from '../../../app/clientComponents/tab-header'
 
-// Mock next/navigation for the EightLimbs component
-const mockPush = jest.fn()
-jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: mockPush,
-  }),
-  usePathname: () => '/',
-  useSearchParams: () => new URLSearchParams(),
-}))
+// Note: next/navigation and useNavigationWithLoading are mocked globally in jest.setup.ts
+// Access the global mocks via (globalThis as any).mockNavigationPush for assertions
+
+// Reference global mocks for assertions
+const mockPush = (globalThis as any).mockNavigationPush
 
 // Mock Next.js Link component
 jest.mock('next/link', () => {
@@ -68,9 +63,7 @@ jest.mock('@mui/icons-material/Whatshot', () => ({
 
 // Test wrapper component with all required providers
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
-  <ThemeProvider theme={theme}>
-    <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
-  </ThemeProvider>
+  <ThemeProvider theme={theme}>{children}</ThemeProvider>
 )
 
 describe('TabHeader Component', () => {

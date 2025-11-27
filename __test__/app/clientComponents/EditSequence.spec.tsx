@@ -7,15 +7,9 @@ import EditSequence, {
   type EditableSequence,
 } from '@clientComponents/EditSequence'
 
-// Standard Soar test mocks
-jest.mock('next/navigation', () => {
-  const push = jest.fn()
-  ;(global as any).__routerPushMock = push
-  return {
-    __esModule: true,
-    useRouter: () => ({ push }),
-  }
-})
+// Note: next/navigation and useNavigationWithLoading are mocked globally in jest.setup.ts
+// Access the global mock via (globalThis as any).mockNavigationPush for assertions
+
 jest.mock('next/image', () => ({
   __esModule: true,
   default: ({ src, alt, width, height, fill, ...props }: any) => {
@@ -328,7 +322,7 @@ describe('EditSequence', () => {
         expect.stringMatching(/\/api\/sequences\/seq-1$/),
         expect.objectContaining({ method: 'DELETE' })
       )
-      expect((global as any).__routerPushMock).toHaveBeenCalledWith(
+      expect((globalThis as any).mockNavigationPush).toHaveBeenCalledWith(
         '/navigator/flows/practiceSequences'
       )
     })

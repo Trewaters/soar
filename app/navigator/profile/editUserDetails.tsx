@@ -27,7 +27,7 @@ import { red } from '@mui/material/colors'
 import { useSession } from 'next-auth/react'
 import { UseUser } from '@context/UserContext'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import LinkIcon from '@mui/icons-material/Link'
 import ShareIcon from '@mui/icons-material/Share'
@@ -92,7 +92,7 @@ export default function EditUserDetails({
   // },
   // }
 
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const {
     state: { userData },
     dispatch,

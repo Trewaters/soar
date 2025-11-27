@@ -23,7 +23,7 @@ import {
   Send as SendIcon,
 } from '@mui/icons-material'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 
 interface FeedbackData {
   name: string
@@ -117,7 +117,7 @@ const ScaleRating: React.FC<{
 )
 
 const FeedbackForm: React.FC = () => {
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const { data: session, status } = useSession()
   const [formData, setFormData] = useState<FeedbackData>({
     ...initialFormData,

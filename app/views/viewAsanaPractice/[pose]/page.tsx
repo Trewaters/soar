@@ -25,7 +25,7 @@ import InfoIcon from '@mui/icons-material/Info'
 import HomeIcon from '@mui/icons-material/Home'
 import AsanaTimer from '@app/clientComponents/asanaTimer'
 import { useTimer } from '@context/timerContext'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { getPoseByName } from '@lib/poseService'
 import Image from 'next/image'
 import { AsanaPose } from 'types/asana'
@@ -46,7 +46,7 @@ export default function ViewAsanaPractice({
   const [showInfo, setShowInfo] = useState(false)
 
   const { state, dispatch } = useTimer()
-  const router = useRouter()
+  const router = useNavigationWithLoading()
 
   // Show/hide controls based on user interaction only - no artificial timeouts
   const toggleControls = useCallback(() => {

@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Stack, TextField, Button, Typography } from '@mui/material'
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { AppText } from '@app/navigator/constants/Strings'
 
 const CredentialsInput: React.FC = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const [isNewUser, setIsNewUser] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)

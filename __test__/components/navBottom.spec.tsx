@@ -3,20 +3,18 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { ThemeProvider } from '@mui/material/styles'
 import { theme } from '@styles/theme'
-import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import NavBottom from '../../components/navBottom'
 import { useSession } from 'next-auth/react'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
-// Mock next/navigation
-const mockPush = jest.fn()
-const mockBack = jest.fn()
-jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(),
-  usePathname: jest.fn(),
-}))
+// Note: next/navigation and useNavigationWithLoading are mocked globally in jest.setup.ts
+// Access the global mocks via (globalThis as any).mockNavigationPush for assertions
 
-// Mock next-auth
+// Reference global mocks for assertions
+const mockPush = (globalThis as any).mockNavigationPush
+const mockBack = (globalThis as any).mockNavigationBack || jest.fn()
+
+// Mock next-auth (overrides global mock for custom behavior in these tests)
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),
 }))
@@ -37,29 +35,19 @@ jest.mock('@mui/icons-material/Dashboard', () => ({
   default: (props: any) => <div data-testid="dashboard-icon" {...props} />,
 }))
 
-const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>
 const mockUseSession = useSession as jest.MockedFunction<typeof useSession>
 const mockUsePathname = usePathname as jest.MockedFunction<typeof usePathname>
 
 // Test wrapper component with all required providers
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
-  <ThemeProvider theme={theme}>
-    <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
-  </ThemeProvider>
+  <ThemeProvider theme={theme}>{children}</ThemeProvider>
 )
 
 describe('NavBottom Component', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockUseRouter.mockReturnValue({
-      push: mockPush,
-      replace: jest.fn(),
-      back: mockBack,
-      forward: jest.fn(),
-      refresh: jest.fn(),
-      prefetch: jest.fn(),
-    })
-    mockUsePathname.mockReturnValue('/test')
+    // Configure pathname mock via global reference
+    ;(globalThis as any).mockUsePathname.mockReturnValue('/test')
   })
 
   describe('when user is not authenticated', () => {
@@ -112,7 +100,8 @@ describe('NavBottom Component', () => {
       const dashboardButton = screen.getByLabelText('Login to access dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/auth/signin')
+      // useNavigationWithLoading.push() is called with (path, elementId)
+      expect(mockPush).toHaveBeenCalledWith('/auth/signin', expect.any(String))
       expect(mockBack).not.toHaveBeenCalled()
     })
 
@@ -162,7 +151,11 @@ describe('NavBottom Component', () => {
       const profileButton = screen.getByLabelText('Navigate to user profile')
       fireEvent.click(profileButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile')
+      // useNavigationWithLoading.push() is called with (path, elementId)
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile',
+        expect.any(String)
+      )
     })
 
     it('applies correct colors for authenticated state', () => {
@@ -310,7 +303,11 @@ describe('NavBottom Component', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      // useNavigationWithLoading.push() is called with (path, elementId)
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
       expect(mockBack).not.toHaveBeenCalled()
     })
 
@@ -328,8 +325,8 @@ describe('NavBottom Component', () => {
       const dashboardButton = screen.getByLabelText('Login to access dashboard')
       fireEvent.click(dashboardButton)
 
-      // Should redirect to login
-      expect(mockPush).toHaveBeenCalledWith('/auth/signin')
+      // Should redirect to login - useNavigationWithLoading.push() is called with (path, elementId)
+      expect(mockPush).toHaveBeenCalledWith('/auth/signin', expect.any(String))
       expect(mockBack).not.toHaveBeenCalled()
     })
 
@@ -351,8 +348,11 @@ describe('NavBottom Component', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      // Verify that router.push() was called with dashboard path
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      // Verify that router.push() was called with dashboard path - useNavigationWithLoading.push() is called with (path, elementId)
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
 
     it('handles menu toggle correctly', () => {
@@ -391,7 +391,11 @@ describe('NavBottom Component', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      // useNavigationWithLoading.push() is called with (path, elementId)
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
       expect(mockPush).not.toHaveBeenCalledWith(testRoute)
     })
   })

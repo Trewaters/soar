@@ -146,6 +146,55 @@ jest.mock('next/navigation', () => ({
 ;(globalThis as any).mockUsePathname = mockUsePathname
 ;(globalThis as any).mockUseRouter = mockUseRouter
 
+// Globally mock useNavigationWithLoading hook - used by components that need loading states during navigation
+// This returns the same interface as the real hook but with mocked functions
+const mockNavigationPush = jest.fn()
+const mockNavigationReplace = jest.fn()
+const mockNavigationPrefetch = jest.fn()
+const mockNavigationBack = jest.fn()
+const mockNavigationForward = jest.fn()
+const mockNavigationRefresh = jest.fn()
+const mockIsElementLoading = jest.fn().mockReturnValue(false)
+const mockIsNavigating = false
+const mockUseNavigationWithLoading = jest.fn(() => ({
+  push: mockNavigationPush,
+  replace: mockNavigationReplace,
+  prefetch: mockNavigationPrefetch,
+  back: mockNavigationBack,
+  forward: mockNavigationForward,
+  refresh: mockNavigationRefresh,
+  isElementLoading: mockIsElementLoading,
+  isNavigating: mockIsNavigating,
+}))
+jest.mock('@app/hooks/useNavigationWithLoading', () => ({
+  __esModule: true,
+  useNavigationWithLoading: mockUseNavigationWithLoading,
+}))
+;(globalThis as any).mockUseNavigationWithLoading = mockUseNavigationWithLoading
+;(globalThis as any).mockNavigationPush = mockNavigationPush
+;(globalThis as any).mockNavigationReplace = mockNavigationReplace
+;(globalThis as any).mockNavigationBack = mockNavigationBack
+;(globalThis as any).mockIsElementLoading = mockIsElementLoading
+
+// Mock NavigationLoadingContext to prevent errors when components use the context
+const mockNavigationLoadingState = {
+  isNavigating: false,
+  targetPath: null,
+  elementId: null,
+  navId: null,
+}
+jest.mock('@context/NavigationLoadingContext', () => ({
+  __esModule: true,
+  useNavigationLoading: jest.fn(() => ({
+    startNavigation: jest.fn(),
+    endNavigation: jest.fn(),
+    state: mockNavigationLoadingState,
+    isElementLoading: jest.fn().mockReturnValue(false),
+  })),
+  NavigationLoadingProvider: ({ children }: { children: React.ReactNode }) =>
+    children,
+}))
+
 // Centralized service mocks - commonly used across multiple test suites
 // These can be overridden in individual tests using require() and mockResolvedValue/mockImplementation
 

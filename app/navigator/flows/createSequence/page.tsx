@@ -37,7 +37,7 @@ import LooksTwoIcon from '@mui/icons-material/LooksTwo'
 import Looks3Icon from '@mui/icons-material/Looks3'
 import Looks4Icon from '@mui/icons-material/Looks4'
 import Looks5Icon from '@mui/icons-material/Looks5'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SearchIcon from '@mui/icons-material/Search'
@@ -80,7 +80,7 @@ export default function Page() {
     seriesNameSet.length - 1
   )
 
-  const router = useRouter()
+  const router = useNavigationWithLoading()
 
   // Enrich series data with normalized createdBy field like in practiceSeries
   const enrichedSeries = useMemo(

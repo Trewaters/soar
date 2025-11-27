@@ -5,18 +5,16 @@ import EightLimbs, {
 } from '@app/navigator/eightLimbs/eight-limbs' // Adjust the import path as necessary
 import '@testing-library/jest-dom'
 
-// Mock next/navigation
-const mockPush = jest.fn()
-jest.mock('next/navigation', () => ({
-  useRouter: () => ({
-    push: mockPush,
-  }),
-}))
+// Note: next/navigation and useNavigationWithLoading are mocked globally in jest.setup.ts
+// Access the global mocks via (globalThis as any).mockNavigationPush for assertions
+
+// Reference global mocks for assertions
+const mockPush = (globalThis as any).mockNavigationPush
 
 describe('EightLimbs Component', () => {
   beforeEach(() => {
     // Clear mock calls before each test
-    mockPush.mockClear()
+    jest.clearAllMocks()
   })
 
   it('renders the main heading', () => {
@@ -65,6 +63,7 @@ describe('EightLimbs Component', () => {
     if (asanaItem) {
       fireEvent.click(asanaItem)
       expect(mockPush).toHaveBeenCalledTimes(1)
+      // The eightLimbsData onClick handler calls router.push with path only (legacy pattern)
       expect(mockPush).toHaveBeenCalledWith('/navigator/asanaPoses')
     }
   })

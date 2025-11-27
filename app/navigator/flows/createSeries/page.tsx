@@ -27,7 +27,7 @@ import LooksTwoIcon from '@mui/icons-material/LooksTwo'
 import Looks3Icon from '@mui/icons-material/Looks3'
 import Looks4Icon from '@mui/icons-material/Looks4'
 import Looks5Icon from '@mui/icons-material/Looks5'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { getAccessiblePoses } from '@lib/poseService'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SplashHeader from '@app/clientComponents/splash-header'
@@ -52,7 +52,7 @@ export default function Page() {
     state.flowSeries
   const [poses, setPoses] = useState<AsanaPose[]>([])
   const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const [open, setOpen] = React.useState(false)
   const [isDirty, setIsDirty] = useState(false)
   const [isDirtyDescription, setIsDirtyDescription] = useState(false)

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { jwtDecode } from 'jwt-decode'
 
 interface AuthContextType {
@@ -16,7 +16,7 @@ type AuthProviderProps = {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<string>('')
-  const router = useRouter()
+  const router = useNavigationWithLoading()
 
   useEffect(() => {
     const token = localStorage.getItem('token')

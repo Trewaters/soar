@@ -10,9 +10,7 @@ import * as poseService from '@lib/poseService'
 
 // Mock dependencies
 jest.mock('next-auth/react')
-jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(),
-}))
+// Remove local next/navigation mock - use global mock from jest.setup.ts
 jest.mock('@app/context/AsanaPoseContext', () => ({
   useAsanaPose: jest.fn(),
 }))
@@ -24,7 +22,8 @@ jest.mock('@app/clientComponents/imageUpload/ImageManagement', () => ({
   )),
 }))
 
-const mockPush = jest.fn()
+// Use global mock from jest.setup.ts
+const mockPush = (globalThis as any).mockNavigationPush
 const mockSession = {
   user: {
     email: 'test@example.com',
@@ -49,12 +48,6 @@ describe('CreateAsanaWithImages - Happy Path', () => {
     useSession.mockReturnValue({
       data: mockSession,
       status: 'authenticated',
-    })
-
-    // Mock router
-    const { useRouter } = require('next/navigation')
-    useRouter.mockReturnValue({
-      push: mockPush,
     })
 
     // Mock AsanaPose context

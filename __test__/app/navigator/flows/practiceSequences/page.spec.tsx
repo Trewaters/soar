@@ -5,33 +5,25 @@ import Page from '@app/navigator/flows/practiceSequences/page'
 import userEvent from '@testing-library/user-event'
 import { SequenceData } from '@lib/sequenceService'
 
-// Mock next/navigation
-const mockPush = jest.fn()
-const mockReplace = jest.fn()
-const mockPrefetch = jest.fn()
-const mockBack = jest.fn()
-const mockForward = jest.fn()
-const mockRefresh = jest.fn()
+// Use global mocks from jest.setup.ts for navigation
+const mockPush = (globalThis as any).mockNavigationPush
+const mockReplace = (globalThis as any).mockNavigationReplace
+const mockBack = (globalThis as any).mockNavigationBack
+
+// Local mock for search params (not in global setup)
 const mockGet = jest.fn<string | null, []>(() => null)
 
+// Override useSearchParams specifically for this test file
 jest.mock('next/navigation', () => ({
   useSearchParams: jest.fn(() => ({
-    get: mockGet,
+    get: (globalThis as any).__mockSearchParamsGet || jest.fn(() => null),
   })),
-  useRouter: jest.fn(() => ({
-    push: mockPush,
-    replace: mockReplace,
-    prefetch: mockPrefetch,
-    back: mockBack,
-    forward: mockForward,
-    refresh: mockRefresh,
-  })),
+  useRouter: jest.fn(),
+  usePathname: jest.fn(() => '/navigator/flows/practiceSequences'),
 }))
 
-// Make mocks available for test access
-;(global as any).__mockNavigationPush = mockPush
-;(global as any).__mockNavigationReplace = mockReplace
-;(global as any).__mockSearchParamsGet = mockGet
+// Make search params mock available for test access
+;(globalThis as any).__mockSearchParamsGet = mockGet
 
 // Mock NextAuth
 jest.mock('next-auth/react', () => ({

@@ -1,42 +1,36 @@
 import { renderHook } from '@testing-library/react'
 import { useFreemiumNotification } from '../../../../app/clientComponents/freemiumNotification/hooks/useFreemiumNotification'
-import { NavigationLoadingProvider } from '../../../../app/context/NavigationLoadingContext'
 
-// Mock dependencies
+// Note: next/navigation and useNavigationWithLoading are mocked globally in jest.setup.ts
+// Access the global mocks via (globalThis as any).mockNavigationPush for assertions
+
+// Mock next-auth/react (overrides global mock for custom behavior in these tests)
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),
 }))
 
-jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(),
-  useSearchParams: () => new URLSearchParams(),
-  usePathname: () => '/',
-}))
-
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 
-// Create a wrapper component that provides all necessary contexts
+// Create a wrapper component
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
+  <>{children}</>
 )
 
 const mockUseSession = useSession as jest.MockedFunction<typeof useSession>
-const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>
+
+// Reference global mock for router
+const mockRouter = {
+  push: (globalThis as any).mockNavigationPush,
+  back: jest.fn(),
+  forward: jest.fn(),
+  refresh: jest.fn(),
+  replace: jest.fn(),
+  prefetch: jest.fn(),
+}
 
 describe('useFreemiumNotification', () => {
-  const mockRouter = {
-    push: jest.fn(),
-    back: jest.fn(),
-    forward: jest.fn(),
-    refresh: jest.fn(),
-    replace: jest.fn(),
-    prefetch: jest.fn(),
-  }
-
   beforeEach(() => {
     jest.clearAllMocks()
-    mockUseRouter.mockReturnValue(mockRouter)
   })
 
   describe('userAuthState determination', () => {

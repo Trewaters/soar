@@ -13,7 +13,7 @@ import {
 } from '@mui/material'
 import { createPose } from '@lib/poseService'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import AsanaDetailsEdit from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
@@ -29,7 +29,7 @@ import { AsanaActivity } from 'types/asana'
 
 export default function Page() {
   const { data: session } = useSession()
-  const router = useRouter()
+  const router = useNavigationWithLoading()
   const { userAuthState, checkFeatureAccess, handleCtaAction } =
     useFreemiumNotification()
 

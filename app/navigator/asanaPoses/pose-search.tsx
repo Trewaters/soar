@@ -5,7 +5,7 @@ import React, { useState, useEffect, SyntheticEvent, useMemo } from 'react'
 import Stack from '@mui/material/Stack'
 import Autocomplete from '@mui/material/Autocomplete'
 import { useAsanaPose } from '@context/AsanaPoseContext'
-import { useRouter } from 'next/navigation'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { AutocompleteInput } from '@app/clientComponents/form'
 import getAsanaTitle from '@app/utils/search/getAsanaTitle'
 
@@ -42,7 +42,7 @@ interface PoseSearchProps {
 export default function PoseSearch({ posePropData }: PoseSearchProps) {
   const { state, dispatch } = useAsanaPose()
   const [poses, setPoses] = useState<AsanaPose[]>(posePropData)
-  const router = useRouter()
+  const router = useNavigationWithLoading()
 
   const defaultPose = poses?.find((p) => p.sort_english_name === '')
 

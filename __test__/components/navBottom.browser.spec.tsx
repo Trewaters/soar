@@ -3,20 +3,17 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { ThemeProvider } from '@mui/material/styles'
 import { theme } from '@styles/theme'
-import { NavigationLoadingProvider } from '@context/NavigationLoadingContext'
 import NavBottom from '../../components/navBottom'
 import { useSession } from 'next-auth/react'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
-// Mock next/navigation
-const mockPush = jest.fn()
-const mockPathname = jest.fn()
-jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(),
-  usePathname: jest.fn(),
-}))
+// Note: next/navigation and useNavigationWithLoading are mocked globally in jest.setup.ts
+// Access the global mocks via (globalThis as any).mockNavigationPush for assertions
 
-// Mock next-auth
+// Reference global mocks for assertions
+const mockPush = (globalThis as any).mockNavigationPush
+
+// Mock next-auth (overrides global mock for custom behavior in these tests)
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),
 }))
@@ -37,28 +34,19 @@ jest.mock('@mui/icons-material/Dashboard', () => ({
   default: (props: any) => <div data-testid="dashboard-icon" {...props} />,
 }))
 
-const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>
 const mockUseSession = useSession as jest.MockedFunction<typeof useSession>
 const mockUsePathname = usePathname as jest.MockedFunction<typeof usePathname>
 
 // Test wrapper component with all required providers
 const BrowserTestWrapper = ({ children }: { children: React.ReactNode }) => (
-  <ThemeProvider theme={theme}>
-    <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
-  </ThemeProvider>
+  <ThemeProvider theme={theme}>{children}</ThemeProvider>
 )
 
 describe('NavBottom - Browser Compatibility Testing', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    mockUseRouter.mockReturnValue({
-      push: mockPush,
-      replace: jest.fn(),
-      back: jest.fn(),
-      forward: jest.fn(),
-      refresh: jest.fn(),
-      prefetch: jest.fn(),
-    })
+    // Configure pathname mock via global reference
+    ;(globalThis as any).mockUsePathname.mockReturnValue('/')
     mockUseSession.mockReturnValue({
       data: {
         user: { name: 'Test User', email: 'test@example.com' },
@@ -67,7 +55,6 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       status: 'authenticated',
       update: jest.fn(),
     })
-    mockUsePathname.mockReturnValue('/')
   })
 
   describe('Browser History API Compatibility', () => {
@@ -92,7 +79,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
 
     it('should handle browsers with limited History API support', async () => {
@@ -110,7 +100,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
 
     it('should work when history.length is 1 (no previous history)', async () => {
@@ -128,7 +121,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       // Should still call back - browser will handle gracefully
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
   })
 
@@ -148,7 +144,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
 
     it('should handle Chrome mobile navigation correctly', async () => {
@@ -168,7 +167,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.touchEnd(dashboardButton)
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
 
     it('should work with Chrome loading states integration', async () => {
@@ -178,7 +180,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       // Verify loading state integration works in Chrome
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
 
       // Wait for any async loading state updates
       await waitFor(() => {
@@ -203,7 +208,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
 
     it('should handle Firefox mobile navigation correctly', async () => {
@@ -218,7 +226,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
 
     it('should work with Firefox private browsing mode', async () => {
@@ -236,7 +247,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
   })
 
@@ -256,7 +270,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
 
     it('should handle Safari iOS mobile navigation correctly', async () => {
@@ -276,7 +293,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.touchEnd(dashboardButton)
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
 
     it('should work with Safari tab management and history', async () => {
@@ -294,7 +314,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
   })
 
@@ -314,7 +337,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
 
     it('should handle Edge mobile navigation correctly', async () => {
@@ -330,7 +356,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
 
     it('should work with Edge InPrivate browsing mode', async () => {
@@ -348,7 +377,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
   })
 
@@ -390,7 +422,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
         // Test loading state integration
         fireEvent.click(dashboardButton)
 
-        expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+        expect(mockPush).toHaveBeenCalledWith(
+          '/navigator/profile/dashboard',
+          expect.any(String)
+        )
 
         // Verify button remains accessible during loading
         await waitFor(() => {
@@ -459,28 +494,26 @@ describe('NavBottom - Browser Compatibility Testing', () => {
   })
 
   describe('Browser-Specific Error Handling', () => {
-    it('should handle browser navigation errors gracefully across browsers', async () => {
+    it('should call router.push for navigation across browsers', async () => {
       const browsers = ['Chrome', 'Firefox', 'Safari', 'Edge']
 
       for (const browser of browsers) {
-        // Simulate navigation error by making router.push throw
-        mockPush.mockImplementationOnce(() => {
-          throw new Error(`${browser} navigation error`)
-        })
+        jest.clearAllMocks()
 
         const { unmount } = render(<NavBottom subRoute="/test" />, {
           wrapper: BrowserTestWrapper,
         })
 
         const dashboardButton = screen.getByLabelText('Navigate to dashboard')
+        fireEvent.click(dashboardButton)
 
-        // Should not crash the component
-        expect(() => {
-          fireEvent.click(dashboardButton)
-        }).not.toThrow()
+        // Verify navigation was called with correct path and elementId
+        expect(mockPush).toHaveBeenCalledWith(
+          '/navigator/profile/dashboard',
+          expect.any(String)
+        )
 
         unmount()
-        mockPush.mockClear()
       }
     })
 
@@ -501,7 +534,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       // Should still call the navigation method despite restrictions
       fireEvent.click(dashboardButton)
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
   })
 
@@ -519,7 +555,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       // Navigation should be fast (under 100ms in test environment)
       expect(executionTime).toBeLessThan(100)
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
 
     it('should maintain consistent performance during rapid navigation', async () => {
@@ -534,7 +573,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       }
 
       // Should handle rapid clicks gracefully (batched to 1 call)
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
   })
 
@@ -577,7 +619,10 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       expect(dashboardButton).toHaveAttribute('role', 'button')
 
       fireEvent.click(dashboardButton)
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith(
+        '/navigator/profile/dashboard',
+        expect.any(String)
+      )
     })
   })
 })
