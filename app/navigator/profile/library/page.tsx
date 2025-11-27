@@ -432,7 +432,7 @@ function SeriesLibrary({
       <Box sx={{ textAlign: 'center', py: 4 }}>
         <CircularProgress />
         <Typography variant="body2" sx={{ mt: 2 }}>
-          Loading your series...
+          Loading your flows...
         </Typography>
       </Box>
     )
@@ -442,16 +442,16 @@ function SeriesLibrary({
     return (
       <Box sx={{ textAlign: 'center', py: 4 }}>
         <Typography variant="h6" gutterBottom>
-          No series created yet
+          No flows created yet
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          Create your first series to group related asanas together
+          Create your first flow to group related asanas together
         </Typography>
         <Button
           variant="contained"
           onClick={() => router.push('/navigator/flows/createSeries')}
         >
-          Create Your First Series
+          Create Your First Flow
         </Button>
       </Box>
     )
@@ -983,7 +983,7 @@ function SeriesListItem({
         onClick={(e) => e.stopPropagation()}
       >
         <DialogTitle id="delete-series-list-dialog-title">
-          Delete Series?
+          Delete Flow?
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="delete-series-list-dialog-description">
@@ -1082,7 +1082,8 @@ function SequenceListItem({
         </Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>
           <Typography variant="caption" color="text.secondary">
-            {sequence.sequencesSeries.length} series
+            {sequence.sequencesSeries.length} flow
+            {sequence.sequencesSeries.length !== 1 ? 's' : ''}
           </Typography>
           {sequence.durationSequence && (
             <Typography variant="caption" color="text.secondary">
@@ -1474,9 +1475,7 @@ function SeriesCard({
         aria-describedby="delete-series-dialog-description"
         onClick={(e) => e.stopPropagation()} // Prevent card click when clicking dialog
       >
-        <DialogTitle id="delete-series-dialog-title">
-          Delete Series?
-        </DialogTitle>
+        <DialogTitle id="delete-series-dialog-title">Delete Flow?</DialogTitle>
         <DialogContent>
           <DialogContentText id="delete-series-dialog-description">
             Are you sure you want to delete &quot;{series.seriesName}&quot;?

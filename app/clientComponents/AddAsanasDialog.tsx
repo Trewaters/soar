@@ -187,7 +187,7 @@ export default function AddAsanasDialog({
       maxWidth="md"
       aria-labelledby="add-asanas-title"
     >
-      <DialogTitle id="add-asanas-title">Add Asanas to Series</DialogTitle>
+      <DialogTitle id="add-asanas-title">Add Asanas to Flow</DialogTitle>
 
       <DialogContent>
         <Box sx={{ mb: 2 }}>

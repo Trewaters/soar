@@ -23,7 +23,7 @@ export async function POST(req: Request) {
   const decodedId = email.toString().replace('%40', '@').replace('=', '')
 
   try {
-    await prisma.userData.update({
+    const updatedUser = await prisma.userData.update({
       where: { email: decodedId },
       data: {
         updatedAt,
@@ -43,8 +43,8 @@ export async function POST(req: Request) {
         role,
       },
     })
-    return Response.json({ message: 'User Data saved' })
+    return Response.json(updatedUser)
   } catch (error) {
-    return Response.json({ error: 'Error saving data' })
+    return Response.json({ error: 'Error saving data' }, { status: 500 })
   }
 }

@@ -268,7 +268,7 @@ const ActivityStreakDebug: React.FC = () => {
             <strong>Asanas:</strong> {debugData.activityCounts.asana}
           </Typography>
           <Typography>
-            <strong>Series:</strong> {debugData.activityCounts.series}
+            <strong>Flows:</strong> {debugData.activityCounts.series}
           </Typography>
           <Typography>
             <strong>Sequences:</strong> {debugData.activityCounts.sequence}

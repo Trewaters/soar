@@ -87,7 +87,7 @@ export default function SeriesImageManagementDemo() {
         maxWidth="md"
         fullWidth
       >
-        <DialogTitle>Edit Series: {demoSeries.name}</DialogTitle>
+        <DialogTitle>Edit Flow: {demoSeries.name}</DialogTitle>
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <SeriesImageManager seriesId={demoSeries.id} disabled={false} />

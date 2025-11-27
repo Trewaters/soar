@@ -137,7 +137,7 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
       aria-labelledby="edit-series-title"
       aria-describedby="edit-series-content"
     >
-      <DialogTitle id="edit-series-title">Edit Series</DialogTitle>
+      <DialogTitle id="edit-series-title">Edit Flow</DialogTitle>
       <DialogContent id="edit-series-content">{EditorContent}</DialogContent>
     </Dialog>
   )

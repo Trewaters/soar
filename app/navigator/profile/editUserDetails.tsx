@@ -741,317 +741,325 @@ export default function EditUserDetails({
                     alt="Edit profile image icon"
                   />
                 )} */}
-              </Stack>
 
-              <Card sx={{ mt: 2 }}>
-                <CardContent>
-                  <Typography variant="body2" color="text.secondary">
-                    {userData?.headline ?? 'What does yoga mean to you?'}
-                  </Typography>
-                </CardContent>
-                <CardActions disableSpacing>
-                  <IconButton aria-label="share" onClick={handleShare}>
-                    <ShareIcon />
-                  </IconButton>
-                  <ExpandMore
-                    expand={expanded}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
-                  >
-                    <ExpandMoreIcon />
-                  </ExpandMore>
-                </CardActions>
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <Card sx={{ mt: 2 }}>
                   <CardContent>
-                    <Stack spacing={3}>
-                      <TextInputField
-                        name="shareQuick"
-                        id="share-quick-input"
-                        placeholder='Share "Quickly"'
-                        label="Share Quickly"
-                        value={formData.shareQuick}
-                        variant="outlined"
-                        onChange={handleChange}
-                        fullWidth
-                      />
-                      <Autocomplete
-                        freeSolo
-                        fullWidth
-                        options={yogaStyles}
-                        value={formData.yogaStyle || ''}
-                        onChange={(event, newValue) => {
-                          setFormData((prev) => ({
-                            ...prev,
-                            yogaStyle:
-                              typeof newValue === 'string' ? newValue : '',
-                          }))
-                        }}
-                        filterOptions={(options, state) =>
-                          options.filter((option) =>
-                            option
-                              .toLowerCase()
-                              .includes(state.inputValue.toLowerCase())
-                          )
-                        }
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            name="yogaStyle"
-                            id="yoga-style-input"
-                            placeholder='Enter "Yoga Style"'
-                            label="Yoga Style"
-                            variant="outlined"
-                            value={formData.yogaStyle || ''}
-                            onChange={handleChange}
-                            fullWidth
-                            sx={{ ...textFieldStyles, width: '100%' }}
-                          />
-                        )}
-                        sx={{ width: '100%' }}
-                      />
-                      <TextInputField
-                        name="yogaExperience"
-                        id="yoga-experience-input"
-                        placeholder='Enter "Yoga Experience"'
-                        label="Yoga Experience"
-                        value={formData.yogaExperience}
-                        variant="outlined"
-                        onChange={handleChange}
-                        fullWidth
-                      />
-                      <TextInputField
-                        name="company"
-                        id="company-input"
-                        placeholder='Enter "Company"'
-                        label="Company"
-                        value={formData.company}
-                        variant="outlined"
-                        onChange={handleChange}
-                        fullWidth
-                      />
-                      <Stack direction="row" spacing={1} alignItems={'center'}>
-                        <LinkIcon />
-                        <Typography variant="body1" noWrap>
-                          <Link
-                            href={
-                              userData.websiteURL?.startsWith('http')
-                                ? userData.websiteURL
-                                : `https://${userData.websiteURL}`
-                            }
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {userData.websiteURL || 'No website provided'}
-                          </Link>
-                        </Typography>
-                      </Stack>
-                      <Stack direction="row" spacing={1} alignItems={'center'}>
-                        <MapIcon />
-                        <Typography>
-                          {userData.location || 'No location provided'}
-                        </Typography>
-                      </Stack>
-                    </Stack>
+                    <Typography variant="body2" color="text.secondary">
+                      {userData?.headline ?? 'What does yoga mean to you?'}
+                    </Typography>
                   </CardContent>
-                </Collapse>
-              </Card>
+                  <CardActions disableSpacing>
+                    <IconButton aria-label="share" onClick={handleShare}>
+                      <ShareIcon />
+                    </IconButton>
+                    <ExpandMore
+                      expand={expanded}
+                      onClick={handleExpandClick}
+                      aria-expanded={expanded}
+                      aria-label="show more"
+                    >
+                      <ExpandMoreIcon />
+                    </ExpandMore>
+                  </CardActions>
+                  <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <CardContent>
+                      <Stack spacing={3}>
+                        <TextInputField
+                          name="shareQuick"
+                          id="share-quick-input"
+                          placeholder='Share "Quickly"'
+                          label="Share Quickly"
+                          value={formData.shareQuick}
+                          variant="outlined"
+                          onChange={handleChange}
+                          fullWidth
+                        />
+                        <Autocomplete
+                          freeSolo
+                          fullWidth
+                          options={yogaStyles}
+                          value={formData.yogaStyle || ''}
+                          onChange={(event, newValue) => {
+                            setFormData((prev) => ({
+                              ...prev,
+                              yogaStyle:
+                                typeof newValue === 'string' ? newValue : '',
+                            }))
+                          }}
+                          filterOptions={(options, state) =>
+                            options.filter((option) =>
+                              option
+                                .toLowerCase()
+                                .includes(state.inputValue.toLowerCase())
+                            )
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              name="yogaStyle"
+                              id="yoga-style-input"
+                              placeholder='Enter "Yoga Style"'
+                              label="Yoga Style"
+                              variant="outlined"
+                              value={formData.yogaStyle || ''}
+                              onChange={handleChange}
+                              fullWidth
+                              sx={{ ...textFieldStyles, width: '100%' }}
+                            />
+                          )}
+                          sx={{ width: '100%' }}
+                        />
+                        <TextInputField
+                          name="yogaExperience"
+                          id="yoga-experience-input"
+                          placeholder='Enter "Yoga Experience"'
+                          label="Yoga Experience"
+                          value={formData.yogaExperience}
+                          variant="outlined"
+                          onChange={handleChange}
+                          fullWidth
+                        />
+                        <TextInputField
+                          name="company"
+                          id="company-input"
+                          placeholder='Enter "Company"'
+                          label="Company"
+                          value={formData.company}
+                          variant="outlined"
+                          onChange={handleChange}
+                          fullWidth
+                        />
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          alignItems={'center'}
+                        >
+                          <LinkIcon />
+                          <Typography variant="body1" noWrap>
+                            <Link
+                              href={
+                                userData.websiteURL?.startsWith('http')
+                                  ? userData.websiteURL
+                                  : `https://${userData.websiteURL}`
+                              }
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {userData.websiteURL || 'No website provided'}
+                            </Link>
+                          </Typography>
+                        </Stack>
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          alignItems={'center'}
+                        >
+                          <MapIcon />
+                          <Typography>
+                            {userData.location || 'No location provided'}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                    </CardContent>
+                  </Collapse>
+                </Card>
 
-              {/* Form Fields */}
-              <FormControl sx={{ width: '100%', mt: 2 }}>
-                <Typography variant="body1" sx={{ mb: 1 }}>
-                  Username
-                </Typography>
-                <TextField
-                  name="username"
-                  value={userData?.name ?? ''}
-                  placeholder="Username"
-                  variant="filled"
-                  disabled
-                  fullWidth
-                  sx={{ ...textFieldStyles, width: '100%' }}
-                />
-              </FormControl>
-
-              <Stack
-                direction={{ xs: 'column', md: 'row' }}
-                spacing={2}
-                sx={{ mt: 2 }}
-              >
-                <FormControl sx={{ width: '100%' }}>
+                {/* Form Fields */}
+                <FormControl sx={{ width: '100%', mt: 2 }}>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    First Name
+                    Username
                   </Typography>
-                  <TextInputField
-                    name="firstName"
-                    placeholder="Enter First Name"
-                    value={formData.firstName ?? ''}
-                    onChange={(e) => {
-                      const { name, value } = e.target
-                      setFormData((prev) => ({
-                        ...prev,
-                        [name]: value,
-                      }))
-                    }}
-                    variant="outlined"
-                    required
+                  <TextField
+                    name="username"
+                    value={userData?.name ?? ''}
+                    placeholder="Username"
+                    variant="filled"
+                    disabled
                     fullWidth
                     sx={{ ...textFieldStyles, width: '100%' }}
                   />
                 </FormControl>
 
-                <FormControl sx={{ width: '100%' }}>
+                <Stack
+                  direction={{ xs: 'column', md: 'row' }}
+                  spacing={2}
+                  sx={{ mt: 2 }}
+                >
+                  <FormControl sx={{ width: '100%' }}>
+                    <Typography variant="body1" sx={{ mb: 1 }}>
+                      First Name
+                    </Typography>
+                    <TextInputField
+                      name="firstName"
+                      placeholder="Enter First Name"
+                      value={formData.firstName ?? ''}
+                      onChange={(e) => {
+                        const { name, value } = e.target
+                        setFormData((prev) => ({
+                          ...prev,
+                          [name]: value,
+                        }))
+                      }}
+                      variant="outlined"
+                      required
+                      fullWidth
+                      sx={{ ...textFieldStyles, width: '100%' }}
+                    />
+                  </FormControl>
+
+                  <FormControl sx={{ width: '100%' }}>
+                    <Typography variant="body1" sx={{ mb: 1 }}>
+                      Last Name
+                    </Typography>
+                    <TextInputField
+                      name="lastName"
+                      placeholder="Enter Last Name"
+                      value={formData.lastName}
+                      onChange={handleChange}
+                      variant="outlined"
+                      required
+                      fullWidth
+                      sx={{ ...textFieldStyles, width: '100%' }}
+                    />
+                  </FormControl>
+                </Stack>
+
+                <FormControl sx={{ width: '100%', mt: 2 }}>
                   <Typography variant="body1" sx={{ mb: 1 }}>
-                    Last Name
+                    Pronouns
                   </Typography>
                   <TextInputField
-                    name="lastName"
-                    placeholder="Enter Last Name"
-                    value={formData.lastName}
+                    name="pronouns"
+                    placeholder="Enter Pronouns"
+                    value={formData.pronouns}
                     onChange={handleChange}
                     variant="outlined"
-                    required
                     fullWidth
                     sx={{ ...textFieldStyles, width: '100%' }}
                   />
                 </FormControl>
-              </Stack>
 
-              <FormControl sx={{ width: '100%', mt: 2 }}>
-                <Typography variant="body1" sx={{ mb: 1 }}>
-                  Pronouns
+                <FormControl sx={{ width: '100%', mt: 2 }}>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    Headline
+                  </Typography>
+                  <TextInputField
+                    name="headline"
+                    placeholder="Enter...2 sentences"
+                    value={formData.headline || 'I am a Yoga instructor.'}
+                    onChange={handleChange}
+                    multiline
+                    maxRows={6}
+                    minRows={2}
+                    fullWidth
+                    sx={{ ...textFieldStyles, width: '100%' }}
+                  />
+                </FormControl>
+
+                <FormControl sx={{ width: '100%', mt: 2 }}>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    Description/About/Bio
+                  </Typography>
+                  <TextInputField
+                    name="bio"
+                    placeholder="Enter...Biography"
+                    value={formData.bio}
+                    onChange={handleChange}
+                    multiline
+                    maxRows={6}
+                    minRows={4}
+                    fullWidth
+                    sx={{ ...textFieldStyles, width: '100%' }}
+                  />
+                </FormControl>
+
+                <FormControl sx={{ width: '100%', mt: 2 }}>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    Website URL
+                  </Typography>
+                  <TextInputField
+                    name="websiteURL"
+                    placeholder="Enter website URL"
+                    value={formData.websiteURL}
+                    onChange={handleChange}
+                    variant="outlined"
+                    fullWidth
+                    sx={{ ...textFieldStyles, width: '100%' }}
+                  />
+                </FormControl>
+
+                <FormControl sx={{ width: '100%', mt: 2 }}>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    My Location
+                  </Typography>
+                  <LocationPicker
+                    value={formData.location}
+                    onChange={handleLocationChange}
+                    placeholder="Search for your city, state, or country"
+                    variant="outlined"
+                    fullWidth
+                    showCurrentLocation={true}
+                    showMapButton={false}
+                    helperText="Select your location to connect with local yoga practitioners"
+                    sx={{ ...textFieldStyles, width: '100%' }}
+                  />
+                </FormControl>
+
+                <Typography variant="body1" sx={{ mb: 1, mt: 2 }}>
+                  Email Address (primary/internal)
                 </Typography>
-                <TextInputField
-                  name="pronouns"
-                  placeholder="Enter Pronouns"
-                  value={formData.pronouns}
-                  onChange={handleChange}
-                  variant="outlined"
-                  fullWidth
-                  sx={{ ...textFieldStyles, width: '100%' }}
-                />
-              </FormControl>
-
-              <FormControl sx={{ width: '100%', mt: 2 }}>
-                <Typography variant="body1" sx={{ mb: 1 }}>
-                  Headline
-                </Typography>
-                <TextInputField
-                  name="headline"
-                  placeholder="Enter...2 sentences"
-                  value={formData.headline || 'I am a Yoga instructor.'}
-                  onChange={handleChange}
-                  multiline
-                  maxRows={6}
-                  minRows={2}
-                  fullWidth
-                  sx={{ ...textFieldStyles, width: '100%' }}
-                />
-              </FormControl>
-
-              <FormControl sx={{ width: '100%', mt: 2 }}>
-                <Typography variant="body1" sx={{ mb: 1 }}>
-                  Description/About/Bio
-                </Typography>
-                <TextInputField
-                  name="bio"
-                  placeholder="Enter...Biography"
-                  value={formData.bio}
-                  onChange={handleChange}
-                  multiline
-                  maxRows={6}
-                  minRows={4}
-                  fullWidth
-                  sx={{ ...textFieldStyles, width: '100%' }}
-                />
-              </FormControl>
-
-              <FormControl sx={{ width: '100%', mt: 2 }}>
-                <Typography variant="body1" sx={{ mb: 1 }}>
-                  Website URL
-                </Typography>
-                <TextInputField
-                  name="websiteURL"
-                  placeholder="Enter website URL"
-                  value={formData.websiteURL}
-                  onChange={handleChange}
-                  variant="outlined"
-                  fullWidth
-                  sx={{ ...textFieldStyles, width: '100%' }}
-                />
-              </FormControl>
-
-              <FormControl sx={{ width: '100%', mt: 2 }}>
-                <Typography variant="body1" sx={{ mb: 1 }}>
-                  My Location
-                </Typography>
-                <LocationPicker
-                  value={formData.location}
-                  onChange={handleLocationChange}
-                  placeholder="Search for your city, state, or country"
-                  variant="outlined"
-                  fullWidth
-                  showCurrentLocation={true}
-                  showMapButton={false}
-                  helperText="Select your location to connect with local yoga practitioners"
-                  sx={{ ...textFieldStyles, width: '100%' }}
-                />
-              </FormControl>
-
-              <Typography variant="body1" sx={{ mb: 1, mt: 2 }}>
-                Email Address (primary/internal)
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{ mb: 1, backgroundColor: 'lightgray' }}
-              >
-                {userData?.email ?? 'N/A'}
-              </Typography>
-              <FormHelperText>
-                Your email address cannot be changed.
-              </FormHelperText>
-              {/* Move Manage Profile Images button above Save button */}
-              <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                spacing={2}
-                sx={{ pt: 2 }}
-              >
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  onClick={() => setImageManagerOpen(true)}
-                  sx={{
-                    py: 1.5,
-                    fontSize: 16,
-                    borderRadius: 2,
-                  }}
+                <Typography
+                  variant="body1"
+                  sx={{ mb: 1, backgroundColor: 'lightgray' }}
                 >
-                  Manage Profile Images
-                </Button>
-
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  variant="contained"
-                  fullWidth
-                  startIcon={loading ? null : <SaveIcon />}
-                  sx={{
-                    py: 1.5,
-                    fontSize: 16,
-                    fontWeight: 600,
-                    borderRadius: 2,
-                    bgcolor: theme.palette.success.main,
-                    '&:hover': {
-                      bgcolor: theme.palette.success.dark,
-                    },
-                  }}
+                  {userData?.email ?? 'N/A'}
+                </Typography>
+                <FormHelperText>
+                  Your email address cannot be changed.
+                </FormHelperText>
+                {/* Move Manage Profile Images button above Save button */}
+                <Stack
+                  direction={{ xs: 'column', sm: 'row' }}
+                  spacing={2}
+                  sx={{ pt: 2 }}
                 >
-                  {loading ? (
-                    <CircularProgress size={24} color="inherit" />
-                  ) : (
-                    'Save Changes'
-                  )}
-                </Button>
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    onClick={() => setImageManagerOpen(true)}
+                    sx={{
+                      py: 1.5,
+                      fontSize: 16,
+                      borderRadius: 2,
+                    }}
+                  >
+                    Manage Profile Images
+                  </Button>
+
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    variant="contained"
+                    fullWidth
+                    startIcon={loading ? null : <SaveIcon />}
+                    sx={{
+                      py: 1.5,
+                      fontSize: 16,
+                      fontWeight: 600,
+                      borderRadius: 2,
+                      bgcolor: theme.palette.success.main,
+                      '&:hover': {
+                        bgcolor: theme.palette.success.dark,
+                      },
+                    }}
+                  >
+                    {loading ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : (
+                      'Save Changes'
+                    )}
+                  </Button>
+                </Stack>
               </Stack>
             </Box>
           </Paper>

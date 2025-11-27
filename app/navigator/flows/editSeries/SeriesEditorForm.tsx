@@ -347,7 +347,7 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
             color="error"
             disabled={disabled}
           >
-            Delete Series
+            Delete Flow
           </Button>
         )}
       </Box>
@@ -365,9 +365,9 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
         onClose={() => setConfirmDeleteOpen(false)}
         aria-labelledby="confirm-delete-title"
       >
-        <DialogTitle id="confirm-delete-title">Delete Series</DialogTitle>
+        <DialogTitle id="confirm-delete-title">Delete Flow</DialogTitle>
         <DialogContent>
-          Are you sure you want to delete this series? This action cannot be
+          Are you sure you want to delete this flow? This action cannot be
           undone.
         </DialogContent>
         <DialogActions>

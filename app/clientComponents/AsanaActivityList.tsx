@@ -175,7 +175,7 @@ export default function AsanaActivityList() {
                         whiteSpace: 'nowrap',
                       }}
                     >
-                      Series: {activity.seriesName}
+                      Flow: {activity.seriesName}
                     </Typography>
                   </Link>
                 ) : activity.type === 'sequence' ? (
