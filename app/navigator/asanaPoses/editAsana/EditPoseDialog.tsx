@@ -16,7 +16,12 @@ import {
   DialogActions,
   Chip,
 } from '@mui/material'
-import { updatePose, type UpdatePoseInput, deletePose } from '@lib/poseService'
+import {
+  updatePose,
+  type UpdatePoseInput,
+  deletePose,
+  fetchWithTimeout,
+} from '@lib/poseService'
 import { useSession } from 'next-auth/react'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
@@ -241,13 +246,14 @@ export default function EditPoseDialog({
         displayOrder: Number(image.displayOrder),
       }))
 
-      const reorderResponse = await fetch(
+      const reorderResponse = await fetchWithTimeout(
         `/api/asana/${pose.id}/images/reorder`,
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ images: imageReorderPayload }),
-        }
+        },
+        15000
       )
 
       if (!reorderResponse.ok) {

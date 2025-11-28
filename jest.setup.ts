@@ -211,6 +211,12 @@ jest.mock('@lib/poseService', () => ({
     id: 'test-pose-id',
     sort_english_name: 'Updated Pose',
   }),
+  fetchWithTimeout: jest
+    .fn()
+    .mockImplementation(async (input: any, init?: any) => {
+      // Use the global fetch mock so tests can override behavior per-suite
+      return await (global as any).fetch(input, init)
+    }),
   deletePose: jest.fn().mockResolvedValue({ success: true }),
   getPoseById: jest.fn().mockResolvedValue({
     id: 'test-pose-id',

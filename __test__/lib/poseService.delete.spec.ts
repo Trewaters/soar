@@ -14,17 +14,18 @@ describe('poseService.deletePose', () => {
   })
 
   it('calls DELETE /api/poses/:id and returns success', async () => {
-    // Import the actual implementation from the library (bypass any jest.mock in setup)
-    const { deletePose } = jest.requireActual(
-      '../../lib/poseService'
-    ) as typeof import('../../lib/poseService')
-
+    // Set up a mocked global.fetch before importing the actual implementation
     const mockResponse = { success: true }
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       status: 200,
       json: async () => mockResponse,
     }) as any
+
+    // Import the actual implementation from the library (bypass any jest.mock in setup)
+    const { deletePose } = jest.requireActual(
+      '../../lib/poseService'
+    ) as typeof import('../../lib/poseService')
 
     const result = await deletePose('pose-123')
 

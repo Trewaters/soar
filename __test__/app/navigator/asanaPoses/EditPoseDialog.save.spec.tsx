@@ -10,6 +10,9 @@ jest.mock('next-auth/react', () => ({
 jest.mock('../../../../lib/poseService', () => ({
   deletePose: jest.fn(),
   updatePose: jest.fn(),
+  fetchWithTimeout: jest.fn().mockImplementation(async (input: any, init?: any) => {
+    return await (global as any).fetch(input, init)
+  }),
 }))
 
 describe('EditPoseDialog Save', () => {

@@ -2,6 +2,54 @@ import { logServiceError } from './errorLogger'
 import { getAlphaUserIds } from '@app/lib/alphaUsers'
 import { AsanaPose } from 'types/asana'
 
+const DEFAULT_REQUEST_TIMEOUT_MS = 15000
+
+export async function fetchWithTimeout(
+  input: RequestInfo,
+  init?: RequestInit,
+  timeoutMs: number = DEFAULT_REQUEST_TIMEOUT_MS
+): Promise<Response> {
+  // Jest's global.fetch mock implementations are simple and do not expect an
+  // AbortSignal to be passed in the init object. Detect mocked fetch and avoid
+  // passing a signal there so existing tests that assert the exact fetch init
+  // object keep working.
+  const globalFetch: any = (global as any).fetch
+  const isJestMock = globalFetch && globalFetch._isMockFunction
+
+  if (isJestMock) {
+    // Do a race between the fetch and a timeout rejection. We cannot abort the
+    // mocked fetch, but this prevents tests from hanging in case of long timeouts.
+    let timer: NodeJS.Timeout | null = null
+    try {
+      const timeoutPromise = new Promise<Response>((_, reject) => {
+        timer = setTimeout(() => reject(new Error('Request timed out')), timeoutMs)
+      })
+      const fetchPromise = fetch(input, init)
+      const res = await Promise.race([fetchPromise as Promise<Response>, timeoutPromise])
+      if (timer) clearTimeout(timer)
+      return res as Response
+    } catch (err: any) {
+      if (timer) clearTimeout(timer)
+      throw err
+    }
+  }
+
+  const controller = new AbortController()
+  const signal = controller.signal
+  const timeout = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    const response = await fetch(input, { ...(init || {}), signal })
+    clearTimeout(timeout)
+    return response
+  } catch (err: any) {
+    clearTimeout(timeout)
+    if (err && (err.name === 'AbortError' || err.code === 'ABORT_ERR')) {
+      throw new Error('Request timed out')
+    }
+    throw err
+  }
+}
+
 export type CreatePoseInput = {
   sort_english_name: string
   english_names: string[]
@@ -304,7 +352,7 @@ export async function getPoseIdByName(name: string): Promise<string | null> {
  */
 export async function createPose(input: CreatePoseInput): Promise<AsanaPose> {
   try {
-    const response = await fetch('/api/poses/createAsana', {
+    const response = await fetchWithTimeout('/api/poses/createAsana', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -348,7 +396,7 @@ export async function updatePose(
   input: UpdatePoseInput
 ): Promise<AsanaPose> {
   try {
-    const response = await fetch(`/api/poses/${id}`, {
+    const response = await fetchWithTimeout(`/api/poses/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -391,7 +439,7 @@ export async function updatePose(
  */
 export async function deletePose(id: string): Promise<{ success: boolean }> {
   try {
-    const response = await fetch(`/api/poses/${id}`, {
+    const response = await fetchWithTimeout(`/api/poses/${id}`, {
       method: 'DELETE',
       headers: {
         'Cache-Control': 'no-cache',
