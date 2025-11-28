@@ -186,8 +186,10 @@ function AsanaPoseReducer(
 
 export default function AsanaPoseProvider({
   children,
+  hydration,
 }: {
   children: ReactNode
+  hydration?: { asanaPose?: any }
 }) {
   const [state, dispatch] = useReducer(AsanaPoseReducer, initialState)
 
@@ -225,6 +227,17 @@ export default function AsanaPoseProvider({
   }
 
   useEffect(() => {}, [state.poses])
+
+  // Apply hydration payload if present
+  useEffect(() => {
+    if (hydration && hydration.asanaPose) {
+      try {
+        dispatch({ type: 'SET_POSES', payload: hydration.asanaPose })
+      } catch (err) {
+        console.warn('[AsanaPoseProvider] hydration failed', err)
+      }
+    }
+  }, [hydration])
 
   const contextValue = {
     state,

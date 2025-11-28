@@ -115,8 +115,10 @@ function FlowSeriesReducer(
 
 export default function FlowSeriesProvider({
   children,
+  hydration,
 }: {
   children: ReactNode
+  hydration?: { flowSeries?: any }
 }) {
   const [state, dispatch] = useReducer(FlowSeriesReducer, initialState)
 
@@ -136,6 +138,17 @@ export default function FlowSeriesProvider({
     // fetchFlowSeriesData('Hip Series')
     // dispatch({ type: 'SET_FLOW_SERIES', payload: state.flowSeries })
   }, [state.flowSeries])
+
+  // Apply hydration if present
+  useEffect(() => {
+    if (hydration && hydration.flowSeries) {
+      try {
+        dispatch({ type: 'SET_FLOW_SERIES', payload: hydration.flowSeries })
+      } catch (err) {
+        console.warn('[FlowSeriesProvider] hydration failed', err)
+      }
+    }
+  }, [hydration])
 
   return (
     <FlowSeriesContext.Provider value={{ state, dispatch }}>
