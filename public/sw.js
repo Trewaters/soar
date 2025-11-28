@@ -1,114 +1,206 @@
-// Service Worker for handling push notifications in Soar Yoga App
-// Version 2.0 - Enhanced error handling and caching prevention
+/*
+  Soar Yoga - Service Worker
+  Clean, single-file service worker.
+*/
 
-const CACHE_VERSION = 'v2.0'
-const SW_VERSION = '2.0.1'
+const CACHE_VERSION = 'v4'
+const CACHE_NAME = `soar-offline-${CACHE_VERSION}`
+const SW_VERSION = '2.0.3'
 
-console.log(`Service Worker ${SW_VERSION} initializing...`)
+const PRECACHE_URLS = [
+  '/',
+  '/offline',
+  '/favicon.ico',
+  '/icon-192x192.png',
+  '/icon-512x512.png',
+]
 
-self.addEventListener('install', (event) => {
-  console.log(`Service Worker ${SW_VERSION} installing...`)
-  // Skip waiting to activate the new service worker immediately
-  // This prevents caching issues that can cause push subscription failures
+function isSameOrigin(url) {
+  try {
+    const u = new URL(url)
+    return u.origin === self.location.origin
+  } catch (e) {
+    return false
+  }
+}
+
+function isJsonRequest(request) {
+  try {
+    const url = new URL(request.url)
+    const accept = request.headers.get('accept') || ''
+    return url.pathname.endsWith('.json') || accept.includes('application/json')
+  } catch (e) {
+    return false
+  }
+}
+
+self.addEventListener('install', function (event) {
+  console.log('[SW ' + SW_VERSION + '] install')
   event.waitUntil(
-    Promise.resolve().then(() => {
-      console.log('Service Worker installation complete')
-      return self.skipWaiting()
-    })
+    caches
+      .open(CACHE_NAME)
+      .then(function (cache) {
+        return cache.addAll(PRECACHE_URLS).catch(function (e) {
+          console.warn('[SW] Precache warning:', e)
+        })
+      })
+      .then(function () {
+        return self.skipWaiting()
+      })
   )
 })
 
-self.addEventListener('activate', (event) => {
-  console.log(`Service Worker ${SW_VERSION} activated`)
-
-  // Take control of all clients immediately and clear old caches
+self.addEventListener('activate', function (event) {
+  console.log('[SW ' + SW_VERSION + '] activate')
   event.waitUntil(
-    Promise.all([
-      self.clients.claim(),
-      caches.keys().then((cacheNames) => {
+    caches
+      .keys()
+      .then(function (keys) {
         return Promise.all(
-          cacheNames
-            .filter((cacheName) => cacheName !== CACHE_VERSION)
-            .map((cacheName) => {
-              console.log('Deleting old cache:', cacheName)
-              return caches.delete(cacheName)
-            })
+          keys.map(function (key) {
+            if (key !== CACHE_NAME && key.startsWith('soar-offline-')) {
+              console.log('[SW] deleting old cache', key)
+              return caches.delete(key)
+            }
+            return Promise.resolve()
+          })
         )
-      }),
-    ]).then(() => {
-      console.log('Service Worker activation complete')
+      })
+      .then(function () {
+        return self.clients.claim()
+      })
+  )
+})
 
-      // Notify all clients that service worker is ready
-      return self.clients.matchAll().then((clients) => {
-        clients.forEach((client) => {
-          client.postMessage({
-            type: 'SW_ACTIVATED',
-            version: SW_VERSION,
-            timestamp: Date.now(),
+self.addEventListener('fetch', function (event) {
+  var request = event.request
+  if (request.method !== 'GET') return
+
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request)
+        .then(function (networkResponse) {
+          return caches.open(CACHE_NAME).then(function (cache) {
+            cache.put(request, networkResponse.clone())
+            return networkResponse
           })
         })
+        .catch(function () {
+          return caches.open(CACHE_NAME).then(function (cache) {
+            return cache.match(request).then(function (cached) {
+              if (cached) return cached
+              return cache.match('/offline').then(function (offline) {
+                if (offline) return offline
+                return new Response('You are offline.', { status: 503 })
+              })
+            })
+          })
+        })
+    )
+    return
+  }
+
+  if (
+    isSameOrigin(request.url) &&
+    ['script', 'style', 'image', 'font'].indexOf(request.destination) !== -1
+  ) {
+    event.respondWith(
+      caches.open(CACHE_NAME).then(function (cache) {
+        return cache.match(request).then(function (cached) {
+          if (cached) return cached
+          return fetch(request)
+            .then(function (networkResponse) {
+              cache.put(request, networkResponse.clone())
+              return networkResponse
+            })
+            .catch(function () {
+              return new Response('Offline asset unavailable', { status: 504 })
+            })
+        })
+      })
+    )
+    return
+  }
+
+  if (isJsonRequest(request)) {
+    event.respondWith(
+      fetch(request)
+        .then(function (networkResponse) {
+          return caches.open(CACHE_NAME).then(function (cache) {
+            cache.put(request, networkResponse.clone())
+            return networkResponse
+          })
+        })
+        .catch(function () {
+          return caches.open(CACHE_NAME).then(function (cache) {
+            return cache.match(request).then(function (cached) {
+              if (cached) return cached
+              return new Response(JSON.stringify({ offline: true }), {
+                headers: { 'Content-Type': 'application/json' },
+                status: 200,
+              })
+            })
+          })
+        })
+    )
+    return
+  }
+
+  event.respondWith(
+    caches.open(CACHE_NAME).then(function (cache) {
+      return cache.match(request).then(function (cached) {
+        if (cached) return cached
+        return fetch(request)
+          .then(function (networkResponse) {
+            cache.put(request, networkResponse.clone())
+            return networkResponse
+          })
+          .catch(function () {
+            return new Response('Offline', { status: 503 })
+          })
       })
     })
   )
 })
 
-// Handle messages from main thread
-self.addEventListener('message', (event) => {
-  console.log(`[SW ${SW_VERSION}] Message received:`, event.data)
-
-  if (event.data && event.data.command === 'SKIP_WAITING') {
-    console.log('Skipping waiting as requested')
+self.addEventListener('message', function (event) {
+  if (!event.data) return
+  if (
+    event.data === 'SKIP_WAITING' ||
+    (event.data && event.data.command === 'SKIP_WAITING')
+  ) {
     self.skipWaiting()
+    return
   }
-
   if (event.data && event.data.command === 'GET_VERSION') {
-    event.ports[0].postMessage({ version: SW_VERSION })
+    if (event.ports && event.ports[0]) {
+      event.ports[0].postMessage({ version: SW_VERSION })
+    }
   }
 })
 
-// Handle push notifications with enhanced error handling
-self.addEventListener('push', (event) => {
-  console.log(`[SW ${SW_VERSION}] Push event received:`, event)
-
-  let notificationData = {
+self.addEventListener('push', function (event) {
+  var notificationData = {
     title: 'Soar Yoga Practice Reminder',
-    body: 'Time for your yoga practice! 🧘‍♀️',
+    body: 'Time for your yoga practice!',
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
     url: '/navigator/flows/practiceSeries',
     tag: 'yoga-reminder',
     requireInteraction: false,
-    actions: [
-      {
-        action: 'start-practice',
-        title: 'Start Practice',
-        icon: '/icons/play-icon.png',
-      },
-      {
-        action: 'dismiss',
-        title: 'Maybe Later',
-        icon: '/icons/dismiss-icon.png',
-      },
-    ],
+    actions: [],
   }
 
-  // Parse notification data from the push event if available
   if (event.data) {
     try {
-      const pushData = event.data.json()
-      notificationData = {
-        ...notificationData,
-        ...pushData,
-      }
-      console.log(`[SW ${SW_VERSION}] Parsed push data:`, pushData)
-    } catch (error) {
-      console.error(`[SW ${SW_VERSION}] Error parsing push data:`, error)
-      // Continue with default notification data
+      var parsed = event.data.json()
+      notificationData = Object.assign({}, notificationData, parsed)
+    } catch (e) {
+      // ignore
     }
   }
 
-  // Show the notification with error handling
-  const showNotification = self.registration
+  var promise = self.registration
     .showNotification(notificationData.title, {
       body: notificationData.body,
       icon: notificationData.icon,
@@ -116,99 +208,41 @@ self.addEventListener('push', (event) => {
       tag: notificationData.tag,
       requireInteraction: notificationData.requireInteraction,
       actions: notificationData.actions,
-      data: {
-        url: notificationData.url,
-      },
+      data: { url: notificationData.url },
     })
-    .catch((error) => {
-      console.error(`[SW ${SW_VERSION}] Error showing notification:`, error)
+    .catch(function (err) {
+      console.warn('[SW] showNotification failed', err)
     })
 
-  event.waitUntil(showNotification)
+  event.waitUntil(promise)
 })
 
-// Handle notification clicks with enhanced logging
-self.addEventListener('notificationclick', (event) => {
-  console.log(`[SW ${SW_VERSION}] Notification clicked:`, event)
-  console.log(`[SW ${SW_VERSION}] Action:`, event.action)
-  console.log(`[SW ${SW_VERSION}] Notification data:`, event.notification.data)
-
-  // Close the notification
+self.addEventListener('notificationclick', function (event) {
   event.notification.close()
-
-  // Get the URL to open (default to practice series)
-  const urlToOpen =
-    event.notification.data?.url || '/navigator/flows/practiceSeries'
-
-  // Handle action button clicks
-  if (event.action === 'start-practice') {
-    // Open the practice page
-    event.waitUntil(
-      clients
-        .matchAll({ type: 'window', includeUncontrolled: true })
-        .then((clientList) => {
-          // Check if app is already open
-          for (const client of clientList) {
-            if (client.url.includes(urlToOpen) && 'focus' in client) {
-              return client.focus()
-            }
+  var urlToOpen =
+    (event.notification.data && event.notification.data.url) || '/'
+  event.waitUntil(
+    clients
+      .matchAll({ type: 'window', includeUncontrolled: true })
+      .then(function (clientList) {
+        for (var i = 0; i < clientList.length; i++) {
+          var client = clientList[i]
+          if (client.url.indexOf(urlToOpen) !== -1 && 'focus' in client) {
+            return client.focus()
           }
-
-          // Open new window/tab if app not already open
-          if (clients.openWindow) {
-            return clients.openWindow(urlToOpen)
-          }
-        })
-    )
-  } else if (event.action === 'dismiss') {
-    // Just close the notification (already done above)
-    return
-  } else {
-    // Default click behavior - open the app
-    event.waitUntil(
-      clients
-        .matchAll({ type: 'window', includeUncontrolled: true })
-        .then((clientList) => {
-          // Check if app is already open
-          for (const client of clientList) {
-            if (client.url === self.registration.scope && 'focus' in client) {
-              return client.focus()
-            }
-          }
-
-          // Open new window/tab if app not already open
-          if (clients.openWindow) {
-            return clients.openWindow(urlToOpen)
-          }
-        })
-    )
-  }
+        }
+        if (clients.openWindow) return clients.openWindow(urlToOpen)
+      })
+  )
 })
 
-// Handle background sync (future enhancement)
-self.addEventListener('sync', (event) => {
-  console.log('Background sync event:', event.tag)
-
+self.addEventListener('sync', function (event) {
   if (event.tag === 'yoga-practice-sync') {
-    // Could be used to sync practice data when connection is restored
     event.waitUntil(syncYogaData())
   }
 })
 
-// Helper function for syncing yoga data (placeholder)
-async function syncYogaData() {
-  try {
-    // This could sync user's practice data, preferences, etc.
-    console.log('Syncing yoga practice data...')
-    // Implementation would depend on your offline strategy
-  } catch (error) {
-    console.error('Error syncing yoga data:', error)
-  }
+function syncYogaData() {
+  console.log('[SW] syncYogaData')
+  return Promise.resolve()
 }
-
-// Handle service worker updates
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting()
-  }
-})

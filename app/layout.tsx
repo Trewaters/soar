@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import Script from 'next/script'
 import { Providers } from '@providers/Providers'
 import { auth } from '../auth'
+import ServiceWorkerRegister from '@clientComponents/ServiceWorkerRegister'
 
 declare global {
   // eslint-disable-next-line no-unused-vars
@@ -102,6 +103,7 @@ export default async function RootLayout({
             `}
           </Script>
           {children}
+          <ServiceWorkerRegister />
         </Providers>
       </body>
     </html>
