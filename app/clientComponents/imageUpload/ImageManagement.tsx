@@ -180,7 +180,6 @@ export default function ImageManagement({
   }
 
   const handleImageUploaded = (image: PoseImageData) => {
-    console.log('Image uploaded:', image)
     // Call parent callback if provided
     onImageUploaded?.(image)
     // Refresh the gallery

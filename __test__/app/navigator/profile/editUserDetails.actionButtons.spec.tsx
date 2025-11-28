@@ -111,13 +111,15 @@ describe('EditUserDetails - Action Buttons', () => {
       })
     })
 
-    it('should display the sticky action bar with fixed positioning', async () => {
+    it('should display the sticky action bar with relative positioning in document flow', async () => {
       render(<EditUserDetails />, { wrapper: TestWrapper })
 
       await waitFor(() => {
         const actionBar = screen.getByTestId('sticky-action-bar')
         expect(actionBar).toBeInTheDocument()
-        expect(actionBar).toHaveStyle({ position: 'fixed' })
+        // Action bar is now in document flow (position: relative) to appear
+        // directly beneath the profile content instead of fixed at screen bottom
+        expect(actionBar).toHaveStyle({ position: 'relative' })
       })
     })
   })
@@ -221,13 +223,16 @@ describe('EditUserDetails - Action Buttons', () => {
       })
     })
 
-    it('should position action bar above the bottom navigation', async () => {
+    it('should position action bar in document flow with margin for bottom navigation', async () => {
       render(<EditUserDetails />, { wrapper: TestWrapper })
 
       await waitFor(() => {
         const actionBar = screen.getByTestId('sticky-action-bar')
-        // Action bar is positioned 66px from bottom to sit above the bottom nav
-        expect(actionBar).toHaveStyle({ bottom: '66px' })
+        // Action bar is now in document flow (not fixed) and uses margin-top
+        // to separate from content. The mb (margin-bottom) handles spacing
+        // above the bottom nav but isn't directly testable via toHaveStyle.
+        expect(actionBar).toBeInTheDocument()
+        expect(actionBar).toHaveStyle({ position: 'relative' })
       })
     })
   })

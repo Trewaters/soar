@@ -327,7 +327,7 @@ export default function Page() {
             link="/navigator/flows"
             onClick={toggleDrawer(!open)}
           />
-          <Box sx={{ px: 2, pb: 12 }}>
+          <Box sx={{ px: 2, pb: 20 }}>
             {FEATURES.SHOW_CREATE_SEQUENCE && (
               <>
                 <FormGroup sx={{ mt: 4 }}>
@@ -837,20 +837,19 @@ export default function Page() {
                     )}
                   </Paper>
 
-                  {/* Sticky Bottom Action Bar - Consistent with other pages */}
+                  {/* Action Bar - In document flow above bottom navigation */}
                   <Box
+                    data-testid="action-bar"
                     sx={{
-                      position: 'fixed',
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
+                      position: 'relative',
+                      mt: 3,
                       backgroundColor: 'background.paper',
-                      borderTop: '1px solid',
-                      borderColor: 'divider',
-                      py: 2,
-                      px: 2,
-                      boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
-                      zIndex: 10,
+                      border: '2px solid',
+                      borderColor: 'primary.main',
+                      py: 2.5,
+                      px: 3,
+                      borderRadius: '12px',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                     }}
                   >
                     <Stack

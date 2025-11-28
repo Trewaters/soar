@@ -49,10 +49,15 @@ export type FlowSeriesPageState = {
   flowSeries: FlowSeriesData
 }
 
-type FlowSeriesAction = {
-  type: 'SET_FLOW_SERIES' | 'RESET_FLOW_SERIES'
-  payload: FlowSeriesData
-}
+type FlowSeriesAction =
+  | {
+      type: 'SET_FLOW_SERIES' | 'RESET_FLOW_SERIES'
+      payload: FlowSeriesData
+    }
+  | {
+      type: 'SET_FLOW_SERIES_IMAGE'
+      payload: string
+    }
 
 const initialState: FlowSeriesPageState = {
   flowSeries: {
@@ -84,6 +89,11 @@ function FlowSeriesReducer(
   switch (action.type) {
     case 'SET_FLOW_SERIES':
       return { ...state, flowSeries: action.payload }
+    case 'SET_FLOW_SERIES_IMAGE':
+      return {
+        ...state,
+        flowSeries: { ...state.flowSeries, image: action.payload },
+      }
     case 'RESET_FLOW_SERIES':
       return {
         ...state,

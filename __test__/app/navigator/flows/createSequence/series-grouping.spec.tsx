@@ -127,7 +127,7 @@ describe('CreateSequence Series Grouping', () => {
 
     // Find the autocomplete input and trigger focus to open dropdown
     const autocomplete = screen.getByPlaceholderText(
-      'Add a Series to your Sequence...'
+      'Search for a Series to add...'
     )
 
     // Focus and then click to ensure dropdown opens
@@ -172,7 +172,7 @@ describe('CreateSequence Series Grouping', () => {
 
     // Find the autocomplete and type a search term to open dropdown and filter
     const autocomplete = screen.getByPlaceholderText(
-      'Add a Series to your Sequence...'
+      'Search for a Series to add...'
     )
 
     // First click to focus and ensure dropdown opens
@@ -218,7 +218,7 @@ describe('CreateSequence Series Grouping', () => {
 
     // Click autocomplete
     const autocomplete = screen.getByPlaceholderText(
-      'Add a Series to your Sequence...'
+      'Search for a Series to add...'
     )
     await user.click(autocomplete)
 

@@ -21,7 +21,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { LooksOne } from '@mui/icons-material'
 import LooksTwoIcon from '@mui/icons-material/LooksTwo'
@@ -57,72 +57,78 @@ export default function Page() {
   const [open, setOpen] = React.useState(false)
   const [isDirty, setIsDirty] = useState(false)
   const [isDirtyDescription, setIsDirtyDescription] = useState(false)
+  // Debug + throttling refs to prevent rapid refetch loops
+  const lastFetchKeyRef = useRef<string | null>(null)
+  const lastFetchTimeRef = useRef<number>(0)
+  const fetchInFlightRef = useRef<boolean>(false)
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen)
   }
 
   const fetchPoses = React.useCallback(async () => {
+    const emailKey = session?.user?.email || 'guest'
+    const now = Date.now()
+    const throttleMs = 1500
+
+    // Guard: avoid overlapping/in-flight fetches
+    if (fetchInFlightRef.current) {
+      console.log('[CreateSeries] fetchPoses skipped: in-flight')
+      return
+    }
+
+    // Guard: throttle repeated fetches with same key within window
+    if (
+      lastFetchKeyRef.current === emailKey &&
+      now - lastFetchTimeRef.current < throttleMs
+    ) {
+      console.log('[CreateSeries] fetchPoses throttled for key:', emailKey)
+      return
+    }
+
     try {
+      fetchInFlightRef.current = true
+      lastFetchKeyRef.current = emailKey
+      lastFetchTimeRef.current = now
+      console.log('[CreateSeries] fetchPoses START for key:', emailKey)
       const poses = await getAccessiblePoses(session?.user?.email || undefined)
+      console.log('[CreateSeries] fetchPoses DONE count:', poses.length)
       setPoses(poses)
     } catch (error: Error | any) {
-      console.error('Error fetching poses:', error.message)
+      console.error('[CreateSeries] Error fetching poses:', error.message)
+    } finally {
+      fetchInFlightRef.current = false
     }
   }, [session?.user?.email])
 
   useEffect(() => {
-    // console.log('create series session', session)
-
-    if (
-      session === null
-      // ||
-      // (session &&
-      //   session.status === 'resolved_model' &&
-      //   session.value === 'null')
-    ) {
+    if (session === null) {
       router.push('/navigator/flows')
+      return
     }
 
     fetchPoses()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router, session])
-
-  // Debug effect to monitor uploadedImages state changes
-  useEffect(() => {
-    console.log('📸 uploadedImages state changed:', uploadedImages)
-  }, [uploadedImages])
+  }, [router, session?.user?.email])
 
   // Refetch poses when the page becomes visible (e.g., when returning from create asana page)
   // This ensures that newly created asanas appear in the autocomplete search
+  // Note: We only use visibilitychange, not focus, to avoid excessive API calls
   const handleVisibilityChange = React.useCallback(() => {
-    if (!document.hidden) {
-      console.log('Page became visible, refreshing pose data...')
+    const hidden = document.hidden
+    console.log('[CreateSeries] visibilitychange hidden:', hidden)
+    if (!hidden) {
+      // Only refetch when visible and not throttled/in-flight
       fetchPoses()
     }
   }, [fetchPoses])
 
-  const handleFocus = React.useCallback(() => {
-    console.log('Window gained focus, refreshing pose data...')
-    fetchPoses()
-  }, [fetchPoses])
-
-  const handlePopState = React.useCallback(() => {
-    console.log('Navigation detected, refreshing pose data...')
-    fetchPoses()
-  }, [fetchPoses])
-
   React.useEffect(() => {
     document.addEventListener('visibilitychange', handleVisibilityChange)
-    window.addEventListener('focus', handleFocus)
-    window.addEventListener('popstate', handlePopState)
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
-      window.removeEventListener('focus', handleFocus)
-      window.removeEventListener('popstate', handlePopState)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleVisibilityChange, handleFocus, handlePopState])
+  }, [handleVisibilityChange])
 
   function handleSelect(
     event: React.SyntheticEvent<Element, Event>,
@@ -223,19 +229,17 @@ export default function Page() {
     }
   }
 
-  const handleImageUploaded = (img: PoseImageData) => {
-    console.log('📸 Image uploaded callback received:', img)
-    // Only keep one image - replace the array instead of appending
-    setUploadedImages([img])
-    console.log('📸 Series image set:', img)
-    dispatch({
-      type: 'SET_FLOW_SERIES',
-      payload: {
-        ...state.flowSeries,
-        image: img.url,
-      },
-    })
-  }
+  const handleImageUploaded = React.useCallback(
+    (img: PoseImageData) => {
+      // Only keep one image - replace the array instead of appending
+      setUploadedImages([img])
+      dispatch({
+        type: 'SET_FLOW_SERIES_IMAGE',
+        payload: img.url,
+      })
+    },
+    [dispatch]
+  )
 
   function handleCancel() {
     dispatch({
@@ -692,20 +696,19 @@ export default function Page() {
                   </Paper>
                 </Box>
 
-                {/* Sticky Bottom Action Bar - Consistent with Asana pages */}
+                {/* Action Bar - In document flow above bottom navigation */}
                 <Box
+                  data-testid="action-bar"
                   sx={{
-                    position: 'fixed',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
+                    position: 'relative',
+                    mt: 3,
                     backgroundColor: 'background.paper',
-                    borderTop: '1px solid',
-                    borderColor: 'divider',
-                    py: 2,
-                    px: 2,
-                    boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
-                    zIndex: 10,
+                    border: '2px solid',
+                    borderColor: 'primary.main',
+                    py: 2.5,
+                    px: 3,
+                    borderRadius: '12px',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                   }}
                 >
                   <Stack
