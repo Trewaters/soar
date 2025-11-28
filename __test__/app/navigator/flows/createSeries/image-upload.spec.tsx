@@ -219,10 +219,8 @@ describe('CreateSeries Image Upload Feature', () => {
 
       await waitFor(() => {
         expect(mockDispatch).toHaveBeenCalledWith({
-          type: 'SET_FLOW_SERIES',
-          payload: expect.objectContaining({
-            image: 'https://example.com/series-image.jpg',
-          }),
+          type: 'SET_FLOW_SERIES_IMAGE',
+          payload: 'https://example.com/series-image.jpg',
         })
       })
     })
