@@ -2,6 +2,7 @@
 import { Box } from '@mui/material'
 import Header from '@serverComponents/header'
 import NavBottom from '@serverComponents/navBottom'
+import OfflineBadge from '@clientComponents/OfflineBadge'
 import { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 
@@ -51,6 +52,8 @@ export default function NavigatorLayout({ children }: { children: ReactNode }) {
       </Box>
       {/* Bottom Navigation - appears on all navigator pages */}
       <NavBottom subRoute={pathname} onMenuToggle={handleMenuToggle} />
+      {/* Offline status indicator */}
+      <OfflineBadge />
     </>
   )
 }
