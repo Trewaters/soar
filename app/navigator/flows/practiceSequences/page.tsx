@@ -23,6 +23,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ViewStreamIcon from '@mui/icons-material/ViewStream'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
+import CloseIcon from '@mui/icons-material/Close'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import { AutocompleteInput } from '@app/clientComponents/form'
@@ -556,7 +557,13 @@ export default function Page() {
             </Box>
 
             <React.Fragment key={singleSequence.id}>
-              {singleSequence?.id ? (
+              {/* Only show sequence content when a sequence is selected.
+                  This covers two cases used in tests:
+                  - A sequenceId is present in the URL (even '0')
+                  - Or a non-zero singleSequence.id has been selected locally
+              */}
+              {sequenceId !== null ||
+              (!!singleSequence?.id && singleSequence.id !== 0) ? (
                 <Box
                   sx={{
                     mt: 4,
@@ -576,18 +583,19 @@ export default function Page() {
                       px: 6,
                     }}
                   >
-                    {/* Title block - constrained width, original theme colors */}
+                    {/* Title block - orange tab widened and includes edit icon */}
                     <Box
                       sx={{
-                        width: { xs: '50%', sm: '40%', md: '30%' },
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
                         backgroundColor: 'primary.main',
                         borderTopLeftRadius: '12px',
                         borderTopRightRadius: '12px',
+                        minWidth: { xs: '80%', sm: 240 },
+                        maxWidth: '85%',
                         px: 2,
                         py: 0.75,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
                       }}
                     >
                       <Typography
@@ -596,11 +604,54 @@ export default function Page() {
                         sx={{
                           color: 'primary.contrastText',
                           fontWeight: 'bold',
-                          textAlign: 'center',
+                          textAlign: 'left',
                         }}
                       >
                         {singleSequence.nameSequence}
                       </Typography>
+
+                      {/* Inline edit icon inside the orange tab on the right */}
+                      <IconButton
+                        onClick={() => {
+                          try {
+                            const editUrl = `/navigator/sequences/${singleSequence.id}?edit=true`
+                            const viewUrl = `/navigator/sequences/${singleSequence.id}`
+                            const isEditing =
+                              typeof window !== 'undefined' &&
+                              window.location.search.includes('edit=true') &&
+                              window.location.pathname.includes(
+                                `/navigator/sequences/${singleSequence.id}`
+                              )
+
+                            if (isEditing) {
+                              router.replace(viewUrl)
+                            } else {
+                              // Use replace so toggling doesn't create many history entries
+                              router.replace(editUrl)
+                            }
+                          } catch (e) {
+                            // ignore navigation errors
+                          }
+                        }}
+                        aria-label={`Edit ${singleSequence.nameSequence}`}
+                        sx={{
+                          ml: 'auto',
+                          color: 'primary.contrastText',
+                          p: 0.5,
+                        }}
+                        title="Edit Sequence"
+                        size="small"
+                      >
+                        {typeof window !== 'undefined' &&
+                        window.location.search.includes('edit=true') &&
+                        window.location.pathname.includes(
+                          `/navigator/sequences/${singleSequence.id}`
+                        ) ? (
+                          <CloseIcon fontSize="small" />
+                        ) : (
+                          <EditIcon fontSize="small" />
+                        )}
+                      </IconButton>
                     </Box>
 
                     {/* Action buttons: View toggle, Edit */}
@@ -642,26 +693,13 @@ export default function Page() {
                         <ViewStreamIcon />
                       </IconButton>
 
-                      <IconButton
-                        onClick={() => {
-                          const editUrl = `/navigator/sequences/${singleSequence.id}?edit=true`
-                          router.push(editUrl)
-                        }}
-                        aria-label={`Edit ${singleSequence.nameSequence}`}
-                        sx={{
-                          color: 'primary.main',
-                          p: 1,
-                          minWidth: 0,
-                        }}
-                        title="Edit Sequence"
-                      >
-                        <EditIcon />
-                      </IconButton>
+                      {/* Edit icon moved into the title tab */}
                     </Box>
                   </Box>
                 </Box>
               ) : null}
-              {singleSequence?.id ? (
+              {sequenceId !== null ||
+              (!!singleSequence?.id && singleSequence.id !== 0) ? (
                 <Stack rowGap={3} alignItems="center">
                   {paginatedData.map((seriesMini, i) => (
                     <Card

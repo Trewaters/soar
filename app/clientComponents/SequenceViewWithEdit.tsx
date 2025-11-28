@@ -16,6 +16,8 @@ import {
 import { ArrowBack as ArrowBackIcon } from '@mui/icons-material'
 import ViewStreamIcon from '@mui/icons-material/ViewStream'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
+import EditIcon from '@mui/icons-material/Edit'
+import CloseIcon from '@mui/icons-material/Close'
 import { useSession } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import EditSequence, { EditableSequence } from '@clientComponents/EditSequence'
@@ -51,6 +53,23 @@ export default function SequenceViewWithEdit({
   useEffect(() => {
     setShowEdit(defaultShowEdit)
   }, [defaultShowEdit])
+
+  // When edit mode is toggled we want to keep the URL in sync so
+  // that `?edit=true` is present when editing and removed when not.
+  const handleToggleEdit = (open?: boolean) => {
+    const next = typeof open === 'boolean' ? open : !showEdit
+    setShowEdit(next)
+
+    try {
+      if (next && model.id) {
+        navigation.replace(`/navigator/sequences/${model.id}?edit=true`)
+      } else if (model.id) {
+        navigation.replace(`/navigator/sequences/${model.id}`)
+      }
+    } catch (e) {
+      // best-effort URL sync; ignore errors
+    }
+  }
 
   // Fetch fresh series data to ensure sequences show current series content
   useEffect(() => {
@@ -274,24 +293,56 @@ export default function SequenceViewWithEdit({
               width: '100%',
             }}
           >
-            <Typography
-              variant="body1"
+            <Box
               component="h1"
-              textAlign="center"
               sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
                 backgroundColor: 'primary.main',
                 borderTopLeftRadius: '12px',
                 borderTopRightRadius: '12px',
-                width: 'fit-content',
+                minWidth: { xs: '80%', sm: 240 },
+                maxWidth: '85%',
                 ml: 5,
-                pr: 7,
+                pr: 3,
                 pl: 2,
-                fontWeight: 'bold',
-                fontSize: '1.25rem',
+                py: 1,
               }}
             >
-              {model.nameSequence}
-            </Typography>
+              <Typography
+                variant="body1"
+                component="span"
+                sx={{
+                  fontWeight: 'bold',
+                  fontSize: '1.25rem',
+                  color: 'primary.contrastText',
+                }}
+              >
+                {model.nameSequence}
+              </Typography>
+
+              {/* place an edit (pencil) icon to the right inside the orange tab */}
+              {isOwner && (
+                <IconButton
+                  aria-label={showEdit ? 'close edit' : 'show edit'}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    handleToggleEdit()
+                  }}
+                  sx={{ ml: 'auto', color: 'primary.contrastText' }}
+                  size="small"
+                  title={showEdit ? 'Close editor' : 'Edit Sequence'}
+                >
+                  {showEdit ? (
+                    <CloseIcon fontSize="small" />
+                  ) : (
+                    <EditIcon fontSize="small" />
+                  )}
+                </IconButton>
+              )}
+            </Box>
 
             {/* View toggle icons */}
             <Box
@@ -335,22 +386,7 @@ export default function SequenceViewWithEdit({
             </Box>
           </Box>
 
-          {isOwner && (
-            <Button
-              variant="outlined"
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                setShowEdit((v) => !v)
-              }}
-              aria-label={showEdit ? 'hide edit' : 'show edit'}
-              aria-expanded={showEdit}
-              aria-controls="sequence-edit-region"
-              sx={{ ml: 5 }}
-            >
-              {showEdit ? 'Close edit' : 'Edit'}
-            </Button>
-          )}
+          {/* Edit toggle moved into the orange header tab for owners */}
         </Box>
 
         {/* Image Section */}
@@ -390,7 +426,11 @@ export default function SequenceViewWithEdit({
         {isOwner && showEdit && (
           <Box id="sequence-edit-region" role="region" aria-label="edit-region">
             <Divider sx={{ my: 2 }} />
-            <EditSequence sequence={model} onChange={handleSequenceUpdate} />
+            <EditSequence
+              sequence={model}
+              onChange={handleSequenceUpdate}
+              onCancel={() => handleToggleEdit(false)}
+            />
           </Box>
         )}
         {/* Flow Series Cards - Following Soar pattern - Only show when NOT in edit mode */}

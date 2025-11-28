@@ -55,6 +55,7 @@ export type EditableSequence = {
 export interface EditSequenceProps {
   sequence: EditableSequence
   onChange?: (updated: EditableSequence) => void
+  onCancel?: () => void
   children?: React.ReactNode
 }
 /* eslint-enable @typescript-eslint/no-unused-vars */
@@ -62,6 +63,7 @@ export interface EditSequenceProps {
 export default function EditSequence({
   sequence,
   onChange,
+  onCancel,
   children,
 }: EditSequenceProps) {
   const { data: session, status } = useSession()
@@ -737,19 +739,17 @@ export default function EditSequence({
         </Stack>
       </form>
 
-      {/* Sticky Action Bar */}
+      {/* Action Bar - placed in document flow below content so it doesn't overlap bottom nav */}
       <Box
         sx={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
+          position: 'relative',
+          mt: 2,
+          mb: { xs: 6, sm: 4 }, // space above bottom nav on small screens
           backgroundColor: 'background.paper',
           borderTop: '1px solid',
           borderColor: 'divider',
           py: 2,
           px: 3,
-          zIndex: 1100,
         }}
       >
         <Stack
@@ -758,6 +758,19 @@ export default function EditSequence({
           justifyContent="center"
           sx={{ maxWidth: '600px', mx: 'auto' }}
         >
+          <Button
+            variant="outlined"
+            onClick={() => onCancel?.()}
+            sx={{
+              borderRadius: '12px',
+              px: 4,
+              py: 1.5,
+              fontSize: '1.1rem',
+              fontWeight: 600,
+            }}
+          >
+            Cancel
+          </Button>
           <Button
             variant="contained"
             onClick={handleSave}

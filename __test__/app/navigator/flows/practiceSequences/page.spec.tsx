@@ -402,8 +402,8 @@ describe('Practice Sequences Page - View Toggle Features', () => {
 
       await user.click(editButton)
 
-      // Verify navigation to list view with edit parameter
-      expect(mockPush).toHaveBeenCalledWith(
+      // Verify navigation to list view with edit parameter (replace used)
+      expect(mockReplace).toHaveBeenCalledWith(
         '/navigator/sequences/456?edit=true'
       )
     })
@@ -429,7 +429,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       await user.click(editButton)
 
       // Verify URL includes edit=true parameter
-      const callArgs = mockPush.mock.calls[0][0]
+      const callArgs = mockReplace.mock.calls[0][0]
       expect(callArgs).toContain('?edit=true')
       expect(callArgs).toBe('/navigator/sequences/789?edit=true')
     })
