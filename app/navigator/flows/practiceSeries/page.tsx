@@ -198,6 +198,9 @@ export default function Page() {
               if (String(selectedSeries.id) !== String(flowRef.current?.id)) {
                 setFlow(selectedSeries)
               }
+            } else {
+              // Previously selected flow no longer exists (likely deleted); clear it
+              setFlow(undefined)
             }
           }
         }
@@ -467,7 +470,12 @@ export default function Page() {
   const handleEditDelete = async (id: string) => {
     try {
       await deleteSeries(id)
-      // Force refresh and navigate back to series list to prevent showing stale data
+      // Immediately clear the current flow so the deleted series is not rendered
+      // Also remove the deleted series from the local series list so the
+      // re-selection effect does not repopulate it when `flow` becomes undefined.
+      setSeries((prev) => prev.filter((s) => String(s.id) !== String(id)))
+      setFlow(undefined)
+      // Force refresh and navigate back to series list page (no id param)
       router.refresh()
       router.replace('/navigator/flows/practiceSeries')
     } catch (e) {

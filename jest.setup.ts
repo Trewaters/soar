@@ -175,6 +175,8 @@ jest.mock('@app/hooks/useNavigationWithLoading', () => ({
 ;(globalThis as any).mockNavigationReplace = mockNavigationReplace
 ;(globalThis as any).mockNavigationBack = mockNavigationBack
 ;(globalThis as any).mockIsElementLoading = mockIsElementLoading
+// Expose refresh mock for tests that assert router refresh behavior
+;(globalThis as any).mockNavigationRefresh = mockNavigationRefresh
 
 // Mock NavigationLoadingContext to prevent errors when components use the context
 const mockNavigationLoadingState = {
