@@ -342,6 +342,9 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
           py: 2,
           px: 2,
           mt: 3,
+          // Keep within container width to prevent side cut-offs
+          width: '100%',
+          boxSizing: 'border-box',
           boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
           zIndex: 10,
         }}
@@ -353,6 +356,9 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
             gap: 2,
             justifyContent: 'center',
             alignItems: 'center',
+            width: '100%',
+            maxWidth: 600,
+            mx: 'auto',
           }}
         >
           <Button
@@ -366,7 +372,7 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
               py: 1.5,
               fontSize: '1.1rem',
               fontWeight: 600,
-              minWidth: { xs: '100%', sm: '200px' },
+              width: { xs: '100%', sm: 'auto' },
               boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
             }}
           >
@@ -384,7 +390,7 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
                 py: 1.5,
                 fontSize: '1.1rem',
                 fontWeight: 600,
-                minWidth: { xs: '100%', sm: '160px' },
+                width: { xs: '100%', sm: 'auto' },
               }}
             >
               Delete Flow
@@ -400,7 +406,7 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
               py: 1.5,
               fontSize: '1.1rem',
               fontWeight: 600,
-              minWidth: { xs: '100%', sm: '160px' },
+              width: { xs: '100%', sm: 'auto' },
             }}
           >
             Cancel

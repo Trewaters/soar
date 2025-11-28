@@ -454,13 +454,16 @@ export default function Page() {
         alt={'Create an Asana'}
         title="Create an Asana"
       />
-      <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
+      <Stack
+        spacing={2}
+        sx={{ mx: { xs: 0, sm: 3 }, mb: '1em', width: '100%', maxWidth: 1200 }}
+      >
         <SubNavHeader
           title="Asana"
           link="/navigator/asanaPoses"
           onClick={handleInfoClick}
         />
-        <Stack sx={{ px: 4 }} spacing={3}>
+        <Stack sx={{ px: { xs: 2, sm: 4 } }} spacing={3}>
           {/* Asana Form Fields using AsanaDetailsEdit */}
           <AsanaDetailsEdit fields={formFields} />
 
@@ -585,7 +588,9 @@ export default function Page() {
               py: 2,
               px: 2,
               mt: 4,
-              mx: -4,
+              // Keep within content width on mobile to avoid side cut-offs
+              width: '100%',
+              boxSizing: 'border-box',
               boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
               zIndex: 10,
             }}
@@ -595,6 +600,7 @@ export default function Page() {
               spacing={2}
               justifyContent="center"
               alignItems="center"
+              sx={{ width: '100%', maxWidth: 600, mx: 'auto' }}
             >
               <Button
                 onClick={handleSubmit}
@@ -607,7 +613,8 @@ export default function Page() {
                   px: 4,
                   fontSize: '1.1rem',
                   fontWeight: 600,
-                  minWidth: { xs: '100%', sm: '200px' },
+                  width: { xs: '100%', sm: 'auto' },
+                  minWidth: { sm: '200px' },
                   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
                 }}
               >
@@ -651,7 +658,8 @@ export default function Page() {
                   px: 4,
                   fontSize: '1.1rem',
                   fontWeight: 600,
-                  minWidth: { xs: '100%', sm: '160px' },
+                  width: { xs: '100%', sm: 'auto' },
+                  minWidth: { sm: '160px' },
                 }}
               >
                 Cancel
