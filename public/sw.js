@@ -177,6 +177,33 @@ self.addEventListener('message', function (event) {
       event.ports[0].postMessage({ version: SW_VERSION })
     }
   }
+  // Invalidate cached URLs on demand. Client can send:
+  // { command: 'INVALIDATE_URLS', urls: ['https://.../api/...'] }
+  if (event.data && event.data.command === 'INVALIDATE_URLS') {
+    try {
+      const urls = Array.isArray(event.data.urls) ? event.data.urls : []
+      if (urls.length === 0) return
+      event.waitUntil(
+        caches.open(CACHE_NAME).then(function (cache) {
+          return Promise.all(
+            urls.map(function (u) {
+              try {
+                // We only remove same-origin cached requests
+                const req = new Request(u)
+                return cache.delete(req).catch(function (e) {
+                  // ignore per-URL deletion errors
+                })
+              } catch (e) {
+                return Promise.resolve()
+              }
+            })
+          )
+        })
+      )
+    } catch (e) {
+      console.warn('[SW] invalidate urls failed', e)
+    }
+  }
 })
 
 self.addEventListener('push', function (event) {

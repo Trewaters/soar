@@ -147,6 +147,26 @@ export default function FlowSeriesProvider({
       } catch (err) {
         console.warn('[FlowSeriesProvider] hydration failed', err)
       }
+      // Background revalidation: even when hydrating from local cache, re-fetch
+      // the authoritative server copy and update state if newer. This avoids
+      // stale local IndexedDB state overwriting server updates (common in
+      // production when users have multiple devices or previous cached data).
+      ;(async () => {
+        try {
+          const id = hydration.flowSeries?.id
+          if (!id) return
+          const url = `/api/series?id=${encodeURIComponent(id)}`
+          const res = await fetch(url, { cache: 'no-store' })
+          if (!res.ok) return
+          const serverData = await res.json()
+          if (serverData) {
+            dispatch({ type: 'SET_FLOW_SERIES', payload: serverData })
+          }
+        } catch (e) {
+          // Non-fatal: we already applied hydration. Revalidation is best-effort.
+          console.warn('[FlowSeriesProvider] revalidation failed', e)
+        }
+      })()
     }
   }, [hydration])
 
