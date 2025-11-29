@@ -17,14 +17,7 @@ export async function PUT(
       )
     }
 
-    const {
-      english_names,
-      sort_english_name,
-      description,
-      category,
-      difficulty,
-      breath,
-    } = await request.json()
+    const input = await request.json()
 
     // First, get the existing pose to check ownership
     const existingPose = await prisma.asanaPose.findUnique({
@@ -43,17 +36,47 @@ export async function PUT(
       )
     }
 
+    // Only copy allowed fields that are present in the request body so we
+    // don't accidentally overwrite fields with undefined.
+    const allowedFields = [
+      'sanskrit_names',
+      'english_names',
+      'alternative_english_names',
+      'sort_english_name',
+      'description',
+      'category',
+      'difficulty',
+      'dristi',
+      'setup_cues',
+      'deepening_cues',
+      'joint_action',
+      'muscle_action',
+      'transition_cues_out',
+      'transition_cues_in',
+      'additional_cues',
+      'benefits',
+      'customize_asana',
+      'pose_modifications',
+      'pose_variations',
+      'breath',
+      'duration_asana',
+      'lore',
+      'asana_intention',
+      'label',
+      'suggested_poses',
+      'preparatory_poses',
+    ]
+
+    const data: Record<string, any> = {}
+    for (const key of allowedFields) {
+      if (Object.prototype.hasOwnProperty.call(input, key)) {
+        data[key] = input[key]
+      }
+    }
+
     const updatedPose = await prisma.asanaPose.update({
       where: { id: resolvedParams.id },
-      data: {
-        english_names,
-        sort_english_name,
-        description,
-        category,
-        difficulty,
-        breath,
-        // Note: updated_on is handled by Prisma defaults, created_by should not be changed
-      },
+      data,
     })
     // Return the updated pose with consistent formatting
     const poseWithFormattedData = {
