@@ -22,10 +22,16 @@ export async function fetchWithTimeout(
     let timer: NodeJS.Timeout | null = null
     try {
       const timeoutPromise = new Promise<Response>((_, reject) => {
-        timer = setTimeout(() => reject(new Error('Request timed out')), timeoutMs)
+        timer = setTimeout(
+          () => reject(new Error('Request timed out')),
+          timeoutMs
+        )
       })
       const fetchPromise = fetch(input, init)
-      const res = await Promise.race([fetchPromise as Promise<Response>, timeoutPromise])
+      const res = await Promise.race([
+        fetchPromise as Promise<Response>,
+        timeoutPromise,
+      ])
       if (timer) clearTimeout(timer)
       return res as Response
     } catch (err: any) {

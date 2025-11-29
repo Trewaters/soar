@@ -612,32 +612,6 @@ const authConfig = {
     newUser: "/auth/new-user", // New users (optional)
     */
   },
-  // Ensure cookie settings are compatible with local development (http://localhost)
-  // NextAuth may set cookies with `secure: true` when it detects a production URL,
-  // which prevents the browser from storing cookies on http://localhost and
-  // causes CSRF/token mismatches (MissingCSRF). Force non-secure cookies in
-  // development so credentials and OAuth flows work locally.
-  cookies: {
-    csrfToken: {
-      name: 'next-auth.csrf-token',
-      options: {
-        httpOnly: false,
-        sameSite: 'lax',
-        path: '/',
-        secure: process.env.NODE_ENV === 'production',
-      },
-    },
-    sessionToken: {
-      // Use standard NextAuth session cookie name so other parts keep working
-      name: 'next-auth.session-token',
-      options: {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: process.env.NODE_ENV === 'production',
-      },
-    },
-  },
 }
 
 // @ts-expect-error - NextAuth v5 beta type resolution issue

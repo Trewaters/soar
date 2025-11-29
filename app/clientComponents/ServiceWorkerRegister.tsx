@@ -14,7 +14,9 @@ export default function ServiceWorkerRegister() {
             location.hostname === '127.0.0.1')
 
         // In development, proactively unregister any existing service workers
-        // to avoid stale/corrupted workers persisting between edits.
+        // to avoid stale/corrupted workers persisting between edits. Do NOT
+        // re-register a service worker in development — that can interfere
+        // with authentication flows (cookies/redirects) during local testing.
         if (isDev) {
           try {
             const regs = await navigator.serviceWorker.getRegistrations()
@@ -22,7 +24,6 @@ export default function ServiceWorkerRegister() {
               // eslint-disable-next-line no-console
               console.log('[SW] Dev unregistering', r.scope)
               // Unregister and wait for completion
-              // (we don't await any subsequent state changes here)
               // eslint-disable-next-line no-await-in-loop
               await r.unregister()
             }
@@ -30,6 +31,9 @@ export default function ServiceWorkerRegister() {
             // eslint-disable-next-line no-console
             console.warn('[SW] Dev unregister failed', e)
           }
+          // Skip registering the service worker in development to avoid
+          // interfering with localhost auth flows.
+          return
         }
 
         const reg = await navigator.serviceWorker.register('/sw.js', {
