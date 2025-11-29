@@ -62,6 +62,7 @@ Prioritized Details...
 interface PoseCardProps {
   poseCardProp: AsanaPose
   initialEditMode?: boolean
+  onSaveSuccess?: () => void
 }
 
 // Custom hook to fetch pose images
@@ -96,6 +97,7 @@ const usePoseImages = (poseId?: string, poseName?: string) => {
 export default function PoseActivityDetail({
   poseCardProp,
   initialEditMode = false,
+  onSaveSuccess,
 }: PoseCardProps) {
   const pose = poseCardProp
   const router = useNavigationWithLoading()
@@ -409,7 +411,19 @@ export default function PoseActivityDetail({
 
       // Exit edit mode and refresh the page data
       setIsEditing(false)
-      router.refresh()
+      // If parent provided a refresh handler, call it so the parent can re-fetch
+      // its data (this avoids needing a full browser reload). Fall back to
+      // router.refresh() for backward compatibility.
+      if (typeof onSaveSuccess === 'function') {
+        try {
+          onSaveSuccess()
+        } catch (e) {
+          console.error('onSaveSuccess handler threw:', e)
+          router.refresh()
+        }
+      } else {
+        router.refresh()
+      }
     } catch (error: Error | any) {
       setError(error.message || 'Failed to update pose')
     } finally {

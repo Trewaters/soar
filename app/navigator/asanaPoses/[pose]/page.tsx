@@ -33,7 +33,7 @@ export default function Page({
   }
 
   useEffect(() => {
-    const getViewPose = async () => {
+    const fetchViewPose = async () => {
       try {
         setLoading(true)
         setError(null)
@@ -48,7 +48,7 @@ export default function Page({
         setLoading(false)
       }
     }
-    getViewPose()
+    fetchViewPose()
   }, [pose])
   if (loading) {
     return (
@@ -114,6 +114,20 @@ export default function Page({
         <PoseActivityDetail
           poseCardProp={viewPose}
           initialEditMode={shouldEdit}
+          onSaveSuccess={async () => {
+            // Re-fetch the current pose when child signals a successful save
+            try {
+              setLoading(true)
+              setError(null)
+              const decodedPose = decodeURIComponent(pose)
+              const responseData = await getPose(decodedPose)
+              setViewPose(responseData)
+            } catch (error) {
+              console.error('Error re-fetching pose after save:', error)
+            } finally {
+              setLoading(false)
+            }
+          }}
         />
         <Box sx={{ height: '60px' }} />
 
