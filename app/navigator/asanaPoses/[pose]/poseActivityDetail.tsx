@@ -265,6 +265,28 @@ export default function PoseActivityDetail({
     }
   }, [isEditing, pose])
 
+  // Keep local edit state in sync with parent-provided initialEditMode
+  useEffect(() => {
+    setIsEditing(initialEditMode)
+  }, [initialEditMode])
+
+  // Keep the URL query param `edit=true` in sync so refreshing the page
+  // preserves whether the user was editing.
+  const syncEditQueryParam = (edit: boolean) => {
+    try {
+      const url = new URL(window.location.href)
+      if (edit) {
+        url.searchParams.set('edit', 'true')
+      } else {
+        url.searchParams.delete('edit')
+      }
+      // Replace state to avoid adding history entries when toggling edit
+      window.history.replaceState({}, '', url.toString())
+    } catch (e) {
+      // ignore in non-browser environments
+    }
+  }
+
   // Edit mode form handlers
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -344,10 +366,10 @@ export default function PoseActivityDetail({
       return
     }
 
-    setIsEditing(!isEditing)
-    if (!isEditing) {
-      // Entering edit mode - form data will be initialized by useEffect
-    } else {
+    const nextEdit = !isEditing
+    setIsEditing(nextEdit)
+    syncEditQueryParam(nextEdit)
+    if (!nextEdit) {
       // Canceling edit - clear error
       setError(null)
     }
@@ -411,6 +433,7 @@ export default function PoseActivityDetail({
 
       // Exit edit mode and refresh the page data
       setIsEditing(false)
+      syncEditQueryParam(false)
       // If parent provided a refresh handler, call it so the parent can re-fetch
       // its data (this avoids needing a full browser reload). Fall back to
       // router.refresh() for backward compatibility.
@@ -433,6 +456,7 @@ export default function PoseActivityDetail({
 
   const handleCancelEdit = () => {
     setIsEditing(false)
+    syncEditQueryParam(false)
     setError(null)
   }
 

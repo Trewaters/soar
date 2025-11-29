@@ -1,6 +1,8 @@
 import { auth } from '../../../../auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../app/lib/prismaClient'
+import fs from 'fs'
+import path from 'path'
 
 export async function PUT(
   request: NextRequest,
@@ -8,6 +10,27 @@ export async function PUT(
 ) {
   const resolvedParams = await params
   try {
+    // Read and log the incoming payload early for debugging (helps capture
+    // client PUT payloads even when auth fails). Do not mutate `request`.
+    const input = await request.json()
+    console.log('🔔 PUT /api/poses/:id payload:', {
+      id: resolvedParams.id,
+      body: input,
+    })
+    try {
+      const logDir = path.join(process.cwd(), '.logs')
+      if (!fs.existsSync(logDir)) fs.mkdirSync(logDir)
+      const logPath = path.join(logDir, `pose-put-${resolvedParams.id}.json`)
+      const entry = {
+        time: new Date().toISOString(),
+        id: resolvedParams.id,
+        body: input,
+      }
+      fs.appendFileSync(logPath, JSON.stringify(entry) + '\n')
+    } catch (e) {
+      // ignore logging errors
+    }
+
     const session = await auth()
 
     if (!session?.user?.email) {
@@ -17,7 +40,7 @@ export async function PUT(
       )
     }
 
-    const input = await request.json()
+    // `input` already read above
 
     // First, get the existing pose to check ownership
     const existingPose = await prisma.asanaPose.findUnique({
