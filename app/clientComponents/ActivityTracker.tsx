@@ -129,7 +129,14 @@ export default function ActivityTracker({
       if (!session?.user?.id || !entityId) return
 
       try {
+        console.debug('[ActivityTracker] checkExistingActivity', {
+          userId: session.user.id,
+          entityId,
+        })
         const result = await checkActivity(session.user.id, entityId)
+        console.debug('[ActivityTracker] checkExistingActivity result', {
+          exists: !!result?.exists,
+        })
         setChecked(result.exists)
 
         // Set difficulty state based on existing activity
@@ -290,7 +297,9 @@ export default function ActivityTracker({
         activityData[`${entityType}Id`] = entityId
         activityData[`${entityType}Name`] = entityName
 
+        console.debug('[ActivityTracker] creating activity', { activityData })
         await createActivity(activityData)
+        console.debug('[ActivityTracker] createActivity resolved')
 
         // Trigger callbacks
         onActivityToggle?.(true)
@@ -310,6 +319,7 @@ export default function ActivityTracker({
         onActivityRefresh?.()
       }
     } catch (e: any) {
+      console.error('[ActivityTracker] updateActivityState error', e)
       setError(e.message || 'Failed to update activity')
       setChecked(!isChecked) // Revert checkbox state on error
     } finally {

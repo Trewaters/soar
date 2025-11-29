@@ -144,6 +144,10 @@ export default function FlowSeriesProvider({
     if (hydration && hydration.flowSeries) {
       try {
         dispatch({ type: 'SET_FLOW_SERIES', payload: hydration.flowSeries })
+        console.debug('[FlowSeriesProvider] applied hydration.flowSeries', {
+          id: hydration.flowSeries?.id,
+          name: hydration.flowSeries?.seriesName,
+        })
       } catch (err) {
         console.warn('[FlowSeriesProvider] hydration failed', err)
       }
@@ -156,11 +160,26 @@ export default function FlowSeriesProvider({
           const id = hydration.flowSeries?.id
           if (!id) return
           const url = `/api/series?id=${encodeURIComponent(id)}`
+          console.debug('[FlowSeriesProvider] revalidating server copy', {
+            url,
+          })
           const res = await fetch(url, { cache: 'no-store' })
-          if (!res.ok) return
+          if (!res.ok) {
+            console.debug('[FlowSeriesProvider] revalidation response not ok', {
+              status: res.status,
+            })
+            return
+          }
           const serverData = await res.json()
+          console.debug('[FlowSeriesProvider] revalidation returned', {
+            serverDataExists: !!serverData,
+          })
           if (serverData) {
             dispatch({ type: 'SET_FLOW_SERIES', payload: serverData })
+            console.debug(
+              '[FlowSeriesProvider] updated state from server revalidation',
+              { id: serverData.id }
+            )
           }
         } catch (e) {
           // Non-fatal: we already applied hydration. Revalidation is best-effort.

@@ -20,14 +20,24 @@ export async function hydrateApp(): Promise<HydratedState> {
       db.getKV('soar:asanaPose'),
       db.getKV('soar:meta'),
     ])
+    console.debug('[hydrateApp] loaded from storage', {
+      userState: !!userState,
+      flowSeries: !!flowSeries,
+      asanaPose: !!asanaPose,
+      meta: !!meta,
+    })
     if (userState) out.userState = userState
     if (flowSeries) out.flowSeries = flowSeries
     if (asanaPose) out.asanaPose = asanaPose
     if (meta) out.meta = meta
   } catch (err) {
     // hydrated read failed; try cache fallback for some keys
+    console.warn('[hydrateApp] primary hydration failed', err)
     try {
       const fallback = await cache.getCache('lastKnownState')
+      console.debug('[hydrateApp] fallback cache read', {
+        fallback: !!fallback,
+      })
       if (fallback) {
         out.userState = out.userState ?? fallback.userState
         out.flowSeries = out.flowSeries ?? fallback.flowSeries

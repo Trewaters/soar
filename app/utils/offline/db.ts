@@ -10,8 +10,14 @@ const DB_VERSION = 1
 
 function supportsIndexedDB() {
   try {
-    return typeof indexedDB !== 'undefined' && indexedDB !== null
+    const ok = typeof indexedDB !== 'undefined' && indexedDB !== null
+    if (!ok)
+      console.debug(
+        '[db] IndexedDB not available - will fallback to localStorage'
+      )
+    return ok
   } catch (e) {
+    console.debug('[db] supportsIndexedDB check threw', e)
     return false
   }
 }
@@ -50,6 +56,7 @@ export async function setKV(key: string, value: any): Promise<void> {
     // fallback to localStorage
     try {
       localStorage.setItem(key, JSON.stringify(value))
+      console.debug('[db] setKV using localStorage', { key })
       return Promise.resolve()
     } catch (e) {
       return Promise.reject(e)
@@ -72,6 +79,7 @@ export async function getKV<T = any>(key: string): Promise<T | null> {
   if (!supportsIndexedDB()) {
     try {
       const raw = localStorage.getItem(key)
+      console.debug('[db] getKV using localStorage', { key, found: !!raw })
       return raw ? (JSON.parse(raw) as T) : null
     } catch (e) {
       return Promise.reject(e)

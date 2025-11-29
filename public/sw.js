@@ -183,6 +183,7 @@ self.addEventListener('message', function (event) {
     try {
       const urls = Array.isArray(event.data.urls) ? event.data.urls : []
       if (urls.length === 0) return
+      console.debug('[SW] invalidate request received', { urls })
       event.waitUntil(
         caches.open(CACHE_NAME).then(function (cache) {
           return Promise.all(
@@ -190,9 +191,24 @@ self.addEventListener('message', function (event) {
               try {
                 // We only remove same-origin cached requests
                 const req = new Request(u)
-                return cache.delete(req).catch(function (e) {
-                  // ignore per-URL deletion errors
-                })
+                return cache
+                  .delete(req)
+                  .then(function (deleted) {
+                    if (deleted) {
+                      console.debug('[SW] deleted cached entry', { url: u })
+                    } else {
+                      console.debug('[SW] no cached entry to delete', {
+                        url: u,
+                      })
+                    }
+                    return deleted
+                  })
+                  .catch(function (e) {
+                    console.warn('[SW] per-url delete failed', {
+                      url: u,
+                      err: e,
+                    })
+                  })
               } catch (e) {
                 return Promise.resolve()
               }

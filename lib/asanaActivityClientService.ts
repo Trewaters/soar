@@ -68,6 +68,11 @@ export async function createAsanaActivity(
     }
 
     const result = await response.json()
+    console.debug('[createAsanaActivity] created activity', {
+      userId: input.userId,
+      asanaId: input.asanaId,
+      resultId: result?.id,
+    })
 
     // Best-effort cache-busting revalidation: after creating activity, trigger
     // a no-store GET for today's activity for this user/asana so that service
@@ -103,21 +108,31 @@ export async function createAsanaActivity(
           `&endDate=${encodeURIComponent(endOfToday.toISOString())}`
 
         const rel = `/api/asanaActivity?${qs}`
+        console.debug('[createAsanaActivity] revalidating', { rel })
         await fetch(rel, { cache: 'no-store' })
 
         // Ask the service worker to invalidate any cached copy of this URL.
         try {
           const absolute = new URL(rel, location.href).toString()
+          console.debug('[createAsanaActivity] sending SW invalidate', {
+            absolute,
+          })
           if (navigator.serviceWorker) {
             if (
               navigator.serviceWorker.controller &&
               navigator.serviceWorker.controller.postMessage
             ) {
+              console.debug(
+                '[createAsanaActivity] using serviceWorker.controller'
+              )
               navigator.serviceWorker.controller.postMessage({
                 command: 'INVALIDATE_URLS',
                 urls: [absolute],
               })
             } else if (navigator.serviceWorker.ready) {
+              console.debug(
+                '[createAsanaActivity] waiting for serviceWorker.ready'
+              )
               navigator.serviceWorker.ready.then((reg: any) => {
                 try {
                   if (reg && reg.active && reg.active.postMessage) {
@@ -127,13 +142,20 @@ export async function createAsanaActivity(
                     })
                   }
                 } catch (e) {
-                  // ignore
+                  console.warn(
+                    '[createAsanaActivity] SW ready postMessage failed',
+                    e
+                  )
                 }
               })
             }
+          } else {
+            console.debug(
+              '[createAsanaActivity] navigator.serviceWorker not available'
+            )
           }
         } catch (e) {
-          // ignore SW messaging errors
+          console.warn('[createAsanaActivity] SW messaging setup failed', e)
         }
       } catch (e) {
         // Non-fatal: revalidation is best-effort
@@ -204,21 +226,31 @@ export async function deleteAsanaActivity(
           `&endDate=${encodeURIComponent(endOfToday.toISOString())}`
 
         const rel = `/api/asanaActivity?${qs}`
+        console.debug('[deleteAsanaActivity] revalidating', { rel })
         await fetch(rel, { cache: 'no-store' })
 
         // Tell SW to invalidate cached URL if available
         try {
           const absolute = new URL(rel, location.href).toString()
+          console.debug('[deleteAsanaActivity] sending SW invalidate', {
+            absolute,
+          })
           if (navigator.serviceWorker) {
             if (
               navigator.serviceWorker.controller &&
               navigator.serviceWorker.controller.postMessage
             ) {
+              console.debug(
+                '[deleteAsanaActivity] using serviceWorker.controller'
+              )
               navigator.serviceWorker.controller.postMessage({
                 command: 'INVALIDATE_URLS',
                 urls: [absolute],
               })
             } else if (navigator.serviceWorker.ready) {
+              console.debug(
+                '[deleteAsanaActivity] waiting for serviceWorker.ready'
+              )
               navigator.serviceWorker.ready.then((reg: any) => {
                 try {
                   if (reg && reg.active && reg.active.postMessage) {
@@ -228,13 +260,20 @@ export async function deleteAsanaActivity(
                     })
                   }
                 } catch (e) {
-                  // ignore
+                  console.warn(
+                    '[deleteAsanaActivity] SW ready postMessage failed',
+                    e
+                  )
                 }
               })
             }
+          } else {
+            console.debug(
+              '[deleteAsanaActivity] navigator.serviceWorker not available'
+            )
           }
         } catch (e) {
-          // ignore
+          console.warn('[deleteAsanaActivity] SW messaging setup failed', e)
         }
       } catch (e) {
         console.warn('[deleteAsanaActivity] cache revalidation failed', e)
