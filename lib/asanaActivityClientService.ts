@@ -197,8 +197,13 @@ export async function createAsanaActivity(
         // immediately. This also posts a window-level message that components
         // can listen for as a revalidation confirmation.
         try {
-          const authoritative = await checkActivityExists(input.userId, input.asanaId)
-          console.debug('[createAsanaActivity] authoritative check result', { authoritative })
+          const authoritative = await checkActivityExists(
+            input.userId,
+            input.asanaId
+          )
+          console.debug('[createAsanaActivity] authoritative check result', {
+            authoritative,
+          })
           try {
             window.postMessage(
               {
@@ -348,16 +353,18 @@ export async function deleteAsanaActivity(
           } catch (e) {
             // ignore
           }
-          } catch (e) {
-            console.warn('[deleteAsanaActivity] SW messaging setup failed', e)
-          }
+        } catch (e) {
+          console.warn('[deleteAsanaActivity] SW messaging setup failed', e)
+        }
 
         // Force an authoritative client-side check after delete so clients
         // can observe the updated state and caches refresh. Broadcast a
         // window message with the result.
         try {
           const authoritative = await checkActivityExists(userId, asanaId)
-          console.debug('[deleteAsanaActivity] authoritative check result', { authoritative })
+          console.debug('[deleteAsanaActivity] authoritative check result', {
+            authoritative,
+          })
           try {
             window.postMessage(
               {
