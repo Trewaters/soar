@@ -125,6 +125,69 @@ export default function ActivityTracker({
 
   // Check existing activity on mount and automatically at midnight
   useEffect(() => {
+    // Listen for service worker invalidation messages and refresh local state
+    const swMessageHandler = (ev: any) => {
+      const data = ev?.data || (ev && ev.detail) || null
+      if (!data) return
+      try {
+        if (data.command === 'INVALIDATE_URLS' && Array.isArray(data.urls)) {
+          const matches = data.urls.filter((u: string) =>
+            u.includes('/api/asanaActivity')
+          )
+          if (matches.length === 0) return
+          // If any invalidated URL mentions our entityId, re-run the check
+          const matchedForThisEntity = matches.some((u: string) =>
+            u.includes(entityId)
+          )
+          if (matchedForThisEntity) {
+            console.debug(
+              '[ActivityTracker] SW invalidation for entity detected',
+              { entityId, urls: matches }
+            )
+            // Re-check activity and update UI
+            ;(async () => {
+              try {
+                if (!session?.user?.id) return
+                const res = await checkActivity(session.user.id, entityId)
+                console.debug(
+                  '[ActivityTracker] post-invalidation check result',
+                  { exists: !!res?.exists }
+                )
+                setChecked(res.exists)
+                if (res.exists && res.activity?.difficulty) {
+                  setSelectedDifficulty(res.activity.difficulty)
+                }
+              } catch (e) {
+                console.warn(
+                  '[ActivityTracker] post-invalidation recheck failed',
+                  e
+                )
+              }
+            })()
+          }
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    try {
+      if (
+        navigator &&
+        navigator.serviceWorker &&
+        navigator.serviceWorker.addEventListener
+      ) {
+        navigator.serviceWorker.addEventListener('message', swMessageHandler)
+      }
+      window.addEventListener('message', swMessageHandler)
+      // Also listen for our rebroadcasted custom event from ServiceWorkerRegister
+      window.addEventListener(
+        'soar:sw-invalidate',
+        swMessageHandler as EventListener
+      )
+    } catch (e) {
+      console.warn('[ActivityTracker] failed to attach SW message listener', e)
+    }
     const checkExistingActivity = async () => {
       if (!session?.user?.id || !entityId) return
 
@@ -195,9 +258,28 @@ export default function ActivityTracker({
 
     const midnightTimer = scheduleNextMidnightRefresh()
 
-    // Cleanup timer on unmount
+    // Cleanup timer + listeners on unmount
     return () => {
       clearTimeout(midnightTimer)
+      try {
+        if (
+          navigator &&
+          navigator.serviceWorker &&
+          navigator.serviceWorker.removeEventListener
+        ) {
+          navigator.serviceWorker.removeEventListener(
+            'message',
+            swMessageHandler
+          )
+        }
+        window.removeEventListener('message', swMessageHandler)
+        window.removeEventListener(
+          'soar:sw-invalidate',
+          swMessageHandler as EventListener
+        )
+      } catch (e) {
+        // ignore
+      }
     }
   }, [session?.user?.id, entityId, checkActivity])
 
@@ -301,6 +383,52 @@ export default function ActivityTracker({
         await createActivity(activityData)
         console.debug('[ActivityTracker] createActivity resolved')
 
+        // Optimistic UI already set `checked` above. Run an authoritative
+        // check in the background to confirm server-side persistence and
+        // populate difficulty from the authoritative source. Retry a couple
+        // times if the first check doesn't show the new activity (race/timing).
+        ;(async () => {
+          try {
+            const userId = session?.user?.id
+            if (!userId) return
+            console.debug(
+              '[ActivityTracker] running post-create authoritative check'
+            )
+            const res = await checkActivity(userId, entityId)
+            console.debug(
+              '[ActivityTracker] post-create authoritative check result',
+              { exists: !!res?.exists }
+            )
+            if (res?.exists) {
+              setChecked(true)
+              if (res.activity?.difficulty)
+                setSelectedDifficulty(res.activity.difficulty)
+            } else {
+              // Retry strategy: short backoff retries to account for propagation delays
+              const retries = [500, 1500]
+              for (const ms of retries) {
+                await new Promise((r) => setTimeout(r, ms))
+                const r2 = await checkActivity(userId, entityId)
+                console.debug('[ActivityTracker] post-create retry check', {
+                  ms,
+                  exists: !!r2?.exists,
+                })
+                if (r2?.exists) {
+                  setChecked(true)
+                  if (r2.activity?.difficulty)
+                    setSelectedDifficulty(r2.activity.difficulty)
+                  break
+                }
+              }
+            }
+          } catch (e) {
+            console.warn(
+              '[ActivityTracker] post-create authoritative check failed',
+              e
+            )
+          }
+        })()
+
         // Trigger callbacks
         onActivityToggle?.(true)
         onActivityRefresh?.()
@@ -313,6 +441,34 @@ export default function ActivityTracker({
         setEasyChipVariant('outlined')
         setAverageChipVariant('outlined')
         setDifficultChipVariant('outlined')
+
+        // Run a background check to confirm deletion and log if it still exists
+        ;(async () => {
+          try {
+            const userId = session?.user?.id
+            if (!userId) return
+            console.debug(
+              '[ActivityTracker] running post-delete authoritative check'
+            )
+            const res = await checkActivity(userId, entityId)
+            console.debug(
+              '[ActivityTracker] post-delete authoritative check result',
+              { exists: !!res?.exists }
+            )
+            if (res?.exists) {
+              // If still exists, log a warning — revalidation or SW path may be lagging
+              console.warn(
+                '[ActivityTracker] activity still exists after delete; may need revalidation',
+                { entityId }
+              )
+            }
+          } catch (e) {
+            console.warn(
+              '[ActivityTracker] post-delete authoritative check failed',
+              e
+            )
+          }
+        })()
 
         // Trigger callbacks
         onActivityToggle?.(false)

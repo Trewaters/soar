@@ -10,6 +10,10 @@ import { logApiError } from '@lib/errorLogger'
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json()
+    console.debug('[api/asanaActivity] POST received', {
+      userId: data?.userId,
+      asanaId: data?.asanaId,
+    })
 
     // Validate required fields (sort_english_name is optional now)
     if (!data.userId || !data.asanaId || !data.asanaName) {
@@ -44,6 +48,7 @@ export async function POST(req: NextRequest) {
     }
 
     const activity = await recordAsanaActivity(data)
+    console.debug('[api/asanaActivity] POST recorded', { id: activity?.id })
     return NextResponse.json(activity, { status: 201 })
   } catch (error) {
     logApiError(error, req, 'POST /api/asanaActivity', {
@@ -75,6 +80,13 @@ export async function DELETE(req: NextRequest) {
   try {
     const data = await req.json()
 
+    console.debug('[api/asanaActivity] DELETE received', {
+      userId: data?.userId,
+      asanaId: data?.asanaId,
+      startDate: data?.startDate,
+      endDate: data?.endDate,
+    })
+
     // Validate required fields
     if (!data.userId || !data.asanaId) {
       const validationError = new Error(
@@ -105,6 +117,10 @@ export async function DELETE(req: NextRequest) {
     const endDate = data.endDate
 
     await deleteAsanaActivity(data.userId, data.asanaId, startDate, endDate)
+    console.debug('[api/asanaActivity] DELETE completed', {
+      userId: data?.userId,
+      asanaId: data?.asanaId,
+    })
     return NextResponse.json(
       { message: 'Activity deleted successfully' },
       { status: 200 }
@@ -129,6 +145,8 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const userId = searchParams.get('userId')
     const asanaId = searchParams.get('asanaId')
+
+    console.debug('[api/asanaActivity] GET', { url: req.url })
 
     if (!userId) {
       const validationError = new Error(

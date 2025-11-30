@@ -118,36 +118,70 @@ export async function createAsanaActivity(
             absolute,
           })
           if (navigator.serviceWorker) {
-            if (
-              navigator.serviceWorker.controller &&
-              navigator.serviceWorker.controller.postMessage
-            ) {
-              console.debug(
-                '[createAsanaActivity] using serviceWorker.controller'
-              )
-              navigator.serviceWorker.controller.postMessage({
-                command: 'INVALIDATE_URLS',
-                urls: [absolute],
-              })
-            } else if (navigator.serviceWorker.ready) {
-              console.debug(
-                '[createAsanaActivity] waiting for serviceWorker.ready'
-              )
-              navigator.serviceWorker.ready.then((reg: any) => {
+            // Try multiple messaging paths to reach the service worker and
+            // the page clients: controller -> active worker via ready ->
+            // window.postMessage fallback.
+            try {
+              if (
+                navigator.serviceWorker.controller &&
+                navigator.serviceWorker.controller.postMessage
+              ) {
+                console.debug(
+                  '[createAsanaActivity] using serviceWorker.controller'
+                )
                 try {
-                  if (reg && reg.active && reg.active.postMessage) {
-                    reg.active.postMessage({
-                      command: 'INVALIDATE_URLS',
-                      urls: [absolute],
-                    })
-                  }
+                  navigator.serviceWorker.controller.postMessage({
+                    command: 'INVALIDATE_URLS',
+                    urls: [absolute],
+                  })
                 } catch (e) {
                   console.warn(
-                    '[createAsanaActivity] SW ready postMessage failed',
+                    '[createAsanaActivity] controller.postMessage failed',
                     e
                   )
                 }
-              })
+              }
+
+              if (
+                navigator.serviceWorker.ready &&
+                navigator.serviceWorker.ready.then
+              ) {
+                try {
+                  navigator.serviceWorker.ready.then((reg: any) => {
+                    try {
+                      if (reg && reg.active && reg.active.postMessage) {
+                        reg.active.postMessage({
+                          command: 'INVALIDATE_URLS',
+                          urls: [absolute],
+                        })
+                      }
+                    } catch (e) {
+                      console.warn(
+                        '[createAsanaActivity] SW ready postMessage failed',
+                        e
+                      )
+                    }
+                  })
+                } catch (e) {
+                  console.warn(
+                    '[createAsanaActivity] navigator.serviceWorker.ready handling failed',
+                    e
+                  )
+                }
+              }
+
+              // Window-level fallback (best-effort). Some clients may listen
+              // for this as a last-resort channel.
+              try {
+                window.postMessage(
+                  { command: 'SOAR_SW_INVALIDATE', urls: [absolute] },
+                  '*'
+                )
+              } catch (e) {
+                // ignore
+              }
+            } catch (e) {
+              console.warn('[createAsanaActivity] SW messaging setup failed', e)
             }
           } else {
             console.debug(
@@ -235,22 +269,29 @@ export async function deleteAsanaActivity(
           console.debug('[deleteAsanaActivity] sending SW invalidate', {
             absolute,
           })
-          if (navigator.serviceWorker) {
-            if (
-              navigator.serviceWorker.controller &&
-              navigator.serviceWorker.controller.postMessage
-            ) {
-              console.debug(
-                '[deleteAsanaActivity] using serviceWorker.controller'
-              )
+
+          if (
+            navigator.serviceWorker.controller &&
+            navigator.serviceWorker.controller.postMessage
+          ) {
+            try {
               navigator.serviceWorker.controller.postMessage({
                 command: 'INVALIDATE_URLS',
                 urls: [absolute],
               })
-            } else if (navigator.serviceWorker.ready) {
-              console.debug(
-                '[deleteAsanaActivity] waiting for serviceWorker.ready'
+            } catch (e) {
+              console.warn(
+                '[deleteAsanaActivity] controller.postMessage failed',
+                e
               )
+            }
+          }
+
+          if (
+            navigator.serviceWorker.ready &&
+            navigator.serviceWorker.ready.then
+          ) {
+            try {
               navigator.serviceWorker.ready.then((reg: any) => {
                 try {
                   if (reg && reg.active && reg.active.postMessage) {
@@ -266,11 +307,21 @@ export async function deleteAsanaActivity(
                   )
                 }
               })
+            } catch (e) {
+              console.warn(
+                '[deleteAsanaActivity] navigator.serviceWorker.ready handling failed',
+                e
+              )
             }
-          } else {
-            console.debug(
-              '[deleteAsanaActivity] navigator.serviceWorker not available'
+          }
+
+          try {
+            window.postMessage(
+              { command: 'SOAR_SW_INVALIDATE', urls: [absolute] },
+              '*'
             )
+          } catch (e) {
+            // ignore
           }
         } catch (e) {
           console.warn('[deleteAsanaActivity] SW messaging setup failed', e)

@@ -45,6 +45,72 @@ export default function ServiceWorkerRegister() {
           // eslint-disable-next-line no-console
           console.log('[SW] Update found')
         })
+        // Listen for messages from the service worker and re-broadcast as a
+        // CustomEvent on window so application components can react to
+        // INVALIDATE_URLS messages without directly depending on navigator APIs.
+        try {
+          if (
+            navigator.serviceWorker &&
+            navigator.serviceWorker.addEventListener
+          ) {
+            navigator.serviceWorker.addEventListener('message', (ev: any) => {
+              try {
+                const data = ev?.data
+                if (!data) return
+                if (data.command === 'INVALIDATE_URLS') {
+                  console.debug(
+                    '[SW] received INVALIDATE_URLS; rebroadcasting',
+                    { urls: data.urls }
+                  )
+                  try {
+                    window.dispatchEvent(
+                      new CustomEvent('soar:sw-invalidate', {
+                        detail: { urls: data.urls },
+                      })
+                    )
+                  } catch (e) {
+                    // fallback: post a plain message to window
+                    try {
+                      window.postMessage(
+                        { command: 'SOAR_SW_INVALIDATE', urls: data.urls },
+                        '*'
+                      )
+                    } catch (e2) {
+                      // ignore
+                    }
+                  }
+                }
+              } catch (e) {
+                console.warn('[SW] message handler failed', e)
+              }
+            })
+            // When a new service worker takes control, emit an event so
+            // application components can re-establish state or re-run
+            // authoritative checks. This helps installed PWAs or pages that
+            // were previously uncontrolled start listening for invalidations.
+            try {
+              navigator.serviceWorker.addEventListener(
+                'controllerchange',
+                () => {
+                  try {
+                    console.debug(
+                      '[SW] controller changed; rebroadcasting controller-change'
+                    )
+                    window.dispatchEvent(
+                      new CustomEvent('soar:sw-controller-change')
+                    )
+                  } catch (e) {
+                    // ignore
+                  }
+                }
+              )
+            } catch (e) {
+              // ignore
+            }
+          }
+        } catch (e) {
+          console.warn('[SW] failed to attach message listener', e)
+        }
       } catch (err) {
         // eslint-disable-next-line no-console
         console.warn('[SW] Registration failed', err)

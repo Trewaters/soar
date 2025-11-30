@@ -213,7 +213,27 @@ self.addEventListener('message', function (event) {
                 return Promise.resolve()
               }
             })
-          )
+          ).then(function () {
+            // After attempting deletions, broadcast invalidation to all window clients
+            try {
+              return self.clients
+                .matchAll({ includeUncontrolled: true, type: 'window' })
+                .then(function (clientList) {
+                  clientList.forEach(function (client) {
+                    try {
+                      client.postMessage({
+                        command: 'INVALIDATE_URLS',
+                        urls: urls,
+                      })
+                    } catch (e) {
+                      // ignore per-client failures
+                    }
+                  })
+                })
+            } catch (e) {
+              // ignore failures
+            }
+          })
         })
       )
     } catch (e) {
