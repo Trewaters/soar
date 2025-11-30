@@ -191,6 +191,31 @@ export async function createAsanaActivity(
         } catch (e) {
           console.warn('[createAsanaActivity] SW messaging setup failed', e)
         }
+
+        // Force an authoritative client-side check (fire-and-forget) so that
+        // any interested clients or runtime caches fetch authoritative data
+        // immediately. This also posts a window-level message that components
+        // can listen for as a revalidation confirmation.
+        try {
+          const authoritative = await checkActivityExists(input.userId, input.asanaId)
+          console.debug('[createAsanaActivity] authoritative check result', { authoritative })
+          try {
+            window.postMessage(
+              {
+                command: 'SOAR_ACTIVITY_REVALIDATED',
+                userId: input.userId,
+                asanaId: input.asanaId,
+                exists: !!authoritative?.exists,
+                activity: authoritative?.activity || null,
+              },
+              '*'
+            )
+          } catch (e) {
+            // ignore postMessage failures
+          }
+        } catch (e) {
+          console.warn('[createAsanaActivity] authoritative check failed', e)
+        }
       } catch (e) {
         // Non-fatal: revalidation is best-effort
         console.warn('[createAsanaActivity] cache revalidation failed', e)
@@ -323,8 +348,32 @@ export async function deleteAsanaActivity(
           } catch (e) {
             // ignore
           }
+          } catch (e) {
+            console.warn('[deleteAsanaActivity] SW messaging setup failed', e)
+          }
+
+        // Force an authoritative client-side check after delete so clients
+        // can observe the updated state and caches refresh. Broadcast a
+        // window message with the result.
+        try {
+          const authoritative = await checkActivityExists(userId, asanaId)
+          console.debug('[deleteAsanaActivity] authoritative check result', { authoritative })
+          try {
+            window.postMessage(
+              {
+                command: 'SOAR_ACTIVITY_REVALIDATED',
+                userId,
+                asanaId,
+                exists: !!authoritative?.exists,
+                activity: authoritative?.activity || null,
+              },
+              '*'
+            )
+          } catch (e) {
+            // ignore
+          }
         } catch (e) {
-          console.warn('[deleteAsanaActivity] SW messaging setup failed', e)
+          console.warn('[deleteAsanaActivity] authoritative check failed', e)
         }
       } catch (e) {
         console.warn('[deleteAsanaActivity] cache revalidation failed', e)
