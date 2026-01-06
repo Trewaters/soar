@@ -59,11 +59,21 @@ describe('asanaActivityClientService', () => {
   it('posts activity then revalidates cache and notifies service worker', async () => {
     const postResult = { id: 'a1' }
 
-    // Mock POST response (first fetch call)
+    // Mock all fetch calls:
+    // 1. POST /api/asanaActivity
+    // 2. GET per-asana/day revalidation
+    // 3. GET user list revalidation
+    // 4. GET weekly summary revalidation
+    // 5. GET checkActivityExists call
     ;(global as any).fetch
-      .mockResolvedValueOnce({ ok: true, json: async () => postResult })
-      // Mock revalidation GET (second fetch call)
-      .mockResolvedValueOnce({ ok: true, json: async () => ({ exists: true }) })
+      .mockResolvedValueOnce({ ok: true, json: async () => postResult }) // POST
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ exists: true }) }) // per-asana revalidation
+      .mockResolvedValueOnce({ ok: true, json: async () => [] }) // user list revalidation
+      .mockResolvedValueOnce({ ok: true, json: async () => [] }) // weekly revalidation
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ exists: true, activity: postResult }),
+      }) // checkActivityExists
 
     const input = {
       userId: 'user123',
@@ -78,24 +88,34 @@ describe('asanaActivityClientService', () => {
     const res = await createAsanaActivity(input)
     expect(res).toEqual(postResult)
 
+    // Give the fire-and-forget revalidation async code time to execute
+    await new Promise((resolve) => setTimeout(resolve, 50))
+    // Also flush any pending microtasks (promises)
+    await Promise.resolve()
+
     // First fetch was POST to /api/asanaActivity
     expect((global as any).fetch.mock.calls[0][0]).toBe('/api/asanaActivity')
     expect((global as any).fetch.mock.calls[0][1].method).toBe('POST')
 
-    // Second fetch was a GET revalidation with cache: 'no-store'
-    const secondCallOpts = (global as any).fetch.mock.calls[1][1]
-    expect(secondCallOpts).toBeDefined()
-    expect(secondCallOpts.cache).toBe('no-store')
+    // Subsequent fetches should be revalidation GET requests with cache: 'no-store'
+    // Check that at least one revalidation request was made
+    let revalidationFound = false
+    for (let i = 1; i < (global as any).fetch.mock.calls.length; i++) {
+      const opts = (global as any).fetch.mock.calls[i][1]
+      if (opts && opts.cache === 'no-store') {
+        revalidationFound = true
+        break
+      }
+    }
+    expect(revalidationFound).toBe(true)
 
-    // Service worker postMessage should be called
-    // Debug: ensure navigator shape is visible in test
-    // eslint-disable-next-line no-console
-    console.log('DEBUG navigator in assertion:', (global as any).navigator)
+    // Service worker postMessage should be called with INVALIDATE_URLS
     const swController = (global as any).navigator.serviceWorker.controller
     expect(swController.postMessage).toHaveBeenCalled()
     const calledWith = swController.postMessage.mock.calls[0][0]
     expect(calledWith.command).toBe('INVALIDATE_URLS')
     expect(Array.isArray(calledWith.urls)).toBe(true)
-    expect(calledWith.urls.length).toBeGreaterThan(0)
+    // Should invalidate at least 3 URLs (per-asana, user list, weekly)
+    expect(calledWith.urls.length).toBeGreaterThanOrEqual(3)
   })
 })

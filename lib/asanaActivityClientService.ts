@@ -108,31 +108,48 @@ export async function createAsanaActivity(
           `&endDate=${encodeURIComponent(endOfToday.toISOString())}`
 
         const rel = `/api/asanaActivity?${qs}`
-        console.debug('[createAsanaActivity] revalidating', { rel })
-        await fetch(rel, { cache: 'no-store' })
+        const userListRel = `/api/asanaActivity?userId=${encodeURIComponent(
+          input.userId
+        )}`
+        const weeklyRel = `/api/asanaActivity/weekly?userId=${encodeURIComponent(
+          input.userId
+        )}`
+
+        console.debug('[createAsanaActivity] revalidating', {
+          perAsana: rel,
+          userList: userListRel,
+          weekly: weeklyRel,
+        })
+
+        // Request fresh copies (no-store) for relevant endpoints so runtime
+        // caches and service worker can update their entries.
+        await Promise.all([
+          fetch(rel, { cache: 'no-store' }),
+          fetch(userListRel, { cache: 'no-store' }),
+          fetch(weeklyRel, { cache: 'no-store' }),
+        ])
 
         // Ask the service worker to invalidate any cached copy of this URL.
         try {
-          const absolute = new URL(rel, location.href).toString()
+          // Send invalidation for all related endpoints (per-asana/day,
+          // full user list, and weekly summary) so SW cache entries are
+          // removed and clients can refetch fresh data.
+          const absolutes = [rel, userListRel, weeklyRel].map((r) =>
+            new URL(r, location.href).toString()
+          )
           console.debug('[createAsanaActivity] sending SW invalidate', {
-            absolute,
+            absolutes,
           })
           if (navigator.serviceWorker) {
-            // Try multiple messaging paths to reach the service worker and
-            // the page clients: controller -> active worker via ready ->
-            // window.postMessage fallback.
             try {
               if (
                 navigator.serviceWorker.controller &&
                 navigator.serviceWorker.controller.postMessage
               ) {
-                console.debug(
-                  '[createAsanaActivity] using serviceWorker.controller'
-                )
                 try {
                   navigator.serviceWorker.controller.postMessage({
                     command: 'INVALIDATE_URLS',
-                    urls: [absolute],
+                    urls: absolutes,
                   })
                 } catch (e) {
                   console.warn(
@@ -152,7 +169,7 @@ export async function createAsanaActivity(
                       if (reg && reg.active && reg.active.postMessage) {
                         reg.active.postMessage({
                           command: 'INVALIDATE_URLS',
-                          urls: [absolute],
+                          urls: absolutes,
                         })
                       }
                     } catch (e) {
@@ -170,11 +187,9 @@ export async function createAsanaActivity(
                 }
               }
 
-              // Window-level fallback (best-effort). Some clients may listen
-              // for this as a last-resort channel.
               try {
                 window.postMessage(
-                  { command: 'SOAR_SW_INVALIDATE', urls: [absolute] },
+                  { command: 'SOAR_SW_INVALIDATE', urls: absolutes },
                   '*'
                 )
               } catch (e) {
@@ -290,14 +305,32 @@ export async function deleteAsanaActivity(
           `&endDate=${encodeURIComponent(endOfToday.toISOString())}`
 
         const rel = `/api/asanaActivity?${qs}`
-        console.debug('[deleteAsanaActivity] revalidating', { rel })
-        await fetch(rel, { cache: 'no-store' })
+        const userListRel = `/api/asanaActivity?userId=${encodeURIComponent(
+          userId
+        )}`
+        const weeklyRel = `/api/asanaActivity/weekly?userId=${encodeURIComponent(
+          userId
+        )}`
+
+        console.debug('[deleteAsanaActivity] revalidating', {
+          perAsana: rel,
+          userList: userListRel,
+          weekly: weeklyRel,
+        })
+
+        await Promise.all([
+          fetch(rel, { cache: 'no-store' }),
+          fetch(userListRel, { cache: 'no-store' }),
+          fetch(weeklyRel, { cache: 'no-store' }),
+        ])
 
         // Tell SW to invalidate cached URL if available
         try {
-          const absolute = new URL(rel, location.href).toString()
+          const absolutes = [rel, userListRel, weeklyRel].map((r) =>
+            new URL(r, location.href).toString()
+          )
           console.debug('[deleteAsanaActivity] sending SW invalidate', {
-            absolute,
+            absolutes,
           })
 
           if (
@@ -307,7 +340,7 @@ export async function deleteAsanaActivity(
             try {
               navigator.serviceWorker.controller.postMessage({
                 command: 'INVALIDATE_URLS',
-                urls: [absolute],
+                urls: absolutes,
               })
             } catch (e) {
               console.warn(
@@ -327,7 +360,7 @@ export async function deleteAsanaActivity(
                   if (reg && reg.active && reg.active.postMessage) {
                     reg.active.postMessage({
                       command: 'INVALIDATE_URLS',
-                      urls: [absolute],
+                      urls: absolutes,
                     })
                   }
                 } catch (e) {
@@ -347,7 +380,7 @@ export async function deleteAsanaActivity(
 
           try {
             window.postMessage(
-              { command: 'SOAR_SW_INVALIDATE', urls: [absolute] },
+              { command: 'SOAR_SW_INVALIDATE', urls: absolutes },
               '*'
             )
           } catch (e) {

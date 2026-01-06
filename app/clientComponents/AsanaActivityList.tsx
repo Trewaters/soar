@@ -112,7 +112,46 @@ export default function AsanaActivityList() {
         setLoading(false)
       }
     }
+
     if (status === 'authenticated') fetchActivities()
+
+    // Listen for SW / client revalidation messages and refetch when relevant
+    const onMessage = (ev: MessageEvent) => {
+      if (!ev?.data) return
+      const data = ev.data
+      try {
+        if (data.command === 'SOAR_ACTIVITY_REVALIDATED') {
+          if (
+            data.userId &&
+            session?.user?.id &&
+            data.userId === session.user.id
+          ) {
+            fetchActivities()
+          }
+        } else if (
+          data.command === 'SOAR_SW_INVALIDATE' ||
+          data.command === 'INVALIDATE_URLS'
+        ) {
+          // If the invalidated urls include the user's activities endpoint, refetch
+          if (Array.isArray(data.urls) && session?.user?.id) {
+            const userUrl = `/api/asanaActivity?userId=${encodeURIComponent(
+              session.user.id
+            )}`
+            const matched = data.urls.some(
+              (u: string) => u.indexOf(userUrl) !== -1
+            )
+            if (matched) fetchActivities()
+          }
+        }
+      } catch (e) {
+        // ignore handler errors
+      }
+    }
+
+    window.addEventListener('message', onMessage)
+    return () => {
+      window.removeEventListener('message', onMessage)
+    }
   }, [session, status])
 
   if (loading) return <LoadingSkeleton type="list" lines={5} height={60} />
