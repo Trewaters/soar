@@ -1,0 +1,27 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": [
+    "app/**/*",
+    "types/**/*",
+    "types/**/*.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "app/**/*.js",
+    "app/**/*.jsx"
+  ],
+  "exclude": [
+    "**/__tests__/**",
+    "__test__/**",
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "test-edit-ui.spec.ts",
+    "playwright.config.*"
+  ]
+}

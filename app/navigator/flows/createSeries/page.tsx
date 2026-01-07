@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { useFlowSeries } from '@context/AsanaSeriesContext'
+import { useFlowSeries } from '@app/context/AsanaSeriesContext'
 import { FEATURES } from '@app/FEATURES'
 import {
   Avatar,
@@ -9,101 +9,146 @@ import {
   Checkbox,
   Drawer,
   FormControl,
-  FormGroup,
-  Grid,
+  Grid2,
   IconButton,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
   ListSubheader,
+  Paper,
   Stack,
   TextField,
   Typography,
 } from '@mui/material'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { LooksOne } from '@mui/icons-material'
 import LooksTwoIcon from '@mui/icons-material/LooksTwo'
 import Looks3Icon from '@mui/icons-material/Looks3'
 import Looks4Icon from '@mui/icons-material/Looks4'
 import Looks5Icon from '@mui/icons-material/Looks5'
-import { useRouter } from 'next/navigation'
-import { FullAsanaData } from '@context/AsanaPostureContext'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+import { getAccessiblePoses } from '@lib/poseService'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SplashHeader from '@app/clientComponents/splash-header'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import AutocompleteComponent from '@app/clientComponents/autocomplete-search'
 import Image from 'next/image'
+import { AppText } from '@app/navigator/constants/Strings'
+import {
+  formatSeriesPoseEntry,
+  splitSeriesPoseEntry,
+} from '@app/utils/asana/seriesPoseLabels'
+import { AsanaPose } from 'types/asana'
+import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
+import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUpload'
+import ImageIcon from '@mui/icons-material/Image'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 
 export default function Page() {
   const { data: session } = useSession()
   const { state, dispatch } = useFlowSeries()
-  const { seriesName, seriesPostures, breath, description, duration, image } =
+  const { seriesName, seriesPoses, breath, description, duration, image } =
     state.flowSeries
-  const [postures, setPostures] = useState<FullAsanaData[]>([])
-  const router = useRouter()
+  const [poses, setPoses] = useState<AsanaPose[]>([])
+  const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
+  const router = useNavigationWithLoading()
   const [open, setOpen] = React.useState(false)
   const [isDirty, setIsDirty] = useState(false)
   const [isDirtyDescription, setIsDirtyDescription] = useState(false)
+  // Debug + throttling refs to prevent rapid refetch loops
+  const lastFetchKeyRef = useRef<string | null>(null)
+  const lastFetchTimeRef = useRef<number>(0)
+  const fetchInFlightRef = useRef<boolean>(false)
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen)
   }
 
-  useEffect(() => {
-    async function fetchData() {
-      // const baseUrl =
-      //   process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-      // const url = new URL('/api/series/', baseUrl)
-      // const res = await fetch(url.toString())
-      // const data = await res.json()
-      // const seriesData = Array.isArray(data) ? data : [data]
-      // setSeries(JSON.parse(JSON.stringify(seriesData)))
-      try {
-        const response = await fetch('/api/poses')
-        if (!response.ok) {
-          throw new Error('Network response was not ok')
-        }
-        setPostures(await response.json())
-      } catch (error: Error | any) {
-        error.message
-      }
-    }
-    console.log('create series session', session)
+  const fetchPoses = React.useCallback(async () => {
+    const emailKey = session?.user?.email || 'guest'
+    const now = Date.now()
+    const throttleMs = 1500
 
+    // Guard: avoid overlapping/in-flight fetches
+    if (fetchInFlightRef.current) {
+      console.log('[CreateSeries] fetchPoses skipped: in-flight')
+      return
+    }
+
+    // Guard: throttle repeated fetches with same key within window
     if (
-      session === null
-      // ||
-      // (session &&
-      //   session.status === 'resolved_model' &&
-      //   session.value === 'null')
+      lastFetchKeyRef.current === emailKey &&
+      now - lastFetchTimeRef.current < throttleMs
     ) {
-      router.push('/navigator/flows')
+      console.log('[CreateSeries] fetchPoses throttled for key:', emailKey)
+      return
     }
 
-    fetchData()
-  }, [router, session])
+    try {
+      fetchInFlightRef.current = true
+      lastFetchKeyRef.current = emailKey
+      lastFetchTimeRef.current = now
+      console.log('[CreateSeries] fetchPoses START for key:', emailKey)
+      const poses = await getAccessiblePoses(session?.user?.email || undefined)
+      console.log('[CreateSeries] fetchPoses DONE count:', poses.length)
+      setPoses(poses)
+    } catch (error: Error | any) {
+      console.error('[CreateSeries] Error fetching poses:', error.message)
+    } finally {
+      fetchInFlightRef.current = false
+    }
+  }, [session?.user?.email])
+
+  useEffect(() => {
+    if (session === null) {
+      router.push('/navigator/flows')
+      return
+    }
+
+    fetchPoses()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router, session?.user?.email])
+
+  // Refetch poses when the page becomes visible (e.g., when returning from create asana page)
+  // This ensures that newly created asanas appear in the autocomplete search
+  // Note: We only use visibilitychange, not focus, to avoid excessive API calls
+  const handleVisibilityChange = React.useCallback(() => {
+    const hidden = document.hidden
+    console.log('[CreateSeries] visibilitychange hidden:', hidden)
+    if (!hidden) {
+      // Only refetch when visible and not throttled/in-flight
+      fetchPoses()
+    }
+  }, [fetchPoses])
+
+  React.useEffect(() => {
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [handleVisibilityChange])
 
   function handleSelect(
     event: React.SyntheticEvent<Element, Event>,
-    value: FullAsanaData | null
+    value: AsanaPose | null
   ) {
     event.preventDefault()
     if (value) {
       const simplifiedName =
-        Array.isArray(value.sanskrit_names) &&
-        value.sanskrit_names[0]?.simplified
-          ? value.sanskrit_names[0].simplified
+        Array.isArray(value.sanskrit_names) && value.sanskrit_names[0]
+          ? value.sanskrit_names[0]
           : ''
+      const formattedEntry = formatSeriesPoseEntry(
+        value.sort_english_name,
+        simplifiedName
+      )
       dispatch({
         type: 'SET_FLOW_SERIES',
         payload: {
           ...state.flowSeries,
-          seriesPostures: [
-            ...state.flowSeries.seriesPostures,
-            value.sort_english_name + '; ' + simplifiedName,
-          ],
+          seriesPoses: [...state.flowSeries.seriesPoses, formattedEntry],
         },
       })
     }
@@ -114,30 +159,50 @@ export default function Page() {
     const updatedSeries = {
       ...state.flowSeries,
       seriesName,
-      seriesPostures,
+      seriesPoses,
       breath,
       description,
       duration,
       image,
     }
     dispatch({ type: 'SET_FLOW_SERIES', payload: updatedSeries })
+    dispatch({
+      type: 'RESET_FLOW_SERIES',
+      payload: {
+        seriesName: '',
+        seriesPoses: [],
+        breath: '',
+        description: '',
+        duration: '',
+        image: '',
+      },
+    })
 
     try {
       const response = await fetch('/api/series/createSeries', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          cache: 'no-store',
         },
         body: JSON.stringify(updatedSeries),
       })
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
-      // eslint-disable-next-line no-unused-vars
       const data = await response.json()
+
+      // Redirect to the series detail page if we got an ID back
+      if (data.id) {
+        router.push(`/navigator/flows/practiceSeries?id=${data.id}`)
+        return
+      }
+
+      return data
     } catch (error: Error | any) {
-      error.message
+      console.error('Error creating series:', error.message)
     }
+    // Fallback to flows page if something went wrong
     router.push('/navigator/flows')
   }
 
@@ -164,389 +229,637 @@ export default function Page() {
     }
   }
 
+  const handleImageUploaded = React.useCallback(
+    (img: PoseImageData) => {
+      // Only keep one image - replace the array instead of appending
+      setUploadedImages([img])
+      dispatch({
+        type: 'SET_FLOW_SERIES_IMAGE',
+        payload: img.url,
+      })
+    },
+    [dispatch]
+  )
+
   function handleCancel() {
     dispatch({
-      type: 'SET_FLOW_SERIES',
+      type: 'RESET_FLOW_SERIES',
       payload: {
-        ...state.flowSeries,
         seriesName: '',
-        seriesPostures: [],
-        breath: '',
-        description: '',
-        duration: '',
-        image: '',
+        seriesPoses: [],
       },
     })
   }
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        mt: 4,
-      }}
-    >
-      <Stack
-        spacing={2}
-        sx={{ marginX: 3, marginY: 3, mb: '1em', width: 'fit-content' }}
+    <>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          mt: 4,
+          mb: 4,
+        }}
       >
-        <SplashHeader
-          src={'/icons/designImages/header-create-series.png'}
-          alt={'Create Series'}
-          title="Create Series"
-        />
-        <SubNavHeader
-          title="Flows"
-          link="/navigator/flows"
-          onClick={toggleDrawer(!open)}
-        />
-        {FEATURES.SHOW_CREATE_SERIES && (
-          <Box sx={{ px: 2 }}>
-            <FormControl sx={{ width: '100%', mb: 3 }}>
-              <AutocompleteComponent
-                options={postures}
-                getOptionLabel={(option) =>
-                  (option as FullAsanaData).sort_english_name
-                }
-                renderOption={(props, option) => {
-                  const postureOption = option as FullAsanaData
-                  return (
-                    <li {...props} key={postureOption.id}>
-                      {postureOption.sort_english_name}
-                    </li>
-                  )
-                }}
-                placeholder="Add a pose to your series"
-                onChange={(event, value) =>
-                  handleSelect(event, value as FullAsanaData | null)
-                }
-                renderInput={() => <TextField placeholder="Search..." />}
-              />
-            </FormControl>
-            <Box className="journal">
-              <FormGroup>
-                <FormControl>
-                  <Grid
-                    item
-                    xs={12}
-                    className="journalTitle"
-                    display={'flex'}
-                    direction={'row'}
+        <Stack spacing={2} sx={{ marginX: 3, mb: '1em', width: 'fit-content' }}>
+          <SplashHeader
+            src={'/icons/designImages/header-create-series.png'}
+            alt={'Create Flow'}
+            title="Create Flow"
+          />
+          <SubNavHeader
+            title="Flows"
+            link="/navigator/flows"
+            onClick={toggleDrawer(!open)}
+          />
+          {FEATURES.SHOW_CREATE_SERIES && (
+            <form onSubmit={handleSubmit}>
+              <Box sx={{ px: 4, pb: 12 }}>
+                {/* Flow Name Input - Primary field with improved visibility */}
+                <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    color="primary"
+                    sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                   >
-                    <TextField
-                      sx={{
-                        '& .MuiInputBase-input': { color: 'primary.main' },
-                        width: '100%',
-                      }}
-                      variant="standard"
-                      id="series-name"
-                      placeholder="Give your Series a name..."
-                      name="seriesName"
-                      value={seriesName}
-                      onChange={handleChange}
-                      InputProps={{
-                        style: { color: 'primary.main' },
-                      }}
+                    <Image
+                      src={'/icons/asanas/label_name_leaf.png'}
+                      alt=""
+                      height={20}
+                      width={16}
                     />
-                    <>
-                      <Checkbox
-                        checked={isDirty}
-                        sx={{
-                          color: 'primary.main',
-                          '&.Mui-checked': {
-                            color: 'primary.main',
-                          },
-                        }}
-                      />
-                    </>
-                  </Grid>
-                  {/* <Grid item xs={12}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={isDirty}
-                          sx={{
-                            color: 'primary.main',
-                            '&.Mui-checked': {
-                              color: 'primary.main',
-                            },
-                          }}
-                        />
-                      }
-                      label="Text field is dirty"
-                    />
-                  </Grid> */}
-                </FormControl>
-
-                <FormControl>
-                  <Stack
-                    className="lines"
-                    spacing={1}
-                    // display={'flex'}
-                    // flexDirection={'column'}
-                    // flexWrap={'wrap'}
-                    // alignItems={'center'}
-                    // justifyContent={'space-between'}
+                    Flow Name *
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    id="series-name"
+                    placeholder="Give your Flow a name..."
+                    name="seriesName"
+                    value={seriesName}
+                    onChange={handleChange}
+                    required
                     sx={{
-                      mx: 4,
-                      mb: 2,
-                      pl: 2,
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: '12px',
+                      },
+                      '& .MuiInputBase-input': { color: 'primary.main' },
                     }}
+                    InputProps={{
+                      endAdornment: isDirty ? (
+                        <CheckCircleIcon sx={{ color: 'success.main' }} />
+                      ) : null,
+                    }}
+                  />
+                </Paper>
+
+                {/* Add Poses to Flow */}
+                <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    color="primary"
+                    sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                   >
-                    {seriesPostures.map((word, index) => (
-                      <Stack
-                        className="journalLine"
-                        key={`${word}+${index}`}
-                        sx={{
-                          alignItems: 'center',
-                          display: 'flex',
-                          flexDirection: 'row',
-                        }}
-                      >
-                        <Stack>
-                          <IconButton
-                            disableRipple
-                            sx={{ color: 'error.light' }}
-                            onClick={() =>
-                              dispatch({
-                                type: 'SET_FLOW_SERIES',
-                                payload: {
-                                  ...state.flowSeries,
-                                  seriesPostures:
-                                    state.flowSeries.seriesPostures.filter(
-                                      (item) => item !== word
-                                    ),
-                                },
-                              })
-                            }
+                    <Image
+                      src={'/icons/asanas/label_name_leaf.png'}
+                      alt=""
+                      height={20}
+                      width={16}
+                    />
+                    Add Poses to Flow
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ mb: 2 }}
+                  >
+                    Search and select poses to add to your flow sequence
+                  </Typography>
+                  <FormControl sx={{ width: '100%' }}>
+                    <AutocompleteComponent
+                      options={poses.sort((a, b) =>
+                        a.sort_english_name.localeCompare(b.sort_english_name)
+                      )}
+                      getOptionLabel={(option) =>
+                        (option as AsanaPose).sort_english_name
+                      }
+                      renderOption={(props, option) => {
+                        const poseOption = option as AsanaPose
+                        return (
+                          <li {...props} key={poseOption.id}>
+                            {poseOption.sort_english_name}
+                          </li>
+                        )
+                      }}
+                      placeholder="Search for a pose to add..."
+                      onChange={(event, value) =>
+                        handleSelect(event, value as AsanaPose | null)
+                      }
+                      renderInput={() => (
+                        <TextField placeholder="Search poses..." />
+                      )}
+                    />
+                  </FormControl>
+                </Paper>
+
+                <Box className="journal">
+                  {/* Series Image Section */}
+                  <Paper
+                    elevation={1}
+                    sx={{ p: 3, mb: 3, borderRadius: '12px' }}
+                  >
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      color="primary"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                    >
+                      <Image
+                        src={'/icons/asanas/label_name_leaf.png'}
+                        alt=""
+                        height={20}
+                        width={16}
+                      />
+                      Series Image
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ mb: 2 }}
+                    >
+                      Upload one image to represent this series. This will help
+                      identify your series in the library.
+                    </Typography>
+
+                    {uploadedImages.length === 0 ? (
+                      <ImageManagement
+                        title=""
+                        variant="upload-only"
+                        onImageUploaded={handleImageUploaded}
+                        uploadTitle="Upload Series Image"
+                        uploadSubtitle="Drag and drop an image here, or click to select (one image only)"
+                      />
+                    ) : (
+                      <Box sx={{ mt: 2 }}>
+                        <Typography
+                          variant="body2"
+                          color="success.main"
+                          gutterBottom
+                        >
+                          <CheckCircleIcon
+                            sx={{
+                              fontSize: 16,
+                              mr: 0.5,
+                              verticalAlign: 'middle',
+                            }}
+                          />
+                          Series image uploaded successfully
+                        </Typography>
+                        <Box
+                          sx={{
+                            mt: 2,
+                            maxWidth: 300,
+                            borderRadius: '8px',
+                            overflow: 'hidden',
+                            border: '2px solid',
+                            borderColor: 'success.light',
+                          }}
+                        >
+                          <Box
+                            component="img"
+                            src={uploadedImages[0].url}
+                            alt={uploadedImages[0].altText || 'Series image'}
+                            sx={{
+                              width: '100%',
+                              height: 200,
+                              objectFit: 'cover',
+                              display: 'block',
+                            }}
+                          />
+                          <Box
+                            sx={{
+                              p: 1.5,
+                              bgcolor: 'success.lighter',
+                            }}
                           >
-                            <DeleteForeverIcon />
-                          </IconButton>
-                        </Stack>
-                        <Stack>
-                          {word.split(';').map((splitWord, idx) => (
                             <Typography
-                              key={`${word}-${idx}`}
-                              variant={idx === 1 ? 'body2' : 'body1'}
+                              variant="caption"
+                              color="text.secondary"
                               sx={{
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                                ...(idx === 1 && {
-                                  fontWeight: 'bold',
-                                  fontStyle: 'italic',
-                                }), // Add emphasis styles here
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 0.5,
                               }}
                             >
-                              {splitWord}
+                              <ImageIcon sx={{ fontSize: 14 }} />
+                              {uploadedImages[0].fileName || 'Series Image'}
                             </Typography>
-                          ))}
-                        </Stack>
-                      </Stack>
-                    ))}
-                  </Stack>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    justifyContent="flex-end"
-                    sx={{ mt: 3 }}
+                          </Box>
+                        </Box>
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          size="small"
+                          onClick={() => {
+                            setUploadedImages([])
+                            dispatch({
+                              type: 'SET_FLOW_SERIES',
+                              payload: {
+                                ...state.flowSeries,
+                                image: '',
+                              },
+                            })
+                          }}
+                          sx={{ mt: 2 }}
+                        >
+                          Remove Image
+                        </Button>
+                      </Box>
+                    )}
+                  </Paper>
+
+                  {/* Pose List Section */}
+                  <Paper
+                    elevation={1}
+                    sx={{ p: 3, mb: 3, borderRadius: '12px' }}
                   >
-                    {/* 
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() =>
-                          dispatch({
-                            type: 'SET_FLOW_SERIES',
-                            payload: {
-                              ...state.flowSeries,
-                              seriesPostures:
-                                state.flowSeries.seriesPostures.slice(0, -1),
-                            },
-                          })
-                        }
-                      >
-                        <Typography>Remove One (-1)</Typography>
-                      </Button>
- */}
-                    {/* <Button
-                      variant="contained"
+                    <Typography
+                      variant="h6"
+                      gutterBottom
                       color="primary"
-                      onClick={() =>
-                        dispatch({
-                          type: 'SET_FLOW_SERIES',
-                          payload: {
-                            ...state.flowSeries,
-                            seriesPostures: [],
-                          },
-                        })
-                      }
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                     >
-                      Clear
-                    </Button> */}
-                  </Stack>
-                </FormControl>
-                <Grid item xs={12} sx={{ mb: 3 }}>
-                  <Stack direction="row" spacing={2} justifyContent="center">
+                      <Image
+                        src={'/icons/asanas/label_name_leaf.png'}
+                        alt=""
+                        height={20}
+                        width={16}
+                      />
+                      Your Flow Sequence{' '}
+                      {seriesPoses.length > 0 &&
+                        `(${seriesPoses.length} poses)`}
+                    </Typography>
+                    {seriesPoses.length === 0 ? (
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ py: 2, textAlign: 'center' }}
+                      >
+                        No poses added yet. Use the search above to add poses to
+                        your flow.
+                      </Typography>
+                    ) : (
+                      <Stack className="lines" spacing={1} sx={{ mt: 2 }}>
+                        {seriesPoses.map((entry, index) => {
+                          // entry may be legacy string or new object
+                          let name = ''
+                          let secondary = ''
+                          let alignmentCues = ''
+
+                          if (typeof entry === 'string') {
+                            const split = splitSeriesPoseEntry(entry)
+                            name = split.name
+                            secondary = split.secondary
+                          } else if (entry && typeof entry === 'object') {
+                            name = (entry as any).sort_english_name || ''
+                            secondary = (entry as any).secondary || ''
+                            alignmentCues = (entry as any).alignment_cues || ''
+                          }
+
+                          const handleRemove = () => {
+                            dispatch({
+                              type: 'SET_FLOW_SERIES',
+                              payload: {
+                                ...state.flowSeries,
+                                seriesPoses:
+                                  state.flowSeries.seriesPoses.filter(
+                                    (_, i) => i !== index
+                                  ),
+                              },
+                            })
+                          }
+
+                          const handleCueChange = (
+                            e: React.ChangeEvent<any>
+                          ) => {
+                            const newVal = e.target.value.slice(0, 1000)
+                            const newSeries = state.flowSeries.seriesPoses.map(
+                              (it, i) => {
+                                if (i !== index) return it
+                                if (typeof it === 'string') {
+                                  // convert legacy string to object when user edits cues
+                                  const s = splitSeriesPoseEntry(it)
+                                  return {
+                                    poseId: undefined,
+                                    sort_english_name: s.name,
+                                    secondary: s.secondary,
+                                    alignment_cues: newVal,
+                                  }
+                                }
+                                return {
+                                  ...(it as any),
+                                  alignment_cues: newVal,
+                                }
+                              }
+                            )
+                            dispatch({
+                              type: 'SET_FLOW_SERIES',
+                              payload: {
+                                ...state.flowSeries,
+                                seriesPoses: newSeries,
+                              },
+                            })
+                          }
+
+                          return (
+                            <Stack
+                              className="journalLine"
+                              key={`${String(name)}+${index}`}
+                              sx={{
+                                alignItems: 'center',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                gap: 2,
+                              }}
+                            >
+                              <Stack>
+                                <IconButton
+                                  disableRipple
+                                  sx={{ color: 'error.light' }}
+                                  onClick={handleRemove}
+                                >
+                                  <DeleteForeverIcon />
+                                </IconButton>
+                              </Stack>
+                              <Stack sx={{ flex: 1 }}>
+                                <Typography
+                                  variant="body1"
+                                  sx={{
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                  }}
+                                >
+                                  {name}
+                                </Typography>
+                                {secondary && (
+                                  <Typography
+                                    variant="body2"
+                                    sx={{
+                                      textOverflow: 'ellipsis',
+                                      whiteSpace: 'nowrap',
+                                      fontWeight: 'bold',
+                                      fontStyle: 'italic',
+                                    }}
+                                  >
+                                    {secondary}
+                                  </Typography>
+                                )}
+                                <TextField
+                                  placeholder="Optional alignment cues (max 1000 characters)"
+                                  variant="standard"
+                                  multiline
+                                  minRows={1}
+                                  value={alignmentCues}
+                                  onChange={handleCueChange}
+                                  inputProps={{
+                                    maxLength: 1000,
+                                    'data-testid': `alignment-cues-${index}`,
+                                    'aria-label': `Alignment cues for ${name}`,
+                                  }}
+                                  sx={{ mt: 1 }}
+                                />
+                                <Typography
+                                  variant="caption"
+                                  sx={{ color: 'text.secondary' }}
+                                >
+                                  {alignmentCues.length}/1000
+                                </Typography>
+                              </Stack>
+                            </Stack>
+                          )
+                        })}
+                      </Stack>
+                    )}
+                  </Paper>
+
+                  {/* Description Section */}
+                  <Paper
+                    elevation={1}
+                    sx={{ p: 3, mb: 3, borderRadius: '12px' }}
+                  >
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      color="primary"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                    >
+                      <Image
+                        src={'/icons/designImages/leaf-2.svg'}
+                        alt=""
+                        height={21}
+                        width={21}
+                      />
+                      Description
+                    </Typography>
+                    <TextField
+                      id="outlined-basic"
+                      fullWidth
+                      placeholder="Add an optional description for your flow..."
+                      multiline
+                      minRows={4}
+                      variant="outlined"
+                      name="description"
+                      value={description}
+                      onChange={handleChange}
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: '12px',
+                        },
+                        '& .MuiInputBase-input': { color: 'primary.main' },
+                      }}
+                      InputProps={{
+                        endAdornment: isDirtyDescription ? (
+                          <CheckCircleIcon
+                            sx={{
+                              color: 'success.main',
+                              alignSelf: 'flex-start',
+                              mt: 1,
+                            }}
+                          />
+                        ) : null,
+                      }}
+                    />
+                  </Paper>
+                </Box>
+
+                {/* Action Bar - In document flow above bottom navigation */}
+                <Box
+                  data-testid="action-bar"
+                  sx={{
+                    position: 'relative',
+                    mt: 3,
+                    backgroundColor: 'background.paper',
+                    border: '2px solid',
+                    borderColor: 'primary.main',
+                    py: 2.5,
+                    px: 3,
+                    borderRadius: '12px',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                  }}
+                >
+                  <Stack
+                    direction={{ xs: 'column', sm: 'row' }}
+                    spacing={2}
+                    justifyContent="center"
+                    alignItems="center"
+                  >
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={handleSubmit}
+                      type="submit"
                       disabled={session === null}
-                      sx={{ borderRadius: '12px' }}
+                      sx={{
+                        borderRadius: '12px',
+                        px: 4,
+                        py: 1.5,
+                        fontSize: '1.1rem',
+                        fontWeight: 600,
+                        minWidth: { xs: '100%', sm: '200px' },
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                      }}
                     >
-                      Submit
+                      {AppText.APP_BUTTON_SUBMIT}
                     </Button>
                     <Button
                       variant="outlined"
-                      color="inherit"
+                      color="secondary"
                       sx={{
-                        color: 'primary.contrastText',
                         borderRadius: '12px',
+                        px: 4,
+                        py: 1.5,
+                        fontSize: '1.1rem',
+                        fontWeight: 600,
+                        minWidth: { xs: '100%', sm: '160px' },
                       }}
                       onClick={handleCancel}
                     >
                       Start Over
                     </Button>
                   </Stack>
-                </Grid>
-
-                <Grid item xs={12} sx={{ mb: 2, mx: 2 }}>
-                  <FormControl
-                    sx={{
-                      width: '100%',
-                      border: '1px solid black',
-                      borderRadius: '12px',
-                      p: 2,
-                    }}
-                  >
-                    <Stack gap={2} flexDirection={'row'} alignItems={'center'}>
-                      <Typography color={'primary.main'} variant="h3">
-                        Description
-                      </Typography>
-                      <Image
-                        src={'/icons/designImages/leaf-2.svg'}
-                        alt={'leaf icon'}
-                        height={21}
-                        width={21}
-                      ></Image>
-                    </Stack>
-                    <TextField
-                      id="outlined-basic"
-                      // label="Description"
-                      placeholder="Type a description..."
-                      multiline
-                      minRows={4}
-                      variant="standard"
-                      name="description"
-                      value={description}
-                      onChange={handleChange}
-                      sx={{
-                        '& .MuiInputBase-input': { color: 'primary.main' },
-                        width: '100%',
-                      }}
-                      InputProps={{
-                        endAdornment: (
-                          <Checkbox
-                            checked={isDirtyDescription}
-                            onChange={handleChange}
-                            sx={{
-                              position: 'absolute',
-                              top: 0,
-                              right: 0,
-                              color: 'primary.main',
-                              '&.Mui-checked': {
-                                color: 'primary.main',
-                              },
-                            }}
-                          />
-                        ),
-                      }}
-                    />
-                  </FormControl>
-                </Grid>
-              </FormGroup>
-            </Box>
-          </Box>
-        )}
-      </Stack>
-      {/* information drawer */}
-      <Drawer
-        onClick={toggleDrawer(!open)}
-        open={open}
-        onClose={toggleDrawer(false)}
-        anchor="bottom"
-      >
-        <Stack flexDirection={'column'}>
-          <Typography variant="h2" textAlign="center">
-            Create a Series
-          </Typography>
-          <List
-            sx={{
-              // width: 'auto',
-              // maxWidth: 360,
-              bgcolor: 'background.helper',
-              alignSelf: 'center',
-              borderRadius: 4,
-              my: 3,
-            }}
-          >
-            <ListSubheader
-              sx={{ bgcolor: 'background.helper', textAlign: 'center' }}
-              component="h3"
-              id="nested-list-subheader"
-            >
-              Welcome to the series creation page
-            </ListSubheader>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <LooksOne />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary="If you can't find a series you like, create your own!" />
-            </ListItem>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <LooksTwoIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary='"Series Name": Type a unique name for your series.' />
-            </ListItem>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <Looks3Icon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary='"Flow Series": Add asana postures to
-                  your series by selecting them from the "Flow Series"
-                  dropdown below. Click the "X" to enter a new posture.'
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <Looks4Icon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary='"Description": Type a description of your series.' />
-            </ListItem>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <Looks5Icon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary='Click "Submit" when you are done.' />
-            </ListItem>
-          </List>
+                </Box>
+              </Box>
+            </form>
+          )}
         </Stack>
-      </Drawer>
-    </Box>
+        {/* information drawer */}
+        <Drawer
+          onClick={toggleDrawer(!open)}
+          open={open}
+          onClose={toggleDrawer(false)}
+          anchor="bottom"
+        >
+          <Stack flexDirection={'column'}>
+            <Typography variant="h2" textAlign="center">
+              Create a Series
+            </Typography>
+            <List
+              sx={{
+                bgcolor: 'background.helper',
+                alignSelf: 'center',
+                borderRadius: 4,
+                my: 3,
+              }}
+            >
+              <ListSubheader
+                sx={{ bgcolor: 'background.helper', textAlign: 'center' }}
+                component="h3"
+                id="nested-list-subheader"
+              >
+                Welcome to the series creation page
+              </ListSubheader>
+
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <LooksOne />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={
+                    "If you can't find a series you like, create your own!"
+                  }
+                />
+              </ListItem>
+
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <LooksTwoIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={'"Series Name": Type a unique name for your series.'}
+                />
+              </ListItem>
+
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <Looks3Icon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={
+                    '"Image Upload": Optionally add an image to represent your series.'
+                  }
+                />
+              </ListItem>
+
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <Looks4Icon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={
+                    '"Flow Series": Add asana poses to your series by selecting them from the "Flow Series" dropdown below.'
+                  }
+                />
+              </ListItem>
+
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <Looks5Icon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={'"Description": Type a description of your series.'}
+                />
+              </ListItem>
+
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <Looks5Icon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={`Click "${AppText.APP_BUTTON_SUBMIT}" when you are done.`}
+                />
+              </ListItem>
+            </List>
+          </Stack>
+        </Drawer>
+      </Box>
+      {/* 
+      TODO: add snackbar message for success/failure no
+      */}
+    </>
   )
 }

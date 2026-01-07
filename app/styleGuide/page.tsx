@@ -1,313 +1,601 @@
 'use client'
-import { Box, Button, Stack, Typography, useTheme } from '@mui/material'
-import { StyleGuideText } from './constants/Strings'
+import {
+  Alert,
+  AppBar,
+  Autocomplete,
+  Avatar,
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Checkbox,
+  CircularProgress,
+  Collapse,
+  Container,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormHelperText,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Stack,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
+  useTheme,
+} from '@mui/material'
+import {
+  ExpandMore as ExpandMoreIcon,
+  Favorite as FavoriteIcon,
+  Home as HomeIcon,
+  Menu as MenuIcon,
+  Person as PersonIcon,
+  Settings as SettingsIcon,
+} from '@mui/icons-material'
+import { AutocompleteInput } from '@app/clientComponents/form'
+import SearchIcon from '@mui/icons-material/Search'
+import { useState } from 'react'
+import { AsanaPose } from 'types/asana'
 
 export default function StyleGuide() {
   const theme = useTheme()
+  const [tabValue, setTabValue] = useState(0)
 
-  // Define color palette
-  type ColorPalette = {
-    [key: string]: {
-      main: string
-      light: string
-      dark: string
-      contrastText: string
-    }
-  }
+  const [expanded, setExpanded] = useState(false)
 
-  const colors: ColorPalette = {
-    primary: {
-      main: theme.palette.primary.main,
-      light: theme.palette.primary.light,
-      dark: theme.palette.primary.dark,
-      contrastText: theme.palette.primary.contrastText,
+  // Generate dynamic color palette from theme
+  const colorKeys = [
+    'primary',
+    'secondary',
+    'error',
+    'warning',
+    'info',
+    'success',
+  ] as const
+  const colors = colorKeys.reduce(
+    (acc, colorKey) => {
+      acc[colorKey] = {
+        main: theme.palette[colorKey].main,
+        light: theme.palette[colorKey].light,
+        dark: theme.palette[colorKey].dark,
+        contrastText: theme.palette[colorKey].contrastText,
+      }
+      return acc
     },
-    secondary: {
-      main: theme.palette.secondary.main,
-      light: theme.palette.secondary.light,
-      dark: theme.palette.secondary.dark,
-      contrastText: theme.palette.secondary.contrastText,
-    },
-    error: {
-      main: theme.palette.error.main,
-      light: theme.palette.error.light,
-      dark: theme.palette.error.dark,
-      contrastText: theme.palette.error.contrastText,
-    },
-    warning: {
-      main: theme.palette.warning.main,
-      light: theme.palette.warning.light,
-      dark: theme.palette.warning.dark,
-      contrastText: theme.palette.warning.contrastText,
-    },
-    info: {
-      main: theme.palette.info.main,
-      light: theme.palette.info.light,
-      dark: theme.palette.info.dark,
-      contrastText: theme.palette.info.contrastText,
-    },
-    success: {
-      main: theme.palette.success.main,
-      light: theme.palette.success.light,
-      dark: theme.palette.success.dark,
-      contrastText: theme.palette.success.contrastText,
-    },
-  }
+    {} as Record<
+      string,
+      { main: string; light: string; dark: string; contrastText: string }
+    >
+  )
+
+  // Sample data for components
+  const autocompleteOptions: AsanaPose[] = [
+    { id: '1', sort_english_name: 'Option 1' } as AsanaPose,
+    { id: '2', sort_english_name: 'Option 2' } as AsanaPose,
+    { id: '3', sort_english_name: 'Option 3' } as AsanaPose,
+    { id: '4', sort_english_name: 'Option 4' } as AsanaPose,
+  ]
+  const listItems = ['Home', 'Profile', 'Settings', 'About']
 
   return (
-    <Stack spacing={2} sx={{ p: 4 }}>
-      <Box
-        display={'flex'}
-        flexDirection={'column'}
-        sx={{ border: '2px solid black', px: 4, py: 2 }}
-      >
-        <Stack spacing={2}>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Stack spacing={6}>
+        {/* Typography Section */}
+        <Paper elevation={3} sx={{ p: 4 }}>
           <Typography
             variant="h1"
-            component={'h1'}
-            sx={{ alignSelf: 'center', borderBottom: '1px solid black' }}
+            component="h1"
+            sx={{ textAlign: 'center', mb: 4 }}
           >
+            Design System Style Guide
+          </Typography>
+
+          <Divider sx={{ my: 3 }} />
+
+          <Typography variant="h2" component="h2" sx={{ mb: 3 }}>
             Typography
           </Typography>
-          <Typography
-            variant="h3"
-            component={'p'}
-            sx={{ alignSelf: 'center', pt: '16px' }}
-          >
-            Headings
-          </Typography>
-        </Stack>
-        <Stack spacing={2} textAlign={'center'} sx={{ py: '32px' }}>
-          <Typography variant="h1" component={'p'}>
-            H1 - Heading
-          </Typography>
-          <Typography variant="h2" component={'p'}>
-            H2 - Heading
-          </Typography>
-          <Typography variant="h3" component={'p'}>
-            H3 - Heading
-          </Typography>
-          <Typography variant="h4" component={'p'}>
-            H4 - Heading
-          </Typography>
-          <Typography variant="h5" component={'p'}>
-            H5 - Heading
-          </Typography>
-          <Typography variant="h6" component={'p'}>
-            H6 - Heading
-          </Typography>
-          <Typography variant="subtitle1" component={'p'}>
-            subtitle1
-          </Typography>
-          <Typography variant="subtitle2" component={'p'}>
-            subtitle2
-          </Typography>
-        </Stack>
-        <Stack spacing={2} textAlign={'center'} sx={{ py: '32px' }}>
-          <Typography
-            variant="h3"
-            component={'p'}
-            sx={{ alignSelf: 'center', pb: '16px' }}
-          >
-            Body Text
-          </Typography>
-          <Typography variant="body1" component={'p'}>
-            body1
-          </Typography>
-          <Typography variant="body1" component={'p'}>
-            Default paragraph text used for most of the app.
-          </Typography>
-          <Typography variant="body2">body2</Typography>
-          <Typography variant="body2">
-            Slightly smaller paragraph text used for less important information.
-          </Typography>
-          <Typography variant="caption">Caption Text</Typography>
-          <Typography variant="overline">Overline Text</Typography>
-          <Typography variant="label">Label Text</Typography>
-        </Stack>
-      </Box>
-      <Typography variant="body1">
-        breakpoints: ( xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920 )
-      </Typography>
-      <Typography variant="body1">
-        spacing: [0, 4, 8, 16, 32, 40, 48, 64]
-      </Typography>
-      <Typography variant="body1">fontFamily: [Lato, sans-serif]</Typography>
 
-      <Typography alignSelf={'center'} variant="h2">
-        Palette
-      </Typography>
-      <Stack
-        gap={3}
-        spacing={3}
-        direction={'row'}
-        flexWrap={'wrap'}
-        justifyContent={'center'}
-      >
-        <Box sx={{ px: 2, border: '2px solid black' }}>
-          <Typography
-            variant="h3"
-            sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
-          >
-            {StyleGuideText.PRIMARY}
-          </Typography>
-          <Typography variant="body1" color={theme.palette.primary.main}>
-            main: {theme.palette.primary.main.toString()}
-          </Typography>
-          <Typography variant="body1" color={theme.palette.primary.light}>
-            light: {theme.palette.primary.light.toString()}
-          </Typography>
-          <Typography variant="body1" color={theme.palette.primary.dark}>
-            dark: {theme.palette.primary.dark.toString()}
-          </Typography>
-          <Typography
-            variant="body1"
-            color={theme.palette.primary.contrastText}
-          >
-            contrastText: {theme.palette.primary.contrastText.toString()}
-          </Typography>
-        </Box>
-        <Box sx={{ px: 2, border: '2px solid black' }}>
-          <Typography
-            variant="h3"
-            sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
-          >
-            {StyleGuideText.SECONDARY}
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#F6B93D' }}>
-            main: F6B93D
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#FFD970' }}>
-            light: FFD970
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#C38B1A' }}>
-            dark: C38B1A
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#000000' }}>
-            contrastText: 000000
-          </Typography>
-        </Box>
-        <Box sx={{ px: 2, border: '2px solid black' }}>
-          <Typography
-            variant="h3"
-            sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
-          >
-            {StyleGuideText.ERROR}
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#D32F2F' }}>
-            main: D32F2F
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#E57373' }}>
-            light: E57373
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#9A0007' }}>
-            dark: 9A0007
-          </Typography>
-          <Typography variant="body1" sx={{ color: 'primary.main' }}>
-            contrastText: {theme.palette.primary.main.toString()}
-          </Typography>
-        </Box>
-        <Box sx={{ px: 2, border: '2px solid black' }}>
-          <Typography
-            variant="h3"
-            sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
-          >
-            {StyleGuideText.WARNING}
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#FFA726' }}>
-            main: FFA726
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#FFD95B' }}>
-            light: FFD95B
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#C77800' }}>
-            dark: C77800
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#000000' }}>
-            contrastText: 000000
-          </Typography>
-        </Box>
-        <Box sx={{ px: 2, border: '2px solid black' }}>
-          <Typography
-            variant="h3"
-            sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
-          >
-            {StyleGuideText.INFO}
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#1976D2' }}>
-            main: 1976D2
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#63A4FF' }}>
-            light: 63A4FF
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#004BA0' }}>
-            dark: 004BA0
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#FFFFFF' }}>
-            contrastText: FFFFFF
-          </Typography>
-        </Box>
-        <Box sx={{ px: 2, border: '2px solid black' }}>
-          <Typography
-            variant="h3"
-            sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
-          >
-            {StyleGuideText.SUCCESS}
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#2E7D32' }}>
-            main: 2E7D32
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#60AD5E' }}>
-            light: 60AD5E
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#005005' }}>
-            dark: 005005
-          </Typography>
-          <Typography variant="body1" sx={{ color: '#FFFFFF' }}>
-            contrastText: FFFFFF
-          </Typography>
-        </Box>
-      </Stack>
-
-      <Stack
-        gap={3}
-        spacing={3}
-        direction={'row'}
-        flexWrap={'wrap'}
-        justifyContent={'center'}
-        paddingTop={5}
-      >
-        {Object.keys(colors).map((colorKey) => (
-          <Box key={colorKey} sx={{ px: 2, pb: 2, border: '2px solid black' }}>
-            <Typography
-              variant="h3"
-              sx={{ mb: 3, borderBottom: 'solid 1px gray' }}
-            >
-              {colorKey}
+          <Stack spacing={2}>
+            <Typography variant="h1">
+              H1 - Main Heading ({theme.typography.h1.fontSize})
             </Typography>
-            <Stack spacing={1}>
-              {Object.entries(colors[colorKey]).map(([variant, color]) => (
-                <Button
-                  key={variant}
-                  variant="contained"
-                  sx={{
-                    backgroundColor: color as string,
-                    color:
-                      colorKey === 'info' || colorKey === 'success'
-                        ? '#FFFFFF'
-                        : '#000000',
-                    '&:hover': {
-                      backgroundColor: color as string,
+            <Typography variant="h2">
+              H2 - Section Heading ({theme.typography.h2.fontSize})
+            </Typography>
+            <Typography variant="h3">
+              H3 - Subsection Heading ({theme.typography.h3.fontSize})
+            </Typography>
+            <Typography variant="h4">
+              H4 - Heading ({theme.typography.h4.fontSize})
+            </Typography>
+            <Typography variant="h5">
+              H5 - Heading ({theme.typography.h5.fontSize})
+            </Typography>
+            <Typography variant="h6">
+              H6 - Heading ({theme.typography.h6.fontSize})
+            </Typography>
+            <Typography variant="subtitle1">
+              Subtitle 1 ({theme.typography.subtitle1.fontSize})
+            </Typography>
+            <Typography variant="subtitle2">
+              Subtitle 2 ({theme.typography.subtitle2.fontSize})
+            </Typography>
+            <Typography variant="body1">
+              Body 1 - Default paragraph text ({theme.typography.body1.fontSize}
+              )
+            </Typography>
+            <Typography variant="body2">
+              Body 2 - Smaller paragraph text ({theme.typography.body2.fontSize}
+              )
+            </Typography>
+            <Typography variant="caption">
+              Caption text ({theme.typography.caption.fontSize})
+            </Typography>
+            <Typography variant="overline">
+              OVERLINE TEXT ({theme.typography.overline.fontSize})
+            </Typography>
+            <Typography variant="label">Label Text (Custom variant)</Typography>
+            <Typography variant="splashTitle">
+              Splash Title (Custom variant)
+            </Typography>
+          </Stack>
+        </Paper>
+
+        {/* Theme Values Section */}
+        <Paper elevation={3} sx={{ p: 4 }}>
+          <Typography variant="h2" component="h2" sx={{ mb: 3 }}>
+            Theme Configuration
+          </Typography>
+
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" gutterBottom>
+                Breakpoints
+              </Typography>
+              <Stack spacing={1}>
+                {Object.entries(theme.breakpoints.values).map(
+                  ([key, value]) => (
+                    <Typography key={key} variant="body2">
+                      {key}: {value}px
+                    </Typography>
+                  )
+                )}
+              </Stack>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" gutterBottom>
+                Spacing Scale
+              </Typography>
+              <Stack spacing={1}>
+                {theme
+                  .spacing()
+                  .split(' ')
+                  .map((value, index) => (
+                    <Typography key={index} variant="body2">
+                      {index}: {value}
+                    </Typography>
+                  ))}
+              </Stack>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" gutterBottom>
+                Font Family
+              </Typography>
+              <Typography variant="body2">
+                {theme.typography.fontFamily}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Paper>
+
+        {/* Color Palette Section */}
+        <Paper elevation={3} sx={{ p: 4 }}>
+          <Typography variant="h2" component="h2" sx={{ mb: 3 }}>
+            Color Palette
+          </Typography>
+
+          <Grid container spacing={3}>
+            {Object.entries(colors).map(([colorName, colorValues]) => (
+              <Grid item xs={12} sm={6} md={4} key={colorName}>
+                <Paper variant="outlined" sx={{ p: 2 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ textTransform: 'capitalize', mb: 2 }}
+                  >
+                    {colorName}
+                  </Typography>
+                  <Stack spacing={1}>
+                    {Object.entries(colorValues).map(([variant, value]) => (
+                      <Box
+                        key={variant}
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          p: 1,
+                          backgroundColor: value,
+                          color:
+                            variant === 'contrastText'
+                              ? theme.palette.text.primary
+                              : value,
+                          borderRadius: 1,
+                          border: '1px solid',
+                          borderColor: theme.palette.divider,
+                        }}
+                      >
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color:
+                              colorName === 'info' || colorName === 'success'
+                                ? '#FFFFFF'
+                                : '#000000',
+                          }}
+                        >
+                          {variant}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color:
+                              colorName === 'info' || colorName === 'success'
+                                ? '#FFFFFF'
+                                : '#000000',
+                            fontFamily: 'monospace',
+                          }}
+                        >
+                          {value}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </Stack>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Paper>
+
+        {/* MUI Components Section */}
+        <Paper elevation={3} sx={{ p: 4 }}>
+          <Typography variant="h2" component="h2" sx={{ mb: 3 }}>
+            MUI Components (Primary Theme Style)
+          </Typography>
+
+          {/* Buttons */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h4" gutterBottom>
+              Buttons
+            </Typography>
+            <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
+              <Button variant="contained" color="primary">
+                Contained Primary
+              </Button>
+              <Button variant="outlined" color="primary">
+                Outlined Primary
+              </Button>
+              <Button variant="text" color="primary">
+                Text Primary
+              </Button>
+              <Button variant="contained" disabled>
+                Disabled
+              </Button>
+              <IconButton color="primary" aria-label="icon button">
+                <FavoriteIcon />
+              </IconButton>
+            </Stack>
+            <Box sx={{ mt: 2 }}>
+              <ButtonGroup variant="contained" color="primary">
+                <Button>One</Button>
+                <Button>Two</Button>
+                <Button>Three</Button>
+              </ButtonGroup>
+            </Box>
+          </Box>
+
+          {/* Form Controls */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h4" gutterBottom>
+              Form Controls
+            </Typography>
+            <Stack spacing={3} sx={{ maxWidth: 400 }}>
+              <TextField
+                label="Text Field"
+                variant="outlined"
+                color="primary"
+                helperText="Helper text"
+              />
+              <Autocomplete
+                disablePortal
+                options={autocompleteOptions}
+                sx={{
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderRadius: '12px',
+                    borderColor: 'primary.main',
+                    boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+                  },
+                  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                    {
+                      borderColor: 'primary.light', // Ensure border color does not change on hover
                     },
-                  }}
-                >
-                  {variant}: {color}
-                </Button>
-              ))}
+                  '& .MuiAutocomplete-endAdornment': {
+                    display: 'none',
+                  },
+                }}
+                renderInput={(params) => (
+                  <AutocompleteInput
+                    params={params}
+                    placeholder="Search for a Yoga Pose"
+                    sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+                  />
+                )}
+                filterOptions={(options, state) =>
+                  options.filter((option) =>
+                    option.sort_english_name
+                      .toLowerCase()
+                      .includes(state.inputValue.toLowerCase())
+                  )
+                }
+                id="search-poses"
+                getOptionLabel={(option: AsanaPose) => option.sort_english_name}
+                renderOption={(props, option) => (
+                  <li {...props} key={option.id}>
+                    {option.sort_english_name}
+                  </li>
+                )}
+                // defaultValue={defaultPose}
+                autoSelect={true}
+                onChange={() => {}}
+              />
+              <FormControl>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox defaultChecked color="primary" />}
+                    label="Checkbox Primary"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox color="primary" />}
+                    label="Checkbox Unchecked"
+                  />
+                </FormGroup>
+                <FormHelperText>Helper text for form group</FormHelperText>
+              </FormControl>
             </Stack>
           </Box>
-        ))}
+
+          {/* Cards */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h4" gutterBottom>
+              Cards
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={4}>
+                <Card>
+                  <CardHeader
+                    title="Card Title"
+                    subheader="Card Subtitle"
+                    action={
+                      <IconButton aria-label="settings">
+                        <SettingsIcon />
+                      </IconButton>
+                    }
+                  />
+                  <CardMedia
+                    component="div"
+                    sx={{
+                      height: 100,
+                      backgroundColor: theme.palette.grey[300],
+                    }}
+                  />
+                  <CardContent>
+                    <Typography variant="body2">
+                      This is card content with some example text.
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button size="small" color="primary">
+                      Action 1
+                    </Button>
+                    <Button size="small" color="primary">
+                      Action 2
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      Expandable Card
+                    </Typography>
+                    <Typography variant="body2">
+                      Click expand to see more content.
+                    </Typography>
+                    <IconButton
+                      onClick={() => setExpanded(!expanded)}
+                      aria-expanded={expanded}
+                      aria-label="show more"
+                    >
+                      <ExpandMoreIcon />
+                    </IconButton>
+                    <Collapse in={expanded} timeout="auto" unmountOnExit>
+                      <Typography paragraph>
+                        This is the expanded content that appears when the
+                        expand button is clicked.
+                      </Typography>
+                    </Collapse>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+          </Box>
+
+          {/* Navigation */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h4" gutterBottom>
+              Navigation
+            </Typography>
+
+            {/* Tabs */}
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                Tabs
+              </Typography>
+              <Tabs
+                value={tabValue}
+                onChange={(_, newValue) => setTabValue(newValue)}
+                aria-label="example tabs"
+              >
+                <Tab label="Tab One" />
+                <Tab label="Tab Two" />
+                <Tab label="Tab Three" />
+              </Tabs>
+            </Box>
+
+            {/* AppBar */}
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                App Bar
+              </Typography>
+              <AppBar position="static" color="primary">
+                <Box sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
+                  <IconButton color="inherit" aria-label="menu">
+                    <MenuIcon />
+                  </IconButton>
+                  <Typography variant="h6" sx={{ flexGrow: 1, ml: 2 }}>
+                    App Title
+                  </Typography>
+                  <IconButton color="inherit" aria-label="profile">
+                    <PersonIcon />
+                  </IconButton>
+                </Box>
+              </AppBar>
+            </Box>
+
+            {/* Lists */}
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                Lists
+              </Typography>
+              <Paper variant="outlined" sx={{ maxWidth: 300 }}>
+                <List>
+                  {listItems.map((item, index) => (
+                    <ListItem key={item} disablePadding>
+                      <ListItemButton>
+                        <ListItemIcon>
+                          {index === 0 && <HomeIcon />}
+                          {index === 1 && <PersonIcon />}
+                          {index === 2 && <SettingsIcon />}
+                          {index === 3 && <SearchIcon />}
+                        </ListItemIcon>
+                        <ListItemText primary={item} />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Paper>
+            </Box>
+          </Box>
+
+          {/* Feedback */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h4" gutterBottom>
+              Feedback
+            </Typography>
+            <Stack spacing={2}>
+              <Alert severity="success">This is a success alert!</Alert>
+              <Alert severity="info">This is an info alert!</Alert>
+              <Alert severity="warning">This is a warning alert!</Alert>
+              <Alert severity="error">This is an error alert!</Alert>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <CircularProgress color="primary" />
+                <Typography>Loading...</Typography>
+              </Box>
+            </Stack>
+          </Box>
+
+          {/* Layout Components */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h4" gutterBottom>
+              Layout
+            </Typography>
+            <Stack spacing={2}>
+              <Typography variant="h6">Dividers</Typography>
+              <Divider />
+              <Divider variant="middle" />
+              <Divider variant="fullWidth" />
+
+              <Typography variant="h6">Avatar</Typography>
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <Avatar sx={{ bgcolor: theme.palette.primary.main }}>A</Avatar>
+                <Avatar sx={{ bgcolor: theme.palette.secondary.main }}>
+                  B
+                </Avatar>
+                <Avatar sx={{ bgcolor: theme.palette.success.main }}>C</Avatar>
+              </Box>
+            </Stack>
+          </Box>
+
+          {/* Custom Button Styles from App */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="h4" gutterBottom>
+              App-Specific Button Styles
+            </Typography>
+            <Stack spacing={2} sx={{ maxWidth: 300 }}>
+              <Button
+                variant="outlined"
+                sx={{
+                  borderRadius: '14px',
+                  boxShadow: '0px 4px 4px -1px rgba(0, 0, 0, 0.25)',
+                  textTransform: 'uppercase',
+                  padding: '12px 16px',
+                  '&:hover': {
+                    backgroundColor: 'transparent',
+                    transform: 'translateY(-1px)',
+                    boxShadow: '0px 6px 8px -1px rgba(0, 0, 0, 0.25)',
+                  },
+                  '&:focus': {
+                    outline: '2px solid',
+                    outlineColor: 'primary.main',
+                    outlineOffset: '2px',
+                  },
+                }}
+              >
+                Navigation Button Style
+              </Button>
+
+              <TextField
+                label="Form Field Style"
+                sx={{
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderRadius: '12px',
+                    borderColor: 'primary.main',
+                    boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+                  },
+                  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
+                    {
+                      borderColor: 'primary.light',
+                    },
+                }}
+              />
+            </Stack>
+          </Box>
+        </Paper>
       </Stack>
-    </Stack>
+    </Container>
   )
 }

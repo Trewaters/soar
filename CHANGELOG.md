@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Unified ActivityTracker component for asana, series, and sequence activity tracking
 - Prisma integrated to handle user login and accounts.
 - MongoDB connection for storing data.
 - Created User profile to manage user accounts.
@@ -18,11 +19,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- none
+- Consolidated three separate activity tracker implementations (SeriesActivityTracker, SequenceActivityTracker, and inline asana tracking) into a single reusable ActivityTracker component
+- Reduced codebase by approximately 620 lines through component consolidation
+- Improved consistency across all activity tracking features
 
 ### Removed
 
-- none
+- Deprecated SeriesActivityTracker component (~234 lines)
+- Deprecated SequenceActivityTracker component (~220 lines)
+- Removed inline activity tracking code from pose detail page (~170 lines)
 
 ## [0.1.0] - 2024-06-01 09:27:07
 

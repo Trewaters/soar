@@ -1,39 +1,71 @@
-import { PrismaClient } from '@prisma/generated/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '../../../../app/lib/prismaClient'
 
 export async function POST(request: Request) {
   const {
     english_names,
+    alternative_english_names,
     sort_english_name,
     description,
     category,
     difficulty,
-    breath_direction_default,
-    preferred_side,
-    sideways,
+    breath,
+    sanskrit_names,
+    dristi,
+    setup_cues,
+    deepening_cues,
+    created_by,
   } = await request.json()
 
   try {
-    await prisma.asanaPosture.create({
+    const createdPose = await prisma.asanaPose.create({
       data: {
         english_names,
+        alternative_english_names: Array.isArray(alternative_english_names)
+          ? alternative_english_names
+          : alternative_english_names
+            ? [alternative_english_names]
+            : [],
         sort_english_name,
         description,
         category,
         difficulty,
-        breath_direction_default,
-        preferred_side,
-        sideways,
-        created_on: new Date().toISOString(),
-        updated_on: null,
-        created_by: 'alpha users',
+        // Ensure breath is stored as an array when provided (caller may send string or array)
+        breath: Array.isArray(breath) ? breath : breath ? [breath] : [],
+        // Additional fields from client
+        sanskrit_names: Array.isArray(sanskrit_names)
+          ? sanskrit_names
+          : typeof sanskrit_names === 'string' && sanskrit_names
+            ? [sanskrit_names]
+            : [],
+        dristi,
+        setup_cues,
+        deepening_cues,
+        created_by,
+        // Mark as user-created when a creator identifier is supplied
+        isUserCreated: Boolean(created_by),
+        // Note: created_on and updated_on are handled by Prisma defaults
       },
     })
-    return Response.json({ message: 'Asana posture Data saved' })
+
+    // Return the created pose with consistent formatting
+    // Use the actual database ID instead of a temporary one
+    // Normalize breath on response to always be an array (use ['neutral'] when empty)
+    const poseWithId = {
+      ...createdPose,
+      breath:
+        createdPose.breath === null || !Array.isArray(createdPose.breath)
+          ? ['neutral']
+          : createdPose.breath.length === 0
+            ? ['neutral']
+            : createdPose.breath,
+    }
+
+    return Response.json(poseWithId)
   } catch (error: any) {
+    console.error('Error creating pose in database:', {
+      error: error.message,
+      stack: error.stack,
+    })
     return Response.json({ error: error.message }, { status: 500 })
-  } finally {
-    await prisma.$disconnect()
   }
 }

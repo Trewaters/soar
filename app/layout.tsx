@@ -1,7 +1,10 @@
 import '@styles/globals.css'
 import { ReactNode } from 'react'
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { Providers } from '@providers/Providers'
+import { auth } from '../auth'
+import ServiceWorkerRegister from '@clientComponents/ServiceWorkerRegister'
 
 declare global {
   // eslint-disable-next-line no-unused-vars
@@ -15,11 +18,35 @@ declare global {
 }
 
 export const metadata: Metadata = {
-  title: 'Happy Yoga',
+  title: 'Uvuyoga',
   description: 'Soar like a leaf on the wind!',
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/icon-192x192.png',
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Uvuyoga',
+  },
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export const viewport = {
+  themeColor: '#ffffff',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false, // Prevents zoom on form focus
+}
+
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode
+}) {
+  const session = await auth()
+
   return (
     <html lang="en">
       <head>
@@ -27,27 +54,56 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
         />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <Providers>
-          {/* add google analytics script below header */}
-          {/* eslint-disable-next-line @next/next/next-script-for-ga */}
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-BE8QV7LLJV"
-          ></script>
-          <script
+        <Providers session={session}>
+          {/* Handle wallet extension conflicts before loading analytics */}
+          <Script
+            id="wallet-conflict-handler"
+            strategy="beforeInteractive"
             dangerouslySetInnerHTML={{
               __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-BE8QV7LLJV');
-          `,
+                try {
+                  // Prevent wallet extensions from interfering with analytics
+                  const originalDefineProperty = Object.defineProperty;
+                  Object.defineProperty = function(obj, prop, descriptor) {
+                    try {
+                      return originalDefineProperty.call(this, obj, prop, descriptor);
+                    } catch (error) {
+                      if (error instanceof TypeError && error.message.includes('redefine')) {
+                        console.warn('Wallet extension conflict detected for property:', prop);
+                        return obj;
+                      }
+                      throw error;
+                    }
+                  };
+                  
+                  // Initialize dataLayer safely
+                  window.dataLayer = window.dataLayer || [];
+                } catch (error) {
+                  console.warn('Wallet extension conflict handling failed:', error);
+                }
+              `,
             }}
           />
-          {/* <GoogleAnalytics gaId="G-BE8QV7LLJV" /> */}
-          <main>{children}</main>
+
+          {/* Google Analytics with Next.js Script component */}
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-BE8QV7LLJV"
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-BE8QV7LLJV');
+            `}
+          </Script>
+          {children}
+          <ServiceWorkerRegister />
         </Providers>
       </body>
     </html>

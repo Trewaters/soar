@@ -39,6 +39,8 @@ const CustomPaginationCircles: React.FC<CustomPaginationProps> = ({
 
   return (
     <Box
+      component="nav"
+      aria-label="Pagination navigation"
       sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -46,11 +48,26 @@ const CustomPaginationCircles: React.FC<CustomPaginationProps> = ({
       }}
     >
       <Box
+        component="button"
         onClick={handlePrevious}
+        aria-label="Go to previous page"
+        disabled={page <= 1}
         sx={{
           cursor: page > 1 ? 'pointer' : 'default',
           opacity: page > 1 ? 1 : 0.5,
           margin: '0 10px',
+          border: 'none',
+          background: 'transparent',
+          padding: '8px',
+          borderRadius: '4px',
+          '&:focus': {
+            outline: '2px solid',
+            outlineColor: 'primary.main',
+            outlineOffset: '2px',
+          },
+          '&:disabled': {
+            cursor: 'not-allowed',
+          },
         }}
       >
         <ArrowBackIosNewIcon sx={{ height: 12, width: 12 }} />
@@ -58,23 +75,49 @@ const CustomPaginationCircles: React.FC<CustomPaginationProps> = ({
       {Array.from({ length: count }, (_, index) => (
         <Box
           key={index}
+          component="button"
           onClick={() => handleClick(index + 1)}
+          aria-label={`Go to page ${index + 1}`}
+          aria-current={page === index + 1 ? 'page' : undefined}
           style={{
             width: 20,
             height: 20,
             borderRadius: '50%',
             margin: '0 5px',
             backgroundColor: `rgba(246, 137, 61, ${getTransparency(index + 1)})`,
+            border: page === index + 1 ? '2px solid #F6893D' : 'none',
             cursor: 'pointer',
+          }}
+          sx={{
+            '&:focus': {
+              outline: '2px solid',
+              outlineColor: 'primary.main',
+              outlineOffset: '2px',
+            },
           }}
         />
       ))}
       <Box
+        component="button"
         onClick={handleNext}
+        aria-label="Go to next page"
+        disabled={page >= count}
         sx={{
           cursor: page < count ? 'pointer' : 'default',
           opacity: page < count ? 1 : 0.5,
           margin: '0 10px',
+          border: 'none',
+          background: 'transparent',
+          padding: '8px',
+          borderRadius: '4px',
+          '&:focus': {
+            outline: '2px solid',
+            outlineColor: 'primary.main',
+            outlineOffset: '2px',
+          },
+          '&:disabled': {
+            cursor: 'not-allowed',
+          },
         }}
       >
         <ArrowForwardIosIcon sx={{ height: 12, width: 12 }} />

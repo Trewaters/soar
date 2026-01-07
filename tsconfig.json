@@ -10,8 +10,6 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
@@ -21,27 +19,29 @@
       }
     ],
     "paths": {
-      "@*": ["./*"],
+      "@/*": ["./"],
       "@app/*": ["./app/*"],
-      "@auth": ["./auth"],
       "@client-api/*": ["./app/api/*"],
-      "@components/*": ["./app/clientComponents/*"],
+      "@clientComponents/*": ["./app/clientComponents/*"],
       "@context/*": ["./app/context/*"],
       "@interfaces/*": ["./app/interfaces/*"],
       "@lib/*": ["./lib/*"],
-      "@postures/*": ["./app/navigator/asanaPostures/*"],
+      "@poses/*": ["./app/navigator/asanaPoses/*"],
       "@prismaSchema/*": ["./prisma/*"],
       "@providers/*": ["./app/providers/*"],
       "@serverComponents/*": ["./components/*"],
       "@styles/*": ["./styles/*"]
-    }
+    },
+    "moduleResolution": "node",
+    "resolveJsonModule": true
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "jest"
+    "jest",
+    "jest.setup.ts"
   ],
   "exclude": ["node_modules", "dist", "build"]
 }

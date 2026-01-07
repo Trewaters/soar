@@ -1,6 +1,4 @@
-import { PrismaClient } from '@prisma/generated/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '../../../../app/lib/prismaClient'
 
 export async function POST(req: Request) {
   const { email, practitionerData } = await req.json()
@@ -31,7 +29,7 @@ export async function POST(req: Request) {
 
   // Remove invalid fields from practitionerData
   // eslint-disable-next-line no-unused-vars
-  const { id, userId, user, ...validPractitionerData } = practitionerData
+  const { ...validPractitionerData } = practitionerData
 
   // Try to update the practitioner data
   try {
@@ -48,7 +46,6 @@ export async function POST(req: Request) {
       { status: 500 }
     )
   }
-
   return new Response(
     JSON.stringify({ message: 'Practitioner data updated successfully' }),
     { status: 200 }

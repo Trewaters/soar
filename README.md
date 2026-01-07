@@ -1,195 +1,109 @@
-# Soar with Happy Yoga, like a leaf on the wind.
+# Uvuyoga
+
+_"Soar like a leaf on the wind!"_
 
 version 1.1.0 or [version badge](https://badge.fury.io/)
 
-App used to find and track Yoga practice. Find poses, create flows, and track progress. For beginners and experts alike. Created by a yoga instructor for yoga instructors and students.
+Welcome everyone! Hello developers, qa team, app testers, yoga practitioners, and app users.
 
-Found yoga poses [here](https://www.pocketyoga.com/pose/)
+## Overview
+
+Exercise app for yoga beginners and experts. Created by a yoga instructor for yogis.
+
+### What is Uvuyoga
+
+A specialized yoga exercise app that empowers users to add, view, and track their yoga practices. The app's future vision includes supporting yoga entrepreneurs by providing tools for managing their businesses. These features will include event scheduling, hosting online classes, and integrated payment processing to streamline their operations.
+
+### Why Contribute?
+
+Improve a meaningful app that helps yogis worldwide. Collaborate on a [NextJS](https://nextjs.org/docs) tech stack, using [Material MUI] components, [MongoDB](https://www.mongodb.com/), [Prisma](https://www.prisma.io/) ODBC, [Auth.js](https://authjs.dev/getting-started/migrating-to-v5) v5 Authentication (Google, Github, Twitter X), [Google Maps](https://developers.google.com/maps/) API, and [Google Analytics](https://marketingplatform.google.com/about/analytics/). Test written in [Jest](https://jestjs.io/) and [Cypress](https://www.cypress.io/).
 
 ## Getting Started
 
-Looking for developers, testers, practitioners, and users.
+### Who Should Use This App?
 
-### What the app should do?
+- Open-source contributors.
+- Yoga enthusiasts.
 
-#### App Sections
+### Sections of the App:
 
-**Asana Postures**
+_Asanas_
 
-- View Yoga postures with details about the posture like name, description, etc.
+- View Asana poses details.
+- Create Asana pose.
 
-**Flows**
+_Flows_
 
-- Series are multiple asanas done in order. Series are smaller pieces that combine to make a Full Sequences.
-- View series
-- View sequences
-- Create series
-- Create sequences
+Series are multiple asanas done in order. Series are smaller pieces that combine to make a Full Sequences.
 
-**Meditaiton**
+- Practice series
+- Practice sequences
+- Create series, must have a user profile to enable this feature.
+- Create sequences, must have a user profile to enable this feature.
 
-- TBD
+_Profile_
 
-**Mantra**
+- View, Edit user details.
+- Profile image from social login
 
-- TBD
+_8 Limb Path_
 
-**Breathwork**
+- Reference definitions for the 8 limbs of yoga.
 
-- TBD
+## How to Contribute?
 
-**Yoga Journal**
+_Ways to Help:_
 
-- TBD
+- Frontend Design: Make the UI intuitive and visually appealing.
+- Yoga Pose Images: Provide illustrations for various poses.
+- Bug Fixes: Help identify and fix bugs.
+- Testing: Write or improve Jest unit tests.
+- Documentation: Enhance this ReadMe and other app docs.
+- For Editing style guide use the [Bishop Fox - Cybersecurity Style Guide - v1.1] (https://www.bishopfox.com/blog/2018/02/hello-world-introducing-the-bishop-fox-cybersecurity-style-guide/)
 
-#### Planner page
+📖 READ [CONTRIBUTING.md](CONTRIBUTING.md) for our code of conduct, [based on this](https://gist.github.com/PurpleBooth/b24679402957c63ec426).
 
-- [in-progress] Goal: Goals (long term),
-- [in-progress] Today: Today's workout (present day),
-- [in-progress] History: Historical (past) practice
+🤩 Open an issue for any questions or suggestions.
 
-#### 8 Limb Path
+### "Pushing good code"
 
-- Reference area with definitions for the 8 limbs of yoga. Meant to be a resource for more information.
+**Q:** **_"Am I pushing good code?"_**
 
-#### Users
+_***Answer yes*** to the list below and you are pushing GREAT CODE!_
 
-- Login
-- Logout
-- View User details, profile image from social login.
-- Edit User details, profile image from social login.
+1. `npm run dev` and there aren't any errors in the server terminal or client (web browser) console.
+2. `npm run build` no breaking build errors. Warnings are acceptable but should be minimized. Errors are not acceptable.
+3. `npm run cover` to make sure no unit test are failing. Coverage goal is (A) 100%, (B) 90%, (C) 80%.
+4. Push `develop` branch to hosting. Verify that the build was Successful and show **Ready** in vercel hosting. Then check how the app works on the web. Test with desktop and mobile device. Again checking the client (web browser) console for errors. "Click things and navigate around the app" especially any features your code touches.
 
-### Why is this app useful?
-
-Used as an aid in anyones active yoga practice. This app won't get you started doing yoga but if you are a yogi, instructor, or student this app is for you.
-
-## CREDIT
-
-[Bishop Fox - Cybersecurity Style Guide - v1.1] (https://www.bishopfox.com/blog/2018/02/hello-world-introducing-the-bishop-fox-cybersecurity-style-guide/)
-
-### Built With
-
-- This project was generated with [NextJS](https://nextjs.org/docs)
-- Material MUI
-- MongoDB
-- Prisma
-- Auth.js v5 (Google, Github, Twitter X)
-- Google APIs
-- Google Analytics
-
-## CONTRIBUTIONS
-
-Solo project so far. Code and graphic design contributors are welcome and encouraged to help.
-
-**Please read** [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to me. (I will copy their instructions when I get time, but for now ditto to what they say)
-
-### How to Contribute?
-
-I NEED HELP WITH...
-
-1. **Frontend design**: Designing look and feel for pages is not my strength. I would love help laying out pages better. _Make the app pretty!_
-2. **Yoga Pose images**: I need images for the yoga poses. It should be a set of images.
-3. **Fix Bugs**: See something wrong fix it or create an issue identifying how to reproduce the bug.
-4. **Add Unit Test**: Using Jest for testing. Write test for anything that isn't covered currently.
-
-## Authors
-
-- **Tre' Grisby** - _Initial work_ - [trewaters](https://gitconnected.com/trewaters)
-
-See also the list of [contributors](https://github.com/) who participated in this project.
-
-## License
-
-This project is licensed under the _GNU Affero General Public License v3.0_ - see the [LICENSE.md](LICENSE.md) file for details.
-
-## Acknowledgments
+### Acknowledgments
 
 - "I tip my hat to anyone whose code was used!" npm gives me a lot of people to thank!
 - Special thank you to my mom, wife, and my daughters! Without their love and support this would have gone nowhere.
 - Gratitude is the attitude!
 
-## Journal
+## Developer Guide
 
-- I started this in July 2023. I hope to have a MVP by the end of the year. I am working on this in my spare time, so it may take longer. I am also learning NextJS as I go, so that will slow me down as well.
-- Soon I will be releasing a version 1 of the app. It snuck up on me. I have actually done what I marked as a milestone for v1! Congrats to me!
+### Prerequesites:
 
-### Current Goals
+Node.js >=18, npm, MongoDB.
 
-(2024-09-17 16:55:11) update Goals for MVP and beyond +1.
+### Setup Instructions:
 
-- **Record practice**, record personal yoga practice in app.
+- Clone the repository. `git clone https://github.com/Trewaters/soar.git`
+- Install dependencies: `npm install`
+- Set up a local MongoDB instance or use MongoDB Atlas.
+- Start the development server and local DB instance: `npm run concurrent`
 
-## Milestones
+Dev tip: sometimes I need to clear my npm cache so the library versions are installed correctly.
 
-(2024-09-17 16:55:34) update milestones so they match my current notes.
-
-- [x] 1.0.0 - MVP ( 2 sections - each with material, "Flows" and "Asana Postures").
-- [x] 2.0.0 - Create User Profiles (connect to db)
-- [ ] 2.1.0 - Routine/Practice Planner. Allow user to track progress and goals.
-- [ ] x.x.0 - Allow User Profiles to save their progress (connect to db)
-- [ ] x.x.0 - User Profile Customizations (Connect "Planner" buttons)
-- [ ] x.x.0 - User Profile Customizations
-- [ ] x.x.0 - Users can Add more poses, etc.
-- [x] x.x.0 - Users can create custom flows
-- [ ] x.x.0 - Users can create journal about Meditations
-- [ ] x.x.0 - Users can create custom Mantras
-- [ ] x.x.0 - Add section: Meditation, Mantra, Breathwork
-
-### Known Bugs
-
-**TITLE (as of DATE)**
-
-**Twitter Auth Forbidden (as of 2024-07-26 16:18:25)**
-
-Currently setup to use v5 of Auth.js. Provider must be tested from Vercel hosting due to TwitterX terms of use. When trying to login through provider I get a 403 error in the browser. No errors showing in Vercel. Just has redirect log to Twitter auth.
-
-```
-Jul 26 16:13:09.71
-POST
-302
-soar-pqzo6upmv-trewaters-projects.vercel.app
-/auth/signin/twitter
+```bash
+npm cache clean --force
 ```
 
-What you are experiencing is a feature 😉 ! Open a [github issue](https://github.com/Trewaters/soar/issues) if you disagree.
+### MongoDB instructions
 
-## Branches
-
-1. [`main`](https://soar-main.vercel.app/) – mostly stable branch. Used for production deployment (publised to Vercel).
-2. [`develop`](https://soar-develop.vercel.app/) - active work that is merged into main. Use this branch to check builds and pre-production deployment issues. Any work I started is a branch created from develop.
-3. [`version_stable`](https://soar-jade.vercel.app/) - stable version this is the stable build of the most current version I am working on.
-4. Feature/… - features I work on that could go merge into develop when complete.
-   `version_010` - release version 0.1.0.
-
-### Current internal "feature" branches
-
-I create branches with the name of the feature I plan to work on. This way I keep my work seperated. If I don't finish I can come back to it, but it won't interfere with any other work I want to do on the app. These have been created organically and are due to change without notice because I am currently working alone.
-
-- _"feature/app-theme-and-style":_ Update the app theme and style. Use professional themes as influence. [Link to "Style Guide" page](http://localhost:3000/styleGuide)
-- _"feature/flow":_ Flow portions of the app. Views (Practice view), edit, create Asanas, Series and Sequences.
-- _"feature/auth":_ Develop authentication, user roles, general app security, etc.
-- _"feature/nav":_ Application navigation elements
-- _"feature/profile":_ Work on the yogi user profile. Allow view, edit and shareable link of profile data.
-- _"feature/posture-cards":_ Work on asana features. Allow view, edit, and create postures.
-- _"feature/core":_ Core work in the app like data connections, env variables, etc.
-
-The "version" branches are locked after release.
-
-I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: _"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0._
-
-## DEVELOPER SECTION
-
-### Prerequesites
-
-Prereqs to work on this project..._(wip)_
-
-### Installing
-
-#### MongoDB instructions
-
-Installed MongoD locally for development purposes. Use Cloud services for production.
-
-**Details**
+Install MongoD locally for development purposes. Use Cloud services for production.
 
 install location:
 
@@ -201,14 +115,14 @@ install location:
 mongod --version
 ```
 
-**Start MongoDB locally**
+_Start MongoDB locally_
 
 1. Start app: `npm run dev`
 2. Run with replica set in config: `mongod --config C:/data/config/mongod.conf`
 
-**mongod.conf**
+_mongod.conf_
 
-details of my current config file as of 2024-07-20 06:55:53.
+Example details for my current config file.
 
 ```
 # mongod.conf
@@ -236,7 +150,7 @@ replication:
   replSetName: "rs0"
 ```
 
-**Backup DB**
+_Backup DB_
 
 [MongoDump](https://www.mongodb.com/docs/database-tools/mongodump/) creates files that can be used to restore database with Mongorestore.
 
@@ -246,7 +160,7 @@ mongodump --uri="mongodb://localhost:27017" --out=C:/data/mongoDumpLocalhost
 mongodump --uri="mongodb+srv://<USERNAME>:<PASSWORD>@<YOUR.DETAILS.mongodb.net>/yogadb?replicaSet=<REPLICA_SET_ID>&retryWrites=true&w=majority" --out=C:/data/mongoDumpProduction
 ```
 
-**Restore DB**
+_Restore DB_
 
 MongoRestore restores files created by mongoDump to a MongoDB instance. This command resotres from a directory to the local mongod instance.
 
@@ -254,16 +168,16 @@ MongoRestore restores files created by mongoDump to a MongoDB instance. This com
 mongorestore  C:/data/mongoDump/
 ```
 
-**Export collection**
+_Export collection_
 
 ```
 mongoexport --collection=<coll> <options> <connection-string> --jsonArray
 
-mongoexport --collection=AsanaPosture mongodb://localhost:27017/yogaDBSandbox
+mongoexport --collection=AsanaPose mongodb://localhost:27017/yogaDBSandbox
 ```
 
 ```
-mongoexport --collection=AsanaPosture mongodb://localhost:27017/yogaDBSandbox --out=C:/data/export/exported_AsanaPosture.json
+mongoexport --collection=AsanaPose mongodb://localhost:27017/yogaDBSandbox --out=C:/data/export/exported_AsanaPose.json
 
 mongoexport --collection=AsanaSequence mongodb://localhost:27017/yogaDBSandbox --out=C:/data/export/exported_AsanaSequence.json
 
@@ -280,26 +194,48 @@ mongoexport --collection=users mongodb://localhost:27017/yogaDBSandbox --out=C:/
 
 ### Tests
 
-Using Jest.
+_Jest unit test_
+
+- Jest for unit tests. Run: npm run test.
+- End-to-end tests (WIP).
 
 My current excuse is to wait until MVP before creating test around features.
 
-..._(wip)_
+_Running unit tests_
 
-### Style Guide (look & feel)
+execute the unit tests via **Jest** [Jest](https://jestjs.io/).
 
-[Style Guide](http://localhost:3000/styleGuide) for Happy Yoga. View this page to see fonts, colors, and letter sizing across the website.
+_Running end-to-end tests_
 
-### Coding Style
+execute the end-to-end tests via **?Test Kit** [Protractor](http://www.protractortest.org/).
+
+Originally Found yoga poses [here](https://www.pocketyoga.com/pose/). Currently used for test data. Final version of the application will have user generated data for poses.
+
+### Visual/UI Style Guide
+
+View the style guide page to see fonts, colors, and letter sizing across the website. Includes some buttons and common components.
+
+[dev Style Guide](http://localhost:3000/styleGuide)
+[prod Style Guide](https://www.happyyoga.app/styleGuide)
+
+### Coding Style Guide
 
 1. Prettier
 2. Eslint
+
+### Documentation
+
+npm script will output docs to "docs/api" folder.
+
+```
+npm run docs
+```
 
 ### Deployment
 
 **Deployed on Vercel**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+An easy way to deploy your Next.js app is with [Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme).
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
@@ -315,23 +251,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 - `SECURITY`: in case of vulnerabilities.
 - `AUDIT`: code clean up. Carefully removing unnecessary files.
 
-### Development server
-
-First, run the development server:
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-Dev tip: sometimes I need to clear my npm cache so the versions are installed correctly
-
-```bash
-npm cache clean --force
-```
-
-**Prisma Databse**
+### Prisma Database
 
 Start using Prisma Client in Node.js (See: https://pris.ly/d/client)
 
@@ -361,96 +281,200 @@ This is failing for mongodb at the moment (2024-08-09 06:22:38)
 npm exec prisma migrate dev
 ```
 
-### Running unit tests
+## Authors
 
-execute the unit tests via **Jest** [Jest](https://jestjs.io/).
+- **Tre' Grisby** - _Initial work_ - [trewaters](https://gitconnected.com/trewaters)
 
-### Running end-to-end tests
+See also the list of [contributors](https://github.com/) who participated in this project.
 
-execute the end-to-end tests via **?Test Kit** [Protractor](http://www.protractortest.org/).
+## License
 
-### Linting
+This project is licensed under the _GNU Affero General Public License v3.0_ - see the [LICENSE.md](LICENSE.md) file for details.
 
-1. Eslint rules
+### Known Bugs
 
-### "Pushing good code"
+**TITLE (as of DATE)**
 
-QUESTION: "Am I pushing good code?"
+**Twitter Auth Forbidden (as of 2024-07-26 16:18:25)**
 
-_If you *Answer yes* to everything on the list below then you are pushing GREAT CODE!_
+Currently setup to use v5 of Auth.js. Provider must be tested from Vercel hosting due to TwitterX terms of use. When trying to login through provider I get a 403 error in the browser. No errors showing in Vercel. Just has redirect log to Twitter auth.
 
-1. `npm run dev` and there aren't any errors in the server terminal or client (web browser) console.
-2. `npm run build` no breaking build errors. Warnings are acceptable but should be minimized. Errors are not acceptable.
-3. `npm run cover` to make sure no unit test are failing. Coverage goal is (A) 100%, (B) 90%, (C) 80%.
-4. Push `develop` branch to hosting. Verify that the build was Successful and show **Ready** in vercel hosting. Then check how the app works on the web. Test with desktop and mobile device. Again checking the client (web browser) console for errors. "Click things and navigate around the app" especially any features your code touches.
+```
+Jul 26 16:13:09.71
+POST
+302
+soar-pqzo6upmv-trewaters-projects.vercel.app
+/auth/signin/twitter
+```
 
-## TO DO
+What you are experiencing is a feature 😉 ! Open a [github issue](https://github.com/Trewaters/soar/issues) if you disagree.
 
-### Next
+## Branching Strategy
 
-_(in order of priority top to bottom)_
+1. [`main`](https://soar-main.vercel.app/): production ready, mostly stable branch. Used for production deployment (publised to Vercel).
+2. [`develop`](https://soar-develop.vercel.app/): active development, active work that is merged into main. Use this branch to check builds and pre-production deployment issues. Any work I started is a branch created from develop.
+3. [`version_stable`](https://soar-jade.vercel.app/) - stable version this is the stable build of the most current version I am working on.
+4. Feature branches: `feature/<feature-name>` - features I work on that could go merge into develop when complete.
+   `version_010` - release version 0.1.0.
 
-- Clean up & add Quality, QA, Quality analysis
-  - Clean up UI.
-    - Profile page jumps when it loads. prevent this jumping. (2024-09-11 18:36:23)
-    - Add loading skeleton to yogi profile.
-  - Clean up data and database objects. Remove unused data fields. Add User Tested feedback.
-- Hide (unfinished/unstarted) features behind a flag (2024-08-24 08:44:29)
-  - Add user roles to application. Pass with the session. (dev, admin, tester, etc)
-  - Restrict Features. Allow “My” (dev) role to see the features while work on them
-  - Create series (etc) MUST be restricted to certain users.
-- Need Logo and images associated with that. Update favicon, etc.
-- Privacy Policy
-- Terms of Service
-- Cookie Policy
-- Disclaimer (if applicable)
-- CTA button, encourage feedback!
+### Current internal "feature" branches
 
-### Anytime
+I create branches with the name of the feature I plan to work on. This way I keep my work seperated. If I don't finish I can come back to it, but it won't interfere with any other work I want to do on the app. These have been created organically and are due to change without notice because I am currently working alone.
 
-- Create Frontend Services files to call my back end apis. Seperates frontend and backend api information. (2024-07-29 17:02:20)
-- Create and httpAdapter to replace axios and use fetch (2024-09-15 20:05:58)
-- Add permanent IP Address to MongoDB Atlas Cluster whitelist for access. Upon deployment of non-alpha. So at the end of alpha phase of development. (2024-07-20 06:53:15)
+- _"feature/app-theme-and-style":_ Update the app theme and style. Use professional themes as influence. [Link to "Style Guide" page](http://localhost:3000/styleGuide)
+- _"feature/flow":_ Flow portions of the app. Views (Practice view), edit, create Asanas, Series and Sequences.
+- _"feature/auth":_ Develop authentication, user roles, general app security, etc.
+- _"feature/nav":_ Application navigation elements
+- _"feature/profile":_ Work on the yogi user profile. Allow view, edit and shareable link of profile data.
+- _"feature/pose-cards":_ Work on asana features. Allow view, edit, and create poses.
+- _"feature/core":_ Core work in the app like data connections, env variables, etc.
 
-### Further help
+The "version" branches are locked after release.
 
-#### Create Release Milestones
+I follow Semantic Versioning for releases. [Read more here](https://semver.org/) ...**[TLDR](https://semver.org/#spec-item-2)**: _"A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative integers, and MUST NOT contain leading zeroes. X is the major version, Y is the minor version, and Z is the patch version. Each element MUST increase numerically. For instance: 1.9.0 -> 1.10.0 -> 1.11.0._
 
-Here is ChatGPT instructions on how to create release milestones that will use for my changelong under the "Versions" section.
+## Production Deployment Guide
 
-To manage releases on GitHub like the example you saw with `https://github.com/Level/level/releases/tag/0.9.0`, you'll need to use GitHub's release management features. This allows you to create, edit, and view releases that group together iterations of your project, often marking different versions or milestones with tags.
+### Environment Variables Setup
 
-Here’s a basic guide on how to create a release for your project on GitHub:
+The application uses different database configurations for development and production. Both Prisma and the MongoDB client use a standardized `DATABASE_URL` environment variable with fallback support.
 
-1. **Navigate to Your Repository**: Go to the main page of your repository on GitHub.
-2. **Access Releases**: Click on the "Releases" section, usually found on the right sidebar under the "Code" tab.
-3. **Draft a New Release**: Click on "Draft a new release" or the "Create a new release" button at the top of the release list.
-4. **Tag Your Release**: Choose a tag for your release. You can select an existing tag or create a new one. If you create a new tag, you will need to specify which branch the tag is created from.
-5. **Fill Out Release Information**: Add a title and a description for your release. Here, you can include detailed information about what’s included in the release, bug fixes, or new features.
-6. **Attach Binaries** (optional): If you want to include compiled programs, executables, or binary files, you can attach them to the release.
-7. **Mark as Pre-release** (if applicable): If the release is not yet ready for production and is considered unstable, you can mark it as a pre-release.
-8. **Publish the Release**: Once you’ve configured all the details, click on "Publish release" to make it public. Alternatively, you can save it as a draft to continue working on it later.
+#### Development Environment
 
-To see your releases, you can visit the "Releases" section of your repository. If you haven't created any releases yet, this page will guide you to make your first one. Additionally, if GitHub Discussions is enabled, you can also link a discussion to your release for community interaction.
+```bash
+# Local MongoDB connection with replica set
+DATABASE_URL='mongodb://localhost:27017/v2YogaDBSandbox?replicaSet=rs0'
 
-For your specific repository, you can start creating and managing releases by visiting [your project’s release section](https://github.com/Trewaters/soar/releases).
+# Legacy support (will be removed in future versions)
+MONGODB_URI_v2='mongodb://localhost:27017/v2YogaDBSandbox?replicaSet=rs0'
+```
 
-This process not only helps in managing different versions but also allows your users to download specific snapshots of the code and associated files.
+#### Production Environment (Vercel)
 
-#### TIPS: Release tags
+Set these environment variables in your Vercel dashboard:
 
-When creating a new release in GitHub, the tags you choose can reflect your project's versioning strategy. Commonly, semantic versioning (SemVer) is used, which helps manage versions by conveying meaning about the underlying changes. Here are some suggested tags you could use based on the type of updates made to your project:
+1. **DATABASE_URL** (Primary)
 
-1. **Major Releases (`vX.0.0`)**: Use this for major changes that may include breaking changes or significant features. For example, `v2.0.0` indicates a significant jump that might include changes not backward compatible with `v1.x.x`.
+   ```
+   mongodb+srv://username:password@cluster.mongodb.net/yogadb?retryWrites=true&w=majority
+   ```
 
-2. **Minor Releases (`vX.Y.0`)**: Employ this tag for minor feature additions or improvements that are backward-compatible. For instance, `v1.3.0` could be a release that adds new functionalities to version `1.2.x` but does not break any existing functionality.
+2. **MONGODB_URI** (Fallback for legacy support)
+   ```
+   mongodb+srv://username:password@cluster.mongodb.net/yogadb?retryWrites=true&w=majority
+   ```
 
-3. **Patch Releases (`vX.Y.Z`)**: This is for small bug fixes or security patches that do not affect the API or major components of the software. For example, `v1.3.1` might include a small bug fix on top of the `v1.3.0` release.
+#### Setting Environment Variables in Vercel
 
-4. **Pre-release Versions**: For beta, alpha, or release candidates, you might use tags like `v1.4.0-alpha`, `v1.4.0-beta`, or `v1.4.0-rc.1`. These tags indicate that the release is not yet in its final form and is meant for testing.
+1. Go to your Vercel project dashboard
+2. Navigate to **Settings** → **Environment Variables**
+3. Add the following variables for **Production** environment:
+   - `DATABASE_URL`: Your MongoDB Atlas connection string
+   - `MONGODB_URI`: Same MongoDB Atlas connection string (for legacy support)
+   - Any other required environment variables (NextAuth secrets, etc.)
 
-5. **Build Metadata**: Sometimes, additional build metadata can be attached to a version, such as `v1.4.0+20210901` indicating a build made on September 1, 2021.
+### Database Migration and Setup
 
-Using clear and consistent tags helps users and contributors understand the progression of your project and the stability of each release. For a detailed understanding of versioning and to get more insights on how to effectively manage your project releases, GitHub provides a helpful guide on [semantic versioning](https://semver.org/).
+#### Local to Production Data Migration
 
-Implementing a good versioning strategy with appropriate tags ensures that your project's releases are predictable, manageable, and less prone to errors.
+**Warning**: Only migrate development data to production if it contains test data you want to preserve. For real production deployments, start with a clean database.
+
+1. **Export local data** (if needed):
+
+   ```bash
+   mongodump --uri="mongodb://localhost:27017/v2YogaDBSandbox" --out=./data/mongoDumpLocal
+   ```
+
+2. **Import to production** (if needed):
+   ```bash
+   mongorestore --uri="mongodb+srv://username:password@cluster.mongodb.net/yogadb" ./data/mongoDumpLocal/v2YogaDBSandbox
+   ```
+
+#### Production Database Schema Setup
+
+1. **Generate Prisma Client** for production:
+
+   ```bash
+   npx prisma generate
+   ```
+
+2. **Push schema** to production database:
+
+   ```bash
+   npx prisma db push
+   ```
+
+3. **Verify collections** exist in MongoDB Atlas:
+   - `UserData`
+   - `UserLogin`
+   - `Account`
+   - Other required collections per your schema
+
+### Troubleshooting Production Issues
+
+#### Login Activity Streak Not Working
+
+If the Activity Streak feature fails in production:
+
+1. **Check Environment Variables**:
+
+   - Verify `DATABASE_URL` is set in Vercel
+   - Ensure the MongoDB connection string is valid
+   - Check that the database name matches between local and production
+
+2. **Database Connection Issues**:
+
+   ```bash
+   # Test connection string locally
+   mongosh "mongodb+srv://username:password@cluster.mongodb.net/yogadb"
+   ```
+
+3. **Missing Collections/Data**:
+
+   - Check if `UserLogin` collection exists in production
+   - Verify `UserData` collection has the required user records
+   - Database names are case-sensitive: `yogadb` ≠ `YogaDB`
+
+4. **API Endpoint Testing**:
+
+   ```bash
+   # Test the recordActivity API in production (automatically updates streak)
+   curl -X POST "https://yourapp.vercel.app/api/user/recordActivity" \
+     -H "Content-Type: application/json" \
+     -d '{"userId":"YOUR_USER_ID","activityType":"view_streaks"}'
+
+   # Test the legacy loginStreak API in production (read-only)
+   curl "https://yourapp.vercel.app/api/user/loginStreak?userId=YOUR_USER_ID"
+   ```
+
+5. **Check Vercel Logs**:
+   - Go to Vercel Dashboard → Functions tab
+   - Check logs for database connection errors
+   - Look for environment variable missing errors
+
+#### Common Production Errors
+
+1. **"Database configuration missing"**: Environment variables not set in Vercel
+2. **"User not found"**: User doesn't exist in production database
+3. **"Connection timeout"**: Invalid MongoDB connection string or network issues
+4. **"Collection not found"**: Database schema not pushed to production
+
+### Environment Variable Priority
+
+The application checks environment variables in this order:
+
+1. `DATABASE_URL` (preferred for all environments)
+
+This ensures backward compatibility while moving toward a standardized approach.
+
+### Deployment Checklist
+
+Before deploying to production:
+
+- [ ] Set `DATABASE_URL` in Vercel environment variables
+- [ ] Set `MONGODB_URI` as fallback in Vercel environment variables
+- [ ] Configure NextAuth secrets (`NEXTAUTH_SECRET`, `NEXTAUTH_URL`)
+- [ ] Test database connection with production credentials
+- [ ] Run `npx prisma generate` after any schema changes
+- [ ] Verify all required collections exist in production database
+- [ ] Test critical features (authentication, activity tracking) in staging

@@ -1,6 +1,7 @@
-import { PrismaClient } from '@prisma/generated/client'
+import { prisma } from '../../../../app/lib/prismaClient'
 
-const prisma = new PrismaClient()
+// Force this route to be dynamic since it requires query parameters
+export const dynamic = 'force-dynamic'
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)

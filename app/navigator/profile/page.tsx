@@ -1,10 +1,43 @@
-import { Box, Stack } from '@mui/material'
-import { SessionProvider } from 'next-auth/react'
-import UserDetails from '@app/navigator/profile/UserDetails'
-import { auth } from '@auth'
+'use client'
+import { Box, Container } from '@mui/material'
+import Grid from '@mui/material/Grid2'
+import EditUserDetails from '@app/navigator/profile/editUserDetails'
+import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
+import UserDetails from './UserDetails'
+import React, { useState } from 'react'
 
-export default async function Page() {
-  const session = await auth()
+export default function Page() {
+  return (
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Grid container spacing={4}>
+        {/* Profile Navigation Menu */}
+        <Grid size={{ xs: 12, md: 4 }}>
+          <ProfileNavMenu />
+        </Grid>
+
+        {/* Main Profile Content */}
+        <Grid size={{ xs: 12, md: 8 }}>
+          <ClientWrapper />
+        </Grid>
+      </Grid>
+    </Container>
+  )
+}
+
+function ClientWrapper() {
+  const [editMode, setEditMode] = useState(false)
+
+  const handleSaveSuccess = () => {
+    setEditMode(false) // Switch back to view mode after successful save
+  }
+
+  const handleEditClick = () => {
+    setEditMode(true)
+  }
+
+  const handleCancelEdit = () => {
+    setEditMode(false)
+  }
 
   return (
     <Box
@@ -12,13 +45,15 @@ export default async function Page() {
       alignItems={'center'}
       justifyContent={'center'}
       flexDirection={'column'}
-      marginTop={4}
     >
-      <SessionProvider session={session}>
-        <Stack>
-          <UserDetails />
-        </Stack>
-      </SessionProvider>
+      {editMode ? (
+        <EditUserDetails
+          onSaveSuccess={handleSaveSuccess}
+          onCancel={handleCancelEdit}
+        />
+      ) : (
+        <UserDetails onEditClick={handleEditClick} />
+      )}
     </Box>
   )
 }

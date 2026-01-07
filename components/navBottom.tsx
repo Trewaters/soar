@@ -1,63 +1,168 @@
 'use client'
-import React, { AppBar, IconButton } from '@mui/material'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import React from 'react'
+import { Box, IconButton } from '@mui/material'
+import MenuIcon from '@mui/icons-material/Menu'
+import PersonIcon from '@mui/icons-material/Person'
+import HomeIcon from '@mui/icons-material/Home'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+import { useSession } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 
-export default function NavBottom(props: { subRoute: string }) {
-  const router = useRouter()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type ColorFunction = (isAuthenticated: boolean) => string
+
+interface NavItem {
+  id: string
+  label: string
+  icon: React.ReactNode
+  path: string | (() => string) | 'menu'
+  getColor: ColorFunction
+}
+
+export default function NavBottom(props: {
+  subRoute: string
+  onMenuToggle?: () => void
+}) {
+  const router = useNavigationWithLoading()
+  const { data: session, status } = useSession()
+  const pathname = usePathname()
+
+  // Determine if user is authenticated
+  const isAuthenticated = status === 'authenticated' && !!session
+
+  // Check if we're in the profile section
+  const isInProfileSection = pathname?.includes('/navigator/profile')
+
+  // Check if we're on the dashboard page
+  const isOnDashboard = pathname === '/navigator/profile/dashboard'
+
+  const navItems: NavItem[] = [
+    {
+      id: 'menu',
+      label: 'Open main navigation menu',
+      icon: <MenuIcon />,
+      path: 'menu',
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      getColor: (_isAuthenticated: boolean) => 'primary.main', // Always primary.main
+    },
+    {
+      id: 'profile',
+      label: isInProfileSection
+        ? 'Navigate to home page'
+        : isAuthenticated
+          ? 'Navigate to user profile'
+          : 'Login to access profile',
+      icon: isInProfileSection ? <HomeIcon /> : <PersonIcon />,
+      path: isInProfileSection
+        ? '/navigator'
+        : isAuthenticated
+          ? '/navigator/profile'
+          : '/auth/signin',
+      getColor: (isAuthenticated: boolean) =>
+        isAuthenticated ? 'success.main' : 'grey.500', // Green when logged in, gray when logged out
+    },
+    {
+      id: isOnDashboard ? 'library' : 'dashboard',
+      label: isOnDashboard
+        ? isAuthenticated
+          ? 'Navigate to library'
+          : 'Login to access library'
+        : isAuthenticated
+          ? 'Navigate to dashboard'
+          : 'Login to access dashboard',
+      icon: isOnDashboard ? (
+        <LibraryBooksIcon aria-hidden="true" />
+      ) : (
+        <DashboardIcon aria-hidden="true" />
+      ),
+      path: isOnDashboard
+        ? isAuthenticated
+          ? '/navigator/profile/library'
+          : '/auth/signin'
+        : isAuthenticated
+          ? '/navigator/profile/dashboard'
+          : '/auth/signin',
+      getColor: (isAuthenticated: boolean) =>
+        isAuthenticated ? 'primary.main' : 'grey.500', // Primary when logged in, gray when logged out
+    },
+  ]
+
+  const handleNavigation = (
+    path: string | (() => string) | 'menu',
+    itemId?: string
+  ) => {
+    // Handle menu toggle specially
+    if (itemId === 'menu' || path === 'menu') {
+      if (props.onMenuToggle) {
+        props.onMenuToggle()
+      }
+      return
+    }
+
+    // Handle regular navigation
+    const targetPath = typeof path === 'function' ? path() : path
+    // Provide an elementId so the NavigationLoadingProvider can track
+    // bottom-nav initiated navigations separately and avoid races.
+    const elementId = `nav-bottom-${itemId || 'item'}`
+    router.push(targetPath, elementId)
+  }
+
   return (
-    <AppBar
+    <Box
+      component="nav"
+      aria-label="Bottom navigation"
       sx={{
+        position: 'fixed',
         backgroundColor: 'info.contrastText',
-        borderTopRightRadius: { sm: 2, md: 0 },
-        borderTopLeftRadius: { sm: 2, md: 0 },
-        width: { sm: '100vw', md: '40vw' },
+        borderTopRightRadius: 0,
+        borderTopLeftRadius: 0,
+        width: '100vw',
+        display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
         px: 2,
-        position: 'relative',
-        left: { sm: '0', md: '30vw' },
+        top: 'auto !important',
+        bottom: '0 !important',
+        left: '0',
+        right: 'auto',
+        height: '66px',
+        zIndex: (theme) => theme.zIndex.appBar,
+        justifySelf: 'center',
       }}
     >
-      <IconButton
-        disableRipple
-        onClick={() => {
-          router.push('/')
-        }}
-      >
-        <Image
-          alt="Home icon"
-          src="/icons/bottom-home.svg"
-          width={20}
-          height={20}
-        />
-      </IconButton>
-      <IconButton
-        disableRipple
-        onClick={() => {
-          router.push('/navigator/profile')
-        }}
-      >
-        <Image
-          alt="User profile icon"
-          src="/icons/bottom-user.svg"
-          width={20}
-          height={20}
-        />
-      </IconButton>
-      <IconButton
-        disableRipple
-        onClick={() => {
-          router.push(props.subRoute)
-        }}
-      >
-        <Image
-          alt="Bottom burger menu icon"
-          src="/icons/bottom-burger-menu.svg"
-          width={20}
-          height={20}
-        />
-      </IconButton>
-    </AppBar>
+      {navItems.map((item) => (
+        <IconButton
+          key={item.id}
+          disableRipple
+          disableFocusRipple
+          disableTouchRipple
+          aria-label={item.label}
+          title={item.label}
+          role="button"
+          onClick={() => handleNavigation(item.path, item.id)}
+          sx={{
+            color: item.getColor(isAuthenticated),
+            '&:focus': {
+              outline: 'none', // Remove focus outline
+            },
+            '&:focus-visible': {
+              outline: '2px solid',
+              outlineColor: 'primary.main',
+              outlineOffset: '2px',
+            },
+            '&.Mui-disabled': {
+              color: item.getColor(isAuthenticated), // Use dynamic color even when disabled
+            },
+          }}
+        >
+          {React.cloneElement(item.icon as React.ReactElement, {
+            sx: { color: item.getColor(isAuthenticated) },
+          })}
+        </IconButton>
+      ))}
+    </Box>
   )
 }

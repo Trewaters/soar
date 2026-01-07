@@ -1,3 +1,5 @@
+import { Box } from '@mui/material'
+
 export default function Page() {
-  return <div>Breathwork</div>
+  return <Box>Breathwork</Box>
 }

@@ -34,7 +34,7 @@ declare module '@mui/material/Typography' {
 
 export const theme = createTheme({
   breakpoints: { values: { xs: 0, sm: 384, md: 768, lg: 1024, xl: 1920 } },
-  spacing: [0, 4, 8, 16, 32, 40, 48, 64],
+  spacing: 4, // Use a simple number multiplier - 4px base unit
   palette: {
     // mode: 'light',
     primary: {
@@ -53,7 +53,7 @@ export const theme = createTheme({
       main: '#D32F2F',
       light: '#E57373',
       dark: '#9A0007',
-      contrastText: '#000000',
+      contrastText: '#d32f2f',
     },
     warning: {
       main: '#FFA726',
@@ -83,7 +83,6 @@ export const theme = createTheme({
       contrastText: '#07020D',
     },
     background: {
-      // journal background color, #f0f0f0
       default: '#f0f0f0',
       paper: '#ffffff',
       helper: '#fef5e7',
@@ -139,10 +138,14 @@ export const theme = createTheme({
     caption: { fontSize: '0.9rem' },
     label: { fontSize: '1.8rem' },
     splashTitle: {
-      fontSize: '4rem', // approx. 64px
+      fontSize: '3rem',
       fontWeight: '900',
+      textTransform: 'uppercase',
       letterSpacing: '0.1rem',
       wordSpacing: '0.1rem',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      textAlign: 'center',
     },
   },
   components: {

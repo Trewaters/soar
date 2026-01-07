@@ -1,24 +1,23 @@
-'use client'
+import React, { ReactNode } from 'react'
+import { SessionProvider } from 'next-auth/react'
+import ClientProviders from './ClientProviders'
 
-import { ReactNode } from 'react'
-import { ThemeProvider } from '@mui/material/styles'
-import { theme } from '@/styles/theme'
-import { CssBaseline } from '@mui/material'
-import UserStateProvider from '@context/UserContext'
-import FlowSeriesProvider from '@context/AsanaSeriesContext'
-import AsanaPostureProvider from '@context/AsanaPostureContext'
-
-export function Providers({ children }: { children: ReactNode }) {
+export function Providers({
+  children,
+  session,
+}: {
+  children: ReactNode
+  session: any
+}) {
   return (
-    <ThemeProvider theme={theme}>
-      {/* CssBaseline to kickstart an elegant, consistent, and simple baseline to build upon. */}
-      <CssBaseline>
-        <UserStateProvider>
-          <FlowSeriesProvider>
-            <AsanaPostureProvider>{children}</AsanaPostureProvider>
-          </FlowSeriesProvider>
-        </UserStateProvider>
-      </CssBaseline>
-    </ThemeProvider>
+    <SessionProvider
+      basePath={'/api/auth'}
+      session={session}
+      refetchInterval={0} // Disable automatic refetching (we'll trigger manually)
+      refetchOnWindowFocus={true} // Refetch when window gains focus
+      refetchWhenOffline={false}
+    >
+      <ClientProviders>{children}</ClientProviders>
+    </SessionProvider>
   )
 }

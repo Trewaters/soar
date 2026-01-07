@@ -2,14 +2,24 @@
 
 :root {
   --background-default: #f0f0f0;
-  --background-paper: #ffffff;
+  --background-paper: #f8f4f2;
   --background-helper: #fef5e7;
   --journal-bottomBorder: #ccc;
-  --primary-main: #f6893d; /* Removed quotes */
+  --primary-main: #f6893d;
 }
 
 body {
   min-height: 100vh;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 a {
@@ -23,33 +33,59 @@ a:hover {
 
 .journal {
   border-radius: 12px;
-  /* padding: 0 !important; */
   width: 100%;
-  border: 1px solid var(--background-default);
+  /* border: 1px solid var(--background-default); */
+  border: 1px solid #f0f0f0;
   box-shadow: 0 2px 48px 5px rgba(0, 0, 0, 0.1);
+  /* background-color: var(--background-paper); */
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
 }
+/* } */
 
 .journal .journalLine {
-  border-bottom: 1px dotted var(--journal-bottomBorder);
+  /* border-bottom: 1px dotted var(--journal-bottomBorder); */
+  border-bottom: 1px dotted #ccc;
   text-transform: capitalize;
   height: auto;
-  padding: 10px;
-  min-width: 300px;
-  max-width: 500px;
+  padding: 10px 0 10px 8px;
+  width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
-  /* display: block; */
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin: 0;
 }
 .journal .journalTitle {
   list-style: none;
-  border-bottom: 1px var(--journal-bottomBorder);
+  /* border-bottom: 1px var(--journal-bottomBorder); */
+  border-bottom: 1px #ccc;
   border-bottom-style: double;
   border-bottom-width: thick;
   text-transform: capitalize;
-  padding-bottom: 0px;
+  /* padding-top: 8px; // margin 8px is provided by MuiTypography root, so this is redundant */
+  padding-bottom: 8px;
   height: auto;
-  /* width: 100%; */
-  color: var(--primary-main);
-  /* color: #f6893d; */
+  /* color: var(--primary-main); */
+  color: #f6893d;
+}
+
+.journal .journalTitleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-bottom: 3px double #ccc;
+  padding-bottom: 8px;
+  width: 100%;
+}
+
+.journal .journalTitleContainer h3 {
+  text-transform: capitalize;
+  margin: 0;
 }
 
 .journal .journalLine:hover {
@@ -61,12 +97,22 @@ a:hover {
   -o-transition: all 0.2s;
 }
 
-.lines {
+.journal .lines {
   border-left: 1px solid #ffaa9f;
-  border-right: 1px solid #ffaa9f;
-  width: 2px;
   float: left;
-  /* height: 495px; */
   margin-left: 40px;
   white-space: nowrap;
+  width: calc(100% - 40px);
+  box-sizing: border-box;
+  position: relative;
+}
+
+.journal .lines::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #ffaa9f;
 }

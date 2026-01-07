@@ -1,157 +1,153 @@
 import React from 'react'
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Button, Paper, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
-import { signIn, providerMap, signOut } from '@auth'
+import { signIn, providerMap, signOut, auth } from '../../../auth'
+import { redirect } from 'next/navigation'
+import { Link as MuiLink } from '@mui/material'
+import Link from 'next/link'
+import CredentialsInput from './credentialsInput'
 
-export default async function SignInPage(props: {
-  searchParams: { callbackUrl: string | undefined }
+export default async function SignInPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ callbackUrl?: string }>
 }) {
+  const session = await auth()
+  const resolvedSearchParams = (await searchParams) ?? {}
   return (
     <>
       <nav>
         <Header />
       </nav>
-      <Stack display={'flex'} alignItems={'center'}>
-        <Stack flexDirection={'row'}>
-          <Typography variant={'h1'}>SOAR</Typography>
-          <Image
-            src={'/icons/asanas/leaf-1.svg'}
-            alt={'SOAR logo'}
-            width={100}
-            height={100}
-          />
-        </Stack>
-        <Stack>
-          <Typography variant={'subtitle1'}>A Happy Yoga App</Typography>
-        </Stack>
-      </Stack>
-      <Stack justifyContent={'center'} alignItems={'center'} display={'flex'}>
+      <Stack justifyContent={'center'} alignItems={'center'} minHeight={'80vh'}>
         <Stack
-          textAlign={'center'}
-          spacing={2}
+          spacing={3}
           sx={{
-            my: 6,
-            border: '1px solid black',
-            width: '50%',
-            borderRadius: '12px',
+            mt: 6,
+            borderTop: '1px solid black',
+            borderLeft: '1px solid black',
+            borderRight: '1px solid black',
+            width: '90%',
+            borderTopLeftRadius: '12px',
+            borderTopRightRadius: '12px',
+            p: 4,
+            minHeight: 'calc(100vh - 120px)',
+            justifyContent: 'space-between',
           }}
         >
-          <Box
-            sx={{ pt: 4, pl: 4 }}
-            display={'flex'}
-            flexDirection={'column'}
-            alignItems={'flex-start'}
-          >
-            <Typography variant="h2">Welcome back 👋🏾</Typography>
-            <Typography variant="body1" component="p">
-              We&apos;re happy you&apos;re here!
-            </Typography>
-          </Box>
-          {/* 
-           <Box
-              sx={{ pt: 4, pl: 4 }}
-              display={'flex'}
-              flexDirection={'column'}
-              alignItems={'flex-start'}
-            >
-              <Typography variant="h2">Welcome back 👋🏾</Typography>
-              <Typography variant="body1" component="p">
-                We&apos;re happy you&apos;re here!
-              </Typography>
-            </Box>
-          */}
-
-          <Stack
-            display={'flex'}
-            alignItems={'center'}
-            justifyContent={'center'}
-            sx={{ mt: 4 }}
-          >
-            <form
-              action={async (formData) => {
-                'use server'
-                // eslint-disable-next-line no-useless-catch
-                try {
-                  await signIn('credentials', formData)
-                } catch (error) {
-                  // if (error instanceof AuthError) {
-                  //   return redirect(`${SIGNIN_ERROR_URL}?error=${error.type}`)
-                  // }
-                  throw error
-                }
-              }}
-            >
-              <Stack display={'flex'} alignItems={'flex-start'}>
-                <Stack>
-                  <label htmlFor="email">
-                    Email
-                    <input name="email" id="email" />
-                  </label>
-                </Stack>
-                <Stack>
-                  <label htmlFor="password">
-                    Password
-                    <input name="password" id="password" />
-                  </label>
-                </Stack>
-              </Stack>
-              <input type="submit" value="Sign In" />
-            </form>
-            {Object.values(providerMap).map((provider, index) => (
-              <form
-                key={index}
-                action={async () => {
-                  'use server'
-                  // eslint-disable-next-line no-useless-catch
-                  try {
-                    // await signIn(provider.id, {
-                    //   redirectTo: props.searchParams?.callbackUrl ?? '',
-                    // })
-                    await signIn(provider.id, {
-                      redirectTo: '/navigator/profile',
+          <Stack spacing={3} alignItems={'center'}>
+            {session ? (
+              <>
+                <Typography variant="h2" color="success.main">
+                  You&apos;re signed in!
+                </Typography>
+                <Typography variant="body1">
+                  <MuiLink component={Link} href="/">
+                    Click here
+                  </MuiLink>
+                  &nbsp;to go to the home page.
+                </Typography>
+                <Paper
+                  component="form"
+                  action={async () => {
+                    'use server'
+                    await signOut({
+                      redirect: true,
+                      redirectTo: '/auth/signout',
                     })
-                  } catch (error) {
-                    // Signin can fail for a number of reasons, such as the user
-                    // not existing, or the user not having the correct role.
-                    // In some cases, you may want to redirect to a custom error
-                    // if (error instanceof AuthError) {
-                    //   return redirect(`${SIGNIN_ERROR_URL}?error=${error.type}`)
-                    // }
+                  }}
+                  elevation={0}
+                  sx={{ backgroundColor: 'transparent' }}
+                >
+                  <Button
+                    variant="outlined"
+                    type="submit"
+                    sx={{ width: 'auto' }}
+                  >
+                    Sign out
+                  </Button>
+                </Paper>
+              </>
+            ) : (
+              <Stack alignItems={'center'} spacing={2}>
+                <Typography variant="h2">Welcome back.</Typography>
+                <Typography variant="body1">
+                  We&apos;re happy you&apos;re here!
+                </Typography>
+                {Object.values(providerMap).map((provider, index) => (
+                  <Paper
+                    key={index}
+                    component="form"
+                    action={async () => {
+                      'use server'
+                      // eslint-disable-next-line no-useless-catch
+                      try {
+                        await signIn(provider.id, {
+                          redirectTo:
+                            resolvedSearchParams.callbackUrl ?? '/navigator',
+                        })
+                      } catch (error) {
+                        // Signin can fail for a number of reasons, such as the user
+                        // not existing, or the user not having the correct role.
+                        // In some cases, you may want to redirect to a custom error
+                        if (
+                          error &&
+                          typeof error === 'object' &&
+                          'type' in error
+                        ) {
+                          return redirect(
+                            `${process.env.SIGNIN_ERROR_URL}?error=${error.type}`
+                          )
+                        }
 
-                    // Otherwise if a redirects happens Next.js can handle it
-                    // so you can just re-thrown the error and let Next.js handle it.
-                    // Docs:
-                    // https://nextjs.org/docs/app/api-reference/functions/redirect#server-component
-                    throw error
-                  }
-                }}
-              >
-                <Button type="submit" variant="contained" sx={{ my: 2 }}>
-                  <span>Sign in with {provider.name}</span>
-                </Button>
-              </form>
-            ))}
+                        // Otherwise if a redirects happens Next.js can handle it
+                        // so you can just re-thrown the error and let Next.js handle it.
+                        // Docs:
+                        // https://nextjs.org/docs/app/api-reference/functions/redirect#server-component
+                        throw error
+                      }
+                    }}
+                    elevation={0}
+                    sx={{ backgroundColor: 'transparent' }}
+                  >
+                    <Button
+                      type="submit"
+                      variant="outlined"
+                      sx={{ m: 2, borderRadius: '12px' }}
+                      startIcon={
+                        <Image
+                          src={
+                            provider.name.toLowerCase() === 'google'
+                              ? '/icons/profile/auth-google.svg'
+                              : '/icons/profile/auth-github-mark.svg'
+                          }
+                          alt={provider.name}
+                          width={20}
+                          height={20}
+                        />
+                      }
+                    >
+                      <Typography>Sign in with {provider.name}</Typography>
+                    </Button>
+                  </Paper>
+                ))}
+                <CredentialsInput />
+              </Stack>
+            )}
+
+            {!session && (
+              <Stack spacing={1}>
+                <Typography variant="body1">
+                  Don&apos;t have an account yet?
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  ✨ Use any method to login the first timea and an account will
+                  be created for you!
+                </Typography>
+              </Stack>
+            )}
           </Stack>
-          <Stack>
-            <Typography variant="subtitle1">sign in again 🔓</Typography>
-            <Typography variant="body1">
-              Don&apos;t have an account yet❔
-            </Typography>
-            <Typography variant="body1">
-              Signing in will automatically create an account for you.
-            </Typography>
-          </Stack>
-          <form
-            action={async () => {
-              'use server'
-              await signOut({ redirectTo: '/navigator' })
-            }}
-          >
-            <Button variant="contained" type="submit">
-              Sign out
-            </Button>
-          </form>
         </Stack>
       </Stack>
     </>

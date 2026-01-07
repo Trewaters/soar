@@ -1,0 +1,14 @@
+# Ignore heavy or generated folders
+.next
+node_modules
+coverage
+prisma/generated/
+.swc/
+dist/
+build/
+
+# Ignore build artifacts
+**/*.tsbuildinfo
+
+# Ignore snapshots if any
+**/__snapshots__/

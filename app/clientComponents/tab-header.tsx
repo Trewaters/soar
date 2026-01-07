@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { Box, Tab, Tabs } from '@mui/material'
-import LandingPage from '@components/landing-page'
+import LandingPage from '@clientComponents/landing-page'
 import EightLimbs from '@app/navigator/eightLimbs/eight-limbs'
 
 interface TabPanelProps {
@@ -42,33 +42,39 @@ export default function TabHeader() {
 
   return (
     <Box
+      data-testid="tab-header"
       sx={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '100%',
       }}
     >
-      <Box
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        aria-label="Tab menu group for navigating yoga content"
+        scrollButtons="auto"
+        centered
         sx={{
-          width: '100%',
-          maxWidth: 360,
-          borderBottom: 1,
-          borderColor: 'divider',
+          minHeight: 48,
+          height: 48,
+          '.MuiTabs-indicator': { height: 3 },
         }}
       >
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="tab menu"
-          scrollButtons="auto"
-          centered
-        >
-          <Tab label="Practice" {...a11yProps(0)} />
-          <Tab label="Reference" {...a11yProps(1)} />
-        </Tabs>
-      </Box>
+        <Tab
+          label="Start your practice"
+          aria-label="Start your practice tab"
+          {...a11yProps(0)}
+          sx={{ minHeight: 48, height: 48 }}
+        />
+        <Tab
+          label="Learn about yoga"
+          aria-label="Learn about yoga tab"
+          {...a11yProps(1)}
+          sx={{ minHeight: 48, height: 48 }}
+        />
+      </Tabs>
       <CustomTabPanel value={value} index={0}>
         <LandingPage />
       </CustomTabPanel>
