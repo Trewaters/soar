@@ -37,7 +37,13 @@ export async function POST(req: NextRequest) {
       notes,
     })
 
-    return NextResponse.json(activity, { status: 201 })
+    const response = NextResponse.json(activity, { status: 201 })
+    // Activity data is user-specific and changes frequently
+    // Tell browsers and service workers: DO NOT CACHE THIS
+    response.headers.set('Cache-Control', 'private, no-store, must-revalidate')
+    response.headers.set('Pragma', 'no-cache')
+    response.headers.set('Expires', '0')
+    return response
   } catch (error) {
     logApiError(error, req, 'POST /api/seriesActivity')
     return NextResponse.json(
@@ -98,14 +104,32 @@ export async function GET(req: NextRequest) {
         startDate,
         endDate
       )
-      return NextResponse.json(
+      const response = NextResponse.json(
         { exists: !!activity, activity },
         { status: 200 }
       )
+      // Activity data is user-specific and changes frequently
+      // Tell browsers and service workers: DO NOT CACHE THIS
+      response.headers.set(
+        'Cache-Control',
+        'private, no-store, must-revalidate'
+      )
+      response.headers.set('Pragma', 'no-cache')
+      response.headers.set('Expires', '0')
+      return response
     } else {
       // Get all series activities for the user
       const activities = await getUserSeriesHistory(userId)
-      return NextResponse.json(activities, { status: 200 })
+      const response = NextResponse.json(activities, { status: 200 })
+      // Activity data is user-specific and changes frequently
+      // Tell browsers and service workers: DO NOT CACHE THIS
+      response.headers.set(
+        'Cache-Control',
+        'private, no-store, must-revalidate'
+      )
+      response.headers.set('Pragma', 'no-cache')
+      response.headers.set('Expires', '0')
+      return response
     }
   } catch (error) {
     logApiError(error, req, 'GET /api/seriesActivity')
