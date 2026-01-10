@@ -92,8 +92,6 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
                   },
                 })
                 // Optionally notify user
-                // eslint-disable-next-line no-console
-                console.log('Profile image uploaded')
               } else {
                 const err = await res.json()
                 // eslint-disable-next-line no-console

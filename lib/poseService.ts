@@ -317,7 +317,7 @@ export async function getPose(idOrName: string): Promise<AsanaPose> {
       try {
         return await getPoseById(idOrName)
       } catch (idError) {
-        console.log('ID lookup failed, falling back to name lookup')
+        console.error('ID lookup failed, falling back to name lookup')
       }
     }
 

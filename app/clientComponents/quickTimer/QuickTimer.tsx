@@ -177,8 +177,6 @@ export default function QuickTimer({
       playBeep(800, 0) // First beep
       playBeep(1000, 400) // Second beep
       playBeep(800, 800) // Third beep
-
-      console.log('Alarm beep played successfully')
     } catch (error) {
       console.warn('Error creating beep alarm:', error)
       // Fallback: try to play a simple tone
@@ -198,12 +196,10 @@ export default function QuickTimer({
 
   // Play alarm sound when timer completes
   const playAlarm = useCallback(() => {
-    console.log('playAlarm called, alarmEnabled:', alarmEnabled)
     if (!alarmEnabled) return
 
     try {
       if (alarmSoundUrl) {
-        console.log('Playing custom alarm sound:', alarmSoundUrl)
         // Use custom sound file
         const audio = new Audio(alarmSoundUrl)
         audio.volume = 0.7
@@ -213,7 +209,6 @@ export default function QuickTimer({
           playBeepAlarm()
         })
       } else {
-        console.log('Playing default beep alarm')
         // Use Web Audio API to create a beep sound
         playBeepAlarm()
       }
@@ -236,7 +231,6 @@ export default function QuickTimer({
         onTimerUpdate?.(remaining)
 
         if (remaining <= 0) {
-          console.log('Timer completed! Calling alarm and notification...')
           setIsTimerActive(false)
           setTimerEndTime(null)
           if (timerRef.current) {

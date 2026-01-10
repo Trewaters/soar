@@ -13,10 +13,6 @@ export async function PUT(
     // Read and log the incoming payload early for debugging (helps capture
     // client PUT payloads even when auth fails). Do not mutate `request`.
     const input = await request.json()
-    console.log('🔔 PUT /api/poses/:id payload:', {
-      id: resolvedParams.id,
-      body: input,
-    })
     try {
       const logDir = path.join(process.cwd(), '.logs')
       if (!fs.existsSync(logDir)) fs.mkdirSync(logDir)

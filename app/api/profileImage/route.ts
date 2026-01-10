@@ -12,7 +12,6 @@ export async function POST(req: NextRequest) {
     const session = await auth()
 
     if (!session || !session.user?.email) {
-      console.log('No session or email found')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -20,16 +19,13 @@ export async function POST(req: NextRequest) {
 
     const file = formData.get('file') as File | null
     if (!file) {
-      console.log('No file found in form data')
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
     }
 
     if (!ALLOWED_TYPES.includes(file.type)) {
-      console.log('Invalid file type:', file.type)
       return NextResponse.json({ error: 'Invalid file type' }, { status: 400 })
     }
     if (file.size > MAX_FILE_SIZE) {
-      console.log('File too large:', file.size)
       return NextResponse.json({ error: 'File too large' }, { status: 400 })
     }
 
@@ -39,10 +35,6 @@ export async function POST(req: NextRequest) {
     })
 
     if (!user) {
-      console.log(
-        'User not found, creating minimal user record for:',
-        session.user.email
-      )
       try {
         user = await prisma.userData.create({
           data: {

@@ -73,7 +73,6 @@ export default function Page() {
 
     // Guard: avoid overlapping/in-flight fetches
     if (fetchInFlightRef.current) {
-      console.log('[CreateSeries] fetchPoses skipped: in-flight')
       return
     }
 
@@ -82,7 +81,6 @@ export default function Page() {
       lastFetchKeyRef.current === emailKey &&
       now - lastFetchTimeRef.current < throttleMs
     ) {
-      console.log('[CreateSeries] fetchPoses throttled for key:', emailKey)
       return
     }
 
@@ -90,9 +88,7 @@ export default function Page() {
       fetchInFlightRef.current = true
       lastFetchKeyRef.current = emailKey
       lastFetchTimeRef.current = now
-      console.log('[CreateSeries] fetchPoses START for key:', emailKey)
       const poses = await getAccessiblePoses(session?.user?.email || undefined)
-      console.log('[CreateSeries] fetchPoses DONE count:', poses.length)
       setPoses(poses)
     } catch (error: Error | any) {
       console.error('[CreateSeries] Error fetching poses:', error.message)
@@ -116,7 +112,6 @@ export default function Page() {
   // Note: We only use visibilitychange, not focus, to avoid excessive API calls
   const handleVisibilityChange = React.useCallback(() => {
     const hidden = document.hidden
-    console.log('[CreateSeries] visibilitychange hidden:', hidden)
     if (!hidden) {
       // Only refetch when visible and not throttled/in-flight
       fetchPoses()

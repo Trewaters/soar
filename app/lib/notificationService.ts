@@ -230,9 +230,6 @@ export async function sendNotification(
   )
 
   if (alreadySent) {
-    console.log(
-      `Notification already sent: ${payload.notificationType} for user ${payload.userId}`
-    )
     return { success: false, sentVia: [], errors: ['Already sent'] }
   }
 
@@ -242,7 +239,6 @@ export async function sendNotification(
       // TODO: Implement email sending
       // await sendEmail(...)
       sentVia.push('email')
-      console.log(`Email notification sent: ${payload.notificationType}`)
     } catch (error) {
       errors.push(`Email failed: ${error}`)
       console.error('Email notification failed:', error)
@@ -255,7 +251,6 @@ export async function sendNotification(
       // TODO: Implement push notification sending
       // await sendPushNotification(...)
       sentVia.push('push')
-      console.log(`Push notification sent: ${payload.notificationType}`)
     } catch (error) {
       errors.push(`Push failed: ${error}`)
       console.error('Push notification failed:', error)

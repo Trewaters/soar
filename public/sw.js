@@ -35,7 +35,6 @@ function isJsonRequest(request) {
 }
 
 self.addEventListener('install', function (event) {
-  console.log('[SW ' + SW_VERSION + '] install')
   event.waitUntil(
     caches
       .open(CACHE_NAME)
@@ -51,7 +50,6 @@ self.addEventListener('install', function (event) {
 })
 
 self.addEventListener('activate', function (event) {
-  console.log('[SW ' + SW_VERSION + '] activate')
   event.waitUntil(
     caches
       .keys()
@@ -59,7 +57,6 @@ self.addEventListener('activate', function (event) {
         return Promise.all(
           keys.map(function (key) {
             if (key !== CACHE_NAME && key.startsWith('soar-offline-')) {
-              console.log('[SW] deleting old cache', key)
               return caches.delete(key)
             }
             return Promise.resolve()
@@ -306,6 +303,5 @@ self.addEventListener('sync', function (event) {
 })
 
 function syncYogaData() {
-  console.log('[SW] syncYogaData')
   return Promise.resolve()
 }

@@ -197,9 +197,6 @@ export default function ActivityTracker({
           entityId,
         })
         const result = await checkActivity(session.user.id, entityId)
-        console.debug('[ActivityTracker] checkExistingActivity result', {
-          exists: !!result?.exists,
-        })
         setChecked(result.exists)
 
         // Set difficulty state based on existing activity

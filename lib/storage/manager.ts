@@ -134,13 +134,10 @@ export class StorageManager {
    * Automatically detect and configure Vercel Blob provider
    */
   async autoConfigureProvider(): Promise<StorageProviderName | null> {
-    console.log('Configuring Vercel Blob storage provider...')
-
     const provider = STORAGE_PROVIDERS['vercel-blob']
     const isConfigured = await provider.isConfigured()
 
     if (isConfigured) {
-      console.log('✅ Vercel Blob provider configured successfully')
       this.switchProvider('vercel-blob')
       return 'vercel-blob'
     } else {

@@ -221,10 +221,6 @@ export function monitorImageQueryPerformance<T>(
           console.warn(
             `Slow query detected: ${queryName} took ${duration.toFixed(2)}ms`
           )
-        } else {
-          console.log(
-            `Query ${queryName} completed in ${duration.toFixed(2)}ms`
-          )
         }
       }
 

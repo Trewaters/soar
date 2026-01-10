@@ -86,14 +86,6 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   // Debug environment variables
-  console.log('🔧 Environment debug:', {
-    NODE_ENV: process.env.NODE_ENV,
-    hasVercelToken: !!process.env.BLOB_READ_WRITE_TOKEN,
-    blobTokenLength: process.env.BLOB_READ_WRITE_TOKEN?.length || 0,
-    vercelUrl: process.env.VERCEL_URL,
-    nextAuthUrl: process.env.NEXTAUTH_URL,
-  })
-
   try {
     // Check authentication
     const session = await auth()
@@ -214,18 +206,10 @@ export async function POST(request: NextRequest) {
     const randomString = Math.random().toString(36).substring(2, 8)
     const filename = `${imageType}_${timestamp}_${randomString}.${fileExtension}`
 
-    console.log('🔍 About to upload to storage:', {
-      filename,
-      fileSize: buffer.length,
-      storageProvider: storageManager.getActiveProvider().name,
-    })
-
     // Upload to storage
     const uploadResult = await storageManager.upload(filename, buffer, {
       access: 'public',
     })
-
-    console.log('✅ Storage upload successful:', uploadResult)
 
     // Get the user's ObjectId from the database using their email
     const user = await prisma.userData.findUnique({
@@ -253,13 +237,9 @@ export async function POST(request: NextRequest) {
       ...(poseName && { poseName }),
     }
 
-    console.log('💾 Saving to database:', { ...imageData, fileSize: file.size })
-
     const savedImage = await prisma.poseImage.create({
       data: imageData,
     })
-
-    console.log('✅ Database save successful:', savedImage.id)
 
     // Update asana image count if this is a pose image
     if (poseId && imageType === 'pose') {
@@ -271,7 +251,6 @@ export async function POST(request: NextRequest) {
           },
         },
       })
-      console.log('✅ Updated asana image count')
     }
 
     const response: ImageUploadResponse = {
@@ -288,7 +267,6 @@ export async function POST(request: NextRequest) {
       totalImages: 1,
     }
 
-    console.log('🎉 Upload complete, returning response')
     return NextResponse.json(response)
   } catch (error) {
     console.error('Enhanced image upload error:', error)

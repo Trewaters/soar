@@ -15,8 +15,6 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    console.log('🗑️ DELETE /api/images/[id] called')
-
     // Check authentication
     const session = await auth()
     if (!session?.user?.email) {
@@ -25,8 +23,6 @@ export async function DELETE(
         { status: 401 }
       )
     }
-
-    console.log('🗑️ User email:', session.user.email)
 
     // Find the user to get their ObjectID
 
@@ -59,14 +55,6 @@ export async function DELETE(
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    console.log('🗑️ User ObjectID:', user.id)
-
-    console.log('🗑️ Ownership check:', {
-      imageUserId: image.userId,
-      userObjectId: user.id,
-      match: image.userId === user.id,
-    })
-
     if (image.userId !== user.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
@@ -80,14 +68,6 @@ export async function DELETE(
 
     // For pose/pose images, verify user owns the asana
     if (attachedPoseId && poseObj) {
-      console.log('🗑️ Asana check:', {
-        poseId: attachedPoseId,
-        isUserCreated: poseObj.isUserCreated,
-        created_by: poseObj.created_by,
-        sessionEmail: session.user.email,
-        emailMatch: poseObj.created_by === session.user.email,
-      })
-
       if (!poseObj.isUserCreated) {
         // Check if user created it by email match, even if isUserCreated is false
         if (poseObj.created_by === session.user.email) {

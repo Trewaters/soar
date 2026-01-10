@@ -63,10 +63,8 @@ export default function CreateAsanaWithImages() {
 
   // Handle image upload callback
   const handleImageUploaded = (image: PoseImageData) => {
-    console.log('📸 Image uploaded callback received:', image)
     setUploadedImages((prev) => {
       const updated = [...prev, image]
-      console.log('📸 Updated images array:', updated)
       return updated
     })
   }

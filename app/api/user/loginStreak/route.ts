@@ -150,24 +150,10 @@ export async function GET(req: NextRequest) {
     }
 
     // Enhanced user verification with diagnostics
-    console.log('Verifying user exists...', { requestId, userId, timestamp })
 
-    const userQueryStart = Date.now()
     const user = await prisma.userData.findUnique({
       where: { id: userId },
       select: { id: true, email: true, createdAt: true },
-    })
-    const userQueryTime = Date.now() - userQueryStart
-
-    console.log('User lookup completed:', {
-      user,
-      requestId,
-      userId,
-      timestamp,
-      queryTimeMs: userQueryTime,
-      userFound: !!user,
-      userEmail: user?.email,
-      userCreatedAt: user?.createdAt,
     })
 
     if (!user) {
@@ -255,12 +241,6 @@ export async function GET(req: NextRequest) {
 
 async function calculateLoginStreak(userId: string) {
   const functionStartTime = Date.now()
-  console.log('=== calculateLoginStreak called ===', {
-    userId,
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV,
-  })
-
   try {
     // Get user's login events ordered by date (most recent first)
     const queryStartTime = Date.now()
@@ -273,21 +253,7 @@ async function calculateLoginStreak(userId: string) {
     })
     const queryTime = Date.now() - queryStartTime
 
-    console.log('UserLogin query completed:', {
-      loginEvents,
-      userId,
-      queryTimeMs: queryTime,
-      eventsCount: loginEvents.length,
-      firstEvent: loginEvents[0]?.loginDate?.toISOString(),
-      lastEvent: loginEvents[loginEvents.length - 1]?.loginDate?.toISOString(),
-      timestamp: new Date().toISOString(),
-    })
-
     if (loginEvents.length === 0) {
-      console.log('No login events found for user:', {
-        userId,
-        timestamp: new Date().toISOString(),
-      })
       return {
         currentStreak: 0,
         longestStreak: 0,
@@ -325,19 +291,6 @@ async function calculateLoginStreak(userId: string) {
 
     // Check if user logged in today
     const isActiveToday = uniqueDates.length > 0 && uniqueDates[0] === todayTime
-
-    console.log('Date processing completed:', {
-      userId,
-      dateProcessingTimeMs: dateProcessingTime,
-      uniqueDatesCount: uniqueDates.length,
-      totalEventsCount: loginEvents.length,
-      todayTime,
-      yesterdayTime,
-      isActiveToday,
-      mostRecentDate: uniqueDates[0],
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      timestamp: new Date().toISOString(),
-    })
 
     // Calculate current streak
     const streakCalculationStart = Date.now()
@@ -390,26 +343,6 @@ async function calculateLoginStreak(userId: string) {
       lastLoginDate,
       isActiveToday,
     }
-
-    const totalTime = Date.now() - functionStartTime
-
-    console.log('Streak calculation completed:', {
-      userId,
-      result,
-      timings: {
-        totalTimeMs: totalTime,
-        queryTimeMs: queryTime,
-        dateProcessingTimeMs: dateProcessingTime,
-        streakCalculationTimeMs: streakCalculationTime,
-      },
-      debugInfo: {
-        uniqueDatesCount: uniqueDates.length,
-        totalEventsCount: loginEvents.length,
-        isActiveToday,
-        environment: process.env.NODE_ENV,
-      },
-      timestamp: new Date().toISOString(),
-    })
 
     return result
   } catch (error) {

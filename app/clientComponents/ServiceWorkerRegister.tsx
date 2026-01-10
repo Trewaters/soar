@@ -21,8 +21,6 @@ export default function ServiceWorkerRegister() {
           try {
             const regs = await navigator.serviceWorker.getRegistrations()
             for (const r of regs) {
-              // eslint-disable-next-line no-console
-              console.log('[SW] Dev unregistering', r.scope)
               // Unregister and wait for completion
               // eslint-disable-next-line no-await-in-loop
               await r.unregister()

@@ -97,29 +97,12 @@ const Dashboard: React.FC = () => {
       const debugPrefix = '[Dashboard Debug]'
       const startTime = Date.now()
 
-      console.log(`${debugPrefix} Starting dashboard data fetch`, {
-        timestamp: new Date().toISOString(),
-        sessionStatus: session?.user ? 'authenticated' : 'unauthenticated',
-        sessionUserId: session?.user?.id || 'none',
-        userDataId: userData?.id || 'none',
-        userDataEmail: userData?.email || 'none',
-      })
-
       try {
         setLoading(true)
         setError(null)
 
         // Get userId from userData or session
         const userId = userData?.id || session?.user?.id
-
-        console.log(`${debugPrefix} User ID resolution`, {
-          resolvedUserId: userId || 'none',
-          source: userData?.id
-            ? 'userData'
-            : session?.user?.id
-              ? 'session'
-              : 'none',
-        })
 
         if (!userId) {
           console.warn(
@@ -136,18 +119,11 @@ const Dashboard: React.FC = () => {
 
         // Skip if using default/initial userData (id='1' is the placeholder)
         if (userId === '1') {
-          console.log(
-            `${debugPrefix} Skipping fetch - placeholder user ID detected`
-          )
           setLoading(false)
           return
         }
 
         // First, ensure login is recorded and get current login streak
-        console.log(`${debugPrefix} Calling recordActivity API`, {
-          userId,
-          activityType: 'view_dashboard',
-        })
 
         const loginStreakResponse = await fetch('/api/user/recordActivity', {
           method: 'POST',
@@ -164,11 +140,6 @@ const Dashboard: React.FC = () => {
         if (loginStreakResponse.ok) {
           const loginData = await loginStreakResponse.json()
           currentLoginStreak = loginData.streakData?.currentStreak || 0
-          console.log(`${debugPrefix} recordActivity API success`, {
-            loginRecorded: loginData.loginRecorded,
-            currentLoginStreak,
-            requestId: loginData.requestId,
-          })
         } else {
           const errorText = await loginStreakResponse
             .text()
@@ -182,15 +153,8 @@ const Dashboard: React.FC = () => {
         }
 
         // Then fetch other dashboard statistics
-        console.log(`${debugPrefix} Calling dashboard/stats API`)
         const response = await fetch('/api/dashboard/stats', {
           cache: 'no-store',
-        })
-
-        console.log(`${debugPrefix} dashboard/stats API response`, {
-          status: response.status,
-          statusText: response.statusText,
-          ok: response.ok,
         })
 
         if (!response.ok) {
@@ -209,26 +173,12 @@ const Dashboard: React.FC = () => {
 
         const result = await response.json()
 
-        console.log(`${debugPrefix} dashboard/stats API result`, {
-          success: result.success,
-          hasData: !!result.data,
-          error: result.error || 'none',
-          dataKeys: result.data ? Object.keys(result.data) : [],
-        })
-
         if (result.success && result.data) {
           // Override the loginStreak with the one from recordActivity API
           const finalData = {
             ...result.data,
             loginStreak: currentLoginStreak,
           }
-          console.log(`${debugPrefix} Setting dashboard data successfully`, {
-            loginStreak: finalData.loginStreak,
-            activityStreak: finalData.activityStreak,
-            practiceHistoryCount: finalData.practiceHistory?.length || 0,
-            mostCommonAsanasCount: finalData.mostCommonAsanas?.length || 0,
-            elapsedMs: Date.now() - startTime,
-          })
           setDashboardData(finalData)
         } else {
           console.error(
@@ -254,9 +204,6 @@ const Dashboard: React.FC = () => {
         setError(errorMessage)
       } finally {
         setLoading(false)
-        console.log(`${debugPrefix} Dashboard fetch complete`, {
-          elapsedMs: Date.now() - startTime,
-        })
       }
     }
 

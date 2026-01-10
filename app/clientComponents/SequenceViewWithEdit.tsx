@@ -141,11 +141,6 @@ export default function SequenceViewWithEdit({
   // This ensures we NEVER use pagination IDs, only actual MongoDB ObjectIds
   const handleSeriesNavigation = async (seriesMini: any) => {
     try {
-      console.log('=== SERIES NAVIGATION DEBUG ===')
-      console.log('Series data from sequence:', seriesMini)
-      console.log('Series ID (likely pagination ID):', seriesMini.id)
-      console.log('Series name to resolve:', seriesMini.seriesName)
-
       // NEVER use seriesMini.id directly - it's likely a pagination ID like "2"
       // ALWAYS resolve by name to get the actual MongoDB ObjectId
 
@@ -155,13 +150,7 @@ export default function SequenceViewWithEdit({
         return
       }
 
-      console.log('Fetching all series to find match...')
       const allSeries = await getAllSeries()
-      console.log(`Found ${allSeries.length} total series in database`)
-      console.log(
-        'Available series:',
-        allSeries.map((s) => ({ id: s.id, name: s.seriesName }))
-      )
 
       // Try exact name match first
       let matchingSeries = allSeries.find(
@@ -170,7 +159,6 @@ export default function SequenceViewWithEdit({
 
       // If no exact match, try case-insensitive match
       if (!matchingSeries) {
-        console.log('No exact match found, trying case-insensitive match...')
         matchingSeries = allSeries.find(
           (series) =>
             series.seriesName.toLowerCase() ===
@@ -180,7 +168,6 @@ export default function SequenceViewWithEdit({
 
       // If still no match, try trimmed comparison (handle whitespace)
       if (!matchingSeries) {
-        console.log('No case-insensitive match found, trying trimmed match...')
         matchingSeries = allSeries.find(
           (series) =>
             series.seriesName.trim().toLowerCase() ===
@@ -189,14 +176,6 @@ export default function SequenceViewWithEdit({
       }
 
       if (matchingSeries?.id) {
-        console.log('✅ SUCCESS: Found matching series!')
-        console.log('Series name:', matchingSeries.seriesName)
-        console.log('MongoDB ObjectId:', matchingSeries.id)
-        console.log(
-          'Navigating to:',
-          `/navigator/flows/practiceSeries?id=${matchingSeries.id}`
-        )
-
         navigation.push(
           `/navigator/flows/practiceSeries?id=${matchingSeries.id}`
         )
@@ -217,8 +196,6 @@ export default function SequenceViewWithEdit({
       alert(
         `Error loading series: ${error instanceof Error ? error.message : 'Unknown error'}`
       )
-    } finally {
-      console.log('=== END SERIES NAVIGATION DEBUG ===')
     }
   }
 

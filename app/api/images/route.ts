@@ -192,15 +192,6 @@ export async function GET(request: NextRequest) {
       ownership,
     }
 
-    console.log('📸 GET /api/images: Returning images', {
-      poseId,
-      poseName,
-      imageCount: transformedImages.length,
-      totalCount,
-      hasMore: response.hasMore,
-      ownership,
-    })
-
     return NextResponse.json(response)
   } catch (error) {
     console.error('Error fetching images:', error)

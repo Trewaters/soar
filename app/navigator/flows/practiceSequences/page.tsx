@@ -277,20 +277,13 @@ export default function Page() {
   // Helper function to resolve series ID and navigate
   const handleSeriesNavigation = async (seriesMini: any) => {
     try {
-      console.log('=== PRACTICE SEQUENCES - SERIES NAVIGATION DEBUG ===')
-      console.log('Series data from sequence:', seriesMini)
-      console.log('Series ID (likely pagination ID):', seriesMini.id)
-      console.log('Series name to resolve:', seriesMini.seriesName)
-
       if (!seriesMini.seriesName) {
         console.error('No series name available for resolution')
         alert('Cannot navigate: Series name is missing')
         return
       }
 
-      console.log('Fetching all series to find match...')
       const allSeries = await getAllSeries()
-      console.log(`Found ${allSeries.length} total series in database`)
 
       // Try to find matching series by name
       const matchingSeries = allSeries.find(
@@ -303,9 +296,6 @@ export default function Page() {
       )
 
       if (matchingSeries?.id) {
-        console.log('✅ SUCCESS: Found matching series!')
-        console.log('Series name:', matchingSeries.seriesName)
-        console.log('MongoDB ObjectId:', matchingSeries.id)
         router.push(`/navigator/flows/practiceSeries?id=${matchingSeries.id}`)
       } else {
         console.error('❌ FAILED: Could not resolve series by name')
@@ -321,8 +311,6 @@ export default function Page() {
       alert(
         `Error loading series: ${error instanceof Error ? error.message : 'Unknown error'}`
       )
-    } finally {
-      console.log('=== END PRACTICE SEQUENCES - SERIES NAVIGATION DEBUG ===')
     }
   }
 

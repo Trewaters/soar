@@ -123,14 +123,6 @@ export default function EnhancedImageGallery() {
         let displayUrl = ''
         let localData: LocalImageData | undefined
 
-        console.log('🖼️ Processing dbImage:', {
-          id: dbImage.id,
-          storageType: dbImage.storageType,
-          url: dbImage.url,
-          localStorageId: dbImage.localStorageId,
-          fileName: dbImage.fileName,
-        })
-
         // If it's a local image, get the actual data URL
         if (dbImage.storageType === 'LOCAL' && dbImage.localStorageId) {
           try {
@@ -140,15 +132,9 @@ export default function EnhancedImageGallery() {
             if (localImage) {
               displayUrl = localImage.dataUrl || PLACEHOLDER_IMAGE
               localData = localImage
-              console.log('✅ Local image found:', {
-                localStorageId: dbImage.localStorageId,
-                hasDataUrl: !!localImage.dataUrl,
-                dataUrlLength: localImage.dataUrl?.length || 0,
-              })
             } else {
               // Local image not found, use placeholder
               displayUrl = PLACEHOLDER_IMAGE
-              console.log('❌ Local image not found:', dbImage.localStorageId)
             }
           } catch (error) {
             console.warn(
@@ -163,28 +149,12 @@ export default function EnhancedImageGallery() {
             dbImage.url && !dbImage.url.startsWith('local://')
               ? dbImage.url
               : PLACEHOLDER_IMAGE
-          console.log('☁️ Cloud image:', {
-            url: dbImage.url,
-            displayUrl: displayUrl,
-            isPlaceholder: displayUrl === PLACEHOLDER_IMAGE,
-          })
         }
 
         // Final safety check - ensure displayUrl is never empty or local://
         if (!displayUrl || displayUrl.startsWith('local://')) {
           displayUrl = PLACEHOLDER_IMAGE
-          console.log('⚠️ Using placeholder for safety:', {
-            originalDisplayUrl: displayUrl,
-            imageId: dbImage.id,
-          })
         }
-
-        console.log('📸 Final image data:', {
-          id: dbImage.id,
-          displayUrl:
-            displayUrl.substring(0, 50) + (displayUrl.length > 50 ? '...' : ''),
-          storageType: dbImage.storageType,
-        })
 
         combinedImages.push({
           ...dbImage,
@@ -512,16 +482,6 @@ export default function EnhancedImageGallery() {
       ) : (
         <Grid2 container spacing={2}>
           {images.map((image) => {
-            // Debug logging for image display
-            console.log('🎨 Rendering image card:', {
-              id: image.id,
-              fileName: image.fileName,
-              storageType: image.storageType,
-              url: image.url,
-              displayUrlPreview: image.displayUrl?.substring(0, 50) + '...',
-              isPlaceholder: image.displayUrl === PLACEHOLDER_IMAGE,
-            })
-
             return (
               <Grid2 key={image.id} size={{ xs: 12, sm: 6, md: 4 }}>
                 <Card

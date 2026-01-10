@@ -22,14 +22,6 @@ export async function POST(req: NextRequest) {
   const timestamp = new Date().toISOString()
   const isProduction = process.env.NODE_ENV === 'production'
 
-  console.log('=== POST /api/user/recordActivity called ===', {
-    requestId,
-    timestamp,
-    url: req.url,
-    method: req.method,
-    environment: process.env.NODE_ENV,
-  })
-
   // use shared prisma client
 
   try {
@@ -37,13 +29,6 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json()
     const { userId, activityType = 'view_streaks' } = body
-
-    console.log('Request body parsed:', {
-      requestId,
-      userId,
-      activityType,
-      timestamp,
-    })
 
     if (!userId) {
       return NextResponse.json(
@@ -79,13 +64,6 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    console.log('User verified:', {
-      requestId,
-      userId,
-      userEmail: user.email,
-      timestamp,
-    })
-
     // Record today's activity if not already recorded
     const today = new Date()
     const startOfToday = new Date(
@@ -107,14 +85,6 @@ export async function POST(req: NextRequest) {
       999
     )
 
-    console.log('Checking for existing login record today:', {
-      requestId,
-      userId,
-      startOfToday: startOfToday.toISOString(),
-      endOfToday: endOfToday.toISOString(),
-      timestamp,
-    })
-
     // Check if user already has a login record for today
     const existingLoginToday = await prisma.userLogin.findFirst({
       where: {
@@ -130,11 +100,6 @@ export async function POST(req: NextRequest) {
 
     if (!existingLoginToday) {
       // Create new login record for today
-      console.log('Creating new login record for today:', {
-        requestId,
-        userId,
-        timestamp,
-      })
 
       await prisma.userLogin.create({
         data: {
@@ -144,37 +109,11 @@ export async function POST(req: NextRequest) {
       })
 
       loginRecorded = true
-      console.log('Login record created successfully:', {
-        requestId,
-        userId,
-        timestamp,
-      })
-    } else {
-      console.log('Login already recorded for today:', {
-        requestId,
-        userId,
-        existingLoginId: existingLoginToday.id,
-        existingLoginDate: existingLoginToday.loginDate.toISOString(),
-        timestamp,
-      })
     }
 
     // Calculate updated streak information
-    console.log('Calculating updated streak information:', {
-      requestId,
-      userId,
-      timestamp,
-    })
 
     const streakData = await calculateLoginStreak(userId)
-
-    console.log('Activity recording completed successfully:', {
-      requestId,
-      userId,
-      loginRecorded,
-      streakData,
-      timestamp,
-    })
 
     return NextResponse.json({
       success: true,
@@ -224,10 +163,6 @@ export async function POST(req: NextRequest) {
 
 async function calculateLoginStreak(userId: string) {
   const functionStartTime = Date.now()
-  console.log('=== calculateLoginStreak called from recordActivity ===', {
-    userId,
-    timestamp: new Date().toISOString(),
-  })
 
   try {
     // Get user's login events ordered by date (most recent first)
@@ -237,12 +172,6 @@ async function calculateLoginStreak(userId: string) {
       select: {
         loginDate: true,
       },
-    })
-
-    console.log('UserLogin query completed:', {
-      userId,
-      eventsCount: loginEvents.length,
-      timestamp: new Date().toISOString(),
     })
 
     if (loginEvents.length === 0) {
@@ -330,13 +259,6 @@ async function calculateLoginStreak(userId: string) {
     }
 
     const totalTime = Date.now() - functionStartTime
-
-    console.log('Streak calculation completed in recordActivity:', {
-      userId,
-      result,
-      totalTimeMs: totalTime,
-      timestamp: new Date().toISOString(),
-    })
 
     return result
   } catch (error) {

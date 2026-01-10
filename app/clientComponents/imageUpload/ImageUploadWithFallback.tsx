@@ -317,12 +317,6 @@ export default function ImageUploadWithFallback({
       }
     }
 
-    console.log('🚀 Starting cloud upload...', {
-      fileName: selectedFile ? selectedFile.name : null,
-      fileSize: selectedFile ? selectedFile.size : null,
-      userId: session.user.id,
-    })
-
     setUploading(true)
     setError(null)
 
@@ -362,34 +356,19 @@ export default function ImageUploadWithFallback({
         }
       }
 
-      console.log('� Upload API Response:', {
-        ok: response.ok,
-        status: response.status,
-        statusText: response.statusText,
-        data,
-      })
-
       // SUCCESS: Cloud upload worked
       if (response.ok) {
-        console.log('✅ Cloud upload successful!')
         onImageUploaded?.(data)
         handleClose()
         return
       }
 
       // FAILURE: Cloud upload failed
-      console.log('❌ Cloud upload failed with status:', response.status)
 
       // Check if we should offer fallback
       const shouldOfferFallback = data && data.canFallbackToLocal === true
-      console.log('🔍 Fallback check:', {
-        hasData: !!data,
-        canFallbackValue: data?.canFallbackToLocal,
-        shouldOfferFallback,
-      })
 
       if (shouldOfferFallback) {
-        console.log('✅ Showing fallback dialog...')
         setFallbackDialog({
           open: true,
           error: data.error || 'Cloud upload failed',
@@ -400,7 +379,6 @@ export default function ImageUploadWithFallback({
         setUploading(false)
         return
       } else {
-        console.log('❌ No fallback available, throwing error')
         throw new Error(data?.error || 'Upload failed')
       }
     } catch (error) {
@@ -408,7 +386,6 @@ export default function ImageUploadWithFallback({
 
       // For network errors, offer fallback
       if (error instanceof TypeError && error.message.includes('fetch')) {
-        console.log('🌐 Network error detected, showing fallback dialog')
         setFallbackDialog({
           open: true,
           error: 'Network connection failed',

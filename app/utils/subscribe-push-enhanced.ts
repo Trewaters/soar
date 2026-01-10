@@ -232,10 +232,6 @@ async function registerServiceWorkerWithRetry(): Promise<ServiceWorkerRegistrati
         throw new Error('Service worker failed to become active')
       }
 
-      console.log(
-        '🎉 Service Worker is ready and active:',
-        activeWorker.state || readyRegistration.active?.state
-      )
       return readyRegistration
     } catch (error) {
       console.error(
@@ -689,10 +685,6 @@ export async function enablePushNotificationsEnhanced(): Promise<{
       window.location.hostname === 'happyyoga.app'
 
     if (isProduction && errorAnalysis.errorType === 'AbortError') {
-      console.log(
-        'Production AbortError detected - activating email reminder fallback'
-      )
-
       // Log additional production diagnostic info
       diagnostics.productionFallback = {
         reason: 'Persistent AbortError in production',

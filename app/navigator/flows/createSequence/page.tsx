@@ -219,14 +219,9 @@ export default function Page() {
         throw new Error('Network response was not ok')
       }
       const data = await response.json()
-      console.log('create sequence response', data)
 
       // Ensure the sequence was created successfully before navigating
       if (data.sequence) {
-        console.log(
-          'Sequence created successfully:',
-          data.sequence.nameSequence
-        )
         // Navigate to the newly created sequence detail page
         router.push(`/navigator/sequences/${data.sequence.id}`)
       } else {

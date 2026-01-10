@@ -281,7 +281,6 @@ jest.mock('@lib/seriesService', () => ({
   getAllSeries: jest.fn().mockImplementation(async () => {
     // Debug log to help diagnose test-only behavior
     // eslint-disable-next-line no-console
-    console.log('DEBUG: jest.setup getAllSeries called')
     const timestamp = Date.now()
     // Use the global fetch (which individual tests may override)
     const res = await (global as any).fetch(`/api/series?ts=${timestamp}`, {

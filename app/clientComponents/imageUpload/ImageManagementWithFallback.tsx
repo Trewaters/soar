@@ -91,7 +91,6 @@ export default function ImageManagementWithFallback({
   }
 
   const handleImageUploaded = (image: PoseImageData) => {
-    console.log('Image uploaded:', image)
     // Refresh the gallery
     setRefreshGallery((prev) => prev + 1)
     // Switch to gallery tab to show the new image

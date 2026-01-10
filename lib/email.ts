@@ -12,11 +12,6 @@ export async function sendReminderEmail(
 ) {
   // For testing without Resend API key, log to console
   if (!resend) {
-    console.log('📧 [EMAIL SIMULATION] Would send email:')
-    console.log('To:', to)
-    console.log('Subject:', subject)
-    console.log('HTML Preview:', html.substring(0, 200) + '...')
-
     // In development, throw error to make it clear API key is needed
     if (process.env.NODE_ENV === 'development') {
       const error =
@@ -37,11 +32,6 @@ export async function sendReminderEmail(
       html,
     })
 
-    console.log('Email sent successfully:', {
-      to,
-      subject,
-      id: result.data?.id,
-    })
     return result
   } catch (error) {
     console.error('Failed to send email via Resend:', error)

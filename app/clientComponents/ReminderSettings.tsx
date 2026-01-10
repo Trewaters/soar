@@ -895,11 +895,6 @@ export default function ReminderSettings({
                   onClick={() => {
                     // Environment diagnostic logging (intentional)
                     console.clear()
-                    console.log('🧘‍♀️ ENVIRONMENT INFO:')
-                    console.log(
-                      '- VAPID Key:',
-                      !!process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY
-                    )
                   }}
                 >
                   Environment Info

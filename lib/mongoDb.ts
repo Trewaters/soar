@@ -1,9 +1,6 @@
 // This approach is taken from https://github.com/vercel/next.js/tree/canary/examples/with-mongodb
 import { MongoClient, ServerApiVersion } from 'mongodb'
 
-// console.log('MONGODB_URI_v2:', process.env.MONGODB_URI_v2)
-// console.log('DATABASE_URL:', process.env.DATABASE_URL)
-
 // Check for environment variables in order of preference
 const mongoUri =
   process.env.DATABASE_URL ||

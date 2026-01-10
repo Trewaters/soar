@@ -8,7 +8,6 @@ export default function ImageUploadFallbackDemo() {
   const { data: session, status } = useSession()
 
   const handleImageUploaded = (image: any) => {
-    console.log('✅ Demo: Image uploaded/saved:', image)
     alert(
       `✅ Image saved successfully: ${image.fileName} (${image.storageType || 'CLOUD'} storage)`
     )
@@ -16,7 +15,6 @@ export default function ImageUploadFallbackDemo() {
 
   // Force a test error for debugging
   const handleTestError = () => {
-    console.log('🧪 Triggering test upload error...')
     // This will help us test the fallback without needing an actual file
     const testUpload = async () => {
       try {
@@ -25,10 +23,8 @@ export default function ImageUploadFallbackDemo() {
           // Send empty form data to trigger an error
           body: new FormData(),
         })
-        const data = await response.json()
-        console.log('Test error response:', { response: response.status, data })
       } catch (error) {
-        console.log('Test error caught:', error)
+        console.error('Test error caught:', error)
       }
     }
     testUpload()

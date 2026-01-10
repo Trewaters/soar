@@ -46,7 +46,6 @@ export default function Page() {
     // Check for refresh parameter in URL
     const urlParams = new URLSearchParams(window.location.search)
     if (urlParams.has('refresh')) {
-      console.log('Refresh parameter detected, forcing data reload...')
       // Remove the refresh parameter from URL without page reload
       const newUrl = window.location.pathname
       window.history.replaceState({}, '', newUrl)
@@ -65,7 +64,6 @@ export default function Page() {
   }, [fetchData])
 
   const handlePopState = useCallback(() => {
-    console.log('Navigation detected, refreshing pose data...')
     fetchData()
   }, [fetchData])
 

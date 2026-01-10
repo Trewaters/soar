@@ -147,8 +147,6 @@ const TextInputField = React.memo(
         (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
           const value = event.target.value
           onChange?.(event, value)
-
-          console.log('TextInputField onChange:', value)
         },
         [onChange]
       )

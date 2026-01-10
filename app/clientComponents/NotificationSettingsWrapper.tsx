@@ -25,8 +25,6 @@ interface NotificationPreferencesData {
 }
 
 export default function NotificationSettingsWrapper() {
-  console.log('NotificationSettingsWrapper mounted')
-
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [reminderData, setReminderData] = useState<any>(null)
@@ -98,8 +96,6 @@ export default function NotificationSettingsWrapper() {
   // Save preferences to API whenever they change
   const savePreferences = useCallback(
     async (newPreferences: NotificationPreferencesData) => {
-      console.log('💾 Saving preferences to server:', newPreferences)
-
       try {
         const payload = {
           // Preserve existing reminder settings
@@ -111,8 +107,6 @@ export default function NotificationSettingsWrapper() {
           // Update notification preferences
           notificationPreferences: newPreferences,
         }
-
-        console.log('📤 POST payload:', payload)
 
         const response = await fetch('/api/reminders', {
           method: 'POST',
@@ -126,8 +120,6 @@ export default function NotificationSettingsWrapper() {
           throw new Error('Failed to save notification preferences')
         }
 
-        const result = await response.json()
-        console.log('✅ Save successful:', result)
         setError(null)
       } catch (err) {
         console.error('❌ Error saving notification preferences:', err)
@@ -140,11 +132,6 @@ export default function NotificationSettingsWrapper() {
 
   const handlePreferencesChange = useCallback(
     (newPreferences: NotificationPreferencesData) => {
-      console.log('🔄 Preferences changing:', {
-        from: preferences,
-        to: newPreferences,
-      })
-
       // Update local state immediately for responsive UI
       setPreferences(newPreferences)
 

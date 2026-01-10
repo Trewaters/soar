@@ -40,11 +40,8 @@ export default function NotificationPreferences({
   preferences,
   onPreferencesChange,
 }: NotificationPreferencesProps) {
-  console.log('NotificationPreferences rendered with:', preferences)
-
   const handleInAppToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked
-    console.log('In-App toggle:', preferences.inApp, '->', newValue)
 
     onPreferencesChange({
       ...preferences,
@@ -54,7 +51,6 @@ export default function NotificationPreferences({
 
   const handleEmailToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.checked
-    console.log('Email toggle:', preferences.email, '->', newValue)
 
     onPreferencesChange({
       ...preferences,
@@ -66,15 +62,6 @@ export default function NotificationPreferences({
     key: keyof NotificationPreferencesData['inAppSubPreferences'],
     value: boolean
   ) => {
-    console.log(
-      'In-App sub-pref',
-      key,
-      ':',
-      preferences.inAppSubPreferences[key],
-      '->',
-      value
-    )
-
     onPreferencesChange({
       ...preferences,
       inAppSubPreferences: {
@@ -88,15 +75,6 @@ export default function NotificationPreferences({
     key: keyof NotificationPreferencesData['emailSubPreferences'],
     value: boolean
   ) => {
-    console.log(
-      'Email sub-pref',
-      key,
-      ':',
-      preferences.emailSubPreferences[key],
-      '->',
-      value
-    )
-
     onPreferencesChange({
       ...preferences,
       emailSubPreferences: {

@@ -59,14 +59,8 @@ export async function GET(request: NextRequest) {
           whereClause.created_by = {
             in: alphaUserIds,
           }
-          console.log(
-            `No user session, showing only alpha user sequences: ${alphaUserIds.join(', ')}`
-          )
         } else {
           // No alpha users configured, return empty result for unauthenticated users
-          console.log(
-            'No alpha users configured and no user session, returning empty result'
-          )
           return NextResponse.json([], {
             headers: {
               'Content-Type': 'application/json',

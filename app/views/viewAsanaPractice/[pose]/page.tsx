@@ -64,26 +64,17 @@ export default function ViewAsanaPractice({
   }, [state.watch.elapsedTime])
 
   const handlePlayPause = () => {
-    console.log('handlePlayPause called, current state:', {
-      isPaused: state.watch.isPaused,
-      isRunning: state.watch.isRunning,
-      elapsedTime: state.watch.elapsedTime,
-    })
-
     if (state.watch.isPaused) {
       // Timer is currently paused - start or resume
       if (state.watch.elapsedTime === 0 && !state.watch.isRunning) {
         // Starting from beginning
-        console.log('Starting timer from beginning')
         dispatch({ type: 'START_TIMER' })
       } else {
         // Resuming from pause
-        console.log('Resuming timer from pause')
         dispatch({ type: 'RESUME_TIMER' })
       }
     } else {
       // Timer is currently running - pause it
-      console.log('Pausing timer')
       dispatch({ type: 'PAUSE_TIMER' })
     }
   }

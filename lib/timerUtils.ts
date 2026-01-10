@@ -29,7 +29,6 @@ export function startTimer(name: string): void {
  * @returns TimerEntry with duration information, or null if failed
  */
 export function stopTimer(name: string): TimerEntry | null {
-  console.log(`Timer "${name}" stopped - using react-use-precision-timer`)
   return {
     entryType: 'measure',
     startTime: Date.now(),

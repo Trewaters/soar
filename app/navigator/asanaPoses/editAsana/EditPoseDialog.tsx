@@ -261,8 +261,6 @@ export default function EditPoseDialog({
         throw new Error(errorData.error || 'Failed to update image order')
       }
 
-      console.log('Image order updated successfully')
-
       onSave()
       onClose()
     } catch (error: Error | any) {
@@ -289,7 +287,6 @@ export default function EditPoseDialog({
 
     try {
       await deletePose(pose.id)
-      console.log('Pose deleted successfully')
       onSave() // This will trigger a refetch in the parent
       onClose()
     } catch (error: Error | any) {

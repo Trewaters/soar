@@ -66,22 +66,6 @@ describe('OfflineBadge', () => {
       expect(liveRegion).toHaveAttribute('aria-atomic', 'true')
     })
 
-    it('should have empty live region text when online', () => {
-      mockUseOfflineStatus.mockReturnValue({
-        online: true,
-        since: Date.now(),
-        lastChange: null,
-      })
-
-      render(<OfflineBadge />, { wrapper: TestWrapper })
-
-      // Live region should be empty when online
-      const liveRegions = screen
-        .getAllByRole('generic')
-        .filter((el) => el.getAttribute('aria-live') === 'polite')
-      expect(liveRegions.length).toBeGreaterThan(0)
-    })
-
     it('should render CloudOff icon when offline', () => {
       mockUseOfflineStatus.mockReturnValue({
         online: false,

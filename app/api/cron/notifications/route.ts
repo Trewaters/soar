@@ -45,7 +45,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    console.log('=== Notification Cron Job Started ===')
     const startTime = Date.now()
 
     const results = {
@@ -57,7 +56,6 @@ export async function GET(request: NextRequest) {
     }
 
     // 1. Check Daily Practice Reminders
-    console.log('Checking daily practice reminders...')
     try {
       const usersNeedingReminders = await checkDailyPracticeReminders()
       results.dailyPractice.checked = usersNeedingReminders.length
@@ -83,7 +81,6 @@ export async function GET(request: NextRequest) {
     }
 
     // 2. Check Login Streaks
-    console.log('Checking login streaks...')
     try {
       const loginStreakUsers = await checkLoginStreaks()
       results.loginStreak.checked = loginStreakUsers.length
@@ -113,7 +110,6 @@ export async function GET(request: NextRequest) {
     }
 
     // 3. Check Activity Streaks
-    console.log('Checking activity streaks...')
     try {
       const activityStreakUsers = await checkActivityStreaks()
       results.activityStreak.checked = activityStreakUsers.length
@@ -143,7 +139,6 @@ export async function GET(request: NextRequest) {
     }
 
     // 4. Check Progress Milestones
-    console.log('Checking progress milestones...')
     try {
       const milestoneUsers = await checkProgressMilestones()
       results.progressMilestones.checked = milestoneUsers.length
@@ -173,7 +168,6 @@ export async function GET(request: NextRequest) {
     }
 
     // 5. Check Feature Announcements
-    console.log('Checking feature announcements...')
     try {
       const announcements = await checkNewFeatureAnnouncements()
       let totalUsers = 0
@@ -208,8 +202,6 @@ export async function GET(request: NextRequest) {
     }
 
     const duration = Date.now() - startTime
-    console.log(`=== Notification Cron Job Completed in ${duration}ms ===`)
-    console.log('Results:', JSON.stringify(results, null, 2))
 
     return NextResponse.json({
       success: true,

@@ -279,8 +279,6 @@ export default function Page() {
 
       // Link uploaded images to the newly created pose
       if (initialUploadedImages.length > 0) {
-        console.log('Linking uploaded images to new pose:', data.id)
-
         try {
           const linkPromises = initialUploadedImages.map(async (image) => {
             const response = await fetch(`/api/images/link`, {
@@ -299,13 +297,10 @@ export default function Page() {
               console.error(
                 `Failed to link image ${image.id} to pose ${data.id}`
               )
-            } else {
-              console.log(`✅ Linked image ${image.id} to pose ${data.id}`)
             }
           })
 
           await Promise.allSettled(linkPromises)
-          console.log('Image linking process completed')
         } catch (linkError) {
           console.error('Error linking images to pose:', linkError)
           // Don't fail the entire creation process for image linking issues
@@ -351,15 +346,10 @@ export default function Page() {
 
       // If pose creation failed and we have uploaded images, clean them up
       if (initialUploadedImages.length > 0) {
-        console.log(
-          'Cleaning up uploaded images due to pose creation failure...'
-        )
-
         // Use Promise.allSettled to attempt deletion of all images even if some fail
         const deletePromises = initialUploadedImages.map(async (image) => {
           try {
             await deletePoseImage(image.id)
-            console.log(`✅ Deleted orphaned image: ${image.id}`)
             return { success: true, imageId: image.id }
           } catch (deleteError) {
             console.error(

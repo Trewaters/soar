@@ -75,9 +75,6 @@ export async function POST() {
             status: 'linked',
           })
         } else {
-          console.log(
-            `❌ No matching asana found for image ${image.id} with poseName: "${imageName}"`
-          )
           errorCount++
           results.push({
             imageId: image.id,

@@ -18,14 +18,6 @@ export async function GET(request: NextRequest) {
   const currentUserId = session?.user?.id
   const alphaUserIds = getAlphaUserIds()
 
-  console.log('🔍 /api/poses: Request details:', {
-    currentUserEmail,
-    alphaUserIds,
-    sortEnglishName,
-    id,
-    createdBy,
-  })
-
   // Handle ID lookup first (if provided)
   if (id) {
     try {
@@ -149,14 +141,12 @@ export async function GET(request: NextRequest) {
     }
 
     // Query the AsanaPose model
-    console.log('📊 Querying AsanaPose with whereClause:', whereClause)
     const data = await prisma.asanaPose.findMany({
       where: whereClause,
       orderBy: {
         created_on: 'desc', // Show newest first to help verify new creations
       },
     })
-    console.log('✅ Query completed, found:', data.length, 'poses')
 
     // Type definitions for the poses API
     interface AsanaPose {
@@ -184,16 +174,6 @@ export async function GET(request: NextRequest) {
     }
 
     // The selected code with proper typing
-    console.log('📊 /api/poses: Query results:', {
-      whereClause,
-      totalFound: data.length,
-      recentAsanas: data.slice(0, 3).map((asana: AsanaPose) => ({
-        id: asana.id,
-        english_names: asana.english_names,
-        created_by: asana.created_by,
-        created_on: asana.created_on,
-      })),
-    } as QueryLogData)
 
     const dataWithId = data.map((item: { breath: string | any[] | null }) => ({
       ...item,

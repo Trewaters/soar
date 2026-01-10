@@ -457,11 +457,6 @@ export async function getDashboardStats(
   const debugPrefix = '[DashboardService Debug]'
   const startTime = Date.now()
 
-  console.log(`${debugPrefix} getDashboardStats called`, {
-    userId,
-    timestamp: new Date().toISOString(),
-  })
-
   try {
     const [
       loginStreak,
@@ -515,17 +510,6 @@ export async function getDashboardStats(
       }),
     ])
 
-    console.log(`${debugPrefix} All stats fetched`, {
-      userId,
-      loginStreak,
-      activityStreak,
-      practiceHistoryLength: practiceHistory.length,
-      mostCommonAsanasLength: mostCommonAsanas.length,
-      mostCommonSeriesLength: mostCommonSeries.length,
-      mostCommonSequencesLength: mostCommonSequences.length,
-      elapsedMs: Date.now() - startTime,
-    })
-
     // Calculate next goal based on current month's practice
     const currentMonthDays =
       practiceHistory[practiceHistory.length - 1]?.days || 0
@@ -544,11 +528,6 @@ export async function getDashboardStats(
         100
       ),
     }
-
-    console.log(`${debugPrefix} getDashboardStats complete`, {
-      userId,
-      elapsedMs: Date.now() - startTime,
-    })
 
     return {
       loginStreak,
