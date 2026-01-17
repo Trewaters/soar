@@ -39,6 +39,102 @@ const nextConfig = {
 
     return config
   },
+  // Add aggressive cache-busting headers
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          // HTML: no-cache to check for updates on every load
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+          // X-Content-Type-Options: prevent MIME sniffing
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          // Next.js static assets: aggressive long-term caching with version hash
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/sw.js',
+        headers: [
+          // Service Worker: never cache, always check for updates
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
+          {
+            key: 'Pragma',
+            value: 'no-cache',
+          },
+          {
+            key: 'Expires',
+            value: '0',
+          },
+        ],
+      },
+      {
+        source: '/manifest.json',
+        headers: [
+          // Manifest: check for updates frequently
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+        ],
+      },
+      {
+        source: '/api/:path*',
+        headers: [
+          // API responses: no cache, always fresh
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate, private',
+          },
+          {
+            key: 'Pragma',
+            value: 'no-cache',
+          },
+          {
+            key: 'Expires',
+            value: '0',
+          },
+        ],
+      },
+      {
+        source: '/icon-:size(.*)',
+        headers: [
+          // App icons: cache but validate
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, must-revalidate',
+          },
+        ],
+      },
+      {
+        source: '/offline',
+        headers: [
+          // Offline page: no cache
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
+        ],
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

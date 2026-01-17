@@ -30,7 +30,8 @@
       "@prismaSchema/*": ["./prisma/*"],
       "@providers/*": ["./app/providers/*"],
       "@serverComponents/*": ["./components/*"],
-      "@styles/*": ["./styles/*"]
+      "@styles/*": ["./styles/*"],
+      "@utils/*": ["./utils/*"]
     },
     "moduleResolution": "node",
     "resolveJsonModule": true

@@ -1,6 +1,12 @@
 'use client'
 
 import { useEffect } from 'react'
+import {
+  monitorServiceWorkerUpdates,
+  checkAndApplyUpdates,
+  clearAllCaches,
+  requestServiceWorkerClearCache,
+} from '../utils/cacheBuster'
 
 export default function ServiceWorkerRegister() {
   useEffect(() => {
@@ -34,15 +40,45 @@ export default function ServiceWorkerRegister() {
           return
         }
 
-        const reg = await navigator.serviceWorker.register('/sw.js', {
-          scope: '/',
-          type: 'classic',
-        })
+        const reg = await navigator.serviceWorker.register(
+          '/sw.js?cb=' + new Date().getTime(),
+          {
+            scope: '/',
+            type: 'classic',
+          }
+        )
         // Optional: log lifecycle
         reg.addEventListener?.('updatefound', () => {
           // eslint-disable-next-line no-console
-          console.log('[SW] Update found')
+          console.log('[SW] Update found, triggering cache clear')
+          // Clear caches when update is found
+          requestServiceWorkerClearCache().catch((e) =>
+            console.warn('[SW] Failed to clear cache on update:', e)
+          )
         })
+
+        // Monitor for Service Worker updates
+        monitorServiceWorkerUpdates(() => {
+          console.log('[SW] Cache cleared, triggering page reload')
+          // Optionally reload page after cache clear
+          setTimeout(() => {
+            window.location.reload()
+          }, 500)
+        })
+
+        // Check for updates periodically
+        const updateCheckInterval = setInterval(async () => {
+          const hasUpdate = await checkAndApplyUpdates(false)
+          if (hasUpdate) {
+            console.log('[SW] Update detected, clearing cache')
+            await clearAllCaches()
+            clearInterval(updateCheckInterval)
+            // Give user time to see notification before reload
+            setTimeout(() => {
+              window.location.reload()
+            }, 1000)
+          }
+        }, 60000) // Check every minute
         // Listen for messages from the service worker and re-broadcast as a
         // CustomEvent on window so application components can react to
         // INVALIDATE_URLS messages without directly depending on navigator APIs.

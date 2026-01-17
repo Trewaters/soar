@@ -3,9 +3,10 @@
   Clean, single-file service worker.
 */
 
-const CACHE_VERSION = 'v6'
+const CACHE_VERSION = 'v7'
 const CACHE_NAME = `soar-offline-${CACHE_VERSION}`
-const SW_VERSION = '2.0.3'
+const SW_VERSION = '3.0.0'
+const CACHE_BUST_TIMESTAMP = new Date().getTime()
 
 const PRECACHE_URLS = [
   '/',
@@ -14,6 +15,18 @@ const PRECACHE_URLS = [
   '/icon-192x192.png',
   '/icon-512x512.png',
 ]
+
+// Cache control configuration - aggressive busting
+const CACHE_CONTROL_CONFIG = {
+  // HTML, CSS, JS: network-first with short cache
+  assets: 1000 * 60, // 1 minute
+  // API responses: always revalidate
+  api: 0,
+  // Images: cache but check occasionally
+  images: 1000 * 60 * 5, // 5 minutes
+  // Static files: cache but with version check
+  static: 1000 * 60 * 10, // 10 minutes
+}
 
 function isSameOrigin(url) {
   try {
@@ -32,6 +45,24 @@ function isJsonRequest(request) {
   } catch (e) {
     return false
   }
+}
+
+function addCacheBustParam(url) {
+  try {
+    const u = new URL(url)
+    // Add cache bust parameter if not already present
+    if (!u.searchParams.has('cb')) {
+      u.searchParams.set('cb', CACHE_BUST_TIMESTAMP)
+    }
+    return u.toString()
+  } catch (e) {
+    return url
+  }
+}
+
+function isCacheExpired(timestamp, maxAge) {
+  if (!timestamp) return true
+  return new Date().getTime() - timestamp > maxAge
 }
 
 self.addEventListener('install', function (event) {
@@ -56,12 +87,26 @@ self.addEventListener('activate', function (event) {
       .then(function (keys) {
         return Promise.all(
           keys.map(function (key) {
+            // Delete all old cache versions
             if (key !== CACHE_NAME && key.startsWith('soar-offline-')) {
+              console.log('[SW] Deleting old cache:', key)
               return caches.delete(key)
             }
             return Promise.resolve()
           })
         )
+      })
+      .then(function () {
+        // Clear current cache and repopulate to ensure fresh content
+        return caches.delete(CACHE_NAME)
+      })
+      .then(function () {
+        // Repopulate with fresh precache URLs
+        return caches.open(CACHE_NAME).then(function (cache) {
+          return cache.addAll(PRECACHE_URLS).catch(function (e) {
+            console.warn('[SW] Precache refresh failed:', e)
+          })
+        })
       })
       .then(function () {
         return self.clients.claim()
@@ -75,14 +120,19 @@ self.addEventListener('fetch', function (event) {
 
   if (request.mode === 'navigate') {
     event.respondWith(
+      // Network-first for navigation: always try network first for HTML
       fetch(request)
         .then(function (networkResponse) {
-          return caches.open(CACHE_NAME).then(function (cache) {
-            cache.put(request, networkResponse.clone())
+          // Validate response is HTML
+          const contentType = networkResponse.headers.get('content-type') || ''
+          if (contentType.includes('text/html')) {
+            // Don't cache navigation responses, keep them fresh
             return networkResponse
-          })
+          }
+          return networkResponse
         })
         .catch(function () {
+          // Fall back to cached version when offline
           return caches.open(CACHE_NAME).then(function (cache) {
             return cache.match(request).then(function (cached) {
               if (cached) return cached
@@ -102,17 +152,26 @@ self.addEventListener('fetch', function (event) {
     ['script', 'style', 'image', 'font'].indexOf(request.destination) !== -1
   ) {
     event.respondWith(
+      // Stale-while-revalidate: serve cached but also fetch fresh
       caches.open(CACHE_NAME).then(function (cache) {
         return cache.match(request).then(function (cached) {
-          if (cached) return cached
-          return fetch(request)
+          // Fetch fresh copy in background
+          var fetchPromise = fetch(request)
             .then(function (networkResponse) {
-              cache.put(request, networkResponse.clone())
+              // Always update cache with network version
+              if (networkResponse && networkResponse.status === 200) {
+                cache.put(request, networkResponse.clone())
+              }
               return networkResponse
             })
             .catch(function () {
+              // Network failed, return cached or error
+              if (cached) return cached
               return new Response('Offline asset unavailable', { status: 504 })
             })
+
+          // Return cached immediately, or wait for network
+          return cached || fetchPromise
         })
       })
     )
@@ -121,21 +180,33 @@ self.addEventListener('fetch', function (event) {
 
   if (isJsonRequest(request)) {
     event.respondWith(
+      // Network-first for API: always fetch fresh data
       fetch(request)
         .then(function (networkResponse) {
-          return caches.open(CACHE_NAME).then(function (cache) {
-            cache.put(request, networkResponse.clone())
-            return networkResponse
-          })
+          // Only cache successful responses
+          if (networkResponse && networkResponse.status === 200) {
+            return caches.open(CACHE_NAME).then(function (cache) {
+              cache.put(request, networkResponse.clone())
+              return networkResponse
+            })
+          }
+          return networkResponse
         })
         .catch(function () {
+          // Fall back to stale cache if network fails
           return caches.open(CACHE_NAME).then(function (cache) {
             return cache.match(request).then(function (cached) {
-              if (cached) return cached
-              return new Response(JSON.stringify({ offline: true }), {
-                headers: { 'Content-Type': 'application/json' },
-                status: 200,
-              })
+              if (cached) {
+                console.debug('[SW] Using stale API cache for:', request.url)
+                return cached
+              }
+              return new Response(
+                JSON.stringify({ offline: true, error: 'Network unavailable' }),
+                {
+                  headers: { 'Content-Type': 'application/json' },
+                  status: 200,
+                }
+              )
             })
           })
         })
@@ -144,17 +215,24 @@ self.addEventListener('fetch', function (event) {
   }
 
   event.respondWith(
+    // Cache-first with network fallback for other resources
     caches.open(CACHE_NAME).then(function (cache) {
       return cache.match(request).then(function (cached) {
-        if (cached) return cached
-        return fetch(request)
+        // Try network first
+        var fetchPromise = fetch(request)
           .then(function (networkResponse) {
-            cache.put(request, networkResponse.clone())
+            if (networkResponse && networkResponse.status === 200) {
+              cache.put(request, networkResponse.clone())
+            }
             return networkResponse
           })
           .catch(function () {
+            // Network failed, return cached
+            if (cached) return cached
             return new Response('Offline', { status: 503 })
           })
+
+        return fetchPromise
       })
     })
   )
@@ -171,8 +249,47 @@ self.addEventListener('message', function (event) {
   }
   if (event.data && event.data.command === 'GET_VERSION') {
     if (event.ports && event.ports[0]) {
-      event.ports[0].postMessage({ version: SW_VERSION })
+      event.ports[0].postMessage({
+        version: SW_VERSION,
+        cacheVersion: CACHE_VERSION,
+        timestamp: CACHE_BUST_TIMESTAMP,
+      })
     }
+  }
+  if (event.data && event.data.command === 'CLEAR_ALL_CACHES') {
+    event.waitUntil(
+      caches
+        .keys()
+        .then(function (keys) {
+          return Promise.all(
+            keys.map(function (key) {
+              console.log('[SW] Force clearing cache:', key)
+              return caches.delete(key)
+            })
+          )
+        })
+        .then(function () {
+          // Repopulate with fresh precache
+          return caches.open(CACHE_NAME).then(function (cache) {
+            return cache.addAll(PRECACHE_URLS).catch(function (e) {
+              console.warn('[SW] Precache repopulation failed:', e)
+            })
+          })
+        })
+        .then(function () {
+          // Broadcast to all clients
+          return self.clients
+            .matchAll({ includeUncontrolled: true, type: 'window' })
+            .then(function (clientList) {
+              clientList.forEach(function (client) {
+                client.postMessage({
+                  command: 'CACHE_CLEARED',
+                  timestamp: new Date().getTime(),
+                })
+              })
+            })
+        })
+    )
   }
   // Invalidate cached URLs on demand. Client can send:
   // { command: 'INVALIDATE_URLS', urls: ['https://.../api/...'] }

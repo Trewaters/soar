@@ -43,10 +43,13 @@ describe('ServiceWorkerRegister', () => {
       jest.advanceTimersByTime(150)
 
       await waitFor(() => {
-        expect(mockRegister).toHaveBeenCalledWith('/sw.js', {
-          scope: '/',
-          type: 'classic',
-        })
+        expect(mockRegister).toHaveBeenCalledWith(
+          expect.stringMatching(/^\/sw\.js\?cb=\d+$/),
+          {
+            scope: '/',
+            type: 'classic',
+          }
+        )
       })
     })
 
