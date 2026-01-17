@@ -57,28 +57,13 @@ export default function ServiceWorkerRegister() {
           )
         })
 
-        // Monitor for Service Worker updates
+        // Monitor for Service Worker updates (no automatic reload)
         monitorServiceWorkerUpdates(() => {
-          console.log('[SW] Cache cleared, triggering page reload')
-          // Optionally reload page after cache clear
-          setTimeout(() => {
-            window.location.reload()
-          }, 500)
+          console.log('[SW] Cache cleared - update available')
+          // Note: Removed automatic reload to prevent infinite loop
+          // User can manually reload or it will reload on next navigation
         })
 
-        // Check for updates periodically
-        const updateCheckInterval = setInterval(async () => {
-          const hasUpdate = await checkAndApplyUpdates(false)
-          if (hasUpdate) {
-            console.log('[SW] Update detected, clearing cache')
-            await clearAllCaches()
-            clearInterval(updateCheckInterval)
-            // Give user time to see notification before reload
-            setTimeout(() => {
-              window.location.reload()
-            }, 1000)
-          }
-        }, 60000) // Check every minute
         // Listen for messages from the service worker and re-broadcast as a
         // CustomEvent on window so application components can react to
         // INVALIDATE_URLS messages without directly depending on navigator APIs.
