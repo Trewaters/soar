@@ -3,7 +3,7 @@
   Clean, single-file service worker.
 */
 
-const CACHE_VERSION = 'v7'
+const CACHE_VERSION = 'v8'
 const CACHE_NAME = `soar-offline-${CACHE_VERSION}`
 const SW_VERSION = '3.0.0'
 const CACHE_BUST_TIMESTAMP = new Date().getTime()
