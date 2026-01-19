@@ -275,11 +275,9 @@ export default function WeeklyActivityViewer({
     )
   }
 
-  // Only show when there's activity data for the current week
-  // If there's no activity this week, don't render anything (user can still use ActivityTracker)
-  if (!weeklyData || weeklyData.count === 0) {
-    return null
-  }
+  // Always show the tracker, even if there's no activity data
+  const activityCount = weeklyData?.count || 0
+  const activities = weeklyData?.activities || []
 
   if (variant === 'compact') {
     return (
@@ -307,18 +305,18 @@ export default function WeeklyActivityViewer({
           </Stack>
 
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Tooltip title={`${weeklyData.count} times this week`}>
+            <Tooltip title={`${activityCount} times this week`}>
               <Chip
                 icon={<CheckCircleIcon />}
-                label={weeklyData.count}
-                color={getStreakColor(weeklyData.count)}
+                label={activityCount}
+                color={getStreakColor(activityCount)}
                 size="small"
                 variant="outlined"
               />
             </Tooltip>
-            {weeklyData.count > 0 && (
+            {activityCount > 0 && (
               <Tooltip
-                title={`Last performed: ${formatLastPerformed(weeklyData.activities)}`}
+                title={`Last performed: ${formatLastPerformed(activities)}`}
               >
                 <CalendarTodayIcon
                   fontSize="small"
@@ -367,7 +365,7 @@ export default function WeeklyActivityViewer({
         <Stack direction="row" spacing={3} alignItems="center">
           <Box textAlign="center">
             <Typography variant="h3" color="primary.main" fontWeight="bold">
-              {weeklyData.count}
+              {activityCount}
             </Typography>
             <Typography variant="body2" color="text.secondary">
               This Week
@@ -382,19 +380,19 @@ export default function WeeklyActivityViewer({
                 Weekly Streak:
               </Typography>
               <Chip
-                label={getStreakLabel(weeklyData.count)}
-                color={getStreakColor(weeklyData.count)}
+                label={getStreakLabel(activityCount)}
+                color={getStreakColor(activityCount)}
                 size="small"
               />
             </Stack>
 
-            {weeklyData.count > 0 && (
+            {activityCount > 0 && (
               <Stack direction="row" alignItems="center" spacing={2}>
                 <Typography variant="body2" color="text.secondary">
                   Last performed:
                 </Typography>
                 <Typography variant="body2" fontWeight="medium">
-                  {formatLastPerformed(weeklyData.activities)}
+                  {formatLastPerformed(activities)}
                 </Typography>
               </Stack>
             )}
@@ -402,16 +400,15 @@ export default function WeeklyActivityViewer({
         </Stack>
 
         {/* Activity List - Show all activities */}
-        {weeklyData.activities.length > 0 && (
+        {activities.length > 0 && (
           <>
             <Divider />
             <Box>
               <Typography variant="body2" color="text.secondary" gutterBottom>
-                {getActivityListLabel()} ({weeklyData.activities.length}{' '}
-                sessions):
+                {getActivityListLabel()} ({activities.length} sessions):
               </Typography>
               <Stack spacing={1}>
-                {weeklyData.activities.map((activity, index) => (
+                {activities.map((activity, index) => (
                   <Box
                     key={activity.id}
                     sx={{
