@@ -510,23 +510,40 @@ export async function getDashboardStats(
       }),
     ])
 
-    // Calculate next goal based on current month's practice
+    // Calculate next goal based on current month's practice with progressive tiers
     const currentMonthDays =
       practiceHistory[practiceHistory.length - 1]?.days || 0
-    const goalTarget = 30
+    const goalTiers = [30, 60, 90, 180, 365]
+    const ultimateGoal = 365
+
+    // Calculate how many goal tiers have been achieved
+    const tiersAchieved = goalTiers.filter(
+      (tier) => currentMonthDays >= tier
+    ).length
+
+    // Calculate how many times the ultimate goal (365) has been completed
+    const ultimateGoalsCompleted = Math.floor(currentMonthDays / ultimateGoal)
+
+    // Find the next goal tier that hasn't been reached yet
+    const nextGoalTier = goalTiers.find((tier) => currentMonthDays < tier)
+    const goalTarget = nextGoalTier || goalTiers[goalTiers.length - 1]
     const daysRemaining = goalTarget - currentMonthDays
 
     const nextGoal = {
       text:
         daysRemaining > 0
           ? `Practice ${daysRemaining} More ${daysRemaining === 1 ? 'Day' : 'Days'}`
-          : 'Goal Achieved! 🎉',
+          : currentMonthDays >= goalTiers[goalTiers.length - 1]
+            ? 'Ultimate Goal Achieved! 🎉'
+            : 'Goal Achieved! 🎉',
       current: currentMonthDays,
       target: goalTarget,
       progress: Math.min(
         Math.round((currentMonthDays / goalTarget) * 100),
         100
       ),
+      tiersAchieved,
+      ultimateGoalsCompleted,
     }
 
     return {

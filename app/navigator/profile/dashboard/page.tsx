@@ -42,6 +42,8 @@ interface DashboardData {
     current: number
     target: number
     progress: number
+    tiersAchieved: number
+    ultimateGoalsCompleted: number
   }
 }
 
@@ -424,13 +426,38 @@ const Dashboard: React.FC = () => {
                     },
                   }}
                 />
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mt: 1, textAlign: 'right' }}
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ mt: 1 }}
                 >
-                  {nextGoal.current} / {nextGoal.target} days
-                </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {nextGoal.tiersAchieved} goal
+                    {nextGoal.tiersAchieved !== 1 ? 's' : ''} achieved
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {nextGoal.current} / {nextGoal.target} days
+                  </Typography>
+                </Stack>
+                {nextGoal.ultimateGoalsCompleted > 0 && (
+                  <Box sx={{ mt: 2, textAlign: 'center' }}>
+                    <Typography
+                      variant="h6"
+                      color="primary.main"
+                      fontWeight="bold"
+                      sx={{ mb: 1 }}
+                    >
+                      Ultimate Goal Achieved!
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      sx={{ color: theme.palette.warning.main }}
+                    >
+                      {'⭐'.repeat(nextGoal.ultimateGoalsCompleted)}
+                    </Typography>
+                  </Box>
+                )}
               </Box>
             </Paper>
 
