@@ -16,6 +16,7 @@ import Image from 'next/image'
 import { UseUser } from '@app/context/UserContext'
 import { useSession } from 'next-auth/react'
 import ProfileDetails from '@app/clientComponents/profileUi/ProfileDetails'
+import StaticMapImage from '@app/clientComponents/maps/StaticMapImage'
 import theme from '@styles/theme'
 
 import ShareIcon from '@mui/icons-material/Share'
@@ -456,6 +457,15 @@ export default function UserDetails({ onEditClick }: UserDetailsProps) {
             }}
           >
             <ProfileDetails label="My Location" details={userData.location} />
+            {userData.location && (
+              <Box sx={{ mt: 2 }}>
+                <StaticMapImage
+                  location={userData.location}
+                  height={300}
+                  zoom={13}
+                />
+              </Box>
+            )}
           </Paper>
 
           <Paper
