@@ -89,16 +89,16 @@ export default async function PrivacySettingsPage() {
                   variant="body2"
                   sx={{ color: 'text.secondary', mb: 2 }}
                 >
-                  Choose who can see your profile.
+                  Your profile is currently set to Private.
                 </Typography>
                 <FormControl component="fieldset">
                   <RadioGroup
                     aria-label="profile-visibility"
-                    defaultValue="public"
+                    defaultValue="private"
                     name="profile-visibility"
                   >
                     <FormControlLabel
-                      value="public"
+                      value="private"
                       control={
                         <Radio
                           sx={{
@@ -109,7 +109,34 @@ export default async function PrivacySettingsPage() {
                           }}
                         />
                       }
-                      label="Public"
+                      label="Private"
+                    />
+                    <FormControlLabel
+                      value="public"
+                      disabled
+                      control={
+                        <Radio
+                          sx={{
+                            color: 'text.secondary',
+                            '&.Mui-checked': {
+                              color: 'primary.main',
+                            },
+                          }}
+                        />
+                      }
+                      label={
+                        <Box
+                          sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+                        >
+                          <span>Public</span>
+                          <Chip
+                            label="In Development"
+                            size="small"
+                            color="warning"
+                            sx={{ fontSize: '0.65rem', height: '20px' }}
+                          />
+                        </Box>
+                      }
                     />
                     <FormControlLabel
                       value="friends-only"
@@ -129,33 +156,6 @@ export default async function PrivacySettingsPage() {
                           sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                         >
                           <span>Friends Only</span>
-                          <Chip
-                            label="In Development"
-                            size="small"
-                            color="warning"
-                            sx={{ fontSize: '0.65rem', height: '20px' }}
-                          />
-                        </Box>
-                      }
-                    />
-                    <FormControlLabel
-                      value="private"
-                      disabled
-                      control={
-                        <Radio
-                          sx={{
-                            color: 'text.secondary',
-                            '&.Mui-checked': {
-                              color: 'primary.main',
-                            },
-                          }}
-                        />
-                      }
-                      label={
-                        <Box
-                          sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-                        >
-                          <span>Private</span>
                           <Chip
                             label="In Development"
                             size="small"
