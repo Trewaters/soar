@@ -80,7 +80,7 @@ export async function GET() {
       await sendReminderEmail(
         r.user.email,
         'Practice now 🧘',
-        `<p>${r.message}</p><p><a href="https://www.uvuyoga.app/navigator/flows/practiceSeries">Start Practice</a></p>`
+        `<p>${r.message}</p><p><a href="https://www.happyyoga.app/navigator/flows/practiceSeries">Start Practice</a></p>`
       )
     }
 
