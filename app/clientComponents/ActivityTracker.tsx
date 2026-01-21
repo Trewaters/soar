@@ -551,17 +551,18 @@ export default function ActivityTracker({
    * Render difficulty chips section
    */
   const renderDifficultyChips = () => (
-    <Box>
+    <Box
+      textAlign={'center'}
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+    >
       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
         {variant === 'card'
           ? `How was this ${entityType === 'sequence' ? 'sequence' : 'practice'} for you?`
           : 'Difficulty (sets activity tracker difficulty)'}
       </Typography>
-      <Stack
-        direction="row"
-        spacing={1}
-        justifyContent={variant === 'card' ? 'center' : 'flex-start'}
-      >
+      <Stack direction="row" spacing={1} justifyContent="center">
         <Chip
           label="Easy"
           variant={easyChipVariant}
@@ -616,7 +617,7 @@ export default function ActivityTracker({
       direction="row"
       spacing={2}
       alignItems="center"
-      justifyContent={variant === 'card' ? 'center' : 'flex-start'}
+      justifyContent="center"
     >
       <Button
         variant={checked ? 'contained' : 'outlined'}
