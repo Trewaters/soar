@@ -1,96 +1,75 @@
 'use client'
 
 import React from 'react'
-import { Box, Button, Divider, Stack, Typography } from '@mui/material'
+import { Box, Divider, Stack, Typography } from '@mui/material'
 import Image from 'next/image'
 import AsanaActivityList from '@app/clientComponents/AsanaActivityList'
 import ActivityStreaks from '@app/clientComponents/activityStreaks/ActivityStreaks'
 import LandingPage from '@app/clientComponents/landing-page'
-import Link from 'next/link'
-// import { useSession } from 'next-auth/react'
 import { UseUser } from '@app/context/UserContext'
 
 export default function Page() {
   const { state } = UseUser()
 
   return (
-    <>
-      <Stack>
-        <Typography
-          variant="subtitle3"
+    <Stack>
+      <Typography
+        variant="h1"
+        color="primary.main"
+        id="page-title"
+        sx={{ mb: 2, ml: 4 }}
+        alignSelf={'center'}
+      >
+        {(() => {
+          const first = state?.userData?.firstName || ''
+          const last = state?.userData?.lastName || ''
+          const combined = `${first} ${last}`.trim()
+          return `Welcome ${combined || 'Yogi'}`
+        })()}
+      </Typography>
+      <Box
+        textAlign="center"
+        sx={{
+          marginTop: 4,
+          width: { xs: '100%', sm: 'auto', md: '60%' },
+          justifyContent: 'center',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+        }}
+        role="main"
+        aria-labelledby="page-title"
+      >
+        <Image
+          src={'/images/primary/Home-page-yogi.png'}
+          width={207}
+          height={207}
+          quality={100}
+          alt="Illustration of a person practicing yoga"
+        />
+        <ActivityStreaks variant="compact" />
+        <Divider
           color="primary.main"
-          id="page-title"
-          sx={{ mb: 2, ml: 4 }}
-          alignSelf={'center'}
-        >
-          {(() => {
-            const first = state?.userData?.firstName || ''
-            const last = state?.userData?.lastName || ''
-            const combined = `${first} ${last}`.trim()
-            return `Welcome ${combined || 'Yogi'}`
-          })()}
-        </Typography>
-        <Box
           textAlign="center"
-          sx={{
-            marginTop: 4,
-            width: { xs: '100%', sm: 'auto', md: '60%' },
-            justifyContent: 'center',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}
-          role="main"
-          aria-labelledby="page-title"
-        >
-          <Image
-            src={'/images/primary/Home-page-yogi.png'}
-            width={207}
-            height={207}
-            quality={100}
-            alt="Illustration of a person practicing yoga"
-          />
-          <ActivityStreaks variant="compact" />
-          <Divider
-            color="#F6893D"
-            textAlign="center"
-            sx={{ marginLeft: 'auto', marginRight: 'auto', width: '10%' }}
-          />
+          sx={{ marginLeft: 'auto', marginRight: 'auto', width: '10%', mb: 4 }}
+        />
+        <Stack spacing={3}>
+          <Typography variant="body1">Build Your Practice:</Typography>
+          <Typography variant="body2" fontStyle={'italic'}>
+            &quot;From Single Asana to Full Sequences&quot;
+          </Typography>
+          <LandingPage />
+        </Stack>
+        <Stack>
           <Typography
             variant="body1"
             fontWeight="600"
-            sx={{
-              mt: 4,
-              // , mb: 1
-            }}
+            sx={{ mt: 4, mb: 1, width: '80vw' }}
           >
-            Build Your Practice:
+            Your Recent Activity
           </Typography>
-          <Typography
-            variant="body2"
-            // fontWeight="600"
-            fontStyle={'italic'}
-            sx={{
-              // mt: 4,
-              mb: 2,
-            }}
-          >
-            &quot;From Single Asana to Full Sequences&quot;
-          </Typography>
-          <Stack>
-            <LandingPage />
-          </Stack>
-          <Stack sx={{ mt: 4 }}>
-            <Typography
-              variant="body1"
-              fontWeight="600"
-              sx={{ mt: 4, mb: 1, width: '80vw' }}
-            >
-              Your Recent Activity
-            </Typography>
-            <AsanaActivityList />
-          </Stack>
-        </Box>
-      </Stack>
-    </>
+          <AsanaActivityList />
+        </Stack>
+      </Box>
+    </Stack>
   )
 }

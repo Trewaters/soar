@@ -291,8 +291,6 @@ export default function SequenceViewWithEdit({
                 variant="body1"
                 component="span"
                 sx={{
-                  fontWeight: 'bold',
-                  fontSize: '1.25rem',
                   color: 'primary.contrastText',
                 }}
               >

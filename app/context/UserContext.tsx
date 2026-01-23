@@ -269,7 +269,7 @@ export default function UserStateProvider({
         })
       }
     }
-  }, [session, sessionStatus, state.userData, state.userData.email])
+  }, [session, sessionStatus, state.userData.email])
 
   // Detect device capabilities on mount
   useEffect(() => {

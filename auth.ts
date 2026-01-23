@@ -17,16 +17,6 @@ const prisma = new PrismaClient({
   log: ['error', 'warn'],
 })
 
-// Log Prisma client initialization
-console.log('[AUTH] Prisma client initialized')
-console.log('[AUTH] NEXTAUTH_SECRET present:', !!process.env.NEXTAUTH_SECRET)
-console.log('[AUTH] AUTH_SECRET present:', !!process.env.AUTH_SECRET)
-console.log('[AUTH] AUTH_GOOGLE_ID present:', !!process.env.AUTH_GOOGLE_ID)
-console.log(
-  '[AUTH] AUTH_GOOGLE_SECRET present:',
-  !!process.env.AUTH_GOOGLE_SECRET
-)
-
 // Defensive guard: some server Responses (from auth core or edge cases)
 // may have an empty body which causes Response.json() to throw
 // with "Unexpected end of JSON input" when callers assume JSON.
@@ -73,10 +63,7 @@ const providers: Provider[] = [
       isNewAccount: { label: 'Is New Account', type: 'text' },
     },
     authorize: async (credentials) => {
-      console.log('[AUTH] Credentials authorize called')
-
       if (!credentials) {
-        console.log('[AUTH] No credentials provided')
         return null
       }
 
@@ -84,25 +71,13 @@ const providers: Provider[] = [
       const password = credentials.password as string
       const isNewAccount = credentials.isNewAccount === 'true'
 
-      console.log('[AUTH] Attempting auth for:', {
-        email,
-        isNewAccount,
-        hasPassword: !!password,
-      })
-
       try {
-        console.log('[AUTH] Looking up user in database...')
         let user = await prisma.userData.findUnique({
           where: { email: email },
         })
-        console.log(
-          '[AUTH] User lookup result:',
-          user ? { id: user.id, email: user.email } : 'not found'
-        )
 
         // Handle new account creation
         if (isNewAccount && !user) {
-          console.log('[AUTH] Creating new user account...')
           // Create new user
           user = await prisma.userData.create({
             data: {
@@ -128,7 +103,6 @@ const providers: Provider[] = [
           })
 
           // Create provider account with hashed password
-          console.log('[AUTH] User created, creating provider account...')
           const hashedPassword = await hashPassword(password)
           await prisma.providerAccount.create({
             data: {
@@ -142,10 +116,6 @@ const providers: Provider[] = [
             },
           })
 
-          console.log('[AUTH] New account created successfully:', {
-            id: user.id,
-            email: user.email,
-          })
           return {
             id: user.id,
             name: user.name,
@@ -155,12 +125,10 @@ const providers: Provider[] = [
 
         // Handle existing user login
         if (!user) {
-          console.log('[AUTH] User not found for login:', email)
           return null
         }
 
         // Verify password for credentials provider
-        console.log('[AUTH] Looking up provider account for user:', user.id)
         const providerAccount = await prisma.providerAccount.findFirst({
           where: {
             userId: user.id,
@@ -168,38 +136,20 @@ const providers: Provider[] = [
           },
         })
 
-        console.log(
-          '[AUTH] Provider account lookup:',
-          providerAccount
-            ? {
-                provider: providerAccount.provider,
-                hasPassword: !!providerAccount.credentials_password,
-              }
-            : 'not found'
-        )
-
         if (!providerAccount || !providerAccount.credentials_password) {
-          console.log('[AUTH] No credentials provider found for user:', email)
           return null
         }
 
         // Compare provided password with stored hash
-        console.log('[AUTH] Comparing passwords...')
         const isValidPassword = await comparePassword(
           password,
           providerAccount.credentials_password
         )
-        console.log('[AUTH] Password validation result:', isValidPassword)
 
         if (!isValidPassword) {
-          console.log('[AUTH] Invalid password for user:', email)
           return null
         }
 
-        console.log('[AUTH] Login successful for user:', {
-          id: user.id,
-          email: user.email,
-        })
         return {
           id: user.id,
           name: user.name,
@@ -239,40 +189,20 @@ const authConfig = {
       account: any
       profile?: any
     }) {
-      console.log('[AUTH] signIn callback called:', {
-        email: user?.email,
-        provider: account?.provider,
-      })
-
       try {
         const email = user.email
 
         // Skip provider account linking for credentials provider
         if (account?.provider === 'credentials') {
-          console.log('[AUTH] signIn: Credentials provider, returning true')
           return true
         }
 
-        console.log(
-          '[AUTH] signIn: OAuth provider, looking up existing user by email:',
-          email
-        )
         const existingUser = await prisma.userData.findUnique({
           where: { email: email ?? undefined },
         })
-        console.log(
-          '[AUTH] signIn: Existing user lookup result:',
-          existingUser
-            ? { id: existingUser.id, email: existingUser.email }
-            : 'not found'
-        )
 
         if (!existingUser && account) {
           // Create new user with OAuth provider
-          console.log(
-            '[AUTH] signIn: Creating new user with OAuth provider:',
-            account.provider
-          )
           try {
             const newUser = await prisma.userData.create({
               data: {
@@ -305,8 +235,6 @@ const authConfig = {
                     refresh_token: account.refresh_token ?? undefined,
                     access_token: account.access_token ?? undefined,
                     expires_at: account.expires_at ?? undefined,
-                    // add to schema
-                    // expires_in: account.expires_in ?? undefined,
                     token_type: account.token_type ?? undefined,
                     scope: account.scope ?? undefined,
                     id_token: account.id_token ?? undefined,
@@ -316,15 +244,7 @@ const authConfig = {
                     updatedAt: new Date(),
                   },
                 },
-                // create a way to add generic profile schema for unknown providers
-                // profile: {
-                //   create: { ...profile },
-                // },
               },
-            })
-            console.log('[AUTH] signIn: New OAuth user created successfully:', {
-              id: newUser.id,
-              email: newUser.email,
             })
           } catch (error) {
             console.error('[AUTH] signIn: Error creating new user:', error)
@@ -332,9 +252,6 @@ const authConfig = {
           }
         } else if (existingUser && account) {
           // User exists - check if this OAuth provider is already linked
-          console.log(
-            '[AUTH] signIn: User exists, checking for existing provider account'
-          )
           const existingProviderAccount =
             await prisma.providerAccount.findFirst({
               where: {
@@ -342,16 +259,9 @@ const authConfig = {
                 provider: account.provider,
               },
             })
-          console.log(
-            '[AUTH] signIn: Existing provider account:',
-            existingProviderAccount ? 'found' : 'not found'
-          )
 
           if (!existingProviderAccount) {
             // Link new OAuth provider to existing user account
-            console.log(
-              '[AUTH] signIn: Linking new OAuth provider to existing user'
-            )
             try {
               await prisma.providerAccount.create({
                 data: {
@@ -370,9 +280,6 @@ const authConfig = {
                   updatedAt: new Date(),
                 },
               })
-              console.log(
-                `[AUTH] signIn: Linked ${account.provider} account to existing user: ${email}`
-              )
             } catch (error) {
               console.error(
                 '[AUTH] signIn: Error linking OAuth provider to existing user:',
@@ -384,9 +291,6 @@ const authConfig = {
 
           // Update existing user's OAuth provider image if it's missing
           if (user.image && !existingUser.image) {
-            console.log(
-              '[AUTH] signIn: Updating user image from OAuth provider'
-            )
             try {
               await prisma.userData.update({
                 where: { email: email ?? undefined },
@@ -395,9 +299,6 @@ const authConfig = {
                   updatedAt: new Date(),
                 },
               })
-              console.log(
-                `[AUTH] signIn: Updated OAuth provider image for existing user: ${email}`
-              )
             } catch (error) {
               console.error(
                 '[AUTH] signIn: Error updating user OAuth image:',
@@ -407,9 +308,6 @@ const authConfig = {
             }
           }
         }
-        console.log(
-          '[AUTH] signIn: OAuth flow completed successfully, returning true'
-        )
         return true
       } catch (error) {
         console.error(
@@ -420,12 +318,6 @@ const authConfig = {
       }
     },
     async session({ session, token }: { session: any; token: any }) {
-      console.log('[AUTH] Session callback called:', {
-        hasToken: !!token,
-        tokenId: token?.id,
-        tokenEmail: token?.email,
-      })
-
       if (!token || (token as any).userDeleted) {
         console.warn('[AUTH] Session invalidated due to missing user record.', {
           tokenEmail: token?.email,
@@ -458,14 +350,7 @@ const authConfig = {
       session?: any
       account?: any
     }) {
-      console.log('[AUTH] JWT callback called:', {
-        trigger,
-        tokenEmail: token?.email,
-        hasAccount: !!account,
-      })
-
       if ((token as any).userDeleted) {
-        console.log('[AUTH] JWT: Token marked as userDeleted, returning early')
         return token
       }
 
@@ -475,12 +360,10 @@ const authConfig = {
 
       // Set user ID from database if not already set
       if (!token.id && token.email) {
-        console.log('[AUTH] JWT: Looking up user by email:', token.email)
         const user = await prisma.userData.findUnique({
           where: { email: token.email as string },
         })
         if (user) {
-          console.log('[AUTH] JWT: Found user, setting token.id:', user.id)
           token.id = user.id
           token.lastUserCheck = now
         } else {
@@ -531,21 +414,14 @@ const authConfig = {
       }
 
       if (account?.provider === 'google') {
-        console.log('[AUTH] JWT: Google provider, adding access token to JWT')
         return { ...token, accessToken: account.access_token }
       }
       if (account?.provider === 'github') {
-        console.log('[AUTH] JWT: GitHub provider, adding access token to JWT')
         return { ...token, accessToken: account.access_token }
       }
-      console.log('[AUTH] JWT: Returning token:', {
-        id: token.id,
-        email: token.email,
-      })
       return token
     },
     async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
-      console.log('[AUTH] redirect callback:', { url, baseUrl })
       // Ensure the redirect is to a valid location
       if (url.startsWith(baseUrl)) return url
       else if (url.startsWith('/')) return `${baseUrl}${url}`

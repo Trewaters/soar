@@ -118,7 +118,7 @@ export const theme = createTheme({
     https://youtu.be/klXyJWlIzuY?si=tLj2PmYvdjCQwxzu
     */
     h1: {
-      fontSize: '3rem',
+      fontSize: '2rem',
       fontWeight: '900',
       letterSpacing: '0.1rem',
       wordSpacing: '0.1rem',
@@ -149,9 +149,9 @@ export const theme = createTheme({
     },
     body1: { fontSize: '1rem' },
     body2: { fontSize: '.8rem' },
-    subtitle3: { fontSize: '1.5rem', fontWeight: 600 },
     subtitle1: { fontSize: '1.2rem' },
     subtitle2: { fontSize: '1.05rem' },
+    subtitle3: { fontSize: '1.5rem', fontWeight: 600 },
     overline: { fontSize: '0.9rem' },
     caption: { fontSize: '0.9rem' },
     label: { fontSize: '1.8rem' },

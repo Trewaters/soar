@@ -47,7 +47,6 @@ export default function FeedbackPage() {
                 component="h1"
                 sx={{
                   color: theme.palette.success.main,
-                  fontSize: { xs: '1.75rem', md: '2.5rem' },
                 }}
               >
                 Send Feedback

@@ -351,7 +351,6 @@ export default function EditSequence({
         component="h1"
         sx={{
           mb: 3,
-          fontWeight: 600,
           color: 'text.primary',
         }}
       >
