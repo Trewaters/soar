@@ -16,6 +16,20 @@ export default function Page() {
   return (
     <>
       <Stack>
+        <Typography
+          variant="subtitle3"
+          color="primary.main"
+          id="page-title"
+          sx={{ mb: 2, ml: 4 }}
+          alignSelf={'center'}
+        >
+          {(() => {
+            const first = state?.userData?.firstName || ''
+            const last = state?.userData?.lastName || ''
+            const combined = `${first} ${last}`.trim()
+            return `Welcome ${combined || 'Yogi'}`
+          })()}
+        </Typography>
         <Box
           textAlign="center"
           sx={{
@@ -28,19 +42,6 @@ export default function Page() {
           role="main"
           aria-labelledby="page-title"
         >
-          <Typography
-            variant="body1"
-            color="primary.main"
-            id="page-title"
-            sx={{ fontWeight: 600, mb: 2, ml: 4, textAlign: 'start' }}
-          >
-            {(() => {
-              const first = state?.userData?.firstName || ''
-              const last = state?.userData?.lastName || ''
-              const combined = `${first} ${last}`.trim()
-              return `Welcome ${combined || 'Yogi'}`
-            })()}
-          </Typography>
           <Image
             src={'/images/primary/Home-page-yogi.png'}
             width={207}

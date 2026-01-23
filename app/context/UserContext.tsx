@@ -12,7 +12,6 @@ import React, {
 import { useSession } from 'next-auth/react'
 import { isMobileDevice } from '@app/utils/mobileInputHelpers'
 import type {
-  UserData,
   UserGithubProfile,
   UserGoogleProfile,
   UserProfilePageState,
@@ -176,7 +175,6 @@ export default function UserStateProvider({
 
   const [state, dispatch] = useReducer(UserReducer, initial)
   const { data: session, status: sessionStatus } = useSession()
-  // ...existing code...
 
   // Hydrate userData.email from session when authenticated
   useEffect(() => {
@@ -271,7 +269,7 @@ export default function UserStateProvider({
         })
       }
     }
-  }, [session, sessionStatus, state.userData.email])
+  }, [session, sessionStatus, state.userData, state.userData.email])
 
   // Detect device capabilities on mount
   useEffect(() => {
@@ -308,7 +306,6 @@ export default function UserStateProvider({
             (errorText.trim().startsWith('<!DOCTYPE') ||
               errorText.includes('<html'))
           ) {
-            // eslint-disable-next-line no-console
             console.warn(
               'User API returned HTML error page when fetching user data',
               errorText.substring(0, 200)

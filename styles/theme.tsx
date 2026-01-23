@@ -2,19 +2,18 @@ import { CSSProperties } from 'react'
 import { createTheme } from '@mui/material/styles'
 
 declare module '@mui/material/styles' {
-  // eslint-disable-next-line no-unused-vars
   interface TypographyVariants {
     label: CSSProperties
     splashTitle: CSSProperties
+    subtitle3: CSSProperties
   }
 
-  // eslint-disable-next-line no-unused-vars
   interface TypographyVariantsOptions {
     label?: CSSProperties
     splashTitle?: CSSProperties
+    subtitle3?: CSSProperties
   }
 
-  // eslint-disable-next-line no-unused-vars
   interface TypeBackground {
     helper: string
   }
@@ -25,18 +24,36 @@ declare module '@mui/material/styles' {
 }
 
 declare module '@mui/material/Typography' {
-  // eslint-disable-next-line no-unused-vars
   interface TypographyPropsVariantOverrides {
     label: true
     splashTitle: true
+    subtitle3: true
   }
 }
 
+/**
+ * The `mode` property in the palette configuration determines the theme's color scheme.
+ *
+ * In Material-UI (MUI), `mode` can be set to either:
+ * - `'light'`: Applies a light color scheme with dark text on light backgrounds
+ * - `'dark'`: Applies a dark color scheme with light text on dark backgrounds
+ *
+ * This setting affects default colors throughout the application, including:
+ * - Component backgrounds
+ * - Text colors
+ * - Border colors
+ * - Shadow intensities
+ *
+ * When `mode` is changed, MUI automatically adjusts component colors to maintain
+ * proper contrast and readability according to Material Design specifications.
+ *
+ * @see https://mui.com/material-ui/customization/dark-mode/
+ */
 export const theme = createTheme({
   breakpoints: { values: { xs: 0, sm: 384, md: 768, lg: 1024, xl: 1920 } },
   spacing: 4, // Use a simple number multiplier - 4px base unit
   palette: {
-    // mode: 'light',
+    mode: 'light',
     primary: {
       main: '#F6893D',
       light: '#FFBA6F',
@@ -132,6 +149,7 @@ export const theme = createTheme({
     },
     body1: { fontSize: '1rem' },
     body2: { fontSize: '.8rem' },
+    subtitle3: { fontSize: '1.5rem', fontWeight: 600 },
     subtitle1: { fontSize: '1.2rem' },
     subtitle2: { fontSize: '1.05rem' },
     overline: { fontSize: '0.9rem' },
