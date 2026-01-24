@@ -221,7 +221,7 @@ export default function AsanaActivityList() {
                       }}
                     >
                       <WorkspacesIcon
-                        sx={{ fontSize: 18, color: 'secondary.main' }}
+                        sx={{ fontSize: 20, color: 'secondary.main' }}
                       />
                       {activity.seriesName}
                     </Typography>
@@ -240,7 +240,7 @@ export default function AsanaActivityList() {
                       }}
                     >
                       <GroupWorkIcon
-                        sx={{ fontSize: 18, color: 'secondary.main' }}
+                        sx={{ fontSize: 20, color: 'secondary.main' }}
                       />
                       {activity.sequenceName}
                     </Typography>
@@ -263,7 +263,7 @@ export default function AsanaActivityList() {
                       }}
                     >
                       <Brightness1OutlinedIcon
-                        sx={{ fontSize: 18, color: 'secondary.main' }}
+                        sx={{ fontSize: 20, color: 'secondary.main' }}
                       />
                       {activity.asanaName}
                     </Typography>
