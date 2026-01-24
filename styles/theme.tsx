@@ -1,6 +1,18 @@
 import { CSSProperties } from 'react'
 import { createTheme } from '@mui/material/styles'
 
+// Color constants - define once, use everywhere
+const COLORS = {
+  primaryOrange: '#F6893D',
+  primaryOrangeLight: '#FFBA6F',
+  primaryOrangeDark: '#C3581A',
+  secondaryYellow: '#F6B93D',
+  secondaryYellowLight: '#FFD970',
+  secondaryYellowDark: '#C38B1A',
+  textPrimary: '#07020D',
+  textDisabled: '#6c757d',
+} as const
+
 declare module '@mui/material/styles' {
   interface TypographyVariants {
     label: CSSProperties
@@ -20,6 +32,11 @@ declare module '@mui/material/styles' {
 
   interface PaletteOptions {
     navSplash: PaletteOptions['primary']
+  }
+
+  interface TypeText {
+    tertiary?: string
+    hint?: string
   }
 }
 
@@ -55,16 +72,16 @@ export const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#F6893D',
-      light: '#FFBA6F',
-      dark: '#C3581A',
+      main: COLORS.primaryOrange,
+      light: COLORS.primaryOrangeLight,
+      dark: COLORS.primaryOrangeDark,
       contrastText: '#000000',
     },
     secondary: {
-      main: '#F6B93D',
-      light: '#FFD970',
-      dark: '#C38B1A',
-      contrastText: '#07020D',
+      main: COLORS.secondaryYellow,
+      light: COLORS.secondaryYellowLight,
+      dark: COLORS.secondaryYellowDark,
+      contrastText: COLORS.textPrimary,
     },
     error: {
       main: '#D32F2F',
@@ -97,7 +114,7 @@ export const theme = createTheme({
       // used for the background of the splash header titles, '#F8F4F2' is 'rgba(248, 244, 242, 0.5)'
       light: 'rgba(248, 244, 242, 0.5)',
       dark: '#F8F4F2',
-      contrastText: '#07020D',
+      contrastText: COLORS.textPrimary,
     },
     background: {
       default: '#f0f0f0',
@@ -105,9 +122,11 @@ export const theme = createTheme({
       helper: '#fef5e7',
     },
     text: {
-      primary: '#07020D',
-      secondary: '#F6893D',
-      disabled: '#9e9e9e',
+      primary: COLORS.textPrimary,
+      secondary: COLORS.primaryOrange,
+      tertiary: COLORS.secondaryYellow,
+      disabled: COLORS.textDisabled,
+      hint: COLORS.primaryOrangeDark,
     },
   },
   typography: {
