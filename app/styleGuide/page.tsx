@@ -49,6 +49,42 @@ import SearchIcon from '@mui/icons-material/Search'
 import { useState } from 'react'
 import { AsanaPose } from 'types/asana'
 
+/**
+ * Calculate the relative luminance of a color
+ * Based on WCAG 2.0 formula: https://www.w3.org/TR/WCAG20/#relativeluminancedef
+ */
+function getRelativeLuminance(color: string): number {
+  // Handle rgba/rgb colors by extracting hex or converting
+  if (color.startsWith('rgba') || color.startsWith('rgb')) {
+    // For rgba with transparency, return a middle value to use black text
+    return 0.5
+  }
+
+  // Convert hex to RGB
+  const hex = color.replace('#', '')
+  const r = parseInt(hex.substr(0, 2), 16) / 255
+  const g = parseInt(hex.substr(2, 2), 16) / 255
+  const b = parseInt(hex.substr(4, 2), 16) / 255
+
+  // Apply gamma correction
+  const rsRGB = r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4)
+  const gsRGB = g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4)
+  const bsRGB = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4)
+
+  // Calculate relative luminance
+  return 0.2126 * rsRGB + 0.7152 * gsRGB + 0.0722 * bsRGB
+}
+
+/**
+ * Determine whether to use white or black text based on background color
+ * Uses WCAG contrast ratio guidelines
+ */
+function getContrastTextColor(backgroundColor: string): string {
+  const luminance = getRelativeLuminance(backgroundColor)
+  // If luminance is greater than 0.5, use black text, otherwise use white
+  return luminance > 0.5 ? '#000000' : '#FFFFFF'
+}
+
 export default function StyleGuide() {
   const theme = useTheme()
   const [tabValue, setTabValue] = useState(0)
@@ -63,21 +99,21 @@ export default function StyleGuide() {
     'warning',
     'info',
     'success',
+    'navSplash',
+    'text',
+    'background',
   ] as const
   const colors = colorKeys.reduce(
     (acc, colorKey) => {
-      acc[colorKey] = {
-        main: theme.palette[colorKey].main,
-        light: theme.palette[colorKey].light,
-        dark: theme.palette[colorKey].dark,
-        contrastText: theme.palette[colorKey].contrastText,
-      }
+      const paletteValue = theme.palette[colorKey as keyof typeof theme.palette]
+      // Get all color properties dynamically
+      const colorEntries = Object.entries(paletteValue).filter(
+        ([_, value]) => typeof value === 'string'
+      )
+      acc[colorKey] = Object.fromEntries(colorEntries)
       return acc
     },
-    {} as Record<
-      string,
-      { main: string; light: string; dark: string; contrastText: string }
-    >
+    {} as Record<string, Record<string, string>>
   )
 
   // Sample data for components
@@ -331,49 +367,37 @@ export default function StyleGuide() {
                     {colorName}
                   </Typography>
                   <Stack spacing={1}>
-                    {Object.entries(colorValues).map(([variant, value]) => (
-                      <Box
-                        key={variant}
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          p: 1,
-                          backgroundColor: value,
-                          color:
-                            variant === 'contrastText'
-                              ? theme.palette.text.primary
-                              : value,
-                          borderRadius: 1,
-                          border: '1px solid',
-                          borderColor: theme.palette.divider,
-                        }}
-                      >
-                        <Typography
-                          variant="body2"
+                    {Object.entries(colorValues).map(([variant, value]) => {
+                      const textColor = getContrastTextColor(value)
+                      return (
+                        <Box
+                          key={variant}
                           sx={{
-                            color:
-                              colorName === 'info' || colorName === 'success'
-                                ? '#FFFFFF'
-                                : '#000000',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            p: 1,
+                            backgroundColor: value,
+                            borderRadius: 1,
+                            border: '1px solid',
+                            borderColor: theme.palette.divider,
                           }}
                         >
-                          {variant}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            color:
-                              colorName === 'info' || colorName === 'success'
-                                ? '#FFFFFF'
-                                : '#000000',
-                            fontFamily: 'monospace',
-                          }}
-                        >
-                          {value}
-                        </Typography>
-                      </Box>
-                    ))}
+                          <Typography variant="body2" sx={{ color: textColor }}>
+                            {variant}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: textColor,
+                              fontFamily: 'monospace',
+                            }}
+                          >
+                            {value}
+                          </Typography>
+                        </Box>
+                      )
+                    })}
                   </Stack>
                 </Paper>
               </Grid2>
