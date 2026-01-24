@@ -1,21 +1,47 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { Box, Stack, TextField, Button, Typography } from '@mui/material'
+import {
+  Box,
+  Stack,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+  AlertTitle,
+  Link as MuiLink,
+} from '@mui/material'
 import { signIn } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { AppText } from '@app/navigator/constants/Strings'
+import { AuthErrorCode } from '@app/auth/types'
+import Link from 'next/link'
 
-const CredentialsInput: React.FC = () => {
+// Type for structured error objects
+type AuthErrorType = {
+  type: string
+  message: string
+  provider?: string
+}
+
+interface CredentialsInputProps {
+  onProviderTypeChange?: (providerType: string | null) => void
+}
+
+const CredentialsInput: React.FC<CredentialsInputProps> = ({
+  onProviderTypeChange,
+}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const router = useNavigationWithLoading()
   const [isNewUser, setIsNewUser] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<AuthErrorType | null>(null)
+  const [providerType, setProviderType] = useState<string | null>(null)
 
   const checkEmailExists = async (email: string) => {
     if (!email || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
       setIsNewUser(false)
+      setProviderType(null)
       return
     }
 
@@ -31,19 +57,33 @@ const CredentialsInput: React.FC = () => {
           response.statusText
         )
         setIsNewUser(false)
+        setProviderType(null)
         return
       }
 
-      const user = await response.json()
+      const result = await response.json()
 
-      if (user.error) {
-        setIsNewUser(true) // Email doesn't exist, so it's a new user
+      if (result.data) {
+        // User exists - store provider information
+        setIsNewUser(false)
+        setProviderType(result.data.provider)
+        // Notify parent component of provider type change
+        if (onProviderTypeChange) {
+          onProviderTypeChange(result.data.provider)
+        }
       } else {
-        setIsNewUser(false) // Email exists
+        // Email doesn't exist, so it's a new user
+        setIsNewUser(true)
+        setProviderType(null)
+        // Notify parent component of provider type change
+        if (onProviderTypeChange) {
+          onProviderTypeChange(null)
+        }
       }
     } catch (error) {
       console.error('Error checking email:', error)
       setIsNewUser(false)
+      setProviderType(null)
     }
   }
 
@@ -79,29 +119,86 @@ const CredentialsInput: React.FC = () => {
       if (result?.error) {
         console.error('Sign in error:', result.error)
 
-        // Handle specific error cases
-        if (result.error === 'CredentialsSignin') {
+        // Parse the error message to extract auth error codes
+        const errorMessage = result.error
+
+        // Check for auth error codes in the error message
+        if (errorMessage.includes(AuthErrorCode.EMAIL_EXISTS_CREDENTIALS)) {
+          setError({
+            type: 'warning',
+            message:
+              'This email is already registered. Please sign in or use "Forgot Password" to reset your password.',
+            provider: 'credentials',
+          })
+        } else if (errorMessage.includes(AuthErrorCode.EMAIL_EXISTS_OAUTH)) {
+          // Extract provider name from error message
+          const providerMatch = errorMessage.match(
+            /(Google|GitHub|Facebook|Twitter)/i
+          )
+          const provider = providerMatch ? providerMatch[1] : 'social login'
+          setError({
+            type: 'warning',
+            message: `This email is registered with ${provider}. Please sign in using the ${provider} button.`,
+            provider: provider.toLowerCase(),
+          })
+        } else if (errorMessage.includes(AuthErrorCode.INVALID_PASSWORD)) {
+          setError({
+            type: 'error',
+            message:
+              'Invalid email or password. Please try again or use "Forgot Password" to reset your password.',
+            provider: 'credentials',
+          })
+        } else if (errorMessage.includes(AuthErrorCode.NO_PASSWORD_SET)) {
+          setError({
+            type: 'warning',
+            message:
+              'No password is set for this account. Please use "Forgot Password" to set a password or use social login.',
+            provider: providerType || undefined,
+          })
+        } else if (errorMessage === 'CredentialsSignin') {
+          // Generic credentials error
           if (isNewUser) {
-            setError('Failed to create account. Please try again.')
+            setError({
+              type: 'error',
+              message: 'Failed to create account. Please try again.',
+            })
           } else {
-            setError('Invalid email or password.')
+            setError({
+              type: 'error',
+              message: 'Invalid email or password.',
+            })
           }
-        } else if (result.error === 'AccessDenied') {
-          setError('Access denied. Please check your credentials.')
-        } else if (result.error === 'Configuration') {
-          setError('Configuration error. Please contact support.')
+        } else if (errorMessage === 'AccessDenied') {
+          setError({
+            type: 'error',
+            message: 'Access denied. Please check your credentials.',
+          })
+        } else if (errorMessage === 'Configuration') {
+          setError({
+            type: 'error',
+            message: 'Configuration error. Please contact support.',
+          })
         } else {
-          setError(`Authentication failed: ${result.error}`)
+          setError({
+            type: 'error',
+            message: `Authentication failed: ${errorMessage}`,
+          })
         }
       } else if (result?.ok) {
         // Success - redirect to navigator
         router.push('/navigator')
       } else {
-        setError('Authentication failed. Please try again.')
+        setError({
+          type: 'error',
+          message: 'Authentication failed. Please try again.',
+        })
       }
     } catch (error) {
       console.error('An unexpected error happened:', error)
-      setError('An unexpected error occurred. Please try again.')
+      setError({
+        type: 'error',
+        message: 'An unexpected error occurred. Please try again.',
+      })
     } finally {
       setLoading(false)
     }
@@ -157,9 +254,30 @@ const CredentialsInput: React.FC = () => {
         />
 
         {error && (
-          <Typography variant="body2" color="error" sx={{ mt: 1 }}>
-            {error}
-          </Typography>
+          <Alert
+            severity={error.type === 'warning' ? 'warning' : 'error'}
+            sx={{ mb: 2 }}
+          >
+            <AlertTitle>
+              {error.type === 'warning'
+                ? 'Account Already Exists'
+                : 'Sign In Failed'}
+            </AlertTitle>
+            {error.message}
+            {error.provider === 'credentials' && (
+              <>
+                {' or '}
+                <MuiLink
+                  component={Link}
+                  href={`/auth/passwordRecovery?email=${encodeURIComponent(email)}`}
+                  sx={{ fontWeight: 'bold', textDecoration: 'underline' }}
+                >
+                  reset your password
+                </MuiLink>
+                .
+              </>
+            )}
+          </Alert>
         )}
 
         {isNewUser ? (

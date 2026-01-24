@@ -1,11 +1,8 @@
 import React from 'react'
 import Box from '@mui/material/Box'
 import { Stack, Typography } from '@mui/material'
-import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import NavigationButton from '@clientComponents/NavigationButton'
-import TimelapseOutlinedIcon from '@mui/icons-material/TimelapseOutlined'
 import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
-import BubbleChartIcon from '@mui/icons-material/BubbleChart'
 import GroupWorkIcon from '@mui/icons-material/GroupWork'
 import WorkspacesIcon from '@mui/icons-material/Workspaces'
 
@@ -13,20 +10,16 @@ const links = [
   {
     name: 'Asanas',
     href: '/navigator/asanaPoses',
-    // icon: <WaterDropOutlinedIcon />,
     icon: <Brightness1OutlinedIcon />,
   },
   {
     name: 'Flows',
     href: '/navigator/flows/practiceSeries',
-    // icon: <TimelapseOutlinedIcon />,
     icon: <WorkspacesIcon />,
   },
   {
     name: 'Sequences',
     href: '/navigator/flows/practiceSequences',
-    // icon: <Brightness1OutlinedIcon />,
-    // icon: <BubbleChartIcon />,
     icon: <GroupWorkIcon />,
   },
 ]

@@ -7,11 +7,30 @@ import { PrismaClient } from '@prisma/client'
 // import { MongoDBAdapter } from '@auth/mongodb-adapter' // Disabled - using custom Prisma-based user management
 // import client from '@lib/mongoDb' // Disabled - using custom Prisma-based user management
 import { hashPassword, comparePassword } from '@app/utils/password'
+import { AuthErrorCode, type AuthError } from '@app/auth/types'
+
+// Re-export auth types for backward compatibility with server-side code
+export { AuthErrorCode, type AuthError }
 
 /*
  * use auth/core Facebook, https://authjs.dev/reference/core/providers/facebook
  * use auth/core Twitter, https://authjs.dev/getting-started/providers/twitter
  */
+
+// Helper function to throw auth errors that NextAuth can catch
+function throwAuthError(
+  code: AuthErrorCode,
+  message: string,
+  provider?: string
+): never {
+  const error = new Error(message) as Error & {
+    code: AuthErrorCode
+    provider?: string
+  }
+  error.code = code
+  if (provider) error.provider = provider
+  throw error
+}
 
 const prisma = new PrismaClient({
   log: ['error', 'warn'],
@@ -64,6 +83,7 @@ const providers: Provider[] = [
     },
     authorize: async (credentials) => {
       if (!credentials) {
+        console.warn('[AUTH] Authorize called with no credentials')
         return null
       }
 
@@ -71,15 +91,65 @@ const providers: Provider[] = [
       const password = credentials.password as string
       const isNewAccount = credentials.isNewAccount === 'true'
 
+      console.log('[AUTH] Authorize attempt:', { email, isNewAccount })
+
       try {
-        let user = await prisma.userData.findUnique({
+        // Check if user exists
+        const user = await prisma.userData.findUnique({
           where: { email: email },
         })
 
         // Handle new account creation
-        if (isNewAccount && !user) {
+        if (isNewAccount) {
+          if (user) {
+            // User already exists - check which provider they're using
+            console.log(
+              '[AUTH] Account creation attempted for existing email:',
+              email
+            )
+
+            const providerAccounts = await prisma.providerAccount.findMany({
+              where: { userId: user.id },
+              select: { provider: true },
+            })
+
+            if (providerAccounts.length === 0) {
+              console.error(
+                '[AUTH] User exists but has no provider accounts:',
+                email
+              )
+              throwAuthError(
+                AuthErrorCode.NO_PASSWORD_SET,
+                'Account exists but no authentication method is configured',
+                'unknown'
+              )
+            }
+
+            const primaryProvider = providerAccounts[0].provider
+            console.log('[AUTH] User exists with provider:', primaryProvider)
+
+            if (primaryProvider === 'credentials') {
+              throwAuthError(
+                AuthErrorCode.EMAIL_EXISTS_CREDENTIALS,
+                'This email is already registered. Please sign in or use "Forgot Password" to reset your password.',
+                'credentials'
+              )
+            } else {
+              // OAuth provider (google, github, etc.)
+              const providerName =
+                primaryProvider.charAt(0).toUpperCase() +
+                primaryProvider.slice(1)
+              throwAuthError(
+                AuthErrorCode.EMAIL_EXISTS_OAUTH,
+                `This email is registered with ${providerName}. Please sign in using the ${providerName} button.`,
+                primaryProvider
+              )
+            }
+          }
+
           // Create new user
-          user = await prisma.userData.create({
+          console.log('[AUTH] Creating new user account:', email)
+          const newUser = await prisma.userData.create({
             data: {
               email: email,
               name: email.split('@')[0], // Use email prefix as initial name
@@ -106,9 +176,9 @@ const providers: Provider[] = [
           const hashedPassword = await hashPassword(password)
           await prisma.providerAccount.create({
             data: {
-              userId: user.id,
+              userId: newUser.id,
               provider: 'credentials',
-              providerAccountId: user.id,
+              providerAccountId: newUser.id,
               type: 'credentials',
               credentials_password: hashedPassword,
               createdAt: new Date(),
@@ -116,47 +186,122 @@ const providers: Provider[] = [
             },
           })
 
+          console.log('[AUTH] New user account created successfully:', email)
           return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
+            id: newUser.id,
+            name: newUser.name,
+            email: newUser.email,
           }
         }
 
         // Handle existing user login
         if (!user) {
+          console.log('[AUTH] User not found for login attempt:', email)
           return null
         }
 
-        // Verify password for credentials provider
+        console.log('[AUTH] User found, verifying credentials:', email)
+
+        // Get provider account information
         const providerAccount = await prisma.providerAccount.findFirst({
           where: {
             userId: user.id,
             provider: 'credentials',
           },
+          select: {
+            provider: true,
+            credentials_password: true,
+          },
         })
 
-        if (!providerAccount || !providerAccount.credentials_password) {
-          return null
+        if (!providerAccount) {
+          // User exists but has no credentials provider - likely OAuth only
+          console.log(
+            '[AUTH] User has no credentials provider, checking for OAuth providers:',
+            email
+          )
+
+          const oauthProviders = await prisma.providerAccount.findMany({
+            where: { userId: user.id },
+            select: { provider: true },
+          })
+
+          if (oauthProviders.length > 0) {
+            const primaryProvider = oauthProviders[0].provider
+            const providerName =
+              primaryProvider.charAt(0).toUpperCase() + primaryProvider.slice(1)
+            console.log(
+              '[AUTH] User registered with OAuth provider:',
+              primaryProvider
+            )
+            throwAuthError(
+              AuthErrorCode.EMAIL_EXISTS_OAUTH,
+              `This email is registered with ${providerName}. Please sign in using the ${providerName} button.`,
+              primaryProvider
+            )
+          }
+
+          console.warn(
+            '[AUTH] User has no configured authentication providers:',
+            email
+          )
+          throwAuthError(
+            AuthErrorCode.NO_PASSWORD_SET,
+            'No password is set for this account. Please use social login or contact support.',
+            'none'
+          )
+        }
+
+        if (!providerAccount.credentials_password) {
+          console.warn(
+            '[AUTH] Credentials provider exists but no password hash found:',
+            email
+          )
+          throwAuthError(
+            AuthErrorCode.NO_PASSWORD_SET,
+            'No password is set for this account. Please use "Forgot Password" to set a password.',
+            'credentials'
+          )
         }
 
         // Compare provided password with stored hash
+        console.log('[AUTH] Comparing password for user:', email)
         const isValidPassword = await comparePassword(
           password,
           providerAccount.credentials_password
         )
 
         if (!isValidPassword) {
-          return null
+          console.log('[AUTH] Invalid password for user:', email)
+          throwAuthError(
+            AuthErrorCode.INVALID_PASSWORD,
+            'Invalid email or password. Please try again or use "Forgot Password" to reset your password.',
+            'credentials'
+          )
         }
 
+        console.log('[AUTH] Authentication successful for user:', email)
         return {
           id: user.id,
           name: user.name,
           email: user.email,
         }
       } catch (error) {
-        console.error('[AUTH] Error in credentials authorize:', error)
+        // Re-throw auth errors so NextAuth can handle them
+        if (error instanceof Error && 'code' in error) {
+          console.error('[AUTH] Authentication error:', {
+            code: (error as any).code,
+            message: error.message,
+            provider: (error as any).provider,
+          })
+          throw error
+        }
+
+        // Log unexpected errors
+        console.error(
+          '[AUTH] Unexpected error in credentials authorize:',
+          error
+        )
         return null
       }
     },

@@ -104,6 +104,11 @@ export const theme = createTheme({
       paper: '#ffffff',
       helper: '#fef5e7',
     },
+    text: {
+      primary: '#F6893D',
+      secondary: '#C3581A',
+      disabled: '#9e9e9e',
+    },
   },
   typography: {
     fontFamily: ['Lato', 'sans-serif'].join(','),

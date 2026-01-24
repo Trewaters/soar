@@ -15,7 +15,6 @@ export default function Page() {
     <Stack>
       <Typography
         variant="h1"
-        color="primary.main"
         id="page-title"
         sx={{ mb: 2, ml: 4 }}
         alignSelf={'center'}
@@ -60,11 +59,7 @@ export default function Page() {
           <LandingPage />
         </Stack>
         <Stack>
-          <Typography
-            variant="body1"
-            fontWeight="600"
-            sx={{ mt: 4, mb: 1, width: '80vw' }}
-          >
+          <Typography variant="body1" sx={{ mt: 4, mb: 1, width: '80vw' }}>
             Your Recent Activity
           </Typography>
           <AsanaActivityList />

@@ -1,12 +1,10 @@
 import React from 'react'
 import { Button, Paper, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
-import Image from 'next/image'
-import { signIn, providerMap, signOut, auth } from '../../../auth'
-import { redirect } from 'next/navigation'
+import { signOut, auth, providerMap } from '../../../auth'
 import { Link as MuiLink } from '@mui/material'
 import Link from 'next/link'
-import CredentialsInput from './credentialsInput'
+import SignInForm from './SignInForm'
 
 export default async function SignInPage({
   searchParams,
@@ -70,70 +68,10 @@ export default async function SignInPage({
                 </Paper>
               </>
             ) : (
-              <Stack alignItems={'center'} spacing={2}>
-                <Typography variant="h2">Welcome back.</Typography>
-                <Typography variant="body1">
-                  We&apos;re happy you&apos;re here!
-                </Typography>
-                {Object.values(providerMap).map((provider, index) => (
-                  <Paper
-                    key={index}
-                    component="form"
-                    action={async () => {
-                      'use server'
-                      // eslint-disable-next-line no-useless-catch
-                      try {
-                        await signIn(provider.id, {
-                          redirectTo:
-                            resolvedSearchParams.callbackUrl ?? '/navigator',
-                        })
-                      } catch (error) {
-                        // Signin can fail for a number of reasons, such as the user
-                        // not existing, or the user not having the correct role.
-                        // In some cases, you may want to redirect to a custom error
-                        if (
-                          error &&
-                          typeof error === 'object' &&
-                          'type' in error
-                        ) {
-                          return redirect(
-                            `${process.env.SIGNIN_ERROR_URL}?error=${error.type}`
-                          )
-                        }
-
-                        // Otherwise if a redirects happens Next.js can handle it
-                        // so you can just re-thrown the error and let Next.js handle it.
-                        // Docs:
-                        // https://nextjs.org/docs/app/api-reference/functions/redirect#server-component
-                        throw error
-                      }
-                    }}
-                    elevation={0}
-                    sx={{ backgroundColor: 'transparent' }}
-                  >
-                    <Button
-                      type="submit"
-                      variant="outlined"
-                      sx={{ m: 2, borderRadius: '12px' }}
-                      startIcon={
-                        <Image
-                          src={
-                            provider.name.toLowerCase() === 'google'
-                              ? '/icons/profile/auth-google.svg'
-                              : '/icons/profile/auth-github-mark.svg'
-                          }
-                          alt={provider.name}
-                          width={20}
-                          height={20}
-                        />
-                      }
-                    >
-                      <Typography>Sign in with {provider.name}</Typography>
-                    </Button>
-                  </Paper>
-                ))}
-                <CredentialsInput />
-              </Stack>
+              <SignInForm
+                providers={Object.values(providerMap)}
+                callbackUrl={resolvedSearchParams.callbackUrl ?? '/navigator'}
+              />
             )}
 
             {!session && (
