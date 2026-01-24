@@ -106,7 +106,7 @@ export const theme = createTheme({
     },
     text: {
       primary: '#07020D',
-      secondary: '#C3581A',
+      secondary: '#F6893D',
       disabled: '#9e9e9e',
     },
   },

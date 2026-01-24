@@ -15,6 +15,7 @@ export default function Page() {
     <Stack>
       <Typography
         variant="h1"
+        color="text.secondary"
         id="page-title"
         sx={{ mb: 2, ml: 4 }}
         alignSelf={'center'}
