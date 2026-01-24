@@ -21,7 +21,7 @@ import {
   FormControlLabel,
   FormGroup,
   FormHelperText,
-  Grid,
+  Grid2,
   IconButton,
   List,
   ListItem,
@@ -133,6 +133,9 @@ export default function StyleGuide() {
             <Typography variant="subtitle2">
               Subtitle 2 ({theme.typography.subtitle2.fontSize})
             </Typography>
+            <Typography variant="subtitle3">
+              Subtitle 3 ({theme.typography.subtitle3.fontSize})
+            </Typography>
             <Typography variant="body1">
               Body 1 - Default paragraph text ({theme.typography.body1.fontSize}
               )
@@ -160,8 +163,8 @@ export default function StyleGuide() {
             Theme Configuration
           </Typography>
 
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
+          <Grid2 container spacing={3}>
+            <Grid2 size={{ xs: 12, md: 4 }}>
               <Typography variant="h6" gutterBottom>
                 Breakpoints
               </Typography>
@@ -174,9 +177,9 @@ export default function StyleGuide() {
                   )
                 )}
               </Stack>
-            </Grid>
+            </Grid2>
 
-            <Grid item xs={12} md={4}>
+            <Grid2 size={{ xs: 12, md: 4 }}>
               <Typography variant="h6" gutterBottom>
                 Spacing Scale
               </Typography>
@@ -190,17 +193,17 @@ export default function StyleGuide() {
                     </Typography>
                   ))}
               </Stack>
-            </Grid>
+            </Grid2>
 
-            <Grid item xs={12} md={4}>
+            <Grid2 size={{ xs: 12, md: 4 }}>
               <Typography variant="h6" gutterBottom>
                 Font Family
               </Typography>
               <Typography variant="body2">
                 {theme.typography.fontFamily}
               </Typography>
-            </Grid>
-          </Grid>
+            </Grid2>
+          </Grid2>
         </Paper>
 
         {/* Color Palette Section */}
@@ -209,9 +212,9 @@ export default function StyleGuide() {
             Color Palette
           </Typography>
 
-          <Grid container spacing={3}>
+          <Grid2 container spacing={3}>
             {Object.entries(colors).map(([colorName, colorValues]) => (
-              <Grid item xs={12} sm={6} md={4} key={colorName}>
+              <Grid2 size={{ xs: 12, sm: 6, md: 4 }} key={colorName}>
                 <Paper variant="outlined" sx={{ p: 2 }}>
                   <Typography
                     variant="h6"
@@ -265,9 +268,9 @@ export default function StyleGuide() {
                     ))}
                   </Stack>
                 </Paper>
-              </Grid>
+              </Grid2>
             ))}
-          </Grid>
+          </Grid2>
         </Paper>
 
         {/* MUI Components Section */}
@@ -382,8 +385,8 @@ export default function StyleGuide() {
             <Typography variant="h4" gutterBottom>
               Cards
             </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={4}>
+            <Grid2 container spacing={2}>
+              <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
                 <Card>
                   <CardHeader
                     title="Card Title"
@@ -415,8 +418,8 @@ export default function StyleGuide() {
                     </Button>
                   </CardActions>
                 </Card>
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
+              </Grid2>
+              <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
                 <Card>
                   <CardContent>
                     <Typography variant="h6" gutterBottom>
@@ -440,8 +443,8 @@ export default function StyleGuide() {
                     </Collapse>
                   </CardContent>
                 </Card>
-              </Grid>
-            </Grid>
+              </Grid2>
+            </Grid2>
           </Box>
 
           {/* Navigation */}
