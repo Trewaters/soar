@@ -249,53 +249,65 @@ export default function StyleGuide() {
             Theme Configuration
           </Typography>
 
-          <Grid2 container spacing={3}>
-            <Grid2 size={{ xs: 12, md: 6 }} sx={{ pr: 8 }}>
-              <Typography variant="h6" gutterBottom>
-                Breakpoints
-              </Typography>
-              <Stack spacing={1}>
-                {Object.entries(theme.breakpoints.values).map(
-                  ([key, value]) => (
-                    <Stack
-                      spacing={1}
-                      direction={'row'}
-                      key={key}
-                      justifyContent={'space-between'}
-                    >
-                      <Typography key={key} variant="body2">
-                        {key}:
-                      </Typography>
-                      <Typography key={key} variant="body2">
-                        {value}px
-                      </Typography>
-                    </Stack>
-                  )
-                )}
-              </Stack>
+          <Grid2 container justifyContent={'center'} spacing={10}>
+            <Grid2
+              size={{ xs: 12, md: 6 }}
+              display="flex"
+              justifyContent="center"
+            >
+              <Box>
+                <Typography variant="h6" gutterBottom textAlign="center">
+                  Breakpoints
+                </Typography>
+                <Stack spacing={1}>
+                  {Object.entries(theme.breakpoints.values).map(
+                    ([key, value]) => (
+                      <Stack
+                        spacing={1}
+                        direction={'row'}
+                        key={key}
+                        justifyContent={'space-between'}
+                      >
+                        <Typography key={key} variant="body2">
+                          {key}:
+                        </Typography>
+                        <Typography key={key} variant="body2">
+                          {value}px
+                        </Typography>
+                      </Stack>
+                    )
+                  )}
+                </Stack>
+              </Box>
             </Grid2>
 
-            <Grid2 size={{ xs: 12, md: 4 }}>
-              <Typography variant="h6" gutterBottom>
-                Spacing Scale
-              </Typography>
-              <Stack spacing={1}>
-                {theme
-                  .spacing()
-                  .split(' ')
-                  .map((value, index) => (
-                    <Typography key={index} variant="body2">
-                      {index}: {value}
-                    </Typography>
-                  ))}
-              </Stack>
+            <Grid2
+              size={{ xs: 12, md: 6 }}
+              display="flex"
+              justifyContent="center"
+            >
+              <Box>
+                <Typography variant="h6" gutterBottom textAlign="center">
+                  Spacing Scale
+                </Typography>
+                <Stack spacing={1}>
+                  {theme
+                    .spacing()
+                    .split(' ')
+                    .map((value, index) => (
+                      <Typography key={index} variant="body2">
+                        {index}: {value}
+                      </Typography>
+                    ))}
+                </Stack>
+              </Box>
             </Grid2>
 
-            <Grid2 size={{ xs: 12, md: 4 }}>
-              <Typography variant="h6" gutterBottom>
+            <Grid2 size={{ xs: 12, md: 12 }}>
+              <Typography variant="h6" gutterBottom textAlign="center">
                 Font Family
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" textAlign="center">
                 {theme.typography.fontFamily}
               </Typography>
             </Grid2>
