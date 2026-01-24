@@ -148,27 +148,27 @@ export const theme = createTheme({
       wordSpacing: '0.1rem',
     },
     h2: {
-      fontSize: '2rem',
+      fontSize: '1.8rem',
       fontWeight: '700',
       letterSpacing: '0.05rem',
       wordSpacing: '0.05rem',
     },
     h3: {
-      fontSize: '1.8rem',
+      fontSize: '1.6rem',
       fontWeight: '700',
       letterSpacing: '0.001rem',
       wordSpacing: '0.001rem',
     },
     h4: {
-      fontSize: '1.6rem',
-      fontWeight: '700',
-    },
-    h5: {
       fontSize: '1.4rem',
       fontWeight: '700',
     },
-    h6: {
+    h5: {
       fontSize: '1.2rem',
+      fontWeight: '700',
+    },
+    h6: {
+      fontSize: '1rem',
       fontWeight: '700',
     },
     body1: { fontSize: '1rem' },

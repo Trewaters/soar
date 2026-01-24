@@ -97,6 +97,7 @@ export default function StyleGuide() {
           <Typography
             variant="h1"
             component="h1"
+            color="text.secondary"
             sx={{ textAlign: 'center', mb: 4 }}
           >
             Design System Style Guide
@@ -104,76 +105,171 @@ export default function StyleGuide() {
 
           <Divider sx={{ my: 3 }} />
 
-          <Typography variant="h2" component="h2" sx={{ mb: 3 }}>
-            Typography
+          <Typography
+            variant="h2"
+            component="h2"
+            textAlign={'center'}
+            sx={{ mb: 6 }}
+          >
+            Typography MUI Variants
           </Typography>
 
-          <Stack spacing={2}>
-            <Typography variant="h1">
-              H1 - Main Heading ({theme.typography.h1.fontSize})
-            </Typography>
-            <Typography variant="h2">
-              H2 - Section Heading ({theme.typography.h2.fontSize})
-            </Typography>
-            <Typography variant="h3">
-              H3 - Subsection Heading ({theme.typography.h3.fontSize})
-            </Typography>
-            <Typography variant="h4">
-              H4 - Heading ({theme.typography.h4.fontSize})
-            </Typography>
-            <Typography variant="h5">
-              H5 - Heading ({theme.typography.h5.fontSize})
-            </Typography>
-            <Typography variant="h6">
-              H6 - Heading ({theme.typography.h6.fontSize})
-            </Typography>
-            <Typography variant="subtitle1">
-              Subtitle 1 ({theme.typography.subtitle1.fontSize})
-            </Typography>
-            <Typography variant="subtitle2">
-              Subtitle 2 ({theme.typography.subtitle2.fontSize})
-            </Typography>
-            <Typography variant="subtitle3">
-              Subtitle 3 ({theme.typography.subtitle3.fontSize})
-            </Typography>
-            <Typography variant="body1">
-              Body 1 - Default paragraph text ({theme.typography.body1.fontSize}
-              )
-            </Typography>
-            <Typography variant="body2">
-              Body 2 - Smaller paragraph text ({theme.typography.body2.fontSize}
-              )
-            </Typography>
-            <Typography variant="caption">
-              Caption text ({theme.typography.caption.fontSize})
-            </Typography>
-            <Typography variant="overline">
-              OVERLINE TEXT ({theme.typography.overline.fontSize})
-            </Typography>
-            <Typography variant="label">Label Text (Custom variant)</Typography>
-            <Typography variant="splashTitle">
-              Splash Title (Custom variant)
-            </Typography>
+          <Stack spacing={4}>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="h1">
+                H1 ({theme.typography.h1.fontSize})
+              </Typography>
+              <Typography variant="h1" sx={{ fontStyle: 'italic' }}>
+                Main Page level Heading
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="h2">
+                H2 ({theme.typography.h2.fontSize})
+              </Typography>
+              <Typography variant="h2" sx={{ fontStyle: 'italic' }}>
+                Section Heading
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="h3">
+                H3 ({theme.typography.h3.fontSize})
+              </Typography>
+              <Typography variant="h3" sx={{ fontStyle: 'italic' }}>
+                Subsection Heading
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="h4">
+                H4 ({theme.typography.h4.fontSize})
+              </Typography>
+              <Typography variant="h4" sx={{ fontStyle: 'italic' }}>
+                Heading
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="h5">
+                H5 ({theme.typography.h5.fontSize})
+              </Typography>
+              <Typography variant="h5" sx={{ fontStyle: 'italic' }}>
+                Heading
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="h6">
+                H6 ({theme.typography.h6.fontSize})
+              </Typography>
+              <Typography variant="h6" sx={{ fontStyle: 'italic' }}>
+                Heading
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="subtitle1">
+                Subtitle1 ({theme.typography.subtitle1.fontSize})
+              </Typography>
+              <Typography variant="subtitle1" sx={{ fontStyle: 'italic' }}>
+                Subtitle variant
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="subtitle2">
+                Subtitle2 ({theme.typography.subtitle2.fontSize})
+              </Typography>
+              <Typography variant="subtitle2" sx={{ fontStyle: 'italic' }}>
+                Subtitle variant
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="subtitle3">
+                Subtitle3 ({theme.typography.subtitle3.fontSize})
+              </Typography>
+              <Typography variant="subtitle3" sx={{ fontStyle: 'italic' }}>
+                Custom subtitle variant
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="body1">
+                Body1 ({theme.typography.body1.fontSize})
+              </Typography>
+              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+                Default paragraph text
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="body2">
+                Body2 ({theme.typography.body2.fontSize})
+              </Typography>
+              <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+                Smaller paragraph text
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="caption">
+                Caption ({theme.typography.caption.fontSize})
+              </Typography>
+              <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
+                Caption text
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="overline">
+                Overline ({theme.typography.overline.fontSize})
+              </Typography>
+              <Typography variant="overline" sx={{ fontStyle: 'italic' }}>
+                Overline text
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="label">
+                Label ({theme.typography.label.fontSize})
+              </Typography>
+              <Typography variant="label" sx={{ fontStyle: 'italic' }}>
+                Custom label variant
+              </Typography>
+            </Stack>
+            <Stack direction={'row'} justifyContent={'space-between'}>
+              <Typography variant="splashTitle">
+                SplashTitle ({theme.typography.splashTitle.fontSize})
+              </Typography>
+              <Typography variant="splashTitle" sx={{ fontStyle: 'italic' }}>
+                Custom splash variant
+              </Typography>
+            </Stack>
           </Stack>
         </Paper>
 
         {/* Theme Values Section */}
         <Paper elevation={3} sx={{ p: 4 }}>
-          <Typography variant="h2" component="h2" sx={{ mb: 3 }}>
+          <Typography
+            variant="h2"
+            component="h2"
+            textAlign={'center'}
+            sx={{ mb: 3 }}
+          >
             Theme Configuration
           </Typography>
 
           <Grid2 container spacing={3}>
-            <Grid2 size={{ xs: 12, md: 4 }}>
+            <Grid2 size={{ xs: 12, md: 6 }} sx={{ pr: 8 }}>
               <Typography variant="h6" gutterBottom>
                 Breakpoints
               </Typography>
               <Stack spacing={1}>
                 {Object.entries(theme.breakpoints.values).map(
                   ([key, value]) => (
-                    <Typography key={key} variant="body2">
-                      {key}: {value}px
-                    </Typography>
+                    <Stack
+                      spacing={1}
+                      direction={'row'}
+                      key={key}
+                      justifyContent={'space-between'}
+                    >
+                      <Typography key={key} variant="body2">
+                        {key}:
+                      </Typography>
+                      <Typography key={key} variant="body2">
+                        {value}px
+                      </Typography>
+                    </Stack>
                   )
                 )}
               </Stack>
