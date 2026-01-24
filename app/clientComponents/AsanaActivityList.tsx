@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Typography, List, ListItem, Box, Chip, Stack } from '@mui/material'
+import WorkspacesIcon from '@mui/icons-material/Workspaces'
+import GroupWorkIcon from '@mui/icons-material/GroupWork'
+import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
 import {
   getUserActivities,
   type AsanaActivityData,
@@ -209,12 +212,18 @@ export default function AsanaActivityList() {
                     <Typography
                       variant="body1"
                       sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 0.5,
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
                       }}
                     >
-                      Flow: {activity.seriesName}
+                      <WorkspacesIcon
+                        sx={{ fontSize: 18, color: 'secondary.main' }}
+                      />
+                      {activity.seriesName}
                     </Typography>
                   </Link>
                 ) : activity.type === 'sequence' ? (
@@ -222,12 +231,18 @@ export default function AsanaActivityList() {
                     <Typography
                       variant="body1"
                       sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 0.5,
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
                       }}
                     >
-                      Sequence: {activity.sequenceName}
+                      <GroupWorkIcon
+                        sx={{ fontSize: 18, color: 'secondary.main' }}
+                      />
+                      {activity.sequenceName}
                     </Typography>
                   </Link>
                 ) : (
@@ -239,11 +254,17 @@ export default function AsanaActivityList() {
                     <Typography
                       variant="body1"
                       sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 0.5,
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
                       }}
                     >
+                      <Brightness1OutlinedIcon
+                        sx={{ fontSize: 18, color: 'secondary.main' }}
+                      />
                       {activity.asanaName}
                     </Typography>
                   </Link>
