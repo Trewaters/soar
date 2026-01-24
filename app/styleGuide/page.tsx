@@ -263,11 +263,30 @@ export default function StyleGuide() {
                 Custom label variant
               </Typography>
             </Stack>
-            <Stack direction={'row'} justifyContent={'space-between'}>
-              <Typography variant="splashTitle">
+            <Stack
+              direction={'row'}
+              justifyContent={'space-between'}
+              sx={{ overflow: 'hidden' }}
+            >
+              <Typography
+                variant="splashTitle"
+                sx={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  maxWidth: '50%',
+                }}
+              >
                 SplashTitle ({theme.typography.splashTitle.fontSize})
               </Typography>
-              <Typography variant="splashTitle" sx={{ fontStyle: 'italic' }}>
+              <Typography
+                variant="splashTitle"
+                sx={{
+                  fontStyle: 'italic',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  maxWidth: '50%',
+                }}
+              >
                 Custom splash variant
               </Typography>
             </Stack>
