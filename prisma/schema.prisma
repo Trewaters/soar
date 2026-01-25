@@ -31,7 +31,7 @@ model UserData {
   company          String?
   socialURL        String?
   isLocationPublic String?
-  role             String?
+  role             String    @default("user") // "user" | "admin" | future roles
 
   // emailPublic       String
   // emailInternal     String
@@ -122,7 +122,7 @@ model ProviderAccount {
 model AsanaPose {
   // “Full”, Abbreviated Pose 1
   id                        String          @id @default(auto()) @map("_id") @db.ObjectId
-  sort_english_name         String          @unique // “Full”, Abbreviated Pose 1, Unique name for pose, expected in English
+  sort_english_name         String          @unique // “Full”, Abbreviated Pose 1, Unique name for pose, expected in English  
   sanskrit_names            String[] // “Full”, Abbreviated Pose 1 // use first element for primary sanskrit name
   english_names             String[] // “Full”, Abbreviated Pose 1
   alternative_english_names String[] // “Full”, Abbreviated Pose 1
@@ -159,13 +159,15 @@ model AsanaPose {
   isUserCreated        Boolean   @default(false) // verify how it is used, don't think it is needed // Flag to identify user-created asanas
   created_on           DateTime? @default(now()) // Necessary
   updated_on           DateTime? @updatedAt // Necessary
-  created_by           String? // Necessary // Should be the user email address.
+  created_by           String          @default("PUBLIC") // "PUBLIC" for system content | userId for user-created content  
+
   imageCount           Int       @default(0) // verify how it is used // Cache for number of images (performance optimization)
 }
 
 model AsanaSeries {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   seriesName     String
+  created_by     String    @default("PUBLIC") // "PUBLIC" for system content | userId for user-created content
   // seriesPoses stores per-series pose entries. Each element shape:
   // { poseId: string, sort_english_name: string, alignment_cues?: string }
   // Use Json[] to allow flexible per-pose metadata attached to a series.
@@ -175,7 +177,6 @@ model AsanaSeries {
   durationSeries String?
   image          String? // Legacy single image field - kept for backward compatibility
   images         String[]  @default([]) // Multiple image URLs for the series
-  created_by     String
   createdAt      DateTime? @default(now())
   updatedAt      DateTime? @updatedAt
 }
@@ -183,11 +184,11 @@ model AsanaSeries {
 model AsanaSequence {
   id               String    @id @default(auto()) @map("_id") @db.ObjectId
   nameSequence     String
+  created_by       String    @default("PUBLIC") // "PUBLIC" for system content | userId for user-created content
   sequencesSeries  Json[]
   description      String?
   durationSequence String?
   image            String?
-  created_by       String?
   createdAt        DateTime? @default(now())
   updatedAt        DateTime? @updatedAt
 }
@@ -267,6 +268,7 @@ model UserLogin {
 model PoseImage {
   id             String      @id @default(auto()) @map("_id") @db.ObjectId
   userId         String      @db.ObjectId
+  created_by     String // User ID who created/uploaded the image (matches userId for consistency)
   poseId      String?     @db.ObjectId // Optional association with a specific pose
   poseName    String? // Store the sort_english_name for easier querying
   url            String // Image URL (Vercel Blob or local reference)
@@ -304,6 +306,7 @@ enum StorageType {
 model GlossaryTerm {
   id            String         @id @default(cuid()) @map("_id")
   term          String         @unique
+  created_by    String         @default("PUBLIC") // "PUBLIC" for system content | userId for user-created content
   meaning       String
   whyMatters    String
   category      String? // e.g. foundational, breath, meditation

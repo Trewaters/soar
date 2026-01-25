@@ -128,7 +128,7 @@ describe('StyleGuide Component', () => {
       renderWithTheme(<StyleGuide />)
 
       // Check for main section headings
-      expect(screen.getByText('Typography')).toBeInTheDocument()
+      expect(screen.getByText('Typography MUI Variants')).toBeInTheDocument()
       expect(screen.getByText('Theme Configuration')).toBeInTheDocument()
       expect(screen.getByText('Color Palette')).toBeInTheDocument()
       expect(
@@ -142,7 +142,7 @@ describe('StyleGuide Component', () => {
       renderWithTheme(<StyleGuide />)
 
       // Check for typography headings
-      expect(screen.getByText(/H1 - Main Heading/)).toBeInTheDocument()
+      expect(screen.getByText('Main Page level Heading')).toBeInTheDocument()
       expect(screen.getByText(/H2 - Section Heading/)).toBeInTheDocument()
       expect(screen.getByText(/H3 - Subsection Heading/)).toBeInTheDocument()
       expect(screen.getByText(/H4 - Heading/)).toBeInTheDocument()
@@ -166,7 +166,7 @@ describe('StyleGuide Component', () => {
       renderWithTheme(<StyleGuide />)
 
       // Check that font sizes are displayed (they come from theme)
-      const h1Element = screen.getByText(/H1 - Main Heading/)
+      const h1Element = screen.getByText('Main Page level Heading')
       expect(h1Element).toBeInTheDocument()
     })
   })
