@@ -1,6 +1,7 @@
 import { auth } from '../../../../auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../app/lib/prismaClient'
+import { canModifyContent } from '@/app/utils/authorization'
 import fs from 'fs'
 import path from 'path'
 
@@ -48,9 +49,10 @@ export async function PUT(
     }
 
     // Check if the user is authorized to edit this pose
-    if (existingPose.created_by !== session.user.email) {
+    // PUBLIC content can be modified by admins, personal content by owner/admin
+    if (!(await canModifyContent(existingPose.created_by || ''))) {
       return NextResponse.json(
-        { error: 'Unauthorized: You can only edit poses you created' },
+        { error: 'You do not have permission to modify this pose' },
         { status: 403 }
       )
     }
@@ -138,9 +140,11 @@ export async function DELETE(
       return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
     }
 
-    if (existingPose.created_by !== session.user.email) {
+    // Check if the user is authorized to delete this pose
+    // PUBLIC content can be deleted by admins, personal content by owner/admin
+    if (!(await canModifyContent(existingPose.created_by || ''))) {
       return NextResponse.json(
-        { error: 'Unauthorized: You can only delete poses you created' },
+        { error: 'You do not have permission to delete this pose' },
         { status: 403 }
       )
     }

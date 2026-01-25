@@ -1,20 +1,27 @@
+import { auth } from '../../../../auth'
 import { prisma } from '../../../../app/lib/prismaClient'
+import { requireAuth } from '@/app/utils/authorization'
+import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
-  const {
-    english_names,
-    alternative_english_names,
-    sort_english_name,
-    description,
-    category,
-    difficulty,
-    breath,
-    sanskrit_names,
-    dristi,
-    setup_cues,
-    deepening_cues,
-    created_by,
-  } = await request.json()
+  try {
+    // Ensure user is authenticated before creating content
+    const session = await requireAuth()
+    
+    const {
+      english_names,
+      alternative_english_names,
+      sort_english_name,
+      description,
+      category,
+      difficulty,
+      breath,
+      sanskrit_names,
+      dristi,
+      setup_cues,
+      deepening_cues,
+      // Ignore any created_by from request - we set it from session
+    } = await request.json()
 
   try {
     const createdPose = await prisma.asanaPose.create({
@@ -40,9 +47,10 @@ export async function POST(request: Request) {
         dristi,
         setup_cues,
         deepening_cues,
-        created_by,
-        // Mark as user-created when a creator identifier is supplied
-        isUserCreated: Boolean(created_by),
+        // Set created_by from authenticated session user ID
+        created_by: session.user.id,
+        // Mark as user-created for personal content
+        isUserCreated: true,
         // Note: created_on and updated_on are handled by Prisma defaults
       },
     })
@@ -62,6 +70,14 @@ export async function POST(request: Request) {
 
     return Response.json(poseWithId)
   } catch (error: any) {
+    // Handle authentication errors from requireAuth
+    if (error.message === 'Unauthorized - Please sign in') {
+      return NextResponse.json(
+        { error: 'Authentication required to create poses' },
+        { status: 401 }
+      )
+    }
+    
     console.error('Error creating pose in database:', {
       error: error.message,
       stack: error.stack,

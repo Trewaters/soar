@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../app/lib/prismaClient'
 import { auth } from '../../../../auth'
-import getAlphaUserIds from '@app/lib/alphaUsers'
+import { canModifyContent } from '@/app/utils/authorization'
 import { formatSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 
 // Use shared prisma client
@@ -29,13 +29,16 @@ export async function GET(
       return NextResponse.json({ error: 'Series not found' }, { status: 404 })
     }
 
-    // Check if user can access this series (own series or alpha user series)
-    const currentUserEmail = session.user.email
-    const alphaUserIds = getAlphaUserIds()
-    const allowedCreators = [currentUserEmail, ...alphaUserIds]
+    // Check if user can access this series (PUBLIC or owned content)
+    const isPublic = series.created_by === 'PUBLIC'
+    const canAccess =
+      isPublic || (await canModifyContent(series.created_by || ''))
 
-    if (!series.created_by || !allowedCreators.includes(series.created_by)) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+    if (!canAccess) {
+      return NextResponse.json(
+        { error: 'You do not have permission to access this series' },
+        { status: 403 }
+      )
     }
 
     // Normalize to FlowSeriesData shape expected by the client
@@ -96,15 +99,11 @@ export async function PATCH(
       return NextResponse.json({ error: 'Series not found' }, { status: 404 })
     }
 
-    // Check access permissions: allow if user is creator or alpha user
-    const currentUserEmail = session.user.email
-    const alphaUserIds = getAlphaUserIds()
-    const isCreator = existingSeries.created_by === currentUserEmail
-    const isAlphaUser = alphaUserIds.includes(currentUserEmail)
-
-    if (!isCreator && !isAlphaUser) {
+    // Check if user is authorized to modify this series
+    // PUBLIC content can be modified by admins, personal content by owner/admin
+    if (!(await canModifyContent(existingSeries.created_by || ''))) {
       return NextResponse.json(
-        { error: 'Forbidden: You are not the creator and not an alpha user' },
+        { error: 'You do not have permission to modify this series' },
         { status: 403 }
       )
     }
@@ -193,15 +192,11 @@ export async function DELETE(
       return NextResponse.json({ error: 'Series not found' }, { status: 404 })
     }
 
-    // Check access permissions: allow if user is creator or alpha user
-    const currentUserEmail = session.user.email
-    const alphaUserIds = getAlphaUserIds()
-    const isCreator = existingSeries.created_by === currentUserEmail
-    const isAlphaUser = alphaUserIds.includes(currentUserEmail)
-
-    if (!isCreator && !isAlphaUser) {
+    // Check if user is authorized to delete this series
+    // PUBLIC content can be deleted by admins, personal content by owner/admin
+    if (!(await canModifyContent(existingSeries.created_by || ''))) {
       return NextResponse.json(
-        { error: 'Forbidden: You are not the creator and not an alpha user' },
+        { error: 'You do not have permission to delete this series' },
         { status: 403 }
       )
     }

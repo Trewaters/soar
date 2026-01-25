@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { auth } from '../../../auth'
-import getAlphaUserIds from '@app/lib/alphaUsers'
+import { canModifyContent } from '@/app/utils/authorization'
 import { prisma } from '../../lib/prismaClient'
 
 // Force this route to be dynamic since it requires query parameters
@@ -10,100 +10,55 @@ export const runtime = 'nodejs'
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url)
-    const createdByParam = url.searchParams.get('createdBy')
+    const filter = url.searchParams.get('filter') // 'public', 'personal', or null (both)
     const session = await auth().catch(() => null)
 
-    // Get current user and alpha user IDs
-    const currentUserEmail = session?.user?.email
-    const alphaUserIds = getAlphaUserIds()
+    // Get current user ID
+    const currentUserId = session?.user?.id
 
-    // If user is not authenticated, return empty array
-    if (!currentUserEmail) {
-      return NextResponse.json([], {
-        headers: {
-          'Cache-Control':
-            'no-store, no-cache, must-revalidate, max-age=0, s-maxage=0, proxy-revalidate',
-          Pragma: 'no-cache',
-          Expires: '0',
-          'Last-Modified': new Date().toUTCString(),
-          'Surrogate-Control': 'no-store',
-          Vary: 'Accept, Accept-Encoding, User-Agent',
-          'X-Timestamp': Date.now().toString(),
-          'X-Cache-Bust': `v${Date.now()}`,
-          'X-Content-Type-Options': 'nosniff',
-        },
-      })
-    }
+    // Build where clause based on filter parameter
+    const whereClause: any = {}
 
-    let data: any[] = []
-    let ownedIds = new Set<string>()
-
-    if (createdByParam && createdByParam.trim().length > 0) {
-      // Only allow filtering by createdBy if it's the current user or an alpha user
-      const allowedCreators = [currentUserEmail, ...alphaUserIds]
-      if (!allowedCreators.includes(createdByParam)) {
-        return NextResponse.json([], {
-          headers: {
-            'Cache-Control':
-              'no-store, no-cache, must-revalidate, max-age=0, s-maxage=0, proxy-revalidate',
-            Pragma: 'no-cache',
-            Expires: '0',
-            'Last-Modified': new Date().toUTCString(),
-            'Surrogate-Control': 'no-store',
-            Vary: 'Accept, Accept-Encoding, User-Agent',
-            'X-Timestamp': Date.now().toString(),
-            'X-Cache-Bust': `v${Date.now()}`,
-            'X-Content-Type-Options': 'nosniff',
-          },
-        })
+    if (filter === 'public') {
+      whereClause.created_by = 'PUBLIC'
+    } else if (filter === 'personal') {
+      if (!session || !currentUserId) {
+        return NextResponse.json(
+          { error: 'Authentication required to view personal content' },
+          { status: 401 }
+        )
       }
-
-      // Filter to only series created by provided email; do NOT select created_by
-      data = await prisma.asanaSeries.findMany({
-        where: { created_by: createdByParam },
-        orderBy: { createdAt: 'desc' },
-      })
-      // All returned belong to createdByParam
-      ownedIds = new Set<string>(data.map((d: any) => d.id))
+      whereClause.created_by = currentUserId
     } else {
-      // Build allowed creators list: current user + alpha users
-      const allowedCreators = [currentUserEmail, ...alphaUserIds]
-
-      // Fetch only series created by current user or alpha users
-      data = await prisma.asanaSeries.findMany({
-        where: { created_by: { in: allowedCreators } },
-        orderBy: { createdAt: 'desc' },
-      })
-
-      // Find ids owned by current user for UI gating
-      const owned = data.filter(
-        (item: any) => item.created_by === currentUserEmail
-      )
-      ownedIds = new Set<string>(owned.map((o: any) => o.id))
+      // Default: show PUBLIC content + user's personal content
+      if (currentUserId) {
+        whereClause.created_by = {
+          in: ['PUBLIC', currentUserId],
+        }
+      } else {
+        whereClause.created_by = 'PUBLIC'
+      }
     }
+
+    // Fetch series based on filter
+    const data = await prisma.asanaSeries.findMany({
+      where: whereClause,
+      orderBy: { createdAt: 'desc' },
+    })
 
     // Normalize to FlowSeriesData shape expected by the client
     const normalized = data.map((item: any) => ({
       id: item.id,
       seriesName: item.seriesName || '',
-      seriesPoses: Array.isArray(item.seriesPoses)
-        ? item.seriesPoses
-        : Array.isArray(item.seriesPoses)
-          ? item.seriesPoses
-          : [],
+      seriesPoses: Array.isArray(item.seriesPoses) ? item.seriesPoses : [],
       breath: Array.isArray(item.breathSeries)
         ? item.breathSeries.join(', ')
         : '',
       description: item.description ?? '',
       duration: item.durationSeries ?? '',
       image: item.image ?? '',
-      // Include ownership for client-side gating of edit UI
-      // Use actual created_by if available, or derive from ownership check
-      createdBy:
-        item.created_by ||
-        (ownedIds.has(item.id)
-          ? createdByParam || currentUserEmail
-          : createdByParam || ''),
+      // Include created_by for client-side ownership UI
+      createdBy: item.created_by || '',
       createdAt: item.createdAt ?? null,
       updatedAt: item.updatedAt ?? null,
     }))

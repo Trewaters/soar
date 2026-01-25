@@ -38,6 +38,9 @@
     "import:all-activities": "npm run import:asana-activity && npm run import:series-activity && npm run import:sequence-activity",
     "sync:db": "tsx scripts/syncDb/sync-db-from-prod.ts",
     "backup:prod": "tsx scripts/syncDb/backup-prod-db.ts",
+    "script:set-admin": "ts-node scripts/set-admin-role.ts",
+    "script:migrate-public": "ts-node scripts/migrate-data-ownership.ts",
+    "script:verify-ownership": "ts-node scripts/verify-ownership.ts",
     "restore:backup": "tsx scripts/syncDb/restore-from-backup.ts",
     "inspect:prod": "tsx scripts/syncDb/inspect-prod-db.ts"
   },

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../auth'
-import { getAlphaUserIds } from '@app/lib/alphaUsers'
+import { canModifyContent } from '@/app/utils/authorization'
 import { prisma } from '../../../app/lib/prismaClient'
 
 // Force this route to be dynamic since it requires query parameters
@@ -10,13 +10,11 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.nextUrl)
   const sortEnglishName = searchParams.get('sort_english_name')
   const id = searchParams.get('id')
-  const createdBy = searchParams.get('createdBy')
+  const filter = searchParams.get('filter') // 'public' | 'personal' | null (default: all)
 
-  // Get current session to determine access control
+  // Get current session
   const session = await auth()
-  const currentUserEmail = session?.user?.email
   const currentUserId = session?.user?.id
-  const alphaUserIds = getAlphaUserIds()
 
   // Handle ID lookup first (if provided)
   if (id) {
@@ -27,15 +25,16 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
       }
 
-      // Check access control for individual pose
-      const hasAccess =
-        !currentUserEmail || // Allow if no user (for public access)
-        pose.created_by === currentUserEmail || // User's own pose (email)
-        pose.created_by === currentUserId || // Older records may store creator as user id
-        alphaUserIds.includes(pose.created_by || '') // Alpha user's pose
+      // Check access: PUBLIC content is visible to all, personal content only to owner/admin
+      const isPublic = pose.created_by === 'PUBLIC'
+      const canAccess =
+        isPublic || (await canModifyContent(pose.created_by || ''))
 
-      if (!hasAccess) {
-        return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+      if (!canAccess) {
+        return NextResponse.json(
+          { error: 'You do not have permission to access this pose' },
+          { status: 403 }
+        )
       }
 
       if (pose.breath === null) {
@@ -62,15 +61,16 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
       }
 
-      // Check access control for individual pose
-      const hasAccess =
-        !currentUserEmail || // Allow if no user (for public access)
-        pose.created_by === currentUserEmail || // User's own pose (email)
-        pose.created_by === currentUserId || // Older records may store creator as user id
-        alphaUserIds.includes(pose.created_by || '') // Alpha user's pose
+      // Check access: PUBLIC content is visible to all, personal content only to owner/admin
+      const isPublic = pose.created_by === 'PUBLIC'
+      const canAccess =
+        isPublic || (await canModifyContent(pose.created_by || ''))
 
-      if (!hasAccess) {
-        return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+      if (!canAccess) {
+        return NextResponse.json(
+          { error: 'You do not have permission to access this pose' },
+          { status: 403 }
+        )
       }
 
       if (pose.breath === null) {
@@ -92,51 +92,30 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Build where clause based on access control
+    // Build where clause based on filter parameter
     const whereClause: any = {}
 
-    if (createdBy) {
-      // If specific creator is requested, check access
-      const hasAccess =
-        !currentUserEmail || // Allow if no user (for public access)
-        createdBy === currentUserEmail || // User's own poses (email)
-        createdBy === currentUserId || // Allow querying by user id for older records
-        alphaUserIds.includes(createdBy) // Alpha user's poses
-
-      if (!hasAccess) {
-        return NextResponse.json({ error: 'Access denied' }, { status: 403 })
+    if (filter === 'public') {
+      // Only PUBLIC content
+      whereClause.created_by = 'PUBLIC'
+    } else if (filter === 'personal') {
+      // Only user's personal content (requires authentication)
+      if (!session || !currentUserId) {
+        return NextResponse.json(
+          { error: 'Authentication required to view personal content' },
+          { status: 401 }
+        )
       }
-
-      whereClause.created_by = createdBy
+      whereClause.created_by = currentUserId
     } else {
-      // If no specific creator, filter by access control
-      if (currentUserEmail) {
-        // Show user's own posts + alpha user posts
-        // Include both email and id for backward compatibility
-        const allowedCreators = [
-          ...(currentUserEmail ? [currentUserEmail] : []),
-          ...(currentUserId ? [currentUserId] : []),
-          ...alphaUserIds,
-        ]
+      // Default: show PUBLIC content + user's personal content
+      if (currentUserId) {
         whereClause.created_by = {
-          in: allowedCreators,
+          in: ['PUBLIC', currentUserId],
         }
       } else {
-        // If no user, only show alpha user posts
-        if (alphaUserIds.length > 0) {
-          whereClause.created_by = {
-            in: alphaUserIds,
-          }
-        } else {
-          // No alpha users and no current user - return empty array
-          return NextResponse.json([], {
-            headers: {
-              'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
-              Pragma: 'no-cache',
-              Expires: '0',
-            },
-          })
-        }
+        // Unauthenticated users only see PUBLIC content
+        whereClause.created_by = 'PUBLIC'
       }
     }
 

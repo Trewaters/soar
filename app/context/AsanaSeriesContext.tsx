@@ -20,6 +20,7 @@ export interface FlowSeriesData {
   description?: string
   duration?: string
   image?: string
+  created_by?: string | null
   createdAt?: string
   updatedAt?: string
 }
@@ -32,6 +33,7 @@ export interface FlowSeriesSequence {
   breath?: string
   duration?: string
   image?: string
+  created_by?: string | null
   createdAt?: string
   updatedAt?: string
 }
@@ -67,6 +69,7 @@ const initialState: FlowSeriesPageState = {
     description: '',
     duration: '',
     image: '',
+    created_by: null,
     createdAt: '',
     updatedAt: '',
   },
@@ -104,6 +107,7 @@ function FlowSeriesReducer(
           description: '',
           duration: '',
           image: '',
+          created_by: null,
           createdAt: '',
           updatedAt: '',
         },
