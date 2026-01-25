@@ -28,6 +28,8 @@
     "pretty": "prettier --l .",
     "pretty-fix": "prettier --write . && prettier --list-different .",
     "postinstall": "prisma generate && prisma db push",
+    "prisma:generate": "npx prisma generate",
+    "prisma:push": "prisma db push",
     "mongo": "mongod --config C:/data/config/mongod.conf",
     "docs": "typedoc",
     "import:asana-activity": "ts-node scripts/migrations/import-asana-activity.ts",

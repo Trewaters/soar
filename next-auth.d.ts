@@ -1,20 +1,40 @@
 import { DefaultSession, DefaultUser } from 'next-auth'
+import { JWT } from 'next-auth/jwt'
 
 declare module 'next-auth' {
+  /**
+   * Extended User interface with role support
+   * Role is optional during initial authentication but will be set from database
+   */
   interface User extends DefaultUser {
     id: string
     role?: string
   }
 
-  // ! extend Session correctly
+  /**
+   * Extended Session interface with role support
+   * Role is included in the session for client-side authorization checks
+   */
   interface Session {
     user: {
-      id: string | null
-      role?: string | null
-      status?: string | null
-      value?: string | null
-      expires?: string | null
+      id: string
+      role: string
+      name: string
+      email: string
+      image?: string
     } & DefaultSession['user']
-    lastLogin?: string | null
+  }
+}
+
+declare module 'next-auth/jwt' {
+  /**
+   * Extended JWT interface with role support
+   * Role is stored in JWT token and synced from database
+   */
+  interface JWT {
+    id: string
+    role: string
+    email: string
+    name?: string
   }
 }

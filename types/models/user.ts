@@ -7,9 +7,35 @@
  */
 
 /**
+ * User roles for authorization and access control
+ * Extensible for future roles (e.g., 'instructor', 'moderator', 'premium')
+ * @see UserData.role field in Prisma schema
+ */
+export type UserRole = 'user' | 'admin'
+
+/**
+ * Content ownership identifier
+ * Can be 'PUBLIC' for system content or a userId for user-created content
+ */
+export type ContentOwner = 'PUBLIC' | string
+
+/**
+ * Helper type for PUBLIC (system-owned) content
+ * Used to type-check content that should be publicly available
+ */
+export type PublicContent = { created_by: 'PUBLIC' }
+
+/**
+ * Helper type for user-owned content
+ * Used to type-check content that belongs to a specific user
+ */
+export type UserOwnedContent = { created_by: string }
+
+/**
  * Core UserData type representing the user account and profile information
  * This type matches the Prisma UserData model schema
  */
+
 export type UserData = {
   // Non-editable core identity fields
   id: string
@@ -40,6 +66,7 @@ export type UserData = {
   company: string
   socialURL: string
   isLocationPublic: string
+  /** User role for authorization - should be one of UserRole ('user' | 'admin') */
   role: string
 
   // Profile image management fields
