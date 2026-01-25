@@ -482,6 +482,11 @@ const authConfig = {
         session.user.name = token.name as string
       }
 
+      // Include role in session for authorization
+      if (session?.user && token.role) {
+        session.user.role = token.role as string
+      }
+
       return session
     },
     async jwt({
@@ -507,9 +512,11 @@ const authConfig = {
       if (!token.id && token.email) {
         const user = await prisma.userData.findUnique({
           where: { email: token.email as string },
+          select: { id: true, role: true },
         })
         if (user) {
           token.id = user.id
+          token.role = user.role || 'user'
           token.lastUserCheck = now
         } else {
           console.warn(
@@ -536,7 +543,7 @@ const authConfig = {
       if (token.id && shouldCheckUser) {
         const userExists = await prisma.userData.findUnique({
           where: { id: token.id as string },
-          select: { id: true },
+          select: { id: true, role: true },
         })
 
         if (!userExists) {
@@ -555,6 +562,8 @@ const authConfig = {
           return token
         }
 
+        // Update role from database to catch role changes
+        token.role = userExists.role || 'user'
         token.lastUserCheck = now
       }
 
