@@ -104,7 +104,7 @@ export default function Page() {
           }}
         >
           <SubNavHeader
-            title="Asanas"
+            mode="back"
             link="/navigator/asanaPoses"
             onClick={handleInfoClick}
             sx={{
