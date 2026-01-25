@@ -28,6 +28,7 @@ export async function GET(request: NextRequest) {
 
     // Get session and alpha user IDs for access control
     const session = await auth()
+    const currentUserId = session?.user?.id || null
     const currentUserEmail = session?.user?.email || null
     const alphaUserIds = getAlphaUserIds()
 
@@ -36,8 +37,9 @@ export async function GET(request: NextRequest) {
     if (createdBy) {
       // Access control: only allow if user requests their own sequences or alpha user sequences
       const hasAccess =
-        !currentUserEmail || // Allow if no user (for public access)
-        createdBy === currentUserEmail || // User's own sequences
+        (!currentUserId && !currentUserEmail) || // Allow if no user (for public access)
+        createdBy === currentUserId || // User's own sequences by ID
+        createdBy === currentUserEmail || // User's own sequences by email
         alphaUserIds.includes(createdBy) // Alpha user's sequences
 
       if (!hasAccess) {
@@ -47,9 +49,13 @@ export async function GET(request: NextRequest) {
       whereClause.created_by = createdBy
     } else {
       // If no specific creator, filter by access control
-      if (currentUserEmail) {
-        // Show user's own sequences + alpha user sequences
-        const allowedCreators = [currentUserEmail, ...alphaUserIds]
+      if (currentUserId || currentUserEmail) {
+        // Show user's own sequences (by ID and email) + alpha user sequences
+        const allowedCreators = [
+          currentUserId,
+          currentUserEmail,
+          ...alphaUserIds,
+        ].filter(Boolean)
         whereClause.created_by = {
           in: allowedCreators,
         }

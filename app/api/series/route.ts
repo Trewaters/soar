@@ -13,30 +13,48 @@ export async function GET(request: Request) {
     const filter = url.searchParams.get('filter') // 'public', 'personal', or null (both)
     const session = await auth().catch(() => null)
 
-    // Get current user ID
+    // Get current user ID and email for backward compatibility
     const currentUserId = session?.user?.id
+    const currentUserEmail = session?.user?.email
 
     // Build where clause based on filter parameter
     const whereClause: any = {}
 
     if (filter === 'public') {
-      whereClause.created_by = 'PUBLIC'
+      // Include legacy "alpha users" content as public
+      whereClause.created_by = {
+        in: ['PUBLIC', 'alpha users'],
+      }
     } else if (filter === 'personal') {
-      if (!session || !currentUserId) {
+      if (!session || (!currentUserId && !currentUserEmail)) {
         return NextResponse.json(
           { error: 'Authentication required to view personal content' },
           { status: 401 }
         )
       }
-      whereClause.created_by = currentUserId
+      // Check both ID and email for backward compatibility
+      const userIdentifiers = [currentUserId, currentUserEmail].filter(Boolean)
+      whereClause.created_by = {
+        in: userIdentifiers,
+      }
     } else {
-      // Default: show PUBLIC content + user's personal content
-      if (currentUserId) {
+      // Default: show PUBLIC + legacy "alpha users" + user's personal content
+      if (currentUserId || currentUserEmail) {
+        // Check both ID and email for backward compatibility with existing data
+        const userIdentifiers = [
+          'PUBLIC',
+          'alpha users', // Legacy public content
+          currentUserId,
+          currentUserEmail,
+        ].filter(Boolean)
         whereClause.created_by = {
-          in: ['PUBLIC', currentUserId],
+          in: userIdentifiers,
         }
       } else {
-        whereClause.created_by = 'PUBLIC'
+        // Unauthenticated users see PUBLIC and legacy "alpha users" content
+        whereClause.created_by = {
+          in: ['PUBLIC', 'alpha users'],
+        }
       }
     }
 
