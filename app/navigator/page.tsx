@@ -57,7 +57,7 @@ export default function Page() {
             Build Your Practice:
           </Typography>
           <Typography variant="body2" fontStyle={'italic'} sx={{ mb: 4 }}>
-            &quot;From Single Asana to Full Sequences&quot;
+            &quot;From a Single Asana to Full Sequences&quot;
           </Typography>
           <LandingPage />
         </Stack>
@@ -75,7 +75,7 @@ export default function Page() {
             Your Recent Activity
           </Typography>
           <Typography variant="body2" fontStyle={'italic'} sx={{ mb: 4 }}>
-            &quot;Check up on progress&quot;
+            View activities marked as <strong>completed</strong> on detail view
           </Typography>
           <AsanaActivityList />
         </Stack>
