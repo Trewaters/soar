@@ -48,7 +48,7 @@ export default function SessionDebugPage() {
               <strong>Name:</strong> {session.user.name || 'Not set'}
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
-              <strong>Role:</strong> {session.user.role || 'Not set'}
+              <strong>Role:</strong> {(session.user as any).role || 'Not set'}
             </Typography>
             <Typography variant="body1" sx={{ mb: 1 }}>
               <strong>Image:</strong> {session.user.image || 'Not set'}
