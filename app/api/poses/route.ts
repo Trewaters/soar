@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
   // Get current session
   const session = await auth()
   const currentUserId = session?.user?.id
+  const currentUserEmail = session?.user?.email
 
   // Handle ID lookup first (if provided)
   if (id) {
@@ -25,8 +26,9 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
       }
 
-      // Check access: PUBLIC content is visible to all, personal content only to owner/admin
-      const isPublic = pose.created_by === 'PUBLIC'
+      // Check access: PUBLIC and "alpha users" content is visible to all
+      const isPublic =
+        pose.created_by === 'PUBLIC' || pose.created_by === 'alpha users'
       const canAccess =
         isPublic || (await canModifyContent(pose.created_by || ''))
 
@@ -61,8 +63,9 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
       }
 
-      // Check access: PUBLIC content is visible to all, personal content only to owner/admin
-      const isPublic = pose.created_by === 'PUBLIC'
+      // Check access: PUBLIC and "alpha users" content is visible to all
+      const isPublic =
+        pose.created_by === 'PUBLIC' || pose.created_by === 'alpha users'
       const canAccess =
         isPublic || (await canModifyContent(pose.created_by || ''))
 
@@ -96,26 +99,41 @@ export async function GET(request: NextRequest) {
     const whereClause: any = {}
 
     if (filter === 'public') {
-      // Only PUBLIC content
-      whereClause.created_by = 'PUBLIC'
+      // Only PUBLIC content (including legacy "alpha users" content)
+      whereClause.created_by = {
+        in: ['PUBLIC', 'alpha users'],
+      }
     } else if (filter === 'personal') {
       // Only user's personal content (requires authentication)
-      if (!session || !currentUserId) {
+      if (!session || (!currentUserId && !currentUserEmail)) {
         return NextResponse.json(
           { error: 'Authentication required to view personal content' },
           { status: 401 }
         )
       }
-      whereClause.created_by = currentUserId
+      // Check both ID and email for backward compatibility
+      const userIdentifiers = [currentUserId, currentUserEmail].filter(Boolean)
+      whereClause.created_by = {
+        in: userIdentifiers,
+      }
     } else {
-      // Default: show PUBLIC content + user's personal content
-      if (currentUserId) {
+      // Default: show PUBLIC content + legacy "alpha users" + user's personal content
+      if (currentUserId || currentUserEmail) {
+        // Check both ID and email for backward compatibility with existing data
+        const userIdentifiers = [
+          'PUBLIC',
+          'alpha users', // Legacy public content
+          currentUserId,
+          currentUserEmail,
+        ].filter(Boolean)
         whereClause.created_by = {
-          in: ['PUBLIC', currentUserId],
+          in: userIdentifiers,
         }
       } else {
-        // Unauthenticated users only see PUBLIC content
-        whereClause.created_by = 'PUBLIC'
+        // Unauthenticated users see PUBLIC and legacy "alpha users" content
+        whereClause.created_by = {
+          in: ['PUBLIC', 'alpha users'],
+        }
       }
     }
 

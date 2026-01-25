@@ -171,6 +171,11 @@ export async function canModifyContent(
     return true
   }
 
+  // "alpha users" and "PUBLIC" content can only be modified by admins
+  if (contentCreatorId === 'PUBLIC' || contentCreatorId === 'alpha users') {
+    return false
+  }
+
   // User can modify their own content
   // Check against both user ID and email for flexibility
   return (
