@@ -266,7 +266,7 @@ export default function StyleGuide() {
             <Stack direction={'column'} spacing={1}>
               <Stack direction={'row'} justifyContent={'space-between'}>
                 <Typography variant="subtitle3">
-                  Subtitle3 ({theme.typography.subtitle3.fontSize})
+                  Subtitle3 ({theme.typography.subtitle3?.fontSize || 'N/A'})
                 </Typography>
                 <Typography variant="subtitle3" sx={{ fontStyle: 'italic' }}>
                   Custom Subtitle Variant

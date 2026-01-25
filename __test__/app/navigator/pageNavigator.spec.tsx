@@ -149,7 +149,7 @@ describe('Page Component', () => {
     )
     expect(screen.getByText('Build Your Practice:')).toBeInTheDocument()
     expect(
-      screen.getByText('"From Single Asana to Full Sequences"')
+      screen.getByText('"From a Single Asana to Full Sequences"')
     ).toBeInTheDocument()
     expect(screen.getByText('Your Recent Activity')).toBeInTheDocument()
   })

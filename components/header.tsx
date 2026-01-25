@@ -250,40 +250,46 @@ export default function Header() {
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'center',
           alignItems: 'center',
           height: '100%',
+          position: 'relative',
         }}
       >
-        <Stack direction="row" justifyContent={'space-between'}>
-          <IconButton
-            disableRipple
-            onClick={toggleDrawer(true)}
-            aria-label="Open main navigation"
-            aria-controls={openDrawer ? 'main-navigation' : undefined}
-            aria-expanded={openDrawer}
-            component="button"
-          >
-            <MenuIcon sx={{ height: '2em', width: '2em' }} />
-          </IconButton>
-          <Box
-            sx={{
-              position: 'absolute',
-              left: '50%',
-              transform: 'translateX(-50%)',
-            }}
-          >
-            <Link href="/">
-              <Image
-                src="/logo/Main Logo in Contrast Light150px.png"
-                alt="Soar Yoga main logo"
-                width={150}
-                height={20}
-                style={{ marginTop: '15%' }}
-              />
-            </Link>
-          </Box>
-        </Stack>
+        <IconButton
+          disableRipple
+          onClick={toggleDrawer(true)}
+          aria-label="Open main navigation"
+          aria-controls={openDrawer ? 'main-navigation' : undefined}
+          aria-expanded={openDrawer}
+          component="button"
+          sx={{
+            position: 'absolute',
+            left: 8,
+            zIndex: 2,
+          }}
+        >
+          <MenuIcon sx={{ height: '2em', width: '2em' }} />
+        </IconButton>
+        <Box
+          sx={{
+            ml: '64px', // Space for hamburger menu (48px icon + 8px left margin + 8px buffer)
+            mr: 2,
+            display: 'flex',
+            justifyContent: 'center',
+            flex: 1,
+          }}
+        >
+          <Link href="/">
+            <Image
+              src="/logo/Main Logo in Contrast Light150px.png"
+              alt="Soar Yoga main logo"
+              width={150}
+              height={20}
+              style={{ marginTop: '15%' }}
+            />
+          </Link>
+        </Box>
       </Box>
       <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
         <Paper onClick={handleClick} sx={{ height: '100%' }}>

@@ -17,7 +17,13 @@ export default function Page() {
         variant="h1"
         color="text.secondary"
         id="page-title"
-        sx={{ mb: 2, ml: 4 }}
+        sx={{ 
+          mb: 2, 
+          ml: 4,
+          wordWrap: 'break-word',
+          overflowWrap: 'break-word',
+          maxWidth: '100%'
+        }}
         alignSelf={'center'}
       >
         {(() => {

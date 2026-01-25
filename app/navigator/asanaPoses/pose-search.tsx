@@ -52,7 +52,10 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
 
   function handleChange(
     event: SyntheticEvent<Element, Event>,
-    value: AsanaPose | { section: 'Mine' | 'Alpha' | 'Others' } | null,
+    value:
+      | AsanaPose
+      | { section: 'My Asanas' | 'Public Asanas' | 'Others' }
+      | null,
     reason: any,
     details?: any
   ) {
@@ -116,14 +119,15 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
     alphaCreated.sort(sortByTitle)
     others.sort(sortByTitle)
     // Insert section headers
-    const result: Array<AsanaPose | { section: 'Mine' | 'Alpha' | 'Others' }> =
-      []
+    const result: Array<
+      AsanaPose | { section: 'My Asanas' | 'Public Asanas' | 'Others' }
+    > = []
     if (userCreated.length > 0) {
-      result.push({ section: 'Mine' })
+      result.push({ section: 'My Asanas' })
       userCreated.forEach((item) => result.push(item))
     }
     if (alphaCreated.length > 0) {
-      result.push({ section: 'Alpha' })
+      result.push({ section: 'Public Asanas' })
       alphaCreated.forEach((item) => result.push(item))
     }
     if (others.length > 0) {
@@ -170,7 +174,8 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
         filterOptions={(options, state) => {
           // Partition options into groups by section
           const groups: Record<string, any[]> = {}
-          let currentSection: 'Mine' | 'Alpha' | 'Others' | null = null
+          let currentSection: 'My Asanas' | 'Public Asanas' | 'Others' | null =
+            null
           for (const option of options) {
             if ('section' in option) {
               currentSection = option.section
@@ -189,11 +194,8 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
           }
           // Flatten back to options array, inserting section header if group has any items
           const filtered: typeof options = []
-          const sectionOrder: Array<'Mine' | 'Alpha' | 'Others'> = [
-            'Mine',
-            'Alpha',
-            'Others',
-          ]
+          const sectionOrder: Array<'My Asanas' | 'Public Asanas' | 'Others'> =
+            ['My Asanas', 'Public Asanas', 'Others']
           for (const section of sectionOrder) {
             if (groups[section] && groups[section].length > 0) {
               filtered.push({ section })

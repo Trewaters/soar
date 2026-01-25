@@ -27,6 +27,14 @@ jest.mock('next/navigation', () => {
     ...original,
     useSearchParams: jest.fn(() => new URLSearchParams('id=flow-1')),
     usePathname: jest.fn(() => '/navigator/flows/practiceSeries'),
+    useRouter: jest.fn(() => ({
+      back: jest.fn(),
+      forward: jest.fn(),
+      push: jest.fn(),
+      replace: jest.fn(),
+      refresh: jest.fn(),
+      prefetch: jest.fn(),
+    })),
   }
 })
 
