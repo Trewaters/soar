@@ -370,7 +370,7 @@ export default function ActivityStreaks({
   if (status === 'unauthenticated' || !session) {
     return (
       <Paper elevation={2} sx={{ p: 2, borderRadius: 2 }}>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="error.main">
           Sign in to view your activity streaks
         </Typography>
       </Paper>
@@ -412,7 +412,7 @@ export default function ActivityStreaks({
       >
         <Stack direction="row" alignItems="center" spacing={1}>
           <Typography
-            variant="h3"
+            variant="h2"
             fontWeight="bold"
             sx={{ color: 'success.main', textAlign: 'center' }}
           >
@@ -421,11 +421,16 @@ export default function ActivityStreaks({
         </Stack>
 
         <Stack direction="row" alignItems="center" spacing={2}>
-          <Typography variant="h4" fontWeight="bold" color="primary.main">
+          <Typography
+            variant="subtitle1"
+            fontWeight="bold"
+            color="primary.main"
+          >
             {primaryStreak.currentStreak}
           </Typography>
           <Typography
-            variant="h4"
+            variant="subtitle1"
+            fontWeight="bold"
             color="primary.main"
             textTransform={'uppercase'}
           >
@@ -452,7 +457,7 @@ export default function ActivityStreaks({
         {/* Header */}
         <Stack direction="row" alignItems="center" spacing={2}>
           <TrendingUpIcon color="primary" fontSize="medium" />
-          <Typography variant="h6" fontWeight="bold">
+          <Typography variant="h2" fontWeight="bold">
             Activity Streaks
           </Typography>
         </Stack>
@@ -491,7 +496,7 @@ export default function ActivityStreaks({
                 <Stack alignItems="center" spacing={1}>
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Typography
-                      variant="h4"
+                      variant="h2"
                       fontWeight="bold"
                       color={`${streak.color}.main`}
                     >

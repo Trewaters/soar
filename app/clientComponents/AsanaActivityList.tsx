@@ -204,81 +204,66 @@ export default function AsanaActivityList() {
                 gap: 1,
               }}
             >
-              <Stack spacing={0.5} sx={{ flex: 1, minWidth: 0 }}>
-                {activity.type === 'series' ? (
-                  <Link
-                    href={`/navigator/flows/practiceSeries?id=${activity.seriesId}`}
-                  >
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 0.5,
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      <WorkspacesIcon
-                        sx={{ fontSize: 20, color: 'secondary.main' }}
+              {(() => {
+                const Icon =
+                  activity.type === 'series'
+                    ? WorkspacesIcon
+                    : activity.type === 'sequence'
+                      ? GroupWorkIcon
+                      : Brightness1OutlinedIcon
+                const href =
+                  activity.type === 'series'
+                    ? `/navigator/flows/practiceSeries?id=${activity.seriesId}`
+                    : activity.type === 'sequence'
+                      ? `/navigator/sequences/${activity.sequenceId}`
+                      : `/navigator/asanaPoses/${activity.asanaId || '#'}`
+                const name =
+                  activity.type === 'series'
+                    ? activity.seriesName
+                    : activity.type === 'sequence'
+                      ? activity.sequenceName
+                      : activity.asanaName
+
+                return (
+                  <>
+                    <Stack spacing={0.5} alignItems="center">
+                      <Icon
+                        sx={{
+                          fontSize: 20,
+                          color: 'secondary.main',
+                        }}
                       />
-                      {activity.seriesName}
-                    </Typography>
-                  </Link>
-                ) : activity.type === 'sequence' ? (
-                  <Link href={`/navigator/sequences/${activity.sequenceId}`}>
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 0.5,
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
+                      <Typography variant="caption" color="text.secondary">
+                        {new Date(activity.datePerformed).toLocaleDateString(
+                          undefined,
+                          {
+                            month: 'short',
+                            day: 'numeric',
+                          }
+                        )}
+                      </Typography>
+                    </Stack>
+                    <Stack
+                      sx={{ flex: 1, minWidth: 0 }}
+                      justifyContent="center"
+                      alignItems="center"
                     >
-                      <GroupWorkIcon
-                        sx={{ fontSize: 20, color: 'secondary.main' }}
-                      />
-                      {activity.sequenceName}
-                    </Typography>
-                  </Link>
-                ) : (
-                  <Link
-                    href={`/navigator/asanaPoses/${
-                      activity.type === 'asana' ? activity.asanaId : '#'
-                    }`}
-                  >
-                    <Typography
-                      variant="body1"
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 0.5,
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      <Brightness1OutlinedIcon
-                        sx={{ fontSize: 20, color: 'secondary.main' }}
-                      />
-                      {activity.asanaName}
-                    </Typography>
-                  </Link>
-                )}
-                <Typography variant="caption" color="text.secondary">
-                  {new Date(activity.datePerformed).toLocaleDateString(
-                    undefined,
-                    {
-                      month: 'short',
-                      day: 'numeric',
-                    }
-                  )}
-                </Typography>
-              </Stack>
+                      <Link href={href}>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {name}
+                        </Typography>
+                      </Link>
+                    </Stack>
+                  </>
+                )
+              })()}
               <Stack
                 direction="row"
                 spacing={1}

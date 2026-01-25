@@ -50,17 +50,23 @@ export default function Page() {
         <Divider
           color="primary.main"
           textAlign="center"
-          sx={{ marginLeft: 'auto', marginRight: 'auto', width: '10%', mb: 4 }}
+          sx={{ marginLeft: 'auto', marginRight: 'auto', width: '10%', mb: 6 }}
         />
         <Stack spacing={3}>
-          <Typography variant="body1">Build Your Practice:</Typography>
+          <Typography variant="subtitle1" color="success.main">
+            Build Your Practice:
+          </Typography>
           <Typography variant="body2" fontStyle={'italic'}>
             &quot;From Single Asana to Full Sequences&quot;
           </Typography>
           <LandingPage />
         </Stack>
         <Stack>
-          <Typography variant="body1" sx={{ mt: 4, mb: 1, width: '80vw' }}>
+          <Typography
+            variant="subtitle1"
+            color="success.main"
+            sx={{ mt: 6, mb: 1, width: '80vw' }}
+          >
             Your Recent Activity
           </Typography>
           <AsanaActivityList />
