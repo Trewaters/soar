@@ -8,8 +8,8 @@
  * @module authorization
  */
 
-import { auth } from '@/auth'
-import type { UserRole } from '@/types/models/user'
+import { auth } from '../../auth'
+import type { UserRole } from '../../types/models/user'
 import type { Session } from 'next-auth'
 
 /**

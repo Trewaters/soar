@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../app/lib/prismaClient'
 import { auth } from '../../../../auth'
-import { canModifyContent } from '@/app/utils/authorization'
+import { canModifyContent } from '@app/utils/authorization'
 import { formatSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 
 // Use shared prisma client

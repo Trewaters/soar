@@ -380,6 +380,7 @@ export default function Page() {
         >
           <SubNavHeader
             title="Flows"
+            mode="static"
             link="/navigator/flows"
             onClick={() => setOpen(!open)}
             sx={{

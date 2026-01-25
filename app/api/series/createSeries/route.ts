@@ -1,6 +1,6 @@
 import { prisma } from '../../../../app/lib/prismaClient'
 import { auth } from '../../../../auth'
-import { requireAuth } from '@/app/utils/authorization'
+import { requireAuth } from '@app/utils/authorization'
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
@@ -12,41 +12,40 @@ export async function POST(request: Request) {
   try {
     // Ensure user is authenticated before creating series
     const session = await requireAuth()
-    
-    const body = await request.json()
-  const seriesName = body.seriesName
-  // Accept either an array of strings (legacy) or array of objects { poseId, sort_english_name, alignment_cues? }
-  const rawSeriesPoses = body.seriesPoses ?? body.series_poses
-  let seriesPoses: any[] = []
-  if (Array.isArray(rawSeriesPoses)) {
-    seriesPoses = rawSeriesPoses.map((item: any) => {
-      if (item && typeof item === 'object' && !Array.isArray(item)) {
-        // sanitize alignment_cues
-        if (typeof item.alignment_cues === 'string') {
-          item.alignment_cues = item.alignment_cues.slice(0, 1000)
-        }
-        return item
-      }
-      // legacy string entry
-      return item
-    })
-  } else if (
-    typeof rawSeriesPoses === 'string' &&
-    rawSeriesPoses.trim().length > 0
-  ) {
-    seriesPoses = [rawSeriesPoses]
-  }
-  const rawBreath = body.breathSeries ?? body.breath ?? []
-  const breathSeries: string[] = Array.isArray(rawBreath)
-    ? rawBreath
-    : typeof rawBreath === 'string' && rawBreath.trim().length > 0
-      ? [rawBreath]
-      : []
-  const description = body.description ?? ''
-  const durationSeries = body.durationSeries ?? body.duration ?? ''
-  const image = body.image ?? ''
 
-  try {
+    const body = await request.json()
+    const seriesName = body.seriesName
+    // Accept either an array of strings (legacy) or array of objects { poseId, sort_english_name, alignment_cues? }
+    const rawSeriesPoses = body.seriesPoses ?? body.series_poses
+    let seriesPoses: any[] = []
+    if (Array.isArray(rawSeriesPoses)) {
+      seriesPoses = rawSeriesPoses.map((item: any) => {
+        if (item && typeof item === 'object' && !Array.isArray(item)) {
+          // sanitize alignment_cues
+          if (typeof item.alignment_cues === 'string') {
+            item.alignment_cues = item.alignment_cues.slice(0, 1000)
+          }
+          return item
+        }
+        // legacy string entry
+        return item
+      })
+    } else if (
+      typeof rawSeriesPoses === 'string' &&
+      rawSeriesPoses.trim().length > 0
+    ) {
+      seriesPoses = [rawSeriesPoses]
+    }
+    const rawBreath = body.breathSeries ?? body.breath ?? []
+    const breathSeries: string[] = Array.isArray(rawBreath)
+      ? rawBreath
+      : typeof rawBreath === 'string' && rawBreath.trim().length > 0
+        ? [rawBreath]
+        : []
+    const description = body.description ?? ''
+    const durationSeries = body.durationSeries ?? body.duration ?? ''
+    const image = body.image ?? ''
+
     // Try create with seriesPoses field
     const newSeries = await prisma.asanaSeries.create({
       data: {
@@ -64,7 +63,7 @@ export async function POST(request: Request) {
         updatedAt: new Date(),
       } as any,
     })
-    
+
     const timestamp = Date.now().toString()
     return Response.json(
       {
@@ -95,19 +94,7 @@ export async function POST(request: Request) {
         { status: 401 }
       )
     }
-    
-    return Response.json({ error: error.message }, { status: 500 })
-  }
-}
-  } catch (error: any) {
-    // Handle authentication errors from outer try block
-    if (error.message === 'Unauthorized - Please sign in') {
-      return NextResponse.json(
-        { error: 'Authentication required to create series' },
-        { status: 401 }
-      )
-    }
-    
+
     return Response.json({ error: error.message }, { status: 500 })
   }
 }

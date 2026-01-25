@@ -227,6 +227,7 @@ export async function POST(request: NextRequest) {
     // Save image metadata to database
     const imageData = {
       userId: user.id, // Use the ObjectId, not the email
+      created_by: user.id, // Set ownership
       fileName: filename,
       altText: altText || `${poseName || imageType} image`,
       fileSize: file.size,

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { auth } from '../../../auth'
-import { canModifyContent } from '@/app/utils/authorization'
+import { canModifyContent } from '@app/utils/authorization'
 import { prisma } from '../../lib/prismaClient'
 
 // Force this route to be dynamic since it requires query parameters

@@ -1,13 +1,13 @@
 import { auth } from '../../../../auth'
 import { prisma } from '../../../../app/lib/prismaClient'
-import { requireAuth } from '@/app/utils/authorization'
+import { requireAuth } from '@app/utils/authorization'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
   try {
     // Ensure user is authenticated before creating content
     const session = await requireAuth()
-    
+
     const {
       english_names,
       alternative_english_names,
@@ -23,7 +23,6 @@ export async function POST(request: Request) {
       // Ignore any created_by from request - we set it from session
     } = await request.json()
 
-  try {
     const createdPose = await prisma.asanaPose.create({
       data: {
         english_names,
@@ -77,7 +76,7 @@ export async function POST(request: Request) {
         { status: 401 }
       )
     }
-    
+
     console.error('Error creating pose in database:', {
       error: error.message,
       stack: error.stack,

@@ -2,6 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useMemo } from 'react'
+import type { Session } from 'next-auth'
 
 /**
  * Hook to determine if the current user can edit specific content
@@ -19,7 +20,10 @@ import { useMemo } from 'react'
  * ```
  */
 export function useCanEditContent(created_by?: string | null) {
-  const { data: session } = useSession()
+  const { data: session } = useSession() as {
+    data: Session | null
+    status: string
+  }
 
   return useMemo(() => {
     // No session = cannot edit
@@ -82,7 +86,10 @@ export function useCanEditContent(created_by?: string | null) {
  * @returns boolean indicating admin status
  */
 export function useIsAdmin() {
-  const { data: session } = useSession()
+  const { data: session } = useSession() as {
+    data: Session | null
+    status: string
+  }
   return useMemo(() => {
     return session?.user?.role === 'admin'
   }, [session?.user?.role])

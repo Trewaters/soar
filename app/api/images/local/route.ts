@@ -33,6 +33,7 @@ export async function POST(request: NextRequest) {
     const poseImage = await prisma.poseImage.create({
       data: {
         userId: session.user.id,
+        created_by: session.user.id, // Set ownership
         url: url || `local://${localStorageId}`, // Special URL format for local images
         altText: altText || null,
         fileName,

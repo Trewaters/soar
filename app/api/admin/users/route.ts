@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireRole } from '@/app/utils/authorization'
-import { prisma } from '@/app/lib/prismaClient'
+import { requireRole } from '@app/utils/authorization'
+import { prisma } from '@lib/prismaClient'
 
 /**
  * Admin-only endpoint to list all users

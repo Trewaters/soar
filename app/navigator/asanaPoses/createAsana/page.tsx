@@ -450,6 +450,7 @@ export default function Page() {
       >
         <SubNavHeader
           title="Asana"
+          mode="static"
           link="/navigator/asanaPoses"
           onClick={handleInfoClick}
         />

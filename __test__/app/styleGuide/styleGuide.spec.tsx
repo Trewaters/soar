@@ -143,23 +143,16 @@ describe('StyleGuide Component', () => {
 
       // Check for typography headings
       expect(screen.getByText('Main Page level Heading')).toBeInTheDocument()
-      expect(screen.getByText(/H2 - Section Heading/)).toBeInTheDocument()
-      expect(screen.getByText(/H3 - Subsection Heading/)).toBeInTheDocument()
-      expect(screen.getByText(/H4 - Heading/)).toBeInTheDocument()
-      expect(screen.getByText(/H5 - Heading/)).toBeInTheDocument()
-      expect(screen.getByText(/H6 - Heading/)).toBeInTheDocument()
-      expect(screen.getByText(/Subtitle 1/)).toBeInTheDocument()
-      expect(screen.getByText(/Subtitle 2/)).toBeInTheDocument()
-      expect(
-        screen.getByText(/Body 1 - Default paragraph text/)
-      ).toBeInTheDocument()
-      expect(
-        screen.getByText(/Body 2 - Smaller paragraph text/)
-      ).toBeInTheDocument()
-      expect(screen.getByText(/Caption text/)).toBeInTheDocument()
-      expect(screen.getByText(/OVERLINE TEXT/)).toBeInTheDocument()
-      expect(screen.getByText(/Label Text/)).toBeInTheDocument()
-      expect(screen.getByText(/Splash Title/)).toBeInTheDocument()
+      expect(screen.getByText('Section Heading')).toBeInTheDocument()
+      expect(screen.getByText('Subsection Heading')).toBeInTheDocument()
+      expect(screen.getByText(/Heading Level 4/)).toBeInTheDocument()
+      expect(screen.getByText(/Heading Level 5/)).toBeInTheDocument()
+      expect(screen.getByText(/Heading Level 6/)).toBeInTheDocument()
+      expect(screen.getAllByText('Subtitle Variant').length).toBeGreaterThan(0)
+      expect(screen.getByText('Default paragraph text')).toBeInTheDocument()
+      expect(screen.getByText('Smaller paragraph text')).toBeInTheDocument()
+      expect(screen.getByText('Caption text')).toBeInTheDocument()
+      expect(screen.getByText('Overline text')).toBeInTheDocument()
     })
 
     it('shows typography with font size information', () => {

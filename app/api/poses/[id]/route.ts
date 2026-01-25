@@ -1,7 +1,7 @@
 import { auth } from '../../../../auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../app/lib/prismaClient'
-import { canModifyContent } from '@/app/utils/authorization'
+import { canModifyContent } from '@app/utils/authorization'
 import fs from 'fs'
 import path from 'path'
 

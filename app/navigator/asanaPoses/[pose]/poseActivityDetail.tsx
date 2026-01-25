@@ -688,6 +688,7 @@ export default function PoseActivityDetail({
       >
         <SubNavHeader
           title="Asanas"
+          mode="static"
           link="/navigator/asanaPoses"
           onClick={handleInfoClick}
         />
