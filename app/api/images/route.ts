@@ -29,9 +29,19 @@ interface PoseImage {
 }
 
 export async function GET(request: NextRequest) {
+  // Declare session outside try-catch for error logging access
+  let session: Awaited<ReturnType<typeof auth>> | null = null
+
+  // Declare search params outside try-catch for error logging access
+  let poseId: string | null = null
+  let poseName: string | null = null
+  let imageType: string | null = null
+  let limit = 50
+  let offset = 0
+
   try {
     // Check authentication
-    const session = await auth()
+    session = await auth()
     if (!session?.user?.id) {
       return NextResponse.json(
         { error: 'Authentication required' },
@@ -40,13 +50,13 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const poseId = searchParams.get('poseId')
-    const poseName = searchParams.get('poseName')
-    const imageType = searchParams.get('imageType')
+    poseId = searchParams.get('poseId')
+    poseName = searchParams.get('poseName')
+    imageType = searchParams.get('imageType')
     const includeOwnership = searchParams.get('includeOwnership') === 'true'
     const orderBy = searchParams.get('orderBy') || 'uploadedAt'
-    const limit = parseInt(searchParams.get('limit') || '50')
-    const offset = parseInt(searchParams.get('offset') || '0')
+    limit = parseInt(searchParams.get('limit') || '50')
+    offset = parseInt(searchParams.get('offset') || '0')
     const showAll = searchParams.get('showAll') === 'true' // Admin flag to show all content
 
     // Get admin status
@@ -79,8 +89,8 @@ export async function GET(request: NextRequest) {
     const useServerSideIdFilter = Boolean(poseId)
 
     if (poseId) {
-      // Prefer poseId (new schema); keep poseId for backward compatibility
-      baseWhere.OR = [{ poseId }, { poseId: poseId }]
+      // Filter by poseId field in PoseImage model
+      baseWhere.poseId = poseId
     }
 
     // Fetch images with optional pose/pose relation populated. Use full record
@@ -90,6 +100,14 @@ export async function GET(request: NextRequest) {
     let images: any[] = []
 
     try {
+      console.log('🔍 Fetching images with params:', {
+        poseId,
+        poseName,
+        userId: session.user.id,
+        baseWhere,
+        useServerSideIdFilter,
+      })
+
       if (useServerSideIdFilter) {
         images = await prisma.poseImage.findMany({
           where: baseWhere,
@@ -147,7 +165,7 @@ export async function GET(request: NextRequest) {
           const sanskritNames = image.pose?.sanskrit_names
 
           const lower = (s: any) => (s ? String(s).toLowerCase() : '')
-          const needle = poseName.toLowerCase()
+          const needle = poseName?.toLowerCase() ?? ''
 
           if (lower(name).includes(needle)) return true
           if (Array.isArray(englishNames)) {
@@ -205,9 +223,24 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(response)
   } catch (error) {
-    console.error('Error fetching images:', error)
+    console.error('❌ Error fetching images - Full details:', {
+      error: error instanceof Error ? error.message : error,
+      stack: error instanceof Error ? error.stack : undefined,
+      errorName: error instanceof Error ? error.name : undefined,
+      userId: session?.user?.id,
+      params: {
+        poseId,
+        poseName,
+        imageType,
+        limit,
+        offset,
+      },
+    })
     return NextResponse.json(
-      { error: 'Failed to fetch images' },
+      {
+        error: 'Failed to fetch images',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
       { status: 500 }
     )
   }
