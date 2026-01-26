@@ -107,7 +107,20 @@ export async function getUserPoseImages(
     })
 
     if (!response.ok) {
-      const errorData = await response.json()
+      // Try to parse as JSON, but if that fails, get the text
+      let errorData: any
+      const contentType = response.headers.get('content-type')
+      try {
+        errorData = await response.json()
+      } catch {
+        const errorText = await response.text()
+        console.error('🔍 getUserPoseImages: Non-JSON error response', {
+          status: response.status,
+          contentType,
+          errorText: errorText.substring(0, 500),
+        })
+        throw new Error(`API returned non-JSON error (${response.status}): ${errorText.substring(0, 200)}`)
+      }
       console.error('🔍 getUserPoseImages: API error', {
         status: response.status,
         errorData,
@@ -115,7 +128,18 @@ export async function getUserPoseImages(
       throw new Error(errorData.error || 'Failed to fetch images')
     }
 
-    const result = await response.json()
+    // Parse the success response
+    let result
+    try {
+      result = await response.json()
+    } catch (parseError) {
+      const responseText = await response.text()
+      console.error('🔍 getUserPoseImages: Failed to parse success response', {
+        parseError,
+        responseStart: responseText.substring(0, 500),
+      })
+      throw new Error(`Failed to parse API response: ${responseText.substring(0, 200)}`)
+    }
     return result
   } catch (error) {
     console.error('🔍 getUserPoseImages: Service error', error)
