@@ -48,14 +48,28 @@ export async function PUT(
       return NextResponse.json({ error: 'Pose not found' }, { status: 404 })
     }
 
+    console.log('[PUT /api/poses/[id]] Authorization check:', {
+      poseId: resolvedParams.id,
+      poseCreatedBy: existingPose.created_by,
+      sessionUser: session.user.email,
+      sessionRole: session.user.role,
+    })
+
     // Check if the user is authorized to edit this pose
     // PUBLIC content can be modified by admins, personal content by owner/admin
-    if (!(await canModifyContent(existingPose.created_by || ''))) {
+    const canModify = await canModifyContent(existingPose.created_by || '')
+
+    console.log('[PUT /api/poses/[id]] canModify result:', canModify)
+
+    if (!canModify) {
+      console.log('[PUT /api/poses/[id]] Access denied')
       return NextResponse.json(
         { error: 'You do not have permission to modify this pose' },
         { status: 403 }
       )
     }
+
+    console.log('[PUT /api/poses/[id]] Access granted, proceeding with update')
 
     // Only copy allowed fields that are present in the request body so we
     // don't accidentally overwrite fields with undefined.

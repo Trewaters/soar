@@ -2,6 +2,7 @@ import { prisma } from '../../../app/lib/prismaClient'
 import { NextRequest, NextResponse } from 'next/server'
 import { createHash } from 'crypto'
 import { auth } from '../../../auth'
+import { isAdmin } from '@app/utils/authorization'
 import getAlphaUserIds from '@app/lib/alphaUsers'
 
 // Use shared prisma client
@@ -25,23 +26,31 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const bustCache = searchParams.get('bust') || 'true' // Default to cache busting
     const createdBy = searchParams.get('createdBy')
+    const showAll = searchParams.get('showAll') === 'true' // Admin flag to show all content
 
     // Get session and alpha user IDs for access control
     const session = await auth()
     const currentUserId = session?.user?.id || null
     const currentUserEmail = session?.user?.email || null
     const alphaUserIds = getAlphaUserIds()
+    const userIsAdmin = await isAdmin()
 
     console.log('🔍 Sequences API - Session info:', {
       userId: currentUserId,
       userEmail: currentUserEmail,
       alphaUserIds,
       createdByParam: createdBy,
+      showAll,
+      isAdmin: userIsAdmin,
     })
 
     const whereClause: any = {}
 
-    if (createdBy) {
+    // Admin users with showAll=true can see all content
+    if (showAll && userIsAdmin) {
+      // No filter - return everything for admins
+      console.log('🔑 Admin user - returning all sequences')
+    } else if (createdBy) {
       // Access control: only allow if user requests their own sequences or alpha user sequences
       const hasAccess =
         (!currentUserId && !currentUserEmail) || // Allow if no user (for public access)

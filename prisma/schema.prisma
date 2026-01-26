@@ -31,7 +31,7 @@ model UserData {
   company          String?
   socialURL        String?
   isLocationPublic String?
-  role             String    @default("user") // "user" | "admin" | future roles
+  role             String    @default("user")
 
   // emailPublic       String
   // emailInternal     String

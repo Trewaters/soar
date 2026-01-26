@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../auth'
-import { canModifyContent } from '@app/utils/authorization'
+import { canModifyContent, isAdmin } from '@app/utils/authorization'
 import { prisma } from '../../../app/lib/prismaClient'
 
 // Force this route to be dynamic since it requires query parameters
@@ -12,11 +12,13 @@ export async function GET(request: NextRequest) {
   const id = searchParams.get('id')
   const filter = searchParams.get('filter') // 'public' | 'personal' | null (default: all)
   const createdBy = searchParams.get('createdBy') // Filter by specific creator
+  const showAll = searchParams.get('showAll') === 'true' // Admin flag to show all content
 
-  // Get current session
+  // Get current session and check admin status
   const session = await auth()
   const currentUserId = session?.user?.id
   const currentUserEmail = session?.user?.email
+  const userIsAdmin = await isAdmin()
 
   // Handle ID lookup first (if provided)
   if (id) {
@@ -99,8 +101,10 @@ export async function GET(request: NextRequest) {
     // Build where clause based on filter parameter
     const whereClause: any = {}
 
-    // Handle createdBy parameter for user library filtering
-    if (createdBy) {
+    // Admin users with showAll=true can see all content
+    if (showAll && userIsAdmin) {
+      // No filter - return everything for admins
+    } else if (createdBy) {
       // Filter to specific creator only (for user library view)
       whereClause.created_by = createdBy
     } else if (filter === 'public') {

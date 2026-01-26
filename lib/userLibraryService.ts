@@ -24,23 +24,27 @@ export interface UserSequenceData extends SequenceData {
 
 /**
  * Get all asanas created by a specific user
+ * For admin users, returns all asanas regardless of creator
  */
 export async function getUserCreatedAsanas(
-  userEmail: string
+  userEmail: string,
+  isAdmin: boolean = false
 ): Promise<UserAsanaData[]> {
   try {
     const timestamp = Date.now()
-    const response = await fetch(
-      `/api/poses?createdBy=${encodeURIComponent(userEmail)}&t=${timestamp}`,
-      {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          Pragma: 'no-cache',
-          Expires: '0',
-        },
-      }
-    )
+    // Admins get all content, regular users get only their own
+    const url = isAdmin
+      ? `/api/poses?showAll=true&t=${timestamp}`
+      : `/api/poses?createdBy=${encodeURIComponent(userEmail)}&t=${timestamp}`
+
+    const response = await fetch(url, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    })
 
     if (!response.ok) {
       throw new Error('Failed to fetch user asanas')
@@ -51,6 +55,7 @@ export async function getUserCreatedAsanas(
     logServiceError(error, 'userLibraryService', 'getUserCreatedAsanas', {
       operation: 'fetch_user_asanas',
       userEmail,
+      isAdmin,
     })
     throw error
   }
@@ -58,23 +63,27 @@ export async function getUserCreatedAsanas(
 
 /**
  * Get all series created by a specific user
+ * For admin users, returns all series regardless of creator
  */
 export async function getUserCreatedSeries(
-  userEmail: string
+  userEmail: string,
+  isAdmin: boolean = false
 ): Promise<UserSeriesData[]> {
   try {
     const timestamp = Date.now()
-    const response = await fetch(
-      `/api/series?createdBy=${encodeURIComponent(userEmail)}&t=${timestamp}`,
-      {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          Pragma: 'no-cache',
-          Expires: '0',
-        },
-      }
-    )
+    // Admins get all content, regular users get only their own
+    const url = isAdmin
+      ? `/api/series?showAll=true&t=${timestamp}`
+      : `/api/series?createdBy=${encodeURIComponent(userEmail)}&t=${timestamp}`
+
+    const response = await fetch(url, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    })
 
     if (!response.ok) {
       throw new Error('Failed to fetch user series')
@@ -85,6 +94,7 @@ export async function getUserCreatedSeries(
     logServiceError(error, 'userLibraryService', 'getUserCreatedSeries', {
       operation: 'fetch_user_series',
       userEmail,
+      isAdmin,
     })
     throw error
   }
@@ -92,23 +102,27 @@ export async function getUserCreatedSeries(
 
 /**
  * Get all sequences created by a specific user
+ * For admin users, returns all sequences regardless of creator
  */
 export async function getUserCreatedSequences(
-  userEmail: string
+  userEmail: string,
+  isAdmin: boolean = false
 ): Promise<UserSequenceData[]> {
   try {
     const timestamp = Date.now()
-    const response = await fetch(
-      `/api/sequences?createdBy=${encodeURIComponent(userEmail)}&t=${timestamp}`,
-      {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          Pragma: 'no-cache',
-          Expires: '0',
-        },
-      }
-    )
+    // Admins get all content, regular users get only their own
+    const url = isAdmin
+      ? `/api/sequences?showAll=true&t=${timestamp}`
+      : `/api/sequences?createdBy=${encodeURIComponent(userEmail)}&t=${timestamp}`
+
+    const response = await fetch(url, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    })
 
     if (!response.ok) {
       throw new Error('Failed to fetch user sequences')
@@ -119,6 +133,7 @@ export async function getUserCreatedSequences(
     logServiceError(error, 'userLibraryService', 'getUserCreatedSequences', {
       operation: 'fetch_user_sequences',
       userEmail,
+      isAdmin,
     })
     throw error
   }

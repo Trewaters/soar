@@ -23,6 +23,7 @@ import {
   fetchWithTimeout,
 } from '@lib/poseService'
 import { useSession } from 'next-auth/react'
+import { useCanEditContent } from '@app/hooks/useCanEditContent'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
 import { AsanaPose } from 'types/asana'
@@ -43,6 +44,7 @@ export default function EditPoseDialog({
   onSave,
 }: EditPoseDialogProps) {
   const { data: session } = useSession()
+  const { canEdit } = useCanEditContent(pose?.created_by)
   const [difficulty, setDifficulty] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -212,8 +214,8 @@ export default function EditPoseDialog({
       return
     }
 
-    if (pose.created_by !== session.user.email) {
-      setError('You can only edit poses you created')
+    if (!canEdit) {
+      setError('You do not have permission to edit this pose')
       setIsSubmitting(false)
       return
     }
@@ -277,8 +279,8 @@ export default function EditPoseDialog({
       return
     }
 
-    if (pose.created_by !== session.user.email) {
-      setError('You can only delete poses you created')
+    if (!canEdit) {
+      setError('You do not have permission to delete this pose')
       return
     }
 
@@ -297,18 +299,14 @@ export default function EditPoseDialog({
     }
   }
 
-  // Check if user can edit this pose
-  const canEdit = session?.user?.email === pose?.created_by
+  // canEdit is already defined at component top level using useCanEditContent hook
 
   if (!canEdit && open) {
     return (
       <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
         <DialogTitle>Cannot Edit Pose</DialogTitle>
         <DialogContent>
-          <Typography>
-            You can only edit poses you created. This pose was created by{' '}
-            {pose.created_by || 'another user'}.
-          </Typography>
+          <Typography>You do not have permission to edit this pose.</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Close</Button>

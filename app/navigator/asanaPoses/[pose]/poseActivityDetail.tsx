@@ -28,6 +28,7 @@ import PoseShareButton from '@app/clientComponents/poseShareButton'
 import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import ActivityTracker from '@app/clientComponents/ActivityTracker'
 import { useSession } from 'next-auth/react'
+import { useCanEditContent } from '@app/hooks/useCanEditContent'
 import {
   checkActivityExists,
   createAsanaActivity,
@@ -102,6 +103,7 @@ export default function PoseActivityDetail({
   const pose = poseCardProp
   const router = useNavigationWithLoading()
   const { data: session } = useSession()
+  const { canEdit } = useCanEditContent(pose?.created_by)
   const [activityRefreshTrigger, setActivityRefreshTrigger] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -361,8 +363,9 @@ export default function PoseActivityDetail({
       return
     }
 
-    if (pose.created_by !== session.user.email) {
-      setError('You can only edit poses you created')
+    // Check if user can edit (either owner or admin)
+    if (!canEdit) {
+      setError('You do not have permission to edit this pose')
       return
     }
 
@@ -385,8 +388,9 @@ export default function PoseActivityDetail({
       return
     }
 
-    if (pose.created_by !== session.user.email) {
-      setError('You can only edit poses you created')
+    // Check if user can edit (either owner or admin)
+    if (!canEdit) {
+      setError('You do not have permission to edit this pose')
       setIsSubmitting(false)
       return
     }
@@ -1065,9 +1069,9 @@ export default function PoseActivityDetail({
         </Box>
       )}
 
-      {/* Edit/Delete Pose Buttons - Only visible to creator */}
+      {/* Edit/Delete Pose Buttons - Only visible to creator or admin */}
       {/* Sticky Bottom Action Bar - Consistent with Create Asana page */}
-      {session && session.user && session.user.email === pose?.created_by && (
+      {session && session.user && canEdit && (
         <Box
           sx={{
             position: 'sticky',
@@ -1111,7 +1115,7 @@ export default function PoseActivityDetail({
                 >
                   Edit Pose
                 </Button>
-                {session.user.email === pose?.created_by && (
+                {canEdit && (
                   <Button
                     variant="outlined"
                     color="error"

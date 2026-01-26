@@ -25,6 +25,7 @@ import Grid from '@mui/material/Grid2'
 import { useSession } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { UseUser } from '@app/context/UserContext'
+import { useIsAdmin } from '@app/hooks/useCanEditContent'
 import Image from 'next/image'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -78,6 +79,7 @@ export default function LibraryPage() {
   const { data: session, status } = useSession()
   const { state } = UseUser()
   const router = useNavigationWithLoading()
+  const isAdmin = useIsAdmin()
   const [tabValue, setTabValue] = useState(0)
 
   // State for different content types
@@ -107,7 +109,7 @@ export default function LibraryPage() {
     setAsanasLoading(true)
     setError(null)
     try {
-      const userAsanas = await getUserCreatedAsanas(session.user.email)
+      const userAsanas = await getUserCreatedAsanas(session.user.email, isAdmin)
       setAsanas(userAsanas)
     } catch (error) {
       console.error('Error fetching user asanas:', error)
@@ -124,7 +126,7 @@ export default function LibraryPage() {
     setSeriesLoading(true)
     setError(null)
     try {
-      const userSeries = await getUserCreatedSeries(session.user.email)
+      const userSeries = await getUserCreatedSeries(session.user.email, isAdmin)
       setSeries(userSeries)
     } catch (error) {
       console.error('Error fetching user series:', error)
@@ -141,7 +143,10 @@ export default function LibraryPage() {
     setSequencesLoading(true)
     setError(null)
     try {
-      const userSequences = await getUserCreatedSequences(session.user.email)
+      const userSequences = await getUserCreatedSequences(
+        session.user.email,
+        isAdmin
+      )
       setSequences(userSequences)
     } catch (error) {
       console.error('Error fetching user sequences:', error)
@@ -158,7 +163,7 @@ export default function LibraryPage() {
       fetchUserSequences()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session?.user?.email])
+  }, [session?.user?.email, isAdmin])
 
   if (status === 'loading') {
     return (

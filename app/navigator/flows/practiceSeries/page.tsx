@@ -8,6 +8,7 @@ import React, {
   ChangeEvent,
 } from 'react'
 import { useSession } from 'next-auth/react'
+import { useIsAdmin } from '@app/hooks/useCanEditContent'
 import { FEATURES } from '@app/FEATURES'
 import { FlowSeriesData } from '@context/AsanaSeriesContext'
 import { orderPosesForSearch } from '@app/utils/search/orderPosesForSearch'
@@ -363,12 +364,13 @@ export default function Page() {
     setRefreshTrigger((prev) => prev + 1)
   }
 
-  // Determine if current user owns the selected series
+  // Determine if current user owns the selected series or is admin
+  const isAdmin = useIsAdmin()
   const isOwner = useMemo(() => {
     if (!flow || !session?.user?.email) return false
     // createdBy added by API normalization
-    return (flow as any).createdBy === session.user.email
-  }, [flow, session?.user?.email])
+    return (flow as any).createdBy === session.user.email || isAdmin
+  }, [flow, session?.user?.email, isAdmin])
 
   // Map FlowSeriesData to EditSeriesDialog expected shape
   const dialogSeries: EditSeriesShape | null = useMemo(() => {

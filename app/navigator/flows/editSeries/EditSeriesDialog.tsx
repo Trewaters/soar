@@ -5,6 +5,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import { useSession } from 'next-auth/react'
+import { useCanEditContent } from '@app/hooks/useCanEditContent'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import SeriesEditorForm from './SeriesEditorForm'
@@ -53,7 +54,7 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
   inline = false,
 }) => {
   const { data: session } = useSession()
-  const isCreator = session?.user?.email === series.created_by
+  const { canEdit } = useCanEditContent(series.created_by)
 
   // Form implementation moved to SeriesEditorForm; this component wraps it
 
@@ -61,9 +62,9 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
   // the component mounted without showing the editor.
   if (inline && !open) return null
 
-  // Only allow dialog/editor to open for creator. When not creator show an
-  // unauthorized message. Render differently depending on inline vs modal.
-  if (!isCreator && open) {
+  // Only allow dialog/editor to open for authorized users (owner or admin).
+  // When not authorized show an unauthorized message. Render differently depending on inline vs modal.
+  if (!canEdit && open) {
     if (inline) {
       return (
         <Box role="region" aria-labelledby="unauthorized-title" sx={{ p: 2 }}>
@@ -108,7 +109,7 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
     <SeriesEditorForm
       series={series}
       mode="edit"
-      disabled={!isCreator}
+      disabled={!canEdit}
       onSave={(updated) => {
         // forward the updated series to the original onSave handler
         onSave && onSave(updated)

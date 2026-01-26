@@ -30,6 +30,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import AddIcon from '@mui/icons-material/Add'
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement'
 import { useSession } from 'next-auth/react'
+import { useCanEditContent } from '@app/hooks/useCanEditContent'
 import { FlowSeriesSequence } from '@context/AsanaSeriesContext'
 import {
   useSequence,
@@ -74,11 +75,8 @@ export default function EditSequence({
 
   const email = session?.user?.email ?? null
   const usingContext = ctx?.active === true
-  const isOwner = usingContext
-    ? ctxIsOwner
-    : !!sequence?.created_by &&
-      !!email &&
-      sequence.created_by.trim().toLowerCase() === email.trim().toLowerCase()
+  const { canEdit } = useCanEditContent(sequence?.created_by || null)
+  const isOwner = usingContext ? ctxIsOwner : canEdit
 
   const [form, setForm] = useState<EditableSequence>({
     id: sequence.id,
@@ -323,7 +321,7 @@ export default function EditSequence({
         aria-label="edit-not-allowed"
         sx={{ m: 2 }}
       >
-        You cannot edit this sequence because you are not the creator.
+        You do not have permission to edit this sequence.
       </Alert>
     )
   }

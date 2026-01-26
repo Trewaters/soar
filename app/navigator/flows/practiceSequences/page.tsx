@@ -42,6 +42,7 @@ import {
 import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import { FEATURES } from '@app/FEATURES'
 import { useSession } from 'next-auth/react'
+import { useIsAdmin } from '@app/hooks/useCanEditContent'
 import getAlphaUserIds from '@app/lib/alphaUsers'
 import { orderPosesForSearch } from '@app/utils/search/orderPosesForSearch'
 
@@ -129,12 +130,13 @@ export default function Page() {
     updatedAt: '',
   })
 
-  // Determine if current user owns the selected sequence
+  // Determine if current user owns the selected sequence or is admin
+  const isAdmin = useIsAdmin()
   const isSequenceOwner = React.useMemo(() => {
     if (!singleSequence || !session?.user?.email) return false
     // createdBy added by API normalization
-    return (singleSequence as any).createdBy === session.user.email
-  }, [singleSequence, session?.user?.email])
+    return (singleSequence as any).createdBy === session.user.email || isAdmin
+  }, [singleSequence, session?.user?.email, isAdmin])
 
   const [, setIsLoadingFreshSeriesData] = useState<boolean>(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
