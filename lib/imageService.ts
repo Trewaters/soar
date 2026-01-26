@@ -107,46 +107,27 @@ export async function getUserPoseImages(
     })
 
     if (!response.ok) {
-      // Try to parse as JSON, but if that fails, get the text
+      // Clone response before reading to avoid "body stream already read" error
+      const clonedResponse = response.clone()
       let errorData: any
-      const contentType = response.headers.get('content-type')
       try {
         errorData = await response.json()
       } catch {
-        const errorText = await response.text()
-        console.error('🔍 getUserPoseImages: Non-JSON error response', {
-          status: response.status,
-          contentType,
-          errorText: errorText.substring(0, 500),
-        })
-        throw new Error(
-          `API returned non-JSON error (${response.status}): ${errorText.substring(0, 200)}`
-        )
+        try {
+          const errorText = await clonedResponse.text()
+          throw new Error(
+            `API returned non-JSON error (${response.status}): ${errorText.substring(0, 200)}`
+          )
+        } catch {
+          throw new Error(`API error (${response.status})`)
+        }
       }
-      console.error('🔍 getUserPoseImages: API error', {
-        status: response.status,
-        errorData,
-      })
       throw new Error(errorData.error || 'Failed to fetch images')
     }
 
-    // Parse the success response
-    let result
-    try {
-      result = await response.json()
-    } catch (parseError) {
-      const responseText = await response.text()
-      console.error('🔍 getUserPoseImages: Failed to parse success response', {
-        parseError,
-        responseStart: responseText.substring(0, 500),
-      })
-      throw new Error(
-        `Failed to parse API response: ${responseText.substring(0, 200)}`
-      )
-    }
+    const result = await response.json()
     return result
   } catch (error) {
-    console.error('🔍 getUserPoseImages: Service error', error)
     logServiceError(error, 'imageService', 'getUserPoseImages', {
       operation: 'fetch_user_images',
       limit,

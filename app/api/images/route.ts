@@ -100,14 +100,6 @@ export async function GET(request: NextRequest) {
     let images: any[] = []
 
     try {
-      console.log('🔍 Fetching images with params:', {
-        poseId,
-        poseName,
-        userId: session.user.id,
-        baseWhere,
-        useServerSideIdFilter,
-      })
-
       if (useServerSideIdFilter) {
         images = await prisma.poseImage.findMany({
           where: baseWhere,

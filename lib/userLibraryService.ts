@@ -47,7 +47,18 @@ export async function getUserCreatedAsanas(
     })
 
     if (!response.ok) {
-      throw new Error('Failed to fetch user asanas')
+      const clonedResponse = response.clone()
+      let errorMessage = 'Failed to fetch user asanas'
+      try {
+        const errorData = await response.json()
+        errorMessage = errorData.error || errorData.details || errorMessage
+      } catch {
+        try {
+          const errorText = await clonedResponse.text()
+          errorMessage = errorText.substring(0, 200)
+        } catch {}
+      }
+      throw new Error(errorMessage)
     }
 
     return await response.json()
@@ -86,7 +97,18 @@ export async function getUserCreatedSeries(
     })
 
     if (!response.ok) {
-      throw new Error('Failed to fetch user series')
+      const clonedResponse = response.clone()
+      let errorMessage = 'Failed to fetch user series'
+      try {
+        const errorData = await response.json()
+        errorMessage = errorData.error || errorData.details || errorMessage
+      } catch {
+        try {
+          const errorText = await clonedResponse.text()
+          errorMessage = errorText.substring(0, 200)
+        } catch {}
+      }
+      throw new Error(errorMessage)
     }
 
     return await response.json()
@@ -125,7 +147,18 @@ export async function getUserCreatedSequences(
     })
 
     if (!response.ok) {
-      throw new Error('Failed to fetch user sequences')
+      const clonedResponse = response.clone()
+      let errorMessage = 'Failed to fetch user sequences'
+      try {
+        const errorData = await response.json()
+        errorMessage = errorData.error || errorData.details || errorMessage
+      } catch {
+        try {
+          const errorText = await clonedResponse.text()
+          errorMessage = errorText.substring(0, 200)
+        } catch {}
+      }
+      throw new Error(errorMessage)
     }
 
     return await response.json()
@@ -149,7 +182,18 @@ export async function deleteUserAsana(asanaId: string): Promise<void> {
     })
 
     if (!response.ok) {
-      throw new Error('Failed to delete asana')
+      const clonedResponse = response.clone()
+      let errorMessage = 'Failed to delete asana'
+      try {
+        const errorData = await response.json()
+        errorMessage = errorData.error || errorData.details || errorMessage
+      } catch {
+        try {
+          const errorText = await clonedResponse.text()
+          errorMessage = errorText.substring(0, 200)
+        } catch {}
+      }
+      throw new Error(errorMessage)
     }
   } catch (error) {
     logServiceError(error, 'userLibraryService', 'deleteUserAsana', {
@@ -170,7 +214,18 @@ export async function deleteUserSeries(seriesId: string): Promise<void> {
     })
 
     if (!response.ok) {
-      throw new Error('Failed to delete series')
+      const clonedResponse = response.clone()
+      let errorMessage = 'Failed to delete series'
+      try {
+        const errorData = await response.json()
+        errorMessage = errorData.error || errorData.details || errorMessage
+      } catch {
+        try {
+          const errorText = await clonedResponse.text()
+          errorMessage = errorText.substring(0, 200)
+        } catch {}
+      }
+      throw new Error(errorMessage)
     }
   } catch (error) {
     logServiceError(error, 'userLibraryService', 'deleteUserSeries', {
@@ -191,7 +246,18 @@ export async function deleteUserSequence(sequenceId: string): Promise<void> {
     })
 
     if (!response.ok) {
-      throw new Error('Failed to delete sequence')
+      const clonedResponse = response.clone()
+      let errorMessage = 'Failed to delete sequence'
+      try {
+        const errorData = await response.json()
+        errorMessage = errorData.error || errorData.details || errorMessage
+      } catch {
+        try {
+          const errorText = await clonedResponse.text()
+          errorMessage = errorText.substring(0, 200)
+        } catch {}
+      }
+      throw new Error(errorMessage)
     }
   } catch (error) {
     logServiceError(error, 'userLibraryService', 'deleteUserSequence', {
