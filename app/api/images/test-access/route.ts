@@ -112,7 +112,8 @@ export async function GET(request: NextRequest) {
           testResult.accessible = false
           testResult.error =
             error instanceof Error ? error.message : 'Unknown error'
-          testResult.errorType = error?.name || 'UnknownError'
+          testResult.errorType =
+            error instanceof Error ? error.name : 'UnknownError'
         }
 
         accessibilityTests.push(testResult)
@@ -194,12 +195,16 @@ export async function GET(request: NextRequest) {
 
         // Analyze common failure patterns
         const results = diagnostics.tests.imageAccessibility.results
-        const status403 = results.filter((r) => r.httpStatus === 403).length
-        const status404 = results.filter((r) => r.httpStatus === 404).length
-        const timeouts = results.filter(
-          (r) => r.errorType === 'AbortError'
+        const status403 = results.filter(
+          (r: { httpStatus: number }) => r.httpStatus === 403
         ).length
-        const corsErrors = results.filter((r) =>
+        const status404 = results.filter(
+          (r: { httpStatus: number }) => r.httpStatus === 404
+        ).length
+        const timeouts = results.filter(
+          (r: { errorType: string }) => r.errorType === 'AbortError'
+        ).length
+        const corsErrors = results.filter((r: { error: string }) =>
           r.error?.toLowerCase().includes('cors')
         ).length
 
