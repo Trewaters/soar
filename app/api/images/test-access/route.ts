@@ -10,17 +10,15 @@ export const dynamic = 'force-dynamic'
  */
 export async function GET(request: NextRequest) {
   try {
+    // Allow unauthenticated access for diagnostics
+    // But limit sensitive info if not authenticated
     const session = await auth()
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      )
-    }
+    const isAuthenticated = !!session?.user?.email
 
     const diagnostics: any = {
       timestamp: new Date().toISOString(),
       environment: process.env.NODE_ENV,
+      authenticated: isAuthenticated,
       tests: {},
     }
 
