@@ -33,6 +33,17 @@ jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),
 }))
 
+// Mock useCanEditContent hook
+const mockUseCanEditContent = jest.fn(() => ({
+  canEdit: false,
+  reason: 'default mock',
+  isOwner: false,
+  isAdmin: false,
+}))
+jest.mock('@app/hooks/useCanEditContent', () => ({
+  useCanEditContent: (created_by: string) => mockUseCanEditContent(created_by),
+}))
+
 // Mock SequenceContext to be inactive by default so the component uses local state
 jest.mock('@context/SequenceContext', () => ({
   useSequence: () => ({ active: false, state: { sequences: {} } }),
@@ -169,6 +180,16 @@ describe('EditSequence', () => {
   })
 
   describe('Owner interactions', () => {
+    beforeEach(() => {
+      // Mock useCanEditContent to allow editing for matching owner
+      mockUseCanEditContent.mockReturnValue({
+        canEdit: true,
+        reason: '',
+        isOwner: true,
+        isAdmin: false,
+      })
+    })
+
     it('renders fields and saves successfully', async () => {
       const user = userEvent.setup()
       mockUseSession.mockReturnValue({
@@ -597,6 +618,13 @@ describe('EditSequence', () => {
         removeSeriesAt: jest.fn(),
         reorderSeries: jest.fn(),
       }))
+      // Mock useCanEditContent to allow editing for matching emails
+      mockUseCanEditContent.mockReturnValue({
+        canEdit: true,
+        reason: '',
+        isOwner: true,
+        isAdmin: false,
+      })
     })
 
     it('should display image when sequence has an image URL', () => {

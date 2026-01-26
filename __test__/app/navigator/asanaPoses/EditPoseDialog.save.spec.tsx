@@ -7,6 +7,16 @@ jest.mock('next/navigation', () => ({ useRouter: () => ({ push: jest.fn() }) }))
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(() => ({ data: { user: { email: 'me@example.com' } } })),
 }))
+// Mock useCanEditContent hook
+const mockUseCanEditContent = jest.fn(() => ({
+  canEdit: true,
+  reason: '',
+  isOwner: true,
+  isAdmin: false,
+}))
+jest.mock('@app/hooks/useCanEditContent', () => ({
+  useCanEditContent: (created_by: string) => mockUseCanEditContent(created_by),
+}))
 jest.mock('../../../../lib/poseService', () => ({
   deletePose: jest.fn(),
   updatePose: jest.fn(),

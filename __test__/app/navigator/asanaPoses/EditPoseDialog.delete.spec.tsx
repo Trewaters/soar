@@ -7,6 +7,11 @@ jest.mock('next/navigation', () => ({ useRouter: () => ({ push: jest.fn() }) }))
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(() => ({ data: { user: { email: 'me@example.com' } } })),
 }))
+// Mock useCanEditContent hook
+const mockUseCanEditContent = jest.fn()
+jest.mock('@app/hooks/useCanEditContent', () => ({
+  useCanEditContent: (created_by: string) => mockUseCanEditContent(created_by),
+}))
 jest.mock('../../../../lib/poseService', () => ({
   deletePose: jest.fn(),
   updatePose: jest.fn(),
@@ -26,6 +31,13 @@ describe('EditPoseDialog Delete', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    // Default: allow editing for creator
+    mockUseCanEditContent.mockReturnValue({
+      canEdit: true,
+      reason: '',
+      isOwner: true,
+      isAdmin: false,
+    })
   })
 
   it('shows Delete button for creator and calls deletePose on confirm', async () => {
@@ -60,6 +72,13 @@ describe('EditPoseDialog Delete', () => {
     }
     useSession.mockReturnValue({
       data: { user: { email: 'other@example.com' } },
+    })
+    // Mock that user cannot edit (not creator and not admin)
+    mockUseCanEditContent.mockReturnValue({
+      canEdit: false,
+      reason: 'not creator',
+      isOwner: false,
+      isAdmin: false,
     })
 
     const Comp =

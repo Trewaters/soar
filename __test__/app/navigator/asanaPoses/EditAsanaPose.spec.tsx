@@ -11,6 +11,16 @@ import type { AsanaPose } from 'types/asana'
 
 // Mock dependencies
 jest.mock('next-auth/react')
+// Mock useCanEditContent hook
+const mockUseCanEditContent = jest.fn(() => ({
+  canEdit: true,
+  reason: '',
+  isOwner: true,
+  isAdmin: false,
+}))
+jest.mock('@app/hooks/useCanEditContent', () => ({
+  useCanEditContent: (created_by: string) => mockUseCanEditContent(created_by),
+}))
 // Note: @lib/poseService is now centrally mocked in jest.setup.ts
 jest.mock('@app/clientComponents/imageUpload/ImageGallery', () => ({
   __esModule: true,

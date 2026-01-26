@@ -12,6 +12,11 @@ jest.mock('next-auth/react')
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }))
+// Mock useCanEditContent hook
+const mockUseCanEditContent = jest.fn()
+jest.mock('@app/hooks/useCanEditContent', () => ({
+  useCanEditContent: (created_by: string) => mockUseCanEditContent(created_by),
+}))
 // Note: @lib/asanaActivityClientService and @lib/imageService are now centrally mocked in jest.setup.ts
 jest.mock('@app/clientComponents/imageUpload/ImageCarousel', () => ({
   __esModule: true,
@@ -91,6 +96,14 @@ describe('PoseActivityDetail - View Asana - Happy Path', () => {
     // Mock activity service
     const activityService = require('@lib/asanaActivityClientService')
     activityService.checkActivityExists = jest.fn().mockResolvedValue(false)
+
+    // Mock useCanEditContent - default to allow editing for matching creator
+    mockUseCanEditContent.mockImplementation((created_by: string) => ({
+      canEdit: created_by === 'test@example.com',
+      reason: created_by === 'test@example.com' ? '' : 'not creator',
+      isOwner: created_by === 'test@example.com',
+      isAdmin: false,
+    }))
   })
 
   const TestWrapper: React.FC<{ children: React.ReactNode }> = ({
