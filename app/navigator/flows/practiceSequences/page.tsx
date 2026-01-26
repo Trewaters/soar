@@ -128,6 +128,14 @@ export default function Page() {
     createdAt: '',
     updatedAt: '',
   })
+
+  // Determine if current user owns the selected sequence
+  const isSequenceOwner = React.useMemo(() => {
+    if (!singleSequence || !session?.user?.email) return false
+    // createdBy added by API normalization
+    return (singleSequence as any).createdBy === session.user.email
+  }, [singleSequence, session?.user?.email])
+
   const [, setIsLoadingFreshSeriesData] = useState<boolean>(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [searchInputValue, setSearchInputValue] = useState('')
@@ -599,48 +607,50 @@ export default function Page() {
                         {singleSequence.nameSequence}
                       </Typography>
 
-                      {/* Inline edit icon inside the orange tab on the right */}
-                      <IconButton
-                        onClick={() => {
-                          try {
-                            const editUrl = `/navigator/sequences/${singleSequence.id}?edit=true`
-                            const viewUrl = `/navigator/sequences/${singleSequence.id}`
-                            const isEditing =
-                              typeof window !== 'undefined' &&
-                              window.location.search.includes('edit=true') &&
-                              window.location.pathname.includes(
-                                `/navigator/sequences/${singleSequence.id}`
-                              )
+                      {/* Inline edit icon inside the orange tab on the right - only show for owners */}
+                      {isSequenceOwner && (
+                        <IconButton
+                          onClick={() => {
+                            try {
+                              const editUrl = `/navigator/sequences/${singleSequence.id}?edit=true`
+                              const viewUrl = `/navigator/sequences/${singleSequence.id}`
+                              const isEditing =
+                                typeof window !== 'undefined' &&
+                                window.location.search.includes('edit=true') &&
+                                window.location.pathname.includes(
+                                  `/navigator/sequences/${singleSequence.id}`
+                                )
 
-                            if (isEditing) {
-                              router.replace(viewUrl)
-                            } else {
-                              // Use replace so toggling doesn't create many history entries
-                              router.replace(editUrl)
+                              if (isEditing) {
+                                router.replace(viewUrl)
+                              } else {
+                                // Use replace so toggling doesn't create many history entries
+                                router.replace(editUrl)
+                              }
+                            } catch (e) {
+                              // ignore navigation errors
                             }
-                          } catch (e) {
-                            // ignore navigation errors
-                          }
-                        }}
-                        aria-label={`Edit ${singleSequence.nameSequence}`}
-                        sx={{
-                          ml: 'auto',
-                          color: 'primary.contrastText',
-                          p: 0.5,
-                        }}
-                        title="Edit Sequence"
-                        size="small"
-                      >
-                        {typeof window !== 'undefined' &&
-                        window.location.search.includes('edit=true') &&
-                        window.location.pathname.includes(
-                          `/navigator/sequences/${singleSequence.id}`
-                        ) ? (
-                          <CloseIcon fontSize="small" />
-                        ) : (
-                          <EditIcon fontSize="small" />
-                        )}
-                      </IconButton>
+                          }}
+                          aria-label={`Edit ${singleSequence.nameSequence}`}
+                          sx={{
+                            ml: 'auto',
+                            color: 'primary.contrastText',
+                            p: 0.5,
+                          }}
+                          title="Edit Sequence"
+                          size="small"
+                        >
+                          {typeof window !== 'undefined' &&
+                          window.location.search.includes('edit=true') &&
+                          window.location.pathname.includes(
+                            `/navigator/sequences/${singleSequence.id}`
+                          ) ? (
+                            <CloseIcon fontSize="small" />
+                          ) : (
+                            <EditIcon fontSize="small" />
+                          )}
+                        </IconButton>
+                      )}
                     </Box>
 
                     {/* Action buttons: View toggle, Edit */}

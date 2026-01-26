@@ -203,7 +203,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
 
   describe('View Toggle Icons Display', () => {
     it('should display view toggle icons when a sequence is selected', async () => {
-      const mockSequence = createMockSequence()
+      const mockSequence = createMockSequence({
+        createdBy: 'test@uvuyoga.com',
+      })
       mockGetAllSequences.mockResolvedValue([mockSequence])
       mockGet.mockReturnValue('1')
 
@@ -238,7 +240,9 @@ describe('Practice Sequences Page - View Toggle Features', () => {
     })
 
     it('should display tooltips on view toggle icons', async () => {
-      const mockSequence = createMockSequence()
+      const mockSequence = createMockSequence({
+        createdBy: 'test@uvuyoga.com',
+      })
       mockGetAllSequences.mockResolvedValue([mockSequence])
       mockGet.mockReturnValue('1')
 
@@ -384,7 +388,10 @@ describe('Practice Sequences Page - View Toggle Features', () => {
   describe('Edit Navigation', () => {
     it('should navigate to edit mode when edit icon is clicked', async () => {
       const user = userEvent.setup()
-      const mockSequence = createMockSequence({ id: 456 })
+      const mockSequence = createMockSequence({
+        id: 456,
+        createdBy: 'test@uvuyoga.com', // Match session user email to show Edit button
+      })
       mockGetAllSequences.mockResolvedValue([mockSequence])
       mockGet.mockReturnValue('456')
 
@@ -410,7 +417,10 @@ describe('Practice Sequences Page - View Toggle Features', () => {
 
     it('should include edit parameter in URL for edit navigation', async () => {
       const user = userEvent.setup()
-      const mockSequence = createMockSequence({ id: 789 })
+      const mockSequence = createMockSequence({
+        id: 789,
+        createdBy: 'test@uvuyoga.com', // Match session user email to show Edit button
+      })
       mockGetAllSequences.mockResolvedValue([mockSequence])
       mockGet.mockReturnValue('789')
 
@@ -532,6 +542,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
     it('should have proper ARIA labels for all view toggle controls', async () => {
       const mockSequence = createMockSequence({
         nameSequence: 'Evening Relaxation',
+        createdBy: 'test@uvuyoga.com',
       })
       mockGetAllSequences.mockResolvedValue([mockSequence])
       mockGet.mockReturnValue('1')

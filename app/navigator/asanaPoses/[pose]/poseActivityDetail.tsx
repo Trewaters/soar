@@ -1065,116 +1065,57 @@ export default function PoseActivityDetail({
         </Box>
       )}
 
-      {/* Edit/Delete Pose Buttons - Edit visible to creator or 'alpha users'; Delete only to actual creator */}
+      {/* Edit/Delete Pose Buttons - Only visible to creator */}
       {/* Sticky Bottom Action Bar - Consistent with Create Asana page */}
-      {session &&
-        session.user &&
-        (session.user.email === pose?.created_by ||
-          pose?.created_by === 'alpha users') && (
-          <Box
-            sx={{
-              position: 'sticky',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              backgroundColor: 'background.paper',
-              borderTop: '1px solid',
-              borderColor: 'divider',
-              py: 2,
-              px: 2,
-              mt: 3,
-              boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
-              zIndex: 10,
-            }}
+      {session && session.user && session.user.email === pose?.created_by && (
+        <Box
+          sx={{
+            position: 'sticky',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: 'background.paper',
+            borderTop: '1px solid',
+            borderColor: 'divider',
+            py: 2,
+            px: 2,
+            mt: 3,
+            boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
+            zIndex: 10,
+          }}
+        >
+          {/* Make edit/delete buttons stack vertically on xs and row on sm+ */}
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={2}
+            justifyContent="center"
+            alignItems="center"
           >
-            {/* Make edit/delete buttons stack vertically on xs and row on sm+ */}
-            <Stack
-              direction={{ xs: 'column', sm: 'row' }}
-              spacing={2}
-              justifyContent="center"
-              alignItems="center"
-            >
-              {!isEditing ? (
-                <>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleEditToggle}
-                    startIcon={<EditIcon />}
-                    sx={{
-                      borderRadius: '12px',
-                      px: 4,
-                      py: 1.5,
-                      fontSize: '1.1rem',
-                      fontWeight: 600,
-                      textTransform: 'none',
-                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                      minWidth: { xs: '100%', sm: '200px' },
-                    }}
-                  >
-                    Edit Pose
-                  </Button>
-                  {session.user.email === pose?.created_by && (
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      startIcon={<DeleteIcon />}
-                      sx={{
-                        borderRadius: '12px',
-                        px: 4,
-                        py: 1.5,
-                        fontSize: '1.1rem',
-                        fontWeight: 600,
-                        textTransform: 'none',
-                        minWidth: { xs: '100%', sm: '160px' },
-                      }}
-                      onClick={async () => {
-                        if (!pose?.id) return
-                        const confirmed = window.confirm(
-                          'Delete this asana? This cannot be undone.'
-                        )
-                        if (!confirmed) return
-                        try {
-                          await deletePose(pose.id)
-                          // Force refresh and navigate to practice asanas page
-                          router.refresh()
-                          router.replace('/navigator/asanaPoses/practiceAsanas')
-                        } catch (e: any) {
-                          alert(e?.message || 'Failed to delete pose')
-                        }
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  )}
-                </>
-              ) : (
-                <>
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={handleSaveEdit}
-                    startIcon={<SaveIcon />}
-                    disabled={isSubmitting}
-                    sx={{
-                      borderRadius: '12px',
-                      px: 4,
-                      py: 1.5,
-                      fontSize: '1.1rem',
-                      fontWeight: 600,
-                      textTransform: 'none',
-                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                      minWidth: { xs: '100%', sm: '200px' },
-                    }}
-                  >
-                    {isSubmitting ? 'Saving...' : 'Save Changes'}
-                  </Button>
+            {!isEditing ? (
+              <>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleEditToggle}
+                  startIcon={<EditIcon />}
+                  sx={{
+                    borderRadius: '12px',
+                    px: 4,
+                    py: 1.5,
+                    fontSize: '1.1rem',
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                    minWidth: { xs: '100%', sm: '200px' },
+                  }}
+                >
+                  Edit Pose
+                </Button>
+                {session.user.email === pose?.created_by && (
                   <Button
                     variant="outlined"
-                    color="secondary"
-                    onClick={handleCancelEdit}
-                    startIcon={<CancelIcon />}
-                    disabled={isSubmitting}
+                    color="error"
+                    startIcon={<DeleteIcon />}
                     sx={{
                       borderRadius: '12px',
                       px: 4,
@@ -1184,14 +1125,70 @@ export default function PoseActivityDetail({
                       textTransform: 'none',
                       minWidth: { xs: '100%', sm: '160px' },
                     }}
+                    onClick={async () => {
+                      if (!pose?.id) return
+                      const confirmed = window.confirm(
+                        'Delete this asana? This cannot be undone.'
+                      )
+                      if (!confirmed) return
+                      try {
+                        await deletePose(pose.id)
+                        // Force refresh and navigate to practice asanas page
+                        router.refresh()
+                        router.replace('/navigator/asanaPoses/practiceAsanas')
+                      } catch (e: any) {
+                        alert(e?.message || 'Failed to delete pose')
+                      }
+                    }}
                   >
-                    Cancel
+                    Delete
                   </Button>
-                </>
-              )}
-            </Stack>
-          </Box>
-        )}
+                )}
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={handleSaveEdit}
+                  startIcon={<SaveIcon />}
+                  disabled={isSubmitting}
+                  sx={{
+                    borderRadius: '12px',
+                    px: 4,
+                    py: 1.5,
+                    fontSize: '1.1rem',
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                    minWidth: { xs: '100%', sm: '200px' },
+                  }}
+                >
+                  {isSubmitting ? 'Saving...' : 'Save Changes'}
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={handleCancelEdit}
+                  startIcon={<CancelIcon />}
+                  disabled={isSubmitting}
+                  sx={{
+                    borderRadius: '12px',
+                    px: 4,
+                    py: 1.5,
+                    fontSize: '1.1rem',
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    minWidth: { xs: '100%', sm: '160px' },
+                  }}
+                >
+                  Cancel
+                </Button>
+              </>
+            )}
+          </Stack>
+        </Box>
+      )}
       {/* EditPoseDialog removed - inline editing is now used */}
       {/*
       <EditPoseDialog

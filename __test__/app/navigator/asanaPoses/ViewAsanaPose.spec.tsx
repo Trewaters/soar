@@ -283,6 +283,51 @@ describe('PoseActivityDetail - View Asana - Happy Path', () => {
     })
   })
 
+  describe('Edit Button Visibility', () => {
+    it('should show Edit button when user is the creator', () => {
+      const userCreatedPose = {
+        ...mockAsanaPose,
+        created_by: 'test@example.com', // Same as mockSession.user.email
+      }
+
+      render(<PoseActivityDetail poseCardProp={userCreatedPose} />, {
+        wrapper: TestWrapper,
+      })
+
+      expect(screen.getByText('Edit Pose')).toBeInTheDocument()
+      expect(screen.getByText('Delete')).toBeInTheDocument()
+    })
+
+    it('should hide Edit button when user is not the creator', () => {
+      const otherUserPose = {
+        ...mockAsanaPose,
+        created_by: 'other@example.com', // Different from mockSession.user.email
+      }
+
+      render(<PoseActivityDetail poseCardProp={otherUserPose} />, {
+        wrapper: TestWrapper,
+      })
+
+      expect(screen.queryByText('Edit Pose')).not.toBeInTheDocument()
+      expect(screen.queryByText('Delete')).not.toBeInTheDocument()
+    })
+
+    it('should hide Edit button when user is not logged in', () => {
+      const { useSession } = require('next-auth/react')
+      useSession.mockReturnValue({
+        data: null,
+        status: 'unauthenticated',
+      })
+
+      render(<PoseActivityDetail poseCardProp={mockAsanaPose} />, {
+        wrapper: TestWrapper,
+      })
+
+      expect(screen.queryByText('Edit Pose')).not.toBeInTheDocument()
+      expect(screen.queryByText('Delete')).not.toBeInTheDocument()
+    })
+  })
+
   describe('Responsive Layout', () => {
     it('should render pose details in mobile-friendly format', () => {
       const { container } = render(
