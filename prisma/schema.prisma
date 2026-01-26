@@ -159,7 +159,7 @@ model AsanaPose {
   isUserCreated        Boolean   @default(false) // verify how it is used, don't think it is needed // Flag to identify user-created asanas
   created_on           DateTime? @default(now()) // Necessary
   updated_on           DateTime? @updatedAt // Necessary
-  created_by           String          @default("PUBLIC") // "PUBLIC" for system content | userId for user-created content  
+  created_by           String?   @default("PUBLIC") // "PUBLIC" for system content | userId for user-created content | nullable for legacy data  
 
   imageCount           Int       @default(0) // verify how it is used // Cache for number of images (performance optimization)
 }

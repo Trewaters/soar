@@ -131,11 +131,20 @@ export async function GET(request: NextRequest) {
       }
 
       // Manually populate pose relations for each image
+      // Only fetch the fields we actually need to avoid issues with nullable fields
       for (const image of images) {
         if (image.poseId ?? image.poseId) {
           const idToLookup = image.poseId ?? image.poseId
           const pose = await prisma.asanaPose.findUnique({
             where: { id: idToLookup },
+            select: {
+              id: true,
+              sort_english_name: true,
+              english_names: true,
+              sanskrit_names: true,
+              isUserCreated: true,
+              created_by: true,
+            },
           })
           if (pose) {
             image.pose = pose
