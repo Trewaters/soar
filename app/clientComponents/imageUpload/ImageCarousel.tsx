@@ -229,6 +229,41 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
     )
   }
 
+  // Validate image URL before rendering
+  const isValidUrl =
+    currentImage?.url &&
+    typeof currentImage.url === 'string' &&
+    (currentImage.url.startsWith('http://') ||
+      currentImage.url.startsWith('https://') ||
+      currentImage.url.startsWith('/') ||
+      currentImage.url.startsWith('data:'))
+
+  if (!isValidUrl) {
+    console.error('Invalid image URL in ImageCarousel:', {
+      url: currentImage?.url,
+      poseId: currentImage?.poseId,
+      poseName: currentImage?.poseName,
+      imageId: currentImage?.id,
+    })
+    return (
+      <Box
+        sx={{
+          height,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'grey.100',
+          borderRadius: 1,
+        }}
+        className={className}
+      >
+        <Typography variant="body2" color="error">
+          Invalid image URL
+        </Typography>
+      </Box>
+    )
+  }
+
   return (
     <Box
       className={className}
@@ -282,7 +317,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
             }}
           >
             <Image
-              src={currentImage?.url || ''}
+              src={currentImage.url}
               alt={
                 currentImage?.altText ||
                 currentImage?.poseName ||
@@ -295,7 +330,16 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
               }}
               sizes={getOptimizedSizes(safeActiveIndex)}
               onLoad={handleImageLoad}
-              onError={() => setIsLoading(false)}
+              onError={(event) => {
+                console.error('Image failed to load in ImageCarousel:', {
+                  url: currentImage?.url,
+                  poseId: currentImage?.poseId,
+                  poseName: currentImage?.poseName,
+                  imageId: currentImage?.id,
+                  error: event,
+                })
+                setIsLoading(false)
+              }}
               priority={getLoadingPriority(safeActiveIndex) === 'high'}
               loading={
                 getLoadingPriority(safeActiveIndex) === 'high'

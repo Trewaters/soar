@@ -13,10 +13,25 @@ const nextConfig = {
     // Configure image domains and loaders
     domains: [],
     remotePatterns: [
-      // Vercel Blob storage pattern
+      // Vercel Blob storage - public access pattern
       {
         protocol: 'https',
         hostname: '*.public.blob.vercel-storage.com',
+      },
+      // Vercel Blob storage - legacy pattern
+      {
+        protocol: 'https',
+        hostname: 'public.blob.vercel-storage.com',
+      },
+      // Vercel Blob storage - regional patterns
+      {
+        protocol: 'https',
+        hostname: '*.vercel-storage.com',
+      },
+      // Vercel Blob storage - all region patterns
+      {
+        protocol: 'https',
+        hostname: 'vercel-storage.com',
       },
     ],
     // Handle unoptimized images (like base64 data URLs)
