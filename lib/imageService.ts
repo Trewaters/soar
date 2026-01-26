@@ -78,7 +78,8 @@ export async function getUserPoseImages(
   limit: number = 10,
   offset: number = 0,
   poseId?: string,
-  poseName?: string
+  poseName?: string,
+  showAll?: boolean
 ): Promise<GetImagesResponse> {
   try {
     const params = new URLSearchParams({
@@ -94,6 +95,9 @@ export async function getUserPoseImages(
     if (poseName) {
       params.append('poseName', poseName)
       params.append('orderBy', 'displayOrder')
+    }
+    if (showAll) {
+      params.append('showAll', 'true')
     }
 
     const url = `/api/images?${params}`

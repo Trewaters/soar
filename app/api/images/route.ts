@@ -47,10 +47,21 @@ export async function GET(request: NextRequest) {
     const orderBy = searchParams.get('orderBy') || 'uploadedAt'
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
+    const showAll = searchParams.get('showAll') === 'true' // Admin flag to show all content
+
+    // Get admin status
+    const { isAdmin: checkIsAdmin } = await import('@app/utils/authorization')
+    const userIsAdmin = await checkIsAdmin()
 
     // Build base where clause for filtering by owner (user)
-    const baseWhere: any = {
-      userId: session.user.id,
+    const baseWhere: any = {}
+
+    // Admin users with showAll=true can see all content
+    if (showAll && userIsAdmin) {
+      // No userId filter - return everything for admins
+    } else {
+      // Regular users only see their own images
+      baseWhere.userId = session.user.id
     }
 
     // Filter by imageType if provided (e.g., 'profile', 'pose', 'gallery')

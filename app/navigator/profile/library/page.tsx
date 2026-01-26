@@ -259,6 +259,7 @@ export default function LibraryPage() {
                 asanas={asanas}
                 loading={asanasLoading}
                 onAsanaDeleted={fetchUserAsanas}
+                isAdmin={isAdmin}
               />
             </TabPanel>
 
@@ -296,10 +297,12 @@ function AsanasLibrary({
   asanas,
   loading,
   onAsanaDeleted,
+  isAdmin,
 }: {
   asanas: UserAsanaData[]
   loading: boolean
   onAsanaDeleted: () => void
+  isAdmin: boolean
 }) {
   const router = useNavigationWithLoading()
   const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
@@ -397,7 +400,11 @@ function AsanasLibrary({
         <Grid container spacing={3}>
           {asanas.map((asana) => (
             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={asana.id}>
-              <AsanaCard asana={asana} onDeleted={onAsanaDeleted} />
+              <AsanaCard
+                asana={asana}
+                onDeleted={onAsanaDeleted}
+                isAdmin={isAdmin}
+              />
             </Grid>
           ))}
         </Grid>
@@ -411,6 +418,7 @@ function AsanasLibrary({
               key={asana.id}
               asana={asana}
               onDeleted={onAsanaDeleted}
+              isAdmin={isAdmin}
             />
           ))}
         </Box>
@@ -680,9 +688,11 @@ function SequencesLibrary({
 function AsanaListItem({
   asana,
   onDeleted,
+  isAdmin,
 }: {
   asana: UserAsanaData
   onDeleted: () => void
+  isAdmin: boolean
 }) {
   const router = useNavigationWithLoading()
   const [images, setImages] = useState<PoseImageData[]>([])
@@ -698,7 +708,8 @@ function AsanaListItem({
           1,
           0,
           asana.id,
-          asana.sort_english_name
+          asana.sort_english_name,
+          isAdmin
         )
         setImages(response.images)
       } catch (error) {
@@ -1170,9 +1181,11 @@ function SequenceListItem({
 function AsanaCard({
   asana,
   onDeleted,
+  isAdmin,
 }: {
   asana: UserAsanaData
   onDeleted: () => void
+  isAdmin: boolean
 }) {
   const router = useNavigationWithLoading()
   const [images, setImages] = useState<PoseImageData[]>([])
@@ -1188,7 +1201,8 @@ function AsanaCard({
           5,
           0,
           asana.id,
-          asana.sort_english_name
+          asana.sort_english_name,
+          isAdmin
         )
         setImages(response.images)
       } catch (error) {
