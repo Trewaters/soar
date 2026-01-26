@@ -119,7 +119,9 @@ export async function getUserPoseImages(
           contentType,
           errorText: errorText.substring(0, 500),
         })
-        throw new Error(`API returned non-JSON error (${response.status}): ${errorText.substring(0, 200)}`)
+        throw new Error(
+          `API returned non-JSON error (${response.status}): ${errorText.substring(0, 200)}`
+        )
       }
       console.error('🔍 getUserPoseImages: API error', {
         status: response.status,
@@ -138,7 +140,9 @@ export async function getUserPoseImages(
         parseError,
         responseStart: responseText.substring(0, 500),
       })
-      throw new Error(`Failed to parse API response: ${responseText.substring(0, 200)}`)
+      throw new Error(
+        `Failed to parse API response: ${responseText.substring(0, 200)}`
+      )
     }
     return result
   } catch (error) {
