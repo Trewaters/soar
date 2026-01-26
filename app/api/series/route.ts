@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { auth } from '../../../auth'
-import { canModifyContent } from '@app/utils/authorization'
 import { prisma } from '../../lib/prismaClient'
 
 // Force this route to be dynamic since it requires query parameters
@@ -11,6 +10,7 @@ export async function GET(request: Request) {
   try {
     const url = new URL(request.url)
     const filter = url.searchParams.get('filter') // 'public', 'personal', or null (both)
+    const createdBy = url.searchParams.get('createdBy') // Filter by specific creator
     const session = await auth().catch(() => null)
 
     // Get current user ID and email for backward compatibility
@@ -20,7 +20,11 @@ export async function GET(request: Request) {
     // Build where clause based on filter parameter
     const whereClause: any = {}
 
-    if (filter === 'public') {
+    // Handle createdBy parameter for user library filtering
+    if (createdBy) {
+      // Filter to specific creator only (for user library view)
+      whereClause.created_by = createdBy
+    } else if (filter === 'public') {
       // Include legacy "alpha users" content as public
       whereClause.created_by = {
         in: ['PUBLIC', 'alpha users'],

@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
   const sortEnglishName = searchParams.get('sort_english_name')
   const id = searchParams.get('id')
   const filter = searchParams.get('filter') // 'public' | 'personal' | null (default: all)
+  const createdBy = searchParams.get('createdBy') // Filter by specific creator
 
   // Get current session
   const session = await auth()
@@ -98,7 +99,11 @@ export async function GET(request: NextRequest) {
     // Build where clause based on filter parameter
     const whereClause: any = {}
 
-    if (filter === 'public') {
+    // Handle createdBy parameter for user library filtering
+    if (createdBy) {
+      // Filter to specific creator only (for user library view)
+      whereClause.created_by = createdBy
+    } else if (filter === 'public') {
       // Only PUBLIC content (including legacy "alpha users" content)
       whereClause.created_by = {
         in: ['PUBLIC', 'alpha users'],

@@ -41,6 +41,9 @@
     "script:set-admin": "ts-node scripts/set-admin-role.ts",
     "script:migrate-public": "ts-node scripts/migrate-data-ownership.ts",
     "script:verify-ownership": "ts-node scripts/verify-ownership.ts",
+    "script:fix-null-creators": "ts-node scripts/fix-null-creators-mongodb.ts",
+    "script:complete-alpha-migration": "ts-node scripts/complete-alpha-migration.ts",
+    "script:fix-null-roles": "ts-node scripts/fix-null-roles.ts",
     "restore:backup": "tsx scripts/syncDb/restore-from-backup.ts",
     "inspect:prod": "tsx scripts/syncDb/inspect-prod-db.ts"
   },

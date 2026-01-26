@@ -35,6 +35,11 @@ export async function requireAuth(): Promise<Session> {
     throw new Error('Unauthorized - Please sign in')
   }
 
+  // Reject null or invalid roles
+  if (!session.user.role || !['user', 'admin'].includes(session.user.role)) {
+    throw new Error('Unauthorized - Invalid or missing role. Please contact support.')
+  }
+
   return session
 }
 
@@ -65,6 +70,11 @@ export async function requireRole(allowedRoles: UserRole[]): Promise<Session> {
   const session = await requireAuth()
 
   const userRole = session.user.role as UserRole
+
+  // Extra safety check: reject null or invalid roles
+  if (!userRole || !['user', 'admin'].includes(userRole)) {
+    throw new Error('Forbidden - Invalid or missing role. Please contact support.')
+  }
 
   if (!allowedRoles.includes(userRole)) {
     throw new Error(
@@ -97,6 +107,7 @@ export async function requireRole(allowedRoles: UserRole[]): Promise<Session> {
  */
 export async function isAdmin(): Promise<boolean> {
   const session = await auth()
+  // Null roles are not admin - must have explicit 'admin' role
   return session?.user?.role === 'admin'
 }
 
@@ -121,7 +132,8 @@ export async function isAdmin(): Promise<boolean> {
  */
 export async function hasRole(role: UserRole): Promise<boolean> {
   const session = await auth()
-  return session?.user?.role === role
+  // Null roles never match valid roles
+  return !!(session?.user?.role && session.user.role === role)
 }
 
 /**
@@ -163,6 +175,11 @@ export async function canModifyContent(
   const session = await auth()
 
   if (!session || !session.user) {
+    return false
+  }
+
+  // Reject null or invalid roles
+  if (!session.user.role || !['user', 'admin'].includes(session.user.role)) {
     return false
   }
 

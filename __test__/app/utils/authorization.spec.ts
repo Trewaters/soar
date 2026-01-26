@@ -70,6 +70,60 @@ describe('Authorization Utilities', () => {
         'Unauthorized - Please sign in'
       )
     })
+
+    it('should reject user with null role', async () => {
+      const mockSession: Session = {
+        user: {
+          id: 'user123',
+          email: 'test@example.com',
+          name: 'Test User',
+          role: null as any, // Invalid null role
+        },
+        expires: '2025-12-31',
+      }
+
+      mockAuth.mockResolvedValue(mockSession)
+
+      await expect(requireAuth()).rejects.toThrow(
+        'Unauthorized - Invalid or missing role. Please contact support.'
+      )
+    })
+
+    it('should reject user with undefined role', async () => {
+      const mockSession: Session = {
+        user: {
+          id: 'user123',
+          email: 'test@example.com',
+          name: 'Test User',
+          role: undefined as any, // Invalid undefined role
+        },
+        expires: '2025-12-31',
+      }
+
+      mockAuth.mockResolvedValue(mockSession)
+
+      await expect(requireAuth()).rejects.toThrow(
+        'Unauthorized - Invalid or missing role. Please contact support.'
+      )
+    })
+
+    it('should reject user with invalid role string', async () => {
+      const mockSession: Session = {
+        user: {
+          id: 'user123',
+          email: 'test@example.com',
+          name: 'Test User',
+          role: 'invalid_role' as any, // Invalid role
+        },
+        expires: '2025-12-31',
+      }
+
+      mockAuth.mockResolvedValue(mockSession)
+
+      await expect(requireAuth()).rejects.toThrow(
+        'Unauthorized - Invalid or missing role. Please contact support.'
+      )
+    })
   })
 
   describe('requireRole', () => {
@@ -167,6 +221,43 @@ describe('Authorization Utilities', () => {
       mockAuth.mockResolvedValue(mockSession)
 
       await expect(requireRole([])).rejects.toThrow(/Forbidden/)
+    })
+
+    it('should reject user with null role', async () => {
+      const mockSession: Session = {
+        user: {
+          id: 'user123',
+          email: 'user@example.com',
+          name: 'User',
+          role: null as any, // Invalid null role
+        },
+        expires: '2025-12-31',
+      }
+
+      mockAuth.mockResolvedValue(mockSession)
+
+      await expect(requireRole(['user'])).rejects.toThrow(
+        'Unauthorized - Invalid or missing role. Please contact support.'
+      )
+    })
+
+    it('should reject user with invalid role in requireRole', async () => {
+      const mockSession: Session = {
+        user: {
+          id: 'user123',
+          email: 'user@example.com',
+          name: 'User',
+          role: 'superuser' as any, // Invalid role
+        },
+        expires: '2025-12-31',
+      }
+
+      mockAuth.mockResolvedValue(mockSession)
+
+      // requireAuth() is called first and throws "Unauthorized" for invalid roles
+      await expect(requireRole(['user', 'admin'])).rejects.toThrow(
+        'Unauthorized - Invalid or missing role. Please contact support.'
+      )
     })
   })
 
@@ -468,6 +559,60 @@ describe('Authorization Utilities', () => {
 
       expect(result).toBe(false)
     })
+
+    it('should return false when user has null role', async () => {
+      const mockSession: Session = {
+        user: {
+          id: 'user123',
+          email: 'user@example.com',
+          name: 'User',
+          role: null as any, // Invalid null role
+        },
+        expires: '2025-12-31',
+      }
+
+      mockAuth.mockResolvedValue(mockSession)
+
+      const result = await canModifyContent('user123')
+
+      expect(result).toBe(false)
+    })
+
+    it('should return false when user has undefined role', async () => {
+      const mockSession: Session = {
+        user: {
+          id: 'user123',
+          email: 'user@example.com',
+          name: 'User',
+          role: undefined as any, // Invalid undefined role
+        },
+        expires: '2025-12-31',
+      }
+
+      mockAuth.mockResolvedValue(mockSession)
+
+      const result = await canModifyContent('user123')
+
+      expect(result).toBe(false)
+    })
+
+    it('should return false when user has invalid role string', async () => {
+      const mockSession: Session = {
+        user: {
+          id: 'user123',
+          email: 'user@example.com',
+          name: 'User',
+          role: 'invalid_role' as any, // Invalid role
+        },
+        expires: '2025-12-31',
+      }
+
+      mockAuth.mockResolvedValue(mockSession)
+
+      const result = await canModifyContent('user123')
+
+      expect(result).toBe(false)
+    })
   })
 
   describe('hasValidRole', () => {
@@ -642,6 +787,96 @@ describe('Authorization Utilities', () => {
       // Cannot access protected resources
       await expect(requireAuth()).rejects.toThrow(/Unauthorized/)
       await expect(requireRole(['user'])).rejects.toThrow(/Unauthorized/)
+    })
+  })
+
+  describe('"alpha users" Content Protection', () => {
+    it('should prevent regular users from modifying "alpha users" content', async () => {
+      const mockSession: Session = {
+        user: {
+          id: 'user123',
+          email: 'user@example.com',
+          name: 'User',
+          role: 'user',
+        },
+        expires: '2025-12-31',
+      }
+
+      mockAuth.mockResolvedValue(mockSession)
+
+      const result = await canModifyContent('alpha users')
+
+      expect(result).toBe(false)
+    })
+
+    it('should allow admin users to modify "alpha users" content', async () => {
+      const mockSession: Session = {
+        user: {
+          id: 'admin123',
+          email: 'admin@example.com',
+          name: 'Admin',
+          role: 'admin',
+        },
+        expires: '2025-12-31',
+      }
+
+      mockAuth.mockResolvedValue(mockSession)
+
+      const result = await canModifyContent('alpha users')
+
+      expect(result).toBe(true)
+    })
+
+    it('should treat "alpha users" content same as "PUBLIC" content for regular users', async () => {
+      const mockSession: Session = {
+        user: {
+          id: 'user123',
+          email: 'user@example.com',
+          name: 'User',
+          role: 'user',
+        },
+        expires: '2025-12-31',
+      }
+
+      mockAuth.mockResolvedValue(mockSession)
+
+      // Both should be false for regular users
+      expect(await canModifyContent('PUBLIC')).toBe(false)
+      expect(await canModifyContent('alpha users')).toBe(false)
+    })
+
+    it('should allow admins to modify both "PUBLIC" and "alpha users" content', async () => {
+      const mockSession: Session = {
+        user: {
+          id: 'admin123',
+          email: 'admin@example.com',
+          name: 'Admin',
+          role: 'admin',
+        },
+        expires: '2025-12-31',
+      }
+
+      mockAuth.mockResolvedValue(mockSession)
+
+      // Both should be true for admins
+      expect(await canModifyContent('PUBLIC')).toBe(true)
+      expect(await canModifyContent('alpha users')).toBe(true)
+    })
+
+    it('should prevent users without valid roles from accessing "alpha users" content', async () => {
+      const mockSessionNullRole: Session = {
+        user: {
+          id: 'user123',
+          email: 'user@example.com',
+          name: 'User',
+          role: null as any,
+        },
+        expires: '2025-12-31',
+      }
+
+      mockAuth.mockResolvedValue(mockSessionNullRole)
+
+      expect(await canModifyContent('alpha users')).toBe(false)
     })
   })
 })
