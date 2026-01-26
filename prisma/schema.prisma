@@ -167,7 +167,7 @@ model AsanaPose {
 model AsanaSeries {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   seriesName     String
-  created_by     String    @default("PUBLIC") // "PUBLIC" for system content | userId for user-created content
+  created_by     String?   @default("PUBLIC") // "PUBLIC" for system content | userId for user-created content | nullable for legacy data
   // seriesPoses stores per-series pose entries. Each element shape:
   // { poseId: string, sort_english_name: string, alignment_cues?: string }
   // Use Json[] to allow flexible per-pose metadata attached to a series.
@@ -184,7 +184,7 @@ model AsanaSeries {
 model AsanaSequence {
   id               String    @id @default(auto()) @map("_id") @db.ObjectId
   nameSequence     String
-  created_by       String    @default("PUBLIC") // "PUBLIC" for system content | userId for user-created content
+  created_by       String?   @default("PUBLIC") // "PUBLIC" for system content | userId for user-created content | nullable for legacy data
   sequencesSeries  Json[]
   description      String?
   durationSequence String?
@@ -268,7 +268,7 @@ model UserLogin {
 model PoseImage {
   id             String      @id @default(auto()) @map("_id") @db.ObjectId
   userId         String      @db.ObjectId
-  created_by     String // User ID who created/uploaded the image (matches userId for consistency)
+  created_by     String? // User ID who created/uploaded the image (matches userId for consistency) | nullable for legacy data
   poseId      String?     @db.ObjectId // Optional association with a specific pose
   poseName    String? // Store the sort_english_name for easier querying
   url            String // Image URL (Vercel Blob or local reference)
@@ -306,7 +306,7 @@ enum StorageType {
 model GlossaryTerm {
   id            String         @id @default(cuid()) @map("_id")
   term          String         @unique
-  created_by    String         @default("PUBLIC") // "PUBLIC" for system content | userId for user-created content
+  created_by    String?        @default("PUBLIC") // "PUBLIC" for system content | userId for user-created content | nullable for legacy data
   meaning       String
   whyMatters    String
   category      String? // e.g. foundational, breath, meditation
