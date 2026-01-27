@@ -3,19 +3,10 @@ import React from 'react'
 import { useFlowSeries } from '@app/context/AsanaSeriesContext'
 import { FEATURES } from '@app/FEATURES'
 import {
-  Avatar,
   Box,
   Button,
-  Checkbox,
-  Drawer,
   FormControl,
-  Grid2,
   IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  ListSubheader,
   Paper,
   Stack,
   TextField,
@@ -23,11 +14,6 @@ import {
 } from '@mui/material'
 import { ChangeEvent, useEffect, useState, useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import { LooksOne } from '@mui/icons-material'
-import LooksTwoIcon from '@mui/icons-material/LooksTwo'
-import Looks3Icon from '@mui/icons-material/Looks3'
-import Looks4Icon from '@mui/icons-material/Looks4'
-import Looks5Icon from '@mui/icons-material/Looks5'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { getAccessiblePoses } from '@lib/poseService'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
@@ -45,6 +31,9 @@ import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
 import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUpload'
 import ImageIcon from '@mui/icons-material/Image'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import HelpButton from '@app/clientComponents/HelpButton'
+import HelpDrawer from '@app/clientComponents/HelpDrawer'
+import { HELP_PATHS } from '@app/utils/helpLoader'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -264,12 +253,19 @@ export default function Page() {
             alt={'Create Flow'}
             title="Create Flow"
           />
-          <SubNavHeader
-            title="Flows"
-            mode="static"
-            link="/navigator/flows"
-            onClick={toggleDrawer(!open)}
-          />
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
+            sx={{
+              width: '100%',
+              maxWidth: '600px',
+              alignSelf: 'center',
+            }}
+          >
+            <SubNavHeader title="Flows" mode="static" link="/navigator/flows" />
+            <HelpButton onClick={() => setOpen(!open)} />
+          </Stack>
           {FEATURES.SHOW_CREATE_SERIES && (
             <form onSubmit={handleSubmit}>
               <Box sx={{ px: 4, pb: 12 }}>
@@ -751,111 +747,13 @@ export default function Page() {
             </form>
           )}
         </Stack>
-        {/* information drawer */}
-        <Drawer
-          onClick={toggleDrawer(!open)}
-          open={open}
-          onClose={toggleDrawer(false)}
-          anchor="bottom"
-        >
-          <Stack flexDirection={'column'}>
-            <Typography variant="h2" textAlign="center">
-              Create a Series
-            </Typography>
-            <List
-              sx={{
-                bgcolor: 'background.helper',
-                alignSelf: 'center',
-                borderRadius: 4,
-                my: 3,
-              }}
-            >
-              <ListSubheader
-                sx={{ bgcolor: 'background.helper', textAlign: 'center' }}
-                component="h3"
-                id="nested-list-subheader"
-              >
-                Welcome to the series creation page
-              </ListSubheader>
-
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar>
-                    <LooksOne />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={
-                    "If you can't find a series you like, create your own!"
-                  }
-                />
-              </ListItem>
-
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar>
-                    <LooksTwoIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={'"Series Name": Type a unique name for your series.'}
-                />
-              </ListItem>
-
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar>
-                    <Looks3Icon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={
-                    '"Image Upload": Optionally add an image to represent your series.'
-                  }
-                />
-              </ListItem>
-
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar>
-                    <Looks4Icon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={
-                    '"Flow Series": Add asana poses to your series by selecting them from the "Flow Series" dropdown below.'
-                  }
-                />
-              </ListItem>
-
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar>
-                    <Looks5Icon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={'"Description": Type a description of your series.'}
-                />
-              </ListItem>
-
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar>
-                    <Looks5Icon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={`Click "${AppText.APP_BUTTON_SUBMIT}" when you are done.`}
-                />
-              </ListItem>
-            </List>
-          </Stack>
-        </Drawer>
       </Box>
-      {/* 
-      TODO: add snackbar message for success/failure no
-      */}
+
+      <HelpDrawer
+        content={HELP_PATHS.flows.createSeries}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
     </>
   )
 }

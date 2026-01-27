@@ -16,7 +16,6 @@ import getAlphaUserIds from '@app/lib/alphaUsers'
 import {
   Autocomplete,
   Box,
-  Drawer,
   Stack,
   Typography,
   useTheme,
@@ -28,6 +27,9 @@ import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import SplashHeader from '@app/clientComponents/splash-header'
 import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import HelpButton from '@app/clientComponents/HelpButton'
+import HelpDrawer from '@app/clientComponents/HelpDrawer'
+import { HELP_PATHS } from '@app/utils/helpLoader'
 import { AutocompleteInput } from '@app/clientComponents/form'
 import PoseShareButton from '@app/clientComponents/poseShareButton'
 import {
@@ -509,18 +511,20 @@ export default function Page() {
           mb: '1em',
         }}
       >
-        <SubNavHeader
-          title="Flows"
-          mode="static"
-          link="/navigator/flows"
-          onClick={handleInfoClick}
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={1}
           sx={{
             width: '100%',
-            maxWidth: '384px', // Match SplashHeader width
+            maxWidth: '384px',
             alignSelf: 'center',
-            mb: 2, // Add bottom margin for spacing
+            mb: 2,
           }}
-        />
+        >
+          <SubNavHeader title="Flows" mode="static" link="/navigator/flows" />
+          <HelpButton onClick={handleInfoClick} />
+        </Stack>
         <Stack sx={{ px: 4, width: '100%', maxWidth: '600px' }}>
           <Autocomplete
             disablePortal
@@ -827,14 +831,12 @@ export default function Page() {
           </Box>
         )}
       </Box>
-      <Drawer
-        // sx={{ width: '50%' }}
-        anchor="bottom"
+
+      <HelpDrawer
+        content={HELP_PATHS.flows.practiceSeries}
         open={open}
         onClose={() => setOpen(false)}
-      >
-        <Typography variant="body1">Pick a Flow to practice.</Typography>
-      </Drawer>
+      />
 
       {/* Dialog rendering removed to keep editor inline only. */}
     </Box>

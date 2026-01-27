@@ -1,10 +1,9 @@
-import { Stack, Button, IconButton, SxProps, Theme } from '@mui/material'
-import React, { ComponentProps } from 'react'
-import HelpIcon from '@mui/icons-material/Help'
+import { Button, SxProps, Theme } from '@mui/material'
+import React from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
-interface SubNavHeaderProps extends ComponentProps<typeof IconButton> {
+interface SubNavHeaderProps {
   title?: string
   mode: 'back' | 'static'
   link?: string
@@ -12,14 +11,14 @@ interface SubNavHeaderProps extends ComponentProps<typeof IconButton> {
 }
 
 /**
- * SubNavHeader component renders a navigation header with a back button and a help icon button.
+ * SubNavHeader component renders a navigation header with a back button.
+ * Use with HelpButton component for pages that need help functionality.
  *
  * @component
  * @param {SubNavHeaderProps} props - The properties for the SubNavHeader component.
  * @param {string} props.title - The title to be displayed on the back button.
  * @param {'back' | 'static'} props.mode - Navigation mode: 'back' uses browser history, 'static' navigates to a specific URL.
  * @param {string} [props.link] - The URL to navigate to when mode is 'static'. Required for 'static' mode.
- * @param {function} [props.onClick] - Optional click handler for the help icon button.
  * @param {SxProps<Theme>} [props.sx] - Optional sx prop for custom styling of the container.
  *
  * @example
@@ -27,7 +26,6 @@ interface SubNavHeaderProps extends ComponentProps<typeof IconButton> {
  * <SubNavHeader
  *   title="Dashboard"
  *   mode="back"
- *   onClick={() => console.log('Help icon clicked')}
  * />
  *
  * @example
@@ -36,15 +34,20 @@ interface SubNavHeaderProps extends ComponentProps<typeof IconButton> {
  *   title="Dashboard"
  *   mode="static"
  *   link="/dashboard"
- *   onClick={() => console.log('Help icon clicked')}
  * />
+ *
+ * @example
+ * // With HelpButton for help functionality
+ * <Stack direction="row" justifyContent="space-between">
+ *   <SubNavHeader mode="back" />
+ *   <HelpButton onClick={() => setOpen(true)} />
+ * </Stack>
  */
 const SubNavHeader: React.FC<SubNavHeaderProps> = ({
   title,
   mode,
   link,
   sx,
-  ...props
 }) => {
   const router = useRouter()
 
@@ -54,49 +57,35 @@ const SubNavHeader: React.FC<SubNavHeaderProps> = ({
     }
   }
   return (
-    <Stack
-      direction={'row'}
-      justifyContent={'space-between'}
+    <Button
+      variant="text"
+      {...(mode === 'static' && link
+        ? { href: link, LinkComponent: 'a' }
+        : { onClick: handleBackClick })}
       sx={{
+        alignSelf: 'flex-start',
+        color: 'primary.contrastText',
         marginTop: 1,
-        width: '100%',
-        maxWidth: '384px', // Match SplashHeader default width
-        alignSelf: 'center', // Center the component
-        paddingX: 0, // Remove padding to align with image edges
+        '&:hover': {
+          backgroundColor: 'transparent',
+          boxShadow: 'none',
+        },
         ...sx,
       }}
+      startIcon={
+        <>
+          <Image
+            width={18}
+            height={18}
+            src="/icons/sub-nav-header-back-arrow-icon.svg"
+            alt="back arrow"
+          />
+        </>
+      }
+      disableRipple
     >
-      <Button
-        variant="text"
-        {...(mode === 'static' && link
-          ? { href: link, LinkComponent: 'a' }
-          : { onClick: handleBackClick })}
-        sx={{
-          alignSelf: 'flex-start',
-          color: 'primary.contrastText',
-          '&:hover': {
-            backgroundColor: 'transparent',
-            boxShadow: 'none',
-          },
-        }}
-        startIcon={
-          <>
-            <Image
-              width={18}
-              height={18}
-              src="/icons/sub-nav-header-back-arrow-icon.svg"
-              alt="back arrow"
-            />
-          </>
-        }
-        disableRipple
-      >
-        {title ? `Back to ${title}` : 'BACK'}
-      </Button>
-      <IconButton disableRipple onClick={props.onClick}>
-        <HelpIcon sx={{ color: 'success.light' }} />
-      </IconButton>
-    </Stack>
+      {title ? `Back to ${title}` : 'BACK'}
+    </Button>
   )
 }
 

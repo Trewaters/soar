@@ -12,7 +12,6 @@ import {
   Typography,
   ListSubheader,
   IconButton,
-  Drawer,
 } from '@mui/material'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
@@ -26,6 +25,9 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import CloseIcon from '@mui/icons-material/Close'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import HelpButton from '@app/clientComponents/HelpButton'
+import HelpDrawer from '@app/clientComponents/HelpDrawer'
+import { HELP_PATHS } from '@app/utils/helpLoader'
 import { AutocompleteInput } from '@app/clientComponents/form'
 import { SequenceData, getAllSequences } from '@lib/sequenceService'
 import { getAllSeries } from '@lib/seriesService'
@@ -388,18 +390,20 @@ export default function Page() {
             alignSelf: 'center',
           }}
         >
-          <SubNavHeader
-            title="Flows"
-            mode="static"
-            link="/navigator/flows"
-            onClick={() => setOpen(!open)}
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
             sx={{
               width: '100%',
               maxWidth: '600px',
               alignSelf: 'center',
               mb: 2,
             }}
-          />
+          >
+            <SubNavHeader title="Flows" mode="static" link="/navigator/flows" />
+            <HelpButton onClick={() => setOpen(!open)} />
+          </Stack>
           <Stack
             sx={{
               px: 4,
@@ -1039,24 +1043,11 @@ export default function Page() {
         </Stack>
       </Box>
 
-      <Drawer
-        anchor="bottom"
+      <HelpDrawer
+        content={HELP_PATHS.flows.practiceSequences}
         open={open}
         onClose={() => setOpen(false)}
-        sx={{
-          '& .MuiDrawer-paper': {
-            maxWidth: '100vw',
-          },
-        }}
-        disablePortal={false}
-        disableScrollLock={true}
-      >
-        <Typography variant="body1" sx={{ p: 2 }}>
-          Browse and practice yoga sequences. Use the search to find specific
-          sequences or scroll through the collection. Select a sequence to view
-          details and track your practice progress.
-        </Typography>
-      </Drawer>
+      />
     </>
   )
 }

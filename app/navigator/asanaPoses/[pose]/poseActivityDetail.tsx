@@ -41,6 +41,8 @@ import { deletePose, updatePose, type UpdatePoseInput } from '@lib/poseService'
 // PoseImageUpload removed from this page; image upload is managed via PoseImageManagement
 import PoseImageManagement from '@app/clientComponents/imageUpload/PoseImageManagement'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import HelpButton from '@app/clientComponents/HelpButton'
+import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
 import { AsanaPose } from 'types/asana'
 
@@ -690,12 +692,23 @@ export default function PoseActivityDetail({
           px: { xs: 0, sm: 2 }, // Remove padding on mobile for full width
         }}
       >
-        <SubNavHeader
-          title="Asanas"
-          mode="static"
-          link="/navigator/asanaPoses"
-          onClick={handleInfoClick}
-        />
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={1}
+          sx={{
+            width: '100%',
+            maxWidth: '600px',
+            alignSelf: 'center',
+          }}
+        >
+          <SubNavHeader
+            title="Asanas"
+            mode="static"
+            link="/navigator/asanaPoses"
+          />
+          <HelpButton onClick={handleInfoClick} />
+        </Stack>
         <Stack direction={'column'} spacing={0}>
           {!isEditing ? (
             <>
@@ -1207,25 +1220,11 @@ export default function PoseActivityDetail({
       />
       */}
 
-      <Drawer
-        anchor="bottom"
+      <HelpDrawer
+        content="View detailed information about this asana pose. You can track your practice activity, set difficulty levels, and access additional pose details and benefits. Use the practice view button to see the pose in action."
         open={open}
         onClose={() => setOpen(false)}
-        sx={{
-          '& .MuiDrawer-paper': {
-            maxWidth: '100vw',
-          },
-        }}
-        disablePortal={false}
-        disableScrollLock={true}
-      >
-        <Typography variant="body1" sx={{ p: 2 }}>
-          View detailed information about this asana pose. You can track your
-          practice activity, set difficulty levels, and access additional pose
-          details and benefits. Use the practice view button to see the pose in
-          action.
-        </Typography>
-      </Drawer>
+      />
     </Paper>
   )
 }

@@ -41,6 +41,8 @@ import Looks5Icon from '@mui/icons-material/Looks5'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import HelpButton from '@app/clientComponents/HelpButton'
+import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import SearchIcon from '@mui/icons-material/Search'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
@@ -52,6 +54,7 @@ import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 import getAlphaUserIds from '@app/lib/alphaUsers'
 import { getAllSeries } from '@lib/seriesService'
 import ImageUpload from '@clientComponents/imageUpload/ImageUpload'
+import { HELP_PATHS } from '@app/utils/helpLoader'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -317,12 +320,19 @@ export default function Page() {
             alt={'Create Sequences'}
             title="Create Sequences"
           />
-          <SubNavHeader
-            title="Flows"
-            mode="static"
-            link="/navigator/flows"
-            onClick={toggleDrawer(!open)}
-          />
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={1}
+            sx={{
+              width: '100%',
+              maxWidth: '600px',
+              alignSelf: 'center',
+            }}
+          >
+            <SubNavHeader title="Flows" mode="static" link="/navigator/flows" />
+            <HelpButton onClick={() => setOpen(!open)} />
+          </Stack>
           <Box sx={{ px: 2, pb: 20 }}>
             {FEATURES.SHOW_CREATE_SEQUENCE && (
               <>
@@ -893,79 +903,15 @@ export default function Page() {
             )}
           </Box>
         </Stack>
-        <Drawer
-          onClick={toggleDrawer(!open)}
-          open={open}
-          onClose={toggleDrawer(false)}
-          anchor="bottom"
-        >
-          <List
-            sx={{
-              width: 'auto',
-              bgcolor: 'background.helper',
-              alignSelf: 'center',
-              borderRadius: 4,
-              my: 3,
-            }}
-          >
-            <ListSubheader
-              sx={{ bgcolor: 'background.helper', textAlign: 'center' }}
-              component="h3"
-              id="nested-list-subheader"
-            >
-              Welcome to the sequence creation page
-            </ListSubheader>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <LooksOne />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary="If you can't find a sequence, create your own!" />
-            </ListItem>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <LooksTwoIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary='"Sequence Name": Type a unique name for your sequence.' />
-            </ListItem>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <Looks3Icon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary='"Pick Series": Add a series to
-                  your sequence by selecting them from the "Pick Series"
-                  dropdown below. View the asana poses in the series below "Pick Series" Click the "X" to enter a new series. "Remove One (-1)" will remove the last series added. "Clear" will remove all series so you can start over.'
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <Looks4Icon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary='"Description": Type a description of your sequence.' />
-            </ListItem>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar>
-                  <Looks5Icon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={`Click "${AppText.APP_BUTTON_SUBMIT}" when you are done.`}
-              />
-            </ListItem>
-          </List>
-        </Drawer>
       </Box>
-      <Box height={'72px'} />
 
+      <HelpDrawer
+        content={HELP_PATHS.flows.createSequences}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
+
+      <Box height={'72px'} />
       <NavBottom subRoute="/navigator/flows" />
     </>
   )

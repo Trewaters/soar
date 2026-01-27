@@ -1,13 +1,16 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { Box, Stack, Typography, Drawer } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { getAccessiblePoses } from '@lib/poseService'
 import SplashHeader from '@app/clientComponents/splash-header'
 import PoseSearch from '@app/navigator/asanaPoses/pose-search'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 import { useSession } from 'next-auth/react'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import HelpButton from '@app/clientComponents/HelpButton'
+import HelpDrawer from '@app/clientComponents/HelpDrawer'
+import { HELP_PATHS } from '@app/utils/helpLoader'
 import { AsanaPose } from 'types/asana'
 
 export default function Page() {
@@ -103,17 +106,19 @@ export default function Page() {
             mb: '1em',
           }}
         >
-          <SubNavHeader
-            mode="back"
-            link="/navigator/asanaPoses"
-            onClick={handleInfoClick}
+          <Stack
+            direction="row"
+            justifyContent="space-between"
             sx={{
               width: '100%',
-              maxWidth: '384px', // Match SplashHeader width
+              maxWidth: '384px',
               alignSelf: 'center',
-              mb: 2, // Add bottom margin for spacing
+              mb: 2,
             }}
-          />
+          >
+            <SubNavHeader mode="back" link="/navigator/asanaPoses" />
+            <HelpButton onClick={handleInfoClick} />
+          </Stack>
           <Stack sx={{ px: 4, width: '100%', maxWidth: '600px' }}>
             {/* Search Section */}
             <Box
@@ -141,24 +146,11 @@ export default function Page() {
         </Box>
       </Box>
 
-      <Drawer
-        anchor="bottom"
+      <HelpDrawer
         open={open}
         onClose={() => setOpen(false)}
-        sx={{
-          '& .MuiDrawer-paper': {
-            maxWidth: '100vw',
-          },
-        }}
-        disablePortal={false}
-        disableScrollLock={true}
-      >
-        <Typography variant="body1" sx={{ p: 2 }}>
-          Search and browse through your available yoga poses. Use the search
-          bar to find specific asanas or scroll through the complete collection
-          to explore and practice different poses.
-        </Typography>
-      </Drawer>
+        content={HELP_PATHS.asanas.practice}
+      />
     </>
   )
 }

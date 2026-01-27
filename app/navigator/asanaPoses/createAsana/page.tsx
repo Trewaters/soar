@@ -5,7 +5,6 @@ import {
   Button,
   Stack,
   Typography,
-  Drawer,
   Snackbar,
   Alert,
   Backdrop,
@@ -16,6 +15,9 @@ import { useSession } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import HelpButton from '@app/clientComponents/HelpButton'
+import HelpDrawer from '@app/clientComponents/HelpDrawer'
+import { HELP_PATHS } from '@app/utils/helpLoader'
 import AsanaDetailsEdit from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
 import type { AsanaEditFieldProps } from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
 import ImageUploadWithFallback from '@app/clientComponents/imageUpload/ImageUploadWithFallback'
@@ -448,12 +450,14 @@ export default function Page() {
         spacing={2}
         sx={{ mx: { xs: 0, sm: 3 }, mb: '1em', width: '100%', maxWidth: 1200 }}
       >
-        <SubNavHeader
-          title="Asana"
-          mode="static"
-          link="/navigator/asanaPoses"
-          onClick={handleInfoClick}
-        />
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <SubNavHeader
+            title="Asana"
+            mode="static"
+            link="/navigator/asanaPoses"
+          />
+          <HelpButton onClick={handleInfoClick} />
+        </Stack>
         <Stack sx={{ px: { xs: 2, sm: 4 } }} spacing={3}>
           {/* Asana Form Fields using AsanaDetailsEdit */}
           <AsanaDetailsEdit fields={formFields} />
@@ -660,12 +664,11 @@ export default function Page() {
         </Stack>
       </Stack>
 
-      <Drawer anchor="bottom" open={open} onClose={() => setOpen(false)}>
-        <Typography variant="body1" sx={{ p: 2 }}>
-          Fill out the form to create a new asana pose. All fields are required
-          except for preferred side.
-        </Typography>
-      </Drawer>
+      <HelpDrawer
+        content={HELP_PATHS.asanas.create}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
 
       {/* Freemium Notification */}
       <FreemiumNotification
