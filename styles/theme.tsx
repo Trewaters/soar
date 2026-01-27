@@ -197,8 +197,6 @@ export const theme = createTheme({
     // Name of the component
     MuiButtonBase: {
       defaultProps: {
-        // The props to change the default for.
-        // No more ripple, on the whole application 💣!
         disableRipple: true,
       },
     },
