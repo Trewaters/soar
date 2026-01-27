@@ -31,8 +31,17 @@ export async function GET(
       return NextResponse.json({ error: 'Series not found' }, { status: 404 })
     }
 
-    // Only allow access to series created by the current user
-    if (series.created_by !== session.user.email) {
+    // Check if user has permission (owner, admin, or public content)
+    const userData = await prisma.userData.findFirst({
+      where: { email: session.user.email },
+      select: { role: true },
+    })
+    const isAdmin = userData?.role === 'admin'
+    const isPublicOrAlpha =
+      series.created_by === 'PUBLIC' || series.created_by === 'alpha users'
+    const isOwner = series.created_by === session.user.email
+
+    if (!isAdmin && !isOwner && !isPublicOrAlpha) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
@@ -60,7 +69,7 @@ export async function POST(
     const resolvedParams = await params
     const seriesId = resolvedParams.id
 
-    // Check if series exists and user owns it
+    // Check if series exists and user has permission
     const series = await prisma.asanaSeries.findUnique({
       where: { id: seriesId },
       select: { images: true, created_by: true },
@@ -70,7 +79,15 @@ export async function POST(
       return NextResponse.json({ error: 'Series not found' }, { status: 404 })
     }
 
-    if (series.created_by !== session.user.email) {
+    // Check if user has permission (owner or admin)
+    const userData = await prisma.userData.findFirst({
+      where: { email: session.user.email },
+      select: { role: true },
+    })
+    const isAdmin = userData?.role === 'admin'
+    const isOwner = series.created_by === session.user.email
+
+    if (!isAdmin && !isOwner) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
@@ -161,7 +178,7 @@ export async function DELETE(
       )
     }
 
-    // Check if series exists and user owns it
+    // Check if series exists and user has permission
     const series = await prisma.asanaSeries.findUnique({
       where: { id: seriesId },
       select: { images: true, created_by: true },
@@ -171,7 +188,15 @@ export async function DELETE(
       return NextResponse.json({ error: 'Series not found' }, { status: 404 })
     }
 
-    if (series.created_by !== session.user.email) {
+    // Check if user has permission (owner or admin)
+    const userData = await prisma.userData.findFirst({
+      where: { email: session.user.email },
+      select: { role: true },
+    })
+    const isAdmin = userData?.role === 'admin'
+    const isOwner = series.created_by === session.user.email
+
+    if (!isAdmin && !isOwner) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 

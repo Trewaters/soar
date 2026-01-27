@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState, useEffect, useContext } from 'react'
 import {
   Box,
   Stack,
@@ -20,6 +20,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import CloseIcon from '@mui/icons-material/Close'
 import { useSession } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+import { UserStateContext } from '@context/UserContext'
 import EditSequence, { EditableSequence } from '@clientComponents/EditSequence'
 import { getAllSeries } from '@lib/seriesService'
 import SeriesPoseList from '@clientComponents/SeriesPoseList'
@@ -43,6 +44,7 @@ export default function SequenceViewWithEdit({
   defaultShowEdit = false,
 }: Props) {
   const { data: session } = useSession()
+  const { state: userState } = useContext(UserStateContext)
   const navigation = useNavigationWithLoading()
   const [showEdit, setShowEdit] = useState<boolean>(defaultShowEdit)
   const [model, setModel] = useState<EditableSequence>(sequence)
@@ -132,10 +134,30 @@ export default function SequenceViewWithEdit({
 
   const isOwner = useMemo(() => {
     const email = session?.user?.email ?? null
-    if (!model.created_by || !email) return false
+    const createdBy = model.created_by
+    const userRole = userState?.userData?.role
+
+    // Admin users can edit any sequence
+    const isAdmin = userRole === 'admin'
+
+    // Allow if admin OR if owner
+    if (isAdmin) {
+      console.log('[SequenceViewWithEdit] isOwner result: true (admin)')
+      return true
+    }
+
+    if (!createdBy || !email) return false
     // Compare case-insensitively and ignore stray whitespace
-    return model.created_by.trim().toLowerCase() === email.trim().toLowerCase()
-  }, [model.created_by, session?.user?.email])
+    const isMatch =
+      createdBy.trim().toLowerCase() === email.trim().toLowerCase()
+    console.log('[SequenceViewWithEdit] isOwner result:', isMatch)
+    return isMatch
+  }, [
+    model.created_by,
+    session?.user?.email,
+    userState?.userData?.role,
+    showEdit,
+  ])
 
   // Helper function to resolve series ID and navigate
   // This ensures we NEVER use pagination IDs, only actual MongoDB ObjectIds

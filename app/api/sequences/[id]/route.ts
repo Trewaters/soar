@@ -42,12 +42,20 @@ export async function PATCH(request: NextRequest, { params }: any) {
     if (!existing)
       return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
-    // Enforce creator-only updates when created_by is present
-    if (
-      !existing.created_by ||
-      existing.created_by.trim().toLowerCase() !==
-        (session.user.email || '').trim().toLowerCase()
-    ) {
+    // Check if user has permission (owner or admin)
+    const userEmail = (session.user.email || '').trim().toLowerCase()
+    const ownerEmail = (existing.created_by || '').trim().toLowerCase()
+
+    // Fetch user role from database
+    const userData = await prisma.userData.findFirst({
+      where: { email: session.user.email },
+      select: { role: true },
+    })
+    const isAdmin = userData?.role === 'admin'
+    const isOwner = ownerEmail && ownerEmail === userEmail
+
+    // Allow if admin OR owner
+    if (!isAdmin && !isOwner) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
@@ -95,7 +103,17 @@ export async function DELETE(_request: NextRequest, { params }: any) {
 
     const requester = (session.user.email || '').trim().toLowerCase()
     const owner = (existing.created_by || '').trim().toLowerCase()
-    if (!owner || owner !== requester) {
+
+    // Fetch user role from database
+    const userData = await prisma.userData.findFirst({
+      where: { email: session.user.email },
+      select: { role: true },
+    })
+    const isAdmin = userData?.role === 'admin'
+    const isOwner = owner && owner === requester
+
+    // Allow if admin OR owner
+    if (!isAdmin && !isOwner) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 

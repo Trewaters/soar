@@ -53,7 +53,7 @@ export default function SequenceDetailPage({
             : [],
           description: seq.description ?? undefined,
           image: seq.image ?? undefined,
-          created_by: (seq as any).created_by ?? null,
+          created_by: seq.created_by ?? null,
         }
         setSequence(sequenceData)
       } catch (error) {

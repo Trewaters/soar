@@ -192,10 +192,6 @@ export default function ActivityTracker({
       if (!session?.user?.id || !entityId) return
 
       try {
-        console.debug('[ActivityTracker] checkExistingActivity', {
-          userId: session.user.id,
-          entityId,
-        })
         const result = await checkActivity(session.user.id, entityId)
         setChecked(result.exists)
 

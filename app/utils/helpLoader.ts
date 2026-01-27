@@ -11,7 +11,7 @@ export const HELP_PATHS = {
   flows: {
     practiceSeries: '/help/flows/practice-series.md',
     practiceSequences: '/help/flows/practice-sequences.md',
-    createSeries: '/help/flows/create-series.md',
+    createSeries: '/help/flows/create-flow.md',
     createSequences: '/help/flows/create-sequences.md',
   },
   profile: {

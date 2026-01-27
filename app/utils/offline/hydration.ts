@@ -20,12 +20,6 @@ export async function hydrateApp(): Promise<HydratedState> {
       db.getKV('soar:asanaPose'),
       db.getKV('soar:meta'),
     ])
-    console.debug('[hydrateApp] loaded from storage', {
-      userState: !!userState,
-      flowSeries: !!flowSeries,
-      asanaPose: !!asanaPose,
-      meta: !!meta,
-    })
     if (userState) out.userState = userState
     if (flowSeries) out.flowSeries = flowSeries
     if (asanaPose) out.asanaPose = asanaPose
