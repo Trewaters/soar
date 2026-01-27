@@ -127,16 +127,41 @@ jest.mock('@app/clientComponents/splash-header', () => {
 
 // Mock SubNavHeader component
 jest.mock('@app/clientComponents/sub-nav-header', () => {
-  const MockSubNavHeader = ({ title, link, onClick }: any) => (
+  const MockSubNavHeader = ({ title, link }: any) => (
     <div data-testid="sub-nav-header">
       <a href={link}>Back to {title}</a>
-      <button onClick={onClick} data-testid="help-button">
-        Help
-      </button>
     </div>
   )
   MockSubNavHeader.displayName = 'MockSubNavHeader'
   return MockSubNavHeader
+})
+
+// Mock HelpButton component
+jest.mock('@app/clientComponents/HelpButton', () => {
+  const MockHelpButton = ({ onClick }: any) => (
+    <button onClick={onClick} data-testid="help-button">
+      Help
+    </button>
+  )
+  MockHelpButton.displayName = 'MockHelpButton'
+  return MockHelpButton
+})
+
+// Mock HelpDrawer component
+jest.mock('@app/clientComponents/HelpDrawer', () => {
+  const MockHelpDrawer = ({ open, onClose, content }: any) => {
+    if (!open) return null
+    return (
+      <div data-testid="help-drawer">
+        <div>Pick a Flow to practice.</div>
+        <button onClick={onClose} data-testid="help-drawer-close">
+          Close
+        </button>
+      </div>
+    )
+  }
+  MockHelpDrawer.displayName = 'MockHelpDrawer'
+  return MockHelpDrawer
 })
 
 // Mock NavBottom component
@@ -689,13 +714,11 @@ describe('Practice Series Page', () => {
       fireEvent.click(helpButton)
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Pick a Flow to practice.')
-        ).toBeInTheDocument()
+        expect(screen.getByText('Pick a Flow to practice.')).toBeInTheDocument()
       })
     })
 
-    it('closes drawer when clicked outside', async () => {
+    it('closes drawer when close button is clicked', async () => {
       mockGetAllSeries.mockResolvedValue([])
       renderWithTheme(<Page />)
 
@@ -703,16 +726,12 @@ describe('Practice Series Page', () => {
       fireEvent.click(helpButton)
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Pick a Flow to practice.')
-        ).toBeInTheDocument()
+        expect(screen.getByText('Pick a Flow to practice.')).toBeInTheDocument()
       })
 
-      // Find the backdrop and click it
-      const backdrop = document.querySelector('.MuiBackdrop-root')
-      if (backdrop) {
-        fireEvent.click(backdrop)
-      }
+      // Click the close button in the drawer
+      const closeButton = screen.getByTestId('help-drawer-close')
+      fireEvent.click(closeButton)
 
       await waitFor(() => {
         expect(
@@ -730,9 +749,7 @@ describe('Practice Series Page', () => {
       // Open drawer
       fireEvent.click(helpButton)
       await waitFor(() => {
-        expect(
-          screen.getByText('Pick a Flow to practice.')
-        ).toBeInTheDocument()
+        expect(screen.getByText('Pick a Flow to practice.')).toBeInTheDocument()
       })
 
       // Close drawer by clicking help button again
@@ -790,9 +807,7 @@ describe('Practice Series Page', () => {
         mockGetAllSeries.mockResolvedValue([])
         renderWithTheme(<Page />)
 
-        const searchComponent = screen.getByPlaceholderText(
-          'Search for a Flow'
-        )
+        const searchComponent = screen.getByPlaceholderText('Search for a Flow')
         expect(searchComponent).toBeInTheDocument()
       })
     })

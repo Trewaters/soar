@@ -55,22 +55,16 @@ describe('SubNavHeader', () => {
     })
 
     it('should render back arrow icon', () => {
-      render(<SubNavHeader mode="back" onClick={mockOnClick} />)
+      render(<SubNavHeader mode="back" />)
       const backArrow = screen.getByAltText('back arrow')
       expect(backArrow).toBeInTheDocument()
-    })
-
-    it('should render help icon button', () => {
-      render(<SubNavHeader mode="back" onClick={mockOnClick} />)
-      const helpButton = screen.getByRole('button', { name: '' })
-      expect(helpButton).toBeInTheDocument()
     })
   })
 
   describe('Back Mode Navigation', () => {
     it('should call router.back() when button is clicked in back mode', async () => {
       const user = userEvent.setup()
-      render(<SubNavHeader mode="back" onClick={mockOnClick} />)
+      render(<SubNavHeader mode="back" />)
 
       const backButton = screen.getByRole('button', { name: /back/i })
       await user.click(backButton)
@@ -79,28 +73,19 @@ describe('SubNavHeader', () => {
     })
 
     it('should display "BACK" text when no title is provided in back mode', () => {
-      render(<SubNavHeader mode="back" onClick={mockOnClick} />)
+      render(<SubNavHeader mode="back" />)
       expect(screen.getByText('BACK')).toBeInTheDocument()
     })
 
     it('should display "Back to {title}" when title is provided in back mode', () => {
-      render(
-        <SubNavHeader mode="back" title="Dashboard" onClick={mockOnClick} />
-      )
+      render(<SubNavHeader mode="back" title="Dashboard" />)
       expect(screen.getByText('Back to Dashboard')).toBeInTheDocument()
     })
   })
 
   describe('Static Mode Navigation', () => {
     it('should render as link with correct href in static mode', () => {
-      render(
-        <SubNavHeader
-          mode="static"
-          link="/dashboard"
-          title="Dashboard"
-          onClick={mockOnClick}
-        />
-      )
+      render(<SubNavHeader mode="static" link="/dashboard" title="Dashboard" />)
 
       const backButton = screen.getByRole('link', {
         name: /back to dashboard/i,
@@ -110,14 +95,7 @@ describe('SubNavHeader', () => {
 
     it('should not call router.back() in static mode', async () => {
       const user = userEvent.setup()
-      render(
-        <SubNavHeader
-          mode="static"
-          link="/dashboard"
-          title="Dashboard"
-          onClick={mockOnClick}
-        />
-      )
+      render(<SubNavHeader mode="static" link="/dashboard" title="Dashboard" />)
 
       const backButton = screen.getByRole('link', {
         name: /back to dashboard/i,
@@ -128,57 +106,28 @@ describe('SubNavHeader', () => {
     })
 
     it('should display "BACK" when no title is provided in static mode', () => {
-      render(<SubNavHeader mode="static" link="/home" onClick={mockOnClick} />)
+      render(<SubNavHeader mode="static" link="/home" />)
       expect(screen.getByText('BACK')).toBeInTheDocument()
     })
   })
 
   describe('Title Display', () => {
     it('should display custom title with "Back to" prefix', () => {
-      render(
-        <SubNavHeader
-          mode="static"
-          link="/settings"
-          title="Settings"
-          onClick={mockOnClick}
-        />
-      )
+      render(<SubNavHeader mode="static" link="/settings" title="Settings" />)
       expect(screen.getByText('Back to Settings')).toBeInTheDocument()
     })
 
     it('should display "BACK" when title is undefined', () => {
-      render(<SubNavHeader mode="back" onClick={mockOnClick} />)
+      render(<SubNavHeader mode="back" />)
       expect(screen.getByText('BACK')).toBeInTheDocument()
       expect(screen.queryByText(/Back to/)).not.toBeInTheDocument()
-    })
-  })
-
-  describe('Help Icon Interaction', () => {
-    it('should call onClick handler when help icon is clicked', async () => {
-      const user = userEvent.setup()
-      render(<SubNavHeader mode="back" onClick={mockOnClick} />)
-
-      const helpButton = screen.getAllByRole('button')[1] // Second button is help icon
-      await user.click(helpButton)
-
-      expect(mockOnClick).toHaveBeenCalledTimes(1)
-    })
-
-    it('should not trigger navigation when help icon is clicked', async () => {
-      const user = userEvent.setup()
-      render(<SubNavHeader mode="back" onClick={mockOnClick} />)
-
-      const helpButton = screen.getAllByRole('button')[1]
-      await user.click(helpButton)
-
-      expect(mockRouterBack).not.toHaveBeenCalled()
     })
   })
 
   describe('Styling', () => {
     it('should apply custom sx prop styles', () => {
       const customSx = { paddingX: 2, marginTop: 2 }
-      render(<SubNavHeader mode="back" sx={customSx} onClick={mockOnClick} />)
+      render(<SubNavHeader mode="back" sx={customSx} />)
 
       const container = screen.getByText('BACK').closest('div')?.parentElement
       expect(container).toBeInTheDocument()
