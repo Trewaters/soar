@@ -45,6 +45,8 @@ import {
   Settings as SettingsIcon,
 } from '@mui/icons-material'
 import { AutocompleteInput } from '@app/clientComponents/form'
+import HelpButton from '@app/clientComponents/HelpButton'
+import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import SearchIcon from '@mui/icons-material/Search'
 import { useState } from 'react'
 import { AsanaPose } from 'types/asana'
@@ -90,6 +92,7 @@ export default function StyleGuide() {
   const [tabValue, setTabValue] = useState(0)
 
   const [expanded, setExpanded] = useState(false)
+  const [helpOpen, setHelpOpen] = useState(false)
 
   // Generate dynamic color palette from theme
   const colorKeys = [
@@ -141,12 +144,7 @@ export default function StyleGuide() {
 
           <Divider sx={{ my: 3 }} />
 
-          <Typography
-            variant="h2"
-            component="h2"
-            textAlign={'center'}
-            sx={{ mb: 6 }}
-          >
+          <Typography variant="h2" textAlign={'center'} sx={{ mb: 6 }}>
             Typography MUI Variants
           </Typography>
 
@@ -156,7 +154,11 @@ export default function StyleGuide() {
                 <Typography variant="h1">
                   H1 ({theme.typography.h1.fontSize})
                 </Typography>
-                <Typography variant="h1" sx={{ fontStyle: 'italic' }}>
+                <Typography
+                  variant="h1"
+                  component={'text'}
+                  sx={{ fontStyle: 'italic' }}
+                >
                   Main Page level Heading
                 </Typography>
               </Stack>
@@ -167,10 +169,14 @@ export default function StyleGuide() {
 
             <Stack direction={'column'} spacing={1}>
               <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="h2">
+                <Typography variant="h2" component={'text'}>
                   H2 ({theme.typography.h2.fontSize})
                 </Typography>
-                <Typography variant="h2" sx={{ fontStyle: 'italic' }}>
+                <Typography
+                  variant="h2"
+                  component={'text'}
+                  sx={{ fontStyle: 'italic' }}
+                >
                   Section Heading
                 </Typography>
               </Stack>
@@ -181,10 +187,14 @@ export default function StyleGuide() {
 
             <Stack direction={'column'} spacing={1}>
               <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="h3">
+                <Typography variant="h3" component={'text'}>
                   H3 ({theme.typography.h3.fontSize})
                 </Typography>
-                <Typography variant="h3" sx={{ fontStyle: 'italic' }}>
+                <Typography
+                  variant="h3"
+                  component={'text'}
+                  sx={{ fontStyle: 'italic' }}
+                >
                   Subsection Heading
                 </Typography>
               </Stack>
@@ -195,10 +205,14 @@ export default function StyleGuide() {
 
             <Stack direction={'column'} spacing={1}>
               <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="h4">
+                <Typography variant="h4" component={'text'}>
                   H4 ({theme.typography.h4.fontSize})
                 </Typography>
-                <Typography variant="h4" sx={{ fontStyle: 'italic' }}>
+                <Typography
+                  variant="h4"
+                  component={'text'}
+                  sx={{ fontStyle: 'italic' }}
+                >
                   Heading Level 4
                 </Typography>
               </Stack>
@@ -209,10 +223,14 @@ export default function StyleGuide() {
 
             <Stack direction={'column'} spacing={1}>
               <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="h5">
+                <Typography variant="h5" component={'text'}>
                   H5 ({theme.typography.h5.fontSize})
                 </Typography>
-                <Typography variant="h5" sx={{ fontStyle: 'italic' }}>
+                <Typography
+                  variant="h5"
+                  component={'text'}
+                  sx={{ fontStyle: 'italic' }}
+                >
                   Heading Level 5
                 </Typography>
               </Stack>
@@ -223,10 +241,14 @@ export default function StyleGuide() {
 
             <Stack direction={'column'} spacing={1}>
               <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="h6">
+                <Typography variant="h6" component={'text'}>
                   H6 ({theme.typography.h6.fontSize})
                 </Typography>
-                <Typography variant="h6" sx={{ fontStyle: 'italic' }}>
+                <Typography
+                  variant="h6"
+                  component={'text'}
+                  sx={{ fontStyle: 'italic' }}
+                >
                   Heading Level 6
                 </Typography>
               </Stack>
@@ -241,11 +263,11 @@ export default function StyleGuide() {
                   Subtitle1 ({theme.typography.subtitle1.fontSize})
                 </Typography>
                 <Typography variant="subtitle1" sx={{ fontStyle: 'italic' }}>
-                  Subtitle Variant
+                  UI Component titles
                 </Typography>
               </Stack>
               <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
-                Used for prominent subheadings
+                Used for titles of cards and UI components
               </Typography>
             </Stack>
 
@@ -255,11 +277,11 @@ export default function StyleGuide() {
                   Subtitle2 ({theme.typography.subtitle2.fontSize})
                 </Typography>
                 <Typography variant="subtitle2" sx={{ fontStyle: 'italic' }}>
-                  Subtitle Variant
+                  Used for table headings
                 </Typography>
               </Stack>
               <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
-                Used for secondary subheadings
+                Used for table headings and less prominent subtitles
               </Typography>
             </Stack>
 
@@ -384,12 +406,7 @@ export default function StyleGuide() {
 
         {/* Theme Values Section */}
         <Paper elevation={3} sx={{ p: 4 }}>
-          <Typography
-            variant="h2"
-            component="h2"
-            textAlign={'center'}
-            sx={{ mb: 3 }}
-          >
+          <Typography variant="h2" textAlign={'center'} sx={{ mb: 3 }}>
             Theme Configuration
           </Typography>
 
@@ -400,7 +417,7 @@ export default function StyleGuide() {
               justifyContent="center"
             >
               <Box>
-                <Typography variant="h6" gutterBottom textAlign="center">
+                <Typography variant="subtitle2" gutterBottom textAlign="center">
                   Breakpoints
                 </Typography>
                 <Stack spacing={1}>
@@ -431,7 +448,7 @@ export default function StyleGuide() {
               justifyContent="center"
             >
               <Box>
-                <Typography variant="h6" gutterBottom textAlign="center">
+                <Typography variant="subtitle2" gutterBottom textAlign="center">
                   Spacing Scale
                 </Typography>
                 <Stack spacing={1}>
@@ -448,7 +465,7 @@ export default function StyleGuide() {
             </Grid2>
 
             <Grid2 size={{ xs: 12, md: 12 }}>
-              <Typography variant="h6" gutterBottom textAlign="center">
+              <Typography variant="subtitle2" gutterBottom textAlign="center">
                 Font Family
               </Typography>
               <Typography variant="body2" textAlign="center">
@@ -460,7 +477,7 @@ export default function StyleGuide() {
 
         {/* Color Palette Section */}
         <Paper elevation={3} sx={{ p: 4 }}>
-          <Typography variant="h2" component="h2" sx={{ mb: 3 }}>
+          <Typography variant="h2" sx={{ mb: 3 }}>
             Color Palette
           </Typography>
 
@@ -469,7 +486,7 @@ export default function StyleGuide() {
               <Grid2 size={{ xs: 12, sm: 6, md: 4 }} key={colorName}>
                 <Paper variant="outlined" sx={{ p: 2 }}>
                   <Typography
-                    variant="h6"
+                    variant="subtitle2"
                     sx={{ textTransform: 'capitalize', mb: 2 }}
                   >
                     {colorName}
@@ -491,11 +508,11 @@ export default function StyleGuide() {
                             borderColor: theme.palette.divider,
                           }}
                         >
-                          <Typography variant="body2" sx={{ color: textColor }}>
+                          <Typography variant="body1" sx={{ color: textColor }}>
                             {variant}
                           </Typography>
                           <Typography
-                            variant="body2"
+                            variant="body1"
                             sx={{
                               color: textColor,
                               fontFamily: 'monospace',
@@ -515,13 +532,13 @@ export default function StyleGuide() {
 
         {/* MUI Components Section */}
         <Paper elevation={3} sx={{ p: 4 }}>
-          <Typography variant="h2" component="h2" sx={{ mb: 3 }}>
+          <Typography variant="h2" sx={{ mb: 3 }}>
             MUI Components (Primary Theme Style)
           </Typography>
 
           {/* Buttons */}
           <Box sx={{ mb: 4 }}>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="subtitle1" gutterBottom>
               Buttons
             </Typography>
             <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
@@ -552,7 +569,7 @@ export default function StyleGuide() {
 
           {/* Form Controls */}
           <Box sx={{ mb: 4 }}>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="subtitle1" gutterBottom>
               Form Controls
             </Typography>
             <Stack spacing={3} sx={{ maxWidth: 400 }}>
@@ -622,7 +639,7 @@ export default function StyleGuide() {
 
           {/* Cards */}
           <Box sx={{ mb: 4 }}>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="subtitle1" gutterBottom>
               Cards
             </Typography>
             <Grid2 container spacing={2}>
@@ -689,7 +706,7 @@ export default function StyleGuide() {
 
           {/* Navigation */}
           <Box sx={{ mb: 4 }}>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="subtitle1" gutterBottom>
               Navigation
             </Typography>
 
@@ -756,7 +773,7 @@ export default function StyleGuide() {
 
           {/* Feedback */}
           <Box sx={{ mb: 4 }}>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="subtitle1" gutterBottom>
               Feedback
             </Typography>
             <Stack spacing={2}>
@@ -773,7 +790,7 @@ export default function StyleGuide() {
 
           {/* Layout Components */}
           <Box sx={{ mb: 4 }}>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="subtitle1" gutterBottom>
               Layout
             </Typography>
             <Stack spacing={2}>
@@ -795,7 +812,7 @@ export default function StyleGuide() {
 
           {/* Custom Button Styles from App */}
           <Box sx={{ mb: 4 }}>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="subtitle1" gutterBottom>
               App-Specific Button Styles
             </Typography>
             <Stack spacing={2} sx={{ maxWidth: 300 }}>
@@ -837,8 +854,156 @@ export default function StyleGuide() {
               />
             </Stack>
           </Box>
+
+          {/* Help Drawer System */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="subtitle1" gutterBottom>
+              Help Drawer System
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              Reusable help pattern with HelpButton + HelpDrawer for contextual
+              guidance.
+            </Typography>
+
+            <Stack spacing={3}>
+              {/* Help Button Example */}
+              <Box>
+                <Typography variant="h6" gutterBottom>
+                  Help Button
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ mb: 1, color: 'text.secondary' }}
+                >
+                  Green question mark icon that triggers help content
+                </Typography>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <HelpButton onClick={() => setHelpOpen(true)} />
+                  <Typography variant="caption">
+                    Click to open help drawer
+                  </Typography>
+                </Stack>
+              </Box>
+
+              {/* Help Button with Navigation Pattern */}
+              <Box>
+                <Typography variant="h6" gutterBottom>
+                  Navigation Header Pattern
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{ mb: 1, color: 'text.secondary' }}
+                >
+                  Standard layout with back button + help button
+                </Typography>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{
+                    p: 2,
+                    bgcolor: 'background.paper',
+                    borderRadius: 2,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                  }}
+                >
+                  <Typography variant="h6">Page Title</Typography>
+                  <HelpButton onClick={() => setHelpOpen(true)} />
+                </Stack>
+              </Box>
+
+              {/* Features List */}
+              <Box>
+                <Typography variant="h6" gutterBottom>
+                  Features
+                </Typography>
+                <List dense>
+                  <ListItem>
+                    <ListItemIcon>
+                      <SearchIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Auto-detects content type"
+                      secondary="Markdown file path or plain text"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <SearchIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Markdown rendering"
+                      secondary="Supports headings, lists, bold, italic"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <SearchIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Bottom drawer design"
+                      secondary="Mobile-friendly, scrollable content"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <SearchIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Accessible"
+                      secondary="Keyboard navigation and focus management"
+                    />
+                  </ListItem>
+                </List>
+              </Box>
+            </Stack>
+          </Box>
         </Paper>
       </Stack>
+
+      {/* Help Drawer Instance */}
+      <HelpDrawer
+        open={helpOpen}
+        onClose={() => setHelpOpen(false)}
+        content={`# Style Guide Help
+
+## Overview
+
+This style guide demonstrates all components and design patterns used in the Soar yoga application.
+
+## How to Use
+
+### Browse Components
+- Scroll through sections to see all available components
+- Each section shows the component in action
+- View theme values and styling patterns
+
+### Copy Patterns
+- Use the code examples as templates
+- Reference theme values instead of hardcoding
+- Follow the established styling patterns
+
+## Help Drawer System
+
+This very drawer you're reading demonstrates the Help Drawer component!
+
+**Key Features:**
+- Clean, consistent help pattern
+- Markdown support for rich content
+- Mobile-friendly bottom drawer
+- Easy to implement across pages
+
+**Usage Pattern:**
+1. Add HelpButton to navigation
+2. Manage open state with useState
+3. Include HelpDrawer at end of component
+4. Provide markdown file path or plain text
+
+## Need More Info?
+
+See the full documentation at \`.github/documentation/DOCS-Help-Drawer.md\``}
+      />
     </Container>
   )
 }

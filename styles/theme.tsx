@@ -142,18 +142,21 @@ export const theme = createTheme({
     https://youtu.be/klXyJWlIzuY?si=tLj2PmYvdjCQwxzu
     */
     h1: {
+      // Top level page text
       fontSize: '2rem',
       fontWeight: '900',
       letterSpacing: '0.1rem',
       wordSpacing: '0.1rem',
     },
     h2: {
+      // Top level page subheading for h1
       fontSize: '1.8rem',
       fontWeight: '700',
       letterSpacing: '0.05rem',
       wordSpacing: '0.05rem',
     },
     h3: {
+      // Page level Section headings if h1 and h2 are taken
       fontSize: '1.6rem',
       fontWeight: '700',
       letterSpacing: '0.001rem',
@@ -171,10 +174,10 @@ export const theme = createTheme({
       fontSize: '1rem',
       fontWeight: '700',
     },
-    body1: { fontSize: '1rem' },
+    body1: { fontSize: '1rem' }, // default body text
     body2: { fontSize: '.8rem' },
-    subtitle1: { fontSize: '1.2rem' },
-    subtitle2: { fontSize: '1.05rem' },
+    subtitle1: { fontSize: '1.2rem' }, // used for component titles
+    subtitle2: { fontSize: '1.05rem' }, // used for table headings
     subtitle3: { fontSize: '1.5rem', fontWeight: 600 },
     overline: { fontSize: '0.9rem' },
     caption: { fontSize: '0.9rem' },

@@ -148,7 +148,7 @@ describe('StyleGuide Component', () => {
       expect(screen.getByText(/Heading Level 4/)).toBeInTheDocument()
       expect(screen.getByText(/Heading Level 5/)).toBeInTheDocument()
       expect(screen.getByText(/Heading Level 6/)).toBeInTheDocument()
-      expect(screen.getAllByText('Subtitle Variant').length).toBeGreaterThan(0)
+      expect(screen.getByText('UI Component titles')).toBeInTheDocument()
       expect(screen.getByText('Default paragraph text')).toBeInTheDocument()
       expect(screen.getByText('Smaller paragraph text')).toBeInTheDocument()
       expect(screen.getByText('Caption text')).toBeInTheDocument()
@@ -350,7 +350,7 @@ describe('StyleGuide Component', () => {
         expect(screen.getAllByTestId('home-icon')).toHaveLength(1)
         expect(screen.getAllByTestId('person-icon')).toHaveLength(2) // Appears in both AppBar and List
         expect(screen.getAllByTestId('settings-icon')).toHaveLength(2) // Appears in both Card header and List
-        expect(screen.getAllByTestId('search-icon')).toHaveLength(2)
+        expect(screen.getAllByTestId('search-icon')).toHaveLength(6) // List + Help Drawer Features (4)
       })
     })
 

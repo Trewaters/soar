@@ -60,27 +60,18 @@ All components currently used in the app are showcased:
 - `Avatar` with theme colors
 - `Divider` variants
 
+#### Help Drawer System (Custom Components)
+
+- `HelpButton` - Green help icon button
+- `HelpDrawer` - Bottom drawer with markdown support
+- Usage examples with navigation patterns
+- Code snippets for implementation
+- Feature list and best practices
+- Live demonstration with actual markdown content
+
 ## Usage as a Template
 
-### 1. **Extract Individual Components**
-
-Use the `ComponentTemplate.tsx` example to see how to extract specific component patterns:
-
-```tsx
-// Example: App-specific button style
-<Button
-  variant="outlined"
-  sx={{
-    borderRadius: '14px',
-    boxShadow: '0px 4px 4px -1px rgba(0, 0, 0, 0.25)',
-    // ... other app-specific styles
-  }}
->
-  Your Button Text
-</Button>
-```
-
-### 2. **Use Theme Values Dynamically**
+### 1. **Use Theme Values Dynamically**
 
 Always reference theme values instead of hardcoding:
 
@@ -96,7 +87,7 @@ const theme = useTheme()
 <Typography style={{ fontSize: '3rem' }}>
 ```
 
-### 3. **Component Constants**
+### 2. **Component Constants**
 
 Use the constants from `constants/Strings.ts`:
 
@@ -146,6 +137,29 @@ sx={{
 }}
 ```
 
+### Help Drawer Pattern
+
+```tsx
+// State management
+const [helpOpen, setHelpOpen] = useState(false)
+
+// Button trigger
+<HelpButton onClick={() => setHelpOpen(true)} />
+
+// Drawer with markdown content
+<HelpDrawer
+  open={helpOpen}
+  onClose={() => setHelpOpen(false)}
+  content={`# Help Content\n\nYour markdown content here...`}
+/>
+```
+
+**Features:**
+- Auto-detects markdown files vs plain text
+- Supports headings, lists, bold, italic formatting
+- Mobile-friendly bottom drawer
+- Keyboard accessible with focus management
+
 ## Benefits
 
 1. **Consistency**: Ensures all components follow the same design patterns
@@ -153,6 +167,7 @@ sx={{
 3. **Documentation**: Visual reference for developers and designers
 4. **Template Library**: Ready-to-use component patterns
 5. **Accessibility**: Consistent focus states and color contrasts
+6. **Help System**: Demonstrates the app's contextual help pattern
 
 ## Files Structure
 
@@ -161,8 +176,6 @@ sx={{
 ├── page.tsx                    # Main style guide page
 ├── constants/
 │   └── Strings.ts             # Theme constants and color definitions
-└── components/
-    └── ComponentTemplate.tsx   # Example of extracting components
 ```
 
 ## Navigation
