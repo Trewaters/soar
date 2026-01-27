@@ -794,18 +794,33 @@ export default function StyleGuide() {
               Layout
             </Typography>
             <Stack spacing={2}>
-              <Typography variant="h6">Dividers</Typography>
+              <Typography variant="h6">Stack</Typography>
+              <Stack spacing={2} direction="row" sx={{ p: 2, border: '1px dashed', borderColor: 'grey.300' }}>
+                <Box sx={{ p: 2, bgcolor: 'primary.light', color: 'white' }}>Item 1</Box>
+                <Box sx={{ p: 2, bgcolor: 'primary.light', color: 'white' }}>Item 2</Box>
+                <Box sx={{ p: 2, bgcolor: 'primary.light', color: 'white' }}>Item 3</Box>
+              </Stack>
+
+              <Typography variant="h6">Box</Typography>
+              <Box 
+                sx={{ 
+                  p: 2, 
+                  bgcolor: 'background.paper', 
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  borderRadius: 1,
+                  textAlign: 'center'
+                }}
+              >
+                Container Box with custom styling
+              </Box>
+
+              <Typography variant="h6">Divider</Typography>
               <Divider />
-              <Divider variant="middle" />
-              <Divider variant="fullWidth" />
 
               <Typography variant="h6">Avatar</Typography>
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <Avatar sx={{ bgcolor: theme.palette.primary.main }}>A</Avatar>
-                <Avatar sx={{ bgcolor: theme.palette.secondary.main }}>
-                  B
-                </Avatar>
-                <Avatar sx={{ bgcolor: theme.palette.success.main }}>C</Avatar>
               </Box>
             </Stack>
           </Box>
