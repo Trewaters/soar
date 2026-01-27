@@ -8,11 +8,14 @@ The Style Guide page (`/styleGuide`) serves as a comprehensive template and refe
 
 ### 🎨 **Typography Showcase**
 
-- All heading variants (H1-H6) with font sizes from theme
+- All heading variants (H1-H6) with dynamic font sizes from theme
 - Body text variants (body1, body2)
-- Subtitle variants
-- Caption, overline, and custom variants (label, splashTitle)
-- Dynamic font size display from theme configuration
+- Subtitle variants (subtitle1, subtitle2, subtitle3)
+- Special variants: caption, overline, label, splashTitle
+- Each variant shows:
+  - Live example with actual font size
+  - Usage context description
+  - Font size value from theme configuration
 
 ### ⚙️ **Theme Configuration Display**
 
@@ -23,42 +26,58 @@ The Style Guide page (`/styleGuide`) serves as a comprehensive template and refe
 ### 🌈 **Dynamic Color Palette**
 
 - **No Hardcoded Values**: All colors are pulled directly from the theme
-- **Complete Palette**: Primary, Secondary, Error, Warning, Info, Success
-- **Color Variants**: Main, Light, Dark, and ContrastText for each palette
+- **Complete Palette**: Primary, Secondary, Error, Warning, Info, Success, NavSplash, Text, Background
+- **All Color Variants**: Automatically displays all color properties (main, light, dark, contrastText, etc.)
 - **Visual Color Swatches**: Interactive color blocks with hex values
+- **Smart Text Contrast**: Automatically calculates optimal text color (black/white) based on background luminance using WCAG 2.0 guidelines
 
 ### 🧩 **MUI Components Library**
 
-All components currently used in the app are showcased:
+All components currently used in the app are showcased with **exactly one example per component** to maintain clarity and avoid redundancy.
 
 #### Form Controls
 
-- `TextField` with app-specific styling
-- `Autocomplete` with sample data
-- `Checkbox` with form groups
-- `FormControlLabel` and `FormHelperText`
+- `TextField` - Outlined variant with helper text
+- `Autocomplete` - Custom styled with pose search example
+- `Checkbox` - With FormControlLabel in FormGroup
+- `FormControl`, `FormGroup`, `FormHelperText` - Form structure components
 
 #### Buttons & Actions
 
-- `Button` variants (contained, outlined, text)
-- `IconButton` with Material icons
-- `ButtonGroup` combinations
-- App-specific button styles from navigator components
+- `Button` - Variants: contained, outlined, text, disabled
+- `IconButton` - With Favorite icon example
+- `ButtonGroup` - Contained variant with three buttons
 
-#### Layout & Navigation
+#### Cards & Content
 
-- `Card`, `CardHeader`, `CardContent`, `CardActions`
-- `AppBar` with navigation items
-- `Tabs` with interactive switching
-- `List`, `ListItem`, `ListItemButton` with icons
+- `Card` - Complete card with header, media, content, and actions
+- `CardHeader` - With title, subtitle, and action icon
+- `CardMedia` - Placeholder media area
+- `CardContent` - Body content area
+- `CardActions` - Action buttons at card bottom
+- `Collapse` - Expandable content example
+
+#### Navigation
+
+- `Tabs` - Three-tab example with state management
+- `AppBar` - Static position with menu and profile icons
+- `List`, `ListItem`, `ListItemButton` - Interactive list with icons
+- `ListItemIcon`, `ListItemText` - List item components
+
+#### Layout Components
+
+- `Container` - MaxWidth lg wrapper for all content
+- `Paper` - Elevation 3 sections and outlined variants
+- `Grid2` - Responsive grid layout for theme values and colors
+- `Stack` - Directional layout with spacing (horizontal example)
+- `Box` - Flexible container with custom styling
+- `Divider` - Simple horizontal divider
 
 #### Feedback & Display
 
-- `Alert` components (success, info, warning, error)
-- `CircularProgress` loading indicator
-- `Collapse` expandable content
-- `Avatar` with theme colors
-- `Divider` variants
+- `Alert` - All severities: success, info, warning, error
+- `CircularProgress` - Primary color loading indicator
+- `Avatar` - Single example with primary background
 
 #### Help Drawer System (Custom Components)
 
@@ -155,6 +174,7 @@ const [helpOpen, setHelpOpen] = useState(false)
 ```
 
 **Features:**
+
 - Auto-detects markdown files vs plain text
 - Supports headings, lists, bold, italic formatting
 - Mobile-friendly bottom drawer
@@ -162,21 +182,31 @@ const [helpOpen, setHelpOpen] = useState(false)
 
 ## Benefits
 
-1. **Consistency**: Ensures all components follow the same design patterns
+1. **Consistency**: Ensures all components follow the same design patterns with single canonical examples
 2. **Maintainability**: Theme changes automatically propagate throughout the app
 3. **Documentation**: Visual reference for developers and designers
-4. **Template Library**: Ready-to-use component patterns
-5. **Accessibility**: Consistent focus states and color contrasts
+4. **Template Library**: Ready-to-use component patterns - one clear example per component
+5. **Accessibility**: Consistent focus states, color contrasts, and WCAG-compliant text colors
 6. **Help System**: Demonstrates the app's contextual help pattern
+7. **Simplicity**: One example per component reduces cognitive load and maintains clarity
 
 ## Files Structure
 
 ```
 /app/styleGuide/
-├── page.tsx                    # Main style guide page
-├── constants/
-│   └── Strings.ts             # Theme constants and color definitions
+├── page.tsx                    # Main style guide page component
+├── README.md                   # This documentation file
+└── constants/
+    └── Strings.ts             # Theme constants and color definitions
 ```
+
+## Design Principles
+
+1. **One Example Per Component**: Each MUI component has exactly one clear example to avoid redundancy
+2. **Theme-Driven**: All values dynamically pulled from theme configuration
+3. **Accessible by Default**: WCAG 2.0 compliant color contrasts and focus management
+4. **Mobile-First**: Responsive layouts that work on all screen sizes
+5. **Real-World Usage**: Examples reflect actual app patterns and styling
 
 ## Navigation
 
