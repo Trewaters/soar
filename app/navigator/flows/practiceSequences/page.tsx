@@ -401,7 +401,11 @@ export default function Page() {
               mb: 2,
             }}
           >
-            <SubNavHeader title="Flows" mode="static" link="/navigator/flows" />
+            <SubNavHeader
+              title="Sequences"
+              mode="static"
+              link="/navigator/sequences"
+            />
             <HelpButton onClick={() => setOpen(!open)} />
           </Stack>
           <Stack

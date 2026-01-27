@@ -54,15 +54,8 @@ export default function Page() {
     handleFreemiumFeatureClick('createSeries', '/navigator/flows/createSeries')
   }
 
-  const handlePracticeSequenceClick = () => {
-    router.push('/navigator/flows/practiceSequences')
-  }
-
-  const handleCreateSequenceClick = () => {
-    handleFreemiumFeatureClick(
-      'createSequence',
-      '/navigator/flows/createSequence'
-    )
+  const handleSequencesClick = () => {
+    router.push('/navigator/sequences')
   }
 
   // Close notification
@@ -115,25 +108,14 @@ export default function Page() {
           onClick={handleCreateSeriesClick}
         />
         <SplashNavButton
-          title="Practice Sequences"
-          description="Sequences are ordered flows."
+          title="Sequences"
+          description="Create and practice ordered yoga sequences."
           image="/icons/designImages/beautiful-young-woman-practices-yoga-asana.png"
           sx={{
             backgroundImage:
               "url('/icons/designImages/beautiful-young-woman-practices-yoga-asana.png')",
           }}
-          onClick={handlePracticeSequenceClick}
-        />
-        <SplashNavButton
-          title="Create Sequence"
-          description="Create your Sequences."
-          image="/icons/designImages/beautiful-young-woman-practices-yoga-create-sequence.png"
-          premium
-          sx={{
-            backgroundImage:
-              "url('/icons/designImages/beautiful-young-woman-practices-yoga-create-sequence.png')",
-          }}
-          onClick={handleCreateSequenceClick}
+          onClick={handleSequencesClick}
         />
       </Box>
 

@@ -100,7 +100,7 @@ export default function Header() {
       },
       {
         name: 'Flows',
-        href: '/navigator/flows/practiceSeries',
+        href: '/navigator/flows',
         // icon: <TimelapseOutlinedIcon color="primary" />,
         icon: <WorkspacesIcon color="primary" />,
         action: null,
@@ -108,7 +108,7 @@ export default function Header() {
       },
       {
         name: 'Sequences',
-        href: '/navigator/flows/practiceSequences',
+        href: '/navigator/sequences',
         // icon: <Brightness1OutlinedIcon color="primary" />,
         icon: <GroupWorkIcon color="primary" />,
         action: null,
