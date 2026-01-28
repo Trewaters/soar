@@ -1,10 +1,10 @@
-# Practice Sequences Help
+# Practice Sequences Help (Scroll View)
 
 ## Overview
 
-The **Practice Sequences** page allows you to explore and practice complete yoga sequences—structured flows that combine multiple series into a comprehensive practice session. Search for sequences, navigate through each series step-by-step, and track your practice progress over time.
+The **Practice Sequences** page provides a focused, scroll-through practice experience where you navigate through one series at a time within a complete yoga sequence. This guided view is perfect for active practice, allowing you to flow through each series with previous/next navigation while tracking your progress and activity.
 
-**Page URL:** `/navigator/flows/practiceSequences`
+**Page URL:** `/navigator/flows/practiceSequences` or `/navigator/flows/practiceSequences?sequenceId=[id]`
 
 ## What is a Sequence?
 
@@ -24,9 +24,16 @@ A **sequence** is an ordered collection of yoga series that creates a complete p
 
 Visual banner displaying "Practice Sequences" with an inspiring yoga practice image. Sets the context for your complete practice experience.
 
-### Back Navigation
+### Back to Flows Navigation
 
-Navigation header labeled "Flows" that returns you to the **Flows Landing Page** (`/navigator/flows`). Use this to explore other flow and sequence options.
+Navigation header with a clickable "Flows" link that returns you to the **Flows Landing Page** (`/navigator/flows`). Use this to explore other flow and sequence options or access the main flows menu.
+
+**Features:**
+
+- **Always accessible** - Located at the top of the page
+- **Clear labeling** - "Flows" text with navigation arrow
+- **Breadcrumb pattern** - Shows your location in the app hierarchy
+- **Keyboard accessible** - Full keyboard navigation support
 
 ### Help Button
 
@@ -50,81 +57,222 @@ Autocomplete search component to find sequences by name. Type to search through 
 3. Select from the dropdown results
 4. The selected sequence loads immediately for practice
 
-### Sequence Title Bar
+### Sequence Title Header
 
-Orange header displaying the sequence name with integrated controls for owners.
+Prominent orange header tab displaying the selected sequence name with integrated owner controls.
 
 **Components:**
 
-- **Sequence Name** - Large, bold title in the orange tab
-- **Edit Icon** (Owner Only) - Pencil icon for sequence owners to modify the sequence
-  - Click to enter edit mode
-  - Changes to X icon when editing (click X to exit edit mode)
-  - Only visible for sequences you created
+- **Sequence Name** - Large, bold title text in white against orange background
+- **Edit Icon** (Owner Only) - Pencil icon appears inside the orange tab for sequence owners
+  - Click to navigate to edit mode in list view
+  - Opens the sequence edit page (`/navigator/sequences/[id]?edit=true`)
+  - Changes to X (close) icon when in edit mode
+  - Only visible if you created this sequence or have admin role
+- **Rounded corners** - Polished top-left and top-right rounded borders
+- **Responsive width** - Adapts to screen size (80% mobile, 240px+ desktop)
+- **Accessible** - Clear ARIA labels for screen readers
 
 ### View Toggle Icons
 
-Two icons on the right side of the title bar to switch between different viewing modes:
+Two icons positioned to the right of the sequence title that allow you to switch between different viewing modes for the same sequence:
 
 **List View Icon** (Format List Bulleted)
 
-- Click to see all series in the sequence at once
-- Navigates to detailed list view page
-- Gray when not active
-- Useful for overview and planning
+- **Clickable** - Gray color indicates it's available but not currently active
+- **Switches to list view** - Shows all series in the sequence simultaneously
+- **Navigation** - Goes to `/navigator/sequences/[id]`
+- **Use case** - Planning, overview, seeing full sequence structure at once
 
 **Scroll View Icon** (View Stream)
 
-- Currently active view on this page
-- Orange/primary color indicates active state
-- One series displayed at a time
-- Perfect for following along during practice
+- **Currently Active** - Orange/primary color indicates you're in this view
+- **Non-interactive** - Pointer events disabled since you're already here
+- **One series at a time** - Current series displayed with previous/next navigation
+- **Use case** - Active practice, following along pose-by-pose
 
-### Series Navigation Card
+\*\*Whenquence-Flow Top Navigation
 
-Interactive card displaying the current series in your sequence with full pose details.
+The series navigation card header provides previous/next controls at the **top** of the current series card.
 
-**Card Header:**
+**Navigation Controls:**
 
-- **Previous Button** - Left arrow with previous series name
-- **Series Name** - Clickable title (links to series detail page)
-- **Next Button** - Right arrow with next series name
+- **Previous Button** - Left side with chevron icon and series name
 
-**Card Content:**
+  - Shows name of the previous series for context
+  - Click to navigate backward in the sequence
+  - Disabled (opacity 30%) when on first series
+  - Shows "Previous" text when no prior series exists
 
-- **Numbered Pose List** - Each pose numbered sequentially (1, 2, 3...)
-- **Pose Names** - Clickable links to individual pose detail pages
-- **Alignment Cues** - Brief inline cues in gray text (if available)
-- **Pose Navigation** - Click any pose name to view full instructions
+- **Next Button** - Right side with chevron icon and series name
+  - Shows name of the upcoming series for context
+  - Click to navigate forward in the sequence
+  - Disabled (opacity 30%) when on last series
+  - Shows "Next" text when no following series exists
 
-**Navigation Buttons:**
+**Design Features:**
 
-- Disabled when at first/last series (grayed out)
-- Show adjacent series names for context
-- Click to move forward or backward through sequence
+- **Space-between layout** - Buttons positioned at opposite ends
+- **Small font size** - Compact for minimal visual distraction
+- **Hover effects** - No background change (transparent hover)
+- **Accessible** - Clear button labels and disabled states
+- **Context preview** - See adjacent series names before navigating
 
-### Pagination Circles
+### Sequence-Flow Detail Card
 
-Visual navigation dots below the series card showing your position in the sequence.
+Interactive card displ (Bottom Navigation)
+
+Visual navigation component with interactive circles/dots positioned below the series card, providing an at-a-glance view of your position in the sequence.
 
 **Features:**
 
-- One circle per series in the sequence
-- Orange circle indicates current position
-- Gray circles for other series
-- Click any circle to jump to that series
-- Provides quick overview of sequence length
+- **One circle per series** - Total number of circles = total series in sequence
+- **Active indicator** - Orange/primary color circle shows current position
+- **Inactive circles** - Gray circles represent other series in the sequence
+- **Click to jump** - Click any circle to navigate directly to that series
+- **Page number tracking** - Corresponds to series order (page 1 = first series)
+- **Visual progress** - See how far through the sequence you've progressed
+  Details Section
 
-### Sequence Image
+Complete descriptive information about the sequence including optional image and detailed description.
 
-Optional visual inspiration image for the sequence (displayed below pagination).
+**Sequence Image (Optional)**
 
-**Display:**
+Visual representation of the sequence, displayed below the pagination circles when available.
 
-- Centered, responsive image up to 400px
-- Rounded corners with subtle shadow
-- Shows when sequence creator uploaded an image
-- Represents the sequence's theme or energy
+**Image Features:**
+
+- **Centered display** - Horizontally centered on the page
+- **Responsive sizing** - 100% width on mobile (max 400px on larger screens)
+- **Contained fit** - Image scaled to fit within bounds without distortion
+- **Maximum height** - Limited to 400px to prevent oversized displays
+- **Rounded corners** - Subtle border radius (2px) for visual polish
+- **Shadow effect** - Elevation shadow (level 3) for depth
+- **Conditional display** - Only shows if sequence creator uploaded an image
+
+**Common Image Uses:**
+
+- Visual representation of the sequence theme
+- Inspirational practice imagery
+- Peak pose demonstration
+- Energy or mood representation
+- Quick visual identification
+
+**Description Section**
+
+Detailed explanation of the sequence purpose, benefits, and guidance, displayed in journal-style formatting.
+
+**Design Features:**
+
+- **Journal styling** - Dark background (`navSplash.dark`) with primary color text
+- **Leaf icon** - Decorative yoga theme icon next to "Description" heading
+- **Formatted text** - Preserves line breaks and paragraph formatting (`whiteSpace: 'pre-line'`)
+- **Generous padding** - Comfortable reading space (p: 4)
+- **Contrast text** - White text (`primary.contrastText`) on dark background
+- **Margin top** - Spaced 32px from previous content
+
+**Common Description Content:**
+
+- **Practice goals** - What this sequence aims to achieve
+- **Target audience** - Beginner, intermediate, or advanced practitioners
+- **Duration estimate** - How long to expect the practice to take
+- **Best timing** - Morning, evening, or any-time practice
+- **Prerequisites** - Props needed (blocks, straps, blankets)
+- **Modifications** - How to adapt for different levels
+- **Benefits** - Physical, mental, and energetic benefits
+- **Special notes** - Contraindications or safety consider
+- **Clean vertical layout** - Each pose on its own line
+- **Touch-friendly** - Adequate padding for mobile tapping
+- **Keyboard accessible** - All pose links navigable via Tab key
+- **Visual hierarchy** - Number, name, and cue clearly separated
+
+**Navigation Integration:**
+
+- **Click series name** - Navigate to series detail/practice page
+- **Click pose name** - Navigate to individual pose instruction page
+- **Smart ID resolution** - Uses series name to resolve correct database ID
+- **Error handling** - Alert shown if series no longer exists
+
+### Sequence-Flow Bottom Navigation
+
+\*\*CuTrack Sequence Activity
+
+Two integrated components work together to help you track and visualize your practice consistency for this specific sequence.
+
+**Activity Tracker Component**
+
+Interactive card-style component to mark when you practice this sequence, helping you build consistent practice habits.
+
+**Features:**
+
+- **Toggle functionality** - Click to mark "I practiced this today"
+- **Status display** - Shows current tracking state (practiced or not)
+- **Date/time recording** - Practices recorded with timestamp
+- **User-specific** - Only you see your practice tracking (private data)
+- **Card variant** - Displayed as a card with clear visual styling
+- **Database integration** - Uses dedicated sequence activity client service
+
+**How It Works:**
+
+1. **Not Tracked** - Button shows "Mark as Practiced" or activity prompt
+2. **Click to track** - Creates a practice activity record for today
+3. **Tracked state** - Button changes appearance (checkmark or confirmation)
+4. **Click to untrack** - Removes the practice record if tracked by mistake
+5. **Callback trigger** - Triggers refresh of weekly activity viewer
+
+**Activity Service Functions:**
+
+- `checkSequenceActivityExists` - Checks if you've tracked this sequence today
+- `createSequenceActivity` - Records a new practice session
+- `deleteSequenceActivity` - Removes a practice record
+- `onActivityToggle` - Triggers refresh of dependent components
+
+**Why Track Practice:**
+
+- **Build awareness** - See your practice consistency patterns
+- **Create accountability** - Visual commitment to regular practice
+- **Motivate continuation** - Streaks and patterns encourage habits
+- **Provide data** - Feeds into weekly activity visualization
+
+**Weekly Activity Viewer Component**
+
+Detailed calendar visualization showing your practice history for this sequence over time.
+
+**Display Features:**
+
+- **7-day view** - Current week with individual day markers
+- **Visual indicators** - Days you practiced are highlighted/colored
+- **Date labels** - Each day shows the date for easy reference
+- **Detailed variant** - Displays comprehensive practice information
+- **Responsive layout** - Adapts to mobile and desktop screens
+- **Auto-refresh** - Updates immediately when you track practice
+
+**Information Displayed:**
+
+- **Practice days** - Which days this week you practiced this sequence
+- **Current streak** - Consecutive days of practice (if applicable)
+- **Weekly total** - Total number of practices this week
+- **Today indicator** - Current day clearly marked
+- **Pattern visualization** - Easy-to-spot consistency trends
+
+**Refresh Mechanism:**
+
+- **Refresh trigger** - State variable increments on activity toggle
+- **Automatic update** - Weekly viewer watches for trigger changes
+- **No page reload** - Updates happen in real-time
+- **Smooth experience** - Seamless integration between components
+
+**Benefits of Activity Tracking:**
+
+- **Visual motivation** - See your consistency at a glance
+- **Pattern awareness** - Notice gaps or streaks in your practice
+- **Goal tracking** - Work toward daily or weekly practice goals
+- **Personal accountability** - Private view of your commitment
+- **Progress celebration** - Recognize your dedication over time
+
+**Privacy Note:**
+
+All practice tracking is private to your account. Only you can see your activity history (and admins for support purposes). Your yoga journey is personal and confidential.e or energy
 
 ### Description Section
 
@@ -287,12 +435,18 @@ Sequences are carefully designed with intentional progression:
 
 **Location:** Below the series card
 
-**Function:**
+**FunWhat's the difference between scroll view and list view?**
 
-- Visual overview of total series count
+A: **Scroll View** (this page) shows one series at a time with previous/next navigation—perfect for active practice and following along. **List View** shows all series in the sequence simultaneously—better for planning, editing, and overview. Use the view toggle icons to switch between them.
+
+**Q: Do I have to practice the series in order?**
+
+A: Yes, for best results. Sequences are designed with intentional progression for safety and effectiveness. However, you can use the pagination circles to jump to specific series if needed for review or to skip ahead
+
 - Current position indicated by orange circle
-- Click any circle to jump directly to that series
-- Faster navigation than sequential buttons
+- CliHow do I edit a sequence?\*\*
+
+A: If you're the sequence owner (or admin), click the **pencil icon** in the orange title header. This navigates to the edit page in list view where you can modify the sequence name, description, image, and manage series. The icon changes to an X when you're in edit mode
 
 ### Pose Links
 
@@ -343,7 +497,21 @@ The edit icon (pencil) appears in the orange title bar **only if:**
 
 ## Activity Tracking Explained
 
-### Why Track Your Practice?
+Why are there navigation buttons at the top but not the bottom of the series card?\*\*
+
+A: The design uses **top navigation** (previous/next buttons) for sequential flow and **pagination circles** at the bottom for quick jumping to any series. This provides both linear navigation and random access without cluttering the interface.
+
+**Q: How do I share a sequence with others?**
+
+A: Currently, sequence sharing is managed through the system. Sequences you create are visible to you and admins. Future updates may include direct sharing features.
+
+**Q: What happens when I click the series name in the card?**
+
+A: Clicking the series name navigates to that series's dedicated practice page (`/navigator/flows/practiceSeries`) where you can view the series in isolation with full details, description, and series-specific activity tracking.
+
+**Q: Can I practice just one series without the full sequence?**
+
+A: Yes! Click the **series name** in the card header to navigate to that series's dedicated page. You can practice any series independently outside of its sequence context
 
 - **Builds Accountability** - Visual record of commitment
 - **Shows Progress** - See consistency patterns
