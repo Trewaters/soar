@@ -18,7 +18,7 @@ export default function Page() {
         color="text.secondary"
         id="page-title"
         sx={{
-          my: 2,
+          my: 4,
           wordWrap: 'break-word',
           overflowWrap: 'break-word',
           maxWidth: '100%',
@@ -35,7 +35,6 @@ export default function Page() {
       <Box
         textAlign="center"
         sx={{
-          marginTop: 4,
           width: { xs: '100%', sm: 'auto', md: '60%' },
           justifyContent: 'center',
           marginLeft: 'auto',
