@@ -899,10 +899,11 @@ export default function Page() {
                                     color="text.secondary"
                                     sx={{
                                       fontStyle: 'normal',
-                                      whiteSpace: 'nowrap',
-                                      overflow: 'hidden',
-                                      textOverflow: 'ellipsis',
-                                      maxWidth: '60%',
+                                      display: 'block',
+                                      mt: 0.5,
+                                      whiteSpace: 'normal',
+                                      overflowWrap: 'break-word',
+                                      wordBreak: 'break-word',
                                     }}
                                   >
                                     ({alignmentCuesInline})

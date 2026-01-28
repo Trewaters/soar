@@ -118,67 +118,90 @@ export default function SeriesPoseList({
             key={`${resolvedName}-${index}`}
             className="lines"
             data-testid={`${dataTestIdPrefix}-${index}`}
+            sx={{
+              mb: 0,
+              whiteSpace: 'normal',
+              overflowWrap: 'break-word',
+              width: '100%',
+              ml: 0,
+              float: 'none',
+              boxSizing: 'border-box',
+              overflow: 'visible',
+            }}
           >
             <Box
               className="journalLine"
               sx={{
-                // p: 2,
-                // borderBottom: '1px solid #eee',
-                // backgroundColor: 'limegreen',
+                // make entries visually seamless within the parent `.journal`
+                width: '100%',
+                borderBottom: 'none',
+                backgroundColor: 'transparent',
+                paddingTop: '8px',
+                paddingBottom: '8px',
+                paddingLeft: '8px',
+                paddingRight: 0,
+                whiteSpace: 'normal',
+                overflow: 'visible',
                 ...poseSx,
               }}
             >
-              <Typography
-                textAlign="left"
-                variant="body1"
-                sx={{
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  gap: 1,
-                  flexWrap: 'wrap',
-                }}
-              >
-                {isPoseDeleted ? (
-                  <Tooltip
-                    title="This pose has been deleted and is no longer available"
-                    arrow
-                    placement="top"
-                  >
-                    <Typography
-                      component="span"
-                      sx={{
-                        color: 'text.disabled',
-                        textDecoration: 'line-through',
-                        cursor: 'not-allowed',
-                      }}
-                      data-testid={`${dataTestIdPrefix}-${index}-deleted`}
-                    >
-                      {resolvedName}
-                    </Typography>
-                  </Tooltip>
-                ) : (
-                  <Link underline="hover" color={linkColor} href={href}>
-                    {resolvedName}
-                  </Link>
-                )}
-                {alignmentCuesInline && (
+              {isPoseDeleted ? (
+                <Tooltip
+                  title="This pose has been deleted and is no longer available"
+                  arrow
+                  placement="top"
+                >
                   <Typography
                     component="span"
-                    variant="body2"
-                    color="text.secondary"
                     sx={{
-                      fontStyle: 'normal',
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      maxWidth: '60%',
+                      color: 'text.disabled',
+                      textDecoration: 'line-through',
+                      cursor: 'not-allowed',
                     }}
-                    data-testid={`${dataTestIdPrefix}-${index}-cue`}
+                    data-testid={`${dataTestIdPrefix}-${index}-deleted`}
                   >
-                    ({alignmentCuesInline})
+                    {resolvedName}
                   </Typography>
-                )}
-              </Typography>
+                </Tooltip>
+              ) : (
+                <Link
+                  underline="hover"
+                  color={linkColor}
+                  href={href}
+                  sx={{
+                    display: 'inline-block',
+                    maxWidth: '100%',
+                    overflowWrap: 'break-word',
+                    wordBreak: 'break-word',
+                    whiteSpace: 'normal',
+                    overflow: 'visible',
+                    textOverflow: 'clip',
+                  }}
+                >
+                  {resolvedName}
+                </Link>
+              )}
+              {alignmentCuesInline && (
+                <Typography
+                  component="span"
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    fontStyle: 'normal',
+                    display: 'block',
+                    mt: 0.5,
+                    overflowWrap: 'break-word',
+                    wordBreak: 'break-word',
+                    whiteSpace: 'normal',
+                    overflow: 'visible',
+                    textOverflow: 'clip',
+                  }}
+                  data-testid={`${dataTestIdPrefix}-${index}-cue`}
+                >
+                  ({alignmentCuesInline})
+                </Typography>
+              )}
+
               {showSecondary && secondary && (
                 // place secondary on its own block so it appears below the name
                 <Box sx={{ width: '100%', mt: 0.5 }}>
@@ -190,6 +213,9 @@ export default function SeriesPoseList({
                       fontStyle: 'italic',
                       display: 'block',
                       width: '100%',
+                      whiteSpace: 'normal',
+                      overflow: 'visible',
+                      textOverflow: 'clip',
                     }}
                     data-testid={`${dataTestIdPrefix}-${index}-secondary`}
                   >
