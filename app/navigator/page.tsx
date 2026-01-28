@@ -18,8 +18,7 @@ export default function Page() {
         color="text.secondary"
         id="page-title"
         sx={{
-          mb: 2,
-          ml: 4,
+          my: 2,
           wordWrap: 'break-word',
           overflowWrap: 'break-word',
           maxWidth: '100%',
