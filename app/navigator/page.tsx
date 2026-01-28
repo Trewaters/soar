@@ -17,12 +17,12 @@ export default function Page() {
         variant="h1"
         color="text.secondary"
         id="page-title"
-        sx={{ 
-          mb: 2, 
+        sx={{
+          mb: 2,
           ml: 4,
           wordWrap: 'break-word',
           overflowWrap: 'break-word',
-          maxWidth: '100%'
+          maxWidth: '100%',
         }}
         alignSelf={'center'}
       >
@@ -78,10 +78,10 @@ export default function Page() {
             color="success.main"
             sx={{ width: '80vw' }}
           >
-            Your Recent Activity
+            View Your Activity:
           </Typography>
           <Typography variant="body2" fontStyle={'italic'} sx={{ mb: 4 }}>
-            View activities marked as <strong>completed</strong> on detail view
+            &quot;Marked <strong>complete</strong> during practice&quot;
           </Typography>
           <AsanaActivityList />
         </Stack>
