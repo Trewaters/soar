@@ -102,24 +102,21 @@ export default function Page() {
             flexDirection: 'column',
             alignItems: 'center',
             width: '100%',
-            marginX: 3,
-            mb: '1em',
           }}
         >
           <Stack
             direction="row"
             justifyContent="space-between"
             sx={{
-              width: '100%',
+              width: '87%',
               maxWidth: '384px',
               alignSelf: 'center',
-              mb: 2,
             }}
           >
             <SubNavHeader mode="back" link="/navigator/asanaPoses" />
             <HelpButton onClick={handleInfoClick} />
           </Stack>
-          <Stack sx={{ px: 4, width: '100%', maxWidth: '600px' }}>
+          <Stack sx={{ width: '100%', maxWidth: '600px' }}>
             {/* Search Section */}
             <Box
               sx={{
@@ -128,7 +125,6 @@ export default function Page() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                mb: 4,
               }}
             >
               {loading ? (
