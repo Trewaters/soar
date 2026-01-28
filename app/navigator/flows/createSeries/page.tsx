@@ -263,7 +263,7 @@ export default function Page() {
               alignSelf: 'center',
             }}
           >
-            <SubNavHeader title="Flows" mode="static" link="/navigator/flows" />
+            <SubNavHeader mode="back" link="/navigator/flows" />
             <HelpButton onClick={() => setOpen(!open)} />
           </Stack>
           {FEATURES.SHOW_CREATE_SERIES && (

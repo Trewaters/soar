@@ -16,6 +16,9 @@ jest.mock('@lib/prismaClient', () => ({
       update: jest.fn(),
       delete: jest.fn(),
     },
+    userData: {
+      findFirst: jest.fn(),
+    },
   },
 }))
 
@@ -51,6 +54,9 @@ describe('API PATCH /api/sequences/[id]', () => {
       id: 'xyz',
       created_by: 'owner@x.com',
     })
+    ;(prisma as any).userData.findFirst.mockResolvedValue({
+      role: 'user', // Not admin
+    })
 
     const req: any = {
       json: async () => ({ nameSequence: 'New' }),
@@ -65,6 +71,9 @@ describe('API PATCH /api/sequences/[id]', () => {
     ;(prisma as any).asanaSequence.findUnique.mockResolvedValue({
       id: 'xyz',
       created_by: 'owner@x.com',
+    })
+    ;(prisma as any).userData.findFirst.mockResolvedValue({
+      role: 'user',
     })
     ;(prisma as any).asanaSequence.update.mockResolvedValue({
       id: 'xyz',
@@ -106,6 +115,9 @@ describe('API DELETE /api/sequences/[id]', () => {
       id: 'xyz',
       created_by: 'owner@x.com',
     })
+    ;(prisma as any).userData.findFirst.mockResolvedValue({
+      role: 'user',
+    })
     const res = await route.DELETE({} as any, { params: { id: 'xyz' } })
     expect(res.status).toBe(403)
   })
@@ -115,6 +127,9 @@ describe('API DELETE /api/sequences/[id]', () => {
     ;(prisma as any).asanaSequence.findUnique.mockResolvedValue({
       id: 'xyz',
       created_by: 'owner@x.com',
+    })
+    ;(prisma as any).userData.findFirst.mockResolvedValue({
+      role: 'user',
     })
     ;(prisma as any).asanaSequence.delete.mockResolvedValue({ success: true })
     const res = await route.DELETE({} as any, { params: { id: 'xyz' } })

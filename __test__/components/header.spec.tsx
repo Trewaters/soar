@@ -236,11 +236,11 @@ describe('Header Component', () => {
       )
       expect(screen.getByRole('link', { name: /flows/i })).toHaveAttribute(
         'href',
-        '/navigator/flows/practiceSeries'
+        '/navigator/flows'
       )
       expect(screen.getByRole('link', { name: /sequences/i })).toHaveAttribute(
         'href',
-        '/navigator/flows/practiceSequences'
+        '/navigator/sequences'
       )
     })
 

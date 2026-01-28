@@ -19,23 +19,34 @@ interface SplashHeaderProps {
 }
 
 /**
- * SplashHeader component renders a header with an image and a title.
+ * A splash header component that displays an image with an optional title and decorative icon.
  *
  * @component
- * @param {SplashHeaderProps} props - The properties for the SplashHeader component.
- * @param {string} props.title - The title text to be displayed.
- * @param {string} props.src - The source URL of the image.
- * @param {string} props.alt - The alt text for the image.
- * @param {number | object} [props.height=355] - The height of the image. Can be a number or responsive object with breakpoint values.
- * @param {number | object} [props.width=384] - The width of the image. Can be a number or responsive object with breakpoint values.
- * @param {React.CSSProperties} [props.style] - Additional styles for the image.
- * @param {number | object} [props.spacing=2] - The spacing between image and title sections. Can be a number or responsive object with breakpoint values.
- * @param {boolean} [props.showIcon=true] - Whether to show the decorative icon next to the title.
- * @param {string} [props.iconSrc="/icons/designImages/leaf-orange.png"] - The source URL of the decorative icon.
- * @param {string} [props.iconAlt=""] - The alt text for the decorative icon. Empty by default for decorative images.
- * @param {number | `${number}`} [props.iconSize=24] - The size of the decorative icon in pixels.
+ * @example
+ * ```tsx
+ * <SplashHeader
+ *   src="/images/yoga.png"
+ *   alt="Yoga poses"
+ *   title="Welcome to Yoga"
+ *   height={400}
+ *   width={500}
+ * />
+ * ```
  *
- * @returns {JSX.Element} The rendered SplashHeader component.
+ * @param {SplashHeaderProps} props - The component props
+ * @param {string} props.title - The title text to display below the image
+ * @param {string} props.src - The source URL of the main splash image
+ * @param {string} props.alt - The alt text for the main splash image
+ * @param {number | ResponsiveDimensions} [props.height=355] - Height of the image container in pixels. Can be a number or object with breakpoint values (xs, sm, md, lg)
+ * @param {number | ResponsiveDimensions} [props.width=384] - Width of the image container in pixels. Can be a number or object with breakpoint values (xs, sm, md, lg)
+ * @param {React.CSSProperties} [props.style] - Additional inline styles for the image
+ * @param {number} [props.spacing=2] - Spacing between the image and title in theme spacing units
+ * @param {boolean} [props.showIcon=true] - Whether to display the decorative icon next to the title
+ * @param {string} [props.iconSrc='/icons/designImages/leaf-orange.png'] - The source URL of the decorative icon
+ * @param {string} [props.iconAlt=''] - The alt text for the decorative icon
+ * @param {number} [props.iconSize=21] - Size of the decorative icon in pixels
+ *
+ * @returns {JSX.Element} A splash header with image, optional icon, and title
  */
 export default function SplashHeader({
   title,

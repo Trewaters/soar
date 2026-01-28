@@ -702,11 +702,7 @@ export default function PoseActivityDetail({
             alignSelf: 'center',
           }}
         >
-          <SubNavHeader
-            title="Asanas"
-            mode="static"
-            link="/navigator/asanaPoses"
-          />
+          <SubNavHeader mode="back" link="/navigator/asanaPoses" />
           <HelpButton onClick={handleInfoClick} />
         </Stack>
         <Stack direction={'column'} spacing={0}>

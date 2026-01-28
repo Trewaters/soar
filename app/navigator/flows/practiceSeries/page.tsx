@@ -522,7 +522,7 @@ export default function Page() {
             mb: 2,
           }}
         >
-          <SubNavHeader title="Flows" mode="static" link="/navigator/flows" />
+          <SubNavHeader mode="back" link="/navigator/flows" />
           <HelpButton onClick={handleInfoClick} />
         </Stack>
         <Stack sx={{ px: 4, width: '100%', maxWidth: '600px' }}>

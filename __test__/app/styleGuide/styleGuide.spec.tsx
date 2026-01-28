@@ -378,7 +378,7 @@ describe('StyleGuide Component', () => {
         renderWithTheme(<StyleGuide />)
 
         expect(screen.getByText('Layout')).toBeInTheDocument()
-        expect(screen.getByText('Dividers')).toBeInTheDocument()
+        expect(screen.getByText('Divider')).toBeInTheDocument()
       })
 
       it('displays avatar components', () => {
@@ -386,9 +386,9 @@ describe('StyleGuide Component', () => {
 
         expect(screen.getByText('Avatar')).toBeInTheDocument()
 
-        // Check for avatar elements with letters A, B, C
-        const avatars = screen.getAllByText(/^[ABC]$/)
-        expect(avatars).toHaveLength(3)
+        // Check for avatar element with letter A
+        const avatar = screen.getByText('A')
+        expect(avatar).toBeInTheDocument()
       })
     })
 

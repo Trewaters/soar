@@ -451,11 +451,7 @@ export default function Page() {
         sx={{ mx: { xs: 0, sm: 3 }, mb: '1em', width: '100%', maxWidth: 1200 }}
       >
         <Stack direction="row" alignItems="center" spacing={1}>
-          <SubNavHeader
-            title="Asana"
-            mode="static"
-            link="/navigator/asanaPoses"
-          />
+          <SubNavHeader mode="back" link="/navigator/asanaPoses" />
           <HelpButton onClick={handleInfoClick} />
         </Stack>
         <Stack sx={{ px: { xs: 2, sm: 4 } }} spacing={3}>
