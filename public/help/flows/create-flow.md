@@ -30,11 +30,11 @@ Navigation header labeled "Flows" that returns you to the **Flows Landing Page**
 
 ### Help Button
 
-Opens this contextual help drawer with detailed guidance on creating flow series. The green question mark icon is positioned in the top navigation area alongside the back button, always accessible for reference.
+Opens this contextual help drawer with detailed guidance on creating flow. The green question mark icon is positioned in the top navigation area alongside the back button, always accessible for reference.
 
 ### Flow Name (Required)
 
-The most important identifier for your flow series. Required field with success checkmark when filled. Use descriptive names like "Morning Energy Flow" or "Core Power Builder - Intermediate".
+The most important identifier for your flow. Required field with success checkmark when filled. Use descriptive names like "Morning Energy Flow" or "Core Power Builder - Intermediate".
 
 ### Flow Search (Add Poses)
 
@@ -60,9 +60,9 @@ Action bar with Submit button (saves and redirects to flow detail page) and Star
 
 **Keep It Focused:**
 
-- Stick to one theme or purpose per series
-- Typically 5-12 poses work well for most series
-- Too many poses can make a series unwieldy
+- Stick to one theme or purpose per flow
+- Typically 5-12 poses work well for most flow
+- Too many poses can make a flow unwieldy
 
 **Consider Your Audience:**
 
@@ -84,7 +84,7 @@ Action bar with Submit button (saves and redirects to flow detail page) and Star
 
 **Test Your Flow:**
 
-- Practice your series before finalizing
+- Practice your flow before finalizing
 - Adjust pose order based on how it feels
 - Remove poses that don't fit the flow
 
@@ -104,25 +104,25 @@ Action bar with Submit button (saves and redirects to flow detail page) and Star
 
 ## Common Questions
 
-**How many poses should a series have?**
-There's no strict rule, but 6-10 poses is a good range for most series. Shorter series (3-5 poses) work for quick practices, while longer series (12-15 poses) can create full practice sessions.
+**How many poses should a flow have?**
+There's no strict rule, but 6-10 poses is a good range for most flow. Shorter flow (3-5 poses) work for quick practices, while longer flow (12-15 poses) can create full practice sessions.
 
-**Can I use the same pose in multiple series?**
-Yes! Poses can appear in as many series as you like. For example, Downward Dog might appear in your "Morning Flow," "Core Series," and "Arm Strength" series.
+**Can I use the same pose in multiple flow?**
+Yes! Poses can appear in as many flow as you like. For example, Downward Dog might appear in your "Morning Flow," "Core Series," and "Arm Strength" flow.
 
-**What's the difference between a series and a sequence?**
-A **series** is a collection of poses grouped by theme. A **sequence** is a structured practice that combines multiple series in a specific order with timing and instructions.
+**What's the difference between a flow and a sequence?**
+A **flow** is a collection of poses grouped by theme. A **sequence** is a structured practice that combines multiple flow in a specific order with timing and instructions.
 
-**Can I share my series with others?**
-Currently, series are personal to your account. Future updates may include sharing capabilities.
+**Can I share my flow with others?**
+Currently, flow are personal to your account. Future updates may include sharing capabilities.
 
 ## Need More Help?
 
-If you're new to creating series, start simple:
+If you're new to creating flow, start simple:
 
 1. Choose 3-5 familiar poses
-2. Give your series a clear name
+2. Give your flow a clear name
 3. Add a brief description
 4. Save and practice it
 
-You can always edit and refine your series as you develop your practice!
+You can always edit and refine your flow as you develop your practice!
