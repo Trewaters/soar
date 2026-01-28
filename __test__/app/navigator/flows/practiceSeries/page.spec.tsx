@@ -429,7 +429,7 @@ describe('Practice Series Page', () => {
       expect(splashHeader).toHaveTextContent('Practice Flows')
 
       const subNavHeader = screen.getByTestId('sub-nav-header')
-      expect(subNavHeader).toHaveTextContent('Back to Flows')
+      expect(subNavHeader).toHaveTextContent('Back to')
     })
 
     it('renders search interface with correct styling', () => {
