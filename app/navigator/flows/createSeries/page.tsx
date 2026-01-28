@@ -750,7 +750,7 @@ export default function Page() {
       </Box>
 
       <HelpDrawer
-        content={HELP_PATHS.flows.createSeries}
+        content={HELP_PATHS.flows.createFlow}
         open={open}
         onClose={() => setOpen(false)}
       />

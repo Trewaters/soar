@@ -906,7 +906,7 @@ export default function Page() {
       </Box>
 
       <HelpDrawer
-        content={HELP_PATHS.flows.createSequences}
+        content={HELP_PATHS.sequences.createSequences}
         open={open}
         onClose={() => setOpen(false)}
       />

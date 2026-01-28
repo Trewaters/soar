@@ -5,14 +5,18 @@
 
 export const HELP_PATHS = {
   asanas: {
-    practice: '/help/asanas/practice.md',
-    create: '/help/asanas/create.md',
+    practice: '/help/asanas/practice-asana.md',
+    create: '/help/asanas/create-asana.md',
   },
   flows: {
-    practiceSeries: '/help/flows/practice-series.md',
-    practiceSequences: '/help/flows/practice-sequences.md',
+    practiceSeries: '/help/flows/practice-flow.md',
+    practiceFlow: '/help/flows/practice-flow.md',
     createSeries: '/help/flows/create-flow.md',
-    createSequences: '/help/flows/create-sequences.md',
+    createFlow: '/help/flows/create-flow.md',
+  },
+  sequences: {
+    practiceSequences: '/help/sequences/practice-sequence.md',
+    createSequences: '/help/sequences/create-sequences.md',
   },
   profile: {
     library: '/help/profile/library.md',

@@ -18,21 +18,19 @@ describe('helpLoader Utility', () => {
   describe('HELP_PATHS Constant', () => {
     it('should have asanas paths', () => {
       expect(HELP_PATHS.asanas).toBeDefined()
-      expect(HELP_PATHS.asanas.practice).toBe('/help/asanas/practice.md')
-      expect(HELP_PATHS.asanas.create).toBe('/help/asanas/create.md')
+      expect(HELP_PATHS.asanas.practice).toBe('/help/asanas/practice-asana.md')
+      expect(HELP_PATHS.asanas.create).toBe('/help/asanas/create-asana.md')
     })
 
     it('should have flows paths', () => {
       expect(HELP_PATHS.flows).toBeDefined()
-      expect(HELP_PATHS.flows.practiceSeries).toBe(
-        '/help/flows/practice-series.md'
+      expect(HELP_PATHS.flows.practiceFlow).toBe('/help/flows/practice-flow.md')
+      expect(HELP_PATHS.sequences.practiceSequences).toBe(
+        '/help/sequences/practice-sequence.md'
       )
-      expect(HELP_PATHS.flows.practiceSequences).toBe(
-        '/help/flows/practice-sequences.md'
-      )
-      expect(HELP_PATHS.flows.createSeries).toBe('/help/flows/create-flow.md')
-      expect(HELP_PATHS.flows.createSequences).toBe(
-        '/help/flows/create-sequences.md'
+      expect(HELP_PATHS.flows.createFlow).toBe('/help/flows/create-flow.md')
+      expect(HELP_PATHS.sequences.createSequences).toBe(
+        '/help/sequences/create-sequences.md'
       )
     })
 
@@ -108,7 +106,7 @@ describe('helpLoader Utility', () => {
 
       const result = await loadHelpText(HELP_PATHS.asanas.practice)
 
-      expect(mockFetch).toHaveBeenCalledWith('/help/asanas/practice.md')
+      expect(mockFetch).toHaveBeenCalledWith('/help/asanas/practice-asana.md')
       expect(result).toBe(mockContent)
     })
 
