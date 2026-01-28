@@ -49,9 +49,7 @@ Prominent orange header tab displaying the sequence name with integrated control
 
 - **Sequence Name** - Large, bold title text in white against orange background
 - **Edit Icon** (Owner Only) - Pencil icon for owners to enter edit mode
-  - Click pencil to open the inline editor
-  - Changes to X (close) icon when editing - click to exit without saving
-  - Only visible if you created this sequence or have admin role
+- **Edit Icon** (Owner Only) - Pencil icon visible to sequence owners and admins; for editing workflows see [Edit Sequence Help](edit-sequence.md).
 - **Rounded corners** - Polished top-left and top-right rounded borders
 - **Responsive width** - Adapts to screen size (80% mobile, 240px+ desktop)
 
@@ -96,20 +94,6 @@ If the sequence has an uploaded image, it displays centered below the title.
 - Visual representation of the sequence theme
 - Inspirational practice imagery
 - Quick visual identification in search results
-
-### Sequence Edit Section (Owner Only)
-
-When you click the edit (pencil) icon in the title header, an inline editor appears with all sequence modification tools.
-
-**Quick Overview:**
-
-- **Edit capabilities** - Modify name, description, image, and series
-- **Edit controls** - Save, Cancel, or Close (X icon)
-- **Owner-only** - Only available to sequence creators and admins
-- **Hidden content** - Series and details hide during editing
-- **URL parameter** - `?edit=true` added when editing
-
-For complete editing instructions, see [Edit Sequence Help](edit-sequence.md).
 
 ### Flow Series Cards
 
@@ -292,11 +276,7 @@ Visual calendar showing your practice history for this sequence over the past we
 
 ### Editing Your Sequence (Owners Only)
 
-1. **Enter Edit Mode** - Click pencil icon in orange title header
-2. **Modify Details** - Update name, description, image, and series
-3. **Save or Cancel** - Commit changes or discard without saving
-
-For complete editing instructions, workflows, and best practices, see [Edit Sequence Help](edit-sequence.md).
+Sequence owners and admins can edit sequences. For full, step-by-step editing workflows and best practices, see [Edit Sequence Help](edit-sequence.md).
 
 ## Tips for Effective Use
 

@@ -149,7 +149,7 @@ describe('HelpDrawer Component', () => {
 
       await waitFor(() => {
         expect(mockLoadHelpText).toHaveBeenCalledWith(
-          '/help/asanas/practice.md'
+          '/help/asanas/practice-asana.md'
         )
       })
     })

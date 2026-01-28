@@ -291,12 +291,12 @@ describe('SeriesPoseList', () => {
       expect(screen.getByTestId('series-pose-0')).toBeInTheDocument()
     })
 
-    it('should handle very long alignment cues with ellipsis', () => {
+    it('should handle very long alignment cues and allow wrapping', () => {
       const longCuePose: SeriesPoseEntry[] = [
         {
           sort_english_name: 'Complex Pose',
           alignment_cues:
-            'This is a very long alignment cue that should be truncated because it exceeds the maximum width allowed for inline display',
+            'This is a very long alignment cue that should wrap across lines instead of being truncated inline',
         },
       ]
       render(<SeriesPoseList seriesPoses={longCuePose} />, {
@@ -304,10 +304,12 @@ describe('SeriesPoseList', () => {
       })
       const cueElement = screen.getByTestId('series-pose-0-cue')
       expect(cueElement).toHaveStyle({
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
+        whiteSpace: 'normal',
+        textOverflow: 'clip',
       })
+      expect(cueElement).toHaveTextContent(
+        'This is a very long alignment cue that should wrap'
+      )
     })
 
     it('should use first element of sanskrit_names array when present', () => {
