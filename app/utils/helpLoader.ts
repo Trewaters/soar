@@ -3,6 +3,8 @@
  * Loads markdown help files from the public/help directory
  */
 
+import { typography } from '@mui/system'
+
 export const HELP_PATHS = {
   asanas: {
     practice: '/help/asanas/practice-asana.md',
@@ -22,6 +24,9 @@ export const HELP_PATHS = {
   profile: {
     library: '/help/profile/library.md',
     connectedAccounts: '/help/profile/connected-accounts-guide.md',
+  },
+  styleGuide: {
+    typography: '/help/styleGuide/typography.md',
   },
 } as const
 

@@ -45,6 +45,7 @@ import HelpButton from '@app/clientComponents/HelpButton'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
 import { AsanaPose } from 'types/asana'
+import { HELP_PATHS } from '@app/utils/helpLoader'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
@@ -1217,7 +1218,7 @@ export default function PoseActivityDetail({
       */}
 
       <HelpDrawer
-        content="View detailed information about this asana pose. You can track your practice activity, set difficulty levels, and access additional pose details and benefits. Use the practice view button to see the pose in action."
+        content={HELP_PATHS.flows.practiceFlow}
         open={open}
         onClose={() => setOpen(false)}
       />
