@@ -695,11 +695,10 @@ export default function PoseActivityDetail({
       >
         <Stack
           direction="row"
-          alignItems="center"
-          spacing={1}
+          justifyContent="space-between"
           sx={{
-            width: '100%',
-            maxWidth: '600px',
+            width: '87%',
+            maxWidth: '384px',
             alignSelf: 'center',
           }}
         >
@@ -1203,22 +1202,8 @@ export default function PoseActivityDetail({
           </Stack>
         </Box>
       )}
-      {/* EditPoseDialog removed - inline editing is now used */}
-      {/*
-      <EditPoseDialog
-        open={editDialogOpen}
-        onClose={() => setEditDialogOpen(false)}
-        pose={pose}
-        onSave={() => {
-          // Close dialog and redirect to practice asana page after save
-          setEditDialogOpen(false)
-          router.push('/navigator/asanaPoses/practiceAsanas')
-        }}
-      />
-      */}
-
       <HelpDrawer
-        content={HELP_PATHS.flows.practiceFlow}
+        content={HELP_PATHS.asanas.practice}
         open={open}
         onClose={() => setOpen(false)}
       />

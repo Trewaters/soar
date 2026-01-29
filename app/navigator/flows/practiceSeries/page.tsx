@@ -513,13 +513,11 @@ export default function Page() {
       >
         <Stack
           direction="row"
-          alignItems="center"
-          spacing={1}
+          justifyContent="space-between"
           sx={{
-            width: '100%',
+            width: '87%',
             maxWidth: '384px',
             alignSelf: 'center',
-            mb: 2,
           }}
         >
           <SubNavHeader mode="back" link="/navigator/flows" />

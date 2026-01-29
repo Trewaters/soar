@@ -450,11 +450,19 @@ export default function Page() {
         spacing={2}
         sx={{ mx: { xs: 0, sm: 3 }, mb: '1em', width: '100%', maxWidth: 1200 }}
       >
-        <Stack direction="row" alignItems="center" spacing={1}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          sx={{
+            width: '87%',
+            maxWidth: '384px',
+            alignSelf: 'center',
+          }}
+        >
           <SubNavHeader mode="back" link="/navigator/asanaPoses" />
           <HelpButton onClick={handleInfoClick} />
         </Stack>
-        <Stack sx={{ px: { xs: 2, sm: 4 } }} spacing={3}>
+        <Stack sx={{ px: { xs: 2, sm: 4 } }} spacing={3} alignItems="center">
           {/* Asana Form Fields using AsanaDetailsEdit */}
           <AsanaDetailsEdit fields={formFields} />
 
