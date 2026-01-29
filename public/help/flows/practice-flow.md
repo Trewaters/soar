@@ -1,8 +1,8 @@
-# Practice Series Help
+# Practice Flow Help
 
 Explore yoga flows - collections of related poses organized by theme or focus area.
 
-## What is a Series?
+## What is a Flow?
 
 A flow is a curated collection of yoga poses grouped by:
 
@@ -19,6 +19,6 @@ A flow is a curated collection of yoga poses grouped by:
 
 ## Tips
 
-- Series can be practiced in any order
+- Flow can be practiced in any order
 - Combine flows for longer practice sessions
 - Bookmark favorites for quick access
