@@ -128,6 +128,8 @@ export default function EditUserDetails({
     try {
       const res = await fetch('/api/profileImage/get', {
         method: 'GET',
+        credentials: 'include',
+        cache: 'no-store',
       })
       const data = await res.json()
       if (data.success) {
@@ -166,6 +168,7 @@ export default function EditUserDetails({
       const res = await fetch('/api/profileImage', {
         method: 'POST',
         body: formData,
+        credentials: 'include',
       })
 
       if (!res.ok) {
@@ -202,6 +205,7 @@ export default function EditUserDetails({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ url }),
+        credentials: 'include',
       })
 
       if (!delRes.ok) {
@@ -240,6 +244,7 @@ export default function EditUserDetails({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ url }),
+        credentials: 'include',
       })
 
       if (!res.ok) {

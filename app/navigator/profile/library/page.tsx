@@ -20,6 +20,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Pagination,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { useSession } from 'next-auth/react'
@@ -31,6 +32,9 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ViewModuleIcon from '@mui/icons-material/ViewModule'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import AllInclusiveIcon from '@mui/icons-material/AllInclusive'
+import PagesIcon from '@mui/icons-material/Pages'
 import { deleteSeries } from '@lib/seriesService'
 import { deletePose } from '@lib/poseService'
 import { deleteSequence } from '@lib/sequenceService'
@@ -39,10 +43,8 @@ import {
   UserAsanaData,
   UserSeriesData,
   UserSequenceData,
-  getUserCreatedAsanas,
-  getUserCreatedSeries,
-  getUserCreatedSequences,
 } from '@lib/userLibraryService'
+import useProfileLibrary from '@app/hooks/useProfileLibrary'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
 import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
 
@@ -82,85 +84,51 @@ export default function LibraryPage() {
   const isAdmin = useIsAdmin()
   const [tabValue, setTabValue] = useState(0)
 
-  // State for different content types
-  const [asanas, setAsanas] = useState<UserAsanaData[]>([])
-  const [series, setSeries] = useState<UserSeriesData[]>([])
-  const [sequences, setSequences] = useState<UserSequenceData[]>([])
-
   // Get profile images count from UserContext
   const profileImagesCount = state.userData.profileImages?.length || 0
 
-  // Loading states
-  const [asanasLoading, setAsanasLoading] = useState(false)
-  const [seriesLoading, setSeriesLoading] = useState(false)
-  const [sequencesLoading, setSequencesLoading] = useState(false)
-
   // Error states
   const [error, setError] = useState<string | null>(null)
+  const [showCursorAlert, setShowCursorAlert] = useState(false)
+
+  // Use paginated library hooks for each content type
+  const [paginationMode, setPaginationMode] = useState<'infinite' | 'paged'>(
+    'infinite'
+  )
+
+  const asanasLibrary = useProfileLibrary({
+    type: 'asanas',
+    pageSize: 12,
+    mode: paginationMode,
+  })
+  const seriesLibrary = useProfileLibrary({
+    type: 'series',
+    pageSize: 12,
+    mode: paginationMode,
+  })
+  const sequencesLibrary = useProfileLibrary({
+    type: 'sequences',
+    pageSize: 12,
+    mode: paginationMode,
+  })
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
   }
 
-  // Fetch user's created asanas
-  const fetchUserAsanas = async () => {
-    if (!session?.user?.email) return
-
-    setAsanasLoading(true)
-    setError(null)
-    try {
-      const userAsanas = await getUserCreatedAsanas(session.user.email, isAdmin)
-      setAsanas(userAsanas)
-    } catch (error) {
-      console.error('Error fetching user asanas:', error)
-      setError('Failed to load your asanas')
-    } finally {
-      setAsanasLoading(false)
-    }
-  }
-
-  // Fetch user's created series
-  const fetchUserSeries = async () => {
-    if (!session?.user?.email) return
-
-    setSeriesLoading(true)
-    setError(null)
-    try {
-      const userSeries = await getUserCreatedSeries(session.user.email, isAdmin)
-      setSeries(userSeries)
-    } catch (error) {
-      console.error('Error fetching user series:', error)
-      setError('Failed to load your flows')
-    } finally {
-      setSeriesLoading(false)
-    }
-  }
-
-  // Fetch user's created sequences
-  const fetchUserSequences = async () => {
-    if (!session?.user?.email) return
-
-    setSequencesLoading(true)
-    setError(null)
-    try {
-      const userSequences = await getUserCreatedSequences(
-        session.user.email,
-        isAdmin
-      )
-      setSequences(userSequences)
-    } catch (error) {
-      console.error('Error fetching user sequences:', error)
-      setError('Failed to load your sequences')
-    } finally {
-      setSequencesLoading(false)
-    }
-  }
-
   useEffect(() => {
+    // Trigger initial loads when session becomes available
     if (session?.user?.email) {
-      fetchUserAsanas()
-      fetchUserSeries()
-      fetchUserSequences()
+      asanasLibrary.refresh()
+      seriesLibrary.refresh()
+      sequencesLibrary.refresh()
+      // show cursor alerts if any hook reported invalid cursor
+      if (asanasLibrary && (asanasLibrary as any).invalidCursor)
+        setShowCursorAlert(true)
+      if (seriesLibrary && (seriesLibrary as any).invalidCursor)
+        setShowCursorAlert(true)
+      if (sequencesLibrary && (sequencesLibrary as any).invalidCursor)
+        setShowCursorAlert(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user?.email, isAdmin])
@@ -218,9 +186,97 @@ export default function LibraryPage() {
             My Library
           </Typography>
 
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-            Manage all the content you&apos;ve created in the app
-          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 2,
+              mb: 2,
+            }}
+          >
+            <Box>
+              <Typography variant="body1" color="text.secondary">
+                Manage all the content you&apos;ve created in the app
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center' }}>
+                <IconButton
+                  onClick={() => setPaginationMode('infinite')}
+                  aria-label={
+                    paginationMode === 'infinite'
+                      ? 'Infinite pagination (selected)'
+                      : 'Enable infinite pagination'
+                  }
+                  title={
+                    paginationMode === 'infinite'
+                      ? 'Infinite (selected)'
+                      : 'Infinite'
+                  }
+                  sx={{
+                    p: 1,
+                    minWidth: 0,
+                    bgcolor:
+                      paginationMode === 'infinite'
+                        ? 'primary.main'
+                        : 'transparent',
+                    color:
+                      paginationMode === 'infinite'
+                        ? 'common.white'
+                        : 'text.secondary',
+                    border: paginationMode === 'infinite' ? 'none' : 1,
+                    borderColor:
+                      paginationMode === 'infinite' ? 'transparent' : 'divider',
+                    '&:hover': {
+                      bgcolor:
+                        paginationMode === 'infinite'
+                          ? 'primary.dark'
+                          : 'action.hover',
+                    },
+                  }}
+                >
+                  <AllInclusiveIcon />
+                </IconButton>
+
+                <IconButton
+                  onClick={() => setPaginationMode('paged')}
+                  aria-label={
+                    paginationMode === 'paged'
+                      ? 'Paged pagination (selected)'
+                      : 'Enable paged pagination'
+                  }
+                  title={
+                    paginationMode === 'paged' ? 'Paged (selected)' : 'Paged'
+                  }
+                  sx={{
+                    p: 1,
+                    minWidth: 0,
+                    bgcolor:
+                      paginationMode === 'paged'
+                        ? 'primary.main'
+                        : 'transparent',
+                    color:
+                      paginationMode === 'paged'
+                        ? 'common.white'
+                        : 'text.secondary',
+                    border: paginationMode === 'paged' ? 'none' : 1,
+                    borderColor:
+                      paginationMode === 'paged' ? 'transparent' : 'divider',
+                    '&:hover': {
+                      bgcolor:
+                        paginationMode === 'paged'
+                          ? 'primary.dark'
+                          : 'action.hover',
+                    },
+                  }}
+                >
+                  <PagesIcon />
+                </IconButton>
+              </Box>
+            </Box>
+          </Box>
 
           {error && (
             <Alert
@@ -232,6 +288,17 @@ export default function LibraryPage() {
             </Alert>
           )}
 
+          {showCursorAlert && (
+            <Alert
+              severity="info"
+              sx={{ mb: 3 }}
+              onClose={() => setShowCursorAlert(false)}
+            >
+              Some pages had an invalid pagination cursor; the view was reset to
+              the first page.
+            </Alert>
+          )}
+
           <Paper elevation={2} sx={{ borderRadius: 2 }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <Tabs
@@ -240,10 +307,16 @@ export default function LibraryPage() {
                 aria-label="library content tabs"
                 variant="fullWidth"
               >
-                <Tab label={`Asanas (${asanas.length})`} {...a11yProps(0)} />
-                <Tab label={`Flows (${series.length})`} {...a11yProps(1)} />
                 <Tab
-                  label={`Sequences (${sequences.length})`}
+                  label={`Asanas (${asanasLibrary.totalCount ?? asanasLibrary.items.length})`}
+                  {...a11yProps(0)}
+                />
+                <Tab
+                  label={`Flows (${seriesLibrary.totalCount ?? seriesLibrary.items.length})`}
+                  {...a11yProps(1)}
+                />
+                <Tab
+                  label={`Sequences (${sequencesLibrary.totalCount ?? sequencesLibrary.items.length})`}
                   {...a11yProps(2)}
                 />
                 <Tab
@@ -256,28 +329,49 @@ export default function LibraryPage() {
             {/* Asanas Tab */}
             <TabPanel value={tabValue} index={0}>
               <AsanasLibrary
-                asanas={asanas}
-                loading={asanasLoading}
-                onAsanaDeleted={fetchUserAsanas}
+                asanas={asanasLibrary.items as UserAsanaData[]}
+                loading={asanasLibrary.loading}
+                onAsanaDeleted={() => asanasLibrary.refresh()}
                 isAdmin={isAdmin}
+                loadMore={asanasLibrary.loadMore}
+                hasMore={asanasLibrary.hasMore}
+                page={asanasLibrary.page}
+                setPage={asanasLibrary.setPage}
+                totalCount={asanasLibrary.totalCount}
+                pageSize={12}
+                paginationMode={paginationMode}
               />
             </TabPanel>
 
             {/* Series Tab */}
             <TabPanel value={tabValue} index={1}>
               <SeriesLibrary
-                series={series}
-                loading={seriesLoading}
-                onSeriesDeleted={fetchUserSeries}
+                series={seriesLibrary.items as UserSeriesData[]}
+                loading={seriesLibrary.loading}
+                onSeriesDeleted={() => seriesLibrary.refresh()}
+                loadMore={seriesLibrary.loadMore}
+                hasMore={seriesLibrary.hasMore}
+                page={seriesLibrary.page}
+                setPage={seriesLibrary.setPage}
+                totalCount={seriesLibrary.totalCount}
+                pageSize={12}
+                paginationMode={paginationMode}
               />
             </TabPanel>
 
             {/* Sequences Tab */}
             <TabPanel value={tabValue} index={2}>
               <SequencesLibrary
-                sequences={sequences}
-                loading={sequencesLoading}
-                onSequenceDeleted={fetchUserSequences}
+                sequences={sequencesLibrary.items as UserSequenceData[]}
+                loading={sequencesLibrary.loading}
+                onSequenceDeleted={() => sequencesLibrary.refresh()}
+                loadMore={sequencesLibrary.loadMore}
+                hasMore={sequencesLibrary.hasMore}
+                page={sequencesLibrary.page}
+                setPage={sequencesLibrary.setPage}
+                totalCount={sequencesLibrary.totalCount}
+                pageSize={12}
+                paginationMode={paginationMode}
               />
             </TabPanel>
 
@@ -298,11 +392,25 @@ function AsanasLibrary({
   loading,
   onAsanaDeleted,
   isAdmin,
+  loadMore,
+  hasMore,
+  page,
+  setPage,
+  totalCount,
+  pageSize,
+  paginationMode,
 }: {
   asanas: UserAsanaData[]
   loading: boolean
   onAsanaDeleted: () => void
   isAdmin: boolean
+  loadMore?: () => Promise<void>
+  hasMore?: boolean
+  page?: number | undefined
+  setPage?: ((p: number) => Promise<void>) | undefined
+  totalCount?: number | null
+  pageSize?: number
+  paginationMode?: 'infinite' | 'paged'
 }) {
   const router = useNavigationWithLoading()
   const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
@@ -339,60 +447,77 @@ function AsanasLibrary({
 
   return (
     <Box sx={{ p: 3 }}>
-      {/* View Toggle Controls */}
+      {/* View Toggle Controls + Page Info */}
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'flex-end',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           mb: 2,
           gap: 1,
         }}
       >
-        <IconButton
-          onClick={() => setViewMode('card')}
-          aria-label={
-            viewMode === 'card'
-              ? 'Currently in card view'
-              : 'Switch to card view'
-          }
-          sx={{
-            color: viewMode === 'card' ? 'primary.main' : 'text.secondary',
-            p: 1,
-            minWidth: 0,
-            cursor: viewMode === 'card' ? 'default' : 'pointer',
-            pointerEvents: viewMode === 'card' ? 'none' : 'auto',
-            opacity: viewMode === 'card' ? 1 : 0.6,
-            '&:hover': {
-              opacity: 1,
-            },
-          }}
-          title={viewMode === 'card' ? 'Card View (current)' : 'Card View'}
-        >
-          <ViewModuleIcon />
-        </IconButton>
+        <Box>
+          {page !== undefined ? (
+            <Typography variant="body2" color="text.secondary">
+              {totalCount && pageSize
+                ? `Viewing page ${page} of ${Math.max(1, Math.ceil((totalCount ?? 0) / pageSize))}`
+                : `Viewing page ${page}`}
+            </Typography>
+          ) : paginationMode === 'infinite' ? (
+            <Typography variant="body2" color="text.secondary">
+              {`Viewing ${asanas.length} images of ${totalCount ?? asanas.length} available`}
+            </Typography>
+          ) : null}
+        </Box>
 
-        <IconButton
-          onClick={() => setViewMode('list')}
-          aria-label={
-            viewMode === 'list'
-              ? 'Currently in list view'
-              : 'Switch to list view'
-          }
-          sx={{
-            color: viewMode === 'list' ? 'primary.main' : 'text.secondary',
-            p: 1,
-            minWidth: 0,
-            cursor: viewMode === 'list' ? 'default' : 'pointer',
-            pointerEvents: viewMode === 'list' ? 'none' : 'auto',
-            opacity: viewMode === 'list' ? 1 : 0.6,
-            '&:hover': {
-              opacity: 1,
-            },
-          }}
-          title={viewMode === 'list' ? 'List View (current)' : 'List View'}
-        >
-          <FormatListBulletedIcon />
-        </IconButton>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+          <IconButton
+            onClick={() => setViewMode('card')}
+            aria-label={
+              viewMode === 'card'
+                ? 'Currently in card view'
+                : 'Switch to card view'
+            }
+            sx={{
+              color: viewMode === 'card' ? 'primary.main' : 'text.secondary',
+              p: 1,
+              minWidth: 0,
+              cursor: viewMode === 'card' ? 'default' : 'pointer',
+              pointerEvents: viewMode === 'card' ? 'none' : 'auto',
+              opacity: viewMode === 'card' ? 1 : 0.6,
+              '&:hover': {
+                opacity: 1,
+              },
+            }}
+            title={viewMode === 'card' ? 'Card View (current)' : 'Card View'}
+          >
+            <ViewModuleIcon />
+          </IconButton>
+
+          <IconButton
+            onClick={() => setViewMode('list')}
+            aria-label={
+              viewMode === 'list'
+                ? 'Currently in list view'
+                : 'Switch to list view'
+            }
+            sx={{
+              color: viewMode === 'list' ? 'primary.main' : 'text.secondary',
+              p: 1,
+              minWidth: 0,
+              cursor: viewMode === 'list' ? 'default' : 'pointer',
+              pointerEvents: viewMode === 'list' ? 'none' : 'auto',
+              opacity: viewMode === 'list' ? 1 : 0.6,
+              '&:hover': {
+                opacity: 1,
+              },
+            }}
+            title={viewMode === 'list' ? 'List View (current)' : 'List View'}
+          >
+            <FormatListBulletedIcon />
+          </IconButton>
+        </Box>
       </Box>
 
       {/* Card View */}
@@ -423,6 +548,52 @@ function AsanasLibrary({
           ))}
         </Box>
       )}
+
+      {/* Pagination controls (paged mode uses numeric pages; infinite mode no Load more) */}
+      {page !== undefined ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          {/* Use MUI Pagination with chevrons and page count */}
+          {/* Compute count from totalCount and pageSize when available */}
+          <Pagination
+            count={
+              totalCount && pageSize
+                ? Math.max(1, Math.ceil(totalCount / pageSize))
+                : 1
+            }
+            page={page}
+            onChange={(_e, value) => {
+              if (setPage) setPage(value)
+            }}
+            showFirstButton={false}
+            showLastButton={false}
+            siblingCount={0}
+            boundaryCount={1}
+            variant="outlined"
+            shape="rounded"
+            aria-label="Profile library pagination"
+          />
+        </Box>
+      ) : // Infinite mode: show a down-chevron load more button when a loadMore handler exists
+      loadMore ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <IconButton
+            aria-label="Load more library items"
+            onClick={() => {
+              if (loadMore) loadMore()
+            }}
+            disabled={loading || !hasMore}
+            sx={{
+              bgcolor: 'background.paper',
+              borderRadius: '50%',
+              boxShadow: 1,
+              width: 56,
+              height: 56,
+            }}
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </Box>
+      ) : null}
     </Box>
   )
 }
@@ -432,10 +603,24 @@ function SeriesLibrary({
   series,
   loading,
   onSeriesDeleted,
+  loadMore,
+  hasMore,
+  page,
+  setPage,
+  totalCount,
+  pageSize,
+  paginationMode,
 }: {
   series: UserSeriesData[]
   loading: boolean
   onSeriesDeleted?: () => void
+  loadMore?: () => Promise<void>
+  hasMore?: boolean
+  page?: number | undefined
+  setPage?: ((p: number) => Promise<void>) | undefined
+  totalCount?: number | null
+  pageSize?: number
+  paginationMode?: 'infinite' | 'paged'
 }) {
   const router = useNavigationWithLoading()
   const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
@@ -472,60 +657,77 @@ function SeriesLibrary({
 
   return (
     <Box sx={{ p: 3 }}>
-      {/* View Toggle Controls */}
+      {/* View Toggle Controls + Page Info */}
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'flex-end',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           mb: 2,
           gap: 1,
         }}
       >
-        <IconButton
-          onClick={() => setViewMode('card')}
-          aria-label={
-            viewMode === 'card'
-              ? 'Currently in card view'
-              : 'Switch to card view'
-          }
-          sx={{
-            color: viewMode === 'card' ? 'primary.main' : 'text.secondary',
-            p: 1,
-            minWidth: 0,
-            cursor: viewMode === 'card' ? 'default' : 'pointer',
-            pointerEvents: viewMode === 'card' ? 'none' : 'auto',
-            opacity: viewMode === 'card' ? 1 : 0.6,
-            '&:hover': {
-              opacity: 1,
-            },
-          }}
-          title={viewMode === 'card' ? 'Card View (current)' : 'Card View'}
-        >
-          <ViewModuleIcon />
-        </IconButton>
+        <Box>
+          {page !== undefined ? (
+            <Typography variant="body2" color="text.secondary">
+              {totalCount && pageSize
+                ? `Viewing page ${page} of ${Math.max(1, Math.ceil((totalCount ?? 0) / pageSize))}`
+                : `Viewing page ${page}`}
+            </Typography>
+          ) : paginationMode === 'infinite' ? (
+            <Typography variant="body2" color="text.secondary">
+              {`Viewing ${series.length} images of ${totalCount ?? series.length} available`}
+            </Typography>
+          ) : null}
+        </Box>
 
-        <IconButton
-          onClick={() => setViewMode('list')}
-          aria-label={
-            viewMode === 'list'
-              ? 'Currently in list view'
-              : 'Switch to list view'
-          }
-          sx={{
-            color: viewMode === 'list' ? 'primary.main' : 'text.secondary',
-            p: 1,
-            minWidth: 0,
-            cursor: viewMode === 'list' ? 'default' : 'pointer',
-            pointerEvents: viewMode === 'list' ? 'none' : 'auto',
-            opacity: viewMode === 'list' ? 1 : 0.6,
-            '&:hover': {
-              opacity: 1,
-            },
-          }}
-          title={viewMode === 'list' ? 'List View (current)' : 'List View'}
-        >
-          <FormatListBulletedIcon />
-        </IconButton>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+          <IconButton
+            onClick={() => setViewMode('card')}
+            aria-label={
+              viewMode === 'card'
+                ? 'Currently in card view'
+                : 'Switch to card view'
+            }
+            sx={{
+              color: viewMode === 'card' ? 'primary.main' : 'text.secondary',
+              p: 1,
+              minWidth: 0,
+              cursor: viewMode === 'card' ? 'default' : 'pointer',
+              pointerEvents: viewMode === 'card' ? 'none' : 'auto',
+              opacity: viewMode === 'card' ? 1 : 0.6,
+              '&:hover': {
+                opacity: 1,
+              },
+            }}
+            title={viewMode === 'card' ? 'Card View (current)' : 'Card View'}
+          >
+            <ViewModuleIcon />
+          </IconButton>
+
+          <IconButton
+            onClick={() => setViewMode('list')}
+            aria-label={
+              viewMode === 'list'
+                ? 'Currently in list view'
+                : 'Switch to list view'
+            }
+            sx={{
+              color: viewMode === 'list' ? 'primary.main' : 'text.secondary',
+              p: 1,
+              minWidth: 0,
+              cursor: viewMode === 'list' ? 'default' : 'pointer',
+              pointerEvents: viewMode === 'list' ? 'none' : 'auto',
+              opacity: viewMode === 'list' ? 1 : 0.6,
+              '&:hover': {
+                opacity: 1,
+              },
+            }}
+            title={viewMode === 'list' ? 'List View (current)' : 'List View'}
+          >
+            <FormatListBulletedIcon />
+          </IconButton>
+        </Box>
       </Box>
 
       {/* Card View */}
@@ -551,6 +753,48 @@ function SeriesLibrary({
           ))}
         </Box>
       )}
+
+      {page !== undefined ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <Pagination
+            count={
+              totalCount && pageSize
+                ? Math.max(1, Math.ceil(totalCount / pageSize))
+                : 1
+            }
+            page={page}
+            onChange={(_e, value) => {
+              if (setPage) setPage(value)
+            }}
+            showFirstButton={false}
+            showLastButton={false}
+            siblingCount={0}
+            boundaryCount={1}
+            variant="outlined"
+            shape="rounded"
+            aria-label="Profile library pagination"
+          />
+        </Box>
+      ) : loadMore ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <IconButton
+            aria-label="Load more library items"
+            onClick={() => {
+              if (loadMore) loadMore()
+            }}
+            disabled={loading || !hasMore}
+            sx={{
+              bgcolor: 'background.paper',
+              borderRadius: '50%',
+              boxShadow: 1,
+              width: 56,
+              height: 56,
+            }}
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </Box>
+      ) : null}
     </Box>
   )
 }
@@ -560,11 +804,26 @@ function SequencesLibrary({
   sequences,
   loading,
   onSequenceDeleted,
+  loadMore,
+  hasMore,
+  page,
+  setPage,
+  totalCount,
+  pageSize,
+  paginationMode,
 }: {
   sequences: UserSequenceData[]
   loading: boolean
   onSequenceDeleted?: () => void
+  loadMore?: () => Promise<void>
+  hasMore?: boolean
+  page?: number | undefined
+  setPage?: ((p: number) => Promise<void>) | undefined
+  totalCount?: number | null
+  pageSize?: number
+  paginationMode?: 'infinite' | 'paged'
 }) {
+  // Note: SequencesLibrary can optionally show paged controls if the hook provides `page` and `setPage` props.
   const router = useNavigationWithLoading()
   const [viewMode, setViewMode] = useState<'card' | 'list'>('card')
 
@@ -601,60 +860,77 @@ function SequencesLibrary({
 
   return (
     <Box sx={{ p: 3 }}>
-      {/* View Toggle Controls */}
+      {/* View Toggle Controls + Page Info */}
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'flex-end',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           mb: 2,
           gap: 1,
         }}
       >
-        <IconButton
-          onClick={() => setViewMode('card')}
-          aria-label={
-            viewMode === 'card'
-              ? 'Currently in card view'
-              : 'Switch to card view'
-          }
-          sx={{
-            color: viewMode === 'card' ? 'primary.main' : 'text.secondary',
-            p: 1,
-            minWidth: 0,
-            cursor: viewMode === 'card' ? 'default' : 'pointer',
-            pointerEvents: viewMode === 'card' ? 'none' : 'auto',
-            opacity: viewMode === 'card' ? 1 : 0.6,
-            '&:hover': {
-              opacity: 1,
-            },
-          }}
-          title={viewMode === 'card' ? 'Card View (current)' : 'Card View'}
-        >
-          <ViewModuleIcon />
-        </IconButton>
+        <Box>
+          {page !== undefined ? (
+            <Typography variant="body2" color="text.secondary">
+              {totalCount && pageSize
+                ? `Viewing page ${page} of ${Math.max(1, Math.ceil((totalCount ?? 0) / pageSize))}`
+                : `Viewing page ${page}`}
+            </Typography>
+          ) : paginationMode === 'infinite' ? (
+            <Typography variant="body2" color="text.secondary">
+              {`Viewing ${sequences.length} images of ${totalCount ?? sequences.length} available`}
+            </Typography>
+          ) : null}
+        </Box>
 
-        <IconButton
-          onClick={() => setViewMode('list')}
-          aria-label={
-            viewMode === 'list'
-              ? 'Currently in list view'
-              : 'Switch to list view'
-          }
-          sx={{
-            color: viewMode === 'list' ? 'primary.main' : 'text.secondary',
-            p: 1,
-            minWidth: 0,
-            cursor: viewMode === 'list' ? 'default' : 'pointer',
-            pointerEvents: viewMode === 'list' ? 'none' : 'auto',
-            opacity: viewMode === 'list' ? 1 : 0.6,
-            '&:hover': {
-              opacity: 1,
-            },
-          }}
-          title={viewMode === 'list' ? 'List View (current)' : 'List View'}
-        >
-          <FormatListBulletedIcon />
-        </IconButton>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+          <IconButton
+            onClick={() => setViewMode('card')}
+            aria-label={
+              viewMode === 'card'
+                ? 'Currently in card view'
+                : 'Switch to card view'
+            }
+            sx={{
+              color: viewMode === 'card' ? 'primary.main' : 'text.secondary',
+              p: 1,
+              minWidth: 0,
+              cursor: viewMode === 'card' ? 'default' : 'pointer',
+              pointerEvents: viewMode === 'card' ? 'none' : 'auto',
+              opacity: viewMode === 'card' ? 1 : 0.6,
+              '&:hover': {
+                opacity: 1,
+              },
+            }}
+            title={viewMode === 'card' ? 'Card View (current)' : 'Card View'}
+          >
+            <ViewModuleIcon />
+          </IconButton>
+
+          <IconButton
+            onClick={() => setViewMode('list')}
+            aria-label={
+              viewMode === 'list'
+                ? 'Currently in list view'
+                : 'Switch to list view'
+            }
+            sx={{
+              color: viewMode === 'list' ? 'primary.main' : 'text.secondary',
+              p: 1,
+              minWidth: 0,
+              cursor: viewMode === 'list' ? 'default' : 'pointer',
+              pointerEvents: viewMode === 'list' ? 'none' : 'auto',
+              opacity: viewMode === 'list' ? 1 : 0.6,
+              '&:hover': {
+                opacity: 1,
+              },
+            }}
+            title={viewMode === 'list' ? 'List View (current)' : 'List View'}
+          >
+            <FormatListBulletedIcon />
+          </IconButton>
+        </Box>
       </Box>
 
       {/* Card View */}
@@ -680,6 +956,48 @@ function SequencesLibrary({
           ))}
         </Box>
       )}
+
+      {page !== undefined ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <Pagination
+            count={
+              totalCount && pageSize
+                ? Math.max(1, Math.ceil(totalCount / pageSize))
+                : 1
+            }
+            page={page}
+            onChange={(_e, value) => {
+              if (setPage) setPage(value)
+            }}
+            showFirstButton={false}
+            showLastButton={false}
+            siblingCount={0}
+            boundaryCount={1}
+            variant="outlined"
+            shape="rounded"
+            aria-label="Profile library pagination"
+          />
+        </Box>
+      ) : loadMore ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <IconButton
+            aria-label="Load more library items"
+            onClick={() => {
+              if (loadMore) loadMore()
+            }}
+            disabled={loading || !hasMore}
+            sx={{
+              bgcolor: 'background.paper',
+              borderRadius: '50%',
+              boxShadow: 1,
+              width: 56,
+              height: 56,
+            }}
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </Box>
+      ) : null}
     </Box>
   )
 }

@@ -1,5 +1,13 @@
 import React from 'react'
-import { Box, Typography, CircularProgress, Alert } from '@mui/material'
+import {
+  Box,
+  Typography,
+  CircularProgress,
+  Alert,
+  IconButton,
+} from '@mui/material'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { ProfileImageDisplay } from './ProfileImageDisplay'
 import { ProfileImageUpload } from './ProfileImageUpload'
 
@@ -28,6 +36,13 @@ export const ProfileImageManager: React.FC<ProfileImageManagerProps> = ({
   showHeader = true,
 }) => {
   const [error, setError] = React.useState<string | null>(null)
+  const [page, setPage] = React.useState<number>(1)
+  const pageSize = 6
+  const pageCount = Math.max(1, Math.ceil(images.length / pageSize))
+
+  React.useEffect(() => {
+    if (page > pageCount) setPage(1)
+  }, [images.length, pageCount, page])
 
   const handleUpload = async (file: File) => {
     setError(null)
@@ -87,13 +102,39 @@ export const ProfileImageManager: React.FC<ProfileImageManagerProps> = ({
         </Alert>
       )}
       <ProfileImageDisplay
-        images={images}
+        images={images.slice((page - 1) * pageSize, page * pageSize)}
         active={active}
         onSelect={handleSelect}
         onDelete={handleDelete}
         placeholder={placeholder}
         showSubtitle={showHeader}
       />
+
+      {images.length > pageSize && (
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
+          <IconButton
+            aria-label="Previous page"
+            size="small"
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+          >
+            <ChevronLeftIcon fontSize="small" />
+          </IconButton>
+
+          <Typography variant="caption" color="text.secondary">
+            Page {page} of {pageCount}
+          </Typography>
+
+          <IconButton
+            aria-label="Next page"
+            size="small"
+            onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
+            disabled={page === pageCount}
+          >
+            <ChevronRightIcon fontSize="small" />
+          </IconButton>
+        </Box>
+      )}
       <Typography variant="caption" sx={{ display: 'block', mt: 1 }}>
         {images.length}/{maxImages} images uploaded
         {active &&

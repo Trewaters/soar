@@ -79,6 +79,155 @@ jest.mock('@app/context/UserContext', () => ({
   UseUser: () => mockUseUser(),
 }))
 
+// Provide a test-safe mock for the `useProfileLibrary` hook used by the page.
+let testAsanasData: any[] = []
+let testSeriesData: any[] = []
+let testSequencesData: any[] = []
+
+const mockUseProfileLibrary = jest.fn((opts?: any) => {
+  const type = opts?.type || 'asanas'
+  if (type === 'asanas') {
+    return {
+      items: testAsanasData,
+      loading: false,
+      hasMore: false,
+      loadMore: async () => {
+        const res = await mockGetUserCreatedAsanas()
+        if (Array.isArray(res)) {
+          testAsanasData.length = 0
+          res.forEach((r: any) => testAsanasData.push(r))
+        }
+        return res
+      },
+      refresh: async () => {
+        const res = await mockGetUserCreatedAsanas()
+        if (Array.isArray(res)) {
+          testAsanasData.length = 0
+          res.forEach((r: any) => testAsanasData.push(r))
+        }
+        return res
+      },
+      page: undefined,
+      setPage: async (p: any) => {
+        const res = await mockGetUserCreatedAsanas()
+        if (Array.isArray(res)) {
+          testAsanasData.length = 0
+          res.forEach((r: any) => testAsanasData.push(r))
+        }
+        return res
+      },
+      totalCount: testAsanasData.length,
+    }
+  }
+  if (type === 'series') {
+    return {
+      items: testSeriesData,
+      loading: false,
+      hasMore: false,
+      loadMore: async () => {
+        const res = await mockGetUserCreatedSeries()
+        if (Array.isArray(res)) {
+          testSeriesData.length = 0
+          res.forEach((r: any) => testSeriesData.push(r))
+        }
+        return res
+      },
+      refresh: async () => {
+        const res = await mockGetUserCreatedSeries()
+        if (Array.isArray(res)) {
+          testSeriesData.length = 0
+          res.forEach((r: any) => testSeriesData.push(r))
+        }
+        return res
+      },
+      page: undefined,
+      setPage: async (p: any) => {
+        const res = await mockGetUserCreatedSeries()
+        if (Array.isArray(res)) {
+          testSeriesData.length = 0
+          res.forEach((r: any) => testSeriesData.push(r))
+        }
+        return res
+      },
+      totalCount: testSeriesData.length,
+    }
+  }
+  return {
+    items: testSequencesData,
+    loading: false,
+    hasMore: false,
+    loadMore: async () => {
+      const res = await mockGetUserCreatedSequences()
+      if (Array.isArray(res)) {
+        testSequencesData.length = 0
+        res.forEach((r: any) => testSequencesData.push(r))
+      }
+      return res
+    },
+    refresh: async () => {
+      const res = await mockGetUserCreatedSequences()
+      if (Array.isArray(res)) {
+        testSequencesData.length = 0
+        res.forEach((r: any) => testSequencesData.push(r))
+      }
+      return res
+    },
+    page: undefined,
+    setPage: async (p: any) => {
+      const res = await mockGetUserCreatedSequences()
+      if (Array.isArray(res)) {
+        testSequencesData.length = 0
+        res.forEach((r: any) => testSequencesData.push(r))
+      }
+      return res
+    },
+    totalCount: testSequencesData.length,
+  }
+})
+
+jest.mock('@app/hooks/useProfileLibrary', () => {
+  const React = require('react')
+  return {
+    __esModule: true,
+    default: (opts: any) => {
+      const type = opts?.type || 'asanas'
+      const [items, setItems] = React.useState(() => {
+        if (type === 'asanas') return testAsanasData
+        if (type === 'series') return testSeriesData
+        return testSequencesData
+      })
+
+      // Do not auto-fetch on mount here — the page calls `refresh()` explicitly.
+
+      const refresh = async () => {
+        const res = await (type === 'asanas'
+          ? mockGetUserCreatedAsanas()
+          : type === 'series'
+            ? mockGetUserCreatedSeries()
+            : mockGetUserCreatedSequences())
+        if (Array.isArray(res)) setItems(res)
+        return res
+      }
+
+      const loadMore = refresh
+      const setPage = async (p: any) => {
+        await refresh()
+      }
+
+      return {
+        items,
+        loading: false,
+        hasMore: false,
+        loadMore,
+        refresh,
+        page: undefined,
+        setPage,
+        totalCount: items.length,
+      }
+    },
+  }
+})
+
 // Mock next-auth/react
 jest.mock('next-auth/react', () => ({
   useSession: () => ({
@@ -234,6 +383,7 @@ describe('LibraryPage - AsanaCard Delete Feature', () => {
       },
     ]
     mockGetUserCreatedAsanas.mockResolvedValue(mockAsanas)
+    testAsanasData = mockAsanas
 
     render(<LibraryPage />, { wrapper: TestWrapper })
 
@@ -254,6 +404,7 @@ describe('LibraryPage - AsanaCard Delete Feature', () => {
       },
     ]
     mockGetUserCreatedAsanas.mockResolvedValue(mockAsanas)
+    testAsanasData = mockAsanas
 
     render(<LibraryPage />, { wrapper: TestWrapper })
 
@@ -280,6 +431,7 @@ describe('LibraryPage - AsanaCard Delete Feature', () => {
       },
     ]
     mockGetUserCreatedAsanas.mockResolvedValue(mockAsanas)
+    testAsanasData = mockAsanas
 
     render(<LibraryPage />, { wrapper: TestWrapper })
 
@@ -311,6 +463,7 @@ describe('LibraryPage - AsanaCard Delete Feature', () => {
       },
     ]
     mockGetUserCreatedAsanas.mockResolvedValue(mockAsanas)
+    testAsanasData = mockAsanas
 
     render(<LibraryPage />, { wrapper: TestWrapper })
 
@@ -352,6 +505,7 @@ describe('LibraryPage - AsanaCard Delete Feature', () => {
       },
     ]
     mockGetUserCreatedAsanas.mockResolvedValue(mockAsanas)
+    testAsanasData = mockAsanas
 
     render(<LibraryPage />, { wrapper: TestWrapper })
 
@@ -401,6 +555,7 @@ describe('LibraryPage - AsanaCard Click to View Feature', () => {
       },
     ]
     mockGetUserCreatedAsanas.mockResolvedValue(mockAsanas)
+    testAsanasData = mockAsanas
 
     render(<LibraryPage />, { wrapper: TestWrapper })
 
@@ -425,6 +580,7 @@ describe('LibraryPage - AsanaCard Click to View Feature', () => {
       },
     ]
     mockGetUserCreatedAsanas.mockResolvedValue(mockAsanas)
+    testAsanasData = mockAsanas
 
     render(<LibraryPage />, { wrapper: TestWrapper })
 
@@ -450,6 +606,7 @@ describe('LibraryPage - AsanaCard Click to View Feature', () => {
       },
     ]
     mockGetUserCreatedAsanas.mockResolvedValue(mockAsanas)
+    testAsanasData = mockAsanas
 
     render(<LibraryPage />, { wrapper: TestWrapper })
 
@@ -482,6 +639,7 @@ describe('LibraryPage - AsanaCard Click to View Feature', () => {
       },
     ]
     mockGetUserCreatedAsanas.mockResolvedValue(mockAsanas)
+    testAsanasData = mockAsanas
 
     render(<LibraryPage />, { wrapper: TestWrapper })
 
@@ -529,6 +687,7 @@ describe('LibraryPage - SeriesCard and SequenceCard Click to View', () => {
       },
     ]
     mockGetUserCreatedSeries.mockResolvedValue(mockSeries)
+    testSeriesData = mockSeries
     mockGetUserCreatedSequences.mockResolvedValue([])
 
     render(<LibraryPage />, { wrapper: TestWrapper })
@@ -594,6 +753,7 @@ describe('LibraryPage - SeriesCard and SequenceCard Click to View', () => {
       },
     ]
     mockGetUserCreatedSeries.mockResolvedValue(mockSeries)
+    testSeriesData = mockSeries
     mockGetUserCreatedSequences.mockResolvedValue([])
 
     render(<LibraryPage />, { wrapper: TestWrapper })
@@ -914,6 +1074,7 @@ describe('LibraryPage - SequenceCard Delete Feature', () => {
       },
     ]
     mockGetUserCreatedSequences.mockResolvedValue(mockSequences)
+    testSequencesData = mockSequences
 
     render(<LibraryPage />, { wrapper: TestWrapper })
 
@@ -942,6 +1103,7 @@ describe('LibraryPage - SequenceCard Delete Feature', () => {
       },
     ]
     mockGetUserCreatedSequences.mockResolvedValue(mockSequences)
+    testSequencesData = mockSequences
 
     render(<LibraryPage />, { wrapper: TestWrapper })
 

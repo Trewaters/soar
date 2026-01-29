@@ -151,7 +151,7 @@ describe('Page Component', () => {
     expect(
       screen.getByText('"From a Single Asana to Full Sequences"')
     ).toBeInTheDocument()
-    expect(screen.getByText('Your Recent Activity')).toBeInTheDocument()
+    expect(screen.getByText('View Your Activity:')).toBeInTheDocument()
   })
 
   it('uses semantic HTML and ARIA roles correctly', () => {

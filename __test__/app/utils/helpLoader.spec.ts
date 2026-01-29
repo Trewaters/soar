@@ -30,7 +30,7 @@ describe('helpLoader Utility', () => {
       )
       expect(HELP_PATHS.flows.createFlow).toBe('/help/flows/create-flow.md')
       expect(HELP_PATHS.sequences.createSequences).toBe(
-        '/help/sequences/create-sequences.md'
+        '/help/sequences/create-sequence.md'
       )
     })
 

@@ -104,6 +104,13 @@ export async function getUserPoseImages(
 
     const response = await fetch(url, {
       method: 'GET',
+      credentials: 'include',
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
     })
 
     if (!response.ok) {
@@ -122,7 +129,17 @@ export async function getUserPoseImages(
           throw new Error(`API error (${response.status})`)
         }
       }
-      throw new Error(errorData.error || 'Failed to fetch images')
+
+      // If unauthorized, provide clearer guidance
+      if (response.status === 401) {
+        throw new Error(
+          errorData.error || 'Authentication required to fetch images (401)'
+        )
+      }
+
+      throw new Error(
+        errorData.error || `Failed to fetch images (${response.status})`
+      )
     }
 
     const result = await response.json()

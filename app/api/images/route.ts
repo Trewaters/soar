@@ -100,6 +100,21 @@ export async function GET(request: NextRequest) {
     let images: any[] = []
 
     try {
+      // Select only the fields we need to avoid Prisma type conversion errors
+      const selectFields = {
+        id: true,
+        url: true,
+        altText: true,
+        fileName: true,
+        fileSize: true,
+        uploadedAt: true,
+        poseId: true,
+        poseName: true,
+        displayOrder: true,
+        userId: true,
+        imageType: true,
+      }
+
       if (useServerSideIdFilter) {
         images = await prisma.poseImage.findMany({
           where: baseWhere,
@@ -109,6 +124,7 @@ export async function GET(request: NextRequest) {
               : { uploadedAt: 'desc' },
           take: limit,
           skip: offset,
+          select: selectFields,
         })
       } else {
         // No poseId provided (maybe poseName). Fetch a superset and apply
@@ -119,27 +135,51 @@ export async function GET(request: NextRequest) {
             orderBy === 'displayOrder'
               ? { displayOrder: 'asc' }
               : { uploadedAt: 'desc' },
+          select: selectFields,
         })
+      }
+
+      // Debug: log a safe sample of the fetched images for diagnosis
+      if (images && images.length > 0) {
+        try {
+          console.debug('images.route: fetched sample image', {
+            id: images[0].id,
+            userId: images[0].userId,
+            poseId: images[0].poseId,
+            poseName: images[0].poseName,
+            uploadedAt: images[0].uploadedAt,
+          })
+        } catch (logErr) {
+          // don't let logging interfere with response
+        }
       }
 
       // Manually populate pose relations for each image
       // Only fetch the fields we actually need to avoid issues with nullable fields
       for (const image of images) {
-        if (image.poseId ?? image.poseId) {
-          const idToLookup = image.poseId ?? image.poseId
-          const pose = await prisma.asanaPose.findUnique({
-            where: { id: idToLookup },
-            select: {
-              id: true,
-              sort_english_name: true,
-              english_names: true,
-              sanskrit_names: true,
-              isUserCreated: true,
-              created_by: true,
-            },
-          })
-          if (pose) {
-            image.pose = pose
+        const possibleId = image.poseId || image.pose?.id || null
+        if (possibleId) {
+          try {
+            const pose = await prisma.asanaPose.findUnique({
+              where: { id: possibleId },
+              select: {
+                id: true,
+                sort_english_name: true,
+                english_names: true,
+                sanskrit_names: true,
+                isUserCreated: true,
+                created_by: true,
+              },
+            })
+            if (pose) image.pose = pose
+          } catch (lookupErr) {
+            console.warn('Warning: failed to lookup pose for image', {
+              imageId: image.id,
+              possibleId,
+              err: lookupErr instanceof Error ? lookupErr.message : lookupErr,
+            })
+            // don't abort the whole images request for a single lookup failure
+            continue
           }
         }
       }
@@ -181,22 +221,32 @@ export async function GET(request: NextRequest) {
         })
       : images
 
-    const transformedImages: PoseImage[] = filteredImages.map((image: any) => ({
-      id: image.id,
-      url: image.url,
-      altText: image.altText || undefined,
-      fileName: image.fileName || undefined,
-      fileSize: image.fileSize || undefined,
-      uploadedAt: image.uploadedAt.toISOString(),
-      poseId: image.poseId ?? image.poseId ?? undefined,
-      poseName:
+    const transformedImages: PoseImage[] = filteredImages.map((image: any) => {
+      // Safely normalize uploadedAt to ISO string
+      const uploadedAt = image.uploadedAt
+        ? new Date(image.uploadedAt).toISOString()
+        : new Date(0).toISOString()
+
+      // Resolve poseName safely
+      const resolvedPoseName =
         image.pose?.sort_english_name ||
         (Array.isArray(image.pose?.english_names)
           ? image.pose?.english_names[0]
           : image.pose?.english_names) ||
-        undefined,
-      displayOrder: image.displayOrder || 1,
-    }))
+        undefined
+
+      return {
+        id: image.id,
+        url: image.url,
+        altText: image.altText || undefined,
+        fileName: image.fileName || undefined,
+        fileSize: image.fileSize || undefined,
+        uploadedAt,
+        poseId: image.poseId ?? image.poseId ?? undefined,
+        poseName: resolvedPoseName,
+        displayOrder: image.displayOrder || 1,
+      }
+    })
 
     // Calculate ownership info if requested
     let ownership = undefined
@@ -224,23 +274,18 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(response)
   } catch (error) {
+    const errMsg = error instanceof Error ? error.message : String(error)
     console.error('❌ Error fetching images - Full details:', {
-      error: error instanceof Error ? error.message : error,
+      error: errMsg,
       stack: error instanceof Error ? error.stack : undefined,
       errorName: error instanceof Error ? error.name : undefined,
       userId: session?.user?.id,
-      params: {
-        poseId,
-        poseName,
-        imageType,
-        limit,
-        offset,
-      },
+      params: { poseId, poseName, imageType, limit, offset },
     })
+    // Return the original error message to the client for easier debugging
     return NextResponse.json(
       {
-        error: 'Failed to fetch images',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: errMsg || 'Failed to fetch images',
       },
       { status: 500 }
     )

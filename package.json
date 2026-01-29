@@ -36,16 +36,16 @@
     "import:series-activity": "ts-node scripts/migrations/import-series-activity.ts",
     "import:sequence-activity": "ts-node scripts/migrations/import-sequence-activity.ts",
     "import:all-activities": "npm run import:asana-activity && npm run import:series-activity && npm run import:sequence-activity",
-    "sync:db": "tsx scripts/syncDb/sync-db-from-prod.ts",
-    "backup:prod": "tsx scripts/syncDb/backup-prod-db.ts",
+    "db:sync-from-prod": "tsx scripts/syncDb/sync-db-from-prod.ts",
+    "db:backup-prod": "tsx scripts/syncDb/backup-prod-db.ts",
+    "db:restore-backup": "tsx scripts/syncDb/restore-from-backup.ts",
+    "db:inspect-prod": "tsx scripts/syncDb/inspect-prod-db.ts",
     "script:set-admin": "ts-node scripts/set-admin-role.ts",
     "script:migrate-public": "ts-node scripts/migrate-data-ownership.ts",
     "script:verify-ownership": "ts-node scripts/verify-ownership.ts",
     "script:fix-null-creators": "ts-node scripts/fix-null-creators-mongodb.ts",
     "script:complete-alpha-migration": "ts-node scripts/complete-alpha-migration.ts",
-    "script:fix-null-roles": "ts-node scripts/fix-null-roles.ts",
-    "restore:backup": "tsx scripts/syncDb/restore-from-backup.ts",
-    "inspect:prod": "tsx scripts/syncDb/inspect-prod-db.ts"
+    "script:fix-null-roles": "ts-node scripts/fix-null-roles.ts"
   },
   "dependencies": {
     "@auth/core": "^0.37.3",

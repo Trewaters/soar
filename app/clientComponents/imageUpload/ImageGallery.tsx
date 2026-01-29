@@ -22,6 +22,8 @@ import {
   ArrowUpward as ArrowUpwardIcon,
   ArrowDownward as ArrowDownwardIcon,
 } from '@mui/icons-material'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import ImageUploadButton from './ImageUploadButton'
@@ -35,12 +37,14 @@ interface ImageGalleryProps {
   asanaId: string
   initialImages: PoseImage[]
   onImagesChange: (images: PoseImage[]) => void
+  pageSize?: number
 }
 
 export default function ImageGallery({
   asanaId,
   initialImages,
   onImagesChange,
+  pageSize = 6,
 }: ImageGalleryProps) {
   const { status } = useSession()
   const [images, setImages] = useState<PoseImage[]>(initialImages)
@@ -56,6 +60,18 @@ export default function ImageGallery({
     )
     setImages(sortedImages)
   }, [initialImages])
+
+  // Pagination state
+  const [page, setPage] = useState<number>(1)
+  useEffect(() => {
+    // Reset to first page when images change
+    setPage(1)
+  }, [images.length])
+
+  const totalPages = Math.max(1, Math.ceil(images.length / pageSize))
+  const startIndex = (page - 1) * pageSize
+  const endIndex = startIndex + pageSize
+  const visibleImages = images.slice(startIndex, endIndex)
 
   const handleMove = (index: number, direction: 'up' | 'down') => {
     const newImages = [...images]
@@ -228,95 +244,128 @@ export default function ImageGallery({
           />
         </Box>
       ) : (
-        <Grid2 container spacing={2}>
-          {images.map((image, index) => (
-            <Grid2 key={image.id} size={{ xs: 12, sm: 6, md: 4 }}>
-              <Card sx={{ position: 'relative' }}>
-                <CardMedia
-                  sx={{
-                    height: 200,
-                    cursor: 'pointer',
-                    position: 'relative',
-                  }}
-                  onClick={() => handleImageClick(image)}
-                >
-                  <Image
-                    src={image.url || PLACEHOLDER_IMAGE}
-                    alt={image.altText || `Pose image ${index + 1}`}
-                    fill
-                    style={{ objectFit: 'cover' }}
-                    sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
-                    priority={index < 3} // Prioritize loading for first few images
-                  />
-                  <Box
+        <>
+          <Grid2 container spacing={2}>
+            {visibleImages.map((image, index) => (
+              <Grid2 key={image.id} size={{ xs: 12, sm: 6, md: 4 }}>
+                <Card sx={{ position: 'relative' }}>
+                  <CardMedia
                     sx={{
-                      position: 'absolute',
-                      top: 8,
-                      right: 8,
-                      display: 'flex',
-                      gap: 1,
-                      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                      borderRadius: '4px',
-                      padding: '2px',
+                      height: 200,
+                      cursor: 'pointer',
+                      position: 'relative',
                     }}
-                  >
-                    <IconButton
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleMove(index, 'up')
-                      }}
-                      disabled={index === 0}
-                      sx={{ color: 'white' }}
-                    >
-                      <ArrowUpwardIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleMove(index, 'down')
-                      }}
-                      disabled={index === images.length - 1}
-                      sx={{ color: 'white' }}
-                    >
-                      <ArrowDownwardIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleDeleteClick(image)
-                      }}
-                      sx={{ color: 'white' }}
-                    >
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </Box>
-                </CardMedia>
-                <CardContent
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    p: 1,
-                    '&:last-child': { pb: 1 },
-                  }}
-                >
-                  <Typography variant="caption" color="text.secondary">
-                    Order: {image.displayOrder + 1}
-                  </Typography>
-                  <IconButton
-                    size="small"
                     onClick={() => handleImageClick(image)}
                   >
-                    <ZoomInIcon fontSize="small" />
-                  </IconButton>
-                </CardContent>
-              </Card>
-            </Grid2>
-          ))}
-        </Grid2>
+                    <Image
+                      src={image.url || PLACEHOLDER_IMAGE}
+                      alt={image.altText || `Pose image ${index + 1}`}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      sizes="(max-width: 600px) 100vw, (max-width: 960px) 50vw, 33vw"
+                      priority={index < 3} // Prioritize loading for first few images
+                    />
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                        display: 'flex',
+                        gap: 1,
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        borderRadius: '4px',
+                        padding: '2px',
+                      }}
+                    >
+                      <IconButton
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleMove(index, 'up')
+                        }}
+                        disabled={index === 0}
+                        sx={{ color: 'white' }}
+                      >
+                        <ArrowUpwardIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleMove(index, 'down')
+                        }}
+                        disabled={index === images.length - 1}
+                        sx={{ color: 'white' }}
+                      >
+                        <ArrowDownwardIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDeleteClick(image)
+                        }}
+                        sx={{ color: 'white' }}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  </CardMedia>
+                  <CardContent
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      p: 1,
+                      '&:last-child': { pb: 1 },
+                    }}
+                  >
+                    <Typography variant="caption" color="text.secondary">
+                      Order: {image.displayOrder + 1}
+                    </Typography>
+                    <IconButton
+                      size="small"
+                      onClick={() => handleImageClick(image)}
+                    >
+                      <ZoomInIcon fontSize="small" />
+                    </IconButton>
+                  </CardContent>
+                </Card>
+              </Grid2>
+            ))}
+          </Grid2>
+
+          {/* Pagination Controls */}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 1,
+              mt: 3,
+            }}
+          >
+            <IconButton
+              aria-label="Previous images page"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page <= 1}
+            >
+              <ChevronLeftIcon />
+            </IconButton>
+
+            <Typography variant="body2">
+              Page {page} of {totalPages}
+            </Typography>
+
+            <IconButton
+              aria-label="Next images page"
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page >= totalPages}
+            >
+              <ChevronRightIcon />
+            </IconButton>
+          </Box>
+        </>
       )}
 
       {/* Zoom Dialog */}
