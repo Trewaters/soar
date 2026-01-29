@@ -15,25 +15,17 @@ The **Edit Sequence** feature allows sequence owners to modify their yoga sequen
 
 You can edit sequences **you created** where you are listed as the owner. The edit pencil icon appears in the orange title header only for your sequences.
 
-### Admin Users
+## Who Can Edit Sequences?
 
-Users with **admin role** can edit any sequence regardless of ownership. This allows admins to:
-
-- Manage platform content and curated sequences
-- Assist users with sequence issues
-- Update shared or public sequences
-- Fix data inconsistencies
-
-### Permission Check
-
-The system compares your email address (from your session) with the sequence's `created_by` field. If they match **OR** you have admin role, you can edit.
+Users who have edit permission for a sequence can modify it. The edit pencil icon appears in the orange title header only for sequences you have permission to edit.
 
 ## Accessing Edit Mode
 
-### From List View (Sequence Details Page)
+### Ownership Verification:
 
-1. **Navigate to sequence details** - Go to `/navigator/sequences/[id]`
-2. **Locate the edit icon** - Pencil icon inside the orange title header
+- **Server-side check** - Permissions are verified on save
+- **Error on mismatch** - Save will fail if you are not authorized
+
 3. **Click the pencil icon** - Inline editor appears below the title
 4. **URL updates** - `?edit=true` is added to the URL
 5. **Content hides** - Series cards and details hide during editing
@@ -319,13 +311,12 @@ Alternative way to exit edit mode, equivalent to Cancel.
 - **Edit parameter** - `?edit=true` added when editing
 - **Browser history** - Creates history entry for edit state
 - **Bookmark-able** - Can bookmark edit URL to return to editing
-- **Shareable** - Edit URL only works for owners/admins
+- **Shareable** - Edit URL only works for owners
 
 **Ownership Verification:**
 
 - **Server-side check** - Permissions verified on save
 - **Email matching** - Compares session email with created_by field
-- **Admin override** - Admin role bypasses owner check
 - **Error on mismatch** - Save fails if not authorized
 
 ### Data Persistence
@@ -478,96 +469,9 @@ Alternative way to exit edit mode, equivalent to Cancel.
 6. Save seasonal variation
 7. Consider creating separate sequences for major variations
 
-## Troubleshooting Editing Issues
-
-### Can't See Edit Icon
-
-**Problem:** Pencil icon doesn't appear in title header.
-
-**Solutions:**
-
-- **Sign in** - Must be authenticated to edit
-- **Verify ownership** - Only owner/admin can edit
-- **Check created_by** - Ensure sequence is yours
-- **Refresh page** - Reload to update session state
-- **Contact admin** - If you should have access but don't
-
-### Changes Not Saving
-
-**Problem:** Click Save but changes don't persist.
-
-**Solutions:**
-
-- **Check console** - Browser console may show errors
-- **Verify internet** - Ensure stable connection
-- **Required fields** - Ensure name field is not empty
-- **Try again** - Click Save again after fixing issues
-- **Contact support** - If problem persists
-
-### Series Won't Add
-
-**Problem:** Can't add series to the sequence.
-
-**Solutions:**
-
-- **Search carefully** - Type exact or partial series name
-- **Check availability** - Series may have been deleted
-- **Verify permissions** - Some series may be restricted
-- **Try different series** - Confirm search is working
-- **Refresh data** - Reload page to refresh series list
-
-### Image Upload Fails
-
-**Problem:** Image won't upload or shows error.
-
-**Solutions:**
-
-- **Check file size** - Must be under 5MB
-- **Verify format** - JPEG, PNG, or SVG only
-- **Try different image** - Test with known-good image
-- **Check internet** - Upload requires stable connection
-- **Compress image** - Reduce file size if too large
-
-### Lost Unsaved Changes
-
-**Problem:** Navigated away and lost edits.
-
-**Solutions:**
-
-- **Save frequently** - Make a habit of saving work
-- **No recovery** - No auto-save or draft system currently
-- **Browser warning** - May warn before leaving with unsaved changes
-- **Re-enter edits** - Unfortunately must redo lost work
-- **Feature request** - Auto-save may be added in future
-
 ## Keyboard Shortcuts (if implemented)
 
 - **Ctrl/Cmd + S** - Save changes (if enabled)
 - **Escape** - Exit edit mode / Cancel (if enabled)
 - **Tab** - Navigate between form fields
 - **Enter** - Submit forms or confirm actions
-
-## Related Help Topics
-
-- [**Sequence Details Help**](sequence-details.md) - List view with all series displayed
-- [**Practice Sequences Help**](practice-sequences.md) - Scroll view for active practice
-- [**Create Sequences Help**](create-sequences.md) - Building sequences from scratch
-- [**Practice Series Help**](../flows/practice-series.md) - Understanding series components
-
-## Development Notes
-
-**Technical Implementation:**
-
-- Inline editing component: `EditSequence.tsx`
-- Parent component: `SequenceViewWithEdit.tsx`
-- URL state management: Next.js router with query params
-- Database updates: Prisma update operations
-- Permission checks: NextAuth session + role verification
-- Image uploads: Cloud storage integration (Vercel Blob or similar)
-
-**Key Functions:**
-
-- `handleSequenceUpdate()` - Processes saved changes
-- `handleToggleEdit()` - Enters/exits edit mode
-- `isOwner` - Computed property for permission check
-- Series resolution by name for navigation accuracy

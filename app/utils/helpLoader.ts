@@ -9,17 +9,19 @@ export const HELP_PATHS = {
     create: '/help/asanas/create-asana.md',
   },
   flows: {
-    practiceSeries: '/help/flows/practice-flow.md',
     practiceFlow: '/help/flows/practice-flow.md',
-    createSeries: '/help/flows/create-flow.md',
     createFlow: '/help/flows/create-flow.md',
+    editFlow: '/help/flows/edit-flow.md',
   },
   sequences: {
     practiceSequences: '/help/sequences/practice-sequence.md',
-    createSequences: '/help/sequences/create-sequences.md',
+    createSequences: '/help/sequences/create-sequence.md',
+    editSequences: '/help/sequences/edit-sequence.md',
+    detailsSequences: '/help/sequences/details-sequence.md',
   },
   profile: {
     library: '/help/profile/library.md',
+    connectedAccounts: '/help/profile/connected-accounts-guide.md',
   },
 } as const
 

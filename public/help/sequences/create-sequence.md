@@ -2,20 +2,20 @@
 
 ## Overview
 
-The **Create Sequence** page allows you to build complete yoga practice sessions by combining multiple series (flows) into an ordered sequence. Create structured sequences with intentional progression, add descriptions and images, and save custom practices for your yoga journey.
+The **Create Sequence** page allows you to build complete yoga practice sessions by combining multiple flow (flows) into an ordered sequence. Create structured sequences with intentional progression, add descriptions and images, and save custom practices for your yoga journey.
 
 **Page URL:** `/navigator/flows/createSequence`
 
 ## What is a Sequence?
 
-A **sequence** is an ordered collection of series (flows) that creates a complete yoga practice session. While a series focuses on a specific theme or body area, a sequence combines multiple series into a structured practice journey.
+A **sequence** is an ordered collection of flow (flows) that creates a complete yoga practice session. While a flow focuses on a specific theme or body area, a sequence combines multiple flow into a structured practice journey.
 
 **Examples of Sequences:**
 
 - **Morning Flow**: Energizing sequence combining sun salutations, standing poses, and inversions
 - **Evening Wind Down**: Calming sequence with gentle stretches, hip openers, and restorative poses
-- **Full Practice**: Comprehensive sequence including warm-up, standing, seated, and closing series
-- **Quick Session**: 20-minute sequence combining 2-3 short series for busy days
+- **Full Practice**: Comprehensive sequence including warm-up, standing, seated, and closing flow
+- **Quick Session**: 20-minute sequence combining 2-3 short flow for busy days
 - **Themed Practice**: Sequences built around specific goals like "Back Pain Relief" or "Hip Flexibility"
 
 ## Page Components
@@ -50,67 +50,67 @@ The primary identifier for your sequence. This field is required and shows a gre
 - "Full Body Strength Builder"
 - "Hip Flexibility Journey"
 
-### Add Series to Sequence
+### Add Flow to Sequence
 
-Autocomplete search component to find and add series (flows) to your sequence.
+Autocomplete search component to find and add flow (flows) to your sequence.
 
 **Search Features:**
 
-- **Smart Filtering** - Type to search series by name
-- **Organized Sections** - Series grouped by "Mine" (your series) and "Alpha" (curated series)
+- **Smart Filtering** - Type to search flow by name
+- **Organized Sections** - Flow grouped by "Mine" (your flow) and "Alpha" (curated flow)
 - **Search Icon** - Visual indicator for the search field
-- **Instant Add** - Click any series to add it to your sequence immediately
+- **Instant Add** - Click any flow to add it to your sequence immediately
 
 **How to Use:**
 
 1. Click the search field
-2. Type a series name (partial matches work)
+2. Type a flow name (partial matches work)
 3. Browse results organized by Mine/Alpha sections
-4. Click a series to add it
-5. Series appears in "Your Sequence" list below
+4. Click a flow to add it
+5. Flow appears in "Your Sequence" list below
 
 ### Your Sequence List
 
-Interactive numbered list showing all series added to your sequence.
+Interactive numbered list showing all flow added to your sequence.
 
 **Display Features:**
 
-- **Numbered List** - Series numbered in practice order (1, 2, 3...)
-- **Series Count** - Shows total count "(3 series)" in the heading
-- **Delete Buttons** - Red trash icon next to each series
-- **Empty State** - Helpful message when no series are added yet
+- **Numbered List** - Flow numbered in practice order (1, 2, 3...)
+- **Flow Count** - Shows total count "(3 flow)" in the heading
+- **Delete Buttons** - Red trash icon next to each flow
+- **Empty State** - Helpful message when no flow are added yet
 
 **Managing Your List:**
 
-- **Add Series** - Use search above to add more series
-- **Remove Series** - Click delete icon to remove unwanted series
-- **Order** - Series are practiced in the order added (cannot reorder after adding)
-- **No Duplicates Warning** - Can add same series multiple times if needed
+- **Add Flow** - Use search above to add more flow
+- **Remove Flow** - Click delete icon to remove unwanted flow
+- **Order** - Flow are practiced in the order added (cannot reorder after adding)
+- **No Duplicates Warning** - Can add same flow multiple times if needed
 
 ### Poses Preview
 
-Detailed view of all poses in the currently selected series from your sequence.
+Detailed view of all poses in the currently selected flow from your sequence.
 
 **Preview Features:**
 
-- **Series Name Header** - Shows which series poses belong to
+- **Flow Name Header** - Shows which flow poses belong to
 - **Pose List** - Complete list with English and Sanskrit names
 - **Alignment Cues** - Brief inline cues appear in parentheses if available
-- **Navigation Controls** - Arrow buttons and counter when multiple series added
+- **Navigation Controls** - Arrow buttons and counter when multiple flow added
 
 **Navigation:**
 
-- **Previous Button** (left arrow) - View poses from earlier series
-- **Series Counter** - Shows "2 of 5" position indicator
-- **Next Button** (right arrow) - View poses from next series
+- **Previous Button** (left arrow) - View poses from earlier flow
+- **Flow Counter** - Shows "2 of 5" position indicator
+- **Next Button** (right arrow) - View poses from next flow
 - **Disabled States** - Arrows gray out at sequence boundaries
 
 **Purpose:**
 
 - Preview poses before finalizing sequence
-- Check flow between series
+- Check flow between flow
 - Verify pose order and transitions
-- Review alignment cues for each series
+- Review alignment cues for each flow
 
 ### Description Field
 
@@ -187,14 +187,14 @@ Enter a descriptive, memorable name for your sequence in the **Sequence Name** f
 - Examples: "30-Minute Morning Practice", "Gentle Evening Flow", "Full Body Strength"
 - A green checkmark appears when you've entered a name
 
-### Step 2: Add Series to Your Sequence
+### Step 2: Add Flow to Your Sequence
 
-Use the search field to find and add series (flows) to your sequence:
+Use the search field to find and add flow (flows) to your sequence:
 
-1. **Search for Series**: Type in the search box to find series by name
-2. **Select a Series**: Click on a series from the dropdown to add it
-3. **Build Your Flow**: Add multiple series in the order you want to practice them
-4. **Review Order**: Series are numbered in the order they'll be practiced
+1. **Search for Flow**: Type in the search box to find flow by name
+2. **Select a Flow**: Click on a flow from the dropdown to add it
+3. **Build Your Flow**: Add multiple flow in the order you want to practice them
+4. **Review Order**: Flow are numbered in the order they'll be practiced
 
 **Tips:**
 
@@ -209,21 +209,21 @@ Use the search field to find and add series (flows) to your sequence:
    - Watch for green checkmark indicating valid entry
    - Examples: "Morning Energy Flow", "Hip Opening Practice", "Evening Relaxation"
 
-3. **Search and Add Series** (Build Your Practice)
+3. **Search and Add Flow** (Build Your Practice)
 
-   - Click the "Add series to sequence" search field
-   - Type series name (partial matches work)
+   - Click the "Add flow to sequence" search field
+   - Type flow name (partial matches work)
    - Browse results in Mine and Alpha sections
-   - Click a series to add it immediately
-   - Repeat to add more series in practice order
+   - Click a flow to add it immediately
+   - Repeat to add more flow in practice order
 
 4. **Preview Your Sequence Poses**
 
    - Review poses in "Poses Preview" section
-   - Navigate between series using arrow buttons
-   - Check series counter (e.g., "2 of 5") to track position
+   - Navigate between flow using arrow buttons
+   - Check flow counter (e.g., "2 of 5") to track position
    - Verify pose order and alignment cues
-   - Ensure smooth flow between series
+   - Ensure smooth flow between flow
 
 5. **Add Description** (Optional but Recommended)
 
@@ -265,27 +265,27 @@ Use the search field to find and add series (flows) to your sequence:
 
 **Building Balanced Sequences:**
 
-- **Warm-up First** - Add gentle series at beginning
-- **Peak in Middle** - Place challenging series in center
-- **Cool Down Last** - Add restorative series at end
+- **Warm-up First** - Add gentle flow at beginning
+- **Peak in Middle** - Place challenging flow in center
+- **Cool Down Last** - Add restorative flow at end
 - **Flow Smoothly** - Check pose transitions in preview
-- **Duration Balance** - Mix short and long series for variety
+- **Duration Balance** - Mix short and long flow for variety
 
-**Series Selection Strategy:**
+**Flow Selection Strategy:**
 
-- Start with 2-3 series for shorter sequences (20-30 minutes)
-- Build 4-6 series for full practice sessions (45-60 minutes)
-- Mix series focusing on different body areas
-- Include both strength-building and flexibility series
+- Start with 2-3 flow for shorter sequences (20-30 minutes)
+- Build 4-6 flow for full practice sessions (45-60 minutes)
+- Mix flow focusing on different body areas
+- Include both strength-building and flexibility flow
 - Consider energy levels - energizing vs. calming
 
 **Using the Pose Preview:**
 
-- Navigate through all series before saving
+- Navigate through all flow before saving
 - Look for repetitive poses that might cause overuse
 - Check for balanced body work (both sides, all areas)
 - Note alignment cues to prepare for practice
-- Verify smooth transitions between series
+- Verify smooth transitions between flow
 
 **Description Best Practices:**
 
@@ -305,25 +305,25 @@ Use the search field to find and add series (flows) to your sequence:
 
 ## Common Questions
 
-**Q: What's the difference between a series (flow) and a sequence?**
+**Q: What's the difference between a flow (flow) and a sequence?**
 
-A: A **series (flow)** is a collection of individual yoga poses grouped by theme or purpose. A **sequence** is a complete practice session made by combining multiple series in a specific order. Think of series as chapters and sequences as the complete book.
+A: A **flow (flow)** is a collection of individual yoga poses grouped by theme or purpose. A **sequence** is a complete practice session made by combining multiple flow in a specific order. Think of flow as chapters and sequences as the complete book.
 
-**Q: How many series should I include in a sequence?**
+**Q: How many flow should I include in a sequence?**
 
-A: It depends on your practice duration and goals. For a 20-30 minute practice, use 2-3 series. For 45-60 minute sessions, include 4-6 series. Quality matters more than quantity - choose series that flow well together.
+A: It depends on your practice duration and goals. For a 20-30 minute practice, use 2-3 flow. For 45-60 minute sessions, include 4-6 flow. Quality matters more than quantity - choose flow that flow well together.
 
-**Q: Can I add the same series multiple times to a sequence?**
+**Q: Can I add the same flow multiple times to a sequence?**
 
-A: Yes! You can add any series multiple times if you want to repeat it during practice. This is useful for creating balanced sequences (e.g., repeating a sun salutation series between other series).
+A: Yes! You can add any flow multiple times if you want to repeat it during practice. This is useful for creating balanced sequences (e.g., repeating a sun salutation flow between other flow).
 
-**Q: Do I have to add series in any specific order?**
+**Q: Do I have to add flow in any specific order?**
 
-A: No strict rules, but best practice is to order series from gentle warm-up to peak intensity to cool-down. Use the pose preview feature to verify your sequence flows smoothly from beginning to end.
+A: No strict rules, but best practice is to order flow from gentle warm-up to peak intensity to cool-down. Use the pose preview feature to verify your sequence flows smoothly from beginning to end.
 
-**Q: Can I reorder series after adding them?**
+**Q: Can I reorder flow after adding them?**
 
-A: Currently, series are practiced in the order you add them. To change the order, remove series and add them back in your preferred sequence. This is an intentional design to encourage thoughtful planning.
+A: Currently, flow are practiced in the order you add them. To change the order, remove flow and add them back in your preferred sequence. This is an intentional design to encourage thoughtful planning.
 
 **Q: What happens if I click "Start Over" by accident?**
 
@@ -331,11 +331,11 @@ A: The "Start Over" button immediately clears all fields without confirmation. Y
 
 **Q: Can I edit a sequence after creating it?**
 
-A: Yes! After creation, you'll be redirected to the sequence detail page where you can edit the name, description, image, and modify the series list. Only the sequence owner can edit their sequences.
+A: Yes! After creation, you'll be redirected to the sequence detail page where you can edit the name, description, image, and modify the flow list. Only the sequence owner can edit their sequences.
 
-**Q: Why don't I see any series in the search?**
+**Q: Why don't I see any flow in the search?**
 
-A: If the search appears empty, you may not have created any series yet. Start by creating some flows (series) first at `/navigator/flows/createSeries`. You can also explore Alpha-curated series if available in your account.
+A: If the search appears empty, you may not have created any flow yet. Start by creating some flows (flow) first at `/navigator/flows/createSeries`. You can also explore Alpha-curated flow if available in your account.
 
 **Q: Is the description field required?**
 
@@ -349,17 +349,17 @@ A: Images up to 5MB are supported in JPEG, PNG, or SVG formats. Landscape-orient
 
 A: No, you must be logged in to create and save sequences. Sequences are saved to your personal account so you can access them across devices and sessions.
 
-**Q: What happens to my sequence if I delete a series that's in it?**
+**Q: What happens to my sequence if I delete a flow that's in it?**
 
-A: When you delete a series from your library, sequences containing that series may show the series as "unavailable." It's best to edit sequences and remove references to series before deleting them from your library.
+A: When you delete a flow from your library, sequences containing that flow may show the flow as "unavailable." It's best to edit sequences and remove references to flow before deleting them from your library.
 
 **Q: How do I know if my sequence flows well?**
 
-A: Use the poses preview feature to review how poses transition from one series to the next. Navigate through each series in your sequence and look for smooth progressions in intensity, logical body positioning, and balanced work across different body areas.
+A: Use the poses preview feature to review how poses transition from one flow to the next. Navigate through each flow in your sequence and look for smooth progressions in intensity, logical body positioning, and balanced work across different body areas.
 
 ## Need More Help?
 
 - **Practice Your Sequences**: Visit the Practice Sequences page to use your created sequences
 - **Edit Sequences**: Modify existing sequences from the sequence detail page
-- **Create Series**: Build more building blocks at `/navigator/flows/createSeries`
+- **Create Flow**: Build more building blocks at `/navigator/flows/createSeries`
 - **Contact Support**: Questions? Reach out to support@happyyoga.app
