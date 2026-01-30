@@ -48,7 +48,7 @@ export default function Page() {
         }}
       >
         <SplashHeader
-          src={'/images/asana/view-asana-practice-background.png'}
+          src={'/images/asana/landing-page-splash-header-asana.png'}
           alt={'Asana'}
           title="Asana"
         />
