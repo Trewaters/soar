@@ -529,8 +529,8 @@ export default function Page() {
           {missing === 'series' && missingName && (
             <Box sx={{ width: '100%', mb: 2 }}>
               <Typography color="error">
-                The series "{decodeURIComponent(missingName)}" has been removed
-                and is no longer available for display.
+                The series &quot;{decodeURIComponent(missingName)}&quot; has
+                been removed and is no longer available for display.
               </Typography>
             </Box>
           )}

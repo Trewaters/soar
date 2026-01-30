@@ -324,7 +324,7 @@ export default function Page() {
 
       const targetNorm = tryNormalize(seriesMini.seriesName)
 
-      let fuzzyMatch = allSeries.find((series) => {
+      const fuzzyMatch = allSeries.find((series) => {
         const nameNorm = tryNormalize(series.seriesName)
         return (
           nameNorm === targetNorm ||

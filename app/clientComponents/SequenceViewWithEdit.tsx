@@ -214,7 +214,7 @@ export default function SequenceViewWithEdit({
 
       const targetNorm = tryNormalize(seriesMini.seriesName)
 
-      let fuzzyMatch = allSeries.find((series) => {
+      const fuzzyMatch = allSeries.find((series) => {
         const nameNorm = tryNormalize(series.seriesName)
         return (
           nameNorm === targetNorm ||
@@ -481,92 +481,95 @@ export default function SequenceViewWithEdit({
             )}
             {model.sequencesSeries?.length ? (
               <Stack spacing={3} alignItems="center">
-                {model.sequencesSeries.map((seriesMini, i) => (
-                  <Card
-                    key={`${seriesMini.seriesName}-${i}`}
-                    sx={{
-                      width: '100%',
-                      maxWidth: '85%',
-                      boxShadow: 3,
-                      textAlign: 'center',
-                      borderColor: 'primary.main',
-                      borderWidth: '1px',
-                      borderStyle: 'solid',
-                      cursor: seriesMini.isStale ? 'not-allowed' : 'pointer',
-                      opacity: seriesMini.isStale ? 0.6 : 1,
-                      '&:hover': seriesMini.isStale
-                        ? {}
-                        : {
-                            boxShadow: 6,
-                            transform: 'translateY(-1px)',
-                            transition: 'all 0.2s ease-in-out',
-                          },
-                    }}
-                    className="journal"
-                    onClick={
-                      seriesMini.isStale
-                        ? undefined
-                        : () => handleSeriesNavigation(seriesMini)
-                    }
-                    aria-disabled={seriesMini.isStale ? 'true' : 'false'}
-                  >
-                    <CardHeader
-                      className="journalTitle"
-                      title={
-                        <Box width={'100%'}>
-                          <Stack
-                            flexDirection={'row'}
-                            justifyContent={'center'}
-                            alignItems={'center'}
-                            sx={{ mb: 1 }}
-                          >
-                            <Typography variant="h6">
-                              {seriesMini.seriesName}
-                            </Typography>
-                            {seriesMini.isStale && (
-                              <Typography
-                                variant="caption"
-                                color="text.secondary"
-                                sx={{ ml: 1 }}
-                              >
-                                (Removed — no longer available)
-                              </Typography>
-                            )}
-                          </Stack>
-                        </Box>
-                      }
-                    />
-                    <CardContent className="lines" sx={{ p: 0 }}>
-                      {seriesMini.seriesPoses?.length ? (
-                        <SeriesPoseList
-                          seriesPoses={seriesMini.seriesPoses}
-                          getHref={(poseName) =>
-                            getPoseNavigationUrlSync(poseName)
-                          }
-                          linkColor="primary.main"
-                          containerSx={{ width: '100%' }}
-                          poseSx={{
-                            px: 3,
-                            py: 1,
-                            '&:hover': {
-                              backgroundColor: '#f0f0f0',
-                              transition: 'all 0.2s',
+                {model.sequencesSeries.map((seriesMini, i) => {
+                  const isStale = Boolean((seriesMini as any).isStale)
+                  return (
+                    <Card
+                      key={`${seriesMini.seriesName}-${i}`}
+                      sx={{
+                        width: '100%',
+                        maxWidth: '85%',
+                        boxShadow: 3,
+                        textAlign: 'center',
+                        borderColor: 'primary.main',
+                        borderWidth: '1px',
+                        borderStyle: 'solid',
+                        cursor: isStale ? 'not-allowed' : 'pointer',
+                        opacity: isStale ? 0.6 : 1,
+                        '&:hover': isStale
+                          ? {}
+                          : {
+                              boxShadow: 6,
+                              transform: 'translateY(-1px)',
+                              transition: 'all 0.2s ease-in-out',
                             },
-                          }}
-                          dataTestIdPrefix={`sequence-series-${i}-pose`}
-                        />
-                      ) : (
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{ p: 2 }}
-                        >
-                          No poses in this series
-                        </Typography>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))}
+                      }}
+                      className="journal"
+                      onClick={
+                        isStale
+                          ? undefined
+                          : () => handleSeriesNavigation(seriesMini)
+                      }
+                      aria-disabled={isStale ? 'true' : 'false'}
+                    >
+                      <CardHeader
+                        className="journalTitle"
+                        title={
+                          <Box width={'100%'}>
+                            <Stack
+                              flexDirection={'row'}
+                              justifyContent={'center'}
+                              alignItems={'center'}
+                              sx={{ mb: 1 }}
+                            >
+                              <Typography variant="h6">
+                                {seriesMini.seriesName}
+                              </Typography>
+                              {isStale && (
+                                <Typography
+                                  variant="caption"
+                                  color="text.secondary"
+                                  sx={{ ml: 1 }}
+                                >
+                                  (Removed — no longer available)
+                                </Typography>
+                              )}
+                            </Stack>
+                          </Box>
+                        }
+                      />
+                      <CardContent className="lines" sx={{ p: 0 }}>
+                        {seriesMini.seriesPoses?.length ? (
+                          <SeriesPoseList
+                            seriesPoses={seriesMini.seriesPoses}
+                            getHref={(poseName) =>
+                              getPoseNavigationUrlSync(poseName)
+                            }
+                            linkColor="primary.main"
+                            containerSx={{ width: '100%' }}
+                            poseSx={{
+                              px: 3,
+                              py: 1,
+                              '&:hover': {
+                                backgroundColor: '#f0f0f0',
+                                transition: 'all 0.2s',
+                              },
+                            }}
+                            dataTestIdPrefix={`sequence-series-${i}-pose`}
+                          />
+                        ) : (
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ p: 2 }}
+                          >
+                            No poses in this series
+                          </Typography>
+                        )}
+                      </CardContent>
+                    </Card>
+                  )
+                })}
               </Stack>
             ) : !isLoadingFreshData ? (
               <Typography
