@@ -48,11 +48,7 @@ export default function Page() {
         }}
       >
         <SplashHeader
-          src={
-            isAuthenticated
-              ? '/images/asana-poses-splash-header.png'
-              : '/images/asana-poses-splash-header-bw.png'
-          }
+          src={'/images/asana/view-asana-practice-background.png'}
           alt={'Asana'}
           title="Asana"
         />

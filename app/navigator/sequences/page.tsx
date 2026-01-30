@@ -105,7 +105,7 @@ export default function SequencesPage() {
         <SplashNavButton
           title="Practice Sequences"
           description="Sequences are ordered flows."
-          image="/icons/designImages/beautiful-young-woman-practices-yoga-asana.png"
+          image="/images/asana/practice-asana-color.png"
           onClick={handlePracticeSequenceClick}
         />
         <SplashNavButton

@@ -109,12 +109,12 @@ export default function Page() {
         <SplashNavButton
           title="Create Flow"
           description="Create your own Flow of asana poses."
-          colorImage="/images/header-create-sequences.png"
-          bwImage="/images/create-series-bw.png"
+          colorImage="/images/asana/create-flow-color.png"
+          bwImage="/images/asana/create-flow-bw.png"
           isAuthenticated={isAuthenticated}
           premium
           sx={{
-            backgroundImage: "url('/images/create-series-bw.png')",
+            backgroundImage: "url('/images/asana/create-flow-bw.png')",
           }}
           onClick={handleCreateSeriesClick}
         />
