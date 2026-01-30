@@ -195,55 +195,34 @@ export async function getAccessiblePoses(
       return alphaPoseArrays.flat()
     }
 
-    // For authenticated users, fetch both user poses and alpha poses in parallel
-    const fetchPromises: Promise<AsanaPose[]>[] = []
-
-    // Add user poses promise
-    fetchPromises.push(getUserPoses(currentUserEmail))
-
-    // Add alpha user poses promises (excluding current user if they're an alpha user)
-    const relevantAlphaUserIds = alphaUserIds.filter(
-      (alphaUserId) => alphaUserId !== currentUserEmail
-    )
-
-    const alphaPosePromises = relevantAlphaUserIds.map(async (alphaUserId) => {
-      try {
-        const response = await fetch(
-          `/api/poses?createdBy=${encodeURIComponent(alphaUserId)}&t=${Date.now()}`,
-          {
-            cache: 'no-store',
-            headers: {
-              'Cache-Control': 'no-cache, no-store, must-revalidate',
-              Pragma: 'no-cache',
-              Expires: '0',
-            },
-          }
-        )
-        if (response.ok) {
-          return await response.json()
-        }
-        return []
-      } catch (error) {
-        console.warn(
-          `Failed to fetch poses for alpha user ${alphaUserId}:`,
-          error
-        )
-        return []
-      }
+    // For authenticated users, request the default listing (no createdBy filter)
+    // letting the server use the session to return PUBLIC, alpha users, and
+    // the authenticated user's personal poses. This avoids mismatches where
+    // client-side identifiers (email vs id) differ from stored `created_by` values.
+    const timestamp = Date.now()
+    const response = await fetch(`/api/poses?t=${timestamp}`, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
     })
 
-    fetchPromises.push(...alphaPosePromises)
+    if (!response.ok) {
+      throw new Error('Failed to fetch accessible poses')
+    }
 
-    // Wait for all requests to complete in parallel
-    const allPoseArrays = await Promise.all(fetchPromises)
-    const allPoses = allPoseArrays.flat()
+    const data = await response.json()
 
-    // Deduplicate poses by sort_english_name
-    const uniquePoses = allPoses.filter(
-      (pose, index, arr) =>
-        arr.findIndex((p) => p.sort_english_name === pose.sort_english_name) ===
-        index
-    )
+    // Deduplicate poses by sort_english_name just like before
+    const uniquePoses = Array.isArray(data)
+      ? data.filter(
+          (pose, index, arr) =>
+            arr.findIndex((p) => p.sort_english_name === pose.sort_english_name) ===
+            index
+        )
+      : []
 
     return uniquePoses
   } catch (error) {
