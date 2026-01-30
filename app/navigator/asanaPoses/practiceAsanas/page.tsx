@@ -5,6 +5,7 @@ import { Box, Stack, Typography } from '@mui/material'
 import { getAccessiblePoses, getPose, getAllPoses } from '@lib/poseService'
 import { useSearchParams } from 'next/navigation'
 import PoseActivityDetail from '@app/navigator/asanaPoses/poseActivityDetail'
+import { useCanEditContent } from '@app/hooks/useCanEditContent'
 import SplashHeader from '@app/clientComponents/splash-header'
 import PoseSearch from '@app/navigator/asanaPoses/pose-search'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
@@ -27,6 +28,14 @@ export default function Page() {
   const [selectedLoading, setSelectedLoading] = useState(false)
   const [selectedError, setSelectedError] = useState<string | null>(null)
   const searchParams = useSearchParams()
+  const { canEdit } = useCanEditContent(selectedPose?.created_by)
+  const selectedId = searchParams?.get?.('id') || null
+  const isEditMode = searchParams?.get?.('edit') === 'true'
+  const helpContent = selectedId
+    ? isEditMode
+      ? HELP_PATHS.asanas.edit
+      : HELP_PATHS.asanas.details
+    : HELP_PATHS.asanas.practice
 
   const handleInfoClick = () => {
     setOpen(!open)
@@ -215,7 +224,7 @@ export default function Page() {
                 <PoseActivityDetail
                   poseCardProp={selectedPose}
                   initialEditMode={searchParams?.get?.('edit') === 'true'}
-                  showActions={false}
+                  showActions={Boolean(canEdit)}
                   onSaveSuccess={async () => {
                     // Re-fetch the selected pose and visible list after a successful save
                     try {
@@ -263,7 +272,7 @@ export default function Page() {
       <HelpDrawer
         open={open}
         onClose={() => setOpen(false)}
-        content={HELP_PATHS.asanas.practice}
+        content={helpContent}
       />
     </>
   )

@@ -214,21 +214,21 @@ export default function PoseActivityDetail({
   const getAsanaBackgroundUrl = (category?: string) => {
     switch (category?.toLowerCase()) {
       case 'prone':
-        return `url('/icons/designImages/asana-back-pattern 1.svg')`
+        return `url('/images/asana/AsanaBackground.png')`
       case 'standing':
-        return `url('/icons/designImages/asana-back-pattern 1.svg')`
+        return `url('/images/asana/AsanaBackground.png')`
       case 'seated':
-        return `url('/icons/designImages/asana-back-pattern 2.svg')`
+        return `url('/images/asana/AsanaBackground.png')`
       case 'supine':
-        return `url('/icons/designImages/asana-back-pattern 2.svg')`
+        return `url('/images/asana/AsanaBackground.png')`
       case 'inversion':
-        return `url('/icons/designImages/asana-back-pattern 3.svg')`
+        return `url('/images/asana/AsanaBackground.png')`
       case 'arm_leg_support':
-        return `url('/icons/designImages/asana-back-pattern 3.svg')`
+        return `url('/images/asana/AsanaBackground.png')`
       case 'arm_balance_and_inversion':
-        return `url('/icons/designImages/asana-back-pattern 3.svg')`
+        return `url('/images/asana/AsanaBackground.png')`
       default:
-        return '/stick-tree-pose-400x400.png'
+        return 'image/asana/AsanaBackground.png'
     }
   }
 

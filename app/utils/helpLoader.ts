@@ -2,13 +2,12 @@
  * Help text loader utility for Soar yoga application
  * Loads markdown help files from the public/help directory
  */
-
-import { typography } from '@mui/system'
-
 export const HELP_PATHS = {
   asanas: {
     practice: '/help/asanas/practice-asana.md',
     create: '/help/asanas/create-asana.md',
+    details: '/help/asanas/details-asana.md',
+    edit: '/help/asanas/edit-asana.md',
   },
   flows: {
     practiceFlow: '/help/flows/practice-flow.md',
