@@ -30,7 +30,7 @@ jest.mock('@app/clientComponents/imageUpload/CarouselDotNavigation', () => ({
     <div data-testid="carousel-dot-navigation">Carousel Navigation</div>
   )),
 }))
-jest.mock('@app/clientComponents/poseShareButton', () => ({
+jest.mock('@app/clientComponents/ShareAsset', () => ({
   __esModule: true,
   default: jest.fn(() => <button data-testid="share-button">Share</button>),
 }))

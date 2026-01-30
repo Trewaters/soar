@@ -131,9 +131,18 @@ export class SeriesShareStrategy implements ShareStrategy {
       })
       .join('\n')
 
-    // Generate URL using the new URL generation system - series always use specific URL
-    // According to PRD, series sharing must always use the production URL
-    const shareUrl = 'https://www.happyyoga.app/navigator/flows/practiceSeries'
+    // Prefer the practiceSeries route with an `id` query param because
+    // that's the canonical public landing page for shared flows in the app.
+    // Use `generateUrlWithFallbacks` with a fallback to the practiceSeries
+    // id URL to ensure we include the series id when possible.
+    const fallbackPracticeUrl = `https://www.happyyoga.app/navigator/flows/practiceSeries?id=${data.id}`
+    // Prefer a stable, shareable production link that includes the series id so
+    // recipients land on the exact flow. If an id is available, use the
+    // production practiceSeries?id=... URL; otherwise fall back to the
+    // generated URL with fallbacks.
+    const shareUrl = data?.id
+      ? fallbackPracticeUrl
+      : generateUrlWithFallbacks('series', data, fallbackPracticeUrl)
 
     // Implement exact PRD format specification
     const shareText = `Sharing a video of
@@ -171,12 +180,20 @@ export class SequenceShareStrategy implements ShareStrategy {
       .map((series) => series.seriesName)
       .join(', ')
 
-    // Generate URL using the new URL generation system
-    const shareUrl = generateUrlWithFallbacks('sequence', data, url)
+    // Prefer the public practiceSequences landing page with a query param
+    // that points to the exact sequence so recipients land on the same
+    // practice page the sender expects. Use generateUrlWithFallbacks as
+    // a fallback when an id isn't available or the environment requires it.
+    const fallbackPracticeUrl = `https://www.happyyoga.app/navigator/flows/practiceSequences?sequenceId=${data.id}`
+    const shareUrl = data?.id
+      ? fallbackPracticeUrl
+      : generateUrlWithFallbacks('sequence', data, url || fallbackPracticeUrl)
+
+    const shareText = `The yoga sequence "${sequenceName}" was shared with you.\n\nDescription: ${data.description || 'A custom yoga sequence'}\n\nSeries included: ${seriesNames}\n\nDuration: ${data.durationSequence || 'Varies'}\n\nPractice with Uvuyoga!\n\n${shareUrl}\n\n(www.happyyoga.app)`
 
     return {
-      title: `The yoga sequence "${sequenceName}" was shared with you. Below is the flow:`,
-      text: `Description: ${data.description || 'A custom yoga sequence'}\n\nSeries included: ${seriesNames}\n\nDuration: ${data.durationSequence || 'Varies'}\n\nPractice with us at Uvuyoga!`,
+      title: `The yoga sequence "${sequenceName}" was shared with you.`,
+      text: shareText,
       url: shareUrl,
       shareType: 'sequence',
     }

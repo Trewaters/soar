@@ -24,7 +24,7 @@ import CancelIcon from '@mui/icons-material/Cancel'
 import { FEATURES } from '@app/FEATURES'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
-import PoseShareButton from '@app/clientComponents/poseShareButton'
+import ShareAsset from '@app/clientComponents/ShareAsset'
 import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import ActivityTracker from '@app/clientComponents/ActivityTracker'
 import { useSession } from 'next-auth/react'
@@ -1067,7 +1067,7 @@ export default function PoseActivityDetail({
                 width: { xs: '100%', sm: 'auto' },
               }}
             >
-              <PoseShareButton
+              <ShareAsset
                 content={{
                   contentType: 'asana',
                   data: pose,

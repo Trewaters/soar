@@ -31,7 +31,7 @@ import HelpButton from '@app/clientComponents/HelpButton'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import { HELP_PATHS } from '@app/utils/helpLoader'
 import { AutocompleteInput } from '@app/clientComponents/form'
-import PoseShareButton from '@app/clientComponents/poseShareButton'
+import ShareAsset from '@app/clientComponents/ShareAsset'
 import {
   getAllSeries,
   deleteSeries,
@@ -818,7 +818,7 @@ export default function Page() {
                   </Box>
                 )}
 
-                <PoseShareButton
+                <ShareAsset
                   content={{
                     contentType: 'series',
                     data: flow,

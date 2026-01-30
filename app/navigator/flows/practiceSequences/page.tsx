@@ -42,6 +42,7 @@ import {
   deleteSequenceActivity,
 } from '@lib/sequenceActivityClientService'
 import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
+import ShareAsset from '@app/clientComponents/ShareAsset'
 import { FEATURES } from '@app/FEATURES'
 import { useSession } from 'next-auth/react'
 import { useIsAdmin } from '@app/hooks/useCanEditContent'
@@ -1006,7 +1007,15 @@ export default function Page() {
                       {singleSequence.description}
                     </Typography>
                   </Box>
-
+                  {/* Share button for the full sequence (visible in this view) */}
+                  <Box sx={{ ml: 1 }}>
+                    <ShareAsset
+                      content={{
+                        contentType: 'sequence',
+                        data: singleSequence as any,
+                      }}
+                    />
+                  </Box>
                   {/* Sequence Activity Tracker */}
                   {singleSequence.id && singleSequence.id !== 0 && (
                     <Box sx={{ mt: 3 }}>
