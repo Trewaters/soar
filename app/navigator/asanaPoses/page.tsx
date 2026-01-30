@@ -2,12 +2,30 @@
 
 import { Box } from '@mui/material'
 import SplashHeader from '@app/clientComponents/splash-header'
+import { useSession } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
 import NAV_PATHS from '@app/utils/navigation/constants'
 
 export default function Page() {
   const router = useNavigationWithLoading()
+
+  const { data: session, status } = useSession()
+
+  // Fallback cookie check for NextAuth session tokens. In some cases the
+  // server-rendered session may be null while the client has an auth cookie
+  // (e.g., after signing in on the client). Check known NextAuth cookie
+  // names and treat presence as authenticated until `useSession` resolves.
+  const hasAuthCookie = () => {
+    if (typeof window === 'undefined') return false
+    const c = document.cookie || ''
+    return /(__Secure-)?next-auth\.session-token=|next-auth\.session-token=/.test(
+      c
+    )
+  }
+
+  const isAuthenticated =
+    status === 'authenticated' || Boolean(session) || hasAuthCookie()
 
   const handlePracticeAsanaClick = () => {
     // Navigate to the dedicated practice asana page
@@ -30,7 +48,11 @@ export default function Page() {
         }}
       >
         <SplashHeader
-          src={'/images/asana-poses-splash-header.png'}
+          src={
+            isAuthenticated
+              ? '/images/asana-poses-splash-header.png'
+              : '/images/asana-poses-splash-header-bw.png'
+          }
           alt={'Asana'}
           title="Asana"
         />
@@ -64,7 +86,9 @@ export default function Page() {
         <SplashNavButton
           title="Create Asana Pose"
           description="Customize your practice by creating new Asana poses."
-          image="/images/asana/create-asana-splash-header-bw.png"
+          colorImage="/images/asana/create-asana-splash-header.png"
+          bwImage="/images/asana/create-asana-splash-header-bw.png"
+          isAuthenticated={isAuthenticated}
           premium
           sx={{
             backgroundImage:

@@ -6,6 +6,7 @@ import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 
 import SplashHeader from '@app/clientComponents/splash-header'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
+import { useSession } from 'next-auth/react'
 import {
   FreemiumNotification,
   useFreemiumNotification,
@@ -69,6 +70,18 @@ export default function Page() {
     }
   }
 
+  // Determine auth state for image selection
+  const { data: session, status } = useSession()
+  const hasAuthCookie = () => {
+    if (typeof window === 'undefined') return false
+    const c = document.cookie || ''
+    return /(__Secure-)?next-auth\.session-token=|next-auth\.session-token=/.test(
+      c
+    )
+  }
+  const isAuthenticated =
+    status === 'authenticated' || Boolean(session) || hasAuthCookie()
+
   return (
     <>
       <Box
@@ -96,7 +109,9 @@ export default function Page() {
         <SplashNavButton
           title="Create Flow"
           description="Create your own Flow of asana poses."
-          image="/images/create-series-bw.png"
+          colorImage="/images/header-create-sequences.png"
+          bwImage="/images/create-series-bw.png"
+          isAuthenticated={isAuthenticated}
           premium
           sx={{
             backgroundImage: "url('/images/create-series-bw.png')",

@@ -1,12 +1,22 @@
+'use client'
+
 import { Box, Stack, Typography } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 import { ComponentProps } from 'react'
+import { useSession } from 'next-auth/react'
 
 interface SplashNavButtonProps extends ComponentProps<typeof Box> {
   title: string
   description: string
+  /** Primary (color) image URL */
   image?: string
+  /** Explicit B&W image URL (preferred for unauthenticated users) */
+  bwImage?: string
+  /** Explicit color image URL (overrides `image` when provided) */
+  colorImage?: string
   premium?: boolean
+  /** Optional override for authentication state (preferred when parent already knows it) */
+  isAuthenticated?: boolean
 }
 
 /**
@@ -28,9 +38,63 @@ export default function SplashNavButton({
   title,
   description,
   image,
+  bwImage,
+  colorImage,
   premium = false,
+  isAuthenticated: isAuthenticatedProp,
   ...props
 }: SplashNavButtonProps) {
+  // Determine auth state to toggle premium images. Prefer explicit prop
+  // passed from parent when available (more reliable in some layouts).
+  // Call the hook unconditionally to satisfy React rules.
+  const { data: session, status } = useSession()
+  const hasAuthCookie = () => {
+    if (typeof window === 'undefined') return false
+    const c = document.cookie || ''
+    return /(__Secure-)?next-auth\.session-token=|next-auth\.session-token=/.test(
+      c
+    )
+  }
+
+  let isAuthenticated: boolean | undefined = undefined
+  if (typeof isAuthenticatedProp !== 'undefined') {
+    isAuthenticated = Boolean(isAuthenticatedProp)
+  } else {
+    isAuthenticated =
+      status === 'authenticated' || Boolean(session) || hasAuthCookie()
+  }
+
+  // Select background image and filter behavior
+  let bgUrl: string | undefined = undefined
+  let useCssGrayscale = false
+
+  const providedColor = colorImage || image
+  const providedBw = bwImage
+
+  if (premium) {
+    if (isAuthenticated) {
+      bgUrl = providedColor
+    } else {
+      if (providedBw) {
+        bgUrl = providedBw
+      } else if (providedColor) {
+        // No explicit B&W variant provided — fall back to CSS grayscale over color image
+        bgUrl = providedColor
+        useCssGrayscale = true
+      }
+    }
+  } else {
+    bgUrl = image
+  }
+
+  // Avoid allowing callers to pass a backgroundImage via `sx` which can
+  // conflict with our ::before background layer. Clone `props.sx` and
+  // remove background-image/background properties so the component fully
+  // controls sizing and clipping.
+  const boxSx = { ...(props.sx || {}) } as any
+  delete boxSx.backgroundImage
+  delete boxSx.background
+
   return (
     <Stack
       sx={{
@@ -50,7 +114,7 @@ export default function SplashNavButton({
     >
       <Box
         sx={{
-          ...props.sx,
+          ...boxSx,
           display: 'flex',
           height: '210px',
           width: '363px',
@@ -61,21 +125,34 @@ export default function SplashNavButton({
           overflow: 'hidden',
           flexDirection: 'column',
           justifyContent: 'flex-start',
-          backgroundImage: image ? `url(${image})` : 'none',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
           position: 'relative',
-          // Apply grayscale filter if it's a black and white image
-          // filter: image && premium ? 'grayscale(100%)' : 'none',
+          // Background image rendered in a ::before layer so we can apply
+          // grayscale to the image only without affecting the overlaid text.
+          '&:before': bgUrl
+            ? {
+                content: "''",
+                position: 'absolute',
+                inset: 0,
+                backgroundImage: `url(${bgUrl})`,
+                // Use contain so the image scales to fit the button dimensions
+                // without overflowing or being cropped unexpectedly.
+                backgroundSize: 'contain',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                filter: useCssGrayscale ? 'grayscale(100%)' : 'none',
+                zIndex: 0,
+                borderTopLeftRadius: '12px',
+                borderTopRightRadius: '12px',
+              }
+            : undefined,
         }}
       >
-        {/* Star icon for premium features */}
+        {/* Star icon for premium features (positioned relative to full image container) */}
         {premium && (
           <Box
             sx={{
               position: 'absolute',
-              bottom: 6,
+              bottom: 12,
               right: 12,
               backgroundColor: 'navSplash.dark',
               borderRadius: '50%',
@@ -85,6 +162,7 @@ export default function SplashNavButton({
               alignItems: 'center',
               justifyContent: 'center',
               boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+              zIndex: 2,
             }}
           >
             <StarIcon
@@ -96,24 +174,27 @@ export default function SplashNavButton({
           </Box>
         )}
 
-        <Typography
-          variant="subtitle1"
-          component={'h2'}
-          sx={{
-            color: 'navSplash.main',
-            backgroundColor: 'rgba(255, 255, 255, 0.3)',
-            borderRadius: '8px',
-            padding: '6px 12px',
-            marginTop: '12px',
-            alignSelf: 'flex-start',
-            fontWeight: 'bold',
-            mt: 2,
-            mx: 2,
-            maxWidth: 'auto',
-          }}
-        >
-          {description}
-        </Typography>
+        <Box sx={{ position: 'relative', zIndex: 1, width: '100%' }}>
+          <Typography
+            variant="subtitle1"
+            component={'h2'}
+            sx={{
+              color: 'navSplash.main',
+              backgroundColor: 'rgba(255, 255, 255, 0.3)',
+              borderRadius: '8px',
+              padding: '6px 12px',
+              marginTop: '12px',
+              alignSelf: 'flex-start',
+              fontWeight: 'bold',
+              mt: 2,
+              mx: 2,
+              maxWidth: 'auto',
+              zIndex: 2,
+            }}
+          >
+            {description}
+          </Typography>
+        </Box>
       </Box>
       <Typography
         variant="h4"

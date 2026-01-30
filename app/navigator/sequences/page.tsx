@@ -6,6 +6,7 @@ import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 
 import SplashHeader from '@app/clientComponents/splash-header'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
+import { useSession } from 'next-auth/react'
 import {
   FreemiumNotification,
   useFreemiumNotification,
@@ -72,6 +73,18 @@ export default function SequencesPage() {
     }
   }
 
+  // Determine auth state for image selection (prefer client-side detection)
+  const { data: session, status } = useSession()
+  const hasAuthCookie = () => {
+    if (typeof window === 'undefined') return false
+    const c = document.cookie || ''
+    return /(__Secure-)?next-auth\.session-token=|next-auth\.session-token=/.test(
+      c
+    )
+  }
+  const isAuthenticated =
+    status === 'authenticated' || Boolean(session) || hasAuthCookie()
+
   return (
     <>
       <Box
@@ -93,21 +106,15 @@ export default function SequencesPage() {
           title="Practice Sequences"
           description="Sequences are ordered flows."
           image="/icons/designImages/beautiful-young-woman-practices-yoga-asana.png"
-          sx={{
-            backgroundImage:
-              "url('/icons/designImages/beautiful-young-woman-practices-yoga-asana.png')",
-          }}
           onClick={handlePracticeSequenceClick}
         />
         <SplashNavButton
           title="Create Sequence"
           description="Create your Sequences."
-          image="/icons/designImages/beautiful-young-woman-practices-yoga-create-sequence.png"
+          colorImage="/images/asana/create-sequence-color.png"
+          bwImage="/images/asana/create-sequence-bw.png"
+          isAuthenticated={isAuthenticated}
           premium
-          sx={{
-            backgroundImage:
-              "url('/icons/designImages/beautiful-young-woman-practices-yoga-create-sequence.png')",
-          }}
           onClick={handleCreateSequenceClick}
         />
       </Box>
