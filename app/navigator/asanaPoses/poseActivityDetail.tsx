@@ -736,18 +736,6 @@ export default function PoseActivityDetail({
           px: { xs: 0, sm: 2 }, // Remove padding on mobile for full width
         }}
       >
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          sx={{
-            width: '87%',
-            maxWidth: '384px',
-            alignSelf: 'center',
-          }}
-        >
-          <SubNavHeader mode="back" link="/navigator/asanaPoses" />
-          <HelpButton onClick={handleInfoClick} />
-        </Stack>
         <Stack direction={'column'} spacing={0}>
           {!isEditing ? (
             <>
@@ -1176,6 +1164,7 @@ export default function PoseActivityDetail({
                   contentType: 'asana',
                   data: pose,
                 }}
+                defaultMessage={`Share asana: ${pose.sort_english_name}`}
               />
             </Box>
           </Stack>

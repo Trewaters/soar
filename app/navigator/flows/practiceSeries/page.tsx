@@ -823,6 +823,7 @@ export default function Page() {
                     contentType: 'series',
                     data: flow,
                   }}
+                  defaultMessage={`Share flow: ${flow.seriesName}`}
                 />
               </Box>
             )}

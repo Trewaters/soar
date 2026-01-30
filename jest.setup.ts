@@ -306,11 +306,17 @@ jest.mock('@lib/seriesService', () => ({
 }))
 
 // Mock alphaUsers - used to control feature flag behavior in tests
-jest.mock('@app/lib/alphaUsers', () => ({
-  __esModule: true,
-  isAlphaUser: jest.fn().mockReturnValue(false),
-  alphaUsers: [],
-}))
+jest.mock('@app/lib/alphaUsers', () => {
+  const fn = jest.fn(() => [])
+  return {
+    __esModule: true,
+    // default export and named helper share the same implementation for tests
+    default: fn,
+    getAlphaUserIds: fn,
+    isAlphaUser: jest.fn().mockReturnValue(false),
+    alphaUsers: [],
+  }
+})
 
 // Mock browser audio APIs that are not available in JSDOM
 beforeAll(() => {

@@ -1014,6 +1014,7 @@ export default function Page() {
                         contentType: 'sequence',
                         data: singleSequence as any,
                       }}
+                      defaultMessage={`Share sequence: ${singleSequence.nameSequence}`}
                     />
                   </Box>
                   {/* Sequence Activity Tracker */}

@@ -5,7 +5,10 @@ import userEvent from '@testing-library/user-event'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 
 import ShareAsset from '@app/clientComponents/ShareAsset'
-import { SeriesShareStrategy, SequenceShareStrategy } from '../../types/sharing'
+import {
+  SeriesShareStrategy,
+  SequenceShareStrategy,
+} from '../../../types/sharing'
 
 // Mock the resolver to return canonical ids quickly
 jest.mock('@app/utils/shareIdResolver', () => ({
@@ -87,6 +90,42 @@ describe('ShareAsset component', () => {
     expect(calledWith).toContain('?sequenceId=resolved-sequence-id')
   })
 
+  it('uses provided custom text when allowCustomText is enabled (clipboard)', async () => {
+    ;(global as any).navigator.clipboard = {
+      writeText: jest.fn().mockResolvedValue(undefined),
+    }
+
+    const seq = {
+      nameSequence: 'Flow X',
+      sequencesSeries: [],
+      description: 'desc',
+      durationSequence: '10m',
+    }
+
+    render(
+      <ShareAsset
+        content={{ contentType: 'sequence', data: seq } as any}
+        allowCustomText={true}
+        defaultMessage={'Hi friend, try this flow'}
+      />,
+      { wrapper: Wrapper }
+    )
+
+    // input should be present with the initial text
+    const input = screen.getByLabelText(/Share this sequence message/i)
+    expect((input as HTMLInputElement).value).toBe('Hi friend, try this flow')
+
+    const btn = screen.getByRole('button', { name: /Share this sequence/i })
+    await userEvent.click(btn)
+
+    await waitFor(() => {
+      expect((navigator as any).clipboard.writeText).toHaveBeenCalled()
+    })
+
+    const calledWith = (navigator as any).clipboard.writeText.mock.calls[0][0]
+    expect(calledWith).toContain('Hi friend, try this flow')
+  })
+
   it('uses native navigator.share when available and shows success snackbar', async () => {
     const shareMock = jest.fn().mockResolvedValue(undefined)
     ;(global as any).navigator.share = shareMock
@@ -118,6 +157,38 @@ describe('ShareAsset component', () => {
     // Snackbar text for success
     await waitFor(() =>
       expect(screen.getByText('Shared successfully')).toBeInTheDocument()
+    )
+  })
+
+  it('uses provided custom text when allowCustomText is enabled (native)', async () => {
+    const shareMock = jest.fn().mockResolvedValue(undefined)
+    ;(global as any).navigator.share = shareMock
+
+    const seq = {
+      nameSequence: 'Flow Y',
+      sequencesSeries: [],
+      description: 'desc',
+      durationSequence: '5m',
+    }
+
+    render(
+      <ShareAsset
+        content={{ contentType: 'sequence', data: seq } as any}
+        allowCustomText={true}
+        defaultMessage={'Custom native message'}
+      />,
+      { wrapper: Wrapper }
+    )
+
+    const btn = screen.getByRole('button', { name: /Share this sequence/i })
+    await userEvent.click(btn)
+
+    await waitFor(() => expect(shareMock).toHaveBeenCalled())
+
+    expect(shareMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        text: expect.stringContaining('Custom native message'),
+      })
     )
   })
 

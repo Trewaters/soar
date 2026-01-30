@@ -26,7 +26,10 @@ describe('PoseActivityDetail', () => {
   it('renders pose title and description from prop', () => {
     render(<PoseActivityDetail poseCardProp={samplePose as any} />)
 
-    expect(screen.getByText(/Test Pose/i)).toBeInTheDocument()
+    // Target the main heading specifically to avoid matching duplicate text elsewhere
+    expect(
+      screen.getByRole('heading', { name: /^Test Pose$/i })
+    ).toBeInTheDocument()
     expect(screen.getByText(/A sample pose for tests/i)).toBeInTheDocument()
   })
 })

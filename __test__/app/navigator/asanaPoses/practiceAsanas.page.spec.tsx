@@ -19,18 +19,27 @@ jest.mock('next/navigation', () => ({
   useSearchParams: () => ({
     get: (k: string) => (k === 'id' ? mockPose.id : null),
   }),
+  useRouter: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    prefetch: jest.fn(),
+  }),
+  usePathname: () => '/',
 }))
 
 import PracticePage from '../../../../app/navigator/asanaPoses/practiceAsanas/page'
+import AsanaPoseProvider from '../../../../app/context/AsanaPoseContext'
 
 describe('practiceAsanas page (query param)', () => {
   beforeEach(() => jest.clearAllMocks())
 
   it('renders the inline pose detail when ?id is present', async () => {
-    render(<PracticePage />)
+    render(<PracticePage />, { wrapper: AsanaPoseProvider })
 
     await waitFor(() =>
-      expect(screen.getByText(/Warrior I/i)).toBeInTheDocument()
+      expect(
+        screen.getByRole('heading', { name: /^Warrior I$/i })
+      ).toBeInTheDocument()
     )
     expect(screen.getByText(/Test pose description/i)).toBeInTheDocument()
   })

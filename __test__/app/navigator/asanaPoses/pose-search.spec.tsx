@@ -10,6 +10,7 @@ jest.mock('next/navigation', () => ({
   }),
 }))
 
+import AsanaPoseProvider from '../../../../app/context/AsanaPoseContext'
 import PoseSearch from '../../../../app/navigator/asanaPoses/pose-search'
 
 describe('pose-search', () => {
@@ -17,9 +18,9 @@ describe('pose-search', () => {
 
   it('renders search input and accepts typing', async () => {
     const user = userEvent.setup()
-    render(<PoseSearch />)
+    render(<PoseSearch posePropData={[]} />, { wrapper: AsanaPoseProvider })
 
-    const input = screen.getByRole('textbox')
+    const input = screen.getByRole('combobox')
     await user.type(input, 'Warrior')
 
     expect(input).toHaveValue('Warrior')

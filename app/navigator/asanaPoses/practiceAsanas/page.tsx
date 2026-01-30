@@ -186,7 +186,7 @@ export default function Page() {
               justifyContent: 'center',
             }}
           >
-            {selectedLoading && <LoadingSkeleton type="detail" />}
+            {selectedLoading && <LoadingSkeleton type="text" />}
             {selectedError && (
               <Typography color="error">{selectedError}</Typography>
             )}

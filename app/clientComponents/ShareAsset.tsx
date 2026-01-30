@@ -9,6 +9,8 @@ import {
   Alert,
   CircularProgress,
   Typography,
+  TextField,
+  Button,
 } from '@mui/material'
 import IosShareIcon from '@mui/icons-material/IosShare'
 import { ShareableContent, createShareStrategy } from '../../types/sharing'
@@ -21,11 +23,14 @@ type ShareAssetProps = {
   content: ShareableContent
   variant?: 'icon' | 'button' | 'compact'
   showDetails?: boolean
-  onShareComplete?: (result: {
+  onShareComplete?: (_result: {
     success: boolean
     method: 'native' | 'clipboard' | 'error'
     error?: string
   }) => void
+  allowCustomText?: boolean
+  /** Optional default message shown in the input when `allowCustomText` is enabled */
+  defaultMessage?: string
 }
 
 export default function ShareAsset({
@@ -33,12 +38,15 @@ export default function ShareAsset({
   variant = 'icon',
   showDetails = false,
   onShareComplete,
+  allowCustomText = false,
+  defaultMessage = '',
 }: ShareAssetProps) {
   const [isSharing, setIsSharing] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [snack, setSnack] = useState<{ severity: any; message: string } | null>(
     null
   )
+  const [customText, setCustomText] = useState<string>(defaultMessage || '')
 
   const validateContent = useCallback((c: ShareableContent) => {
     if (!c) return false
@@ -53,10 +61,7 @@ export default function ShareAsset({
           (c.data as any).seriesName && (c.data as any).seriesPoses?.length
         )
       case 'sequence':
-        return Boolean(
-          (c.data as any).nameSequence &&
-            (c.data as any).sequencesSeries?.length
-        )
+        return Boolean((c.data as any).nameSequence)
       default:
         return false
     }
@@ -85,9 +90,13 @@ export default function ShareAsset({
 
   const copyToClipboard = useCallback(async (text: string) => {
     try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text)
-        return true
+      if (navigator.clipboard) {
+        try {
+          await navigator.clipboard.writeText(text)
+          return true
+        } catch (e) {
+          // fall through to legacy copy method
+        }
       }
       if (
         document.queryCommandSupported &&
@@ -157,9 +166,15 @@ export default function ShareAsset({
       const strat = createShareStrategy(content.contentType)
       const shareConfigResolved = strat.generateShareConfig(dataToShare as any)
 
+      // Prefer user-supplied custom text when available
+      const effectiveText =
+        customText && customText.trim() !== ''
+          ? customText
+          : shareConfigResolved.text
+
       const shareData = {
         title: shareConfigResolved.title,
-        text: shareConfigResolved.text,
+        text: effectiveText,
         url: shareConfigResolved.url,
       }
 
@@ -200,7 +215,7 @@ export default function ShareAsset({
         }
       }
 
-      const payload = `${shareConfigResolved.title}\n${shareConfigResolved.text}\n${shareConfigResolved.url}`
+      const payload = `${shareConfigResolved.title}\n${effectiveText}\n${shareConfigResolved.url}`
       const ok = await copyToClipboard(payload)
       if (ok) {
         handleSnackbar('info', 'Link copied to clipboard')
@@ -246,6 +261,17 @@ export default function ShareAsset({
     }
   }, [content])
 
+  const buttonText = useMemo(() => {
+    if (
+      variant === 'button' &&
+      defaultMessage &&
+      defaultMessage.trim() !== ''
+    ) {
+      return defaultMessage
+    }
+    return label
+  }, [variant, defaultMessage, label])
+
   return (
     <Box>
       {showDetails && (
@@ -256,16 +282,94 @@ export default function ShareAsset({
         </Box>
       )}
 
-      <Tooltip title={label} placement="top">
-        <IconButton
+      {allowCustomText && (
+        <Box sx={{ mb: 1 }}>
+          <TextField
+            value={customText}
+            onChange={(e) => setCustomText(e.target.value)}
+            placeholder="Add a message (optional)"
+            size="small"
+            fullWidth
+            inputProps={{ 'aria-label': `${label} message` }}
+          />
+        </Box>
+      )}
+
+      {variant === 'icon' && (
+        <Box
+          component="span"
+          sx={{ display: 'inline-flex', alignItems: 'center' }}
+        >
+          <Tooltip
+            title={
+              defaultMessage && defaultMessage.trim() !== ''
+                ? defaultMessage
+                : label
+            }
+            placement="top"
+          >
+            <IconButton
+              onClick={handleShare}
+              disabled={isSharing}
+              aria-label={label}
+              size="small"
+            >
+              {isSharing ? <CircularProgress size={20} /> : <IosShareIcon />}
+            </IconButton>
+          </Tooltip>
+
+          {defaultMessage && defaultMessage.trim() !== '' && (
+            <Typography
+              variant="body2"
+              sx={{
+                ml: 1,
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                maxWidth: 240,
+              }}
+            >
+              {defaultMessage}
+            </Typography>
+          )}
+        </Box>
+      )}
+
+      {variant === 'button' && (
+        <Button
+          variant="contained"
+          color="primary"
           onClick={handleShare}
           disabled={isSharing}
+          startIcon={
+            isSharing ? <CircularProgress size={18} /> : <IosShareIcon />
+          }
           aria-label={label}
           size="small"
         >
-          {isSharing ? <CircularProgress size={20} /> : <IosShareIcon />}
-        </IconButton>
-      </Tooltip>
+          {isSharing ? 'Sharing...' : buttonText}
+        </Button>
+      )}
+
+      {variant === 'compact' && (
+        <Tooltip
+          title={
+            defaultMessage && defaultMessage.trim() !== ''
+              ? defaultMessage
+              : label
+          }
+          placement="top"
+        >
+          <IconButton
+            onClick={handleShare}
+            disabled={isSharing}
+            aria-label={label}
+            size="small"
+          >
+            {isSharing ? <CircularProgress size={16} /> : <IosShareIcon />}
+          </IconButton>
+        </Tooltip>
+      )}
 
       <Snackbar
         open={snackbarOpen}
