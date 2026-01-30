@@ -12,6 +12,7 @@ import { getUserSeriesActivities } from '@lib/seriesActivityClientService'
 import { getUserSequenceActivities } from '@lib/sequenceActivityClientService'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 import Link from 'next/link'
+import { NAV_PATHS } from '@app/utils/navigation/constants'
 
 type CombinedActivity =
   | (AsanaActivityData & { type: 'asana' })
@@ -211,12 +212,21 @@ export default function AsanaActivityList() {
                     : activity.type === 'sequence'
                       ? GroupWorkIcon
                       : Brightness1OutlinedIcon
-                const href =
-                  activity.type === 'series'
-                    ? `/navigator/flows/practiceSeries?id=${activity.seriesId}`
-                    : activity.type === 'sequence'
-                      ? `/navigator/sequences/${activity.sequenceId}`
-                      : `/navigator/asanaPoses/${activity.asanaId || '#'}`
+                let href = '#'
+                if (activity.type === 'series') {
+                  href = `${NAV_PATHS.FLOWS_PRACTICE_SERIES}?id=${activity.seriesId}`
+                } else if (activity.type === 'sequence') {
+                  href = `${NAV_PATHS.SEQUENCES}/${activity.sequenceId}`
+                } else {
+                  // asana activity -> link to asana detail page
+                  if ((activity as any).asanaId) {
+                    href = `${NAV_PATHS.PRACTICE_ASANAS}?id=${(activity as any).asanaId}`
+                  } else if ((activity as any).asanaName) {
+                    href = `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent(
+                      (activity as any).asanaName
+                    )}`
+                  }
+                }
                 const name =
                   activity.type === 'series'
                     ? activity.seriesName

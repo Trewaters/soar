@@ -45,6 +45,7 @@ import {
   UserSequenceData,
 } from '@lib/userLibraryService'
 import useProfileLibrary from '@app/hooks/useProfileLibrary'
+import NAV_PATHS from '@app/utils/navigation/constants'
 import ProfileNavMenu from '@app/navigator/profile/ProfileNavMenu'
 import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
 
@@ -437,7 +438,7 @@ function AsanasLibrary({
         </Typography>
         <Button
           variant="contained"
-          onClick={() => router.push('/navigator/asanaPoses/createAsana')}
+          onClick={() => router.push(NAV_PATHS.CREATE_ASANA)}
         >
           Create Your First Asana
         </Button>
@@ -1073,7 +1074,7 @@ function AsanaListItem({
           boxShadow: 4,
         },
       }}
-      onClick={() => router.push(`/navigator/asanaPoses/${asana.id}`)}
+      onClick={() => router.push(`${NAV_PATHS.PRACTICE_ASANAS}?id=${asana.id}`)}
     >
       {/* Image thumbnail */}
       <Box
@@ -1147,7 +1148,7 @@ function AsanaListItem({
           title="Edit"
           onClick={(e) => {
             e.stopPropagation()
-            router.push(`/navigator/asanaPoses/${asana.id}?edit=true`)
+            router.push(`${NAV_PATHS.PRACTICE_ASANAS}?id=${asana.id}&edit=true`)
           }}
           sx={{ color: 'text.secondary' }}
         >
@@ -1570,7 +1571,7 @@ function AsanaCard({
           boxShadow: 4,
         },
       }}
-      onClick={() => router.push(`/navigator/asanaPoses/${asana.id}`)}
+      onClick={() => router.push(`${NAV_PATHS.PRACTICE_ASANAS}?id=${asana.id}`)}
     >
       <CardMedia
         sx={{
@@ -1646,7 +1647,7 @@ function AsanaCard({
           title="Edit"
           onClick={(e) => {
             e.stopPropagation() // Prevent card click navigation
-            router.push(`/navigator/asanaPoses/${asana.id}?edit=true`)
+            router.push(`${NAV_PATHS.PRACTICE_ASANAS}?id=${asana.id}&edit=true`)
           }}
           sx={{ color: 'text.secondary' }}
         >

@@ -8,6 +8,7 @@ import { useAsanaPose } from '@context/AsanaPoseContext'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { AutocompleteInput } from '@app/clientComponents/form'
 import getAsanaTitle from '@app/utils/search/getAsanaTitle'
+import { NAV_PATHS } from '@app/utils/navigation/constants'
 
 import { FEATURES } from '@app/FEATURES'
 import getAlphaUserIds from '@app/lib/alphaUsers'
@@ -63,20 +64,24 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
     if (value && 'section' in value) return
     dispatch({ type: 'SET_POSES', payload: value ?? state.poses })
     const selectedId = (value as AsanaPose)?.id
+    const selectedName = (value as AsanaPose)?.sort_english_name
     try {
-      const isPracticePage =
-        typeof window !== 'undefined' &&
-        window.location.pathname.startsWith(
-          '/navigator/asanaPoses/practiceAsanas'
+      // Always navigate to the practice page with query params to show pose details
+      if (selectedId) {
+        router.push(`${NAV_PATHS.PRACTICE_ASANAS}?id=${selectedId}`)
+        return
+      }
+      if (selectedName) {
+        router.push(
+          `${NAV_PATHS.PRACTICE_ASANAS}?name=${encodeURIComponent(
+            selectedName
+          )}`
         )
-      if (isPracticePage && selectedId) {
-        router.push(`/navigator/asanaPoses/practiceAsanas?id=${selectedId}`)
         return
       }
     } catch (e) {
       // fall back to default behavior if any error occurs
     }
-    router.push(`/navigator/asanaPoses/${selectedId || ''}/`)
   }
   // Get current user id from session
   const { data: session } = useSession()

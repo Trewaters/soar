@@ -1,4 +1,5 @@
 import { getPoseIdByName } from '@lib/poseService'
+import { NAV_PATHS } from './constants'
 
 /**
  * Convert a pose reference from series data to a navigation URL
@@ -16,15 +17,15 @@ export async function getPoseNavigationUrl(
     const poseId = await getPoseIdByName(poseName)
 
     if (poseId) {
-      return `/navigator/asanaPoses/${poseId}`
+      return `${NAV_PATHS.PRACTICE_ASANAS}?id=${poseId}`
     } else {
-      // Fallback to name-based URL if ID lookup fails
-      return `/navigator/asanaPoses/${encodeURIComponent(poseName)}`
+      // Fallback to name-based detail URL if ID lookup fails
+      return `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent(poseName)}`
     }
   } catch (error) {
-    // Fallback to name-based URL on any error
+    // Fallback to name-based detail URL on any error
     const poseName = poseReference.split(';')[0]
-    return `/navigator/asanaPoses/${encodeURIComponent(poseName)}`
+    return `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent(poseName)}`
   }
 }
 
@@ -37,8 +38,8 @@ export function getPoseNavigationUrlSync(poseReference: string): string {
   // Extract pose name from "PoseName;Description" format
   const poseName = poseReference.split(';')[0]
 
-  // Return name-based URL that will be handled by the flexible getPose function
-  return `/navigator/asanaPoses/${encodeURIComponent(poseName)}`
+  // Return name-based detail URL
+  return `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent(poseName)}`
 }
 
 /**

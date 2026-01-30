@@ -11,6 +11,7 @@ import {
 } from '@mui/material'
 import LockIcon from '@mui/icons-material/Lock'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+import NAV_PATHS from '@app/utils/navigation/constants'
 
 export interface UnauthorizedErrorProps {
   /**
@@ -173,7 +174,7 @@ export default function UnauthorizedError({
               }}
               onClick={() => {
                 onClose()
-                router.push('/navigator/asanaPoses/createAsana')
+                router.push(NAV_PATHS.CREATE_ASANA)
               }}
             >
               Create Your Own

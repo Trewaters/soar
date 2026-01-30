@@ -9,6 +9,7 @@ import {
 } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+import NAV_PATHS from '@app/utils/navigation/constants'
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
 import AirIcon from '@mui/icons-material/Air'
 import AdjustIcon from '@mui/icons-material/Adjust'
@@ -25,7 +26,7 @@ export const eightLimbsData = [
     // icon: <WaterDropOutlinedIcon />,
     icon: <Brightness1OutlinedIcon />,
     onClick: (router: ReturnType<typeof useNavigationWithLoading>) =>
-      router.push('/navigator/asanaPoses'),
+      router.push(NAV_PATHS.ASANA_POSES),
     iconSx: { color: 'primary.main', pl: 3 },
     textSx: {
       color: 'primary.main',

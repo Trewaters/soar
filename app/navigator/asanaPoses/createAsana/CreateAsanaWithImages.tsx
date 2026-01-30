@@ -7,6 +7,7 @@ import { useAsanaPose } from '@app/context/AsanaPoseContext'
 import { createPose } from '@lib/poseService'
 import { useSession } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+import NAV_PATHS from '@app/utils/navigation/constants'
 import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
 import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUpload'
 import ImageIcon from '@mui/icons-material/Image'
@@ -52,7 +53,7 @@ export default function CreateAsanaWithImages() {
 
   useEffect(() => {
     if (session === null) {
-      router.push('/navigator/asanaPoses')
+      router.push(NAV_PATHS.ASANA_POSES)
     }
   }, [router, session])
 
@@ -121,8 +122,8 @@ export default function CreateAsanaWithImages() {
       setEnglishVariationsInput('')
       setUploadedImages([])
 
-      // Redirect to the new asana using the returned data
-      router.push(`/navigator/asanaPoses/${data.id}`)
+      // Redirect to the new asana using the returned data (practice page accepts ?id=)
+      router.push(`${NAV_PATHS.PRACTICE_ASANAS}?id=${data.id}`)
     } catch (error: Error | any) {
       console.error('Error creating pose:', error.message)
     }
@@ -390,7 +391,7 @@ export default function CreateAsanaWithImages() {
                 <Button
                   type="button"
                   variant="outlined"
-                  onClick={() => router.push('/navigator/asanaPoses')}
+                  onClick={() => router.push(NAV_PATHS.ASANA_POSES)}
                 >
                   Cancel
                 </Button>

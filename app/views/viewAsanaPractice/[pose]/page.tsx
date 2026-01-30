@@ -29,6 +29,7 @@ import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { getPoseByName } from '@lib/poseService'
 import Image from 'next/image'
 import { AsanaPose } from 'types/asana'
+import NAV_PATHS from '@app/utils/navigation/constants'
 
 export default function ViewAsanaPractice({
   params,
@@ -178,7 +179,7 @@ export default function ViewAsanaPractice({
           <Grid size={2}>
             <Tooltip title="Back to Asanas">
               <IconButton
-                onClick={() => router.push('/navigator/asanaPoses')}
+                onClick={() => router.push(NAV_PATHS.ASANA_POSES)}
                 sx={{ color: 'white' }}
               >
                 <HomeIcon />

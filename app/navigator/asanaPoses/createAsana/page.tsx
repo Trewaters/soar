@@ -13,6 +13,7 @@ import {
 import { createPose } from '@lib/poseService'
 import { useSession } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+import NAV_PATHS from '@app/utils/navigation/constants'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import HelpButton from '@app/clientComponents/HelpButton'
@@ -319,8 +320,8 @@ export default function Page() {
         isNavigating: true,
       })
 
-      // Navigate immediately to show the new pose
-      router.push(`/navigator/asanaPoses/${data.id}`)
+      // Navigate immediately to show the new pose (practice page accepts ?id=)
+      router.push(`${NAV_PATHS.PRACTICE_ASANAS}?id=${data.id}`)
     } catch (error: Error | any) {
       console.error('Error creating pose:', error.message)
 
@@ -394,7 +395,7 @@ export default function Page() {
     if (!accessResult.hasAccess) {
       // Show notification and redirect immediately
       setNotificationState({ isOpen: true })
-      router.push('/navigator/asanaPoses')
+      router.push(NAV_PATHS.ASANA_POSES)
     }
   }, [checkFeatureAccess, router])
 
@@ -459,7 +460,7 @@ export default function Page() {
             alignSelf: 'center',
           }}
         >
-          <SubNavHeader mode="back" link="/navigator/asanaPoses" />
+          <SubNavHeader mode="back" link={NAV_PATHS.ASANA_POSES} />
           <HelpButton onClick={handleInfoClick} />
         </Stack>
         <Stack sx={{ px: { xs: 2, sm: 4 } }} spacing={3} alignItems="center">
@@ -647,7 +648,7 @@ export default function Page() {
                   setUploadedImages([])
 
                   // Redirect to Practice Asana (search) page
-                  router.push('/navigator/asanaPoses')
+                  router.push(NAV_PATHS.ASANA_POSES)
                 }}
                 variant="outlined"
                 size="large"

@@ -4,17 +4,18 @@ import { Box } from '@mui/material'
 import SplashHeader from '@app/clientComponents/splash-header'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import SplashNavButton from '@app/clientComponents/splash-nav-button'
+import NAV_PATHS from '@app/utils/navigation/constants'
 
 export default function Page() {
   const router = useNavigationWithLoading()
 
   const handlePracticeAsanaClick = () => {
     // Navigate to the dedicated practice asana page
-    router.push('/navigator/asanaPoses/practiceAsanas')
+    router.push(NAV_PATHS.PRACTICE_ASANAS)
   }
 
   const handleCreateAsanaClick = () => {
-    router.push('/navigator/asanaPoses/createAsana')
+    router.push(NAV_PATHS.CREATE_ASANA)
   }
 
   return (

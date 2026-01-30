@@ -11,6 +11,7 @@ import PoseSearch from '@app/navigator/asanaPoses/pose-search'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 import { useSession } from 'next-auth/react'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import NAV_PATHS from '@app/utils/navigation/constants'
 import HelpButton from '@app/clientComponents/HelpButton'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import { HELP_PATHS } from '@app/utils/helpLoader'
@@ -151,7 +152,7 @@ export default function Page() {
               alignSelf: 'center',
             }}
           >
-            <SubNavHeader mode="back" link="/navigator/asanaPoses" />
+            <SubNavHeader mode="back" link={NAV_PATHS.ASANA_POSES} />
             <HelpButton onClick={handleInfoClick} />
           </Stack>
           <Stack sx={{ width: '100%', maxWidth: '600px' }}>

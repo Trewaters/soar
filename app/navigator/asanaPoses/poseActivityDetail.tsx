@@ -46,6 +46,7 @@ import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
 import { AsanaPose } from 'types/asana'
 import { HELP_PATHS } from '@app/utils/helpLoader'
+import NAV_PATHS from '@app/utils/navigation/constants'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
@@ -238,9 +239,12 @@ export default function PoseActivityDetail({
   }
 
   function handleClick() {
-    router.push(
-      `../../views/viewAsanaPractice/${encodeURIComponent(pose?.sort_english_name || '')}/`
+    const targetId = encodeURIComponent(
+      (pose?.id && pose.id.toString && pose.id.toString()) ||
+        pose?.sort_english_name ||
+        ''
     )
+    router.push(`${NAV_PATHS.PRACTICE_ASANAS}?id=${targetId}`)
   }
 
   // Initialize form data when entering edit mode
@@ -1049,7 +1053,7 @@ export default function PoseActivityDetail({
                         try {
                           await deletePose(pose.id)
                           router.refresh()
-                          router.replace('/navigator/asanaPoses/practiceAsanas')
+                          router.replace(NAV_PATHS.PRACTICE_ASANAS)
                         } catch (e: any) {
                           alert(e?.message || 'Failed to delete pose')
                         }
@@ -1241,7 +1245,7 @@ export default function PoseActivityDetail({
                         await deletePose(pose.id)
                         // Force refresh and navigate to practice asanas page
                         router.refresh()
-                        router.replace('/navigator/asanaPoses/practiceAsanas')
+                        router.replace(NAV_PATHS.PRACTICE_ASANAS)
                       } catch (e: any) {
                         alert(e?.message || 'Failed to delete pose')
                       }

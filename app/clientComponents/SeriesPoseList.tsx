@@ -10,6 +10,7 @@ import {
   Tooltip,
 } from '@mui/material'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
+import NAV_PATHS from '@app/utils/navigation/constants'
 
 export type SeriesPoseEntry =
   | string
@@ -70,11 +71,11 @@ export default function SeriesPoseList({
   dataTestIdPrefix = 'series-pose',
 }: SeriesPoseListProps) {
   const defaultGetHref = (poseName: string, poseId?: string | null): string => {
-    // Use ID if available, fallback to encoded name
+    // Link to practice page with query param `?id=` (use ID if available, fallback to encoded name)
     if (poseId) {
-      return `/navigator/asanaPoses/${poseId}`
+      return `${NAV_PATHS.PRACTICE_ASANAS}?id=${poseId}`
     }
-    return `/navigator/asanaPoses/${encodeURIComponent(poseName)}`
+    return `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent(poseName)}`
   }
 
   const hrefResolver = getHref || defaultGetHref
