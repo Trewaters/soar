@@ -5,6 +5,7 @@ import '@testing-library/jest-dom'
 import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider, CssBaseline, createTheme } from '@mui/material'
 import LibraryPage from '@app/navigator/profile/library/page'
+import NAV_PATHS from '@app/utils/navigation/constants'
 
 // Create a basic theme for testing
 const theme = createTheme()
@@ -566,7 +567,9 @@ describe('LibraryPage - AsanaCard Click to View Feature', () => {
     await user.click(cardName)
 
     // Should navigate to the asana detail page
-    expect(mockPush).toHaveBeenCalledWith('/navigator/asanaPoses/asana1')
+    expect(mockPush).toHaveBeenCalledWith(
+      `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('asana1')}`
+    )
   })
 
   it('should navigate to edit mode when edit button is clicked', async () => {
@@ -591,7 +594,7 @@ describe('LibraryPage - AsanaCard Click to View Feature', () => {
 
     // Should navigate to the asana detail page with edit=true parameter
     expect(mockPush).toHaveBeenCalledWith(
-      '/navigator/asanaPoses/asana1?edit=true'
+      `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('asana1')}&edit=true`
     )
   })
 
@@ -618,7 +621,7 @@ describe('LibraryPage - AsanaCard Click to View Feature', () => {
     // Should only be called once with the edit parameter
     expect(mockPush).toHaveBeenCalledTimes(1)
     expect(mockPush).toHaveBeenCalledWith(
-      '/navigator/asanaPoses/asana1?edit=true'
+      `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('asana1')}&edit=true`
     )
   })
 
@@ -650,7 +653,9 @@ describe('LibraryPage - AsanaCard Click to View Feature', () => {
     const warriorCard = screen.getByText('Warrior Pose')
     await user.click(warriorCard)
 
-    expect(mockPush).toHaveBeenCalledWith('/navigator/asanaPoses/asana1')
+    expect(mockPush).toHaveBeenCalledWith(
+      `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('asana1')}`
+    )
 
     mockPush.mockClear()
 
@@ -658,7 +663,9 @@ describe('LibraryPage - AsanaCard Click to View Feature', () => {
     const treeCard = screen.getByText('Tree Pose')
     await user.click(treeCard)
 
-    expect(mockPush).toHaveBeenCalledWith('/navigator/asanaPoses/asana2')
+    expect(mockPush).toHaveBeenCalledWith(
+      `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('asana2')}`
+    )
   })
 })
 
@@ -1456,7 +1463,9 @@ describe('LibraryPage - Asanas View Toggle Feature', () => {
     await user.click(asanaName)
 
     // Should navigate to the asana detail page
-    expect(mockPush).toHaveBeenCalledWith('/navigator/asanaPoses/asana1')
+    expect(mockPush).toHaveBeenCalledWith(
+      `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('asana1')}`
+    )
   })
 })
 

@@ -7,6 +7,7 @@ import { SessionProvider } from 'next-auth/react'
 import CreateAsanaWithImages from '@app/navigator/asanaPoses/createAsana/CreateAsanaWithImages'
 import { createTheme } from '@mui/material/styles'
 import * as poseService from '@lib/poseService'
+import NAV_PATHS from '@app/utils/navigation/constants'
 
 // Mock dependencies
 jest.mock('next-auth/react')
@@ -223,7 +224,9 @@ describe('CreateAsanaWithImages - Happy Path', () => {
 
       await waitFor(() => {
         expect(mockPush).toHaveBeenCalledWith(
-          '/navigator/asanaPoses/new-pose-456'
+          `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent(
+            'new-pose-456'
+          )}`
         )
       })
     })

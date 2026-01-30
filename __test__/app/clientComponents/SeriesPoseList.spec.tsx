@@ -6,6 +6,7 @@ import theme from '@styles/theme'
 import SeriesPoseList, {
   SeriesPoseEntry,
 } from '@app/clientComponents/SeriesPoseList'
+import NAV_PATHS from '@app/utils/navigation/constants'
 
 // Test wrapper with MUI theme
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -72,11 +73,11 @@ describe('SeriesPoseList', () => {
       expect(links).toHaveLength(3)
       expect(links[0]).toHaveAttribute(
         'href',
-        '/navigator/asanaPoses/Warrior%20I'
+        `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('Warrior I')}`
       )
       expect(links[1]).toHaveAttribute(
         'href',
-        '/navigator/asanaPoses/Downward%20Dog'
+        `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('Downward Dog')}`
       )
     })
   })
@@ -135,11 +136,11 @@ describe('SeriesPoseList', () => {
       const links = screen.getAllByRole('link')
       expect(links[0]).toHaveAttribute(
         'href',
-        '/navigator/asanaPoses/tree-pose-id'
+        `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('tree-pose-id')}`
       )
       expect(links[1]).toHaveAttribute(
         'href',
-        '/navigator/asanaPoses/mountain-pose-id'
+        `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('mountain-pose-id')}`
       )
     })
 
@@ -150,7 +151,7 @@ describe('SeriesPoseList', () => {
       const links = screen.getAllByRole('link')
       expect(links[0]).toHaveAttribute(
         'href',
-        '/navigator/asanaPoses/Tree%20Pose'
+        `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('Tree Pose')}`
       )
     })
   })
