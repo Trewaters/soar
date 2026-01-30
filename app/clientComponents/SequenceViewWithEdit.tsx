@@ -20,6 +20,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import CloseIcon from '@mui/icons-material/Close'
 import { useSession } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+import NAV_PATHS from '@app/utils/navigation/constants'
 import { UserStateContext } from '@context/UserContext'
 import EditSequence, { EditableSequence } from '@clientComponents/EditSequence'
 import { getAllSeries } from '@lib/seriesService'
@@ -199,20 +200,57 @@ export default function SequenceViewWithEdit({
 
       if (matchingSeries?.id) {
         navigation.push(
-          `/navigator/flows/practiceSeries?id=${matchingSeries.id}`
+          `${NAV_PATHS.FLOWS_PRACTICE_SERIES}?id=${matchingSeries.id}`
         )
-      } else {
-        console.error('❌ FAILED: Could not resolve series by name')
-        console.error('Looking for series name:', seriesMini.seriesName)
-        console.error(
-          'Available series names:',
-          allSeries.map((s) => s.seriesName)
-        )
-
-        alert(
-          `Cannot find series named "${seriesMini.seriesName}". Please check if the series still exists.`
-        )
+        return
       }
+
+      // Additional tolerant matching strategies
+      const tryNormalize = (s: string) =>
+        decodeURIComponent(String(s || ''))
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, ' ')
+
+      const targetNorm = tryNormalize(seriesMini.seriesName)
+
+      let fuzzyMatch = allSeries.find((series) => {
+        const nameNorm = tryNormalize(series.seriesName)
+        return (
+          nameNorm === targetNorm ||
+          nameNorm.includes(targetNorm) ||
+          targetNorm.includes(nameNorm) ||
+          nameNorm.startsWith(targetNorm) ||
+          targetNorm.startsWith(nameNorm)
+        )
+      })
+
+      if (fuzzyMatch?.id) {
+        navigation.push(
+          `${NAV_PATHS.FLOWS_PRACTICE_SERIES}?id=${fuzzyMatch.id}`
+        )
+        return
+      }
+
+      // If seriesMini.id looks like a MongoDB ObjectId, try using it directly
+      const maybeId = String(seriesMini.id || '')
+      if (/^[0-9a-fA-F]{24}$/.test(maybeId)) {
+        navigation.push(`${NAV_PATHS.FLOWS_PRACTICE_SERIES}?id=${maybeId}`)
+        return
+      }
+
+      // Final fallback: log details and navigate to the series list page with hint
+      console.error('❌ FAILED: Could not resolve series by name')
+      console.error('Looking for series name:', seriesMini.seriesName)
+      console.error(
+        'Available series names:',
+        allSeries.map((s) => s.seriesName)
+      )
+      navigation.push(
+        `${NAV_PATHS.FLOWS_PRACTICE_SERIES}?missing=series&name=${encodeURIComponent(
+          seriesMini.seriesName
+        )}`
+      )
     } catch (error) {
       console.error('❌ ERROR during series resolution:', error)
       alert(
@@ -454,15 +492,23 @@ export default function SequenceViewWithEdit({
                       borderColor: 'primary.main',
                       borderWidth: '1px',
                       borderStyle: 'solid',
-                      cursor: 'pointer',
-                      '&:hover': {
-                        boxShadow: 6,
-                        transform: 'translateY(-1px)',
-                        transition: 'all 0.2s ease-in-out',
-                      },
+                      cursor: seriesMini.isStale ? 'not-allowed' : 'pointer',
+                      opacity: seriesMini.isStale ? 0.6 : 1,
+                      '&:hover': seriesMini.isStale
+                        ? {}
+                        : {
+                            boxShadow: 6,
+                            transform: 'translateY(-1px)',
+                            transition: 'all 0.2s ease-in-out',
+                          },
                     }}
                     className="journal"
-                    onClick={() => handleSeriesNavigation(seriesMini)}
+                    onClick={
+                      seriesMini.isStale
+                        ? undefined
+                        : () => handleSeriesNavigation(seriesMini)
+                    }
+                    aria-disabled={seriesMini.isStale ? 'true' : 'false'}
                   >
                     <CardHeader
                       className="journalTitle"
@@ -477,6 +523,15 @@ export default function SequenceViewWithEdit({
                             <Typography variant="h6">
                               {seriesMini.seriesName}
                             </Typography>
+                            {seriesMini.isStale && (
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                                sx={{ ml: 1 }}
+                              >
+                                (Removed — no longer available)
+                              </Typography>
+                            )}
                           </Stack>
                         </Box>
                       }

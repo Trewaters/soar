@@ -35,6 +35,7 @@ import React from 'react'
 import Image from 'next/image'
 import CustomPaginationCircles from '@app/clientComponents/pagination-circles'
 import { useSearchParams } from 'next/navigation'
+import NAV_PATHS from '@app/utils/navigation/constants'
 import ActivityTracker from '@app/clientComponents/ActivityTracker'
 import {
   checkSequenceActivityExists,
@@ -309,16 +310,54 @@ export default function Page() {
       )
 
       if (matchingSeries?.id) {
-        router.push(`/navigator/flows/practiceSeries?id=${matchingSeries.id}`)
-      } else {
-        console.error('❌ FAILED: Could not resolve series by name')
-        console.error('Looking for series name:', seriesMini.seriesName)
-        console.error(
-          'Available series names:',
-          allSeries.map((s) => s.seriesName)
+        router.push(
+          `${NAV_PATHS.FLOWS_PRACTICE_SERIES}?id=${matchingSeries.id}`
         )
-        alert(`Cannot find series named "${seriesMini.seriesName}"`)
+        return
       }
+
+      const tryNormalize = (s: string) =>
+        decodeURIComponent(String(s || ''))
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, ' ')
+
+      const targetNorm = tryNormalize(seriesMini.seriesName)
+
+      let fuzzyMatch = allSeries.find((series) => {
+        const nameNorm = tryNormalize(series.seriesName)
+        return (
+          nameNorm === targetNorm ||
+          nameNorm.includes(targetNorm) ||
+          targetNorm.includes(nameNorm) ||
+          nameNorm.startsWith(targetNorm) ||
+          targetNorm.startsWith(nameNorm)
+        )
+      })
+
+      if (fuzzyMatch?.id) {
+        router.push(`${NAV_PATHS.FLOWS_PRACTICE_SERIES}?id=${fuzzyMatch.id}`)
+        return
+      }
+
+      const maybeId = String(seriesMini.id || '')
+      if (/^[0-9a-fA-F]{24}$/.test(maybeId)) {
+        router.push(`${NAV_PATHS.FLOWS_PRACTICE_SERIES}?id=${maybeId}`)
+        return
+      }
+
+      console.error('❌ FAILED: Could not resolve series by name')
+      console.error('Looking for series name:', seriesMini.seriesName)
+      console.error(
+        'Available series names:',
+        allSeries.map((s) => s.seriesName)
+      )
+      // Final fallback: navigate to series list with a helpful missing hint
+      router.push(
+        `${NAV_PATHS.FLOWS_PRACTICE_SERIES}?missing=series&name=${encodeURIComponent(
+          seriesMini.seriesName
+        )}`
+      )
     } catch (error) {
       console.error('❌ ERROR during series resolution:', error)
       alert(

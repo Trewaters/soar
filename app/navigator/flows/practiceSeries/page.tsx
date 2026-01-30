@@ -63,6 +63,8 @@ export default function Page() {
   const router = useNavigationWithLoading()
   const searchParams = useSearchParams()
   const seriesId = searchParams.get('id')
+  const missing = searchParams.get('missing')
+  const missingName = searchParams.get('name')
   const [series, setSeries] = useState<FlowSeriesData[]>([])
   const [flow, setFlow] = useState<FlowSeriesData>()
   const flowRef = React.useRef<FlowSeriesData | undefined>(flow)
@@ -524,6 +526,14 @@ export default function Page() {
           <HelpButton onClick={handleInfoClick} />
         </Stack>
         <Stack sx={{ px: 4, width: '100%', maxWidth: '600px' }}>
+          {missing === 'series' && missingName && (
+            <Box sx={{ width: '100%', mb: 2 }}>
+              <Typography color="error">
+                The series "{decodeURIComponent(missingName)}" has been removed
+                and is no longer available for display.
+              </Typography>
+            </Box>
+          )}
           <Autocomplete
             disablePortal
             freeSolo={false}

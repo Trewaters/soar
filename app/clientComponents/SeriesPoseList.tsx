@@ -11,6 +11,8 @@ import {
 } from '@mui/material'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 import NAV_PATHS from '@app/utils/navigation/constants'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+import { getPoseIdByName } from '@lib/poseService'
 
 export type SeriesPoseEntry =
   | string
@@ -77,6 +79,8 @@ export default function SeriesPoseList({
     }
     return `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent(poseName)}`
   }
+
+  const navigation = useNavigationWithLoading()
 
   const hrefResolver = getHref || defaultGetHref
 
@@ -169,6 +173,42 @@ export default function SeriesPoseList({
                   underline="hover"
                   color={linkColor}
                   href={href}
+                  onClick={async (e) => {
+                    // Prevent the click from bubbling up to parent cards which
+                    // have an onClick for navigating to the series.
+                    e.preventDefault()
+                    e.stopPropagation()
+
+                    // Prefer an explicit poseId passed in via props/poseIds
+                    if (poseId) {
+                      navigation.push(
+                        `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent(
+                          String(poseId)
+                        )}`
+                      )
+                      return
+                    }
+
+                    // Attempt to resolve the ObjectId by name. If not found,
+                    // avoid navigating to a name-based `?id=` URL which may
+                    // return a 404; instead navigate to the asana list.
+                    try {
+                      const resolved = await getPoseIdByName(poseName)
+                      if (resolved) {
+                        navigation.push(
+                          `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent(
+                            resolved
+                          )}`
+                        )
+                        return
+                      }
+                    } catch (err) {
+                      // ignore and fall through
+                    }
+
+                    // Fallback: open the asana list page instead of a name-based detail
+                    navigation.push(NAV_PATHS.PRACTICE_ASANAS)
+                  }}
                   sx={{
                     display: 'inline-block',
                     maxWidth: '100%',

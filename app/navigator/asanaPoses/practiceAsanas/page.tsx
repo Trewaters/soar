@@ -2,8 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
-import { getAccessiblePoses } from '@lib/poseService'
-import { getPose } from '@lib/poseService'
+import { getAccessiblePoses, getPose, getAllPoses } from '@lib/poseService'
 import { useSearchParams } from 'next/navigation'
 import PoseActivityDetail from '@app/navigator/asanaPoses/poseActivityDetail'
 import SplashHeader from '@app/clientComponents/splash-header'
@@ -80,8 +79,28 @@ export default function Page() {
       setSelectedError(null)
       try {
         const pose = await getPose(id)
-        if (mounted) setSelectedPose(pose ?? null)
+        if (mounted) {
+          setSelectedPose(pose ?? null)
+        }
       } catch (err: any) {
+        // If pose not found by flexible lookup, attempt a tolerant fallback:
+        // fetch all poses and try case-insensitive match on sort_english_name.
+        try {
+          const decoded = decodeURIComponent(id)
+          const all = await getAllPoses()
+          const match = all.find(
+            (p: any) =>
+              (p.sort_english_name || '').trim().toLowerCase() ===
+              decoded.trim().toLowerCase()
+          )
+          if (mounted && match) {
+            setSelectedPose(match)
+            return
+          }
+        } catch (fallbackErr) {
+          // ignore fallback errors
+        }
+
         if (mounted) setSelectedError(err?.message || 'Failed to load pose')
       } finally {
         if (mounted) setSelectedLoading(false)
