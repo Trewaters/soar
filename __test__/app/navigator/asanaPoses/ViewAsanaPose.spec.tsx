@@ -3,7 +3,7 @@ import '@testing-library/jest-dom'
 import { render, screen, waitFor } from '@testing-library/react'
 import { ThemeProvider } from '@mui/material/styles'
 import { SessionProvider } from 'next-auth/react'
-import PoseActivityDetail from '@app/navigator/asanaPoses/[pose]/poseActivityDetail'
+import PoseActivityDetail from '@app/navigator/asanaPoses/poseActivityDetail'
 import { createTheme } from '@mui/material/styles'
 import type { AsanaPose } from 'types/asana'
 

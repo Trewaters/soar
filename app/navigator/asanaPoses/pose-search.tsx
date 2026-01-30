@@ -62,7 +62,21 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
     // Ignore section header selections
     if (value && 'section' in value) return
     dispatch({ type: 'SET_POSES', payload: value ?? state.poses })
-    router.push(`/navigator/asanaPoses/${(value as AsanaPose)?.id || ''}/`)
+    const selectedId = (value as AsanaPose)?.id
+    try {
+      const isPracticePage =
+        typeof window !== 'undefined' &&
+        window.location.pathname.startsWith(
+          '/navigator/asanaPoses/practiceAsanas'
+        )
+      if (isPracticePage && selectedId) {
+        router.push(`/navigator/asanaPoses/practiceAsanas?id=${selectedId}`)
+        return
+      }
+    } catch (e) {
+      // fall back to default behavior if any error occurs
+    }
+    router.push(`/navigator/asanaPoses/${selectedId || ''}/`)
   }
   // Get current user id from session
   const { data: session } = useSession()

@@ -66,6 +66,8 @@ Prioritized Details...
 interface PoseCardProps {
   poseCardProp: AsanaPose
   initialEditMode?: boolean
+  showActions?: boolean
+  showInlineEditIcon?: boolean
   onSaveSuccess?: () => void
 }
 
@@ -77,7 +79,9 @@ const usePoseImages = (poseId?: string, poseName?: string) => {
 
   useEffect(() => {
     const fetchImages = async () => {
-      if (!session?.user?.id || (!poseId && !poseName)) {
+      // Fetch images when we have either a poseId or poseName.
+      // Do not require a logged-in session — public pose images should be visible.
+      if (!poseId && !poseName) {
         return
       }
 
@@ -101,6 +105,8 @@ const usePoseImages = (poseId?: string, poseName?: string) => {
 export default function PoseActivityDetail({
   poseCardProp,
   initialEditMode = false,
+  showActions = true,
+  showInlineEditIcon = true,
   onSaveSuccess,
 }: PoseCardProps) {
   const pose = poseCardProp
@@ -547,17 +553,35 @@ export default function PoseActivityDetail({
                 zIndex: 3,
               }}
             >
-              <Typography
-                variant="h3"
+              <Box
                 sx={{
-                  color: 'white',
-                  fontWeight: 'bold',
-                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)',
-                  fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
-                {pose?.sort_english_name}
-              </Typography>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    color: 'white',
+                    fontWeight: 'bold',
+                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)',
+                    fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
+                  }}
+                >
+                  {pose?.sort_english_name}
+                </Typography>
+                {showInlineEditIcon && session && session.user && canEdit && (
+                  <IconButton
+                    aria-label="Edit pose"
+                    onClick={handleEditToggle}
+                    sx={{ ml: 1, color: 'white' }}
+                    size="small"
+                  >
+                    <EditIcon />
+                  </IconButton>
+                )}
+              </Box>
               <Typography
                 variant="body2"
                 sx={{
@@ -660,26 +684,45 @@ export default function PoseActivityDetail({
               </Box>
             </Paper>
             <Stack alignItems="center">
-              <Typography
-                variant="h1"
-                component={'h2'}
+              <Box
                 sx={{
-                  pt: 2,
-                  height: '200px',
-                  width: { xs: '100%', sm: '400px' },
-                  backgroundColor: 'info.contrastText',
-                  color: 'primary.main',
-                  borderRadius: '12px',
-                  textAlign: 'center',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 2px 2px 2px rgba(211, 211, 211, 0.5)',
-                  px: 2,
+                  width: '100%',
                 }}
               >
-                {pose?.sort_english_name}
-              </Typography>
+                <Typography
+                  variant="h1"
+                  component={'h2'}
+                  sx={{
+                    pt: 2,
+                    height: '200px',
+                    width: { xs: '100%', sm: '400px' },
+                    backgroundColor: 'info.contrastText',
+                    color: 'primary.main',
+                    borderRadius: '12px',
+                    textAlign: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 2px 2px 2px rgba(211, 211, 211, 0.5)',
+                    px: 2,
+                  }}
+                >
+                  {pose?.sort_english_name}
+                </Typography>
+                {showInlineEditIcon && session && session.user && canEdit && (
+                  <IconButton
+                    aria-label="Edit pose"
+                    onClick={handleEditToggle}
+                    sx={{ ml: 1, color: 'primary.main' }}
+                    size="small"
+                  >
+                    <EditIcon />
+                  </IconButton>
+                )}
+              </Box>
             </Stack>
           </>
         )}
@@ -970,6 +1013,7 @@ export default function PoseActivityDetail({
                 width: '100%',
                 px: { xs: 0, sm: 2 }, // Remove padding on mobile for full width
                 display: 'flex',
+                flexDirection: 'column',
                 justifyContent: { xs: 'stretch', sm: 'center' }, // Full width on mobile, centered on larger screens
                 alignItems: 'center',
                 '@media (max-width: 384px)': {
@@ -979,6 +1023,66 @@ export default function PoseActivityDetail({
                 },
               }}
             >
+              {/* Inline action buttons for edit view (placed above activity tracker) */}
+              {isEditing &&
+                !showActions &&
+                session &&
+                session.user &&
+                canEdit && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      gap: 2,
+                      justifyContent: 'center',
+                      mb: 3,
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      color="success"
+                      onClick={handleSaveEdit}
+                      startIcon={<SaveIcon />}
+                      disabled={isSubmitting}
+                      sx={{ borderRadius: '12px', px: 3 }}
+                    >
+                      {isSubmitting ? 'Saving...' : 'Save Changes'}
+                    </Button>
+
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      startIcon={<DeleteIcon />}
+                      onClick={async () => {
+                        if (!pose?.id) return
+                        const confirmed = window.confirm(
+                          'Delete this asana? This cannot be undone.'
+                        )
+                        if (!confirmed) return
+                        try {
+                          await deletePose(pose.id)
+                          router.refresh()
+                          router.replace('/navigator/asanaPoses/practiceAsanas')
+                        } catch (e: any) {
+                          alert(e?.message || 'Failed to delete pose')
+                        }
+                      }}
+                      sx={{ borderRadius: '12px', px: 3 }}
+                    >
+                      Delete Asana
+                    </Button>
+
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={handleCancelEdit}
+                      startIcon={<CancelIcon />}
+                      sx={{ borderRadius: '12px', px: 3 }}
+                    >
+                      Cancel
+                    </Button>
+                  </Box>
+                )}
+
               <WeeklyActivityViewer
                 entityId={pose.id.toString()}
                 entityName={pose.english_names[0] || pose.sort_english_name}
@@ -1080,7 +1184,7 @@ export default function PoseActivityDetail({
 
       {/* Edit/Delete Pose Buttons - Only visible to creator or admin */}
       {/* Sticky Bottom Action Bar - Consistent with Create Asana page */}
-      {session && session.user && canEdit && (
+      {showActions && session && session.user && canEdit && (
         <Box
           sx={{
             position: 'sticky',

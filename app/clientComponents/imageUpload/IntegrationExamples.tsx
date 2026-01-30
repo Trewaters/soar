@@ -9,6 +9,7 @@
 import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
 import { useSession } from 'next-auth/react'
 
+// not used as of now, but kept for future reference
 export function ProfileWithImages() {
   const { data: session } = useSession()
 
@@ -69,6 +70,7 @@ export function CreateAsanaWithImages() {
 
 // 3. Integration with Pose Detail Page
 // Add to app/navigator/asanaPoses/[pose]/poseActivityDetail.tsx
+// not used as of now, but kept for future reference
 
 export function PoseDetailWithImages({
   poseCardProp,
@@ -94,10 +96,13 @@ export function PoseDetailWithImages({
 
 // 4. Standalone Upload Component Usage
 // For quick uploads without full gallery
+// not used as of now, but kept for future reference
 
 import ImageUpload, {
   PoseImageData,
 } from '@app/clientComponents/imageUpload/ImageUpload'
+
+// not used as of now, but kept for future reference
 
 export function QuickUploadExample() {
   const handleImageUploaded = (image: PoseImageData) => {
@@ -122,6 +127,7 @@ export function QuickUploadExample() {
 
 // 5. Gallery-Only Component Usage
 // For viewing existing images
+// not used as of now, but kept for future reference
 
 import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
 import { PoseImage } from './types'
@@ -182,6 +188,7 @@ export function GalleryOnlyExample() {
 
 // 6. Integration with Navigation
 // Add to a navigation menu or header
+// not used as of now, but kept for future reference
 
 export function NavWithImageUpload() {
   const [uploadOpen, setUploadOpen] = useState(false)

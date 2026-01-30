@@ -3,6 +3,9 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 import { getAccessiblePoses } from '@lib/poseService'
+import { getPose } from '@lib/poseService'
+import { useSearchParams } from 'next/navigation'
+import PoseActivityDetail from '@app/navigator/asanaPoses/poseActivityDetail'
 import SplashHeader from '@app/clientComponents/splash-header'
 import PoseSearch from '@app/navigator/asanaPoses/pose-search'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
@@ -12,6 +15,7 @@ import HelpButton from '@app/clientComponents/HelpButton'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import { HELP_PATHS } from '@app/utils/helpLoader'
 import { AsanaPose } from 'types/asana'
+import { QuickTimer } from '@app/clientComponents/quickTimer'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -19,6 +23,10 @@ export default function Page() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
+  const [selectedPose, setSelectedPose] = useState<AsanaPose | null>(null)
+  const [selectedLoading, setSelectedLoading] = useState(false)
+  const [selectedError, setSelectedError] = useState<string | null>(null)
+  const searchParams = useSearchParams()
 
   const handleInfoClick = () => {
     setOpen(!open)
@@ -54,6 +62,36 @@ export default function Page() {
       window.history.replaceState({}, '', newUrl)
     }
   }, [fetchData])
+
+  // Watch for ?id= on the practice page and fetch pose details
+  useEffect(() => {
+    const id = searchParams?.get?.('id') || null
+    if (!id) {
+      setSelectedPose(null)
+      setSelectedError(null)
+      setSelectedLoading(false)
+      return
+    }
+
+    let mounted = true
+    const fetchPose = async () => {
+      setSelectedLoading(true)
+      setSelectedError(null)
+      try {
+        const pose = await getPose(id)
+        if (mounted) setSelectedPose(pose ?? null)
+      } catch (err: any) {
+        if (mounted) setSelectedError(err?.message || 'Failed to load pose')
+      } finally {
+        if (mounted) setSelectedLoading(false)
+      }
+    }
+
+    fetchPose()
+    return () => {
+      mounted = false
+    }
+  }, [searchParams])
 
   // Refetch data when the page becomes visible (e.g., when returning from create page)
   const handleVisibilityChange = useCallback(() => {
@@ -139,6 +177,66 @@ export default function Page() {
               )}
             </Box>
           </Stack>
+          {/* Inline Pose Detail */}
+          <Box
+            sx={{
+              width: '100%',
+              mt: 2,
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            {selectedLoading && <LoadingSkeleton type="detail" />}
+            {selectedError && (
+              <Typography color="error">{selectedError}</Typography>
+            )}
+            {selectedPose && (
+              <Box sx={{ width: '100%', maxWidth: '900px' }}>
+                <PoseActivityDetail
+                  poseCardProp={selectedPose}
+                  initialEditMode={searchParams?.get?.('edit') === 'true'}
+                  showActions={false}
+                  onSaveSuccess={async () => {
+                    // Re-fetch the selected pose and visible list after a successful save
+                    try {
+                      setSelectedLoading(true)
+                      setSelectedError(null)
+                      const refreshed = await getPose(selectedPose.id)
+                      setSelectedPose(refreshed ?? null)
+                      // Refresh the listing as well
+                      fetchData()
+                    } catch (e: any) {
+                      setSelectedError(e?.message || 'Failed to refresh pose')
+                    } finally {
+                      setSelectedLoading(false)
+                    }
+                  }}
+                />
+                <Box sx={{ height: '60px' }} />
+
+                {/* Quick Timer Section - mirror dynamic page behavior */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    px: 2,
+                  }}
+                >
+                  <QuickTimer
+                    buttonText="+5 Minutes"
+                    timerMinutes={5}
+                    variant="default"
+                    onTimerStart={() => {}}
+                    onTimerEnd={() => {}}
+                    onTimerUpdate={() => {}}
+                    maxWidth="400px"
+                  />
+                </Box>
+              </Box>
+            )}
+          </Box>
         </Box>
       </Box>
 
