@@ -2,8 +2,6 @@
 // Keeps implementation small and test-friendly: if `indexedDB` is not available
 // (e.g. in some test environments), we fall back to `localStorage`.
 
-type KV = Record<string, any>
-
 const DB_NAME = 'soar_offline_db'
 const STORE_NAME = 'kv'
 const DB_VERSION = 1
@@ -39,6 +37,7 @@ function openIndexedDB(): Promise<IDBDatabase> {
   })
 }
 
+// eslint-disable-next-line no-unused-vars
 async function withIDB<T>(fn: (db: IDBDatabase) => Promise<T>): Promise<T> {
   if (!supportsIndexedDB()) {
     return Promise.reject(new Error('IndexedDB not available'))
@@ -157,10 +156,12 @@ export async function keys(): Promise<string[]> {
   )
 }
 
-export default {
+const db = {
   setKV,
   getKV,
   delKV,
   clearAll,
   keys,
 }
+
+export default db

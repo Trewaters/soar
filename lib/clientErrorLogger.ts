@@ -215,6 +215,7 @@ ${'='.repeat(80)}
     }
   }
 
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   private sendToAnalytics(_errorInfo: ClientLoggedError): void {
     // Placeholder for analytics/monitoring service integration
     // You could integrate with services like:

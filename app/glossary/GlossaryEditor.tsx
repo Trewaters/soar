@@ -18,7 +18,9 @@ export interface GlossaryEditorProps {
   mode: 'create' | 'edit'
   termToEdit?: string | null
   onClose: () => void
+  // eslint-disable-next-line no-unused-vars
   onSaved: (msg: string) => void
+  // eslint-disable-next-line no-unused-vars
   onError: (msg: string) => void
 }
 

@@ -10,7 +10,7 @@ import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { useSession } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 type ColorFunction = (isAuthenticated: boolean) => string
 
 interface NavItem {
@@ -44,7 +44,7 @@ export default function NavBottom(props: {
       label: 'Open main navigation menu',
       icon: <MenuIcon />,
       path: 'menu',
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
       getColor: (_isAuthenticated: boolean) => 'primary.main', // Always primary.main
     },
     {

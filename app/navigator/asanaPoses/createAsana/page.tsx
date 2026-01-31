@@ -29,7 +29,6 @@ import {
   useFreemiumNotification,
 } from '@app/clientComponents/freemiumNotification'
 import { AsanaActivity } from 'types/asana'
-import { useSafeAsanaPose as useAsanaPose } from '@app/context/AsanaPoseContext'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -61,25 +60,28 @@ export default function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Available categories for autocomplete
-  const categories = [
-    'Arm Leg Support',
-    'Backbend',
-    'Balance',
-    'Bandha',
-    'Core',
-    'Forward Bend',
-    'Hip Opener',
-    'Inversion',
-    'Lateral Bend',
-    'Mudra',
-    'Neutral',
-    'Prone',
-    'Restorative',
-    'Seated',
-    'Standing',
-    'Supine',
-    'Twist',
-  ]
+  const categories = React.useMemo(
+    () => [
+      'Arm Leg Support',
+      'Backbend',
+      'Balance',
+      'Bandha',
+      'Core',
+      'Forward Bend',
+      'Hip Opener',
+      'Inversion',
+      'Lateral Bend',
+      'Mudra',
+      'Neutral',
+      'Prone',
+      'Restorative',
+      'Seated',
+      'Standing',
+      'Supine',
+      'Twist',
+    ],
+    []
+  )
 
   const [formFullAsanaPoseData, setFormFullAsanaPoseData] = useState<{
     sort_english_name: string
@@ -241,13 +243,6 @@ export default function Page() {
     ],
     // Recompute when the form data, categories or setField change
     [formFullAsanaPoseData, categories, setField]
-  )
-
-  const globalOnChange = React.useCallback(
-    (key: string, value: any) => {
-      setField(key, value)
-    },
-    [setField]
   )
 
   const handleImageUploaded = (image: PoseImageData) => {
@@ -412,6 +407,7 @@ export default function Page() {
       setNotificationState({ isOpen: true })
       router.push(NAV_PATHS.ASANA_POSES)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Close notification handler

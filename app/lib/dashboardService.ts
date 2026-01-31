@@ -132,10 +132,6 @@ export async function calculateActivityStreak(userId: string): Promise<number> {
 
   // Get today's date in local timezone format
   const today = new Date()
-  const todayYear = today.getFullYear()
-  const todayMonth = String(today.getMonth() + 1).padStart(2, '0')
-  const todayDay = String(today.getDate()).padStart(2, '0')
-  const todayStr = `${todayYear}-${todayMonth}-${todayDay}`
 
   // Check if there's activity today or yesterday to keep streak alive
   const lastActivityStr = sortedDays[0]

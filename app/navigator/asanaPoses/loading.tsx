@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { Box, Stack, Skeleton, Typography, Fade } from '@mui/material'
+import { Box, Stack, Skeleton, Fade } from '@mui/material'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 
 /**

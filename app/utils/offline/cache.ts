@@ -33,9 +33,11 @@ export async function purgeCacheOlderThan(ms: number): Promise<void> {
   await Promise.all(promises)
 }
 
-export default {
+const cache = {
   setCache,
   getCache,
   removeCache,
   purgeCacheOlderThan,
 }
+
+export default cache

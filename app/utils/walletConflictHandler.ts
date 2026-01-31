@@ -4,6 +4,7 @@
 declare global {
   interface Window {
     dataLayer?: Object[]
+    // eslint-disable-next-line no-unused-vars
     gtag: (...args: any[]) => void
     conflux?: any
     ethereum?: any

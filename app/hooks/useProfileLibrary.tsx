@@ -20,7 +20,6 @@ export function useProfileLibrary(options?: {
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [cursor, setCursor] = useState<string | null>(null)
-  const [invalidCursor, setInvalidCursor] = useState(false)
   const [totalCount, setTotalCount] = useState<number | null>(null)
   const [page, setPage] = useState<number>(initialPage)
   const mounted = useRef(true)
@@ -49,7 +48,6 @@ export function useProfileLibrary(options?: {
             page: targetPage,
           })
           if (res && (res as any).invalidCursor) {
-            setInvalidCursor(true)
             // fall back to first page silently
             setPage(1)
             // replace items with first page
@@ -63,7 +61,6 @@ export function useProfileLibrary(options?: {
             setItems(Array.isArray(fallback.items) ? fallback.items : [])
             setHasMore(Boolean(fallback.hasMore))
             setCursor(fallback.nextCursor || null)
-            setInvalidCursor(false)
             return
           }
           if (!mounted.current) return
@@ -84,7 +81,6 @@ export function useProfileLibrary(options?: {
             mode: 'infinite',
           })
           if (res && (res as any).invalidCursor) {
-            setInvalidCursor(true)
             // fallback: reset cursor and load first slice
             setCursor(null)
             const fallback = await profileClient.fetchProfileLibrary({
@@ -101,7 +97,6 @@ export function useProfileLibrary(options?: {
             )
             setHasMore(Boolean(fallback.hasMore))
             setCursor(fallback.nextCursor || null)
-            setInvalidCursor(false)
             return
           }
           if (!mounted.current) return
@@ -146,6 +141,7 @@ export function useProfileLibrary(options?: {
         console.error('Failed to track client telemetry', e)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [load, mode, page])
 
   const refresh = useCallback(async () => {

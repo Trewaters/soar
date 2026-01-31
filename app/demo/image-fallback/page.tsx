@@ -23,6 +23,7 @@ export default function ImageUploadFallbackDemo() {
           // Send empty form data to trigger an error
           body: new FormData(),
         })
+        return response.json()
       } catch (error) {
         console.error('Test error caught:', error)
       }

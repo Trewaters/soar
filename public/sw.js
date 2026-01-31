@@ -3,9 +3,9 @@
   Clean, single-file service worker.
 */
 
-const CACHE_VERSION = 'v9'
+const CACHE_VERSION = 'v2026.01.31'
 const CACHE_NAME = `soar-offline-${CACHE_VERSION}`
-const SW_VERSION = '3.0.0'
+const SW_VERSION = '1.0.0'
 const CACHE_BUST_TIMESTAMP = new Date().getTime()
 
 const PRECACHE_URLS = [

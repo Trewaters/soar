@@ -57,7 +57,9 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
       | AsanaPose
       | { section: 'My Asanas' | 'Public Asanas' | 'Others' }
       | null,
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     reason: any,
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     details?: any
   ) {
     // Ignore section header selections

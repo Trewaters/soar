@@ -4,6 +4,7 @@
 export type OrderPosesForSearchOpts<T> = {
   currentUserId?: string | null
   alphaUserIds: string[]
+  // eslint-disable-next-line no-unused-vars
   getTitle: (_: T) => string
 }
 
@@ -22,6 +23,7 @@ export function orderPosesForSearch<
   poses: T[],
   currentUserId: string | null | undefined,
   alphaUserIds: string[],
+  // eslint-disable-next-line no-unused-vars
   getTitle: (_: T) => string
 ): T[] {
   // Partition

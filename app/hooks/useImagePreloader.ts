@@ -8,9 +8,13 @@ interface UseImagePreloaderOptions {
 
 interface UseImagePreloaderReturn {
   preloadedImages: Set<string>
+  // eslint-disable-next-line no-unused-vars
   isImageLoaded: (url: string) => boolean
+  // eslint-disable-next-line no-unused-vars
   preloadImage: (url: string) => Promise<void>
+  // eslint-disable-next-line no-unused-vars
   getOptimizedSizes: (index: number) => string
+  // eslint-disable-next-line no-unused-vars
   getLoadingPriority: (index: number) => 'high' | 'low' | 'auto'
 }
 
@@ -124,8 +128,11 @@ export const useImagePreloader = ({
 
   // Cleanup on unmount
   useEffect(() => {
+    // capture the current loading promises so the cleanup uses a stable snapshot
+    const currentPromises = Object.values(loadingPromises.current)
+
     return () => {
-      Object.values(loadingPromises.current).forEach((promise) => {
+      currentPromises.forEach((promise) => {
         promise.catch(() => {
           // Ignore errors during cleanup
         })

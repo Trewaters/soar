@@ -9,9 +9,6 @@ import {
   Chip,
   IconButton,
   Stack,
-  Checkbox,
-  FormControlLabel,
-  Drawer,
   TextField,
   FormControl,
   Autocomplete,
@@ -38,10 +35,7 @@ import ImageCarousel from '@app/clientComponents/imageUpload/ImageCarousel'
 import CarouselDotNavigation from '@app/clientComponents/imageUpload/CarouselDotNavigation'
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 import { deletePose, updatePose, type UpdatePoseInput } from '@lib/poseService'
-// PoseImageUpload removed from this page; image upload is managed via PoseImageManagement
 import PoseImageManagement from '@app/clientComponents/imageUpload/PoseImageManagement'
-import SubNavHeader from '@app/clientComponents/sub-nav-header'
-import HelpButton from '@app/clientComponents/HelpButton'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
 import { AsanaPose } from 'types/asana'
@@ -115,7 +109,7 @@ export default function PoseActivityDetail({
   const { data: session } = useSession()
   const { canEdit } = useCanEditContent(pose?.created_by)
   const [activityRefreshTrigger, setActivityRefreshTrigger] = useState(0)
-  const [error, setError] = useState<string | null>(null)
+  const [, setError] = useState<string | null>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [open, setOpen] = useState(false)
 
@@ -175,10 +169,6 @@ export default function PoseActivityDetail({
     deepening_cues: '',
     breath_direction_default: '',
   })
-
-  const handleInfoClick = () => {
-    setOpen(!open)
-  }
 
   // Fetch uploaded images for this pose
   const { images: poseImages } = usePoseImages(
@@ -424,7 +414,7 @@ export default function PoseActivityDetail({
 
     try {
       // Update the pose text data
-      const updatedPoseData = await updatePose(pose.id, updatedAsana)
+      await updatePose(pose.id, updatedAsana)
 
       // Update the image order if images were changed
       if (images.length > 0) {

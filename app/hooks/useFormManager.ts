@@ -20,7 +20,9 @@ export interface FormState {
 export interface UseFormManagerOptions {
   initialValues: Record<string, string>
   enableMobileOptimizations?: boolean
+  // eslint-disable-next-line no-unused-vars
   onSubmit?: (values: Record<string, string>) => void | Promise<void>
+  // eslint-disable-next-line no-unused-vars
   validate?: (values: Record<string, string>) => Record<string, string>
 }
 
@@ -31,17 +33,24 @@ export interface UseFormManagerReturn {
   isSubmitting: boolean
 
   // Field management
+  // eslint-disable-next-line no-unused-vars
   setValue: (name: string, value: string) => void
+  // eslint-disable-next-line no-unused-vars
   setFieldError: (name: string, error: string) => void
+  // eslint-disable-next-line no-unused-vars
   setFieldTouched: (name: string, touched: boolean) => void
 
   // Form operations
+  // eslint-disable-next-line no-unused-vars
   handleSubmit: (e: React.FormEvent) => void
   resetForm: () => void
 
   // Mobile optimization
+  // eslint-disable-next-line no-unused-vars
   registerField: (name: string) => (ref: HTMLElement | null) => void
+  // eslint-disable-next-line no-unused-vars
   handleFieldFocus: (name: string) => void
+  // eslint-disable-next-line no-unused-vars
   handleFieldBlur: (name: string) => void
 }
 

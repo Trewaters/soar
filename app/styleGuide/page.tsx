@@ -112,6 +112,7 @@ export default function StyleGuide() {
       const paletteValue = theme.palette[colorKey as keyof typeof theme.palette]
       // Get all color properties dynamically
       const colorEntries = Object.entries(paletteValue).filter(
+        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
         ([_, value]) => typeof value === 'string'
       )
       acc[colorKey] = Object.fromEntries(colorEntries)

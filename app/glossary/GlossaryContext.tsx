@@ -27,9 +27,12 @@ interface GlossaryContextValue {
   loading: boolean
   error: string | null
   createTerm: (
+    // eslint-disable-next-line no-unused-vars
     input: Omit<GlossaryTerm, 'source'> & { source?: GlossaryTerm['source'] }
   ) => Promise<void>
+  // eslint-disable-next-line no-unused-vars
   updateTerm: (term: Partial<GlossaryTerm> & { term: string }) => Promise<void>
+  // eslint-disable-next-line no-unused-vars
   deleteTerm: (term: string) => Promise<void>
 }
 
