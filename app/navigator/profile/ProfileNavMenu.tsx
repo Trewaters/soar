@@ -117,7 +117,7 @@ const ProfileNavMenu: React.FC = () => {
   ]
 
   // If the current session user is an admin, expose admin links
-  if (session?.user?.role === 'admin') {
+  if ((session?.user as any)?.role === 'admin') {
     menuItems.splice(3, 0, {
       id: 'admin-tos',
       label: 'Admin: TOS',
