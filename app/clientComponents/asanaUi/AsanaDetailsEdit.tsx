@@ -28,6 +28,7 @@ interface BaseFieldProps {
   helperText?: string
   required?: boolean
   disabled?: boolean
+  fieldKey?: string
 }
 
 // Text field specific props
@@ -93,6 +94,7 @@ export type AsanaEditFieldProps =
 // Main component props
 interface AsanaDetailsEditProps {
   fields: AsanaEditFieldProps[]
+  globalOnChange?: (key: string, value: any) => void
 }
 
 // Extend Stack props for styling flexibility
@@ -149,7 +151,7 @@ const fieldSxStyles = {
 export default React.memo(function AsanaDetailsEdit(
   props: AsanaDetailsEditComponentProps
 ) {
-  const { fields, ...stackProps } = props
+  const { fields, globalOnChange, ...stackProps } = props
 
   // Local helper component to manage the variations input display string
   // while still syncing the final array to the parent via field.onChange.
@@ -168,7 +170,12 @@ export default React.memo(function AsanaDetailsEdit(
     // Keep display in sync when not actively editing (e.g., parent reset)
     React.useEffect(() => {
       if (!isEditingRef.current) {
-        setDisplay(Array.isArray(field.value) ? field.value.join(', ') : '')
+        const newDisplay = Array.isArray(field.value)
+          ? field.value.join(', ')
+          : ''
+        if (newDisplay !== display) {
+          setDisplay(newDisplay)
+        }
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [field.value])
@@ -185,7 +192,18 @@ export default React.memo(function AsanaDetailsEdit(
         .split(',')
         .map((name) => name.trim())
         .filter((name) => name.length > 0)
-      field.onChange(cleanedVariations)
+      if (field.onChange) {
+        field.onChange(cleanedVariations)
+      } else if ((props as any).globalOnChange && field.fieldKey) {
+        try {
+          console.trace('VariationInput.finalize -> globalOnChange', {
+            label: field.label,
+            fieldKey: field.fieldKey,
+            value: cleanedVariations,
+          })
+        } catch (e) {}
+        ;(props as any).globalOnChange(field.fieldKey, cleanedVariations)
+      }
       setDisplay(cleanedVariations.join(', '))
     }
 
@@ -279,6 +297,26 @@ export default React.memo(function AsanaDetailsEdit(
   }
 
   const renderFieldInput = (field: AsanaEditFieldProps, fieldId: string) => {
+    const callChange = (val: any) => {
+      // Trace the caller and field info to help debug runaway updates
+      try {
+        console.trace('AsanaDetailsEdit.callChange', {
+          label: field.label,
+          fieldKey: (field as any).fieldKey,
+          value: val,
+        })
+      } catch (e) {
+        // swallow tracing errors in environments that restrict console
+      }
+
+      // Prefer explicit field.onChange; fall back to globalOnChange if provided
+      if ((field as any).onChange) {
+        ;(field as any).onChange(val)
+      } else if (globalOnChange && (field as any).fieldKey) {
+        globalOnChange((field as any).fieldKey, val)
+      }
+    }
+
     switch (field.type) {
       case 'text':
         return (
@@ -286,7 +324,7 @@ export default React.memo(function AsanaDetailsEdit(
             id={fieldId}
             // label={field.label}
             value={field.value}
-            onChange={(e) => field.onChange(e.target.value)}
+            onChange={(e) => callChange(e.target.value)}
             placeholder={field.placeholder}
             required={field.required}
             disabled={field.disabled}
@@ -305,7 +343,7 @@ export default React.memo(function AsanaDetailsEdit(
             id={fieldId}
             // label={field.label}
             value={field.value}
-            onChange={(e) => field.onChange(e.target.value)}
+            onChange={(e) => callChange(e.target.value)}
             placeholder={field.placeholder}
             required={field.required}
             disabled={field.disabled}
@@ -327,10 +365,8 @@ export default React.memo(function AsanaDetailsEdit(
             freeSolo={field.freeSolo ?? false}
             options={field.options}
             value={field.value}
-            onChange={(event, value) => field.onChange(value || '')}
-            onInputChange={(event, newInputValue) =>
-              field.onChange(newInputValue)
-            }
+            onChange={(event, value) => callChange(value || '')}
+            onInputChange={(event, newInputValue) => callChange(newInputValue)}
             disabled={field.disabled}
             sx={{
               ...fieldSxStyles,
@@ -379,7 +415,7 @@ export default React.memo(function AsanaDetailsEdit(
               {field.options.map((option) => (
                 <Button
                   key={option}
-                  onClick={() => field.onChange(option)}
+                  onClick={() => callChange(option)}
                   variant={field.value === option ? 'contained' : 'outlined'}
                   disabled={field.disabled}
                   sx={{

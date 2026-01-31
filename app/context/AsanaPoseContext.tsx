@@ -266,3 +266,27 @@ export function useAsanaPose() {
   }
   return context
 }
+
+// Defensive hook: returns a safe no-op fallback if the provider is missing.
+export function useSafeAsanaPose(): AsanaPoseContextType {
+  try {
+    return useAsanaPose()
+  } catch (err) {
+    console.warn(
+      '[useSafeAsanaPose] AsanaPoseProvider not found, returning fallback'
+    )
+    const fallback: AsanaPoseContextType = {
+      state: initialState,
+      dispatch: () => undefined,
+      setCurrentImageIndex: () => undefined,
+      updateImageCount: () => undefined,
+      addPoseImage: () => undefined,
+      removePoseImage: () => undefined,
+      reorderImages: () => undefined,
+      setReordering: () => undefined,
+      setUploadProgress: () => undefined,
+      resetCarousel: () => undefined,
+    }
+    return fallback
+  }
+}

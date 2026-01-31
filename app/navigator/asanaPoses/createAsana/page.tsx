@@ -29,6 +29,7 @@ import {
   useFreemiumNotification,
 } from '@app/clientComponents/freemiumNotification'
 import { AsanaActivity } from 'types/asana'
+import { useSafeAsanaPose as useAsanaPose } from '@app/context/AsanaPoseContext'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -115,125 +116,139 @@ export default function Page() {
     deepening_cues: '',
   })
 
-  // Create field configurations for AsanaDetailsEdit
-  const formFields: AsanaEditFieldProps[] = [
-    {
-      type: 'text',
-      label: 'Asana Pose Name',
-      value: formFullAsanaPoseData.sort_english_name,
-      onChange: (value: string) =>
-        setFormFullAsanaPoseData({
-          ...formFullAsanaPoseData,
-          sort_english_name: value,
-        }),
-      required: true,
-      placeholder: 'Enter the name of the asana',
+  // Create field configurations for AsanaDetailsEdit (memoized to avoid
+  // recreating handlers/objects every render which can cause extra updates)
+  // Stable setter that avoids updating state when the value hasn't changed
+  // and includes a short-lived guard to detect runaway updates.
+  const setFieldCallCount = React.useRef(0)
+
+  const setField = React.useCallback((key: string, value: any) => {
+    setFieldCallCount.current += 1
+    if (setFieldCallCount.current > 200) {
+      console.error(
+        'setField called >200 times rapidly; skipping update for key:',
+        key
+      )
+      console.trace()
+      return
+    }
+
+    setFormFullAsanaPoseData((prev) => {
+      const current = (prev as any)[key]
+      const isEqual =
+        Array.isArray(current) && Array.isArray(value)
+          ? JSON.stringify(current) === JSON.stringify(value)
+          : current === value
+      if (isEqual) return prev
+      return { ...(prev as any), [key]: value }
+    })
+  }, [])
+
+  const formFields: AsanaEditFieldProps[] = React.useMemo(
+    () => [
+      {
+        type: 'text',
+        fieldKey: 'sort_english_name',
+        label: 'Asana Pose Name',
+        value: formFullAsanaPoseData.sort_english_name,
+        required: true,
+        placeholder: 'Enter the name of the asana',
+        onChange: (value: any) => setField('sort_english_name', value),
+      },
+      {
+        type: 'autocomplete',
+        fieldKey: 'category',
+        label: 'Category',
+        value: formFullAsanaPoseData.category,
+        options: categories,
+        placeholder: 'Select a Category',
+        freeSolo: true,
+        onChange: (value: any) => setField('category', value),
+      },
+      {
+        type: 'variations',
+        fieldKey: 'english_names',
+        label: 'Name Variations',
+        value: formFullAsanaPoseData.english_names,
+        placeholder: 'e.g. "Downward Dog, Adho Mukha Svanasana"',
+        helperText: 'Separate name variants with commas',
+        onChange: (value: any) => setField('english_names', value),
+      },
+      {
+        type: 'multiline',
+        fieldKey: 'description',
+        label: 'Description',
+        value: formFullAsanaPoseData.description,
+        placeholder: 'Enter a detailed description...',
+        rows: 4,
+        onChange: (value: any) => setField('description', value),
+      },
+      {
+        type: 'buttonGroup',
+        fieldKey: 'difficulty',
+        label: 'Difficulty Level',
+        value: formFullAsanaPoseData.difficulty,
+        options: ['Easy', 'Average', 'Difficult'],
+        helperText: 'Select the difficulty level for this asana',
+        onChange: (value: any) => setField('difficulty', value),
+      },
+      {
+        type: 'text',
+        fieldKey: 'sanskrit_names',
+        label: 'Sanskrit Name(s)',
+        value: formFullAsanaPoseData.sanskrit_names[0] || '',
+        placeholder: 'e.g. Tadasana, Vrikshasana',
+        onChange: (value: any) => setField('sanskrit_names', [value]),
+      },
+      {
+        type: 'text',
+        fieldKey: 'dristi',
+        label: 'Dristi (Gaze Point)',
+        value: formFullAsanaPoseData.dristi || '',
+        placeholder:
+          'e.g. "Tip of the nose", "Between the eyebrows", "Hand", "Toes", "Upward to the sky"',
+        helperText:
+          'Type your own or use suggestions like: Tip of the nose, Between the eyebrows, Hand, Toes, Upward to the sky',
+        onChange: (value: any) => setField('dristi', value),
+      },
+      {
+        type: 'multiline',
+        fieldKey: 'setup_cues',
+        label: 'Setup Cues',
+        value: formFullAsanaPoseData.setup_cues || '',
+        placeholder: 'Enter a detailed description...',
+        rows: 4,
+        onChange: (value: any) => setField('setup_cues', value),
+      },
+      {
+        type: 'multiline',
+        fieldKey: 'deepening_cues',
+        label: 'Deepening Cues',
+        value: formFullAsanaPoseData.deepening_cues || '',
+        placeholder: 'Enter a detailed description...',
+        rows: 4,
+        onChange: (value: any) => setField('deepening_cues', value),
+      },
+      {
+        type: 'variations',
+        fieldKey: 'alternative_english_names',
+        label: 'Alternative Names (Custom/Nicknames)',
+        value: formFullAsanaPoseData.alternative_english_names,
+        placeholder: 'e.g. "My favorite twist, Pretzel pose"',
+        helperText: 'Add your own custom names or nicknames for this pose',
+        onChange: (value: any) => setField('alternative_english_names', value),
+      },
+    ],
+    // Recompute when the form data, categories or setField change
+    [formFullAsanaPoseData, categories, setField]
+  )
+
+  const globalOnChange = React.useCallback(
+    (key: string, value: any) => {
+      setField(key, value)
     },
-    {
-      type: 'autocomplete',
-      label: 'Category',
-      value: formFullAsanaPoseData.category,
-      options: categories,
-      onChange: (value: string) =>
-        setFormFullAsanaPoseData({ ...formFullAsanaPoseData, category: value }),
-      placeholder: 'Select a Category',
-      freeSolo: true,
-    },
-    {
-      type: 'variations',
-      label: 'Name Variations',
-      value: formFullAsanaPoseData.english_names,
-      onChange: (value: string[]) =>
-        setFormFullAsanaPoseData({
-          ...formFullAsanaPoseData,
-          english_names: value,
-        }),
-      placeholder: 'e.g. "Downward Dog, Adho Mukha Svanasana"',
-      helperText: 'Separate name variants with commas',
-    },
-    {
-      type: 'multiline',
-      label: 'Description',
-      value: formFullAsanaPoseData.description,
-      onChange: (value: string) =>
-        setFormFullAsanaPoseData({
-          ...formFullAsanaPoseData,
-          description: value,
-        }),
-      placeholder: 'Enter a detailed description...',
-      rows: 4,
-    },
-    {
-      type: 'buttonGroup',
-      label: 'Difficulty Level',
-      value: formFullAsanaPoseData.difficulty,
-      options: ['Easy', 'Average', 'Difficult'],
-      onChange: (value: string) =>
-        setFormFullAsanaPoseData({
-          ...formFullAsanaPoseData,
-          difficulty: value,
-        }),
-      helperText: 'Select the difficulty level for this asana',
-    },
-    {
-      type: 'text',
-      label: 'Sanskrit Name(s)',
-      value: formFullAsanaPoseData.sanskrit_names[0] || '',
-      onChange: (value: string) =>
-        setFormFullAsanaPoseData({
-          ...formFullAsanaPoseData,
-          sanskrit_names: [value],
-        }),
-      placeholder: 'e.g. Tadasana, Vrikshasana',
-    },
-    {
-      type: 'text',
-      label: 'Dristi (Gaze Point)',
-      value: formFullAsanaPoseData.dristi || '',
-      onChange: (value: string) =>
-        setFormFullAsanaPoseData({ ...formFullAsanaPoseData, dristi: value }),
-      placeholder:
-        'e.g. "Tip of the nose", "Between the eyebrows", "Hand", "Toes", "Upward to the sky"',
-      helperText:
-        'Type your own or use suggestions like: Tip of the nose, Between the eyebrows, Hand, Toes, Upward to the sky',
-    },
-    {
-      type: 'multiline',
-      label: 'Setup Cues',
-      value: formFullAsanaPoseData.setup_cues || '',
-      onChange: (value: string) =>
-        setFormFullAsanaPoseData({
-          ...formFullAsanaPoseData,
-          setup_cues: value,
-        }),
-      placeholder: 'Enter a detailed description...',
-      rows: 4,
-    },
-    {
-      type: 'multiline',
-      label: 'Deepening Cues',
-      value: formFullAsanaPoseData.deepening_cues || '',
-      onChange: (value: string) =>
-        setFormFullAsanaPoseData({
-          ...formFullAsanaPoseData,
-          deepening_cues: value,
-        }),
-      placeholder: 'Enter a detailed description...',
-      rows: 4,
-    },
-    {
-      type: 'variations',
-      label: 'Alternative Names (Custom/Nicknames)',
-      value: formFullAsanaPoseData.alternative_english_names,
-      onChange: (value: string[]) =>
-        setFormFullAsanaPoseData({
-          ...formFullAsanaPoseData,
-          alternative_english_names: value,
-        }),
-      placeholder: 'e.g. "My favorite twist, Pretzel pose"',
-      helperText: 'Add your own custom names or nicknames for this pose',
-    },
-  ]
+    [setField]
+  )
 
   const handleImageUploaded = (image: PoseImageData) => {
     setUploadedImages((prev) => [...prev, image])
@@ -397,7 +412,7 @@ export default function Page() {
       setNotificationState({ isOpen: true })
       router.push(NAV_PATHS.ASANA_POSES)
     }
-  }, [checkFeatureAccess, router])
+  }, [])
 
   // Close notification handler
   const handleCloseNotification = () => {

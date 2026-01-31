@@ -65,6 +65,11 @@ model UserData {
   tz                 String             @default("America/Los_Angeles") // store IANA TZ
   reminders          Reminder[]
   pushSubscriptions  PushSubscription[]
+  // Denormalized TOS acceptance quick-check fields
+  acceptedTosVersionId String?  @map("accepted_tos_version_id")
+  acceptedTosAt        DateTime? @map("accepted_tos_at")
+  // Relation: append-only acceptances for audit
+  tosAcceptances      UserTosAcceptance[] // Relation to UserTosAcceptance
 }
 
 model Reminder {
@@ -322,6 +327,36 @@ model GlossaryTerm {
 
   @@index([source])
   @@index([userId])
+}
+
+/// Stores published Terms of Service versions for audit and re-accept flows.
+model TosVersion {
+  id          String   @id @map("_id")
+  title       String
+  summary     String?
+  effectiveAt DateTime
+  externalUrl String?  @default("https://www.happyyoga.app/compliance/terms")
+  active      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([active])
+}
+
+/// Records an acceptance event when a user accepts a specific TOS version.
+model UserTosAcceptance {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @db.ObjectId
+  user         UserData @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tosVersionId String
+  acceptedAt   DateTime @default(now())
+  ipAddress    String?
+  userAgent    String?
+  method       String   // 'signup' | 'reauthorize'
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([tosVersionId])
 }
 
 enum GlossarySource {

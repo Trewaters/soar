@@ -92,57 +92,11 @@ export default async function SignUpPage() {
             justifyContent={'center'}
             sx={{ mt: 4 }}
           >
-            {!session &&
-              Object.values(providerMap).map((provider, index) => (
-                <form
-                  key={index}
-                  action={async () => {
-                    'use server'
-                    // eslint-disable-next-line no-useless-catch
-                    try {
-                      // await signIn(provider.id, {
-                      //   redirectTo: props.searchParams?.callbackUrl ?? '',
-                      // })
-                      await signIn(provider.id, {
-                        redirectTo: '/navigator/profile',
-                      })
-                    } catch (error) {
-                      // Signin can fail for a number of reasons, such as the user
-                      // not existing, or the user not having the correct role.
-                      // In some cases, you may want to redirect to a custom error
-                      // if (error instanceof AuthError) {
-                      //   return redirect(`${SIGNIN_ERROR_URL}?error=${error.type}`)
-                      // }
-
-                      // Otherwise if a redirects happens Next.js can handle it
-                      // so you can just re-thrown the error and let Next.js handle it.
-                      // Docs:
-                      // https://nextjs.org/docs/app/api-reference/functions/redirect#server-component
-                      throw error
-                    }
-                  }}
-                >
-                  <Button
-                    type="submit"
-                    variant="outlined"
-                    sx={{ my: 2, borderRadius: '12px' }}
-                    startIcon={
-                      <Image
-                        src={
-                          provider.name.toLowerCase() === 'google'
-                            ? '/icons/profile/auth-google.svg'
-                            : '/icons/profile/auth-github-mark.svg'
-                        }
-                        alt={provider.name}
-                        width={20}
-                        height={20}
-                      />
-                    }
-                  >
-                    <Typography>Sign in with {provider.name}</Typography>
-                  </Button>
-                </form>
-              ))}
+            {!session && (
+              // Client component enforces TOS acceptance before sign-in
+              // @ts-ignore - providerMap is serializable
+              <SignupProviders providers={Object.values(providerMap)} />
+            )}
           </Stack>
         </Stack>
       </Stack>

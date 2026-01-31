@@ -29,19 +29,6 @@ An **asana** is a single yoga posture. This page lists available asanas from you
 - **Public Asanas**: Community-shared poses
 - **Others**: All other poses
 
-### Pose List / Cards
-
-- Shows thumbnail, English name, and short metadata (difficulty/category).
-- Tap a card to open the pose detail view where you can see instructions, images, and practice controls.
-
-### Practice Button
-
-- Located on each pose card or detail view — opens the practice player for that pose.
-
-### Create Button (Authenticated users)
-
-- Allows you to add a new pose. Requires authentication. If unavailable, you will see a freemium/permission notice.
-
 ## Using Practice Asanas — Step-by-Step
 
 1. **Open the page**: Navigate to `/navigator/asanaPoses/practiceAsanas`.
@@ -77,8 +64,3 @@ A: The page may refresh when you return from the create flow. If it doesn't, try
 - **Screen readers**: Form fields and buttons include ARIA labels where applicable.
 - **Keyboard navigation**: Use `Tab` to move through the search input and pose cards; press `Enter` to activate selections.
 - **Touch targets**: Buttons and cards are sized for comfortable tapping on mobile devices.
-
-## Permissions & Notes
-
-- **Authenticated actions**: Creating and editing poses require sign-in.
-- **Freemium**: Some advanced features may be restricted — a notification explains how to upgrade or get access.

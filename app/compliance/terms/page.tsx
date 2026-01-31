@@ -1,16 +1,52 @@
 import { Box, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { TermsService } from './constants/Strings'
+import { prisma } from '@lib/prismaClient'
 
-const TermsOfService: React.FC = () => {
+export default async function TermsOfService({
+  searchParams,
+}: {
+  searchParams?: any
+}) {
+  // Access the TosVersion model via the prisma client; use bracket access to
+  // avoid TS errors if the generated client types are out-of-sync.
+  // Try to load the active version; if none exists, fall back to the most
+  // recently created version so the page still shows an id for staging/dev.
+  const client: any = prisma
+  let active = await client['tosVersion']?.findFirst({
+    where: { active: true },
+    orderBy: { createdAt: 'desc' },
+    select: { id: true, title: true, effectiveAt: true },
+  })
+
+  if (!active) {
+    active = await client['tosVersion']?.findFirst({
+      orderBy: { createdAt: 'desc' },
+      select: { id: true, title: true, effectiveAt: true },
+    })
+  }
+
+  // Remove debug logging and JSON output for production clarity
+
   return (
     <Box style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
       <Stack spacing={'64px'}>
         <Stack>
           <Typography variant="h1">{TermsService.TITLE}</Typography>
-          <Typography variant="body1">{TermsService.EFFECTIVE_DATE}</Typography>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Typography variant="body1">
+              {active?.effectiveAt
+                ? `Effective: ${new Date(active.effectiveAt).toLocaleDateString()}`
+                : TermsService.EFFECTIVE_DATE}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Version: {active?.title ?? 'none'}
+            </Typography>
+          </Stack>
           <Typography variant="body1">{TermsService.INTRO}</Typography>
         </Stack>
+
+        {/* Debug output removed */}
 
         <Stack>
           <Typography variant="h2">
@@ -126,5 +162,3 @@ const TermsOfService: React.FC = () => {
     </Box>
   )
 }
-
-export default TermsOfService

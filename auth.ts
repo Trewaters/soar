@@ -452,6 +452,30 @@ const authConfig = {
               // Don't throw - allow sign-in to continue even if update fails
             }
           }
+          // After creating/linking user, perform a TOS acceptance check so the
+          // initial token/session can include TOS state immediately after sign-in.
+          try {
+            const activeTos = await prisma.tosVersion.findFirst({
+              where: { active: true },
+              orderBy: { createdAt: 'desc' },
+              select: { id: true },
+            })
+            const userRecord = await prisma.userData.findUnique({
+              where: { email: user.email ?? undefined },
+              select: { acceptedTosVersionId: true },
+            })
+
+            ;(user as any).tosCurrentVersion = activeTos?.id ?? null
+            ;(user as any).suspendedTos = Boolean(
+              activeTos?.id &&
+                userRecord?.acceptedTosVersionId !== activeTos?.id
+            )
+          } catch (e) {
+            console.error(
+              'Error checking TOS acceptance during signIn callback:',
+              e
+            )
+          }
         }
         return true
       } catch (error) {
@@ -485,6 +509,15 @@ const authConfig = {
       // Include role in session for authorization
       if (session?.user && token.role) {
         session.user.role = token.role as string
+      }
+
+      // Include TOS status in session for client-side handling
+      if (session?.user && (token as any).tosCurrentVersion) {
+        session.user.tosCurrentVersion = (token as any)
+          .tosCurrentVersion as string
+      }
+      if (session?.user) {
+        session.user.suspended_tos = Boolean((token as any).suspendedTos)
       }
 
       return session
@@ -565,6 +598,27 @@ const authConfig = {
         // Update role from database to catch role changes
         token.role = userExists.role || 'user'
         token.lastUserCheck = now
+        // Check TOS acceptance: get active TOS and user's accepted TOS
+        try {
+          const activeTos = await prisma.tosVersion.findFirst({
+            where: { active: true },
+            orderBy: { createdAt: 'desc' },
+          })
+          const userTos = await prisma.userData.findUnique({
+            where: { id: token.id as string },
+            select: { acceptedTosVersionId: true },
+          })
+          const activeId = activeTos?.id || null
+          const acceptedId = userTos?.acceptedTosVersionId || null
+          ;(token as any).tosCurrentVersion = activeId
+          ;(token as any).suspendedTos = Boolean(
+            activeId && acceptedId !== activeId
+          )
+        } catch (e) {
+          console.error('Error checking TOS acceptance during JWT callback:', e)
+          ;(token as any).tosCurrentVersion = null
+          ;(token as any).suspendedTos = false
+        }
       }
 
       if (account?.provider === 'google') {

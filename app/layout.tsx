@@ -3,6 +3,7 @@ import { ReactNode } from 'react'
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import { Providers } from '@providers/Providers'
+import TosReacceptGuard from '@clientComponents/TosReacceptGuard'
 import { auth } from '../auth'
 import ServiceWorkerRegister from '@clientComponents/ServiceWorkerRegister'
 
@@ -59,6 +60,7 @@ export default async function RootLayout({
       </head>
       <body>
         <Providers session={session}>
+          <TosReacceptGuard />
           {/* Handle wallet extension conflicts before loading analytics */}
           <Script
             id="wallet-conflict-handler"

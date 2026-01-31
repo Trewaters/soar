@@ -14,6 +14,7 @@ jest.mock('next-auth/react')
 // Remove local next/navigation mock - use global mock from jest.setup.ts
 jest.mock('@app/context/AsanaPoseContext', () => ({
   useAsanaPose: jest.fn(),
+  useSafeAsanaPose: jest.fn(),
 }))
 // Note: @lib/poseService is now centrally mocked in jest.setup.ts
 jest.mock('@app/clientComponents/imageUpload/ImageManagement', () => ({
@@ -51,12 +52,14 @@ describe('CreateAsanaWithImages - Happy Path', () => {
       status: 'authenticated',
     })
 
-    // Mock AsanaPose context
-    const { useAsanaPose } = require('@app/context/AsanaPoseContext')
-    useAsanaPose.mockReturnValue({
+    // Mock AsanaPose context (both hooks)
+    const ctx = require('@app/context/AsanaPoseContext')
+    ctx.useAsanaPose.mockReturnValue({
       state: mockState,
       dispatch: mockDispatch,
     })
+    // ensure useSafeAsanaPose mirrors useAsanaPose in tests
+    ctx.useSafeAsanaPose.mockImplementation(() => ctx.useAsanaPose())
   })
 
   const TestWrapper: React.FC<{ children: React.ReactNode }> = ({
