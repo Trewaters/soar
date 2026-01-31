@@ -10,6 +10,7 @@ export const NAV_PATHS = {
   FLOWS_PRACTICE_SERIES: '/navigator/flows/practiceSeries',
   // Sequences base path (id in path)
   SEQUENCES: '/navigator/sequences',
+  COMPLIANCE_TERMS_SERVICE: '/compliance/terms',
 }
 
 export default NAV_PATHS

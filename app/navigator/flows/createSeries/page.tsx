@@ -51,10 +51,6 @@ export default function Page() {
   const lastFetchTimeRef = useRef<number>(0)
   const fetchInFlightRef = useRef<boolean>(false)
 
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen)
-  }
-
   const fetchPoses = React.useCallback(async () => {
     const emailKey = session?.user?.email || 'guest'
     const now = Date.now()

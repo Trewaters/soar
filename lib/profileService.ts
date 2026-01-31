@@ -399,4 +399,6 @@ export async function getLibrary(params: GetLibraryParams) {
   }
 }
 
-export default { getLibrary }
+const profileService = { getLibrary }
+
+export default profileService

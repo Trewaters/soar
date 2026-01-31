@@ -49,4 +49,6 @@ export async function fetchProfileLibrary(params: FetchProfileParams) {
   }
 }
 
-export default { fetchProfileLibrary }
+const profileClient = { fetchProfileLibrary }
+
+export default profileClient

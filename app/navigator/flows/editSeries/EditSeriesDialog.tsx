@@ -53,7 +53,6 @@ const EditSeriesDialog: React.FC<EditSeriesDialogProps> = ({
   onDelete,
   inline = false,
 }) => {
-  const { data: session } = useSession()
   const { canEdit } = useCanEditContent(series.created_by)
 
   // Form implementation moved to SeriesEditorForm; this component wraps it

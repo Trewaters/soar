@@ -219,8 +219,9 @@ export async function getAccessiblePoses(
     const uniquePoses = Array.isArray(data)
       ? data.filter(
           (pose, index, arr) =>
-            arr.findIndex((p) => p.sort_english_name === pose.sort_english_name) ===
-            index
+            arr.findIndex(
+              (p) => p.sort_english_name === pose.sort_english_name
+            ) === index
         )
       : []
 

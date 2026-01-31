@@ -29,8 +29,8 @@ export default function TosReacceptModal({ open, loading, onAccept }: Props) {
       <DialogTitle id="tos-reaccept-title">Terms of Service Update</DialogTitle>
       <DialogContent dividers>
         <Typography gutterBottom>
-          We've updated our Terms of Service. To continue using your account you
-          must review and accept the new terms.
+          We&apos;ve updated our Terms of Service. To continue using your
+          account you must review and accept the new terms.
         </Typography>
 
         <Typography variant="body2" sx={{ mt: 1 }}>

@@ -3,6 +3,7 @@ import { Box, Button, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
 import { signIn, providerMap, auth } from '../../../auth'
+import SignupProviders from '../SignupProviders'
 
 export default async function SignUpPage() {
   const session = await auth()
@@ -93,8 +94,6 @@ export default async function SignUpPage() {
             sx={{ mt: 4 }}
           >
             {!session && (
-              // Client component enforces TOS acceptance before sign-in
-              // @ts-ignore - providerMap is serializable
               <SignupProviders providers={Object.values(providerMap)} />
             )}
           </Stack>

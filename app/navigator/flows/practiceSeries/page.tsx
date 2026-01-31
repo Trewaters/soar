@@ -215,6 +215,7 @@ export default function Page() {
         setLoading(false)
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [seriesId]
   )
 

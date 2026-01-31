@@ -48,8 +48,10 @@ export interface SeriesEditorFormProps {
   series: Series
   mode?: Mode
   disabled?: boolean
+  // eslint-disable-next-line no-unused-vars
   onSave?: (updated: Series) => void
   onCancel?: () => void
+  // eslint-disable-next-line no-unused-vars
   onDelete?: (id: string) => void
 }
 

@@ -4,25 +4,19 @@ import { SequenceData } from '@context/SequenceContext'
 import { FEATURES } from '@app/FEATURES'
 import {
   Autocomplete,
-  Avatar,
+  FormControl,
   Box,
   Button,
   IconButton,
-  Drawer,
-  FormControl,
   FormGroup,
-  FormLabel,
   List,
   ListItem,
-  ListItemAvatar,
   ListItemText,
   ListSubheader,
   Paper,
   Stack,
   TextField,
   Typography,
-  ListItemIcon,
-  Checkbox,
 } from '@mui/material'
 import { useSession } from 'next-auth/react'
 import {
@@ -33,11 +27,7 @@ import {
   useState,
   useMemo,
 } from 'react'
-import { LooksOne } from '@mui/icons-material'
-import LooksTwoIcon from '@mui/icons-material/LooksTwo'
-import Looks3Icon from '@mui/icons-material/Looks3'
-import Looks4Icon from '@mui/icons-material/Looks4'
-import Looks5Icon from '@mui/icons-material/Looks5'
+// removed unused icon imports to silence lint warnings
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
@@ -267,9 +257,7 @@ export default function Page() {
     setIsDirtyDescription(false)
   }
 
-  const toggleDrawer = (newOpen: boolean) => () => {
-    setOpen(newOpen)
-  }
+  // open state toggled inline where needed (HelpButton / HelpDrawer)
 
   // Function to update poses based on the current series index
   const updatePoses = (index: number) => {

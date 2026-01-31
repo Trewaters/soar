@@ -201,6 +201,7 @@ ${'='.repeat(80)}
     }
   }
 
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   private sendToExternalService(_errorInfo: LoggedError): void {
     // Placeholder for external logging service integration
     // You could integrate with services like:

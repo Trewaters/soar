@@ -29,4 +29,5 @@ export function trackClientEvent(
   }
 }
 
-export default { trackServerEvent, trackClientEvent }
+const telemetry = { trackServerEvent, trackClientEvent }
+export default telemetry

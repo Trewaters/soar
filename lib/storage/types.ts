@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * Common interfaces for storage providers
  * Allows easy switching between cloud storage solutions
@@ -75,7 +76,7 @@ export interface StorageProvider {
    * @returns Promise with upload result
    */
   upload(
-    fileName: string,
+    _fileName: string,
     file: File | Blob | Buffer,
     options?: StorageUploadOptions
   ): Promise<StorageUploadResult>
