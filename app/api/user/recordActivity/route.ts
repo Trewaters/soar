@@ -162,8 +162,6 @@ export async function POST(req: NextRequest) {
 }
 
 async function calculateLoginStreak(userId: string) {
-  const functionStartTime = Date.now()
-
   try {
     // Get user's login events ordered by date (most recent first)
     const loginEvents = await prisma.userLogin.findMany({
@@ -257,8 +255,6 @@ async function calculateLoginStreak(userId: string) {
       lastLoginDate,
       isActiveToday,
     }
-
-    const totalTime = Date.now() - functionStartTime
 
     return result
   } catch (error) {

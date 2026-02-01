@@ -1,22 +1,31 @@
 'use client'
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 import React, { createContext, useContext, useState, ReactNode } from 'react'
 
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 interface NavigationLoadingState {
   isNavigating: boolean
   targetPath: string | null
   elementId: string | null
   navId: string | null
 }
+/* eslint-enable no-unused-vars, @typescript-eslint/no-unused-vars */
 
 interface NavigationLoadingContextType {
   state: NavigationLoadingState
   startNavigation: (
+    // eslint-disable-next-line no-unused-vars
     targetPath: string,
+    // eslint-disable-next-line no-unused-vars
     elementId?: string,
+    // eslint-disable-next-line no-unused-vars
     navId?: string
   ) => void
+  // eslint-disable-next-line no-unused-vars
   endNavigation: (navId?: string) => void
+  // eslint-disable-next-line no-unused-vars
   isNavigatingTo: (path: string) => boolean
+  // eslint-disable-next-line no-unused-vars
   isElementLoading: (elementId: string) => boolean
 }
 

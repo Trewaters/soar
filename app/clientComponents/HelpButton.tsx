@@ -19,7 +19,7 @@ interface HelpButtonProps {
  * @example
  * // Basic usage with HelpDrawer
  * const [open, setOpen] = useState(false)
- * 
+ *
  * <HelpButton onClick={() => setOpen(true)} />
  * <HelpDrawer open={open} onClose={() => setOpen(false)} helpText="..." />
  *

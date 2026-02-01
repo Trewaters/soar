@@ -5,6 +5,8 @@
  * into a single reusable component with configurable behavior via props.
  */
 
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
+
 /**
  * Supported entity types for activity tracking
  */

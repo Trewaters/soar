@@ -1,5 +1,4 @@
 import { prisma } from '../../../../app/lib/prismaClient'
-import { auth } from '../../../../auth'
 import { requireAuth } from '@app/utils/authorization'
 import { NextResponse } from 'next/server'
 

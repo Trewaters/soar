@@ -408,6 +408,7 @@ function AsanasLibrary({
   loadMore?: () => Promise<void>
   hasMore?: boolean
   page?: number | undefined
+  // eslint-disable-next-line no-unused-vars
   setPage?: ((p: number) => Promise<void>) | undefined
   totalCount?: number | null
   pageSize?: number
@@ -618,6 +619,7 @@ function SeriesLibrary({
   loadMore?: () => Promise<void>
   hasMore?: boolean
   page?: number | undefined
+  // eslint-disable-next-line no-unused-vars
   setPage?: ((p: number) => Promise<void>) | undefined
   totalCount?: number | null
   pageSize?: number
@@ -819,6 +821,7 @@ function SequencesLibrary({
   loadMore?: () => Promise<void>
   hasMore?: boolean
   page?: number | undefined
+  // eslint-disable-next-line no-unused-vars
   setPage?: ((p: number) => Promise<void>) | undefined
   totalCount?: number | null
   pageSize?: number
@@ -1039,7 +1042,7 @@ function AsanaListItem({
     }
 
     fetchImages()
-  }, [asana.id, asana.sort_english_name])
+  }, [asana.id, asana.sort_english_name, isAdmin])
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -1532,7 +1535,7 @@ function AsanaCard({
     }
 
     fetchImages()
-  }, [asana.id, asana.sort_english_name])
+  }, [asana.id, asana.sort_english_name, isAdmin])
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation() // Prevent card click navigation

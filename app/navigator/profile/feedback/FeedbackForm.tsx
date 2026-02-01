@@ -68,6 +68,7 @@ const initialFormData: FeedbackData = {
 const RatingButton: React.FC<{
   value: number
   currentValue: number
+  // eslint-disable-next-line no-unused-vars
   onChange: (value: number) => void
   icon: React.ReactNode
   label: string

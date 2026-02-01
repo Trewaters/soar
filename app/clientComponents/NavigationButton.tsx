@@ -8,6 +8,7 @@ import {
   useTheme,
 } from '@mui/material'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 
 interface NavigationButtonProps extends Omit<ButtonProps, 'onClick'> {
   href?: string

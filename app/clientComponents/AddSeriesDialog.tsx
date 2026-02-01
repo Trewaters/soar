@@ -7,7 +7,6 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  TextField,
   List,
   ListItem,
   ListItemText,
@@ -37,7 +36,8 @@ interface SeriesOption {
 interface AddSeriesDialogProps {
   open: boolean
   onClose: () => void
-  onAdd: (series: SeriesOption[]) => void
+  // eslint-disable-next-line no-unused-vars
+  onAdd: (items: SeriesOption[]) => void
   excludeSeriesIds?: string[]
 }
 
@@ -70,9 +70,7 @@ export default function AddSeriesDialog({
         const series: SeriesOption[] = await response.json()
 
         // Filter out series that are already in the sequence
-        const filtered = series.filter(
-          (series) => !excludeSeriesIds.includes(series.id)
-        )
+        const filtered = series.filter((s) => !excludeSeriesIds.includes(s.id))
 
         setAvailableSeries(filtered)
         setFilteredSeries(filtered)
@@ -90,10 +88,10 @@ export default function AddSeriesDialog({
 
   // Filter series based on search term
   useEffect(() => {
-    const filtered = availableSeries.filter((series) => {
-      const seriesName = series.seriesName?.toLowerCase() || ''
-      const description = series.description?.toLowerCase() || ''
-      const poseCount = series.seriesPoses?.length.toString() || ''
+    const filtered = availableSeries.filter((s) => {
+      const seriesName = s.seriesName?.toLowerCase() || ''
+      const description = s.description?.toLowerCase() || ''
+      const poseCount = s.seriesPoses?.length.toString() || ''
 
       const searchLower = searchTerm.toLowerCase()
 
@@ -158,11 +156,11 @@ export default function AddSeriesDialog({
                 Selected Series ({selectedSeries.length}):
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                {selectedSeries.map((series) => (
+                {selectedSeries.map((s) => (
                   <Chip
-                    key={series.id}
-                    label={`${series.seriesName} (${series.seriesPoses?.length || 0} poses)`}
-                    onDelete={() => handleSeriesToggle(series)}
+                    key={s.id}
+                    label={`${s.seriesName} (${s.seriesPoses?.length || 0} poses)`}
+                    onDelete={() => handleSeriesToggle(s)}
                     color="primary"
                     variant="outlined"
                   />
@@ -195,20 +193,20 @@ export default function AddSeriesDialog({
                 />
               </ListItem>
             ) : (
-              filteredSeries.map((series) => (
+              filteredSeries.map((s) => (
                 <ListItem
-                  key={series.id}
-                  onClick={() => handleSeriesToggle(series)}
+                  key={s.id}
+                  onClick={() => handleSeriesToggle(s)}
                   dense
                   sx={{ cursor: 'pointer' }}
                 >
                   <ListItemAvatar>
-                    <Avatar src={series.image} alt={series.seriesName}>
-                      {series.seriesName?.[0]?.toUpperCase()}
+                    <Avatar src={s.image} alt={s.seriesName}>
+                      {s.seriesName?.[0]?.toUpperCase()}
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText
-                    primary={series.seriesName}
+                    primary={s.seriesName}
                     secondary={
                       <Box
                         sx={{
@@ -217,23 +215,23 @@ export default function AddSeriesDialog({
                           gap: 0.5,
                         }}
                       >
-                        {series.description && (
+                        {s.description && (
                           <Typography variant="body2" color="text.secondary">
-                            {series.description.length > 60
-                              ? `${series.description.substring(0, 60)}...`
-                              : series.description}
+                            {s.description.length > 60
+                              ? `${s.description.substring(0, 60)}...`
+                              : s.description}
                           </Typography>
                         )}
                         <Box sx={{ display: 'flex', gap: 1 }}>
                           <Chip
-                            label={`${series.seriesPoses?.length || 0} poses`}
+                            label={`${s.seriesPoses?.length || 0} poses`}
                             size="small"
                             color="primary"
                             variant="outlined"
                           />
-                          {series.durationSeries && (
+                          {s.durationSeries && (
                             <Chip
-                              label={series.durationSeries}
+                              label={s.durationSeries}
                               size="small"
                               color="secondary"
                               variant="outlined"
@@ -246,10 +244,10 @@ export default function AddSeriesDialog({
                   <ListItemSecondaryAction>
                     <Checkbox
                       edge="end"
-                      checked={isSeriesSelected(series)}
-                      onChange={() => handleSeriesToggle(series)}
+                      checked={isSeriesSelected(s)}
+                      onChange={() => handleSeriesToggle(s)}
                       inputProps={{
-                        'aria-labelledby': `add-series-${series.id}`,
+                        'aria-labelledby': `add-series-${s.id}`,
                       }}
                     />
                   </ListItemSecondaryAction>

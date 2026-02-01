@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   Box,
   Typography,
@@ -16,8 +16,6 @@ import {
   Alert,
   CircularProgress,
   Fab,
-  useMediaQuery,
-  useTheme,
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
@@ -26,7 +24,8 @@ import { useSession } from 'next-auth/react'
 
 interface SeriesImageManagerProps {
   seriesId: string
-  onImagesChange?: (images: string[]) => void
+  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  onImagesChange?: (_images: string[]) => void
   disabled?: boolean
 }
 
@@ -36,10 +35,9 @@ export default function SeriesImageManager({
   disabled = false,
 }: SeriesImageManagerProps) {
   const { data: session } = useSession()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  // theme/media queries removed — not currently used
 
-  const [images, setImages] = useState<string[]>([])
+  const [_images, setImages] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -48,17 +46,15 @@ export default function SeriesImageManager({
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-  // Fetch series images
-  const fetchImages = async () => {
+  // Fetch series images (memoized)
+  const fetchImages = useCallback(async () => {
     if (!seriesId) return
 
     try {
       setLoading(true)
       setError(null)
 
-      // Some test environments don't provide global.fetch; guard against that
       if (typeof fetch !== 'function') {
-        // Skip fetching in environments without fetch (tests will mock behavior)
         setImages([])
         onImagesChange?.([])
         return
@@ -73,19 +69,19 @@ export default function SeriesImageManager({
       const data = await response.json()
       setImages(data.images || [])
       onImagesChange?.(data.images || [])
-    } catch (error) {
-      console.error('Error fetching series images:', error)
+    } catch (err) {
+      console.error('Error fetching series images:', err)
       setError('Failed to load images')
     } finally {
       setLoading(false)
     }
-  }
+  }, [seriesId, onImagesChange])
 
   useEffect(() => {
     if (session?.user?.email && seriesId) {
       fetchImages()
     }
-  }, [session?.user?.email, seriesId])
+  }, [session?.user?.email, seriesId, fetchImages])
 
   // Handle file selection
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -204,7 +200,7 @@ export default function SeriesImageManager({
         </Alert>
       )}
 
-      {images.length === 0 && !error ? (
+      {_images.length === 0 && !error ? (
         <Alert severity="info" sx={{ mb: 2 }}>
           No images uploaded yet. Add images to showcase your series.
         </Alert>
@@ -212,7 +208,7 @@ export default function SeriesImageManager({
 
       {/* Image Grid */}
       <Grid container spacing={2} sx={{ mb: 2 }}>
-        {images.map((imageUrl, index) => (
+        {_images.map((imageUrl, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             <Card sx={{ position: 'relative' }}>
               <CardMedia

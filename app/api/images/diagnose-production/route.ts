@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
 import { prisma } from '../../../lib/prismaClient'
 import { storageManager } from '../../../../lib/storage/manager'
@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic'
  * Diagnostic endpoint to check image storage and configuration in production
  * Usage: GET /api/images/diagnose-production
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Check authentication
     const session = await auth()

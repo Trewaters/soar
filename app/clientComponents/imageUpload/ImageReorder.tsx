@@ -3,6 +3,7 @@
  * Provides drag-and-drop and button-based reordering for multi-image management
  */
 
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 'use client'
 import React, { useState, useRef, useEffect } from 'react'
 import {

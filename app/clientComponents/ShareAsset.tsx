@@ -19,6 +19,7 @@ import {
   resolveSequenceCanonical,
 } from '@app/utils/shareIdResolver'
 
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 type ShareAssetProps = {
   content: ShareableContent
   variant?: 'icon' | 'button' | 'compact'
@@ -32,6 +33,7 @@ type ShareAssetProps = {
   /** Optional default message shown in the input when `allowCustomText` is enabled */
   defaultMessage?: string
 }
+/* eslint-enable no-unused-vars, @typescript-eslint/no-unused-vars */
 
 export default function ShareAsset({
   content,
@@ -238,12 +240,14 @@ export default function ShareAsset({
       setIsSharing(false)
     }
   }, [
-    shareConfig,
     copyToClipboard,
     detectWebShareSupport,
     handleSnackbar,
     onShareComplete,
     shareWithNativeAPI,
+    content,
+    customText,
+    validateContent,
   ])
 
   const handleClose = useCallback(() => setSnackbarOpen(false), [])

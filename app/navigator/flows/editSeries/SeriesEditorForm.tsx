@@ -49,10 +49,10 @@ export interface SeriesEditorFormProps {
   mode?: Mode
   disabled?: boolean
   // eslint-disable-next-line no-unused-vars
-  onSave?: (updated: Series) => void
+  onSave?: (_updated: Series) => void
   onCancel?: () => void
   // eslint-disable-next-line no-unused-vars
-  onDelete?: (id: string) => void
+  onDelete?: (_id: string) => void
 }
 
 const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({

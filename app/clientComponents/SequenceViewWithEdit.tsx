@@ -153,12 +153,7 @@ export default function SequenceViewWithEdit({
       createdBy.trim().toLowerCase() === email.trim().toLowerCase()
     console.log('[SequenceViewWithEdit] isOwner result:', isMatch)
     return isMatch
-  }, [
-    model.created_by,
-    session?.user?.email,
-    userState?.userData?.role,
-    showEdit,
-  ])
+  }, [model.created_by, session?.user?.email, userState?.userData?.role])
 
   // Helper function to resolve series ID and navigate
   // This ensures we NEVER use pagination IDs, only actual MongoDB ObjectIds

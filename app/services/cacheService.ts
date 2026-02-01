@@ -5,7 +5,6 @@
 
 import {
   clearAllCaches,
-  forceFullReload,
   invalidateServiceWorkerCache,
   requestServiceWorkerClearCache,
   getServiceWorkerVersion,
@@ -160,6 +159,7 @@ export function onCacheClear(callback: () => void): () => void {
  * Listen for invalidation events
  */
 export function onCacheInvalidate(
+  // eslint-disable-next-line no-unused-vars
   callback: (urls: string[]) => void
 ): () => void {
   const handler = (event: Event) => {

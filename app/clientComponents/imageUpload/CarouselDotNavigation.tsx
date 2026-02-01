@@ -1,4 +1,5 @@
 'use client'
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 import React from 'react'
 import { Box, IconButton, Tooltip, useTheme } from '@mui/material'
 import { PoseImageData } from '../../../types/images'

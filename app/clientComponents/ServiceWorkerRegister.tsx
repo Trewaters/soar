@@ -3,8 +3,6 @@
 import { useEffect } from 'react'
 import {
   monitorServiceWorkerUpdates,
-  checkAndApplyUpdates,
-  clearAllCaches,
   requestServiceWorkerClearCache,
 } from '../utils/cacheBuster'
 

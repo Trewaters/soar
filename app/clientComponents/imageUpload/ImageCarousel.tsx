@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 'use client'
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import {
@@ -58,12 +59,11 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
     () => sortedImages.map((img) => img.url),
     [sortedImages]
   )
-  const { preloadedImages, getOptimizedSizes, getLoadingPriority } =
-    useImagePreloader({
-      images: imageUrls,
-      currentIndex: activeIndex,
-      preloadCount: 1, // Preload 1 image on each side
-    })
+  const { getOptimizedSizes, getLoadingPriority } = useImagePreloader({
+    images: imageUrls,
+    currentIndex: activeIndex,
+    preloadCount: 1, // Preload 1 image on each side
+  })
 
   // Handle index changes and notify parent component
   const handleIndexChange = useCallback(

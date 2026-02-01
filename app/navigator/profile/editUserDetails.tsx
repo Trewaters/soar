@@ -6,7 +6,6 @@ import { ProfileImageManager } from '@app/clientComponents/ProfileImage/ProfileI
 import {
   Avatar,
   Button,
-  FormControl,
   Stack,
   TextField,
   Typography,
@@ -21,7 +20,6 @@ import {
   Collapse,
   IconButton,
   Link,
-  Alert,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import { red } from '@mui/material/colors'
@@ -72,11 +70,13 @@ const yogaStyles = [
 ]
 const ExpandMore = styled(
   (props: { expand: boolean } & React.ComponentProps<typeof IconButton>) => {
-    const { expand, ...other } = props
+    // `expand` is intentionally omitted from the forwarded props
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    const { expand: _unusedExpand, ...other } = props
     return <IconButton {...other} />
   }
-)(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+)(({ theme, expand: _expand }) => ({
+  transform: !_expand ? 'rotate(0deg)' : 'rotate(180deg)',
   marginLeft: 'auto',
   transition: theme.transitions.create('transform', {
     duration: theme.transitions.duration.shortest,
@@ -104,10 +104,6 @@ export default function EditUserDetails({
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [profileImageMode, setProfileImageMode] = useState<
-    'active' | 'inactive' | 'edit'
-  >('active')
-  // Modal state for profile image manager
   const [imageManagerOpen, setImageManagerOpen] = useState(false)
 
   // Local state for images (mirrors context, but allows optimistic UI)
@@ -329,34 +325,6 @@ export default function EditUserDetails({
       location: location,
     }))
   }, [])
-
-  const ProfileStatusIndicator = ({
-    mode,
-    iconSrc,
-    alt,
-  }: {
-    mode: 'active' | 'inactive' | 'edit'
-    iconSrc: string
-    alt: string
-  }) => {
-    return (
-      <Box>
-        <Image
-          src={iconSrc}
-          alt={alt}
-          width={27}
-          height={27}
-          style={{
-            borderRadius: '50%',
-            objectFit: 'cover',
-            width: 27,
-            height: 27,
-            display: 'block',
-          }}
-        />
-      </Box>
-    )
-  }
 
   const textFieldStyles = {
     '& .MuiInputBase-root': {

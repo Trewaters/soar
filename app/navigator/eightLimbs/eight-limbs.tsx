@@ -7,10 +7,9 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material'
-import { useRouter } from 'next/navigation'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import NAV_PATHS from '@app/utils/navigation/constants'
-import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined'
+// WaterDropOutlinedIcon intentionally not used; removed to silence lint warnings
 import AirIcon from '@mui/icons-material/Air'
 import AdjustIcon from '@mui/icons-material/Adjust'
 import LensBlurIcon from '@mui/icons-material/LensBlur'

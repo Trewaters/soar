@@ -4,11 +4,7 @@ import { redirect } from 'next/navigation'
 
 export const revalidate = 0
 
-export default async function AcceptancesPage({
-  searchParams,
-}: {
-  searchParams?: any
-}) {
+export default async function AcceptancesPage() {
   try {
     await requireRole(['admin'])
   } catch (err: any) {

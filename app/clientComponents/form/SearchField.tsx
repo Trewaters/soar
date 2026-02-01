@@ -13,7 +13,7 @@ import CloseIcon from '@mui/icons-material/Close'
 
 interface SearchFieldProps {
   value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChange: React.ChangeEventHandler<HTMLInputElement>
   placeholder?: string
   onClear?: () => void
   sx?: SxProps<Theme>

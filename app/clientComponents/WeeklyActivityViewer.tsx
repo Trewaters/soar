@@ -46,7 +46,7 @@ interface WeeklyActivityViewerProps {
 
 export default function WeeklyActivityViewer({
   entityId,
-  entityName: _entityName, // eslint-disable-line @typescript-eslint/no-unused-vars
+  entityName: _entityName, // eslint-disable-line no-unused-vars, @typescript-eslint/no-unused-vars
   entityType,
   variant = 'compact',
   refreshTrigger = 0,

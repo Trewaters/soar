@@ -141,7 +141,7 @@ export default function NotificationSettingsWrapper() {
         // Optionally: revert to previous state on error
       })
     },
-    [preferences, savePreferences]
+    [savePreferences]
   )
 
   if (loading) {

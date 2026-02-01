@@ -1,4 +1,3 @@
-import { auth } from '../../../../auth'
 import { prisma } from '../../../../app/lib/prismaClient'
 import { requireAuth } from '@app/utils/authorization'
 import { NextResponse } from 'next/server'

@@ -2,12 +2,14 @@ import { Series } from '@app/navigator/flows/editSeries/EditSeriesDialog'
 import { updateSeries, deleteSeries } from '@lib/seriesService'
 import React, { createContext, useContext, useState, useCallback } from 'react'
 
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 interface SeriesContextType {
   seriesList: Series[]
   setSeriesList: React.Dispatch<React.SetStateAction<Series[]>>
   updateSeriesInContext: (updated: Series) => Promise<void>
   deleteSeriesInContext: (id: string) => Promise<void>
 }
+/* eslint-enable no-unused-vars, @typescript-eslint/no-unused-vars */
 
 const SeriesContext = createContext<SeriesContextType | undefined>(undefined)
 

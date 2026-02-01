@@ -154,31 +154,6 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    // Type definitions for the poses API
-    interface AsanaPose {
-      id: string
-      english_names: string | string[]
-      created_by: string | null
-      created_on: Date | null
-      sort_english_name?: string
-      breath: string[] | null
-    }
-
-    interface QueryWhereClause {
-      created_by?: string | { in: string[] }
-    }
-
-    interface QueryLogData {
-      whereClause: QueryWhereClause
-      totalFound: number
-      recentAsanas: Array<{
-        id: string
-        english_names: string | string[]
-        created_by: string | null
-        created_on: Date
-      }>
-    }
-
     // The selected code with proper typing
 
     const dataWithId = data.map((item: { breath: string | any[] | null }) => ({

@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { Box, Button, Typography, Alert } from '@mui/material'
 
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
+
 interface ProfileImageUploadProps {
   onUpload: (file: File) => Promise<void>
   disabled?: boolean

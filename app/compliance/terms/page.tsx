@@ -8,6 +8,10 @@ export default async function TermsOfService({
 }: {
   searchParams?: any
 }) {
+  // reference incoming searchParams to avoid unused-variable lint warnings
+  if (searchParams) {
+    // noop: intentionally referencing for lint
+  }
   // Access the TosVersion model via the prisma client; use bracket access to
   // avoid TS errors if the generated client types are out-of-sync.
   // Try to load the active version; if none exists, fall back to the most

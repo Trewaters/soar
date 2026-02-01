@@ -23,9 +23,13 @@ type AuthErrorType = {
   provider?: string
 }
 
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 interface CredentialsInputProps {
-  onProviderTypeChange?: (providerType: string | null) => void
+  // Callback invoked with the provider type when email lookup completes
+  // The callback receives the detected provider string or null when not found
+  onProviderTypeChange?: (_provider: string | null) => void
 }
+/* eslint-enable no-unused-vars, @typescript-eslint/no-unused-vars */
 
 const CredentialsInput: React.FC<CredentialsInputProps> = ({
   onProviderTypeChange,
@@ -38,58 +42,62 @@ const CredentialsInput: React.FC<CredentialsInputProps> = ({
   const [error, setError] = useState<AuthErrorType | null>(null)
   const [providerType, setProviderType] = useState<string | null>(null)
 
-  const checkEmailExists = async (email: string) => {
-    if (!email || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
-      setIsNewUser(false)
-      setProviderType(null)
-      return
-    }
-
-    try {
-      const response = await fetch(
-        `/api/user/fetchAccount?email=${encodeURIComponent(email)}`
-      )
-
-      if (!response.ok) {
-        console.error(
-          'Failed to check email:',
-          response.status,
-          response.statusText
-        )
+  const checkEmailExists = React.useCallback(
+    async (emailParam: string) => {
+      const email = emailParam
+      if (!email || !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
         setIsNewUser(false)
         setProviderType(null)
         return
       }
 
-      const result = await response.json()
+      try {
+        const response = await fetch(
+          `/api/user/fetchAccount?email=${encodeURIComponent(email)}`
+        )
 
-      if (result.data) {
-        // User exists - store provider information
+        if (!response.ok) {
+          console.error(
+            'Failed to check email:',
+            response.status,
+            response.statusText
+          )
+          setIsNewUser(false)
+          setProviderType(null)
+          return
+        }
+
+        const result = await response.json()
+
+        if (result.data) {
+          // User exists - store provider information
+          setIsNewUser(false)
+          setProviderType(result.data.provider)
+          // Notify parent component of provider type change
+          if (onProviderTypeChange) {
+            onProviderTypeChange(result.data.provider)
+          }
+        } else {
+          // Email doesn't exist, so it's a new user
+          setIsNewUser(true)
+          setProviderType(null)
+          // Notify parent component of provider type change
+          if (onProviderTypeChange) {
+            onProviderTypeChange(null)
+          }
+        }
+      } catch (error) {
+        console.error('Error checking email:', error)
         setIsNewUser(false)
-        setProviderType(result.data.provider)
-        // Notify parent component of provider type change
-        if (onProviderTypeChange) {
-          onProviderTypeChange(result.data.provider)
-        }
-      } else {
-        // Email doesn't exist, so it's a new user
-        setIsNewUser(true)
         setProviderType(null)
-        // Notify parent component of provider type change
-        if (onProviderTypeChange) {
-          onProviderTypeChange(null)
-        }
       }
-    } catch (error) {
-      console.error('Error checking email:', error)
-      setIsNewUser(false)
-      setProviderType(null)
-    }
-  }
+    },
+    [onProviderTypeChange]
+  )
 
   useEffect(() => {
     checkEmailExists(email)
-  }, [email])
+  }, [email, checkEmailExists])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

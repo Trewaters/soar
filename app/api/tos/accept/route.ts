@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     const userAgent = headers.get('user-agent') || null
 
     // Create acceptance record (append-only)
-    const created = await prisma.userTosAcceptance.create({
+    await prisma.userTosAcceptance.create({
       data: {
         userId: session.user.id,
         tosVersionId: versionId,
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Update denormalized fields on the user for quick checks
-    const updated = await prisma.userData.update({
+    await prisma.userData.update({
       where: { id: session.user.id },
       data: {
         acceptedTosVersionId: versionId,

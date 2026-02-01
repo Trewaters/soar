@@ -1,6 +1,7 @@
 import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import TosReacceptGuard from '@app/clientComponents/TosReacceptGuard'
 
 // Mock next-auth useSession
 jest.mock('next-auth/react', () => ({
@@ -9,12 +10,9 @@ jest.mock('next-auth/react', () => ({
 
 const { useSession } = require('next-auth/react')
 
-import TosReacceptGuard from '../../../../app/clientComponents/TosReacceptGuard'
-
 describe('TosReacceptGuard', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    // Default: authenticated session
     useSession.mockReturnValue({
       data: { user: { id: 'u1', email: 't@e' } },
       status: 'authenticated',

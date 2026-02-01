@@ -243,7 +243,7 @@ async function calculateLoginStreak(userId: string) {
   const functionStartTime = Date.now()
   try {
     // Get user's login events ordered by date (most recent first)
-    const queryStartTime = Date.now()
+    // queryStartTime removed (instrumentation omitted)
     const loginEvents = await prisma.userLogin.findMany({
       where: { userId },
       orderBy: { loginDate: 'desc' },
@@ -251,7 +251,7 @@ async function calculateLoginStreak(userId: string) {
         loginDate: true,
       },
     })
-    const queryTime = Date.now() - queryStartTime
+    // instrumentation: query duration measurement intentionally omitted
 
     if (loginEvents.length === 0) {
       return {
@@ -264,7 +264,7 @@ async function calculateLoginStreak(userId: string) {
 
     // Get unique login dates (ignore multiple logins on same day)
     // Use UTC to ensure consistent date calculations across timezones
-    const dateProcessingStart = Date.now()
+    // dateProcessingStart removed (instrumentation omitted)
     const uniqueDates = Array.from(
       new Set(
         loginEvents.map((login) => {
@@ -279,7 +279,7 @@ async function calculateLoginStreak(userId: string) {
       )
     ).sort((a, b) => b - a) // Sort descending (most recent first)
 
-    const dateProcessingTime = Date.now() - dateProcessingStart
+    // instrumentation: date processing duration intentionally omitted
 
     const today = new Date()
     const todayTime = new Date(
@@ -293,7 +293,7 @@ async function calculateLoginStreak(userId: string) {
     const isActiveToday = uniqueDates.length > 0 && uniqueDates[0] === todayTime
 
     // Calculate current streak
-    const streakCalculationStart = Date.now()
+    // streakCalculationStart removed (instrumentation omitted)
     let currentStreak = 0
     let expectedDate = isActiveToday ? todayTime : yesterdayTime
 
@@ -331,7 +331,7 @@ async function calculateLoginStreak(userId: string) {
       }
     }
 
-    const streakCalculationTime = Date.now() - streakCalculationStart
+    // instrumentation: streak calculation duration intentionally omitted
 
     // Get the most recent login date for return
     const lastLoginDate =

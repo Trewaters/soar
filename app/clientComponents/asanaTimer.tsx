@@ -1,6 +1,5 @@
 import { AsanaTimerProps, useTimer } from '@context/timerContext'
-import { formatDuration } from '@lib/timerUtils'
-import { Box, Typography } from '@mui/material'
+// removed unused imports: formatDuration, Box, Typography
 import { useCallback, useEffect, useRef } from 'react'
 
 export default function AsanaTimer({

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 import React from 'react'
 import { Box, Avatar, IconButton, Typography, Chip } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'

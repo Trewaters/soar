@@ -1,8 +1,8 @@
 import React from 'react'
-import { Box, Button, Stack, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Image from 'next/image'
-import { signIn, providerMap, auth } from '../../../auth'
+import { providerMap, auth } from '../../../auth'
 import SignupProviders from '../SignupProviders'
 
 export default async function SignUpPage() {
