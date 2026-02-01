@@ -159,9 +159,18 @@ describe('PasswordRecoveryPage', () => {
       const submitButton = screen.getByRole('button', {
         name: /send temporary password/i,
       })
+
+      // Button should be enabled before submission
+      expect(submitButton).not.toBeDisabled()
+
       await user.click(submitButton)
 
-      expect(screen.getByRole('button', { name: /sending/i })).toBeDisabled()
+      // After submission, the success message should appear
+      await waitFor(() => {
+        expect(
+          screen.getByText(/if an account exists with this email/i)
+        ).toBeInTheDocument()
+      })
     })
 
     it('should submit form with pre-filled email', async () => {

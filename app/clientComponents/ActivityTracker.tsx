@@ -228,32 +228,20 @@ export default function ActivityTracker({
     // Initial check on mount
     checkExistingActivity()
 
-    // Set up automatic refresh at local midnight
-    const scheduleNextMidnightRefresh = () => {
-      const now = new Date()
-      const nextMidnight = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate() + 1,
-        0,
-        0,
-        0,
-        0
-      )
-      const msUntilMidnight = nextMidnight.getTime() - now.getTime()
-
-      return setTimeout(() => {
+    // Set up a minute-based interval to detect local midnight.
+    // This avoids long-running single-shot timers while still refreshing once per day.
+    let lastCheckedDate = new Date().getDate()
+    const intervalId = window.setInterval(() => {
+      const nowCheck = new Date()
+      if (nowCheck.getDate() !== lastCheckedDate) {
+        lastCheckedDate = nowCheck.getDate()
         checkExistingActivity()
-        // Schedule next refresh for the following midnight
-        scheduleNextMidnightRefresh()
-      }, msUntilMidnight)
-    }
-
-    const midnightTimer = scheduleNextMidnightRefresh()
+      }
+    }, 60 * 1000)
 
     // Cleanup timer + listeners on unmount
     return () => {
-      clearTimeout(midnightTimer)
+      clearInterval(intervalId)
       try {
         if (
           navigator &&
@@ -397,15 +385,17 @@ export default function ActivityTracker({
               if (res.activity?.difficulty)
                 setSelectedDifficulty(res.activity.difficulty)
             } else {
-              // Retry strategy: short backoff retries to account for propagation delays
-              const retries = [500, 1500]
-              for (const ms of retries) {
-                await new Promise((r) => setTimeout(r, ms))
+              // invalidation or background sync for eventual consistency.
+              const additionalChecks = 2
+              for (let i = 0; i < additionalChecks; i++) {
                 const r2 = await checkActivity(userId, entityId)
-                console.debug('[ActivityTracker] post-create retry check', {
-                  ms,
-                  exists: !!r2?.exists,
-                })
+                console.debug(
+                  '[ActivityTracker] post-create immediate retry check',
+                  {
+                    attempt: i + 1,
+                    exists: !!r2?.exists,
+                  }
+                )
                 if (r2?.exists) {
                   setChecked(true)
                   if (r2.activity?.difficulty)

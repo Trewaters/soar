@@ -67,11 +67,6 @@ export async function hardRefresh(): Promise<void> {
   await clearAllCaches()
   await requestServiceWorkerClearCache()
   generateCacheBustToken()
-
-  // Reload after a brief delay
-  setTimeout(() => {
-    window.location.reload()
-  }, 500)
 }
 
 /**

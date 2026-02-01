@@ -16,17 +16,10 @@ export default function middleware(request: NextRequest) {
   // const session = request.cookies.get('authjs.session-token') // the session cookie name
   const response = NextResponse.next()
 
-  // Add aggressive cache-control headers for all responses
-  // HTML pages: check for updates on every load
-  response.headers.set('Cache-Control', 'public, max-age=0, must-revalidate')
-
-  // Prevent browsers from caching based on outdated ETags
-  response.headers.set('ETag', `"${Date.now()}"`)
-
-  // Prevent MIME sniffing
+  // Prevent MIME sniffing - this is safe to always apply
   response.headers.set('X-Content-Type-Options', 'nosniff')
 
-  // Prevent caching for sensitive operations
+  // Prevent caching for sensitive API operations
   if (request.nextUrl.pathname.includes('/api/')) {
     response.headers.set(
       'Cache-Control',

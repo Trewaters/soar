@@ -1,54 +1,16 @@
 import { logServiceError } from './errorLogger'
-import { getAlphaUserIds } from '@app/lib/alphaUsers'
 import { AsanaPose } from 'types/asana'
-
-const DEFAULT_REQUEST_TIMEOUT_MS = 15000
 
 export async function fetchWithTimeout(
   input: RequestInfo,
-  init?: RequestInit,
-  timeoutMs: number = DEFAULT_REQUEST_TIMEOUT_MS
+  init?: RequestInit
 ): Promise<Response> {
-  // Jest's global.fetch mock implementations are simple and do not expect an
-  // AbortSignal to be passed in the init object. Detect mocked fetch and avoid
-  // passing a signal there so existing tests that assert the exact fetch init
-  // object keep working.
-  const globalFetch: any = (global as any).fetch
-  const isJestMock = globalFetch && globalFetch._isMockFunction
-
-  if (isJestMock) {
-    // Do a race between the fetch and a timeout rejection. We cannot abort the
-    // mocked fetch, but this prevents tests from hanging in case of long timeouts.
-    let timer: NodeJS.Timeout | null = null
-    try {
-      const timeoutPromise = new Promise<Response>((_, reject) => {
-        timer = setTimeout(
-          () => reject(new Error('Request timed out')),
-          timeoutMs
-        )
-      })
-      const fetchPromise = fetch(input, init)
-      const res = await Promise.race([
-        fetchPromise as Promise<Response>,
-        timeoutPromise,
-      ])
-      if (timer) clearTimeout(timer)
-      return res as Response
-    } catch (err: any) {
-      if (timer) clearTimeout(timer)
-      throw err
-    }
-  }
-
   const controller = new AbortController()
   const signal = controller.signal
-  const timeout = setTimeout(() => controller.abort(), timeoutMs)
   try {
     const response = await fetch(input, { ...(init || {}), signal })
-    clearTimeout(timeout)
     return response
   } catch (err: any) {
-    clearTimeout(timeout)
     if (err && (err.name === 'AbortError' || err.code === 'ABORT_ERR')) {
       throw new Error('Request timed out')
     }
@@ -155,50 +117,9 @@ export async function getAccessiblePoses(
   currentUserEmail?: string
 ): Promise<AsanaPose[]> {
   try {
-    // Get alpha user IDs
-    const alphaUserIds = getAlphaUserIds()
-
-    // If no current user, only show alpha user poses
-    if (!currentUserEmail) {
-      if (alphaUserIds.length === 0) {
-        return []
-      }
-
-      // Fetch all alpha user poses in parallel
-      const alphaPosePromises = alphaUserIds.map(async (alphaUserId) => {
-        try {
-          const response = await fetch(
-            `/api/poses?createdBy=${encodeURIComponent(alphaUserId)}&t=${Date.now()}`,
-            {
-              cache: 'no-store',
-              headers: {
-                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                Pragma: 'no-cache',
-                Expires: '0',
-              },
-            }
-          )
-          if (response.ok) {
-            return await response.json()
-          }
-          return []
-        } catch (error) {
-          console.warn(
-            `Failed to fetch poses for alpha user ${alphaUserId}:`,
-            error
-          )
-          return []
-        }
-      })
-
-      const alphaPoseArrays = await Promise.all(alphaPosePromises)
-      return alphaPoseArrays.flat()
-    }
-
-    // For authenticated users, request the default listing (no createdBy filter)
-    // letting the server use the session to return PUBLIC, alpha users, and
-    // the authenticated user's personal poses. This avoids mismatches where
-    // client-side identifiers (email vs id) differ from stored `created_by` values.
+    // Request the default listing (no createdBy filter) letting the server
+    // use the session (if present) to return PUBLIC, alpha users, and
+    // the authenticated user's personal poses.
     const timestamp = Date.now()
     const response = await fetch(`/api/poses?t=${timestamp}`, {
       cache: 'no-store',
@@ -215,7 +136,7 @@ export async function getAccessiblePoses(
 
     const data = await response.json()
 
-    // Deduplicate poses by sort_english_name just like before
+    // Deduplicate poses by sort_english_name to ensure clean search results
     const uniquePoses = Array.isArray(data)
       ? data.filter(
           (pose, index, arr) =>
@@ -240,7 +161,7 @@ export async function getAccessiblePoses(
  */
 export async function getPoseById(id: string): Promise<AsanaPose> {
   try {
-    const response = await fetch(`/api/poses/?id=${encodeURIComponent(id)}`, {
+    const response = await fetch(`/api/poses?id=${encodeURIComponent(id)}`, {
       cache: 'no-store',
     })
     if (!response.ok) {
@@ -262,7 +183,7 @@ export async function getPoseById(id: string): Promise<AsanaPose> {
 export async function getPoseByName(name: string): Promise<AsanaPose> {
   try {
     const response = await fetch(
-      `/api/poses/?sort_english_name=${encodeURIComponent(name)}`,
+      `/api/poses?sort_english_name=${encodeURIComponent(name)}`,
       { cache: 'no-store' }
     )
     if (!response.ok) {

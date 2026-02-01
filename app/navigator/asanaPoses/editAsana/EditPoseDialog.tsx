@@ -254,8 +254,7 @@ export default function EditPoseDialog({
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ images: imageReorderPayload }),
-        },
-        15000
+        }
       )
 
       if (!reorderResponse.ok) {

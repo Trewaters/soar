@@ -191,7 +191,11 @@ export default function UserStateProvider({
       // Clear user data when logged out. During unit tests skip clearing so
       // provider hydration can be asserted without the session mock wiping
       // state immediately.
-      if (process.env.NODE_ENV !== 'test') {
+      // Only clear if the data isn't already empty to avoid infinite loops.
+      if (
+        process.env.NODE_ENV !== 'test' &&
+        (state.userData.id !== '' || state.userData.email !== '')
+      ) {
         // Clear user data when logged out
         dispatch({
           type: 'SET_USER',
@@ -224,12 +228,16 @@ export default function UserStateProvider({
           },
         })
       }
-    } else if (!session) {
+    } else if (sessionStatus !== 'loading' && !session) {
       // Session is null. In production this may indicate the user was deleted
       // and we force sign out. In test environments skip the aggressive
       // signOut/clear logic so unit tests that render providers directly
       // can hydrate state without being overwritten.
-      if (process.env.NODE_ENV !== 'test') {
+      // Only clear if the data isn't already empty to avoid infinite loops.
+      if (
+        process.env.NODE_ENV !== 'test' &&
+        (state.userData.id !== '' || state.userData.email !== '')
+      ) {
         console.warn(
           'User session invalidated - user may have been deleted. Signing out.'
         )

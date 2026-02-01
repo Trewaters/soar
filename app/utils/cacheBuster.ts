@@ -196,13 +196,8 @@ export async function getServiceWorkerVersion(): Promise<{
       }
 
       const channel = new MessageChannel()
-      const timeout = setTimeout(() => {
-        console.warn('[CacheBuster] SW version check timeout')
-        resolve(null)
-      }, 2000)
 
       channel.port1.onmessage = (event) => {
-        clearTimeout(timeout)
         resolve(event.data)
       }
 

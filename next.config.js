@@ -58,21 +58,6 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/:path*',
-        headers: [
-          // HTML: no-cache to check for updates on every load
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=0, must-revalidate',
-          },
-          // X-Content-Type-Options: prevent MIME sniffing
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-        ],
-      },
-      {
         source: '/_next/static/:path*',
         headers: [
           // Next.js static assets: aggressive long-term caching with version hash

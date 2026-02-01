@@ -41,15 +41,9 @@ export default function PasswordRecoveryPage() {
       // TODO: Implement password recovery API call
       console.log('Password recovery requested for:', email)
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
       setSuccessMessage(
         'If an account exists with this email, you will receive a temporary password shortly.'
       )
-
-      // Clear email field after successful submission
-      // setEmail('')
     } catch (error) {
       console.error('Password recovery error:', error)
       setErrorMessage(

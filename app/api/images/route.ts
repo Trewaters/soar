@@ -42,12 +42,6 @@ export async function GET(request: NextRequest) {
   try {
     // Check authentication
     session = await auth()
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Authentication required' },
-        { status: 401 }
-      )
-    }
 
     const { searchParams } = new URL(request.url)
     poseId = searchParams.get('poseId')
@@ -59,19 +53,38 @@ export async function GET(request: NextRequest) {
     offset = parseInt(searchParams.get('offset') || '0')
     const showAll = searchParams.get('showAll') === 'true' // Admin flag to show all content
 
-    // Get admin status
-    const { isAdmin: checkIsAdmin } = await import('@app/utils/authorization')
-    const userIsAdmin = await checkIsAdmin()
-
     // Build base where clause for filtering by owner (user)
     const baseWhere: any = {}
 
-    // Admin users with showAll=true can see all content
+    // Authentication is required for general image fetching unless a specific pose is targeted
+    const isSpecificPoseTargeted = Boolean(poseId || poseName)
+
+    if (!session?.user?.id && !isSpecificPoseTargeted) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    // Get admin status
+    const { isAdmin: checkIsAdmin } = await import('@app/utils/authorization')
+    const userIsAdmin = session?.user?.id ? await checkIsAdmin() : false
+
+    // If no userId is in the filter, it returns nothing for regular users
+    // unless they target a specific pose to see its public images.
     if (showAll && userIsAdmin) {
       // No userId filter - return everything for admins
-    } else {
-      // Regular users only see their own images
-      baseWhere.userId = session.user.id
+    } else if (session?.user?.id) {
+      // Logged in users see their own images by default
+      if (!isSpecificPoseTargeted) {
+        baseWhere.userId = session.user.id
+      }
+    } else if (!isSpecificPoseTargeted) {
+      // Guest users must target a specific pose
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      )
     }
 
     // Filter by imageType if provided (e.g., 'profile', 'pose', 'gallery')
@@ -197,7 +210,7 @@ export async function GET(request: NextRequest) {
       totalCount = images.length
     }
 
-    // Transform data for response
+    // Transformed data for response
     // If poseName was provided, apply a text filter against pose fields
     const filteredImages = poseName
       ? images.filter((image: any) => {
@@ -250,7 +263,7 @@ export async function GET(request: NextRequest) {
 
     // Calculate ownership info if requested
     let ownership = undefined
-    if (includeOwnership && poseId) {
+    if (includeOwnership && poseId && session?.user?.id) {
       const pose = await prisma.asanaPose.findUnique({
         where: { id: poseId },
         select: { isUserCreated: true, created_by: true },
@@ -258,8 +271,11 @@ export async function GET(request: NextRequest) {
 
       if (pose) {
         ownership = {
-          canManage: pose.isUserCreated && pose.created_by === session.user.id,
-          isOwner: pose.created_by === session.user.id,
+          canManage:
+            pose.isUserCreated &&
+            session?.user?.id &&
+            pose.created_by === session.user.id,
+          isOwner: session?.user?.id && pose.created_by === session.user.id,
           isUserCreated: pose.isUserCreated,
         }
       }

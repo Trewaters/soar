@@ -29,10 +29,13 @@ describe('poseService.deletePose', () => {
 
     const result = await deletePose('pose-123')
 
-    expect(global.fetch).toHaveBeenCalledWith('/api/poses/pose-123', {
-      method: 'DELETE',
-      headers: { 'Cache-Control': 'no-cache' },
-    })
+    expect(global.fetch).toHaveBeenCalled()
+    const callArgs = (global.fetch as jest.Mock).mock.calls[0]
+    expect(callArgs[0]).toBe('/api/poses/pose-123')
+    expect(callArgs[1].method).toBe('DELETE')
+    expect(callArgs[1].headers).toEqual({ 'Cache-Control': 'no-cache' })
+    // Note: fetchWithTimeout adds an AbortSignal, so we just verify it exists
+    expect(callArgs[1].signal).toBeDefined()
     expect(result).toEqual({ success: true })
   })
 

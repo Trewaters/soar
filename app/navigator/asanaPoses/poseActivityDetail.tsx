@@ -731,6 +731,120 @@ export default function PoseActivityDetail({
         }}
       >
         <Stack direction={'column'} spacing={0}>
+          {/* Activity Tracker and Action Buttons (Moved to top for better accessibility) */}
+          {pose && pose.id && (
+            <Box
+              sx={{
+                mt: 1,
+                mb: 1,
+                width: '100%',
+                px: { xs: 0, sm: 2 },
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: { xs: 'stretch', sm: 'center' },
+                alignItems: 'center',
+                '@media (max-width: 384px)': {
+                  px: 0,
+                  justifyContent: 'stretch',
+                },
+              }}
+            >
+              {/* Inline action buttons for edit view */}
+              {isEditing &&
+                !showActions &&
+                session &&
+                session.user &&
+                canEdit && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      gap: 2,
+                      justifyContent: 'center',
+                      mb: 3,
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      color="success"
+                      onClick={handleSaveEdit}
+                      startIcon={<SaveIcon />}
+                      disabled={isSubmitting}
+                      sx={{ borderRadius: '12px', px: 3 }}
+                    >
+                      {isSubmitting ? 'Saving...' : 'Save Changes'}
+                    </Button>
+
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      startIcon={<DeleteIcon />}
+                      onClick={async () => {
+                        if (!pose?.id) return
+                        const confirmed = window.confirm(
+                          'Delete this asana? This cannot be undone.'
+                        )
+                        if (!confirmed) return
+                        try {
+                          await deletePose(pose.id)
+                          router.refresh()
+                          router.replace(NAV_PATHS.PRACTICE_ASANAS)
+                        } catch (e: any) {
+                          alert(e?.message || 'Failed to delete pose')
+                        }
+                      }}
+                      sx={{ borderRadius: '12px', px: 3 }}
+                    >
+                      Delete Asana
+                    </Button>
+
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={handleCancelEdit}
+                      startIcon={<CancelIcon />}
+                      sx={{ borderRadius: '12px', px: 3 }}
+                    >
+                      Cancel
+                    </Button>
+                  </Box>
+                )}
+
+              {/* Mark as Complete control moved higher up per design instructions */}
+              <Box
+                sx={{
+                  mb: 2,
+                  mx: 'auto',
+                  width: '100%',
+                  maxWidth: '600px',
+                }}
+              >
+                <ActivityTracker
+                  entityId={pose.id.toString()}
+                  entityName={pose.sort_english_name}
+                  entityType="asana"
+                  variant="inline"
+                  checkActivity={checkActivityExists}
+                  createActivity={createAsanaActivity}
+                  deleteActivity={deleteAsanaActivity}
+                  onActivityRefresh={() =>
+                    setActivityRefreshTrigger((prev) => prev + 1)
+                  }
+                  additionalActivityData={{
+                    sort_english_name: pose.sort_english_name,
+                    duration: 0,
+                  }}
+                />
+              </Box>
+
+              <WeeklyActivityViewer
+                entityId={pose.id.toString()}
+                entityName={pose.english_names[0] || pose.sort_english_name}
+                entityType="asana"
+                variant="detailed"
+                refreshTrigger={activityRefreshTrigger}
+              />
+            </Box>
+          )}
           {!isEditing ? (
             <>
               {/* View Mode */}
@@ -982,124 +1096,6 @@ export default function PoseActivityDetail({
                 poseId={pose.id?.toString()}
                 poseName={pose.sort_english_name}
                 variant="full"
-              />
-            </Box>
-          )}
-
-          {/* Activity Tracker Component */}
-          {pose && pose.id && (
-            <Box
-              sx={{
-                mt: 3,
-                mb: 2,
-                width: '100%',
-                px: { xs: 0, sm: 2 }, // Remove padding on mobile for full width
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: { xs: 'stretch', sm: 'center' }, // Full width on mobile, centered on larger screens
-                alignItems: 'center',
-                '@media (max-width: 384px)': {
-                  // Ensure full width container on screens 384px or smaller
-                  px: 0,
-                  justifyContent: 'stretch',
-                },
-              }}
-            >
-              {/* Inline action buttons for edit view (placed above activity tracker) */}
-              {isEditing &&
-                !showActions &&
-                session &&
-                session.user &&
-                canEdit && (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      gap: 2,
-                      justifyContent: 'center',
-                      mb: 3,
-                    }}
-                  >
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={handleSaveEdit}
-                      startIcon={<SaveIcon />}
-                      disabled={isSubmitting}
-                      sx={{ borderRadius: '12px', px: 3 }}
-                    >
-                      {isSubmitting ? 'Saving...' : 'Save Changes'}
-                    </Button>
-
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      startIcon={<DeleteIcon />}
-                      onClick={async () => {
-                        if (!pose?.id) return
-                        const confirmed = window.confirm(
-                          'Delete this asana? This cannot be undone.'
-                        )
-                        if (!confirmed) return
-                        try {
-                          await deletePose(pose.id)
-                          router.refresh()
-                          router.replace(NAV_PATHS.PRACTICE_ASANAS)
-                        } catch (e: any) {
-                          alert(e?.message || 'Failed to delete pose')
-                        }
-                      }}
-                      sx={{ borderRadius: '12px', px: 3 }}
-                    >
-                      Delete Asana
-                    </Button>
-
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={handleCancelEdit}
-                      startIcon={<CancelIcon />}
-                      sx={{ borderRadius: '12px', px: 3 }}
-                    >
-                      Cancel
-                    </Button>
-                  </Box>
-                )}
-
-              <WeeklyActivityViewer
-                entityId={pose.id.toString()}
-                entityName={pose.english_names[0] || pose.sort_english_name}
-                entityType="asana"
-                variant="detailed"
-                refreshTrigger={activityRefreshTrigger}
-              />
-            </Box>
-          )}
-
-          {/* Unified Activity Tracker Component */}
-          {pose && pose.id && (
-            <Box
-              sx={{
-                mt: 2,
-                mx: 'auto',
-                width: '100%',
-                maxWidth: '600px',
-              }}
-            >
-              <ActivityTracker
-                entityId={pose.id.toString()}
-                entityName={pose.sort_english_name}
-                entityType="asana"
-                variant="inline"
-                checkActivity={checkActivityExists}
-                createActivity={createAsanaActivity}
-                deleteActivity={deleteAsanaActivity}
-                onActivityRefresh={() =>
-                  setActivityRefreshTrigger((prev) => prev + 1)
-                }
-                additionalActivityData={{
-                  sort_english_name: pose.sort_english_name,
-                  duration: 0,
-                }}
               />
             </Box>
           )}
