@@ -499,11 +499,13 @@ export default function Page() {
         alignItems: 'center',
       }}
     >
-      <SplashHeader
-        src={'/images/series/series-practice-splash-header.png'}
-        alt={'Practice Flows'}
-        title="Practice Flows"
-      />
+      {!seriesId && (
+        <SplashHeader
+          src={'/images/series/series-practice-splash-header.png'}
+          alt={'Practice Flows'}
+          title="Practice Flows"
+        />
+      )}
       <Box
         sx={{
           display: 'flex',

@@ -1,6 +1,7 @@
 'use client'
 
 import { Box } from '@mui/material'
+import { useSearchParams } from 'next/navigation'
 import SplashHeader from '@app/clientComponents/splash-header'
 import { useSession } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
@@ -9,6 +10,8 @@ import NAV_PATHS from '@app/utils/navigation/constants'
 
 export default function Page() {
   const router = useNavigationWithLoading()
+  const searchParams = useSearchParams()
+  const asanaId = searchParams.get('id')
 
   const { data: session, status } = useSession()
 
@@ -47,11 +50,13 @@ export default function Page() {
           paddingBottom: { xs: '80px', sm: '80px' }, // Extra padding for mobile to ensure content is above nav
         }}
       >
-        <SplashHeader
-          src={'/images/asana/landing-page-splash-header-asana.png'}
-          alt={'Asana'}
-          title="Asana"
-        />
+        {!asanaId && (
+          <SplashHeader
+            src={'/images/asana/landing-page-splash-header-asana.png'}
+            alt={'Asana'}
+            title="Asana"
+          />
+        )}
         <Box height={'32px'} />
 
         {/* Practice Asana Poses Button with embedded search */}

@@ -415,11 +415,13 @@ export default function Page() {
           overflow: 'hidden',
         }}
       >
-        <SplashHeader
-          src={'/icons/designImages/header-practice-sequence.png'}
-          alt={'Practice Sequences'}
-          title="Practice Sequences"
-        />
+        {!sequenceId && (
+          <SplashHeader
+            src={'/icons/designImages/header-practice-sequence.png'}
+            alt={'Practice Sequences'}
+            title="Practice Sequences"
+          />
+        )}
         <Stack
           spacing={2}
           sx={{

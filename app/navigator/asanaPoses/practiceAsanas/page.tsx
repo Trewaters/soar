@@ -158,11 +158,13 @@ export default function Page() {
           alignItems: 'center',
         }}
       >
-        <SplashHeader
-          src={'/images/asana/practice-asana-pose-210x363.png'}
-          alt={'Practice Asanas'}
-          title="Practice Asanas"
-        />
+        {!selectedId && (
+          <SplashHeader
+            src={'/images/asana/practice-asana-pose-210x363.png'}
+            alt={'Practice Asanas'}
+            title="Practice Asanas"
+          />
+        )}
         <Box
           sx={{
             display: 'flex',
