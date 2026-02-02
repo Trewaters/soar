@@ -1,42 +1,4 @@
 'use client'
-/**
- * Unified Activity Tracker Component
- *
- * Consolidates activity tracking for asanas, series, and sequences into a single
- * reusable component. Supports both inline and card variants with configurable
- * difficulty selection and activity persistence.
- *
- * @example Asana (Inline Variant)
- * ```tsx
- * <ActivityTracker
- *   entityId={pose.id.toString()}
- *   entityName={pose.sort_english_name}
- *   entityType="asana"
- *   variant="inline"
- *   checkActivity={checkActivityExists}
- *   createActivity={createAsanaActivity}
- *   deleteActivity={deleteAsanaActivity}
- *   onActivityRefresh={() => setActivityRefreshTrigger(prev => prev + 1)}
- *   additionalActivityData={{ sort_english_name: pose.sort_english_name, duration: 0 }}
- * />
- * ```
- *
- * @example Series (Card Variant)
- * ```tsx
- * <ActivityTracker
- *   entityId={series.id}
- *   entityName={series.name}
- *   entityType="series"
- *   variant="card"
- *   checkActivity={checkSeriesActivityExists}
- *   createActivity={createSeriesActivity}
- *   deleteActivity={deleteSeriesActivity}
- *   title="Track Your Practice"
- *   buttonLabel="Track Series Practice"
- *   showSuccessMessage={true}
- * />
- * ```
- */
 import React, { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import {
@@ -58,7 +20,7 @@ const getDefaultTitle = (entityType: EntityType): string => {
   switch (entityType) {
     case 'asana':
       return 'Track Your Practice'
-    case 'series':
+    case 'flow':
       return 'Track Your Practice'
     case 'sequence':
       return 'Track Your Sequence Practice'
@@ -73,9 +35,9 @@ const getDefaultTitle = (entityType: EntityType): string => {
 const getDefaultButtonLabel = (entityType: EntityType): string => {
   switch (entityType) {
     case 'asana':
-      return 'Mark for Activity Tracker'
-    case 'series':
-      return 'Track Series Practice'
+      return 'Track this pose'
+    case 'flow':
+      return 'Track Flow Practice'
     case 'sequence':
       return 'Track Sequence Practice'
     default:
@@ -329,6 +291,16 @@ export default function ActivityTracker({
   }
 
   /**
+   * Handle clear/reset for chips variant
+   */
+  const handleClearChips = () => {
+    setSelectedDifficulty(null)
+    setEasyChipVariant('outlined')
+    setAverageChipVariant('outlined')
+    setDifficultChipVariant('outlined')
+  }
+
+  /**
    * Update activity state (create or delete)
    */
   const updateActivityState = async (isChecked: boolean) => {
@@ -509,8 +481,8 @@ export default function ActivityTracker({
   const getChipClickHandler = (
     difficulty: 'easy' | 'average' | 'difficult'
   ) => {
-    if (variant === 'inline') {
-      // Inline variant uses toggle behavior
+    if (variant === 'inline' || variant === 'chips') {
+      // Inline and chips variants use toggle behavior
       switch (difficulty) {
         case 'easy':
           return handleEasyChipClick
@@ -540,13 +512,15 @@ export default function ActivityTracker({
     <Box
       textAlign={'center'}
       display="flex"
-      flexDirection="column"
+      flexDirection={variant === 'chips' ? 'row' : 'column'}
       alignItems="center"
     >
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+      <Typography variant="body1" color="text.secondary" sx={{ mr: 4 }}>
         {variant === 'card'
           ? `How was this ${entityType === 'sequence' ? 'sequence' : 'practice'} for you?`
-          : 'Difficulty (sets activity tracker difficulty)'}
+          : variant === 'chips'
+            ? 'Track Activity: '
+            : 'Difficulty (sets activity tracker difficulty)'}
       </Typography>
       <Stack direction="row" spacing={1} justifyContent="center">
         <Chip
@@ -664,6 +638,34 @@ export default function ActivityTracker({
       <Stack spacing={2}>
         {renderDifficultyChips()}
         {renderActivityControls()}
+        {renderError()}
+      </Stack>
+    )
+  }
+
+  /**
+   * Render chips variant - only shows difficulty chips and a clear button
+   */
+  if (variant === 'chips') {
+    return (
+      <Stack
+        spacing={2}
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        {renderDifficultyChips()}
+        {selectedDifficulty && (
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleClearChips}
+            size="small"
+            sx={{ textTransform: 'none' }}
+          >
+            Clear
+          </Button>
+        )}
         {renderError()}
       </Stack>
     )

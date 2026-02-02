@@ -12,12 +12,16 @@ import {
   TextField,
   FormControl,
   Autocomplete,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import SaveIcon from '@mui/icons-material/Save'
 import CancelIcon from '@mui/icons-material/Cancel'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { FEATURES } from '@app/FEATURES'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
@@ -822,7 +826,7 @@ export default function PoseActivityDetail({
                   entityId={pose.id.toString()}
                   entityName={pose.sort_english_name}
                   entityType="asana"
-                  variant="inline"
+                  variant="chips"
                   checkActivity={checkActivityExists}
                   createActivity={createAsanaActivity}
                   deleteActivity={deleteAsanaActivity}
@@ -836,13 +840,31 @@ export default function PoseActivityDetail({
                 />
               </Box>
 
-              <WeeklyActivityViewer
-                entityId={pose.id.toString()}
-                entityName={pose.english_names[0] || pose.sort_english_name}
-                entityType="asana"
-                variant="detailed"
-                refreshTrigger={activityRefreshTrigger}
-              />
+              <Accordion
+                sx={{
+                  mb: 2,
+                  mx: 'auto',
+                  width: '100%',
+                  maxWidth: '600px',
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="weekly-activity-content"
+                  id="weekly-activity-header"
+                >
+                  <Typography variant="h6">Weekly Activity</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <WeeklyActivityViewer
+                    entityId={pose.id.toString()}
+                    entityName={pose.english_names[0] || pose.sort_english_name}
+                    entityType="asana"
+                    variant="detailed"
+                    refreshTrigger={activityRefreshTrigger}
+                  />
+                </AccordionDetails>
+              </Accordion>
             </Box>
           )}
           {!isEditing ? (

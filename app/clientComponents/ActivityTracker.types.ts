@@ -10,14 +10,14 @@
 /**
  * Supported entity types for activity tracking
  */
-export type EntityType = 'asana' | 'series' | 'sequence'
+export type EntityType = 'asana' | 'series' | 'sequence' | 'flow'
 
 /**
  * UI variant for the component
  * - 'card': Full styled card with Paper wrapper, title, and success message
  * - 'inline': Minimal inline variant without wrapper
  */
-export type ComponentVariant = 'inline' | 'card'
+export type ComponentVariant = 'inline' | 'card' | 'chips'
 
 /**
  * Result from checking if an activity exists
