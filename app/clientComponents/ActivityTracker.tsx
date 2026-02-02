@@ -303,7 +303,15 @@ export default function ActivityTracker({
   }
 
   /**
-   * Handle clear/reset for chips variant
+   * Clears the selected difficulty and resets chip UI variants to their default 'outlined' state.
+   *
+   * This asynchronous handler performs local UI state resets (clears the selected difficulty and
+   * sets the easy/average/difficult chip variants to 'outlined'). If the component is using the
+   * 'chips' variant, it also awaits updateActivityState(false) to mark the activity as not active.
+   *
+   * @async
+   * @returns {Promise<void>} Resolves when local state updates are applied and any remote activity state update (if triggered) completes.
+   * @throws {Error} May reject if updateActivityState(false) fails.
    */
   const handleClearChips = async () => {
     setSelectedDifficulty(null)
@@ -323,6 +331,7 @@ export default function ActivityTracker({
     isChecked: boolean,
     difficulty?: string | null
   ) => {
+    const wasChecked = checked
     setChecked(isChecked)
 
     if (!session?.user?.id) {
@@ -337,6 +346,15 @@ export default function ActivityTracker({
 
     try {
       if (isChecked) {
+        // If we're marking as checked, and it was already checked (replacement for today),
+        // we must delete the old one first to ensure only one activity per day is tracked.
+        if (wasChecked) {
+          console.debug(
+            '[ActivityTracker] replacing existing activity for today'
+          )
+          await deleteActivity(session.user.id, entityId)
+        }
+
         // Create new activity
         // Use dynamic naming for all entity types: asanaId/asanaName, seriesId/seriesName, sequenceId/sequenceName
         const activityData: any = {
@@ -558,6 +576,7 @@ export default function ActivityTracker({
           variant={easyChipVariant}
           color="success"
           onClick={getChipClickHandler('easy')}
+          disabled={loading}
           size="medium"
           sx={{
             cursor: 'pointer',
@@ -572,6 +591,7 @@ export default function ActivityTracker({
           variant={averageChipVariant}
           color="info"
           onClick={getChipClickHandler('average')}
+          disabled={loading}
           size="medium"
           sx={{
             cursor: 'pointer',
@@ -586,6 +606,7 @@ export default function ActivityTracker({
           variant={difficultChipVariant}
           color="error"
           onClick={getChipClickHandler('difficult')}
+          disabled={loading}
           size="medium"
           sx={{
             cursor: 'pointer',
@@ -680,7 +701,7 @@ export default function ActivityTracker({
     return (
       <Stack
         spacing={2}
-        direction="row"
+        direction="column"
         alignItems="center"
         justifyContent="space-between"
       >
@@ -690,10 +711,12 @@ export default function ActivityTracker({
             variant="contained"
             color="secondary"
             onClick={handleClearChips}
+            disabled={loading}
+            fullWidth
             size="small"
             sx={{ textTransform: 'none' }}
           >
-            Clear
+            Clear activity
           </Button>
         )}
         {renderError()}

@@ -1074,7 +1074,6 @@ export default function Page() {
                     </Box>
                   )}
 
-                  {/* Sequence Weekly Activity Tracker */}
                   {singleSequence.id && singleSequence.id !== 0 && (
                     <Box sx={{ mt: 3 }}>
                       <WeeklyActivityViewer

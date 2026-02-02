@@ -44,6 +44,72 @@ interface WeeklyActivityViewerProps {
   refreshTrigger?: number
 }
 
+/**
+ * WeeklyActivityViewer
+ *
+ * Client-side React component that displays a weekly activity summary and activity list
+ * for a given entity (asana, series, or sequence). Fetches weekly activity data for the
+ * signed-in user and renders either a compact summary card or a detailed tracker view.
+ *
+ * Behavior / Side effects:
+ * - Uses the current session (useSession) to determine the signed-in user id.
+ * - On mount and whenever session.user.id, entityId, entityType, or refreshTrigger changes,
+ *   triggers a fetch via one of:
+ *     - getAsanaWeeklyActivity(userId, entityId)
+ *     - getSeriesWeeklyActivity(userId, entityId)
+ *     - getSequenceWeeklyActivity(userId, entityId)
+ *   and populates local state: weeklyData, loading, error.
+ * - Handles network and fetch errors by setting `error` and logging to console.
+ *
+ * Props (WeeklyActivityViewerProps):
+ * @param entityId - Unique identifier of the entity to load activity for (required).
+ * @param entityName - The entity display name (passed as _entityName to avoid unused-var warnings).
+ * @param entityType - One of 'asana' | 'series' | 'sequence'. Determines which fetch routine and label text to use.
+ * @param variant - 'compact' | 'detailed' (default: 'compact'). Controls rendering style:
+ *                   - 'compact': a small card with activity count, last-performed tooltip and streak chip.
+ *                   - 'detailed': full tracker with weekly count, streak label, last performed, and a
+ *                     list of sessions with date/time, time-of-day icon, and difficulty/completion chip.
+ * @param refreshTrigger - Numeric trigger to force refetch when changed (default: 0).
+ *
+ * Rendering / UI states:
+ * - Loading: renders a LoadingSkeleton with size depending on variant.
+ * - Error: renders a centered error Box with the error message.
+ * - Not authenticated: renders a Paper prompting the user to sign in and explaining benefits.
+ * - Authenticated: always renders the tracker UI even if there are zero activities. Uses:
+ *     - weeklyData.count -> activityCount
+ *     - weeklyData.activities -> activities array (may be empty)
+ *
+ * Utility behaviors / formatting:
+ * - formatLastPerformed(activities) -> human-friendly last-performed label:
+ *     - "Never", "Today", "Yesterday", "N days ago" (for <= 7 days), otherwise uses toLocaleDateString.
+ * - getStreakColor(count) -> maps count to chip color tokens: >=5 => 'success', >=3 => 'warning', >=1 => 'info', else 'default'.
+ * - getStreakLabel(count) -> maps count to short label: >=7 => 'Amazing!', >=5 => 'Great!', >=3 => 'Good', >=1 => 'Started', else 'None'.
+ * - getDifficultyColor(difficulty, completionStatus) ->
+ *     - If completionStatus === 'complete' and difficulty provided:
+ *         'easy' -> 'success', 'average'/'medium' -> 'info', 'difficult'/'hard' -> 'error', default -> 'success'
+ *     - Otherwise falls back to completionStatus mapping: 'complete' -> 'success', 'partial' -> 'warning', else 'default'.
+ * - getEntityTypeLabel, getCompactTitle, getDetailedTitle, getActivityListLabel provide localized labels for each entityType.
+ * - getTimeOfDayIcon(datePerformed) -> returns an icon based on local hour:
+ *     - Morning (05:00–11:59): WbTwilightIcon (warning.main)
+ *     - Day (12:00–19:59): WbSunnyIcon (warning.light)
+ *     - Night (20:00–04:59): NightsStayIcon (info.main)
+ *
+ * List rendering:
+ * - For detailed view, each session entry shows:
+ *     - Formatted date (weekday, month short, day) and time in 'en-US' format (hour:min).
+ *     - Time-of-day icon (see above).
+ *     - A Chip showing difficulty or completionStatus with color determined by getDifficultyColor
+ *       and white label text.
+ * - Rows alternate backgroundColor between 'grey.50' and 'background.paper' for visual grouping.
+ *
+ * Notes / Accessibility:
+ * - Tooltips are used to expose last-performed details in compact mode and on count chips.
+ * - All dates/times are formatted using the browser locale for display; explicit 'en-US' formatting
+ *   is used for the date/time strings in the activity list.
+ *
+ * Returns:
+ * - JSX.Element: the appropriate skeleton, error, login prompt, compact card, or detailed tracker UI.
+ */
 export default function WeeklyActivityViewer({
   entityId,
   entityName: _entityName, // eslint-disable-line no-unused-vars, @typescript-eslint/no-unused-vars

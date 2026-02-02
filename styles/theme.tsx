@@ -109,9 +109,7 @@ export const theme = createTheme({
       contrastText: '#FFFFFF',
     },
     navSplash: {
-      // color for the splash header body text
       main: '#185A77',
-      // used for the background of the splash header titles, '#F8F4F2' is 'rgba(248, 244, 242, 0.5)'
       light: 'rgba(248, 244, 242, 0.5)',
       dark: '#F8F4F2',
       contrastText: COLORS.textPrimary,

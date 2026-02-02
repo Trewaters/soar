@@ -841,11 +841,16 @@ export default function PoseActivityDetail({
               </Box>
 
               <Accordion
+                elevation={0}
                 sx={{
                   mb: 2,
                   mx: 'auto',
                   width: '100%',
                   maxWidth: '600px',
+                  backgroundColor: 'navSplash.dark',
+                  '&:before': {
+                    display: 'none',
+                  },
                 }}
               >
                 <AccordionSummary
