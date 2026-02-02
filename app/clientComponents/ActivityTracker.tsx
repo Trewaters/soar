@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession, signIn } from 'next-auth/react'
 import {
   Button,
   Stack,
@@ -489,9 +489,20 @@ export default function ActivityTracker({
           borderColor: 'divider',
         }}
       >
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-          Log in to track your practice and build your streak
-        </Typography>
+        <Stack alignItems="center" spacing={1}>
+          <Typography variant="body2" color="text.secondary">
+            Log in to track your practice and build your streak
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            onClick={() => signIn()}
+            sx={{ textTransform: 'none' }}
+          >
+            Login
+          </Button>
+        </Stack>
       </Paper>
     )
   }

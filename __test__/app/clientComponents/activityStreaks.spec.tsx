@@ -104,8 +104,9 @@ describe('ActivityStreaks Component', () => {
       render(<ActivityStreaks />)
 
       expect(
-        screen.getByText('Sign in to view your activity streaks')
+        screen.getByText('View your activity streaks by logging in.')
       ).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /Login/i })).toBeInTheDocument()
     })
 
     it('shows sign-in message when session data is null', () => {
@@ -118,8 +119,9 @@ describe('ActivityStreaks Component', () => {
       render(<ActivityStreaks />)
 
       expect(
-        screen.getByText('Sign in to view your activity streaks')
+        screen.getByText('View your activity streaks by logging in.')
       ).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /Login/i })).toBeInTheDocument()
     })
   })
 

@@ -101,7 +101,7 @@ describe('ActivityTracker Component', () => {
 
       // Verify button is present
       expect(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
+        screen.getByRole('button', { name: /Track this pose/i })
       ).toBeInTheDocument()
 
       // Verify checkbox is present
@@ -133,7 +133,7 @@ describe('ActivityTracker Component', () => {
       // Verify all controls are present
       expect(screen.getByText('Easy')).toBeInTheDocument()
       expect(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
+        screen.getByRole('button', { name: /Track this pose/i })
       ).toBeInTheDocument()
       expect(screen.getByRole('checkbox')).toBeInTheDocument()
     })
@@ -251,19 +251,19 @@ describe('ActivityTracker Component', () => {
       )
 
       expect(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
+        screen.getByRole('button', { name: /Track this pose/i })
       ).toBeInTheDocument()
     })
 
-    it('should use default buttonLabel based on entityType series', () => {
+    it('should use default buttonLabel based on entityType flow', () => {
       render(
         <TestWrapper>
-          <ActivityTracker {...defaultProps} entityType="series" />
+          <ActivityTracker {...defaultProps} entityType="flow" />
         </TestWrapper>
       )
 
       expect(
-        screen.getByRole('button', { name: /Track Series Practice/i })
+        screen.getByRole('button', { name: /Track Flow Practice/i })
       ).toBeInTheDocument()
     })
 
@@ -407,7 +407,7 @@ describe('ActivityTracker Component', () => {
 
       // Click track button
       const trackButton = screen.getByRole('button', {
-        name: /Mark for Activity Tracker/i,
+        name: /Track this pose/i,
       })
       await user.click(trackButton)
 
@@ -494,7 +494,7 @@ describe('ActivityTracker Component', () => {
       // Verify button state updated
       await waitFor(() => {
         expect(
-          screen.getByRole('button', { name: /Mark for Activity Tracker/i })
+          screen.getByRole('button', { name: /Track this pose/i })
         ).toBeInTheDocument()
       })
     })
@@ -516,7 +516,7 @@ describe('ActivityTracker Component', () => {
       await user.click(screen.getByText('Easy'))
 
       const trackButton = screen.getByRole('button', {
-        name: /Mark for Activity Tracker/i,
+        name: /Track this pose/i,
       })
       const checkbox = screen.getByRole('checkbox')
 
@@ -552,7 +552,7 @@ describe('ActivityTracker Component', () => {
       await user.click(screen.getByText('Difficult'))
 
       const trackButton = screen.getByRole('button', {
-        name: /Mark for Activity Tracker/i,
+        name: /Track this pose/i,
       })
       await user.click(trackButton)
 
@@ -583,9 +583,7 @@ describe('ActivityTracker Component', () => {
       )
 
       await user.click(screen.getByText('Easy'))
-      await user.click(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
-      )
+      await user.click(screen.getByRole('button', { name: /Track this pose/i }))
 
       await waitFor(() => {
         expect(mockCreateActivity).toHaveBeenCalledWith(
@@ -617,6 +615,7 @@ describe('ActivityTracker Component', () => {
       expect(
         screen.getByText(/Log in to track your practice and build your streak/i)
       ).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /Login/i })).toBeInTheDocument()
       expect(mockCreateActivity).not.toHaveBeenCalled()
     })
 
@@ -645,9 +644,7 @@ describe('ActivityTracker Component', () => {
       )
 
       await user.click(screen.getByText('Easy'))
-      await user.click(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
-      )
+      await user.click(screen.getByRole('button', { name: /Track this pose/i }))
 
       await waitFor(() => {
         expect(mockCreateActivity).toHaveBeenCalledWith(
@@ -674,9 +671,7 @@ describe('ActivityTracker Component', () => {
       )
 
       await user.click(screen.getByText('Easy'))
-      await user.click(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
-      )
+      await user.click(screen.getByRole('button', { name: /Track this pose/i }))
 
       await waitFor(() => {
         expect(
@@ -686,7 +681,7 @@ describe('ActivityTracker Component', () => {
 
       // Verify checked state is not changed
       expect(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
+        screen.getByRole('button', { name: /Track this pose/i })
       ).toBeInTheDocument()
     })
 
@@ -743,9 +738,7 @@ describe('ActivityTracker Component', () => {
       )
 
       await user.click(screen.getByText('Easy'))
-      await user.click(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
-      )
+      await user.click(screen.getByRole('button', { name: /Track this pose/i }))
 
       await waitFor(() => {
         expect(screen.getByText(/Network error/i)).toBeInTheDocument()
@@ -754,9 +747,7 @@ describe('ActivityTracker Component', () => {
       // Second attempt succeeds
       mockCreateActivity.mockResolvedValueOnce(undefined)
 
-      await user.click(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
-      )
+      await user.click(screen.getByRole('button', { name: /Track this pose/i }))
 
       await waitFor(() => {
         expect(screen.queryByText(/Network error/i)).not.toBeInTheDocument()
@@ -779,9 +770,7 @@ describe('ActivityTracker Component', () => {
       )
 
       await user.click(screen.getByText('Easy'))
-      await user.click(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
-      )
+      await user.click(screen.getByRole('button', { name: /Track this pose/i }))
 
       await waitFor(() => {
         expect(onActivityToggle).toHaveBeenCalledWith(true)
@@ -835,9 +824,7 @@ describe('ActivityTracker Component', () => {
       )
 
       await user.click(screen.getByText('Easy'))
-      await user.click(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
-      )
+      await user.click(screen.getByRole('button', { name: /Track this pose/i }))
 
       await waitFor(() => {
         expect(onActivityRefresh).toHaveBeenCalled()
@@ -941,9 +928,7 @@ describe('ActivityTracker Component', () => {
       )
 
       await user.click(screen.getByText('Easy'))
-      await user.click(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
-      )
+      await user.click(screen.getByRole('button', { name: /Track this pose/i }))
 
       await waitFor(() => {
         expect(
@@ -966,9 +951,7 @@ describe('ActivityTracker Component', () => {
       )
 
       await user.click(screen.getByText('Easy'))
-      await user.click(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
-      )
+      await user.click(screen.getByRole('button', { name: /Track this pose/i }))
 
       await waitFor(() => {
         expect(
@@ -1003,7 +986,7 @@ describe('ActivityTracker Component', () => {
       )
 
       expect(
-        screen.getByRole('button', { name: /Mark for Activity Tracker/i })
+        screen.getByRole('button', { name: /Track this pose/i })
       ).toBeInTheDocument()
     })
 

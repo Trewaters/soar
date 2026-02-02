@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { Typography, List, ListItem, Box, Chip, Stack } from '@mui/material'
+import { useSession, signIn } from 'next-auth/react'
+import {
+  Typography,
+  List,
+  ListItem,
+  Box,
+  Chip,
+  Stack,
+  Button,
+  Paper,
+} from '@mui/material'
 import WorkspacesIcon from '@mui/icons-material/Workspaces'
 import GroupWorkIcon from '@mui/icons-material/GroupWork'
 import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
@@ -158,8 +167,23 @@ export default function AsanaActivityList() {
     }
   }, [session, status])
 
-  if (loading) return <LoadingSkeleton type="list" lines={5} height={60} />
+  if (loading || status === 'loading')
+    return <LoadingSkeleton type="list" lines={5} height={60} />
   if (error) return <Typography color="error">{error}</Typography>
+  if (status === 'unauthenticated') {
+    return (
+      <Paper elevation={2} sx={{ p: 2, borderRadius: 2 }}>
+        <Stack alignItems="center" spacing={2}>
+          <Typography variant="body2" color="text.secondary">
+            Log in to view activities marked completed
+          </Typography>
+          <Button variant="contained" color="primary" onClick={() => signIn()}>
+            Login
+          </Button>
+        </Stack>
+      </Paper>
+    )
+  }
   if (!activities.length) return <Typography>No activity found.</Typography>
 
   return (

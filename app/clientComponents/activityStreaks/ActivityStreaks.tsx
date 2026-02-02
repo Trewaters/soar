@@ -1,7 +1,15 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { Box, Typography, Paper, Stack, Chip, Tooltip } from '@mui/material'
-import { useSession, signOut } from 'next-auth/react'
+import {
+  Box,
+  Typography,
+  Paper,
+  Stack,
+  Chip,
+  Tooltip,
+  Button,
+} from '@mui/material'
+import { useSession, signOut, signIn } from 'next-auth/react'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
@@ -370,9 +378,14 @@ export default function ActivityStreaks({
   if (status === 'unauthenticated' || !session) {
     return (
       <Paper elevation={2} sx={{ p: 2, borderRadius: 2 }}>
-        <Typography variant="body2" color="error.main">
-          Sign in to view your activity streaks
-        </Typography>
+        <Stack alignItems="center" spacing={2}>
+          <Typography variant="body2" color="text.secondary">
+            View your activity streaks by logging in.
+          </Typography>
+          <Button variant="contained" color="primary" onClick={() => signIn()}>
+            Login
+          </Button>
+        </Stack>
       </Paper>
     )
   }
