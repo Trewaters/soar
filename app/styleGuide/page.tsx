@@ -150,260 +150,529 @@ export default function StyleGuide() {
             Typography MUI Variants
           </Typography>
 
-          <Stack spacing={4}>
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="h1">
-                  H1 ({theme.typography.h1.fontSize})
-                </Typography>
-                <Typography
-                  variant="h1"
-                  component={'text'}
-                  sx={{ fontStyle: 'italic' }}
-                >
-                  Main Page level Heading
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+          <Grid2 container spacing={2}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="h1"
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                H1 ({theme.typography.h1.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="h1"
+                component={'text'}
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                Main Page level Heading
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 Header for top level of pages.
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="h2" component={'text'}>
-                  H2 ({theme.typography.h2.fontSize})
-                </Typography>
-                <Typography
-                  variant="h2"
-                  component={'text'}
-                  sx={{ fontStyle: 'italic' }}
-                >
-                  Section Heading
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="h2"
+                component={'text'}
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                H2 ({theme.typography.h2.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="h2"
+                component={'text'}
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                Section Heading
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 For Header subtitles
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="h3" component={'text'}>
-                  H3 ({theme.typography.h3.fontSize})
-                </Typography>
-                <Typography
-                  variant="h3"
-                  component={'text'}
-                  sx={{ fontStyle: 'italic' }}
-                >
-                  Subsection Heading
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="h3"
+                component={'text'}
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                H3 ({theme.typography.h3.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="h3"
+                component={'text'}
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                Subsection Heading
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 Used for subsection titles within a section
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="h4" component={'text'}>
-                  H4 ({theme.typography.h4.fontSize})
-                </Typography>
-                <Typography
-                  variant="h4"
-                  component={'text'}
-                  sx={{ fontStyle: 'italic' }}
-                >
-                  Heading Level 4
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="h4"
+                component={'text'}
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                H4 ({theme.typography.h4.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="h4"
+                component={'text'}
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                Heading Level 4
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 For component headings and card titles
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="h5" component={'text'}>
-                  H5 ({theme.typography.h5.fontSize})
-                </Typography>
-                <Typography
-                  variant="h5"
-                  component={'text'}
-                  sx={{ fontStyle: 'italic' }}
-                >
-                  Heading Level 5
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="h5"
+                component={'text'}
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                H5 ({theme.typography.h5.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="h5"
+                component={'text'}
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                Heading Level 5
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 For smaller component headings
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="h6" component={'text'}>
-                  H6 ({theme.typography.h6.fontSize})
-                </Typography>
-                <Typography
-                  variant="h6"
-                  component={'text'}
-                  sx={{ fontStyle: 'italic' }}
-                >
-                  Heading Level 6
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="h6"
+                component={'text'}
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                H6 ({theme.typography.h6.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="h6"
+                component={'text'}
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                Heading Level 6
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 For minor headings and list group titles
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="subtitle1">
-                  Subtitle1 ({theme.typography.subtitle1.fontSize})
-                </Typography>
-                <Typography variant="subtitle1" sx={{ fontStyle: 'italic' }}>
-                  UI Component titles
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                Subtitle1 ({theme.typography.subtitle1.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="subtitle1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                UI Component titles
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 Used for titles of cards and UI components
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="subtitle2">
-                  Subtitle2 ({theme.typography.subtitle2.fontSize})
-                </Typography>
-                <Typography variant="subtitle2" sx={{ fontStyle: 'italic' }}>
-                  Used for table headings
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                Subtitle2 ({theme.typography.subtitle2.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="subtitle2"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                Used for table headings
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 Used for table headings and less prominent subtitles
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="subtitle3">
-                  Subtitle3 ({theme.typography.subtitle3?.fontSize || 'N/A'})
-                </Typography>
-                <Typography variant="subtitle3" sx={{ fontStyle: 'italic' }}>
-                  Custom Subtitle Variant
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="subtitle3"
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                Subtitle3 ({theme.typography.subtitle3?.fontSize || 'N/A'})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="subtitle3"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                Custom Subtitle Variant
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 Custom variant for larger subtitles
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="body1">
-                  Body1 ({theme.typography.body1.fontSize})
-                </Typography>
-                <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
-                  Default paragraph text
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="body1"
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                Body1 ({theme.typography.body1.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                Default paragraph text
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 Standard body text for most content
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="body2">
-                  Body2 ({theme.typography.body2.fontSize})
-                </Typography>
-                <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
-                  Smaller paragraph text
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                Body2 ({theme.typography.body2.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="body2"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                Smaller paragraph text
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 Used for secondary body text and descriptions
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="caption">
-                  Caption ({theme.typography.caption.fontSize})
-                </Typography>
-                <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
-                  Caption text
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="caption"
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                Caption ({theme.typography.caption.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="caption"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                Caption text
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 For image captions and supplementary text
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="overline">
-                  Overline ({theme.typography.overline.fontSize})
-                </Typography>
-                <Typography variant="overline" sx={{ fontStyle: 'italic' }}>
-                  Overline text
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="overline"
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                Overline ({theme.typography.overline.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="overline"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                Overline text
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 For labels and eyebrows above headings
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack direction={'row'} justifyContent={'space-between'}>
-                <Typography variant="label">
-                  Label ({theme.typography.label.fontSize})
-                </Typography>
-                <Typography variant="label" sx={{ fontStyle: 'italic' }}>
-                  Custom label variant
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="label"
+                sx={{
+                  backgroundColor: 'background.helper',
+                  wordBreak: 'break-word',
+                }}
+              >
+                Label ({theme.typography.label.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2
+              size={{ sm: 12, md: 6 }}
+              sx={{ minWidth: 0, overflow: 'hidden' }}
+            >
+              <Typography
+                variant="label"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
+                Custom label variant
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 Custom variant for prominent labels
               </Typography>
-            </Stack>
+            </Grid2>
 
-            <Stack direction={'column'} spacing={1}>
-              <Stack
-                direction={'row'}
-                justifyContent={'space-between'}
-                sx={{ overflow: 'hidden' }}
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="splashTitle"
+                sx={{
+                  backgroundColor: 'background.helper',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  wordBreak: 'break-word',
+                }}
               >
-                <Typography
-                  variant="splashTitle"
-                  sx={{
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    maxWidth: '50%',
-                  }}
-                >
-                  SplashTitle ({theme.typography.splashTitle.fontSize})
-                </Typography>
-                <Typography
-                  variant="splashTitle"
-                  sx={{
-                    fontStyle: 'italic',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    maxWidth: '50%',
-                  }}
-                >
-                  Custom splash variant
-                </Typography>
-              </Stack>
-              <Typography variant="body1" sx={{ fontStyle: 'italic' }}>
+                SplashTitle ({theme.typography.splashTitle.fontSize})
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="splashTitle"
+                sx={{
+                  fontStyle: 'italic',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  wordBreak: 'break-word',
+                }}
+              >
+                Custom splash variant
+              </Typography>
+            </Grid2>
+            <Grid2 size={{ sm: 12 }} sx={{ minWidth: 0, overflow: 'hidden' }}>
+              <Typography
+                variant="body1"
+                sx={{ fontStyle: 'italic', wordBreak: 'break-word' }}
+              >
                 Large uppercase titles for splash screens and hero sections
               </Typography>
-            </Stack>
-          </Stack>
+            </Grid2>
+          </Grid2>
         </Paper>
 
         {/* Theme Values Section */}
