@@ -534,7 +534,7 @@ export default function ActivityTracker({
       flexDirection={variant === 'chips' ? 'row' : 'column'}
       alignItems="center"
     >
-      <Typography variant="body1" color="text.secondary" sx={{ mr: 4 }}>
+      <Typography variant="subtitle1" color="text.secondary" sx={{ mr: 4 }}>
         {variant === 'card'
           ? `How was this ${entityType === 'sequence' ? 'sequence' : 'practice'} for you?`
           : variant === 'chips'
@@ -547,7 +547,7 @@ export default function ActivityTracker({
           variant={easyChipVariant}
           color="success"
           onClick={getChipClickHandler('easy')}
-          size="small"
+          size="medium"
           sx={{
             cursor: 'pointer',
             fontWeight: easyChipVariant === 'filled' ? 700 : 400,
@@ -561,7 +561,7 @@ export default function ActivityTracker({
           variant={averageChipVariant}
           color="info"
           onClick={getChipClickHandler('average')}
-          size="small"
+          size="medium"
           sx={{
             cursor: 'pointer',
             fontWeight: averageChipVariant === 'filled' ? 700 : 400,
@@ -575,7 +575,7 @@ export default function ActivityTracker({
           variant={difficultChipVariant}
           color="error"
           onClick={getChipClickHandler('difficult')}
-          size="small"
+          size="medium"
           sx={{
             cursor: 'pointer',
             fontWeight: difficultChipVariant === 'filled' ? 700 : 400,
