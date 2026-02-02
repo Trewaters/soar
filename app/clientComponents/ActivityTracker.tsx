@@ -241,7 +241,7 @@ export default function ActivityTracker({
   /**
    * Handle Easy chip click (for inline variant with toggle behavior)
    */
-  const handleEasyChipClick = () => {
+  const handleEasyChipClick = async () => {
     const newVariant = easyChipVariant === 'outlined' ? 'filled' : 'outlined'
     setEasyChipVariant(newVariant)
 
@@ -250,6 +250,10 @@ export default function ActivityTracker({
       // Reset other chips
       setAverageChipVariant('outlined')
       setDifficultChipVariant('outlined')
+      // For chips variant, save the activity
+      if (variant === 'chips') {
+        await updateActivityState(true, 'easy')
+      }
     } else {
       setSelectedDifficulty(null)
     }
@@ -258,7 +262,7 @@ export default function ActivityTracker({
   /**
    * Handle Average chip click (for inline variant with toggle behavior)
    */
-  const handleAverageChipClick = () => {
+  const handleAverageChipClick = async () => {
     const newVariant = averageChipVariant === 'outlined' ? 'filled' : 'outlined'
     setAverageChipVariant(newVariant)
 
@@ -267,6 +271,10 @@ export default function ActivityTracker({
       // Reset other chips
       setEasyChipVariant('outlined')
       setDifficultChipVariant('outlined')
+      // For chips variant, save the activity
+      if (variant === 'chips') {
+        await updateActivityState(true, 'average')
+      }
     } else {
       setSelectedDifficulty(null)
     }
@@ -275,7 +283,7 @@ export default function ActivityTracker({
   /**
    * Handle Difficult chip click (for inline variant with toggle behavior)
    */
-  const handleDifficultChipClick = () => {
+  const handleDifficultChipClick = async () => {
     const newVariant =
       difficultChipVariant === 'outlined' ? 'filled' : 'outlined'
     setDifficultChipVariant(newVariant)
@@ -285,6 +293,10 @@ export default function ActivityTracker({
       // Reset other chips
       setEasyChipVariant('outlined')
       setAverageChipVariant('outlined')
+      // For chips variant, save the activity
+      if (variant === 'chips') {
+        await updateActivityState(true, 'difficult')
+      }
     } else {
       setSelectedDifficulty(null)
     }
@@ -293,17 +305,24 @@ export default function ActivityTracker({
   /**
    * Handle clear/reset for chips variant
    */
-  const handleClearChips = () => {
+  const handleClearChips = async () => {
     setSelectedDifficulty(null)
     setEasyChipVariant('outlined')
     setAverageChipVariant('outlined')
     setDifficultChipVariant('outlined')
+    // Delete the activity when clearing in chips variant
+    if (variant === 'chips') {
+      await updateActivityState(false)
+    }
   }
 
   /**
    * Update activity state (create or delete)
    */
-  const updateActivityState = async (isChecked: boolean) => {
+  const updateActivityState = async (
+    isChecked: boolean,
+    difficulty?: string | null
+  ) => {
     setChecked(isChecked)
 
     if (!session?.user?.id) {
@@ -322,7 +341,7 @@ export default function ActivityTracker({
         // Use dynamic naming for all entity types: asanaId/asanaName, seriesId/seriesName, sequenceId/sequenceName
         const activityData: any = {
           userId: session.user.id,
-          difficulty: selectedDifficulty || undefined,
+          difficulty: difficulty ?? (selectedDifficulty || undefined),
           completionStatus: 'complete',
           datePerformed: new Date(),
           ...additionalActivityData,
