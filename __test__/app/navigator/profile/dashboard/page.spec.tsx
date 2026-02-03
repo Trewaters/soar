@@ -94,6 +94,9 @@ interface DashboardData {
     current: number
     target: number
     progress: number
+    tiersAchieved: number
+    tierName?: string
+    ultimateGoalsCompleted: number
   }
 }
 
@@ -134,6 +137,9 @@ const mockDashboardData: DashboardData = {
     current: 7,
     target: 30,
     progress: 23.33,
+    tiersAchieved: 0,
+    tierName: '',
+    ultimateGoalsCompleted: 0,
   },
 }
 

@@ -8,6 +8,7 @@ import ShareAsset from '@app/clientComponents/ShareAsset'
 import {
   SeriesShareStrategy,
   SequenceShareStrategy,
+  AsanaShareStrategy,
 } from '../../../types/sharing'
 
 // Mock the resolver to return canonical ids quickly
@@ -48,6 +49,16 @@ describe('Share strategies', () => {
       durationSequence: '',
     } as any)
     expect(out.url).toContain('?sequenceId=99')
+  })
+
+  it('AsanaShareStrategy includes ?id= when data.id present', () => {
+    const strat = new AsanaShareStrategy()
+    const out = strat.generateShareConfig({
+      id: 'pose-123',
+      sort_english_name: 'Lotus',
+    } as any)
+    expect(out.url).toContain('?id=pose-123')
+    expect(out.url).toContain('/navigator/asanaPoses/practiceAsanas')
   })
 })
 

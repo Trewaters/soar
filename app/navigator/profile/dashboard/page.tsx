@@ -43,6 +43,7 @@ interface DashboardData {
     target: number
     progress: number
     tiersAchieved: number
+    tierName?: string
     ultimateGoalsCompleted: number
   }
 }
@@ -86,7 +87,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => {
 
 const Dashboard: React.FC = () => {
   const theme = useTheme()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const {
     state: { userData },
   } = UseUser()
@@ -106,7 +107,11 @@ const Dashboard: React.FC = () => {
         // Get userId from userData or session
         const userId = userData?.id || session?.user?.id
 
+        // If we don't have a userId yet, check if we should wait or show error
         if (!userId) {
+          if (status === 'loading') {
+            return // Don't set error yet, still waiting for session
+          }
           console.warn(
             `${debugPrefix} No user ID found - user session not found`,
             {
@@ -211,7 +216,7 @@ const Dashboard: React.FC = () => {
 
     fetchDashboardData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [userData?.id, session?.user?.id, status])
 
   if (loading) {
     return (
@@ -434,7 +439,17 @@ const Dashboard: React.FC = () => {
                 >
                   <Typography variant="body2" color="text.secondary">
                     {nextGoal.tiersAchieved} goal
-                    {nextGoal.tiersAchieved !== 1 ? 's' : ''} achieved
+                    {nextGoal.tiersAchieved !== 1 ? 's' : ''} achieved{' '}
+                    {nextGoal.tierName && (
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        color="primary.main"
+                        fontWeight="bold"
+                      >
+                        ({nextGoal.tierName})
+                      </Typography>
+                    )}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {nextGoal.current} / {nextGoal.target} days

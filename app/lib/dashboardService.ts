@@ -22,6 +22,9 @@ interface DashboardStats {
     current: number
     target: number
     progress: number
+    tiersAchieved: number
+    tierName: string
+    ultimateGoalsCompleted: number
   }
 }
 
@@ -506,39 +509,74 @@ export async function getDashboardStats(
       }),
     ])
 
-    // Calculate next goal based on current month's practice with progressive tiers
-    const currentMonthDays =
-      practiceHistory[practiceHistory.length - 1]?.days || 0
-    const goalTiers = [30, 60, 90, 180, 365]
+    // Calculate next goal based on continuous activity streak
+    const continuousPracticeDays = activityStreak
+    const baseGoalTiers = [30, 60, 90, 180, 365]
     const ultimateGoal = 365
 
-    // Calculate how many goal tiers have been achieved
-    const tiersAchieved = goalTiers.filter(
-      (tier) => currentMonthDays >= tier
+    // Count how many base tiers (including the first yearly 365) are achieved
+    const baseTiersAchieved = baseGoalTiers.filter(
+      (tier) => continuousPracticeDays >= tier
     ).length
 
-    // Calculate how many times the ultimate goal (365) has been completed
-    const ultimateGoalsCompleted = Math.floor(currentMonthDays / ultimateGoal)
+    // How many full years have been completed (1 => first 365 achieved)
+    const yearsCompleted = Math.floor(continuousPracticeDays / ultimateGoal)
 
-    // Find the next goal tier that hasn't been reached yet
-    const nextGoalTier = goalTiers.find((tier) => currentMonthDays < tier)
-    const goalTarget = nextGoalTier || goalTiers[goalTiers.length - 1]
-    const daysRemaining = goalTarget - currentMonthDays
+    // Additional yearly milestones beyond the first year
+    const extraYearlyTiersAchieved = Math.max(0, yearsCompleted - 1)
+
+    // Total tiers achieved includes the base tiers plus any extra yearly milestones
+    const tiersAchieved = baseTiersAchieved + extraYearlyTiersAchieved
+
+    // Define encouraging names for each achieved tier. Additional yearly names
+    // can be appended later; when not provided, we reuse the last name.
+    const tierNames = [
+      '', // 0 tiers
+      'Yoga practitioner in Training', // 30 days
+      'Dedicated to Yoga', // 60 days
+      'Discover the Inner Guru', // 90 days
+      'Six (6) month Sage', // 180 days
+      'Yearly Transformation', // 365 days
+      'The Acharya Teacher', // 2nd year
+      'The Muni Sage', // 3rd year
+      // future yearly names may be appended here
+    ]
+
+    const currentTierName =
+      tierNames[Math.min(tiersAchieved, tierNames.length - 1)] ||
+      tierNames[tierNames.length - 1]
+
+    // How many full 365-day cycles have been completed
+    const ultimateGoalsCompleted = yearsCompleted
+
+    // Determine next goal:
+    // - If there's a base tier ahead, use that.
+    // - Otherwise use the next multiple of 365 (next yearly goal).
+    const nextBaseGoal = baseGoalTiers.find(
+      (tier) => continuousPracticeDays < tier
+    )
+    const goalTarget =
+      nextBaseGoal ||
+      (Math.floor(continuousPracticeDays / ultimateGoal) + 1) * ultimateGoal
+    const daysRemaining = goalTarget - continuousPracticeDays
 
     const nextGoal = {
       text:
         daysRemaining > 0
           ? `Practice ${daysRemaining} More ${daysRemaining === 1 ? 'Day' : 'Days'}`
-          : currentMonthDays >= goalTiers[goalTiers.length - 1]
+          : goalTarget === ultimateGoal
             ? 'Ultimate Goal Achieved! 🎉'
-            : 'Goal Achieved! 🎉',
-      current: currentMonthDays,
+            : goalTarget > ultimateGoal
+              ? 'Yearly Goal Achieved! 🎉'
+              : 'Goal Achieved! 🎉',
+      current: continuousPracticeDays,
       target: goalTarget,
       progress: Math.min(
-        Math.round((currentMonthDays / goalTarget) * 100),
+        Math.round((continuousPracticeDays / goalTarget) * 100),
         100
       ),
       tiersAchieved,
+      tierName: currentTierName,
       ultimateGoalsCompleted,
     }
 

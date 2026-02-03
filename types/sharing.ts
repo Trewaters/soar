@@ -80,8 +80,12 @@ export class AsanaShareStrategy implements ShareStrategy {
   generateShareConfig(data: AsanaPose): ShareConfig {
     const poseName = data.sort_english_name
 
-    // According to PRD, asana sharing must always use the production URL
-    const shareUrl = 'https://www.happyyoga.app/navigator/flows/practiceSeries'
+    // Use canonical practiceAsanas URL with ID
+    const fallbackPracticeUrl = `https://www.happyyoga.app/navigator/asanaPoses/practiceAsanas?id=${data.id}`
+    // Prefer a stable, shareable link that includes the pose id.
+    const shareUrl = data?.id
+      ? fallbackPracticeUrl
+      : generateUrlWithFallbacks('asana', data, fallbackPracticeUrl)
 
     // Implement exact PRD format specification
     const shareText = `The asana pose ${poseName} was shared with you. Below is the description:

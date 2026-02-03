@@ -6,23 +6,17 @@ import Image from 'next/image'
 import {
   Box,
   Button,
-  Chip,
   IconButton,
   Stack,
-  TextField,
-  FormControl,
-  Autocomplete,
   Accordion,
   AccordionSummary,
   AccordionDetails,
   Snackbar,
   Alert,
 } from '@mui/material'
-import Grid from '@mui/material/Grid2'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import SaveIcon from '@mui/icons-material/Save'
-import CancelIcon from '@mui/icons-material/Cancel'
 import CloseIcon from '@mui/icons-material/Close'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { FEATURES } from '@app/FEATURES'
