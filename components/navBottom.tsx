@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import PersonIcon from '@mui/icons-material/Person'
@@ -8,7 +8,12 @@ import DashboardIcon from '@mui/icons-material/Dashboard'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { useSession } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
+import ShareAsset from '@app/clientComponents/ShareAsset'
+import { getPose } from '@lib/poseService'
+import { getSingleSeries } from '@lib/seriesService'
+import { getSingleSequence } from '@lib/sequenceService'
+import { ShareableContent } from 'types/sharing'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 type ColorFunction = (isAuthenticated: boolean) => string
@@ -26,11 +31,66 @@ export default function NavBottom(props: {
   onMenuToggle?: () => void
 }) {
   const router = useNavigationWithLoading()
-  const { data: session, status } = useSession()
+  const { status } = useSession()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const isAuthenticated = status === 'authenticated'
 
-  // Determine if user is authenticated
-  const isAuthenticated = status === 'authenticated' && !!session
+  const [shareContent, setShareContent] = useState<ShareableContent | null>(
+    null
+  )
+
+  useEffect(() => {
+    const fetchAssetData = async () => {
+      // Get params from searchParams or window location if needed
+      const id =
+        searchParams.get('id') ||
+        new URLSearchParams(window.location.search).get('id')
+      const sequenceId =
+        searchParams.get('sequenceId') ||
+        new URLSearchParams(window.location.search).get('sequenceId')
+
+      try {
+        if (
+          (pathname.includes('/asanaPoses/practiceAsanas') ||
+            pathname.includes('/asanaPoses')) &&
+          id
+        ) {
+          const pose = await getPose(id)
+          if (pose) {
+            setShareContent({ contentType: 'asana', data: pose })
+            return
+          }
+        }
+
+        if (
+          (pathname.includes('/flows/practiceSeries') ||
+            pathname.includes('/flows')) &&
+          id
+        ) {
+          const series = await getSingleSeries(id)
+          if (series) {
+            setShareContent({ contentType: 'series', data: series })
+            return
+          }
+        }
+
+        if (pathname.includes('/flows/practiceSequences') && sequenceId) {
+          const sequence = await getSingleSequence(sequenceId)
+          if (sequence) {
+            setShareContent({ contentType: 'sequence', data: sequence })
+            return
+          }
+        }
+
+        setShareContent(null)
+      } catch (error) {
+        setShareContent(null)
+      }
+    }
+
+    fetchAssetData()
+  }, [pathname, searchParams])
 
   // Check if we're in the profile section
   const isInProfileSection = pathname?.includes('/navigator/profile')
@@ -133,36 +193,60 @@ export default function NavBottom(props: {
         justifySelf: 'center',
       }}
     >
-      {navItems.map((item) => (
-        <IconButton
-          key={item.id}
-          disableRipple
-          disableFocusRipple
-          disableTouchRipple
-          aria-label={item.label}
-          title={item.label}
-          role="button"
-          onClick={() => handleNavigation(item.path, item.id)}
-          sx={{
-            color: item.getColor(isAuthenticated),
-            '&:focus': {
-              outline: 'none', // Remove focus outline
-            },
-            '&:focus-visible': {
-              outline: '2px solid',
-              outlineColor: 'primary.main',
-              outlineOffset: '2px',
-            },
-            '&.Mui-disabled': {
-              color: item.getColor(isAuthenticated), // Use dynamic color even when disabled
-            },
-          }}
-        >
-          {React.cloneElement(item.icon as React.ReactElement, {
-            sx: { color: item.getColor(isAuthenticated) },
-          })}
-        </IconButton>
-      ))}
+      {navItems.map((item) => {
+        // Replace middle button (profile) with ShareAsset if shareContent is available
+        if (shareContent && item.id === 'profile') {
+          return (
+            <ShareAsset
+              key="share"
+              content={shareContent}
+              color="success.main"
+              size="medium"
+              sx={{
+                '&:focus': {
+                  outline: 'none',
+                },
+                '&:focus-visible': {
+                  outline: '2px solid',
+                  outlineColor: 'primary.main',
+                  outlineOffset: '2px',
+                },
+              }}
+            />
+          )
+        }
+
+        return (
+          <IconButton
+            key={item.id}
+            disableRipple
+            disableFocusRipple
+            disableTouchRipple
+            aria-label={item.label}
+            title={item.label}
+            role="button"
+            onClick={() => handleNavigation(item.path, item.id)}
+            sx={{
+              color: item.getColor(isAuthenticated),
+              '&:focus': {
+                outline: 'none', // Remove focus outline
+              },
+              '&:focus-visible': {
+                outline: '2px solid',
+                outlineColor: 'primary.main',
+                outlineOffset: '2px',
+              },
+              '&.Mui-disabled': {
+                color: item.getColor(isAuthenticated), // Use dynamic color even when disabled
+              },
+            }}
+          >
+            {React.cloneElement(item.icon as React.ReactElement, {
+              sx: { color: item.getColor(isAuthenticated) },
+            })}
+          </IconButton>
+        )
+      })}
     </Box>
   )
 }

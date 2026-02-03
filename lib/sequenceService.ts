@@ -77,6 +77,37 @@ export async function getAllSequences(): Promise<SequenceData[]> {
 }
 
 /**
+ * Get a single sequence by ID
+ */
+export async function getSingleSequence(id: string): Promise<SequenceData> {
+  try {
+    // Add timestamp to prevent caching
+    const timestamp = Date.now()
+    const response = await fetch(`/api/sequences/${id}?ts=${timestamp}`, {
+      cache: 'no-store',
+      next: { revalidate: 0 },
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0',
+        Pragma: 'no-cache',
+        Expires: '0',
+      },
+    })
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        throw new Error('Sequence not found')
+      }
+      throw new Error('Failed to fetch sequence')
+    }
+
+    return await response.json()
+  } catch (error) {
+    logServiceError(error, 'sequenceService', 'getSingleSequence', { id })
+    throw error
+  }
+}
+
+/**
  * Create a new sequence
  */
 export async function createSequence(
@@ -131,10 +162,6 @@ export async function deleteSequence(
 
     return await response.json()
   } catch (error) {
-    logServiceError(error, 'sequenceService', 'deleteSequence', {
-      operation: 'delete_sequence',
-      sequenceId: id,
-    })
     throw error
   }
 }

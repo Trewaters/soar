@@ -32,6 +32,12 @@ type ShareAssetProps = {
   allowCustomText?: boolean
   /** Optional default message shown in the input when `allowCustomText` is enabled */
   defaultMessage?: string
+  /** Optional custom color for the icon/button */
+  color?: string
+  /** Optional additional sx styles */
+  sx?: any
+  /** Optional size for the icon button */
+  size?: 'small' | 'medium' | 'large'
 }
 /* eslint-enable no-unused-vars, @typescript-eslint/no-unused-vars */
 
@@ -42,6 +48,9 @@ export default function ShareAsset({
   onShareComplete,
   allowCustomText = false,
   defaultMessage = '',
+  color,
+  sx,
+  size = 'small',
 }: ShareAssetProps) {
   const [isSharing, setIsSharing] = useState(false)
   const [snackbarOpen, setSnackbarOpen] = useState(false)
@@ -316,9 +325,20 @@ export default function ShareAsset({
               onClick={handleShare}
               disabled={isSharing}
               aria-label={label}
-              size="small"
+              size={size}
+              sx={{
+                color: color || 'inherit',
+                ...sx,
+              }}
             >
-              {isSharing ? <CircularProgress size={20} /> : <IosShareIcon />}
+              {isSharing ? (
+                <CircularProgress
+                  size={size === 'small' ? 20 : 24}
+                  color="inherit"
+                />
+              ) : (
+                <IosShareIcon />
+              )}
             </IconButton>
           </Tooltip>
 
@@ -342,14 +362,24 @@ export default function ShareAsset({
       {variant === 'button' && (
         <Button
           variant="contained"
-          color="primary"
           onClick={handleShare}
           disabled={isSharing}
           startIcon={
-            isSharing ? <CircularProgress size={18} /> : <IosShareIcon />
+            isSharing ? (
+              <CircularProgress size={18} color="inherit" />
+            ) : (
+              <IosShareIcon />
+            )
           }
           aria-label={label}
           size="small"
+          sx={{
+            backgroundColor: color || 'primary.main',
+            '&:hover': {
+              backgroundColor: color || 'primary.dark',
+            },
+            ...sx,
+          }}
         >
           {isSharing ? 'Sharing...' : buttonText}
         </Button>
@@ -368,9 +398,20 @@ export default function ShareAsset({
             onClick={handleShare}
             disabled={isSharing}
             aria-label={label}
-            size="small"
+            size={size}
+            sx={{
+              color: color || 'inherit',
+              ...sx,
+            }}
           >
-            {isSharing ? <CircularProgress size={16} /> : <IosShareIcon />}
+            {isSharing ? (
+              <CircularProgress
+                size={size === 'small' ? 16 : 20}
+                color="inherit"
+              />
+            ) : (
+              <IosShareIcon />
+            )}
           </IconButton>
         </Tooltip>
       )}

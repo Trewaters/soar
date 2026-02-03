@@ -5,7 +5,10 @@ import { ThemeProvider } from '@mui/material/styles'
 import { theme } from '@styles/theme'
 import NavBottom from '../../components/navBottom'
 import { useSession } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
+import { getPose } from '@lib/poseService'
+import { getSingleSeries } from '@lib/seriesService'
+import { getSingleSequence } from '@lib/sequenceService'
 
 // Note: next/navigation and useNavigationWithLoading are mocked globally in jest.setup.ts
 // Access the global mocks via (globalThis as any).mockNavigationPush for assertions
@@ -18,6 +21,31 @@ const mockBack = (globalThis as any).mockNavigationBack || jest.fn()
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),
 }))
+
+// Mock Asset Services
+jest.mock('@lib/poseService', () => ({
+  getPose: jest.fn(),
+}))
+jest.mock('@lib/seriesService', () => ({
+  getSingleSeries: jest.fn(),
+}))
+jest.mock('@lib/sequenceService', () => ({
+  getSingleSequence: jest.fn(),
+}))
+
+// Mock ShareAsset component
+jest.mock('@app/clientComponents/ShareAsset', () => {
+  return function MockShareAsset(props: any) {
+    return (
+      <div
+        data-testid="share-asset"
+        data-color={props.color}
+        data-size={props.size}
+        data-content-type={props.content?.contentType}
+      />
+    )
+  }
+})
 
 // Mock Material-UI icons
 jest.mock('@mui/icons-material/Menu', () => ({
@@ -37,6 +65,11 @@ jest.mock('@mui/icons-material/Dashboard', () => ({
 
 const mockUseSession = useSession as jest.MockedFunction<typeof useSession>
 const mockUsePathname = usePathname as jest.MockedFunction<typeof usePathname>
+const mockUseSearchParams = useSearchParams as jest.Mock
+
+const mockGetPose = getPose as jest.Mock
+const mockGetSingleSeries = getSingleSeries as jest.Mock
+const mockGetSingleSequence = getSingleSequence as jest.Mock
 
 // Test wrapper component with all required providers
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
@@ -190,6 +223,96 @@ describe('NavBottom Component', () => {
 
       const profileButton = screen.getByLabelText('Login to access profile')
       expect(profileButton).not.toBeDisabled() // Should redirect to login, not be disabled
+    })
+  })
+
+  describe('Contextual Sharing', () => {
+    beforeEach(() => {
+      mockUseSession.mockReturnValue({
+        data: { user: { id: 'user-1' } },
+        status: 'authenticated',
+      })
+      mockGetPose.mockResolvedValue({ id: 'pose-1', name: 'Test Pose' })
+      mockGetSingleSeries.mockResolvedValue({
+        id: 'series-1',
+        name: 'Test Series',
+      })
+      mockGetSingleSequence.mockResolvedValue({
+        id: 'sequence-1',
+        name: 'Test Sequence',
+      })
+    })
+
+    it('replaces the profile icon with ShareAsset when on a practice asana page with id', async () => {
+      mockUsePathname.mockReturnValue('/navigator/asanaPoses/practiceAsanas')
+      mockUseSearchParams.mockReturnValue(new URLSearchParams('id=pose-1'))
+
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
+
+      // Should find the share asset component (with some delay due to async useEffect)
+      const shareAsset = await screen.findByTestId('share-asset')
+      expect(shareAsset).toBeInTheDocument()
+
+      // The profile icon should NOT be in the document
+      expect(screen.queryByTestId('person-icon')).not.toBeInTheDocument()
+    })
+
+    it('replaces the profile icon with ShareAsset when on a practice series page with id', async () => {
+      mockUsePathname.mockReturnValue('/navigator/flows/practiceSeries')
+      mockUseSearchParams.mockReturnValue(new URLSearchParams('id=series-1'))
+
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
+
+      const shareAsset = await screen.findByTestId('share-asset')
+      expect(shareAsset).toBeInTheDocument()
+      expect(screen.queryByTestId('person-icon')).not.toBeInTheDocument()
+    })
+
+    it('replaces the profile icon with ShareAsset when on a practice sequence page with sequenceId', async () => {
+      mockUsePathname.mockReturnValue('/navigator/flows/practiceSequences')
+      mockUseSearchParams.mockReturnValue(
+        new URLSearchParams('sequenceId=sequence-1')
+      )
+
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
+
+      const shareAsset = await screen.findByTestId('share-asset')
+      expect(shareAsset).toBeInTheDocument()
+      expect(screen.queryByTestId('person-icon')).not.toBeInTheDocument()
+    })
+
+    it('replaces the profile icon with ShareAsset on base flow page when id is present', async () => {
+      mockUsePathname.mockReturnValue('/navigator/flows')
+      mockUseSearchParams.mockReturnValue(new URLSearchParams('id=series-1'))
+
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
+
+      const shareAsset = await screen.findByTestId('share-asset')
+      expect(shareAsset).toBeInTheDocument()
+    })
+
+    it('shows the normal profile icon when no asset id is present on practice pages', () => {
+      mockUsePathname.mockReturnValue('/navigator/asanaPoses/practiceAsanas')
+      mockUseSearchParams.mockReturnValue(new URLSearchParams(''))
+
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
+
+      expect(screen.getByTestId('person-icon')).toBeInTheDocument()
+      expect(screen.queryByTestId('share-asset')).not.toBeInTheDocument()
+    })
+
+    it('passes correct props to ShareAsset', async () => {
+      mockUsePathname.mockReturnValue('/navigator/asanaPoses/practiceAsanas')
+      mockUseSearchParams.mockReturnValue(new URLSearchParams('id=pose-1'))
+
+      render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
+
+      const shareAsset = await screen.findByTestId('share-asset')
+
+      // Check for custom styling props we added
+      expect(shareAsset).toHaveAttribute('data-color', 'success.main')
+      expect(shareAsset).toHaveAttribute('data-size', 'medium')
+      expect(shareAsset).toHaveAttribute('data-content-type', 'asana')
     })
   })
 
