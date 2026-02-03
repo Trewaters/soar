@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import Image from 'next/image'
 import React from 'react'
 
@@ -44,7 +44,7 @@ interface SplashHeaderProps {
  * @param {boolean} [props.showIcon=true] - Whether to display the decorative icon next to the title
  * @param {string} [props.iconSrc='/icons/designImages/leaf-orange.png'] - The source URL of the decorative icon
  * @param {string} [props.iconAlt=''] - The alt text for the decorative icon
- * @param {number} [props.iconSize=21] - Size of the decorative icon in pixels
+ * @param {number} [props.iconSize=18] - Size of the decorative icon in pixels
  *
  * @returns {JSX.Element} A splash header with image, optional icon, and title
  */
@@ -59,17 +59,8 @@ export default function SplashHeader({
   showIcon = true,
   iconSrc = '/icons/designImages/leaf-orange.png',
   iconAlt = '',
-  iconSize = 21,
+  iconSize = 18,
 }: SplashHeaderProps) {
-  // Extract base dimensions for Next.js Image component
-  const baseHeight =
-    typeof height === 'number'
-      ? height
-      : height.md || height.sm || height.xs || 355
-
-  const baseWidth =
-    typeof width === 'number' ? width : width.md || width.sm || width.xs || 384
-
   // Create responsive sizing for the container
   const getResponsiveDimensions = (
     dimension: number | { xs?: number; sm?: number; md?: number; lg?: number }
@@ -86,43 +77,45 @@ export default function SplashHeader({
   }
 
   return (
-    <Stack spacing={spacing} data-testid="splash-header">
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          position: 'relative',
-          // Apply responsive sizing to the container
-          width: getResponsiveDimensions(width),
-          height: getResponsiveDimensions(height),
-          '& img': {
-            width: '100% !important',
-            height: '100% !important',
-            objectFit: 'contain',
-          },
+    <Box
+      data-testid="splash-header"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        position: 'relative',
+        width: getResponsiveDimensions(width),
+        maxWidth: '100%', // Prevent overflow on small screens
+        height: getResponsiveDimensions(height),
+        margin: '0 auto',
+        overflow: 'hidden',
+        borderRadius: '12px', // Consistency with other components
+      }}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        priority
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 384px"
+        style={{
+          objectFit: 'contain', // Changed from cover to prevent distortion/cropping of illustrations
+          ...style,
         }}
-      >
-        <Image
-          src={src}
-          alt={alt}
-          height={baseHeight}
-          width={baseWidth}
-          style={{
-            display: 'flex',
-            alignSelf: 'center',
-            ...style,
-          }}
-        />
-      </Box>
+      />
       <Box
         sx={{
+          position: 'absolute',
+          top: '66%', // Positioned just below center (50%)
+          left: 0,
+          transform: 'translateY(-50%)',
           width: '100%',
-          maxWidth: '100vw',
+          maxWidth: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           gap: 0.5, // Smaller gap to keep icon close to text
+          zIndex: 1,
         }}
       >
         {showIcon && (
@@ -136,31 +129,23 @@ export default function SplashHeader({
         )}
         <Typography
           variant="splashTitle"
+          component="span"
           sx={{
-            // Layout and visual styling only - typography styles come from theme variant
             color: 'primary.main',
             backgroundColor: 'navSplash.light',
             px: { xs: 1, sm: 2 },
             py: 1,
             borderRadius: '8px',
-            maxWidth: showIcon ? 'calc(100vw - 32px)' : '100vw', // Account for icon width + gap
+            maxWidth: showIcon ? 'calc(100% - 48px)' : '100%', // Adjusted for absolute positioning context
             wordBreak: 'break-word',
             overflowWrap: 'break-word',
             hyphens: 'auto',
-            textAlign: 'center',
-            lineHeight: 1.2,
-            // More aggressive responsive fontSize scaling - prioritizes fitting on screen
-            fontSize: {
-              xs: 'clamp(0.75rem, 4vw, 1rem)', // Much more conservative scaling for xs
-              sm: 'clamp(0.875rem, 5vw, 1.5rem)', // More conservative for sm
-              md: 'clamp(1rem, 6vw, 2rem)', // More conservative for md
-              lg: 'clamp(1.125rem, 7vw, 2.5rem)', // More conservative for lg
-            },
+            boxShadow: 2, // Added a little shadow to lift it from background
           }}
         >
           {title}
         </Typography>
       </Box>
-    </Stack>
+    </Box>
   )
 }

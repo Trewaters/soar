@@ -54,8 +54,9 @@ describe('SplashHeader Component', () => {
 
       const mainImage = screen.getByAltText('Test image alt text')
       expect(mainImage).toHaveAttribute('src', '/test-image.jpg')
-      expect(mainImage).toHaveAttribute('height', '355')
-      expect(mainImage).toHaveAttribute('width', '384')
+      // Next.js Image with fill property does not use height/width attributes
+      expect(mainImage).not.toHaveAttribute('height')
+      expect(mainImage).not.toHaveAttribute('width')
     })
 
     it('should render title text correctly', () => {
@@ -82,8 +83,8 @@ describe('SplashHeader Component', () => {
         'src',
         '/icons/designImages/leaf-orange.png'
       )
-      expect(decorativeIcon).toHaveAttribute('height', '21')
-      expect(decorativeIcon).toHaveAttribute('width', '21')
+      expect(decorativeIcon).toHaveAttribute('height', '18')
+      expect(decorativeIcon).toHaveAttribute('width', '18')
     })
 
     it('should hide decorative icon when showIcon is false', () => {
@@ -167,7 +168,8 @@ describe('SplashHeader Component', () => {
       })
 
       const mainImage = screen.getByAltText('Test image alt text')
-      expect(mainImage).toHaveAttribute('height', '400') // md value used as base
+      expect(mainImage).toBeInTheDocument()
+      expect(mainImage.style.objectFit).toBe('contain')
     })
 
     it('should handle responsive width object', () => {
@@ -177,7 +179,8 @@ describe('SplashHeader Component', () => {
       })
 
       const mainImage = screen.getByAltText('Test image alt text')
-      expect(mainImage).toHaveAttribute('width', '450') // md value used as base
+      expect(mainImage).toBeInTheDocument()
+      expect(mainImage.style.objectFit).toBe('contain')
     })
 
     it('should fallback to default values for empty responsive objects', () => {
@@ -186,8 +189,8 @@ describe('SplashHeader Component', () => {
       })
 
       const mainImage = screen.getByAltText('Test image alt text')
-      expect(mainImage).toHaveAttribute('height', '355')
-      expect(mainImage).toHaveAttribute('width', '384')
+      expect(mainImage).toBeInTheDocument()
+      expect(mainImage.style.objectFit).toBe('contain')
     })
   })
 
@@ -210,9 +213,9 @@ describe('SplashHeader Component', () => {
         wrapper: TestWrapper,
       })
 
-      // The Stack component should have a data-testid or we can check the MUI class
-      const stackElement = container.querySelector('.MuiStack-root')
-      expect(stackElement).toBeInTheDocument()
+      // The container should have a data-testid
+      const containerElement = screen.getByTestId('splash-header')
+      expect(containerElement).toBeInTheDocument()
     })
 
     it('should apply custom spacing when spacing prop is provided', () => {
@@ -221,8 +224,8 @@ describe('SplashHeader Component', () => {
         { wrapper: TestWrapper }
       )
 
-      const stackElement = container.querySelector('.MuiStack-root')
-      expect(stackElement).toBeInTheDocument()
+      const containerElement = screen.getByTestId('splash-header')
+      expect(containerElement).toBeInTheDocument()
     })
 
     it('should handle responsive spacing object', () => {
@@ -233,8 +236,8 @@ describe('SplashHeader Component', () => {
         { wrapper: TestWrapper }
       )
 
-      const stackElement = container.querySelector('.MuiStack-root')
-      expect(stackElement).toBeInTheDocument()
+      const containerElement = screen.getByTestId('splash-header')
+      expect(containerElement).toBeInTheDocument()
     })
 
     it('should eliminate need for manual spacing in consuming components', () => {
@@ -248,7 +251,7 @@ describe('SplashHeader Component', () => {
       expect(screen.getByText('Test Title')).toBeInTheDocument()
       expect(screen.getByAltText('Test image alt text')).toBeInTheDocument()
 
-      // Both sections should be within the same Stack container
+      // Both sections should be within the same container
       const titleElement = screen.getByText('Test Title')
       const imageElement = screen.getByAltText('Test image alt text')
 

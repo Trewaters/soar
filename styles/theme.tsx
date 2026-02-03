@@ -181,14 +181,13 @@ export const theme = createTheme({
     caption: { fontSize: '0.9rem' },
     label: { fontSize: '1.8rem' },
     splashTitle: {
-      fontSize: '3rem',
+      fontSize: 'clamp(1rem, 6vw, 2.5rem)', // Responsive sizing that scales with viewport
       fontWeight: '900',
       textTransform: 'uppercase',
       letterSpacing: '0.1rem',
       wordSpacing: '0.1rem',
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
       textAlign: 'center',
+      lineHeight: 1.2,
     },
   },
   components: {
