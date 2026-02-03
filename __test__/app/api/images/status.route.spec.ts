@@ -55,7 +55,7 @@ describe('GET /api/images/status', () => {
 
   it('returns 400 when poseId missing', async () => {
     ;(auth as jest.Mock).mockResolvedValue({
-      user: { email: 'creator@example.com' },
+      user: { email: 'creator@example.com', role: 'user' },
     })
     const req: any = { url: `${baseUrl}?userId=creator@example.com` }
 
@@ -67,7 +67,7 @@ describe('GET /api/images/status', () => {
 
   it('returns 400 when userId missing', async () => {
     ;(auth as jest.Mock).mockResolvedValue({
-      user: { email: 'creator@example.com' },
+      user: { email: 'creator@example.com', role: 'user' },
     })
     const req: any = { url: `${baseUrl}?poseId=abc` }
 
@@ -79,7 +79,7 @@ describe('GET /api/images/status', () => {
 
   it('returns 403 when userId does not match session email', async () => {
     ;(auth as jest.Mock).mockResolvedValue({
-      user: { email: 'someone@x.com' },
+      user: { email: 'someone@x.com', role: 'user' },
     })
     const req: any = {
       url: `${baseUrl}?poseId=abc&userId=creator@example.com`,
@@ -93,9 +93,9 @@ describe('GET /api/images/status', () => {
 
   it('returns 404 when asana not found', async () => {
     ;(auth as jest.Mock).mockResolvedValue({
-      user: { email: 'creator@example.com' },
+      user: { email: 'creator@example.com', role: 'user' },
     })
-    prisma.asanaPose.findUnique.mockResolvedValue(null)
+    ;(prisma.asanaPose.findUnique as jest.Mock).mockResolvedValue(null)
 
     const req: any = {
       url: `${baseUrl}?poseId=missing&userId=creator@example.com`,
@@ -109,17 +109,17 @@ describe('GET /api/images/status', () => {
 
   it('returns status object for owner when user can manage images', async () => {
     ;(auth as jest.Mock).mockResolvedValue({
-      user: { email: 'creator@example.com' },
+      user: { email: 'creator@example.com', role: 'user' },
     })
-    prisma.asanaPose.findUnique.mockResolvedValue({
+    ;(prisma.asanaPose.findUnique as jest.Mock).mockResolvedValue({
       isUserCreated: true,
       created_by: 'creator@example.com',
       imageCount: 1,
     })
-    prisma.userData.findUnique.mockResolvedValue({
+    ;(prisma.userData.findUnique as jest.Mock).mockResolvedValue({
       id: 'user-object-id-123',
     })
-    prisma.poseImage.count.mockResolvedValue(1)
+    ;(prisma.poseImage.count as jest.Mock).mockResolvedValue(1)
 
     const req: any = {
       url: `${baseUrl}?poseId=abc&userId=creator@example.com`,

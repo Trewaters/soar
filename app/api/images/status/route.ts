@@ -31,6 +31,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'userId is required' }, { status: 400 })
     }
 
+    // Verification of session email matching provided userId
+    if (session.user.email !== userId) {
+      return NextResponse.json(
+        { error: 'Unauthorized access' },
+        { status: 403 }
+      )
+    }
+
     // Project convention: created_by stores the creator's email.
     const { canModifyContent } = await import('@app/utils/authorization')
 
