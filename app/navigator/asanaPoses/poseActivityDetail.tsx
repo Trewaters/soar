@@ -31,7 +31,6 @@ import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 import AsanaDetailsEdit, {
   AsanaEditFieldProps,
 } from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
-import ShareAsset from '@app/clientComponents/ShareAsset'
 import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import ActivityTracker from '@app/clientComponents/ActivityTracker'
 import { useSession } from 'next-auth/react'
@@ -1167,22 +1166,6 @@ export default function PoseActivityDetail({
             >
               Practice View
             </Button>
-
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                width: { xs: '100%', sm: 'auto' },
-              }}
-            >
-              <ShareAsset
-                content={{
-                  contentType: 'asana',
-                  data: pose,
-                }}
-                defaultMessage={`Share asana: ${pose.sort_english_name}`}
-              />
-            </Box>
           </Stack>
         </Box>
       )}

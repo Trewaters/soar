@@ -162,6 +162,7 @@ export async function deleteSequence(
 
     return await response.json()
   } catch (error) {
+    logServiceError(error, 'sequenceService', 'deleteSequence', { id })
     throw error
   }
 }
