@@ -133,6 +133,7 @@ model AsanaPose {
   alternative_english_names String[] // “Full”, Abbreviated Pose 1
   poseImages                PoseImage[] // “Full”, Abbreviated Pose 1 // Relation to PoseImage, string to array
   description               String? // “Full”, Abbreviated Pose 1
+  /// (Category List: Arm Balance, Arm Leg Support, Backbend, Balance, Bandha, Core, Forward Bend, Forward Fold, Hip Opener, Inversion, Lateral Bend, Mudra, Neutral, Pranayama, Prone, Reclining Asanas, Restorative, Seated, Standing, Supine, Twist)
   category                  String? // “Full”, Abbreviated Pose 1
   difficulty                String? // “Full”, Abbreviated Pose 1
   activity_completed        Boolean? // “Full”, Abbreviated Pose 1
@@ -314,7 +315,8 @@ model GlossaryTerm {
   created_by    String?        @default("PUBLIC") // "PUBLIC" for system content | userId for user-created content | nullable for legacy data
   meaning       String
   whyMatters    String
-  category      String? // e.g. foundational, breath, meditation
+  /// (Category List: Arm Balance, Arm Leg Support, Backbend, Balance, Bandha, Core, Forward Bend, Forward Fold, Hip Opener, Inversion, Lateral Bend, Mudra, Neutral, Pranayama, Prone, Reclining Asanas, Restorative, Seated, Standing, Supine, Twist)
+  category      String?
   sanskrit      String? // Sanskrit representation with diacritics
   pronunciation String? // Phonetic guide for accessibility
   source        GlossarySource @default(DEFAULT)

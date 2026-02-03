@@ -28,7 +28,7 @@ import {
   FreemiumNotification,
   useFreemiumNotification,
 } from '@app/clientComponents/freemiumNotification'
-import { AsanaActivity } from 'types/asana'
+import { AsanaActivity, ASANA_CATEGORIES } from 'types/asana'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -60,28 +60,7 @@ export default function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Available categories for autocomplete
-  const categories = React.useMemo(
-    () => [
-      'Arm Leg Support',
-      'Backbend',
-      'Balance',
-      'Bandha',
-      'Core',
-      'Forward Bend',
-      'Hip Opener',
-      'Inversion',
-      'Lateral Bend',
-      'Mudra',
-      'Neutral',
-      'Prone',
-      'Restorative',
-      'Seated',
-      'Standing',
-      'Supine',
-      'Twist',
-    ],
-    []
-  )
+  const categories: string[] = [...ASANA_CATEGORIES]
 
   const [formFullAsanaPoseData, setFormFullAsanaPoseData] = useState<{
     sort_english_name: string

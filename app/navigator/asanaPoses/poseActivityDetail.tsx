@@ -21,10 +21,14 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import SaveIcon from '@mui/icons-material/Save'
 import CancelIcon from '@mui/icons-material/Cancel'
+import CloseIcon from '@mui/icons-material/Close'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { FEATURES } from '@app/FEATURES'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
+import AsanaDetailsEdit, {
+  AsanaEditFieldProps,
+} from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
 import ShareAsset from '@app/clientComponents/ShareAsset'
 import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import ActivityTracker from '@app/clientComponents/ActivityTracker'
@@ -42,7 +46,7 @@ import { deletePose, updatePose, type UpdatePoseInput } from '@lib/poseService'
 import PoseImageManagement from '@app/clientComponents/imageUpload/PoseImageManagement'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
-import { AsanaPose } from 'types/asana'
+import { AsanaPose, ASANA_CATEGORIES } from 'types/asana'
 import { HELP_PATHS } from '@app/utils/helpLoader'
 import NAV_PATHS from '@app/utils/navigation/constants'
 
@@ -122,32 +126,6 @@ export default function PoseActivityDetail({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [images, setImages] = useState<any[]>([])
 
-  // Available categories for autocomplete
-  const categories = [
-    'Arm Leg Support',
-    'Backbend',
-    'Balance',
-    'Bandha',
-    'Core',
-    'Forward Bend',
-    'Hip Opener',
-    'Inversion',
-    'Lateral Bend',
-    'Mudra',
-    'Neutral',
-    'Prone',
-    'Restorative',
-    'Seated',
-    'Standing',
-    'Supine',
-    'Twist',
-  ]
-
-  const [englishVariationsInput, setEnglishVariationsInput] = useState('')
-  const [alternativeNamesInput, setAlternativeNamesInput] = useState('')
-  const [sanskritInput, setSanskritInput] = useState('')
-  const [difficulty, setDifficulty] = useState('')
-
   const [formData, setFormData] = useState<{
     sort_english_name: string
     english_names: string[]
@@ -173,6 +151,111 @@ export default function PoseActivityDetail({
     deepening_cues: '',
     breath_direction_default: '',
   })
+
+  // Stable setter for form fields to avoid extra re-renders
+  const setField = React.useCallback((key: string, value: any) => {
+    setFormData((prev) => {
+      if ((prev as any)[key] === value) return prev
+      return { ...prev, [key]: value }
+    })
+  }, [])
+
+  const formFields: AsanaEditFieldProps[] = React.useMemo(
+    () => [
+      {
+        type: 'text',
+        fieldKey: 'sort_english_name',
+        label: 'Asana Pose Name',
+        value: formData.sort_english_name,
+        required: true,
+        placeholder: 'Enter the name of the asana',
+        onChange: (value: any) => setField('sort_english_name', value),
+      },
+      {
+        type: 'variations',
+        fieldKey: 'english_names',
+        label: 'Name Variations',
+        value: formData.english_names,
+        placeholder: 'e.g. Downward Dog, Adho Mukha Svanasana',
+        helperText: 'Separate variants with commas',
+        onChange: (value: any) => setField('english_names', value),
+      },
+      {
+        type: 'variations',
+        fieldKey: 'alternative_english_names',
+        label: 'Alternative Names (Custom/Nicknames)',
+        value: formData.alternative_english_names || [],
+        placeholder: 'e.g. My favorite twist, Pretzel pose',
+        helperText: 'Multiple nicknames separated by commas',
+        onChange: (value: any) => setField('alternative_english_names', value),
+      },
+      {
+        type: 'variations',
+        fieldKey: 'sanskrit_names',
+        label: 'Sanskrit Names',
+        value: formData.sanskrit_names || [],
+        placeholder: 'e.g. Virabhadrasana I, ...',
+        helperText: 'Separate multiple names with commas',
+        onChange: (value: any) => setField('sanskrit_names', value),
+      },
+      {
+        type: 'multiline',
+        fieldKey: 'description',
+        label: 'Description',
+        value: formData.description,
+        placeholder:
+          'Describe the pose alignment, position, and key characteristics...',
+        required: true,
+        rows: 4,
+        onChange: (value: any) => setField('description', value),
+      },
+      {
+        type: 'autocomplete',
+        fieldKey: 'category',
+        label: 'Category',
+        value: formData.category,
+        options: [...ASANA_CATEGORIES],
+        placeholder: 'Select or type category',
+        required: true,
+        freeSolo: true,
+        onChange: (value: any) => setField('category', value),
+      },
+      {
+        type: 'buttonGroup',
+        fieldKey: 'difficulty',
+        label: 'Difficulty Level',
+        value: formData.difficulty,
+        options: ['Easy', 'Average', 'Difficult'],
+        helperText: 'Select the difficulty level for this asana',
+        onChange: (value: any) => setField('difficulty', value),
+      },
+      {
+        type: 'text',
+        fieldKey: 'dristi',
+        label: 'Dristi',
+        value: formData.dristi || '',
+        placeholder: 'Gaze point',
+        onChange: (value: any) => setField('dristi', value),
+      },
+      {
+        type: 'multiline',
+        fieldKey: 'setup_cues',
+        label: 'Setup Cues',
+        value: formData.setup_cues || '',
+        rows: 2,
+        onChange: (value: any) => setField('setup_cues', value),
+      },
+      {
+        type: 'multiline',
+        fieldKey: 'deepening_cues',
+        label: 'Deepening Cues',
+        value: formData.deepening_cues || '',
+        rows: 2,
+        onChange: (value: any) => setField('deepening_cues', value),
+      },
+    ],
+    [formData, setField]
+  )
 
   // Fetch uploaded images for this pose
   const { images: poseImages } = usePoseImages(
@@ -258,18 +341,6 @@ export default function PoseActivityDetail({
         breath_direction_default: (pose as any).breath_direction_default || '',
       })
       setImages(pose.poseImages || [])
-      setEnglishVariationsInput(
-        Array.isArray(pose.english_names) ? pose.english_names.join(', ') : ''
-      )
-      setAlternativeNamesInput(
-        Array.isArray(pose.alternative_english_names)
-          ? pose.alternative_english_names.join(', ')
-          : ''
-      )
-      setSanskritInput(
-        Array.isArray(pose.sanskrit_names) ? pose.sanskrit_names.join(', ') : ''
-      )
-      setDifficulty(pose.difficulty || '')
       setError(null)
     }
   }, [isEditing, pose])
@@ -305,65 +376,6 @@ export default function PoseActivityDetail({
     })
   }
 
-  const handleCategoryChange = (
-    event: React.SyntheticEvent,
-    value: string | null
-  ) => {
-    setFormData({
-      ...formData,
-      category: value || '',
-    })
-  }
-
-  const handleDifficultyChange = (value: string) => {
-    setDifficulty(value)
-    setFormData({
-      ...formData,
-      difficulty: value,
-    })
-  }
-
-  const handleVariationsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setEnglishVariationsInput(value)
-    const variations = value
-      .split(',')
-      .map((v) => v.trim())
-      .filter(Boolean)
-    setFormData({
-      ...formData,
-      english_names: variations,
-    })
-  }
-
-  const handleAlternativeNamesChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = e.target.value
-    setAlternativeNamesInput(value)
-    const arr = value
-      .split(',')
-      .map((v) => v.trim())
-      .filter(Boolean)
-    setFormData({
-      ...formData,
-      alternative_english_names: arr,
-    })
-  }
-
-  const handleSanskritChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setSanskritInput(value)
-    const arr = value
-      .split(',')
-      .map((v) => v.trim())
-      .filter(Boolean)
-    setFormData({
-      ...formData,
-      sanskrit_names: arr,
-    })
-  }
-
   const handleEditToggle = () => {
     if (!session?.user?.email) {
       setError('You must be logged in to edit poses')
@@ -382,6 +394,22 @@ export default function PoseActivityDetail({
     if (!nextEdit) {
       // Canceling edit - clear error
       setError(null)
+    }
+  }
+
+  const handleDeletePose = async () => {
+    if (!pose?.id) return
+    const confirmed = window.confirm(
+      'Delete this asana? This cannot be undone.'
+    )
+    if (!confirmed) return
+    try {
+      await deletePose(pose.id)
+      // Force refresh and navigate to practice asanas page
+      router.refresh()
+      router.replace(NAV_PATHS.PRACTICE_ASANAS)
+    } catch (e: any) {
+      alert(e?.message || 'Failed to delete pose')
     }
   }
 
@@ -539,6 +567,82 @@ export default function PoseActivityDetail({
               aria-label={`Images for ${pose?.sort_english_name} pose`}
             />
 
+            {/* Action Icons Overlay */}
+            {showInlineEditIcon && session && session.user && canEdit && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 16,
+                  left: 16,
+                  zIndex: 4,
+                  display: 'flex',
+                  gap: 1,
+                }}
+              >
+                {!isEditing ? (
+                  <IconButton
+                    aria-label="Edit pose"
+                    onClick={handleEditToggle}
+                    sx={{
+                      color: 'primary.main',
+                      backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      },
+                    }}
+                    size="small"
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                ) : (
+                  <>
+                    <IconButton
+                      aria-label="Save changes"
+                      onClick={handleSaveEdit}
+                      sx={{
+                        color: 'primary.main',
+                        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                        '&:hover': {
+                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        },
+                      }}
+                      size="small"
+                    >
+                      <SaveIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      aria-label="Delete pose"
+                      onClick={handleDeletePose}
+                      sx={{
+                        color: 'error.main',
+                        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                        '&:hover': {
+                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        },
+                      }}
+                      size="small"
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      aria-label="Cancel editing"
+                      onClick={handleCancelEdit}
+                      sx={{
+                        color: 'primary.contrastText',
+                        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                        '&:hover': {
+                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        },
+                      }}
+                      size="small"
+                    >
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  </>
+                )}
+              </Box>
+            )}
+
             {/* Pose name overlay on image */}
             <Box
               sx={{
@@ -569,16 +673,6 @@ export default function PoseActivityDetail({
                 >
                   {pose?.sort_english_name}
                 </Typography>
-                {showInlineEditIcon && session && session.user && canEdit && (
-                  <IconButton
-                    aria-label="Edit pose"
-                    onClick={handleEditToggle}
-                    sx={{ ml: 1, color: 'white' }}
-                    size="small"
-                  >
-                    <EditIcon />
-                  </IconButton>
-                )}
               </Box>
               <Typography
                 variant="body2"
@@ -684,10 +778,11 @@ export default function PoseActivityDetail({
             <Stack alignItems="center">
               <Box
                 sx={{
+                  position: 'relative',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: '100%',
+                  width: { xs: '100%', sm: '400px' },
                 }}
               >
                 <Typography
@@ -696,7 +791,7 @@ export default function PoseActivityDetail({
                   sx={{
                     pt: 2,
                     height: '200px',
-                    width: { xs: '100%', sm: '400px' },
+                    width: '100%',
                     backgroundColor: 'info.contrastText',
                     color: 'primary.main',
                     borderRadius: '12px',
@@ -710,15 +805,79 @@ export default function PoseActivityDetail({
                 >
                   {pose?.sort_english_name}
                 </Typography>
+
+                {/* Action Icons Overlay for No Image */}
                 {showInlineEditIcon && session && session.user && canEdit && (
-                  <IconButton
-                    aria-label="Edit pose"
-                    onClick={handleEditToggle}
-                    sx={{ ml: 1, color: 'primary.main' }}
-                    size="small"
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 16,
+                      left: 16,
+                      zIndex: 4,
+                      display: 'flex',
+                      gap: 1,
+                    }}
                   >
-                    <EditIcon />
-                  </IconButton>
+                    {!isEditing ? (
+                      <IconButton
+                        aria-label="Edit pose"
+                        onClick={handleEditToggle}
+                        sx={{
+                          color: 'primary.main',
+                          backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                          '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.1)' },
+                        }}
+                        size="small"
+                      >
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    ) : (
+                      <>
+                        <IconButton
+                          aria-label="Save changes"
+                          onClick={handleSaveEdit}
+                          sx={{
+                            color: 'primary.main',
+                            backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                            '&:hover': {
+                              backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                            },
+                          }}
+                          size="small"
+                        >
+                          <SaveIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton
+                          aria-label="Delete pose"
+                          onClick={handleDeletePose}
+                          sx={{
+                            color: 'error.main',
+                            backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                            '&:hover': {
+                              backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                            },
+                          }}
+                          size="small"
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton
+                          aria-label="Cancel editing"
+                          onClick={handleCancelEdit}
+                          sx={{
+                            color: 'primary.contrastText',
+                            backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                            '&:hover': {
+                              backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                            },
+                          }}
+                          size="small"
+                        >
+                          <CloseIcon fontSize="small" />
+                        </IconButton>
+                      </>
+                    )}
+                  </Box>
                 )}
               </Box>
             </Stack>
@@ -753,66 +912,6 @@ export default function PoseActivityDetail({
                 },
               }}
             >
-              {/* Inline action buttons for edit view */}
-              {isEditing &&
-                !showActions &&
-                session &&
-                session.user &&
-                canEdit && (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      gap: 2,
-                      justifyContent: 'center',
-                      mb: 3,
-                    }}
-                  >
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={handleSaveEdit}
-                      startIcon={<SaveIcon />}
-                      disabled={isSubmitting}
-                      sx={{ borderRadius: '12px', px: 3 }}
-                    >
-                      {isSubmitting ? 'Saving...' : 'Save Changes'}
-                    </Button>
-
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      startIcon={<DeleteIcon />}
-                      onClick={async () => {
-                        if (!pose?.id) return
-                        const confirmed = window.confirm(
-                          'Delete this asana? This cannot be undone.'
-                        )
-                        if (!confirmed) return
-                        try {
-                          await deletePose(pose.id)
-                          router.refresh()
-                          router.replace(NAV_PATHS.PRACTICE_ASANAS)
-                        } catch (e: any) {
-                          alert(e?.message || 'Failed to delete pose')
-                        }
-                      }}
-                      sx={{ borderRadius: '12px', px: 3 }}
-                    >
-                      Delete Asana
-                    </Button>
-
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      onClick={handleCancelEdit}
-                      startIcon={<CancelIcon />}
-                      sx={{ borderRadius: '12px', px: 3 }}
-                    >
-                      Cancel
-                    </Button>
-                  </Box>
-                )}
-
               {/* Mark as Complete control moved higher up per design instructions */}
               <Box
                 sx={{
@@ -933,85 +1032,12 @@ export default function PoseActivityDetail({
             </>
           ) : (
             <>
-              {/* Edit Mode */}
+              {/* Consolidated Edit Mode */}
               <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
                 <Typography variant="h6" gutterBottom color="primary">
-                  Basic Information
+                  Pose Information
                 </Typography>
-
-                <Grid container spacing={2}>
-                  <Grid size={12}>
-                    <FormControl sx={{ width: '100%', mb: 3 }}>
-                      <TextField
-                        label="Sort English Name"
-                        name="sort_english_name"
-                        value={formData.sort_english_name}
-                        onChange={handleChange}
-                        required
-                        placeholder="e.g., Tree Pose"
-                        helperText="This is the primary name for the pose"
-                      />
-                    </FormControl>
-                  </Grid>
-
-                  <Grid size={12}>
-                    <FormControl sx={{ width: '100%', mb: 3 }}>
-                      <TextField
-                        label="English Name Variations"
-                        value={englishVariationsInput}
-                        onChange={handleVariationsChange}
-                        placeholder="e.g., Warrior I, Warrior One, High Lunge"
-                        helperText="Separate multiple names with commas"
-                        multiline
-                        rows={2}
-                      />
-                    </FormControl>
-                  </Grid>
-
-                  <Grid size={12}>
-                    <FormControl sx={{ width: '100%', mb: 3 }}>
-                      <TextField
-                        label="Custom name for asana"
-                        name="alternative_english_names"
-                        value={alternativeNamesInput}
-                        onChange={handleAlternativeNamesChange}
-                        placeholder="e.g., My favorite twist, Pretzel pose"
-                        helperText="Multiple nicknames separated by commas"
-                        multiline
-                        rows={2}
-                      />
-                    </FormControl>
-                  </Grid>
-
-                  <Grid size={12}>
-                    <FormControl sx={{ width: '100%', mb: 3 }}>
-                      <TextField
-                        label="Sanskrit Names"
-                        value={sanskritInput}
-                        onChange={handleSanskritChange}
-                        placeholder="e.g., Virabhadrasana I, ..."
-                        helperText="Separate multiple names with commas"
-                        multiline
-                        rows={2}
-                      />
-                    </FormControl>
-                  </Grid>
-
-                  <Grid size={12}>
-                    <FormControl sx={{ width: '100%', mb: 3 }}>
-                      <TextField
-                        label="Description"
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                        required
-                        multiline
-                        rows={4}
-                        placeholder="Describe the pose alignment, position, and key characteristics..."
-                      />
-                    </FormControl>
-                  </Grid>
-                </Grid>
+                <AsanaDetailsEdit fields={formFields} sx={{ mt: 2 }} />
               </Paper>
 
               {/* Image Gallery Section in Edit Mode */}
@@ -1024,93 +1050,6 @@ export default function PoseActivityDetail({
                   initialImages={images}
                   onImagesChange={setImages}
                 />
-              </Paper>
-
-              <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
-                <Typography variant="h6" gutterBottom color="primary">
-                  Pose Details
-                </Typography>
-
-                <Grid container spacing={2}>
-                  <Grid size={6}>
-                    <FormControl sx={{ width: '100%', mb: 3 }}>
-                      <Autocomplete
-                        options={categories}
-                        value={formData.category}
-                        onChange={handleCategoryChange}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label="Category"
-                            required
-                            placeholder="Select or type category"
-                          />
-                        )}
-                        freeSolo
-                      />
-                    </FormControl>
-                  </Grid>
-
-                  <Grid size={6}>
-                    <FormControl sx={{ width: '100%', mb: 3 }}>
-                      <Typography variant="subtitle2" gutterBottom>
-                        Difficulty Level
-                      </Typography>
-                      <Stack direction="row" spacing={1}>
-                        {['Easy', 'Average', 'Difficult'].map((level) => (
-                          <Chip
-                            key={level}
-                            label={level}
-                            clickable
-                            variant={
-                              difficulty === level ? 'filled' : 'outlined'
-                            }
-                            color={difficulty === level ? 'primary' : 'default'}
-                            onClick={() => handleDifficultyChange(level)}
-                          />
-                        ))}
-                      </Stack>
-                    </FormControl>
-                  </Grid>
-
-                  <Grid size={12}>
-                    <FormControl sx={{ width: '100%', mb: 3 }}>
-                      <TextField
-                        label="Dristi"
-                        name="dristi"
-                        value={formData.dristi || ''}
-                        onChange={handleChange}
-                        placeholder="Gaze point"
-                      />
-                    </FormControl>
-                  </Grid>
-
-                  <Grid size={12}>
-                    <FormControl sx={{ width: '100%', mb: 3 }}>
-                      <TextField
-                        label="Setup Cues"
-                        name="setup_cues"
-                        value={formData.setup_cues || ''}
-                        onChange={handleChange}
-                        multiline
-                        rows={2}
-                      />
-                    </FormControl>
-                  </Grid>
-
-                  <Grid size={12}>
-                    <FormControl sx={{ width: '100%', mb: 3 }}>
-                      <TextField
-                        label="Deepening Cues"
-                        name="deepening_cues"
-                        value={formData.deepening_cues || ''}
-                        onChange={handleChange}
-                        multiline
-                        rows={2}
-                      />
-                    </FormControl>
-                  </Grid>
-                </Grid>
               </Paper>
             </>
           )}
@@ -1188,130 +1127,7 @@ export default function PoseActivityDetail({
         </Box>
       )}
 
-      {/* Edit/Delete Pose Buttons - Only visible to creator or admin */}
-      {/* Sticky Bottom Action Bar - Consistent with Create Asana page */}
-      {showActions && session && session.user && canEdit && (
-        <Box
-          sx={{
-            position: 'sticky',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            backgroundColor: 'background.paper',
-            borderTop: '1px solid',
-            borderColor: 'divider',
-            py: 2,
-            px: 2,
-            mt: 3,
-            boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
-            zIndex: 10,
-          }}
-        >
-          {/* Make edit/delete buttons stack vertically on xs and row on sm+ */}
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-          >
-            {!isEditing ? (
-              <>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleEditToggle}
-                  startIcon={<EditIcon />}
-                  sx={{
-                    borderRadius: '12px',
-                    px: 4,
-                    py: 1.5,
-                    fontSize: '1.1rem',
-                    fontWeight: 600,
-                    textTransform: 'none',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                    minWidth: { xs: '100%', sm: '200px' },
-                  }}
-                >
-                  Edit Pose
-                </Button>
-                {canEdit && (
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    startIcon={<DeleteIcon />}
-                    sx={{
-                      borderRadius: '12px',
-                      px: 4,
-                      py: 1.5,
-                      fontSize: '1.1rem',
-                      fontWeight: 600,
-                      textTransform: 'none',
-                      minWidth: { xs: '100%', sm: '160px' },
-                    }}
-                    onClick={async () => {
-                      if (!pose?.id) return
-                      const confirmed = window.confirm(
-                        'Delete this asana? This cannot be undone.'
-                      )
-                      if (!confirmed) return
-                      try {
-                        await deletePose(pose.id)
-                        // Force refresh and navigate to practice asanas page
-                        router.refresh()
-                        router.replace(NAV_PATHS.PRACTICE_ASANAS)
-                      } catch (e: any) {
-                        alert(e?.message || 'Failed to delete pose')
-                      }
-                    }}
-                  >
-                    Delete
-                  </Button>
-                )}
-              </>
-            ) : (
-              <>
-                <Button
-                  variant="contained"
-                  color="success"
-                  onClick={handleSaveEdit}
-                  startIcon={<SaveIcon />}
-                  disabled={isSubmitting}
-                  sx={{
-                    borderRadius: '12px',
-                    px: 4,
-                    py: 1.5,
-                    fontSize: '1.1rem',
-                    fontWeight: 600,
-                    textTransform: 'none',
-                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                    minWidth: { xs: '100%', sm: '200px' },
-                  }}
-                >
-                  {isSubmitting ? 'Saving...' : 'Save Changes'}
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={handleCancelEdit}
-                  startIcon={<CancelIcon />}
-                  disabled={isSubmitting}
-                  sx={{
-                    borderRadius: '12px',
-                    px: 4,
-                    py: 1.5,
-                    fontSize: '1.1rem',
-                    fontWeight: 600,
-                    textTransform: 'none',
-                    minWidth: { xs: '100%', sm: '160px' },
-                  }}
-                >
-                  Cancel
-                </Button>
-              </>
-            )}
-          </Stack>
-        </Box>
-      )}
+      {/* Sticky Bottom Action Bar - Removed redundant buttons per request */}
       <HelpDrawer
         content={HELP_PATHS.asanas.practice}
         open={open}
