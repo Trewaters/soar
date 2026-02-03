@@ -15,6 +15,8 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Snackbar,
+  Alert,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import EditIcon from '@mui/icons-material/Edit'
@@ -117,7 +119,19 @@ export default function PoseActivityDetail({
   const { data: session } = useSession()
   const { canEdit } = useCanEditContent(pose?.created_by)
   const [activityRefreshTrigger, setActivityRefreshTrigger] = useState(0)
-  const [, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [showUndoSnackbar, setShowUndoSnackbar] = useState(false)
+  const deleteTimeoutRef = React.useRef<NodeJS.Timeout | null>(null)
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (deleteTimeoutRef.current) {
+        clearTimeout(deleteTimeoutRef.current)
+      }
+    }
+  }, [])
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [open, setOpen] = useState(false)
 
@@ -400,17 +414,33 @@ export default function PoseActivityDetail({
   const handleDeletePose = async () => {
     if (!pose?.id) return
     const confirmed = window.confirm(
-      'Delete this asana? This cannot be undone.'
+      `Do you really want to delete ${pose?.sort_english_name}?`
     )
     if (!confirmed) return
-    try {
-      await deletePose(pose.id)
-      // Force refresh and navigate to practice asanas page
-      router.refresh()
-      router.replace(NAV_PATHS.PRACTICE_ASANAS)
-    } catch (e: any) {
-      alert(e?.message || 'Failed to delete pose')
+
+    // Show undo snackbar and start countdown
+    setShowUndoSnackbar(true)
+
+    deleteTimeoutRef.current = setTimeout(async () => {
+      try {
+        await deletePose(pose.id)
+        setShowUndoSnackbar(false)
+        // Force refresh and navigate to practice asanas page
+        router.refresh()
+        router.replace(NAV_PATHS.PRACTICE_ASANAS)
+      } catch (e: any) {
+        setError(e?.message || 'Failed to delete pose')
+        setShowUndoSnackbar(false)
+      }
+    }, 5000) // 5 second window for undo
+  }
+
+  const handleUndoDelete = () => {
+    if (deleteTimeoutRef.current) {
+      clearTimeout(deleteTimeoutRef.current)
+      deleteTimeoutRef.current = null
     }
+    setShowUndoSnackbar(false)
   }
 
   const handleSaveEdit = async () => {
@@ -569,36 +599,21 @@ export default function PoseActivityDetail({
 
             {/* Action Icons Overlay */}
             {showInlineEditIcon && session && session.user && canEdit && (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top: 16,
-                  left: 16,
-                  zIndex: 4,
-                  display: 'flex',
-                  gap: 1,
-                }}
-              >
-                {!isEditing ? (
-                  <IconButton
-                    aria-label="Edit pose"
-                    onClick={handleEditToggle}
-                    sx={{
-                      color: 'primary.main',
-                      backgroundColor: 'rgba(255, 255, 255, 0.6)',
-                      '&:hover': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                      },
-                    }}
-                    size="small"
-                  >
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                ) : (
-                  <>
+              <>
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 16,
+                    left: 16,
+                    zIndex: 4,
+                    display: 'flex',
+                    gap: 1,
+                  }}
+                >
+                  {!isEditing ? (
                     <IconButton
-                      aria-label="Save changes"
-                      onClick={handleSaveEdit}
+                      aria-label="Edit pose"
+                      onClick={handleEditToggle}
                       sx={{
                         color: 'primary.main',
                         backgroundColor: 'rgba(255, 255, 255, 0.6)',
@@ -608,8 +623,51 @@ export default function PoseActivityDetail({
                       }}
                       size="small"
                     >
-                      <SaveIcon fontSize="small" />
+                      <EditIcon fontSize="small" />
                     </IconButton>
+                  ) : (
+                    <>
+                      <IconButton
+                        aria-label="Save changes"
+                        onClick={handleSaveEdit}
+                        sx={{
+                          color: 'primary.main',
+                          backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                          '&:hover': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                          },
+                        }}
+                        size="small"
+                      >
+                        <SaveIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton
+                        aria-label="Cancel editing"
+                        onClick={handleCancelEdit}
+                        sx={{
+                          color: 'primary.contrastText',
+                          backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                          '&:hover': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                          },
+                        }}
+                        size="small"
+                      >
+                        <CloseIcon fontSize="small" />
+                      </IconButton>
+                    </>
+                  )}
+                </Box>
+
+                {isEditing && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 16,
+                      right: 16,
+                      zIndex: 5, // Higher than carousel dots
+                    }}
+                  >
                     <IconButton
                       aria-label="Delete pose"
                       onClick={handleDeletePose}
@@ -624,23 +682,9 @@ export default function PoseActivityDetail({
                     >
                       <DeleteIcon fontSize="small" />
                     </IconButton>
-                    <IconButton
-                      aria-label="Cancel editing"
-                      onClick={handleCancelEdit}
-                      sx={{
-                        color: 'primary.contrastText',
-                        backgroundColor: 'rgba(255, 255, 255, 0.6)',
-                        '&:hover': {
-                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                        },
-                      }}
-                      size="small"
-                    >
-                      <CloseIcon fontSize="small" />
-                    </IconButton>
-                  </>
+                  </Box>
                 )}
-              </Box>
+              </>
             )}
 
             {/* Pose name overlay on image */}
@@ -690,7 +734,7 @@ export default function PoseActivityDetail({
               <Box
                 sx={{
                   position: 'absolute',
-                  top: 16,
+                  top: isEditing ? 60 : 16, // Move down when delete button is in top right
                   right: 16,
                   zIndex: 4,
                 }}
@@ -808,34 +852,21 @@ export default function PoseActivityDetail({
 
                 {/* Action Icons Overlay for No Image */}
                 {showInlineEditIcon && session && session.user && canEdit && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: 16,
-                      left: 16,
-                      zIndex: 4,
-                      display: 'flex',
-                      gap: 1,
-                    }}
-                  >
-                    {!isEditing ? (
-                      <IconButton
-                        aria-label="Edit pose"
-                        onClick={handleEditToggle}
-                        sx={{
-                          color: 'primary.main',
-                          backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                          '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.1)' },
-                        }}
-                        size="small"
-                      >
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                    ) : (
-                      <>
+                  <>
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: 16,
+                        left: 16,
+                        zIndex: 4,
+                        display: 'flex',
+                        gap: 1,
+                      }}
+                    >
+                      {!isEditing ? (
                         <IconButton
-                          aria-label="Save changes"
-                          onClick={handleSaveEdit}
+                          aria-label="Edit pose"
+                          onClick={handleEditToggle}
                           sx={{
                             color: 'primary.main',
                             backgroundColor: 'rgba(0, 0, 0, 0.05)',
@@ -845,8 +876,51 @@ export default function PoseActivityDetail({
                           }}
                           size="small"
                         >
-                          <SaveIcon fontSize="small" />
+                          <EditIcon fontSize="small" />
                         </IconButton>
+                      ) : (
+                        <>
+                          <IconButton
+                            aria-label="Save changes"
+                            onClick={handleSaveEdit}
+                            sx={{
+                              color: 'primary.main',
+                              backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                              '&:hover': {
+                                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                              },
+                            }}
+                            size="small"
+                          >
+                            <SaveIcon fontSize="small" />
+                          </IconButton>
+                          <IconButton
+                            aria-label="Cancel editing"
+                            onClick={handleCancelEdit}
+                            sx={{
+                              color: 'primary.contrastText',
+                              backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                              '&:hover': {
+                                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                              },
+                            }}
+                            size="small"
+                          >
+                            <CloseIcon fontSize="small" />
+                          </IconButton>
+                        </>
+                      )}
+                    </Box>
+
+                    {isEditing && (
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: 16,
+                          right: 16,
+                          zIndex: 4,
+                        }}
+                      >
                         <IconButton
                           aria-label="Delete pose"
                           onClick={handleDeletePose}
@@ -861,23 +935,9 @@ export default function PoseActivityDetail({
                         >
                           <DeleteIcon fontSize="small" />
                         </IconButton>
-                        <IconButton
-                          aria-label="Cancel editing"
-                          onClick={handleCancelEdit}
-                          sx={{
-                            color: 'primary.contrastText',
-                            backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                            '&:hover': {
-                              backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                            },
-                          }}
-                          size="small"
-                        >
-                          <CloseIcon fontSize="small" />
-                        </IconButton>
-                      </>
+                      </Box>
                     )}
-                  </Box>
+                  </>
                 )}
               </Box>
             </Stack>
@@ -1133,6 +1193,34 @@ export default function PoseActivityDetail({
         open={open}
         onClose={() => setOpen(false)}
       />
+
+      {/* Undo Delete Snackbar */}
+      <Snackbar
+        open={showUndoSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          severity="warning"
+          variant="filled"
+          action={
+            <Button color="inherit" size="small" onClick={handleUndoDelete}>
+              UNDO
+            </Button>
+          }
+          sx={{
+            width: '100%',
+            fontWeight: 'bold',
+            animation: 'flash 1s infinite',
+            '@keyframes flash': {
+              '0%': { opacity: 1 },
+              '50%': { opacity: 0.8 },
+              '100%': { opacity: 1 },
+            },
+          }}
+        >
+          Deleting {pose?.sort_english_name} in 5 seconds...
+        </Alert>
+      </Snackbar>
     </Paper>
   )
 }

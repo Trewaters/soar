@@ -297,7 +297,7 @@ describe('PoseActivityDetail - View Asana - Happy Path', () => {
   })
 
   describe('Edit Button Visibility', () => {
-    it('should show Edit button when user is the creator', () => {
+    it('should show Edit icon when user is the creator', () => {
       const userCreatedPose = {
         ...mockAsanaPose,
         created_by: 'test@example.com', // Same as mockSession.user.email
@@ -307,11 +307,12 @@ describe('PoseActivityDetail - View Asana - Happy Path', () => {
         wrapper: TestWrapper,
       })
 
-      expect(screen.getByText('Edit Pose')).toBeInTheDocument()
-      expect(screen.getByText('Delete')).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: /edit pose/i })
+      ).toBeInTheDocument()
     })
 
-    it('should hide Edit button when user is not the creator', () => {
+    it('should hide Edit icon when user is not the creator', () => {
       const otherUserPose = {
         ...mockAsanaPose,
         created_by: 'other@example.com', // Different from mockSession.user.email
@@ -321,11 +322,12 @@ describe('PoseActivityDetail - View Asana - Happy Path', () => {
         wrapper: TestWrapper,
       })
 
-      expect(screen.queryByText('Edit Pose')).not.toBeInTheDocument()
-      expect(screen.queryByText('Delete')).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: /edit pose/i })
+      ).not.toBeInTheDocument()
     })
 
-    it('should hide Edit button when user is not logged in', () => {
+    it('should hide Edit icon when user is not logged in', () => {
       const { useSession } = require('next-auth/react')
       useSession.mockReturnValue({
         data: null,
@@ -336,8 +338,9 @@ describe('PoseActivityDetail - View Asana - Happy Path', () => {
         wrapper: TestWrapper,
       })
 
-      expect(screen.queryByText('Edit Pose')).not.toBeInTheDocument()
-      expect(screen.queryByText('Delete')).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('button', { name: /edit pose/i })
+      ).not.toBeInTheDocument()
     })
   })
 
