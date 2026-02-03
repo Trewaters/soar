@@ -40,7 +40,6 @@ import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 import { deletePose, updatePose, type UpdatePoseInput } from '@lib/poseService'
 import PoseImageManagement from '@app/clientComponents/imageUpload/PoseImageManagement'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
-import ImageGallery from '@app/clientComponents/imageUpload/ImageGallery'
 import { AsanaPose, ASANA_CATEGORIES } from 'types/asana'
 import { HELP_PATHS } from '@app/utils/helpLoader'
 import NAV_PATHS from '@app/utils/navigation/constants'
@@ -73,7 +72,12 @@ interface PoseCardProps {
 const usePoseImages = (poseId?: string, poseName?: string) => {
   const [images, setImages] = useState<PoseImageData[]>([])
   const [loading, setLoading] = useState(false)
+  const [refreshTrigger, setRefreshTrigger] = useState(0)
   const { data: session } = useSession()
+
+  const refresh = React.useCallback(() => {
+    setRefreshTrigger((prev) => prev + 1)
+  }, [])
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -88,6 +92,7 @@ const usePoseImages = (poseId?: string, poseName?: string) => {
         const response = await getUserPoseImages(50, 0, poseId, poseName)
         setImages(response.images)
       } catch (error) {
+        console.error('[usePoseImages] Error fetching images:', error)
         setImages([])
       } finally {
         setLoading(false)
@@ -95,15 +100,14 @@ const usePoseImages = (poseId?: string, poseName?: string) => {
     }
 
     fetchImages()
-  }, [session?.user?.id, poseId, poseName])
+  }, [session?.user?.id, poseId, poseName, refreshTrigger])
 
-  return { images, loading }
+  return { images, loading, refresh }
 }
 
 export default function PoseActivityDetail({
   poseCardProp,
   initialEditMode = false,
-  showActions = true,
   showInlineEditIcon = true,
   onSaveSuccess,
 }: PoseCardProps) {
@@ -130,8 +134,6 @@ export default function PoseActivityDetail({
 
   // Inline Edit Mode State
   const [isEditing, setIsEditing] = useState(initialEditMode)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [images, setImages] = useState<any[]>([])
 
   const [formData, setFormData] = useState<{
     sort_english_name: string
@@ -265,7 +267,7 @@ export default function PoseActivityDetail({
   )
 
   // Fetch uploaded images for this pose
-  const { images: poseImages } = usePoseImages(
+  const { images: poseImages, refresh: refreshImages } = usePoseImages(
     pose?.id?.toString(),
     pose?.sort_english_name
   )
@@ -347,7 +349,6 @@ export default function PoseActivityDetail({
         deepening_cues: pose.deepening_cues || '',
         breath_direction_default: (pose as any).breath_direction_default || '',
       })
-      setImages(pose.poseImages || [])
       setError(null)
     }
   }, [isEditing, pose])
@@ -372,15 +373,6 @@ export default function PoseActivityDetail({
     } catch (e) {
       // ignore in non-browser environments
     }
-  }
-
-  // Edit mode form handlers
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData({
-      ...formData,
-      [name]: value,
-    })
   }
 
   const handleEditToggle = () => {
@@ -420,7 +412,7 @@ export default function PoseActivityDetail({
         setShowUndoSnackbar(false)
         // Force refresh and navigate to practice asanas page
         router.refresh()
-        router.replace(NAV_PATHS.PRACTICE_ASANAS)
+        router.replace(`${NAV_PATHS.PRACTICE_ASANAS}?refresh=true`)
       } catch (e: any) {
         setError(e?.message || 'Failed to delete pose')
         setShowUndoSnackbar(false)
@@ -437,19 +429,16 @@ export default function PoseActivityDetail({
   }
 
   const handleSaveEdit = async () => {
-    setIsSubmitting(true)
     setError(null)
 
     if (!session?.user?.email) {
       setError('You must be logged in to edit poses')
-      setIsSubmitting(false)
       return
     }
 
     // Check if user can edit (either owner or admin)
     if (!canEdit) {
       setError('You do not have permission to edit this pose')
-      setIsSubmitting(false)
       return
     }
 
@@ -471,28 +460,6 @@ export default function PoseActivityDetail({
       // Update the pose text data
       await updatePose(pose.id, updatedAsana)
 
-      // Update the image order if images were changed
-      if (images.length > 0) {
-        const imageReorderPayload = images.map((image) => ({
-          id: image.id,
-          displayOrder: Number(image.displayOrder),
-        }))
-
-        const reorderResponse = await fetch(
-          `/api/asana/${pose.id}/images/reorder`,
-          {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ images: imageReorderPayload }),
-          }
-        )
-
-        if (!reorderResponse.ok) {
-          const errorData = await reorderResponse.json()
-          throw new Error(errorData.error || 'Failed to update image order')
-        }
-      }
-
       // Exit edit mode and refresh the page data
       setIsEditing(false)
       syncEditQueryParam(false)
@@ -511,8 +478,6 @@ export default function PoseActivityDetail({
       }
     } catch (error: Error | any) {
       setError(error.message || 'Failed to update pose')
-    } finally {
-      setIsSubmitting(false)
     }
   }
 
@@ -579,7 +544,7 @@ export default function PoseActivityDetail({
                 localStorageId: undefined,
                 isOffline: false,
                 imageType: 'pose',
-                displayOrder: 1,
+                displayOrder: (img as any).displayOrder ?? 1,
                 createdAt: new Date(img.uploadedAt),
                 updatedAt: new Date(img.uploadedAt),
               }))}
@@ -695,6 +660,7 @@ export default function PoseActivityDetail({
               <Box
                 sx={{
                   display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
@@ -710,6 +676,37 @@ export default function PoseActivityDetail({
                 >
                   {pose?.sort_english_name}
                 </Typography>
+
+                {/* Dot navigation for multiple images - moved to center below name */}
+                {poseImages.length > 1 && (
+                  <Box sx={{ mt: 0.5, mb: 0.5 }}>
+                    <CarouselDotNavigation
+                      images={poseImages.map((img) => ({
+                        id: img.id,
+                        userId: '',
+                        poseId: pose?.id?.toString(),
+                        poseName: pose?.sort_english_name,
+                        url: img.url,
+                        altText:
+                          img.altText || `${pose?.sort_english_name} pose`,
+                        fileName: img.fileName || undefined,
+                        fileSize: img.fileSize || undefined,
+                        uploadedAt: new Date(img.uploadedAt),
+                        storageType: 'CLOUD' as const,
+                        localStorageId: undefined,
+                        isOffline: false,
+                        imageType: 'pose',
+                        displayOrder: (img as any).displayOrder ?? 1,
+                        createdAt: new Date(img.uploadedAt),
+                        updatedAt: new Date(img.uploadedAt),
+                      }))}
+                      activeIndex={currentImageIndex}
+                      onIndexChange={handleCarouselIndexChange}
+                      size="small"
+                      color="secondary"
+                    />
+                  </Box>
+                )}
               </Box>
               <Typography
                 variant="body2"
@@ -721,43 +718,6 @@ export default function PoseActivityDetail({
                 {pose?.category}
               </Typography>
             </Box>
-
-            {/* Dot navigation for multiple images */}
-            {poseImages.length > 1 && (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top: isEditing ? 60 : 16, // Move down when delete button is in top right
-                  right: 16,
-                  zIndex: 4,
-                }}
-              >
-                <CarouselDotNavigation
-                  images={poseImages.map((img) => ({
-                    id: img.id,
-                    userId: '',
-                    poseId: pose?.id?.toString(),
-                    poseName: pose?.sort_english_name,
-                    url: img.url,
-                    altText: img.altText || `${pose?.sort_english_name} pose`,
-                    fileName: img.fileName || undefined,
-                    fileSize: img.fileSize || undefined,
-                    uploadedAt: new Date(img.uploadedAt),
-                    storageType: 'CLOUD' as const,
-                    localStorageId: undefined,
-                    isOffline: false,
-                    imageType: 'pose',
-                    displayOrder: 1,
-                    createdAt: new Date(img.uploadedAt),
-                    updatedAt: new Date(img.uploadedAt),
-                  }))}
-                  activeIndex={currentImageIndex}
-                  onIndexChange={handleCarouselIndexChange}
-                  size="small"
-                  color="secondary"
-                />
-              </Box>
-            )}
           </Box>
         ) : null}
 
@@ -1092,18 +1052,6 @@ export default function PoseActivityDetail({
                 </Typography>
                 <AsanaDetailsEdit fields={formFields} sx={{ mt: 2 }} />
               </Paper>
-
-              {/* Image Gallery Section in Edit Mode */}
-              <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
-                <Typography variant="h6" gutterBottom color="primary">
-                  Image Gallery
-                </Typography>
-                <ImageGallery
-                  asanaId={pose.id}
-                  initialImages={images}
-                  onImagesChange={setImages}
-                />
-              </Paper>
             </>
           )}
 
@@ -1114,7 +1062,10 @@ export default function PoseActivityDetail({
                 title={`Images for ${pose.sort_english_name}`}
                 poseId={pose.id?.toString()}
                 poseName={pose.sort_english_name}
-                variant="full"
+                variant={isEditing ? 'full' : 'gallery-only'}
+                showUploadButton={isEditing}
+                enableManagement={isEditing}
+                onImagesChange={refreshImages}
               />
             </Box>
           )}
@@ -1170,6 +1121,22 @@ export default function PoseActivityDetail({
         open={open}
         onClose={() => setOpen(false)}
       />
+
+      <Snackbar
+        open={!!error}
+        autoHideDuration={6000}
+        onClose={() => setError(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setError(null)}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {error}
+        </Alert>
+      </Snackbar>
 
       {/* Undo Delete Snackbar */}
       <Snackbar

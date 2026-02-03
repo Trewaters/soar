@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server'
 import { auth } from 'auth'
 import { prisma } from '@lib/prismaClient'
+import { canModifyContent } from '@app/utils/authorization'
 
 // Next.js dynamic route handlers receive a second argument with params; params must be awaited
 export async function PUT(
@@ -33,11 +34,12 @@ export async function PUT(
 
     const images = body.images
 
-    // Basic validation
+    // Basic validation: Support both 'id' and 'imageId' for flexibility
     if (
       !images.every(
         (img: any) =>
-          typeof img.id === 'string' && typeof img.displayOrder === 'number'
+          (typeof img.id === 'string' || typeof img.imageId === 'string') &&
+          typeof img.displayOrder === 'number'
       )
     ) {
       return NextResponse.json(
@@ -51,14 +53,19 @@ export async function PUT(
       where: { id: asanaId },
       select: { created_by: true },
     })
-    const creatorEmail = asana?.created_by
-    if (!asana || creatorEmail !== session.user?.email) {
+
+    if (!asana) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
+    const canModify = await canModifyContent(asana.created_by || '')
+    if (!canModify) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const updateTransactions = images.map((image: any) =>
       prisma.poseImage.update({
-        where: { id: image.id },
+        where: { id: image.id || image.imageId },
         data: { displayOrder: image.displayOrder },
       })
     )

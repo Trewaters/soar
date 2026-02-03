@@ -197,13 +197,6 @@ export default React.memo(function AsanaDetailsEdit(
       if (field.onChange) {
         field.onChange(cleanedVariations)
       } else if ((props as any).globalOnChange && field.fieldKey) {
-        try {
-          console.trace('VariationInput.finalize -> globalOnChange', {
-            label: field.label,
-            fieldKey: field.fieldKey,
-            value: cleanedVariations,
-          })
-        } catch (e) {}
         ;(props as any).globalOnChange(field.fieldKey, cleanedVariations)
       }
       setDisplay(cleanedVariations.join(', '))
@@ -300,17 +293,6 @@ export default React.memo(function AsanaDetailsEdit(
 
   const renderFieldInput = (field: AsanaEditFieldProps, fieldId: string) => {
     const callChange = (val: any) => {
-      // Trace the caller and field info to help debug runaway updates
-      try {
-        console.trace('AsanaDetailsEdit.callChange', {
-          label: field.label,
-          fieldKey: (field as any).fieldKey,
-          value: val,
-        })
-      } catch (e) {
-        // swallow tracing errors in environments that restrict console
-      }
-
       // Prefer explicit field.onChange; fall back to globalOnChange if provided
       if ((field as any).onChange) {
         ;(field as any).onChange(val)

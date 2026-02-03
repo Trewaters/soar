@@ -64,23 +64,12 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    // Verify user owns all the images
-    const ownsAllImages = await verifyMultipleImageOwnership(
-      imageIds,
-      session.user.id
-    )
+    // Role-Based Access Control: Admins can reorder any image,
+    // users can only reorder images they own.
+    const { isAdmin } = await import('@app/utils/authorization')
+    const userIsAdmin = await isAdmin()
 
-    if (!ownsAllImages) {
-      return NextResponse.json(
-        {
-          error: 'You can only reorder images you own',
-          code: 'UNAUTHORIZED',
-        },
-        { status: 403 }
-      )
-    }
-
-    // Get the images to verify they belong to the same pose
+    // Get the images to verify they belong to the same pose and check ownership
     // Fetch full records (no select) to tolerate schema rename (pose -> asana)
     const imageDetails: any = await prisma.poseImage.findMany({
       where: { id: { in: imageIds } },
@@ -92,6 +81,22 @@ export async function PUT(request: NextRequest) {
         { error: 'Some images not found' },
         { status: 404 }
       )
+    }
+
+    // Verify ownership if not admin
+    if (!userIsAdmin) {
+      const ownsAllImages = imageDetails.every(
+        (img: any) => img.userId === session.user.id
+      )
+      if (!ownsAllImages) {
+        return NextResponse.json(
+          {
+            error: 'You can only reorder images you own',
+            code: 'UNAUTHORIZED',
+          },
+          { status: 403 }
+        )
+      }
     }
 
     // Verify all images belong to the same pose/asana (support both field names)
@@ -117,16 +122,18 @@ export async function PUT(request: NextRequest) {
       )
     }
 
-    // Verify user owns the asana
-    const ownsAsana = await verifyAsanaOwnership(poseId, session.user.id)
-    if (!ownsAsana) {
-      return NextResponse.json(
-        {
-          error: 'You can only reorder images for asanas you created',
-          code: 'UNAUTHORIZED',
-        },
-        { status: 403 }
-      )
+    // Verify user owns the asana OR is admin
+    if (!userIsAdmin) {
+      const ownsAsana = await verifyAsanaOwnership(poseId, session.user.id)
+      if (!ownsAsana) {
+        return NextResponse.json(
+          {
+            error: 'You can only reorder images for asanas you created',
+            code: 'UNAUTHORIZED',
+          },
+          { status: 403 }
+        )
+      }
     }
 
     // Perform the reordering in a transaction

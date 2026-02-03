@@ -180,14 +180,6 @@ describe('PoseActivityDetail - View Asana - Happy Path', () => {
   })
 
   describe('Interactive Elements', () => {
-    it('should render share button', () => {
-      render(<PoseActivityDetail poseCardProp={mockAsanaPose} />, {
-        wrapper: TestWrapper,
-      })
-
-      expect(screen.getByTestId('share-button')).toBeInTheDocument()
-    })
-
     it('should render activity tracker', () => {
       render(<PoseActivityDetail poseCardProp={mockAsanaPose} />, {
         wrapper: TestWrapper,

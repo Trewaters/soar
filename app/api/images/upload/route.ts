@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
 import { prisma } from '../../../../app/lib/prismaClient'
 import { storageManager } from '../../../../lib/storage/manager'
+import { canModifyContent } from '@app/utils/authorization'
 import {
   getNextDisplayOrder,
   ImageLimitError,
@@ -54,12 +55,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Asana not found' }, { status: 404 })
     }
 
-    // Use backwards compatible ownership check
-    const sessionEmail = session.user.email
-    const isUserOwned = asana.created_by === sessionEmail
-
-    // Check if user can manage images (user-created or user is the creator)
-    const canManage = isUserOwned && Boolean(asana.created_by)
+    const canManage = await canModifyContent(asana.created_by || '')
 
     if (!canManage) {
       return NextResponse.json(
@@ -111,7 +107,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 })
     }
 
-    if (userId !== session.user.email) {
+    // Validate that the uploader is the current user (allow matching by ID or email)
+    const isCurrentUser =
+      userId === session.user.email || userId === session.user.id
+    if (!isCurrentUser) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
@@ -152,22 +151,11 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Asana not found' }, { status: 404 })
       }
 
-      // Use backwards compatible ownership check
-      const sessionEmail = session.user.email
-      const isUserOwned = asana.created_by === sessionEmail
-
-      // Backwards compatible system asana detection
-      const isSystemAsana = !Boolean(asana.created_by)
-
-      // Check if this is a system asana (no images allowed)
-      if (isSystemAsana) {
-        throw new SystemAsanaError(
-          'Cannot upload images to system asanas. Only user-created asanas support images.'
-        )
-      }
+      // Use robust ownership check via canModifyContent
+      const canManage = await canModifyContent(asana.created_by || '')
 
       // Check ownership
-      if (!isUserOwned) {
+      if (!canManage) {
         throw new AsanaOwnershipError(
           'You can only upload images to your own asanas.',
           'OWNERSHIP_ERROR'

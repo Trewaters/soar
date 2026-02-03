@@ -108,12 +108,9 @@ export default function ImageGallery({
     if (!imageToDelete) return
 
     try {
-      const response = await fetch(
-        `/api/images/upload?id=${imageToDelete.id}`,
-        {
-          method: 'DELETE',
-        }
-      )
+      const response = await fetch(`/api/images/${imageToDelete.id}`, {
+        method: 'DELETE',
+      })
 
       if (!response.ok) {
         throw new Error('Failed to delete image')

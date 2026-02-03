@@ -104,6 +104,7 @@ export async function GET(request: NextRequest) {
     if (poseId) {
       // Filter by poseId field in PoseImage model
       baseWhere.poseId = poseId
+      console.log('[api/images] Filtering by poseId:', poseId)
     }
 
     // Fetch images with optional pose/pose relation populated. Use full record
@@ -150,21 +151,6 @@ export async function GET(request: NextRequest) {
               : { uploadedAt: 'desc' },
           select: selectFields,
         })
-      }
-
-      // Debug: log a safe sample of the fetched images for diagnosis
-      if (images && images.length > 0) {
-        try {
-          console.debug('images.route: fetched sample image', {
-            id: images[0].id,
-            userId: images[0].userId,
-            poseId: images[0].poseId,
-            poseName: images[0].poseName,
-            uploadedAt: images[0].uploadedAt,
-          })
-        } catch (logErr) {
-          // don't let logging interfere with response
-        }
       }
 
       // Manually populate pose relations for each image
@@ -262,20 +248,21 @@ export async function GET(request: NextRequest) {
     })
 
     // Calculate ownership info if requested
-    let ownership = undefined
-    if (includeOwnership && poseId && session?.user?.id) {
+    let ownershipValue = undefined
+    if (includeOwnership && poseId) {
+      const { canModifyContent } = await import('@app/utils/authorization')
       const pose = await prisma.asanaPose.findUnique({
         where: { id: poseId },
         select: { isUserCreated: true, created_by: true },
       })
 
       if (pose) {
-        ownership = {
-          canManage:
-            pose.isUserCreated &&
-            session?.user?.id &&
-            pose.created_by === session.user.id,
-          isOwner: session?.user?.id && pose.created_by === session.user.id,
+        const canManage = await canModifyContent(pose.created_by || '')
+        const isOwner =
+          session?.user?.email && pose.created_by === session.user.email
+        ownershipValue = {
+          canManage: Boolean(canManage),
+          isOwner: Boolean(isOwner),
           isUserCreated: pose.isUserCreated,
         }
       }
@@ -285,7 +272,7 @@ export async function GET(request: NextRequest) {
       images: transformedImages,
       total: totalCount,
       hasMore: totalCount > offset + limit,
-      ownership,
+      ownership: ownershipValue,
     }
 
     return NextResponse.json(response)

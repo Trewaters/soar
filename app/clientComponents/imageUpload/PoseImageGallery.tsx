@@ -61,12 +61,14 @@ interface PoseImageGalleryProps {
   poseId?: string
   poseName?: string
   enableManagement?: boolean
+  onImagesChange?: () => void
 }
 
 export default function PoseImageGallery({
   poseId,
   poseName,
   enableManagement = true,
+  onImagesChange,
 }: PoseImageGalleryProps) {
   const { status } = useSession()
   const [images, setImages] = useState<PoseImage[]>([])
@@ -85,7 +87,8 @@ export default function PoseImageGallery({
   } | null>(null)
 
   // TEMPORARY: Override ownership for testing tabs functionality
-  const canManageImages = ownership?.canManage || true // Set to false to test real ownership
+  // Respect enableManagement prop to allow parent control
+  const canManageImages = enableManagement && (ownership?.canManage || true) // Set to false to test real ownership
 
   // Fetch images filtered by pose
   const fetchImages = async () => {
@@ -136,9 +139,13 @@ export default function PoseImageGallery({
   }
 
   useEffect(() => {
-    if (status === 'authenticated') {
+    // Fetch if authenticated OR if we have pose identifiers (publicly viewable)
+    if (
+      status === 'authenticated' ||
+      (status === 'unauthenticated' && (poseId || poseName))
+    ) {
       fetchImages()
-    } else if (status === 'unauthenticated') {
+    } else if (status === 'unauthenticated' && !poseId && !poseName) {
       setLoading(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -164,6 +171,9 @@ export default function PoseImageGallery({
       // Remove from local state
       setImages((prev) => prev.filter((img) => img.id !== imageToDelete.id))
       setImageToDelete(null)
+
+      // Notify parent of changes
+      if (onImagesChange) onImagesChange()
     } catch (error) {
       console.error('Error deleting image:', error)
       setError('Failed to delete image')
@@ -191,7 +201,7 @@ export default function PoseImageGallery({
         body: JSON.stringify({
           images: reorderedImages.map((img, index) => ({
             imageId: img.id,
-            displayOrder: index,
+            displayOrder: index + 1, // Use 1-based indexing (1, 2, 3)
           })),
           poseName: poseName || undefined,
         }),
@@ -209,11 +219,14 @@ export default function PoseImageGallery({
           id: img.id,
           url: img.url,
           altText: img.altText || '',
-          order: index,
+          order: index + 1,
           uploadedAt: new Date().toISOString(),
-          displayOrder: index,
+          displayOrder: index + 1,
         }))
       )
+
+      // Notify parent of changes
+      if (onImagesChange) onImagesChange()
 
       return { success: true }
     } catch (error) {
@@ -377,7 +390,7 @@ export default function PoseImageGallery({
     )
   }
 
-  if (status === 'unauthenticated') {
+  if (status === 'unauthenticated' && !poseId && !poseName) {
     return (
       <Box sx={{ p: 3 }}>
         <Alert severity="info">

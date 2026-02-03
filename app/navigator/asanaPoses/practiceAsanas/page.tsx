@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 import { getAccessiblePoses, getPose, getAllPoses } from '@lib/poseService'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, usePathname } from 'next/navigation'
 import PoseActivityDetail from '@app/navigator/asanaPoses/poseActivityDetail'
 import { useCanEditContent } from '@app/hooks/useCanEditContent'
 import SplashHeader from '@app/clientComponents/splash-header'
@@ -28,6 +28,7 @@ export default function Page() {
   const [selectedLoading, setSelectedLoading] = useState(false)
   const [selectedError, setSelectedError] = useState<string | null>(null)
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const { canEdit } = useCanEditContent(selectedPose?.created_by)
   const selectedId = searchParams?.get?.('id') || null
   const isEditMode = searchParams?.get?.('edit') === 'true'
@@ -62,15 +63,16 @@ export default function Page() {
 
   useEffect(() => {
     fetchData()
-
-    // Check for refresh parameter in URL
-    const urlParams = new URLSearchParams(window.location.search)
-    if (urlParams.has('refresh')) {
-      // Remove the refresh parameter from URL without page reload
-      const newUrl = window.location.pathname
-      window.history.replaceState({}, '', newUrl)
-    }
   }, [fetchData])
+
+  // Watch for refresh parameter to reload data
+  useEffect(() => {
+    if (searchParams?.get('refresh') === 'true') {
+      fetchData()
+      // Remove query param without reload
+      window.history.replaceState({}, '', pathname)
+    }
+  }, [searchParams, fetchData, pathname])
 
   // Watch for ?id= on the practice page and fetch pose details
   useEffect(() => {
@@ -208,7 +210,6 @@ export default function Page() {
               )}
             </Box>
           </Stack>
-          {/* Inline Pose Detail */}
           <Box
             sx={{
               width: '100%',
@@ -217,7 +218,9 @@ export default function Page() {
               justifyContent: 'center',
             }}
           >
-            {selectedLoading && <LoadingSkeleton type="text" />}
+            {!selectedPose && selectedLoading && (
+              <LoadingSkeleton type="text" />
+            )}
             {selectedError && (
               <Typography color="error">{selectedError}</Typography>
             )}

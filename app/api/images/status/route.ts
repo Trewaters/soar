@@ -32,13 +32,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Project convention: created_by stores the creator's email.
-    // Ensure the caller's userId matches the authenticated user's email for safety.
-    if (userId !== session.user.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized access' },
-        { status: 403 }
-      )
-    }
+    const { canModifyContent } = await import('@app/utils/authorization')
 
     // Get asana information
     const asana = await prisma.asanaPose.findUnique({
@@ -53,41 +47,26 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Asana not found' }, { status: 404 })
     }
 
+    // Use robust ownership check via canModifyContent
+    const canManage = await canModifyContent(asana.created_by || '')
+
     // Count actual images in the database instead of relying on imageCount field
-    // Note: userId field in poseImage may contain email addresses, not ObjectIDs
-    // So we need to find the user first to get their proper ObjectID or use email-based lookup
-    const user = await prisma.userData.findUnique({
-      where: { email: session.user.email },
-      select: { id: true },
-    })
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
-    }
-
-    // Try counting using the new `poseId` field first, fallback to `poseId` if needed
     let actualImageCount = 0
     try {
       actualImageCount = await prisma.poseImage.count({
-        where: { poseId: poseId, userId: user.id } as any,
+        where: { poseId: poseId } as any,
       })
     } catch (e) {
-      // Fallback to poseId
-      actualImageCount = await prisma.poseImage.count({
-        where: { poseId: poseId, userId: user.id } as any,
-      })
+      console.warn('Failed to count images with poseId', e)
     }
 
-    // Check if user can upload images to this asana
     // created_by is expected to be the creator's email per project convention
     const createdBy = asana.created_by
     const sessionEmail = session.user.email
 
     // Backwards compatible: if user created the asana (by email match), treat as user-created
-    // regardless of isUserCreated flag for backwards compatibility
     const isUserOwned = createdBy === sessionEmail
-    const canManage = isUserOwned
-    const maxAllowed = isUserOwned ? MAX_IMAGES_PER_ASANA : 1
+    const maxAllowed = MAX_IMAGES_PER_ASANA
     const currentCount = actualImageCount // Use actual count instead of stale imageCount field
     const remainingSlots = Math.max(0, maxAllowed - currentCount)
     const canUpload = canManage && remainingSlots > 0
@@ -97,7 +76,7 @@ export async function GET(request: NextRequest) {
       remainingSlots,
       maxAllowed,
       canUpload,
-      isUserCreated: isUserOwned, // Use backwards-compatible logic
+      isUserCreated: Boolean(createdBy) && createdBy !== 'PUBLIC',
       canManage,
     }
 

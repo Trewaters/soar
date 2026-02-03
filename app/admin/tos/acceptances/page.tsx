@@ -2,6 +2,7 @@ import { prisma } from '@lib/prismaClient'
 import { requireRole } from '@app/utils/authorization'
 import { redirect } from 'next/navigation'
 
+export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default async function AcceptancesPage() {

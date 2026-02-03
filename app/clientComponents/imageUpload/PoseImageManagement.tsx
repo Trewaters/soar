@@ -33,6 +33,8 @@ interface PoseImageManagementProps {
   poseName?: string
   showUploadButton?: boolean
   showGallery?: boolean
+  enableManagement?: boolean
+  onImagesChange?: () => void
   variant?: 'full' | 'upload-only' | 'gallery-only'
 }
 
@@ -46,6 +48,8 @@ export default function PoseImageManagement({
   poseName,
   showUploadButton = true,
   showGallery = true,
+  enableManagement = true,
+  onImagesChange,
   variant = 'full',
 }: PoseImageManagementProps) {
   const [tabValue, setTabValue] = useState(0)
@@ -63,9 +67,21 @@ export default function PoseImageManagement({
     })
     // Refresh the gallery to show the new image
     setRefreshGallery((prev) => prev + 1)
+
+    // Notify parent if needed
+    if (onImagesChange) {
+      onImagesChange()
+    }
+
     // Switch to gallery tab to show the new image
     if (showGallery) {
       setTabValue(1)
+    }
+  }
+
+  const handleGalleryChange = () => {
+    if (onImagesChange) {
+      onImagesChange()
     }
   }
 
@@ -95,7 +111,8 @@ export default function PoseImageManagement({
           key={refreshGallery}
           poseId={poseId}
           poseName={poseName}
-          enableManagement={true}
+          enableManagement={enableManagement}
+          onImagesChange={handleGalleryChange}
         />
       </Paper>
     )
@@ -134,7 +151,8 @@ export default function PoseImageManagement({
             key={refreshGallery}
             poseId={poseId}
             poseName={poseName}
-            enableManagement={true}
+            enableManagement={enableManagement}
+            onImagesChange={handleGalleryChange}
           />
         </TabPanel>
       )}

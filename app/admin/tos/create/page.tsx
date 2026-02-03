@@ -4,6 +4,8 @@ import { prisma } from '@lib/prismaClient'
 import ActivateButton from '../ActivateButton'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 export default async function TosCreatePage() {
   const admin = await isAdmin()
   if (!admin) return <div>Unauthorized</div>

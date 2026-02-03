@@ -55,7 +55,13 @@ export async function DELETE(
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    if (image.userId !== user.id) {
+    // Role-Based Access Control: Admins can delete any image,
+    // users can only delete their own images.
+    const { isAdmin } = await import('@app/utils/authorization')
+    const userIsAdmin = await isAdmin()
+    const isOwner = image.userId === user.id
+
+    if (!userIsAdmin && !isOwner) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
     }
 
@@ -66,8 +72,8 @@ export async function DELETE(
 
     const poseObj = (image as any).pose ?? (image as any).asana ?? null
 
-    // For pose/pose images, verify user owns the asana
-    if (attachedPoseId && poseObj) {
+    // For pose/pose images, verify user owns the asana OR is admin
+    if (attachedPoseId && poseObj && !userIsAdmin) {
       if (!poseObj.isUserCreated) {
         // Check if user created it by email match, even if isUserCreated is false
         if (poseObj.created_by === session.user.email) {
