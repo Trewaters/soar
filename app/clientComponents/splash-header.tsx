@@ -9,8 +9,6 @@ interface SplashHeaderProps {
   height?: number | { xs?: number; sm?: number; md?: number; lg?: number }
   width?: number | { xs?: number; sm?: number; md?: number; lg?: number }
   style?: React.CSSProperties
-  // Spacing props
-  spacing?: number | { xs?: number; sm?: number; md?: number; lg?: number }
   // Decorative icon props
   showIcon?: boolean
   iconSrc?: string
@@ -40,7 +38,6 @@ interface SplashHeaderProps {
  * @param {number | ResponsiveDimensions} [props.height=355] - Height of the image container in pixels. Can be a number or object with breakpoint values (xs, sm, md, lg)
  * @param {number | ResponsiveDimensions} [props.width=384] - Width of the image container in pixels. Can be a number or object with breakpoint values (xs, sm, md, lg)
  * @param {React.CSSProperties} [props.style] - Additional inline styles for the image
- * @param {number} [props.spacing=2] - Spacing between the image and title in theme spacing units
  * @param {boolean} [props.showIcon=true] - Whether to display the decorative icon next to the title
  * @param {string} [props.iconSrc='/icons/designImages/leaf-orange.png'] - The source URL of the decorative icon
  * @param {string} [props.iconAlt=''] - The alt text for the decorative icon
@@ -55,7 +52,6 @@ export default function SplashHeader({
   height = 355,
   width = 384,
   style,
-  spacing = 2,
   showIcon = true,
   iconSrc = '/icons/designImages/leaf-orange.png',
   iconAlt = '',

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '../../../auth'
+import { auth } from 'auth'
+import { Session } from 'next-auth'
 import { prisma } from '../../lib/prismaClient'
 
 // Force this route to be dynamic since it requires authentication
@@ -30,7 +31,7 @@ interface PoseImage {
 
 export async function GET(request: NextRequest) {
   // Declare session outside try-catch for error logging access
-  let session: Awaited<ReturnType<typeof auth>> | null = null
+  let session: Session | null = null
 
   // Declare search params outside try-catch for error logging access
   let poseId: string | null = null

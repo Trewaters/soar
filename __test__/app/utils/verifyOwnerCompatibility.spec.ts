@@ -22,6 +22,7 @@ const mockUserSession = {
     id: 'user-id-123',
     email: 'creator@example.com',
     name: 'Creator',
+    role: 'user',
   },
 } as Session
 
@@ -31,9 +32,9 @@ describe('Owner matching compatibility', () => {
   })
 
   it('verifyAsanaOwnership returns true when created_by matches email', async () => {
-    prisma.asanaPose.findUnique.mockResolvedValue({
+    jest.mocked(prisma.asanaPose.findUnique).mockResolvedValue({
       created_by: 'creator@example.com',
-    })
+    } as any)
 
     const result = await verifyAsanaOwnership(
       'asana-abc',
@@ -48,9 +49,9 @@ describe('Owner matching compatibility', () => {
   })
 
   it('verifyAsanaOwnership returns true when created_by matches user id (legacy records)', async () => {
-    prisma.asanaPose.findUnique.mockResolvedValue({
+    jest.mocked(prisma.asanaPose.findUnique).mockResolvedValue({
       created_by: 'user-id-123',
-    })
+    } as any)
 
     const result = await verifyAsanaOwnership('asana-abc', 'user-id-123')
 

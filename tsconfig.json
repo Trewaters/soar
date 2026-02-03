@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "target": "ES2023",
-    "baseUrl": "./",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -19,7 +18,13 @@
       }
     ],
     "paths": {
-      "@/*": ["./"],
+      "auth": ["./auth.ts"],
+      "types/*": ["./types/*"],
+      "lib/*": ["./lib/*"],
+      "components/*": ["./components/*"],
+      "styles/*": ["./styles/*"],
+      "scripts/*": ["./scripts/*"],
+      "@/*": ["./*"],
       "@app/*": ["./app/*"],
       "@client-api/*": ["./app/api/*"],
       "@clientComponents/*": ["./app/clientComponents/*"],
@@ -33,7 +38,7 @@
       "@styles/*": ["./styles/*"],
       "@utils/*": ["./utils/*"]
     },
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true
   },
   "include": [

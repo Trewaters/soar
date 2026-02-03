@@ -109,7 +109,7 @@ describe('PoseActivityDetail - View Asana - Happy Path', () => {
   const TestWrapper: React.FC<{ children: React.ReactNode }> = ({
     children,
   }) => (
-    <SessionProvider session={mockSession}>
+    <SessionProvider session={mockSession as any}>
       <ThemeProvider theme={createTheme()}>{children}</ThemeProvider>
     </SessionProvider>
   )

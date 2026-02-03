@@ -30,6 +30,9 @@ import {
 } from '@app/clientComponents/freemiumNotification'
 import { AsanaActivity, ASANA_CATEGORIES } from 'types/asana'
 
+// Available categories for autocomplete
+const categories: string[] = [...ASANA_CATEGORIES]
+
 export default function Page() {
   const { data: session } = useSession()
   const router = useNavigationWithLoading()
@@ -58,9 +61,6 @@ export default function Page() {
   const [open, setOpen] = useState(false)
   const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  // Available categories for autocomplete
-  const categories: string[] = [...ASANA_CATEGORIES]
 
   const [formFullAsanaPoseData, setFormFullAsanaPoseData] = useState<{
     sort_english_name: string
@@ -220,8 +220,8 @@ export default function Page() {
         onChange: (value: any) => setField('alternative_english_names', value),
       },
     ],
-    // Recompute when the form data, categories or setField change
-    [formFullAsanaPoseData, categories, setField]
+    // Recompute when the form data or setField change
+    [formFullAsanaPoseData, setField]
   )
 
   const handleImageUploaded = (image: PoseImageData) => {

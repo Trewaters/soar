@@ -135,12 +135,13 @@ describe('Credentials Provider Authorization', () => {
         id: 'user123',
         email: 'newuser@example.com',
         name: 'newuser',
+        role: 'user',
       }
 
-      prisma.userData.findUnique.mockResolvedValue(null)
-      prisma.userData.create.mockResolvedValue(mockUser)
+      jest.mocked(prisma.userData.findUnique).mockResolvedValue(null)
+      jest.mocked(prisma.userData.create).mockResolvedValue(mockUser as any)
       mockHashPassword.mockResolvedValue('hashed_password_123')
-      prisma.providerAccount.create.mockResolvedValue({})
+      jest.mocked(prisma.providerAccount.create).mockResolvedValue({} as any)
 
       const result = await authorizeFunction({
         email: 'newuser@example.com',
@@ -175,13 +176,16 @@ describe('Credentials Provider Authorization', () => {
         id: 'user123',
         email: 'existing@example.com',
         name: 'existing',
+        role: 'user',
       }
 
-      prisma.userData.findUnique.mockResolvedValue(existingUser)
-      prisma.providerAccount.findFirst.mockResolvedValue({
+      jest
+        .mocked(prisma.userData.findUnique)
+        .mockResolvedValue(existingUser as any)
+      jest.mocked(prisma.providerAccount.findFirst).mockResolvedValue({
         id: 'provider123',
         credentials_password: 'hashed_password',
-      })
+      } as any)
       mockComparePassword.mockResolvedValue(true)
 
       const result = await authorizeFunction({
@@ -204,6 +208,7 @@ describe('Credentials Provider Authorization', () => {
       id: 'user123',
       email: 'test@example.com',
       name: 'Test User',
+      role: 'user',
     }
 
     it('should successfully authenticate with correct password', async () => {
@@ -214,8 +219,10 @@ describe('Credentials Provider Authorization', () => {
         credentials_password: 'hashed_password_123',
       }
 
-      prisma.userData.findUnique.mockResolvedValue(mockUser)
-      prisma.providerAccount.findFirst.mockResolvedValue(mockProviderAccount)
+      jest.mocked(prisma.userData.findUnique).mockResolvedValue(mockUser as any)
+      jest
+        .mocked(prisma.providerAccount.findFirst)
+        .mockResolvedValue(mockProviderAccount as any)
       mockComparePassword.mockResolvedValue(true)
 
       const result = await authorizeFunction({
@@ -252,8 +259,10 @@ describe('Credentials Provider Authorization', () => {
         credentials_password: 'hashed_password_123',
       }
 
-      prisma.userData.findUnique.mockResolvedValue(mockUser)
-      prisma.providerAccount.findFirst.mockResolvedValue(mockProviderAccount)
+      jest.mocked(prisma.userData.findUnique).mockResolvedValue(mockUser as any)
+      jest
+        .mocked(prisma.providerAccount.findFirst)
+        .mockResolvedValue(mockProviderAccount as any)
       mockComparePassword.mockResolvedValue(false)
 
       const result = await authorizeFunction({
@@ -270,7 +279,7 @@ describe('Credentials Provider Authorization', () => {
     })
 
     it('should return null when user does not exist', async () => {
-      prisma.userData.findUnique.mockResolvedValue(null)
+      jest.mocked(prisma.userData.findUnique).mockResolvedValue(null)
 
       const result = await authorizeFunction({
         email: 'nonexistent@example.com',
@@ -283,8 +292,8 @@ describe('Credentials Provider Authorization', () => {
     })
 
     it('should return null when no credentials provider exists for user', async () => {
-      prisma.userData.findUnique.mockResolvedValue(mockUser)
-      prisma.providerAccount.findFirst.mockResolvedValue(null)
+      jest.mocked(prisma.userData.findUnique).mockResolvedValue(mockUser as any)
+      jest.mocked(prisma.providerAccount.findFirst).mockResolvedValue(null)
 
       const result = await authorizeFunction({
         email: 'test@example.com',
@@ -308,9 +317,8 @@ describe('Credentials Provider Authorization', () => {
         provider: 'credentials',
         credentials_password: null,
       }
-
-      prisma.userData.findUnique.mockResolvedValue(mockUser)
-      prisma.providerAccount.findFirst.mockResolvedValue(
+      ;(prisma.userData.findUnique as jest.Mock).mockResolvedValue(mockUser)
+      ;(prisma.providerAccount.findFirst as jest.Mock).mockResolvedValue(
         mockProviderAccountWithoutPassword
       )
 
@@ -332,7 +340,7 @@ describe('Credentials Provider Authorization', () => {
     })
 
     it('should return null on database error', async () => {
-      prisma.userData.findUnique.mockRejectedValue(
+      ;(prisma.userData.findUnique as jest.Mock).mockRejectedValue(
         new Error('Database connection failed')
       )
 
@@ -346,8 +354,8 @@ describe('Credentials Provider Authorization', () => {
     })
 
     it('should return null on password hashing error during account creation', async () => {
-      prisma.userData.findUnique.mockResolvedValue(null)
-      prisma.userData.create.mockResolvedValue({
+      ;(prisma.userData.findUnique as jest.Mock).mockResolvedValue(null)
+      ;(prisma.userData.create as jest.Mock).mockResolvedValue({
         id: 'user123',
         email: 'test@example.com',
         name: 'test',
@@ -378,9 +386,10 @@ describe('Credentials Provider Authorization', () => {
         provider: 'credentials',
         credentials_password: 'hashed_password_123',
       }
-
-      prisma.userData.findUnique.mockResolvedValue(mockUser)
-      prisma.providerAccount.findFirst.mockResolvedValue(mockProviderAccount)
+      ;(prisma.userData.findUnique as jest.Mock).mockResolvedValue(mockUser)
+      ;(prisma.providerAccount.findFirst as jest.Mock).mockResolvedValue(
+        mockProviderAccount
+      )
       mockComparePassword.mockResolvedValue(true)
 
       await authorizeFunction({
@@ -394,8 +403,8 @@ describe('Credentials Provider Authorization', () => {
     })
 
     it('should not allow login without password verification', async () => {
-      prisma.userData.findUnique.mockResolvedValue(mockUser)
-      prisma.providerAccount.findFirst.mockResolvedValue({
+      ;(prisma.userData.findUnique as jest.Mock).mockResolvedValue(mockUser)
+      ;(prisma.providerAccount.findFirst as jest.Mock).mockResolvedValue({
         id: 'provider123',
         credentials_password: 'hashed_password',
       })

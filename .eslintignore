@@ -9,6 +9,7 @@ build/
 
 # Ignore build artifacts
 **/*.tsbuildinfo
+next-env.d.ts
 
 # Ignore snapshots if any
 **/__snapshots__/

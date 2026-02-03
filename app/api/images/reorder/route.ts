@@ -3,7 +3,6 @@ import { auth } from '../../../../auth'
 import { prisma } from '../../../../app/lib/prismaClient'
 import {
   verifyAsanaOwnership,
-  verifyMultipleImageOwnership,
   validateDisplayOrders,
   AsanaOwnershipError,
 } from '../../../utils/asanaOwnership'

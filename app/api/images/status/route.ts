@@ -70,10 +70,7 @@ export async function GET(request: NextRequest) {
 
     // created_by is expected to be the creator's email per project convention
     const createdBy = asana.created_by
-    const sessionEmail = session.user.email
 
-    // Backwards compatible: if user created the asana (by email match), treat as user-created
-    const isUserOwned = createdBy === sessionEmail
     const maxAllowed = MAX_IMAGES_PER_ASANA
     const currentCount = actualImageCount // Use actual count instead of stale imageCount field
     const remainingSlots = Math.max(0, maxAllowed - currentCount)

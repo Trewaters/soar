@@ -66,12 +66,12 @@ describe('Notification Service - Core Functions', () => {
 
   describe('hasBeenSent', () => {
     it('should return true when notification log exists', async () => {
-      prisma.notificationLog.findFirst.mockResolvedValue({
+      jest.mocked(prisma.notificationLog.findFirst).mockResolvedValue({
         id: 'log-1',
         userId: 'user-1',
         notificationType: 'daily_practice',
         triggerData: {},
-      })
+      } as any)
 
       const result = await hasBeenSent('user-1', 'daily_practice', {})
 
@@ -85,7 +85,7 @@ describe('Notification Service - Core Functions', () => {
     })
 
     it('should return false when notification log does not exist', async () => {
-      prisma.notificationLog.findFirst.mockResolvedValue(null)
+      jest.mocked(prisma.notificationLog.findFirst).mockResolvedValue(null)
 
       const result = await hasBeenSent('user-1', 'daily_practice', {})
 
@@ -93,9 +93,9 @@ describe('Notification Service - Core Functions', () => {
     })
 
     it('should return false on error (fail open)', async () => {
-      prisma.notificationLog.findFirst.mockRejectedValue(
-        new Error('Database error')
-      )
+      jest
+        .mocked(prisma.notificationLog.findFirst)
+        .mockRejectedValue(new Error('Database error'))
 
       const result = await hasBeenSent('user-1', 'daily_practice', {})
 
@@ -104,7 +104,7 @@ describe('Notification Service - Core Functions', () => {
 
     it('should check triggerData equality for milestone notifications', async () => {
       const triggerData = { milestone: 100, type: 'sessions' }
-      prisma.notificationLog.findFirst.mockResolvedValue(null)
+      jest.mocked(prisma.notificationLog.findFirst).mockResolvedValue(null)
 
       await hasBeenSent('user-1', 'progress_milestone', triggerData)
 
@@ -133,8 +133,7 @@ describe('Notification Service - Core Functions', () => {
         sentVia,
         sentAt: new Date(),
       }
-
-      prisma.notificationLog.create.mockResolvedValue(mockLog)
+      ;(prisma.notificationLog.create as jest.Mock).mockResolvedValue(mockLog)
 
       const result = await logNotification(payload, sentVia)
 
@@ -156,7 +155,7 @@ describe('Notification Service - Core Functions', () => {
         triggerData: {},
       }
 
-      prisma.notificationLog.create.mockRejectedValue(
+      ;(prisma.notificationLog.create as jest.Mock).mockRejectedValue(
         new Error('Database error')
       )
 
@@ -180,10 +179,10 @@ describe('Notification Service - Core Functions', () => {
         },
       }
 
-      prisma.reminder.findFirst.mockResolvedValue({
+      jest.mocked(prisma.reminder.findFirst).mockResolvedValue({
         emailNotificationsEnabled: true,
         notificationPreferences: mockPreferences,
-      })
+      } as any)
 
       const result = await getUserNotificationPreferences('user-1')
 
@@ -198,7 +197,7 @@ describe('Notification Service - Core Functions', () => {
     })
 
     it('should return default disabled preferences when none exist', async () => {
-      prisma.reminder.findFirst.mockResolvedValue(null)
+      jest.mocked(prisma.reminder.findFirst).mockResolvedValue(null)
 
       const result = await getUserNotificationPreferences('user-1')
 
@@ -209,14 +208,14 @@ describe('Notification Service - Core Functions', () => {
     })
 
     it('should handle missing subPreferences gracefully', async () => {
-      prisma.reminder.findFirst.mockResolvedValue({
+      jest.mocked(prisma.reminder.findFirst).mockResolvedValue({
         emailNotificationsEnabled: true,
         notificationPreferences: {
           inApp: true,
           email: true,
           subPreferences: {},
         },
-      })
+      } as any)
 
       const result = await getUserNotificationPreferences('user-1')
 
@@ -225,7 +224,9 @@ describe('Notification Service - Core Functions', () => {
     })
 
     it('should return disabled preferences on database error', async () => {
-      prisma.reminder.findFirst.mockRejectedValue(new Error('Database error'))
+      jest
+        .mocked(prisma.reminder.findFirst)
+        .mockRejectedValue(new Error('Database error'))
 
       const result = await getUserNotificationPreferences('user-1')
 
@@ -337,9 +338,13 @@ describe('Notification Service - Check Functions', () => {
         tz: 'America/Los_Angeles',
       }
 
-      prisma.reminder.findMany.mockResolvedValue(mockReminders)
-      prisma.userData.findUnique.mockResolvedValue(mockUserData)
-      prisma.asanaActivity.findMany.mockResolvedValue([]) // No practice today
+      jest
+        .mocked(prisma.reminder.findMany)
+        .mockResolvedValue(mockReminders as any)
+      jest
+        .mocked(prisma.userData.findUnique)
+        .mockResolvedValue(mockUserData as any)
+      jest.mocked(prisma.asanaActivity.findMany).mockResolvedValue([]) // No practice today
 
       const users = await checkDailyPracticeReminders()
 
@@ -374,11 +379,15 @@ describe('Notification Service - Check Functions', () => {
         tz: 'America/Los_Angeles',
       }
 
-      prisma.reminder.findMany.mockResolvedValue(mockReminders)
-      prisma.userData.findUnique.mockResolvedValue(mockUserData)
-      prisma.asanaActivity.findMany.mockResolvedValue([
-        { datePerformed: new Date() },
-      ]) // Practiced today
+      jest
+        .mocked(prisma.reminder.findMany)
+        .mockResolvedValue(mockReminders as any)
+      jest
+        .mocked(prisma.userData.findUnique)
+        .mockResolvedValue(mockUserData as any)
+      jest
+        .mocked(prisma.asanaActivity.findMany)
+        .mockResolvedValue([{ datePerformed: new Date() }] as any) // Practiced today
 
       const users = await checkDailyPracticeReminders()
 
@@ -405,8 +414,12 @@ describe('Notification Service - Check Functions', () => {
         tz: 'America/Los_Angeles',
       }
 
-      prisma.userData.findMany.mockResolvedValue([mockUserData])
-      prisma.userLogin.findMany.mockResolvedValue(mockUserLogins)
+      jest
+        .mocked(prisma.userData.findMany)
+        .mockResolvedValue([mockUserData] as any)
+      jest
+        .mocked(prisma.userLogin.findMany)
+        .mockResolvedValue(mockUserLogins as any)
 
       const users = await checkLoginStreaks()
 
@@ -431,8 +444,12 @@ describe('Notification Service - Check Functions', () => {
         tz: 'America/Los_Angeles',
       }
 
-      prisma.userData.findMany.mockResolvedValue([mockUserData])
-      prisma.userLogin.findMany.mockResolvedValue(mockUserLogins)
+      jest
+        .mocked(prisma.userData.findMany)
+        .mockResolvedValue([mockUserData] as any)
+      jest
+        .mocked(prisma.userLogin.findMany)
+        .mockResolvedValue(mockUserLogins as any)
 
       const users = await checkLoginStreaks()
 
@@ -455,10 +472,14 @@ describe('Notification Service - Check Functions', () => {
         tz: 'America/Los_Angeles',
       }
 
-      prisma.userData.findMany.mockResolvedValue([mockUserData])
-      prisma.asanaActivity.findMany.mockResolvedValue(mockActivities)
-      prisma.seriesActivity.findMany.mockResolvedValue([])
-      prisma.sequenceActivity.findMany.mockResolvedValue([])
+      jest
+        .mocked(prisma.userData.findMany)
+        .mockResolvedValue([mockUserData] as any)
+      jest
+        .mocked(prisma.asanaActivity.findMany)
+        .mockResolvedValue(mockActivities as any)
+      jest.mocked(prisma.seriesActivity.findMany).mockResolvedValue([])
+      jest.mocked(prisma.sequenceActivity.findMany).mockResolvedValue([])
 
       const users = await checkActivityStreaks()
 
@@ -483,10 +504,14 @@ describe('Notification Service - Check Functions', () => {
         tz: 'America/Los_Angeles',
       }
 
-      prisma.userData.findMany.mockResolvedValue([mockUserData])
-      prisma.asanaActivity.findMany.mockResolvedValue(mockActivities)
-      prisma.seriesActivity.findMany.mockResolvedValue([])
-      prisma.sequenceActivity.findMany.mockResolvedValue([])
+      jest
+        .mocked(prisma.userData.findMany)
+        .mockResolvedValue([mockUserData] as any)
+      jest
+        .mocked(prisma.asanaActivity.findMany)
+        .mockResolvedValue(mockActivities as any)
+      jest.mocked(prisma.seriesActivity.findMany).mockResolvedValue([])
+      jest.mocked(prisma.sequenceActivity.findMany).mockResolvedValue([])
 
       const users = await checkActivityStreaks()
 
@@ -505,10 +530,12 @@ describe('Notification Service - Check Functions', () => {
         tz: 'America/Los_Angeles',
       }
 
-      prisma.userData.findMany.mockResolvedValue([mockUserData])
-      prisma.asanaActivity.count.mockResolvedValue(100) // Milestone count
-      prisma.seriesActivity.count.mockResolvedValue(0)
-      prisma.sequenceActivity.count.mockResolvedValue(0)
+      jest
+        .mocked(prisma.userData.findMany)
+        .mockResolvedValue([mockUserData] as any)
+      jest.mocked(prisma.asanaActivity.count).mockResolvedValue(100) // Milestone count
+      jest.mocked(prisma.seriesActivity.count).mockResolvedValue(0)
+      jest.mocked(prisma.sequenceActivity.count).mockResolvedValue(0)
 
       const users = await checkProgressMilestones()
 
@@ -537,13 +564,17 @@ describe('Notification Service - Check Functions', () => {
         },
       ]
 
-      prisma.userData.findMany.mockResolvedValue([mockUserData])
-      prisma.asanaActivity.count.mockResolvedValue(1)
-      prisma.asanaActivity.findMany.mockResolvedValue(mockFirstActivity)
-      prisma.seriesActivity.count.mockResolvedValue(0)
-      prisma.seriesActivity.findMany.mockResolvedValue([])
-      prisma.sequenceActivity.count.mockResolvedValue(0)
-      prisma.sequenceActivity.findMany.mockResolvedValue([])
+      jest
+        .mocked(prisma.userData.findMany)
+        .mockResolvedValue([mockUserData] as any)
+      jest.mocked(prisma.asanaActivity.count).mockResolvedValue(1)
+      jest
+        .mocked(prisma.asanaActivity.findMany)
+        .mockResolvedValue(mockFirstActivity as any)
+      jest.mocked(prisma.seriesActivity.count).mockResolvedValue(0)
+      jest.mocked(prisma.seriesActivity.findMany).mockResolvedValue([])
+      jest.mocked(prisma.sequenceActivity.count).mockResolvedValue(0)
+      jest.mocked(prisma.sequenceActivity.findMany).mockResolvedValue([])
 
       const users = await checkProgressMilestones()
 

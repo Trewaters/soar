@@ -41,6 +41,7 @@ const mockUserSession = {
     id: 'test-user-id',
     email: 'test@uvuyoga.com',
     name: 'Test Yogi',
+    role: 'user',
   },
 } as Session
 
@@ -49,6 +50,7 @@ const mockOtherUserSession = {
     id: 'other-user-id',
     email: 'other@uvuyoga.com',
     name: 'Other Yogi',
+    role: 'user',
   },
 } as Session
 
@@ -109,9 +111,9 @@ describe('Asana Ownership Verification Utilities', () => {
 
   describe('verifyAsanaOwnership', () => {
     it('should return true when user owns the asana', async () => {
-      prisma.asanaPose.findUnique.mockResolvedValue({
+      jest.mocked(prisma.asanaPose.findUnique).mockResolvedValue({
         created_by: 'test-user-id',
-      })
+      } as any)
 
       const result = await verifyAsanaOwnership('asana-1', 'test-user-id')
 
@@ -123,9 +125,9 @@ describe('Asana Ownership Verification Utilities', () => {
     })
 
     it('should return false when user does not own the asana', async () => {
-      prisma.asanaPose.findUnique.mockResolvedValue({
+      jest.mocked(prisma.asanaPose.findUnique).mockResolvedValue({
         created_by: 'other-user-id',
-      })
+      } as any)
 
       const result = await verifyAsanaOwnership('asana-1', 'test-user-id')
 
@@ -133,7 +135,7 @@ describe('Asana Ownership Verification Utilities', () => {
     })
 
     it('should return false when asana does not exist', async () => {
-      prisma.asanaPose.findUnique.mockResolvedValue(null)
+      jest.mocked(prisma.asanaPose.findUnique).mockResolvedValue(null)
 
       const result = await verifyAsanaOwnership('non-existent', 'test-user-id')
 
@@ -142,7 +144,9 @@ describe('Asana Ownership Verification Utilities', () => {
 
     it('should return false and log error when database query fails', async () => {
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
-      prisma.asanaPose.findUnique.mockRejectedValue(new Error('Database error'))
+      jest
+        .mocked(prisma.asanaPose.findUnique)
+        .mockRejectedValue(new Error('Database error'))
 
       const result = await verifyAsanaOwnership('asana-1', 'test-user-id')
 
@@ -308,10 +312,10 @@ describe('Asana Ownership Verification Utilities', () => {
 
   describe('verifyMultipleImageOwnership', () => {
     it('should return true when user owns all images', async () => {
-      prisma.poseImage.findMany.mockResolvedValue([
+      jest.mocked(prisma.poseImage.findMany).mockResolvedValue([
         { id: 'image-1', userId: 'test-user-id' },
         { id: 'image-2', userId: 'test-user-id' },
-      ])
+      ] as any)
 
       const result = await verifyMultipleImageOwnership(
         ['image-1', 'image-2'],
@@ -322,10 +326,10 @@ describe('Asana Ownership Verification Utilities', () => {
     })
 
     it('should return false when user does not own all images', async () => {
-      prisma.poseImage.findMany.mockResolvedValue([
+      jest.mocked(prisma.poseImage.findMany).mockResolvedValue([
         { id: 'image-1', userId: 'test-user-id' },
         { id: 'image-2', userId: 'other-user-id' },
-      ])
+      ] as any)
 
       const result = await verifyMultipleImageOwnership(
         ['image-1', 'image-2'],
@@ -336,10 +340,10 @@ describe('Asana Ownership Verification Utilities', () => {
     })
 
     it('should return false when some images do not exist', async () => {
-      prisma.poseImage.findMany.mockResolvedValue([
+      jest.mocked(prisma.poseImage.findMany).mockResolvedValue([
         { id: 'image-1', userId: 'test-user-id' },
         // image-2 not found
-      ])
+      ] as any)
 
       const result = await verifyMultipleImageOwnership(
         ['image-1', 'image-2'],
@@ -351,7 +355,9 @@ describe('Asana Ownership Verification Utilities', () => {
 
     it('should handle database errors gracefully', async () => {
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
-      prisma.poseImage.findMany.mockRejectedValue(new Error('Database error'))
+      jest
+        .mocked(prisma.poseImage.findMany)
+        .mockRejectedValue(new Error('Database error'))
 
       const result = await verifyMultipleImageOwnership(
         ['image-1'],
@@ -381,7 +387,7 @@ describe('Asana Ownership Verification Utilities', () => {
 
   describe('getNextDisplayOrder', () => {
     it('should return 1 for asana with no images', async () => {
-      prisma.poseImage.findMany.mockResolvedValue([])
+      jest.mocked(prisma.poseImage.findMany).mockResolvedValue([] as any)
 
       const result = await getNextDisplayOrder('asana-1')
 
@@ -389,7 +395,9 @@ describe('Asana Ownership Verification Utilities', () => {
     })
 
     it('should return 2 when display order 1 is taken', async () => {
-      prisma.poseImage.findMany.mockResolvedValue([{ displayOrder: 1 }])
+      jest
+        .mocked(prisma.poseImage.findMany)
+        .mockResolvedValue([{ displayOrder: 1 }] as any)
 
       const result = await getNextDisplayOrder('asana-1')
 
@@ -397,10 +405,9 @@ describe('Asana Ownership Verification Utilities', () => {
     })
 
     it('should return 2 when display orders 1 and 3 are taken', async () => {
-      prisma.poseImage.findMany.mockResolvedValue([
-        { displayOrder: 1 },
-        { displayOrder: 3 },
-      ])
+      jest
+        .mocked(prisma.poseImage.findMany)
+        .mockResolvedValue([{ displayOrder: 1 }, { displayOrder: 3 }] as any)
 
       const result = await getNextDisplayOrder('asana-1')
 
@@ -408,11 +415,13 @@ describe('Asana Ownership Verification Utilities', () => {
     })
 
     it('should throw error when all slots are taken', async () => {
-      prisma.poseImage.findMany.mockResolvedValue([
-        { displayOrder: 1 },
-        { displayOrder: 2 },
-        { displayOrder: 3 },
-      ])
+      jest
+        .mocked(prisma.poseImage.findMany)
+        .mockResolvedValue([
+          { displayOrder: 1 },
+          { displayOrder: 2 },
+          { displayOrder: 3 },
+        ] as any)
 
       await expect(getNextDisplayOrder('asana-1')).rejects.toThrow(
         'No available display order slots'
@@ -421,7 +430,9 @@ describe('Asana Ownership Verification Utilities', () => {
 
     it('should handle database errors', async () => {
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
-      prisma.poseImage.findMany.mockRejectedValue(new Error('Database error'))
+      jest
+        .mocked(prisma.poseImage.findMany)
+        .mockRejectedValue(new Error('Database error'))
 
       await expect(getNextDisplayOrder('asana-1')).rejects.toThrow()
       expect(consoleSpy).toHaveBeenCalled()

@@ -190,7 +190,7 @@ jest.mock('@app/hooks/useProfileLibrary', () => {
   const React = require('react')
   return {
     __esModule: true,
-    default: (opts: any) => {
+    default: function UseProfileLibraryMock(opts: any) {
       const type = opts?.type || 'asanas'
       const [items, setItems] = React.useState(() => {
         if (type === 'asanas') return testAsanasData
