@@ -74,7 +74,6 @@ export default function PoseImageGallery({
   const [images, setImages] = useState<PoseImage[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedImage, setSelectedImage] = useState<PoseImage | null>(null)
   const [imageToDelete, setImageToDelete] = useState<PoseImage | null>(null)
   const [currentView, setCurrentView] = useState<
     'carousel' | 'grid' | 'reorder'
@@ -239,15 +238,6 @@ export default function PoseImageGallery({
     }
   }
 
-  // Handle image click for zoom
-  const handleImageClick = (image: PoseImage) => {
-    setSelectedImage(image)
-  }
-
-  const handleCloseZoom = () => {
-    setSelectedImage(null)
-  }
-
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes'
     const k = 1024
@@ -310,23 +300,10 @@ export default function PoseImageGallery({
                 aria-label="Navigate between pose images"
               />
             </Box>
-            {/* Add zoom functionality for carousel images */}
-            <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
-              <Button
-                variant="text"
-                size="small"
-                onClick={() => handleImageClick(images[currentImageIndex])}
-              >
-                Click to zoom
-              </Button>
-            </Box>
           </>
         ) : (
-          // Single image display with click-to-zoom functionality
-          <Card
-            sx={{ maxWidth: 600, mx: 'auto', cursor: 'pointer' }}
-            onClick={() => handleImageClick(images[0])}
-          >
+          // Single image display
+          <Card sx={{ maxWidth: 600, mx: 'auto' }}>
             <CardMedia
               component="div"
               sx={{ height: 400, position: 'relative' }}
@@ -558,9 +535,7 @@ export default function PoseImageGallery({
                         sx={{
                           height: 200,
                           position: 'relative',
-                          cursor: 'pointer',
                         }}
-                        onClick={() => handleImageClick(image)}
                       >
                         <Image
                           src={image.url}
@@ -604,79 +579,8 @@ export default function PoseImageGallery({
             </Box>
           )}
         </>
-      )}{' '}
-      {/* Image zoom dialog */}
-      <Dialog
-        open={!!selectedImage}
-        onClose={handleCloseZoom}
-        maxWidth="md"
-        fullWidth
-      >
-        {selectedImage && (
-          <>
-            <DialogTitle>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Typography variant="h6">
-                  {selectedImage.fileName || 'Image Preview'}
-                </Typography>
-                {canManageImages && (
-                  <IconButton
-                    onClick={() => handleDeleteClick(selectedImage)}
-                    color="error"
-                    aria-label="Delete image"
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                )}
-              </Stack>
-            </DialogTitle>
-            <DialogContent>
-              <Box
-                sx={{
-                  position: 'relative',
-                  width: '100%',
-                  height: '400px',
-                  mb: 2,
-                }}
-              >
-                <Image
-                  src={selectedImage.url}
-                  alt={selectedImage.altText || 'Yoga pose image'}
-                  fill
-                  style={{ objectFit: 'contain' }}
-                />
-              </Box>
-              {selectedImage.altText && (
-                <Typography variant="body1" gutterBottom>
-                  {selectedImage.altText}
-                </Typography>
-              )}
-              <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-                <Chip
-                  label={`Uploaded ${formatDate(selectedImage.uploadedAt)}`}
-                  variant="outlined"
-                />
-                {selectedImage.fileSize && (
-                  <Chip
-                    label={formatFileSize(selectedImage.fileSize)}
-                    variant="outlined"
-                  />
-                )}
-                {poseName && (
-                  <Chip label={poseName} color="primary" variant="outlined" />
-                )}
-              </Stack>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseZoom}>Close</Button>
-            </DialogActions>
-          </>
-        )}
-      </Dialog>
+      )}
+
       {/* Delete confirmation dialog */}
       <Dialog
         open={!!imageToDelete}

@@ -70,15 +70,19 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
     (newIndex: number) => {
       if (totalImages === 0) {
         setActiveIndex(0)
+        setIsLoading(false)
         return
       }
 
       // Clamp the index to valid range
       const clampedIndex = Math.max(0, Math.min(newIndex, totalImages - 1))
-      setActiveIndex(clampedIndex)
-      onIndexChange?.(clampedIndex)
+      if (clampedIndex !== activeIndex) {
+        setActiveIndex(clampedIndex)
+        setIsLoading(true) // Trigger loading state for new image
+        onIndexChange?.(clampedIndex)
+      }
     },
-    [totalImages, onIndexChange]
+    [totalImages, onIndexChange, activeIndex]
   )
 
   // Navigate to previous image
@@ -159,6 +163,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
   useEffect(() => {
     if (totalImages === 0) {
       setActiveIndex(0)
+      setIsLoading(false)
       return
     }
 
@@ -166,6 +171,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
       // Clamp the external index to valid range
       const clampedIndex = Math.max(0, Math.min(currentIndex, totalImages - 1))
       setActiveIndex(clampedIndex)
+      setIsLoading(true) // Trigger loading state for new image
     }
   }, [currentIndex, activeIndex, totalImages])
 
@@ -287,72 +293,94 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
       aria-live="polite"
     >
       {/* Main Image Display */}
-      <Fade in={!isLoading} timeout={300}>
-        <Card
-          sx={{
-            height: '100%',
-            width: '100%',
-            position: 'relative',
-            boxShadow: 'none',
-            borderRadius: 1,
-            backgroundColor: 'grey.50', // Subtle background for contained images
-          }}
-        >
-          {isLoading && (
+      <Box
+        sx={{
+          height: '100%',
+          width: '100%',
+          position: 'relative',
+          borderRadius: 1,
+          backgroundColor: 'grey.50',
+        }}
+      >
+        <Fade in={!isLoading} timeout={300} key={safeActiveIndex}>
+          <Card
+            sx={{
+              height: '100%',
+              width: '100%',
+              position: 'relative',
+              boxShadow: 'none',
+              borderRadius: 1,
+              backgroundColor: 'transparent',
+            }}
+          >
+            <CardMedia
+              component="div"
+              sx={{
+                height: '100%',
+                position: 'relative',
+                overflow: 'hidden',
+                backgroundColor: 'grey.100',
+              }}
+            >
+              <Image
+                src={currentImage.url}
+                key={currentImage.id || currentImage.url}
+                alt={
+                  currentImage?.altText ||
+                  currentImage?.poseName ||
+                  `Yoga pose ${safeActiveIndex + 1}`
+                }
+                fill
+                style={{
+                  objectFit: 'contain',
+                }}
+                sizes={getOptimizedSizes(safeActiveIndex)}
+                onLoad={handleImageLoad}
+                onError={(event) => {
+                  console.error('Image failed to load in ImageCarousel:', {
+                    url: currentImage?.url,
+                    poseId: currentImage?.poseId,
+                    poseName: currentImage?.poseName,
+                    imageId: currentImage?.id,
+                    error: event,
+                  })
+                  setIsLoading(false)
+                }}
+                priority={getLoadingPriority(safeActiveIndex) === 'high'}
+                loading={
+                  getLoadingPriority(safeActiveIndex) === 'high'
+                    ? 'eager'
+                    : 'lazy'
+                }
+                quality={
+                  getLoadingPriority(safeActiveIndex) === 'high' ? 90 : 75
+                }
+                placeholder="empty"
+              />
+            </CardMedia>
+          </Card>
+        </Fade>
+
+        {isLoading && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              zIndex: 1,
+            }}
+          >
             <Skeleton
               variant="rectangular"
               width="100%"
               height="100%"
               animation="wave"
             />
-          )}
-
-          <CardMedia
-            component="div"
-            sx={{
-              height: '100%',
-              position: 'relative',
-              overflow: 'hidden',
-              backgroundColor: 'grey.100', // Background for the image area when using contain
-            }}
-          >
-            <Image
-              src={currentImage.url}
-              alt={
-                currentImage?.altText ||
-                currentImage?.poseName ||
-                `Yoga pose ${safeActiveIndex + 1}`
-              }
-              fill
-              style={{
-                objectFit: 'contain',
-                transition: 'opacity 0.3s ease-in-out',
-              }}
-              sizes={getOptimizedSizes(safeActiveIndex)}
-              onLoad={handleImageLoad}
-              onError={(event) => {
-                console.error('Image failed to load in ImageCarousel:', {
-                  url: currentImage?.url,
-                  poseId: currentImage?.poseId,
-                  poseName: currentImage?.poseName,
-                  imageId: currentImage?.id,
-                  error: event,
-                })
-                setIsLoading(false)
-              }}
-              priority={getLoadingPriority(safeActiveIndex) === 'high'}
-              loading={
-                getLoadingPriority(safeActiveIndex) === 'high'
-                  ? 'eager'
-                  : 'lazy'
-              }
-              quality={getLoadingPriority(safeActiveIndex) === 'high' ? 90 : 75}
-              placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkrHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-            />
-          </CardMedia>
-        </Card>
-      </Fade>
+          </Box>
+        )}
+      </Box>
 
       {/* Navigation Arrows */}
       {showArrows && totalImages > 1 && (
