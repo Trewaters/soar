@@ -5,6 +5,7 @@ import Image from 'next/image'
 interface AsanaDetailsProps {
   details: string | string[] | null | undefined
   label: string
+  showCategoryIcon?: boolean
 }
 
 // Extend only Stack props since it's the root element of our component
@@ -25,6 +26,7 @@ type AsanaDetailsComponentProps = ComponentProps<typeof Stack> &
  * @param props - The properties for the AsanaDetails component.
  * @param props.label - The label or title for the Asana detail.
  * @param props.details - The detailed description or content for the Asana detail.
+ * @param props.showCategoryIcon - Optional boolean to show category-specific icons.
  * @param props.sx - Optional additional styling to apply to the details section.
  *
  * @returns A memoized React component rendering the Asana detail section.
@@ -39,7 +41,7 @@ export default React.memo(function AsanaDetails(
 ) {
   // If there is no meaningful details to show, render nothing.
   // Treat: undefined, null, empty string, empty array as "no data".
-  const { details } = props
+  const { details, showCategoryIcon } = props
 
   // If details is an array, determine whether it contains any non-empty string entries
   const arrayHasNonEmptyEntries = Array.isArray(details)
@@ -73,6 +75,29 @@ export default React.memo(function AsanaDetails(
     : `${props.label}: ${safeDetails}`
 
   const content = cleanedArray ? cleanedArray.join('\n') : safeDetails
+
+  // Helper to get category icon URL (mirrors logic in poseActivityDetail.tsx)
+  const getCategoryIcon = (category: string) => {
+    switch (category.toLowerCase()) {
+      case 'prone':
+      case 'standing':
+        return '/icons/designImages/asana-standing.svg'
+      case 'seated':
+      case 'supine':
+        return '/icons/designImages/asana-supine.svg'
+      case 'inversion':
+      case 'arm_leg_support':
+      case 'arm_balance_and_inversion':
+        return '/icons/designImages/asana-inverted.svg'
+      default:
+        return '/stick-tree-pose-400x400.png'
+    }
+  }
+
+  const categoryIcon =
+    showCategoryIcon && typeof content === 'string'
+      ? getCategoryIcon(content)
+      : null
 
   return (
     <Box
@@ -109,7 +134,12 @@ export default React.memo(function AsanaDetails(
           {props.label}:
         </Typography>
       </Stack>
-      <Stack sx={{ py: 2, pl: 4 }}>
+      <Stack
+        sx={{ py: 2, pl: 4 }}
+        direction="row"
+        alignItems="center"
+        spacing={2}
+      >
         <Typography
           variant="body1"
           component="dd"
@@ -124,6 +154,15 @@ export default React.memo(function AsanaDetails(
         >
           {content}
         </Typography>
+        {categoryIcon && (
+          <Image
+            src={categoryIcon}
+            alt={`${content} icon`}
+            width={32}
+            height={32}
+            style={{ marginLeft: '16px' }}
+          />
+        )}
       </Stack>
     </Box>
   )

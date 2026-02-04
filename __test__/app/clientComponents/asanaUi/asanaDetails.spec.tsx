@@ -64,4 +64,37 @@ describe('AsanaDetails (clean copy)', () => {
     // Verify empty strings were filtered out (no extra whitespace)
     expect(detailsText.textContent).toBe('One\nTwo\nThree')
   })
+
+  it('renders category icon when showCategoryIcon is true', () => {
+    // Test with a known category that has an icon
+    render(
+      <AsanaDetails
+        label="Category"
+        details="Standing"
+        showCategoryIcon={true}
+      />,
+      { wrapper: Wrapper }
+    )
+
+    expect(screen.getByText(/Category:/)).toBeInTheDocument()
+    expect(screen.getByText(/Standing/)).toBeInTheDocument()
+
+    // Check for the image
+    const icon = screen.getByAltText('Standing icon')
+    expect(icon).toBeInTheDocument()
+    expect(icon).toHaveAttribute('src', '/icons/designImages/asana-standing.svg')
+  })
+
+  it('does not render category icon when showCategoryIcon is false', () => {
+    render(
+      <AsanaDetails
+        label="Category"
+        details="Standing"
+        showCategoryIcon={false}
+      />,
+      { wrapper: Wrapper }
+    )
+
+    expect(screen.queryByAltText('Standing icon')).not.toBeInTheDocument()
+  })
 })

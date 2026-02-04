@@ -941,6 +941,7 @@ export default function PoseActivityDetail({
               <AsanaDetails
                 details={`${pose?.category}`}
                 label="Category"
+                showCategoryIcon={false}
                 sx={{ mb: '32px' }}
               />
               <AsanaDetails
