@@ -39,6 +39,7 @@ import CarouselDotNavigation from '@app/clientComponents/imageUpload/CarouselDot
 import { getUserPoseImages, type PoseImageData } from '@lib/imageService'
 import { deletePose, updatePose, type UpdatePoseInput } from '@lib/poseService'
 import PoseImageManagement from '@app/clientComponents/imageUpload/PoseImageManagement'
+import PoseImageUpload from '@app/clientComponents/imageUpload/PoseImageUpload'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import { AsanaPose, ASANA_CATEGORIES } from 'types/asana'
 import { HELP_PATHS } from '@app/utils/helpLoader'
@@ -271,6 +272,15 @@ export default function PoseActivityDetail({
     pose?.id?.toString(),
     pose?.sort_english_name
   )
+
+  // Ensure carousel index is valid when images change (e.g. after deletion)
+  useEffect(() => {
+    if (poseImages.length > 0 && currentImageIndex >= poseImages.length) {
+      setCurrentImageIndex(Math.max(0, poseImages.length - 1))
+    } else if (poseImages.length === 0 && currentImageIndex !== 0) {
+      setCurrentImageIndex(0)
+    }
+  }, [poseImages.length, currentImageIndex])
 
   // Handle carousel image index changes
   const handleCarouselIndexChange = (index: number) => {
@@ -618,29 +628,47 @@ export default function PoseActivityDetail({
                 </Box>
 
                 {isEditing && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: 16,
-                      right: 16,
-                      zIndex: 5, // Higher than carousel dots
-                    }}
-                  >
-                    <IconButton
-                      aria-label="Delete pose"
-                      onClick={handleDeletePose}
+                  <>
+                    <Box
                       sx={{
-                        color: 'error.main',
-                        backgroundColor: 'rgba(255, 255, 255, 0.6)',
-                        '&:hover': {
-                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                        },
+                        position: 'absolute',
+                        top: 16,
+                        right: 16,
+                        zIndex: 5, // Higher than carousel dots
                       }}
-                      size="small"
                     >
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </Box>
+                      <IconButton
+                        aria-label="Delete pose"
+                        onClick={handleDeletePose}
+                        sx={{
+                          color: 'error.main',
+                          backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                          '&:hover': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                          },
+                        }}
+                        size="small"
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        bottom: 16,
+                        left: 16,
+                        zIndex: 5,
+                      }}
+                    >
+                      <PoseImageUpload
+                        poseId={pose?.id?.toString() || ''}
+                        poseName={pose?.sort_english_name}
+                        variant="icon-button"
+                        onImageUploaded={refreshImages}
+                        iconSize="small"
+                      />
+                    </Box>
+                  </>
                 )}
               </>
             )}
@@ -797,29 +825,47 @@ export default function PoseActivityDetail({
                   </Box>
 
                   {isEditing && (
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        top: 16,
-                        right: 16,
-                        zIndex: 4,
-                      }}
-                    >
-                      <IconButton
-                        aria-label="Delete pose"
-                        onClick={handleDeletePose}
+                    <>
+                      <Box
                         sx={{
-                          color: 'error.main',
-                          backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                          '&:hover': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                          },
+                          position: 'absolute',
+                          top: 16,
+                          right: 16,
+                          zIndex: 4,
                         }}
-                        size="small"
                       >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </Box>
+                        <IconButton
+                          aria-label="Delete pose"
+                          onClick={handleDeletePose}
+                          sx={{
+                            color: 'error.main',
+                            backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                            '&:hover': {
+                              backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                            },
+                          }}
+                          size="small"
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </Box>
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          bottom: 16,
+                          left: 16,
+                          zIndex: 4,
+                        }}
+                      >
+                        <PoseImageUpload
+                          poseId={pose?.id?.toString() || ''}
+                          poseName={pose?.sort_english_name}
+                          variant="icon-button"
+                          onImageUploaded={refreshImages}
+                          iconSize="small"
+                        />
+                      </Box>
+                    </>
                   )}
                 </>
               )}

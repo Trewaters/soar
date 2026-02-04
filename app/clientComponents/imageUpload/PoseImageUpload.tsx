@@ -58,10 +58,11 @@ interface PoseImageUploadProps {
   onImageDeleted?: (imageId: string) => void
   maxFileSize?: number // in MB
   acceptedTypes?: string[]
-  variant?: 'button' | 'dropzone'
+  variant?: 'button' | 'dropzone' | 'icon-button'
   poseId?: string
   poseName?: string
   showSlotInfo?: boolean
+  iconSize?: 'small' | 'medium' | 'large'
 }
 
 /**
@@ -99,6 +100,7 @@ export default function PoseImageUpload({
   poseId,
   poseName,
   showSlotInfo = true,
+  iconSize = 'small',
 }: PoseImageUploadProps) {
   const { data: session } = useSession()
   const [open, setOpen] = useState(false)
@@ -640,6 +642,189 @@ export default function PoseImageUpload({
             )}
           </Box>
         )}
+      </>
+    )
+  }
+
+  if (variant === 'icon-button') {
+    return (
+      <>
+        <IconButton
+          aria-label={
+            poseName ? `Upload image for ${poseName}` : 'Upload image'
+          }
+          onClick={() => setOpen(true)}
+          disabled={uploading}
+          sx={{
+            color: 'primary.main',
+            backgroundColor: 'rgba(255, 255, 255, 0.6)',
+            '&:hover': {
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            },
+            '&.Mui-disabled': {
+              backgroundColor: 'rgba(255, 255, 255, 0.3)',
+              color: 'grey.400',
+            },
+          }}
+          size={iconSize}
+        >
+          <CloudUploadIcon fontSize={iconSize} />
+        </IconButton>
+
+        <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+          <DialogTitle>
+            Upload Yoga Pose Image
+            {poseName && (
+              <Typography variant="body2" color="text.secondary">
+                for {poseName}
+              </Typography>
+            )}
+          </DialogTitle>
+
+          <DialogContent>
+            <Stack spacing={3}>
+              {/* Render slot information */}
+              {renderSlotInfo()}
+
+              <Box
+                onClick={handleFileInputClick}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                sx={{
+                  border: '2px dashed',
+                  borderColor:
+                    selectedFiles.length > 0 ? 'success.main' : 'grey.400',
+                  borderRadius: 2,
+                  p: 3,
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  backgroundColor: 'grey.50',
+                  '&:hover': {
+                    backgroundColor: 'grey.100',
+                  },
+                }}
+              >
+                <CloudUploadIcon
+                  sx={{ fontSize: 40, color: 'text.secondary', mb: 1 }}
+                />
+                <Typography variant="body1" gutterBottom>
+                  {selectedFiles.length > 0
+                    ? `${selectedFiles.length} file${selectedFiles.length === 1 ? '' : 's'} selected`
+                    : 'Choose file or drag here'}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {acceptedTypes.map((type) => type.split('/')[1]).join(', ')} •
+                  Max {maxFileSize}MB
+                </Typography>
+              </Box>
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept={acceptedTypes.join(',')}
+                onChange={handleFileSelect}
+                // When imageStatus is not yet available (e.g. new asana), allow
+                // multiple file selection so creators can pick several images at once.
+                multiple={imageStatus ? imageStatus.remainingSlots > 1 : true}
+                style={{ display: 'none' }}
+              />
+
+              {previews.length > 0 && (
+                <Box sx={{ display: 'grid', gap: 2 }}>
+                  {previews.map((p, idx) => (
+                    <Card key={`preview-${idx}`}>
+                      {p ? (
+                        <CardMedia
+                          component="img"
+                          height="200"
+                          image={p}
+                          alt={`Preview ${idx + 1}`}
+                          sx={{ objectFit: 'contain' }}
+                        />
+                      ) : null}
+                      <CardContent>
+                        <Stack
+                          direction="row"
+                          justifyContent="space-between"
+                          alignItems="center"
+                        >
+                          <Box>
+                            <Typography variant="body2">
+                              {selectedFiles[idx]?.name}
+                            </Typography>
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                            >
+                              {selectedFiles[idx] &&
+                                formatFileSize(selectedFiles[idx].size)}
+                            </Typography>
+                          </Box>
+                          <IconButton
+                            onClick={() => removeSelectedFile(idx)}
+                            color="error"
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  ))}
+
+                  <TextField
+                    fullWidth
+                    label="Alt Text (for accessibility)"
+                    placeholder={`Describe the yoga pose ${poseName ? `for ${poseName}` : ''}...`}
+                    value={altText}
+                    onChange={(e) => setAltText(e.target.value)}
+                    multiline
+                    rows={2}
+                    helperText="Provide a brief description of the pose for screen readers and SEO"
+                  />
+                </Box>
+              )}
+
+              {uploading && (
+                <Box sx={{ mt: 2 }}>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    Uploading... {Math.round(uploadProgress)}%
+                  </Typography>
+                  <LinearProgress
+                    variant="determinate"
+                    value={uploadProgress}
+                    sx={{ height: 8, borderRadius: 1 }}
+                  />
+                </Box>
+              )}
+
+              {error && <Alert severity="error">{error}</Alert>}
+            </Stack>
+          </DialogContent>
+
+          <DialogActions sx={{ p: 3 }}>
+            <Button onClick={handleClose} color="inherit">
+              Cancel
+            </Button>
+            <Button
+              onClick={handleUpload}
+              variant="contained"
+              disabled={
+                selectedFiles.length === 0 ||
+                uploading ||
+                (imageStatus ? !imageStatus.canUpload : false)
+              }
+              startIcon={
+                uploading ? <CircularProgress size={16} /> : <CloudUploadIcon />
+              }
+            >
+              {uploading ? 'Uploading...' : 'Upload'}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </>
     )
   }

@@ -150,6 +150,15 @@ export default function PoseImageGallery({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, poseId, poseName])
 
+  // Ensure carousel index is valid when images change (e.g. after deletion)
+  useEffect(() => {
+    if (images.length > 0 && currentImageIndex >= images.length) {
+      setCurrentImageIndex(Math.max(0, images.length - 1))
+    } else if (images.length === 0 && currentImageIndex !== 0) {
+      setCurrentImageIndex(0)
+    }
+  }, [images.length, currentImageIndex])
+
   // Handle delete
   const handleDeleteClick = (image: PoseImage) => {
     setImageToDelete(image)

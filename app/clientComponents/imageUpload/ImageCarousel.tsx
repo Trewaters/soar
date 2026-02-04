@@ -167,9 +167,10 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
       return
     }
 
-    if (currentIndex !== activeIndex && currentIndex >= 0) {
-      // Clamp the external index to valid range
-      const clampedIndex = Math.max(0, Math.min(currentIndex, totalImages - 1))
+    // Always clamp the current index to the valid range if images changed or prop changed
+    const clampedIndex = Math.max(0, Math.min(currentIndex, totalImages - 1))
+
+    if (clampedIndex !== activeIndex) {
       setActiveIndex(clampedIndex)
       setIsLoading(true) // Trigger loading state for new image
     }
