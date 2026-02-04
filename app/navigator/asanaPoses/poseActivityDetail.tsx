@@ -655,73 +655,58 @@ export default function PoseActivityDetail({
                 background: 'linear-gradient(transparent, rgba(0, 0, 0, 0.8))',
                 p: 2,
                 zIndex: 3,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Typography
-                  variant="h3"
-                  sx={{
-                    color: 'white',
-                    fontWeight: 'bold',
-                    textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)',
-                    fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
-                  }}
-                >
-                  {pose?.sort_english_name}
-                </Typography>
-
-                {/* Dot navigation for multiple images - moved to center below name */}
-                {poseImages.length > 1 && (
-                  <Box sx={{ mt: 0.5, mb: 0.5 }}>
-                    <CarouselDotNavigation
-                      images={poseImages.map((img) => ({
-                        id: img.id,
-                        userId: '',
-                        poseId: pose?.id?.toString(),
-                        poseName: pose?.sort_english_name,
-                        url: img.url,
-                        altText:
-                          img.altText || `${pose?.sort_english_name} pose`,
-                        fileName: img.fileName || undefined,
-                        fileSize: img.fileSize || undefined,
-                        uploadedAt: new Date(img.uploadedAt),
-                        storageType: 'CLOUD' as const,
-                        localStorageId: undefined,
-                        isOffline: false,
-                        imageType: 'pose',
-                        displayOrder: (img as any).displayOrder ?? 1,
-                        createdAt: new Date(img.uploadedAt),
-                        updatedAt: new Date(img.uploadedAt),
-                      }))}
-                      activeIndex={currentImageIndex}
-                      onIndexChange={handleCarouselIndexChange}
-                      size="small"
-                      color="secondary"
-                    />
-                  </Box>
-                )}
-              </Box>
               <Typography
-                variant="body2"
+                variant="h3"
                 sx={{
-                  color: 'rgba(255, 255, 255, 0.9)',
-                  textShadow: '1px 1px 2px rgba(0, 0, 0, 0.8)',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)',
+                  fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
                 }}
               >
-                {pose?.category}
+                {pose?.sort_english_name}
               </Typography>
+
+              {/* Dot navigation for multiple images - moved to center below name */}
+              {poseImages.length > 1 && (
+                <Box sx={{ mt: 0.5, mb: 0.5 }}>
+                  <CarouselDotNavigation
+                    images={poseImages.map((img) => ({
+                      id: img.id,
+                      userId: '',
+                      poseId: pose?.id?.toString(),
+                      poseName: pose?.sort_english_name,
+                      url: img.url,
+                      altText: img.altText || `${pose?.sort_english_name} pose`,
+                      fileName: img.fileName || undefined,
+                      fileSize: img.fileSize || undefined,
+                      uploadedAt: new Date(img.uploadedAt),
+                      storageType: 'CLOUD' as const,
+                      localStorageId: undefined,
+                      isOffline: false,
+                      imageType: 'pose',
+                      displayOrder: (img as any).displayOrder ?? 1,
+                      createdAt: new Date(img.uploadedAt),
+                      updatedAt: new Date(img.uploadedAt),
+                    }))}
+                    activeIndex={currentImageIndex}
+                    onIndexChange={handleCarouselIndexChange}
+                    size="small"
+                    color="secondary"
+                  />
+                </Box>
+              )}
             </Box>
           </Box>
         ) : null}
 
-        {/* Category badge when no uploaded images are available */}
+        {/* Header when no images are available */}
         {(!poseImages || poseImages.length === 0) && (
           <Stack alignItems="center" sx={{ mt: 3 }}>
             <Box
@@ -731,24 +716,19 @@ export default function PoseActivityDetail({
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: { xs: '100%', sm: '400px' },
+                height: '200px',
+                backgroundColor: 'info.contrastText',
+                borderRadius: '12px',
+                boxShadow: '0 2px 2px 2px rgba(211, 211, 211, 0.5)',
+                px: 2,
               }}
             >
               <Typography
                 variant="h1"
                 component={'h2'}
                 sx={{
-                  pt: 2,
-                  height: '200px',
-                  width: '100%',
-                  backgroundColor: 'info.contrastText',
                   color: 'primary.main',
-                  borderRadius: '12px',
                   textAlign: 'center',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 2px 2px 2px rgba(211, 211, 211, 0.5)',
-                  px: 2,
                 }}
               >
                 {pose?.sort_english_name}
