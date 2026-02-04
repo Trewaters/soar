@@ -107,12 +107,17 @@ describe('PoseImageGallery Integration Tests', () => {
     // Mock successful session
     mockUseSession.mockReturnValue({
       data: {
-        user: { id: 'user1', email: 'test@example.com' },
+        user: {
+          id: 'user1',
+          email: 'test@example.com',
+          name: 'Test User',
+          role: 'user',
+        },
         expires: '2024-12-31',
-      },
+      } as any,
       status: 'authenticated',
       update: jest.fn(),
-    })
+    } as any)
 
     // Mock successful image fetch with ownership data
     ;(global.fetch as jest.Mock).mockResolvedValue({
@@ -146,9 +151,7 @@ describe('PoseImageGallery Integration Tests', () => {
     // Wait for images to load and check for the image count indicator
     await waitFor(
       () => {
-        expect(
-          screen.getByText(/Images for Mountain Pose \(3\)/)
-        ).toBeInTheDocument()
+        expect(screen.getByText(/3 images/)).toBeInTheDocument()
       },
       { timeout: 3000 }
     )
@@ -175,9 +178,7 @@ describe('PoseImageGallery Integration Tests', () => {
     // Wait for images to load and check for the image count indicator
     await waitFor(
       () => {
-        expect(
-          screen.getByText(/Images for Mountain Pose \(3\)/)
-        ).toBeInTheDocument()
+        expect(screen.getByText(/3 images/)).toBeInTheDocument()
       },
       { timeout: 3000 }
     )
@@ -215,9 +216,7 @@ describe('PoseImageGallery Integration Tests', () => {
     // Wait for images to load and check for the image count indicator
     await waitFor(
       () => {
-        expect(
-          screen.getByText(/Images for Mountain Pose \(3\)/)
-        ).toBeInTheDocument()
+        expect(screen.getByText(/3 images/)).toBeInTheDocument()
       },
       { timeout: 3000 }
     )
@@ -278,9 +277,7 @@ describe('PoseImageGallery Integration Tests', () => {
 
     await waitFor(
       () => {
-        expect(
-          screen.getByText(/Images for Mountain Pose \(3\)/)
-        ).toBeInTheDocument()
+        expect(screen.getByText(/3 images/)).toBeInTheDocument()
       },
       { timeout: 3000 }
     )
@@ -345,7 +342,7 @@ describe('PoseImageGallery Integration Tests', () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByText(/Images for Mountain Pose/)).toBeInTheDocument()
+      expect(screen.getByText(/1 image/)).toBeInTheDocument()
     })
 
     // Should not show tabs for single image
@@ -366,7 +363,7 @@ describe('PoseImageGallery Integration Tests', () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByText(/Images for Mountain Pose/)).toBeInTheDocument()
+      expect(screen.getByText(/3 images/)).toBeInTheDocument()
     })
 
     // Should show tabs when user can manage (already mocked in beforeEach)

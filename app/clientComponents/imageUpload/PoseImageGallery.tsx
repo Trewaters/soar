@@ -319,14 +319,30 @@ export default function PoseImageGallery({
           </Card>
         )}
 
-        {/* Show delete controls for single image if user can manage */}
-        {images.length === 1 && canManageImages && (
-          <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+        {/* Action button below image display */}
+        {canManageImages && images.length > 0 && (
+          <Box
+            sx={{
+              mt: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            {/* Show alt text for carousel view only, as single image card has its own */}
+            {images.length > 1 && images[currentImageIndex].altText && (
+              <Typography
+                variant="caption"
+                sx={{ mb: 1, fontWeight: 'medium' }}
+              >
+                {images[currentImageIndex].altText}
+              </Typography>
+            )}
             <Button
               variant="outlined"
               color="error"
               startIcon={<DeleteIcon />}
-              onClick={() => handleDeleteClick(images[0])}
+              onClick={() => handleDeleteClick(images[currentImageIndex])}
               size="small"
             >
               Delete Image
@@ -340,9 +356,6 @@ export default function PoseImageGallery({
   if (status === 'loading' || loading) {
     return (
       <Box sx={{ p: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          {poseName ? `Images for ${poseName}` : 'Pose Images'}
-        </Typography>
         <Grid2 container spacing={2}>
           {[...Array(3)].map((_, index) => (
             <Grid2 key={index} size={{ xs: 12, sm: 6, md: 4 }}>
@@ -393,16 +406,11 @@ export default function PoseImageGallery({
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-end',
           alignItems: 'center',
           mb: 3,
         }}
       >
-        <Typography variant="h6">
-          {poseName
-            ? `Images for ${poseName} (${images.length})`
-            : `Pose Images (${images.length})`}
-        </Typography>
         {images.length > 0 && (
           <Chip
             icon={<ImageIcon />}
@@ -464,23 +472,6 @@ export default function PoseImageGallery({
             </Box>
           )}
 
-          {/* Show delete controls for individual images in carousel view if user can manage */}
-          {currentView === 'carousel' &&
-            canManageImages &&
-            images.length > 0 && (
-              <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  startIcon={<DeleteIcon />}
-                  onClick={() => handleDeleteClick(images[currentImageIndex])}
-                  size="small"
-                >
-                  Delete Current Image
-                </Button>
-              </Box>
-            )}
-
           {/* Render based on current view */}
           {currentView === 'carousel' && renderCarouselView()}
 
@@ -513,12 +504,6 @@ export default function PoseImageGallery({
 
           {currentView === 'grid' && canManageImages && images.length > 0 && (
             <Box data-testid="image-management">
-              <Typography variant="h6" gutterBottom>
-                Management Interface
-              </Typography>
-              <Typography variant="body2" gutterBottom>
-                Image ID: {images[0].id}
-              </Typography>
               <Grid2 container spacing={2}>
                 {images.map((image, index) => (
                   <Grid2 key={image.id} size={{ xs: 12, sm: 6, md: 4 }}>
@@ -543,9 +528,19 @@ export default function PoseImageGallery({
                           direction="row"
                           justifyContent="space-between"
                           alignItems="center"
+                          spacing={1}
                         >
-                          <Typography variant="body2" color="text.secondary">
-                            Image {index + 1} of {images.length}
+                          <Typography
+                            variant="body2"
+                            color="text.primary"
+                            sx={{
+                              fontWeight: 'medium',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {image.altText || `Image ${index + 1}`}
                           </Typography>
                           <IconButton
                             onClick={() => handleDeleteClick(image)}
@@ -559,11 +554,6 @@ export default function PoseImageGallery({
                             <DeleteIcon />
                           </IconButton>
                         </Stack>
-                        {image.fileName && (
-                          <Typography variant="caption" display="block">
-                            {image.fileName}
-                          </Typography>
-                        )}
                       </CardContent>
                     </Card>
                   </Grid2>

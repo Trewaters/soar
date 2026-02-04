@@ -156,8 +156,8 @@ export default function PoseImageManagement({
 
   if (variant === 'upload-only') {
     return (
-      <Paper elevation={1} sx={{ p: 3, borderRadius: '16px' }}>
-        <Typography variant="h6" gutterBottom>
+      <Paper elevation={1} sx={{ borderRadius: '16px', overflow: 'hidden' }}>
+        <Typography variant="h6" sx={{ p: 3, pb: 0, color: 'primary.main' }}>
           {title}
         </Typography>
         {renderInfoContent()}
@@ -167,8 +167,8 @@ export default function PoseImageManagement({
 
   if (variant === 'gallery-only') {
     return (
-      <Paper elevation={1} sx={{ p: 3, borderRadius: '16px' }}>
-        <Typography variant="h6" gutterBottom>
+      <Paper elevation={1} sx={{ borderRadius: '16px', overflow: 'hidden' }}>
+        <Typography variant="h6" sx={{ p: 3, pb: 0, color: 'primary.main' }}>
           {title}
         </Typography>
         <PoseImageGallery
@@ -184,7 +184,7 @@ export default function PoseImageManagement({
 
   return (
     <Paper elevation={1} sx={{ borderRadius: '16px', overflow: 'hidden' }}>
-      <Typography variant="h6" sx={{ p: 3, pb: 0 }}>
+      <Typography variant="h6" sx={{ p: 3, pb: 0, color: 'primary.main' }}>
         {title}
       </Typography>
 
