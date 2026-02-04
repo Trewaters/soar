@@ -723,103 +723,70 @@ export default function PoseActivityDetail({
 
         {/* Category badge when no uploaded images are available */}
         {(!poseImages || poseImages.length === 0) && (
-          <>
-            <Paper
-              elevation={1}
+          <Stack alignItems="center" sx={{ mt: 3 }}>
+            <Box
               sx={{
-                borderRadius: '16px',
-                backgroundColor: 'info.contrastText',
-                mt: 3,
-                mb: '-24px',
-                mx: '25%',
-                zIndex: 1,
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: { xs: '100%', sm: '400px' },
               }}
             >
-              <Box
+              <Typography
+                variant="h1"
+                component={'h2'}
                 sx={{
-                  borderRadius: '16px',
-                  height: '50%',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  px: 4,
-                  py: 1,
-                  overflow: 'hidden',
-                }}
-                justifyContent={'space-around'}
-                alignItems={'center'}
-              >
-                <Image
-                  alt="Asana Standing"
-                  height={36}
-                  width={36}
-                  style={{
-                    alignContent: 'center',
-                  }}
-                  src={getAsanaIconUrl(pose?.category)}
-                />
-                <Typography
-                  variant="h5"
-                  component={'p'}
-                  sx={{
-                    color: 'secondary.contrastText',
-                    flexShrink: 1,
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {pose?.category}
-                </Typography>
-              </Box>
-            </Paper>
-            <Stack alignItems="center">
-              <Box
-                sx={{
-                  position: 'relative',
+                  pt: 2,
+                  height: '200px',
+                  width: '100%',
+                  backgroundColor: 'info.contrastText',
+                  color: 'primary.main',
+                  borderRadius: '12px',
+                  textAlign: 'center',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  width: { xs: '100%', sm: '400px' },
+                  boxShadow: '0 2px 2px 2px rgba(211, 211, 211, 0.5)',
+                  px: 2,
                 }}
               >
-                <Typography
-                  variant="h1"
-                  component={'h2'}
-                  sx={{
-                    pt: 2,
-                    height: '200px',
-                    width: '100%',
-                    backgroundColor: 'info.contrastText',
-                    color: 'primary.main',
-                    borderRadius: '12px',
-                    textAlign: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: '0 2px 2px 2px rgba(211, 211, 211, 0.5)',
-                    px: 2,
-                  }}
-                >
-                  {pose?.sort_english_name}
-                </Typography>
+                {pose?.sort_english_name}
+              </Typography>
 
-                {/* Action Icons Overlay for No Image */}
-                {showInlineEditIcon && session && session.user && canEdit && (
-                  <>
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        top: 16,
-                        left: 16,
-                        zIndex: 4,
-                        display: 'flex',
-                        gap: 1,
-                      }}
-                    >
-                      {!isEditing ? (
+              {/* Action Icons Overlay for No Image */}
+              {showInlineEditIcon && session && session.user && canEdit && (
+                <>
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 16,
+                      left: 16,
+                      zIndex: 4,
+                      display: 'flex',
+                      gap: 1,
+                    }}
+                  >
+                    {!isEditing ? (
+                      <IconButton
+                        aria-label="Edit pose"
+                        onClick={handleEditToggle}
+                        sx={{
+                          color: 'primary.main',
+                          backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                          '&:hover': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                          },
+                        }}
+                        size="small"
+                      >
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                    ) : (
+                      <>
                         <IconButton
-                          aria-label="Edit pose"
-                          onClick={handleEditToggle}
+                          aria-label="Save changes"
+                          onClick={handleSaveEdit}
                           sx={{
                             color: 'primary.main',
                             backgroundColor: 'rgba(0, 0, 0, 0.05)',
@@ -829,56 +796,13 @@ export default function PoseActivityDetail({
                           }}
                           size="small"
                         >
-                          <EditIcon fontSize="small" />
+                          <SaveIcon fontSize="small" />
                         </IconButton>
-                      ) : (
-                        <>
-                          <IconButton
-                            aria-label="Save changes"
-                            onClick={handleSaveEdit}
-                            sx={{
-                              color: 'primary.main',
-                              backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                              '&:hover': {
-                                backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                              },
-                            }}
-                            size="small"
-                          >
-                            <SaveIcon fontSize="small" />
-                          </IconButton>
-                          <IconButton
-                            aria-label="Cancel editing"
-                            onClick={handleCancelEdit}
-                            sx={{
-                              color: 'primary.contrastText',
-                              backgroundColor: 'rgba(0, 0, 0, 0.05)',
-                              '&:hover': {
-                                backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                              },
-                            }}
-                            size="small"
-                          >
-                            <CloseIcon fontSize="small" />
-                          </IconButton>
-                        </>
-                      )}
-                    </Box>
-
-                    {isEditing && (
-                      <Box
-                        sx={{
-                          position: 'absolute',
-                          top: 16,
-                          right: 16,
-                          zIndex: 4,
-                        }}
-                      >
                         <IconButton
-                          aria-label="Delete pose"
-                          onClick={handleDeletePose}
+                          aria-label="Cancel editing"
+                          onClick={handleCancelEdit}
                           sx={{
-                            color: 'error.main',
+                            color: 'primary.contrastText',
                             backgroundColor: 'rgba(0, 0, 0, 0.05)',
                             '&:hover': {
                               backgroundColor: 'rgba(0, 0, 0, 0.1)',
@@ -886,15 +810,41 @@ export default function PoseActivityDetail({
                           }}
                           size="small"
                         >
-                          <DeleteIcon fontSize="small" />
+                          <CloseIcon fontSize="small" />
                         </IconButton>
-                      </Box>
+                      </>
                     )}
-                  </>
-                )}
-              </Box>
-            </Stack>
-          </>
+                  </Box>
+
+                  {isEditing && (
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: 16,
+                        right: 16,
+                        zIndex: 4,
+                      }}
+                    >
+                      <IconButton
+                        aria-label="Delete pose"
+                        onClick={handleDeletePose}
+                        sx={{
+                          color: 'error.main',
+                          backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                          '&:hover': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                          },
+                        }}
+                        size="small"
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  )}
+                </>
+              )}
+            </Box>
+          </Stack>
         )}
       </Box>
       <Box
