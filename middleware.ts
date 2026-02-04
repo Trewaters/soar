@@ -4,16 +4,11 @@ import type { NextRequest } from 'next/server'
 export const config = {
   matcher: [
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
-    // '/flows/:path*',
     '/navigator/asanaPoses/createAsana/:path*',
-    // '/navigator/asanaPoses/:path*',
-    // '/api/:path*', // API routes
   ],
 }
 
 export default function middleware(request: NextRequest) {
-  // Access session data
-  // const session = request.cookies.get('authjs.session-token') // the session cookie name
   const response = NextResponse.next()
 
   // Prevent MIME sniffing - this is safe to always apply
