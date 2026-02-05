@@ -11,6 +11,7 @@ export const NAV_PATHS = {
   // Sequences base path (id in path)
   SEQUENCES: '/navigator/sequences',
   COMPLIANCE_TERMS_SERVICE: '/compliance/terms',
+  VIEW_ASANA_PRACTICE: '/views/viewAsanaPractice',
 }
 
 export default NAV_PATHS

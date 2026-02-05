@@ -348,12 +348,10 @@ export default function PoseActivityDetail({
   }
 
   function handleClick() {
-    const targetId = encodeURIComponent(
-      (pose?.id && pose.id.toString && pose.id.toString()) ||
-        pose?.sort_english_name ||
-        ''
-    )
-    router.push(`${NAV_PATHS.PRACTICE_ASANAS}?id=${targetId}`)
+    if (!pose?.sort_english_name) return
+
+    const posePath = encodeURIComponent(pose.sort_english_name)
+    router.push(`${NAV_PATHS.VIEW_ASANA_PRACTICE}/${posePath}`)
   }
 
   // Initialize form data when entering edit mode

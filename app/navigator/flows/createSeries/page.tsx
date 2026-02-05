@@ -272,12 +272,6 @@ export default function Page() {
                     color="primary"
                     sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                   >
-                    <Image
-                      src={'/icons/asanas/label_name_leaf.png'}
-                      alt=""
-                      height={20}
-                      width={16}
-                    />
                     Flow Name *
                   </Typography>
                   <TextField
@@ -311,12 +305,6 @@ export default function Page() {
                     color="primary"
                     sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                   >
-                    <Image
-                      src={'/icons/asanas/label_name_leaf.png'}
-                      alt=""
-                      height={20}
-                      width={16}
-                    />
                     Add Poses to Flow
                   </Typography>
                   <Typography
@@ -365,12 +353,6 @@ export default function Page() {
                       color="primary"
                       sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                     >
-                      <Image
-                        src={'/icons/asanas/label_name_leaf.png'}
-                        alt=""
-                        height={20}
-                        width={16}
-                      />
                       Series Image
                     </Typography>
                     <Typography
@@ -480,12 +462,6 @@ export default function Page() {
                       color="primary"
                       sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                     >
-                      <Image
-                        src={'/icons/asanas/label_name_leaf.png'}
-                        alt=""
-                        height={20}
-                        width={16}
-                      />
                       Your Flow Sequence{' '}
                       {seriesPoses.length > 0 &&
                         `(${seriesPoses.length} poses)`}

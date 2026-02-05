@@ -114,14 +114,7 @@ export default React.memo(function AsanaDetails(
       role="group"
       aria-label={`Asana detail: ${props.label}`}
     >
-      <Stack direction={'row'} gap={3} display={'flex'} alignItems={'center'}>
-        <Image
-          src={'/icons/asanas/label_name_leaf.png'}
-          alt={props.label}
-          aria-hidden="true"
-          width={16}
-          height={20}
-        />
+      <Stack direction={'row'} display={'flex'} alignItems={'center'}>
         <Typography
           variant="subtitle1"
           component="dt"

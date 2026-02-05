@@ -470,12 +470,6 @@ export default function Page() {
                 gap: 2,
               }}
             >
-              <Box
-                component="img"
-                src="/icons/asanas/label_name_leaf.png"
-                alt=""
-                sx={{ width: 16, height: 20 }}
-              />
               Image Upload
             </Typography>
             <ImageUploadWithFallback
@@ -501,12 +495,6 @@ export default function Page() {
                   gap: 2,
                 }}
               >
-                <Box
-                  component="img"
-                  src="/icons/asanas/label_name_leaf.png"
-                  alt=""
-                  sx={{ width: 16, height: 20 }}
-                />
                 Uploaded Images ({uploadedImages.length})
               </Typography>
               <Box

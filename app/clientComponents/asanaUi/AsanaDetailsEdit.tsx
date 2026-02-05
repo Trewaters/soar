@@ -256,13 +256,6 @@ export default React.memo(function AsanaDetailsEdit(
           sx={{ mb: 1 }}
           id={`${fieldId}-header`}
         >
-          <Image
-            src="/icons/asanas/label_name_leaf.png"
-            alt=""
-            aria-hidden="true"
-            width={16}
-            height={20}
-          />
           <Typography
             variant="subtitle1"
             component="h3"

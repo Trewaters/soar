@@ -335,12 +335,6 @@ export default function Page() {
                       color="primary"
                       sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                     >
-                      <Image
-                        src={'/icons/asanas/label_name_leaf.png'}
-                        alt=""
-                        height={20}
-                        width={16}
-                      />
                       Sequence Name *
                     </Typography>
                     <TextField
@@ -377,12 +371,6 @@ export default function Page() {
                       color="primary"
                       sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                     >
-                      <Image
-                        src={'/icons/asanas/label_name_leaf.png'}
-                        alt=""
-                        height={20}
-                        width={16}
-                      />
                       Add Series to Sequence
                     </Typography>
                     <Typography
@@ -544,12 +532,6 @@ export default function Page() {
                       color="primary"
                       sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                     >
-                      <Image
-                        src={'/icons/asanas/label_name_leaf.png'}
-                        alt=""
-                        height={20}
-                        width={16}
-                      />
                       Your Sequence{' '}
                       {seriesNameSet.length > 0 &&
                         `(${seriesNameSet.length} series)`}
@@ -626,12 +608,6 @@ export default function Page() {
                         color="primary"
                         sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                       >
-                        <Image
-                          src={'/icons/asanas/label_name_leaf.png'}
-                          alt=""
-                          height={20}
-                          width={16}
-                        />
                         {currentSeriesName} - Poses Preview
                       </Typography>
                       <List dense>
