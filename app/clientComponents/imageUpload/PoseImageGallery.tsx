@@ -62,6 +62,7 @@ interface PoseImageGalleryProps {
   poseName?: string
   enableManagement?: boolean
   onImagesChange?: () => void
+  refreshTrigger?: any
 }
 
 export default function PoseImageGallery({
@@ -69,6 +70,7 @@ export default function PoseImageGallery({
   poseName,
   enableManagement = true,
   onImagesChange,
+  refreshTrigger,
 }: PoseImageGalleryProps) {
   const { status } = useSession()
   const [images, setImages] = useState<PoseImage[]>([])
@@ -148,7 +150,7 @@ export default function PoseImageGallery({
       setLoading(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, poseId, poseName])
+  }, [status, poseId, poseName, refreshTrigger])
 
   // Ensure carousel index is valid when images change (e.g. after deletion)
   useEffect(() => {
@@ -319,34 +321,38 @@ export default function PoseImageGallery({
           </Card>
         )}
 
-        {/* Action button below image display */}
-        {canManageImages && images.length > 0 && (
+        {/* Show alt text or image counter, ensuring it switches with the image */}
+        {images.length > 1 && (
           <Box
             sx={{
-              mt: 2,
+              mt: 1.5,
               display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            {/* Show alt text for carousel view only, as single image card has its own */}
-            {images.length > 1 && images[currentImageIndex].altText && (
-              <Typography
-                variant="caption"
-                sx={{ mb: 1, fontWeight: 'medium' }}
-              >
-                {images[currentImageIndex].altText}
-              </Typography>
-            )}
-            <Button
-              variant="outlined"
-              color="error"
-              startIcon={<DeleteIcon />}
-              onClick={() => handleDeleteClick(images[currentImageIndex])}
-              size="small"
+            <Typography
+              variant="caption"
+              sx={{
+                fontWeight: 'medium',
+                color: 'text.secondary',
+                textAlign: 'center',
+              }}
             >
-              Delete Image
-            </Button>
+              {(() => {
+                const alt = images[currentImageIndex].altText
+                const isGeneric =
+                  alt &&
+                  (alt.toLowerCase().endsWith(' image') ||
+                    alt.toLowerCase().endsWith(' pose') ||
+                    alt.toLowerCase().endsWith(' yoga pose')) &&
+                  poseName &&
+                  alt.toLowerCase().includes(poseName.toLowerCase())
+
+                return !alt || isGeneric
+                  ? `Image ${currentImageIndex + 1} of ${images.length}`
+                  : alt
+              })()}
+            </Typography>
           </Box>
         )}
       </Box>

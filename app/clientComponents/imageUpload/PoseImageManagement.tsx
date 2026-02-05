@@ -53,6 +53,7 @@ interface PoseImageManagementProps {
   enableManagement?: boolean
   onImagesChange?: () => void
   variant?: 'full' | 'upload-only' | 'gallery-only'
+  refreshTrigger?: any
 }
 
 /**
@@ -68,6 +69,7 @@ export default function PoseImageManagement({
   enableManagement = true,
   onImagesChange,
   variant = 'full',
+  refreshTrigger,
 }: PoseImageManagementProps) {
   const { data: session } = useSession()
   const [tabValue, setTabValue] = useState(0)
@@ -84,7 +86,7 @@ export default function PoseImageManagement({
       }
     }
     fetchStatus()
-  }, [poseId, session?.user?.email, refreshGallery])
+  }, [poseId, session?.user?.email, refreshGallery, refreshTrigger])
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
@@ -177,6 +179,7 @@ export default function PoseImageManagement({
           poseName={poseName}
           enableManagement={enableManagement}
           onImagesChange={handleGalleryChange}
+          refreshTrigger={refreshTrigger}
         />
       </Paper>
     )
@@ -212,6 +215,7 @@ export default function PoseImageManagement({
             poseName={poseName}
             enableManagement={enableManagement}
             onImagesChange={handleGalleryChange}
+            refreshTrigger={refreshTrigger}
           />
         </TabPanel>
       )}

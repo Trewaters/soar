@@ -80,6 +80,13 @@ const usePoseImages = (poseId?: string, poseName?: string) => {
     setRefreshTrigger((prev) => prev + 1)
   }, [])
 
+  const addImage = React.useCallback((image: PoseImageData) => {
+    setImages((prev) => {
+      if (prev.some((img) => img.id === image.id)) return prev
+      return [image, ...prev]
+    })
+  }, [])
+
   useEffect(() => {
     const fetchImages = async () => {
       // Fetch images when we have either a poseId or poseName.
@@ -103,7 +110,7 @@ const usePoseImages = (poseId?: string, poseName?: string) => {
     fetchImages()
   }, [session?.user?.id, poseId, poseName, refreshTrigger])
 
-  return { images, loading, refresh }
+  return { images, loading, refresh, addImage }
 }
 
 export default function PoseActivityDetail({
@@ -129,6 +136,11 @@ export default function PoseActivityDetail({
       }
     }
   }, [])
+
+  const handleImageUploaded = (image: PoseImageData) => {
+    addImage(image)
+    refreshImages()
+  }
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [open, setOpen] = useState(false)
@@ -268,10 +280,11 @@ export default function PoseActivityDetail({
   )
 
   // Fetch uploaded images for this pose
-  const { images: poseImages, refresh: refreshImages } = usePoseImages(
-    pose?.id?.toString(),
-    pose?.sort_english_name
-  )
+  const {
+    images: poseImages,
+    refresh: refreshImages,
+    addImage,
+  } = usePoseImages(pose?.id?.toString(), pose?.sort_english_name)
 
   // Ensure carousel index is valid when images change (e.g. after deletion)
   useEffect(() => {
@@ -546,7 +559,7 @@ export default function PoseActivityDetail({
                 poseId: pose?.id?.toString(),
                 poseName: pose?.sort_english_name,
                 url: img.url,
-                altText: img.altText || `${pose?.sort_english_name} pose`,
+                altText: img.altText || undefined,
                 fileName: img.fileName || undefined,
                 fileSize: img.fileSize || undefined,
                 uploadedAt: new Date(img.uploadedAt),
@@ -664,8 +677,9 @@ export default function PoseActivityDetail({
                         poseId={pose?.id?.toString() || ''}
                         poseName={pose?.sort_english_name}
                         variant="icon-button"
-                        onImageUploaded={refreshImages}
+                        onImageUploaded={handleImageUploaded}
                         iconSize="small"
+                        refreshTrigger={poseImages.length}
                       />
                     </Box>
                   </>
@@ -711,7 +725,7 @@ export default function PoseActivityDetail({
                       poseId: pose?.id?.toString(),
                       poseName: pose?.sort_english_name,
                       url: img.url,
-                      altText: img.altText || `${pose?.sort_english_name} pose`,
+                      altText: img.altText || undefined,
                       fileName: img.fileName || undefined,
                       fileSize: img.fileSize || undefined,
                       uploadedAt: new Date(img.uploadedAt),
@@ -861,8 +875,9 @@ export default function PoseActivityDetail({
                           poseId={pose?.id?.toString() || ''}
                           poseName={pose?.sort_english_name}
                           variant="icon-button"
-                          onImageUploaded={refreshImages}
+                          onImageUploaded={handleImageUploaded}
                           iconSize="small"
+                          refreshTrigger={poseImages.length}
                         />
                       </Box>
                     </>
@@ -1043,6 +1058,7 @@ export default function PoseActivityDetail({
                 showUploadButton={isEditing}
                 enableManagement={isEditing}
                 onImagesChange={refreshImages}
+                refreshTrigger={poseImages.length}
               />
             </Box>
           )}

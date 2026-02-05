@@ -63,6 +63,7 @@ interface PoseImageUploadProps {
   poseName?: string
   showSlotInfo?: boolean
   iconSize?: 'small' | 'medium' | 'large'
+  refreshTrigger?: any
 }
 
 /**
@@ -101,6 +102,7 @@ export default function PoseImageUpload({
   poseName,
   showSlotInfo = true,
   iconSize = 'small',
+  refreshTrigger,
 }: PoseImageUploadProps) {
   const { data: session } = useSession()
   const [open, setOpen] = useState(false)
@@ -140,12 +142,19 @@ export default function PoseImageUpload({
     }
   }, [poseId, session?.user?.email])
 
-  // Load image status when component mounts or poseId changes
+  // Load image status when component mounts, poseId changes, or dialog opens
   useEffect(() => {
     if (poseId && session?.user?.email && showSlotInfo) {
       loadImageStatus()
     }
-  }, [poseId, session?.user?.email, showSlotInfo, loadImageStatus])
+  }, [
+    poseId,
+    session?.user?.email,
+    showSlotInfo,
+    loadImageStatus,
+    open,
+    refreshTrigger,
+  ])
 
   // Load any staged images from localStorage when creating a new asana
   useEffect(() => {

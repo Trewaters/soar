@@ -39,26 +39,6 @@ jest.mock('../../../../app/clientComponents/imageUpload/ImageReorder', () => {
   }
 })
 
-jest.mock(
-  '../../../../app/clientComponents/imageUpload/ImageManagementControls',
-  () => {
-    return function MockImageManagementControls({ image, onDelete }: any) {
-      return (
-        <div data-testid="image-management">
-          <div>Management Interface</div>
-          <div>Image ID: {image?.id}</div>
-          <button
-            onClick={() => onDelete(image?.id)}
-            data-testid="delete-image"
-          >
-            Delete Image
-          </button>
-        </div>
-      )
-    }
-  }
-)
-
 // Test wrapper with theme
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <ThemeProvider theme={theme}>
@@ -229,11 +209,11 @@ describe('PoseImageGallery Integration Tests', () => {
     // Click manage tab
     fireEvent.click(screen.getByText('Manage Images'))
 
-    // Should show management interface
+    // Should show management interface (grid of images with delete buttons)
     await waitFor(() => {
       expect(screen.getByTestId('image-management')).toBeInTheDocument()
-      expect(screen.getByText('Management Interface')).toBeInTheDocument()
-      expect(screen.getByText('Image ID: img1')).toBeInTheDocument()
+      expect(screen.getByText('Yoga pose 1')).toBeInTheDocument()
+      expect(screen.getByTestId('delete-image')).toBeInTheDocument()
     })
 
     // Mock delete API call

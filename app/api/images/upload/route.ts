@@ -217,7 +217,7 @@ export async function POST(request: NextRequest) {
       userId: user.id, // Use the ObjectId, not the email
       created_by: user.id, // Set ownership
       fileName: filename,
-      altText: altText || `${poseName || imageType} image`,
+      altText: altText || null, // Don't default to pose name, let frontend handle fallbacks
       fileSize: file.size,
       imageType: imageType,
       url: uploadResult.url,
