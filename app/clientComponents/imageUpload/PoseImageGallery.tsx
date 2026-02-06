@@ -455,6 +455,7 @@ export default function PoseImageGallery({
                 value={currentView}
                 onChange={(_, newValue) => setCurrentView(newValue)}
                 aria-label="image view tabs"
+                variant="fullWidth"
               >
                 <Tab
                   label="View Images"
