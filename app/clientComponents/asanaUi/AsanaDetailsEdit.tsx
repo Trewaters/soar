@@ -11,87 +11,14 @@ import {
   FormControl,
   FormHelperText,
 } from '@mui/material'
-import React, { ComponentProps, ReactNode } from 'react'
+import React, { ComponentProps } from 'react'
 import Image from 'next/image'
 import SearchIcon from '@mui/icons-material/Search'
-
-// Enum for different field types to ensure type safety
-export type AsanaEditFieldType =
-  | 'text'
-  | 'multiline'
-  | 'autocomplete'
-  | 'buttonGroup'
-  | 'variations'
-  | 'custom'
-
-// Base props shared across all field types
-interface BaseFieldProps {
-  label: string
-  helperText?: string
-  required?: boolean
-  disabled?: boolean
-  fieldKey?: string
-}
-
-// Text field specific props
-interface TextFieldProps extends BaseFieldProps {
-  type: 'text'
-  placeholder?: string
-  value: string
-  onChange: (_value: string) => void
-}
-
-// Multiline text field props
-interface MultilineFieldProps extends BaseFieldProps {
-  type: 'multiline'
-  placeholder?: string
-  rows?: number
-  value: string
-  onChange: (_value: string) => void
-}
-
-// Autocomplete field props
-interface AutocompleteFieldProps extends BaseFieldProps {
-  type: 'autocomplete'
-  options: string[]
-  placeholder?: string
-  freeSolo?: boolean
-  value: string
-  onChange: (_value: string) => void
-}
-
-// Button group field props
-interface ButtonGroupFieldProps extends BaseFieldProps {
-  type: 'buttonGroup'
-  options: string[]
-  value: string
-  onChange: (_value: string) => void
-}
-
-// Variations field props (comma-separated input)
-interface VariationsFieldProps extends BaseFieldProps {
-  type: 'variations'
-  placeholder?: string
-  value: string[]
-  onChange: (_value: string[]) => void
-}
-
-// Custom field props (allows any custom component)
-interface CustomFieldProps extends BaseFieldProps {
-  type: 'custom'
-  children: ReactNode
-  value: any
-  onChange: (_value: any) => void
-}
-
-// Union type for all field props
-export type AsanaEditFieldProps =
-  | TextFieldProps
-  | MultilineFieldProps
-  | AutocompleteFieldProps
-  | ButtonGroupFieldProps
-  | VariationsFieldProps
-  | CustomFieldProps
+import {
+  AsanaEditFieldProps,
+  VariationsAsanaFieldProps,
+  fieldSxStyles,
+} from './asanaFieldConstants'
 
 // Main component props
 interface AsanaDetailsEditProps {
@@ -102,18 +29,6 @@ interface AsanaDetailsEditProps {
 // Extend Stack props for styling flexibility
 type AsanaDetailsEditComponentProps = ComponentProps<typeof Stack> &
   AsanaDetailsEditProps
-
-// Common field styling object
-const fieldSxStyles = {
-  '& .MuiOutlinedInput-notchedOutline': {
-    borderRadius: '12px',
-    borderColor: 'primary.main',
-    boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-  },
-  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-    borderColor: 'primary.light',
-  },
-}
 
 /**
  * A standardized edit component for Asana form fields with consistent styling and headers.
@@ -161,7 +76,7 @@ export default React.memo(function AsanaDetailsEdit(
     field,
     fieldId,
   }: {
-    field: VariationsFieldProps
+    field: VariationsAsanaFieldProps
     fieldId: string
   }) {
     const [display, setDisplay] = React.useState<string>(
@@ -423,7 +338,7 @@ export default React.memo(function AsanaDetailsEdit(
       case 'variations': {
         return (
           <VariationInput
-            field={field as VariationsFieldProps}
+            field={field as VariationsAsanaFieldProps}
             fieldId={fieldId}
           />
         )

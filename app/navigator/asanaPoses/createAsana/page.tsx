@@ -9,6 +9,7 @@ import {
   Alert,
   Backdrop,
   CircularProgress,
+  IconButton,
 } from '@mui/material'
 import { createPose } from '@lib/poseService'
 import { useSession } from 'next-auth/react'
@@ -20,10 +21,11 @@ import HelpButton from '@app/clientComponents/HelpButton'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import { HELP_PATHS } from '@app/utils/helpLoader'
 import AsanaDetailsEdit from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
-import type { AsanaEditFieldProps } from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
+import { createAsanaFields } from '@app/clientComponents/asanaUi/asanaFieldConstants'
 import ImageUploadWithFallback from '@app/clientComponents/imageUpload/ImageUploadWithFallback'
 import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUploadWithFallback'
 import { deletePoseImage } from '@lib/imageService'
+import DeleteIcon from '@mui/icons-material/Delete'
 import {
   FreemiumNotification,
   useFreemiumNotification,
@@ -125,107 +127,19 @@ export default function Page() {
     })
   }, [])
 
-  const formFields: AsanaEditFieldProps[] = React.useMemo(
-    () => [
-      {
-        type: 'text',
-        fieldKey: 'sort_english_name',
-        label: 'Asana Pose Name',
-        value: formFullAsanaPoseData.sort_english_name,
-        required: true,
-        placeholder: 'Enter the name of the asana',
-        onChange: (value: any) => setField('sort_english_name', value),
-      },
-      {
-        type: 'autocomplete',
-        fieldKey: 'category',
-        label: 'Category',
-        value: formFullAsanaPoseData.category,
-        options: categories,
-        placeholder: 'Select a Category',
-        freeSolo: true,
-        onChange: (value: any) => setField('category', value),
-      },
-      {
-        type: 'variations',
-        fieldKey: 'english_names',
-        label: 'Name Variations',
-        value: formFullAsanaPoseData.english_names,
-        placeholder: 'e.g. "Downward Dog, Adho Mukha Svanasana"',
-        helperText: 'Separate name variants with commas',
-        onChange: (value: any) => setField('english_names', value),
-      },
-      {
-        type: 'multiline',
-        fieldKey: 'description',
-        label: 'Description',
-        value: formFullAsanaPoseData.description,
-        placeholder: 'Enter a detailed description...',
-        rows: 4,
-        onChange: (value: any) => setField('description', value),
-      },
-      {
-        type: 'buttonGroup',
-        fieldKey: 'difficulty',
-        label: 'Difficulty Level',
-        value: formFullAsanaPoseData.difficulty,
-        options: ['Easy', 'Average', 'Difficult'],
-        helperText: 'Select the difficulty level for this asana',
-        onChange: (value: any) => setField('difficulty', value),
-      },
-      {
-        type: 'text',
-        fieldKey: 'sanskrit_names',
-        label: 'Sanskrit Name(s)',
-        value: formFullAsanaPoseData.sanskrit_names[0] || '',
-        placeholder: 'e.g. Tadasana, Vrikshasana',
-        onChange: (value: any) => setField('sanskrit_names', [value]),
-      },
-      {
-        type: 'text',
-        fieldKey: 'dristi',
-        label: 'Dristi (Gaze Point)',
-        value: formFullAsanaPoseData.dristi || '',
-        placeholder:
-          'e.g. "Tip of the nose", "Between the eyebrows", "Hand", "Toes", "Upward to the sky"',
-        helperText:
-          'Type your own or use suggestions like: Tip of the nose, Between the eyebrows, Hand, Toes, Upward to the sky',
-        onChange: (value: any) => setField('dristi', value),
-      },
-      {
-        type: 'multiline',
-        fieldKey: 'setup_cues',
-        label: 'Setup Cues',
-        value: formFullAsanaPoseData.setup_cues || '',
-        placeholder: 'Enter a detailed description...',
-        rows: 4,
-        onChange: (value: any) => setField('setup_cues', value),
-      },
-      {
-        type: 'multiline',
-        fieldKey: 'deepening_cues',
-        label: 'Deepening Cues',
-        value: formFullAsanaPoseData.deepening_cues || '',
-        placeholder: 'Enter a detailed description...',
-        rows: 4,
-        onChange: (value: any) => setField('deepening_cues', value),
-      },
-      {
-        type: 'variations',
-        fieldKey: 'alternative_english_names',
-        label: 'Alternative Names (Custom/Nicknames)',
-        value: formFullAsanaPoseData.alternative_english_names,
-        placeholder: 'e.g. "My favorite twist, Pretzel pose"',
-        helperText: 'Add your own custom names or nicknames for this pose',
-        onChange: (value: any) => setField('alternative_english_names', value),
-      },
-    ],
-    // Recompute when the form data or setField change
+  const formFields = React.useMemo(
+    () => createAsanaFields(formFullAsanaPoseData, setField, categories),
     [formFullAsanaPoseData, setField]
   )
 
   const handleImageUploaded = (image: PoseImageData) => {
-    setUploadedImages((prev) => [...prev, image])
+    setUploadedImages((prev) => {
+      if (prev.length >= 3) {
+        console.warn('Image skip: already have 3 images')
+        return prev
+      }
+      return [...prev, image]
+    })
   }
 
   // Generate alternative name suggestions for duplicates
@@ -389,6 +303,30 @@ export default function Page() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Clear uploaded images and reset form when component mounts (fresh start)
+  useEffect(() => {
+    // Clear cloud-staged images
+    setUploadedImages([])
+
+    setFormFullAsanaPoseData({
+      sort_english_name: '',
+      english_names: [],
+      alternative_english_names: [],
+      description: '',
+      category: '',
+      difficulty: '',
+      created_by: session?.user?.email ?? 'error-undefined-user',
+      dristi: '',
+      sanskrit_names: [],
+      poseImages: [],
+      activity_completed: false,
+      asanaActivities: [],
+      activity_practice: false,
+      setup_cues: '',
+      deepening_cues: '',
+    })
+  }, [])
+
   // Close notification handler
   const handleCloseNotification = () => {
     setNotificationState({ isOpen: false })
@@ -470,7 +408,7 @@ export default function Page() {
                 gap: 2,
               }}
             >
-              Image Upload
+              Image Upload ({uploadedImages.length}/3)
             </Typography>
             <ImageUploadWithFallback
               maxFileSize={5}
@@ -478,12 +416,15 @@ export default function Page() {
               variant="dropzone"
               onImageUploaded={handleImageUploaded}
               poseName={formFullAsanaPoseData.sort_english_name}
+              shouldClearStaged={true}
+              maxImages={3}
+              currentCount={uploadedImages.length}
             />
           </Box>
 
           {/* Uploaded Images Gallery */}
           {uploadedImages.length > 0 && (
-            <Box sx={{ pl: 4 }}>
+            <Box sx={{ pl: 4, width: '100%', pb: 20 }}>
               <Typography
                 variant="subtitle1"
                 sx={{
@@ -495,7 +436,7 @@ export default function Page() {
                   gap: 2,
                 }}
               >
-                Uploaded Images ({uploadedImages.length})
+                Uploaded Images ({uploadedImages.length}/3)
               </Typography>
               <Box
                 sx={{
@@ -503,6 +444,9 @@ export default function Page() {
                   gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
                   gap: 2,
                   mt: 2,
+                  maxHeight: '400px',
+                  overflowY: 'auto',
+                  pr: 2,
                 }}
               >
                 {uploadedImages.map((image, index) => (
@@ -529,6 +473,32 @@ export default function Page() {
                         objectFit: 'cover',
                       }}
                     />
+                    <IconButton
+                      onClick={() => {
+                        setUploadedImages((prev) =>
+                          prev.filter((_, i) => i !== index)
+                        )
+                      }}
+                      sx={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        color: 'error.main',
+                        '&:hover': {
+                          backgroundColor: 'error.main',
+                          color: 'white',
+                          transform: 'scale(1.1)',
+                        },
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                        padding: '6px',
+                        zIndex: 10,
+                      }}
+                      aria-label="Delete image"
+                      size="small"
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
                     <Box
                       sx={{
                         position: 'absolute',
@@ -604,7 +574,22 @@ export default function Page() {
               </Button>
 
               <Button
-                onClick={() => {
+                onClick={async () => {
+                  // Delete staged images from cloud storage before clearing state
+                  if (uploadedImages.length > 0) {
+                    const deletePromises = uploadedImages.map(async (image) => {
+                      try {
+                        await deletePoseImage(image.id)
+                      } catch (error) {
+                        console.error(
+                          `Failed to delete image ${image.id}:`,
+                          error
+                        )
+                      }
+                    })
+                    await Promise.allSettled(deletePromises)
+                  }
+
                   // Clear form inputs and uploaded images
                   setFormFullAsanaPoseData({
                     sort_english_name: '',

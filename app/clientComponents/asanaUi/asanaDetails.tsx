@@ -1,10 +1,26 @@
 import { Box, Stack, Typography } from '@mui/material'
 import React, { ComponentProps } from 'react'
 import Image from 'next/image'
+import {
+  AsanaEditFieldProps,
+  getFieldDisplayValue,
+} from './asanaFieldConstants'
 
+/**
+ * Props for displaying Asana details in view mode
+ * Supports both direct details or field configurations
+ */
 interface AsanaDetailsProps {
-  details: string | string[] | null | undefined
+  /** Direct details to display (legacy mode) */
+  details?: string | string[] | null | undefined
+
+  /** Field configuration (new unified mode) */
+  field?: AsanaEditFieldProps
+
+  /** Display label for the detail */
   label: string
+
+  /** Whether to show category-specific icons */
   showCategoryIcon?: boolean
 }
 
@@ -20,12 +36,20 @@ type AsanaDetailsComponentProps = ComponentProps<typeof Stack> &
  * Displays detailed information about an Asana item in a styled definition list format.
  *
  * @remarks
+ * This component supports two modes:
+ * 1. Legacy mode: Direct details prop (string | string[] | null | undefined)
+ * 2. Unified mode: Field configuration from AsanaFieldConfig (AsanaEditFieldProps)
+ *
+ * Using the field configuration ensures consistency with AsanaDetailsEdit component
+ * and provides better type safety and maintainability.
+ *
  * This component uses Material UI's Box, Stack, and Typography components to layout the label and details.
  * It also includes an icon and supports responsive design.
  *
  * @param props - The properties for the AsanaDetails component.
  * @param props.label - The label or title for the Asana detail.
- * @param props.details - The detailed description or content for the Asana detail.
+ * @param props.details - The detailed description or content for the Asana detail (legacy).
+ * @param props.field - The field configuration for unified mode.
  * @param props.showCategoryIcon - Optional boolean to show category-specific icons.
  * @param props.sx - Optional additional styling to apply to the details section.
  *
@@ -33,7 +57,18 @@ type AsanaDetailsComponentProps = ComponentProps<typeof Stack> &
  *
  * @example
  * ```tsx
+ * // Legacy mode
  * <AsanaDetails label="Pose Name" details="Description of the pose." />
+ *
+ * // Unified mode
+ * <AsanaDetails
+ *   field={{
+ *     type: 'text',
+ *     label: 'Pose Name',
+ *     value: 'Downward Dog',
+ *     fieldKey: 'sort_english_name'
+ *   }}
+ * />
  * ```
  */
 export default React.memo(function AsanaDetails(
@@ -41,7 +76,17 @@ export default React.memo(function AsanaDetails(
 ) {
   // If there is no meaningful details to show, render nothing.
   // Treat: undefined, null, empty string, empty array as "no data".
-  const { details, showCategoryIcon } = props
+  const { showCategoryIcon, field } = props
+
+  // Support both legacy details prop and new field configuration
+  let details = props.details
+  let label = props.label
+
+  // If field is provided, extract details and label from it
+  if (field) {
+    details = getFieldDisplayValue(field)
+    label = field.label
+  }
 
   // If details is an array, determine whether it contains any non-empty string entries
   const arrayHasNonEmptyEntries = Array.isArray(details)
@@ -71,8 +116,8 @@ export default React.memo(function AsanaDetails(
     : null
 
   const ariaLabel = cleanedArray
-    ? `${props.label}: ${cleanedArray.join(' ')}`
-    : `${props.label}: ${safeDetails}`
+    ? `${label}: ${cleanedArray.join(' ')}`
+    : `${label}: ${safeDetails}`
 
   const content = cleanedArray ? cleanedArray.join('\n') : safeDetails
 
@@ -116,7 +161,7 @@ export default React.memo(function AsanaDetails(
       }}
       alignSelf={'center'}
       role="group"
-      aria-label={`Asana detail: ${props.label}`}
+      aria-label={`Asana detail: ${label}`}
     >
       <Stack direction={'row'} display={'flex'} alignItems={'center'}>
         <Typography
@@ -128,7 +173,7 @@ export default React.memo(function AsanaDetails(
             color: 'primary.main',
           }}
         >
-          {props.label}:
+          {label}:
         </Typography>
       </Stack>
       <Stack

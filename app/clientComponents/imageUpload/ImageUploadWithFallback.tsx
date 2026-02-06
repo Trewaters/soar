@@ -27,6 +27,7 @@ import {
   WifiOff as WifiOffIcon,
   Storage as StorageIcon,
 } from '@mui/icons-material'
+import DeleteIcon from '@mui/icons-material/Delete'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import {
@@ -57,6 +58,9 @@ interface ImageUploadWithFallbackProps {
   variant?: 'button' | 'dropzone'
   poseId?: string
   poseName?: string
+  shouldClearStaged?: boolean
+  maxImages?: number
+  currentCount?: number
 }
 
 interface FallbackDialogState {
@@ -111,6 +115,9 @@ export default function ImageUploadWithFallback({
   variant = 'button',
   poseId,
   poseName,
+  shouldClearStaged = false,
+  maxImages = 3,
+  currentCount = 0,
 }: ImageUploadWithFallbackProps) {
   const { data: session } = useSession()
   const [open, setOpen] = useState(false)
@@ -153,6 +160,16 @@ export default function ImageUploadWithFallback({
   // Load staged images when creating a new asana (no poseId)
   React.useEffect(() => {
     if (poseId) return
+
+    // Explicitly clear if requested
+    if (shouldClearStaged) {
+      setStagedImages([])
+      try {
+        localStorage.removeItem(STAGED_KEY)
+      } catch (e) {}
+      return
+    }
+
     try {
       const raw = localStorage.getItem(STAGED_KEY)
       if (raw) {
@@ -162,11 +179,17 @@ export default function ImageUploadWithFallback({
     } catch (e) {
       // ignore
     }
-  }, [poseId])
+  }, [poseId, shouldClearStaged])
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
     if (!files.length) return
+
+    // Global limit check
+    if (activeCount >= maxImages) {
+      setError(`Maximum of ${maxImages} images already reached`)
+      return
+    }
 
     // If no poseId, allow selecting multiple files and stage them
     if (!poseId) {
@@ -209,14 +232,30 @@ export default function ImageUploadWithFallback({
   }
 
   const processSelectedFilesForStaging = async (files: File[]) => {
-    // filter/validate
+    // Check total count including existing staged images and already uploaded images
+    const totalExisting = stagedImages.length + currentCount
+    if (totalExisting >= maxImages) {
+      setError(`Maximum of ${maxImages} images allowed for this asana`)
+      return
+    }
+
+    // filter/validate and limit new files
     const valid: File[] = []
+    const remainingSlots = maxImages - totalExisting
+
     for (const file of files) {
+      if (valid.length >= remainingSlots) break
       if (!acceptedTypes.includes(file.type)) continue
       if (file.size > maxFileSize * 1024 * 1024) continue
       valid.push(file)
     }
-    if (!valid.length) return
+
+    if (!valid.length) {
+      if (files.length > maxImages - totalExisting) {
+        setError(`Maximum of ${maxImages} images allowed for this asana`)
+      }
+      return
+    }
 
     try {
       const fileToDataUrl = (file: File) =>
@@ -547,43 +586,64 @@ export default function ImageUploadWithFallback({
     </Button>
   )
 
+  const activeCount = stagedImages.length + currentCount
+
   const DropzoneArea = () => (
     <Box
       onDragOver={handleDragOver}
       onDrop={handleDrop}
-      onClick={() => setOpen(true)}
+      onClick={() => activeCount < maxImages && setOpen(true)}
       sx={{
         border: '2px dashed',
-        borderColor: 'primary.main',
+        borderColor: activeCount >= maxImages ? 'grey.300' : 'primary.main',
         borderRadius: '12px',
         p: 4,
         textAlign: 'center',
-        cursor: 'pointer',
+        cursor: activeCount >= maxImages ? 'default' : 'pointer',
         transition: 'all 0.2s ease',
-        '&:hover': {
-          borderColor: 'primary.dark',
-          backgroundColor: 'primary.light',
-          opacity: 0.8,
-        },
+        backgroundColor: activeCount >= maxImages ? 'grey.50' : 'transparent',
+        '&:hover':
+          activeCount >= maxImages
+            ? {}
+            : {
+                borderColor: 'primary.dark',
+                backgroundColor: 'primary.light',
+                opacity: 0.8,
+              },
       }}
     >
-      <CloudUploadIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
-      <Typography variant="h6" color="primary.main" gutterBottom>
-        Upload Yoga Pose Image
+      <CloudUploadIcon
+        sx={{
+          fontSize: 48,
+          color: activeCount >= maxImages ? 'grey.400' : 'primary.main',
+          mb: 2,
+        }}
+      />
+      <Typography
+        variant="h6"
+        color={activeCount >= maxImages ? 'text.secondary' : 'primary.main'}
+        gutterBottom
+      >
+        {activeCount >= maxImages
+          ? 'Maximum Images Reached'
+          : 'Upload Yoga Pose Image'}
       </Typography>
       <Typography variant="body2" color="text.secondary">
-        Drag and drop an image here, or click to select
+        {activeCount >= maxImages
+          ? `You have already added the maximum of ${maxImages} images.`
+          : 'Drag and drop an image here, or click to select'}
       </Typography>
       {/* helper: allow multiple selection when creating a new asana */}
-      {!poseId && (
+      {!poseId && activeCount < maxImages && (
         <Typography
           variant="caption"
           color="text.secondary"
           display="block"
           mt={1}
         >
-          You can select multiple images at once while creating a new asana.
-          They will be staged locally until you save the asana.
+          You can select multiple images (up to {maxImages} total) while
+          creating a new asana. They will be staged locally until you save the
+          asana.
         </Typography>
       )}
       <Typography
@@ -676,49 +736,63 @@ export default function ImageUploadWithFallback({
                     >
                       {stagedImages.map((s, i) => (
                         <Card key={`staged-${i}`} sx={{ minWidth: 160 }}>
-                          <CardMedia
-                            component="img"
-                            height="120"
-                            image={s.dataUrl}
-                            alt={s.name}
-                            sx={{ objectFit: 'cover' }}
-                          />
-                          <CardContent>
-                            <Stack
-                              direction="row"
-                              justifyContent="space-between"
-                              alignItems="center"
-                            >
-                              <Box>
-                                <Typography variant="body2" noWrap>
-                                  {s.name}
-                                </Typography>
-                                <Typography
-                                  variant="caption"
-                                  color="text.secondary"
-                                >
-                                  {formatFileSize(s.size)}
-                                </Typography>
-                              </Box>
-                              <IconButton
-                                onClick={() => {
-                                  const next = stagedImages.filter(
-                                    (_, idx) => idx !== i
+                          <Box sx={{ position: 'relative' }}>
+                            <CardMedia
+                              component="img"
+                              height="120"
+                              image={s.dataUrl}
+                              alt={s.name}
+                              sx={{ objectFit: 'cover' }}
+                            />
+                            <IconButton
+                              onClick={() => {
+                                const next = stagedImages.filter(
+                                  (_, idx) => idx !== i
+                                )
+                                setStagedImages(next)
+                                try {
+                                  localStorage.setItem(
+                                    STAGED_KEY,
+                                    JSON.stringify(next)
                                   )
-                                  setStagedImages(next)
-                                  try {
-                                    localStorage.setItem(
-                                      STAGED_KEY,
-                                      JSON.stringify(next)
-                                    )
-                                  } catch (e) {}
-                                }}
-                                color="error"
-                                size="small"
+                                } catch (e) {}
+                              }}
+                              sx={{
+                                position: 'absolute',
+                                top: 5,
+                                right: 5,
+                                bgcolor: 'rgba(255, 255, 255, 0.8)',
+                                color: 'error.main',
+                                '&:hover': {
+                                  bgcolor: 'error.main',
+                                  color: 'white',
+                                },
+                                zIndex: 1,
+                                padding: '4px',
+                              }}
+                              size="small"
+                              title="Remove image"
+                            >
+                              <DeleteIcon fontSize="small" />
+                            </IconButton>
+                          </Box>
+                          <CardContent sx={{ p: 1, '&:last-child': { pb: 1 } }}>
+                            <Box>
+                              <Typography
+                                variant="body2"
+                                noWrap
+                                sx={{ fontSize: '0.75rem' }}
                               >
-                                <StorageIcon />
-                              </IconButton>
-                            </Stack>
+                                {s.name}
+                              </Typography>
+                              <Typography
+                                variant="caption"
+                                color="text.secondary"
+                                sx={{ fontSize: '0.65rem' }}
+                              >
+                                {formatFileSize(s.size)}
+                              </Typography>
+                            </Box>
                           </CardContent>
                         </Card>
                       ))}

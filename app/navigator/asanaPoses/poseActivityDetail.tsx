@@ -22,9 +22,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { FEATURES } from '@app/FEATURES'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
-import AsanaDetailsEdit, {
-  AsanaEditFieldProps,
-} from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
+import AsanaDetailsEdit from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
+import { createAsanaFields } from '@app/clientComponents/asanaUi/asanaFieldConstants'
 import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import ActivityTracker from '@app/clientComponents/ActivityTracker'
 import { useSession } from 'next-auth/react'
@@ -180,101 +179,8 @@ export default function PoseActivityDetail({
     })
   }, [])
 
-  const formFields: AsanaEditFieldProps[] = React.useMemo(
-    () => [
-      {
-        type: 'text',
-        fieldKey: 'sort_english_name',
-        label: 'Asana Pose Name',
-        value: formData.sort_english_name,
-        required: true,
-        placeholder: 'Enter the name of the asana. Must be unique.',
-        onChange: (value: any) => setField('sort_english_name', value),
-      },
-      {
-        type: 'variations',
-        fieldKey: 'sanskrit_names',
-        label: 'Sanskrit Names',
-        value: formData.sanskrit_names || [],
-        placeholder: 'e.g. Virabhadrasana I, ...',
-        helperText: 'Separate multiple names with commas',
-        onChange: (value: any) => setField('sanskrit_names', value),
-      },
-      {
-        type: 'variations',
-        fieldKey: 'english_names',
-        label: 'English Name Variations',
-        value: formData.english_names,
-        placeholder: 'e.g. Downward Dog, Adho Mukha Svanasana',
-        helperText: 'Separate variants with commas',
-        onChange: (value: any) => setField('english_names', value),
-      },
-      {
-        type: 'variations',
-        fieldKey: 'alternative_english_names',
-        label: 'Alternative Names (Custom/Nicknames)',
-        value: formData.alternative_english_names || [],
-        placeholder: 'e.g. My favorite twist, Pretzel pose',
-        helperText: 'Multiple nicknames separated by commas',
-        onChange: (value: any) => setField('alternative_english_names', value),
-      },
-      {
-        type: 'multiline',
-        fieldKey: 'description',
-        label: 'Description',
-        value: formData.description || '',
-        placeholder:
-          'Describe the pose alignment, position, and key characteristics...',
-        rows: 4,
-        onChange: (value: any) => setField('description', value),
-      },
-      {
-        type: 'autocomplete',
-        fieldKey: 'category',
-        label: 'Category',
-        value: formData.category || '',
-        options: [...ASANA_CATEGORIES],
-        placeholder: 'Select or type category',
-        freeSolo: true,
-        onChange: (value: any) => setField('category', value),
-      },
-      {
-        type: 'buttonGroup',
-        fieldKey: 'difficulty',
-        label: 'Difficulty Level',
-        value: formData.difficulty || '',
-        options: ['Easy', 'Average', 'Difficult'],
-        helperText: 'Select the difficulty level for this asana',
-        onChange: (value: any) => setField('difficulty', value),
-      },
-      {
-        type: 'text',
-        fieldKey: 'dristi',
-        label: 'Dristi',
-        value: formData.dristi || '',
-        placeholder: 'Gaze point',
-        helperText: 'e.g. “Tip of the nose” or “Hand”, “Toes”',
-        onChange: (value: any) => setField('dristi', value),
-      },
-      {
-        type: 'multiline',
-        fieldKey: 'setup_cues',
-        label: 'Setup Cues',
-        value: formData.setup_cues || '',
-        rows: 2,
-        placeholder: 'Enter a detailed description…',
-        onChange: (value: any) => setField('setup_cues', value),
-      },
-      {
-        type: 'multiline',
-        fieldKey: 'deepening_cues',
-        label: 'Deepening Cues',
-        value: formData.deepening_cues || '',
-        rows: 2,
-        placeholder: 'Enter a detailed description…',
-        onChange: (value: any) => setField('deepening_cues', value),
-      },
-    ],
+  const formFields = React.useMemo(
+    () => createAsanaFields(formData, setField, [...ASANA_CATEGORIES]),
     [formData, setField]
   )
 

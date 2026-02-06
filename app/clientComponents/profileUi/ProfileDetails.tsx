@@ -25,7 +25,7 @@ type ProfileDetailsComponentProps = ComponentProps<typeof Stack> &
  *
  * @remarks
  * This component uses Material UI's Box, Stack, and Typography components to layout the label and details.
- * It includes an icon and supports responsive design, following the same pattern as AsanaDetails.
+ * It includes an icon and supports responsive design.
  *
  * @param props - The properties for the ProfileDetails component.
  * @param props.label - The label or title for the profile detail.
