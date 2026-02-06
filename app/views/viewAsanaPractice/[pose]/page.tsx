@@ -26,7 +26,11 @@ import HomeIcon from '@mui/icons-material/Home'
 import AsanaTimer from '@app/clientComponents/asanaTimer'
 import { useTimer } from '@context/timerContext'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
-import { getPoseByName } from '@lib/poseService'
+import { useSession } from 'next-auth/react'
+import { getAccessiblePoses, getPoseByName } from '@lib/poseService'
+import { orderPosesForSearch } from '@app/utils/search/orderPosesForSearch'
+import getAsanaTitle from '@app/utils/search/getAsanaTitle'
+import getAlphaUserIds from '@app/lib/alphaUsers'
 import Image from 'next/image'
 import { AsanaPose } from 'types/asana'
 import NAV_PATHS from '@app/utils/navigation/constants'
@@ -38,6 +42,7 @@ export default function ViewAsanaPractice({
 }) {
   const { pose } = use(params)
   const [viewPose, setViewPose] = useState<AsanaPose>()
+  const [allPoses, setAllPoses] = useState<AsanaPose[]>([])
   const [elapsedTime, setElapsedTime] = useState(0)
   const [totalTime] = useState(300) // Default 5 minutes
   const [isFullscreen, setIsFullscreen] = useState(false)
@@ -48,15 +53,32 @@ export default function ViewAsanaPractice({
 
   const { state, dispatch } = useTimer()
   const router = useNavigationWithLoading()
+  const { data: session } = useSession()
 
-  // Show/hide controls based on user interaction only - no artificial timeouts
+  // Show/hide controls based on user interaction
   const toggleControls = useCallback(() => {
-    setShowControls(!showControls)
-  }, [showControls])
+    if (showInfo) {
+      setShowInfo(false)
+      // When closing info, usually users want to see the controls again
+      setShowControls(true)
+    } else {
+      setShowControls(!showControls)
+    }
+  }, [showControls, showInfo])
 
-  const handleTimeUpdate = (time: number) => {
-    setElapsedTime(time)
+  const handleInfoToggle = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    const nextShowInfo = !showInfo
+    setShowInfo(nextShowInfo)
+    // Automatically hide controls when info is displayed as requested
+    if (nextShowInfo) {
+      setShowControls(false)
+    }
   }
+
+  const handleTimeUpdate = useCallback((time: number) => {
+    setElapsedTime(time)
+  }, [])
 
   // Sync local elapsedTime with timer context state
   useEffect(() => {
@@ -143,6 +165,69 @@ export default function ViewAsanaPractice({
     getViewPose()
   }, [pose])
 
+  useEffect(() => {
+    const fetchAllPoses = async () => {
+      try {
+        const poses = await getAccessiblePoses()
+        const alphaUserIds = getAlphaUserIds()
+
+        // Map to enriched poses (adding createdBy for the ordering utility)
+        const enrichedPoses = poses.map((p) => ({
+          ...p,
+          createdBy: (p as any).created_by ?? undefined,
+        }))
+
+        const ordered = orderPosesForSearch(
+          enrichedPoses,
+          session?.user?.id,
+          alphaUserIds,
+          (p) =>
+            getAsanaTitle({
+              displayName: (p as any).displayName,
+              englishName: p.sort_english_name,
+              title: p.label,
+            })
+        )
+        setAllPoses(ordered)
+      } catch (error) {
+        console.error('Error fetching all poses:', error)
+      }
+    }
+    fetchAllPoses()
+  }, [session])
+
+  const handleNextPose = () => {
+    if (allPoses.length === 0 || !viewPose) return
+    const currentIndex = allPoses.findIndex((p) => p.id === viewPose.id)
+    if (currentIndex === -1) return
+
+    const nextIndex = (currentIndex + 1) % allPoses.length
+    const nextPose = allPoses[nextIndex]
+    router.push(
+      `${NAV_PATHS.VIEW_ASANA_PRACTICE}/${encodeURIComponent(
+        nextPose.sort_english_name
+      )}`,
+      undefined,
+      { scroll: false }
+    )
+  }
+
+  const handlePrevPose = () => {
+    if (allPoses.length === 0 || !viewPose) return
+    const currentIndex = allPoses.findIndex((p) => p.id === viewPose.id)
+    if (currentIndex === -1) return
+
+    const prevIndex = (currentIndex - 1 + allPoses.length) % allPoses.length
+    const prevPose = allPoses[prevIndex]
+    router.push(
+      `${NAV_PATHS.VIEW_ASANA_PRACTICE}/${encodeURIComponent(
+        prevPose.sort_english_name
+      )}`,
+      undefined,
+      { scroll: false }
+    )
+  }
+
   // Controls are visible by default and can be toggled by user
   // No artificial timeouts - user controls when to show/hide
 
@@ -153,14 +238,14 @@ export default function ViewAsanaPractice({
     backgroundPosition: 'center',
     width: '100vw',
     height: '100vh',
-    position: 'fixed' as const,
+    position: 'absolute' as const,
     top: 0,
     left: 0,
     display: 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'space-between',
     backgroundColor: 'primary.dark',
-    cursor: showControls ? 'default' : 'none',
+    cursor: showControls || showInfo ? 'default' : 'none',
   }
 
   return (
@@ -179,7 +264,12 @@ export default function ViewAsanaPractice({
           <Grid size={2}>
             <Tooltip title="Back to Asanas">
               <IconButton
-                onClick={() => router.push(NAV_PATHS.ASANA_POSES)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  router.push(NAV_PATHS.ASANA_POSES, undefined, {
+                    scroll: false,
+                  })
+                }}
                 sx={{ color: 'white' }}
               >
                 <HomeIcon />
@@ -200,28 +290,13 @@ export default function ViewAsanaPractice({
                 alt="Soar Yoga main logo"
                 width={120}
                 height={16}
-                style={{ marginBottom: '8px' }}
               />
-              <Typography
-                variant="h4"
-                textAlign="center"
-                color="white"
-                sx={{
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                  fontWeight: 'bold',
-                }}
-              >
-                {viewPose?.sort_english_name}
-              </Typography>
             </Box>
           </Grid>
 
           <Grid size={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Tooltip title={showInfo ? 'Hide Info' : 'Show Info'}>
-              <IconButton
-                onClick={() => setShowInfo(!showInfo)}
-                sx={{ color: 'white' }}
-              >
+              <IconButton onClick={handleInfoToggle} sx={{ color: 'white' }}>
                 <InfoIcon />
               </IconButton>
             </Tooltip>
@@ -240,6 +315,19 @@ export default function ViewAsanaPractice({
           px: 2,
         }}
       >
+        <Typography
+          variant="h3"
+          textAlign="center"
+          color="white"
+          sx={{
+            textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+            fontWeight: 'bold',
+            mb: 4,
+          }}
+        >
+          {viewPose?.sort_english_name}
+        </Typography>
+
         {/* Info Panel */}
         {showInfo && (
           <Box
@@ -251,9 +339,11 @@ export default function ViewAsanaPractice({
               maxWidth: '600px',
               maxHeight: '70vh',
               overflowY: 'auto',
-              opacity: showControls ? 1 : 0,
               transition: 'opacity 0.3s ease',
+              position: 'relative',
+              zIndex: 10,
             }}
+            onClick={(e) => e.stopPropagation()}
           >
             <Typography variant="h6" color="white" gutterBottom>
               Pose Information
@@ -416,11 +506,15 @@ export default function ViewAsanaPractice({
                 justifyContent: 'center',
                 gap: { xs: 1, sm: 2 },
                 mb: { xs: 2, sm: 0 },
+                pointerEvents: showControls ? 'auto' : 'none',
               }}
             >
               <Tooltip title="Stop">
                 <IconButton
-                  onClick={handleStop}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleStop()
+                  }}
                   sx={{
                     color: 'white',
                     minWidth: 44,
@@ -433,7 +527,10 @@ export default function ViewAsanaPractice({
 
               <Tooltip title={state.watch.isPaused ? 'Play' : 'Pause'}>
                 <IconButton
-                  onClick={handlePlayPause}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handlePlayPause()
+                  }}
                   sx={{
                     color: 'white',
                     backgroundColor: 'rgba(255,255,255,0.1)',
@@ -452,7 +549,10 @@ export default function ViewAsanaPractice({
 
               <Tooltip title="Restart">
                 <IconButton
-                  onClick={handleRestart}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleRestart()
+                  }}
                   sx={{
                     color: 'white',
                     minWidth: 44,
@@ -482,10 +582,15 @@ export default function ViewAsanaPractice({
                   display: 'flex',
                   gap: 1,
                   justifyContent: { xs: 'center', sm: 'flex-start' },
+                  pointerEvents: showControls ? 'auto' : 'none',
                 }}
               >
                 <Tooltip title="Previous Pose">
                   <IconButton
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handlePrevPose()
+                    }}
                     sx={{
                       color: 'white',
                       minWidth: 44,
@@ -498,6 +603,10 @@ export default function ViewAsanaPractice({
 
                 <Tooltip title="Next Pose">
                   <IconButton
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleNextPose()
+                    }}
                     sx={{
                       color: 'white',
                       minWidth: 44,
@@ -517,6 +626,7 @@ export default function ViewAsanaPractice({
                   gap: 1,
                   justifyContent: { xs: 'center', sm: 'flex-end' },
                   flexWrap: 'wrap',
+                  pointerEvents: showControls ? 'auto' : 'none',
                 }}
               >
                 {/* Volume Control */}
@@ -530,7 +640,10 @@ export default function ViewAsanaPractice({
                 >
                   <Tooltip title={isMuted ? 'Unmute' : 'Mute'}>
                     <IconButton
-                      onClick={handleVolumeToggle}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleVolumeToggle()
+                      }}
                       sx={{
                         color: 'white',
                         minWidth: 44,
@@ -548,7 +661,10 @@ export default function ViewAsanaPractice({
                   <Slider
                     size="small"
                     value={isMuted ? 0 : volume}
-                    onChange={handleVolumeChange}
+                    onChange={(e, v) => {
+                      handleVolumeChange(e as any, v)
+                    }}
+                    onClick={(e) => e.stopPropagation()}
                     sx={{
                       color: 'white',
                       width: { xs: 60, sm: 80 },
@@ -559,6 +675,7 @@ export default function ViewAsanaPractice({
 
                 <Tooltip title="Settings">
                   <IconButton
+                    onClick={(e) => e.stopPropagation()}
                     sx={{
                       color: 'white',
                       minWidth: 44,
@@ -573,7 +690,10 @@ export default function ViewAsanaPractice({
                   title={isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
                 >
                   <IconButton
-                    onClick={handleFullscreen}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleFullscreen()
+                    }}
                     sx={{
                       color: 'white',
                       minWidth: 44,

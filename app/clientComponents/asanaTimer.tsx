@@ -63,12 +63,7 @@ export default function AsanaTimer({
         clearInterval(intervalRef.current)
       }
     }
-  }, [
-    state.watch.isRunning,
-    state.watch.isPaused,
-    state.watch.elapsedTime,
-    updateElapsedTime,
-  ])
+  }, [state.watch.isRunning, state.watch.isPaused, updateElapsedTime])
 
   // Handle reset
   useEffect(() => {

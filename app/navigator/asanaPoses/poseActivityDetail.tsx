@@ -351,7 +351,9 @@ export default function PoseActivityDetail({
     if (!pose?.sort_english_name) return
 
     const posePath = encodeURIComponent(pose.sort_english_name)
-    router.push(`${NAV_PATHS.VIEW_ASANA_PRACTICE}/${posePath}`)
+    router.push(`${NAV_PATHS.VIEW_ASANA_PRACTICE}/${posePath}`, undefined, {
+      scroll: false,
+    })
   }
 
   // Initialize form data when entering edit mode
@@ -1080,6 +1082,7 @@ export default function PoseActivityDetail({
             sx={{
               width: { xs: '100%', sm: 'auto' },
               alignItems: 'stretch',
+              mb: 4,
             }}
           >
             <Button

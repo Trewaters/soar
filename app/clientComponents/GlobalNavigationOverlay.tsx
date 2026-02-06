@@ -32,6 +32,7 @@ export default function GlobalNavigationOverlay() {
         zIndex: (theme) => theme.zIndex.drawer + 2000, // Above everything
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         backdropFilter: 'blur(2px)',
+        position: 'absolute', // Prevents Next.js "Skipping auto-scroll" warning
       }}
     >
       <Fade in={state.isNavigating} timeout={200}>

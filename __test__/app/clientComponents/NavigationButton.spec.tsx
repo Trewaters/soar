@@ -197,7 +197,7 @@ describe('NavigationButton', () => {
       fireEvent.click(button)
 
       // When replace option is true, router.replace is called instead
-      expect(mockRouterReplace).toHaveBeenCalledWith('/test')
+      expect(mockRouterReplace).toHaveBeenCalledWith('/test', { scroll: false })
     })
 
     it('should apply custom sx styles', () => {

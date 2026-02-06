@@ -167,11 +167,26 @@ export function useNavigationWithLoading() {
 
       try {
         // Perform navigation and await completion when supported by the router API
+        // Next.js App Router focus/scroll behavior: { scroll: boolean }
+        const nextOptions =
+          options && typeof options.scroll === 'boolean'
+            ? { scroll: options.scroll }
+            : undefined
+
         if (options?.replace) {
           // router.replace may return a promise in newer Next versions
-          await (router as any).replace(path)
+          if (nextOptions) {
+            await (router as any).replace(path, nextOptions)
+          } else {
+            await (router as any).replace(path)
+          }
         } else {
-          await (router as any).push(path)
+          // Next.js App Router push takes (href, { scroll })
+          if (nextOptions) {
+            await (router as any).push(path, nextOptions)
+          } else {
+            await (router as any).push(path)
+          }
         }
         // After the push/replace promise resolves, end the navigation for this
         // navId. This makes client-side navigations reliably dismiss the loading
@@ -267,8 +282,11 @@ export function useNavigationWithLoading() {
   return {
     // Enhanced navigation methods
     push: navigateWithLoading,
-    replace: (path: string, elementId?: string) =>
-      navigateWithLoading(path, elementId, { replace: true }),
+    replace: (
+      path: string,
+      elementId?: string,
+      options?: { scroll?: boolean }
+    ) => navigateWithLoading(path, elementId, { ...options, replace: true }),
     back: goBack,
     forward: goForward,
     refresh,
