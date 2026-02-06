@@ -1,5 +1,8 @@
 'use client'
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Alert,
   AppBar,
   Autocomplete,
@@ -29,6 +32,7 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
+  Snackbar,
   Stack,
   Tab,
   Tabs,
@@ -94,6 +98,13 @@ export default function StyleGuide() {
 
   const [expanded, setExpanded] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
+  const [accordionExpanded, setAccordionExpanded] = useState<string | false>(
+    false
+  )
+  const [showSuccessSnackbar, setShowSuccessSnackbar] = useState(false)
+  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false)
+  const [showWarningSnackbar, setShowWarningSnackbar] = useState(false)
+  const [showInfoSnackbar, setShowInfoSnackbar] = useState(false)
 
   // Generate dynamic color palette from theme
   const colorKeys = [
@@ -1042,6 +1053,84 @@ export default function StyleGuide() {
             </Box>
           </Box>
 
+          {/* Accordions */}
+          <Box sx={{ mb: 4 }}>
+            <Typography variant="subtitle1" gutterBottom>
+              Accordions
+            </Typography>
+            <Stack spacing={2}>
+              <Accordion
+                expanded={accordionExpanded === 'accordion1'}
+                onChange={(event, isExpanded) =>
+                  setAccordionExpanded(isExpanded ? 'accordion1' : false)
+                }
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="accordion1-content"
+                  id="accordion1-header"
+                >
+                  <Typography variant="subtitle1">Accordion Item 1</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography variant="body2">
+                    This is the content for the first accordion item. It expands
+                    and collapses when clicked.
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion
+                expanded={accordionExpanded === 'accordion2'}
+                onChange={(event, isExpanded) =>
+                  setAccordionExpanded(isExpanded ? 'accordion2' : false)
+                }
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="accordion2-content"
+                  id="accordion2-header"
+                >
+                  <Typography variant="subtitle1">Accordion Item 2</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography variant="body2">
+                    This is the content for the second accordion item. Multiple
+                    items can be in a set, but typically only one expands at a
+                    time.
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion
+                defaultExpanded
+                sx={{
+                  backgroundColor: 'navSplash.dark',
+                  '&:before': {
+                    display: 'none',
+                  },
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="accordion3-content"
+                  id="accordion3-header"
+                >
+                  <Typography variant="subtitle1">
+                    Accordion Item 3 (App Theme)
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography variant="body2">
+                    This accordion uses the app theme with navSplash.dark
+                    background and has the default border removed (similar to
+                    poseActivityDetail).
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
+            </Stack>
+          </Box>
+
           {/* Feedback */}
           <Box sx={{ mb: 4 }}>
             <Typography variant="subtitle1" gutterBottom>
@@ -1056,6 +1145,40 @@ export default function StyleGuide() {
                 <CircularProgress color="primary" />
                 <Typography>Loading...</Typography>
               </Box>
+            </Stack>
+
+            <Typography variant="subtitle2" sx={{ mt: 4, mb: 2 }}>
+              Snackbars
+            </Typography>
+            <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => setShowSuccessSnackbar(true)}
+              >
+                Show Success Snackbar
+              </Button>
+              <Button
+                variant="contained"
+                color="info"
+                onClick={() => setShowInfoSnackbar(true)}
+              >
+                Show Info Snackbar
+              </Button>
+              <Button
+                variant="contained"
+                color="warning"
+                onClick={() => setShowWarningSnackbar(true)}
+              >
+                Show Warning Snackbar
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => setShowErrorSnackbar(true)}
+              >
+                Show Error Snackbar
+              </Button>
             </Stack>
           </Box>
 
@@ -1257,6 +1380,80 @@ export default function StyleGuide() {
           </Box>
         </Paper>
       </Stack>
+
+      {/* Snackbar Examples */}
+      <Snackbar
+        open={showSuccessSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setShowSuccessSnackbar(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setShowSuccessSnackbar(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Success! This is a success snackbar message.
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={showInfoSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setShowInfoSnackbar(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setShowInfoSnackbar(false)}
+          severity="info"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Info! This is an informational snackbar message.
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={showWarningSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setShowWarningSnackbar(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setShowWarningSnackbar(false)}
+          severity="warning"
+          variant="filled"
+          sx={{ width: '100%', fontWeight: 'bold' }}
+          action={
+            <Button
+              color="inherit"
+              size="small"
+              onClick={() => setShowWarningSnackbar(false)}
+            >
+              UNDO
+            </Button>
+          }
+        >
+          Warning! Action will be undone in 5 seconds...
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={showErrorSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setShowErrorSnackbar(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setShowErrorSnackbar(false)}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Error! Something went wrong with this snackbar message.
+        </Alert>
+      </Snackbar>
 
       {/* Help Drawer Instance */}
       <HelpDrawer
