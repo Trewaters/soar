@@ -76,17 +76,21 @@ export default React.memo(function AsanaDetails(
 
   const content = cleanedArray ? cleanedArray.join('\n') : safeDetails
 
-  // Helper to get category icon URL (mirrors logic in poseActivityDetail.tsx)
-  const getCategoryIcon = (category: string) => {
-    switch (category.toLowerCase()) {
+  // Helper to get category icon URL based on asana category
+  const getAsanaCategoryIconUrl = (category?: string) => {
+    switch (category?.toLowerCase()) {
       case 'prone':
+        return '/icons/designImages/asana-standing.svg'
       case 'standing':
         return '/icons/designImages/asana-standing.svg'
       case 'seated':
+        return '/icons/designImages/asana-supine.svg'
       case 'supine':
         return '/icons/designImages/asana-supine.svg'
       case 'inversion':
+        return '/icons/designImages/asana-inverted.svg'
       case 'arm_leg_support':
+        return '/icons/designImages/asana-inverted.svg'
       case 'arm_balance_and_inversion':
         return '/icons/designImages/asana-inverted.svg'
       default:
@@ -96,7 +100,7 @@ export default React.memo(function AsanaDetails(
 
   const categoryIcon =
     showCategoryIcon && typeof content === 'string'
-      ? getCategoryIcon(content)
+      ? getAsanaCategoryIconUrl(content)
       : null
 
   return (

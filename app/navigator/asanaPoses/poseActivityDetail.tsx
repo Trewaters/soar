@@ -151,27 +151,25 @@ export default function PoseActivityDetail({
   const [formData, setFormData] = useState<{
     sort_english_name: string
     english_names: string[]
-    description: string
-    category: string
-    difficulty: string
-    sanskrit_names?: string[]
-    alternative_english_names?: string[]
+    sanskrit_names: string[]
+    alternative_english_names: string[]
+    description?: string
+    category?: string
+    difficulty?: string
     dristi?: string
     setup_cues?: string
     deepening_cues?: string
-    breath_direction_default?: string
   }>({
     sort_english_name: '',
     english_names: [],
+    sanskrit_names: [],
+    alternative_english_names: [],
     description: '',
     category: '',
     difficulty: '',
-    sanskrit_names: [],
-    alternative_english_names: [],
     dristi: '',
     setup_cues: '',
     deepening_cues: '',
-    breath_direction_default: '',
   })
 
   // Stable setter for form fields to avoid extra re-renders
@@ -190,13 +188,22 @@ export default function PoseActivityDetail({
         label: 'Asana Pose Name',
         value: formData.sort_english_name,
         required: true,
-        placeholder: 'Enter the name of the asana',
+        placeholder: 'Enter the name of the asana. Must be unique.',
         onChange: (value: any) => setField('sort_english_name', value),
       },
       {
         type: 'variations',
+        fieldKey: 'sanskrit_names',
+        label: 'Sanskrit Names',
+        value: formData.sanskrit_names || [],
+        placeholder: 'e.g. Virabhadrasana I, ...',
+        helperText: 'Separate multiple names with commas',
+        onChange: (value: any) => setField('sanskrit_names', value),
+      },
+      {
+        type: 'variations',
         fieldKey: 'english_names',
-        label: 'Name Variations',
+        label: 'English Name Variations',
         value: formData.english_names,
         placeholder: 'e.g. Downward Dog, Adho Mukha Svanasana',
         helperText: 'Separate variants with commas',
@@ -212,22 +219,12 @@ export default function PoseActivityDetail({
         onChange: (value: any) => setField('alternative_english_names', value),
       },
       {
-        type: 'variations',
-        fieldKey: 'sanskrit_names',
-        label: 'Sanskrit Names',
-        value: formData.sanskrit_names || [],
-        placeholder: 'e.g. Virabhadrasana I, ...',
-        helperText: 'Separate multiple names with commas',
-        onChange: (value: any) => setField('sanskrit_names', value),
-      },
-      {
         type: 'multiline',
         fieldKey: 'description',
         label: 'Description',
-        value: formData.description,
+        value: formData.description || '',
         placeholder:
           'Describe the pose alignment, position, and key characteristics...',
-        required: true,
         rows: 4,
         onChange: (value: any) => setField('description', value),
       },
@@ -235,10 +232,9 @@ export default function PoseActivityDetail({
         type: 'autocomplete',
         fieldKey: 'category',
         label: 'Category',
-        value: formData.category,
+        value: formData.category || '',
         options: [...ASANA_CATEGORIES],
         placeholder: 'Select or type category',
-        required: true,
         freeSolo: true,
         onChange: (value: any) => setField('category', value),
       },
@@ -246,7 +242,7 @@ export default function PoseActivityDetail({
         type: 'buttonGroup',
         fieldKey: 'difficulty',
         label: 'Difficulty Level',
-        value: formData.difficulty,
+        value: formData.difficulty || '',
         options: ['Easy', 'Average', 'Difficult'],
         helperText: 'Select the difficulty level for this asana',
         onChange: (value: any) => setField('difficulty', value),
@@ -257,6 +253,7 @@ export default function PoseActivityDetail({
         label: 'Dristi',
         value: formData.dristi || '',
         placeholder: 'Gaze point',
+        helperText: 'e.g. “Tip of the nose” or “Hand”, “Toes”',
         onChange: (value: any) => setField('dristi', value),
       },
       {
@@ -265,6 +262,7 @@ export default function PoseActivityDetail({
         label: 'Setup Cues',
         value: formData.setup_cues || '',
         rows: 2,
+        placeholder: 'Enter a detailed description…',
         onChange: (value: any) => setField('setup_cues', value),
       },
       {
@@ -273,6 +271,7 @@ export default function PoseActivityDetail({
         label: 'Deepening Cues',
         value: formData.deepening_cues || '',
         rows: 2,
+        placeholder: 'Enter a detailed description…',
         onChange: (value: any) => setField('deepening_cues', value),
       },
     ],
@@ -300,26 +299,6 @@ export default function PoseActivityDetail({
     setCurrentImageIndex(index)
   }
 
-  const getAsanaIconUrl = (category?: string) => {
-    switch (category?.toLowerCase()) {
-      case 'prone':
-        return '/icons/designImages/asana-standing.svg'
-      case 'standing':
-        return '/icons/designImages/asana-standing.svg'
-      case 'seated':
-        return '/icons/designImages/asana-supine.svg'
-      case 'supine':
-        return '/icons/designImages/asana-supine.svg'
-      case 'inversion':
-        return '/icons/designImages/asana-inverted.svg'
-      case 'arm_leg_support':
-        return '/icons/designImages/asana-inverted.svg'
-      case 'arm_balance_and_inversion':
-        return '/icons/designImages/asana-inverted.svg'
-      default:
-        return '/stick-tree-pose-400x400.png'
-    }
-  }
   const getAsanaBackgroundUrl = (category?: string) => {
     switch (category?.toLowerCase()) {
       case 'prone':
@@ -362,15 +341,14 @@ export default function PoseActivityDetail({
       setFormData({
         sort_english_name: pose.sort_english_name || '',
         english_names: pose.english_names || [],
+        sanskrit_names: pose.sanskrit_names || [],
         alternative_english_names: pose.alternative_english_names || [],
         description: pose.description || '',
         category: pose.category || '',
         difficulty: pose.difficulty || '',
-        sanskrit_names: pose.sanskrit_names || [],
         dristi: pose.dristi || '',
         setup_cues: pose.setup_cues || '',
         deepening_cues: pose.deepening_cues || '',
-        breath_direction_default: (pose as any).breath_direction_default || '',
       })
       setError(null)
     }
@@ -468,15 +446,14 @@ export default function PoseActivityDetail({
     const updatedAsana: UpdatePoseInput = {
       sort_english_name: formData.sort_english_name,
       english_names: formData.english_names,
-      description: formData.description,
-      category: formData.category,
-      difficulty: formData.difficulty,
+      description: formData.description || '',
+      category: formData.category || '',
+      difficulty: formData.difficulty || '',
       sanskrit_names: formData.sanskrit_names,
-      dristi: formData.dristi,
-      setup_cues: formData.setup_cues,
-      deepening_cues: formData.deepening_cues,
+      dristi: formData.dristi || '',
+      setup_cues: formData.setup_cues || '',
+      deepening_cues: formData.deepening_cues || '',
       alternative_english_names: formData.alternative_english_names,
-      breath_direction_default: formData.breath_direction_default,
     }
 
     try {
@@ -1002,7 +979,7 @@ export default function PoseActivityDetail({
               <AsanaDetails
                 details={`${pose?.category}`}
                 label="Category"
-                showCategoryIcon={false}
+                showCategoryIcon
                 sx={{ mb: '32px' }}
               />
               <AsanaDetails
