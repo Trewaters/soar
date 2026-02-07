@@ -137,19 +137,13 @@ export default function ImageUploadWithFallback({
     preview: null,
   })
 
-  const [storageInfo, setStorageInfo] = useState<{
-    available: number
-    quota: number
-  } | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Initialize local storage and check available space
+  // Initialize local storage for image operations
   React.useEffect(() => {
     const initStorage = async () => {
       try {
         await localImageStorage.init()
-        const info = await localImageStorage.getStorageInfo()
-        setStorageInfo(info)
       } catch (error) {
         console.warn('Failed to initialize local storage:', error)
       }
@@ -486,10 +480,6 @@ export default function ImageUploadWithFallback({
 
       const savedImage = await response.json()
 
-      // Update storage info
-      const info = await localImageStorage.getStorageInfo()
-      setStorageInfo(info)
-
       onImageUploaded?.(savedImage)
       handleClose()
       closeFallbackDialog()
@@ -654,15 +644,6 @@ export default function ImageUploadWithFallback({
       >
         Supported: JPEG, PNG, WebP (max {maxFileSize}MB)
       </Typography>
-      {storageInfo && (
-        <Chip
-          icon={<StorageIcon />}
-          label={`Local: ${formatFileSize(storageInfo.available)} available`}
-          size="small"
-          variant="outlined"
-          sx={{ mt: 1 }}
-        />
-      )}
     </Box>
   )
 
@@ -836,24 +817,6 @@ export default function ImageUploadWithFallback({
                 helperText="This helps make your image accessible to screen readers"
               />
             )}
-
-            {storageInfo && (
-              <Box sx={{ p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
-                <Typography variant="caption" color="text.secondary">
-                  Local Storage Available:{' '}
-                  {formatFileSize(storageInfo.available)}
-                </Typography>
-                <LinearProgress
-                  variant="determinate"
-                  value={
-                    ((storageInfo.quota - storageInfo.available) /
-                      storageInfo.quota) *
-                    100
-                  }
-                  sx={{ mt: 1 }}
-                />
-              </Box>
-            )}
           </Stack>
         </DialogContent>
 
@@ -935,11 +898,6 @@ export default function ImageUploadWithFallback({
                 Your image will be saved on this device and automatically
                 uploaded to the cloud when the connection is restored.
               </Typography>
-              {storageInfo && (
-                <Typography variant="caption" display="block" sx={{ mt: 1 }}>
-                  Available space: {formatFileSize(storageInfo.available)}
-                </Typography>
-              )}
             </Box>
           </Stack>
         </DialogContent>
