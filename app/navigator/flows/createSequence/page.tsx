@@ -250,11 +250,8 @@ export default function Page() {
   }
 
   function handleCancel() {
-    setNameSequence('')
-    setDescription('')
-    setSeriesNameSet([])
-    setIsDirtyName(false)
-    setIsDirtyDescription(false)
+    // Navigate to Sequence search view
+    router.push('/navigator/flows/practiceSequences')
   }
 
   // open state toggled inline where needed (HelpButton / HelpDrawer)

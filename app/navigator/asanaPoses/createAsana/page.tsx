@@ -574,43 +574,8 @@ export default function Page() {
               </Button>
 
               <Button
-                onClick={async () => {
-                  // Delete staged images from cloud storage before clearing state
-                  if (uploadedImages.length > 0) {
-                    const deletePromises = uploadedImages.map(async (image) => {
-                      try {
-                        await deletePoseImage(image.id)
-                      } catch (error) {
-                        console.error(
-                          `Failed to delete image ${image.id}:`,
-                          error
-                        )
-                      }
-                    })
-                    await Promise.allSettled(deletePromises)
-                  }
-
-                  // Clear form inputs and uploaded images
-                  setFormFullAsanaPoseData({
-                    sort_english_name: '',
-                    english_names: [],
-                    alternative_english_names: [],
-                    description: '',
-                    category: '',
-                    difficulty: '',
-                    created_by: session?.user?.email ?? 'error-undefined-user',
-                    dristi: '',
-                    sanskrit_names: [],
-                    poseImages: [],
-                    activity_completed: false,
-                    asanaActivities: [],
-                    activity_practice: false,
-                    setup_cues: '',
-                    deepening_cues: '',
-                  })
-                  setUploadedImages([])
-
-                  // Redirect to Practice Asana (search) page
+                onClick={() => {
+                  // Forward to search asana view
                   router.push(NAV_PATHS.ASANA_POSES)
                 }}
                 variant="outlined"

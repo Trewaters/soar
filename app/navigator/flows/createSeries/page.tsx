@@ -222,13 +222,8 @@ export default function Page() {
   )
 
   function handleCancel() {
-    dispatch({
-      type: 'RESET_FLOW_SERIES',
-      payload: {
-        seriesName: '',
-        seriesPoses: [],
-      },
-    })
+    // Navigate to Flow search view
+    router.push('/navigator/flows')
   }
 
   return (
