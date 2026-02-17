@@ -343,9 +343,9 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
               Image could not be loaded
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              The image file for "
-              {currentImage?.poseName || currentImage?.altText || 'this pose'}"
-              is no longer available.
+              The image file for &quot;
+              {currentImage?.poseName || currentImage?.altText || 'this pose'}
+              &quot; is no longer available.
             </Typography>
             {totalImages > 1 && (
               <Typography variant="caption" color="text.secondary">
