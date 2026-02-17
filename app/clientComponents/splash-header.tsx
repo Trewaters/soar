@@ -4,8 +4,8 @@ import React from 'react'
 
 interface SplashHeaderProps {
   title: string
-  src: string
-  alt: string
+  src?: string
+  alt?: string
   height?: number | { xs?: number; sm?: number; md?: number; lg?: number }
   width?: number | { xs?: number; sm?: number; md?: number; lg?: number }
   style?: React.CSSProperties
@@ -33,8 +33,8 @@ interface SplashHeaderProps {
  *
  * @param {SplashHeaderProps} props - The component props
  * @param {string} props.title - The title text to display below the image
- * @param {string} props.src - The source URL of the main splash image
- * @param {string} props.alt - The alt text for the main splash image
+ * @param {string} [props.src] - The source URL of the main splash image (optional)
+ * @param {string} [props.alt] - The alt text for the main splash image (optional)
  * @param {number | ResponsiveDimensions} [props.height=355] - Height of the image container in pixels. Can be a number or object with breakpoint values (xs, sm, md, lg)
  * @param {number | ResponsiveDimensions} [props.width=384] - Width of the image container in pixels. Can be a number or object with breakpoint values (xs, sm, md, lg)
  * @param {React.CSSProperties} [props.style] - Additional inline styles for the image
@@ -47,13 +47,13 @@ interface SplashHeaderProps {
  */
 export default function SplashHeader({
   title,
-  src,
-  alt,
+  src = '',
+  alt = '',
   height = 355,
   width = 384,
   style,
   showIcon = true,
-  iconSrc = '/icons/designImages/leaf-orange.png',
+  iconSrc,
   iconAlt = '',
   iconSize = 18,
 }: SplashHeaderProps) {
@@ -88,21 +88,23 @@ export default function SplashHeader({
         borderRadius: '12px', // Consistency with other components
       }}
     >
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        priority
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 384px"
-        style={{
-          objectFit: 'contain', // Changed from cover to prevent distortion/cropping of illustrations
-          ...style,
-        }}
-      />
+      {src && (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          priority
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 384px"
+          style={{
+            objectFit: 'contain', // Changed from cover to prevent distortion/cropping of illustrations
+            ...style,
+          }}
+        />
+      )}
       <Box
         sx={{
           position: 'absolute',
-          top: '66%', // Positioned just below center (50%)
+          top: '33%', // Positioned just below center (50%)
           left: 0,
           transform: 'translateY(-50%)',
           width: '100%',
@@ -114,7 +116,7 @@ export default function SplashHeader({
           zIndex: 1,
         }}
       >
-        {showIcon && (
+        {showIcon && iconSrc && (
           <Image
             src={iconSrc}
             height={iconSize}

@@ -72,10 +72,24 @@ describe('SplashHeader Component', () => {
   })
 
   describe('Decorative Icon - Default Behavior', () => {
-    it('should show decorative icon by default', () => {
+    it('should not show decorative icon when iconSrc is not provided', () => {
       render(<SplashHeader {...defaultProps} />, {
         wrapper: TestWrapper,
       })
+
+      const images = screen.getAllByTestId('mock-image')
+      expect(images).toHaveLength(1) // Only main image, no decorative icon
+      expect(screen.getByAltText('Test image alt text')).toBeInTheDocument()
+    })
+
+    it('should show decorative icon when iconSrc is provided', () => {
+      render(
+        <SplashHeader
+          {...defaultProps}
+          iconSrc="/icons/designImages/leaf-orange.png"
+        />,
+        { wrapper: TestWrapper }
+      )
 
       const decorativeIcon = screen.getByAltText('')
       expect(decorativeIcon).toBeInTheDocument()
@@ -88,9 +102,14 @@ describe('SplashHeader Component', () => {
     })
 
     it('should hide decorative icon when showIcon is false', () => {
-      render(<SplashHeader {...defaultProps} showIcon={false} />, {
-        wrapper: TestWrapper,
-      })
+      render(
+        <SplashHeader
+          {...defaultProps}
+          showIcon={false}
+          iconSrc="/icons/designImages/leaf-orange.png"
+        />,
+        { wrapper: TestWrapper }
+      )
 
       const images = screen.getAllByTestId('mock-image')
       expect(images).toHaveLength(1) // Only main image, no decorative icon
@@ -109,9 +128,14 @@ describe('SplashHeader Component', () => {
     })
 
     it('should use custom icon size when provided as number', () => {
-      render(<SplashHeader {...defaultProps} iconSize={32} />, {
-        wrapper: TestWrapper,
-      })
+      render(
+        <SplashHeader
+          {...defaultProps}
+          iconSrc="/icons/designImages/leaf-orange.png"
+          iconSize={32}
+        />,
+        { wrapper: TestWrapper }
+      )
 
       const decorativeIcon = screen.getByAltText('')
       expect(decorativeIcon).toHaveAttribute('height', '32')
@@ -119,9 +143,14 @@ describe('SplashHeader Component', () => {
     })
 
     it('should use custom icon size when provided as string', () => {
-      render(<SplashHeader {...defaultProps} iconSize="48" />, {
-        wrapper: TestWrapper,
-      })
+      render(
+        <SplashHeader
+          {...defaultProps}
+          iconSrc="/icons/designImages/leaf-orange.png"
+          iconSize="48"
+        />,
+        { wrapper: TestWrapper }
+      )
 
       const decorativeIcon = screen.getByAltText('')
       expect(decorativeIcon).toHaveAttribute('height', '48')
@@ -131,9 +160,13 @@ describe('SplashHeader Component', () => {
 
   describe('Accessibility - Icon Alt Text', () => {
     it('should use empty alt text by default for decorative icon', () => {
-      render(<SplashHeader {...defaultProps} />, {
-        wrapper: TestWrapper,
-      })
+      render(
+        <SplashHeader
+          {...defaultProps}
+          iconSrc="/icons/designImages/leaf-orange.png"
+        />,
+        { wrapper: TestWrapper }
+      )
 
       const decorativeIcon = screen.getByAltText('')
       expect(decorativeIcon).toBeInTheDocument()
@@ -141,19 +174,26 @@ describe('SplashHeader Component', () => {
 
     it('should use custom alt text when provided for decorative purposes', () => {
       render(
-        <SplashHeader {...defaultProps} iconAlt="Decorative leaf symbol" />,
-        {
-          wrapper: TestWrapper,
-        }
+        <SplashHeader
+          {...defaultProps}
+          iconSrc="/icons/designImages/leaf-orange.png"
+          iconAlt="Decorative leaf symbol"
+        />,
+        { wrapper: TestWrapper }
       )
 
       expect(screen.getByAltText('Decorative leaf symbol')).toBeInTheDocument()
     })
 
     it('should use descriptive alt text when icon is meaningful', () => {
-      render(<SplashHeader {...defaultProps} iconAlt="Icon description" />, {
-        wrapper: TestWrapper,
-      })
+      render(
+        <SplashHeader
+          {...defaultProps}
+          iconSrc="/icons/designImages/leaf-orange.png"
+          iconAlt="Icon description"
+        />,
+        { wrapper: TestWrapper }
+      )
 
       const decorativeIcon = screen.getByAltText('Icon description')
       expect(decorativeIcon).toBeInTheDocument()
@@ -297,21 +337,52 @@ describe('SplashHeader Component', () => {
         })
       }).not.toThrow()
     })
+
+    it('should work without any optional icon props', () => {
+      expect(() => {
+        render(
+          <SplashHeader
+            title="Title"
+            src="/image.jpg"
+            alt="Image"
+            // No icon props
+          />,
+          { wrapper: TestWrapper }
+        )
+      }).not.toThrow()
+    })
   })
 
-  describe('Backward Compatibility', () => {
-    it('should maintain existing behavior when no icon props are provided', () => {
+  describe('Icon Opt-in Behavior', () => {
+    it('should render only main image when icon is optional and not provided', () => {
       render(<SplashHeader {...defaultProps} />, {
         wrapper: TestWrapper,
       })
 
-      // Should have both main image and default decorative icon
+      // Should have only main image, no decorative icon
+      const images = screen.getAllByTestId('mock-image')
+      expect(images).toHaveLength(1)
+
+      // Main image
+      expect(images[0]).toHaveAttribute('src', '/test-image.jpg')
+    })
+
+    it('should render both images when iconSrc is provided', () => {
+      render(
+        <SplashHeader
+          {...defaultProps}
+          iconSrc="/icons/designImages/leaf-orange.png"
+        />,
+        { wrapper: TestWrapper }
+      )
+
+      // Should have both main image and decorative icon
       const images = screen.getAllByTestId('mock-image')
       expect(images).toHaveLength(2)
 
       // Main image
       expect(images[0]).toHaveAttribute('src', '/test-image.jpg')
-      // Default decorative icon
+      // Decorative icon
       expect(images[1]).toHaveAttribute(
         'src',
         '/icons/designImages/leaf-orange.png'
