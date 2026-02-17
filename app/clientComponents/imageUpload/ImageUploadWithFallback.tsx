@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react'
 import {
   Button,
   Dialog,
@@ -19,6 +19,7 @@ import {
   CardContent,
   CardMedia,
   IconButton,
+  Snackbar,
 } from '@mui/material'
 import {
   CloudUpload as CloudUploadIcon,
@@ -53,6 +54,8 @@ interface ImageUploadWithFallbackProps {
   onImageUploaded?: (image: PoseImageData) => void
   // eslint-disable-next-line no-unused-vars
   onImageDeleted?: (imageId: string) => void
+  // eslint-disable-next-line no-unused-vars
+  onStagedImagesChange?: (count: number) => void
   maxFileSize?: number // in MB
   acceptedTypes?: string[]
   variant?: 'button' | 'dropzone'
@@ -108,17 +111,21 @@ interface FallbackDialogState {
  * Requires a valid user session (via useSession) and a localImageStorage utility for local fallback.
  * The component is designed for Next.js/React applications and uses Material UI for styling.
  */
-export default function ImageUploadWithFallback({
-  onImageUploaded,
-  maxFileSize = 10,
-  acceptedTypes = ['image/jpeg', 'image/png', 'image/webp'],
-  variant = 'button',
-  poseId,
-  poseName,
-  shouldClearStaged = false,
-  maxImages = 3,
-  currentCount = 0,
-}: ImageUploadWithFallbackProps) {
+function ImageUploadWithFallbackComponent(
+  {
+    onImageUploaded,
+    onStagedImagesChange,
+    maxFileSize = 10,
+    acceptedTypes = ['image/jpeg', 'image/png', 'image/webp'],
+    variant = 'button',
+    poseId,
+    poseName,
+    shouldClearStaged = false,
+    maxImages = 3,
+    currentCount = 0,
+  }: ImageUploadWithFallbackProps,
+  ref: React.Ref<{ saveStagedImages: () => Promise<void> }>
+) {
   const { data: session } = useSession()
   const [open, setOpen] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -136,8 +143,105 @@ export default function ImageUploadWithFallback({
     altText: '',
     preview: null,
   })
+  const [successMessage, setSuccessMessage] = useState<string>('')
 
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Expose saveStagedImages method via ref
+  useImperativeHandle(
+    ref,
+    () => ({
+      saveStagedImages: async (newPoseId?: string, newPoseName?: string) => {
+        if (stagedImages.length === 0) return
+
+        if (!session?.user?.id) {
+          setError('Please ensure you are logged in')
+          return
+        }
+
+        setUploading(true)
+        setError(null)
+
+        const dataUrlToFile = (dataUrl: string, filename: string) => {
+          const arr = dataUrl.split(',')
+          const mimeMatch = arr[0].match(/:(.*?);/)
+          const mime = mimeMatch ? mimeMatch[1] : 'image/png'
+          const bstr = atob(arr[1])
+          let n = bstr.length
+          const u8 = new Uint8Array(n)
+          while (n--) u8[n] = bstr.charCodeAt(n)
+          return new File([u8], filename, { type: mime })
+        }
+
+        try {
+          for (const s of stagedImages) {
+            const file = dataUrlToFile(s.dataUrl, s.name)
+
+            const formData = new FormData()
+            formData.append('file', file)
+            formData.append('altText', '')
+            formData.append('userId', session.user.email || '')
+            formData.append(
+              'imageType',
+              newPoseId || poseId || newPoseName || poseName
+                ? 'pose'
+                : 'gallery'
+            )
+            // Use provided poseId/poseName or fall back to component props
+            if (newPoseId) {
+              formData.append('poseId', newPoseId)
+            } else if (poseId) {
+              formData.append('poseId', poseId)
+            }
+
+            if (newPoseName) {
+              formData.append('poseName', newPoseName)
+            } else if (poseName) {
+              formData.append('poseName', poseName)
+            }
+
+            const response = await fetch('/api/images/upload', {
+              method: 'POST',
+              body: formData,
+            })
+
+            let data: any
+            try {
+              data = await response.json()
+            } catch (jsonError) {
+              data = {
+                error: 'Network error occurred',
+                canFallbackToLocal: true,
+              }
+            }
+
+            if (!response.ok) {
+              setError(data?.error || 'Upload failed')
+              throw new Error(data?.error || 'Upload failed')
+            }
+
+            onImageUploaded?.(data)
+          }
+
+          // All uploaded successfully: clear staged images
+          setStagedImages([])
+          try {
+            localStorage.removeItem(STAGED_KEY)
+          } catch (e) {}
+
+          setSuccessMessage(`${stagedImages.length} images saved to assets`)
+        } catch (error) {
+          console.error('Batch upload error:', error)
+          setError(
+            error instanceof Error ? error.message : 'Failed to save images'
+          )
+        } finally {
+          setUploading(false)
+        }
+      },
+    }),
+    [stagedImages, session, poseId, poseName, onImageUploaded]
+  )
 
   // Initialize local storage for image operations
   React.useEffect(() => {
@@ -173,7 +277,7 @@ export default function ImageUploadWithFallback({
     } catch (e) {
       // ignore
     }
-  }, [poseId, shouldClearStaged])
+  }, [poseId, shouldClearStaged, onStagedImagesChange])
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
@@ -275,6 +379,7 @@ export default function ImageUploadWithFallback({
       try {
         localStorage.setItem(STAGED_KEY, JSON.stringify(next))
       } catch (e) {}
+      // Images now visible directly in dropzone - no need to open dialog
     } catch (e) {
       console.warn('Staging failed', e)
     }
@@ -502,6 +607,8 @@ export default function ImageUploadWithFallback({
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
+    // Clear success message
+    setSuccessMessage('')
   }
 
   const closeFallbackDialog = () => {
@@ -524,7 +631,22 @@ export default function ImageUploadWithFallback({
     if (!files.length) return
 
     if (!poseId) {
-      processSelectedFilesForStaging(files)
+      const totalExisting = stagedImages.length + currentCount
+      const remainingSlots = maxImages - totalExisting
+      const validFiles = files
+        .filter(
+          (f) =>
+            acceptedTypes.includes(f.type) &&
+            f.size <= maxFileSize * 1024 * 1024
+        )
+        .slice(0, remainingSlots)
+
+      if (validFiles.length > 0) {
+        processSelectedFilesForStaging(validFiles)
+        setSuccessMessage(
+          `${validFiles.length} image${validFiles.length > 1 ? 's' : ''} will be added when you save the asana.`
+        )
+      }
       return
     }
 
@@ -559,6 +681,9 @@ export default function ImageUploadWithFallback({
     // Auto-generate alt text from filename
     const baseName = file.name.split('.')[0]
     setAltText(baseName.replace(/[-_]/g, ' '))
+
+    // Show success feedback
+    setSuccessMessage('Image ready to upload!')
   }
 
   const UploadButton = () => (
@@ -578,264 +703,183 @@ export default function ImageUploadWithFallback({
 
   const activeCount = stagedImages.length + currentCount
 
+  // Rendered staged images component (reusable)
+  const StagedImagesPreviews = () => (
+    <>
+      {!poseId && stagedImages.length > 0 && (
+        <Box sx={{ mt: 3 }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+              gap: 2,
+            }}
+          >
+            {stagedImages.map((s, i) => (
+              <Card key={`staged-${i}`} sx={{ position: 'relative' }}>
+                <Box sx={{ position: 'relative', paddingBottom: '100%' }}>
+                  <CardMedia
+                    component="img"
+                    image={s.dataUrl}
+                    alt={s.name}
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                    }}
+                  />
+                  <IconButton
+                    onClick={() => {
+                      const next = stagedImages.filter((_, idx) => idx !== i)
+                      setStagedImages(next)
+                      try {
+                        localStorage.setItem(STAGED_KEY, JSON.stringify(next))
+                      } catch (e) {}
+                    }}
+                    sx={{
+                      position: 'absolute',
+                      top: 5,
+                      right: 5,
+                      bgcolor: 'rgba(255, 255, 255, 0.8)',
+                      color: 'error.main',
+                      '&:hover': {
+                        bgcolor: 'error.main',
+                        color: 'white',
+                      },
+                      zIndex: 1,
+                      padding: '4px',
+                    }}
+                    size="small"
+                    title="Remove image"
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+              </Card>
+            ))}
+          </Box>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ mt: 1, display: 'block', mb: 2 }}
+          >
+            Staged images will be saved when you save this asana. Click the
+            dropzone above to add more images.
+          </Typography>
+        </Box>
+      )}
+    </>
+  )
+
   const DropzoneArea = () => (
-    <Box
-      onDragOver={handleDragOver}
-      onDrop={handleDrop}
-      onClick={() => activeCount < maxImages && setOpen(true)}
-      sx={{
-        border: '2px dashed',
-        borderColor: activeCount >= maxImages ? 'grey.300' : 'primary.main',
-        borderRadius: '12px',
-        p: 4,
-        textAlign: 'center',
-        cursor: activeCount >= maxImages ? 'default' : 'pointer',
-        transition: 'all 0.2s ease',
-        backgroundColor: activeCount >= maxImages ? 'grey.50' : 'transparent',
-        '&:hover':
-          activeCount >= maxImages
-            ? {}
-            : {
-                borderColor: 'primary.dark',
-                backgroundColor: 'primary.light',
-                opacity: 0.8,
-              },
-      }}
-    >
-      <CloudUploadIcon
+    <Box>
+      <Box
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        onClick={() => activeCount < maxImages && fileInputRef.current?.click()}
         sx={{
-          fontSize: 48,
-          color: activeCount >= maxImages ? 'grey.400' : 'primary.main',
-          mb: 2,
+          border: '2px dashed',
+          borderColor: activeCount >= maxImages ? 'grey.300' : 'primary.main',
+          borderRadius: '12px',
+          p: 4,
+          textAlign: 'center',
+          cursor: activeCount >= maxImages ? 'default' : 'pointer',
+          transition: 'all 0.2s ease',
+          backgroundColor: activeCount >= maxImages ? 'grey.50' : 'transparent',
+          '&:hover':
+            activeCount >= maxImages
+              ? {}
+              : {
+                  borderColor: 'primary.dark',
+                  backgroundColor: 'primary.light',
+                  opacity: 0.8,
+                },
         }}
-      />
-      <Typography
-        variant="h6"
-        color={activeCount >= maxImages ? 'text.secondary' : 'primary.main'}
-        gutterBottom
       >
-        {activeCount >= maxImages
-          ? 'Maximum Images Reached'
-          : 'Upload Yoga Pose Image'}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {activeCount >= maxImages
-          ? `You have already added the maximum of ${maxImages} images.`
-          : 'Drag and drop an image here, or click to select'}
-      </Typography>
-      {/* helper: allow multiple selection when creating a new asana */}
-      {!poseId && activeCount < maxImages && (
+        <CloudUploadIcon
+          sx={{
+            fontSize: 48,
+            color: activeCount >= maxImages ? 'grey.400' : 'primary.main',
+            mb: 2,
+          }}
+        />
+        <Typography
+          variant="h6"
+          color={activeCount >= maxImages ? 'text.secondary' : 'primary.main'}
+          gutterBottom
+        >
+          {activeCount >= maxImages
+            ? 'Maximum Images Reached'
+            : `Upload Yoga Pose Image (${activeCount}/${maxImages})`}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {activeCount >= maxImages
+            ? `You have already added the maximum of ${maxImages} images.`
+            : 'Drag and drop an image here, or click to select'}
+        </Typography>
+        {/* helper: allow multiple selection when creating a new asana */}
+        {!poseId && activeCount < maxImages && (
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            display="block"
+            mt={1}
+          >
+            You can select multiple images (up to {maxImages} total) while
+            creating a new asana. They will be staged locally until you save the
+            asana.
+          </Typography>
+        )}
         <Typography
           variant="caption"
           color="text.secondary"
           display="block"
           mt={1}
         >
-          You can select multiple images (up to {maxImages} total) while
-          creating a new asana. They will be staged locally until you save the
-          asana.
+          Supported: JPEG, PNG, WebP (max {maxFileSize}MB)
         </Typography>
-      )}
-      <Typography
-        variant="caption"
-        color="text.secondary"
-        display="block"
-        mt={1}
-      >
-        Supported: JPEG, PNG, WebP (max {maxFileSize}MB)
-      </Typography>
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={acceptedTypes.join(',')}
+          onChange={handleFileSelect}
+          multiple={!poseId}
+          style={{ display: 'none' }}
+        />
+      </Box>
+
+      {/* Show staged images directly in the dropzone area */}
+      <StagedImagesPreviews />
     </Box>
   )
 
   return (
     <>
       {variant === 'button' ? <UploadButton /> : <DropzoneArea />}
-      {/* Main Upload Dialog */}
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        maxWidth="sm"
-        fullWidth
-        PaperProps={{
-          sx: { borderRadius: '12px' },
-        }}
+
+      {/* Success Toast */}
+      <Snackbar
+        open={!!successMessage}
+        autoHideDuration={4000}
+        onClose={() => setSuccessMessage('')}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
-        <DialogTitle>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <CloudUploadIcon color="primary" />
-            <Typography variant="h5">Upload Yoga Pose Image</Typography>
-          </Box>
-        </DialogTitle>
-
-        <DialogContent>
-          <Stack spacing={3}>
-            {error && (
-              <Alert severity="error" onClose={() => setError(null)}>
-                {error}
-              </Alert>
-            )}
-
-            {!selectedFile ? (
-              <Box>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept={acceptedTypes.join(',')}
-                  onChange={handleFileSelect}
-                  multiple={!poseId}
-                  style={{ display: 'none' }}
-                />
-                <Paper
-                  sx={{
-                    border: '2px dashed',
-                    borderColor: 'grey.300',
-                    borderRadius: 2,
-                    p: 4,
-                    textAlign: 'center',
-                    cursor: 'pointer',
-                    '&:hover': {
-                      borderColor: 'primary.main',
-                    },
-                  }}
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <CloudUploadIcon
-                    sx={{ fontSize: 48, color: 'grey.400', mb: 2 }}
-                  />
-                  <Typography variant="body1" color="text.secondary">
-                    Click to select an image
-                  </Typography>
-                </Paper>
-                {/* Show staged previews when creating a new asana */}
-                {!poseId && stagedImages.length > 0 && (
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="subtitle2">
-                      Staged images (not yet saved)
-                    </Typography>
-                    <Box
-                      sx={{ display: 'flex', gap: 2, mt: 1, overflowX: 'auto' }}
-                    >
-                      {stagedImages.map((s, i) => (
-                        <Card key={`staged-${i}`} sx={{ minWidth: 160 }}>
-                          <Box sx={{ position: 'relative' }}>
-                            <CardMedia
-                              component="img"
-                              height="120"
-                              image={s.dataUrl}
-                              alt={s.name}
-                              sx={{ objectFit: 'cover' }}
-                            />
-                            <IconButton
-                              onClick={() => {
-                                const next = stagedImages.filter(
-                                  (_, idx) => idx !== i
-                                )
-                                setStagedImages(next)
-                                try {
-                                  localStorage.setItem(
-                                    STAGED_KEY,
-                                    JSON.stringify(next)
-                                  )
-                                } catch (e) {}
-                              }}
-                              sx={{
-                                position: 'absolute',
-                                top: 5,
-                                right: 5,
-                                bgcolor: 'rgba(255, 255, 255, 0.8)',
-                                color: 'error.main',
-                                '&:hover': {
-                                  bgcolor: 'error.main',
-                                  color: 'white',
-                                },
-                                zIndex: 1,
-                                padding: '4px',
-                              }}
-                              size="small"
-                              title="Remove image"
-                            >
-                              <DeleteIcon fontSize="small" />
-                            </IconButton>
-                          </Box>
-                          <CardContent sx={{ p: 1, '&:last-child': { pb: 1 } }}>
-                            <Box>
-                              <Typography
-                                variant="body2"
-                                noWrap
-                                sx={{ fontSize: '0.75rem' }}
-                              >
-                                {s.name}
-                              </Typography>
-                              <Typography
-                                variant="caption"
-                                color="text.secondary"
-                                sx={{ fontSize: '0.65rem' }}
-                              >
-                                {formatFileSize(s.size)}
-                              </Typography>
-                            </Box>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </Box>
-                  </Box>
-                )}
-              </Box>
-            ) : (
-              <Box sx={{ textAlign: 'center' }}>
-                {preview && typeof preview === 'string' && (
-                  <Image
-                    src={preview}
-                    alt="Preview"
-                    width={200}
-                    height={200}
-                    style={{
-                      objectFit: 'cover',
-                      borderRadius: 8,
-                    }}
-                  />
-                )}
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mt: 1 }}
-                >
-                  {selectedFile.name} ({formatFileSize(selectedFile.size)})
-                </Typography>
-              </Box>
-            )}
-
-            {selectedFile && (
-              <TextField
-                label="Image Description (Alt Text)"
-                placeholder="Describe this yoga pose for accessibility..."
-                value={altText}
-                onChange={(e) => setAltText(e.target.value)}
-                multiline
-                rows={3}
-                fullWidth
-                helperText="This helps make your image accessible to screen readers"
-              />
-            )}
-          </Stack>
-        </DialogContent>
-
-        <DialogActions sx={{ p: 3 }}>
-          <Button onClick={handleClose} color="inherit" disabled={uploading}>
-            Cancel
-          </Button>
-          <Button
-            onClick={handleCloudUpload}
-            variant="contained"
-            disabled={!(selectedFile || stagedImages.length > 0) || uploading}
-            startIcon={
-              uploading ? <CircularProgress size={20} /> : <CloudUploadIcon />
-            }
-          >
-            {uploading ? 'Uploading...' : 'Upload to Cloud'}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Alert
+          onClose={() => setSuccessMessage('')}
+          severity="success"
+          variant="filled"
+          sx={{
+            width: '100%',
+            borderRadius: '12px',
+          }}
+        >
+          {successMessage}
+        </Alert>
+      </Snackbar>
 
       {/* Fallback Dialog */}
       <Dialog
@@ -926,3 +970,6 @@ export default function ImageUploadWithFallback({
     </>
   )
 }
+
+const ImageUploadWithFallback = forwardRef(ImageUploadWithFallbackComponent)
+export default ImageUploadWithFallback

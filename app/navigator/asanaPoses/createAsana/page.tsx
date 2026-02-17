@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   Box,
   Button,
@@ -40,6 +40,9 @@ export default function Page() {
   const router = useNavigationWithLoading()
   const { userAuthState, checkFeatureAccess, handleCtaAction } =
     useFreemiumNotification()
+  const imageUploadRef = useRef<{
+    saveStagedImages: (poseId?: string, poseName?: string) => Promise<void>
+  }>(null)
 
   // State for notification management
   const [notificationState, setNotificationState] = useState({
@@ -182,6 +185,19 @@ export default function Page() {
 
     try {
       const data = await createPose(updatedAsana)
+
+      // Save any staged images to the newly created pose
+      if (imageUploadRef.current) {
+        try {
+          await imageUploadRef.current.saveStagedImages(
+            data.id.toString(),
+            data.sort_english_name
+          )
+        } catch (error) {
+          console.error('Error saving staged images:', error)
+          // Don't fail the entire operation if images fail to save
+        }
+      }
 
       // Link uploaded images to the newly created pose
       if (initialUploadedImages.length > 0) {
@@ -408,9 +424,10 @@ export default function Page() {
                 gap: 2,
               }}
             >
-              Image Upload ({uploadedImages.length}/3)
+              Image Upload
             </Typography>
             <ImageUploadWithFallback
+              ref={imageUploadRef}
               maxFileSize={5}
               acceptedTypes={['image/jpeg', 'image/png', 'image/svg']}
               variant="dropzone"

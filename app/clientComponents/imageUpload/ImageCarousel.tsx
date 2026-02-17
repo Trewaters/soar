@@ -45,6 +45,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
   const [isLoading, setIsLoading] = useState(true)
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [isPaused, setIsPaused] = useState(false)
+  const [failedImageIds, setFailedImageIds] = useState<Set<string>>(new Set())
 
   // Memoize sorted images to avoid re-sorting on every render
   const sortedImages = useMemo(
@@ -181,6 +182,12 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
     setIsLoading(false)
   }
 
+  // Handle image load error - track failed image IDs
+  const handleImageError = (imageId: string) => {
+    setFailedImageIds((prev) => new Set([...prev, imageId]))
+    setIsLoading(false)
+  }
+
   // Handle hover for auto-play pause
   const handleMouseEnter = () => {
     setIsPaused(true)
@@ -214,6 +221,10 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
   // Safely get current image with bounds checking
   const currentImage = sortedImages[activeIndex] || null
   const safeActiveIndex = Math.max(0, Math.min(activeIndex, totalImages - 1))
+
+  // Check if current image failed to load
+  const isCurrentImageFailed =
+    currentImage?.id && failedImageIds.has(currentImage.id)
 
   // Don't render image if currentImage is null (out of bounds)
   if (!currentImage) {
@@ -303,66 +314,106 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
           backgroundColor: 'grey.50',
         }}
       >
-        <Fade in={!isLoading} timeout={300} key={safeActiveIndex}>
-          <Card
+        {/* Show error state when image fails to load */}
+        {isCurrentImageFailed ? (
+          <Box
             sx={{
               height: '100%',
               width: '100%',
-              position: 'relative',
-              boxShadow: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: 'grey.100',
               borderRadius: 1,
-              backgroundColor: 'transparent',
+              p: 3,
+              textAlign: 'center',
             }}
           >
-            <CardMedia
-              component="div"
+            <Box
               sx={{
-                height: '100%',
-                position: 'relative',
-                overflow: 'hidden',
-                backgroundColor: 'grey.100',
+                fontSize: '48px',
+                mb: 2,
+                opacity: 0.5,
               }}
             >
-              <Image
-                src={currentImage.url}
-                key={currentImage.id || currentImage.url}
-                alt={
-                  currentImage?.altText ||
-                  currentImage?.poseName ||
-                  `Yoga pose ${safeActiveIndex + 1}`
-                }
-                fill
-                style={{
-                  objectFit: 'contain',
+              🖼️
+            </Box>
+            <Typography variant="subtitle1" color="error" sx={{ mb: 1 }}>
+              Image could not be loaded
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              The image file for "
+              {currentImage?.poseName || currentImage?.altText || 'this pose'}"
+              is no longer available.
+            </Typography>
+            {totalImages > 1 && (
+              <Typography variant="caption" color="text.secondary">
+                Showing image {safeActiveIndex + 1} of {totalImages}
+              </Typography>
+            )}
+          </Box>
+        ) : (
+          <Fade in={!isLoading} timeout={300} key={safeActiveIndex}>
+            <Card
+              sx={{
+                height: '100%',
+                width: '100%',
+                position: 'relative',
+                boxShadow: 'none',
+                borderRadius: 1,
+                backgroundColor: 'transparent',
+              }}
+            >
+              <CardMedia
+                component="div"
+                sx={{
+                  height: '100%',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  backgroundColor: 'grey.100',
                 }}
-                sizes={getOptimizedSizes(safeActiveIndex)}
-                onLoad={handleImageLoad}
-                onError={(event) => {
-                  console.error('Image failed to load in ImageCarousel:', {
-                    url: currentImage?.url,
-                    poseId: currentImage?.poseId,
-                    poseName: currentImage?.poseName,
-                    imageId: currentImage?.id,
-                    error: event,
-                  })
-                  setIsLoading(false)
-                }}
-                priority={getLoadingPriority(safeActiveIndex) === 'high'}
-                loading={
-                  getLoadingPriority(safeActiveIndex) === 'high'
-                    ? 'eager'
-                    : 'lazy'
-                }
-                quality={
-                  getLoadingPriority(safeActiveIndex) === 'high' ? 90 : 75
-                }
-                placeholder="empty"
-              />
-            </CardMedia>
-          </Card>
-        </Fade>
-
-        {isLoading && (
+              >
+                <Image
+                  src={currentImage.url}
+                  key={currentImage.id || currentImage.url}
+                  alt={
+                    currentImage?.altText ||
+                    currentImage?.poseName ||
+                    `Yoga pose ${safeActiveIndex + 1}`
+                  }
+                  fill
+                  style={{
+                    objectFit: 'contain',
+                  }}
+                  sizes={getOptimizedSizes(safeActiveIndex)}
+                  onLoad={handleImageLoad}
+                  onError={() => {
+                    const imageId = currentImage?.id || currentImage?.url || ''
+                    console.error('Image failed to load in ImageCarousel:', {
+                      url: currentImage?.url,
+                      poseId: currentImage?.poseId,
+                      poseName: currentImage?.poseName,
+                      imageId: currentImage?.id,
+                    })
+                    handleImageError(imageId)
+                  }}
+                  priority={getLoadingPriority(safeActiveIndex) === 'high'}
+                  loading={
+                    getLoadingPriority(safeActiveIndex) === 'high'
+                      ? 'eager'
+                      : 'lazy'
+                  }
+                  quality={
+                    getLoadingPriority(safeActiveIndex) === 'high' ? 90 : 75
+                  }
+                  placeholder="empty"
+                />
+              </CardMedia>
+            </Card>
+          </Fade>
+        )}
+        {!isCurrentImageFailed && isLoading && (
           <Box
             sx={{
               position: 'absolute',

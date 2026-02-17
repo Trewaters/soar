@@ -105,7 +105,6 @@ export async function GET(request: NextRequest) {
     if (poseId) {
       // Filter by poseId field in PoseImage model
       baseWhere.poseId = poseId
-      console.log('[api/images] Filtering by poseId:', poseId)
     }
 
     // Fetch images with optional pose/pose relation populated. Use full record
