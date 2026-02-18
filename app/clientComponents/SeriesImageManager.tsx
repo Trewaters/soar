@@ -27,12 +27,14 @@ interface SeriesImageManagerProps {
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   onImagesChange?: (_images: string[]) => void
   disabled?: boolean
+  maxImages?: number
 }
 
 export default function SeriesImageManager({
   seriesId,
   onImagesChange,
   disabled = false,
+  maxImages = Infinity,
 }: SeriesImageManagerProps) {
   const { data: session } = useSession()
   // theme/media queries removed — not currently used
@@ -206,6 +208,13 @@ export default function SeriesImageManager({
         </Alert>
       ) : null}
 
+      {_images.length >= maxImages && maxImages < Infinity ? (
+        <Alert severity="info" sx={{ mb: 2 }}>
+          Maximum of {maxImages} image{maxImages !== 1 ? 's' : ''} allowed.
+          Remove an image to add another.
+        </Alert>
+      ) : null}
+
       {/* Image Grid */}
       <Grid container spacing={2} sx={{ mb: 2 }}>
         {_images.map((imageUrl, index) => (
@@ -245,7 +254,7 @@ export default function SeriesImageManager({
       </Grid>
 
       {/* Upload Button */}
-      {!disabled && (
+      {!disabled && _images.length < maxImages && (
         <>
           {/* Desktop Upload Button */}
           <Box sx={{ display: { xs: 'none', sm: 'block' }, mb: 2 }}>

@@ -230,16 +230,22 @@ export default function ImageUpload({
           sx: { borderRadius: '12px' },
         }}
       >
-        <DialogTitle>
-          <Typography variant="h5" component="h2">
-            Upload Yoga Pose Image
-          </Typography>
-        </DialogTitle>
+        <DialogTitle>{uploadTitle}</DialogTitle>
 
         <DialogContent>
           <Stack spacing={3}>
             {error && (
-              <Alert severity="error" onClose={() => setError(null)}>
+              <Alert
+                severity="error"
+                onClose={() => setError(null)}
+                sx={{
+                  mb: 2,
+                  fontWeight: 500,
+                  '& .MuiAlert-message': {
+                    width: '100%',
+                  },
+                }}
+              >
                 {error}
               </Alert>
             )}

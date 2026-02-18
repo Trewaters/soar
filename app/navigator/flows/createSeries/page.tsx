@@ -3,6 +3,7 @@ import React from 'react'
 import { useFlowSeries } from '@app/context/AsanaSeriesContext'
 import { FEATURES } from '@app/FEATURES'
 import {
+  Alert,
   Box,
   Button,
   FormControl,
@@ -42,6 +43,7 @@ export default function Page() {
     state.flowSeries
   const [poses, setPoses] = useState<AsanaPose[]>([])
   const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
+  const [submissionError, setSubmissionError] = useState<string | null>(null)
   const router = useNavigationWithLoading()
   const [open, setOpen] = React.useState(false)
   const [isDirty, setIsDirty] = useState(false)
@@ -136,6 +138,19 @@ export default function Page() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    setSubmissionError(null)
+
+    // Validate required fields
+    if (!seriesName.trim()) {
+      setSubmissionError('Flow name is required')
+      return
+    }
+
+    if (seriesPoses.length === 0) {
+      setSubmissionError('At least one pose is required')
+      return
+    }
+
     const updatedSeries = {
       ...state.flowSeries,
       seriesName,
@@ -168,7 +183,8 @@ export default function Page() {
         body: JSON.stringify(updatedSeries),
       })
       if (!response.ok) {
-        throw new Error('Network response was not ok')
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || 'Failed to create flow')
       }
       const data = await response.json()
 
@@ -178,12 +194,13 @@ export default function Page() {
         return
       }
 
-      return data
+      setSubmissionError('Flow created but could not retrieve ID')
     } catch (error: Error | any) {
-      console.error('Error creating series:', error.message)
+      const errorMsg =
+        error instanceof Error ? error.message : 'Error creating flow'
+      console.error('Error creating series:', errorMsg)
+      setSubmissionError(errorMsg)
     }
-    // Fallback to flows page if something went wrong
-    router.push('/navigator/flows')
   }
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -211,7 +228,9 @@ export default function Page() {
 
   const handleImageUploaded = React.useCallback(
     (img: PoseImageData) => {
-      // Only keep one image - replace the array instead of appending
+      // Flows are limited to ONE image - replace the array instead of appending
+      // Prevent multiple uploads by clearing error and updating state
+      setSubmissionError(null)
       setUploadedImages([img])
       dispatch({
         type: 'SET_FLOW_SERIES_IMAGE',
@@ -259,6 +278,17 @@ export default function Page() {
           {FEATURES.SHOW_CREATE_SERIES && (
             <form onSubmit={handleSubmit}>
               <Box sx={{ px: 4, pb: 12 }}>
+                {/* Error Alert */}
+                {submissionError && (
+                  <Alert
+                    severity="error"
+                    onClose={() => setSubmissionError(null)}
+                    sx={{ mb: 3 }}
+                  >
+                    {submissionError}
+                  </Alert>
+                )}
+
                 {/* Flow Name Input - Primary field with improved visibility */}
                 <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
                   <Typography

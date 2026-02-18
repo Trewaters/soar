@@ -185,7 +185,11 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
           </Paper>
 
           <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
-            <SeriesImageManager seriesId={series.id} disabled={disabled} />
+            <SeriesImageManager
+              seriesId={series.id}
+              disabled={disabled}
+              maxImages={1}
+            />
           </Paper>
 
           <Paper elevation={1} sx={{ p: 3, mb: 1.5, borderRadius: '12px' }}>

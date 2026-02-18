@@ -26,6 +26,8 @@ import {
   useEffect,
   useState,
   useMemo,
+  useCallback,
+  useRef,
 } from 'react'
 // removed unused icon imports to silence lint warnings
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
@@ -76,6 +78,11 @@ export default function Page() {
   )
 
   const router = useNavigationWithLoading()
+
+  // Throttling refs to prevent rapid/overlapping API calls
+  const lastFetchKeyRef = useRef<string | null>(null)
+  const lastFetchTimeRef = useRef<number>(0)
+  const fetchInFlightRef = useRef<boolean>(false)
 
   // Enrich series data with normalized createdBy field like in practiceSeries
   const enrichedSeries = useMemo(
@@ -148,21 +155,49 @@ export default function Page() {
     return result
   }, [enrichedSeries, session?.user?.id, session?.user?.email, alphaUserIds])
 
-  useEffect(() => {
-    async function getData() {
+  const fetchSeries = useCallback(async () => {
+    const emailKey = session?.user?.email || 'guest'
+    const now = Date.now()
+    const throttleMs = 1500
+
+    // Guard: avoid overlapping/in-flight fetches
+    if (fetchInFlightRef.current) {
+      return
+    }
+
+    // Guard: throttle repeated fetches with same key within window
+    if (
+      lastFetchKeyRef.current === emailKey &&
+      now - lastFetchTimeRef.current < throttleMs
+    ) {
+      return
+    }
+
+    try {
+      fetchInFlightRef.current = true
+      lastFetchKeyRef.current = emailKey
+      lastFetchTimeRef.current = now
       const seriesData = await getAllSeries()
 
       if (seriesData) {
         setFlowSeries(seriesData as FlowSeriesData[])
       }
+    } catch (error: Error | any) {
+      console.error('[CreateSequence] Error fetching series:', error.message)
+    } finally {
+      fetchInFlightRef.current = false
     }
+  }, [session?.user?.email])
 
+  useEffect(() => {
     if (session === null) {
       router.push('/navigator/flows')
+      return
     }
 
-    getData()
-  }, [router, session])
+    fetchSeries()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router, session?.user?.email])
 
   // Ensure poses are updated when a new series is added
   function handleSelect(
@@ -761,6 +796,8 @@ export default function Page() {
                     </Typography>
                     <Box sx={{ mt: 2 }}>
                       <ImageUpload
+                        uploadTitle="Upload Sequence Image"
+                        uploadSubtitle="Drag and drop an image here, or click to select"
                         onImageUploaded={(imageData) => {
                           setImage(imageData.url)
                           setSequences((prev) => ({
