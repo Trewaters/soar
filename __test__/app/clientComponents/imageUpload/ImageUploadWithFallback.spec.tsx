@@ -226,12 +226,10 @@ describe('ImageUploadWithFallback - Drag and Drop', () => {
 
       fireEvent.drop(dropzoneElement, { dataTransfer } as any)
 
-      // Should show total count (1 uploaded + 1 staged = 2/2)
+      // Should show max limit reached message when trying to add more than allowed
       await waitFor(() => {
         expect(
-          screen.getByRole('heading', {
-            name: /Upload Yoga Pose Image \(2\/2\)/,
-          })
+          screen.getByText(/You have already added the maximum of 2 images/)
         ).toBeInTheDocument()
       })
     })
