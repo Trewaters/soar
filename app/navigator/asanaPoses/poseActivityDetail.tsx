@@ -463,6 +463,7 @@ export default function PoseActivityDetail({
                   {!isEditing ? (
                     <IconButton
                       aria-label="Edit pose"
+                      title="Edit pose"
                       onClick={handleEditToggle}
                       sx={{
                         color: 'primary.main',
@@ -479,6 +480,7 @@ export default function PoseActivityDetail({
                     <>
                       <IconButton
                         aria-label="Save changes"
+                        title="Save changes"
                         onClick={handleSaveEdit}
                         sx={{
                           color: 'primary.main',
@@ -493,6 +495,7 @@ export default function PoseActivityDetail({
                       </IconButton>
                       <IconButton
                         aria-label="Cancel editing"
+                        title="Cancel editing"
                         onClick={handleCancelEdit}
                         sx={{
                           color: 'primary.contrastText',
@@ -521,6 +524,7 @@ export default function PoseActivityDetail({
                     >
                       <IconButton
                         aria-label="Delete pose"
+                        title="Delete pose"
                         onClick={handleDeletePose}
                         sx={{
                           color: 'error.main',
@@ -661,6 +665,7 @@ export default function PoseActivityDetail({
                     {!isEditing ? (
                       <IconButton
                         aria-label="Edit pose"
+                        title="Edit pose"
                         onClick={handleEditToggle}
                         sx={{
                           color: 'primary.main',
@@ -677,6 +682,7 @@ export default function PoseActivityDetail({
                       <>
                         <IconButton
                           aria-label="Save changes"
+                          title="Save changes"
                           onClick={handleSaveEdit}
                           sx={{
                             color: 'primary.main',
@@ -691,6 +697,7 @@ export default function PoseActivityDetail({
                         </IconButton>
                         <IconButton
                           aria-label="Cancel editing"
+                          title="Cancel editing"
                           onClick={handleCancelEdit}
                           sx={{
                             color: 'primary.contrastText',
@@ -719,6 +726,7 @@ export default function PoseActivityDetail({
                       >
                         <IconButton
                           aria-label="Delete pose"
+                          title="Delete pose"
                           onClick={handleDeletePose}
                           sx={{
                             color: 'error.main',
@@ -935,6 +943,76 @@ export default function PoseActivityDetail({
           )}
         </Stack>
       </Box>
+
+      {showInlineEditIcon && session?.user && canEdit && (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            px: 2,
+            mt: 1,
+            mb: 1,
+            width: '100%',
+          }}
+        >
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={1.5}
+            sx={{
+              width: { xs: '100%', sm: 'auto' },
+              alignItems: 'stretch',
+            }}
+          >
+            {!isEditing ? (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleEditToggle}
+                startIcon={<EditIcon fontSize="small" />}
+                sx={{ textTransform: 'none', borderRadius: '10px' }}
+                aria-label="Edit pose"
+              >
+                Edit
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleSaveEdit}
+                  startIcon={<SaveIcon fontSize="small" />}
+                  sx={{ textTransform: 'none', borderRadius: '10px' }}
+                  aria-label="Save changes"
+                >
+                  Save Changes
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleCancelEdit}
+                  startIcon={<CloseIcon fontSize="small" />}
+                  sx={{ textTransform: 'none', borderRadius: '10px' }}
+                  aria-label="Cancel editing"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={handleDeletePose}
+                  startIcon={<DeleteIcon fontSize="small" />}
+                  sx={{ textTransform: 'none', borderRadius: '10px' }}
+                  aria-label="Delete pose"
+                >
+                  Delete
+                </Button>
+              </>
+            )}
+          </Stack>
+        </Box>
+      )}
+
       {pose && FEATURES.SHOW_PRACTICE_VIEW_ASANA && (
         <Box
           sx={{

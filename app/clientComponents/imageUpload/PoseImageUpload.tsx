@@ -662,6 +662,7 @@ export default function PoseImageUpload({
           aria-label={
             poseName ? `Upload image for ${poseName}` : 'Upload image'
           }
+          title={poseName ? `Upload image for ${poseName}` : 'Upload image'}
           onClick={() => setOpen(true)}
           disabled={uploading}
           sx={{

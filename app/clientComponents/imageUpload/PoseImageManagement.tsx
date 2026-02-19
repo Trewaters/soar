@@ -20,6 +20,7 @@ import CloudDoneIcon from '@mui/icons-material/CloudDone'
 import { useSession } from 'next-auth/react'
 import { getImageUploadStatus, type ImageStatus } from '@lib/imageStatus'
 import PoseImageGallery from './PoseImageGallery'
+import PoseImageUpload from './PoseImageUpload'
 import type { PoseImageData } from './PoseImageUpload'
 
 interface TabPanelProps {
@@ -100,6 +101,40 @@ export default function PoseImageManagement({
     }
   }
 
+  const handleImageUploaded = (_image: PoseImageData) => {
+    setRefreshGallery((prev) => prev + 1)
+    if (onImagesChange) {
+      onImagesChange()
+    }
+  }
+
+  const renderHeader = () => (
+    <Box
+      sx={{
+        p: 3,
+        pb: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 2,
+      }}
+    >
+      <Typography variant="h6" sx={{ color: 'primary.main' }}>
+        {title}
+      </Typography>
+      {showUploadButton && enableManagement && (
+        <PoseImageUpload
+          poseId={poseId}
+          poseName={poseName}
+          variant="icon-button"
+          onImageUploaded={handleImageUploaded}
+          iconSize="small"
+          refreshTrigger={refreshGallery}
+        />
+      )}
+    </Box>
+  )
+
   const renderInfoContent = () => (
     <Box>
       <Typography variant="subtitle1" gutterBottom fontWeight="bold">
@@ -107,7 +142,7 @@ export default function PoseImageManagement({
       </Typography>
       <Typography variant="body2" color="text.secondary" paragraph>
         Manage and view images for this yoga pose. Use the upload icon button at
-        the top of the page to add new images.
+        the top right of this panel to add new images.
       </Typography>
 
       <List dense>
@@ -149,8 +184,8 @@ export default function PoseImageManagement({
       <Stack direction="row" spacing={1} alignItems="center">
         <CheckCircleIcon color="success" fontSize="small" />
         <Typography variant="body2">
-          Click the <strong>Upload</strong> icon overlaying the asana image in
-          edit mode to manage content.
+          Click the <strong>Upload</strong> icon next to this panel title in edit
+          mode to manage content.
         </Typography>
       </Stack>
     </Box>
@@ -159,9 +194,7 @@ export default function PoseImageManagement({
   if (variant === 'upload-only') {
     return (
       <Paper elevation={1} sx={{ borderRadius: '16px', overflow: 'hidden' }}>
-        <Typography variant="h6" sx={{ p: 3, pb: 0, color: 'primary.main' }}>
-          {title}
-        </Typography>
+        {renderHeader()}
         {renderInfoContent()}
       </Paper>
     )
@@ -170,9 +203,7 @@ export default function PoseImageManagement({
   if (variant === 'gallery-only') {
     return (
       <Paper elevation={1} sx={{ borderRadius: '16px', overflow: 'hidden' }}>
-        <Typography variant="h6" sx={{ p: 3, pb: 0, color: 'primary.main' }}>
-          {title}
-        </Typography>
+        {renderHeader()}
         <PoseImageGallery
           key={refreshGallery}
           poseId={poseId}
@@ -187,9 +218,7 @@ export default function PoseImageManagement({
 
   return (
     <Paper elevation={1} sx={{ borderRadius: '16px', overflow: 'hidden' }}>
-      <Typography variant="h6" sx={{ p: 3, pb: 0, color: 'primary.main' }}>
-        {title}
-      </Typography>
+      {renderHeader()}
 
       <Tabs
         value={tabValue}
