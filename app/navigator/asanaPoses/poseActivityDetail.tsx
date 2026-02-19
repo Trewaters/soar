@@ -222,7 +222,7 @@ export default function PoseActivityDetail({
       case 'arm_balance_and_inversion':
         return `url('/images/asana/AsanaBackground.png')`
       default:
-        return 'image/asana/AsanaBackground.png'
+        return `url('/images/asana/AsanaBackground.png')`
     }
   }
 
@@ -862,6 +862,15 @@ export default function PoseActivityDetail({
             <>
               {/* View Mode */}
               <AsanaDetails
+                details={
+                  Array.isArray(pose?.sanskrit_names)
+                    ? pose.sanskrit_names.join(', ')
+                    : (pose?.sanskrit_names as any) || ''
+                }
+                label="Sanskrit Names"
+                sx={{ mb: '32px' }}
+              />
+              <AsanaDetails
                 details={pose?.english_names?.join(', ')}
                 label={pose?.label ?? 'English Variant Names'}
                 sx={{
@@ -896,15 +905,6 @@ export default function PoseActivityDetail({
               <AsanaDetails
                 details={pose?.dristi}
                 label="Dristi"
-                sx={{ mb: '32px' }}
-              />
-              <AsanaDetails
-                details={
-                  Array.isArray(pose?.sanskrit_names)
-                    ? pose.sanskrit_names.join(', ')
-                    : (pose?.sanskrit_names as any) || ''
-                }
-                label="Sanskrit Names"
                 sx={{ mb: '32px' }}
               />
               <AsanaDetails
