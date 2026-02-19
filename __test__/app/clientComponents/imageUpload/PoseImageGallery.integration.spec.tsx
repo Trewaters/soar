@@ -297,7 +297,7 @@ describe('PoseImageGallery Integration Tests', () => {
     })
   })
 
-  it('should not show tabs for single image', async () => {
+  it('should show view and manage tabs for single image', async () => {
     // Mock single image response - override the beforeEach mock
     ;(global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
@@ -325,10 +325,10 @@ describe('PoseImageGallery Integration Tests', () => {
       expect(screen.getByText(/1 image/)).toBeInTheDocument()
     })
 
-    // Should not show tabs for single image
-    expect(screen.queryByText('View Images')).not.toBeInTheDocument()
+    // Should show management tabs for single image, but not reorder
+    expect(screen.getByText('View Images')).toBeInTheDocument()
+    expect(screen.getByText('Manage Images')).toBeInTheDocument()
     expect(screen.queryByText('Reorder Images')).not.toBeInTheDocument()
-    expect(screen.queryByText('Manage Images')).not.toBeInTheDocument()
   })
 
   it('should handle ownership permissions correctly', async () => {

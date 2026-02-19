@@ -161,6 +161,12 @@ export default function PoseImageGallery({
     }
   }, [images.length, currentImageIndex])
 
+  useEffect(() => {
+    if (images.length <= 1 && currentView === 'reorder') {
+      setCurrentView('carousel')
+    }
+  }, [images.length, currentView])
+
   // Handle delete
   const handleDeleteClick = (image: PoseImage) => {
     setImageToDelete(image)
@@ -449,7 +455,7 @@ export default function PoseImageGallery({
       ) : (
         <>
           {/* Tab interface for view management */}
-          {enableManagement && canManageImages && images.length > 1 && (
+          {enableManagement && canManageImages && images.length > 0 && (
             <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
               <Tabs
                 value={currentView}
@@ -463,12 +469,14 @@ export default function PoseImageGallery({
                   icon={<ViewCarouselIcon />}
                   iconPosition="start"
                 />
-                <Tab
-                  label="Reorder Images"
-                  value="reorder"
-                  icon={<DragIndicatorIcon />}
-                  iconPosition="start"
-                />
+                {images.length > 1 && (
+                  <Tab
+                    label="Reorder Images"
+                    value="reorder"
+                    icon={<DragIndicatorIcon />}
+                    iconPosition="start"
+                  />
+                )}
                 <Tab
                   label="Manage Images"
                   value="grid"
@@ -482,32 +490,34 @@ export default function PoseImageGallery({
           {/* Render based on current view */}
           {currentView === 'carousel' && renderCarouselView()}
 
-          {currentView === 'reorder' && canManageImages && (
-            <ImageReorder
-              images={images.map((img) => ({
-                id: img.id,
-                url: img.url,
-                altText: img.altText || '',
-                userId: 'current-user',
-                uploadedAt: new Date(img.uploadedAt),
-                storageType: 'CLOUD' as const,
-                isOffline: false,
-                imageType: 'pose' as const,
-                displayOrder: img.displayOrder || 1,
-                createdAt: new Date(img.uploadedAt),
-                updatedAt: new Date(img.uploadedAt),
-              }))}
-              onReorder={async (reorderedImages) => {
-                const result = await handleImageReorder(reorderedImages)
-                if (!result.success) {
-                  console.error('Failed to reorder images:', result.error)
-                  setError(result.error || 'Failed to reorder images')
-                }
-              }}
-              disabled={false}
-              showButtons={true}
-            />
-          )}
+          {currentView === 'reorder' &&
+            canManageImages &&
+            images.length > 1 && (
+              <ImageReorder
+                images={images.map((img) => ({
+                  id: img.id,
+                  url: img.url,
+                  altText: img.altText || '',
+                  userId: 'current-user',
+                  uploadedAt: new Date(img.uploadedAt),
+                  storageType: 'CLOUD' as const,
+                  isOffline: false,
+                  imageType: 'pose' as const,
+                  displayOrder: img.displayOrder || 1,
+                  createdAt: new Date(img.uploadedAt),
+                  updatedAt: new Date(img.uploadedAt),
+                }))}
+                onReorder={async (reorderedImages) => {
+                  const result = await handleImageReorder(reorderedImages)
+                  if (!result.success) {
+                    console.error('Failed to reorder images:', result.error)
+                    setError(result.error || 'Failed to reorder images')
+                  }
+                }}
+                disabled={false}
+                showButtons={true}
+              />
+            )}
 
           {currentView === 'grid' && canManageImages && images.length > 0 && (
             <Box data-testid="image-management">
