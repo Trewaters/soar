@@ -29,6 +29,47 @@ export interface GetImagesResponse {
   hasMore: boolean
 }
 
+async function getResponseErrorMessage(
+  response: Response,
+  fallbackMessage: string
+): Promise<string> {
+  const contentType = response.headers.get('content-type') || ''
+
+  if (contentType.includes('application/json')) {
+    try {
+      const errorData = await response.json()
+      const message =
+        errorData?.error || errorData?.message || errorData?.details
+      if (typeof message === 'string' && message.trim()) {
+        return message
+      }
+    } catch {
+      // Fall through to text parsing for malformed JSON responses
+    }
+  }
+
+  let errorText = ''
+  try {
+    errorText = await response.text()
+  } catch {
+    errorText = ''
+  }
+
+  const payloadTooLarge =
+    response.status === 413 ||
+    /request entity too large|payload too large/i.test(errorText)
+
+  if (payloadTooLarge) {
+    return 'Image file is too large for this upload endpoint. Please choose a smaller image and try again.'
+  }
+
+  if (errorText.trim()) {
+    return errorText.substring(0, 200)
+  }
+
+  return fallbackMessage
+}
+
 /**
  * Upload a pose image to Vercel Blob and save to database
  */
@@ -55,11 +96,18 @@ export async function uploadPoseImage(
     })
 
     if (!response.ok) {
-      const errorData = await response.json()
-      throw new Error(errorData.error || 'Failed to upload image')
+      const errorMessage = await getResponseErrorMessage(
+        response,
+        `Failed to upload image (${response.status})`
+      )
+      throw new Error(errorMessage)
     }
 
-    return await response.json()
+    try {
+      return await response.json()
+    } catch {
+      throw new Error('Upload succeeded but returned an invalid response.')
+    }
   } catch (error) {
     logServiceError(error, 'imageService', 'uploadPoseImage', {
       operation: 'upload_image',
