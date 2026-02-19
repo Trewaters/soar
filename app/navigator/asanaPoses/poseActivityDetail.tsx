@@ -49,6 +49,8 @@ import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import { AsanaPose, ASANA_CATEGORIES } from 'types/asana'
 import { HELP_PATHS } from '@app/utils/helpLoader'
 import NAV_PATHS from '@app/utils/navigation/constants'
+import { AsanaUpdatePayloadValidator } from '@app/utils/validation/schemas/asana'
+import { formatValidationError } from '@app/utils/validation/errorFormatter'
 
 const yogaMatWoman = '/yogaMatWoman.svg'
 
@@ -348,9 +350,26 @@ export default function PoseActivityDetail({
       alternative_english_names: formData.alternative_english_names,
     }
 
+    const validationResult = AsanaUpdatePayloadValidator.validate(updatedAsana)
+    if (!validationResult.isValid) {
+      const validationMessage = Object.entries(validationResult.errors)
+        .flatMap(([field, reasons]) =>
+          reasons.map((reason) => formatValidationError(field, reason))
+        )
+        .join(' | ')
+
+      setError(
+        validationMessage || 'Please fix validation errors before saving'
+      )
+      return
+    }
+
     try {
       // Update the pose text data
-      await updatePose(pose.id, updatedAsana)
+      await updatePose(
+        pose.id,
+        validationResult.normalizedData as UpdatePoseInput
+      )
 
       // Exit edit mode and refresh the page data
       setIsEditing(false)

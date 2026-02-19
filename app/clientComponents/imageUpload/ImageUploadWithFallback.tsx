@@ -10,13 +10,8 @@ import {
   Box,
   Stack,
   Alert,
-  Paper,
-  TextField,
   CircularProgress,
-  Chip,
-  LinearProgress,
   Card,
-  CardContent,
   CardMedia,
   IconButton,
   Snackbar,
@@ -26,7 +21,6 @@ import {
   Save as SaveIcon,
   Warning as WarningIcon,
   WifiOff as WifiOffIcon,
-  Storage as StorageIcon,
 } from '@mui/icons-material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { useSession } from 'next-auth/react'
@@ -127,13 +121,9 @@ function ImageUploadWithFallbackComponent(
   ref: React.Ref<{ saveStagedImages: () => Promise<void> }>
 ) {
   const { data: session } = useSession()
-  const [open, setOpen] = useState(false)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
   type StagedImage = { name: string; size: number; dataUrl: string }
   const [stagedImages, setStagedImages] = useState<StagedImage[]>([])
   const STAGED_KEY = 'soar:staged-asana-images'
-  const [altText, setAltText] = useState('')
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [fallbackDialog, setFallbackDialog] = useState<FallbackDialogState>({
@@ -314,19 +304,7 @@ function ImageUploadWithFallbackComponent(
       return
     }
 
-    setSelectedFile(file)
     setError(null)
-
-    // Create preview
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      setPreview(e.target?.result as string)
-    }
-    reader.readAsDataURL(file)
-
-    // Auto-generate alt text from filename
-    const baseName = file.name.split('.')[0]
-    setAltText(baseName.replace(/[-_]/g, ' '))
   }
 
   const processSelectedFilesForStaging = async (files: File[]) => {
@@ -382,161 +360,6 @@ function ImageUploadWithFallbackComponent(
       // Images now visible directly in dropzone - no need to open dialog
     } catch (e) {
       console.warn('Staging failed', e)
-    }
-  }
-
-  const handleCloudUpload = async () => {
-    if (!session?.user?.id) {
-      setError('Please ensure you are logged in')
-      return
-    }
-
-    // If there are staged images (creating a new asana), upload them in sequence
-    if (!selectedFile && stagedImages.length > 0) {
-      setUploading(true)
-      setError(null)
-
-      const dataUrlToFile = (dataUrl: string, filename: string) => {
-        const arr = dataUrl.split(',')
-        const mimeMatch = arr[0].match(/:(.*?);/)
-        const mime = mimeMatch ? mimeMatch[1] : 'image/png'
-        const bstr = atob(arr[1])
-        let n = bstr.length
-        const u8 = new Uint8Array(n)
-        while (n--) u8[n] = bstr.charCodeAt(n)
-        return new File([u8], filename, { type: mime })
-      }
-
-      try {
-        for (const s of stagedImages) {
-          const file = dataUrlToFile(s.dataUrl, s.name)
-
-          const formData = new FormData()
-          formData.append('file', file)
-          formData.append('altText', '')
-          formData.append('userId', session.user.email || '')
-          formData.append('imageType', poseId || poseName ? 'pose' : 'gallery')
-          if (poseId) formData.append('poseId', poseId)
-          if (poseName) formData.append('poseName', poseName)
-
-          const response = await fetch('/api/images/upload', {
-            method: 'POST',
-            body: formData,
-          })
-
-          let data: any
-          try {
-            data = await response.json()
-          } catch (jsonError) {
-            data = { error: 'Network error occurred', canFallbackToLocal: true }
-          }
-
-          if (!response.ok) {
-            // If any upload fails, surface an error and stop batch
-            setError(data?.error || 'Upload failed')
-            throw new Error(data?.error || 'Upload failed')
-          }
-
-          onImageUploaded?.(data)
-        }
-
-        // All uploaded successfully: clear staged images
-        setStagedImages([])
-        try {
-          localStorage.removeItem(STAGED_KEY)
-        } catch (e) {}
-
-        handleClose()
-        return
-      } catch (error) {
-        console.error('Batch upload error:', error)
-      } finally {
-        setUploading(false)
-      }
-    }
-
-    setUploading(true)
-    setError(null)
-
-    try {
-      const formData = new FormData()
-      if (selectedFile) {
-        formData.append('file', selectedFile)
-      }
-      formData.append('altText', altText.trim() || '')
-      formData.append('userId', session.user.email || '')
-      formData.append('imageType', poseId || poseName ? 'pose' : 'gallery') // Tag as pose image if pose info provided
-
-      // Add pose information if available
-      if (poseId) {
-        formData.append('poseId', poseId)
-      }
-      if (poseName) {
-        formData.append('poseName', poseName)
-      }
-
-      const response = await fetch('/api/images/upload', {
-        method: 'POST',
-        body: formData,
-      })
-
-      let data: any
-      try {
-        data = await response.json()
-      } catch (jsonError) {
-        // If JSON parsing fails, treat as a network error eligible for fallback
-        console.error('❌ Failed to parse response JSON:', jsonError)
-        data = {
-          error: 'Network error occurred',
-          canFallbackToLocal: true,
-          details:
-            'Failed to communicate with cloud storage. You can save this image locally instead.',
-        }
-      }
-
-      // SUCCESS: Cloud upload worked
-      if (response.ok) {
-        onImageUploaded?.(data)
-        handleClose()
-        return
-      }
-
-      // FAILURE: Cloud upload failed
-
-      // Check if we should offer fallback
-      const shouldOfferFallback = data && data.canFallbackToLocal === true
-
-      if (shouldOfferFallback) {
-        setFallbackDialog({
-          open: true,
-          error: data.error || 'Cloud upload failed',
-          file: selectedFile,
-          altText: altText,
-          preview: preview,
-        })
-        setUploading(false)
-        return
-      } else {
-        throw new Error(data?.error || 'Upload failed')
-      }
-    } catch (error) {
-      console.error('❌ Upload error caught:', error)
-
-      // For network errors, offer fallback
-      if (error instanceof TypeError && error.message.includes('fetch')) {
-        setFallbackDialog({
-          open: true,
-          error: 'Network connection failed',
-          file: selectedFile,
-          altText: altText,
-          preview: preview,
-        })
-      } else {
-        // For other errors, show as regular error
-        setError(error instanceof Error ? error.message : 'Upload failed')
-      }
-    } finally {
-      setUploading(false)
     }
   }
 
@@ -599,10 +422,6 @@ function ImageUploadWithFallbackComponent(
   }
 
   const handleClose = () => {
-    setOpen(false)
-    setSelectedFile(null)
-    setPreview(null)
-    setAltText('')
     setError(null)
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
@@ -668,19 +487,7 @@ function ImageUploadWithFallbackComponent(
       return
     }
 
-    setSelectedFile(file)
     setError(null)
-
-    // Create preview
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      setPreview(e.target?.result as string)
-    }
-    reader.readAsDataURL(file)
-
-    // Auto-generate alt text from filename
-    const baseName = file.name.split('.')[0]
-    setAltText(baseName.replace(/[-_]/g, ' '))
 
     // Show success feedback
     setSuccessMessage('Image ready to upload!')
@@ -690,7 +497,7 @@ function ImageUploadWithFallbackComponent(
     <Button
       variant="contained"
       startIcon={<CloudUploadIcon />}
-      onClick={() => setOpen(true)}
+      onClick={() => fileInputRef.current?.click()}
       sx={{
         borderRadius: '12px',
         textTransform: 'none',
@@ -841,15 +648,6 @@ function ImageUploadWithFallbackComponent(
         >
           Supported: JPEG, PNG, WebP (max {maxFileSize}MB)
         </Typography>
-
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept={acceptedTypes.join(',')}
-          onChange={handleFileSelect}
-          multiple={!poseId}
-          style={{ display: 'none' }}
-        />
       </Box>
 
       {/* Show staged images directly in the dropzone area */}
@@ -859,6 +657,15 @@ function ImageUploadWithFallbackComponent(
 
   return (
     <>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept={acceptedTypes.join(',')}
+        onChange={handleFileSelect}
+        multiple={!poseId}
+        style={{ display: 'none' }}
+      />
+
       {variant === 'button' ? <UploadButton /> : <DropzoneArea />}
 
       {/* Success Toast */}
@@ -878,6 +685,26 @@ function ImageUploadWithFallbackComponent(
           }}
         >
           {successMessage}
+        </Alert>
+      </Snackbar>
+
+      {/* Error Toast */}
+      <Snackbar
+        open={!!error}
+        autoHideDuration={5000}
+        onClose={() => setError(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setError(null)}
+          severity="error"
+          variant="filled"
+          sx={{
+            width: '100%',
+            borderRadius: '12px',
+          }}
+        >
+          {error}
         </Alert>
       </Snackbar>
 

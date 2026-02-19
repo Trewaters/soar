@@ -36,6 +36,8 @@ import {
   useFreemiumNotification,
 } from '@app/clientComponents/freemiumNotification'
 import { AsanaActivity, ASANA_CATEGORIES } from 'types/asana'
+import { AsanaCreatePayloadValidator } from '@app/utils/validation/schemas/asana'
+import { formatValidationError } from '@app/utils/validation/errorFormatter'
 
 // Available categories for autocomplete
 const categories: string[] = [...ASANA_CATEGORIES]
@@ -144,7 +146,6 @@ export default function Page() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
 
     // Clear any previous error states
     setErrorState({
@@ -153,10 +154,7 @@ export default function Page() {
       isDuplicateName: false,
     })
 
-    // Track initial uploaded images for cleanup if needed
-    const initialUploadedImages = [...uploadedImages]
-
-    const updatedAsana = {
+    const validationPayload = {
       sort_english_name: formFullAsanaPoseData.sort_english_name,
       english_names: formFullAsanaPoseData.english_names,
       alternative_english_names:
@@ -164,12 +162,38 @@ export default function Page() {
       description: formFullAsanaPoseData.description,
       category: formFullAsanaPoseData.category,
       difficulty: formFullAsanaPoseData.difficulty,
-      // Include optional, more detailed fields
       sanskrit_names: formFullAsanaPoseData.sanskrit_names,
       dristi: formFullAsanaPoseData.dristi,
       setup_cues: formFullAsanaPoseData.setup_cues,
       deepening_cues: formFullAsanaPoseData.deepening_cues,
       breath: formFullAsanaPoseData.breath ?? undefined,
+    }
+
+    const validationResult =
+      AsanaCreatePayloadValidator.validate(validationPayload)
+    if (!validationResult.isValid) {
+      const validationMessage = Object.entries(validationResult.errors)
+        .flatMap(([field, reasons]) =>
+          reasons.map((reason) => formatValidationError(field, reason))
+        )
+        .join(' | ')
+
+      setErrorState({
+        showToast: true,
+        message:
+          validationMessage || 'Please fix the highlighted validation errors.',
+        isDuplicateName: false,
+      })
+      return
+    }
+
+    setIsSubmitting(true)
+
+    // Track initial uploaded images for cleanup if needed
+    const initialUploadedImages = [...uploadedImages]
+
+    const updatedAsana = {
+      ...validationResult.normalizedData,
       // created_by should be the user's email
       created_by: session?.user?.email ?? 'unknown',
     }

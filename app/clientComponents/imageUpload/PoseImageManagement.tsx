@@ -21,7 +21,6 @@ import { useSession } from 'next-auth/react'
 import { getImageUploadStatus, type ImageStatus } from '@lib/imageStatus'
 import PoseImageGallery from './PoseImageGallery'
 import PoseImageUpload from './PoseImageUpload'
-import type { PoseImageData } from './PoseImageUpload'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -101,7 +100,7 @@ export default function PoseImageManagement({
     }
   }
 
-  const handleImageUploaded = (_image: PoseImageData) => {
+  const handleImageUploaded = () => {
     setRefreshGallery((prev) => prev + 1)
     if (onImagesChange) {
       onImagesChange()
@@ -184,8 +183,8 @@ export default function PoseImageManagement({
       <Stack direction="row" spacing={1} alignItems="center">
         <CheckCircleIcon color="success" fontSize="small" />
         <Typography variant="body2">
-          Click the <strong>Upload</strong> icon next to this panel title in edit
-          mode to manage content.
+          Click the <strong>Upload</strong> icon next to this panel title in
+          edit mode to manage content.
         </Typography>
       </Stack>
     </Box>

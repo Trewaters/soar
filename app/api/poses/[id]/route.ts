@@ -1,9 +1,11 @@
 import { auth } from '../../../../auth'
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '../../../../app/lib/prismaClient'
+import { prisma } from '@lib/prismaClient'
 import { canModifyContent } from '@app/utils/authorization'
 import fs from 'fs'
 import path from 'path'
+import { AsanaUpdatePayloadValidator } from '@app/utils/validation/schemas/asana'
+import { formatAsValidationResponse } from '@app/utils/validation/errorFormatter'
 
 export async function PUT(
   request: NextRequest,
@@ -106,6 +108,26 @@ export async function PUT(
     for (const key of allowedFields) {
       if (Object.prototype.hasOwnProperty.call(input, key)) {
         data[key] = input[key]
+      }
+    }
+
+    // Validation integration point: validate normalized edit payload before DB write.
+    const validationResult = AsanaUpdatePayloadValidator.validate(data)
+    if (!validationResult.isValid) {
+      console.warn('[PUT /api/poses/[id]] Validation failed', {
+        poseId: resolvedParams.id,
+        errors: validationResult.errors,
+      })
+      return NextResponse.json(formatAsValidationResponse(validationResult), {
+        status: 400,
+      })
+    }
+
+    const normalizedData = validationResult.normalizedData
+    const normalizedDataRecord = normalizedData as Record<string, unknown>
+    for (const key of Object.keys(data)) {
+      if (Object.prototype.hasOwnProperty.call(normalizedDataRecord, key)) {
+        data[key] = normalizedDataRecord[key]
       }
     }
 

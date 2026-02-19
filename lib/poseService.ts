@@ -21,30 +21,30 @@ export async function fetchWithTimeout(
 export type CreatePoseInput = {
   sort_english_name: string
   english_names: string[]
-  description: string
+  description?: string | null
   category: string
   difficulty: string
   // Optional extended fields to match Prisma and app types
   breath?: string[]
   sanskrit_names?: string[]
-  dristi?: string
-  setup_cues?: string
-  deepening_cues?: string
+  dristi?: string | null
+  setup_cues?: string | null
+  deepening_cues?: string | null
   created_by: string
 }
 
 export type UpdatePoseInput = {
   sort_english_name: string
   english_names: string[]
-  description: string
-  category: string
-  difficulty: string
+  description?: string | null
+  category?: string
+  difficulty?: string
   // make breath optional on update to match create semantics
   breath?: string[]
   sanskrit_names?: string[]
-  dristi?: string
-  setup_cues?: string
-  deepening_cues?: string
+  dristi?: string | null
+  setup_cues?: string | null
+  deepening_cues?: string | null
   // Additional optional fields accepted by the update endpoint
   breath_direction_default?: string
   // preferred_side and sideways deprecated and removed

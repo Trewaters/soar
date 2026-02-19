@@ -1,50 +1,42 @@
-import { prisma } from '../../../../app/lib/prismaClient'
+import { prisma } from '@lib/prismaClient'
 import { requireAuth } from '@app/utils/authorization'
 import { NextResponse } from 'next/server'
+import { AsanaCreatePayloadValidator } from '@app/utils/validation/schemas/asana'
+import { formatAsValidationResponse } from '@app/utils/validation/errorFormatter'
 
 export async function POST(request: Request) {
   try {
     // Ensure user is authenticated before creating content
     const session = await requireAuth()
 
-    const {
-      english_names,
-      alternative_english_names,
-      sort_english_name,
-      description,
-      category,
-      difficulty,
-      breath,
-      sanskrit_names,
-      dristi,
-      setup_cues,
-      deepening_cues,
-      // Ignore any created_by from request - we set it from session
-    } = await request.json()
+    const requestBody = await request.json()
+
+    // Validation integration point: reject invalid payloads before DB writes
+    const validationResult = AsanaCreatePayloadValidator.validate(requestBody)
+    if (!validationResult.isValid) {
+      console.warn('[POST /api/poses/createAsana] Validation failed', {
+        errors: validationResult.errors,
+      })
+      return NextResponse.json(formatAsValidationResponse(validationResult), {
+        status: 400,
+      })
+    }
+
+    const normalized = validationResult.normalizedData
 
     const createdPose = await prisma.asanaPose.create({
       data: {
-        english_names,
-        alternative_english_names: Array.isArray(alternative_english_names)
-          ? alternative_english_names
-          : alternative_english_names
-            ? [alternative_english_names]
-            : [],
-        sort_english_name,
-        description,
-        category,
-        difficulty,
-        // Ensure breath is stored as an array when provided (caller may send string or array)
-        breath: Array.isArray(breath) ? breath : breath ? [breath] : [],
-        // Additional fields from client
-        sanskrit_names: Array.isArray(sanskrit_names)
-          ? sanskrit_names
-          : typeof sanskrit_names === 'string' && sanskrit_names
-            ? [sanskrit_names]
-            : [],
-        dristi,
-        setup_cues,
-        deepening_cues,
+        english_names: normalized.english_names,
+        alternative_english_names: normalized.alternative_english_names ?? [],
+        sort_english_name: normalized.sort_english_name,
+        description: normalized.description ?? null,
+        category: normalized.category,
+        difficulty: normalized.difficulty,
+        breath: normalized.breath ?? [],
+        sanskrit_names: normalized.sanskrit_names ?? [],
+        dristi: normalized.dristi ?? null,
+        setup_cues: normalized.setup_cues ?? null,
+        deepening_cues: normalized.deepening_cues ?? null,
         // Set created_by from authenticated session user ID
         created_by: session.user.id,
         // Mark as user-created for personal content
