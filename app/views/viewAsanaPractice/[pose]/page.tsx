@@ -31,6 +31,7 @@ import { getAccessiblePoses, getPoseByName } from '@lib/poseService'
 import { orderPosesForSearch } from '@app/utils/search/orderPosesForSearch'
 import getAsanaTitle from '@app/utils/search/getAsanaTitle'
 import getAlphaUserIds from '@app/lib/alphaUsers'
+import { ASANA_FIELD_DEFINITIONS_BY_KEY } from '@app/clientComponents/asanaUi/asanaFieldConstants'
 import Image from 'next/image'
 import { AsanaPose } from 'types/asana'
 import NAV_PATHS from '@app/utils/navigation/constants'
@@ -352,22 +353,30 @@ export default function ViewAsanaPractice({
             {/* Basic Info */}
             {viewPose?.category && (
               <Typography variant="body1" color="white" sx={{ mb: 1 }}>
-                <strong>Category:</strong> {viewPose.category}
+                <strong>
+                  {ASANA_FIELD_DEFINITIONS_BY_KEY.category.label}:
+                </strong>{' '}
+                {viewPose.category}
               </Typography>
             )}
             {viewPose?.difficulty && (
               <Typography variant="body1" color="white" sx={{ mb: 1 }}>
-                <strong>Difficulty:</strong> {viewPose.difficulty}
+                <strong>
+                  {ASANA_FIELD_DEFINITIONS_BY_KEY.difficulty.label}:
+                </strong>{' '}
+                {viewPose.difficulty}
               </Typography>
             )}
             {/* Pose-level breath intentionally hidden; series-level breath is still supported */}
 
-            {/* Names */}
+            {/* Name Fields */}
             {viewPose?.sanskrit_names &&
               Array.isArray(viewPose.sanskrit_names) &&
               viewPose.sanskrit_names.length > 0 && (
                 <Typography variant="body1" color="white" sx={{ mb: 1 }}>
-                  <strong>Sanskrit:</strong>{' '}
+                  <strong>
+                    {ASANA_FIELD_DEFINITIONS_BY_KEY.sanskrit_names.label}:
+                  </strong>{' '}
                   {viewPose.sanskrit_names.join(', ')}
                 </Typography>
               )}
@@ -375,14 +384,19 @@ export default function ViewAsanaPractice({
               Array.isArray(viewPose.english_names) &&
               viewPose.english_names.length > 0 && (
                 <Typography variant="body1" color="white" sx={{ mb: 1 }}>
-                  <strong>Also Known As:</strong>{' '}
+                  <strong>
+                    {ASANA_FIELD_DEFINITIONS_BY_KEY.english_names.label}:
+                  </strong>{' '}
                   {viewPose.english_names.join(', ')}
                 </Typography>
               )}
 
-            {/* Description */}
+            {/* Description Field */}
             {viewPose?.description && (
               <Typography variant="body2" color="white" sx={{ mb: 2 }}>
+                <strong>
+                  {ASANA_FIELD_DEFINITIONS_BY_KEY.description.label}:
+                </strong>{' '}
                 {viewPose.description}
               </Typography>
             )}
@@ -390,7 +404,8 @@ export default function ViewAsanaPractice({
             {/* Dristi */}
             {viewPose?.dristi && (
               <Typography variant="body2" color="white" sx={{ mb: 1 }}>
-                <strong>Dristi (Gaze):</strong> {viewPose.dristi}
+                <strong>{ASANA_FIELD_DEFINITIONS_BY_KEY.dristi.label}:</strong>{' '}
+                {viewPose.dristi}
               </Typography>
             )}
 
@@ -398,7 +413,9 @@ export default function ViewAsanaPractice({
             {viewPose?.setup_cues && (
               <Box sx={{ mb: 2 }}>
                 <Typography variant="body1" color="white" sx={{ mb: 0.5 }}>
-                  <strong>Setup Cues:</strong>
+                  <strong>
+                    {ASANA_FIELD_DEFINITIONS_BY_KEY.setup_cues.label}:
+                  </strong>
                 </Typography>
                 <Typography variant="body2" color="white">
                   {viewPose.setup_cues}
@@ -410,7 +427,9 @@ export default function ViewAsanaPractice({
             {viewPose?.deepening_cues && (
               <Box sx={{ mb: 2 }}>
                 <Typography variant="body1" color="white" sx={{ mb: 0.5 }}>
-                  <strong>Deepening Cues:</strong>
+                  <strong>
+                    {ASANA_FIELD_DEFINITIONS_BY_KEY.deepening_cues.label}:
+                  </strong>
                 </Typography>
                 <Typography variant="body2" color="white">
                   {viewPose.deepening_cues}

@@ -20,15 +20,18 @@ import {
 } from '@mui/material'
 import SearchField from './form/SearchField'
 import { useSession } from 'next-auth/react'
+import type { AsanaPose } from 'types/asana'
 
-interface AsanaOption {
-  id: string
-  english_names: string[]
-  sanskrit_names: string | null
-  sort_english_name: string
-  difficulty: string
-  category: string
-  created_by: string
+type AsanaOption = Pick<
+  AsanaPose,
+  | 'id'
+  | 'english_names'
+  | 'sort_english_name'
+  | 'difficulty'
+  | 'category'
+  | 'created_by'
+> & {
+  sanskrit_names: AsanaPose['sanskrit_names'] | string | null
 }
 
 interface AddAsanasDialogProps {
@@ -171,8 +174,9 @@ export default function AddAsanasDialog({
   const getAsanaDisplayName = (asana: AsanaOption) => {
     // Prioritize sort_english_name as the canonical display name
     const englishName = asana.sort_english_name || asana.english_names[0]
-    const sanskritName =
-      typeof asana.sanskrit_names === 'string' ? asana.sanskrit_names : ''
+    const sanskritName = Array.isArray(asana.sanskrit_names)
+      ? asana.sanskrit_names[0] || ''
+      : asana.sanskrit_names ?? ''
     return sanskritName ? `${englishName} (${sanskritName})` : englishName
   }
 

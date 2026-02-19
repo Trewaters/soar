@@ -23,7 +23,13 @@ import { FEATURES } from '@app/FEATURES'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 import AsanaDetailsEdit from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
-import { createAsanaFields } from '@app/clientComponents/asanaUi/asanaFieldConstants'
+import {
+  ASANA_FIELD_DEFINITIONS_BY_KEY,
+  type AsanaFieldKey,
+  type AsanaFormData,
+  createEmptyAsanaFormData,
+  createAsanaFields,
+} from '@app/clientComponents/asanaUi/asanaFieldConstants'
 import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import ActivityTracker from '@app/clientComponents/ActivityTracker'
 import { useSession } from 'next-auth/react'
@@ -147,34 +153,14 @@ export default function PoseActivityDetail({
   // Inline Edit Mode State
   const [isEditing, setIsEditing] = useState(initialEditMode)
 
-  const [formData, setFormData] = useState<{
-    sort_english_name: string
-    english_names: string[]
-    sanskrit_names: string[]
-    alternative_english_names: string[]
-    description?: string
-    category?: string
-    difficulty?: string
-    dristi?: string
-    setup_cues?: string
-    deepening_cues?: string
-  }>({
-    sort_english_name: '',
-    english_names: [],
-    sanskrit_names: [],
-    alternative_english_names: [],
-    description: '',
-    category: '',
-    difficulty: '',
-    dristi: '',
-    setup_cues: '',
-    deepening_cues: '',
-  })
+  const [formData, setFormData] = useState<AsanaFormData>(
+    createEmptyAsanaFormData()
+  )
 
   // Stable setter for form fields to avoid extra re-renders
-  const setField = React.useCallback((key: string, value: any) => {
+  const setField = React.useCallback((key: AsanaFieldKey, value: any) => {
     setFormData((prev) => {
-      if ((prev as any)[key] === value) return prev
+      if (prev[key] === value) return prev
       return { ...prev, [key]: value }
     })
   }, [])
@@ -867,54 +853,56 @@ export default function PoseActivityDetail({
                     ? pose.sanskrit_names.join(', ')
                     : (pose?.sanskrit_names as any) || ''
                 }
-                label="Sanskrit Names"
+                label={ASANA_FIELD_DEFINITIONS_BY_KEY.sanskrit_names.label}
                 sx={{ mb: '32px' }}
               />
               <AsanaDetails
                 details={pose?.english_names?.join(', ')}
-                label={pose?.label ?? 'English Variant Names'}
+                label={ASANA_FIELD_DEFINITIONS_BY_KEY.english_names.label}
                 sx={{
                   mb: '32px',
                 }}
               />
               <AsanaDetails
                 details={pose?.alternative_english_names?.join(', ')}
-                label={pose?.label ?? 'Alternative Names (Custom/Nicknames)'}
+                label={
+                  ASANA_FIELD_DEFINITIONS_BY_KEY.alternative_english_names.label
+                }
                 sx={{
                   mb: '32px',
                 }}
               />
               <AsanaDetails
                 details={pose?.description}
-                label="Description"
+                label={ASANA_FIELD_DEFINITIONS_BY_KEY.description.label}
                 sx={{
                   mb: '32px',
                 }}
               />
               <AsanaDetails
                 details={`${pose?.category}`}
-                label="Category"
+                label={ASANA_FIELD_DEFINITIONS_BY_KEY.category.label}
                 showCategoryIcon
                 sx={{ mb: '32px' }}
               />
               <AsanaDetails
                 details={pose?.difficulty}
-                label="Difficulty"
+                label={ASANA_FIELD_DEFINITIONS_BY_KEY.difficulty.label}
                 sx={{ mb: '32px' }}
               />
               <AsanaDetails
                 details={pose?.dristi}
-                label="Dristi"
+                label={ASANA_FIELD_DEFINITIONS_BY_KEY.dristi.label}
                 sx={{ mb: '32px' }}
               />
               <AsanaDetails
                 details={pose?.setup_cues}
-                label="Setup Cues"
+                label={ASANA_FIELD_DEFINITIONS_BY_KEY.setup_cues.label}
                 sx={{ mb: '32px' }}
               />
               <AsanaDetails
                 details={pose?.deepening_cues}
-                label="Deepening Cues"
+                label={ASANA_FIELD_DEFINITIONS_BY_KEY.deepening_cues.label}
                 sx={{ mb: '32px' }}
               />
             </>

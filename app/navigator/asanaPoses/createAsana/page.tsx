@@ -21,7 +21,12 @@ import HelpButton from '@app/clientComponents/HelpButton'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import { HELP_PATHS } from '@app/utils/helpLoader'
 import AsanaDetailsEdit from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
-import { createAsanaFields } from '@app/clientComponents/asanaUi/asanaFieldConstants'
+import {
+  type AsanaFieldKey,
+  type AsanaFormData,
+  createEmptyAsanaFormData,
+  createAsanaFields,
+} from '@app/clientComponents/asanaUi/asanaFieldConstants'
 import ImageUploadWithFallback from '@app/clientComponents/imageUpload/ImageUploadWithFallback'
 import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUploadWithFallback'
 import { deletePoseImage } from '@lib/imageService'
@@ -35,12 +40,22 @@ import { AsanaActivity, ASANA_CATEGORIES } from 'types/asana'
 // Available categories for autocomplete
 const categories: string[] = [...ASANA_CATEGORIES]
 
+type CreateAsanaFormState = AsanaFormData & {
+  created_by: string
+  poseImages: PoseImageData[]
+  activity_completed?: boolean
+  asanaActivities: AsanaActivity[]
+  activity_practice?: boolean
+  breath?: string[]
+}
+
 export default function Page() {
   const { data: session } = useSession()
   const router = useNavigationWithLoading()
   const { userAuthState, checkFeatureAccess, handleCtaAction } =
     useFreemiumNotification()
   const imageUploadRef = useRef<{
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
     saveStagedImages: (poseId?: string, poseName?: string) => Promise<void>
   }>(null)
 
@@ -67,40 +82,16 @@ export default function Page() {
   const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const [formFullAsanaPoseData, setFormFullAsanaPoseData] = useState<{
-    sort_english_name: string
-    english_names: string[]
-    alternative_english_names: string[] // Custom names for asana
-    description: string
-    category: string
-    difficulty: string
-    created_by: string
-    dristi?: string
-    sanskrit_names: string[] // use first element for primary sanskrit name
-    poseImages: PoseImageData[] // Relation to PoseImage
-    activity_completed?: boolean
-    asanaActivities: AsanaActivity[] // Relation to AsanaActivity
-    activity_practice?: boolean
-    setup_cues?: string
-    deepening_cues?: string
-  }>({
-    sort_english_name: '',
-    english_names: [],
-    alternative_english_names: [],
-    description: '',
-    category: '',
-    difficulty: '',
-    // created_by should be the user's email (project convention)
-    created_by: session?.user?.email ?? 'error-undefined-user',
-    dristi: '',
-    sanskrit_names: [], // use first element for primary sanskrit name
-    poseImages: [],
-    activity_completed: false,
-    asanaActivities: [],
-    activity_practice: false,
-    setup_cues: '',
-    deepening_cues: '',
-  })
+  const [formFullAsanaPoseData, setFormFullAsanaPoseData] =
+    useState<CreateAsanaFormState>({
+      ...createEmptyAsanaFormData(),
+      // created_by should be the user's email (project convention)
+      created_by: session?.user?.email ?? 'error-undefined-user',
+      poseImages: [],
+      activity_completed: false,
+      asanaActivities: [],
+      activity_practice: false,
+    })
 
   // Create field configurations for AsanaDetailsEdit (memoized to avoid
   // recreating handlers/objects every render which can cause extra updates)
@@ -108,7 +99,7 @@ export default function Page() {
   // and includes a short-lived guard to detect runaway updates.
   const setFieldCallCount = React.useRef(0)
 
-  const setField = React.useCallback((key: string, value: any) => {
+  const setField = React.useCallback((key: AsanaFieldKey, value: any) => {
     setFieldCallCount.current += 1
     if (setFieldCallCount.current > 200) {
       console.error(
@@ -120,13 +111,13 @@ export default function Page() {
     }
 
     setFormFullAsanaPoseData((prev) => {
-      const current = (prev as any)[key]
+      const current = prev[key]
       const isEqual =
         Array.isArray(current) && Array.isArray(value)
           ? JSON.stringify(current) === JSON.stringify(value)
           : current === value
       if (isEqual) return prev
-      return { ...(prev as any), [key]: value }
+      return { ...prev, [key]: value }
     })
   }, [])
 
@@ -178,7 +169,7 @@ export default function Page() {
       dristi: formFullAsanaPoseData.dristi,
       setup_cues: formFullAsanaPoseData.setup_cues,
       deepening_cues: formFullAsanaPoseData.deepening_cues,
-      breath: (formFullAsanaPoseData as any).breath ?? undefined,
+      breath: formFullAsanaPoseData.breath ?? undefined,
       // created_by should be the user's email
       created_by: session?.user?.email ?? 'unknown',
     }
@@ -325,22 +316,14 @@ export default function Page() {
     setUploadedImages([])
 
     setFormFullAsanaPoseData({
-      sort_english_name: '',
-      english_names: [],
-      alternative_english_names: [],
-      description: '',
-      category: '',
-      difficulty: '',
+      ...createEmptyAsanaFormData(),
       created_by: session?.user?.email ?? 'error-undefined-user',
-      dristi: '',
-      sanskrit_names: [],
       poseImages: [],
       activity_completed: false,
       asanaActivities: [],
       activity_practice: false,
-      setup_cues: '',
-      deepening_cues: '',
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Close notification handler

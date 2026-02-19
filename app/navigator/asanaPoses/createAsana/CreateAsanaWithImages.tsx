@@ -10,42 +10,29 @@ import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import NAV_PATHS from '@app/utils/navigation/constants'
 import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
 import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUpload'
+import {
+  ASANA_FIELD_DEFINITIONS_BY_KEY,
+  createEmptyAsanaFormData,
+  type AsanaFormData,
+} from '@app/clientComponents/asanaUi/asanaFieldConstants'
 import ImageIcon from '@mui/icons-material/Image'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+
+type CreateAsanaWithImagesFormData = AsanaFormData & {
+  breath_direction_default: string
+  created_by: string
+  breath: string[]
+}
 
 export default function CreateAsanaWithImages() {
   const { data: session } = useSession()
   const { state, dispatch } = useAsanaPose()
   const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
   const [englishVariationsInput, setEnglishVariationsInput] = useState('')
-  const [formData, setFormData] = useState<{
-    sort_english_name: string
-    english_names: string[]
-    description: string
-    category: string
-    difficulty: string
-    breath_direction_default: string
-    created_by: string
-    // optional extended fields
-    sanskrit_names?: string[]
-    dristi?: string
-    setup_cues?: string
-    deepening_cues?: string
-    breath?: string[]
-  }>({
-    sort_english_name: '',
-    english_names: [],
-    description: '',
-    category: '',
-    difficulty: '',
+  const [formData, setFormData] = useState<CreateAsanaWithImagesFormData>({
+    ...createEmptyAsanaFormData(),
     breath_direction_default: '',
-    // preferred_side and sideways removed
-    sanskrit_names: [],
-    dristi: '',
-    setup_cues: '',
-    deepening_cues: '',
     breath: [],
-    // created_by should be the user's email (project convention)
     created_by: session?.user?.email ?? 'error-undefined-user',
   })
 
@@ -92,6 +79,7 @@ export default function CreateAsanaWithImages() {
     const updatedAsana = {
       sort_english_name: formData.sort_english_name,
       english_names: formData.english_names,
+      alternative_english_names: formData.alternative_english_names,
       description: formData.description,
       category: formData.category,
       difficulty: formData.difficulty,
@@ -110,13 +98,9 @@ export default function CreateAsanaWithImages() {
 
       // Clear the form
       setFormData({
-        sort_english_name: '',
-        english_names: [],
-        description: '',
-        category: '',
-        difficulty: '',
+        ...createEmptyAsanaFormData(),
         breath_direction_default: '',
-        // preferred_side and sideways removed
+        breath: [],
         created_by: 'alpha users',
       })
       setEnglishVariationsInput('')
@@ -206,7 +190,7 @@ export default function CreateAsanaWithImages() {
                   <Grid size={12}>
                     <FormControl sx={{ width: '100%', mb: 3 }}>
                       <TextField
-                        label="Description"
+                        label={ASANA_FIELD_DEFINITIONS_BY_KEY.description.label}
                         name="description"
                         value={formData.description}
                         onChange={handleChange}
@@ -337,7 +321,7 @@ export default function CreateAsanaWithImages() {
                     <FormControl sx={{ width: '100%', mb: 3 }}>
                       <TextField
                         select
-                        label="Category"
+                        label={ASANA_FIELD_DEFINITIONS_BY_KEY.category.label}
                         name="category"
                         value={formData.category}
                         onChange={handleChange}
@@ -365,7 +349,7 @@ export default function CreateAsanaWithImages() {
                     <FormControl sx={{ width: '100%', mb: 3 }}>
                       <TextField
                         select
-                        label="Difficulty"
+                        label={ASANA_FIELD_DEFINITIONS_BY_KEY.difficulty.label}
                         name="difficulty"
                         value={formData.difficulty}
                         onChange={handleChange}

@@ -9,51 +9,17 @@ import {
   useReducer,
 } from 'react'
 import { PoseImageData } from '../../types/images'
-import { AsanaPose } from 'types/asana'
+import {
+  AsanaPose,
+  DisplayAsanaPose,
+  PoseCardFields as CanonicalPoseCardFields,
+} from 'types/asana'
+import { createEmptyAsanaFormData } from '@app/clientComponents/asanaUi/asanaFieldConstants'
 
-export interface displayAsanaPose {
-  id: number
-  english_names: string[]
-  sanskrit_names: string
-  sort_english_name: string
-  description: string
-  benefits: string
-  category: string
-  difficulty: string
-  lore: string
-  dristi: string
-  // preferred_side and sideways removed from app
-  created_on: string
-  updated_on: string
-  activity_completed: boolean
-  activity_practice: boolean
-  pose_intent: string
-  duration_asana: string
-  created_by: string
-}
+export type displayAsanaPose = DisplayAsanaPose
 
 // PoseCard fields
-export interface PoseCardFields {
-  id: number
-  description: string
-  simplified_english_name: string
-  english_name: string
-  sanskrit_names: {
-    simplified: string
-  }[]
-  // duration: string
-  pose_meaning: string
-  benefits: string
-  dristi: string
-  difficulty: string
-  category: string
-  subcategory: string
-  acitivity_completed: boolean
-  acitivity_easy: boolean
-  acitivity_difficult: boolean
-  acitivity_practice: boolean
-  pose_intent: string
-}
+export type PoseCardFields = CanonicalPoseCardFields
 
 export interface AsanaPosePageState {
   // allow partial during initial load/migration to avoid strict type mismatch
@@ -78,13 +44,8 @@ type AsanaPoseAction =
 const initialState: AsanaPosePageState = {
   poses: {
     id: '',
-    sort_english_name: '',
-    english_names: [],
-    sanskrit_names: [],
+    ...createEmptyAsanaFormData(),
     poseImages: [],
-    description: '',
-    category: '',
-    difficulty: '',
     imageCount: 0,
     isUserCreated: false,
   },
