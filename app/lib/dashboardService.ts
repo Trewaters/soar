@@ -551,10 +551,7 @@ export async function getDashboardStats(
       // future yearly names may be appended here
     ]
 
-    const tierIndex = Math.max(
-      0,
-      Math.min(tiersAchieved, tierNames.length - 1)
-    )
+    const tierIndex = Math.max(0, Math.min(tiersAchieved, tierNames.length - 1))
     const currentTierName = tierNames[tierIndex] ?? 'Get started!'
 
     // How many full 365-day cycles have been completed

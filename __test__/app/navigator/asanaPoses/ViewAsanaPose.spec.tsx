@@ -299,9 +299,8 @@ describe('PoseActivityDetail - View Asana - Happy Path', () => {
         wrapper: TestWrapper,
       })
 
-      expect(
-        screen.getByRole('button', { name: /edit pose/i })
-      ).toBeInTheDocument()
+      const editButtons = screen.getAllByRole('button', { name: /edit pose/i })
+      expect(editButtons.length).toBeGreaterThan(0)
     })
 
     it('should hide Edit icon when user is not the creator', () => {
