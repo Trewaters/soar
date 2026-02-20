@@ -10,7 +10,7 @@ import {
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 
-interface NavigationButtonProps extends Omit<ButtonProps, 'onClick'> {
+export interface NavigationButtonProps extends Omit<ButtonProps, 'onClick'> {
   href?: string
   elementId?: string
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void

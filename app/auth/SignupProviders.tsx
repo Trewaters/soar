@@ -9,7 +9,7 @@ import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { signIn } from 'next-auth/react'
 
-type Provider = {
+export type Provider = {
   id: string
   name: string
 }

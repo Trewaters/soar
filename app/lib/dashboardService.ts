@@ -1,16 +1,16 @@
 import { prisma } from './prismaClient'
 
-interface PracticeHistoryItem {
+export interface PracticeHistoryItem {
   month: string
   days: number
 }
 
-interface MostCommonItem {
+export interface MostCommonItem {
   name: string
   count: number
 }
 
-interface DashboardStats {
+export interface DashboardStats {
   loginStreak: number
   activityStreak: number
   longestStreak: number

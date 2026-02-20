@@ -28,7 +28,7 @@ export type SequencePageState = {
   sequences: SequenceData
 }
 
-type SequenceAction =
+export type SequenceAction =
   | { type: 'SET_SEQUENCES'; payload: SequenceData }
   | { type: 'UPDATE_SEQUENCE'; payload: SequenceData }
   | { type: 'UPDATE_FIELD'; payload: { key: keyof SequenceData; value: any } }
@@ -49,7 +49,7 @@ const initialState: SequencePageState = {
   },
 }
 
-interface SequenceContextType {
+export interface SequenceContextType {
   state: SequencePageState
   dispatch: Dispatch<SequenceAction>
   active: boolean

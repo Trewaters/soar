@@ -6,7 +6,7 @@ import { prisma } from '../../lib/prismaClient'
 // Force this route to be dynamic since it requires authentication
 export const dynamic = 'force-dynamic'
 
-interface ImageGalleryResponse {
+export interface ImageGalleryResponse {
   images: PoseImage[]
   total: number
   hasMore: boolean
@@ -17,7 +17,7 @@ interface ImageGalleryResponse {
   }
 }
 
-interface PoseImage {
+export interface PoseImage {
   id: string
   url: string
   altText?: string

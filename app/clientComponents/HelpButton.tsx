@@ -2,7 +2,7 @@ import { IconButton, SxProps, Theme } from '@mui/material'
 import React from 'react'
 import HelpIcon from '@mui/icons-material/Help'
 
-interface HelpButtonProps {
+export interface HelpButtonProps {
   onClick: () => void
   sx?: SxProps<Theme>
 }

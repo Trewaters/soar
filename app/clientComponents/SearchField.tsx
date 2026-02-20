@@ -12,7 +12,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search'
 import CloseIcon from '@mui/icons-material/Close'
 
-interface SearchFieldProps {
+export interface SearchFieldProps {
   value: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   placeholder?: string

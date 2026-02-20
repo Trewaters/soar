@@ -3,16 +3,24 @@ import Autocomplete from '@mui/material/Autocomplete'
 import { AutocompleteInput } from '@app/clientComponents/form'
 import { AsanaPose } from 'types/asana'
 
-interface AnotherOptionType {
+export interface AnotherOptionType {
   id: string
   name: string
 }
 
-type AutocompleteOption = AsanaPose | AnotherOptionType
+export type AutocompleteOption = AsanaPose | AnotherOptionType
 
-interface CustomAutocompleteProps
+export interface CustomAutocompleteProps
   extends React.ComponentProps<typeof Autocomplete> {
   placeholder?: string
+  /**
+   * If provided, the options will be grouped under the returned string.
+   * The groupBy value is also used as the text for group headers when `renderGroup` is not provided.
+   *
+   * @param option The option to group.
+   * @returns The group name.
+   */
+  groupBy?: (option: any) => string
 }
 
 export default function AutocompleteComponent(props: CustomAutocompleteProps) {

@@ -7,14 +7,14 @@ import type { PrismaClient } from '@prisma/client'
  * Implements efficient queries for multi-image carousels with proper indexing
  */
 
-interface ImageQueryOptions {
+export interface ImageQueryOptions {
   poseId: string
   includeMetadata?: boolean
   limit?: number
   orderBy?: 'displayOrder' | 'uploadedAt'
 }
 
-interface ImageQueryResult {
+export interface ImageQueryResult {
   images: Array<{
     id: string
     url: string

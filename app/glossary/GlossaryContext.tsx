@@ -21,7 +21,7 @@ export interface GlossaryTerm {
   readOnly?: boolean
 }
 
-interface GlossaryContextValue {
+export interface GlossaryContextValue {
   defaultTerms: GlossaryTerm[]
   terms: GlossaryTerm[]
   loading: boolean

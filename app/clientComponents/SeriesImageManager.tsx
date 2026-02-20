@@ -22,7 +22,7 @@ import AddIcon from '@mui/icons-material/Add'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { useSession } from 'next-auth/react'
 
-interface SeriesImageManagerProps {
+export interface SeriesImageManagerProps {
   seriesId: string
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   onImagesChange?: (_images: string[]) => void

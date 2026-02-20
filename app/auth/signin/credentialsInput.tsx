@@ -24,7 +24,7 @@ type AuthErrorType = {
 }
 
 /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
-interface CredentialsInputProps {
+export interface CredentialsInputProps {
   // Callback invoked with the provider type when email lookup completes
   // The callback receives the detected provider string or null when not found
   onProviderTypeChange?: (_provider: string | null) => void

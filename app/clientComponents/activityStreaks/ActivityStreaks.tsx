@@ -34,7 +34,7 @@ export interface StreakData {
   color: 'primary' | 'secondary' | 'success' | 'warning' | 'error'
 }
 
-interface ActivityStreaksProps {
+export interface ActivityStreaksProps {
   variant?: 'compact' | 'detailed'
   streakTypes?: StreakType[]
 }

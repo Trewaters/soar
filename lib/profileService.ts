@@ -1,9 +1,9 @@
 import { prisma } from './prismaClient'
 import { logServiceError } from './errorLogger'
 
-type LibraryType = 'asanas' | 'series' | 'sequences' | 'all'
+export type LibraryType = 'asanas' | 'series' | 'sequences' | 'all'
 
-interface GetLibraryParams {
+export interface GetLibraryParams {
   userId?: string | null
   type?: LibraryType
   limit?: number

@@ -8,7 +8,7 @@ export type FieldValidationResult<T = unknown> = {
 
 // TypeScript requires a parameter identifier in function type syntax.
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-type UnaryFunction<Input, Output> = (input: Input) => Output
+export type UnaryFunction<Input, Output> = (input: Input) => Output
 
 export type Validator<T = unknown> = UnaryFunction<
   unknown,

@@ -3,7 +3,7 @@ import React from 'react'
 import { Box } from '@mui/material'
 import Image from 'next/image'
 
-interface StaticMapImageProps {
+export interface StaticMapImageProps {
   location: string
   width?: number
   height?: number

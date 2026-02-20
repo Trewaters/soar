@@ -57,7 +57,7 @@ interface ImageGalleryResponse {
   }
 }
 
-interface PoseImageGalleryProps {
+export interface PoseImageGalleryProps {
   poseId?: string
   poseName?: string
   enableManagement?: boolean

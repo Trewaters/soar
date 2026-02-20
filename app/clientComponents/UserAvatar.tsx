@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { UseUser } from '@app/context/UserContext'
 import { useSession } from 'next-auth/react'
 
-interface UserAvatarProps extends Omit<AvatarProps, 'src' | 'alt'> {
+export interface UserAvatarProps extends Omit<AvatarProps, 'src' | 'alt'> {
   /**
    * Size variant for quick styling
    */

@@ -289,7 +289,7 @@ See also the list of [contributors](https://github.com/) who participated in thi
 
 ## License
 
-This project is licensed under the _GNU Affero General Public License v3.0_ - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the _GNU Affero General Public License v3.0_ - see the [LICENSE](LICENSE) file for details.
 
 ### Known Bugs
 

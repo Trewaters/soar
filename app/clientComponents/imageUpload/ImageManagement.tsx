@@ -145,7 +145,7 @@ function TabPanel(props: TabPanelProps) {
   )
 }
 
-interface ImageManagementProps {
+export interface ImageManagementProps {
   title?: string
   showUploadButton?: boolean
   showGallery?: boolean

@@ -36,7 +36,7 @@ type WeeklyActivityData =
   | WeeklySeriesActivityData
   | WeeklySequenceActivityData
 
-interface WeeklyActivityViewerProps {
+export interface WeeklyActivityViewerProps {
   entityId: string
   entityName: string // Used for prop interface, may be used for future enhancements
   entityType: 'asana' | 'series' | 'sequence'
@@ -60,16 +60,6 @@ interface WeeklyActivityViewerProps {
  *     - getSequenceWeeklyActivity(userId, entityId)
  *   and populates local state: weeklyData, loading, error.
  * - Handles network and fetch errors by setting `error` and logging to console.
- *
- * Props (WeeklyActivityViewerProps):
- * @param entityId - Unique identifier of the entity to load activity for (required).
- * @param entityName - The entity display name (passed as _entityName to avoid unused-var warnings).
- * @param entityType - One of 'asana' | 'series' | 'sequence'. Determines which fetch routine and label text to use.
- * @param variant - 'compact' | 'detailed' (default: 'compact'). Controls rendering style:
- *                   - 'compact': a small card with activity count, last-performed tooltip and streak chip.
- *                   - 'detailed': full tracker with weekly count, streak label, last performed, and a
- *                     list of sessions with date/time, time-of-day icon, and difficulty/completion chip.
- * @param refreshTrigger - Numeric trigger to force refetch when changed (default: 0).
  *
  * Rendering / UI states:
  * - Loading: renders a LoadingSkeleton with size depending on variant.

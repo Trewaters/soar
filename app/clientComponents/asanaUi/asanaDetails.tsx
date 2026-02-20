@@ -10,7 +10,7 @@ import {
  * Props for displaying Asana details in view mode
  * Supports both direct details or field configurations
  */
-interface AsanaDetailsProps {
+export interface AsanaDetailsProps {
   /** Direct details to display (legacy mode) */
   details?: string | string[] | null | undefined
 
@@ -26,7 +26,7 @@ interface AsanaDetailsProps {
 
 // Extend only Stack props since it's the root element of our component
 // Typography and Image props are internal implementation details
-type AsanaDetailsComponentProps = ComponentProps<typeof Stack> &
+export type AsanaDetailsComponentProps = ComponentProps<typeof Stack> &
   AsanaDetailsProps
 
 // Memoize component to prevent unnecessary re-renders since it's used extensively

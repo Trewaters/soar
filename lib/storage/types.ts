@@ -76,7 +76,7 @@ export interface StorageProvider {
    * @returns Promise with upload result
    */
   upload(
-    _fileName: string,
+    fileName: string,
     file: File | Blob | Buffer,
     options?: StorageUploadOptions
   ): Promise<StorageUploadResult>

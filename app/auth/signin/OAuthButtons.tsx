@@ -17,7 +17,7 @@ const pulse = keyframes`
   }
 `
 
-interface OAuthButtonsProps {
+export interface OAuthButtonsProps {
   providers: Array<{ id: string; name: string }>
   highlightProvider?: string | null
   callbackUrl?: string

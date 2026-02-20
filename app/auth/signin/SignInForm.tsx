@@ -4,7 +4,7 @@ import { Stack, Typography } from '@mui/material'
 import CredentialsInput from './credentialsInput'
 import OAuthButtons from './OAuthButtons'
 
-interface SignInFormProps {
+export interface SignInFormProps {
   providers: Array<{ id: string; name: string }>
   callbackUrl?: string
 }

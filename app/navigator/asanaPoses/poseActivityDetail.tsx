@@ -68,7 +68,7 @@ Prioritized Details...
 
 */
 
-interface PoseCardProps {
+export interface PoseCardProps {
   poseCardProp: AsanaPose
   initialEditMode?: boolean
   showActions?: boolean

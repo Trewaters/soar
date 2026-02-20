@@ -23,7 +23,7 @@ import {
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 
-interface ImageUploadProps {
+export interface ImageUploadProps {
   // eslint-disable-next-line no-unused-vars
   onUploadSuccess?: (imageData: UploadedImageData) => void
   onClose?: () => void
@@ -31,7 +31,7 @@ interface ImageUploadProps {
   asanaId?: string
 }
 
-interface UploadedImageData {
+export interface UploadedImageData {
   id: string
   url: string
   altText?: string

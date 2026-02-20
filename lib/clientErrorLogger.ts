@@ -23,7 +23,7 @@ export interface ClientLoggedError {
   timestamp: string
 }
 
-class ClientErrorLogger {
+export class ClientErrorLogger {
   private static instance: ClientErrorLogger
   private logBuffer: ClientLoggedError[] = []
   private readonly maxBufferSize = 50

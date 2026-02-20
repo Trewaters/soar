@@ -12,7 +12,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { ProfileImageDisplay } from './ProfileImageDisplay'
 import { ProfileImageUpload } from './ProfileImageUpload'
 
-interface ProfileImageManagerProps {
+export interface ProfileImageManagerProps {
   images: string[]
   active: string | null
   placeholder: string

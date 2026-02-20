@@ -4,7 +4,7 @@ import { Box, Avatar, IconButton, Typography, Chip } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 
-interface ProfileImageDisplayProps {
+export interface ProfileImageDisplayProps {
   images: string[]
   active: string | null
   onSelect: (url: string) => void

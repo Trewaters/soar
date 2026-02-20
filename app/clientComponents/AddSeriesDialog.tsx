@@ -23,7 +23,7 @@ import {
 import SearchField from './form/SearchField'
 import { useSession } from 'next-auth/react'
 
-interface SeriesOption {
+export interface SeriesOption {
   id: string
   seriesName: string
   seriesPoses: string[]
@@ -33,7 +33,7 @@ interface SeriesOption {
   created_by?: string
 }
 
-interface AddSeriesDialogProps {
+export interface AddSeriesDialogProps {
   open: boolean
   onClose: () => void
   // eslint-disable-next-line no-unused-vars

@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 
-interface UseImagePreloaderOptions {
+export interface UseImagePreloaderOptions {
   images: string[]
   currentIndex: number
   preloadCount?: number
 }
 
-interface UseImagePreloaderReturn {
+export interface UseImagePreloaderReturn {
   preloadedImages: Set<string>
   // eslint-disable-next-line no-unused-vars
   isImageLoaded: (url: string) => boolean

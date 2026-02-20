@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/material'
 import Image from 'next/image'
 import React from 'react'
 
-interface SplashHeaderProps {
+export interface SplashHeaderProps {
   title: string
   src?: string
   alt?: string

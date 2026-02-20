@@ -8,7 +8,7 @@ import {
   Button,
 } from '@mui/material'
 
-interface ConfirmationDialogProps {
+export interface ConfirmationDialogProps {
   open: boolean
   title: string
   message: string

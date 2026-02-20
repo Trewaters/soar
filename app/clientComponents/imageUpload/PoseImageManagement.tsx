@@ -44,7 +44,7 @@ function TabPanel(props: TabPanelProps) {
   )
 }
 
-interface PoseImageManagementProps {
+export interface PoseImageManagementProps {
   title?: string
   poseId?: string
   poseName?: string

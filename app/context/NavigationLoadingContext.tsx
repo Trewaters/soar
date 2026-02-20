@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react'
 
 /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
-interface NavigationLoadingState {
+export interface NavigationLoadingState {
   isNavigating: boolean
   targetPath: string | null
   elementId: string | null
@@ -11,7 +11,7 @@ interface NavigationLoadingState {
 }
 /* eslint-enable no-unused-vars, @typescript-eslint/no-unused-vars */
 
-interface NavigationLoadingContextType {
+export interface NavigationLoadingContextType {
   state: NavigationLoadingState
   startNavigation: (
     // eslint-disable-next-line no-unused-vars

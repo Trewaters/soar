@@ -3,7 +3,7 @@ import React from 'react'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 
-interface CustomPaginationProps {
+export interface CustomPaginationProps {
   count: number
   page: number
   // eslint-disable-next-line no-unused-vars

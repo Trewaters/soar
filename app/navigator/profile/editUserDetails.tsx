@@ -43,7 +43,7 @@ import {
 } from '@app/utils/mobileThemeHelpers'
 import theme from '@styles/theme'
 
-interface EditUserDetailsProps {
+export interface EditUserDetailsProps {
   onSaveSuccess?: () => void
   onCancel?: () => void
 }

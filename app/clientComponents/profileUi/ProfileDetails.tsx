@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from '@mui/material'
 import React, { ComponentProps } from 'react'
 
-interface ProfileDetailsProps {
+export interface ProfileDetailsProps {
   details: string | string[] | null | undefined
   label: string
   /**
@@ -17,7 +17,7 @@ interface ProfileDetailsProps {
 }
 
 // Extend only Stack props since it's the root element of our component
-type ProfileDetailsComponentProps = ComponentProps<typeof Stack> &
+export type ProfileDetailsComponentProps = ComponentProps<typeof Stack> &
   ProfileDetailsProps
 
 /**

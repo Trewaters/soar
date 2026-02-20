@@ -11,7 +11,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete'
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary'
 
-interface DemoSeriesImageDeleteProps {
+export interface DemoSeriesImageDeleteProps {
   onNavigateToSeries?: () => void
 }
 

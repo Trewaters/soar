@@ -5,7 +5,7 @@ import StarIcon from '@mui/icons-material/Star'
 import { ComponentProps } from 'react'
 import { useSession } from 'next-auth/react'
 
-interface SplashNavButtonProps extends ComponentProps<typeof Box> {
+export interface SplashNavButtonProps extends ComponentProps<typeof Box> {
   title: string
   description: string
   /** Primary (color) image URL */
@@ -27,11 +27,6 @@ interface SplashNavButtonProps extends ComponentProps<typeof Box> {
  * and hover effects including shadow highlights. Optionally displays a background image
  * with the description text overlaid on top. Premium features show a star icon.
  *
- * @param title - The main title text displayed at the bottom of the button
- * @param description - The descriptive text displayed at the top of the button, overlaying the image
- * @param image - Optional URL for background image that displays behind the description text
- * @param premium - Whether this is a premium feature that should display a star icon
- * @param props - Additional props including sx styling overrides and onClick handler
  * @returns A Material-UI Box component styled as a navigation button
  */
 export default function SplashNavButton({

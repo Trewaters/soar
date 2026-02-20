@@ -51,7 +51,7 @@ export interface PoseImageData {
  * @property poseName - Optional name of the pose associated with the image upload.
  * @property showSlotInfo - Optional flag to show remaining upload slots information.
  */
-interface PoseImageUploadProps {
+export interface PoseImageUploadProps {
   // eslint-disable-next-line no-unused-vars
   onImageUploaded?: (image: PoseImageData) => void
   // eslint-disable-next-line no-unused-vars

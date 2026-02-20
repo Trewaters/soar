@@ -12,7 +12,8 @@
     "app/**/*.ts",
     "app/**/*.tsx",
     "app/**/*.js",
-    "app/**/*.jsx"
+    "app/**/*.jsx",
+    "lib/**/*"
   ],
   "exclude": [
     "**/__tests__/**",

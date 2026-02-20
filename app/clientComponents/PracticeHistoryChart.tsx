@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Box, useTheme } from '@mui/material'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
 
-interface PracticeHistoryChartProps {
+export interface PracticeHistoryChartProps {
   data: Array<{ month: string; days: number }>
 }
 

@@ -51,7 +51,7 @@ export type FlowSeriesPageState = {
   flowSeries: FlowSeriesData
 }
 
-type FlowSeriesAction =
+export type FlowSeriesAction =
   | {
       type: 'SET_FLOW_SERIES' | 'RESET_FLOW_SERIES'
       payload: FlowSeriesData
@@ -75,7 +75,7 @@ const initialState: FlowSeriesPageState = {
   },
 }
 
-interface FlowSeriesContextType {
+export interface FlowSeriesContextType {
   state: FlowSeriesPageState
   dispatch: Dispatch<FlowSeriesAction>
 }

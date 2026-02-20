@@ -18,7 +18,7 @@ import Image from 'next/image'
 import { PoseImageData } from '../../../types/images'
 import { useImagePreloader } from '../../hooks/useImagePreloader'
 
-interface ImageCarouselProps {
+export interface ImageCarouselProps {
   images: PoseImageData[]
   currentIndex?: number
   onIndexChange?: (newIndex: number) => void

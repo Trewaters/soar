@@ -20,7 +20,7 @@ interface LocalStorageInfo {
   quota: number
 }
 
-class LocalImageStorage {
+export class LocalImageStorage {
   private readonly DB_NAME = 'YogaAppImages'
   private readonly DB_VERSION = 1
   private readonly STORE_NAME = 'images'

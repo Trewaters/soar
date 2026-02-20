@@ -2,7 +2,7 @@ import { Drawer, Typography, Box, SxProps, Theme } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { loadHelpText, parseMarkdownToHTML } from '@app/utils/helpLoader'
 
-interface HelpDrawerProps {
+export interface HelpDrawerProps {
   open: boolean
   onClose: () => void
   content: string

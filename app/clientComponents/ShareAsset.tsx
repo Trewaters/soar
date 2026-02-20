@@ -20,7 +20,7 @@ import {
 } from '@app/utils/shareIdResolver'
 
 /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
-type ShareAssetProps = {
+export type ShareAssetProps = {
   content: ShareableContent
   variant?: 'icon' | 'button' | 'compact'
   showDetails?: boolean

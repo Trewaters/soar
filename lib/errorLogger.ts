@@ -25,7 +25,7 @@ export interface LoggedError {
   timestamp: string
 }
 
-class ErrorLogger {
+export class ErrorLogger {
   private static instance: ErrorLogger
   private logBuffer: LoggedError[] = []
   private readonly maxBufferSize = 100

@@ -21,13 +21,13 @@ import {
 } from './asanaFieldConstants'
 
 // Main component props
-interface AsanaDetailsEditProps {
+export interface AsanaDetailsEditProps {
   fields: AsanaEditFieldProps[]
   globalOnChange?: (key: string, value: any) => void
 }
 
 // Extend Stack props for styling flexibility
-type AsanaDetailsEditComponentProps = ComponentProps<typeof Stack> &
+export type AsanaDetailsEditComponentProps = ComponentProps<typeof Stack> &
   AsanaDetailsEditProps
 
 /**

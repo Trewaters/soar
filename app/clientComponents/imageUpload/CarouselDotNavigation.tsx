@@ -4,7 +4,7 @@ import React from 'react'
 import { Box, IconButton, Tooltip, useTheme } from '@mui/material'
 import { PoseImageData } from '../../../types/images'
 
-interface CarouselDotNavigationProps {
+export interface CarouselDotNavigationProps {
   images: PoseImageData[]
   activeIndex: number
   onIndexChange: (index: number) => void

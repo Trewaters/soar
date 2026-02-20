@@ -35,7 +35,7 @@ import {
   deleteSequenceActivity,
 } from '@lib/sequenceActivityClientService'
 
-type Props = {
+export type Props = {
   sequence: EditableSequence
   defaultShowEdit?: boolean
 }

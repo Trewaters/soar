@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import SearchIcon from '@mui/icons-material/Search'
 import { SxProps, Theme } from '@mui/material'
 
-interface AutocompleteInputProps {
+export interface AutocompleteInputProps {
   params: any
   placeholder?: string
   onClick?: () => void

@@ -139,7 +139,7 @@ export const fieldSxStyles = {
   },
 } as const
 
-type AsanaFieldDefinitionShape = {
+export type AsanaFieldDefinitionShape = {
   fieldKey: string
   type: Exclude<AsanaEditFieldType, 'custom'>
   label: string
@@ -228,7 +228,7 @@ export const ASANA_FIELD_DEFINITIONS = [
 ] as const satisfies readonly AsanaFieldDefinitionShape[]
 
 export type AsanaFieldKey = (typeof ASANA_FIELD_DEFINITIONS)[number]['fieldKey']
-type AsanaFieldDefinition = (typeof ASANA_FIELD_DEFINITIONS)[number]
+export type AsanaFieldDefinition = (typeof ASANA_FIELD_DEFINITIONS)[number]
 
 export type AsanaFormData = {
   [Definition in AsanaFieldDefinition as Definition['fieldKey']]: Definition['type'] extends 'variations'

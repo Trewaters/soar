@@ -114,7 +114,7 @@ const initialState: UserProfilePageState = {
   },
 }
 
-interface UserStateContextType {
+export interface UserStateContextType {
   state: UserProfilePageState
   dispatch: Dispatch<UserAction>
 }

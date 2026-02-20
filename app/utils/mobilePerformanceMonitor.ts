@@ -23,7 +23,7 @@ export interface PerformanceThresholds {
   renderTime: number
 }
 
-class MobilePerformanceMonitor {
+export class MobilePerformanceMonitor {
   private metrics: PerformanceMetrics[] = []
   private isMonitoring: boolean = false
   private performanceThresholds: PerformanceThresholds = {

@@ -22,7 +22,7 @@ import SearchField from './form/SearchField'
 import { useSession } from 'next-auth/react'
 import type { AsanaPose } from 'types/asana'
 
-type AsanaOption = Pick<
+export type AsanaOption = Pick<
   AsanaPose,
   | 'id'
   | 'english_names'
@@ -34,7 +34,7 @@ type AsanaOption = Pick<
   sanskrit_names: AsanaPose['sanskrit_names'] | string | null
 }
 
-interface AddAsanasDialogProps {
+export interface AddAsanasDialogProps {
   open: boolean
   onClose: () => void
   // eslint-disable-next-line no-unused-vars

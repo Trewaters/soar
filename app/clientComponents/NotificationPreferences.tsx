@@ -11,7 +11,7 @@ import {
   FormControlLabel,
 } from '@mui/material'
 
-interface NotificationPreferencesData {
+export interface NotificationPreferencesData {
   inApp: boolean
   email: boolean
   inAppSubPreferences: {
@@ -30,7 +30,7 @@ interface NotificationPreferencesData {
   }
 }
 
-interface NotificationPreferencesProps {
+export interface NotificationPreferencesProps {
   preferences: NotificationPreferencesData
   // eslint-disable-next-line no-unused-vars
   onPreferencesChange: (preferences: NotificationPreferencesData) => void

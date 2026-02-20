@@ -3,14 +3,14 @@ import axios from 'axios'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { jwtDecode } from 'jwt-decode'
 
-interface AuthContextType {
+export interface AuthContextType {
   user: any
   logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-type AuthProviderProps = {
+export type AuthProviderProps = {
   children: React.ReactNode
 }
 

@@ -2,7 +2,7 @@
 import React from 'react'
 import { Box, Skeleton, Stack, SkeletonProps } from '@mui/material'
 
-interface LoadingSkeletonProps {
+export interface LoadingSkeletonProps {
   type?: 'text' | 'list' | 'search' | 'card' | 'circular' | 'custom'
   height?: number | string
   width?: number | string

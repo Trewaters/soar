@@ -23,7 +23,7 @@ import {
 import Image from 'next/image'
 import { signIn } from 'next-auth/react'
 
-interface AddLoginMethodDialogProps {
+export interface AddLoginMethodDialogProps {
   open: boolean
   onClose: () => void
   onSuccess: () => void

@@ -4,7 +4,7 @@ import { Button, Snackbar, Alert } from '@mui/material'
 import { CloudUpload as CloudUploadIcon } from '@mui/icons-material'
 import ImageUploadComponent from './ImageUploadComponent'
 
-interface ImageUploadButtonProps {
+export interface ImageUploadButtonProps {
   variant?: 'contained' | 'outlined' | 'text'
   size?: 'small' | 'medium' | 'large'
   disabled?: boolean

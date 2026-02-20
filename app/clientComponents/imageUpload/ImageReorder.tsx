@@ -29,7 +29,7 @@ import {
 } from '@mui/icons-material'
 import { PoseImageData } from '../../../types/images'
 
-interface ImageReorderProps {
+export interface ImageReorderProps {
   images: PoseImageData[]
   onReorder: (_reorderedImages: PoseImageData[]) => Promise<void>
   disabled?: boolean

@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link'
 import CircularProgress from '@mui/material/CircularProgress'
 
-type Props = {
+export type Props = {
   open: boolean
   loading?: boolean
   onAccept: () => Promise<void>

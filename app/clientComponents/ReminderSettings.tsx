@@ -52,7 +52,7 @@ interface ReminderData {
   emailNotificationsEnabled?: boolean // Add email notifications preference
 }
 
-interface ReminderSettingsProps {
+export interface ReminderSettingsProps {
   inAppNotificationsEnabled?: boolean
   emailNotificationsEnabled?: boolean
 }

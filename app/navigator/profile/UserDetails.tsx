@@ -22,7 +22,7 @@ import theme from '@styles/theme'
 import ShareIcon from '@mui/icons-material/Share'
 import EditIcon from '@mui/icons-material/Edit'
 
-interface UserDetailsProps {
+export interface UserDetailsProps {
   onEditClick?: () => void
 }
 

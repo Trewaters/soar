@@ -28,7 +28,7 @@ export type TimerPageState = {
   watch: TimerWatch
 }
 
-type TimerAction =
+export type TimerAction =
   | { type: 'SET_TIMER'; payload: TimerWatch }
   | { type: 'RESET_TIMER' }
   | { type: 'PAUSE_TIMER' }
@@ -46,7 +46,7 @@ const initialState: TimerPageState = {
   },
 }
 
-interface TimerContextType {
+export interface TimerContextType {
   state: TimerPageState
   dispatch: Dispatch<TimerAction>
 }

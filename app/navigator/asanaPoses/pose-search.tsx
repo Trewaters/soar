@@ -15,7 +15,7 @@ import getAlphaUserIds from '@app/lib/alphaUsers'
 import { useSession } from 'next-auth/react'
 import { AsanaPose } from 'types/asana'
 
-interface PoseSearchProps {
+export interface PoseSearchProps {
   posePropData: AsanaPose[]
 }
 

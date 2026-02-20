@@ -30,7 +30,7 @@ export interface AsanaPosePageState {
   uploadProgress: number | null
 }
 
-type AsanaPoseAction =
+export type AsanaPoseAction =
   | { type: 'SET_POSES'; payload: Partial<AsanaPose> }
   | { type: 'SET_CURRENT_IMAGE_INDEX'; payload: number }
   | { type: 'UPDATE_IMAGE_COUNT'; payload: number }

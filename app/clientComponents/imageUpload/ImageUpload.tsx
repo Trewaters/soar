@@ -32,7 +32,7 @@ export interface PoseImageData {
   uploadedAt: string
 }
 
-interface ImageUploadProps {
+export interface ImageUploadProps {
   // eslint-disable-next-line no-unused-vars
   onImageUploaded?: (image: PoseImageData) => void
   // eslint-disable-next-line no-unused-vars
