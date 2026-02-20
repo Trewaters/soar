@@ -19,10 +19,11 @@ export async function GET() {
       orderBy: { createdAt: 'desc' },
     })
     if (!active) {
-      return NextResponse.json(
-        { error: 'No active TOS version' },
-        { status: 404 }
-      )
+      return NextResponse.json({
+        accepted: true,
+        activeVersionId: null,
+        userAcceptedVersionId: null,
+      })
     }
 
     const user = await prisma.userData.findUnique({

@@ -85,12 +85,14 @@ describe('GET /api/tos/status', () => {
     expect(body.error).toMatch(/Authentication required/)
   })
 
-  it('returns 404 when no active version', async () => {
+  it('returns accepted=true when no active version exists', async () => {
     ;(auth as any).mockResolvedValue({ user: { id: 'user1' } })
     ;(prisma.tosVersion.findFirst as any).mockResolvedValue(null)
     const res: any = await GET({} as any)
     const body = await res.json()
-    expect(res.status).toBe(404)
-    expect(body.error).toMatch(/No active TOS version/)
+    expect(res.status).toBe(200)
+    expect(body.accepted).toBe(true)
+    expect(body.activeVersionId).toBeNull()
+    expect(body.userAcceptedVersionId).toBeNull()
   })
 })

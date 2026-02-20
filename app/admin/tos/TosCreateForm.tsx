@@ -8,13 +8,23 @@ import Alert from '@mui/material/Alert'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Box from '@mui/material/Box'
+import MenuItem from '@mui/material/MenuItem'
 
-export default function TosCreateForm() {
+type TosCreateFormProps = {
+  availableTosFiles: { value: string; label: string }[]
+}
+
+export default function TosCreateForm({
+  availableTosFiles,
+}: TosCreateFormProps) {
   const [title, setTitle] = useState('')
   const [summary, setSummary] = useState('')
   const [effectiveAt, setEffectiveAt] = useState('')
   const [active, setActive] = useState(false)
   const [status, setStatus] = useState<string | null>(null)
+  const [contentFile, setContentFile] = useState(
+    availableTosFiles[0]?.value ?? ''
+  )
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -24,7 +34,13 @@ export default function TosCreateForm() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ title, summary, effectiveAt, active }),
+        body: JSON.stringify({
+          title,
+          summary,
+          effectiveAt,
+          active,
+          contentFile,
+        }),
       })
       const json = await res.json()
       if (!res.ok) {
@@ -38,6 +54,7 @@ export default function TosCreateForm() {
       setSummary('')
       setEffectiveAt('')
       setActive(false)
+      setContentFile(availableTosFiles[0]?.value ?? '')
     } catch (err: any) {
       console.error('TOS create exception', err)
       setStatus('Error')
@@ -79,6 +96,26 @@ export default function TosCreateForm() {
           multiline
           rows={3}
         />
+        <TextField
+          label="TOS Content File"
+          select
+          value={contentFile}
+          onChange={(e) => setContentFile(e.target.value)}
+          required
+          helperText="Select a markdown file from app/compliance/terms/content"
+          disabled={availableTosFiles.length === 0}
+        >
+          {availableTosFiles.map((file) => (
+            <MenuItem key={file.value} value={file.value}>
+              {file.label}
+            </MenuItem>
+          ))}
+        </TextField>
+        {availableTosFiles.length === 0 && (
+          <Alert severity="warning">
+            No TOS markdown files found in app/compliance/terms/content.
+          </Alert>
+        )}
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
           <TextField
             label="Effective At"
@@ -104,7 +141,11 @@ export default function TosCreateForm() {
           }
           label="Publish (set active)"
         />
-        <Button type="submit" variant="contained">
+        <Button
+          type="submit"
+          variant="contained"
+          disabled={availableTosFiles.length === 0}
+        >
           Create
         </Button>
       </Stack>

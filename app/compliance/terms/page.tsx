@@ -2,9 +2,62 @@ import { Box, Stack, Typography, Container } from '@mui/material'
 import React from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import Link from 'next/link'
-import { TermsService } from './constants/Strings'
 import { prisma } from '@lib/prismaClient'
 import theme from '@styles/theme'
+import { readTosMarkdown } from './server/tosFileRegistry'
+
+type MarkdownBlock =
+  | { type: 'h1' | 'h2' | 'h3'; text: string }
+  | { type: 'p'; text: string }
+  | { type: 'ul'; items: string[] }
+
+function parseMarkdownBlocks(markdown: string): MarkdownBlock[] {
+  const lines = markdown.replace(/\r\n/g, '\n').split('\n')
+  const blocks: MarkdownBlock[] = []
+  let index = 0
+
+  while (index < lines.length) {
+    const line = lines[index].trim()
+
+    if (!line) {
+      index += 1
+      continue
+    }
+
+    if (line.startsWith('# ')) {
+      blocks.push({ type: 'h1', text: line.slice(2).trim() })
+      index += 1
+      continue
+    }
+
+    if (line.startsWith('## ')) {
+      blocks.push({ type: 'h2', text: line.slice(3).trim() })
+      index += 1
+      continue
+    }
+
+    if (line.startsWith('### ')) {
+      blocks.push({ type: 'h3', text: line.slice(4).trim() })
+      index += 1
+      continue
+    }
+
+    if (line.startsWith('- ')) {
+      const items: string[] = []
+      while (index < lines.length && lines[index].trim().startsWith('- ')) {
+        items.push(lines[index].trim().slice(2).trim())
+        index += 1
+      }
+      blocks.push({ type: 'ul', items })
+      continue
+    }
+
+    blocks.push({ type: 'p', text: line })
+    index += 1
+  }
+
+  return blocks
+}
 
 export default async function TermsOfService({
   searchParams,
@@ -26,7 +79,13 @@ export default async function TermsOfService({
     typeof requestedVersionId === 'string' && requestedVersionId.length > 0
       ? await client['tosVersion']?.findUnique({
           where: { id: requestedVersionId },
-          select: { id: true, title: true, effectiveAt: true },
+          select: {
+            id: true,
+            title: true,
+            summary: true,
+            effectiveAt: true,
+            externalUrl: true,
+          },
         })
       : null
 
@@ -34,18 +93,30 @@ export default async function TermsOfService({
     active = await client['tosVersion']?.findFirst({
       where: { active: true },
       orderBy: { createdAt: 'desc' },
-      select: { id: true, title: true, effectiveAt: true },
+      select: {
+        id: true,
+        title: true,
+        summary: true,
+        effectiveAt: true,
+        externalUrl: true,
+      },
     })
   }
 
   if (!active) {
     active = await client['tosVersion']?.findFirst({
       orderBy: { createdAt: 'desc' },
-      select: { id: true, title: true, effectiveAt: true },
+      select: {
+        id: true,
+        title: true,
+        summary: true,
+        effectiveAt: true,
+        externalUrl: true,
+      },
     })
   }
-
-  // Remove debug logging and JSON output for production clarity
+  const markdown = readTosMarkdown(active?.externalUrl)
+  const blocks = markdown ? parseMarkdownBlocks(markdown) : []
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
@@ -66,139 +137,73 @@ export default async function TermsOfService({
         </Link>
 
         <Box style={{ maxWidth: '800px' }}>
-          <Stack spacing={'64px'}>
+          <Stack spacing={4}>
             <Stack>
-              <Typography variant="h1">{TermsService.TITLE}</Typography>
+              <Typography variant="h1">
+                {active?.title || 'Terms of Service'}
+              </Typography>
               <Stack direction="row" spacing={2} alignItems="center">
                 <Typography variant="body1">
                   {active?.effectiveAt
                     ? `Effective: ${new Date(active.effectiveAt).toLocaleDateString()}`
-                    : TermsService.EFFECTIVE_DATE}
+                    : 'Effective date unavailable'}
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
                   Version: {active?.id ?? 'none'}
                 </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Title: {active?.title ?? 'none'}
-                </Typography>
               </Stack>
-              <Typography variant="body1">{TermsService.INTRO}</Typography>
+              {active?.summary ? (
+                <Typography variant="body1">{active.summary}</Typography>
+              ) : null}
             </Stack>
+            {blocks.length > 0 ? (
+              blocks.map((block, blockIndex) => {
+                if (block.type === 'h1') {
+                  return (
+                    <Typography key={blockIndex} variant="h2">
+                      {block.text}
+                    </Typography>
+                  )
+                }
+                if (block.type === 'h2') {
+                  return (
+                    <Typography key={blockIndex} variant="h3">
+                      {block.text}
+                    </Typography>
+                  )
+                }
+                if (block.type === 'h3') {
+                  return (
+                    <Typography key={blockIndex} variant="h4">
+                      {block.text}
+                    </Typography>
+                  )
+                }
+                if (block.type === 'ul') {
+                  return (
+                    <Box key={blockIndex} component="ul" sx={{ pl: 3, m: 0 }}>
+                      {block.items.map((item, itemIndex) => (
+                        <li key={`${blockIndex}-${itemIndex}`}>
+                          <Typography variant="body1">{item}</Typography>
+                        </li>
+                      ))}
+                    </Box>
+                  )
+                }
 
-            {/* Debug output removed */}
-
-            <Stack>
-              <Typography variant="h2">
-                {TermsService.ACCEPTANCE_HEADING}
+                return (
+                  <Typography key={blockIndex} variant="body1">
+                    {block.text}
+                  </Typography>
+                )
+              })
+            ) : (
+              <Typography variant="body1" color="text.secondary">
+                No Terms of Service markdown content found. Add a markdown file
+                under app/compliance/terms/content and publish a TOS version
+                that points to it.
               </Typography>
-              <Typography variant="body1">
-                {TermsService.ACCEPTANCE_DETAILS}
-              </Typography>
-            </Stack>
-
-            <Stack>
-              <Typography variant="h2">
-                {TermsService.ELIGIBILITY_HEADING}
-              </Typography>
-              <Typography variant="body1">
-                {TermsService.ELIGIBILITY_DETAILS}
-              </Typography>
-            </Stack>
-
-            <Stack>
-              <Typography variant="h2">
-                {TermsService.USE_OF_APP_HEADING}
-              </Typography>
-              <Typography variant="body1">
-                {TermsService.USE_OF_APP_DETAILS}
-              </Typography>
-            </Stack>
-
-            <Stack>
-              <Typography variant="h2">
-                {TermsService.ACCOUNT_REGISTRATION_HEADING}
-              </Typography>
-              <Typography variant="body1">
-                {TermsService.ACCOUNT_REGISTRATION_DETAILS}
-              </Typography>
-            </Stack>
-
-            <Stack>
-              <Typography variant="h2">
-                {TermsService.USER_CONDUCT_HEADING}
-              </Typography>
-              <Typography variant="body1">
-                {TermsService.USER_CONDUCT_DETAILS}
-              </Typography>
-              <ul>
-                <li>{TermsService.USER_CONDUCT_ITEM_1}</li>
-                <li>{TermsService.USER_CONDUCT_ITEM_2}</li>
-                <li>{TermsService.USER_CONDUCT_ITEM_3}</li>
-              </ul>
-            </Stack>
-
-            <Stack>
-              <Typography variant="h2">
-                {TermsService.INTELLECTUAL_PROPERTY_HEADING}
-              </Typography>
-              <Typography variant="body1">
-                {TermsService.INTELLECTUAL_PROPERTY_DETAILS}
-              </Typography>
-            </Stack>
-
-            <Stack>
-              <Typography variant="h2">
-                {TermsService.TERMINATION_HEADING}
-              </Typography>
-              <Typography variant="body1">
-                {TermsService.TERMINATION_DETAILS}
-              </Typography>
-            </Stack>
-
-            <Stack>
-              <Typography variant="h2">
-                {TermsService.LIMITATION_LIABILITY_HEADING}
-              </Typography>
-              <Typography variant="body1">
-                {TermsService.LIMITATION_LIABILITY_DETAILS}
-              </Typography>
-            </Stack>
-
-            <Stack>
-              <Typography variant="h2">
-                {TermsService.MODIFICATIONS_HEADING}
-              </Typography>
-              <Typography variant="body1">
-                {TermsService.MODIFICATIONS_DETAILS}
-              </Typography>
-            </Stack>
-
-            <Stack>
-              <Typography variant="h2">
-                {TermsService.GOVERNING_LAW_HEADING}
-              </Typography>
-              <Typography variant="body1">
-                {TermsService.GOVERNING_LAW_DETAILS}
-              </Typography>
-            </Stack>
-
-            <Stack>
-              <Typography variant="h2">
-                {TermsService.USER_DATA_POLICY_HEADING}
-              </Typography>
-              <Typography variant="body1">
-                {TermsService.USER_DATA_POLICY_DETAILS}
-              </Typography>
-            </Stack>
-
-            <Stack>
-              <Typography variant="h2">
-                {TermsService.CONTACT_HEADING}
-              </Typography>
-              <Typography variant="body1">
-                {TermsService.CONTACT_DETAILS}
-              </Typography>
-            </Stack>
+            )}
           </Stack>
         </Box>
       </Stack>

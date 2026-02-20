@@ -3,6 +3,7 @@ import { isAdmin } from '@app/utils/authorization'
 import { prisma } from '@lib/prismaClient'
 import ActivateButton from '../ActivateButton'
 import Link from 'next/link'
+import { getAvailableTosFiles } from '@app/compliance/terms/server/tosFileRegistry'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,6 +14,7 @@ export default async function TosCreatePage() {
   const versions = await prisma.tosVersion.findMany({
     orderBy: { createdAt: 'desc' },
   })
+  const availableTosFiles = getAvailableTosFiles()
   return (
     <div style={{ padding: 20 }}>
       <div
@@ -31,7 +33,7 @@ export default async function TosCreatePage() {
       </div>
 
       <div style={{ marginBottom: 32 }}>
-        <TosCreateForm />
+        <TosCreateForm availableTosFiles={availableTosFiles} />
       </div>
 
       <section>

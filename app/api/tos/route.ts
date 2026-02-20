@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../auth'
 import { isAdmin } from '@app/utils/authorization'
 import { prisma } from '../../../app/lib/prismaClient'
+import { isValidTosFile } from '@app/compliance/terms/server/tosFileRegistry'
 
 export const dynamic = 'force-dynamic'
 
@@ -50,11 +51,22 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { title, summary, effectiveAt, externalUrl, active } = body
+    const { title, summary, effectiveAt, externalUrl, active, contentFile } =
+      body
 
-    if (!title || !effectiveAt) {
+    if (!title || !effectiveAt || !contentFile) {
       return NextResponse.json(
         { error: 'Missing required fields' },
+        { status: 400 }
+      )
+    }
+
+    if (!isValidTosFile(contentFile)) {
+      return NextResponse.json(
+        {
+          error:
+            'Invalid content file. Add a .md file under app/compliance/terms/content and select it.',
+        },
         { status: 400 }
       )
     }
@@ -64,36 +76,11 @@ export async function POST(request: NextRequest) {
       await prisma.tosVersion.updateMany({ where: {}, data: { active: false } })
     }
 
-    // Generate a sequential version id: YYYYMMDD + 4-digit sequence (0001..)
-    const now = new Date()
-    const yyyy = String(now.getFullYear())
-    const mm = String(now.getMonth() + 1).padStart(2, '0')
-    const dd = String(now.getDate()).padStart(2, '0')
-    const prefix = `${yyyy}${mm}${dd}`
-
-    // Some existing DB rows may have non-string `id` values which causes
-    // MongoDB's $regexMatch to fail when Prisma translates `startsWith`.
-    // To be defensive, fetch ids and filter in JS to avoid server-side regex on non-strings.
-    const allIds = await prisma.tosVersion.findMany({ select: { id: true } })
-    const existing = allIds.filter(
-      (e) => typeof e.id === 'string' && e.id.startsWith(prefix)
-    )
-
-    let max = 0
-    for (const e of existing) {
-      const suffix = e.id.slice(prefix.length)
-      const n = parseInt(suffix, 10)
-      if (!isNaN(n) && n > max) max = n
-    }
-    const nextSeq = String(max + 1).padStart(4, '0')
-    const versionId = `${prefix}${nextSeq}`
-
     const createData = {
-      id: versionId,
       title,
       summary: summary || null,
       effectiveAt: new Date(effectiveAt),
-      externalUrl: externalUrl || undefined,
+      externalUrl: contentFile || externalUrl || undefined,
       active: Boolean(active),
     }
 

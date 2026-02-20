@@ -89,7 +89,8 @@ const providers: Provider[] = [
         return null
       }
 
-      const email = credentials.email as string
+      const rawEmail = credentials.email as string
+      const email = rawEmail.trim().toLowerCase()
       const password = credentials.password as string
       const isNewAccount = credentials.isNewAccount === 'true'
       const tosAccepted = credentials.tosAccepted === 'true'
@@ -105,6 +106,20 @@ const providers: Provider[] = [
         const user = await prisma.userData.findUnique({
           where: { email: email },
         })
+
+        const existingCredentialsAccount =
+          await prisma.providerAccount.findUnique({
+            where: {
+              provider_providerAccountId: {
+                provider: 'credentials',
+                providerAccountId: email,
+              },
+            },
+            select: {
+              id: true,
+              userId: true,
+            },
+          })
 
         // Handle new account creation
         if (isNewAccount) {
@@ -138,12 +153,20 @@ const providers: Provider[] = [
             )
           }
 
-          if (user) {
+          if (user || existingCredentialsAccount) {
             // User already exists - check which provider they're using
             console.log(
               '[AUTH] Account creation attempted for existing email:',
               email
             )
+
+            if (existingCredentialsAccount) {
+              throwAuthError(
+                AuthErrorCode.EMAIL_EXISTS_CREDENTIALS,
+                'This email is already registered. Please sign in or use "Forgot Password" to reset your password.',
+                'credentials'
+              )
+            }
 
             const providerAccounts = await prisma.providerAccount.findMany({
               where: { userId: user.id },
@@ -188,47 +211,59 @@ const providers: Provider[] = [
           console.log('[AUTH] Creating new user account:', email)
           const now = new Date()
           const hashedPassword = await hashPassword(password)
-          const newUser = await prisma.userData.create({
-            data: {
-              email: email,
-              name: email.split('@')[0], // Use email prefix as initial name
-              provider_id: `credentials_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, // Unique ID for credentials users
-              createdAt: now,
-              updatedAt: now,
-              firstName: '',
-              lastName: '',
-              bio: '',
-              headline: '',
-              location: '',
-              websiteURL: '',
-              shareQuick: '',
-              yogaStyle: '',
-              yogaExperience: '',
-              company: '',
-              socialURL: '',
-              isLocationPublic: '',
-              role: 'user',
-              acceptedTosVersionId: activeTos.id,
-              acceptedTosAt: now,
-              providerAccounts: {
-                create: {
-                  provider: 'credentials',
-                  providerAccountId: email,
-                  type: 'credentials',
-                  credentials_password: hashedPassword,
-                  createdAt: now,
-                  updatedAt: now,
+          let newUser
+          try {
+            newUser = await prisma.userData.create({
+              data: {
+                email: email,
+                name: email.split('@')[0], // Use email prefix as initial name
+                provider_id: `credentials_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, // Unique ID for credentials users
+                createdAt: now,
+                updatedAt: now,
+                firstName: '',
+                lastName: '',
+                bio: '',
+                headline: '',
+                location: '',
+                websiteURL: '',
+                shareQuick: '',
+                yogaStyle: '',
+                yogaExperience: '',
+                company: '',
+                socialURL: '',
+                isLocationPublic: '',
+                role: 'user',
+                acceptedTosVersionId: activeTos.id,
+                acceptedTosAt: now,
+                providerAccounts: {
+                  create: {
+                    provider: 'credentials',
+                    providerAccountId: email,
+                    type: 'credentials',
+                    credentials_password: hashedPassword,
+                    createdAt: now,
+                    updatedAt: now,
+                  },
+                },
+                tosAcceptances: {
+                  create: {
+                    tosVersionId: activeTos.id,
+                    acceptedAt: now,
+                    method: 'signup',
+                  },
                 },
               },
-              tosAcceptances: {
-                create: {
-                  tosVersionId: activeTos.id,
-                  acceptedAt: now,
-                  method: 'signup',
-                },
-              },
-            },
-          })
+            })
+          } catch (createErr: any) {
+            if (createErr?.code === 'P2002') {
+              throwAuthError(
+                AuthErrorCode.EMAIL_EXISTS_CREDENTIALS,
+                'This email is already registered. Please sign in or use "Forgot Password" to reset your password.',
+                'credentials'
+              )
+            }
+            throw createErr
+          }
 
           console.log('[AUTH] New user account created successfully:', email)
           return {
