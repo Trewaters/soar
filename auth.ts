@@ -168,8 +168,23 @@ const providers: Provider[] = [
               )
             }
 
+            const existingUserId =
+              user?.id ?? existingCredentialsAccount?.userId
+
+            if (!existingUserId) {
+              console.error(
+                '[AUTH] Account existence check failed to resolve user id:',
+                email
+              )
+              throwAuthError(
+                AuthErrorCode.NO_PASSWORD_SET,
+                'Account exists but no authentication method is configured',
+                'unknown'
+              )
+            }
+
             const providerAccounts = await prisma.providerAccount.findMany({
-              where: { userId: user.id },
+              where: { userId: existingUserId },
               select: { provider: true },
             })
 
