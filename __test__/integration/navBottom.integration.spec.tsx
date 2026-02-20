@@ -78,7 +78,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
     })
 
     it('should navigate to dashboard from home when authenticated', async () => {
-      render(<NavBottom subRoute="/navigator/profile" />, {
+      render(<NavBottom subRoute="/profile" />, {
         wrapper: TestWrapper,
       })
 
@@ -367,7 +367,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
     it('should work consistently across all pages that display bottom navigation', async () => {
       const testPages = [
         '/',
-        '/navigator/profile',
+        '/profile',
         '/breathwork',
         '/meditation',
         '/mantra',

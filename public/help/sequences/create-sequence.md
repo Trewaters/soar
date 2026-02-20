@@ -4,7 +4,7 @@
 
 The **Create Sequence** page allows you to build complete yoga practice sessions by combining multiple flow (flows) into an ordered sequence. Create structured sequences with intentional progression, add descriptions and images, and save custom practices for your yoga journey.
 
-**Page URL:** `/navigator/flows/createSequence`
+**Page URL:** `/flows/createSequence`
 
 ## What is a Sequence?
 
@@ -26,7 +26,7 @@ Visual banner displaying "Create Sequences" with an inspiring yoga practice imag
 
 ### Back Navigation
 
-Navigation header labeled "Flows" that returns you to the **Flows Landing Page** (`/navigator/flows`). Use this to exit the creation process without saving.
+Navigation header labeled "Flows" that returns you to the **Flows Landing Page** (`/flows`). Use this to exit the creation process without saving.
 
 ### Help Button
 
@@ -200,7 +200,7 @@ Use the search field to find and add flow (flows) to your sequence:
 
 1. **Navigate to Create Sequence Page**
 
-   Access via the Flows Landing Page or direct URL: `/navigator/flows/createSequence`
+   Access via the Flows Landing Page or direct URL: `/flows/createSequence`
 
 2. **Name Your Sequence** (Required)
 
@@ -335,7 +335,7 @@ A: Yes! After creation, you'll be redirected to the sequence detail page where y
 
 **Q: Why don't I see any flow in the search?**
 
-A: If the search appears empty, you may not have created any flow yet. Start by creating some flows (flow) first at `/navigator/flows/createSeries`. You can also explore Alpha-curated flow if available in your account.
+A: If the search appears empty, you may not have created any flow yet. Start by creating some flows (flow) first at `/flows/createSeries`. You can also explore Alpha-curated flow if available in your account.
 
 **Q: Is the description field required?**
 
@@ -361,5 +361,5 @@ A: Use the poses preview feature to review how poses transition from one flow to
 
 - **Practice Your Sequences**: Visit the Practice Sequences page to use your created sequences
 - **Edit Sequences**: Modify existing sequences from the sequence detail page
-- **Create Flow**: Build more building blocks at `/navigator/flows/createSeries`
+- **Create Flow**: Build more building blocks at `/flows/createSeries`
 - **Contact Support**: Questions? Reach out to support@happyyoga.app

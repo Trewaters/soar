@@ -1,4 +1,4 @@
-import { Series } from '@app/navigator/flows/editSeries/EditSeriesDialog'
+import { Series } from '@app/flows/editSeries/EditSeriesDialog'
 
 export async function updateSeries(id: string, input: Series): Promise<Series> {
   try {

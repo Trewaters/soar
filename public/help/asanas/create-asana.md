@@ -4,7 +4,7 @@
 
 The **Create Asana** page allows you to add custom yoga poses to your personal collection. Build your own asana library with poses that match your practice style, including modifications, personal notes, and custom names.
 
-**Page URL:** `/navigator/asanaPoses/createAsana`
+**Page URL:** `/asanaPoses/createAsana`
 
 ## Page Components
 
@@ -14,7 +14,7 @@ Visual banner displaying "Create an Asana" with an inspiring background image of
 
 ### Back Navigation
 
-Returns you to the **Asana Landing Page** (`/navigator/asanaPoses`). Use this to exit the creation process without saving.
+Returns you to the **Asana Landing Page** (`/asanaPoses`). Use this to exit the creation process without saving.
 
 ### Help Button
 

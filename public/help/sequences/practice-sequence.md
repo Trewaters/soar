@@ -4,7 +4,7 @@
 
 The **Practice Sequences** page provides a focused, scroll-through practice experience where you navigate through one series at a time within a complete yoga sequence. This guided view is perfect for active practice, allowing you to flow through each series with previous/next navigation while tracking your progress and activity.
 
-**Page URL:** `/navigator/flows/practiceSequences` or `/navigator/flows/practiceSequences?sequenceId=[id]`
+**Page URL:** `/flows/practiceSequences` or `/flows/practiceSequences?sequenceId=[id]`
 
 ## What is a Sequence?
 
@@ -26,7 +26,7 @@ Visual banner displaying "Practice Sequences" with an inspiring yoga practice im
 
 ### Back to Flows Navigation
 
-Navigation header with a clickable "Flows" link that returns you to the **Flows Landing Page** (`/navigator/flows`). Use this to explore other flow and sequence options or access the main flows menu.
+Navigation header with a clickable "Flows" link that returns you to the **Flows Landing Page** (`/flows`). Use this to explore other flow and sequence options or access the main flows menu.
 
 **Features:**
 
@@ -66,7 +66,7 @@ Prominent orange header tab displaying the selected sequence name with integrate
 - **Sequence Name** - Large, bold title text in white against orange background
 - **Edit Icon** (Owner Only) - Pencil icon appears inside the orange tab for sequence owners
   - Click to navigate to edit mode in list view
-  - Opens the sequence edit page (`/navigator/sequences/[id]?edit=true`)
+  - Opens the sequence edit page (`/sequences/[id]?edit=true`)
   - Changes to X (close) icon when in edit mode
   - Only visible if you created this sequence or have admin role
 - **Rounded corners** - Polished top-left and top-right rounded borders
@@ -81,7 +81,7 @@ Two icons positioned to the right of the sequence title that allow you to switch
 
 - **Clickable** - Gray color indicates it's available but not currently active
 - **Switches to list view** - Shows all series in the sequence simultaneously
-- **Navigation** - Goes to `/navigator/sequences/[id]`
+- **Navigation** - Goes to `/sequences/[id]`
 - **Use case** - Planning, overview, seeing full sequence structure at once
 
 **Scroll View Icon** (View Stream)
@@ -507,7 +507,7 @@ A: Currently, sequence sharing is managed through the system. Sequences you crea
 
 **Q: What happens when I click the series name in the card?**
 
-A: Clicking the series name navigates to that series's dedicated practice page (`/navigator/flows/practiceSeries`) where you can view the series in isolation with full details, description, and series-specific activity tracking.
+A: Clicking the series name navigates to that series's dedicated practice page (`/flows/practiceSeries`) where you can view the series in isolation with full details, description, and series-specific activity tracking.
 
 **Q: Can I practice just one series without the full sequence?**
 

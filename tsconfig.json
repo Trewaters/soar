@@ -31,7 +31,7 @@
       "@context/*": ["./app/context/*"],
       "@interfaces/*": ["./app/interfaces/*"],
       "@lib/*": ["./lib/*"],
-      "@poses/*": ["./app/navigator/asanaPoses/*"],
+      "@poses/*": ["./app/asanaPoses/*"],
       "@prismaSchema/*": ["./prisma/*"],
       "@providers/*": ["./app/providers/*"],
       "@serverComponents/*": ["./components/*"],

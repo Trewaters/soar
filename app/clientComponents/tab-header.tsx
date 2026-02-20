@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Box, Tab, Tabs } from '@mui/material'
 import LandingPage from '@clientComponents/landing-page'
-import EightLimbs from '@app/navigator/eightLimbs/eight-limbs'
+import EightLimbs from '@app/eightLimbs/eight-limbs'
 
 interface TabPanelProps {
   children?: React.ReactNode

@@ -291,9 +291,9 @@ const poseService = require('@lib/poseService') as jest.Mocked<
 
 See these test files for examples of using centralized mocks:
 
-- `__test__/app/navigator/asanaPoses/createAsana/CreateAsanaWithImages.spec.tsx`
-- `__test__/app/navigator/asanaPoses/ViewAsanaPose.spec.tsx`
-- `__test__/app/navigator/asanaPoses/EditAsanaPose.spec.tsx`
+- `__test__/app/asanaPoses/createAsana/CreateAsanaWithImages.spec.tsx`
+- `__test__/app/asanaPoses/ViewAsanaPose.spec.tsx`
+- `__test__/app/asanaPoses/EditAsanaPose.spec.tsx`
 
 ## Contributing
 

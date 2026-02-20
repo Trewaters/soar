@@ -20,6 +20,7 @@ export interface CustomAutocompleteProps
    * @param option The option to group.
    * @returns The group name.
    */
+  // eslint-disable-next-line no-unused-vars
   groupBy?: (option: any) => string
 }
 

@@ -4,7 +4,7 @@
 
 The Profile Library page lets practitioners manage content they created: Asanas (poses), Flows (series), Sequences, and Profile Images. This document explains the pagination UX (infinite vs paged), how to use controls, API query examples, accessibility considerations, and recommended DB/index guidance for production.
 
-**Page URL:** `/navigator/profile/library`
+**Page URL:** `/profile/library`
 
 ## What is Pagination in the Profile Library?
 
@@ -45,7 +45,7 @@ No feature flag is required — users choose the mode via the UI toggle on the L
 
 1. Viewing your library (default):
 
-- Navigate to `/navigator/profile/library` and ensure you're signed in.
+- Navigate to `/profile/library` and ensure you're signed in.
 - Use the header toggle to pick **Infinite** (append) or **Paged** (slice) behaviour.
 
 2. Load more (infinite):

@@ -13,6 +13,7 @@
     "lint:errors": "eslint . --ext .js,.jsx,.ts,.tsx --quiet",
     "lint:cache": "eslint . --ext .js,.jsx,.ts,.tsx --quiet --cache --cache-location .eslintcache",
     "lint:scope": "eslint --ext .js,.jsx,.ts,.tsx",
+    "guard:navigator": "node scripts/guards/check-no-legacy-navigator-paths.mjs",
     "lint:sequences": "eslint app/sequences --ext .tsx --quiet --cache --cache-location .eslintcache",
     "test": "jest --detectOpenHandles --forceExit",
     "test:single": "jest --detectOpenHandles --forceExit --testNamePattern=",

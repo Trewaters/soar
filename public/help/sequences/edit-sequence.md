@@ -6,8 +6,8 @@ The **Edit Sequence** feature allows sequence owners to modify their yoga sequen
 
 **Edit URLs:**
 
-- From List View: `/navigator/sequences/[id]?edit=true`
-- From Scroll View: `/navigator/flows/practiceSequences?sequenceId=[id]` (then click edit icon)
+- From List View: `/sequences/[id]?edit=true`
+- From Scroll View: `/flows/practiceSequences?sequenceId=[id]` (then click edit icon)
 
 ## Who Can Edit Sequences?
 
@@ -35,7 +35,7 @@ Users who have edit permission for a sequence can modify it. The edit pencil ico
 1. **Load a sequence** - Search and select your sequence
 2. **Find the edit icon** - Pencil icon inside the orange title tab
 3. **Click the pencil icon** - Navigates to list view edit page
-4. **Edit mode opens** - Redirects to `/navigator/sequences/[id]?edit=true`
+4. **Edit mode opens** - Redirects to `/sequences/[id]?edit=true`
 
 ### Visual Indicators
 

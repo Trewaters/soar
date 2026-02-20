@@ -4,7 +4,7 @@
 
 The **Sequence Details** page provides a comprehensive view of a complete yoga sequence with its component series and poses. You can view sequence information, navigate through flows, track your practice activity, and (if you're the owner) edit sequence details—all in a mobile-friendly list format that shows all series at once.
 
-**Page URL:** `/navigator/sequences/[id]` or `/sequences/[id]`
+**Page URL:** `/sequences/[id]`
 
 ## What is a Sequence?
 
@@ -559,6 +559,6 @@ A: Yes, if you're the owner! Click the **edit pencil icon** to enter edit mode. 
 
 **URL Patterns:**
 
-- View: `/navigator/sequences/[id]` or `/sequences/[id]`
-- Edit: `/navigator/sequences/[id]?edit=true`
-- Practice: `/navigator/flows/practiceSequences?sequenceId=[id]`
+- View: `/sequences/[id]`
+- Edit: `/sequences/[id]?edit=true`
+- Practice: `/flows/practiceSequences?sequenceId=[id]`

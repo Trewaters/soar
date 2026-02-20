@@ -15,7 +15,7 @@ import {
 } from '@mui/material'
 import { signIn } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
-import { AppText } from '@app/navigator/constants/Strings'
+import { AppText } from '@app/constants/Strings'
 import { AuthErrorCode } from '@app/auth/types'
 import Link from 'next/link'
 

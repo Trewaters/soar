@@ -296,4 +296,4 @@ This guide is regularly updated as we add new features and improve the Connected
 
 - [Go to Connected Accounts](#) → Profile → Settings → Account Security → Connected Accounts
 - [Privacy Policy](../compliance/terms)
-- [Community Guidelines](../navigator/profile/settings/legal/community-guidelines)
+- [Community Guidelines](/profile/settings/legal/community-guidelines)

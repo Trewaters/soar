@@ -5,7 +5,7 @@ import Script from 'next/script'
 import { Providers } from '@providers/Providers'
 import TosReacceptGuard from '@clientComponents/TosReacceptGuard'
 import AppNavigationShell from '@clientComponents/AppNavigationShell'
-import { auth } from '../auth'
+import { auth } from 'auth'
 import ServiceWorkerRegister from '@clientComponents/ServiceWorkerRegister'
 
 declare global {

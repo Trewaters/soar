@@ -586,7 +586,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
         '/breathwork/practice',
         '/meditation/guided',
         '/planner/create-sequence',
-        '/navigator/asanaPoses/practice',
+        '/asanaPoses/practice',
       ]
 
       for (const route of yogaRoutes) {

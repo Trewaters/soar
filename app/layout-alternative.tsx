@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 import type { Metadata } from 'next'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { Providers } from '@providers/Providers'
-import { auth } from '../auth'
+import { auth } from 'auth'
 
 declare global {
   // eslint-disable-next-line no-unused-vars

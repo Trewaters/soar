@@ -4,7 +4,7 @@
 
 The **Edit Asana** view allows owners (or users with edit permissions) to update an existing asana's details: name, Sanskrit name, description, tags, difficulty, images, and practice settings. This help document covers the fields, validations, save/cancel behavior, and permissions notes.
 
-**Page pattern:** The edit UI is displayed when the Practice Asanas page is opened with an `id` and `edit=true` (for example: `/navigator/asanaPoses/practiceAsanas?id=686000caa1949b8140c403b3&edit=true`).
+**Page pattern:** The edit UI is displayed when the Practice Asanas page is opened with an `id` and `edit=true` (for example: `/asanaPoses/practiceAsanas?id=686000caa1949b8140c403b3&edit=true`).
 
 ## Editable Fields
 

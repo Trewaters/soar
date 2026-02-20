@@ -4,7 +4,7 @@
 
 The **Create Flow** page allows you to build custom yoga flow sequences by combining multiple asanas into a cohesive practice. Create themed collections of poses with specific alignment cues, descriptions, and visual representation for your personal yoga library.
 
-**Page URL:** `/navigator/flows/createSeries`
+**Page URL:** `/flows/createSeries`
 
 ## What is a Flow?
 

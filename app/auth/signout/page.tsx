@@ -2,8 +2,8 @@ import React from 'react'
 import { Button, Stack, Typography } from '@mui/material'
 import Header from '@serverComponents/header'
 import Link from 'next/link'
-import { signOut, auth } from '../../../auth'
-import { AppText } from '@app/navigator/constants/Strings'
+import { signOut, auth } from 'auth'
+import { AppText } from '@app/constants/Strings'
 
 export default async function SignOutPage({
   searchParams,

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import Home from '@app/page'
 
-jest.mock('@app/navigator/page', () => {
+jest.mock('@app/page', () => {
   return function MockNavigatorHome() {
     return <div>home-page-content</div>
   }

@@ -4,7 +4,7 @@
 
 The **Edit Flow** page allows you to modify existing yoga flow sequences by updating the flow name, adding or removing asanas, reordering poses, customizing alignment cues, managing images, and changing the flow description. Edit your flows to refine your practice sequences as your yoga journey evolves.
 
-**Page URL:** `/navigator/flows/practiceSeries?id={flowId}` (Edit mode accessed via the Edit icon)
+**Page URL:** `/flows/practiceSeries?id={flowId}` (Edit mode accessed via the Edit icon)
 
 ## What Can You Edit?
 

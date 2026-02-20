@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Paper, Stack, Typography } from '@mui/material'
-import { signOut, auth, providerMap } from '../../../auth'
+import { signOut, auth, providerMap } from 'auth'
 import { Link as MuiLink } from '@mui/material'
 import Link from 'next/link'
 import SignInForm from './SignInForm'
