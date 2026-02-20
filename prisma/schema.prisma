@@ -333,7 +333,7 @@ model GlossaryTerm {
 
 /// Stores published Terms of Service versions for audit and re-accept flows.
 model TosVersion {
-  id          String   @id @map("_id")
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   summary     String?
   effectiveAt DateTime
@@ -342,6 +342,7 @@ model TosVersion {
   createdAt   DateTime @default(now())
 
   @@index([active])
+  @@map("tos_versions")
 }
 
 /// Records an acceptance event when a user accepts a specific TOS version.
