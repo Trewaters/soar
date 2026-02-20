@@ -8,20 +8,31 @@ export default async function TermsOfService({
 }: {
   searchParams?: any
 }) {
-  // reference incoming searchParams to avoid unused-variable lint warnings
-  if (searchParams) {
-    // noop: intentionally referencing for lint
-  }
+  const requestedVersionIdRaw = searchParams?.versionId
+  const requestedVersionId = Array.isArray(requestedVersionIdRaw)
+    ? requestedVersionIdRaw[0]
+    : requestedVersionIdRaw
+
   // Access the TosVersion model via the prisma client; use bracket access to
   // avoid TS errors if the generated client types are out-of-sync.
   // Try to load the active version; if none exists, fall back to the most
   // recently created version so the page still shows an id for staging/dev.
   const client: any = prisma
-  let active = await client['tosVersion']?.findFirst({
-    where: { active: true },
-    orderBy: { createdAt: 'desc' },
-    select: { id: true, title: true, effectiveAt: true },
-  })
+  let active =
+    typeof requestedVersionId === 'string' && requestedVersionId.length > 0
+      ? await client['tosVersion']?.findUnique({
+          where: { id: requestedVersionId },
+          select: { id: true, title: true, effectiveAt: true },
+        })
+      : null
+
+  if (!active) {
+    active = await client['tosVersion']?.findFirst({
+      where: { active: true },
+      orderBy: { createdAt: 'desc' },
+      select: { id: true, title: true, effectiveAt: true },
+    })
+  }
 
   if (!active) {
     active = await client['tosVersion']?.findFirst({
@@ -44,7 +55,10 @@ export default async function TermsOfService({
                 : TermsService.EFFECTIVE_DATE}
             </Typography>
             <Typography variant="body2" color="textSecondary">
-              Version: {active?.title ?? 'none'}
+              Version: {active?.id ?? 'none'}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Title: {active?.title ?? 'none'}
             </Typography>
           </Stack>
           <Typography variant="body1">{TermsService.INTRO}</Typography>

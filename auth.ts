@@ -80,6 +80,8 @@ const providers: Provider[] = [
       email: { label: 'Email', type: 'email' },
       password: { label: 'Password', type: 'password' },
       isNewAccount: { label: 'Is New Account', type: 'text' },
+      tosAccepted: { label: 'Accepted Terms', type: 'text' },
+      tosVersionId: { label: 'TOS Version', type: 'text' },
     },
     authorize: async (credentials) => {
       if (!credentials) {
@@ -90,6 +92,11 @@ const providers: Provider[] = [
       const email = credentials.email as string
       const password = credentials.password as string
       const isNewAccount = credentials.isNewAccount === 'true'
+      const tosAccepted = credentials.tosAccepted === 'true'
+      const tosVersionId =
+        typeof credentials.tosVersionId === 'string'
+          ? credentials.tosVersionId
+          : null
 
       console.log('[AUTH] Authorize attempt:', { email, isNewAccount })
 
@@ -101,6 +108,36 @@ const providers: Provider[] = [
 
         // Handle new account creation
         if (isNewAccount) {
+          const activeTos = await prisma.tosVersion.findFirst({
+            where: { active: true },
+            orderBy: { createdAt: 'desc' },
+            select: { id: true },
+          })
+
+          if (!activeTos?.id) {
+            throwAuthError(
+              AuthErrorCode.TOS_VERSION_UNAVAILABLE,
+              'No active Terms of Service version is available. Please try again shortly.',
+              'credentials'
+            )
+          }
+
+          if (!tosAccepted) {
+            throwAuthError(
+              AuthErrorCode.TOS_ACCEPTANCE_REQUIRED,
+              'You must accept the current Terms of Service to create an account.',
+              'credentials'
+            )
+          }
+
+          if (tosVersionId && tosVersionId !== activeTos.id) {
+            throwAuthError(
+              AuthErrorCode.TOS_VERSION_MISMATCH,
+              'The Terms of Service version you accepted is outdated. Please review and accept the current version.',
+              'credentials'
+            )
+          }
+
           if (user) {
             // User already exists - check which provider they're using
             console.log(
@@ -149,13 +186,15 @@ const providers: Provider[] = [
 
           // Create new user
           console.log('[AUTH] Creating new user account:', email)
+          const now = new Date()
+          const hashedPassword = await hashPassword(password)
           const newUser = await prisma.userData.create({
             data: {
               email: email,
               name: email.split('@')[0], // Use email prefix as initial name
               provider_id: `credentials_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`, // Unique ID for credentials users
-              createdAt: new Date(),
-              updatedAt: new Date(),
+              createdAt: now,
+              updatedAt: now,
               firstName: '',
               lastName: '',
               bio: '',
@@ -169,20 +208,25 @@ const providers: Provider[] = [
               socialURL: '',
               isLocationPublic: '',
               role: 'user',
-            },
-          })
-
-          // Create provider account with hashed password
-          const hashedPassword = await hashPassword(password)
-          await prisma.providerAccount.create({
-            data: {
-              userId: newUser.id,
-              provider: 'credentials',
-              providerAccountId: newUser.id,
-              type: 'credentials',
-              credentials_password: hashedPassword,
-              createdAt: new Date(),
-              updatedAt: new Date(),
+              acceptedTosVersionId: activeTos.id,
+              acceptedTosAt: now,
+              providerAccounts: {
+                create: {
+                  provider: 'credentials',
+                  providerAccountId: email,
+                  type: 'credentials',
+                  credentials_password: hashedPassword,
+                  createdAt: now,
+                  updatedAt: now,
+                },
+              },
+              tosAcceptances: {
+                create: {
+                  tosVersionId: activeTos.id,
+                  acceptedAt: now,
+                  method: 'signup',
+                },
+              },
             },
           })
 

@@ -14,6 +14,12 @@ export enum AuthErrorCode {
   INVALID_PASSWORD = 'INVALID_PASSWORD',
   /** User tried to sign in with email that has no password set (OAuth only) */
   NO_PASSWORD_SET = 'NO_PASSWORD_SET',
+  /** User must accept the current Terms of Service to create an account */
+  TOS_ACCEPTANCE_REQUIRED = 'TOS_ACCEPTANCE_REQUIRED',
+  /** Submitted TOS version is not the currently active version */
+  TOS_VERSION_MISMATCH = 'TOS_VERSION_MISMATCH',
+  /** No active TOS version is available for account creation */
+  TOS_VERSION_UNAVAILABLE = 'TOS_VERSION_UNAVAILABLE',
 }
 /* eslint-enable no-unused-vars */
 

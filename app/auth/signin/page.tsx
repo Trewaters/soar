@@ -73,18 +73,6 @@ export default async function SignInPage({
                 callbackUrl={resolvedSearchParams.callbackUrl ?? '/navigator'}
               />
             )}
-
-            {!session && (
-              <Stack spacing={1}>
-                <Typography variant="body1">
-                  Don&apos;t have an account yet?
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  ✨ Use any method to login the first timea and an account will
-                  be created for you!
-                </Typography>
-              </Stack>
-            )}
           </Stack>
         </Stack>
       </Stack>

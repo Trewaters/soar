@@ -13,6 +13,9 @@ jest.mock('../../../../auth', () => ({
     EMAIL_EXISTS_OAUTH: 'EMAIL_EXISTS_OAUTH',
     INVALID_PASSWORD: 'INVALID_PASSWORD',
     NO_PASSWORD_SET: 'NO_PASSWORD_SET',
+    TOS_ACCEPTANCE_REQUIRED: 'TOS_ACCEPTANCE_REQUIRED',
+    TOS_VERSION_MISMATCH: 'TOS_VERSION_MISMATCH',
+    TOS_VERSION_UNAVAILABLE: 'TOS_VERSION_UNAVAILABLE',
   },
 }))
 
@@ -33,6 +36,9 @@ enum AuthErrorCode {
   EMAIL_EXISTS_OAUTH = 'EMAIL_EXISTS_OAUTH',
   INVALID_PASSWORD = 'INVALID_PASSWORD',
   NO_PASSWORD_SET = 'NO_PASSWORD_SET',
+  TOS_ACCEPTANCE_REQUIRED = 'TOS_ACCEPTANCE_REQUIRED',
+  TOS_VERSION_MISMATCH = 'TOS_VERSION_MISMATCH',
+  TOS_VERSION_UNAVAILABLE = 'TOS_VERSION_UNAVAILABLE',
 }
 
 // Mock next/navigation
@@ -65,10 +71,24 @@ describe('CredentialsInput Component', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    mockFetch.mockResolvedValue({
-      ok: true,
-      json: async () => ({ data: null }),
-    } as Response)
+    mockFetch.mockImplementation(async (input: RequestInfo | URL) => {
+      const url = String(input)
+
+      if (url.includes('/api/tos')) {
+        return {
+          ok: true,
+          json: async () => ({
+            id: 'tos-v1',
+            externalUrl: '/compliance/terms',
+          }),
+        } as Response
+      }
+
+      return {
+        ok: true,
+        json: async () => ({ data: null }),
+      } as Response
+    })
   })
 
   describe('Rendering', () => {
@@ -223,6 +243,11 @@ describe('CredentialsInput Component', () => {
       const submitButton = screen.getByRole('button', {
         name: /create new account/i,
       })
+      const termsCheckbox = await screen.findByRole('checkbox', {
+        name: /i accept the current/i,
+      })
+
+      await user.click(termsCheckbox)
       await user.click(submitButton)
 
       await waitFor(() => {
@@ -231,6 +256,8 @@ describe('CredentialsInput Component', () => {
           email: 'newuser@example.com',
           password: 'password123',
           isNewAccount: 'true',
+          tosAccepted: 'true',
+          tosVersionId: 'tos-v1',
         })
       })
     })
@@ -500,6 +527,17 @@ describe('CredentialsInput Component', () => {
     })
 
     it('should enable submit button when fields are filled', async () => {
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          data: {
+            email: 'user@example.com',
+            provider: 'credentials',
+            providerId: 'user_123',
+          },
+        }),
+      } as Response)
+
       render(
         <CredentialsInput onProviderTypeChange={mockOnProviderTypeChange} />
       )
@@ -517,6 +555,50 @@ describe('CredentialsInput Component', () => {
         })
         expect(submitButton).not.toBeDisabled()
       })
+    })
+
+    it('should keep create-account button disabled until terms are accepted', async () => {
+      render(
+        <CredentialsInput onProviderTypeChange={mockOnProviderTypeChange} />
+      )
+
+      const emailInput = screen.getByLabelText(/email/i)
+      const passwordInput = screen.getByLabelText(/password/i)
+
+      await user.type(emailInput, 'newuser@example.com')
+      await user.type(passwordInput, 'password123')
+
+      const createButton = await screen.findByRole('button', {
+        name: /create new account/i,
+      })
+      expect(createButton).toBeDisabled()
+
+      const termsCheckbox = await screen.findByRole('checkbox', {
+        name: /i accept the current/i,
+      })
+      await user.click(termsCheckbox)
+
+      await waitFor(() => {
+        expect(createButton).not.toBeDisabled()
+      })
+    })
+
+    it('should link terms checkbox to active tos version url', async () => {
+      render(
+        <CredentialsInput onProviderTypeChange={mockOnProviderTypeChange} />
+      )
+
+      const emailInput = screen.getByLabelText(/email/i)
+      await user.type(emailInput, 'newuser@example.com')
+
+      const termsLink = await screen.findByRole('link', {
+        name: /terms of service/i,
+      })
+
+      expect(termsLink).toHaveAttribute(
+        'href',
+        expect.stringContaining('/compliance/terms?versionId=tos-v1')
+      )
     })
   })
 })

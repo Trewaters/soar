@@ -9,6 +9,9 @@ import {
   Alert,
   AlertTitle,
   Link as MuiLink,
+  Checkbox,
+  FormControlLabel,
+  CircularProgress,
 } from '@mui/material'
 import { signIn } from 'next-auth/react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
@@ -28,11 +31,15 @@ export interface CredentialsInputProps {
   // Callback invoked with the provider type when email lookup completes
   // The callback receives the detected provider string or null when not found
   onProviderTypeChange?: (_provider: string | null) => void
+  createMode?: boolean
+  onCreateModeChange?: (_isCreateMode: boolean) => void
 }
 /* eslint-enable no-unused-vars, @typescript-eslint/no-unused-vars */
 
 const CredentialsInput: React.FC<CredentialsInputProps> = ({
   onProviderTypeChange,
+  createMode,
+  onCreateModeChange,
 }) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -41,6 +48,16 @@ const CredentialsInput: React.FC<CredentialsInputProps> = ({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<AuthErrorType | null>(null)
   const [providerType, setProviderType] = useState<string | null>(null)
+  const [tosAccepted, setTosAccepted] = useState(false)
+  const [tosVersionId, setTosVersionId] = useState<string | null>(null)
+  const [tosUrl, setTosUrl] = useState('/compliance/terms')
+  const [tosLoading, setTosLoading] = useState(false)
+
+  useEffect(() => {
+    if (typeof createMode === 'boolean') {
+      setIsNewUser(createMode)
+    }
+  }, [createMode])
 
   const checkEmailExists = React.useCallback(
     async (emailParam: string) => {
@@ -99,6 +116,47 @@ const CredentialsInput: React.FC<CredentialsInputProps> = ({
     checkEmailExists(email)
   }, [email, checkEmailExists])
 
+  useEffect(() => {
+    if (!isNewUser) {
+      setTosAccepted(false)
+      return
+    }
+
+    let mounted = true
+    const loadActiveTos = async () => {
+      setTosLoading(true)
+      try {
+        const response = await fetch('/api/tos')
+        if (!response.ok) {
+          throw new Error('Unable to load Terms of Service')
+        }
+        const data = await response.json()
+        if (!mounted) return
+        const activeVersionId =
+          typeof data?.id === 'string' && data.id.length > 0 ? data.id : null
+        setTosVersionId(activeVersionId)
+        setTosUrl(
+          activeVersionId
+            ? `/compliance/terms?versionId=${encodeURIComponent(activeVersionId)}`
+            : '/compliance/terms'
+        )
+      } catch (e) {
+        console.error('Failed to fetch active Terms of Service:', e)
+        if (!mounted) return
+        setTosVersionId(null)
+        setTosUrl('/compliance/terms')
+      } finally {
+        if (mounted) setTosLoading(false)
+      }
+    }
+
+    loadActiveTos()
+
+    return () => {
+      mounted = false
+    }
+  }, [isNewUser])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -114,6 +172,8 @@ const CredentialsInput: React.FC<CredentialsInputProps> = ({
           email,
           password,
           isNewAccount: 'true', // Flag to indicate account creation
+          tosAccepted: tosAccepted ? 'true' : 'false',
+          tosVersionId: tosVersionId || '',
         })
       } else {
         // For existing users, normal sign in
@@ -162,6 +222,28 @@ const CredentialsInput: React.FC<CredentialsInputProps> = ({
             message:
               'No password is set for this account. Please use "Forgot Password" to set a password or use social login.',
             provider: providerType || undefined,
+          })
+        } else if (
+          errorMessage.includes(AuthErrorCode.TOS_ACCEPTANCE_REQUIRED)
+        ) {
+          setError({
+            type: 'error',
+            message:
+              'You must accept the current Terms of Service before creating your account.',
+          })
+        } else if (errorMessage.includes(AuthErrorCode.TOS_VERSION_MISMATCH)) {
+          setError({
+            type: 'error',
+            message:
+              'The Terms of Service were updated. Please review and accept the current version, then try again.',
+          })
+        } else if (
+          errorMessage.includes(AuthErrorCode.TOS_VERSION_UNAVAILABLE)
+        ) {
+          setError({
+            type: 'error',
+            message:
+              'Unable to load the current Terms of Service. Please try again shortly.',
           })
         } else if (errorMessage === 'CredentialsSignin') {
           // Generic credentials error
@@ -290,11 +372,52 @@ const CredentialsInput: React.FC<CredentialsInputProps> = ({
 
         {isNewUser ? (
           <>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={tosAccepted}
+                  onChange={(event) => setTosAccepted(event.target.checked)}
+                />
+              }
+              label={
+                <Typography variant="body2">
+                  I accept the current{' '}
+                  <MuiLink
+                    component={Link}
+                    href={tosUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{ fontWeight: 'bold', textDecoration: 'underline' }}
+                  >
+                    Terms of Service
+                  </MuiLink>
+                  .
+                </Typography>
+              }
+            />
+
+            {tosLoading && (
+              <Stack direction="row" spacing={1} alignItems="center">
+                <CircularProgress size={16} />
+                <Typography variant="body2" color="text.secondary">
+                  Loading current Terms of Service...
+                </Typography>
+              </Stack>
+            )}
+
             <Button
               type="submit"
               variant="contained"
               color="primary"
-              disabled={loading || !email || !password || password.length < 6}
+              disabled={
+                loading ||
+                tosLoading ||
+                !email ||
+                !password ||
+                password.length < 6 ||
+                !tosAccepted ||
+                !tosVersionId
+              }
               sx={{ py: 1.5, fontSize: '16px' }}
             >
               {loading ? 'Creating Account...' : '🚀 Create New Account'}
@@ -326,18 +449,18 @@ const CredentialsInput: React.FC<CredentialsInputProps> = ({
           Forgot Password?
         </Button>
 
-        {/* Manual toggle for creating account */}
-        {!isNewUser && email && (
+        {isNewUser && (
           <Button
             variant="text"
             color="primary"
             onClick={() => {
-              setIsNewUser(true)
+              setIsNewUser(false)
+              onCreateModeChange?.(false)
               setError(null)
             }}
             sx={{ mt: 1 }}
           >
-            Don&apos;t have an account? Create one here
+            Already have an account? Sign in
           </Button>
         )}
       </Stack>
