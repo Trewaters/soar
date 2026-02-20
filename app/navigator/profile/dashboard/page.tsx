@@ -33,6 +33,7 @@ interface StatCardProps {
 interface DashboardData {
   loginStreak: number
   activityStreak: number
+  longestStreak: number
   practiceHistory: Array<{ month: string; days: number }>
   mostCommonAsanas: Array<{ name: string; count: number }>
   mostCommonSeries: Array<{ name: string; count: number }>
@@ -246,6 +247,7 @@ const Dashboard: React.FC = () => {
   const {
     loginStreak,
     activityStreak,
+    longestStreak,
     practiceHistory,
     mostCommonAsanas,
     mostCommonSeries,
@@ -283,16 +285,23 @@ const Dashboard: React.FC = () => {
             <Grid container spacing={3} sx={{ mb: 4 }}>
               <Grid item xs={12} sm={6} md={4}>
                 <StatCard
-                  title="Login Streak"
+                  title="Current Login Streak"
                   value={`🔥 ${loginStreak} Days`}
                   color={theme.palette.warning.main}
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
                 <StatCard
-                  title="Activity Streak"
+                  title="Current Activity Streak"
                   value={`🔥 ${activityStreak} Days`}
                   color={theme.palette.warning.main}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <StatCard
+                  title="Longest Activity Streak"
+                  value={`🏆 ${longestStreak} Days`}
+                  color={theme.palette.success.main}
                 />
               </Grid>
             </Grid>

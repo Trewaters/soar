@@ -13,6 +13,7 @@ interface MostCommonItem {
 interface DashboardStats {
   loginStreak: number
   activityStreak: number
+  longestStreak: number
   practiceHistory: PracticeHistoryItem[]
   mostCommonAsanas: MostCommonItem[]
   mostCommonSeries: MostCommonItem[]
@@ -460,6 +461,7 @@ export async function getDashboardStats(
     const [
       loginStreak,
       activityStreak,
+      longestStreak,
       practiceHistory,
       mostCommonAsanas,
       mostCommonSeries,
@@ -474,6 +476,13 @@ export async function getDashboardStats(
       }),
       calculateActivityStreak(userId).catch((err) => {
         console.error(`${debugPrefix} calculateActivityStreak failed`, {
+          userId,
+          error: err,
+        })
+        return 0
+      }),
+      calculateLongestStreak(userId).catch((err) => {
+        console.error(`${debugPrefix} calculateLongestStreak failed`, {
           userId,
           error: err,
         })
@@ -531,7 +540,7 @@ export async function getDashboardStats(
     // Define encouraging names for each achieved tier. Additional yearly names
     // can be appended later; when not provided, we reuse the last name.
     const tierNames = [
-      '', // 0 tiers
+      'Get started!', // 0 tiers
       'Yoga practitioner in Training', // 30 days
       'Dedicated to Yoga', // 60 days
       'Discover the Inner Guru', // 90 days
@@ -542,9 +551,11 @@ export async function getDashboardStats(
       // future yearly names may be appended here
     ]
 
-    const currentTierName =
-      tierNames[Math.min(tiersAchieved, tierNames.length - 1)] ||
-      tierNames[tierNames.length - 1]
+    const tierIndex = Math.max(
+      0,
+      Math.min(tiersAchieved, tierNames.length - 1)
+    )
+    const currentTierName = tierNames[tierIndex] ?? 'Get started!'
 
     // How many full 365-day cycles have been completed
     const ultimateGoalsCompleted = yearsCompleted
@@ -583,6 +594,7 @@ export async function getDashboardStats(
     return {
       loginStreak,
       activityStreak,
+      longestStreak,
       practiceHistory,
       mostCommonAsanas,
       mostCommonSeries,

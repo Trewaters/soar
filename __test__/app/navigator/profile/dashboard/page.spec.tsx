@@ -85,6 +85,7 @@ global.fetch = jest.fn()
 interface DashboardData {
   loginStreak: number
   activityStreak: number
+  longestStreak: number
   practiceHistory: Array<{ month: string; days: number }>
   mostCommonAsanas: Array<{ name: string; count: number }>
   mostCommonSeries: Array<{ name: string; count: number }>
@@ -103,6 +104,7 @@ interface DashboardData {
 const mockDashboardData: DashboardData = {
   loginStreak: 7,
   activityStreak: 5,
+  longestStreak: 14,
   practiceHistory: [
     { month: 'Nov 24', days: 12 },
     { month: 'Dec 24', days: 15 },
@@ -186,6 +188,15 @@ describe('Dashboard Page', () => {
         expect(
           screen.getByText('Your progress at a glance.')
         ).toBeInTheDocument()
+      })
+    })
+
+    it('should display longest activity streak stat card', async () => {
+      render(<Dashboard />, { wrapper: TestWrapper })
+
+      await waitFor(() => {
+        expect(screen.getByText('Longest Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('🏆 14 Days')).toBeInTheDocument()
       })
     })
   })
@@ -312,7 +323,7 @@ describe('Dashboard Page', () => {
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Login Streak')).toBeInTheDocument()
+        expect(screen.getByText('Current Login Streak')).toBeInTheDocument()
         expect(screen.getByText('🔥 7 Days')).toBeInTheDocument()
       })
     })
@@ -321,7 +332,7 @@ describe('Dashboard Page', () => {
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Current Activity Streak')).toBeInTheDocument()
         expect(screen.getByText('🔥 5 Days')).toBeInTheDocument()
       })
     })
@@ -330,8 +341,8 @@ describe('Dashboard Page', () => {
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Login Streak')).toBeInTheDocument()
-        expect(screen.getByText('Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('Current Login Streak')).toBeInTheDocument()
+        expect(screen.getByText('Current Activity Streak')).toBeInTheDocument()
       })
     })
   })
@@ -566,7 +577,7 @@ describe('Dashboard Page', () => {
 
       // Verify ProfileNavMenu and content are both rendered
       expect(screen.getByTestId('profile-nav-menu')).toBeInTheDocument()
-      expect(screen.getByText('Login Streak')).toBeInTheDocument()
+      expect(screen.getByText('Current Login Streak')).toBeInTheDocument()
     })
   })
 
@@ -576,6 +587,14 @@ describe('Dashboard Page', () => {
         ...mockDashboardData,
         loginStreak: 0,
         activityStreak: 0,
+        nextGoal: {
+          ...mockDashboardData.nextGoal,
+          current: 0,
+          target: 30,
+          progress: 0,
+          tiersAchieved: 0,
+          tierName: 'Get started!',
+        },
       }
       ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
         if (url === '/api/user/recordActivity') {
@@ -599,6 +618,7 @@ describe('Dashboard Page', () => {
         // Only two streak cards should show "🔥 0 Days" (Login and Activity)
         const zeroStreaks = screen.getAllByText(/0\s*Days/)
         expect(zeroStreaks).toHaveLength(2)
+        expect(screen.getByText('(Get started!)')).toBeInTheDocument()
       })
 
       // Restore the main fetch mock for other tests
