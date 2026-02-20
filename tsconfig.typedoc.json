@@ -5,6 +5,7 @@
     "noEmit": true
   },
   "include": [
+    "next-auth.d.ts",
     "app/**/*",
     "types/**/*",
     "types/**/*.ts",
