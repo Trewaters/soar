@@ -168,10 +168,7 @@ const providers: Provider[] = [
               )
             }
 
-            const existingUserId =
-              user?.id ?? existingCredentialsAccount?.userId
-
-            if (!existingUserId) {
+            if (!user) {
               console.error(
                 '[AUTH] Account existence check failed to resolve user id:',
                 email
@@ -184,7 +181,7 @@ const providers: Provider[] = [
             }
 
             const providerAccounts = await prisma.providerAccount.findMany({
-              where: { userId: existingUserId },
+              where: { userId: user.id },
               select: { provider: true },
             })
 
