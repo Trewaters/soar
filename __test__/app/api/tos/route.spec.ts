@@ -21,6 +21,8 @@ jest.mock('@app/utils/authorization', () => ({ isAdmin: jest.fn() }))
 jest.mock('../../../../app/lib/prismaClient', () => ({
   prisma: {
     tosVersion: {
+      findFirst: jest.fn(),
+      findUnique: jest.fn(),
       findMany: jest.fn(),
       create: jest.fn(),
       updateMany: jest.fn(),
@@ -34,6 +36,7 @@ jest.mock('@app/compliance/terms/server/tosFileRegistry', () => ({
 }))
 
 let POST: any
+let GET: any
 let auth: any
 let isAdmin: any
 let prisma: any
@@ -42,6 +45,7 @@ let isValidTosFile: any
 beforeAll(() => {
   const mod = require('../../../../app/api/tos/route')
   POST = mod.POST
+  GET = mod.GET
   auth = require('../../../../auth').auth
   isAdmin = require('@app/utils/authorization').isAdmin
   prisma = require('../../../../app/lib/prismaClient').prisma
@@ -124,5 +128,66 @@ describe('POST /api/tos', () => {
     const body = await res.json()
     expect(res.status).toBe(201)
     expect(body.id).toBeDefined()
+  })
+})
+
+describe('GET /api/tos', () => {
+  beforeEach(() => jest.clearAllMocks())
+
+  it('returns specific version when versionId is provided', async () => {
+    ;(prisma.tosVersion as any).findUnique = jest
+      .fn()
+      .mockResolvedValue({ id: 'v42', title: 'Version 42' })
+
+    const req: any = {
+      nextUrl: 'http://localhost:3000/api/tos?versionId=v42',
+    }
+
+    const res: any = await GET(req)
+    const body = await res.json()
+    expect(res.status).toBe(200)
+    expect(body.id).toBe('v42')
+  })
+
+  it('returns 404 when versionId is not found', async () => {
+    ;(prisma.tosVersion as any).findUnique = jest.fn().mockResolvedValue(null)
+
+    const req: any = {
+      nextUrl: 'http://localhost:3000/api/tos?versionId=missing',
+    }
+
+    const res: any = await GET(req)
+    const body = await res.json()
+    expect(res.status).toBe(404)
+    expect(body.error).toMatch(/TOS version not found/)
+  })
+
+  it('returns active version when no versionId is provided', async () => {
+    ;(prisma.tosVersion.findFirst as any).mockResolvedValue({
+      id: 'active-v1',
+      active: true,
+    })
+
+    const req: any = {
+      nextUrl: 'http://localhost:3000/api/tos',
+    }
+
+    const res: any = await GET(req)
+    const body = await res.json()
+    expect(res.status).toBe(200)
+    expect(body.id).toBe('active-v1')
+  })
+
+  it('returns 404 when there is no active version', async () => {
+    ;(prisma.tosVersion.findFirst as any).mockResolvedValue(null)
+
+    const req: any = {
+      nextUrl: 'http://localhost:3000/api/tos',
+    }
+
+    const res: any = await GET(req)
+    const body = await res.json()
+    expect(res.status).toBe(404)
+    expect(body.error).toMatch(/No active TOS version/)
   })
 })
