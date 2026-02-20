@@ -63,9 +63,9 @@ export default function ImageUploadComponent({
         return
       }
 
-      // Validate file size (max 10MB)
-      if (file.size > 10 * 1024 * 1024) {
-        setError('File size must be less than 10MB')
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError('File size must be less than 5MB')
         return
       }
 
@@ -236,7 +236,7 @@ export default function ImageUploadComponent({
                   Click to select an image
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Supports: JPG, PNG, GIF, WebP (Max 10MB)
+                  Supports: JPG, PNG, GIF, WebP (Max 5MB)
                 </Typography>
               </Box>
             )}

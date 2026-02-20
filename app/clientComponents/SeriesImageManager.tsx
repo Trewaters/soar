@@ -97,10 +97,10 @@ export default function SeriesImageManager({
       return
     }
 
-    // Validate file size (10MB)
-    const maxSize = 10 * 1024 * 1024
+    // Validate file size (5MB)
+    const maxSize = 5 * 1024 * 1024
     if (file.size > maxSize) {
-      setError('File too large. Maximum size is 10MB.')
+      setError('File too large. Maximum size is 5MB.')
       return
     }
 
