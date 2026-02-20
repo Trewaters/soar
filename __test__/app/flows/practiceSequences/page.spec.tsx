@@ -45,17 +45,6 @@ jest.mock('@app/lib/alphaUsers', () => {
   return jest.fn(() => ['alpha@example.com', 'alpha-user-id'])
 })
 
-// Mock FEATURES
-jest.mock('@app/FEATURES', () => ({
-  FEATURES: {
-    SHOW_CREATE_SERIES: true,
-    SHOW_CREATE_SEQUENCE: true,
-    SHOW_PRACTICE_SEQUENCE: true,
-    SHOW_PRACTICE_VIEW_ASANA: true,
-    PRIORITIZE_USER_ENTRIES_IN_SEARCH: true,
-  },
-}))
-
 // Mock search utility
 jest.mock('@app/utils/search/orderPosesForSearch', () => ({
   orderPosesForSearch: jest.fn(

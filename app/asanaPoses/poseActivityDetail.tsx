@@ -19,7 +19,6 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import SaveIcon from '@mui/icons-material/Save'
 import CloseIcon from '@mui/icons-material/Close'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { FEATURES } from '@app/FEATURES'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import AsanaDetails from '@app/clientComponents/asanaUi/asanaDetails'
 import AsanaDetailsEdit from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
@@ -1032,7 +1031,7 @@ export default function PoseActivityDetail({
         </Box>
       )}
 
-      {pose && FEATURES.SHOW_PRACTICE_VIEW_ASANA && (
+      {pose && (
         <Box
           sx={{
             display: 'flex',

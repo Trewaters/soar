@@ -43,7 +43,6 @@ import {
   deleteSequenceActivity,
 } from '@lib/sequenceActivityClientService'
 import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
-import { FEATURES } from '@app/FEATURES'
 import { useSession } from 'next-auth/react'
 import { useIsAdmin } from '@app/hooks/useCanEditContent'
 import getAlphaUserIds from '@app/lib/alphaUsers'
@@ -81,8 +80,6 @@ export default function Page() {
         (createdBy && alphaUserIds.includes(createdBy))
       )
     })
-
-    if (!FEATURES.PRIORITIZE_USER_ENTRIES_IN_SEARCH) return authorizedSequences
 
     // Convert id to string for ordering, then map back to SequenceData
     const validSequences = authorizedSequences

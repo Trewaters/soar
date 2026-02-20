@@ -9,8 +9,6 @@ import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { AutocompleteInput } from '@app/clientComponents/form'
 import getAsanaTitle from '@app/utils/search/getAsanaTitle'
 import { NAV_PATHS } from '@app/utils/navigation/constants'
-
-import { FEATURES } from '@app/FEATURES'
 import getAlphaUserIds from '@app/lib/alphaUsers'
 import { useSession } from 'next-auth/react'
 import { AsanaPose } from 'types/asana'
@@ -99,7 +97,6 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
     }))
   }, [poses])
   const orderedOptions = useMemo(() => {
-    if (!FEATURES.PRIORITIZE_USER_ENTRIES_IN_SEARCH) return enrichedPoses
     // Partition and sort
     const userCreated: typeof enrichedPoses = []
     const alphaCreated: typeof enrichedPoses = []

@@ -90,15 +90,6 @@ jest.mock('@app/clientComponents/imageUpload/PoseImageUpload', () => () => (
 ))
 jest.mock('@app/clientComponents/HelpDrawer', () => () => <div />)
 
-jest.mock('@app/FEATURES', () => ({
-  FEATURES: {
-    SHOW_PRACTICE_VIEW_ASANA: true,
-    SHOW_CREATE_SERIES: true,
-    SHOW_CREATE_SEQUENCE: true,
-    SHOW_PRACTICE_SEQUENCE: true,
-  },
-}))
-
 import PoseActivityDetail from '@app/asanaPoses/poseActivityDetail'
 
 const samplePose = {

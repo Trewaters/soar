@@ -9,7 +9,6 @@ import React, {
 } from 'react'
 import { useSession } from 'next-auth/react'
 import { useIsAdmin } from '@app/hooks/useCanEditContent'
-import { FEATURES } from '@app/FEATURES'
 import { FlowSeriesData } from '@context/AsanaSeriesContext'
 import { orderPosesForSearch } from '@app/utils/search/orderPosesForSearch'
 import getAlphaUserIds from '@app/lib/alphaUsers'
@@ -115,11 +114,6 @@ export default function Page() {
       )
     })
 
-    if (!FEATURES.PRIORITIZE_USER_ENTRIES_IN_SEARCH)
-      return authorizedSeries.map((s) => ({
-        ...s,
-        id: s.id ? String(s.id) : '',
-      }))
     const validSeries = authorizedSeries
       .filter((s) => !!s.id && !!s.seriesName && !!s.seriesPoses)
       .map((s) => ({
