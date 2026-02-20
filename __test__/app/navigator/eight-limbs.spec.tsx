@@ -64,7 +64,7 @@ describe('EightLimbs Component', () => {
       fireEvent.click(asanaItem)
       expect(mockPush).toHaveBeenCalledTimes(1)
       // The eightLimbsData onClick handler calls router.push with path only (legacy pattern)
-      expect(mockPush).toHaveBeenCalledWith('/navigator/asanaPoses')
+      expect(mockPush).toHaveBeenCalledWith('/asanaPoses')
     }
   })
 

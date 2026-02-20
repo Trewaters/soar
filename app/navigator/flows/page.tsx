@@ -48,11 +48,11 @@ export default function Page() {
 
   // Navigation handlers
   const handlePracticeSeriesClick = () => {
-    router.push('/navigator/flows/practiceSeries')
+    router.push('/flows/practiceSeries')
   }
 
   const handleCreateSeriesClick = () => {
-    handleFreemiumFeatureClick('createSeries', '/navigator/flows/createSeries')
+    handleFreemiumFeatureClick('createSeries', '/flows/createSeries')
   }
 
   // Close notification

@@ -86,7 +86,7 @@ export default function Page() {
 
   useEffect(() => {
     if (session === null) {
-      router.push('/navigator/flows')
+      router.push('/flows')
       return
     }
 
@@ -190,7 +190,7 @@ export default function Page() {
 
       // Redirect to the series detail page if we got an ID back
       if (data.id) {
-        router.push(`/navigator/flows/practiceSeries?id=${data.id}`)
+        router.push(`/flows/practiceSeries?id=${data.id}`)
         return
       }
 
@@ -242,7 +242,7 @@ export default function Page() {
 
   function handleCancel() {
     // Navigate to Flow search view
-    router.push('/navigator/flows')
+    router.push('/flows')
   }
 
   return (
@@ -272,7 +272,7 @@ export default function Page() {
               alignSelf: 'center',
             }}
           >
-            <SubNavHeader mode="back" link="/navigator/flows" />
+            <SubNavHeader mode="back" link="/flows" />
             <HelpButton onClick={() => setOpen(!open)} />
           </Stack>
           {FEATURES.SHOW_CREATE_SERIES && (

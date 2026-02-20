@@ -32,7 +32,7 @@ export default async function LegalPage() {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <IconButton
                   component={Link}
-                  href="/navigator/profile/settings"
+                  href="/profile/settings"
                   sx={{
                     color: 'primary.main',
                     '&:hover': {
@@ -82,7 +82,7 @@ export default async function LegalPage() {
 
               {/* Privacy Policy */}
               <Link
-                href="/navigator/profile/privacy-policy"
+                href="/profile/privacy-policy"
                 style={{
                   textDecoration: 'underline',
                   color: 'inherit',
@@ -95,7 +95,7 @@ export default async function LegalPage() {
 
               {/* Community Guidelines */}
               <Link
-                href="/navigator/profile/settings/legal/community-guidelines"
+                href="/profile/settings/legal/community-guidelines"
                 style={{
                   textDecoration: 'underline',
                   color: 'inherit',

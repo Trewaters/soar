@@ -200,15 +200,13 @@ describe('URL Generation Utilities', () => {
     test('should generate series URLs using specific path', () => {
       mockDevelopmentEnvironment()
       const url = generateContentUrl('series')
-      expect(url).toBe('http://localhost:3000/navigator/flows/practiceSeries')
+      expect(url).toBe('http://localhost:3000/flows/practiceSeries')
     })
 
     test('should generate sequence URLs using specific path', () => {
       mockProductionEnvironment()
       const url = generateContentUrl('sequence')
-      expect(url).toBe(
-        'https://www.happyyoga.app/navigator/flows/practiceSequence'
-      )
+      expect(url).toBe('https://www.happyyoga.app/flows/practiceSequences')
     })
 
     test('should handle content data for dynamic URL generation', () => {
@@ -218,15 +216,13 @@ describe('URL Generation Utilities', () => {
       const seriesData = { id: 'series-123', seriesName: 'Sun Salutation' }
       const seriesUrl = generateContentUrl('series', seriesData)
       expect(seriesUrl).toBe(
-        'https://www.happyyoga.app/navigator/flows/series/series-123'
+        'https://www.happyyoga.app/flows/series/series-123'
       )
 
       // Test sequence with ID
       const sequenceData = { id: 'seq-456', nameSequence: 'Morning Flow' }
       const sequenceUrl = generateContentUrl('sequence', sequenceData)
-      expect(sequenceUrl).toBe(
-        'https://www.happyyoga.app/navigator/sequences/seq-456'
-      )
+      expect(sequenceUrl).toBe('https://www.happyyoga.app/sequences/seq-456')
 
       // Test asana with ID (production only)
       const asanaData = { id: 'asana-789', sort_english_name: 'Warrior I' }
@@ -263,7 +259,7 @@ describe('URL Generation Utilities', () => {
     test('should use primary URL when valid', () => {
       mockDevelopmentEnvironment()
       const url = generateUrlWithFallbacks('series')
-      expect(url).toBe('http://localhost:3000/navigator/flows/practiceSeries')
+      expect(url).toBe('http://localhost:3000/flows/practiceSeries')
     })
 
     test('should use fallback URL when primary fails validation', () => {
@@ -364,11 +360,9 @@ describe('URL Generation Utilities', () => {
       expect(urls.environment).toBe('development')
       expect(urls.baseUrl).toBe('http://localhost:3000')
       expect(urls.asanaUrl).toBe('http://localhost:3000/asana/1')
-      expect(urls.seriesUrl).toBe(
-        'http://localhost:3000/navigator/flows/practiceSeries'
-      )
+      expect(urls.seriesUrl).toBe('http://localhost:3000/flows/practiceSeries')
       expect(urls.sequenceUrl).toBe(
-        'http://localhost:3000/navigator/flows/practiceSequence'
+        'http://localhost:3000/flows/practiceSequences'
       )
       expect(urls.currentPageUrl).toBe('http://localhost:3000/asana/1')
     })
@@ -381,10 +375,10 @@ describe('URL Generation Utilities', () => {
       expect(urls.baseUrl).toBe('https://www.happyyoga.app')
       expect(urls.asanaUrl).toBe('https://www.happyyoga.app/practice/session')
       expect(urls.seriesUrl).toBe(
-        'https://www.happyyoga.app/navigator/flows/practiceSeries'
+        'https://www.happyyoga.app/flows/practiceSeries'
       )
       expect(urls.sequenceUrl).toBe(
-        'https://www.happyyoga.app/navigator/flows/practiceSequence'
+        'https://www.happyyoga.app/flows/practiceSequences'
       )
       expect(urls.currentPageUrl).toBe(
         'https://www.happyyoga.app/practice/session'
@@ -441,7 +435,7 @@ describe('URL Generation Utilities', () => {
 
       expect(asanaUrl).toContain('happyyoga.app')
       expect(seriesUrl).toContain('practiceSeries')
-      expect(sequenceUrl).toContain('practiceSequence')
+      expect(sequenceUrl).toContain('practiceSequences')
     })
 
     test('should handle yoga content data appropriately', () => {
@@ -469,10 +463,10 @@ describe('URL Generation Utilities', () => {
 
       expect(asanaUrl).toBe('https://www.happyyoga.app/asana/warrior-i')
       expect(seriesUrl).toBe(
-        'https://www.happyyoga.app/navigator/flows/series/sun-salutation'
+        'https://www.happyyoga.app/flows/series/sun-salutation'
       )
       expect(sequenceUrl).toBe(
-        'https://www.happyyoga.app/navigator/sequences/morning-flow'
+        'https://www.happyyoga.app/sequences/morning-flow'
       )
     })
   })
@@ -495,8 +489,8 @@ describe('URL Generation Utilities', () => {
       const yogaUrls = [
         'https://www.happyyoga.app',
         'https://www.happyyoga.app/practice',
-        'https://www.happyyoga.app/navigator/flows/practiceSeries',
-        'https://www.happyyoga.app/navigator/flows/practiceSequence',
+        'https://www.happyyoga.app/flows/practiceSeries',
+        'https://www.happyyoga.app/flows/practiceSequences',
         'http://localhost:3000',
         'http://localhost:3000/asana/warrior-pose',
       ]

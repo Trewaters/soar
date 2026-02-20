@@ -650,7 +650,7 @@ function SeriesLibrary({
         </Typography>
         <Button
           variant="contained"
-          onClick={() => router.push('/navigator/flows/createSeries')}
+          onClick={() => router.push('/flows/createSeries')}
         >
           Create Your First Flow
         </Button>
@@ -854,7 +854,7 @@ function SequencesLibrary({
         </Typography>
         <Button
           variant="contained"
-          onClick={() => router.push('/navigator/flows/createSequence')}
+          onClick={() => router.push('/flows/createSequence')}
         >
           Create Your First Sequence
         </Button>
@@ -1255,9 +1255,7 @@ function SeriesListItem({
           boxShadow: 4,
         },
       }}
-      onClick={() =>
-        router.push(`/navigator/flows/practiceSeries?id=${series.id}`)
-      }
+      onClick={() => router.push(`/flows/practiceSeries?id=${series.id}`)}
     >
       {/* Series info */}
       <Box sx={{ flexGrow: 1, mr: 2 }}>
@@ -1294,9 +1292,7 @@ function SeriesListItem({
           title="Edit"
           onClick={(e) => {
             e.stopPropagation()
-            router.push(
-              `/navigator/flows/practiceSeries?id=${series.id}&edit=true`
-            )
+            router.push(`/flows/practiceSeries?id=${series.id}&edit=true`)
           }}
           sx={{ color: 'text.secondary' }}
         >
@@ -1400,7 +1396,7 @@ function SequenceListItem({
           boxShadow: 4,
         },
       }}
-      onClick={() => router.push(`/navigator/sequences/${sequence.id}`)}
+      onClick={() => router.push(`/sequences/${sequence.id}`)}
     >
       {/* Sequence info */}
       <Box sx={{ flexGrow: 1, mr: 2 }}>
@@ -1444,7 +1440,7 @@ function SequenceListItem({
           title="Edit"
           onClick={(e) => {
             e.stopPropagation()
-            router.push(`/navigator/sequences/${sequence.id}?edit=true`)
+            router.push(`/sequences/${sequence.id}?edit=true`)
           }}
           sx={{ color: 'text.secondary' }}
         >
@@ -1754,9 +1750,7 @@ function SeriesCard({
           boxShadow: 4,
         },
       }}
-      onClick={() =>
-        router.push(`/navigator/flows/practiceSeries?id=${series.id}`)
-      }
+      onClick={() => router.push(`/flows/practiceSeries?id=${series.id}`)}
     >
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography variant="h6" component="h3" gutterBottom>
@@ -1790,9 +1784,7 @@ function SeriesCard({
           title="Edit"
           onClick={(e) => {
             e.stopPropagation() // Prevent card click navigation
-            router.push(
-              `/navigator/flows/practiceSeries?id=${series.id}&edit=true`
-            )
+            router.push(`/flows/practiceSeries?id=${series.id}&edit=true`)
           }}
           sx={{ color: 'text.secondary' }}
         >
@@ -1896,7 +1888,7 @@ function SequenceCard({
           boxShadow: 4,
         },
       }}
-      onClick={() => router.push(`/navigator/sequences/${sequence.id}`)}
+      onClick={() => router.push(`/sequences/${sequence.id}`)}
     >
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography variant="h6" component="h3" gutterBottom>
@@ -1935,7 +1927,7 @@ function SequenceCard({
           title="Edit"
           onClick={(e) => {
             e.stopPropagation() // Prevent card click navigation
-            router.push(`/navigator/sequences/${sequence.id}?edit=true`)
+            router.push(`/sequences/${sequence.id}?edit=true`)
           }}
           sx={{ color: 'text.secondary' }}
         >

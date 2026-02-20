@@ -1,15 +1,15 @@
-import { render } from '@testing-library/react'
-import * as navigation from 'next/navigation'
+import { render, screen } from '@testing-library/react'
 import Home from '@app/page'
 
-jest.mock('next/navigation', () => ({
-  redirect: jest.fn(),
-}))
+jest.mock('@app/navigator/page', () => {
+  return function MockNavigatorHome() {
+    return <div>home-page-content</div>
+  }
+})
 
 describe('Home', () => {
-  it('should call redirect to /navigator', () => {
-    const redirectMock = jest.spyOn(navigation, 'redirect')
-    render(<Home />) // Ensure JSX is properly parsed
-    expect(redirectMock).toHaveBeenCalledWith('/navigator')
+  it('should render home page content at root', () => {
+    render(<Home />)
+    expect(screen.getByText('home-page-content')).toBeInTheDocument()
   })
 })

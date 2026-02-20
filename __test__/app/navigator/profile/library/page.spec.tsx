@@ -516,7 +516,7 @@ describe('LibraryPage - AsanaCard Delete Feature', () => {
     await user.click(deleteButton)
 
     // Router push should not be called for card navigation
-    expect(mockPush).not.toHaveBeenCalledWith('/navigator/asanaPoses/asana1')
+    expect(mockPush).not.toHaveBeenCalledWith('/asanaPoses/asana1')
 
     // But dialog should be open
     expect(screen.getByText('Delete Asana?')).toBeInTheDocument()
@@ -673,6 +673,8 @@ describe('LibraryPage - SeriesCard and SequenceCard Click to View', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     mockGetUserCreatedAsanas.mockResolvedValue([])
+    mockGetUserCreatedSeries.mockResolvedValue([])
+    mockGetUserCreatedSequences.mockResolvedValue([])
     mockGetUserPoseImages.mockResolvedValue({ images: [], totalCount: 0 })
 
     mockUseUser.mockReturnValue({
@@ -693,26 +695,22 @@ describe('LibraryPage - SeriesCard and SequenceCard Click to View', () => {
         createdAt: new Date().toISOString(),
       },
     ]
+
     mockGetUserCreatedSeries.mockResolvedValue(mockSeries)
     testSeriesData = mockSeries
     mockGetUserCreatedSequences.mockResolvedValue([])
 
     render(<LibraryPage />, { wrapper: TestWrapper })
 
-    // Switch to Series tab
     const seriesTab = screen.getByRole('tab', { name: /Flows/i })
     await user.click(seriesTab)
 
     await screen.findByText('Sun Salutation')
 
-    // Click on the series card
     const seriesCard = screen.getByText('Sun Salutation')
     await user.click(seriesCard)
 
-    // Should navigate to the series practice page
-    expect(mockPush).toHaveBeenCalledWith(
-      '/navigator/flows/practiceSeries?id=series1'
-    )
+    expect(mockPush).toHaveBeenCalledWith('/flows/practiceSeries?id=series1')
   })
 
   it('should navigate to sequence detail page when sequence card is clicked', async () => {
@@ -721,30 +719,27 @@ describe('LibraryPage - SeriesCard and SequenceCard Click to View', () => {
       {
         id: 'seq1',
         nameSequence: 'Morning Flow',
-        description: 'A gentle morning sequence',
+        sequenceDescription: 'Start your day strong',
         sequencesSeries: ['series1', 'series2'],
-        durationSequence: '30 minutes',
         createdBy: 'test@example.com',
         createdAt: new Date().toISOString(),
       },
     ]
+
     mockGetUserCreatedSeries.mockResolvedValue([])
     mockGetUserCreatedSequences.mockResolvedValue(mockSequences)
 
     render(<LibraryPage />, { wrapper: TestWrapper })
 
-    // Switch to Sequences tab
     const sequencesTab = screen.getByRole('tab', { name: /Sequences/i })
     await user.click(sequencesTab)
 
     await screen.findByText('Morning Flow')
 
-    // Click on the sequence card
     const sequenceCard = screen.getByText('Morning Flow')
     await user.click(sequenceCard)
 
-    // Should navigate to the sequence detail page
-    expect(mockPush).toHaveBeenCalledWith('/navigator/sequences/seq1')
+    expect(mockPush).toHaveBeenCalledWith('/sequences/seq1')
   })
 
   it('should not trigger series card navigation when edit button is clicked', async () => {
@@ -776,7 +771,7 @@ describe('LibraryPage - SeriesCard and SequenceCard Click to View', () => {
 
     // Should not navigate to the series page
     expect(mockPush).not.toHaveBeenCalledWith(
-      '/navigator/flows/practiceSeries?id=series1'
+      '/flows/practiceSeries?id=series1'
     )
   })
 })

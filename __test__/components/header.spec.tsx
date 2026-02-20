@@ -12,7 +12,7 @@ jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
   }),
-  usePathname: () => '/navigator',
+  usePathname: () => '/',
 }))
 
 // Mock next-auth more thoroughly
@@ -224,23 +224,23 @@ describe('Header Component', () => {
 
       expect(screen.getByRole('link', { name: /home/i })).toHaveAttribute(
         'href',
-        '/navigator'
+        '/'
       )
       expect(screen.getByRole('link', { name: /8 limbs/i })).toHaveAttribute(
         'href',
-        '/navigator/eightLimbs'
+        '/eightLimbs'
       )
       expect(screen.getByRole('link', { name: /asanas/i })).toHaveAttribute(
         'href',
-        '/navigator/asanaPoses'
+        '/asanaPoses'
       )
       expect(screen.getByRole('link', { name: /flows/i })).toHaveAttribute(
         'href',
-        '/navigator/flows'
+        '/flows'
       )
       expect(screen.getByRole('link', { name: /sequences/i })).toHaveAttribute(
         'href',
-        '/navigator/sequences'
+        '/sequences'
       )
     })
 
@@ -357,7 +357,7 @@ describe('Header Component', () => {
       // Mock usePathname to return a profile path
       jest
         .spyOn(require('next/navigation'), 'usePathname')
-        .mockReturnValue('/navigator/profile')
+        .mockReturnValue('/profile')
 
       mockUseSession.mockReturnValue({
         data: {
@@ -385,7 +385,7 @@ describe('Header Component', () => {
       // Mock usePathname to return profile dashboard path
       jest
         .spyOn(require('next/navigation'), 'usePathname')
-        .mockReturnValue('/navigator/profile/dashboard')
+        .mockReturnValue('/profile/dashboard')
 
       mockUseSession.mockReturnValue({
         data: {

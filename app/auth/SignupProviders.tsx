@@ -26,7 +26,7 @@ export default function SignupProviders({
     if (!accepted) return
     setLoadingProvider(providerId)
     try {
-      await signIn(providerId, { callbackUrl: '/navigator/profile' })
+      await signIn(providerId, { callbackUrl: '/profile' })
     } catch (e) {
       // ignore - NextAuth will handle redirects/errors
     } finally {

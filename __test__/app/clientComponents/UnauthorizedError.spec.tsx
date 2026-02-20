@@ -318,7 +318,7 @@ describe('UnauthorizedError', () => {
       await user.click(createButton)
 
       expect(mockClose).toHaveBeenCalledTimes(1)
-      expect(mockPush).toHaveBeenCalledWith('/navigator/asanaPoses/createAsana')
+      expect(mockPush).toHaveBeenCalledWith('/asanaPoses/createAsana')
     })
 
     it('should auto-hide after default duration', async () => {

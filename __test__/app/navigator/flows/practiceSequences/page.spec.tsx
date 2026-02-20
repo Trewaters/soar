@@ -19,7 +19,7 @@ jest.mock('next/navigation', () => ({
     get: (globalThis as any).__mockSearchParamsGet || jest.fn(() => null),
   })),
   useRouter: jest.fn(),
-  usePathname: jest.fn(() => '/navigator/flows/practiceSequences'),
+  usePathname: jest.fn(() => '/flows/practiceSequences'),
 }))
 
 // Make search params mock available for test access
@@ -312,7 +312,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       await user.click(listViewButton)
 
       // Verify navigation to list view with correct sequence ID
-      expect(mockPush).toHaveBeenCalledWith('/navigator/sequences/123')
+      expect(mockPush).toHaveBeenCalledWith('/sequences/123')
     })
 
     it('should navigate to list view with different sequence IDs', async () => {
@@ -347,9 +347,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
 
         await user.click(listViewButton)
 
-        expect(mockPush).toHaveBeenCalledWith(
-          `/navigator/sequences/${testSeq.id}`
-        )
+        expect(mockPush).toHaveBeenCalledWith(`/sequences/${testSeq.id}`)
 
         unmount()
       }
@@ -409,10 +407,8 @@ describe('Practice Sequences Page - View Toggle Features', () => {
 
       await user.click(editButton)
 
-      // Verify navigation to list view with edit parameter (replace used)
-      expect(mockReplace).toHaveBeenCalledWith(
-        '/navigator/sequences/456?edit=true'
-      )
+      // Verify navigation to edit mode with correct parameter
+      expect(mockReplace).toHaveBeenCalledWith('/sequences/456?edit=true')
     })
 
     it('should include edit parameter in URL for edit navigation', async () => {
@@ -441,7 +437,7 @@ describe('Practice Sequences Page - View Toggle Features', () => {
       // Verify URL includes edit=true parameter
       const callArgs = mockReplace.mock.calls[0][0]
       expect(callArgs).toContain('?edit=true')
-      expect(callArgs).toBe('/navigator/sequences/789?edit=true')
+      expect(callArgs).toBe('/sequences/789?edit=true')
     })
   })
 

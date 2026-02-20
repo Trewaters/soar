@@ -64,7 +64,7 @@ export async function GET() {
         {
           title: 'Practice now',
           body: r.message,
-          url: '/navigator/flows/practiceSeries',
+          url: '/flows/practiceSeries',
         }
       )
       if (!res.ok && res.code === 410) {
@@ -80,7 +80,7 @@ export async function GET() {
       await sendReminderEmail(
         r.user.email,
         'Practice now 🧘',
-        `<p>${r.message}</p><p><a href="https://www.happyyoga.app/navigator/flows/practiceSeries">Start Practice</a></p>`
+        `<p>${r.message}</p><p><a href="https://www.happyyoga.app/flows/practiceSeries">Start Practice</a></p>`
       )
     }
 

@@ -69,7 +69,6 @@ describe('NavBottom Integration Tests - Task 10', () => {
     jest.clearAllMocks()
     // Reset mockPush implementation to default (not throwing)
     mockPush.mockReset()
-    // Configure pathname mock via global reference
     ;(globalThis as any).mockUsePathname.mockReturnValue('/test')
   })
 
@@ -86,9 +85,8 @@ describe('NavBottom Integration Tests - Task 10', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      // useNavigationWithLoading.push() is called with (path, elementId)
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
       expect(mockBack).not.toHaveBeenCalled()
@@ -102,9 +100,8 @@ describe('NavBottom Integration Tests - Task 10', () => {
       const dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
 
-      // useNavigationWithLoading.push() is called with (path, elementId)
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
       expect(mockBack).not.toHaveBeenCalled()
@@ -119,7 +116,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
       expect(mockBack).not.toHaveBeenCalled()
@@ -134,7 +131,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
       expect(mockBack).not.toHaveBeenCalled()
@@ -149,7 +146,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
       expect(mockBack).not.toHaveBeenCalled()
@@ -165,7 +162,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
       expect(mockBack).not.toHaveBeenCalled()
@@ -184,7 +181,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
       expect(mockBack).not.toHaveBeenCalled()
@@ -200,11 +197,9 @@ describe('NavBottom Integration Tests - Task 10', () => {
       fireEvent.click(dashboardButton)
       fireEvent.click(dashboardButton)
 
-      // All clicks call mockPush since the NavigationLoadingContext is mocked
-      // In the real app, the loading state would prevent rapid clicks
       expect(mockPush).toHaveBeenCalled()
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -222,7 +217,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -272,7 +267,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
 
       // Should navigate to dashboard, not use back navigation
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
       expect(mockBack).not.toHaveBeenCalled()
@@ -287,7 +282,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -301,7 +296,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -315,7 +310,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -347,7 +342,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -392,7 +387,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
         fireEvent.click(dashboardButton)
 
         expect(mockPush).toHaveBeenCalledWith(
-          '/navigator/profile/dashboard',
+          '/profile/dashboard',
           expect.any(String)
         )
 
@@ -410,7 +405,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       let dashboardButton = screen.getByLabelText('Navigate to dashboard')
       fireEvent.click(dashboardButton)
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
 
@@ -447,7 +442,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
         fireEvent.click(dashboardButton)
 
         expect(mockPush).toHaveBeenCalledWith(
-          '/navigator/profile/dashboard',
+          '/profile/dashboard',
           expect.any(String)
         )
 
@@ -469,7 +464,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
 
       // Should call router.push() which integrates with loading context
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -486,7 +481,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -512,7 +507,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       // Verify navigation works
       fireEvent.click(dashboardButton)
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -534,7 +529,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -560,7 +555,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       // Button should still be functional
       fireEvent.click(updatedDashboardButton)
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -583,7 +578,7 @@ describe('NavBottom Integration Tests - Task 10', () => {
       // will handle the actual debouncing in the real app
       expect(mockPush).toHaveBeenCalled()
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })

@@ -362,7 +362,7 @@ self.addEventListener('push', function (event) {
     body: 'Time for your yoga practice!',
     icon: '/icons/icon-192x192.png',
     badge: '/icons/badge-72x72.png',
-    url: '/navigator/flows/practiceSeries',
+    url: '/flows/practiceSeries',
     tag: 'yoga-reminder',
     requireInteraction: false,
     actions: [],

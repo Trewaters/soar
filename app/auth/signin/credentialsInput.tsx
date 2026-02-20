@@ -276,7 +276,7 @@ const CredentialsInput: React.FC<CredentialsInputProps> = ({
         }
       } else if (result?.ok) {
         // Success - redirect to navigator
-        router.push('/navigator')
+        router.push('/')
       } else {
         setError({
           type: 'error',

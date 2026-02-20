@@ -26,7 +26,7 @@ export interface OAuthButtonsProps {
 const OAuthButtons: React.FC<OAuthButtonsProps> = ({
   providers,
   highlightProvider,
-  callbackUrl = '/navigator',
+  callbackUrl = '/',
 }) => {
   const router = useRouter()
 

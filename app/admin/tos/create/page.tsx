@@ -25,7 +25,7 @@ export default async function TosCreatePage() {
       >
         <h1 style={{ margin: 0 }}>Create Terms of Service Version</h1>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <Link href="/navigator/profile">Profile</Link>
+          <Link href="/profile">Profile</Link>
           <Link href="/admin/tos">← Back to versions</Link>
         </div>
       </div>

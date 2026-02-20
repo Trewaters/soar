@@ -80,7 +80,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -101,7 +101,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -122,7 +122,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       // Should still call back - browser will handle gracefully
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -145,7 +145,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -168,7 +168,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -181,7 +181,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       // Verify loading state integration works in Chrome
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
 
@@ -209,7 +209,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -227,7 +227,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -248,7 +248,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -271,7 +271,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -294,7 +294,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -315,7 +315,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -338,7 +338,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -357,7 +357,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -378,7 +378,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       fireEvent.click(dashboardButton)
 
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -423,7 +423,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
         fireEvent.click(dashboardButton)
 
         expect(mockPush).toHaveBeenCalledWith(
-          '/navigator/profile/dashboard',
+          '/profile/dashboard',
           expect.any(String)
         )
 
@@ -509,7 +509,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
         // Verify navigation was called with correct path and elementId
         expect(mockPush).toHaveBeenCalledWith(
-          '/navigator/profile/dashboard',
+          '/profile/dashboard',
           expect.any(String)
         )
 
@@ -535,7 +535,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       // Should still call the navigation method despite restrictions
       fireEvent.click(dashboardButton)
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -556,7 +556,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
       // Navigation should be fast (under 100ms in test environment)
       expect(executionTime).toBeLessThan(100)
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -574,7 +574,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       // Should handle rapid clicks gracefully (batched to 1 call)
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -620,7 +620,7 @@ describe('NavBottom - Browser Compatibility Testing', () => {
 
       fireEvent.click(dashboardButton)
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })

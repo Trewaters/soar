@@ -382,9 +382,7 @@ export default function Page() {
       try {
         const sid = String(value.id)
         router.replace(
-          `/navigator/flows/practiceSequences?sequenceId=${encodeURIComponent(
-            sid
-          )}`
+          `/flows/practiceSequences?sequenceId=${encodeURIComponent(sid)}`
         )
       } catch (e) {
         // ignore router errors in client-side navigation
@@ -440,7 +438,7 @@ export default function Page() {
               alignSelf: 'center',
             }}
           >
-            <SubNavHeader mode="back" link="/navigator/sequences" />
+            <SubNavHeader mode="back" link="/sequences" />
             <HelpButton onClick={() => setOpen(!open)} />
           </Stack>
           <Stack
@@ -657,13 +655,13 @@ export default function Page() {
                         <IconButton
                           onClick={() => {
                             try {
-                              const editUrl = `/navigator/sequences/${singleSequence.id}?edit=true`
-                              const viewUrl = `/navigator/sequences/${singleSequence.id}`
+                              const editUrl = `/sequences/${singleSequence.id}?edit=true`
+                              const viewUrl = `/sequences/${singleSequence.id}`
                               const isEditing =
                                 typeof window !== 'undefined' &&
                                 window.location.search.includes('edit=true') &&
                                 window.location.pathname.includes(
-                                  `/navigator/sequences/${singleSequence.id}`
+                                  `/sequences/${singleSequence.id}`
                                 )
 
                               if (isEditing) {
@@ -688,7 +686,7 @@ export default function Page() {
                           {typeof window !== 'undefined' &&
                           window.location.search.includes('edit=true') &&
                           window.location.pathname.includes(
-                            `/navigator/sequences/${singleSequence.id}`
+                            `/sequences/${singleSequence.id}`
                           ) ? (
                             <CloseIcon fontSize="small" />
                           ) : (
@@ -709,9 +707,7 @@ export default function Page() {
                       {/* View toggle icons */}
                       <IconButton
                         onClick={() => {
-                          router.push(
-                            `/navigator/sequences/${singleSequence.id}`
-                          )
+                          router.push(`/sequences/${singleSequence.id}`)
                         }}
                         aria-label={`Switch to list view for ${singleSequence.nameSequence}`}
                         sx={{

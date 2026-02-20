@@ -342,7 +342,7 @@ describe('EditSequence', () => {
         expect.objectContaining({ method: 'DELETE' })
       )
       expect((globalThis as any).mockNavigationPush).toHaveBeenCalledWith(
-        '/navigator/flows/practiceSequences'
+        '/flows/practiceSequences'
       )
     })
   })

@@ -43,14 +43,14 @@ const CONTENT_PATHS = {
     test: '/asana', // Test fallback
   },
   series: {
-    development: '/navigator/flows/practiceSeries',
-    production: '/navigator/flows/practiceSeries',
-    test: '/navigator/flows/practiceSeries',
+    development: '/flows/practiceSeries',
+    production: '/flows/practiceSeries',
+    test: '/flows/practiceSeries',
   },
   sequence: {
-    development: '/navigator/flows/practiceSequence',
-    production: '/navigator/flows/practiceSequence',
-    test: '/navigator/flows/practiceSequence',
+    development: '/flows/practiceSequences',
+    production: '/flows/practiceSequences',
+    test: '/flows/practiceSequences',
   },
 } as const
 
@@ -165,7 +165,7 @@ export const generateContentUrl = (
       case 'series': {
         // Series use the [id] route structure for direct navigation
         if (contentData?.id && environment === 'production') {
-          const directSeriesUrl = `${baseUrl}/navigator/flows/series/${contentData.id}`
+          const directSeriesUrl = `${baseUrl}/flows/series/${contentData.id}`
           return validateUrl(directSeriesUrl)
             ? directSeriesUrl
             : `${baseUrl}${contentPath}`
@@ -179,7 +179,7 @@ export const generateContentUrl = (
       case 'sequence': {
         // Sequences use the [id] route structure for direct navigation
         if (contentData?.id && environment === 'production') {
-          const directSequenceUrl = `${baseUrl}/navigator/sequences/${contentData.id}`
+          const directSequenceUrl = `${baseUrl}/sequences/${contentData.id}`
           return validateUrl(directSequenceUrl)
             ? directSequenceUrl
             : `${baseUrl}${contentPath}`

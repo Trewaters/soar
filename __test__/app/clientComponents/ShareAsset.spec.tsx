@@ -58,7 +58,7 @@ describe('Share strategies', () => {
       sort_english_name: 'Lotus',
     } as any)
     expect(out.url).toContain('?id=pose-123')
-    expect(out.url).toContain('/navigator/asanaPoses/practiceAsanas')
+    expect(out.url).toContain('/asanaPoses/practiceAsanas')
   })
 })
 

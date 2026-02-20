@@ -15,7 +15,7 @@ const CommunityGuidelinesPage = () => (
     <Stack spacing={3}>
       {/* Back Button */}
       <Link
-        href="/navigator/profile/settings/legal"
+        href="/profile/settings/legal"
         style={{
           display: 'flex',
           alignItems: 'center',

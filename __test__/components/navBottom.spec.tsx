@@ -185,10 +185,7 @@ describe('NavBottom Component', () => {
       fireEvent.click(profileButton)
 
       // useNavigationWithLoading.push() is called with (path, elementId)
-      expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile',
-        expect.any(String)
-      )
+      expect(mockPush).toHaveBeenCalledWith('/profile', expect.any(String))
     })
 
     it('applies correct colors for authenticated state', () => {
@@ -244,7 +241,7 @@ describe('NavBottom Component', () => {
     })
 
     it('replaces the profile icon with ShareAsset when on a practice asana page with id', async () => {
-      mockUsePathname.mockReturnValue('/navigator/asanaPoses/practiceAsanas')
+      mockUsePathname.mockReturnValue('/asanaPoses/practiceAsanas')
       mockUseSearchParams.mockReturnValue(new URLSearchParams('id=pose-1'))
 
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
@@ -258,7 +255,7 @@ describe('NavBottom Component', () => {
     })
 
     it('replaces the profile icon with ShareAsset when on a practice series page with id', async () => {
-      mockUsePathname.mockReturnValue('/navigator/flows/practiceSeries')
+      mockUsePathname.mockReturnValue('/flows/practiceSeries')
       mockUseSearchParams.mockReturnValue(new URLSearchParams('id=series-1'))
 
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
@@ -269,7 +266,7 @@ describe('NavBottom Component', () => {
     })
 
     it('replaces the profile icon with ShareAsset when on a practice sequence page with sequenceId', async () => {
-      mockUsePathname.mockReturnValue('/navigator/flows/practiceSequences')
+      mockUsePathname.mockReturnValue('/flows/practiceSequences')
       mockUseSearchParams.mockReturnValue(
         new URLSearchParams('sequenceId=sequence-1')
       )
@@ -282,7 +279,7 @@ describe('NavBottom Component', () => {
     })
 
     it('replaces the profile icon with ShareAsset on base flow page when id is present', async () => {
-      mockUsePathname.mockReturnValue('/navigator/flows')
+      mockUsePathname.mockReturnValue('/flows')
       mockUseSearchParams.mockReturnValue(new URLSearchParams('id=series-1'))
 
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
@@ -292,7 +289,7 @@ describe('NavBottom Component', () => {
     })
 
     it('shows the normal profile icon when no asset id is present on practice pages', () => {
-      mockUsePathname.mockReturnValue('/navigator/asanaPoses/practiceAsanas')
+      mockUsePathname.mockReturnValue('/asanaPoses/practiceAsanas')
       mockUseSearchParams.mockReturnValue(new URLSearchParams(''))
 
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
@@ -302,7 +299,7 @@ describe('NavBottom Component', () => {
     })
 
     it('passes correct props to ShareAsset', async () => {
-      mockUsePathname.mockReturnValue('/navigator/asanaPoses/practiceAsanas')
+      mockUsePathname.mockReturnValue('/asanaPoses/practiceAsanas')
       mockUseSearchParams.mockReturnValue(new URLSearchParams('id=pose-1'))
 
       render(<NavBottom subRoute="/test" />, { wrapper: TestWrapper })
@@ -428,7 +425,7 @@ describe('NavBottom Component', () => {
 
       // useNavigationWithLoading.push() is called with (path, elementId)
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
       expect(mockBack).not.toHaveBeenCalled()
@@ -473,7 +470,7 @@ describe('NavBottom Component', () => {
 
       // Verify that router.push() was called with dashboard path - useNavigationWithLoading.push() is called with (path, elementId)
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
     })
@@ -516,7 +513,7 @@ describe('NavBottom Component', () => {
 
       // useNavigationWithLoading.push() is called with (path, elementId)
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/profile/dashboard',
+        '/profile/dashboard',
         expect.any(String)
       )
       expect(mockPush).not.toHaveBeenCalledWith(testRoute)

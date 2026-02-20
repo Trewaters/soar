@@ -92,16 +92,27 @@ describe('Authentication Flow Integration Tests', () => {
       const testEmail = 'existing@example.com'
 
       // Step 1: User enters existing email
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          data: {
-            email: testEmail,
-            provider: 'credentials',
-            providerId: 'user_123',
-          },
-        }),
-      } as Response)
+      mockFetch.mockImplementation(async (input) => {
+        const url = String(input)
+
+        if (url.includes('/api/user/fetchAccount')) {
+          return {
+            ok: true,
+            json: async () => ({
+              data: {
+                email: testEmail,
+                provider: 'credentials',
+                providerId: 'user_123',
+              },
+            }),
+          } as Response
+        }
+
+        return {
+          ok: true,
+          json: async () => ({ data: null }),
+        } as Response
+      })
 
       // Step 2: User tries to create account, gets error
       mockSignIn.mockResolvedValueOnce({
@@ -126,9 +137,7 @@ describe('Authentication Flow Integration Tests', () => {
       const passwordInput = screen.getByLabelText(/password/i)
       await user.type(passwordInput, 'password123')
 
-      const submitButton = screen.getByRole('button', {
-        name: /create new account/i,
-      })
+      const submitButton = screen.getByRole('button', { name: /sign in/i })
       await user.click(submitButton)
 
       // Verify error message appears
@@ -168,7 +177,7 @@ describe('Authentication Flow Integration Tests', () => {
         { id: 'github', name: 'GitHub' },
       ]
 
-      render(<SignInForm providers={mockProviders} callbackUrl="/navigator" />)
+      render(<SignInForm providers={mockProviders} callbackUrl="/" />)
 
       // Enter OAuth-registered email
       const emailInput = screen.getByLabelText(/email/i)
@@ -185,16 +194,27 @@ describe('Authentication Flow Integration Tests', () => {
     it('should show OAuth provider warning message', async () => {
       const testEmail = 'github@example.com'
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          data: {
-            email: testEmail,
-            provider: 'github',
-            providerId: 'github_123',
-          },
-        }),
-      } as Response)
+      mockFetch.mockImplementation(async (input) => {
+        const url = String(input)
+
+        if (url.includes('/api/user/fetchAccount')) {
+          return {
+            ok: true,
+            json: async () => ({
+              data: {
+                email: testEmail,
+                provider: 'github',
+                providerId: 'github_123',
+              },
+            }),
+          } as Response
+        }
+
+        return {
+          ok: true,
+          json: async () => ({ data: null }),
+        } as Response
+      })
 
       mockSignIn.mockResolvedValueOnce({
         error: `Error: ${AuthErrorCode.EMAIL_EXISTS_OAUTH} - registered with GitHub`,
@@ -211,9 +231,7 @@ describe('Authentication Flow Integration Tests', () => {
       await user.type(emailInput, testEmail)
       await user.type(passwordInput, 'somepassword')
 
-      const submitButton = screen.getByRole('button', {
-        name: /create new account/i,
-      })
+      const submitButton = screen.getByRole('button', { name: /sign in/i })
       await user.click(submitButton)
 
       await waitFor(() => {
@@ -228,16 +246,27 @@ describe('Authentication Flow Integration Tests', () => {
       const testEmail = 'user@example.com'
 
       // Mock existing credentials account
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({
-          data: {
-            email: testEmail,
-            provider: 'credentials',
-            providerId: 'user_existing',
-          },
-        }),
-      } as Response)
+      mockFetch.mockImplementation(async (input) => {
+        const url = String(input)
+
+        if (url.includes('/api/user/fetchAccount')) {
+          return {
+            ok: true,
+            json: async () => ({
+              data: {
+                email: testEmail,
+                provider: 'credentials',
+                providerId: 'user_existing',
+              },
+            }),
+          } as Response
+        }
+
+        return {
+          ok: true,
+          json: async () => ({ data: null }),
+        } as Response
+      })
 
       mockSignIn.mockResolvedValueOnce({
         error: `Error: ${AuthErrorCode.INVALID_PASSWORD}`,
@@ -263,10 +292,7 @@ describe('Authentication Flow Integration Tests', () => {
 
       await user.type(passwordInput, 'wrongpassword')
 
-      // Get whatever submit button is available (may be "Sign In" or "Create New Account")
-      const submitButton = screen.getByRole('button', {
-        name: /submit|sign in|create/i,
-      })
+      const submitButton = screen.getByRole('button', { name: /sign in/i })
       await user.click(submitButton)
 
       await waitFor(() => {
@@ -411,11 +437,30 @@ describe('Authentication Flow Integration Tests', () => {
   describe('New User Account Creation Flow', () => {
     it('should successfully create new account for new email', async () => {
       const testEmail = 'newuser@example.com'
+      const testTosVersion = 'tos-version-123'
 
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ data: null }),
-      } as Response)
+      mockFetch.mockImplementation(async (input) => {
+        const url = String(input)
+
+        if (url.includes('/api/user/fetchAccount')) {
+          return {
+            ok: true,
+            json: async () => ({ data: null }),
+          } as Response
+        }
+
+        if (url.includes('/api/tos')) {
+          return {
+            ok: true,
+            json: async () => ({ id: testTosVersion }),
+          } as Response
+        }
+
+        return {
+          ok: true,
+          json: async () => ({ data: null }),
+        } as Response
+      })
 
       mockSignIn.mockResolvedValueOnce({ ok: true } as any)
 
@@ -436,6 +481,9 @@ describe('Authentication Flow Integration Tests', () => {
         ).toBeInTheDocument()
       })
 
+      const tosCheckbox = screen.getByRole('checkbox')
+      await user.click(tosCheckbox)
+
       const submitButton = screen.getByRole('button', {
         name: /create new account/i,
       })
@@ -447,6 +495,8 @@ describe('Authentication Flow Integration Tests', () => {
           email: testEmail,
           password: 'newpassword123',
           isNewAccount: 'true',
+          tosAccepted: 'true',
+          tosVersionId: testTosVersion,
         })
       })
     })

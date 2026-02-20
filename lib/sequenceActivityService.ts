@@ -477,7 +477,7 @@ export async function getRecentSequenceActivities(
       datePerformed: activity.datePerformed,
       difficulty: activity.difficulty,
       completionStatus: activity.completionStatus,
-      link: `/navigator/sequences/${activity.sequenceId}`,
+      link: `/sequences/${activity.sequenceId}`,
     }))
   } catch (error) {
     logServiceError(

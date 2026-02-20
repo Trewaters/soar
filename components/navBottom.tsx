@@ -93,10 +93,10 @@ export default function NavBottom(props: {
   }, [pathname, searchParams])
 
   // Check if we're in the profile section
-  const isInProfileSection = pathname?.includes('/navigator/profile')
+  const isInProfileSection = pathname?.includes('/profile')
 
   // Check if we're on the dashboard page
-  const isOnDashboard = pathname === '/navigator/profile/dashboard'
+  const isOnDashboard = pathname === '/profile/dashboard'
 
   const navItems: NavItem[] = [
     {
@@ -116,9 +116,9 @@ export default function NavBottom(props: {
           : 'Login to access profile',
       icon: isInProfileSection ? <HomeIcon /> : <PersonIcon />,
       path: isInProfileSection
-        ? '/navigator'
+        ? '/'
         : isAuthenticated
-          ? '/navigator/profile'
+          ? '/profile'
           : '/auth/signin',
       getColor: (isAuthenticated: boolean) =>
         isAuthenticated ? 'success.main' : 'grey.500', // Green when logged in, gray when logged out
@@ -139,10 +139,10 @@ export default function NavBottom(props: {
       ),
       path: isOnDashboard
         ? isAuthenticated
-          ? '/navigator/profile/library'
+          ? '/profile/library'
           : '/auth/signin'
         : isAuthenticated
-          ? '/navigator/profile/dashboard'
+          ? '/profile/dashboard'
           : '/auth/signin',
       getColor: (isAuthenticated: boolean) =>
         isAuthenticated ? 'primary.main' : 'grey.500', // Primary when logged in, gray when logged out

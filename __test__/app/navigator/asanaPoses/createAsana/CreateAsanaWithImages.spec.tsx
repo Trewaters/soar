@@ -361,7 +361,7 @@ describe('CreateAsanaWithImages - Happy Path', () => {
       render(<CreateAsanaWithImages />, { wrapper: TestWrapper })
 
       await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith('/navigator/asanaPoses')
+        expect(mockPush).toHaveBeenCalledWith('/asanaPoses')
       })
     })
   })

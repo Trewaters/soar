@@ -242,7 +242,7 @@ export async function sendTestNotification(): Promise<void> {
     badge: '/icons/badge-72x72.png',
     tag: 'test-notification',
     data: {
-      url: '/navigator/flows/practiceSeries',
+      url: '/flows/practiceSeries',
     },
   })
 }

@@ -11,7 +11,7 @@ import React from 'react'
 // Mock Next.js modules
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
-  usePathname: jest.fn(() => '/navigator/profile/settings/connected-accounts'),
+  usePathname: jest.fn(() => '/profile/settings/connected-accounts'),
   useSearchParams: jest.fn(() => ({
     get: jest.fn(() => null),
   })),
@@ -176,10 +176,7 @@ describe('ConnectedAccountsPage', () => {
           name: /Back to Account Settings/i,
         })
         expect(backButton).toBeInTheDocument()
-        expect(backButton).toHaveAttribute(
-          'href',
-          '/navigator/profile/settings'
-        )
+        expect(backButton).toHaveAttribute('href', '/profile/settings')
       })
     })
 

@@ -191,7 +191,7 @@ export default function Page() {
 
   useEffect(() => {
     if (session === null) {
-      router.push('/navigator/flows')
+      router.push('/flows')
       return
     }
 
@@ -251,7 +251,7 @@ export default function Page() {
       // Ensure the sequence was created successfully before navigating
       if (data.sequence) {
         // Navigate to the newly created sequence detail page
-        router.push(`/navigator/sequences/${data.sequence.id}`)
+        router.push(`/sequences/${data.sequence.id}`)
       } else {
         throw new Error('Sequence creation returned no sequence data')
       }
@@ -286,7 +286,7 @@ export default function Page() {
 
   function handleCancel() {
     // Navigate to Sequence search view
-    router.push('/navigator/flows/practiceSequences')
+    router.push('/flows/practiceSequences')
   }
 
   // open state toggled inline where needed (HelpButton / HelpDrawer)
@@ -349,7 +349,7 @@ export default function Page() {
               alignSelf: 'center',
             }}
           >
-            <SubNavHeader mode="back" link="/navigator/flows" />
+            <SubNavHeader mode="back" link="/flows" />
             <HelpButton onClick={() => setOpen(!open)} />
           </Stack>
           <Box sx={{ px: 2, pb: 20 }}>
@@ -909,7 +909,7 @@ export default function Page() {
       />
 
       <Box height={'72px'} />
-      <NavBottom subRoute="/navigator/flows" />
+      <NavBottom subRoute="/flows" />
     </>
   )
 }

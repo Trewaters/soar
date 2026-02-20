@@ -48,14 +48,11 @@ export default function SequencesPage() {
 
   // Navigation handlers
   const handlePracticeSequenceClick = () => {
-    router.push('/navigator/flows/practiceSequences')
+    router.push('/flows/practiceSequences')
   }
 
   const handleCreateSequenceClick = () => {
-    handleFreemiumFeatureClick(
-      'createSequence',
-      '/navigator/flows/createSequence'
-    )
+    handleFreemiumFeatureClick('createSequence', '/flows/createSequence')
   }
 
   // Close notification

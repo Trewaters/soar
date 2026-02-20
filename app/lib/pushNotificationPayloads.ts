@@ -47,7 +47,7 @@ export function getNewFeatureAnnouncementPayload(
     icon: '/icons/yoga-icon-192.png',
     badge: '/icons/badge-icon-72.png',
     data: {
-      url: featureUrl || '/navigator',
+      url: featureUrl || '/',
       type: 'new_feature',
       featureTitle,
     },
@@ -129,7 +129,7 @@ export function getLoginStreakReminderPayload(
     icon: '/icons/yoga-icon-192.png',
     badge: '/icons/badge-icon-72.png',
     data: {
-      url: reminderType === 'warning' ? '/navigator' : '/dashboard',
+      url: reminderType === 'warning' ? '/' : '/dashboard',
       type: 'login_streak',
       streakCount: String(streakCount),
       reminderType,

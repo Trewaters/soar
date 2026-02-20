@@ -316,7 +316,7 @@ describe('TabHeader Component', () => {
 
       if (asanaItem) {
         fireEvent.click(asanaItem)
-        expect(mockPush).toHaveBeenCalledWith('/navigator/asanaPoses')
+        expect(mockPush).toHaveBeenCalledWith('/asanaPoses')
       }
     })
   })

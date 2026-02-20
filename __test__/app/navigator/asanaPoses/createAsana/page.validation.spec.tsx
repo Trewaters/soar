@@ -89,8 +89,9 @@ describe('Create Asana page validation feedback', () => {
 
     await user.click(screen.getByRole('button', { name: 'Create Asana' }))
 
+    expect(await screen.findByText(/english_names:/i)).toBeInTheDocument()
     expect(mockCreatePose).not.toHaveBeenCalled()
-    expect(await screen.findByText(/sort_english_name:/i)).toBeInTheDocument()
+    expect(mockPush).not.toHaveBeenCalled()
   })
 
   it('dismisses error toast and submits successfully after fixing input', async () => {
@@ -116,7 +117,7 @@ describe('Create Asana page validation feedback', () => {
     await waitFor(() => {
       expect(mockCreatePose).toHaveBeenCalledTimes(1)
       expect(mockPush).toHaveBeenCalledWith(
-        '/navigator/asanaPoses/practiceAsanas?id=pose-1'
+        '/asanaPoses/practiceAsanas?id=pose-1'
       )
     })
   })

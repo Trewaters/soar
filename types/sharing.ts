@@ -74,14 +74,14 @@ export function createShareStrategy(
  * Share strategy for individual asana poses/asanas
  * Implements exact format specification from PRD with mandatory format:
  * "The asana pose [Asana Pose sort name] was shared with you. Below is the description:
- * Practice with Uvuyoga! https://www.happyyoga.app/navigator/flows/practiceSeries (www.happyyoga.app)"
+ * Practice with Uvuyoga! https://www.happyyoga.app/flows/practiceSeries (www.happyyoga.app)"
  */
 export class AsanaShareStrategy implements ShareStrategy {
   generateShareConfig(data: AsanaPose): ShareConfig {
     const poseName = data.sort_english_name
 
     // Use canonical practiceAsanas URL with ID
-    const fallbackPracticeUrl = `https://www.happyyoga.app/navigator/asanaPoses/practiceAsanas?id=${data.id}`
+    const fallbackPracticeUrl = `https://www.happyyoga.app/asanaPoses/practiceAsanas?id=${data.id}`
     // Prefer a stable, shareable link that includes the pose id.
     const shareUrl = data?.id
       ? fallbackPracticeUrl
@@ -110,7 +110,7 @@ ${shareUrl}
  * Implements exact format specification from PRD with mandatory format:
  * "Sharing a video of the yoga series "[Series Name]"
  * Below are the poses in this series: * [Pose 1], * [Pose 2], etc.
- * Practice with Uvuyoga! https://www.happyyoga.app/navigator/flows/practiceSeries (www.happyyoga.app)"
+ * Practice with Uvuyoga! https://www.happyyoga.app/flows/practiceSeries (www.happyyoga.app)"
  */
 export class SeriesShareStrategy implements ShareStrategy {
   generateShareConfig(data: FlowSeriesData): ShareConfig {
@@ -139,7 +139,7 @@ export class SeriesShareStrategy implements ShareStrategy {
     // that's the canonical public landing page for shared flows in the app.
     // Use `generateUrlWithFallbacks` with a fallback to the practiceSeries
     // id URL to ensure we include the series id when possible.
-    const fallbackPracticeUrl = `https://www.happyyoga.app/navigator/flows/practiceSeries?id=${data.id}`
+    const fallbackPracticeUrl = `https://www.happyyoga.app/flows/practiceSeries?id=${data.id}`
     // Prefer a stable, shareable production link that includes the series id so
     // recipients land on the exact flow. If an id is available, use the
     // production practiceSeries?id=... URL; otherwise fall back to the
@@ -188,7 +188,7 @@ export class SequenceShareStrategy implements ShareStrategy {
     // that points to the exact sequence so recipients land on the same
     // practice page the sender expects. Use generateUrlWithFallbacks as
     // a fallback when an id isn't available or the environment requires it.
-    const fallbackPracticeUrl = `https://www.happyyoga.app/navigator/flows/practiceSequences?sequenceId=${data.id}`
+    const fallbackPracticeUrl = `https://www.happyyoga.app/flows/practiceSequences?sequenceId=${data.id}`
     const shareUrl = data?.id
       ? fallbackPracticeUrl
       : generateUrlWithFallbacks('sequence', data, url || fallbackPracticeUrl)

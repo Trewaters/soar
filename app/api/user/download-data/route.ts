@@ -295,14 +295,12 @@ export async function GET() {
       // User Rights (GDPR Information)
       your_rights: {
         right_to_access: 'You are exercising this right now',
-        right_to_rectification: 'Edit your profile at /navigator/profile',
-        right_to_erasure:
-          'Delete your account at /navigator/profile/privacy-settings',
+        right_to_rectification: 'Edit your profile at /profile',
+        right_to_erasure: 'Delete your account at /profile/privacy-settings',
         right_to_restrict_processing:
-          'Manage preferences at /navigator/profile/settings/notifications',
+          'Manage preferences at /profile/settings/notifications',
         right_to_data_portability: 'You are exercising this right now',
-        right_to_object:
-          'Manage data sharing at /navigator/profile/privacy-settings',
+        right_to_object: 'Manage data sharing at /profile/privacy-settings',
         contact: 'For data privacy questions, contact your administrator',
       },
     }

@@ -259,7 +259,7 @@ export default function EditSequence({
         throw new Error(data?.error || `Delete failed (${res.status})`)
       }
       // Navigate to practice sequences page after delete
-      router.push('/navigator/flows/practiceSequences')
+      router.push('/flows/practiceSequences')
     } catch (e) {
       // Surface an inline error via saveError banner area
       setSaveState('error')

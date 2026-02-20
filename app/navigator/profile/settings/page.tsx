@@ -32,7 +32,7 @@ export default async function SettingsPage() {
               {/* Privacy */}
               <Paper
                 component="a"
-                href="/navigator/profile/settings/legal"
+                href="/profile/settings/legal"
                 elevation={0}
                 sx={{
                   p: 3,
@@ -64,7 +64,7 @@ export default async function SettingsPage() {
               {/* Privacy Settings */}
               <Paper
                 component="a"
-                href="/navigator/profile/privacy-settings"
+                href="/profile/privacy-settings"
                 elevation={0}
                 sx={{
                   p: 3,
@@ -96,7 +96,7 @@ export default async function SettingsPage() {
               {/* Notifications */}
               <Paper
                 component="a"
-                href="/navigator/profile/settings/notifications"
+                href="/profile/settings/notifications"
                 elevation={0}
                 sx={{
                   p: 3,
@@ -128,7 +128,7 @@ export default async function SettingsPage() {
               {/* Account Security */}
               <Paper
                 component="a"
-                href="/navigator/profile/settings/account-security"
+                href="/profile/settings/account-security"
                 elevation={0}
                 sx={{
                   p: 3,
@@ -160,7 +160,7 @@ export default async function SettingsPage() {
               {/* Connected Accounts */}
               <Paper
                 component="a"
-                href="/navigator/profile/settings/connected-accounts"
+                href="/profile/settings/connected-accounts"
                 elevation={0}
                 sx={{
                   p: 3,
@@ -192,7 +192,7 @@ export default async function SettingsPage() {
               {/* Send Feedback */}
               <Paper
                 component="a"
-                href="/navigator/profile/feedback"
+                href="/profile/feedback"
                 elevation={0}
                 sx={{
                   p: 3,

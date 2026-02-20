@@ -353,7 +353,7 @@ export default function Page() {
       setOpen(false)
       setAcOpen(false)
       // Update URL to show the series ID
-      router.push(`/navigator/flows/practiceSeries?id=${value.id}`, undefined, {
+      router.push(`/flows/practiceSeries?id=${value.id}`, undefined, {
         scroll: false,
       })
     }
@@ -483,7 +483,7 @@ export default function Page() {
       setFlow(undefined)
       // Force refresh and navigate back to series list page (no id param)
       router.refresh()
-      router.replace('/navigator/flows/practiceSeries')
+      router.replace('/flows/practiceSeries')
     } catch (e) {
       console.error('Failed to delete series', e)
     }
@@ -524,7 +524,7 @@ export default function Page() {
             alignSelf: 'center',
           }}
         >
-          <SubNavHeader mode="back" link="/navigator/flows" />
+          <SubNavHeader mode="back" link="/flows" />
           <HelpButton onClick={handleInfoClick} />
         </Stack>
         <Stack sx={{ px: 4, width: '100%', maxWidth: '600px' }}>

@@ -124,7 +124,7 @@ export default function AddLoginMethodDialog({
 
     try {
       // Redirect to OAuth provider with callback to connected accounts page
-      const callbackUrl = `${window.location.origin}/navigator/profile/settings/connected-accounts?action=link-success&provider=${provider}`
+      const callbackUrl = `${window.location.origin}/profile/settings/connected-accounts?action=link-success&provider=${provider}`
       await signIn(provider, { callbackUrl })
     } catch (err) {
       console.error('OAuth sign-in error:', err)

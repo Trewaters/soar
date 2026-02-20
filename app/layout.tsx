@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import Script from 'next/script'
 import { Providers } from '@providers/Providers'
 import TosReacceptGuard from '@clientComponents/TosReacceptGuard'
+import AppNavigationShell from '@clientComponents/AppNavigationShell'
 import { auth } from '../auth'
 import ServiceWorkerRegister from '@clientComponents/ServiceWorkerRegister'
 
@@ -104,7 +105,7 @@ export default async function RootLayout({
               gtag('config', 'G-BE8QV7LLJV');
             `}
           </Script>
-          {children}
+          <AppNavigationShell>{children}</AppNavigationShell>
           <ServiceWorkerRegister />
         </Providers>
       </body>

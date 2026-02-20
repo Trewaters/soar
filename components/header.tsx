@@ -84,14 +84,14 @@ export default function Header() {
     () => [
       {
         name: 'Home',
-        href: '/navigator',
+        href: '/',
         icon: <HomeIcon />,
         action: null,
         color: 'gray',
       },
       {
         name: 'Asanas',
-        href: '/navigator/asanaPoses',
+        href: '/asanaPoses',
         // icon: <WaterDropOutlinedIcon color="primary" />,
         icon: <Brightness1OutlinedIcon color="primary" />,
         action: null,
@@ -99,7 +99,7 @@ export default function Header() {
       },
       {
         name: 'Flows',
-        href: '/navigator/flows',
+        href: '/flows',
         // icon: <TimelapseOutlinedIcon color="primary" />,
         icon: <WorkspacesIcon color="primary" />,
         action: null,
@@ -107,7 +107,7 @@ export default function Header() {
       },
       {
         name: 'Sequences',
-        href: '/navigator/sequences',
+        href: '/sequences',
         // icon: <Brightness1OutlinedIcon color="primary" />,
         icon: <GroupWorkIcon color="primary" />,
         action: null,
@@ -115,28 +115,28 @@ export default function Header() {
       },
       {
         name: '8 Limbs',
-        href: '/navigator/eightLimbs',
+        href: '/eightLimbs',
         icon: <FlareIcon />,
         action: null,
         color: 'gray',
       },
       {
         name: 'About',
-        href: '/navigator/about',
+        href: '/about',
         icon: <TipsAndUpdatesOutlinedIcon />,
         action: null,
         color: 'gray',
       },
       {
         name: 'Profile',
-        href: '/navigator/profile',
+        href: '/profile',
         icon: <PersonIcon />,
         action: null,
         color: 'gray',
       },
       {
         name: 'Glossary',
-        href: '/navigator/glossary',
+        href: '/glossary',
         icon: <MenuBookIcon />,
         action: null,
         color: 'gray',

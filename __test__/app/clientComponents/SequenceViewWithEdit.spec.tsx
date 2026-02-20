@@ -413,7 +413,7 @@ describe('SequenceViewWithEdit', () => {
 
         // Verify navigation.push was called with correct scroll view URL
         expect(mockPush).toHaveBeenCalledWith(
-          '/navigator/flows/practiceSequences?sequenceId=test-sequence-123'
+          '/flows/practiceSequences?sequenceId=test-sequence-123'
         )
       })
 
@@ -511,7 +511,7 @@ describe('SequenceViewWithEdit', () => {
 
         // Should navigate even in edit mode
         expect(mockPush).toHaveBeenCalledWith(
-          '/navigator/flows/practiceSequences?sequenceId=edit-test-789'
+          '/flows/practiceSequences?sequenceId=edit-test-789'
         )
       })
 
@@ -578,7 +578,7 @@ describe('SequenceViewWithEdit', () => {
 
         // Verify navigation.push was called with scroll view URL
         expect(mockPush).toHaveBeenCalledWith(
-          '/navigator/flows/practiceSequences?sequenceId=test-sequence-456'
+          '/flows/practiceSequences?sequenceId=test-sequence-456'
         )
       })
 
@@ -720,7 +720,7 @@ describe('SequenceViewWithEdit', () => {
           await user.click(scrollViewButton)
 
           expect(mockPush).toHaveBeenCalledWith(
-            `/navigator/flows/practiceSequences?sequenceId=${testSeq.id}`
+            `/flows/practiceSequences?sequenceId=${testSeq.id}`
           )
 
           unmount()
@@ -747,7 +747,7 @@ describe('SequenceViewWithEdit', () => {
         await user.click(backButton)
 
         expect(mockPush).toHaveBeenCalledWith(
-          '/navigator/flows/practiceSequences?sequenceId=back-nav-test-id'
+          '/flows/practiceSequences?sequenceId=back-nav-test-id'
         )
       })
     })

@@ -26,7 +26,7 @@ jest.mock('next/navigation', () => {
     __esModule: true,
     ...original,
     useSearchParams: jest.fn(() => new URLSearchParams('id=flow-1')),
-    usePathname: jest.fn(() => '/navigator/flows/practiceSeries'),
+    usePathname: jest.fn(() => '/flows/practiceSeries'),
     useRouter: jest.fn(() => ({
       back: jest.fn(),
       forward: jest.fn(),
@@ -111,7 +111,7 @@ describe('Practice Series Page - Delete Flow', () => {
     })
 
     // Navigation replace should have been called to base route (no id param)
-    expect(mockReplace).toHaveBeenCalledWith('/navigator/flows/practiceSeries')
+    expect(mockReplace).toHaveBeenCalledWith('/flows/practiceSeries')
     // Refresh invoked to revalidate data
     expect(mockRefresh).toHaveBeenCalled()
     // Service delete called

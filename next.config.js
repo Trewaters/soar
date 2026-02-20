@@ -54,6 +54,50 @@ const nextConfig = {
 
     return config
   },
+  async redirects() {
+    return [
+      {
+        source: '/navigator',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/navigator/asanaPoses/:path*',
+        destination: '/asanaPoses/:path*',
+        permanent: true,
+      },
+      {
+        source: '/navigator/flows/:path*',
+        destination: '/flows/:path*',
+        permanent: true,
+      },
+      {
+        source: '/navigator/sequences/:path*',
+        destination: '/sequences/:path*',
+        permanent: true,
+      },
+      {
+        source: '/navigator/profile/:path*',
+        destination: '/profile/:path*',
+        permanent: true,
+      },
+      {
+        source: '/navigator/about/:path*',
+        destination: '/about/:path*',
+        permanent: true,
+      },
+      {
+        source: '/navigator/eightLimbs/:path*',
+        destination: '/eightLimbs/:path*',
+        permanent: true,
+      },
+      {
+        source: '/navigator/glossary/:path*',
+        destination: '/glossary/:path*',
+        permanent: true,
+      },
+    ]
+  },
   // Add aggressive cache-busting headers
   async headers() {
     return [

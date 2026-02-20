@@ -15,7 +15,7 @@ const PrivacyPolicyPage = () => (
     <Stack spacing={3}>
       {/* Back Button */}
       <NextLink
-        href="/navigator/profile/settings/legal"
+        href="/profile/settings/legal"
         style={{
           display: 'flex',
           alignItems: 'center',

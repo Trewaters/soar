@@ -65,9 +65,9 @@ export default function SequenceViewWithEdit({
 
     try {
       if (next && model.id) {
-        navigation.replace(`/navigator/sequences/${model.id}?edit=true`)
+        navigation.replace(`/sequences/${model.id}?edit=true`)
       } else if (model.id) {
-        navigation.replace(`/navigator/sequences/${model.id}`)
+        navigation.replace(`/sequences/${model.id}`)
       }
     } catch (e) {
       // best-effort URL sync; ignore errors
@@ -269,9 +269,7 @@ export default function SequenceViewWithEdit({
 
     // Navigate back to scroll view practice sequences page
     if (model.id) {
-      navigation.push(
-        `/navigator/flows/practiceSequences?sequenceId=${model.id}`
-      )
+      navigation.push(`/flows/practiceSequences?sequenceId=${model.id}`)
     } else {
       // Fallback to general navigation back
       navigation.back()
@@ -399,7 +397,7 @@ export default function SequenceViewWithEdit({
                 onClick={() => {
                   if (model.id) {
                     navigation.push(
-                      `/navigator/flows/practiceSequences?sequenceId=${model.id}`
+                      `/flows/practiceSequences?sequenceId=${model.id}`
                     )
                   }
                 }}

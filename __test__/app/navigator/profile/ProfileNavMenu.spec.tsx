@@ -363,7 +363,7 @@ describe('ProfileNavMenu', () => {
       const profileOverviewButton = screen.getByText('Profile Overview')
       await user.click(profileOverviewButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile')
+      expect(mockPush).toHaveBeenCalledWith('/profile')
     })
 
     it('should navigate to dashboard when clicked', async () => {
@@ -373,7 +373,7 @@ describe('ProfileNavMenu', () => {
       const dashboardButton = screen.getByText('Dashboard')
       await user.click(dashboardButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/dashboard')
+      expect(mockPush).toHaveBeenCalledWith('/profile/dashboard')
     })
 
     it('should navigate to library when clicked', async () => {
@@ -383,7 +383,7 @@ describe('ProfileNavMenu', () => {
       const libraryButton = screen.getByText('My Library')
       await user.click(libraryButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/library')
+      expect(mockPush).toHaveBeenCalledWith('/profile/library')
     })
 
     it('should navigate to account settings when clicked', async () => {
@@ -393,7 +393,7 @@ describe('ProfileNavMenu', () => {
       const settingsButton = screen.getByText('Account Settings')
       await user.click(settingsButton)
 
-      expect(mockPush).toHaveBeenCalledWith('/navigator/profile/settings')
+      expect(mockPush).toHaveBeenCalledWith('/profile/settings')
     })
 
     it('should call signOut when logout button is clicked', async () => {
@@ -502,7 +502,7 @@ describe('ProfileNavMenu', () => {
       await user.keyboard('{Enter}')
 
       await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith('/navigator/profile')
+        expect(mockPush).toHaveBeenCalledWith('/profile')
       })
     })
   })

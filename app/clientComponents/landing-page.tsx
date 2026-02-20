@@ -9,17 +9,17 @@ import WorkspacesIcon from '@mui/icons-material/Workspaces'
 const links = [
   {
     name: 'Asanas',
-    href: '/navigator/asanaPoses/practiceAsanas',
+    href: '/asanaPoses/practiceAsanas',
     icon: <Brightness1OutlinedIcon />,
   },
   {
     name: 'Flows',
-    href: '/navigator/flows/practiceSeries',
+    href: '/flows/practiceSeries',
     icon: <WorkspacesIcon />,
   },
   {
     name: 'Sequences',
-    href: '/navigator/flows/practiceSequences',
+    href: '/flows/practiceSequences',
     icon: <GroupWorkIcon />,
   },
 ]

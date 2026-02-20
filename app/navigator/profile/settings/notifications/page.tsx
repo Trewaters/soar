@@ -34,7 +34,7 @@ export default async function NotificationSettingsPage() {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <IconButton
                   component={Link}
-                  href="/navigator/profile/settings"
+                  href="/profile/settings"
                   sx={{
                     color: 'primary.main',
                     '&:hover': {

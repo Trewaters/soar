@@ -92,26 +92,26 @@ const ProfileNavMenu: React.FC = () => {
       id: 'profile-overview',
       label: 'Profile Overview',
       icon: <PersonIcon />,
-      href: '/navigator/profile',
+      href: '/profile',
     },
     {
       id: 'dashboard',
       label: 'Dashboard',
       icon: <DashboardIcon />,
-      href: '/navigator/profile/dashboard',
+      href: '/profile/dashboard',
     },
     {
       id: 'library',
       label: 'My Library',
       icon: <LibraryIcon />,
-      href: '/navigator/profile/library',
+      href: '/profile/library',
       // badge: 'New',
     },
     {
       id: 'account-settings',
       label: 'Account Settings',
       icon: <SettingsIcon />,
-      href: '/navigator/profile/settings',
+      href: '/profile/settings',
       disabled: false, // Settings page is now available
     },
   ]

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button, Paper, Stack, Typography } from '@mui/material'
-import Header from '@serverComponents/header'
 import { signOut, auth, providerMap } from '../../../auth'
 import { Link as MuiLink } from '@mui/material'
 import Link from 'next/link'
@@ -15,9 +14,6 @@ export default async function SignInPage({
   const resolvedSearchParams = (await searchParams) ?? {}
   return (
     <>
-      <nav>
-        <Header />
-      </nav>
       <Stack justifyContent={'center'} alignItems={'center'} minHeight={'80vh'}>
         <Stack
           spacing={3}
@@ -70,7 +66,7 @@ export default async function SignInPage({
             ) : (
               <SignInForm
                 providers={Object.values(providerMap)}
-                callbackUrl={resolvedSearchParams.callbackUrl ?? '/navigator'}
+                callbackUrl={resolvedSearchParams.callbackUrl ?? '/'}
               />
             )}
           </Stack>
