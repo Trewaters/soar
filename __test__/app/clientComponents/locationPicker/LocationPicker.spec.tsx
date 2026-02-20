@@ -24,16 +24,20 @@ const mockGeocoder = {
   geocode: mockGeocode,
 }
 
+const mockAutocompleteSessionToken = jest.fn()
+
 // Mock the Google Maps API
 const mockGoogle = {
   maps: {
     places: {
       AutocompleteService: jest.fn(() => mockAutocompleteService),
       PlacesService: jest.fn(() => mockPlacesService),
+      AutocompleteSessionToken: jest.fn(() => mockAutocompleteSessionToken),
       PlacesServiceStatus: {
         OK: 'OK',
         ZERO_RESULTS: 'ZERO_RESULTS',
         INVALID_REQUEST: 'INVALID_REQUEST',
+        REQUEST_DENIED: 'REQUEST_DENIED',
       },
     },
     Geocoder: jest.fn(() => mockGeocoder),

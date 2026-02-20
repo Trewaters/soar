@@ -1,5 +1,6 @@
 'use client'
 import React from 'react'
+import { usePathname } from 'next/navigation'
 import {
   Box,
   Paper,
@@ -39,6 +40,7 @@ interface ProfileNavMenuItem {
 }
 
 const ProfileNavMenu: React.FC = () => {
+  const currentPath = usePathname()
   const { data: session } = useSession()
   const router = useNavigationWithLoading()
   const {
@@ -46,14 +48,6 @@ const ProfileNavMenu: React.FC = () => {
     dispatch,
   } = UseUser()
   const { activeImage, isPlaceholder } = useActiveProfileImage()
-
-  // Get current pathname for highlighting
-  const [currentPath, setCurrentPath] = React.useState<string>('')
-  React.useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setCurrentPath(window.location.pathname)
-    }
-  }, [])
 
   // Fetch user data if session exists but userData is not populated
   React.useEffect(() => {
@@ -131,7 +125,6 @@ const ProfileNavMenu: React.FC = () => {
       item.action()
     } else if (item.href && !item.disabled) {
       router.push(item.href)
-      setCurrentPath(item.href)
     }
   }
 

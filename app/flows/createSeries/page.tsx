@@ -37,7 +37,7 @@ import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import { HELP_PATHS } from '@app/utils/helpLoader'
 
 export default function Page() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const { state, dispatch } = useFlowSeries()
   const { seriesName, seriesPoses, breath, description, duration, image } =
     state.flowSeries
@@ -85,14 +85,16 @@ export default function Page() {
   }, [session?.user?.email])
 
   useEffect(() => {
-    if (session === null) {
+    if (status === 'unauthenticated') {
       router.push('/flows')
       return
     }
 
-    fetchPoses()
+    if (status === 'authenticated') {
+      fetchPoses()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router, session?.user?.email])
+  }, [status, session?.user?.email])
 
   // Refetch poses when the page becomes visible (e.g., when returning from create asana page)
   // This ensures that newly created asanas appear in the autocomplete search

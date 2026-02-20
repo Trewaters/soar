@@ -69,8 +69,19 @@ export default function ImageUpload({
   }
 
   const handleUpload = async () => {
+    console.log('[ImageUpload] handleUpload called', {
+      hasFile: !!selectedFile,
+      hasSession: !!session?.user?.email,
+      userEmail: session?.user?.email,
+    })
+
     if (!selectedFile || !session?.user?.email) {
-      setError('Please select a file and ensure you are logged in')
+      const errorMsg = 'Please select a file and ensure you are logged in'
+      console.error('[ImageUpload]', errorMsg, {
+        hasFile: !!selectedFile,
+        hasSession: !!session?.user?.email,
+      })
+      setError(errorMsg)
       return
     }
 
@@ -78,16 +89,24 @@ export default function ImageUpload({
     setError(null)
 
     try {
+      console.log('[ImageUpload] Starting upload with uploadPoseImage')
       const uploadedImage = await uploadPoseImage({
         file: selectedFile,
         altText: altText.trim() || undefined,
         userId: session.user.email, // Use email as userId for ownership check
       })
 
+      console.log(
+        '[ImageUpload] Upload successful, calling onImageUploaded callback',
+        uploadedImage
+      )
       onImageUploaded?.(uploadedImage)
+      console.log('[ImageUpload] Closing dialog')
       handleClose()
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Upload failed')
+      const errorMsg = error instanceof Error ? error.message : 'Upload failed'
+      console.error('[ImageUpload] Error during upload:', { error, errorMsg })
+      setError(errorMsg)
     } finally {
       setUploading(false)
     }

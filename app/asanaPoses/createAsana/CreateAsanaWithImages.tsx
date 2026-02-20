@@ -51,8 +51,13 @@ export default function CreateAsanaWithImages() {
 
   // Handle image upload callback
   const handleImageUploaded = (image: PoseImageData) => {
+    console.log(
+      '[CreateAsanaWithImages] handleImageUploaded called with:',
+      image
+    )
     setUploadedImages((prev) => {
       const updated = [...prev, image]
+      console.log('[CreateAsanaWithImages] Images state updated:', updated)
       return updated
     })
   }
@@ -95,6 +100,46 @@ export default function CreateAsanaWithImages() {
 
     try {
       const data = await createPose(updatedAsana)
+      console.log('[CreateAsanaWithImages] Asana created successfully:', {
+        id: data.id,
+        name: data.sort_english_name,
+        uploadedImagesCount: uploadedImages.length,
+      })
+
+      // Link uploaded images with the newly created asana
+      if (uploadedImages.length > 0) {
+        console.log('[CreateAsanaWithImages] Linking images to asana...')
+        try {
+          for (const image of uploadedImages) {
+            const response = await fetch(`/api/images/${image.id}/link`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                poseId: data.id,
+                poseName: data.sort_english_name,
+              }),
+            })
+
+            if (!response.ok) {
+              console.warn(
+                '[CreateAsanaWithImages] Failed to link image:',
+                image.id
+              )
+            } else {
+              console.log(
+                '[CreateAsanaWithImages] Image linked successfully:',
+                image.id
+              )
+            }
+          }
+        } catch (linkError) {
+          console.error(
+            '[CreateAsanaWithImages] Error linking images:',
+            linkError
+          )
+          // Don't throw - the asana was created successfully, just the linking failed
+        }
+      }
 
       // Clear the form
       setFormData({

@@ -144,6 +144,9 @@ export default function Page() {
   const [, setIsLoadingFreshSeriesData] = useState<boolean>(false)
   const [refreshTrigger, setRefreshTrigger] = useState(0)
   const [searchInputValue, setSearchInputValue] = useState('')
+  const [sequenceNotFoundError, setSequenceNotFoundError] = useState<
+    string | null
+  >(null)
 
   const [page, setPage] = useState(1)
   const itemsPerPage = 1
@@ -163,6 +166,7 @@ export default function Page() {
       try {
         const newSequences = await getAllSequences()
         setSequences(newSequences)
+        setSequenceNotFoundError(null)
 
         // If there's a sequence ID in the URL, auto-select that sequence
         if (sequenceId && newSequences.length > 0) {
@@ -171,10 +175,31 @@ export default function Page() {
           )
           if (selectedSequence) {
             setSingleSequence(selectedSequence)
+            setSequenceNotFoundError(null)
+          } else {
+            // Sequence ID in URL doesn't exist
+            setSingleSequence({
+              id: 0,
+              nameSequence: '',
+              sequencesSeries: [],
+              description: '',
+              durationSequence: '',
+              image: '',
+              createdAt: '',
+              updatedAt: '',
+            })
+            setSequenceNotFoundError(
+              `The yoga sequence you were looking for is no longer available. It may have been deleted or the link is invalid.`
+            )
           }
         }
       } catch (error) {
         console.error(`Error fetching sequences from ${debugContext}:`, error)
+        if (sequenceId) {
+          setSequenceNotFoundError(
+            'Failed to load the requested sequence. Please try again.'
+          )
+        }
       }
     }
 
@@ -595,6 +620,41 @@ export default function Page() {
                 }}
               />
             </Box>
+
+            {/* Display error message if the requested sequence is not available */}
+            {sequenceNotFoundError && (
+              <Box
+                sx={{
+                  width: '100%',
+                  maxWidth: '600px',
+                  p: 3,
+                  mt: 2,
+                  backgroundColor: 'error.light',
+                  border: '1px solid',
+                  borderColor: 'error.main',
+                  borderRadius: 2,
+                  textAlign: 'center',
+                }}
+              >
+                <Typography variant="h5" sx={{ color: 'error.dark', mb: 1 }}>
+                  Sequence Not Available
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'error.dark', mb: 2 }}>
+                  {sequenceNotFoundError}
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => {
+                    setSequenceNotFoundError(null)
+                    router.push('/flows/practiceSequences')
+                  }}
+                  sx={{ textTransform: 'none' }}
+                >
+                  Clear and Browse Sequences
+                </Button>
+              </Box>
+            )}
 
             <React.Fragment key={singleSequence.id}>
               {/* Only show sequence content when a sequence is selected.

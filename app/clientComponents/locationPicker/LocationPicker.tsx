@@ -91,6 +91,8 @@ export default function LocationPicker({
     useRef<google.maps.places.AutocompleteService | null>(null)
   const placesService = useRef<google.maps.places.PlacesService | null>(null)
   const geocoder = useRef<google.maps.Geocoder | null>(null)
+  const sessionTokenRef =
+    useRef<google.maps.places.AutocompleteSessionToken | null>(null)
 
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
@@ -110,6 +112,13 @@ export default function LocationPicker({
       placesService.current = new window.google.maps.places.PlacesService(
         dummyDiv
       )
+
+      // Initialize session token for Autocomplete Session Token API
+      // This reduces billing costs and is the recommended approach as of March 2025
+      if (window.google.maps.places.AutocompleteSessionToken) {
+        sessionTokenRef.current =
+          new window.google.maps.places.AutocompleteSessionToken()
+      }
     }
   }, [isLoaded])
 
@@ -125,9 +134,12 @@ export default function LocationPicker({
     setLocationError(null)
 
     if (newValue.length > 2 && autocompleteService.current) {
-      const request = {
+      const request: google.maps.places.AutocompletionRequest = {
         input: newValue,
         types: ['(cities)'], // Focus on cities, but also includes localities
+        ...(sessionTokenRef.current && {
+          sessionToken: sessionTokenRef.current,
+        }),
       }
 
       autocompleteService.current.getPlacePredictions(
@@ -139,6 +151,23 @@ export default function LocationPicker({
           ) {
             setPredictions(predictions)
             setShowPredictions(true)
+          } else if (
+            status ===
+            window.google.maps.places.PlacesServiceStatus.ZERO_RESULTS
+          ) {
+            setPredictions([])
+            setShowPredictions(false)
+          } else if (
+            status ===
+            window.google.maps.places.PlacesServiceStatus.REQUEST_DENIED
+          ) {
+            // This error can occur due to CSP blocking or invalid API key
+            console.warn(
+              'Autocomplete request denied. Please check your API key and ensure Google Maps API is enabled. ' +
+                'If you see net::ERR_BLOCKED_BY_CLIENT, you may need to disable browser extensions blocking Google services.'
+            )
+            setPredictions([])
+            setShowPredictions(false)
           } else {
             setPredictions([])
             setShowPredictions(false)
@@ -210,7 +239,7 @@ export default function LocationPicker({
   ) => {
     if (!placesService.current) return
 
-    const request = {
+    const request: google.maps.places.PlaceDetailsRequest = {
       placeId: prediction.place_id,
       fields: [
         'formatted_address',
@@ -218,6 +247,7 @@ export default function LocationPicker({
         'geometry',
         'place_id',
       ],
+      ...(sessionTokenRef.current && { sessionToken: sessionTokenRef.current }),
     }
 
     placesService.current.getDetails(request, (place, status) => {
@@ -233,6 +263,18 @@ export default function LocationPicker({
         if (onChange) {
           onChange(locationData.formatted_address, locationData)
         }
+
+        // Reset session token after selection (recommended practice for session token API)
+        if (window.google.maps.places.AutocompleteSessionToken) {
+          sessionTokenRef.current =
+            new window.google.maps.places.AutocompleteSessionToken()
+        }
+      } else if (
+        status === window.google.maps.places.PlacesServiceStatus.REQUEST_DENIED
+      ) {
+        console.warn(
+          'Place details request denied. Please check your API key and ensure Place Details API is enabled.'
+        )
       }
     })
   }
@@ -302,7 +344,9 @@ export default function LocationPicker({
     return (
       <Alert severity="error">
         Error loading Google Maps. Please check your API key and network
-        connection.
+        connection. If you see &quot;net::ERR_BLOCKED_BY_CLIENT&quot;, try
+        disabling browser extensions that block trackers/ads, or whitelist
+        maps.googleapis.com.
       </Alert>
     )
   }

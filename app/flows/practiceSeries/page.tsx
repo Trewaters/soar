@@ -22,6 +22,7 @@ import {
   ListSubheader,
   Card,
   CardMedia,
+  Button,
 } from '@mui/material'
 import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import SplashHeader from '@app/clientComponents/splash-header'
@@ -81,6 +82,9 @@ export default function Page() {
   const [editOpen, setEditOpen] = useState(false)
   const [images, setImages] = useState<string[]>([])
   const [searchInputValue, setSearchInputValue] = useState('')
+  const [seriesNotFoundError, setSeriesNotFoundError] = useState<string | null>(
+    null
+  )
 
   // Partitioned, grouped search data using centralized ordering utility
   const enrichedSeries = useMemo(
@@ -172,6 +176,7 @@ export default function Page() {
   const fetchSeries = useCallback(
     async (selectId?: string) => {
       setLoading(true)
+      setSeriesNotFoundError(null)
       try {
         const seriesData = await getAllSeries()
         setSeries(seriesData as FlowSeriesData[])
@@ -188,6 +193,13 @@ export default function Page() {
               if (String(selectedSeries.id) !== String(flowRef.current?.id)) {
                 setFlow(selectedSeries)
               }
+              setSeriesNotFoundError(null)
+            } else {
+              // Series ID in URL doesn't exist in the database
+              setFlow(undefined)
+              setSeriesNotFoundError(
+                `The flow you were looking for is no longer available. It may have been deleted or the link is invalid.`
+              )
             }
           } else if (selectId) {
             // When explicitly refreshing a specific series (e.g., after save),
@@ -195,6 +207,7 @@ export default function Page() {
             const selectedSeries = seriesData.find((s) => s.id === selectId)
             if (selectedSeries) {
               setFlow(selectedSeries)
+              setSeriesNotFoundError(null)
             }
           } else if (flow?.id) {
             const selectedSeries = seriesData.find((s) => s.id === flow.id)
@@ -202,14 +215,21 @@ export default function Page() {
               if (String(selectedSeries.id) !== String(flowRef.current?.id)) {
                 setFlow(selectedSeries)
               }
+              setSeriesNotFoundError(null)
             } else {
               // Previously selected flow no longer exists (likely deleted); clear it
               setFlow(undefined)
+              setSeriesNotFoundError(null)
             }
           }
         }
       } catch (error) {
         console.error('Error fetching series:', error)
+        if (seriesId) {
+          setSeriesNotFoundError(
+            'Failed to load the requested flow. Please try again.'
+          )
+        }
       } finally {
         setLoading(false)
       }
@@ -700,6 +720,40 @@ export default function Page() {
           />
           {/* GroupedAutocompleteSections removed: UI now uses flat ordered list only */}
         </Stack>
+        {/* Display error message if the requested series is not available */}
+        {seriesNotFoundError && (
+          <Box
+            sx={{
+              width: '100%',
+              maxWidth: '600px',
+              p: 3,
+              mt: 2,
+              backgroundColor: 'error.light',
+              border: '1px solid',
+              borderColor: 'error.main',
+              borderRadius: 2,
+              textAlign: 'center',
+            }}
+          >
+            <Typography variant="h5" sx={{ color: 'error.dark', mb: 1 }}>
+              Flow Not Available
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'error.dark', mb: 2 }}>
+              {seriesNotFoundError}
+            </Typography>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                setSeriesNotFoundError(null)
+                router.push('/flows/practiceSeries')
+              }}
+              sx={{ textTransform: 'none' }}
+            >
+              Clear and Browse Flows
+            </Button>
+          </Box>
+        )}
         {flow && (
           <Box width="100%" sx={{ p: 2, maxWidth: '600px' }} key={flow.id}>
             {/* If editing, render the EditSeriesDialog inline here so the editor replaces the series content */}

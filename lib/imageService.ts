@@ -77,6 +77,14 @@ export async function uploadPoseImage(
   input: UploadImageInput
 ): Promise<PoseImageData> {
   try {
+    console.log('[uploadPoseImage] Starting upload...', {
+      fileName: input.file.name,
+      fileSize: input.file.size,
+      fileType: input.file.type,
+      userId: input.userId,
+      poseId: input.poseId,
+    })
+
     const formData = new FormData()
     formData.append('file', input.file)
     formData.append('userId', input.userId)
@@ -90,9 +98,16 @@ export async function uploadPoseImage(
       formData.append('poseName', input.poseName)
     }
 
+    console.log('[uploadPoseImage] Sending POST to /api/images/upload')
     const response = await fetch('/api/images/upload', {
       method: 'POST',
       body: formData,
+    })
+
+    console.log('[uploadPoseImage] Response received:', {
+      status: response.status,
+      statusText: response.statusText,
+      contentType: response.headers.get('content-type'),
     })
 
     if (!response.ok) {
@@ -100,15 +115,30 @@ export async function uploadPoseImage(
         response,
         `Failed to upload image (${response.status})`
       )
+      console.error('[uploadPoseImage] Upload failed:', {
+        errorMessage,
+        status: response.status,
+      })
       throw new Error(errorMessage)
     }
 
     try {
-      return await response.json()
-    } catch {
+      const result = await response.json()
+      console.log('[uploadPoseImage] Upload successful:', {
+        id: result.id,
+        url: result.url,
+      })
+      return result
+    } catch (parseError) {
+      console.error('[uploadPoseImage] Failed to parse response:', parseError)
       throw new Error('Upload succeeded but returned an invalid response.')
     }
   } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    console.error('[uploadPoseImage] Caught error:', {
+      message: errorMsg,
+      stack: error instanceof Error ? error.stack : undefined,
+    })
     logServiceError(error, 'imageService', 'uploadPoseImage', {
       operation: 'upload_image',
       fileSize: input.file.size,

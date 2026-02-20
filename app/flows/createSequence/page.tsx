@@ -49,7 +49,7 @@ import ImageUpload from '@clientComponents/imageUpload/ImageUpload'
 import { HELP_PATHS } from '@app/utils/helpLoader'
 
 export default function Page() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
 
   const [sequences, setSequences] = useState<SequenceData>({
     id: 0,
@@ -190,14 +190,16 @@ export default function Page() {
   }, [session?.user?.email])
 
   useEffect(() => {
-    if (session === null) {
+    if (status === 'unauthenticated') {
       router.push('/flows')
       return
     }
 
-    fetchSeries()
+    if (status === 'authenticated') {
+      fetchSeries()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [router, session?.user?.email])
+  }, [status, session?.user?.email])
 
   // Ensure poses are updated when a new series is added
   function handleSelect(

@@ -238,3 +238,107 @@ export async function DELETE(
     )
   }
 }
+
+/**
+ * PATCH /api/images/[id]/link
+ * Links an image to an asana (for images uploaded before asana creation)
+ */
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    // Check authentication
+    const session = await auth()
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    const resolvedParams = await params
+    const imageId = resolvedParams.id
+
+    if (!imageId) {
+      return NextResponse.json({ error: 'Image ID required' }, { status: 400 })
+    }
+
+    // Get the image first
+    const image = await prisma.poseImage.findUnique({
+      where: { id: imageId },
+    })
+
+    if (!image) {
+      return NextResponse.json({ error: 'Image not found' }, { status: 404 })
+    }
+
+    // Find the user to verify ownership
+    const user = await prisma.userData.findUnique({
+      where: { email: session.user.email },
+      select: { id: true },
+    })
+
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    // Verify the user owns the image
+    if (image.userId !== user.id) {
+      return NextResponse.json(
+        { error: 'You can only link your own images' },
+        { status: 403 }
+      )
+    }
+
+    // Get poseId and poseName from request body
+    const body = await request.json()
+    const { poseId, poseName } = body
+
+    if (!poseId) {
+      return NextResponse.json({ error: 'poseId is required' }, { status: 400 })
+    }
+
+    // Verify the asana exists and the user created it
+    const asana = await prisma.asanaPose.findUnique({
+      where: { id: poseId },
+      select: {
+        id: true,
+        sort_english_name: true,
+        created_by: true,
+        imageCount: true,
+      },
+    })
+
+    if (!asana) {
+      return NextResponse.json({ error: 'Asana not found' }, { status: 404 })
+    }
+
+    if (asana.created_by !== session.user.email) {
+      return NextResponse.json(
+        { error: 'You can only link images to asanas you created' },
+        { status: 403 }
+      )
+    }
+
+    // Update the image with the poseId
+    const updated = await prisma.poseImage.update({
+      where: { id: imageId },
+      data: {
+        poseId,
+        poseName: poseName || asana.sort_english_name,
+      },
+    })
+
+    return NextResponse.json({
+      success: true,
+      image: updated,
+    })
+  } catch (error) {
+    console.error('Error linking image to asana:', error)
+    return NextResponse.json(
+      { error: 'Failed to link image to asana' },
+      { status: 500 }
+    )
+  }
+}
