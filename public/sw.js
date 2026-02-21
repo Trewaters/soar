@@ -16,18 +16,6 @@ const PRECACHE_URLS = [
   '/icon-512x512.png',
 ]
 
-// Cache control configuration - aggressive busting
-const CACHE_CONTROL_CONFIG = {
-  // HTML, CSS, JS: network-first with short cache
-  assets: 1000 * 60, // 1 minute
-  // API responses: always revalidate
-  api: 0,
-  // Images: cache but check occasionally
-  images: 1000 * 60 * 5, // 5 minutes
-  // Static files: cache but with version check
-  static: 1000 * 60 * 10, // 10 minutes
-}
-
 function isSameOrigin(url) {
   try {
     const u = new URL(url)
@@ -45,24 +33,6 @@ function isJsonRequest(request) {
   } catch (e) {
     return false
   }
-}
-
-function addCacheBustParam(url) {
-  try {
-    const u = new URL(url)
-    // Add cache bust parameter if not already present
-    if (!u.searchParams.has('cb')) {
-      u.searchParams.set('cb', CACHE_BUST_TIMESTAMP)
-    }
-    return u.toString()
-  } catch (e) {
-    return url
-  }
-}
-
-function isCacheExpired(timestamp, maxAge) {
-  if (!timestamp) return true
-  return new Date().getTime() - timestamp > maxAge
 }
 
 self.addEventListener('install', function (event) {
@@ -87,7 +57,7 @@ self.addEventListener('activate', function (event) {
       .then(function (keys) {
         return Promise.all(
           keys.map(function (key) {
-            // Delete all old cache versions
+            // Delete old cache versions.
             if (key !== CACHE_NAME && key.startsWith('soar-offline-')) {
               console.log('[SW] Deleting old cache:', key)
               return caches.delete(key)
@@ -97,11 +67,11 @@ self.addEventListener('activate', function (event) {
         )
       })
       .then(function () {
-        // Clear current cache and repopulate to ensure fresh content
+        // Clear the current cache before repopulating fresh content.
         return caches.delete(CACHE_NAME)
       })
       .then(function () {
-        // Repopulate with fresh precache URLs
+        // Repopulate with fresh precache URLs.
         return caches.open(CACHE_NAME).then(function (cache) {
           return cache.addAll(PRECACHE_URLS).catch(function (e) {
             console.warn('[SW] Precache refresh failed:', e)
@@ -120,29 +90,19 @@ self.addEventListener('fetch', function (event) {
 
   if (request.mode === 'navigate') {
     event.respondWith(
-      // Network-first for navigation: always try network first for HTML
-      fetch(request)
-        .then(function (networkResponse) {
-          // Validate response is HTML
-          const contentType = networkResponse.headers.get('content-type') || ''
-          if (contentType.includes('text/html')) {
-            // Don't cache navigation responses, keep them fresh
-            return networkResponse
-          }
-          return networkResponse
-        })
-        .catch(function () {
-          // Fall back to cached version when offline
-          return caches.open(CACHE_NAME).then(function (cache) {
-            return cache.match(request).then(function (cached) {
-              if (cached) return cached
-              return cache.match('/offline').then(function (offline) {
-                if (offline) return offline
-                return new Response('You are offline.', { status: 503 })
-              })
+      // Network-first for navigation requests.
+      fetch(request).catch(function () {
+        // Fallback to cache when offline.
+        return caches.open(CACHE_NAME).then(function (cache) {
+          return cache.match(request).then(function (cached) {
+            if (cached) return cached
+            return cache.match('/offline').then(function (offline) {
+              if (offline) return offline
+              return new Response('You are offline.', { status: 503 })
             })
           })
         })
+      })
     )
     return
   }
@@ -152,25 +112,25 @@ self.addEventListener('fetch', function (event) {
     ['script', 'style', 'image', 'font'].indexOf(request.destination) !== -1
   ) {
     event.respondWith(
-      // Stale-while-revalidate: serve cached but also fetch fresh
+      // Stale-while-revalidate for static assets.
       caches.open(CACHE_NAME).then(function (cache) {
         return cache.match(request).then(function (cached) {
-          // Fetch fresh copy in background
+          // Fetch a fresh copy in the background.
           var fetchPromise = fetch(request)
             .then(function (networkResponse) {
-              // Always update cache with network version
+              // Always refresh the cache with the network response.
               if (networkResponse && networkResponse.status === 200) {
                 cache.put(request, networkResponse.clone())
               }
               return networkResponse
             })
             .catch(function () {
-              // Network failed, return cached or error
+              // Network failed; return cached response or error.
               if (cached) return cached
               return new Response('Offline asset unavailable', { status: 504 })
             })
 
-          // Return cached immediately, or wait for network
+          // Return cache immediately, or await network response.
           return cached || fetchPromise
         })
       })
@@ -180,10 +140,10 @@ self.addEventListener('fetch', function (event) {
 
   if (isJsonRequest(request)) {
     event.respondWith(
-      // Network-first for API: always fetch fresh data
+      // Network-first for API/data requests.
       fetch(request)
         .then(function (networkResponse) {
-          // Only cache successful responses
+          // Cache only successful responses.
           if (networkResponse && networkResponse.status === 200) {
             return caches.open(CACHE_NAME).then(function (cache) {
               cache.put(request, networkResponse.clone())
@@ -193,7 +153,7 @@ self.addEventListener('fetch', function (event) {
           return networkResponse
         })
         .catch(function () {
-          // Fall back to stale cache if network fails
+          // Fallback to stale cache if network fails.
           return caches.open(CACHE_NAME).then(function (cache) {
             return cache.match(request).then(function (cached) {
               if (cached) {
@@ -215,25 +175,22 @@ self.addEventListener('fetch', function (event) {
   }
 
   event.respondWith(
-    // Cache-first with network fallback for other resources
+    // Network-first with cache fallback for all other requests.
     caches.open(CACHE_NAME).then(function (cache) {
-      return cache.match(request).then(function (cached) {
-        // Try network first
-        var fetchPromise = fetch(request)
-          .then(function (networkResponse) {
-            if (networkResponse && networkResponse.status === 200) {
-              cache.put(request, networkResponse.clone())
-            }
-            return networkResponse
-          })
-          .catch(function () {
-            // Network failed, return cached
+      return fetch(request)
+        .then(function (networkResponse) {
+          if (networkResponse && networkResponse.status === 200) {
+            cache.put(request, networkResponse.clone())
+          }
+          return networkResponse
+        })
+        .catch(function () {
+          // Network failed; return cached response.
+          return cache.match(request).then(function (cached) {
             if (cached) return cached
             return new Response('Offline', { status: 503 })
           })
-
-        return fetchPromise
-      })
+        })
     })
   )
 })
@@ -269,7 +226,7 @@ self.addEventListener('message', function (event) {
           )
         })
         .then(function () {
-          // Repopulate with fresh precache
+          // Repopulate with fresh precache URLs.
           return caches.open(CACHE_NAME).then(function (cache) {
             return cache.addAll(PRECACHE_URLS).catch(function (e) {
               console.warn('[SW] Precache repopulation failed:', e)
@@ -277,7 +234,7 @@ self.addEventListener('message', function (event) {
           })
         })
         .then(function () {
-          // Broadcast to all clients
+          // Broadcast cache-clear event to all clients.
           return self.clients
             .matchAll({ includeUncontrolled: true, type: 'window' })
             .then(function (clientList) {
@@ -291,7 +248,7 @@ self.addEventListener('message', function (event) {
         })
     )
   }
-  // Invalidate cached URLs on demand. Client can send:
+  // Invalidate cached URLs on demand. Clients can send:
   // { command: 'INVALIDATE_URLS', urls: ['https://.../api/...'] }
   if (event.data && event.data.command === 'INVALIDATE_URLS') {
     try {
@@ -303,7 +260,13 @@ self.addEventListener('message', function (event) {
           return Promise.all(
             urls.map(function (u) {
               try {
-                // We only remove same-origin cached requests
+                // Remove only same-origin cached requests.
+                if (!isSameOrigin(u)) {
+                  console.debug('[SW] skipping cross-origin invalidation', {
+                    url: u,
+                  })
+                  return Promise.resolve(false)
+                }
                 const req = new Request(u)
                 return cache
                   .delete(req)
@@ -328,7 +291,7 @@ self.addEventListener('message', function (event) {
               }
             })
           ).then(function () {
-            // After attempting deletions, broadcast invalidation to all window clients
+            // After deletions, broadcast invalidation to all window clients.
             try {
               return self.clients
                 .matchAll({ includeUncontrolled: true, type: 'window' })
@@ -340,12 +303,12 @@ self.addEventListener('message', function (event) {
                         urls: urls,
                       })
                     } catch (e) {
-                      // ignore per-client failures
+                      // Ignore per-client failures.
                     }
                   })
                 })
             } catch (e) {
-              // ignore failures
+              // Ignore client-broadcast failures.
             }
           })
         })
@@ -373,7 +336,7 @@ self.addEventListener('push', function (event) {
       var parsed = event.data.json()
       notificationData = Object.assign({}, notificationData, parsed)
     } catch (e) {
-      // ignore
+      // Ignore payload parse errors.
     }
   }
 

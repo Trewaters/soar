@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, Stack, Typography } from '@mui/material'
-import Header from '@serverComponents/header'
 import Image from 'next/image'
 import { providerMap, auth } from 'auth'
 import SignupProviders from '../SignupProviders'
@@ -9,9 +8,6 @@ export default async function SignUpPage() {
   const session = await auth()
   return (
     <>
-      <nav>
-        <Header />
-      </nav>
       <Stack flexDirection={'row'} justifySelf={'center'} alignItems={'center'}>
         <Stack>
           <Typography variant={'subtitle1'}>An Uvuyoga App</Typography>

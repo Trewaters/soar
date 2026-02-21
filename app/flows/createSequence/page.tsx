@@ -39,7 +39,6 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { ArrowBack, ArrowForward } from '@mui/icons-material'
 import Image from 'next/image'
-import NavBottom from '@serverComponents/navBottom'
 import { AppText } from '@app/constants/Strings'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 import getAlphaUserIds from '@app/lib/alphaUsers'
@@ -890,9 +889,6 @@ export default function Page() {
         open={open}
         onClose={() => setOpen(false)}
       />
-
-      <Box height={'72px'} />
-      <NavBottom subRoute="/flows" />
     </>
   )
 }
