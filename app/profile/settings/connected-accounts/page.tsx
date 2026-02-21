@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import {
   Container,
   Typography,
@@ -11,12 +11,19 @@ import {
   IconButton,
   CircularProgress,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  TextField,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import {
   ArrowBack as ArrowBackIcon,
   AddCircleOutline as AddIcon,
   Delete as DeleteIcon,
+  WarningAmber as WarningAmberIcon,
 } from '@mui/icons-material'
 import ConfirmationDialog from '@clientComponents/ConfirmationDialog'
 import AddLoginMethodDialog from '@clientComponents/AddLoginMethodDialog'
@@ -69,6 +76,9 @@ export default function ConnectedAccountsPage() {
   const [providerToDisconnect, setProviderToDisconnect] = useState<
     string | null
   >(null)
+  const [deleteAccountDialogOpen, setDeleteAccountDialogOpen] = useState(false)
+  const [deleteConfirmationText, setDeleteConfirmationText] = useState('')
+  const [deleteAccountLoading, setDeleteAccountLoading] = useState(false)
   const [addDialogOpen, setAddDialogOpen] = useState(false)
   const searchParams = useSearchParams()
 
@@ -116,8 +126,57 @@ export default function ConnectedAccountsPage() {
   }
 
   const handleDisconnect = async (provider: string) => {
+    if (connectedAccounts.length === 1) {
+      setDeleteConfirmationText('')
+      setDeleteAccountDialogOpen(true)
+      return
+    }
+
     setProviderToDisconnect(provider)
     setDialogOpen(true)
+  }
+
+  const cancelDeleteAccount = () => {
+    if (deleteAccountLoading) return
+    setDeleteAccountDialogOpen(false)
+    setDeleteConfirmationText('')
+  }
+
+  const confirmDeleteAccount = async () => {
+    if (deleteConfirmationText !== 'DELETE') return
+
+    setDeleteAccountLoading(true)
+    setError(null)
+    let accountDeleted = false
+
+    try {
+      const response = await fetch('/api/user/delete-account', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to delete account')
+      }
+
+      accountDeleted = true
+      await signOut({ redirect: true, callbackUrl: '/?account-deleted=true' })
+    } catch (err) {
+      console.error('Failed to delete account:', err)
+
+      if (accountDeleted) {
+        window.location.replace('/?account-deleted=true')
+        return
+      }
+
+      setError(err instanceof Error ? err.message : 'Failed to delete account')
+      setDeleteAccountLoading(false)
+      setDeleteAccountDialogOpen(false)
+      setDeleteConfirmationText('')
+    }
   }
 
   const confirmDisconnect = async () => {
@@ -362,14 +421,10 @@ export default function ConnectedAccountsPage() {
                                 {isConnected && isAvailable && (
                                   <IconButton
                                     onClick={() => handleDisconnect(providerId)}
-                                    disabled={connectedAccounts.length === 1}
                                     sx={{
                                       color: 'error.main',
                                       '&:hover': {
                                         bgcolor: 'error.light',
-                                      },
-                                      '&:disabled': {
-                                        color: 'text.disabled',
                                       },
                                     }}
                                     aria-label={`Disconnect ${metadata.name}`}
@@ -453,6 +508,129 @@ export default function ConnectedAccountsPage() {
         onCancel={cancelDisconnect}
         isWarning={true}
       />
+
+      <Dialog
+        open={deleteAccountDialogOpen}
+        onClose={cancelDeleteAccount}
+        aria-labelledby="delete-account-dialog-title"
+        aria-describedby="delete-account-dialog-description"
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle
+          id="delete-account-dialog-title"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            color: 'error.main',
+          }}
+        >
+          <WarningAmberIcon />
+          <Typography variant="h6" component="span">
+            Delete Account Permanently
+          </Typography>
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText
+            id="delete-account-dialog-description"
+            sx={{ mb: 2, color: 'error.main', fontWeight: 600 }}
+          >
+            ⚠️ WARNING: This action cannot be undone!
+          </DialogContentText>
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            You are about to permanently delete your account and all associated
+            data. This includes:
+          </Typography>
+          <Box component="ul" sx={{ pl: 2, mb: 2 }}>
+            <Typography component="li" variant="body2" sx={{ mb: 0.5 }}>
+              Your profile information and account details
+            </Typography>
+            <Typography component="li" variant="body2" sx={{ mb: 0.5 }}>
+              All activity history (asanas, series, sequences)
+            </Typography>
+            <Typography component="li" variant="body2" sx={{ mb: 0.5 }}>
+              All created content (poses, series, sequences)
+            </Typography>
+            <Typography component="li" variant="body2" sx={{ mb: 0.5 }}>
+              All preferences and notification settings
+            </Typography>
+            <Typography component="li" variant="body2" sx={{ mb: 0.5 }}>
+              All notification history and reminders
+            </Typography>
+            <Typography component="li" variant="body2" sx={{ mb: 0.5 }}>
+              All connected accounts and sessions
+            </Typography>
+          </Box>
+          <Typography
+            variant="body2"
+            sx={{ mb: 2, fontWeight: 600, color: 'text.primary' }}
+          >
+            This action complies with GDPR Article 17 (Right to Erasure).
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 1, fontWeight: 600 }}>
+            To confirm, please type{' '}
+            <Box
+              component="span"
+              sx={{
+                color: 'error.main',
+                fontFamily: 'monospace',
+                fontSize: '1.1em',
+              }}
+            >
+              DELETE
+            </Box>{' '}
+            below:
+          </Typography>
+          <TextField
+            fullWidth
+            value={deleteConfirmationText}
+            onChange={(e) => setDeleteConfirmationText(e.target.value)}
+            placeholder="Type DELETE to confirm"
+            variant="outlined"
+            disabled={deleteAccountLoading}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&.Mui-focused fieldset': {
+                  borderColor: 'error.main',
+                },
+              },
+            }}
+          />
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button
+            onClick={cancelDeleteAccount}
+            disabled={deleteAccountLoading}
+            sx={{ color: 'text.secondary', textTransform: 'none' }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={confirmDeleteAccount}
+            variant="contained"
+            disabled={
+              deleteAccountLoading || deleteConfirmationText !== 'DELETE'
+            }
+            sx={{
+              backgroundColor: 'error.main',
+              color: 'white',
+              textTransform: 'none',
+              fontWeight: 600,
+              '&:hover': {
+                backgroundColor: 'error.dark',
+              },
+              '&:disabled': {
+                backgroundColor: 'grey.300',
+              },
+            }}
+          >
+            {deleteAccountLoading
+              ? 'Deleting Account...'
+              : 'Yes, Delete My Account'}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <AddLoginMethodDialog
         open={addDialogOpen}

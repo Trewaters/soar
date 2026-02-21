@@ -39,12 +39,13 @@ jest.mock('next/image', () => ({
 
 // Mock NextAuth
 const mockUseSession = jest.fn()
+const mockSignOut = jest.fn()
 jest.mock('next-auth/react', () => ({
   SessionProvider: ({ children }: { children: React.ReactNode }) => (
     <>{children}</>
   ),
   useSession: () => mockUseSession(),
-  signOut: jest.fn(),
+  signOut: (options: any) => mockSignOut(options),
 }))
 
 // Mock UserContext
@@ -340,7 +341,9 @@ describe('ConnectedAccountsPage', () => {
       })
     })
 
-    it('should prevent disconnecting when only one account is connected', async () => {
+    it('should open account deletion confirmation when only one account is connected', async () => {
+      const user = userEvent.setup()
+
       ;(global.fetch as jest.Mock).mockResolvedValue({
         ok: true,
         json: async () => ({
@@ -365,8 +368,83 @@ describe('ConnectedAccountsPage', () => {
         name: /Disconnect Google/i,
       })
 
-      // Button should be disabled when only one account is connected
-      expect(disconnectButton).toBeDisabled()
+      expect(disconnectButton).toBeEnabled()
+      await user.click(disconnectButton)
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', {
+            name: /Delete Account Permanently/i,
+          })
+        ).toBeInTheDocument()
+      })
+    })
+
+    it('should delete account and sign out when last connected method is confirmed', async () => {
+      const user = userEvent.setup()
+
+      ;(global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          accounts: [
+            {
+              provider: 'google',
+              providerAccountId: 'google-123',
+              connectedAt: new Date('2024-01-01'),
+            },
+          ],
+          totalCount: 1,
+        }),
+      })
+      ;(global.fetch as jest.Mock).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true }),
+      })
+
+      renderPage()
+
+      await waitFor(() => {
+        expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+      })
+
+      await user.click(
+        screen.getByRole('button', {
+          name: /Disconnect Google/i,
+        })
+      )
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('heading', {
+            name: /Delete Account Permanently/i,
+          })
+        ).toBeInTheDocument()
+      })
+
+      await user.type(
+        screen.getByPlaceholderText(/Type DELETE to confirm/i),
+        'DELETE'
+      )
+
+      await user.click(
+        screen.getByRole('button', { name: /Yes, Delete My Account/i })
+      )
+
+      await waitFor(() => {
+        expect(global.fetch).toHaveBeenCalledWith('/api/user/delete-account', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+      })
+
+      await waitFor(() => {
+        expect(mockSignOut).toHaveBeenCalledWith({
+          redirect: true,
+          callbackUrl: '/?account-deleted=true',
+        })
+      })
     })
 
     it('should cancel disconnect when user declines confirmation', async () => {
@@ -514,7 +592,7 @@ describe('ConnectedAccountsPage', () => {
       })
     })
 
-    it('should disable disconnect button when only one account connected', async () => {
+    it('should keep disconnect button enabled when only one account is connected', async () => {
       ;(global.fetch as jest.Mock).mockResolvedValue({
         ok: true,
         json: async () => ({
@@ -535,7 +613,7 @@ describe('ConnectedAccountsPage', () => {
         const disconnectButton = screen.getByRole('button', {
           name: /Disconnect Google/i,
         })
-        expect(disconnectButton).toBeDisabled()
+        expect(disconnectButton).toBeEnabled()
       })
     })
   })

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { signOut } from 'next-auth/react'
 import {
   Button,
   CircularProgress,
@@ -47,6 +48,7 @@ export default function DeleteAccountButton() {
     setConfirmOpen(false)
     setLoading(true)
     setError(null)
+    let accountDeleted = false
 
     try {
       const response = await fetch('/api/user/delete-account', {
@@ -61,11 +63,19 @@ export default function DeleteAccountButton() {
         throw new Error(errorData.error || 'Failed to delete account')
       }
 
-      // Account deleted successfully
-      // Force a hard redirect to clear all state and prevent session checks
-      window.location.replace('/?account-deleted=true')
+      accountDeleted = true
+
+      // Account deleted successfully; terminate session before redirecting home
+      await signOut({ redirect: true, callbackUrl: '/?account-deleted=true' })
     } catch (err: any) {
       console.error('Delete account error:', err)
+
+      // If account was deleted but sign-out failed, still force navigation away from authenticated views
+      if (accountDeleted) {
+        window.location.replace('/?account-deleted=true')
+        return
+      }
+
       setError(
         err.message || 'Failed to delete your account. Please try again.'
       )
