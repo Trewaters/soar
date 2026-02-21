@@ -742,9 +742,6 @@ export default function EditSequence({
           position: 'relative',
           mt: 2,
           mb: { xs: 6, sm: 4 }, // space above bottom nav on small screens
-          backgroundColor: 'background.paper',
-          borderTop: '1px solid',
-          borderColor: 'divider',
           py: 2,
           px: 3,
         }}

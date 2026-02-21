@@ -554,16 +554,12 @@ export default function Page() {
               bottom: 0,
               left: 0,
               right: 0,
-              backgroundColor: 'background.paper',
-              borderTop: '1px solid',
-              borderColor: 'divider',
               py: 2,
               px: 2,
               mt: 4,
               // Keep within content width on mobile to avoid side cut-offs
               width: '100%',
               boxSizing: 'border-box',
-              boxShadow: '0 -4px 12px rgba(0, 0, 0, 0.1)',
               zIndex: 10,
             }}
           >

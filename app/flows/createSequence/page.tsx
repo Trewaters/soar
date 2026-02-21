@@ -829,13 +829,8 @@ export default function Page() {
                   sx={{
                     position: 'relative',
                     mt: 3,
-                    backgroundColor: 'background.paper',
-                    border: '2px solid',
-                    borderColor: 'primary.main',
                     py: 2.5,
                     px: 3,
-                    borderRadius: '12px',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                   }}
                 >
                   <Stack
