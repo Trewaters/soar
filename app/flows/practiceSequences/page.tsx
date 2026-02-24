@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  Autocomplete,
   Box,
   Button,
   Card,
@@ -10,11 +9,11 @@ import {
   Link,
   Stack,
   Typography,
-  ListSubheader,
   IconButton,
 } from '@mui/material'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+import GroupedDataAssetSearch from '@app/clientComponents/GroupedDataAssetSearch'
 
 import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import EditIcon from '@mui/icons-material/Edit'
@@ -28,7 +27,6 @@ import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import HelpButton from '@app/clientComponents/HelpButton'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import { HELP_PATHS } from '@app/utils/helpLoader'
-import { AutocompleteInput } from '@app/clientComponents/form'
 import { SequenceData, getAllSequences } from '@lib/sequenceService'
 import { getAllSeries } from '@lib/seriesService'
 import React from 'react'
@@ -45,8 +43,6 @@ import {
 import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import { useSession } from 'next-auth/react'
 import { useIsAdmin } from '@app/hooks/useCanEditContent'
-import getAlphaUserIds from '@app/lib/alphaUsers'
-import { orderPosesForSearch } from '@app/utils/search/orderPosesForSearch'
 
 export default function Page() {
   const router = useNavigationWithLoading()
@@ -56,7 +52,6 @@ export default function Page() {
   // const userId = session?.user?.id ?? null // no longer used
   const [sequences, setSequences] = useState<SequenceData[]>([])
   // Centralized ordering: user/alpha-created at top, deduped, then others alphabetical
-  const alphaUserIds = getAlphaUserIds()
   const enrichedSequences = React.useMemo(
     () =>
       (sequences || []).map((s) => ({
@@ -65,60 +60,6 @@ export default function Page() {
       })),
     [sequences]
   )
-  // Partition/group using the new utility (user/alpha at top, deduped, then others alpha)
-  const currentUserId = session?.user?.id || session?.user?.email || ''
-  const userIdentifiers = [session?.user?.id, session?.user?.email].filter(
-    Boolean
-  ) as string[]
-  const orderedSequenceOptions = React.useMemo(() => {
-    // Filter sequences to only show those created by current user or alpha users
-    const authorizedSequences = enrichedSequences.filter((s) => {
-      const createdBy = (s as any).createdBy
-      // Allow sequences created by current user or alpha users only
-      return (
-        (createdBy && userIdentifiers.includes(createdBy)) ||
-        (createdBy && alphaUserIds.includes(createdBy))
-      )
-    })
-
-    // Convert id to string for ordering, then map back to SequenceData
-    const validSequences = authorizedSequences
-      .filter(
-        (s) =>
-          typeof s.id !== 'undefined' && !!s.nameSequence && !!s.sequencesSeries
-      )
-      .map((s) => ({ ...s, id: String(s.id) }))
-    const allOrdered = orderPosesForSearch(
-      validSequences,
-      currentUserId,
-      alphaUserIds,
-      (item) => String(item.nameSequence || '')
-    )
-    // Partition for section headers: Mine, Alpha (no Others since we filtered them out)
-    const mine: typeof allOrdered = []
-    const alpha: typeof allOrdered = []
-    allOrdered.forEach((item) => {
-      const createdBy = (item as any).createdBy
-      if (createdBy && userIdentifiers.includes(createdBy)) {
-        mine.push(item)
-      } else if (createdBy && alphaUserIds.includes(createdBy)) {
-        alpha.push(item)
-      }
-    })
-    // Compose with section header markers (no Others section)
-    const result: Array<
-      (typeof allOrdered)[number] | { section: 'Mine' | 'Alpha' | 'Others' }
-    > = []
-    if (mine.length > 0) {
-      result.push({ section: 'Mine' })
-      mine.forEach((item) => result.push(item))
-    }
-    if (alpha.length > 0) {
-      result.push({ section: 'Alpha' })
-      alpha.forEach((item) => result.push(item))
-    }
-    return result
-  }, [enrichedSequences, currentUserId, alphaUserIds, userIdentifiers])
   const [singleSequence, setSingleSequence] = useState<SequenceData>({
     id: 0,
     nameSequence: '',
@@ -388,13 +329,7 @@ export default function Page() {
   }
 
   // Resolve asana IDs for navigation
-  function handleSelect(
-    event: ChangeEvent<object>,
-    value: SequenceData | null
-  ) {
-    // Logs the type of event (e.g., 'click')
-    // Logs the element that triggered the event
-    event.preventDefault()
+  function handleSelect(value: SequenceData | null) {
     if (value) {
       // Restore original behavior: select sequence locally for practice UI
       setSingleSequence(value)
@@ -480,140 +415,18 @@ export default function Page() {
                 maxWidth: '600px',
               }}
             >
-              <Autocomplete
-                key={`autocomplete-${orderedSequenceOptions.length}-${orderedSequenceOptions.map((s: any) => s.id ?? s.section).join('-')}`}
-                disablePortal
-                id="combo-box-sequence-search"
-                options={orderedSequenceOptions}
+              <GroupedDataAssetSearch<SequenceData>
+                items={enrichedSequences}
+                myLabel="My Sequences"
+                publicLabel="Public Sequences"
+                searchField={(item) => item.nameSequence}
+                displayField={(item) => item.nameSequence}
+                placeholderText="Search for a Sequence"
+                getCreatedBy={(item) => (item as any).createdBy}
                 inputValue={searchInputValue}
-                onInputChange={(event, newInputValue) => {
-                  setSearchInputValue(newInputValue)
-                }}
-                getOptionLabel={(option) => {
-                  if ('section' in option) return ''
-                  return option.nameSequence
-                }}
-                // Section headers logic
-                renderOption={(() => {
-                  let lastSection: string | null = null
-                  const sectionHeaderMap: Record<number, string> = {}
-                  orderedSequenceOptions.forEach((opt, idx) => {
-                    if ('section' in opt) {
-                      lastSection = opt.section
-                    } else if (lastSection) {
-                      sectionHeaderMap[idx] = lastSection
-                      lastSection = null
-                    }
-                  })
-                  const renderOptionFn = (
-                    props: React.HTMLAttributes<HTMLLIElement>,
-                    option: any,
-                    { index }: { index: number }
-                  ) => {
-                    if ('section' in option) return null
-
-                    const sectionLabel = sectionHeaderMap[index] || null
-
-                    // Extract key from props to avoid spreading it into JSX
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-                    const { key, ...otherProps } = props as any
-
-                    return (
-                      <React.Fragment key={option.id ?? `option-${index}`}>
-                        {sectionLabel && (
-                          <ListSubheader
-                            key={`${sectionLabel}-header-${index}`}
-                            component="div"
-                            disableSticky
-                            role="presentation"
-                          >
-                            {sectionLabel}
-                          </ListSubheader>
-                        )}
-                        <li
-                          key={option.id ?? `option-${index}`}
-                          {...otherProps}
-                        >
-                          {option.nameSequence}
-                        </li>
-                      </React.Fragment>
-                    )
-                  }
-                  renderOptionFn.displayName =
-                    'SequenceAutocompleteRenderOption'
-                  return renderOptionFn
-                })()}
-                filterOptions={(options, state) => {
-                  // Partition options into groups by section
-                  const groups: Record<string, any[]> = {}
-                  let currentSection: 'Mine' | 'Alpha' | null = null
-                  for (const option of options) {
-                    const opt = option as any
-                    if ('section' in opt) {
-                      currentSection = opt.section as 'Mine' | 'Alpha'
-                      if (!groups[currentSection]) groups[currentSection] = []
-                    } else if (currentSection) {
-                      if (!groups[currentSection]) groups[currentSection] = []
-                      if (
-                        opt.nameSequence &&
-                        opt.nameSequence
-                          .toLowerCase()
-                          .includes(state.inputValue.toLowerCase())
-                      ) {
-                        groups[currentSection].push(opt)
-                      }
-                    }
-                  }
-                  // Flatten back to options array, inserting section header if group has any items
-                  const filtered: typeof options = []
-                  const sectionOrder: Array<'Mine' | 'Alpha'> = [
-                    'Mine',
-                    'Alpha',
-                  ]
-                  for (const section of sectionOrder) {
-                    if (groups[section] && groups[section].length > 0) {
-                      filtered.push({
-                        section: section as 'Mine' | 'Alpha' | 'Others',
-                      })
-                      filtered.push(...groups[section])
-                    }
-                  }
-                  return filtered
-                }}
-                isOptionEqualToValue={(option, value) => {
-                  const opt = option as any
-                  const val = value as any
-                  if ('section' in opt || 'section' in val) return false
-                  return opt.id === val.id
-                }}
-                sx={{
-                  width: '100%',
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderRadius: '12px',
-                    borderColor: 'primary.main',
-                    boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-                  },
-                  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline':
-                    {
-                      borderColor: 'primary.light',
-                    },
-                  '& .MuiAutocomplete-endAdornment': {
-                    display: 'none',
-                  },
-                }}
-                renderInput={(params) => (
-                  <AutocompleteInput
-                    params={params}
-                    placeholder="Search for a Sequence"
-                    sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
-                    inputValue={searchInputValue}
-                    onClear={() => setSearchInputValue('')}
-                  />
-                )}
-                onChange={(event, value) => {
-                  const val = value as any
-                  if (val && 'section' in val) return
-                  handleSelect(event as any, value as SequenceData | null)
+                onInputChange={setSearchInputValue}
+                onSelect={(selectedSequence) => {
+                  handleSelect(selectedSequence)
                 }}
               />
             </Box>

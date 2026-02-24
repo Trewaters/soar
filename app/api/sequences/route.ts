@@ -94,11 +94,6 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    console.log(
-      '🔍 Sequences API - Where clause:',
-      JSON.stringify(whereClause, null, 2)
-    )
-
     // Fetch sequences with access control
     const data = await prisma.asanaSequence.findMany({
       where: whereClause,
@@ -106,8 +101,6 @@ export async function GET(request: NextRequest) {
         createdAt: 'desc', // Show newest first to help verify new creations
       },
     })
-
-    console.log(`✅ Sequences API - Found ${data.length} sequences`)
 
     const filteredData = data
 

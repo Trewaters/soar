@@ -2,8 +2,6 @@
 import { FlowSeriesData } from '@context/AsanaSeriesContext'
 import { SequenceData } from '@context/SequenceContext'
 import {
-  Autocomplete,
-  FormControl,
   Box,
   Button,
   IconButton,
@@ -11,7 +9,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListSubheader,
   Paper,
   Stack,
   TextField,
@@ -21,7 +18,6 @@ import { useSession } from 'next-auth/react'
 import {
   ChangeEvent,
   FormEvent,
-  Fragment,
   useEffect,
   useState,
   useMemo,
@@ -34,14 +30,13 @@ import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import HelpButton from '@app/clientComponents/HelpButton'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
-import SearchIcon from '@mui/icons-material/Search'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { ArrowBack, ArrowForward } from '@mui/icons-material'
 import Image from 'next/image'
 import { AppText } from '@app/constants/Strings'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
-import getAlphaUserIds from '@app/lib/alphaUsers'
+import GroupedDataAssetSearch from '@clientComponents/GroupedDataAssetSearch'
 import { getAllSeries } from '@lib/seriesService'
 import ImageUpload from '@clientComponents/imageUpload/ImageUpload'
 import { HELP_PATHS } from '@app/utils/helpLoader'
@@ -68,9 +63,6 @@ export default function Page() {
   const [poses, setPoses] = useState<Array<string | any>>([])
   const [open, setOpen] = useState(false)
 
-  // Get alpha user IDs (synchronous function like in practiceSeries)
-  const alphaUserIds = useMemo(() => getAlphaUserIds(), [])
-
   const [currentSeriesIndex, setCurrentSeriesIndex] = useState(
     seriesNameSet.length - 1
   )
@@ -91,67 +83,6 @@ export default function Page() {
       })),
     [flowSeries]
   )
-
-  // Prepare ordered series options with grouping like in practiceSeries
-  const orderedSeriesOptions = useMemo(() => {
-    if (!enrichedSeries || enrichedSeries.length === 0) return []
-
-    // Get current user identifier
-    const currentUserId = session?.user?.id
-    const currentUserEmail = session?.user?.email
-
-    // Filter series to only show those created by current user or alpha users
-    const userIdentifiers = [currentUserId, currentUserEmail].filter(Boolean)
-    const authorizedSeries = enrichedSeries.filter((s) => {
-      const createdBy = (s as any).createdBy
-      // Allow series created by current user or alpha users only
-      return (
-        (createdBy && userIdentifiers.includes(createdBy)) ||
-        (createdBy && alphaUserIds.includes(createdBy))
-      )
-    })
-
-    // Partition series into groups
-    const mine: (FlowSeriesData & { id: string })[] = []
-    const alpha: (FlowSeriesData & { id: string })[] = []
-
-    authorizedSeries.forEach((item) => {
-      const createdBy = (item as any).createdBy
-
-      // Ensure id is always a string
-      const itemWithId: FlowSeriesData & { id: string } = {
-        ...item,
-        id: (item as any).id ? String((item as any).id) : '',
-      }
-
-      if (createdBy && userIdentifiers.includes(createdBy)) {
-        mine.push(itemWithId)
-      } else if (createdBy && alphaUserIds.includes(createdBy)) {
-        alpha.push(itemWithId)
-      }
-    })
-
-    // Sort each group alphabetically
-    mine.sort((a, b) => a.seriesName.localeCompare(b.seriesName))
-    alpha.sort((a, b) => a.seriesName.localeCompare(b.seriesName))
-
-    // Compose with section header markers
-    const result: Array<
-      | (FlowSeriesData & { id: string })
-      | { section: 'Mine' | 'Alpha' | 'Others' }
-    > = []
-
-    if (mine.length > 0) {
-      result.push({ section: 'Mine' })
-      mine.forEach((item) => result.push(item))
-    }
-    if (alpha.length > 0) {
-      result.push({ section: 'Alpha' })
-      alpha.forEach((item) => result.push(item))
-    }
-
-    return result
-  }, [enrichedSeries, session?.user?.id, session?.user?.email, alphaUserIds])
 
   const fetchSeries = useCallback(async () => {
     const emailKey = session?.user?.email || 'guest'
@@ -200,11 +131,7 @@ export default function Page() {
   }, [status, session?.user?.email])
 
   // Ensure poses are updated when a new series is added
-  function handleSelect(
-    event: ChangeEvent<object>,
-    value: FlowSeriesData | null
-  ) {
-    event.preventDefault()
+  function handleSelect(value: FlowSeriesData | null) {
     if (value) {
       setSeriesNameSet((prevSeriesNameSet) => [
         ...prevSeriesNameSet,
@@ -405,145 +332,18 @@ export default function Page() {
                   >
                     Search and select series (flows) to add to your sequence
                   </Typography>
-                  <FormControl sx={{ width: '100%' }}>
-                    <Autocomplete
-                      disablePortal
-                      id="combo-box-series-search-inline"
-                      options={orderedSeriesOptions}
-                      getOptionLabel={(option) => {
-                        const opt = option as any
-                        if ('section' in opt) return ''
-                        return opt.seriesName
-                      }}
-                      renderOption={(() => {
-                        let lastSection: string | null = null
-                        const sectionHeaderMap: Record<number, string> = {}
-                        orderedSeriesOptions.forEach(
-                          (opt: any, idx: number) => {
-                            if ('section' in opt) {
-                              lastSection = opt.section
-                            } else if (lastSection) {
-                              sectionHeaderMap[idx] = lastSection
-                              lastSection = null
-                            }
-                          }
-                        )
-                        const renderOptionFn = (
-                          props: any,
-                          option: any,
-                          { index }: { index: number }
-                        ) => {
-                          if ('section' in option) return null
-                          const sectionLabel = sectionHeaderMap[index] || null
-                          return (
-                            <Fragment key={option.id ?? `option-${index}`}>
-                              {sectionLabel && (
-                                <ListSubheader
-                                  key={`${sectionLabel}-header-${index}`}
-                                  component="div"
-                                  disableSticky
-                                  role="presentation"
-                                >
-                                  {sectionLabel}
-                                </ListSubheader>
-                              )}
-                              <li
-                                {...props}
-                                key={option.id ?? `option-${index}`}
-                              >
-                                {option.seriesName}
-                              </li>
-                            </Fragment>
-                          )
-                        }
-                        return renderOptionFn
-                      })()}
-                      filterOptions={(options, state) => {
-                        const groups: Record<string, any[]> = {}
-                        let currentSection: 'Mine' | 'Alpha' | null = null
-                        for (const option of options) {
-                          const opt = option as any
-                          if ('section' in opt) {
-                            currentSection = opt.section as 'Mine' | 'Alpha'
-                            if (!groups[currentSection])
-                              groups[currentSection] = []
-                          } else if (currentSection) {
-                            if (!groups[currentSection])
-                              groups[currentSection] = []
-                            if (
-                              opt.seriesName &&
-                              opt.seriesName
-                                .toLowerCase()
-                                .includes(state.inputValue.toLowerCase())
-                            ) {
-                              groups[currentSection].push(opt)
-                            }
-                          }
-                        }
-                        const filtered: typeof options = []
-                        const sectionOrder: Array<'Mine' | 'Alpha'> = [
-                          'Mine',
-                          'Alpha',
-                        ]
-                        for (const section of sectionOrder) {
-                          if (groups[section] && groups[section].length > 0) {
-                            filtered.push({
-                              section: section as 'Mine' | 'Alpha' | 'Others',
-                            })
-                            filtered.push(...groups[section])
-                          }
-                        }
-                        return filtered
-                      }}
-                      isOptionEqualToValue={(option, value) => {
-                        const opt = option as any
-                        const val = value as any
-                        if ('section' in opt || 'section' in val) return false
-                        return opt.id === val.id
-                      }}
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          borderRadius: '12px',
-                        },
-                        '& .MuiOutlinedInput-notchedOutline': {
-                          borderColor: 'primary.main',
-                        },
-                        '& .MuiAutocomplete-popupIndicator': {
-                          display: 'none',
-                        },
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          placeholder="Search for a Series to add..."
-                          sx={{
-                            '& .MuiInputBase-input': {
-                              color: 'primary.main',
-                            },
-                          }}
-                          InputProps={{
-                            ...params.InputProps,
-                            startAdornment: (
-                              <>
-                                <SearchIcon
-                                  sx={{ color: 'primary.main', mr: 1 }}
-                                />
-                                {params.InputProps.startAdornment}
-                              </>
-                            ),
-                          }}
-                        />
-                      )}
-                      onChange={(event, value) => {
-                        const val = value as any
-                        if (val && 'section' in val) return
-                        handleSelect(
-                          event as any,
-                          value as FlowSeriesData | null
-                        )
-                      }}
-                    />
-                  </FormControl>
+                  <GroupedDataAssetSearch<FlowSeriesData>
+                    items={enrichedSeries}
+                    myLabel="My Flows"
+                    publicLabel="Public Flows"
+                    searchField={(item) => item.seriesName}
+                    displayField={(item) => item.seriesName}
+                    placeholderText="Search for a Series to add..."
+                    getCreatedBy={(item) => (item as any).createdBy}
+                    onSelect={(selectedFlow) => {
+                      handleSelect(selectedFlow)
+                    }}
+                  />
                 </Paper>
 
                 {/* List of Series in this Sequence */}
