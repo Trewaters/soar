@@ -22,8 +22,8 @@ export type CreatePoseInput = {
   sort_english_name: string
   english_names: string[]
   description?: string | null
-  category: string
-  difficulty: string
+  category?: string | null
+  difficulty?: string | null
   // Optional extended fields to match Prisma and app types
   breath?: string[]
   sanskrit_names?: string[]

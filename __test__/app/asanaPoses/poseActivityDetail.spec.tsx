@@ -2,9 +2,12 @@ import '@testing-library/jest-dom'
 import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import NAV_PATHS from '@app/utils/navigation/constants'
 
 const mockUpdatePose = jest.fn()
 const mockRefresh = jest.fn()
+const mockReplace = jest.fn()
+const mockDeletePose = jest.fn()
 
 jest.mock('next/image', () => (props: any) => {
   // eslint-disable-next-line @next/next/no-img-element
@@ -27,12 +30,12 @@ jest.mock('@app/hooks/useNavigationWithLoading', () => ({
   useNavigationWithLoading: () => ({
     refresh: mockRefresh,
     push: jest.fn(),
-    replace: jest.fn(),
+    replace: mockReplace,
   }),
 }))
 
 jest.mock('@lib/poseService', () => ({
-  deletePose: jest.fn(),
+  deletePose: (...args: any[]) => mockDeletePose(...args),
   updatePose: (...args: any[]) => mockUpdatePose(...args),
 }))
 
@@ -175,5 +178,49 @@ describe('PoseActivityDetail', () => {
       expect(mockUpdatePose).toHaveBeenCalledTimes(1)
       expect(mockRefresh).toHaveBeenCalled()
     })
+  })
+
+  it('deletes immediately after confirmation and does not show undo countdown', async () => {
+    const user = userEvent.setup()
+    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true)
+    mockDeletePose.mockResolvedValue({ id: 'pose-1' })
+
+    render(
+      <PoseActivityDetail
+        poseCardProp={samplePose as any}
+        initialEditMode={true}
+      />
+    )
+
+    await user.click(screen.getAllByLabelText('Delete pose')[0])
+
+    await waitFor(() => {
+      expect(mockDeletePose).toHaveBeenCalledWith('pose-1')
+      expect(mockRefresh).toHaveBeenCalledTimes(1)
+      expect(mockReplace).toHaveBeenCalledWith(
+        `${NAV_PATHS.PRACTICE_ASANAS}?refresh=true`
+      )
+    })
+
+    expect(screen.queryByText(/in 5 seconds/i)).not.toBeInTheDocument()
+    confirmSpy.mockRestore()
+  })
+
+  it('does not delete when confirmation is cancelled', async () => {
+    const user = userEvent.setup()
+    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false)
+
+    render(
+      <PoseActivityDetail
+        poseCardProp={samplePose as any}
+        initialEditMode={true}
+      />
+    )
+
+    await user.click(screen.getAllByLabelText('Delete pose')[0])
+
+    expect(mockDeletePose).not.toHaveBeenCalled()
+    expect(mockReplace).not.toHaveBeenCalled()
+    confirmSpy.mockRestore()
   })
 })

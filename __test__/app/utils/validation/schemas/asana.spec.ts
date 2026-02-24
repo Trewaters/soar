@@ -38,14 +38,14 @@ describe('validation/schemas/asana', () => {
       const result = AsanaCreatePayloadValidator.validate({
         sort_english_name: ' ',
         english_names: [],
-        difficulty: 'Hard',
+        difficulty: 'Difficult',
       })
 
       expect(result.isValid).toBe(false)
       expect(result.errors.sort_english_name).toBeDefined()
       expect(result.errors.english_names).toBeDefined()
-      expect(result.errors.category).toBeDefined()
-      expect(result.errors.difficulty).toBeDefined()
+      expect(result.errors.category).toBeUndefined()
+      expect(result.errors.difficulty).toBeUndefined()
     })
 
     it('rejects non-string array members', () => {

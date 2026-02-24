@@ -171,6 +171,7 @@ export const ASANA_FIELD_DEFINITIONS = [
     type: 'variations',
     fieldKey: 'english_names',
     label: 'English Name Variations',
+    required: true,
     placeholder: 'e.g. Downward Dog, Adho Mukha Svanasana',
     helperText: 'Separate variants with commas',
   },
@@ -279,6 +280,7 @@ export function createAsanaFields(
         fieldKey: normalizedDefinition.fieldKey,
         label: normalizedDefinition.label,
         helperText: normalizedDefinition.helperText,
+        required: normalizedDefinition.required,
         placeholder: normalizedDefinition.placeholder,
         value: Array.isArray(rawValue) ? rawValue : [],
         onChange,
@@ -294,6 +296,7 @@ export function createAsanaFields(
         fieldKey: normalizedDefinition.fieldKey,
         label: normalizedDefinition.label,
         helperText: normalizedDefinition.helperText,
+        required: normalizedDefinition.required,
         placeholder: normalizedDefinition.placeholder,
         rows: normalizedDefinition.rows,
         value: stringValue,
@@ -307,6 +310,7 @@ export function createAsanaFields(
         fieldKey: normalizedDefinition.fieldKey,
         label: normalizedDefinition.label,
         helperText: normalizedDefinition.helperText,
+        required: normalizedDefinition.required,
         placeholder: normalizedDefinition.placeholder,
         freeSolo: normalizedDefinition.freeSolo,
         options:
@@ -326,6 +330,7 @@ export function createAsanaFields(
         fieldKey: normalizedDefinition.fieldKey,
         label: normalizedDefinition.label,
         helperText: normalizedDefinition.helperText,
+        required: normalizedDefinition.required,
         options: normalizedDefinition.options
           ? [...normalizedDefinition.options]
           : [],

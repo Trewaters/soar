@@ -23,8 +23,8 @@ export type AsanaCreatePayload = {
   alternative_english_names?: string[]
   sanskrit_names?: string[]
   description?: string | null
-  category: string
-  difficulty: string
+  category?: string | null
+  difficulty?: string | null
   dristi?: string | null
   setup_cues?: string | null
   deepening_cues?: string | null
@@ -64,13 +64,11 @@ function createAsanaSchema(
     category: composeValidators(
       stringNormalizer(),
       string(),
-      required('category'),
       minLength(1, 'category')
     ),
     difficulty: composeValidators(
       stringNormalizer(),
       string(),
-      required('difficulty'),
       enumValue(ASANA_DIFFICULTIES, 'difficulty')
     ),
     dristi: composeValidators(stringNormalizer(), string()),

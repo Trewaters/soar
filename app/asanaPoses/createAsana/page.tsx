@@ -87,6 +87,8 @@ export default function Page() {
   const [formFullAsanaPoseData, setFormFullAsanaPoseData] =
     useState<CreateAsanaFormState>({
       ...createEmptyAsanaFormData(),
+      category: 'Standing',
+      difficulty: 'Easy',
       // created_by should be the user's email (project convention)
       created_by: session?.user?.email ?? 'error-undefined-user',
       poseImages: [],
@@ -341,6 +343,8 @@ export default function Page() {
 
     setFormFullAsanaPoseData({
       ...createEmptyAsanaFormData(),
+      category: 'Standing',
+      difficulty: 'Easy',
       created_by: session?.user?.email ?? 'error-undefined-user',
       poseImages: [],
       activity_completed: false,

@@ -131,17 +131,6 @@ export default function PoseActivityDetail({
   const { canEdit } = useCanEditContent(pose?.created_by)
   const [activityRefreshTrigger, setActivityRefreshTrigger] = useState(0)
   const [error, setError] = useState<string | null>(null)
-  const [showUndoSnackbar, setShowUndoSnackbar] = useState(false)
-  const deleteTimeoutRef = React.useRef<NodeJS.Timeout | null>(null)
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (deleteTimeoutRef.current) {
-        clearTimeout(deleteTimeoutRef.current)
-      }
-    }
-  }, [])
 
   const handleImageUploaded = (image: PoseImageData) => {
     addImage(image)
@@ -297,29 +286,13 @@ export default function PoseActivityDetail({
     )
     if (!confirmed) return
 
-    // Show undo snackbar and start countdown
-    setShowUndoSnackbar(true)
-
-    deleteTimeoutRef.current = setTimeout(async () => {
-      try {
-        await deletePose(pose.id)
-        setShowUndoSnackbar(false)
-        // Force refresh and navigate to practice asanas page
-        router.refresh()
-        router.replace(`${NAV_PATHS.PRACTICE_ASANAS}?refresh=true`)
-      } catch (e: any) {
-        setError(e?.message || 'Failed to delete pose')
-        setShowUndoSnackbar(false)
-      }
-    }, 5000) // 5 second window for undo
-  }
-
-  const handleUndoDelete = () => {
-    if (deleteTimeoutRef.current) {
-      clearTimeout(deleteTimeoutRef.current)
-      deleteTimeoutRef.current = null
+    try {
+      await deletePose(pose.id)
+      router.refresh()
+      router.replace(`${NAV_PATHS.PRACTICE_ASANAS}?refresh=true`)
+    } catch (e: any) {
+      setError(e?.message || 'Failed to delete pose')
     }
-    setShowUndoSnackbar(false)
   }
 
   const handleSaveEdit = async () => {
@@ -1096,34 +1069,6 @@ export default function PoseActivityDetail({
           sx={{ width: '100%' }}
         >
           {error}
-        </Alert>
-      </Snackbar>
-
-      {/* Undo Delete Snackbar */}
-      <Snackbar
-        open={showUndoSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert
-          severity="warning"
-          variant="filled"
-          action={
-            <Button color="inherit" size="small" onClick={handleUndoDelete}>
-              UNDO
-            </Button>
-          }
-          sx={{
-            width: '100%',
-            fontWeight: 'bold',
-            animation: 'flash 1s infinite',
-            '@keyframes flash': {
-              '0%': { opacity: 1 },
-              '50%': { opacity: 0.8 },
-              '100%': { opacity: 1 },
-            },
-          }}
-        >
-          Deleting {pose?.sort_english_name} in 5 seconds...
         </Alert>
       </Snackbar>
     </Paper>

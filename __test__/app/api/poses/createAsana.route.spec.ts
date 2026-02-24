@@ -92,4 +92,64 @@ describe('POST /api/poses/createAsana validation', () => {
       })
     )
   })
+
+  it('defaults difficulty to Easy when omitted', async () => {
+    ;(prisma.asanaPose.create as jest.Mock).mockResolvedValue({
+      id: 'pose-2',
+      sort_english_name: 'Chair Pose',
+      difficulty: 'Easy',
+      breath: ['neutral'],
+    })
+
+    const response = await POST(
+      new Request('http://localhost/api/poses/createAsana', {
+        method: 'POST',
+        body: JSON.stringify({
+          sort_english_name: 'Chair Pose',
+          english_names: ['Chair Pose'],
+          category: 'Standing',
+        }),
+      })
+    )
+
+    expect(response.status).toBe(200)
+    expect(prisma.asanaPose.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          sort_english_name: 'Chair Pose',
+          difficulty: 'Easy',
+        }),
+      })
+    )
+  })
+
+  it('defaults category to Standing when omitted', async () => {
+    ;(prisma.asanaPose.create as jest.Mock).mockResolvedValue({
+      id: 'pose-3',
+      sort_english_name: 'Triangle Pose',
+      category: 'Standing',
+      breath: ['neutral'],
+    })
+
+    const response = await POST(
+      new Request('http://localhost/api/poses/createAsana', {
+        method: 'POST',
+        body: JSON.stringify({
+          sort_english_name: 'Triangle Pose',
+          english_names: ['Triangle Pose'],
+          difficulty: 'Easy',
+        }),
+      })
+    )
+
+    expect(response.status).toBe(200)
+    expect(prisma.asanaPose.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          sort_english_name: 'Triangle Pose',
+          category: 'Standing',
+        }),
+      })
+    )
+  })
 })
