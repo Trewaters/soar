@@ -178,38 +178,22 @@ export async function canModifyContent(
 ): Promise<boolean> {
   const session = await auth()
 
-  console.log('[canModifyContent] Checking permissions:', {
-    contentCreatorId,
-    sessionUser: session?.user?.email,
-    sessionRole: session?.user?.role,
-    sessionId: session?.user?.id,
-  })
-
   if (!session || !session.user) {
-    console.log('[canModifyContent] No session - denying access')
     return false
   }
 
   // Reject null or invalid roles
   if (!session.user.role || !['user', 'admin'].includes(session.user.role)) {
-    console.log(
-      '[canModifyContent] Invalid role - denying access:',
-      session.user.role
-    )
     return false
   }
 
   // Admin users can modify all content
   if (session.user.role === 'admin') {
-    console.log('[canModifyContent] User is admin - granting access')
     return true
   }
 
   // "alpha users" and "PUBLIC" content can only be modified by admins
   if (contentCreatorId === 'PUBLIC' || contentCreatorId === 'alpha users') {
-    console.log(
-      '[canModifyContent] PUBLIC/alpha content - denying access to non-admin'
-    )
     return false
   }
 
@@ -218,12 +202,6 @@ export async function canModifyContent(
   const canModify =
     contentCreatorId === session.user.id ||
     contentCreatorId === session.user.email
-
-  console.log('[canModifyContent] Ownership check result:', {
-    canModify,
-    matchesId: contentCreatorId === session.user.id,
-    matchesEmail: contentCreatorId === session.user.email,
-  })
 
   return canModify
 }
