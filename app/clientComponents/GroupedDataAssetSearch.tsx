@@ -322,6 +322,7 @@ export default function GroupedDataAssetSearch<T extends object>({
       sx={{
         background: 'white',
         width: { xs: '100%', md: '40vw' },
+        mx: 'auto',
         borderRadius: '12px',
       }}
     >
