@@ -12,6 +12,7 @@ export interface MostCommonItem {
 
 export interface DashboardStats {
   loginStreak: number
+  longestLoginStreak: number
   activityStreak: number
   activityStreakAtRisk: boolean
   longestStreak: number
@@ -81,6 +82,50 @@ export async function calculateLoginStreak(userId: string): Promise<number> {
   }
 
   return streak
+}
+
+/**
+ * Calculate longest historical login streak from UserLogin records
+ */
+export async function calculateLongestLoginStreak(
+  userId: string
+): Promise<number> {
+  const logins = await prisma.userLogin.findMany({
+    where: { userId },
+    select: { loginDate: true },
+  })
+
+  if (logins.length === 0) return 0
+
+  const uniqueDays = new Set<string>()
+  for (const login of logins) {
+    const loginDate = new Date(login.loginDate)
+    loginDate.setHours(0, 0, 0, 0)
+    uniqueDays.add(loginDate.toISOString().split('T')[0])
+  }
+
+  const sortedDays = Array.from(uniqueDays).sort()
+
+  let maxStreak = 1
+  let currentStreak = 1
+
+  for (let i = 1; i < sortedDays.length; i++) {
+    const prevDate = new Date(sortedDays[i - 1])
+    const currDate = new Date(sortedDays[i])
+
+    const daysDiff = Math.floor(
+      (currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24)
+    )
+
+    if (daysDiff === 1) {
+      currentStreak++
+      maxStreak = Math.max(maxStreak, currentStreak)
+    } else {
+      currentStreak = 1
+    }
+  }
+
+  return maxStreak
 }
 
 /**
@@ -498,6 +543,7 @@ export async function getDashboardStats(
   try {
     const [
       loginStreak,
+      longestLoginStreak,
       activityStreakStatus,
       longestStreak,
       practiceHistory,
@@ -507,6 +553,13 @@ export async function getDashboardStats(
     ] = await Promise.all([
       calculateLoginStreak(userId).catch((err) => {
         console.error(`${debugPrefix} calculateLoginStreak failed`, {
+          userId,
+          error: err,
+        })
+        return 0
+      }),
+      calculateLongestLoginStreak(userId).catch((err) => {
+        console.error(`${debugPrefix} calculateLongestLoginStreak failed`, {
           userId,
           error: err,
         })
@@ -632,6 +685,7 @@ export async function getDashboardStats(
 
     return {
       loginStreak,
+      longestLoginStreak,
       activityStreak: activityStreakStatus.currentStreak,
       activityStreakAtRisk: activityStreakStatus.isAtRisk,
       longestStreak,

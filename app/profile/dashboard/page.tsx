@@ -33,6 +33,7 @@ interface StatCardProps {
 
 interface DashboardData {
   loginStreak: number
+  longestLoginStreak: number
   activityStreak: number
   activityStreakAtRisk: boolean
   longestStreak: number
@@ -259,6 +260,7 @@ const Dashboard: React.FC = () => {
 
   const {
     loginStreak,
+    longestLoginStreak,
     activityStreak,
     activityStreakAtRisk,
     longestStreak,
@@ -297,14 +299,14 @@ const Dashboard: React.FC = () => {
 
             {/* Stat Cards */}
             <Grid container spacing={3} sx={{ mb: 4 }}>
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={12} sm={6} md={6}>
                 <StatCard
                   title="Current Login Streak"
                   value={`🔥 ${loginStreak} Days`}
                   color={theme.palette.warning.main}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={12} sm={6} md={6}>
                 <StatCard
                   title="Current Activity Streak"
                   value={`🔥 ${activityStreak} Days`}
@@ -320,7 +322,14 @@ const Dashboard: React.FC = () => {
                   }
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4}>
+              <Grid item xs={12} sm={6} md={6}>
+                <StatCard
+                  title="Longest Login Streak"
+                  value={`🏆 ${longestLoginStreak} Days`}
+                  color={theme.palette.success.main}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={6}>
                 <StatCard
                   title="Longest Activity Streak"
                   value={`🏆 ${longestStreak} Days`}

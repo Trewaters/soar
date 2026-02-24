@@ -84,6 +84,7 @@ global.fetch = jest.fn()
 
 interface DashboardData {
   loginStreak: number
+  longestLoginStreak: number
   activityStreak: number
   activityStreakAtRisk: boolean
   longestStreak: number
@@ -104,6 +105,7 @@ interface DashboardData {
 
 const mockDashboardData: DashboardData = {
   loginStreak: 7,
+  longestLoginStreak: 21,
   activityStreak: 5,
   activityStreakAtRisk: false,
   longestStreak: 14,
@@ -199,6 +201,15 @@ describe('Dashboard Page', () => {
       await waitFor(() => {
         expect(screen.getByText('Longest Activity Streak')).toBeInTheDocument()
         expect(screen.getByText('🏆 14 Days')).toBeInTheDocument()
+      })
+    })
+
+    it('should display longest login streak stat card', async () => {
+      render(<Dashboard />, { wrapper: TestWrapper })
+
+      await waitFor(() => {
+        expect(screen.getByText('Longest Login Streak')).toBeInTheDocument()
+        expect(screen.getByText('🏆 21 Days')).toBeInTheDocument()
       })
     })
   })

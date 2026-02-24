@@ -102,19 +102,12 @@ export default function ActivityTracker({
             u.includes(entityId)
           )
           if (matchedForThisEntity) {
-            console.debug(
-              '[ActivityTracker] SW invalidation for entity detected',
-              { entityId, urls: matches }
-            )
             // Re-check activity and update UI
             ;(async () => {
               try {
                 if (!session?.user?.id) return
                 const res = await checkActivity(session.user.id, entityId)
-                console.debug(
-                  '[ActivityTracker] post-invalidation check result',
-                  { exists: !!res?.exists }
-                )
+
                 setChecked(res.exists)
                 if (res.exists && res.activity?.difficulty) {
                   setSelectedDifficulty(res.activity.difficulty)
@@ -349,9 +342,6 @@ export default function ActivityTracker({
         // If we're marking as checked, and it was already checked (replacement for today),
         // we must delete the old one first to ensure only one activity per day is tracked.
         if (wasChecked) {
-          console.debug(
-            '[ActivityTracker] replacing existing activity for today'
-          )
           await deleteActivity(session.user.id, entityId)
         }
 
@@ -369,9 +359,7 @@ export default function ActivityTracker({
         activityData[`${entityType}Id`] = entityId
         activityData[`${entityType}Name`] = entityName
 
-        console.debug('[ActivityTracker] creating activity', { activityData })
         await createActivity(activityData)
-        console.debug('[ActivityTracker] createActivity resolved')
 
         // Optimistic UI already set `checked` above. Run an authoritative
         // check in the background to confirm server-side persistence and
@@ -381,14 +369,7 @@ export default function ActivityTracker({
           try {
             const userId = session?.user?.id
             if (!userId) return
-            console.debug(
-              '[ActivityTracker] running post-create authoritative check'
-            )
             const res = await checkActivity(userId, entityId)
-            console.debug(
-              '[ActivityTracker] post-create authoritative check result',
-              { exists: !!res?.exists }
-            )
             if (res?.exists) {
               setChecked(true)
               if (res.activity?.difficulty)
@@ -398,13 +379,6 @@ export default function ActivityTracker({
               const additionalChecks = 2
               for (let i = 0; i < additionalChecks; i++) {
                 const r2 = await checkActivity(userId, entityId)
-                console.debug(
-                  '[ActivityTracker] post-create immediate retry check',
-                  {
-                    attempt: i + 1,
-                    exists: !!r2?.exists,
-                  }
-                )
                 if (r2?.exists) {
                   setChecked(true)
                   if (r2.activity?.difficulty)
@@ -439,14 +413,7 @@ export default function ActivityTracker({
           try {
             const userId = session?.user?.id
             if (!userId) return
-            console.debug(
-              '[ActivityTracker] running post-delete authoritative check'
-            )
             const res = await checkActivity(userId, entityId)
-            console.debug(
-              '[ActivityTracker] post-delete authoritative check result',
-              { exists: !!res?.exists }
-            )
             if (res?.exists) {
               // If still exists, log a warning — revalidation or SW path may be lagging
               console.warn(

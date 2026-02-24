@@ -312,12 +312,6 @@ export async function deleteAsanaActivity(
           userId
         )}`
 
-        console.debug('[deleteAsanaActivity] revalidating', {
-          perAsana: rel,
-          userList: userListRel,
-          weekly: weeklyRel,
-        })
-
         await Promise.all([
           fetch(rel, { cache: 'no-store' }),
           fetch(userListRel, { cache: 'no-store' }),
@@ -329,9 +323,6 @@ export async function deleteAsanaActivity(
           const absolutes = [rel, userListRel, weeklyRel].map((r) =>
             new URL(r, location.href).toString()
           )
-          console.debug('[deleteAsanaActivity] sending SW invalidate', {
-            absolutes,
-          })
 
           if (
             navigator.serviceWorker.controller &&
@@ -395,9 +386,6 @@ export async function deleteAsanaActivity(
         // window message with the result.
         try {
           const authoritative = await checkActivityExists(userId, asanaId)
-          console.debug('[deleteAsanaActivity] authoritative check result', {
-            authoritative,
-          })
           try {
             window.postMessage(
               {

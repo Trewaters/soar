@@ -29,6 +29,7 @@ const mockGetDashboardStats = getDashboardStats as jest.Mock
 describe('Dashboard Stats API Route', () => {
   const mockDashboardData = {
     loginStreak: 7,
+    longestLoginStreak: 21,
     activityStreak: 5,
     activityStreakAtRisk: false,
     longestStreak: 14,
@@ -172,6 +173,7 @@ describe('Dashboard Stats API Route', () => {
       const data = await response.json()
 
       expect(data.data).toHaveProperty('loginStreak')
+      expect(data.data).toHaveProperty('longestLoginStreak')
       expect(data.data).toHaveProperty('activityStreak')
       expect(data.data).toHaveProperty('activityStreakAtRisk')
       expect(data.data).toHaveProperty('longestStreak')
@@ -276,6 +278,7 @@ describe('Dashboard Stats API Route', () => {
       const zeroStreaksData = {
         ...mockDashboardData,
         loginStreak: 0,
+        longestLoginStreak: 0,
         activityStreak: 0,
         activityStreakAtRisk: false,
         longestStreak: 0,
@@ -299,6 +302,7 @@ describe('Dashboard Stats API Route', () => {
 
       expect(response.status).toBe(200)
       expect(data.data.loginStreak).toBe(0)
+      expect(data.data.longestLoginStreak).toBe(0)
       expect(data.data.activityStreak).toBe(0)
       expect(data.data.activityStreakAtRisk).toBe(false)
       expect(data.data.longestStreak).toBe(0)
