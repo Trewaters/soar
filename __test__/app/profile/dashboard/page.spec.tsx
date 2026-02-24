@@ -85,6 +85,7 @@ global.fetch = jest.fn()
 interface DashboardData {
   loginStreak: number
   activityStreak: number
+  activityStreakAtRisk: boolean
   longestStreak: number
   practiceHistory: Array<{ month: string; days: number }>
   mostCommonAsanas: Array<{ name: string; count: number }>
@@ -104,6 +105,7 @@ interface DashboardData {
 const mockDashboardData: DashboardData = {
   loginStreak: 7,
   activityStreak: 5,
+  activityStreakAtRisk: false,
   longestStreak: 14,
   practiceHistory: [
     { month: 'Nov 24', days: 12 },
@@ -345,6 +347,45 @@ describe('Dashboard Page', () => {
         expect(screen.getByText('Current Activity Streak')).toBeInTheDocument()
       })
     })
+
+    it('should show warning message when activity streak is at risk today', async () => {
+      const atRiskData = {
+        ...mockDashboardData,
+        activityStreak: 8,
+        activityStreakAtRisk: true,
+      }
+
+      ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
+        if (url === '/api/user/recordActivity') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              success: true,
+              streakData: { currentStreak: 7 },
+            }),
+          })
+        }
+        if (url === '/api/dashboard/stats') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ success: true, data: atRiskData }),
+          })
+        }
+        return Promise.reject(new Error('Unknown URL'))
+      })
+
+      render(<Dashboard />, { wrapper: TestWrapper })
+
+      await waitFor(() => {
+        expect(screen.getByText('Current Activity Streak')).toBeInTheDocument()
+        expect(screen.getByText('🔥 8 Days')).toBeInTheDocument()
+        expect(
+          screen.getByText('Save your streak—record activity today.')
+        ).toBeInTheDocument()
+      })
+
+      setupMainFetchMock()
+    })
   })
 
   describe('Practice History Chart', () => {
@@ -536,6 +577,50 @@ describe('Dashboard Page', () => {
       await waitFor(() => {
         expect(screen.getByText('7 / 30 days')).toBeInTheDocument()
       })
+    })
+
+    it('should show jeopardy warning in goals section when streak is at risk', async () => {
+      const atRiskGoalData = {
+        ...mockDashboardData,
+        activityStreak: 9,
+        activityStreakAtRisk: true,
+        nextGoal: {
+          ...mockDashboardData.nextGoal,
+          current: 9,
+          progress: 30,
+        },
+      }
+
+      ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
+        if (url === '/api/user/recordActivity') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({
+              success: true,
+              streakData: { currentStreak: 7 },
+            }),
+          })
+        }
+        if (url === '/api/dashboard/stats') {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ success: true, data: atRiskGoalData }),
+          })
+        }
+        return Promise.reject(new Error('Unknown URL'))
+      })
+
+      render(<Dashboard />, { wrapper: TestWrapper })
+
+      await waitFor(() => {
+        expect(
+          screen.getByText(
+            'Streak in jeopardy — record activity today or it resets to zero.'
+          )
+        ).toBeInTheDocument()
+      })
+
+      setupMainFetchMock()
     })
   })
 

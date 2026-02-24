@@ -30,6 +30,7 @@ describe('Dashboard Stats API Route', () => {
   const mockDashboardData = {
     loginStreak: 7,
     activityStreak: 5,
+    activityStreakAtRisk: false,
     longestStreak: 14,
     practiceHistory: [
       { month: 'Nov 24', days: 12 },
@@ -172,6 +173,7 @@ describe('Dashboard Stats API Route', () => {
 
       expect(data.data).toHaveProperty('loginStreak')
       expect(data.data).toHaveProperty('activityStreak')
+      expect(data.data).toHaveProperty('activityStreakAtRisk')
       expect(data.data).toHaveProperty('longestStreak')
       expect(data.data).toHaveProperty('practiceHistory')
       expect(data.data).toHaveProperty('mostCommonAsanas')
@@ -275,6 +277,7 @@ describe('Dashboard Stats API Route', () => {
         ...mockDashboardData,
         loginStreak: 0,
         activityStreak: 0,
+        activityStreakAtRisk: false,
         longestStreak: 0,
       }
 
@@ -297,6 +300,7 @@ describe('Dashboard Stats API Route', () => {
       expect(response.status).toBe(200)
       expect(data.data.loginStreak).toBe(0)
       expect(data.data.activityStreak).toBe(0)
+      expect(data.data.activityStreakAtRisk).toBe(false)
       expect(data.data.longestStreak).toBe(0)
     })
 

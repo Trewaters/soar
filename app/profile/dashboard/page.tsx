@@ -28,11 +28,13 @@ interface StatCardProps {
   value: string
   icon?: React.ReactNode
   color?: string
+  helperText?: string
 }
 
 interface DashboardData {
   loginStreak: number
   activityStreak: number
+  activityStreakAtRisk: boolean
   longestStreak: number
   practiceHistory: Array<{ month: string; days: number }>
   mostCommonAsanas: Array<{ name: string; count: number }>
@@ -49,7 +51,13 @@ interface DashboardData {
   }
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => {
+const StatCard: React.FC<StatCardProps> = ({
+  title,
+  value,
+  icon,
+  color,
+  helperText,
+}) => {
   const theme = useTheme()
 
   return (
@@ -80,6 +88,11 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => {
               {value}
             </Typography>
           </Stack>
+          {helperText && (
+            <Typography variant="body2" color={color || 'text.secondary'}>
+              {helperText}
+            </Typography>
+          )}
         </Stack>
       </CardContent>
     </Card>
@@ -247,6 +260,7 @@ const Dashboard: React.FC = () => {
   const {
     loginStreak,
     activityStreak,
+    activityStreakAtRisk,
     longestStreak,
     practiceHistory,
     mostCommonAsanas,
@@ -294,7 +308,16 @@ const Dashboard: React.FC = () => {
                 <StatCard
                   title="Current Activity Streak"
                   value={`🔥 ${activityStreak} Days`}
-                  color={theme.palette.warning.main}
+                  color={
+                    activityStreakAtRisk
+                      ? theme.palette.error.main
+                      : theme.palette.warning.main
+                  }
+                  helperText={
+                    activityStreakAtRisk
+                      ? 'Save your streak—record activity today.'
+                      : undefined
+                  }
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
@@ -420,7 +443,11 @@ const Dashboard: React.FC = () => {
               sx={{
                 p: 3,
                 borderRadius: 2,
-                border: `2px solid ${theme.palette.warning.main}`,
+                border: `2px solid ${
+                  activityStreakAtRisk
+                    ? theme.palette.error.main
+                    : theme.palette.warning.main
+                }`,
               }}
             >
               <Typography variant="h6" fontWeight="bold" gutterBottom>
@@ -464,6 +491,17 @@ const Dashboard: React.FC = () => {
                     {nextGoal.current} / {nextGoal.target} days
                   </Typography>
                 </Stack>
+                {activityStreakAtRisk && (
+                  <Typography
+                    variant="body2"
+                    color="error.main"
+                    fontWeight={600}
+                    sx={{ mt: 1 }}
+                  >
+                    Streak in jeopardy — record activity today or it resets to
+                    zero.
+                  </Typography>
+                )}
                 {nextGoal.ultimateGoalsCompleted > 0 && (
                   <Box sx={{ mt: 2, textAlign: 'center' }}>
                     <Typography

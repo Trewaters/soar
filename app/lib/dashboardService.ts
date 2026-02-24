@@ -13,6 +13,7 @@ export interface MostCommonItem {
 export interface DashboardStats {
   loginStreak: number
   activityStreak: number
+  activityStreakAtRisk: boolean
   longestStreak: number
   practiceHistory: PracticeHistoryItem[]
   mostCommonAsanas: MostCommonItem[]
@@ -93,6 +94,24 @@ export async function calculateLoginStreak(userId: string): Promise<number> {
  * Activities from today or yesterday keep the streak alive.
  */
 export async function calculateActivityStreak(userId: string): Promise<number> {
+  const streakStatus = await calculateActivityStreakStatus(userId)
+  return streakStatus.currentStreak
+}
+
+/**
+ * Calculate activity streak status from practice activities
+ *
+ * - `currentStreak` is the active consecutive day count ending on the user's
+ *   most recent activity day (today or yesterday).
+ * - `isActiveToday` indicates whether activity has been recorded today.
+ * - `isAtRisk` indicates a non-zero streak that has activity yesterday but not
+ *   today, meaning it will reset if no activity is recorded today.
+ */
+export async function calculateActivityStreakStatus(userId: string): Promise<{
+  currentStreak: number
+  isActiveToday: boolean
+  isAtRisk: boolean
+}> {
   // Get all practice activities (asanas, series, sequences)
   const [asanaActivities, seriesActivities, sequenceActivities] =
     await Promise.all([
@@ -117,7 +136,13 @@ export async function calculateActivityStreak(userId: string): Promise<number> {
     ...sequenceActivities.map((a: { datePerformed: Date }) => a.datePerformed),
   ]
 
-  if (allActivities.length === 0) return 0
+  if (allActivities.length === 0) {
+    return {
+      currentStreak: 0,
+      isActiveToday: false,
+      isAtRisk: false,
+    }
+  }
 
   // Get unique days with activity (use local date strings for user calendar alignment)
   const uniqueDays = new Set<string>()
@@ -153,30 +178,43 @@ export async function calculateActivityStreak(userId: string): Promise<number> {
 
   // If last activity was more than 1 day ago, streak is broken
   if (daysDiff > 1) {
-    return 0
-  }
-
-  // Count consecutive days backwards from today
-  let streak = 0
-  for (let i = 0; i < sortedDays.length; i++) {
-    const expectedDate = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate() - i
-    )
-    const expYear = expectedDate.getFullYear()
-    const expMonth = String(expectedDate.getMonth() + 1).padStart(2, '0')
-    const expDay = String(expectedDate.getDate()).padStart(2, '0')
-    const expectedStr = `${expYear}-${expMonth}-${expDay}`
-
-    if (sortedDays[i] === expectedStr) {
-      streak++
-    } else {
-      break
+    return {
+      currentStreak: 0,
+      isActiveToday: false,
+      isAtRisk: false,
     }
   }
 
-  return streak
+  // Count consecutive days backwards from the most recent activity day
+  let streak = 1
+  for (let i = 1; i < sortedDays.length; i++) {
+    const [prevYear, prevMonth, prevDay] = sortedDays[i - 1]
+      .split('-')
+      .map(Number)
+    const [currYear, currMonth, currDay] = sortedDays[i].split('-').map(Number)
+
+    const prevDate = new Date(prevYear, prevMonth - 1, prevDay)
+    const currDate = new Date(currYear, currMonth - 1, currDay)
+
+    const consecutiveDiff = Math.floor(
+      (prevDate.getTime() - currDate.getTime()) / (1000 * 60 * 60 * 24)
+    )
+
+    if (consecutiveDiff === 1) {
+      streak++
+      continue
+    }
+
+    break
+  }
+
+  const isActiveToday = daysDiff === 0
+
+  return {
+    currentStreak: streak,
+    isActiveToday,
+    isAtRisk: streak > 0 && !isActiveToday,
+  }
 }
 
 /**
@@ -460,7 +498,7 @@ export async function getDashboardStats(
   try {
     const [
       loginStreak,
-      activityStreak,
+      activityStreakStatus,
       longestStreak,
       practiceHistory,
       mostCommonAsanas,
@@ -474,12 +512,16 @@ export async function getDashboardStats(
         })
         return 0
       }),
-      calculateActivityStreak(userId).catch((err) => {
-        console.error(`${debugPrefix} calculateActivityStreak failed`, {
+      calculateActivityStreakStatus(userId).catch((err) => {
+        console.error(`${debugPrefix} calculateActivityStreakStatus failed`, {
           userId,
           error: err,
         })
-        return 0
+        return {
+          currentStreak: 0,
+          isActiveToday: false,
+          isAtRisk: false,
+        }
       }),
       calculateLongestStreak(userId).catch((err) => {
         console.error(`${debugPrefix} calculateLongestStreak failed`, {
@@ -519,7 +561,7 @@ export async function getDashboardStats(
     ])
 
     // Calculate next goal based on continuous activity streak
-    const continuousPracticeDays = activityStreak
+    const continuousPracticeDays = activityStreakStatus.currentStreak
     const baseGoalTiers = [30, 60, 90, 180, 365]
     const ultimateGoal = 365
 
@@ -590,7 +632,8 @@ export async function getDashboardStats(
 
     return {
       loginStreak,
-      activityStreak,
+      activityStreak: activityStreakStatus.currentStreak,
+      activityStreakAtRisk: activityStreakStatus.isAtRisk,
       longestStreak,
       practiceHistory,
       mostCommonAsanas,
