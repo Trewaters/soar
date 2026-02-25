@@ -48,7 +48,7 @@ export default function ServiceWorkerRegister() {
         // Optional: log lifecycle
         reg.addEventListener?.('updatefound', () => {
           // eslint-disable-next-line no-console
-          console.log('[SW] Update found, triggering cache clear')
+
           // Clear caches when update is found
           requestServiceWorkerClearCache().catch((e) =>
             console.warn('[SW] Failed to clear cache on update:', e)
@@ -57,7 +57,6 @@ export default function ServiceWorkerRegister() {
 
         // Monitor for Service Worker updates (no automatic reload)
         monitorServiceWorkerUpdates(() => {
-          console.log('[SW] Cache cleared - update available')
           // Note: Removed automatic reload to prevent infinite loop
           // User can manually reload or it will reload on next navigation
         })
@@ -75,10 +74,6 @@ export default function ServiceWorkerRegister() {
                 const data = ev?.data
                 if (!data) return
                 if (data.command === 'INVALIDATE_URLS') {
-                  console.debug(
-                    '[SW] received INVALIDATE_URLS; rebroadcasting',
-                    { urls: data.urls }
-                  )
                   try {
                     window.dispatchEvent(
                       new CustomEvent('soar:sw-invalidate', {
@@ -110,9 +105,6 @@ export default function ServiceWorkerRegister() {
                 'controllerchange',
                 () => {
                   try {
-                    console.debug(
-                      '[SW] controller changed; rebroadcasting controller-change'
-                    )
                     window.dispatchEvent(
                       new CustomEvent('soar:sw-controller-change')
                     )

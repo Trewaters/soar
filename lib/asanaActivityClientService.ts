@@ -68,11 +68,6 @@ export async function createAsanaActivity(
     }
 
     const result = await response.json()
-    console.debug('[createAsanaActivity] created activity', {
-      userId: input.userId,
-      asanaId: input.asanaId,
-      resultId: result?.id,
-    })
 
     // Best-effort cache-busting revalidation: after creating activity, trigger
     // a no-store GET for today's activity for this user/asana so that service
@@ -115,12 +110,6 @@ export async function createAsanaActivity(
           input.userId
         )}`
 
-        console.debug('[createAsanaActivity] revalidating', {
-          perAsana: rel,
-          userList: userListRel,
-          weekly: weeklyRel,
-        })
-
         // Request fresh copies (no-store) for relevant endpoints so runtime
         // caches and service worker can update their entries.
         await Promise.all([
@@ -137,9 +126,6 @@ export async function createAsanaActivity(
           const absolutes = [rel, userListRel, weeklyRel].map((r) =>
             new URL(r, location.href).toString()
           )
-          console.debug('[createAsanaActivity] sending SW invalidate', {
-            absolutes,
-          })
           if (navigator.serviceWorker) {
             try {
               if (
@@ -198,10 +184,6 @@ export async function createAsanaActivity(
             } catch (e) {
               console.warn('[createAsanaActivity] SW messaging setup failed', e)
             }
-          } else {
-            console.debug(
-              '[createAsanaActivity] navigator.serviceWorker not available'
-            )
           }
         } catch (e) {
           console.warn('[createAsanaActivity] SW messaging setup failed', e)
@@ -216,9 +198,6 @@ export async function createAsanaActivity(
             input.userId,
             input.asanaId
           )
-          console.debug('[createAsanaActivity] authoritative check result', {
-            authoritative,
-          })
           try {
             window.postMessage(
               {

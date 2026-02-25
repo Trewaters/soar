@@ -81,8 +81,6 @@ export async function clearAllCaches(): Promise<void> {
       headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' },
     })
     await fetch(noCache)
-
-    console.log('[CacheBuster] All caches cleared')
   } catch (error) {
     console.error('[CacheBuster] Error clearing caches:', error)
   }
@@ -94,7 +92,6 @@ export async function clearAllCaches(): Promise<void> {
 export async function requestServiceWorkerClearCache(): Promise<void> {
   try {
     if (!navigator.serviceWorker?.controller) {
-      console.log('[CacheBuster] Service Worker not active')
       return
     }
 
@@ -105,8 +102,6 @@ export async function requestServiceWorkerClearCache(): Promise<void> {
       { command: 'CLEAR_ALL_CACHES' },
       [channel.port2]
     )
-
-    console.log('[CacheBuster] Requested SW cache clear')
   } catch (error) {
     console.error('[CacheBuster] Failed to request SW cache clear:', error)
   }
@@ -120,7 +115,6 @@ export async function invalidateServiceWorkerCache(
 ): Promise<void> {
   try {
     if (!navigator.serviceWorker?.controller) {
-      console.log('[CacheBuster] Service Worker not active')
       return
     }
 
@@ -128,8 +122,6 @@ export async function invalidateServiceWorkerCache(
       command: 'INVALIDATE_URLS',
       urls: urls,
     })
-
-    console.log('[CacheBuster] Invalidation request sent to SW:', urls)
   } catch (error) {
     console.error('[CacheBuster] Failed to invalidate SW cache:', error)
   }
@@ -157,23 +149,17 @@ export function monitorServiceWorkerUpdates(callback?: () => void): void {
 
     // Listen for cache invalidation messages from SW
     if (data?.command === 'CACHE_CLEARED') {
-      console.log(
-        '[CacheBuster] Service Worker cleared caches at:',
-        new Date(data.timestamp)
-      )
       callback?.()
     }
 
     // Listen for invalidation confirmations
     if (data?.command === 'INVALIDATE_URLS') {
-      console.log('[CacheBuster] URLs invalidated:', data.urls)
       callback?.()
     }
   })
 
   // Check for controller change (new SW activated)
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    console.log('[CacheBuster] New Service Worker activated')
     // Clear token to force new cache bust on next request
     generateCacheBustToken()
     callback?.()
@@ -228,8 +214,6 @@ export async function checkAndApplyUpdates(
 
     // Version changed, update is available
     if (storedVersion && storedVersion !== swVersion.version) {
-      console.log('[CacheBuster] Update available:', swVersion.version)
-
       if (autoRefresh) {
         // Clear cache and reload
         await clearAllCaches()

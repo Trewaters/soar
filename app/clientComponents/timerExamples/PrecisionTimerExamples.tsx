@@ -8,9 +8,7 @@ import { useTimer, useStopwatch, useDelay } from 'react-use-precision-timer'
  */
 export default function PrecisionTimerExamples() {
   // Example 1: Repeating Timer
-  const timerCallback = useCallback(() => {
-    console.log('Timer tick!')
-  }, [])
+  const timerCallback = useCallback(() => {}, [])
 
   const timer = useTimer({ delay: 1000 }, timerCallback)
 
@@ -18,9 +16,7 @@ export default function PrecisionTimerExamples() {
   const stopwatch = useStopwatch()
 
   // Example 3: One-time delay
-  const delayCallback = useCallback(() => {
-    console.log('Delayed action executed!')
-  }, [])
+  const delayCallback = useCallback(() => {}, [])
 
   const onceTimer = useDelay(2000, delayCallback)
 

@@ -3,7 +3,7 @@ import { auth } from '../../../../auth'
 import { getDashboardStats } from '../../../lib/dashboardService'
 import { prisma } from '../../../../app/lib/prismaClient'
 
-export async function GET(request?: Request) {
+export async function GET(request: Request) {
   const debugPrefix = '[Dashboard Stats API Debug]'
   const startTime = Date.now()
 

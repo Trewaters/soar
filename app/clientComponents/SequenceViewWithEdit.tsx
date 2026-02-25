@@ -143,7 +143,6 @@ export default function SequenceViewWithEdit({
 
     // Allow if admin OR if owner
     if (isAdmin) {
-      console.log('[SequenceViewWithEdit] isOwner result: true (admin)')
       return true
     }
 
@@ -151,7 +150,6 @@ export default function SequenceViewWithEdit({
     // Compare case-insensitively and ignore stray whitespace
     const isMatch =
       createdBy.trim().toLowerCase() === email.trim().toLowerCase()
-    console.log('[SequenceViewWithEdit] isOwner result:', isMatch)
     return isMatch
   }, [model.created_by, session?.user?.email, userState?.userData?.role])
 
@@ -277,7 +275,6 @@ export default function SequenceViewWithEdit({
   }
 
   function handleActivityToggle(isTracked: boolean) {
-    console.log('Sequence activity tracked:', isTracked)
     // Trigger refresh of any activity components that might be listening
     setRefreshTrigger((prev) => prev + 1)
   }

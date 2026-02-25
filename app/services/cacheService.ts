@@ -22,7 +22,6 @@ export async function invalidateApiCache(endpoints: string[]): Promise<void> {
   })
 
   await invalidateServiceWorkerCache(urls)
-  console.log('[CacheService] Invalidated API cache for:', endpoints)
 }
 
 /**
@@ -63,7 +62,6 @@ export async function invalidatePracticeCache(): Promise<void> {
  * Hard refresh: clear all caches and reload page
  */
 export async function hardRefresh(): Promise<void> {
-  console.log('[CacheService] Performing hard refresh')
   await clearAllCaches()
   await requestServiceWorkerClearCache()
   generateCacheBustToken()
@@ -129,8 +127,6 @@ export async function clearCacheByType(
           }
         }
       }
-
-      console.log(`[CacheService] Cleared ${type} cache`)
     }
   } catch (error) {
     console.error(`[CacheService] Error clearing ${type} cache:`, error)

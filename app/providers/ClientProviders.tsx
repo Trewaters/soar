@@ -38,9 +38,6 @@ export default function ClientProviders({ children }: { children: ReactNode }) {
         if (!mounted) return
         if (Object.keys(data).length) {
           setHydrationData(data)
-          // For now also log the hydration payload. Individual providers
-          // will consume this to seed their initial state.
-          console.debug('[ClientProviders] hydrated app state:', data)
         }
       } catch (err) {
         console.warn('[ClientProviders] hydration failed', err)

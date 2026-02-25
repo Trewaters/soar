@@ -47,16 +47,6 @@ export default function TosReacceptGuard() {
 
   const accept = async (): Promise<void> => {
     setLoading(true)
-    // Debug: log session info before sending acceptance
-    try {
-      console.debug('[TOS] submitting acceptance', {
-        userId: session?.user?.id ?? null,
-        userEmail: session?.user?.email ?? null,
-        sessionStatus: status,
-      })
-    } catch (e) {
-      // ignore
-    }
     try {
       const res = await fetch('/api/tos/accept', {
         method: 'POST',

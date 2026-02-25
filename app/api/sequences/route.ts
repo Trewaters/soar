@@ -35,21 +35,11 @@ export async function GET(request: NextRequest) {
     const alphaUserIds = getAlphaUserIds()
     const userIsAdmin = await isAdmin()
 
-    console.log('🔍 Sequences API - Session info:', {
-      userId: currentUserId,
-      userEmail: currentUserEmail,
-      alphaUserIds,
-      createdByParam: createdBy,
-      showAll,
-      isAdmin: userIsAdmin,
-    })
-
     const whereClause: any = {}
 
     // Admin users with showAll=true can see all content
     if (showAll && userIsAdmin) {
       // No filter - return everything for admins
-      console.log('🔑 Admin user - returning all sequences')
     } else if (createdBy) {
       // Access control: only allow if user requests their own sequences or alpha user sequences
       const hasAccess =

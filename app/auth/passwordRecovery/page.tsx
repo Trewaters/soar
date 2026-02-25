@@ -39,7 +39,6 @@ export default function PasswordRecoveryPage() {
 
     try {
       // TODO: Implement password recovery API call
-      console.log('Password recovery requested for:', email)
 
       setSuccessMessage(
         'If an account exists with this email, you will receive a temporary password shortly.'

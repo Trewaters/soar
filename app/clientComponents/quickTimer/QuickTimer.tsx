@@ -145,14 +145,9 @@ export default function QuickTimer({
 
       // Resume audio context if it's suspended (required by many browsers)
       if (audioContext.state === 'suspended') {
-        audioContext
-          .resume()
-          .then(() => {
-            console.log('Audio context resumed successfully')
-          })
-          .catch((error) => {
-            console.warn('Failed to resume audio context:', error)
-          })
+        audioContext.resume().catch((error) => {
+          console.warn('Failed to resume audio context:', error)
+        })
       }
 
       const playBeep = (frequency: number, delay: number = 0) => {

@@ -40,13 +40,7 @@ export async function GET(request: NextRequest) {
     // Debug: log a concise summary to help diagnose empty result issues
     try {
       const itemsCount = Array.isArray(result?.items) ? result.items.length : 0
-      console.debug(
-        '[api/profile/library] user=%s type=%s page=%s mode=%s limit=%d items=%d nextCursor=%s invalidCursor=%s',
-        userId,
-        type,
-        String(page),
-        mode,
-        limit,
+      console.log(
         itemsCount,
         String(result?.nextCursor ?? ''),
         String(result?.invalidCursor ?? false)

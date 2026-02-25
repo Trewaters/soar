@@ -99,8 +99,6 @@ const providers: Provider[] = [
           ? credentials.tosVersionId
           : null
 
-      console.log('[AUTH] Authorize attempt:', { email, isNewAccount })
-
       try {
         // Check if user exists
         const user = await prisma.userData.findUnique({
@@ -155,10 +153,6 @@ const providers: Provider[] = [
 
           if (user || existingCredentialsAccount) {
             // User already exists - check which provider they're using
-            console.log(
-              '[AUTH] Account creation attempted for existing email:',
-              email
-            )
 
             if (existingCredentialsAccount) {
               throwAuthError(
@@ -198,7 +192,6 @@ const providers: Provider[] = [
             }
 
             const primaryProvider = providerAccounts[0].provider
-            console.log('[AUTH] User exists with provider:', primaryProvider)
 
             if (primaryProvider === 'credentials') {
               throwAuthError(
@@ -220,7 +213,6 @@ const providers: Provider[] = [
           }
 
           // Create new user
-          console.log('[AUTH] Creating new user account:', email)
           const now = new Date()
           const hashedPassword = await hashPassword(password)
           let newUser
@@ -277,7 +269,6 @@ const providers: Provider[] = [
             throw createErr
           }
 
-          console.log('[AUTH] New user account created successfully:', email)
           return {
             id: newUser.id,
             name: newUser.name,
@@ -287,11 +278,8 @@ const providers: Provider[] = [
 
         // Handle existing user login
         if (!user) {
-          console.log('[AUTH] User not found for login attempt:', email)
           return null
         }
-
-        console.log('[AUTH] User found, verifying credentials:', email)
 
         // Get provider account information
         const providerAccount = await prisma.providerAccount.findFirst({
@@ -307,10 +295,6 @@ const providers: Provider[] = [
 
         if (!providerAccount) {
           // User exists but has no credentials provider - likely OAuth only
-          console.log(
-            '[AUTH] User has no credentials provider, checking for OAuth providers:',
-            email
-          )
 
           const oauthProviders = await prisma.providerAccount.findMany({
             where: { userId: user.id },
@@ -321,10 +305,6 @@ const providers: Provider[] = [
             const primaryProvider = oauthProviders[0].provider
             const providerName =
               primaryProvider.charAt(0).toUpperCase() + primaryProvider.slice(1)
-            console.log(
-              '[AUTH] User registered with OAuth provider:',
-              primaryProvider
-            )
             throwAuthError(
               AuthErrorCode.EMAIL_EXISTS_OAUTH,
               `This email is registered with ${providerName}. Please sign in using the ${providerName} button.`,
@@ -356,14 +336,12 @@ const providers: Provider[] = [
         }
 
         // Compare provided password with stored hash
-        console.log('[AUTH] Comparing password for user:', email)
         const isValidPassword = await comparePassword(
           password,
           providerAccount.credentials_password
         )
 
         if (!isValidPassword) {
-          console.log('[AUTH] Invalid password for user:', email)
           throwAuthError(
             AuthErrorCode.INVALID_PASSWORD,
             'Invalid email or password. Please try again or use "Forgot Password" to reset your password.',
@@ -371,7 +349,6 @@ const providers: Provider[] = [
           )
         }
 
-        console.log('[AUTH] Authentication successful for user:', email)
         return {
           id: user.id,
           name: user.name,
@@ -770,7 +747,6 @@ const authConfig = {
       }
     },
     signOut: async (message: any) => {
-      console.log('signOut', message)
       await prisma.$disconnect()
     },
   },

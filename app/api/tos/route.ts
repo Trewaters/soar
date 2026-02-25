@@ -108,11 +108,6 @@ export async function POST(request: NextRequest) {
           })
           created = await prisma.tosVersion.create({ data: createData })
         }
-
-        console.log('[api/tos] created (active)', {
-          id: created.id,
-          title: created.title,
-        })
         return NextResponse.json(created, { status: 201 })
       } catch (err: any) {
         console.error('[api/tos] create-with-deactivate error:', err)

@@ -142,7 +142,6 @@ export class StorageManager {
       return 'vercel-blob'
     } else {
       const status = provider.getConfigStatus()
-      console.log('❌ Vercel Blob not configured:', status.missingConfig)
     }
 
     console.warn('⚠️  Vercel Blob storage provider not properly configured')

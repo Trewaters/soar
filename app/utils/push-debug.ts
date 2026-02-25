@@ -132,7 +132,6 @@ export async function quickPushTest() {
   const result = await enablePushNotificationsEnhanced()
 
   if (result.success) {
-    console.log('✅ Quick test passed!', result.diagnostics)
   } else {
     console.error('❌ Quick test failed:', result.error, result.diagnostics)
   }

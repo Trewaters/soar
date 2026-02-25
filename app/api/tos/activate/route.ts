@@ -20,19 +20,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Deactivate all versions, then activate the selected one
-    console.log('TOS activate request by admin, versionId=', versionId)
     const deact = await prisma.tosVersion.updateMany({
       where: {},
       data: { active: false },
     })
-    console.log('Deactivated count:', deact.count)
 
     const updated = await prisma.tosVersion.update({
       where: { id: versionId },
       data: { active: true },
     })
-
-    console.log('Activated version:', updated.id)
     return NextResponse.json({ ok: true, updated })
   } catch (err: any) {
     console.error('Error activating TOS version:', err)

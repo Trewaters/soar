@@ -307,10 +307,6 @@ export default function Page() {
         ).length
         const failed = results.length - successful
 
-        console.log(
-          `🧹 Cleanup complete: ${successful} images deleted, ${failed} failed`
-        )
-
         // Clear the state regardless of individual deletion results
         setUploadedImages([])
       }

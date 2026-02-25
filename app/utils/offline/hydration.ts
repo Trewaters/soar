@@ -29,9 +29,6 @@ export async function hydrateApp(): Promise<HydratedState> {
     console.warn('[hydrateApp] primary hydration failed', err)
     try {
       const fallback = await cache.getCache('lastKnownState')
-      console.debug('[hydrateApp] fallback cache read', {
-        fallback: !!fallback,
-      })
       if (fallback) {
         out.userState = out.userState ?? fallback.userState
         out.flowSeries = out.flowSeries ?? fallback.flowSeries

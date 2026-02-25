@@ -308,8 +308,6 @@ export default function EditUserDetails({
       const { name } = e.target
       const fieldValue = value !== undefined ? value : e.target.value
 
-      console.log('onChange called for:', name, 'with value:', fieldValue)
-
       // Update local form state only - this doesn't trigger context re-renders
       setFormData((prev) => ({
         ...prev,

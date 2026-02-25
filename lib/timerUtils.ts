@@ -20,7 +20,7 @@ export interface TimerEntry {
  * @param name - The name of the timer to start
  */
 export function startTimer(name: string): void {
-  console.log(`Timer "${name}" started - using react-use-precision-timer`)
+  // Intentionally no-op: actual timer functionality uses react-use-precision-timer
 }
 
 /**
@@ -41,7 +41,7 @@ export function stopTimer(name: string): TimerEntry | null {
  * Legacy function - maintained for compatibility
  */
 export function clearAllTimers(): void {
-  console.log('Timers cleared - using react-use-precision-timer')
+  // Intentionally no-op: actual timer functionality uses react-use-precision-timer
 }
 
 /**

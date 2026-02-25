@@ -7,17 +7,11 @@ import { Box, Typography, Paper } from '@mui/material'
  * This demonstrates the timer's flexibility and reusability
  */
 export default function QuickTimerExamples() {
-  const handleTimerStart = () => {
-    console.log('Timer started!')
-  }
+  const handleTimerStart = () => {}
 
-  const handleTimerEnd = () => {
-    console.log('Timer completed!')
-  }
+  const handleTimerEnd = () => {}
 
-  const handleTimerUpdate = (remainingSeconds: number) => {
-    console.log(`${remainingSeconds} seconds remaining`)
-  }
+  const handleTimerUpdate = (remainingSeconds: number) => {}
 
   return (
     <Box sx={{ p: 3, maxWidth: 800, mx: 'auto' }}>
@@ -76,7 +70,7 @@ export default function QuickTimerExamples() {
           variant="default"
           enableAlarm={true}
           showAlarmToggle={true}
-          onTimerStart={() => console.log('Alarm test timer started!')}
+          onTimerStart={() => {}}
           onTimerEnd={() =>
             console.log('Alarm test timer completed! You should hear beeps.')
           }

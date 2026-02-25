@@ -185,16 +185,7 @@ export default function LocationPickerDemo() {
           <Button variant="outlined" onClick={clearAll}>
             Clear All Fields
           </Button>
-          <Button
-            variant="contained"
-            onClick={() =>
-              console.log({
-                basic: basicLocation,
-                advanced: advancedLocation,
-                advancedData: advancedLocationData,
-              })
-            }
-          >
+          <Button variant="contained" onClick={() => {}}>
             Log All Values
           </Button>
         </Stack>

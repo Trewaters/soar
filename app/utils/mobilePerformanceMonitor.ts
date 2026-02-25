@@ -260,11 +260,7 @@ export class MobilePerformanceMonitor {
 
     const typeKey = type as string
     if (suggestions[typeKey]) {
-      console.group(`Optimization suggestions for ${type}:`)
-      suggestions[typeKey].forEach((suggestion) => {
-        console.log(`• ${suggestion}`)
-      })
-      console.groupEnd()
+      suggestions[typeKey].forEach((suggestion) => {})
     }
   }
 

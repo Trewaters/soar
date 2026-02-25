@@ -77,9 +77,6 @@ export async function DELETE(
       if (!poseObj.isUserCreated) {
         // Check if user created it by email match, even if isUserCreated is false
         if (poseObj.created_by === session.user.email) {
-          console.log(
-            '🗑️ Allowing deletion: user created asana even though isUserCreated is false'
-          )
         } else {
           return NextResponse.json(
             {
