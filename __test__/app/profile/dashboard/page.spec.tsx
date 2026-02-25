@@ -59,6 +59,16 @@ jest.mock('@app/profile/ProfileNavMenu', () => ({
 
 // Helper to set up the main fetch mock implementation
 function setupMainFetchMock(loginStreak = 7) {
+  const mockActivityHistory = [
+    { datePerformed: '2026-02-25T10:00:00.000Z' },
+    { datePerformed: '2026-02-24T10:00:00.000Z' },
+    { datePerformed: '2026-02-23T10:00:00.000Z' },
+    { datePerformed: '2026-02-22T10:00:00.000Z' },
+    { datePerformed: '2026-02-21T10:00:00.000Z' },
+    { datePerformed: '2026-02-20T10:00:00.000Z' },
+    { datePerformed: '2026-02-19T10:00:00.000Z' },
+  ]
+
   ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
     if (url === '/api/user/recordActivity') {
       return Promise.resolve({
@@ -69,10 +79,25 @@ function setupMainFetchMock(loginStreak = 7) {
         }),
       })
     }
-    if (url === '/api/dashboard/stats') {
+    if (url.startsWith('/api/dashboard/stats')) {
       return Promise.resolve({
         ok: true,
         json: async () => ({ success: true, data: mockDashboardData }),
+      })
+    }
+    if (url.startsWith('/api/asanaActivity?userId=')) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => mockActivityHistory,
+      })
+    }
+    if (
+      url.startsWith('/api/seriesActivity?userId=') ||
+      url.startsWith('/api/sequenceActivity?userId=')
+    ) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => [],
       })
     }
     return Promise.reject(new Error('Unknown URL'))
@@ -200,7 +225,7 @@ describe('Dashboard Page', () => {
 
       await waitFor(() => {
         expect(screen.getByText('Longest Activity Streak')).toBeInTheDocument()
-        expect(screen.getByText('🏆 14 Days')).toBeInTheDocument()
+        expect(screen.getByText('🏆 7 Days')).toBeInTheDocument()
       })
     })
 
@@ -241,7 +266,7 @@ describe('Dashboard Page', () => {
             json: async () => ({ success: true }),
           })
         }
-        if (url === '/api/dashboard/stats') {
+        if (url.startsWith('/api/dashboard/stats')) {
           return Promise.resolve({
             ok: false,
             status: 500,
@@ -269,7 +294,7 @@ describe('Dashboard Page', () => {
             json: async () => ({ success: true }),
           })
         }
-        if (url === '/api/dashboard/stats') {
+        if (url.startsWith('/api/dashboard/stats')) {
           return Promise.resolve({
             ok: true,
             json: async () => ({ success: false }),
@@ -293,7 +318,7 @@ describe('Dashboard Page', () => {
             json: async () => ({ success: true }),
           })
         }
-        if (url === '/api/dashboard/stats') {
+        if (url.startsWith('/api/dashboard/stats')) {
           return Promise.reject(new Error('Network error'))
         }
         return Promise.reject(new Error('Unknown URL'))
@@ -314,7 +339,7 @@ describe('Dashboard Page', () => {
             json: async () => ({ success: true }),
           })
         }
-        if (url === '/api/dashboard/stats') {
+        if (url.startsWith('/api/dashboard/stats')) {
           return Promise.reject('Unknown error')
         }
         return Promise.reject(new Error('Unknown URL'))
@@ -337,7 +362,9 @@ describe('Dashboard Page', () => {
 
       await waitFor(() => {
         expect(screen.getByText('Current Login Streak')).toBeInTheDocument()
-        expect(screen.getByText('🔥 7 Days')).toBeInTheDocument()
+        expect(screen.getAllByText('🔥 7 Days').length).toBeGreaterThanOrEqual(
+          1
+        )
       })
     })
 
@@ -346,7 +373,9 @@ describe('Dashboard Page', () => {
 
       await waitFor(() => {
         expect(screen.getByText('Current Activity Streak')).toBeInTheDocument()
-        expect(screen.getByText('🔥 5 Days')).toBeInTheDocument()
+        expect(screen.getAllByText('🔥 7 Days').length).toBeGreaterThanOrEqual(
+          1
+        )
       })
     })
 
@@ -376,7 +405,7 @@ describe('Dashboard Page', () => {
             }),
           })
         }
-        if (url === '/api/dashboard/stats') {
+        if (url.startsWith('/api/dashboard/stats')) {
           return Promise.resolve({
             ok: true,
             json: async () => ({ success: true, data: atRiskData }),
@@ -436,7 +465,7 @@ describe('Dashboard Page', () => {
             json: async () => ({ success: true }),
           })
         }
-        if (url === '/api/dashboard/stats') {
+        if (url.startsWith('/api/dashboard/stats')) {
           return Promise.resolve({
             ok: true,
             json: async () => ({
@@ -568,7 +597,9 @@ describe('Dashboard Page', () => {
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
-        expect(screen.getByText('Next Goal: 30 Day Streak')).toBeInTheDocument()
+        expect(
+          screen.getByText('Next Goal: Practice 23 More Days')
+        ).toBeInTheDocument()
       })
     })
 
@@ -612,7 +643,7 @@ describe('Dashboard Page', () => {
             }),
           })
         }
-        if (url === '/api/dashboard/stats') {
+        if (url.startsWith('/api/dashboard/stats')) {
           return Promise.resolve({
             ok: true,
             json: async () => ({ success: true, data: atRiskGoalData }),
@@ -647,9 +678,12 @@ describe('Dashboard Page', () => {
           },
           body: expect.any(String),
         })
-        expect(global.fetch).toHaveBeenCalledWith('/api/dashboard/stats', {
-          cache: 'no-store',
-        })
+        expect(global.fetch).toHaveBeenCalledWith(
+          expect.stringContaining('/api/dashboard/stats'),
+          {
+            cache: 'no-store',
+          }
+        )
       })
     })
 
@@ -657,8 +691,8 @@ describe('Dashboard Page', () => {
       render(<Dashboard />, { wrapper: TestWrapper })
 
       await waitFor(() => {
-        // Should call both endpoints (recordActivity + stats)
-        expect(global.fetch).toHaveBeenCalledTimes(2)
+        // Should call recordActivity + stats + 3 activity sources
+        expect(global.fetch).toHaveBeenCalledTimes(5)
       })
     })
   })
@@ -699,7 +733,7 @@ describe('Dashboard Page', () => {
             json: async () => ({ success: true }),
           })
         }
-        if (url === '/api/dashboard/stats') {
+        if (url.startsWith('/api/dashboard/stats')) {
           return Promise.resolve({
             ok: true,
             json: async () => ({ success: true, data: zeroStreakData }),
@@ -735,7 +769,7 @@ describe('Dashboard Page', () => {
             json: async () => ({ success: true }),
           })
         }
-        if (url === '/api/dashboard/stats') {
+        if (url.startsWith('/api/dashboard/stats')) {
           return Promise.resolve({
             ok: true,
             json: async () => ({ success: true, data: emptyListsData }),
@@ -768,7 +802,7 @@ describe('Dashboard Page', () => {
             }),
           })
         }
-        if (url === '/api/dashboard/stats') {
+        if (url.startsWith('/api/dashboard/stats')) {
           return Promise.resolve({
             ok: true,
             json: async () => ({ success: true, data: highStreakData }),

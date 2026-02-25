@@ -1,4 +1,14 @@
 import { prisma } from './prismaClient'
+import {
+  buildNextGoalFromActivityStreak,
+  calculateCurrentActivityStreakFromDateKeys,
+  calculateLongestActivityStreakFromDateKeys,
+  getUniqueActivityDateKeys,
+} from './activityStreakCalculator'
+import {
+  extractActivityDatesFromSources,
+  fetchUserActivitySourceRecords,
+} from './activityStreakServer'
 
 export interface PracticeHistoryItem {
   month: string
@@ -138,8 +148,14 @@ export async function calculateLongestLoginStreak(
  * The streak is broken if there's a gap of more than 1 day between activities.
  * Activities from today or yesterday keep the streak alive.
  */
-export async function calculateActivityStreak(userId: string): Promise<number> {
-  const streakStatus = await calculateActivityStreakStatus(userId)
+export async function calculateActivityStreak(
+  userId: string,
+  timezoneOffsetMinutes = 0
+): Promise<number> {
+  const streakStatus = await calculateActivityStreakStatus(
+    userId,
+    timezoneOffsetMinutes
+  )
   return streakStatus.currentStreak
 }
 
@@ -152,34 +168,16 @@ export async function calculateActivityStreak(userId: string): Promise<number> {
  * - `isAtRisk` indicates a non-zero streak that has activity yesterday but not
  *   today, meaning it will reset if no activity is recorded today.
  */
-export async function calculateActivityStreakStatus(userId: string): Promise<{
+export async function calculateActivityStreakStatus(
+  userId: string,
+  timezoneOffsetMinutes = 0
+): Promise<{
   currentStreak: number
   isActiveToday: boolean
   isAtRisk: boolean
 }> {
-  // Get all practice activities (asanas, series, sequences)
-  const [asanaActivities, seriesActivities, sequenceActivities] =
-    await Promise.all([
-      prisma.asanaActivity.findMany({
-        where: { userId },
-        select: { datePerformed: true },
-      }),
-      prisma.seriesActivity.findMany({
-        where: { userId },
-        select: { datePerformed: true },
-      }),
-      prisma.sequenceActivity.findMany({
-        where: { userId },
-        select: { datePerformed: true },
-      }),
-    ])
-
-  // Combine all activities into one array
-  const allActivities: Date[] = [
-    ...asanaActivities.map((a: { datePerformed: Date }) => a.datePerformed),
-    ...seriesActivities.map((a: { datePerformed: Date }) => a.datePerformed),
-    ...sequenceActivities.map((a: { datePerformed: Date }) => a.datePerformed),
-  ]
+  const activitySources = await fetchUserActivitySourceRecords(userId)
+  const allActivities = extractActivityDatesFromSources(activitySources)
 
   if (allActivities.length === 0) {
     return {
@@ -189,136 +187,34 @@ export async function calculateActivityStreakStatus(userId: string): Promise<{
     }
   }
 
-  // Get unique days with activity (use local date strings for user calendar alignment)
-  const uniqueDays = new Set<string>()
-  for (const activity of allActivities) {
-    const activityDate = new Date(activity)
-    // Use local date parts to match user's calendar day
-    const year = activityDate.getFullYear()
-    const month = String(activityDate.getMonth() + 1).padStart(2, '0')
-    const day = String(activityDate.getDate()).padStart(2, '0')
-    const dateStr = `${year}-${month}-${day}`
-    uniqueDays.add(dateStr)
-  }
-
-  // Sort days in descending order (most recent first)
-  const sortedDays = Array.from(uniqueDays).sort().reverse()
-
-  // Get today's date in local timezone format
-  const today = new Date()
-
-  // Check if there's activity today or yesterday to keep streak alive
-  const lastActivityStr = sortedDays[0]
-  const [lastYear, lastMonth, lastDay] = lastActivityStr.split('-').map(Number)
-  const lastActivityDate = new Date(lastYear, lastMonth - 1, lastDay)
-  const todayDate = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate()
+  const sortedDays = getUniqueActivityDateKeys(
+    allActivities,
+    timezoneOffsetMinutes
   )
 
-  const daysDiff = Math.floor(
-    (todayDate.getTime() - lastActivityDate.getTime()) / (1000 * 60 * 60 * 24)
+  return calculateCurrentActivityStreakFromDateKeys(
+    sortedDays,
+    timezoneOffsetMinutes
   )
-
-  // If last activity was more than 1 day ago, streak is broken
-  if (daysDiff > 1) {
-    return {
-      currentStreak: 0,
-      isActiveToday: false,
-      isAtRisk: false,
-    }
-  }
-
-  // Count consecutive days backwards from the most recent activity day
-  let streak = 1
-  for (let i = 1; i < sortedDays.length; i++) {
-    const [prevYear, prevMonth, prevDay] = sortedDays[i - 1]
-      .split('-')
-      .map(Number)
-    const [currYear, currMonth, currDay] = sortedDays[i].split('-').map(Number)
-
-    const prevDate = new Date(prevYear, prevMonth - 1, prevDay)
-    const currDate = new Date(currYear, currMonth - 1, currDay)
-
-    const consecutiveDiff = Math.floor(
-      (prevDate.getTime() - currDate.getTime()) / (1000 * 60 * 60 * 24)
-    )
-
-    if (consecutiveDiff === 1) {
-      streak++
-      continue
-    }
-
-    break
-  }
-
-  const isActiveToday = daysDiff === 0
-
-  return {
-    currentStreak: streak,
-    isActiveToday,
-    isAtRisk: streak > 0 && !isActiveToday,
-  }
 }
 
 /**
  * Calculate longest streak from practice activities
  */
-export async function calculateLongestStreak(userId: string): Promise<number> {
-  const [asanaActivities, seriesActivities, sequenceActivities] =
-    await Promise.all([
-      prisma.asanaActivity.findMany({
-        where: { userId },
-        select: { datePerformed: true },
-      }),
-      prisma.seriesActivity.findMany({
-        where: { userId },
-        select: { datePerformed: true },
-      }),
-      prisma.sequenceActivity.findMany({
-        where: { userId },
-        select: { datePerformed: true },
-      }),
-    ])
-
-  const allActivities = [
-    ...asanaActivities.map((a) => a.datePerformed),
-    ...seriesActivities.map((a) => a.datePerformed),
-    ...sequenceActivities.map((a) => a.datePerformed),
-  ]
+export async function calculateLongestStreak(
+  userId: string,
+  timezoneOffsetMinutes = 0
+): Promise<number> {
+  const activitySources = await fetchUserActivitySourceRecords(userId)
+  const allActivities = extractActivityDatesFromSources(activitySources)
 
   if (allActivities.length === 0) return 0
 
-  const uniqueDays = new Set<string>()
-  for (const activity of allActivities) {
-    const activityDate = new Date(activity)
-    activityDate.setHours(0, 0, 0, 0)
-    uniqueDays.add(activityDate.toISOString().split('T')[0])
-  }
-
-  const sortedDays = Array.from(uniqueDays).sort()
-
-  let maxStreak = 0
-  let currentStreak = 1
-
-  for (let i = 1; i < sortedDays.length; i++) {
-    const prevDate = new Date(sortedDays[i - 1])
-    const currDate = new Date(sortedDays[i])
-
-    const daysDiff = Math.floor(
-      (currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24)
-    )
-
-    if (daysDiff === 1) {
-      currentStreak++
-      maxStreak = Math.max(maxStreak, currentStreak)
-    } else {
-      currentStreak = 1
-    }
-  }
-
-  return Math.max(maxStreak, 1)
+  const sortedDays = getUniqueActivityDateKeys(
+    allActivities,
+    timezoneOffsetMinutes
+  )
+  return calculateLongestActivityStreakFromDateKeys(sortedDays)
 }
 
 /**
@@ -333,36 +229,10 @@ export async function getPracticeHistory(
   twelveMonthsAgo.setDate(1)
   twelveMonthsAgo.setHours(0, 0, 0, 0)
 
-  const [asanaActivities, seriesActivities, sequenceActivities] =
-    await Promise.all([
-      prisma.asanaActivity.findMany({
-        where: {
-          userId,
-          datePerformed: { gte: twelveMonthsAgo },
-        },
-        select: { datePerformed: true },
-      }),
-      prisma.seriesActivity.findMany({
-        where: {
-          userId,
-          datePerformed: { gte: twelveMonthsAgo },
-        },
-        select: { datePerformed: true },
-      }),
-      prisma.sequenceActivity.findMany({
-        where: {
-          userId,
-          datePerformed: { gte: twelveMonthsAgo },
-        },
-        select: { datePerformed: true },
-      }),
-    ])
-
-  const allActivities = [
-    ...asanaActivities.map((a) => a.datePerformed),
-    ...seriesActivities.map((a) => a.datePerformed),
-    ...sequenceActivities.map((a) => a.datePerformed),
-  ]
+  const activitySources = await fetchUserActivitySourceRecords(userId, {
+    fromDate: twelveMonthsAgo,
+  })
+  const allActivities = extractActivityDatesFromSources(activitySources)
 
   // Group by month
   const monthCounts = new Map<string, Set<string>>()
@@ -535,7 +405,8 @@ export async function getMostCommonSequences(
  * Get all dashboard statistics for a user
  */
 export async function getDashboardStats(
-  userId: string
+  userId: string,
+  timezoneOffsetMinutes = 0
 ): Promise<DashboardStats> {
   const debugPrefix = '[DashboardService Debug]'
   const startTime = Date.now()
@@ -565,18 +436,20 @@ export async function getDashboardStats(
         })
         return 0
       }),
-      calculateActivityStreakStatus(userId).catch((err) => {
-        console.error(`${debugPrefix} calculateActivityStreakStatus failed`, {
-          userId,
-          error: err,
-        })
-        return {
-          currentStreak: 0,
-          isActiveToday: false,
-          isAtRisk: false,
+      calculateActivityStreakStatus(userId, timezoneOffsetMinutes).catch(
+        (err) => {
+          console.error(`${debugPrefix} calculateActivityStreakStatus failed`, {
+            userId,
+            error: err,
+          })
+          return {
+            currentStreak: 0,
+            isActiveToday: false,
+            isAtRisk: false,
+          }
         }
-      }),
-      calculateLongestStreak(userId).catch((err) => {
+      ),
+      calculateLongestStreak(userId, timezoneOffsetMinutes).catch((err) => {
         console.error(`${debugPrefix} calculateLongestStreak failed`, {
           userId,
           error: err,
@@ -613,75 +486,9 @@ export async function getDashboardStats(
       }),
     ])
 
-    // Calculate next goal based on continuous activity streak
-    const continuousPracticeDays = activityStreakStatus.currentStreak
-    const baseGoalTiers = [30, 60, 90, 180, 365]
-    const ultimateGoal = 365
-
-    // Count how many base tiers (including the first yearly 365) are achieved
-    const baseTiersAchieved = baseGoalTiers.filter(
-      (tier) => continuousPracticeDays >= tier
-    ).length
-
-    // How many full years have been completed (1 => first 365 achieved)
-    const yearsCompleted = Math.floor(continuousPracticeDays / ultimateGoal)
-
-    // Additional yearly milestones beyond the first year
-    const extraYearlyTiersAchieved = Math.max(0, yearsCompleted - 1)
-
-    // Total tiers achieved includes the base tiers plus any extra yearly milestones
-    const tiersAchieved = baseTiersAchieved + extraYearlyTiersAchieved
-
-    // Define encouraging names for each achieved tier. Additional yearly names
-    // can be appended later; when not provided, we reuse the last name.
-    const tierNames = [
-      'Get started!', // 0 tiers
-      'Yoga practitioner in Training', // 30 days
-      'Dedicated to Yoga', // 60 days
-      'Discover the Inner Guru', // 90 days
-      'Six (6) month Sage', // 180 days
-      'Yearly Transformation', // 365 days
-      'The Acharya Teacher', // 2nd year
-      'The Muni Sage', // 3rd year
-      // future yearly names may be appended here
-    ]
-
-    const tierIndex = Math.max(0, Math.min(tiersAchieved, tierNames.length - 1))
-    const currentTierName = tierNames[tierIndex] ?? 'Get started!'
-
-    // How many full 365-day cycles have been completed
-    const ultimateGoalsCompleted = yearsCompleted
-
-    // Determine next goal:
-    // - If there's a base tier ahead, use that.
-    // - Otherwise use the next multiple of 365 (next yearly goal).
-    const nextBaseGoal = baseGoalTiers.find(
-      (tier) => continuousPracticeDays < tier
+    const nextGoal = buildNextGoalFromActivityStreak(
+      activityStreakStatus.currentStreak
     )
-    const goalTarget =
-      nextBaseGoal ||
-      (Math.floor(continuousPracticeDays / ultimateGoal) + 1) * ultimateGoal
-    const daysRemaining = goalTarget - continuousPracticeDays
-
-    const nextGoal = {
-      text:
-        daysRemaining > 0
-          ? `Practice ${daysRemaining} More ${daysRemaining === 1 ? 'Day' : 'Days'}`
-          : goalTarget === ultimateGoal
-            ? 'Ultimate Goal Achieved! 🎉'
-            : goalTarget > ultimateGoal
-              ? 'Yearly Goal Achieved! 🎉'
-              : 'Goal Achieved! 🎉',
-      current: continuousPracticeDays,
-      target: goalTarget,
-      progress: Math.min(
-        Math.round((continuousPracticeDays / goalTarget) * 100),
-        100
-      ),
-      tiersAchieved,
-      tierName: currentTierName,
-      ultimateGoalsCompleted,
-    }
 
     return {
       loginStreak,

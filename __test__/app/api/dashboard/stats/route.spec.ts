@@ -152,7 +152,32 @@ describe('Dashboard Stats API Route', () => {
       expect(prisma.userData.findUnique).toHaveBeenCalledWith({
         where: { email: 'test@example.com' },
       })
-      expect(mockGetDashboardStats).toHaveBeenCalledWith('user-123')
+      expect(mockGetDashboardStats).toHaveBeenCalledWith('user-123', 0)
+    })
+
+    it('should pass timezoneOffsetMinutes query parameter to dashboard service', async () => {
+      const mockUserData = {
+        id: 'user-123',
+        email: 'test@example.com',
+        name: 'Test User',
+      }
+
+      mockAuth.mockResolvedValue({
+        user: { email: 'test@example.com' },
+        expires: new Date().toISOString(),
+      } as any)
+      ;(prisma.userData.findUnique as jest.Mock).mockResolvedValue(mockUserData)
+      mockGetDashboardStats.mockResolvedValue(mockDashboardData)
+
+      const request = new Request(
+        'http://localhost:3000/api/dashboard/stats?timezoneOffsetMinutes=480'
+      )
+      const response = await GET(request)
+      const data = await response.json()
+
+      expect(response.status).toBe(200)
+      expect(data.success).toBe(true)
+      expect(mockGetDashboardStats).toHaveBeenCalledWith('user-123', 480)
     })
 
     it('should include all dashboard data properties', async () => {

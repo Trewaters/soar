@@ -3,9 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { useSession, signIn } from 'next-auth/react'
 import AsanaActivityList from '@app/clientComponents/AsanaActivityList'
-import { getUserActivities } from '@lib/asanaActivityClientService'
-import { getUserSeriesActivities } from '@lib/seriesActivityClientService'
-import { getUserSequenceActivities } from '@lib/sequenceActivityClientService'
+import { fetchCombinedUserActivities } from '@app/lib/activityStreakClient'
 import userEvent from '@testing-library/user-event'
 
 // Mock next-auth
@@ -14,17 +12,9 @@ jest.mock('next-auth/react', () => ({
   signIn: jest.fn(),
 }))
 
-// Mock services
-jest.mock('@lib/asanaActivityClientService', () => ({
-  getUserActivities: jest.fn(),
-}))
-
-jest.mock('@lib/seriesActivityClientService', () => ({
-  getUserSeriesActivities: jest.fn(),
-}))
-
-jest.mock('@lib/sequenceActivityClientService', () => ({
-  getUserSequenceActivities: jest.fn(),
+// Mock centralized activity helper
+jest.mock('@app/lib/activityStreakClient', () => ({
+  fetchCombinedUserActivities: jest.fn(),
 }))
 
 // Mock LoadingSkeleton
@@ -36,14 +26,9 @@ jest.mock('@app/clientComponents/LoadingSkeleton', () => {
 
 const mockUseSession = useSession as jest.MockedFunction<typeof useSession>
 const mockSignIn = signIn as jest.MockedFunction<typeof signIn>
-const mockGetUserActivities = getUserActivities as jest.MockedFunction<
-  typeof getUserActivities
->
-const mockGetUserSeriesActivities =
-  getUserSeriesActivities as jest.MockedFunction<typeof getUserSeriesActivities>
-const mockGetUserSequenceActivities =
-  getUserSequenceActivities as jest.MockedFunction<
-    typeof getUserSequenceActivities
+const mockFetchCombinedUserActivities =
+  fetchCombinedUserActivities as jest.MockedFunction<
+    typeof fetchCombinedUserActivities
   >
 
 describe('AsanaActivityList Component', () => {
@@ -106,9 +91,7 @@ describe('AsanaActivityList Component', () => {
         update: jest.fn(),
       })
 
-      mockGetUserActivities.mockResolvedValue([])
-      mockGetUserSeriesActivities.mockResolvedValue([])
-      mockGetUserSequenceActivities.mockResolvedValue([])
+      mockFetchCombinedUserActivities.mockResolvedValue([])
 
       render(<AsanaActivityList />)
 
@@ -136,6 +119,7 @@ describe('AsanaActivityList Component', () => {
           notes: 'Great pose',
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
+          type: 'asana',
         },
       ]
 
@@ -150,12 +134,14 @@ describe('AsanaActivityList Component', () => {
           duration: 600,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
+          type: 'series',
         },
       ]
 
-      mockGetUserActivities.mockResolvedValue(mockAsanaActivities as any)
-      mockGetUserSeriesActivities.mockResolvedValue(mockSeriesActivities as any)
-      mockGetUserSequenceActivities.mockResolvedValue([])
+      mockFetchCombinedUserActivities.mockResolvedValue([
+        ...(mockAsanaActivities as any),
+        ...(mockSeriesActivities as any),
+      ])
 
       render(<AsanaActivityList />)
 
@@ -172,7 +158,9 @@ describe('AsanaActivityList Component', () => {
         update: jest.fn(),
       })
 
-      mockGetUserActivities.mockRejectedValue(new Error('Failed to fetch'))
+      mockFetchCombinedUserActivities.mockRejectedValue(
+        new Error('Failed to fetch')
+      )
 
       render(<AsanaActivityList />)
 

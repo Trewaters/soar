@@ -5,6 +5,14 @@
  */
 
 import { prisma } from './prismaClient'
+import {
+  calculateCurrentActivityStreakFromDateKeys,
+  getUniqueActivityDateKeys,
+} from './activityStreakCalculator'
+import {
+  extractActivityDatesFromSources,
+  fetchUserActivitySourceRecords,
+} from './activityStreakServer'
 
 // Type definitions
 export interface NotificationPreferences {
@@ -495,85 +503,19 @@ export async function checkActivityStreaks(): Promise<
       },
     })
 
-    const today = new Date()
-    const todayStr = today.toISOString().split('T')[0]
-    const yesterdayStr = new Date(today.getTime() - 24 * 60 * 60 * 1000)
-      .toISOString()
-      .split('T')[0]
-
     for (const user of users) {
-      // Get all practice activities
-      const [asanaActivities, seriesActivities, sequenceActivities] =
-        await Promise.all([
-          prisma.asanaActivity.findMany({
-            where: { userId: user.id },
-            select: { datePerformed: true },
-          }),
-          prisma.seriesActivity.findMany({
-            where: { userId: user.id },
-            select: { datePerformed: true },
-          }),
-          prisma.sequenceActivity.findMany({
-            where: { userId: user.id },
-            select: { datePerformed: true },
-          }),
-        ])
-
-      // Combine all activities
-      const allActivities: Date[] = [
-        ...asanaActivities.map((a: { datePerformed: Date }) => a.datePerformed),
-        ...seriesActivities.map(
-          (a: { datePerformed: Date }) => a.datePerformed
-        ),
-        ...sequenceActivities.map(
-          (a: { datePerformed: Date }) => a.datePerformed
-        ),
-      ]
+      const activitySources = await fetchUserActivitySourceRecords(user.id)
+      const allActivities = extractActivityDatesFromSources(activitySources)
 
       if (allActivities.length === 0) continue
 
-      // Get unique days with activity
-      const uniqueDays = new Set<string>()
-      for (const activity of allActivities) {
-        const activityDate = new Date(activity)
-        const dateStr = activityDate.toISOString().split('T')[0]
-        uniqueDays.add(dateStr)
-      }
-
-      // Sort days in descending order
-      const sortedDays = Array.from(uniqueDays).sort().reverse()
-      const lastActivityStr = sortedDays[0]
-
-      // Calculate current streak
-      const lastActivityDate = new Date(lastActivityStr + 'T00:00:00.000Z')
-      const todayDate = new Date(todayStr + 'T00:00:00.000Z')
-
-      const daysSinceActivity = Math.floor(
-        (todayDate.getTime() - lastActivityDate.getTime()) /
-          (1000 * 60 * 60 * 24)
-      )
-
-      // Calculate streak
-      let currentStreak = 0
-      if (daysSinceActivity <= 1) {
-        for (let i = 0; i < sortedDays.length; i++) {
-          const expectedDate = new Date(todayDate)
-          expectedDate.setUTCDate(todayDate.getUTCDate() - i)
-          const expectedStr = expectedDate.toISOString().split('T')[0]
-
-          if (sortedDays[i] === expectedStr) {
-            currentStreak++
-          } else {
-            break
-          }
-        }
-      }
-
-      const practicedToday = sortedDays[0] === todayStr
-      const practicedYesterday = sortedDays[0] === yesterdayStr
+      const sortedDays = getUniqueActivityDateKeys(allActivities)
+      const streakStatus =
+        calculateCurrentActivityStreakFromDateKeys(sortedDays)
+      const currentStreak = streakStatus.currentStreak
 
       // Streak about to break warning (practiced yesterday, but not today)
-      if (!practicedToday && practicedYesterday && currentStreak >= 3) {
+      if (streakStatus.isAtRisk && currentStreak >= 3) {
         usersToNotify.push({
           userId: user.id,
           email: user.email || '',
@@ -586,7 +528,7 @@ export async function checkActivityStreaks(): Promise<
 
       // Milestone celebrations (7, 14, 30, 60, 90, 180, 365 days)
       const milestones = [7, 14, 30, 60, 90, 180, 365]
-      if (practicedToday && milestones.includes(currentStreak)) {
+      if (streakStatus.isActiveToday && milestones.includes(currentStreak)) {
         usersToNotify.push({
           userId: user.id,
           email: user.email || '',

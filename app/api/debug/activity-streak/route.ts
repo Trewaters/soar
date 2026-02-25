@@ -1,8 +1,16 @@
 import { NextResponse } from 'next/server'
 import { auth } from '../../../../auth'
 import { prisma } from '../../../../app/lib/prismaClient'
+import {
+  calculateCurrentActivityStreakFromDateKeys,
+  getUniqueActivityDateKeys,
+} from '../../../../app/lib/activityStreakCalculator'
+import {
+  fetchUserActivitySourceRecords,
+  mergeTypedServerActivityRecords,
+} from '../../../../app/lib/activityStreakServer'
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const session = await auth()
 
@@ -25,28 +33,21 @@ export async function GET() {
       )
     }
 
-    // Get all practice activities
-    const [asanaActivities, seriesActivities, sequenceActivities] =
-      await Promise.all([
-        prisma.asanaActivity.findMany({
-          where: { userId: userData.id },
-          select: { datePerformed: true, createdAt: true },
-          orderBy: { datePerformed: 'desc' },
-          take: 20,
-        }),
-        prisma.seriesActivity.findMany({
-          where: { userId: userData.id },
-          select: { datePerformed: true, createdAt: true },
-          orderBy: { datePerformed: 'desc' },
-          take: 20,
-        }),
-        prisma.sequenceActivity.findMany({
-          where: { userId: userData.id },
-          select: { datePerformed: true, createdAt: true },
-          orderBy: { datePerformed: 'desc' },
-          take: 20,
-        }),
-      ])
+    const activitySources = await fetchUserActivitySourceRecords(userData.id, {
+      includeCreatedAt: true,
+      orderDesc: true,
+      take: 20,
+    })
+
+    const timezoneOffsetParam = new URL(request.url).searchParams.get(
+      'timezoneOffsetMinutes'
+    )
+    const parsedOffset = timezoneOffsetParam
+      ? Number(timezoneOffsetParam)
+      : Number.NaN
+    const timezoneOffsetMinutes = Number.isFinite(parsedOffset)
+      ? Math.max(-840, Math.min(840, parsedOffset))
+      : 0
 
     // Get server date info
     const serverNow = new Date()
@@ -62,33 +63,18 @@ export async function GET() {
       formatted: `${serverNow.getFullYear()}-${String(serverNow.getMonth() + 1).padStart(2, '0')}-${String(serverNow.getDate()).padStart(2, '0')}`,
     }
 
-    // Process all activities
-    const allActivities = [
-      ...asanaActivities.map((a) => ({
-        type: 'asana',
-        datePerformed: a.datePerformed,
-        createdAt: a.createdAt,
-      })),
-      ...seriesActivities.map((a) => ({
-        type: 'series',
-        datePerformed: a.datePerformed,
-        createdAt: a.createdAt,
-      })),
-      ...sequenceActivities.map((a) => ({
-        type: 'sequence',
-        datePerformed: a.datePerformed,
-        createdAt: a.createdAt,
-      })),
-    ]
+    const allActivities = mergeTypedServerActivityRecords(activitySources, {
+      sortDesc: true,
+    })
 
     // Get unique days with detailed info
     const uniqueDaysMap = new Map<string, any>()
     for (const activity of allActivities) {
+      const dateStr = getUniqueActivityDateKeys(
+        [activity.datePerformed],
+        timezoneOffsetMinutes
+      )[0]
       const activityDate = new Date(activity.datePerformed)
-      const year = activityDate.getFullYear()
-      const month = String(activityDate.getMonth() + 1).padStart(2, '0')
-      const day = String(activityDate.getDate()).padStart(2, '0')
-      const dateStr = `${year}-${month}-${day}`
 
       if (!uniqueDaysMap.has(dateStr)) {
         uniqueDaysMap.set(dateStr, {
@@ -107,54 +93,10 @@ export async function GET() {
       .map((d) => d.dateStr)
       .sort()
       .reverse()
-
-    // Calculate streak logic
-    let streak = 0
-    const streakDays = []
-
-    for (let i = 0; i < sortedDays.length; i++) {
-      const expectedDate = new Date(
-        serverNow.getFullYear(),
-        serverNow.getMonth(),
-        serverNow.getDate() - i
-      )
-      const expYear = expectedDate.getFullYear()
-      const expMonth = String(expectedDate.getMonth() + 1).padStart(2, '0')
-      const expDay = String(expectedDate.getDate()).padStart(2, '0')
-      const expectedStr = `${expYear}-${expMonth}-${expDay}`
-
-      const match = sortedDays[i] === expectedStr
-      streakDays.push({
-        expected: expectedStr,
-        actual: sortedDays[i] || 'none',
-        match,
-      })
-
-      if (match) {
-        streak++
-      } else {
-        break
-      }
-    }
-
-    // Check if last activity is within 1 day
-    const lastActivityStr = sortedDays[0]
-    let daysDiff = null
-    if (lastActivityStr) {
-      const [lastYear, lastMonth, lastDay] = lastActivityStr
-        .split('-')
-        .map(Number)
-      const lastActivityDate = new Date(lastYear, lastMonth - 1, lastDay)
-      const todayDate = new Date(
-        serverNow.getFullYear(),
-        serverNow.getMonth(),
-        serverNow.getDate()
-      )
-      daysDiff = Math.floor(
-        (todayDate.getTime() - lastActivityDate.getTime()) /
-          (1000 * 60 * 60 * 24)
-      )
-    }
+    const streakStatus = calculateCurrentActivityStreakFromDateKeys(
+      sortedDays,
+      timezoneOffsetMinutes
+    )
 
     return NextResponse.json({
       success: true,
@@ -162,19 +104,18 @@ export async function GET() {
         userId: userData.id,
         userEmail: session.user.email,
         serverDate,
+        timezoneOffsetMinutes,
         totalActivities: allActivities.length,
         activityCounts: {
-          asana: asanaActivities.length,
-          series: seriesActivities.length,
-          sequence: sequenceActivities.length,
+          asana: activitySources.asanaActivities.length,
+          series: activitySources.seriesActivities.length,
+          sequence: activitySources.sequenceActivities.length,
         },
         uniqueDaysWithActivity: uniqueDays,
         sortedDays,
-        lastActivityDate: lastActivityStr,
-        daysSinceLastActivity: daysDiff,
-        streakBroken: daysDiff !== null && daysDiff > 1,
-        calculatedStreak: streak,
-        streakCalculationDetails: streakDays.slice(0, 10),
+        currentStreak: streakStatus.currentStreak,
+        isActiveToday: streakStatus.isActiveToday,
+        isAtRisk: streakStatus.isAtRisk,
       },
     })
   } catch (error) {

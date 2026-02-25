@@ -22,6 +22,7 @@ import PracticeHistoryChart from '@clientComponents/PracticeHistoryChart'
 import ProfileNavMenu from '@app/profile/ProfileNavMenu'
 import { useSession } from 'next-auth/react'
 import { UseUser } from '@context/UserContext'
+import { fetchUserActivityStreakSummary } from '@app/lib/activityStreakClient'
 
 interface StatCardProps {
   title: string
@@ -196,9 +197,33 @@ const Dashboard: React.FC = () => {
         const result = await response.json()
 
         if (result.success && result.data) {
-          // Override the loginStreak with the one from recordActivity API
+          let activityOverrides: Partial<DashboardData> = {}
+
+          try {
+            const activitySummary = await fetchUserActivityStreakSummary(userId)
+
+            activityOverrides = {
+              activityStreak: activitySummary.status.currentStreak,
+              activityStreakAtRisk: activitySummary.status.isAtRisk,
+              longestStreak: activitySummary.longestStreak,
+              nextGoal: activitySummary.nextGoal,
+            }
+          } catch (activityCalculationError) {
+            console.warn(
+              `${debugPrefix} Falling back to server activity metrics`,
+              {
+                error:
+                  activityCalculationError instanceof Error
+                    ? activityCalculationError.message
+                    : activityCalculationError,
+              }
+            )
+          }
+
+          // Override with freshest login streak and client-calculated activity metrics
           const finalData = {
             ...result.data,
+            ...activityOverrides,
             loginStreak: currentLoginStreak,
           }
           setDashboardData(finalData)

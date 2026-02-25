@@ -14,17 +14,16 @@ import WorkspacesIcon from '@mui/icons-material/Workspaces'
 import GroupWorkIcon from '@mui/icons-material/GroupWork'
 import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
 import {
-  getUserActivities,
-  type AsanaActivityData,
-} from '@lib/asanaActivityClientService'
-import { getUserSeriesActivities } from '@lib/seriesActivityClientService'
-import { getUserSequenceActivities } from '@lib/sequenceActivityClientService'
+  fetchCombinedUserActivities,
+  type UserActivityItem,
+} from '@app/lib/activityStreakClient'
+import { type AsanaActivityData } from '@lib/asanaActivityClientService'
 import LoadingSkeleton from '@app/clientComponents/LoadingSkeleton'
 import Link from 'next/link'
 import { NAV_PATHS } from '@app/utils/navigation/constants'
 
 type CombinedActivity =
-  | (AsanaActivityData & { type: 'asana' })
+  | (AsanaActivityData & UserActivityItem & { type: 'asana' })
   | {
       id: string
       userId: string
@@ -91,34 +90,9 @@ export default function AsanaActivityList() {
       setLoading(true)
       setError(null)
       try {
-        const [asanaData, seriesData, sequenceData] = await Promise.all([
-          getUserActivities(session.user.id),
-          getUserSeriesActivities(session.user.id),
-          getUserSequenceActivities(session.user.id),
-        ])
-        // Transform data to CombinedActivity with type property
-        const combinedData: CombinedActivity[] = [
-          ...asanaData.map((activity) => ({
-            ...activity,
-            type: 'asana' as const,
-          })),
-          ...seriesData.map((activity) => ({
-            ...activity,
-            type: 'series' as const,
-          })),
-          ...sequenceData.map((activity) => ({
-            ...activity,
-            type: 'sequence' as const,
-          })),
-        ]
-        // Sort by datePerformed descending
-        const sorted = combinedData.sort(
-          (a: CombinedActivity, b: CombinedActivity) =>
-            new Date(b.datePerformed).getTime() -
-            new Date(a.datePerformed).getTime()
-        )
+        const sorted = await fetchCombinedUserActivities(session.user.id)
         // Limit to 5 most recent activities
-        setActivities(sorted.slice(0, 5))
+        setActivities(sorted.slice(0, 5) as CombinedActivity[])
       } catch (e: any) {
         setError(e.message || 'Error loading activity')
       } finally {

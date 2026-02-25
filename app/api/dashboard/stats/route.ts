@@ -3,7 +3,7 @@ import { auth } from '../../../../auth'
 import { getDashboardStats } from '../../../lib/dashboardService'
 import { prisma } from '../../../../app/lib/prismaClient'
 
-export async function GET() {
+export async function GET(request?: Request) {
   const debugPrefix = '[Dashboard Stats API Debug]'
   const startTime = Date.now()
 
@@ -37,9 +37,24 @@ export async function GET() {
       )
     }
 
+    const timezoneOffsetParam = request
+      ? new URL(request.url).searchParams.get('timezoneOffsetMinutes')
+      : null
+
+    const parsedOffset = timezoneOffsetParam
+      ? Number(timezoneOffsetParam)
+      : Number.NaN
+
+    const timezoneOffsetMinutes = Number.isFinite(parsedOffset)
+      ? Math.max(-840, Math.min(840, parsedOffset))
+      : 0
+
     // Get real dashboard statistics from the service
 
-    const dashboardData = await getDashboardStats(userData.id)
+    const dashboardData = await getDashboardStats(
+      userData.id,
+      timezoneOffsetMinutes
+    )
 
     return NextResponse.json({
       success: true,
