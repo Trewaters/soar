@@ -375,15 +375,15 @@ export default function Page() {
                     color="primary"
                     sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                   >
-                    Series Image
+                    Flow Image
                   </Typography>
                   <Typography
                     variant="body2"
                     color="text.secondary"
                     sx={{ mb: 2 }}
                   >
-                    Upload one image to represent this series. This will help
-                    identify your series in the library.
+                    Upload one image to represent this flow. Something
+                    inspirational that captures the essence of your Flow.
                   </Typography>
 
                   {uploadedImages.length === 0 ? (
@@ -391,7 +391,7 @@ export default function Page() {
                       title=""
                       variant="upload-only"
                       onImageUploaded={handleImageUploaded}
-                      uploadTitle="Upload Series Image"
+                      uploadTitle="Upload Flow Image"
                       uploadSubtitle="Drag and drop an image here, or click to select (one image only)"
                     />
                   ) : (
@@ -408,7 +408,7 @@ export default function Page() {
                             verticalAlign: 'middle',
                           }}
                         />
-                        Series image uploaded successfully
+                        Flow image uploaded successfully
                       </Typography>
                       <Box
                         sx={{
@@ -423,7 +423,7 @@ export default function Page() {
                         <Box
                           component="img"
                           src={uploadedImages[0].url}
-                          alt={uploadedImages[0].altText || 'Series image'}
+                          alt={uploadedImages[0].altText || 'Flow image'}
                           sx={{
                             width: '100%',
                             height: 200,
@@ -447,7 +447,7 @@ export default function Page() {
                             }}
                           >
                             <ImageIcon sx={{ fontSize: 14 }} />
-                            {uploadedImages[0].fileName || 'Series Image'}
+                            {uploadedImages[0].fileName || 'Flow Image'}
                           </Typography>
                         </Box>
                       </Box>
