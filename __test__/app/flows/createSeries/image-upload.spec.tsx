@@ -133,7 +133,7 @@ describe('CreateSeries Image Upload Feature', () => {
   })
 
   describe('Image Upload Section Rendering', () => {
-    it('should render the Series Image section header', async () => {
+    it('should render the Flow Image section header', async () => {
       render(
         <TestWrapper>
           <Page />
@@ -141,7 +141,7 @@ describe('CreateSeries Image Upload Feature', () => {
       )
 
       await waitFor(() => {
-        expect(screen.getByText('Series Image')).toBeInTheDocument()
+        expect(screen.getByText('Flow Image')).toBeInTheDocument()
       })
     })
 
@@ -154,7 +154,7 @@ describe('CreateSeries Image Upload Feature', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText(/Upload one image to represent this series/i)
+          screen.getByText(/Upload one image to represent this flow/i)
         ).toBeInTheDocument()
       })
     })
@@ -180,7 +180,7 @@ describe('CreateSeries Image Upload Feature', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('upload-title')).toHaveTextContent(
-          'Upload Series Image'
+          'Upload Flow Image'
         )
       })
     })
@@ -266,7 +266,7 @@ describe('CreateSeries Image Upload Feature', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText('Series image uploaded successfully')
+          screen.getByText('Flow image uploaded successfully')
         ).toBeInTheDocument()
       })
     })
@@ -483,7 +483,7 @@ describe('CreateSeries Image Upload Feature', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText('Series image uploaded successfully')
+          screen.getByText('Flow image uploaded successfully')
         ).toBeInTheDocument()
       })
 
@@ -493,7 +493,7 @@ describe('CreateSeries Image Upload Feature', () => {
       // Success message should be gone
       await waitFor(() => {
         expect(
-          screen.queryByText('Series image uploaded successfully')
+          screen.queryByText('Flow image uploaded successfully')
         ).not.toBeInTheDocument()
       })
     })

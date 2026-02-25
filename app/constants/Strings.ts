@@ -1,6 +1,9 @@
 export abstract class AppText {
   public static readonly APP_NAME = 'Uvuyoga'
   public static readonly APP_BUTTON_SUBMIT = 'Submit'
+  public static readonly APP_BUTTON_CANCEL = 'Cancel'
+  public static readonly APP_BUTTON_SAVE = 'Save'
+  public static readonly APP_BUTTON_CREATE_FLOW = 'Create Flow'
   public static readonly APP_SIGN_IN = 'Sign In'
   public static readonly APP_SIGN_UP = 'Sign Up'
   public static readonly APP_CREATE_ACCOUNT = 'Create Account'

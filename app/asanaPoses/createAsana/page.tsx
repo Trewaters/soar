@@ -31,6 +31,8 @@ import ImageUploadWithFallback from '@app/clientComponents/imageUpload/ImageUplo
 import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUploadWithFallback'
 import { deletePoseImage } from '@lib/imageService'
 import DeleteIcon from '@mui/icons-material/Delete'
+import SaveIcon from '@mui/icons-material/Save'
+import CloseIcon from '@mui/icons-material/Close'
 import {
   FreemiumNotification,
   useFreemiumNotification,
@@ -579,6 +581,7 @@ export default function Page() {
                 variant="contained"
                 size="large"
                 disabled={isSubmitting || successState.isNavigating}
+                startIcon={<SaveIcon />}
                 sx={{
                   borderRadius: '12px',
                   py: 1.5,
@@ -602,8 +605,10 @@ export default function Page() {
                   // Forward to search asana view
                   router.push(NAV_PATHS.ASANA_POSES)
                 }}
-                variant="outlined"
+                variant="contained"
+                color="error"
                 size="large"
+                startIcon={<CloseIcon />}
                 sx={{
                   borderRadius: '12px',
                   py: 1.5,
