@@ -12,10 +12,13 @@ import {
   Card,
   CardMedia,
   Button,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import SplashHeader from '@app/clientComponents/splash-header'
-import Image from 'next/image'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import HelpButton from '@app/clientComponents/HelpButton'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
@@ -35,15 +38,14 @@ import {
 import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import { useSearchParams } from 'next/navigation'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
-import EditIcon from '@mui/icons-material/Edit'
-import IconButton from '@mui/material/IconButton'
+import Paper from '@mui/material/Paper'
 import EditSeriesDialog, {
   Series as EditSeriesShape,
   Asana as EditAsanaShape,
 } from '@app/flows/editSeries/EditSeriesDialog'
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
-import SeriesPoseList from '@app/clientComponents/SeriesPoseList'
 import { getPoseIdByName } from '@lib/poseService'
+import FlowTitlePoseListSection from '@app/clientComponents/FlowTitlePoseListSection'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -520,59 +522,124 @@ export default function Page() {
           </Box>
         )}
         {flow && (
-          <Box width="100%" sx={{ p: 2, maxWidth: '600px' }} key={flow.id}>
+          <Box
+            width="100%"
+            sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}
+            key={flow.id}
+          >
             {/* If editing, render the EditSeriesDialog inline here so the editor replaces the series content */}
             {editOpen ? (
-              <EditSeriesDialog
-                inline
-                open={editOpen}
-                onClose={() => setEditOpen(false)}
-                series={dialogSeries!}
-                onSave={handleEditSave}
-                onDelete={handleEditDelete}
-              />
+              <Box sx={{ width: '100%', maxWidth: '600px', p: 2 }}>
+                <EditSeriesDialog
+                  inline
+                  open={editOpen}
+                  onClose={() => setEditOpen(false)}
+                  series={dialogSeries!}
+                  onSave={handleEditSave}
+                  onDelete={handleEditDelete}
+                />
+              </Box>
             ) : (
               <Box
-                display={'flex'}
-                flexDirection={'column'}
-                alignItems={'center'}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
               >
-                {/* Title + optional Edit button for owners */}
-                <Box className="journal">
-                  <Box className="journalTitleContainer">
-                    <Typography
-                      variant="h3"
-                      textAlign={'center'}
-                      sx={{
-                        color: `${theme.palette.primary.main}`,
-                      }}
+                {/* Activity Tracker - displayed above the main container */}
+                <Box
+                  sx={{
+                    mb: 2,
+                    mx: 'auto',
+                    width: '100%',
+                    maxWidth: '600px',
+                  }}
+                >
+                  <ActivityTracker
+                    entityId={flow.id?.toString() || ''}
+                    entityName={flow.seriesName}
+                    entityType="series"
+                    variant="chips"
+                    checkActivity={checkSeriesActivityExists}
+                    createActivity={createSeriesActivity}
+                    deleteActivity={deleteSeriesActivity}
+                    onActivityToggle={handleActivityToggle}
+                  />
+                </Box>
+
+                {/* Weekly Activity Accordion - displayed above the main container */}
+                {flow.id && flow.id !== '' && (
+                  <Accordion
+                    elevation={0}
+                    sx={{
+                      mb: 2,
+                      mx: 'auto',
+                      width: '100%',
+                      maxWidth: '600px',
+                      backgroundColor: 'transparent',
+                      '&:before': {
+                        display: 'none',
+                      },
+                    }}
+                  >
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="weekly-activity-content"
+                      id="weekly-activity-header"
                     >
-                      {flow.seriesName}
-                    </Typography>
-                    {isOwner && (
-                      <IconButton
-                        aria-label="Edit flow"
-                        onClick={() => setEditOpen(true)}
-                        color="primary"
-                        size="small"
-                      >
-                        <EditIcon />
-                      </IconButton>
-                    )}
-                  </Box>
-                  <SeriesPoseList
+                      <Typography variant="h6">Weekly Activity</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <WeeklyActivityViewer
+                        entityId={flow.id.toString()}
+                        entityName={flow.seriesName}
+                        entityType="series"
+                        variant="detailed"
+                        refreshTrigger={refreshTrigger}
+                      />
+                    </AccordionDetails>
+                  </Accordion>
+                )}
+
+                {/* Main content container */}
+                <Paper
+                  elevation={0}
+                  sx={{
+                    width: '100%',
+                    maxWidth: '600px',
+                    p: 3,
+                    backgroundColor: 'transparent',
+                    borderRadius: 2,
+                  }}
+                >
+                  {/* Title + Edit button + Series Pose List - unified in one journal component */}
+                  <FlowTitlePoseListSection
+                    title={flow.seriesName}
+                    isOwner={isOwner}
+                    onEditClick={() => setEditOpen(true)}
                     seriesPoses={flow.seriesPoses}
                     poseIds={poseIds}
                     getHref={(poseName) => getPoseNavigationUrlSync(poseName)}
                     linkColor="primary.contrastText"
                     dataTestIdPrefix="practice-series-pose"
                   />
-                  {/* Series image (if uploaded) - shown between pose list and description */}
-                  {imageUrl ? (
-                    <Box sx={{ width: '100%', maxWidth: 600, mt: 2 }}>
+
+                  {/* Series Image */}
+                  {imageUrl && (
+                    <Box
+                      sx={{
+                        mt: 3,
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                      }}
+                    >
                       <Card
                         sx={{
                           position: 'relative',
+                          width: '100%',
                           boxShadow: 'none',
                           backgroundColor: 'transparent',
                         }}
@@ -591,62 +658,30 @@ export default function Page() {
                         />
                       </Card>
                     </Box>
-                  ) : null}
-                </Box>
-                <Box
-                  className={'journal'}
-                  sx={{
-                    marginTop: '32px',
-                    p: 4,
-                    color: 'primary.main',
-                    backgroundColor: 'navSplash.dark',
-                  }}
-                >
-                  <Stack flexDirection={'row'} alignItems={'center'}>
-                    <Typography variant="h3" sx={{ mr: 2 }}>
-                      Description
-                    </Typography>
-                    <Image
-                      src={'/icons/designImages/leaf-2.svg'}
-                      alt={'leaf icon'}
-                      height={21}
-                      width={21}
-                    ></Image>
-                  </Stack>
-                  <Typography
-                    color="primary.contrastText"
-                    variant="body1"
-                    sx={{ whiteSpace: 'pre-line' }}
-                  >
-                    {flow.description}
-                  </Typography>
-                </Box>
+                  )}
 
-                {/* Series Activity Tracker */}
-                <Box sx={{ mt: 3 }}>
-                  <ActivityTracker
-                    entityId={flow.id?.toString() || ''}
-                    entityName={flow.seriesName}
-                    entityType="series"
-                    variant="card"
-                    checkActivity={checkSeriesActivityExists}
-                    createActivity={createSeriesActivity}
-                    deleteActivity={deleteSeriesActivity}
-                    onActivityToggle={handleActivityToggle}
-                  />
-                </Box>
-
-                {flow.id && flow.id !== '' && (
-                  <Box sx={{ mt: 3 }}>
-                    <WeeklyActivityViewer
-                      entityId={flow.id.toString()}
-                      entityName={flow.seriesName}
-                      entityType="series"
-                      variant="detailed"
-                      refreshTrigger={refreshTrigger}
-                    />
-                  </Box>
-                )}
+                  {/* Description */}
+                  {flow.description && (
+                    <Box sx={{ width: '100%', mt: 3 }}>
+                      <Typography
+                        variant="h4"
+                        sx={{
+                          mb: 1,
+                          color: `${theme.palette.primary.main}`,
+                        }}
+                      >
+                        Description
+                      </Typography>
+                      <Typography
+                        color="primary.contrastText"
+                        variant="body1"
+                        sx={{ whiteSpace: 'pre-line' }}
+                      >
+                        {flow.description}
+                      </Typography>
+                    </Box>
+                  )}
+                </Paper>
               </Box>
             )}
           </Box>

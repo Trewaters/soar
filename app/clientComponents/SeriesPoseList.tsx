@@ -231,6 +231,7 @@ export default function SeriesPoseList({
                     fontStyle: 'normal',
                     display: 'block',
                     mt: 0.5,
+                    ml: 2,
                     overflowWrap: 'break-word',
                     wordBreak: 'break-word',
                     whiteSpace: 'normal',

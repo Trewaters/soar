@@ -10,6 +10,9 @@ import {
   Stack,
   Typography,
   IconButton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
@@ -22,6 +25,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import ViewStreamIcon from '@mui/icons-material/ViewStream'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import CloseIcon from '@mui/icons-material/Close'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import SplashHeader from '@app/clientComponents/splash-header'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import HelpButton from '@app/clientComponents/HelpButton'
@@ -609,8 +613,75 @@ export default function Page() {
               ) : null}
               {sequenceId !== null ||
               (!!singleSequence?.id && singleSequence.id !== 0) ? (
-                <Stack rowGap={3} alignItems="center">
-                  {paginatedData.map((seriesMini, i) => (
+                <>
+                  {/* Sequence Activity Tracker (moved to top after title per asana pattern) */}
+                  {singleSequence.id && singleSequence.id !== 0 && (
+                    <Box
+                      sx={{
+                        mt: 3,
+                        width: '100%',
+                        maxWidth: '600px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          mb: 2,
+                          mx: 'auto',
+                          width: '100%',
+                          maxWidth: '600px',
+                        }}
+                      >
+                        <ActivityTracker
+                          entityId={singleSequence.id.toString()}
+                          entityName={singleSequence.nameSequence}
+                          entityType="sequence"
+                          variant="chips"
+                          checkActivity={checkSequenceActivityExists}
+                          createActivity={createSequenceActivity}
+                          deleteActivity={deleteSequenceActivity}
+                          onActivityToggle={handleActivityToggle}
+                        />
+                      </Box>
+
+                      <Accordion
+                        elevation={0}
+                        sx={{
+                          mb: 2,
+                          mx: 'auto',
+                          width: '100%',
+                          maxWidth: '600px',
+                          backgroundColor: 'transparent',
+                          '&:before': {
+                            display: 'none',
+                          },
+                        }}
+                      >
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls="weekly-activity-content"
+                          id="weekly-activity-header"
+                        >
+                          <Typography variant="h6">Weekly Activity</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <WeeklyActivityViewer
+                            entityId={singleSequence.id.toString()}
+                            entityName={singleSequence.nameSequence}
+                            entityType="sequence"
+                            variant="detailed"
+                            refreshTrigger={refreshTrigger}
+                          />
+                        </AccordionDetails>
+                      </Accordion>
+                    </Box>
+                  )}
+
+                  <Stack rowGap={3} alignItems="center">
+                    {paginatedData.map((seriesMini, i) => (
                     <Card
                       key={i}
                       sx={{
@@ -912,35 +983,7 @@ export default function Page() {
                       {singleSequence.description}
                     </Typography>
                   </Box>
-                  {/* Sequence Activity Tracker */}
-                  {singleSequence.id && singleSequence.id !== 0 && (
-                    <Box sx={{ mt: 3 }}>
-                      <ActivityTracker
-                        entityId={singleSequence.id.toString()}
-                        entityName={singleSequence.nameSequence}
-                        entityType="sequence"
-                        variant="card"
-                        checkActivity={checkSequenceActivityExists}
-                        createActivity={createSequenceActivity}
-                        deleteActivity={deleteSequenceActivity}
-                        onActivityToggle={handleActivityToggle}
-                      />
-                    </Box>
-                  )}
-
-                  {singleSequence.id && singleSequence.id !== 0 && (
-                    <Box sx={{ mt: 3 }}>
-                      <WeeklyActivityViewer
-                        entityId={singleSequence.id.toString()}
-                        entityName={singleSequence.nameSequence}
-                        entityType="sequence"
-                        variant="detailed"
-                        refreshTrigger={refreshTrigger}
-                      />
-                    </Box>
-                  )}
-                </Stack>
-              ) : null}
+                </>\n              ) : null}
             </React.Fragment>
           </Stack>
         </Stack>
