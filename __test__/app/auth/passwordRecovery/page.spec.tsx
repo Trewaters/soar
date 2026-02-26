@@ -110,8 +110,6 @@ describe('PasswordRecoveryPage', () => {
 
   describe('Form Submission', () => {
     it('should submit form with email value', async () => {
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation()
-
       render(<PasswordRecoveryPage />)
 
       const emailInput = screen.getByLabelText(/email/i)
@@ -123,13 +121,37 @@ describe('PasswordRecoveryPage', () => {
       await user.click(submitButton)
 
       await waitFor(() => {
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'Password recovery requested for:',
-          'recovery@example.com'
-        )
+        expect(
+          screen.getByText(/if an account exists with this email/i)
+        ).toBeInTheDocument()
+        expect(emailInput).toHaveValue('recovery@example.com')
+      })
+    })
+
+    it('should submit form with pre-filled email', async () => {
+      const testEmail = 'prefilled@example.com'
+
+      mockUseSearchParams.mockReturnValue({
+        get: jest.fn((key) => (key === 'email' ? testEmail : null)),
+      } as any)
+
+      render(<PasswordRecoveryPage />)
+
+      const submitButton = screen.getByRole('button', {
+        name: /send temporary password/i,
+      })
+      await user.click(submitButton)
+
+      await waitFor(() => {
+        expect(
+          screen.getByText(/if an account exists with this email/i)
+        ).toBeInTheDocument()
+        expect(screen.getByLabelText(/email/i)).toHaveValue(testEmail)
       })
 
-      consoleSpy.mockRestore()
+      expect(
+        screen.getByText(/email pre-filled from your sign-in attempt/i)
+      ).toBeInTheDocument()
     })
 
     it('should show success message after submission', async () => {
@@ -171,31 +193,6 @@ describe('PasswordRecoveryPage', () => {
           screen.getByText(/if an account exists with this email/i)
         ).toBeInTheDocument()
       })
-    })
-
-    it('should submit form with pre-filled email', async () => {
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation()
-      const testEmail = 'prefilled@example.com'
-
-      mockUseSearchParams.mockReturnValue({
-        get: jest.fn((key) => (key === 'email' ? testEmail : null)),
-      } as any)
-
-      render(<PasswordRecoveryPage />)
-
-      const submitButton = screen.getByRole('button', {
-        name: /send temporary password/i,
-      })
-      await user.click(submitButton)
-
-      await waitFor(() => {
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'Password recovery requested for:',
-          testEmail
-        )
-      })
-
-      consoleSpy.mockRestore()
     })
 
     it('should keep submit button disabled when email is empty', () => {

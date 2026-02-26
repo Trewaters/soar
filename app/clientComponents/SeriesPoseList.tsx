@@ -85,7 +85,7 @@ export default function SeriesPoseList({
   const hrefResolver = getHref || defaultGetHref
 
   return (
-    <Stack spacing={0} sx={{ width: '100%', ...containerSx }}>
+    <Stack spacing={0} sx={[{ width: '100%' }, containerSx as any]}>
       {seriesPoses.map((pose, index) => {
         // Normalize pose entry to extract name, secondary, and alignment cues
         let poseName = ''
@@ -136,19 +136,27 @@ export default function SeriesPoseList({
           >
             <Box
               className="journalLine"
-              sx={{
-                // make entries visually seamless within the parent `.journal`
-                width: '100%',
-                borderBottom: 'none',
-                backgroundColor: 'transparent',
-                paddingTop: '8px',
-                paddingBottom: '8px',
-                paddingLeft: '8px',
-                paddingRight: 0,
-                whiteSpace: 'normal',
-                overflow: 'visible',
-                ...poseSx,
-              }}
+              sx={[
+                {
+                  // make entries visually seamless within the parent `.journal`
+                  width: '100%',
+                  borderBottom: 'none',
+                  backgroundColor: 'transparent',
+                  paddingTop: '8px',
+                  paddingBottom: '8px',
+                  paddingLeft: '8px',
+                  paddingRight: 0,
+                  // Override global `.journal .journalLine` row flex styles
+                  // so pose name, cues, and secondary text always stack vertically.
+                  display: 'flex !important',
+                  flexDirection: 'column !important',
+                  flexWrap: 'nowrap !important',
+                  alignItems: 'flex-start !important',
+                  whiteSpace: 'normal',
+                  overflow: 'visible',
+                },
+                poseSx as any,
+              ]}
             >
               {isPoseDeleted ? (
                 <Tooltip
@@ -210,7 +218,7 @@ export default function SeriesPoseList({
                     navigation.push(NAV_PATHS.PRACTICE_ASANAS)
                   }}
                   sx={{
-                    display: 'inline-block',
+                    display: 'block',
                     maxWidth: '100%',
                     overflowWrap: 'break-word',
                     wordBreak: 'break-word',
@@ -224,14 +232,13 @@ export default function SeriesPoseList({
               )}
               {alignmentCuesInline && (
                 <Typography
-                  component="span"
+                  component="div"
                   variant="body2"
                   color="text.secondary"
                   sx={{
                     fontStyle: 'normal',
                     display: 'block',
                     mt: 0.5,
-                    ml: 2,
                     overflowWrap: 'break-word',
                     wordBreak: 'break-word',
                     whiteSpace: 'normal',

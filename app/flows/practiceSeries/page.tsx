@@ -9,8 +9,6 @@ import {
   Stack,
   Typography,
   useTheme,
-  Card,
-  CardMedia,
   Button,
   Accordion,
   AccordionSummary,
@@ -46,6 +44,8 @@ import EditSeriesDialog, {
 import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 import { getPoseIdByName } from '@lib/poseService'
 import FlowTitlePoseListSection from '@app/clientComponents/FlowTitlePoseListSection'
+import ImageCarousel from '@app/clientComponents/imageUpload/ImageCarousel'
+import { PoseImageData } from 'types/images'
 
 export default function Page() {
   const { data: session } = useSession()
@@ -70,7 +70,7 @@ export default function Page() {
   const [loading, setLoading] = useState(false)
   const [acOpen, setAcOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
-  const [images, setImages] = useState<string[]>([])
+  const [images, setImages] = useState<PoseImageData[]>([])
   const [searchInputValue, setSearchInputValue] = useState('')
   const [seriesNotFoundError, setSeriesNotFoundError] = useState<string | null>(
     null
@@ -161,7 +161,10 @@ export default function Page() {
     fetchSeries()
   }, [fetchSeries])
 
-  // Handle series ID changes after series data is loaded
+  // Handle series ID changes after series data is loaded.
+  // This effect acts as a defensive safety net for cases where fetchSeries completes
+  // but the flow wasn't properly selected (e.g., race conditions or timing issues).
+  // It only triggers if a seriesId is in the URL and flow hasn't been set yet.
   useEffect(() => {
     if (seriesId && series.length > 0 && !flow) {
       const selectedSeries = series.find(
@@ -173,7 +176,7 @@ export default function Page() {
     }
   }, [seriesId, series, flow])
 
-  // Fetch images array for the selected series (prefer images[0] over legacy flow.image)
+  // Fetch images array for the selected series
   useEffect(() => {
     let mounted = true
     const abortController = new AbortController()
@@ -193,7 +196,24 @@ export default function Page() {
           return
         }
         const data = await res.json()
-        if (mounted) setImages(Array.isArray(data.images) ? data.images : [])
+        if (mounted && Array.isArray(data.images)) {
+          // Convert to ImageCarousel format
+          const carouselImages = data.images.map(
+            (url: string, index: number) =>
+              ({
+                id: `series-image-${index}`,
+                userId: '',
+                url,
+                altText: `${flow.seriesName} image ${index + 1}`,
+                displayOrder: index + 1,
+                uploadedAt: new Date(),
+                storageType: 'CLOUD' as const,
+                isOffline: false,
+                imageType: 'series' as any,
+              }) as PoseImageData
+          )
+          setImages(carouselImages)
+        }
       } catch (e: any) {
         // Ignore aborted requests
         if (e.name === 'AbortError') {
@@ -208,7 +228,7 @@ export default function Page() {
       mounted = false
       abortController.abort()
     }
-  }, [flow?.id])
+  }, [flow?.id, flow?.seriesName])
 
   // Resolve asana IDs for navigation and deleted pose detection
   useEffect(() => {
@@ -243,16 +263,7 @@ export default function Page() {
         }
       })
 
-      // Update state incrementally as each ID resolves
-      idPromises.forEach((promise) => {
-        promise.then(({ poseName, id }) => {
-          if (mounted) {
-            setPoseIds((prev) => ({ ...prev, [poseName]: id }))
-          }
-        })
-      })
-
-      // Also wait for all to complete to ensure we have the full set
+      // Wait for all promises to complete and update state once with the full set
       try {
         const results = await Promise.all(idPromises)
         if (mounted) {
@@ -275,11 +286,6 @@ export default function Page() {
       mounted = false
     }
   }, [flow?.seriesPoses])
-
-  const imageUrl = useMemo(() => {
-    if (images && images.length > 0) return images[0]
-    return flow?.image || ''
-  }, [images, flow?.image])
 
   function handleInfoClick() {
     setOpen(!open)
@@ -626,8 +632,8 @@ export default function Page() {
                     dataTestIdPrefix="practice-series-pose"
                   />
 
-                  {/* Series Image */}
-                  {imageUrl && (
+                  {/* Series Image - Read-only carousel display */}
+                  {(images.length > 0 || flow?.image) && (
                     <Box
                       sx={{
                         mt: 3,
@@ -636,27 +642,30 @@ export default function Page() {
                         justifyContent: 'center',
                       }}
                     >
-                      <Card
-                        sx={{
-                          position: 'relative',
-                          width: '100%',
-                          boxShadow: 'none',
-                          backgroundColor: 'transparent',
-                        }}
-                      >
-                        <CardMedia
-                          component="img"
-                          image={imageUrl}
-                          alt={`${flow.seriesName} image`}
-                          sx={{
-                            width: '100%',
-                            height: 'auto',
-                            maxHeight: '400px',
-                            objectFit: 'contain',
-                            borderRadius: 2,
-                          }}
+                      <Box sx={{ width: '100%', maxWidth: '500px' }}>
+                        <ImageCarousel
+                          images={
+                            images.length > 0
+                              ? images
+                              : [
+                                  {
+                                    id: 'legacy-image',
+                                    userId: '',
+                                    url: flow?.image || '',
+                                    altText: `${flow?.seriesName} image`,
+                                    displayOrder: 1,
+                                    uploadedAt: new Date(),
+                                    storageType: 'CLOUD' as const,
+                                    isOffline: false,
+                                    imageType: 'series' as any,
+                                  } as PoseImageData,
+                                ]
+                          }
+                          height={400}
+                          showArrows={false}
+                          aria-label={`${flow?.seriesName} series image`}
                         />
-                      </Card>
+                      </Box>
                     </Box>
                   )}
 

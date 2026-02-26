@@ -328,7 +328,6 @@ describe('Authentication Flow Integration Tests', () => {
     })
 
     it('should allow submitting password recovery with pre-filled email', async () => {
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation()
       const testEmail = 'recovery@example.com'
 
       mockUseSearchParams.mockReturnValue({
@@ -343,13 +342,11 @@ describe('Authentication Flow Integration Tests', () => {
       await user.click(submitButton)
 
       await waitFor(() => {
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'Password recovery requested for:',
-          testEmail
-        )
+        expect(
+          screen.getByText(/if an account exists with this email/i)
+        ).toBeInTheDocument()
+        expect(screen.getByLabelText(/email/i)).toHaveValue(testEmail)
       })
-
-      consoleSpy.mockRestore()
     })
   })
 

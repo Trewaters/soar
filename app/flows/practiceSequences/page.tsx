@@ -352,7 +352,7 @@ export default function Page() {
     }
   }
 
-  function handleActivityToggle(isTracked: boolean) {
+  function handleActivityToggle() {
     // Trigger refresh of any activity components that might be listening
     setRefreshTrigger((prev) => prev + 1)
   }
@@ -469,219 +469,218 @@ export default function Page() {
               </Box>
             )}
 
-            <React.Fragment key={singleSequence.id}>
-              {/* Only show sequence content when a sequence is selected.
-                  This covers two cases used in tests:
-                  - A sequenceId is present in the URL (even '0')
-                  - Or a non-zero singleSequence.id has been selected locally
-              */}
-              {sequenceId !== null ||
-              (!!singleSequence?.id && singleSequence.id !== 0) ? (
+            {/* Only show sequence content when a sequence is selected.
+                This covers two cases used in tests:
+                - A sequenceId is present in the URL (even '0')
+                - Or a non-zero singleSequence.id has been selected locally
+            */}
+            {(sequenceId !== null ||
+              (!!singleSequence?.id && singleSequence.id !== 0)) && (
+              <Box
+                sx={{
+                  mt: 4,
+                  width: '100%',
+                  maxWidth: '600px',
+                  alignSelf: 'center',
+                }}
+              >
+                {/* Sequence title with inline edit icon to the right */}
                 <Box
                   sx={{
-                    mt: 4,
                     width: '100%',
-                    maxWidth: '600px',
-                    alignSelf: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-around',
+                    gap: 2,
+                    px: 6,
                   }}
                 >
-                  {/* Sequence title with inline edit icon to the right */}
+                  {/* Title block - orange tab widened and includes edit icon */}
                   <Box
                     sx={{
-                      width: '100%',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-around',
-                      gap: 2,
-                      px: 6,
+                      gap: 1,
+                      backgroundColor: 'primary.main',
+                      borderTopLeftRadius: '12px',
+                      borderTopRightRadius: '12px',
+                      minWidth: { xs: '80%', sm: 240 },
+                      maxWidth: '85%',
+                      px: 2,
+                      py: 0.75,
                     }}
                   >
-                    {/* Title block - orange tab widened and includes edit icon */}
-                    <Box
+                    <Typography
+                      variant="h6"
+                      component="h3"
                       sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1,
-                        backgroundColor: 'primary.main',
-                        borderTopLeftRadius: '12px',
-                        borderTopRightRadius: '12px',
-                        minWidth: { xs: '80%', sm: 240 },
-                        maxWidth: '85%',
-                        px: 2,
-                        py: 0.75,
+                        color: 'primary.contrastText',
+                        fontWeight: 'bold',
+                        textAlign: 'left',
                       }}
                     >
-                      <Typography
-                        variant="h6"
-                        component="h3"
-                        sx={{
-                          color: 'primary.contrastText',
-                          fontWeight: 'bold',
-                          textAlign: 'left',
-                        }}
-                      >
-                        {singleSequence.nameSequence}
-                      </Typography>
+                      {singleSequence.nameSequence}
+                    </Typography>
 
-                      {/* Inline edit icon inside the orange tab on the right - only show for owners */}
-                      {isSequenceOwner && (
-                        <IconButton
-                          onClick={() => {
-                            try {
-                              const editUrl = `/sequences/${singleSequence.id}?edit=true`
-                              const viewUrl = `/sequences/${singleSequence.id}`
-                              const isEditing =
-                                typeof window !== 'undefined' &&
-                                window.location.search.includes('edit=true') &&
-                                window.location.pathname.includes(
-                                  `/sequences/${singleSequence.id}`
-                                )
-
-                              if (isEditing) {
-                                router.replace(viewUrl)
-                              } else {
-                                // Use replace so toggling doesn't create many history entries
-                                router.replace(editUrl)
-                              }
-                            } catch (e) {
-                              // ignore navigation errors
-                            }
-                          }}
-                          aria-label={`Edit ${singleSequence.nameSequence}`}
-                          sx={{
-                            ml: 'auto',
-                            color: 'primary.contrastText',
-                            p: 0.5,
-                          }}
-                          title="Edit Sequence"
-                          size="small"
-                        >
-                          {typeof window !== 'undefined' &&
-                          window.location.search.includes('edit=true') &&
-                          window.location.pathname.includes(
-                            `/sequences/${singleSequence.id}`
-                          ) ? (
-                            <CloseIcon fontSize="small" />
-                          ) : (
-                            <EditIcon fontSize="small" />
-                          )}
-                        </IconButton>
-                      )}
-                    </Box>
-
-                    {/* Action buttons: View toggle, Edit */}
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1,
-                      }}
-                    >
-                      {/* View toggle icons */}
+                    {/* Inline edit icon inside the orange tab on the right - only show for owners */}
+                    {isSequenceOwner && (
                       <IconButton
                         onClick={() => {
-                          router.push(`/sequences/${singleSequence.id}`)
-                        }}
-                        aria-label={`Switch to list view for ${singleSequence.nameSequence}`}
-                        sx={{
-                          color: 'grey.500',
-                          p: 1,
-                          minWidth: 0,
-                        }}
-                        title="List View"
-                      >
-                        <FormatListBulletedIcon />
-                      </IconButton>
+                          try {
+                            const editUrl = `/sequences/${singleSequence.id}?edit=true`
+                            const viewUrl = `/sequences/${singleSequence.id}`
+                            const isEditing =
+                              typeof window !== 'undefined' &&
+                              window.location.search.includes('edit=true') &&
+                              window.location.pathname.includes(
+                                `/sequences/${singleSequence.id}`
+                              )
 
-                      <IconButton
-                        aria-label="Currently in scroll view"
-                        sx={{
-                          color: 'primary.main',
-                          p: 1,
-                          minWidth: 0,
-                          pointerEvents: 'none',
+                            if (isEditing) {
+                              router.replace(viewUrl)
+                            } else {
+                              // Use replace so toggling doesn't create many history entries
+                              router.replace(editUrl)
+                            }
+                          } catch (e) {
+                            // ignore navigation errors
+                          }
                         }}
-                        title="Scroll View (current)"
+                        aria-label={`Edit ${singleSequence.nameSequence}`}
+                        sx={{
+                          ml: 'auto',
+                          color: 'primary.contrastText',
+                          p: 0.5,
+                        }}
+                        title="Edit Sequence"
+                        size="small"
                       >
-                        <ViewStreamIcon />
+                        {typeof window !== 'undefined' &&
+                        window.location.search.includes('edit=true') &&
+                        window.location.pathname.includes(
+                          `/sequences/${singleSequence.id}`
+                        ) ? (
+                          <CloseIcon fontSize="small" />
+                        ) : (
+                          <EditIcon fontSize="small" />
+                        )}
                       </IconButton>
+                    )}
+                  </Box>
 
-                      {/* Edit icon moved into the title tab */}
-                    </Box>
+                  {/* Action buttons: View toggle, Edit */}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                    }}
+                  >
+                    {/* View toggle icons */}
+                    <IconButton
+                      onClick={() => {
+                        router.push(`/sequences/${singleSequence.id}`)
+                      }}
+                      aria-label={`Switch to list view for ${singleSequence.nameSequence}`}
+                      sx={{
+                        color: 'grey.500',
+                        p: 1,
+                        minWidth: 0,
+                      }}
+                      title="List View"
+                    >
+                      <FormatListBulletedIcon />
+                    </IconButton>
+
+                    <IconButton
+                      aria-label="Currently in scroll view"
+                      sx={{
+                        color: 'primary.main',
+                        p: 1,
+                        minWidth: 0,
+                        pointerEvents: 'none',
+                      }}
+                      title="Scroll View (current)"
+                    >
+                      <ViewStreamIcon />
+                    </IconButton>
+
+                    {/* Edit icon moved into the title tab */}
                   </Box>
                 </Box>
-              ) : null}
-              {sequenceId !== null ||
-              (!!singleSequence?.id && singleSequence.id !== 0) ? (
-                <>
-                  {/* Sequence Activity Tracker (moved to top after title per asana pattern) */}
-                  {singleSequence.id && singleSequence.id !== 0 && (
+              </Box>
+            )}
+            {(sequenceId !== null ||
+              (!!singleSequence?.id && singleSequence.id !== 0)) && (
+              <>
+                {/* Sequence Activity Tracker (moved to top after title per asana pattern) */}
+                {singleSequence.id && singleSequence.id !== 0 && (
+                  <Box
+                    sx={{
+                      mt: 3,
+                      width: '100%',
+                      maxWidth: '600px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
                     <Box
                       sx={{
-                        mt: 3,
+                        mb: 2,
+                        mx: 'auto',
                         width: '100%',
                         maxWidth: '600px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
                       }}
                     >
-                      <Box
-                        sx={{
-                          mb: 2,
-                          mx: 'auto',
-                          width: '100%',
-                          maxWidth: '600px',
-                        }}
+                      <ActivityTracker
+                        entityId={singleSequence.id.toString()}
+                        entityName={singleSequence.nameSequence}
+                        entityType="sequence"
+                        variant="chips"
+                        checkActivity={checkSequenceActivityExists}
+                        createActivity={createSequenceActivity}
+                        deleteActivity={deleteSequenceActivity}
+                        onActivityToggle={handleActivityToggle}
+                      />
+                    </Box>
+
+                    <Accordion
+                      elevation={0}
+                      sx={{
+                        mb: 2,
+                        mx: 'auto',
+                        width: '100%',
+                        maxWidth: '600px',
+                        backgroundColor: 'transparent',
+                        '&:before': {
+                          display: 'none',
+                        },
+                      }}
+                    >
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="weekly-activity-content"
+                        id="weekly-activity-header"
                       >
-                        <ActivityTracker
+                        <Typography variant="h6">Weekly Activity</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <WeeklyActivityViewer
                           entityId={singleSequence.id.toString()}
                           entityName={singleSequence.nameSequence}
                           entityType="sequence"
-                          variant="chips"
-                          checkActivity={checkSequenceActivityExists}
-                          createActivity={createSequenceActivity}
-                          deleteActivity={deleteSequenceActivity}
-                          onActivityToggle={handleActivityToggle}
+                          variant="detailed"
+                          refreshTrigger={refreshTrigger}
                         />
-                      </Box>
+                      </AccordionDetails>
+                    </Accordion>
+                  </Box>
+                )}
 
-                      <Accordion
-                        elevation={0}
-                        sx={{
-                          mb: 2,
-                          mx: 'auto',
-                          width: '100%',
-                          maxWidth: '600px',
-                          backgroundColor: 'transparent',
-                          '&:before': {
-                            display: 'none',
-                          },
-                        }}
-                      >
-                        <AccordionSummary
-                          expandIcon={<ExpandMoreIcon />}
-                          aria-controls="weekly-activity-content"
-                          id="weekly-activity-header"
-                        >
-                          <Typography variant="h6">Weekly Activity</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <WeeklyActivityViewer
-                            entityId={singleSequence.id.toString()}
-                            entityName={singleSequence.nameSequence}
-                            entityType="sequence"
-                            variant="detailed"
-                            refreshTrigger={refreshTrigger}
-                          />
-                        </AccordionDetails>
-                      </Accordion>
-                    </Box>
-                  )}
-
-                  <Stack rowGap={3} alignItems="center">
-                    {paginatedData.map((seriesMini, i) => (
+                <Stack rowGap={3} alignItems="center">
+                  {paginatedData.map((seriesMini, i) => (
                     <Card
                       key={i}
                       sx={{
@@ -983,8 +982,9 @@ export default function Page() {
                       {singleSequence.description}
                     </Typography>
                   </Box>
-                </>\n              ) : null}
-            </React.Fragment>
+                </Stack>
+              </>
+            )}
           </Stack>
         </Stack>
       </Box>
