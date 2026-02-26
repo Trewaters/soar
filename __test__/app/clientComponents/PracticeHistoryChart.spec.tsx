@@ -113,7 +113,7 @@ describe('PracticeHistoryChart', () => {
       )
 
       const bar = screen.getByTestId('bar')
-      expect(bar).toHaveAttribute('data-fill', '#FFA726')
+      expect(bar).toHaveAttribute('data-fill', theme.palette.warning.main)
       expect(bar).toHaveAttribute('data-key', 'days')
     })
 

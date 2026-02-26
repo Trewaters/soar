@@ -131,10 +131,14 @@ export default function SplashHeader({
           sx={{
             color: 'primary.main',
             backgroundColor: 'navSplash.light',
+            display: 'inline-block',
+            width: 'fit-content',
+            maxWidth: showIcon ? 'calc(100% - 48px)' : 'calc(100% - 16px)',
+            boxSizing: 'border-box',
+            textAlign: 'center',
             px: { xs: 1, sm: 2 },
             py: 1,
             borderRadius: '8px',
-            maxWidth: showIcon ? 'calc(100% - 48px)' : '100%', // Adjusted for absolute positioning context
             wordBreak: 'break-word',
             overflowWrap: 'break-word',
             hyphens: 'auto',

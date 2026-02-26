@@ -204,21 +204,20 @@ describe('StyleGuide Component', () => {
 
   describe('MUI Components Section', () => {
     describe('Button Components', () => {
-      it('displays all button variants', () => {
+      it('displays standard action buttons', () => {
         renderWithTheme(<StyleGuide />)
 
         expect(screen.getByText('Buttons')).toBeInTheDocument()
+        expect(screen.getByText('Standard Action Buttons')).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument()
         expect(
-          screen.getByRole('button', { name: 'Contained Primary' })
+          screen.getByRole('button', { name: 'Save Changes' })
         ).toBeInTheDocument()
         expect(
-          screen.getByRole('button', { name: 'Outlined Primary' })
+          screen.getByRole('button', { name: 'Cancel' })
         ).toBeInTheDocument()
         expect(
-          screen.getByRole('button', { name: 'Text Primary' })
-        ).toBeInTheDocument()
-        expect(
-          screen.getByRole('button', { name: 'Disabled' })
+          screen.getByRole('button', { name: 'Delete' })
         ).toBeInTheDocument()
       })
 
