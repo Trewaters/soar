@@ -40,64 +40,62 @@ export default function Page() {
   }
 
   return (
-    <>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        minHeight: '100vh', // Ensure full viewport height
+        paddingBottom: { xs: '80px', sm: '80px' }, // Extra padding for mobile to ensure content is above nav
+      }}
+    >
+      {!asanaId && (
+        <SplashHeader
+          src={'/images/asana/landing-page-splash-header-asana.png'}
+          alt={'Asana'}
+          title="Asana"
+        />
+      )}
+      <Box height={'32px'} />
+
+      {/* Practice Asana Poses Button with embedded search */}
       <Box
         sx={{
+          width: '100%',
+          maxWidth: '363px',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          minHeight: '100vh', // Ensure full viewport height
-          paddingBottom: { xs: '80px', sm: '80px' }, // Extra padding for mobile to ensure content is above nav
+          mb: 4,
         }}
       >
-        {!asanaId && (
-          <SplashHeader
-            src={'/images/asana/landing-page-splash-header-asana.png'}
-            alt={'Asana'}
-            title="Asana"
-          />
-        )}
-        <Box height={'32px'} />
-
-        {/* Practice Asana Poses Button with embedded search */}
-        <Box
-          sx={{
-            width: '100%',
-            maxWidth: '363px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            mb: 4,
-          }}
-        >
-          <SplashNavButton
-            title="Practice Asanas"
-            description="Search and practice asana poses."
-            image="/images/asana/practice-asana-pose-210x363.png"
-            sx={{
-              backgroundImage:
-                "url('/images/asana/practice-asana-pose-210x363.png')",
-              mb: 2,
-            }}
-            onClick={handlePracticeAsanaClick}
-          />
-        </Box>
-
-        {/* Create Asana Poses Button */}
         <SplashNavButton
-          title="Create Asana Pose"
-          description="Customize your practice by creating new Asana poses."
-          colorImage="/images/asana/create-asana-splash-header.png"
-          bwImage="/images/asana/create-asana-splash-header-bw.png"
-          isAuthenticated={isAuthenticated}
-          premium
+          title="Practice Asanas"
+          description="Search and practice asana poses."
+          image="/images/asana/practice-asana-pose-210x363.png"
           sx={{
             backgroundImage:
-              "url('/images/asana/create-asana-splash-header.svg')",
+              "url('/images/asana/practice-asana-pose-210x363.png')",
+            mb: 2,
           }}
-          onClick={handleCreateAsanaClick}
+          onClick={handlePracticeAsanaClick}
         />
       </Box>
-    </>
+
+      {/* Create Asana Poses Button */}
+      <SplashNavButton
+        title="Create Asana Pose"
+        description="Customize your practice by creating new Asana poses."
+        colorImage="/images/asana/create-asana-splash-header.png"
+        bwImage="/images/asana/create-asana-splash-header-bw.png"
+        isAuthenticated={isAuthenticated}
+        premium
+        sx={{
+          backgroundImage:
+            "url('/images/asana/create-asana-splash-header.svg')",
+        }}
+        onClick={handleCreateAsanaClick}
+      />
+    </Box>
   )
 }

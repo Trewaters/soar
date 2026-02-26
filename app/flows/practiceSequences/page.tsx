@@ -7,6 +7,7 @@ import {
   CardContent,
   CardHeader,
   Link,
+  Paper,
   Stack,
   Typography,
   IconButton,
@@ -476,12 +477,16 @@ export default function Page() {
             */}
             {(sequenceId !== null ||
               (!!singleSequence?.id && singleSequence.id !== 0)) && (
-              <Box
+              <Paper
+                elevation={0}
                 sx={{
                   mt: 4,
                   width: '100%',
                   maxWidth: '600px',
                   alignSelf: 'center',
+                  p: 3,
+                  backgroundColor: 'navSplash.dark',
+                  borderRadius: 2,
                 }}
               >
                 {/* Sequence title with inline edit icon to the right */}
@@ -492,7 +497,7 @@ export default function Page() {
                     alignItems: 'center',
                     justifyContent: 'space-around',
                     gap: 2,
-                    px: 6,
+                    px: 2,
                   }}
                 >
                   {/* Title block - orange tab widened and includes edit icon */}
@@ -522,7 +527,6 @@ export default function Page() {
                       {singleSequence.nameSequence}
                     </Typography>
 
-                    {/* Inline edit icon inside the orange tab on the right - only show for owners */}
                     {isSequenceOwner && (
                       <IconButton
                         onClick={() => {
@@ -539,7 +543,6 @@ export default function Page() {
                             if (isEditing) {
                               router.replace(viewUrl)
                             } else {
-                              // Use replace so toggling doesn't create many history entries
                               router.replace(editUrl)
                             }
                           } catch (e) {
@@ -568,7 +571,6 @@ export default function Page() {
                     )}
                   </Box>
 
-                  {/* Action buttons: View toggle, Edit */}
                   <Box
                     sx={{
                       display: 'flex',
@@ -576,7 +578,6 @@ export default function Page() {
                       gap: 1,
                     }}
                   >
-                    {/* View toggle icons */}
                     <IconButton
                       onClick={() => {
                         router.push(`/sequences/${singleSequence.id}`)
@@ -604,15 +605,9 @@ export default function Page() {
                     >
                       <ViewStreamIcon />
                     </IconButton>
-
-                    {/* Edit icon moved into the title tab */}
                   </Box>
                 </Box>
-              </Box>
-            )}
-            {(sequenceId !== null ||
-              (!!singleSequence?.id && singleSequence.id !== 0)) && (
-              <>
+
                 {/* Sequence Activity Tracker (moved to top after title per asana pattern) */}
                 {singleSequence.id && singleSequence.id !== 0 && (
                   <Box
@@ -960,7 +955,7 @@ export default function Page() {
                       marginTop: '32px',
                       p: 4,
                       color: 'primary.main',
-                      backgroundColor: 'navSplash.dark',
+                      backgroundColor: 'transparent',
                     }}
                   >
                     <Stack flexDirection={'row'} alignItems={'center'}>
@@ -983,7 +978,7 @@ export default function Page() {
                     </Typography>
                   </Box>
                 </Stack>
-              </>
+              </Paper>
             )}
           </Stack>
         </Stack>

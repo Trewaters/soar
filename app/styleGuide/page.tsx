@@ -52,6 +52,10 @@ import { AutocompleteInput } from '@app/clientComponents/form'
 import HelpButton from '@app/clientComponents/HelpButton'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import SearchIcon from '@mui/icons-material/Search'
+import EditIcon from '@mui/icons-material/Edit'
+import SaveIcon from '@mui/icons-material/Save'
+import CloseIcon from '@mui/icons-material/Close'
+import DeleteIcon from '@mui/icons-material/Delete'
 import { useState } from 'react'
 import { AsanaPose } from 'types/asana'
 import { HELP_PATHS } from '@app/utils/helpLoader'
@@ -824,18 +828,6 @@ export default function StyleGuide() {
               Buttons
             </Typography>
             <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
-              <Button variant="contained" color="primary">
-                Contained Primary
-              </Button>
-              <Button variant="outlined" color="primary">
-                Outlined Primary
-              </Button>
-              <Button variant="text" color="primary">
-                Text Primary
-              </Button>
-              <Button variant="contained" disabled>
-                Disabled
-              </Button>
               <IconButton color="primary" aria-label="icon button">
                 <FavoriteIcon />
               </IconButton>
@@ -846,6 +838,60 @@ export default function StyleGuide() {
                 <Button>Two</Button>
                 <Button>Three</Button>
               </ButtonGroup>
+            </Box>
+            <Box sx={{ mt: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                Standard Action Buttons
+              </Typography>
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={1.5}
+                sx={{
+                  width: { xs: '100%', sm: 'auto' },
+                  alignItems: 'stretch',
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<EditIcon fontSize="small" />}
+                  sx={{ textTransform: 'none', borderRadius: '10px' }}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<SaveIcon fontSize="small" />}
+                  sx={{ textTransform: 'none', borderRadius: '10px' }}
+                >
+                  Save Changes
+                </Button>
+                <Button
+                  variant="contained"
+                  color="warning"
+                  startIcon={<CloseIcon fontSize="small" />}
+                  sx={{
+                    textTransform: 'none',
+                    borderRadius: '10px',
+                    color: 'warning.contrastText',
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  startIcon={<DeleteIcon fontSize="small" />}
+                  sx={{
+                    textTransform: 'none',
+                    borderRadius: '10px',
+                    color: 'error.contrastText',
+                  }}
+                >
+                  Delete
+                </Button>
+              </Stack>
             </Box>
           </Box>
 

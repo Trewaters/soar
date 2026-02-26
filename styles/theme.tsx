@@ -75,7 +75,7 @@ export const theme = createTheme({
       main: COLORS.primaryOrange,
       light: COLORS.primaryOrangeLight,
       dark: COLORS.primaryOrangeDark,
-      contrastText: '#000000',
+      contrastText: COLORS.textPrimary,
     },
     secondary: {
       main: COLORS.secondaryYellow,
@@ -90,10 +90,10 @@ export const theme = createTheme({
       contrastText: '#ffffff',
     },
     warning: {
-      main: '#FFA726',
-      light: '#FFD95B',
-      dark: '#C77800',
-      contrastText: '#000000',
+      main: '#C2410C',
+      light: '#FB923C',
+      dark: '#7C2D12',
+      contrastText: '#FFFFFF',
     },
     info: {
       // #5DB7DE suggested for Flow info icon
