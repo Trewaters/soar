@@ -487,6 +487,11 @@ export default function SequenceViewWithEdit({
                     return {
                       sort_english_name: pose.sort_english_name,
                       secondary: pose.secondary,
+                      sanskrit_names: Array.isArray(
+                        (pose as any).sanskrit_names
+                      )
+                        ? (pose as any).sanskrit_names
+                        : undefined,
                       alignment_cues: pose.alignment_cues,
                       poseId: pose.poseId,
                     }

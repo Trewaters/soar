@@ -85,10 +85,21 @@ export default function SeriesPoseList({
       {seriesPoses.map((pose, index) => {
         // Normalize pose entry to extract name, secondary, and alignment cues
         const poseName = pose.sort_english_name || ''
-        const secondary =
-          pose.secondary ||
-          (Array.isArray(pose.sanskrit_names) && pose.sanskrit_names[0]) ||
-          ''
+        const sanskritName =
+          Array.isArray(pose.sanskrit_names) && pose.sanskrit_names[0]
+            ? String(pose.sanskrit_names[0]).trim()
+            : ''
+        const secondaryText = pose.secondary
+          ? String(pose.secondary).trim()
+          : ''
+        const alternateText =
+          secondaryText &&
+          sanskritName &&
+          secondaryText.toLowerCase() !== sanskritName.toLowerCase()
+            ? secondaryText
+            : ''
+        const fallbackSecondary =
+          !sanskritName && secondaryText ? secondaryText : ''
         const alignmentCues = pose.alignment_cues || ''
 
         const resolvedName = poseName || `pose-${index}`
@@ -223,7 +234,7 @@ export default function SeriesPoseList({
                 </Typography>
               )}
 
-              {showSecondary && secondary && (
+              {showSecondary && sanskritName && (
                 // place secondary on its own block so it appears below the name
                 <Box sx={{ width: '100%', mt: 0.5 }}>
                   <Typography
@@ -240,7 +251,48 @@ export default function SeriesPoseList({
                     }}
                     data-testid={`${dataTestIdPrefix}-${index}-secondary`}
                   >
-                    {secondary}
+                    {sanskritName}
+                  </Typography>
+                </Box>
+              )}
+
+              {showSecondary && alternateText && (
+                <Box sx={{ width: '100%', mt: 0.5 }}>
+                  <Typography
+                    textAlign="left"
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      display: 'block',
+                      width: '100%',
+                      whiteSpace: 'normal',
+                      overflow: 'visible',
+                      textOverflow: 'clip',
+                    }}
+                    data-testid={`${dataTestIdPrefix}-${index}-alternative`}
+                  >
+                    {alternateText}
+                  </Typography>
+                </Box>
+              )}
+
+              {showSecondary && fallbackSecondary && (
+                <Box sx={{ width: '100%', mt: 0.5 }}>
+                  <Typography
+                    textAlign="left"
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      fontStyle: 'italic',
+                      display: 'block',
+                      width: '100%',
+                      whiteSpace: 'normal',
+                      overflow: 'visible',
+                      textOverflow: 'clip',
+                    }}
+                    data-testid={`${dataTestIdPrefix}-${index}-secondary`}
+                  >
+                    {fallbackSecondary}
                   </Typography>
                 </Box>
               )}

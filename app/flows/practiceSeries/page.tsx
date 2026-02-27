@@ -42,11 +42,16 @@ import EditSeriesDialog, {
   Series as EditSeriesShape,
   Asana as EditAsanaShape,
 } from '@app/flows/editSeries/EditSeriesDialog'
-import { getPoseById, getPoseIdByName } from '@lib/poseService'
+import { getPoseById, getPoseByName } from '@lib/poseService'
 import FlowTitlePoseListSection from '@app/clientComponents/FlowTitlePoseListSection'
 import { SeriesPoseEntry } from '@app/clientComponents/SeriesPoseList'
 import ImageCarousel from '@app/clientComponents/imageUpload/ImageCarousel'
 import { PoseImageData } from 'types/images'
+
+type PoseMetadata = {
+  sanskritName?: string
+  alternativeName?: string
+}
 
 export default function Page() {
   const { data: session } = useSession()
@@ -62,6 +67,9 @@ export default function Page() {
   const [poseIds, setPoseIds] = useState<{
     [poseName: string]: string | null
   }>({})
+  const [poseMetadataByName, setPoseMetadataByName] = useState<
+    Record<string, PoseMetadata>
+  >({})
 
   useEffect(() => {
     flowRef.current = flow
@@ -236,7 +244,10 @@ export default function Page() {
     let mounted = true
     async function resolvePoseIds() {
       if (!flow?.seriesPoses?.length) {
-        if (mounted) setPoseIds({})
+        if (mounted) {
+          setPoseIds({})
+          setPoseMetadataByName({})
+        }
         return
       }
 
@@ -267,22 +278,57 @@ export default function Page() {
       const idPromises = poseEntries.map(async ({ poseName, poseId }) => {
         if (poseId) {
           try {
-            await getPoseById(poseId)
-            return { poseName, id: poseId }
+            const pose = await getPoseById(poseId)
+            const sanskritName =
+              Array.isArray(pose?.sanskrit_names) && pose.sanskrit_names[0]
+                ? String(pose.sanskrit_names[0]).trim()
+                : undefined
+            const alternativeName =
+              Array.isArray(pose?.alternative_english_names) &&
+              pose.alternative_english_names[0]
+                ? String(pose.alternative_english_names[0]).trim()
+                : undefined
+
+            return {
+              poseName,
+              id: pose.id || poseId,
+              sanskritName,
+              alternativeName,
+            }
           } catch {
             // Continue to name-based fallback
           }
         }
 
         try {
-          const idByName = await getPoseIdByName(poseName)
-          return { poseName, id: idByName }
+          const pose = await getPoseByName(poseName)
+          const sanskritName =
+            Array.isArray(pose?.sanskrit_names) && pose.sanskrit_names[0]
+              ? String(pose.sanskrit_names[0]).trim()
+              : undefined
+          const alternativeName =
+            Array.isArray(pose?.alternative_english_names) &&
+            pose.alternative_english_names[0]
+              ? String(pose.alternative_english_names[0]).trim()
+              : undefined
+
+          return {
+            poseName,
+            id: pose.id || null,
+            sanskritName,
+            alternativeName,
+          }
         } catch (error) {
           console.warn(
             `Failed to resolve pose by id/name for pose: ${poseName}`,
             error
           )
-          return { poseName, id: null }
+          return {
+            poseName,
+            id: null,
+            sanskritName: undefined,
+            alternativeName: undefined,
+          }
         }
       })
 
@@ -297,7 +343,18 @@ export default function Page() {
             },
             {} as { [poseName: string]: string | null }
           )
+          const metadataMap = results.reduce(
+            (acc, { poseName, sanskritName, alternativeName }) => {
+              acc[poseName] = {
+                sanskritName,
+                alternativeName,
+              }
+              return acc
+            },
+            {} as Record<string, PoseMetadata>
+          )
           setPoseIds(idsMap)
+          setPoseMetadataByName(metadataMap)
         }
       } catch (error) {
         console.error('Error resolving pose IDs:', error)
@@ -361,21 +418,52 @@ export default function Page() {
       .filter(
         (entry) => !!entry && typeof entry === 'object' && !Array.isArray(entry)
       )
-      .map((entry: any) => ({
-        sort_english_name: String(entry.sort_english_name || ''),
-        secondary:
-          typeof entry.secondary === 'string' ? entry.secondary : undefined,
-        sanskrit_names: Array.isArray(entry.sanskrit_names)
-          ? entry.sanskrit_names
-          : undefined,
-        alignment_cues:
-          typeof entry.alignment_cues === 'string'
-            ? entry.alignment_cues
-            : undefined,
-        poseId: typeof entry.poseId === 'string' ? entry.poseId : undefined,
-      }))
+      .map((entry: any) => {
+        const sortEnglishName = String(entry.sort_english_name || '').trim()
+        const resolvedMetadata = poseMetadataByName[sortEnglishName]
+
+        const entrySanskritName =
+          Array.isArray(entry.sanskrit_names) && entry.sanskrit_names[0]
+            ? String(entry.sanskrit_names[0]).trim()
+            : ''
+        const resolvedSanskritName =
+          entrySanskritName || resolvedMetadata?.sanskritName || ''
+
+        const entrySecondary =
+          typeof entry.secondary === 'string' ? entry.secondary.trim() : ''
+
+        let resolvedSecondary = entrySecondary
+        const resolvedAlternative = resolvedMetadata?.alternativeName || ''
+
+        const entryLooksLikeSanskrit =
+          !!resolvedSecondary &&
+          !!resolvedSanskritName &&
+          resolvedSecondary.toLowerCase() === resolvedSanskritName.toLowerCase()
+
+        if (
+          resolvedAlternative &&
+          (!resolvedSecondary || entryLooksLikeSanskrit)
+        ) {
+          resolvedSecondary = resolvedAlternative
+        }
+
+        return {
+          sort_english_name: sortEnglishName,
+          secondary: resolvedSecondary || undefined,
+          sanskrit_names: resolvedSanskritName
+            ? [resolvedSanskritName]
+            : Array.isArray(entry.sanskrit_names)
+              ? entry.sanskrit_names
+              : undefined,
+          alignment_cues:
+            typeof entry.alignment_cues === 'string'
+              ? entry.alignment_cues
+              : undefined,
+          poseId: typeof entry.poseId === 'string' ? entry.poseId : undefined,
+        }
+      })
       .filter((entry) => entry.sort_english_name.length > 0)
-  }, [flow?.seriesPoses])
+  }, [flow?.seriesPoses, poseMetadataByName])
 
   const handleEditSave = async (updated: EditSeriesShape) => {
     try {

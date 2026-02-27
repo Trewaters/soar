@@ -298,6 +298,26 @@ describe('SeriesPoseList', () => {
       // Ensure the second element is not displayed
       expect(screen.queryByText('Naukasana')).not.toBeInTheDocument()
     })
+
+    it('should render sanskrit first and alternative text beneath when both exist', () => {
+      const poseWithSanskritAndAlternative: SeriesPoseEntry[] = [
+        {
+          sort_english_name: 'Warrior I',
+          sanskrit_names: ['Virabhadrasana I'],
+          secondary: 'Warrior One Variation',
+        },
+      ]
+
+      render(<SeriesPoseList seriesPoses={poseWithSanskritAndAlternative} />, {
+        wrapper: TestWrapper,
+      })
+
+      const sanskrit = screen.getByTestId('series-pose-0-secondary')
+      const alternative = screen.getByTestId('series-pose-0-alternative')
+
+      expect(sanskrit).toHaveTextContent('Virabhadrasana I')
+      expect(alternative).toHaveTextContent('Warrior One Variation')
+    })
   })
 
   describe('Accessibility', () => {
