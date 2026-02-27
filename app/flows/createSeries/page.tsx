@@ -338,17 +338,6 @@ export default function Page() {
                   onChange={handleChange}
                   required
                   sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '12px',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                    },
-                    '& .MuiInputBase-input': {
-                      color: 'primary.contrastText',
-                    },
-                    '& .MuiInputBase-input::placeholder': {
-                      color: 'background.text',
-                      opacity: 1,
-                    },
                     width: '100%',
                   }}
                   InputProps={{
@@ -378,15 +367,6 @@ export default function Page() {
                   name="duration"
                   value={duration}
                   onChange={handleChange}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '12px',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                    },
-                    '& .MuiInputBase-input': {
-                      color: 'primary.contrastText',
-                    },
-                  }}
                   InputProps={{
                     endAdornment: isDirtyDuration ? (
                       <CheckCircleIcon
@@ -421,10 +401,6 @@ export default function Page() {
                 <FormControl
                   sx={{
                     width: '100%',
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '12px',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                    },
                   }}
                 >
                   <GroupedDataAssetSearch<AsanaPose>
@@ -672,15 +648,6 @@ export default function Page() {
                   name="description"
                   value={description}
                   onChange={handleChange}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '12px',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-                    },
-                    '& .MuiInputBase-input': {
-                      color: 'primary.contrastText',
-                    },
-                  }}
                   InputProps={{
                     endAdornment: isDirtyDescription ? (
                       <CheckCircleIcon
@@ -838,7 +805,7 @@ export default function Page() {
                       fontWeight: 600,
                       width: { xs: '100%', sm: 'auto' },
                       minWidth: { sm: '200px' },
-                      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                      boxShadow: (theme) => theme.customShadows.cta,
                     }}
                   >
                     {AppText.APP_BUTTON_CREATE_FLOW}

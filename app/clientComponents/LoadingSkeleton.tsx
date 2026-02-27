@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import { Box, Skeleton, Stack, SkeletonProps } from '@mui/material'
+import { COLORS } from '../../styles/theme'
 
 export interface LoadingSkeletonProps {
   type?: 'text' | 'list' | 'search' | 'card' | 'circular' | 'custom'
@@ -43,7 +44,7 @@ export default function LoadingSkeleton({
               animation={animation}
               sx={{
                 borderRadius: '12px',
-                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+                boxShadow: `0 4px 4px 0 ${COLORS.overlayDarkStrong}`,
                 margin: 2, // Add margin to match the Stack spacing
               }}
             />
@@ -88,8 +89,9 @@ export default function LoadingSkeleton({
               width,
               borderRadius: '12px',
               p: 2,
-              border: '1px solid #f0f0f0',
-              boxShadow: '0 2px 48px 5px rgba(0, 0, 0, 0.1)',
+              border: (theme) =>
+                `1px solid ${theme.palette.background.default}`,
+              boxShadow: `0 2px 48px 5px ${COLORS.overlayDarkLightest}`,
               ...sx,
             }}
           >

@@ -19,12 +19,26 @@ export default async function TosAdminPage() {
     <div style={{ padding: 20 }}>
       <div
         style={{
+          marginBottom: 12,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
         }}
       >
         <h1 style={{ margin: 0 }}>Terms of Service - Versions</h1>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <Link href="/">← Back home</Link>
+        </div>
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <div></div>
         <div>
           <Link href="/admin/tos/create">
             <button style={{ padding: '8px 12px', cursor: 'pointer' }}>

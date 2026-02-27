@@ -131,11 +131,6 @@ export function getFieldDisplayValue(
 export const fieldSxStyles = {
   '& .MuiOutlinedInput-notchedOutline': {
     borderRadius: '12px',
-    borderColor: 'primary.main',
-    boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-  },
-  '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-    borderColor: 'primary.light',
   },
 } as const
 

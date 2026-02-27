@@ -2,6 +2,8 @@
  * Activity Streak Reminder Email Template
  */
 
+import { COLORS } from '@styles/theme'
+
 export interface ActivityStreakReminderData {
   userName: string
   streakCount: number
@@ -47,14 +49,14 @@ ${data.unsubscribeUrl}`
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       line-height: 1.6;
-      color: #333;
+      color: ${COLORS.textDark};
       max-width: 600px;
       margin: 0 auto;
       padding: 20px;
-      background-color: #f5f5f5;
+      background-color: ${COLORS.backgroundLight};
     }
     .container {
-      background-color: #ffffff;
+      background-color: ${COLORS.backgroundPaper};
       border-radius: 8px;
       padding: 40px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -68,15 +70,15 @@ ${data.unsubscribeUrl}`
       margin-bottom: 20px;
     }
     h1 {
-      color: #5e35b1;
+      color: ${COLORS.emailPurple};
       margin: 0;
       font-size: 24px;
     }
     .streak-badge {
       background: ${
         data.reminderType === 'warning'
-          ? 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)'
-          : 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)'
+          ? `linear-gradient(135deg, ${COLORS.emailGradientLight1} 0%, ${COLORS.emailGradientLight2} 100%)`
+          : `linear-gradient(135deg, ${COLORS.emailGradientDark1} 0%, ${COLORS.emailGradientDark2} 100%)`
       };
       color: white;
       padding: 20px 30px;
@@ -95,19 +97,19 @@ ${data.unsubscribeUrl}`
     }
     .message {
       font-size: 16px;
-      color: #666;
+      color: ${COLORS.textGray};
       text-align: center;
       margin: 25px 0;
       line-height: 1.8;
     }
     .quick-practice {
-      background-color: #f5f5f5;
+      background-color: ${COLORS.backgroundLight};
       padding: 20px;
       border-radius: 8px;
       margin: 25px 0;
     }
     .quick-practice h3 {
-      color: #5e35b1;
+      color: ${COLORS.emailPurple};
       font-size: 16px;
       margin: 0 0 10px 0;
     }
@@ -116,14 +118,14 @@ ${data.unsubscribeUrl}`
       padding-left: 20px;
     }
     .quick-practice li {
-      color: #666;
+      color: ${COLORS.textGray};
       font-size: 14px;
       margin: 5px 0;
     }
     .cta-button {
       display: inline-block;
-      background-color: #5e35b1;
-      color: #ffffff !important;
+      background-color: ${COLORS.emailPurple};
+      color: ${COLORS.textInverse} !important;
       text-decoration: none;
       padding: 14px 32px;
       border-radius: 6px;
@@ -137,13 +139,13 @@ ${data.unsubscribeUrl}`
     .footer {
       margin-top: 40px;
       padding-top: 20px;
-      border-top: 1px solid #eee;
+      border-top: 1px solid ${COLORS.borderDivider};
       font-size: 12px;
-      color: #999;
+      color: ${COLORS.shadowGray};
       text-align: center;
     }
     .footer a {
-      color: #5e35b1;
+      color: ${COLORS.emailPurple};
       text-decoration: none;
     }
   </style>

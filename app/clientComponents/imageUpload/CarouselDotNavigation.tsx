@@ -3,6 +3,7 @@
 import React from 'react'
 import { Box, IconButton, Tooltip, useTheme } from '@mui/material'
 import { PoseImageData } from '../../../types/images'
+import { COLORS } from '../../../styles/theme'
 
 export interface CarouselDotNavigationProps {
   images: PoseImageData[]
@@ -166,7 +167,9 @@ export const CarouselDotNavigation: React.FC<CarouselDotNavigationProps> = ({
                   backgroundColor: getColor(isActive),
                   transition: 'all 0.2s ease-in-out',
                   transform: isActive ? 'scale(1.2)' : 'scale(1)',
-                  boxShadow: isActive ? `0 2px 4px rgba(0, 0, 0, 0.2)` : 'none',
+                  boxShadow: isActive
+                    ? `0 2px 4px ${COLORS.overlayDarkMedium}`
+                    : 'none',
                   border: isActive
                     ? `2px solid ${theme.palette.background.paper}`
                     : '2px solid transparent',

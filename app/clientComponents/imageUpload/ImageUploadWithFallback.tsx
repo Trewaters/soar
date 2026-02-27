@@ -30,6 +30,7 @@ import {
   formatFileSize,
   type LocalImageData,
 } from '../../../lib/localImageStorage'
+import { COLORS } from '../../../styles/theme'
 
 export interface PoseImageData {
   id: string
@@ -550,7 +551,7 @@ function ImageUploadWithFallbackComponent(
                       position: 'absolute',
                       top: 5,
                       right: 5,
-                      bgcolor: 'rgba(255, 255, 255, 0.8)',
+                      bgcolor: COLORS.overlayWhiteExtraStrong,
                       color: 'error.main',
                       '&:hover': {
                         bgcolor: 'error.main',

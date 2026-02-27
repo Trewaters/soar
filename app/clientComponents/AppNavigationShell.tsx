@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import Header from '@serverComponents/header'
 import NavBottom from '@serverComponents/navBottom'
 import OfflineBadge from '@clientComponents/OfflineBadge'
+import { COLORS } from '../../styles/theme'
 
 export default function AppNavigationShell({
   children,
@@ -28,8 +29,8 @@ export default function AppNavigationShell({
           position: 'absolute',
           top: '-40px',
           left: '0',
-          backgroundColor: '#f6893d',
-          color: '#fff',
+          backgroundColor: COLORS.primaryOrange,
+          color: COLORS.textInverse,
           padding: '8px 16px',
           zIndex: 1000,
           textDecoration: 'none',

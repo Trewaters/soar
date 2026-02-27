@@ -3,17 +3,106 @@ import { createTheme } from '@mui/material/styles'
 
 // Color constants - define once, use everywhere
 const COLORS = {
+  // Primary colors
   primaryOrange: '#F6893D',
   primaryOrangeLight: '#FFBA6F',
   primaryOrangeDark: '#C3581A',
+
+  // Secondary colors
   secondaryYellow: '#F6B93D',
   secondaryYellowLight: '#FFD970',
   secondaryYellowDark: '#C38B1A',
+
+  // Text colors
   textPrimary: '#07020D',
   textDisabled: '#6c757d',
+  textInverse: '#ffffff',
+  textBlack: '#000000',
+  textDark: '#333333',
+  textGray: '#666666',
+  textGrayLight: '#757575',
+
+  // Background colors
+  backgroundDefault: '#f0f0f0',
+  backgroundPaper: '#ffffff',
+  backgroundHelper: '#fef5e7',
+  backgroundLight: '#f5f5f5',
+
+  // Error palette
+  errorMain: '#D32F2F',
+  errorLight: '#E57373',
+  errorDark: '#9A0007',
+
+  // Warning palette
+  warningMain: '#C2410C',
+  warningLight: '#FB923C',
+  warningDark: '#7C2D12',
+
+  // Info palette
+  infoMain: '#1976D2',
+  infoLight: '#63A4FF',
+  infoDark: '#004BA0',
+
+  // Success palette
+  successMain: '#2E7D32',
+  successLight: '#60AD5E',
+  successDark: '#005005',
+
+  // Navigation/Splash
+  navSplashMain: '#185A77',
+  navSplashDark: '#F8F4F2',
+  navSplashLight: 'rgba(248, 244, 242, 0.5)',
+
+  // Chart and borders
+  chartAxisStroke: '#888888',
+  borderDivider: '#e0e0e0',
+  shadowGray: '#CBCBCB',
+
+  // RGB format for dynamic opacity (used in rgba() format)
+  primaryOrangeRGB: '246, 137, 61',
+
+  // Dark overlay opacity variants (for modals, overlays, semi-transparent backgrounds)
+  overlayDarkLightest: 'rgba(0, 0, 0, 0.1)',
+  overlayDarkLight: 'rgba(0, 0, 0, 0.15)',
+  overlayDarkMedium: 'rgba(0, 0, 0, 0.2)',
+  overlayDarkStrong: 'rgba(0, 0, 0, 0.25)',
+  overlayDarkFull: 'rgba(0, 0, 0, 0.5)',
+  overlayDarkFuller: 'rgba(0, 0, 0, 0.6)',
+  overlayDarkFullest: 'rgba(0, 0, 0, 0.7)',
+  overlayDarkDarkest: 'rgba(0, 0, 0, 0.8)',
+
+  // White overlay opacity variants (for light overlays, frosted glass effects)
+  overlayWhiteSoft: 'rgba(255, 255, 255, 0.1)',
+  overlayWhiteLight: 'rgba(255, 255, 255, 0.2)',
+  overlayWhiteMedium: 'rgba(255, 255, 255, 0.3)',
+  overlayWhiteStrong: 'rgba(255, 255, 255, 0.5)',
+  overlayWhiteVeryStrong: 'rgba(255, 255, 255, 0.6)',
+  overlayWhiteExtraStrong: 'rgba(255, 255, 255, 0.8)',
+  overlayWhiteStrongest: 'rgba(255, 255, 255, 0.9)',
+
+  // Email/Special colors
+  emailPurple: '#5e35b1',
+  emailGradientLight1: '#ff9a9e',
+  emailGradientLight2: '#fecfef',
+  emailGradientDark1: '#a18cd1',
+  emailGradientDark2: '#fbc2eb',
 } as const
 
 declare module '@mui/material/styles' {
+  interface Theme {
+    customShadows: {
+      cta: string
+      floatingControl: string
+    }
+  }
+
+  interface ThemeOptions {
+    customShadows?: {
+      cta?: string
+      floatingControl?: string
+    }
+  }
+
   interface TypographyVariants {
     label: CSSProperties
     splashTitle: CSSProperties
@@ -29,6 +118,13 @@ declare module '@mui/material/styles' {
   interface TypeBackground {
     helper: string
     text: string
+    surfaceSubtle: string
+    surfaceHover: string
+    overlayDark: string
+    overlayDarkStrong: string
+    overlayLightSoft: string
+    overlayLightMedium: string
+    overlayLightStrong: string
   }
 
   interface PaletteOptions {
@@ -38,6 +134,7 @@ declare module '@mui/material/styles' {
   interface TypeText {
     tertiary?: string
     hint?: string
+    inverse?: string
   }
 }
 
@@ -85,41 +182,48 @@ export const theme = createTheme({
       contrastText: COLORS.textPrimary,
     },
     error: {
-      main: '#D32F2F',
-      light: '#E57373',
-      dark: '#9A0007',
-      contrastText: '#ffffff',
+      main: COLORS.errorMain,
+      light: COLORS.errorLight,
+      dark: COLORS.errorDark,
+      contrastText: COLORS.textInverse,
     },
     warning: {
-      main: '#C2410C',
-      light: '#FB923C',
-      dark: '#7C2D12',
-      contrastText: '#FFFFFF',
+      main: COLORS.warningMain,
+      light: COLORS.warningLight,
+      dark: COLORS.warningDark,
+      contrastText: COLORS.textInverse,
     },
     info: {
       // #5DB7DE suggested for Flow info icon
-      main: '#1976D2',
-      light: '#63A4FF',
-      dark: '#004BA0',
-      contrastText: '#FFFFFF',
+      main: COLORS.infoMain,
+      light: COLORS.infoLight,
+      dark: COLORS.infoDark,
+      contrastText: COLORS.textInverse,
     },
     success: {
-      main: '#2E7D32',
-      light: '#60AD5E',
-      dark: '#005005',
-      contrastText: '#FFFFFF',
+      main: COLORS.successMain,
+      light: COLORS.successLight,
+      dark: COLORS.successDark,
+      contrastText: COLORS.textInverse,
     },
     navSplash: {
-      main: '#185A77',
-      light: 'rgba(248, 244, 242, 0.5)',
-      dark: '#F8F4F2',
+      main: COLORS.navSplashMain,
+      light: COLORS.navSplashLight,
+      dark: COLORS.navSplashDark,
       contrastText: COLORS.textPrimary,
     },
     background: {
-      default: '#f0f0f0',
-      paper: '#ffffff',
-      helper: '#fef5e7',
+      default: COLORS.backgroundDefault,
+      paper: COLORS.backgroundPaper,
+      helper: COLORS.backgroundHelper,
       text: COLORS.textDisabled,
+      surfaceSubtle: 'rgba(0, 0, 0, 0.02)',
+      surfaceHover: 'rgba(0, 0, 0, 0.04)',
+      overlayDark: 'rgba(0, 0, 0, 0.7)',
+      overlayDarkStrong: 'rgba(0, 0, 0, 0.8)',
+      overlayLightSoft: 'rgba(255, 255, 255, 0.2)',
+      overlayLightMedium: 'rgba(255, 255, 255, 0.3)',
+      overlayLightStrong: 'rgba(255, 255, 255, 0.9)',
     },
     text: {
       primary: COLORS.textPrimary,
@@ -127,6 +231,7 @@ export const theme = createTheme({
       tertiary: COLORS.secondaryYellow,
       disabled: COLORS.textDisabled,
       hint: COLORS.primaryOrangeDark,
+      inverse: COLORS.textInverse,
     },
   },
   typography: {
@@ -210,7 +315,29 @@ export const theme = createTheme({
         }),
       },
     },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderRadius: '12px',
+            borderColor: theme.palette.primary.main,
+            boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+          },
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.light,
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: theme.palette.primary.main,
+          },
+        }),
+      },
+    },
+  },
+  customShadows: {
+    cta: '0 4px 8px rgba(0, 0, 0, 0.2)',
+    floatingControl: '0 2px 4px rgba(0,0,0,0.3)',
   },
 })
 
+export { COLORS }
 export default theme

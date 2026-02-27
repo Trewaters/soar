@@ -12,6 +12,7 @@ import {
 } from '@mui/material'
 import { Close as CloseIcon } from '@mui/icons-material'
 import type { FreemiumNotificationProps } from './types'
+import { COLORS } from '../../../styles/theme'
 
 /**
  * FreemiumNotification Component
@@ -160,12 +161,12 @@ const FreemiumNotification: React.FC<FreemiumNotificationProps> = ({
                 onClick={handleCtaClick}
                 sx={{
                   minWidth: isMobile ? '80px' : '100px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                  backgroundColor: COLORS.overlayWhiteSoft,
+                  borderColor: COLORS.overlayWhiteMedium,
                   color: 'inherit',
                   '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                    borderColor: 'rgba(255, 255, 255, 0.5)',
+                    backgroundColor: COLORS.overlayWhiteLight,
+                    borderColor: COLORS.overlayWhiteStrong,
                   },
                   // Ensure proper touch targets on mobile
                   minHeight: isMobile ? '44px' : '36px',

@@ -52,13 +52,20 @@ const PracticeHistoryChart: React.FC<PracticeHistoryChartProps> = ({
           data={data}
           margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
         >
-          <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-          <XAxis dataKey="month" tick={{ fontSize: 12 }} stroke="#888888" />
-          <YAxis tick={{ fontSize: 12 }} stroke="#888888" />
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke={theme.palette.background.default}
+          />
+          <XAxis
+            dataKey="month"
+            tick={{ fontSize: 12 }}
+            stroke={theme.palette.text.disabled}
+          />
+          <YAxis tick={{ fontSize: 12 }} stroke={theme.palette.text.disabled} />
           <Tooltip
             contentStyle={{
-              backgroundColor: 'white',
-              border: '1px solid #e0e0e0',
+              backgroundColor: theme.palette.background.paper,
+              border: `1px solid ${theme.palette.text.disabled}`,
               borderRadius: 8,
             }}
             labelStyle={{ fontWeight: 'bold' }}

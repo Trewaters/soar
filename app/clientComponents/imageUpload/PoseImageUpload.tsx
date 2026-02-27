@@ -27,6 +27,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { useSession } from 'next-auth/react'
 import { uploadPoseImage } from '@lib/imageService'
 import { getImageUploadStatus, ImageStatus } from '../../../lib/imageStatus'
+import { COLORS } from '../../../styles/theme'
 
 export interface PoseImageData {
   id: string
@@ -667,12 +668,12 @@ export default function PoseImageUpload({
           disabled={uploading}
           sx={{
             color: 'primary.main',
-            backgroundColor: 'rgba(255, 255, 255, 0.6)',
+            backgroundColor: COLORS.overlayWhiteVeryStrong,
             '&:hover': {
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              backgroundColor: COLORS.overlayWhiteStrongest,
             },
             '&.Mui-disabled': {
-              backgroundColor: 'rgba(255, 255, 255, 0.3)',
+              backgroundColor: COLORS.overlayWhiteMedium,
               color: 'grey.400',
             },
           }}

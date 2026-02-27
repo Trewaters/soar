@@ -164,7 +164,7 @@ export default function AsanaActivityList() {
     <Box
       sx={{
         borderRadius: 2,
-        boxShadow: '0px 4px 4px 0px #F6893D',
+        boxShadow: (theme) => `0px 4px 4px 0px ${theme.palette.primary.main}`,
         width: '100%',
         maxWidth: '100%',
         overflow: 'hidden',

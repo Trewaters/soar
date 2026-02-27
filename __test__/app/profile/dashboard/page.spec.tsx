@@ -59,15 +59,14 @@ jest.mock('@app/profile/ProfileNavMenu', () => ({
 
 // Helper to set up the main fetch mock implementation
 function setupMainFetchMock(loginStreak = 7) {
-  const mockActivityHistory = [
-    { datePerformed: '2026-02-25T10:00:00.000Z' },
-    { datePerformed: '2026-02-24T10:00:00.000Z' },
-    { datePerformed: '2026-02-23T10:00:00.000Z' },
-    { datePerformed: '2026-02-22T10:00:00.000Z' },
-    { datePerformed: '2026-02-21T10:00:00.000Z' },
-    { datePerformed: '2026-02-20T10:00:00.000Z' },
-    { datePerformed: '2026-02-19T10:00:00.000Z' },
-  ]
+  // Use dynamic recent dates so tests are robust regardless of current date.
+  const now = new Date()
+  const mockActivityHistory = Array.from({ length: 7 }).map((_, i) => {
+    const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000)
+    // Normalize to 10:00:00Z for consistency with earlier fixtures
+    d.setUTCHours(10, 0, 0, 0)
+    return { datePerformed: d.toISOString() }
+  })
 
   ;(global.fetch as jest.Mock).mockImplementation((url: string) => {
     if (url === '/api/user/recordActivity') {

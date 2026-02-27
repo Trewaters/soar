@@ -170,14 +170,6 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
         disablePortal
         options={orderedOptions}
         sx={{
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderRadius: '12px',
-            borderColor: 'primary.main',
-            boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-          },
-          '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'primary.light',
-          },
           '& .MuiAutocomplete-endAdornment': {
             display: 'none',
           },
@@ -186,9 +178,6 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
           <AutocompleteInput
             params={params}
             placeholder="Search for a Yoga Pose"
-            sx={{
-              '& .MuiInputBase-input': { color: 'primary.contrastText' },
-            }}
           />
         )}
         filterOptions={(options, state) => {

@@ -301,14 +301,6 @@ export default function Page() {
                     onChange={handleChange}
                     placeholder="Give your Sequence a name..."
                     required
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: '12px',
-                      },
-                      '& .MuiInputBase-input': {
-                        color: 'primary.contrastText',
-                      },
-                    }}
                     InputProps={{
                       endAdornment: isDirtyName ? (
                         <CheckCircleIcon sx={{ color: 'success.main' }} />
@@ -380,9 +372,9 @@ export default function Page() {
                             pl: 2,
                             py: 1,
                             borderRadius: '8px',
-                            backgroundColor: 'rgba(0, 0, 0, 0.02)',
+                            backgroundColor: 'background.surfaceSubtle',
                             '&:hover': {
-                              backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                              backgroundColor: 'background.surfaceHover',
                             },
                           }}
                         >
@@ -536,14 +528,6 @@ export default function Page() {
                     name="description"
                     value={description}
                     onChange={handleChange}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: '12px',
-                      },
-                      '& .MuiInputBase-input': {
-                        color: 'primary.contrastText',
-                      },
-                    }}
                     InputProps={{
                       endAdornment: isDirtyDescription ? (
                         <CheckCircleIcon
@@ -655,7 +639,7 @@ export default function Page() {
                         fontSize: '1.1rem',
                         fontWeight: 600,
                         minWidth: { xs: '100%', sm: '200px' },
-                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                        boxShadow: (theme) => theme.customShadows.cta,
                       }}
                     >
                       {AppText.APP_BUTTON_SUBMIT}

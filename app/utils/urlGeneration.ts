@@ -47,6 +47,12 @@ const CONTENT_PATHS = {
     production: '/flows/practiceSeries',
     test: '/flows/practiceSeries',
   },
+  // Alias for legacy "series" terminology used in tests and some runtime places
+  series: {
+    development: '/flows/practiceSeries',
+    production: '/flows/practiceSeries',
+    test: '/flows/practiceSeries',
+  },
   sequence: {
     development: '/flows/practiceSequences',
     production: '/flows/practiceSequences',

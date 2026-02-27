@@ -364,14 +364,6 @@ export default function GroupedDataAssetSearch<T extends object>({
         }}
         onChange={handleChange as any}
         sx={{
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderRadius: '12px',
-            borderColor: 'primary.main',
-            boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-          },
-          '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'primary.light',
-          },
           '& .MuiAutocomplete-endAdornment': {
             display: 'none',
           },
@@ -380,9 +372,6 @@ export default function GroupedDataAssetSearch<T extends object>({
           <AutocompleteInput
             params={params}
             placeholder={placeholderText}
-            sx={{
-              '& .MuiInputBase-input': { color: 'primary.contrastText' },
-            }}
             inputValue={inputValue}
             onClear={onInputChange ? () => onInputChange('') : undefined}
           />

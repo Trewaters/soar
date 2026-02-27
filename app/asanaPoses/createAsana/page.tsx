@@ -509,14 +509,17 @@ export default function Page() {
                         position: 'absolute',
                         top: 8,
                         right: 8,
-                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        backgroundColor: 'background.overlayLightStrong',
                         color: 'error.main',
                         '&:hover': {
                           backgroundColor: 'error.main',
-                          color: 'white',
+                          color: 'text.inverse',
                           transform: 'scale(1.1)',
                         },
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                        boxShadow: (theme) =>
+                          theme && (theme as any).customShadows
+                            ? (theme as any).customShadows.floatingControl
+                            : 'none',
                         padding: '6px',
                         zIndex: 10,
                       }}
@@ -531,8 +534,8 @@ export default function Page() {
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        bgcolor: 'rgba(0, 0, 0, 0.7)',
-                        color: 'white',
+                        bgcolor: 'background.overlayDark',
+                        color: 'text.inverse',
                         p: 0.5,
                         fontSize: '0.75rem',
                         textAlign: 'center',
@@ -586,7 +589,10 @@ export default function Page() {
                   fontWeight: 600,
                   width: { xs: '100%', sm: 'auto' },
                   minWidth: { sm: '200px' },
-                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                  boxShadow: (theme) =>
+                    theme && (theme as any).customShadows
+                      ? (theme as any).customShadows.cta
+                      : 'none',
                 }}
               >
                 {successState.isNavigating
@@ -682,9 +688,9 @@ export default function Page() {
       {/* Loading Overlay */}
       <Backdrop
         sx={{
-          color: '#fff',
+          color: 'text.inverse',
           zIndex: (theme) => theme.zIndex.drawer + 1,
-          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          backgroundColor: 'background.overlayDark',
         }}
         open={successState.isNavigating}
       >

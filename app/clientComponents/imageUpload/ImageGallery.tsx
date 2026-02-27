@@ -29,6 +29,7 @@ import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import ImageUploadButton from './ImageUploadButton'
 import { PoseImage } from './types'
+import { COLORS } from '../../../styles/theme'
 
 // Simple placeholder image data URL
 const PLACEHOLDER_IMAGE =
@@ -270,7 +271,7 @@ export default function ImageGallery({
                         right: 8,
                         display: 'flex',
                         gap: 1,
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        backgroundColor: COLORS.overlayDarkFull,
                         borderRadius: '4px',
                         padding: '2px',
                       }}

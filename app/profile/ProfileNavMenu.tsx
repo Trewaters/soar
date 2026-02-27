@@ -166,8 +166,8 @@ const ProfileNavMenu: React.FC = () => {
                   size="small"
                   sx={{
                     mt: 1,
-                    bgcolor: 'rgba(255, 255, 255, 0.2)',
-                    color: 'white',
+                    bgcolor: 'background.overlayLightSoft',
+                    color: 'text.inverse',
                     fontSize: '0.75rem',
                   }}
                 />

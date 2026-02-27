@@ -1,6 +1,13 @@
 /* eslint-disable no-unused-vars, @typescript-eslint/no-unused-vars */
 import React from 'react'
-import { Box, Avatar, IconButton, Typography, Chip } from '@mui/material'
+import {
+  Box,
+  Avatar,
+  IconButton,
+  Typography,
+  Chip,
+  useTheme,
+} from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 
@@ -21,6 +28,7 @@ export const ProfileImageDisplay: React.FC<ProfileImageDisplayProps> = ({
   placeholder,
   showSubtitle = true,
 }) => {
+  const theme = useTheme()
   return (
     <Box sx={{ mt: 2 }}>
       {showSubtitle && (
@@ -62,16 +70,19 @@ export const ProfileImageDisplay: React.FC<ProfileImageDisplayProps> = ({
                     height: 80,
                     border:
                       active === url
-                        ? '3px solid #1976d2'
-                        : '2px solid #e0e0e0',
+                        ? `3px solid ${theme.palette.info.main}`
+                        : `2px solid ${theme.palette.background.default}`,
                     cursor: 'pointer',
                     boxShadow:
                       active === url
-                        ? '0 0 0 2px rgba(25, 118, 210, 0.2)'
+                        ? `0 0 0 2px ${theme.palette.info.main}33`
                         : 'none',
                     transition: 'all 0.2s ease-in-out',
                     '&:hover': {
-                      borderColor: active === url ? '#1976d2' : '#757575',
+                      borderColor:
+                        active === url
+                          ? theme.palette.info.main
+                          : theme.palette.text.disabled,
                       transform: 'scale(1.05)',
                     },
                   }}
@@ -96,7 +107,7 @@ export const ProfileImageDisplay: React.FC<ProfileImageDisplayProps> = ({
                       position: 'absolute',
                       top: -4,
                       right: -4,
-                      color: '#1976d2',
+                      color: theme.palette.info.main,
                       backgroundColor: 'white',
                       borderRadius: '50%',
                       fontSize: 20,

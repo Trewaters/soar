@@ -17,6 +17,7 @@ import {
 import Image from 'next/image'
 import { PoseImageData } from '../../../types/images'
 import { useImagePreloader } from '../../hooks/useImagePreloader'
+import { COLORS } from '../../../styles/theme'
 
 export interface ImageCarouselProps {
   images: PoseImageData[]
@@ -446,10 +447,10 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
               left: 8,
               top: '50%',
               transform: 'translateY(-50%)',
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backgroundColor: COLORS.overlayDarkFull,
               color: 'white',
               '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                backgroundColor: COLORS.overlayDarkFullest,
               },
               '&:disabled': {
                 display: 'none',
@@ -472,10 +473,10 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
               right: 8,
               top: '50%',
               transform: 'translateY(-50%)',
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backgroundColor: COLORS.overlayDarkFull,
               color: 'white',
               '&:hover': {
-                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                backgroundColor: COLORS.overlayDarkFullest,
               },
               '&:disabled': {
                 display: 'none',
@@ -498,7 +499,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
             position: 'absolute',
             bottom: 8,
             right: 8,
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backgroundColor: COLORS.overlayDarkFuller,
             color: 'white',
             px: 1,
             py: 0.5,

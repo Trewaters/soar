@@ -5,6 +5,7 @@ import NavigationButton from '@clientComponents/NavigationButton'
 import Brightness1OutlinedIcon from '@mui/icons-material/Brightness1Outlined'
 import GroupWorkIcon from '@mui/icons-material/GroupWork'
 import WorkspacesIcon from '@mui/icons-material/Workspaces'
+import { COLORS } from '../../styles/theme'
 
 const links = [
   {
@@ -41,7 +42,7 @@ export default function LandingPage() {
                 minWidth: 120,
                 minHeight: 48,
                 borderRadius: '14px',
-                boxShadow: '0px 4px 4px -1px rgba(0, 0, 0, 0.25)',
+                boxShadow: `0px 4px 4px -1px ${COLORS.overlayDarkStrong}`,
                 textTransform: 'uppercase',
                 py: 4, // 32px (valid index)
                 px: 4, // 32px (valid index)
@@ -53,7 +54,7 @@ export default function LandingPage() {
                 '&:hover': {
                   backgroundColor: 'transparent',
                   transform: 'translateY(-1px)',
-                  boxShadow: '0px 6px 8px -1px rgba(0, 0, 0, 0.25)',
+                  boxShadow: `0px 6px 8px -1px ${COLORS.overlayDarkStrong}`,
                 },
                 '&:focus': {
                   outline: '2px solid',

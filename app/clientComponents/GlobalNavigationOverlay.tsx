@@ -8,6 +8,7 @@ import {
   Fade,
 } from '@mui/material'
 import { useNavigationLoading } from '@context/NavigationLoadingContext'
+import { COLORS } from '../../styles/theme'
 
 /**
  * Global navigation loading overlay that displays during page transitions.
@@ -28,9 +29,9 @@ export default function GlobalNavigationOverlay() {
       data-testid="global-navigation-overlay"
       open={state.isNavigating}
       sx={{
-        color: '#fff',
+        color: (theme) => theme.palette.text.inverse,
         zIndex: (theme) => theme.zIndex.drawer + 2000, // Above everything
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: COLORS.overlayDarkFull,
         backdropFilter: 'blur(2px)',
         position: 'absolute', // Prevents Next.js "Skipping auto-scroll" warning
       }}
@@ -44,9 +45,9 @@ export default function GlobalNavigationOverlay() {
             gap: 2,
             padding: 3,
             borderRadius: 2,
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            backgroundColor: COLORS.overlayWhiteSoft,
             backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
+            border: `1px solid ${COLORS.overlayWhiteLight}`,
           }}
         >
           <CircularProgress

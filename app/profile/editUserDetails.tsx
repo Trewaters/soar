@@ -541,10 +541,10 @@ export default function EditUserDetails({
                     aria-label="Cancel editing and view profile"
                     onClick={onCancel}
                     sx={{
-                      color: 'white',
-                      bgcolor: 'rgba(255, 255, 255, 0.2)',
+                      color: 'text.inverse',
+                      bgcolor: 'background.overlayLightSoft',
                       '&:hover': {
-                        bgcolor: 'rgba(255, 255, 255, 0.3)',
+                        bgcolor: 'background.overlayLightMedium',
                       },
                     }}
                     data-testid="cancel-edit-header-button"

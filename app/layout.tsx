@@ -9,9 +9,7 @@ import { auth } from 'auth'
 import ServiceWorkerRegister from '@clientComponents/ServiceWorkerRegister'
 
 declare global {
-  // eslint-disable-next-line no-unused-vars
   namespace JSX {
-    // eslint-disable-next-line no-unused-vars
     interface IntrinsicElements {
       'gmp-map': any
       'gmp-advanced-marker': any
@@ -35,7 +33,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport = {
-  themeColor: '#ffffff',
+  themeColor: '#ffffff', // Match white background color
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,

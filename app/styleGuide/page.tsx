@@ -40,6 +40,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
+import { Theme } from '@mui/material/styles'
 import {
   ExpandMore as ExpandMoreIcon,
   Favorite as FavoriteIcon,
@@ -90,10 +91,12 @@ function getRelativeLuminance(color: string): number {
  * Determine whether to use white or black text based on background color
  * Uses WCAG contrast ratio guidelines
  */
-function getContrastTextColor(backgroundColor: string): string {
+function getContrastTextColor(backgroundColor: string, theme: Theme): string {
   const luminance = getRelativeLuminance(backgroundColor)
   // If luminance is greater than 0.5, use black text, otherwise use white
-  return luminance > 0.5 ? '#000000' : '#FFFFFF'
+  return luminance > 0.5
+    ? theme.palette.text.primary
+    : theme.palette.text.inverse ?? '#ffffff'
 }
 
 export default function StyleGuide() {
@@ -779,7 +782,7 @@ export default function StyleGuide() {
                   </Typography>
                   <Stack spacing={1}>
                     {Object.entries(colorValues).map(([variant, value]) => {
-                      const textColor = getContrastTextColor(value)
+                      const textColor = getContrastTextColor(value, theme)
                       return (
                         <Box
                           key={variant}
@@ -928,11 +931,6 @@ export default function StyleGuide() {
                   <AutocompleteInput
                     params={params}
                     placeholder="Search for a Yoga Pose"
-                    sx={{
-                      '& .MuiInputBase-input': {
-                        color: 'primary.contrastText',
-                      },
-                    }}
                   />
                 )}
                 filterOptions={(options, state) =>

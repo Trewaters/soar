@@ -1,7 +1,8 @@
-import { Box } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import React from 'react'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import { COLORS } from '../../styles/theme'
 
 export interface CustomPaginationProps {
   count: number
@@ -15,6 +16,7 @@ const CustomPaginationCircles: React.FC<CustomPaginationProps> = ({
   page,
   onChange,
 }) => {
+  const theme = useTheme()
   const handleClick = (newPage: number) => {
     onChange({} as React.ChangeEvent<unknown>, newPage)
   }
@@ -84,8 +86,11 @@ const CustomPaginationCircles: React.FC<CustomPaginationProps> = ({
             height: 20,
             borderRadius: '50%',
             margin: '0 5px',
-            backgroundColor: `rgba(246, 137, 61, ${getTransparency(index + 1)})`,
-            border: page === index + 1 ? '2px solid #F6893D' : 'none',
+            backgroundColor: `rgba(${COLORS.primaryOrangeRGB}, ${getTransparency(index + 1)})`,
+            border:
+              page === index + 1
+                ? `2px solid ${theme.palette.primary.main}`
+                : 'none',
             cursor: 'pointer',
           }}
           sx={{

@@ -123,15 +123,9 @@ const TextInputField = React.memo(
         const soarStyles = {
           '& .MuiOutlinedInput-notchedOutline': {
             borderRadius: '12px',
-            borderColor: 'primary.main',
-            boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-          },
-          '& .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'primary.light',
           },
           '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline':
             {
-              borderColor: 'primary.main',
               borderWidth: '2px',
             },
         }

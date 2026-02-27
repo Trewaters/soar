@@ -61,7 +61,9 @@ export default function ShareAsset({
 
   const validateContent = useCallback((c: ShareableContent) => {
     if (!c) return false
-    switch (c.contentType) {
+    // Accept only the canonical content type ('flow' for flows)
+    const t = c.contentType
+    switch (t) {
       case 'asana':
         return Boolean(
           (c.data as any).sort_english_name ||
@@ -81,7 +83,8 @@ export default function ShareAsset({
   const shareConfig = useMemo(() => {
     try {
       if (!validateContent(content)) return null
-      const strat = createShareStrategy(content.contentType)
+      const normalizedType = content?.contentType
+      const strat = createShareStrategy(normalizedType as any)
       return strat.generateShareConfig(content.data as any)
     } catch (e) {
       return null
@@ -164,7 +167,8 @@ export default function ShareAsset({
       // the public canonical id rather than a pagination or transient id.
       let dataToShare: any = content.data
       try {
-        if (content.contentType === 'flow') {
+        const contentTypeNormalized = content.contentType
+        if (contentTypeNormalized === 'flow') {
           dataToShare = await resolveSeriesCanonical(content.data)
         } else if (content.contentType === 'sequence') {
           dataToShare = await resolveSequenceCanonical(content.data)
@@ -174,7 +178,7 @@ export default function ShareAsset({
         dataToShare = content.data
       }
 
-      const strat = createShareStrategy(content.contentType)
+      const strat = createShareStrategy(content.contentType as any)
       const shareConfigResolved = strat.generateShareConfig(dataToShare as any)
 
       // Prefer user-supplied custom text when available
@@ -262,7 +266,9 @@ export default function ShareAsset({
   const handleClose = useCallback(() => setSnackbarOpen(false), [])
 
   const label = useMemo(() => {
-    switch (content?.contentType) {
+    // Use the declared content type for user-facing labels.
+    const t = content?.contentType
+    switch (t) {
       case 'asana':
         return 'Share this pose'
       case 'flow':

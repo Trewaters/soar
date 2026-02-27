@@ -12,6 +12,7 @@ import {
 import LockIcon from '@mui/icons-material/Lock'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import NAV_PATHS from '@app/utils/navigation/constants'
+import { COLORS } from '../../styles/theme'
 
 export interface UnauthorizedErrorProps {
   /**
@@ -166,10 +167,10 @@ export default function UnauthorizedError({
               variant="outlined"
               sx={{
                 color: 'white',
-                borderColor: 'rgba(255, 255, 255, 0.5)',
+                borderColor: COLORS.overlayWhiteStrong,
                 '&:hover': {
                   borderColor: 'white',
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  backgroundColor: COLORS.overlayWhiteSoft,
                 },
               }}
               onClick={() => {
@@ -184,10 +185,10 @@ export default function UnauthorizedError({
               variant="outlined"
               sx={{
                 color: 'white',
-                borderColor: 'rgba(255, 255, 255, 0.5)',
+                borderColor: COLORS.overlayWhiteStrong,
                 '&:hover': {
                   borderColor: 'white',
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  backgroundColor: COLORS.overlayWhiteSoft,
                 },
               }}
               onClick={onClose}

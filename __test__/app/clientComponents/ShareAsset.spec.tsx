@@ -211,11 +211,11 @@ describe('ShareAsset component', () => {
 
     const series = { seriesName: 'S', seriesPoses: ['P1;desc'] }
     render(
-      <ShareAsset content={{ contentType: 'series', data: series } as any} />,
+      <ShareAsset content={{ contentType: 'flow', data: series } as any} />,
       { wrapper: Wrapper }
     )
 
-    const btn = screen.getByRole('button', { name: /Share this series/i })
+    const btn = screen.getByRole('button', { name: /Share this flow/i })
     await userEvent.click(btn)
 
     await waitFor(() => expect(shareMock).toHaveBeenCalled())

@@ -565,7 +565,8 @@ export default function SequenceViewWithEdit({
                               px: 3,
                               py: 1,
                               '&:hover': {
-                                backgroundColor: '#f0f0f0',
+                                backgroundColor: (theme) =>
+                                  theme.palette.background.default,
                                 transition: 'all 0.2s',
                               },
                             }}

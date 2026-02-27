@@ -7,6 +7,7 @@
 
 import { SxProps, Theme } from '@mui/material/styles'
 import { isMobileDevice } from './mobileInputHelpers'
+import { COLORS } from '@styles/theme'
 
 /**
  * Mobile-optimized input styling that prevents iOS zoom
@@ -16,7 +17,7 @@ export const getMobileInputTheme = (): SxProps<Theme> => ({
   '& .MuiInputBase-root': {
     fontSize: '16px', // Prevents iOS zoom
     borderRadius: '12px',
-    boxShadow: '0 4px 4px 0 #CBCBCB',
+    boxShadow: `0 4px 4px 0 ${COLORS.shadowGray}`,
     minHeight: '48px', // Minimum touch target size
 
     // Enhanced touch targets for mobile

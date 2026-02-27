@@ -21,6 +21,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { useSession } from 'next-auth/react'
+import { COLORS } from '../../styles/theme'
 
 export interface SeriesImageManagerProps {
   seriesId: string
@@ -234,7 +235,7 @@ export default function SeriesImageManager({
                     top: 8,
                     right: 8,
                     p: 0,
-                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    backgroundColor: COLORS.overlayDarkFullest,
                     borderRadius: 1,
                   }}
                 >

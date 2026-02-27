@@ -4,6 +4,7 @@ import { useActiveProfileImage } from '@app/hooks/useActiveProfileImage'
 import Image from 'next/image'
 import { UseUser } from '@app/context/UserContext'
 import { useSession } from 'next-auth/react'
+import { COLORS } from '../../styles/theme'
 
 export interface UserAvatarProps extends Omit<AvatarProps, 'src' | 'alt'> {
   /**
@@ -144,7 +145,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              bgcolor: 'rgba(255,255,255,0.6)',
+              bgcolor: COLORS.overlayWhiteVeryStrong,
               borderRadius: '50%',
             }}
           >

@@ -4,6 +4,7 @@ import { Box, Stack, Typography } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
 import { ComponentProps } from 'react'
 import { useSession } from 'next-auth/react'
+import { COLORS } from '../../styles/theme'
 
 export interface SplashNavButtonProps extends ComponentProps<typeof Box> {
   title: string
@@ -96,12 +97,12 @@ export default function SplashNavButton({
         borderRadius: '12px',
         border: '1px solid',
         borderColor: 'grey.300',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        boxShadow: `0 2px 8px ${COLORS.overlayDarkLightest}`,
         position: 'relative',
         ':hover': {
           cursor: 'pointer',
           transform: 'translateY(-2px)',
-          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+          boxShadow: `0 4px 16px ${COLORS.overlayDarkLight}`,
         },
         transition: 'all 0.2s ease-in-out',
       }}
@@ -156,7 +157,7 @@ export default function SplashNavButton({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+              boxShadow: `0 2px 4px ${COLORS.overlayDarkMedium}`,
               zIndex: 2,
             }}
           >
@@ -175,7 +176,7 @@ export default function SplashNavButton({
             component={'h2'}
             sx={{
               color: 'navSplash.main',
-              backgroundColor: 'rgba(255, 255, 255, 0.3)',
+              backgroundColor: COLORS.overlayWhiteMedium,
               borderRadius: '8px',
               padding: '6px 12px',
               marginTop: '12px',

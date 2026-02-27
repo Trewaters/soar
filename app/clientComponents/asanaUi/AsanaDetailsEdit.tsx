@@ -273,9 +273,6 @@ export default React.memo(function AsanaDetailsEdit(
                 placeholder={field.placeholder}
                 required={field.required}
                 helperText={field.helperText}
-                sx={{
-                  '& .MuiInputBase-input': { color: 'primary.contrastText' },
-                }}
                 slotProps={{
                   input: {
                     ...params.InputProps,

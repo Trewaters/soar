@@ -251,10 +251,10 @@ export default function UserDetails({ onEditClick }: UserDetailsProps) {
               aria-label="Edit Profile"
               onClick={onEditClick}
               sx={{
-                color: 'white',
-                bgcolor: 'rgba(255, 255, 255, 0.2)',
+                color: 'text.inverse',
+                bgcolor: 'background.overlayLightSoft',
                 '&:hover': {
-                  bgcolor: 'rgba(255, 255, 255, 0.3)',
+                  bgcolor: 'background.overlayLightMedium',
                 },
               }}
               data-testid="edit-profile-button"

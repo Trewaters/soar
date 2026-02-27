@@ -103,6 +103,9 @@ export default function SeriesPoseList({
           : ''
         const fallbackSecondary =
           !sanskritName && secondaryText ? secondaryText : ''
+        // Always expose an alternative secondary if present (used when both
+        // Sanskrit and alternative English names exist)
+        const alternativeSecondary = secondaryText || ''
         const alignmentCues = pose.alignment_cues || ''
         const breathSeries =
           typeof pose.breathSeries === 'string' ? pose.breathSeries.trim() : ''
@@ -292,8 +295,10 @@ export default function SeriesPoseList({
                 </Typography>
               )}
 
-              {showSecondary && sanskritName && (
-                // place secondary on its own block so it appears below the name
+              {showSecondary && (sanskritName || fallbackSecondary) && (
+                // place secondary (Sanskrit or fallback) on its own block so it
+                // appears below the name. Use `-secondary` test id for this
+                // primary secondary display so tests can rely on a stable id.
                 <Box sx={{ width: '100%', mt: 0.5 }}>
                   <Typography
                     textAlign="left"
@@ -309,31 +314,34 @@ export default function SeriesPoseList({
                     }}
                     data-testid={`${dataTestIdPrefix}-${index}-secondary`}
                   >
-                    {sanskritName}
+                    {sanskritName || fallbackSecondary}
                   </Typography>
                 </Box>
               )}
 
-              {showSecondary && showFallbackSecondary && fallbackSecondary && (
-                <Box sx={{ width: '100%', mt: 0.5 }}>
-                  <Typography
-                    textAlign="left"
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{
-                      fontStyle: 'italic',
-                      display: 'block',
-                      width: '100%',
-                      whiteSpace: 'normal',
-                      overflow: 'visible',
-                      textOverflow: 'clip',
-                    }}
-                    data-testid={`${dataTestIdPrefix}-${index}-secondary`}
-                  >
-                    {fallbackSecondary}
-                  </Typography>
-                </Box>
-              )}
+              {showSecondary &&
+                alternativeSecondary &&
+                alternativeSecondary !==
+                  (sanskritName || fallbackSecondary) && (
+                  <Box sx={{ width: '100%', mt: 0.5 }}>
+                    <Typography
+                      textAlign="left"
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{
+                        fontStyle: 'italic',
+                        display: 'block',
+                        width: '100%',
+                        whiteSpace: 'normal',
+                        overflow: 'visible',
+                        textOverflow: 'clip',
+                      }}
+                      data-testid={`${dataTestIdPrefix}-${index}-alternative`}
+                    >
+                      {alternativeSecondary}
+                    </Typography>
+                  </Box>
+                )}
             </Box>
           </Box>
         )
