@@ -24,7 +24,9 @@ import NAV_PATHS from '@app/utils/navigation/constants'
 import { UserStateContext } from '@context/UserContext'
 import EditSequence, { EditableSequence } from '@clientComponents/EditSequence'
 import { getAllSeries } from '@lib/seriesService'
-import SeriesPoseList from '@clientComponents/SeriesPoseList'
+import SeriesPoseList, {
+  type SeriesPoseEntry,
+} from '@clientComponents/SeriesPoseList'
 import { getPoseNavigationUrlSync } from '@app/utils/navigation/poseNavigation'
 import Image from 'next/image'
 import ActivityTracker from '@app/clientComponents/ActivityTracker'
@@ -473,6 +475,23 @@ export default function SequenceViewWithEdit({
               <Stack spacing={3} alignItems="center">
                 {model.sequencesSeries.map((seriesMini, i) => {
                   const isStale = Boolean((seriesMini as any).isStale)
+                  const normalizedSeriesPoses: SeriesPoseEntry[] = (
+                    seriesMini.seriesPoses || []
+                  ).map((pose) => {
+                    if (typeof pose === 'string') {
+                      return {
+                        sort_english_name: pose,
+                      }
+                    }
+
+                    return {
+                      sort_english_name: pose.sort_english_name,
+                      secondary: pose.secondary,
+                      alignment_cues: pose.alignment_cues,
+                      poseId: pose.poseId,
+                    }
+                  })
+
                   return (
                     <Card
                       key={`${seriesMini.seriesName}-${i}`}
@@ -529,9 +548,9 @@ export default function SequenceViewWithEdit({
                         }
                       />
                       <CardContent className="lines" sx={{ p: 0 }}>
-                        {seriesMini.seriesPoses?.length ? (
+                        {normalizedSeriesPoses.length ? (
                           <SeriesPoseList
-                            seriesPoses={seriesMini.seriesPoses}
+                            seriesPoses={normalizedSeriesPoses}
                             getHref={(poseName) =>
                               getPoseNavigationUrlSync(poseName)
                             }
