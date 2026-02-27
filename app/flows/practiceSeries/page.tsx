@@ -42,7 +42,7 @@ import EditSeriesDialog, {
   Series as EditSeriesShape,
   Asana as EditAsanaShape,
 } from '@app/flows/editSeries/EditSeriesDialog'
-import { getPoseById } from '@lib/poseService'
+import { getPoseById, getPoseIdByName } from '@lib/poseService'
 import FlowTitlePoseListSection from '@app/clientComponents/FlowTitlePoseListSection'
 import { SeriesPoseEntry } from '@app/clientComponents/SeriesPoseList'
 import ImageCarousel from '@app/clientComponents/imageUpload/ImageCarousel'
@@ -241,27 +241,48 @@ export default function Page() {
       }
 
       const poseEntries = flow.seriesPoses
-        .filter((pose): pose is any => !!pose && typeof pose === 'object')
-        .map((pose) => ({
-          poseName: String((pose as any).sort_english_name || ''),
-          poseId: String((pose as any).poseId || ''),
-        }))
+        .map((pose: any) => {
+          if (!pose) return null
+
+          if (typeof pose === 'string') {
+            const poseName = pose.split(';')[0]?.trim() || ''
+            return { poseName, poseId: '' }
+          }
+
+          if (typeof pose === 'object') {
+            return {
+              poseName: String((pose as any).sort_english_name || '').trim(),
+              poseId: String((pose as any).poseId || (pose as any).id || ''),
+            }
+          }
+
+          return null
+        })
+        .filter(
+          (entry): entry is { poseName: string; poseId: string } => !!entry
+        )
         .filter((entry) => entry.poseName.length > 0)
 
-      // Validate pose IDs in parallel; keep only object-based seriesPoses support
+      // Validate pose IDs in parallel and fall back to name lookup when IDs are missing.
       const idPromises = poseEntries.map(async ({ poseName, poseId }) => {
-        if (!poseId) {
-          return { poseName, id: null, shouldMarkDeleted: true }
+        if (poseId) {
+          try {
+            await getPoseById(poseId)
+            return { poseName, id: poseId }
+          } catch {
+            // Continue to name-based fallback
+          }
         }
+
         try {
-          await getPoseById(poseId)
-          return { poseName, id: poseId, shouldMarkDeleted: true }
+          const idByName = await getPoseIdByName(poseName)
+          return { poseName, id: idByName }
         } catch (error) {
           console.warn(
-            `Failed to resolve pose by id for pose: ${poseName}`,
+            `Failed to resolve pose by id/name for pose: ${poseName}`,
             error
           )
-          return { poseName, id: null, shouldMarkDeleted: true }
+          return { poseName, id: null }
         }
       })
 
@@ -270,8 +291,7 @@ export default function Page() {
         const results = await Promise.all(idPromises)
         if (mounted) {
           const idsMap = results.reduce(
-            (acc, { poseName, id, shouldMarkDeleted }) => {
-              if (!shouldMarkDeleted) return acc
+            (acc, { poseName, id }) => {
               acc[poseName] = id
               return acc
             },

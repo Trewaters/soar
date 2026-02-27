@@ -92,9 +92,16 @@ export default function SeriesPoseList({
         const alignmentCues = pose.alignment_cues || ''
 
         const resolvedName = poseName || `pose-${index}`
-        const poseId = pose.poseId || poseIds[poseName] || null
+        const hasResolvedPoseState = Object.prototype.hasOwnProperty.call(
+          poseIds,
+          poseName
+        )
+        const resolvedPoseId = hasResolvedPoseState
+          ? poseIds[poseName]
+          : undefined
+        const poseId = pose.poseId ?? resolvedPoseId ?? null
         const href = hrefResolver(poseName, poseId)
-        const isPoseDeleted = !poseId
+        const isPoseDeleted = hasResolvedPoseState && resolvedPoseId === null
 
         // Extract first line of alignment cue for inline display
         const alignmentCuesInline =
@@ -178,6 +185,8 @@ export default function SeriesPoseList({
                           String(poseId)
                         )}`
                       )
+                    } else {
+                      navigation.push(href)
                     }
                   }}
                   sx={{

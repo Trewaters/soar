@@ -505,7 +505,7 @@ describe('SeriesPoseList', () => {
       expect(links).toHaveLength(2)
     })
 
-    it('should render deleted styling when pose entry has no poseId', () => {
+    it('should render link when pose entry has no poseId and no explicit deleted mapping', () => {
       render(
         <SeriesPoseList
           seriesPoses={[{ sort_english_name: 'Old Pose Name' }]}
@@ -514,8 +514,12 @@ describe('SeriesPoseList', () => {
         { wrapper: TestWrapper }
       )
 
-      expect(screen.getByTestId('series-pose-0-deleted')).toBeInTheDocument()
-      expect(screen.queryByRole('link')).not.toBeInTheDocument()
+      expect(
+        screen.queryByTestId('series-pose-0-deleted')
+      ).not.toBeInTheDocument()
+      expect(
+        screen.getByRole('link', { name: 'Old Pose Name' })
+      ).toBeInTheDocument()
     })
   })
 })
