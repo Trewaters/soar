@@ -43,6 +43,9 @@ export interface SeriesPoseListProps {
   /** Show secondary/Sanskrit name (default: true) */
   showSecondary?: boolean
 
+  /** Show fallback secondary text when Sanskrit is unavailable (default: true) */
+  showFallbackSecondary?: boolean
+
   /** Link text color (default: 'primary.main') */
   linkColor?: string
 
@@ -68,6 +71,7 @@ export default function SeriesPoseList({
   getHref,
   showAlignmentInline = true,
   showSecondary = true,
+  showFallbackSecondary = true,
   linkColor = 'primary.main',
   containerSx = {},
   poseSx = {},
@@ -132,12 +136,12 @@ export default function SeriesPoseList({
                 normalizedBreath === 'hold full'
               ? {
                   label: 'Hold inhale',
-                  icon: <DeblurIcon sx={{ color: 'info.main' }} />,
+                  icon: <DeblurIcon sx={{ color: 'secondary.main' }} />,
                 }
               : normalizedBreath === 'exhale'
                 ? {
                     label: 'Exhale',
-                    icon: <PlayForWorkIcon sx={{ color: 'secondary.main' }} />,
+                    icon: <PlayForWorkIcon sx={{ color: 'info.main' }} />,
                   }
                 : normalizedBreath === 'hold empty'
                   ? {
@@ -310,7 +314,7 @@ export default function SeriesPoseList({
                 </Box>
               )}
 
-              {showSecondary && fallbackSecondary && (
+              {showSecondary && showFallbackSecondary && fallbackSecondary && (
                 <Box sx={{ width: '100%', mt: 0.5 }}>
                   <Typography
                     textAlign="left"

@@ -58,7 +58,7 @@ export default function FlowTitlePoseListSection({
       {/* Title Container with Edit Button */}
       <Box className="journalTitleContainer">
         <Typography
-          variant="h3"
+          variant="h1"
           textAlign="center"
           sx={{
             color: theme.palette.primary.main,
@@ -84,7 +84,8 @@ export default function FlowTitlePoseListSection({
         seriesPoses={seriesPoses}
         poseIds={poseIds}
         getHref={getHref}
-        showSecondary={false}
+        showSecondary
+        showFallbackSecondary={false}
         linkColor={linkColor}
         dataTestIdPrefix={dataTestIdPrefix}
       />

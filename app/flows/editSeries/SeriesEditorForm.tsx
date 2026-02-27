@@ -38,11 +38,9 @@ const getBreathIcon = (value: string) => {
         <FilterVintageIcon sx={{ color: 'success.main' }} fontSize="small" />
       )
     case 'Hold full':
-      return <DeblurIcon sx={{ color: 'info.main' }} fontSize="small" />
+      return <DeblurIcon sx={{ color: 'secondary.main' }} fontSize="small" />
     case 'Exhale':
-      return (
-        <PlayForWorkIcon sx={{ color: 'secondary.main' }} fontSize="small" />
-      )
+      return <PlayForWorkIcon sx={{ color: 'info.main' }} fontSize="small" />
     case 'Hold empty':
       return <BackHandIcon sx={{ color: 'error.main' }} fontSize="small" />
     default:
