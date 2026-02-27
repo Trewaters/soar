@@ -17,70 +17,31 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => (
 )
 
 describe('SeriesPoseList', () => {
-  const mockStringPoses: SeriesPoseEntry[] = [
-    'Warrior I; Virabhadrasana I',
-    'Downward Dog; Adho Mukha Svanasana',
-    'Child Pose',
-  ]
-
   const mockObjectPoses: SeriesPoseEntry[] = [
     {
       sort_english_name: 'Tree Pose',
+      poseId: 'tree-pose-id',
       secondary: 'Vrikshasana',
       alignment_cues: 'Keep standing leg strong',
     },
     {
       sort_english_name: 'Mountain Pose',
+      poseId: 'mountain-pose-id',
       secondary: 'Tadasana',
       alignment_cues: '',
     },
     {
       sort_english_name: 'Triangle Pose',
+      poseId: 'triangle-pose-id',
       secondary: 'Trikonasana',
       alignment_cues: 'Extend through both sides\nKeep hips aligned',
     },
   ]
 
   const mockPoseIds = {
-    'Warrior I': 'warrior-1-id',
     'Tree Pose': 'tree-pose-id',
     'Mountain Pose': 'mountain-pose-id',
   }
-
-  describe('Rendering with string poses', () => {
-    it('should render without errors', () => {
-      render(<SeriesPoseList seriesPoses={mockStringPoses} />, {
-        wrapper: TestWrapper,
-      })
-      expect(screen.getByText('Warrior I')).toBeInTheDocument()
-      expect(screen.getByText('Downward Dog')).toBeInTheDocument()
-      expect(screen.getByText('Child Pose')).toBeInTheDocument()
-    })
-
-    it('should display secondary Sanskrit names from string format', () => {
-      render(<SeriesPoseList seriesPoses={mockStringPoses} />, {
-        wrapper: TestWrapper,
-      })
-      expect(screen.getByText('Virabhadrasana I')).toBeInTheDocument()
-      expect(screen.getByText('Adho Mukha Svanasana')).toBeInTheDocument()
-    })
-
-    it('should render links for each pose', () => {
-      render(<SeriesPoseList seriesPoses={mockStringPoses} />, {
-        wrapper: TestWrapper,
-      })
-      const links = screen.getAllByRole('link')
-      expect(links).toHaveLength(3)
-      expect(links[0]).toHaveAttribute(
-        'href',
-        `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('Warrior I')}`
-      )
-      expect(links[1]).toHaveAttribute(
-        'href',
-        `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('Downward Dog')}`
-      )
-    })
-  })
 
   describe('Rendering with object poses', () => {
     it('should render without errors', () => {
@@ -144,14 +105,14 @@ describe('SeriesPoseList', () => {
       )
     })
 
-    it('should fallback to encoded name when ID not available', () => {
+    it('should use entry poseId when poseIds map is empty', () => {
       render(<SeriesPoseList seriesPoses={mockObjectPoses} poseIds={{}} />, {
         wrapper: TestWrapper,
       })
       const links = screen.getAllByRole('link')
       expect(links[0]).toHaveAttribute(
         'href',
-        `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('Tree Pose')}`
+        `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent('tree-pose-id')}`
       )
     })
   })
@@ -260,15 +221,20 @@ describe('SeriesPoseList', () => {
       expect(screen.queryByRole('link')).not.toBeInTheDocument()
     })
 
-    it('should handle mixed string and object formats', () => {
+    it('should handle mixed complete and partial object formats', () => {
       const mixedPoses: SeriesPoseEntry[] = [
-        'Warrior I; Virabhadrasana I',
+        {
+          sort_english_name: 'Warrior I',
+          secondary: 'Virabhadrasana I',
+        },
         {
           sort_english_name: 'Tree Pose',
           secondary: 'Vrikshasana',
           alignment_cues: 'Balance on one leg',
         },
-        'Child Pose',
+        {
+          sort_english_name: 'Child Pose',
+        },
       ]
       render(<SeriesPoseList seriesPoses={mixedPoses} />, {
         wrapper: TestWrapper,
@@ -360,9 +326,9 @@ describe('SeriesPoseList', () => {
   describe('Deleted Poses', () => {
     it('should display tooltip for deleted poses when poseId is explicitly null', () => {
       const posesWithDeleted: SeriesPoseEntry[] = [
-        'Tree Pose',
-        'Warrior I', // This one will be marked as deleted
-        'Mountain Pose',
+        { sort_english_name: 'Tree Pose' },
+        { sort_english_name: 'Warrior I' }, // This one will be marked as deleted
+        { sort_english_name: 'Mountain Pose' },
       ]
 
       const poseIdsWithDeleted = {
@@ -395,7 +361,7 @@ describe('SeriesPoseList', () => {
 
       render(
         <SeriesPoseList
-          seriesPoses={mockStringPoses.slice(0, 2)}
+          seriesPoses={mockObjectPoses.slice(0, 2)}
           poseIds={poseIdsWithValidIds}
         />,
         { wrapper: TestWrapper }
@@ -419,7 +385,11 @@ describe('SeriesPoseList', () => {
 
       render(
         <SeriesPoseList
-          seriesPoses={mockStringPoses}
+          seriesPoses={[
+            { sort_english_name: 'Tree Pose' },
+            { sort_english_name: 'Warrior I' },
+            { sort_english_name: 'Mountain Pose' },
+          ]}
           poseIds={poseIdsWithDeleted}
         />,
         { wrapper: TestWrapper }
@@ -437,7 +407,7 @@ describe('SeriesPoseList', () => {
 
       render(
         <SeriesPoseList
-          seriesPoses={['Warrior I']}
+          seriesPoses={[{ sort_english_name: 'Warrior I' }]}
           poseIds={poseIdsWithDeleted}
         />,
         { wrapper: TestWrapper }
@@ -491,9 +461,18 @@ describe('SeriesPoseList', () => {
     })
 
     it('should not apply deleted styling when poseIds object is empty', () => {
-      render(<SeriesPoseList seriesPoses={mockStringPoses} poseIds={{}} />, {
-        wrapper: TestWrapper,
-      })
+      render(
+        <SeriesPoseList
+          seriesPoses={[
+            { sort_english_name: 'Tree Pose', poseId: 'tree-pose-id' },
+            { sort_english_name: 'Warrior I', poseId: 'warrior-i-id' },
+          ]}
+          poseIds={{}}
+        />,
+        {
+          wrapper: TestWrapper,
+        }
+      )
 
       // All poses should be links since we don't know which are deleted
       const links = screen.getAllByRole('link')
@@ -508,20 +487,35 @@ describe('SeriesPoseList', () => {
     it('should not apply deleted styling when pose is not in poseIds map', () => {
       const partialPoseIds = {
         'Tree Pose': 'tree-id',
-        // Warrior I not in map - this means we haven't checked yet, not that it's deleted
       }
 
       render(
         <SeriesPoseList
-          seriesPoses={['Tree Pose', 'Warrior I']}
+          seriesPoses={[
+            { sort_english_name: 'Tree Pose' },
+            { sort_english_name: 'Warrior I', poseId: 'warrior-i-id' },
+          ]}
           poseIds={partialPoseIds}
         />,
         { wrapper: TestWrapper }
       )
 
-      // Warrior I should still be a link (not deleted) since it's not in the map
+      // Warrior I should still be a link (not deleted) because it has poseId
       const links = screen.getAllByRole('link')
       expect(links).toHaveLength(2)
+    })
+
+    it('should render deleted styling when pose entry has no poseId', () => {
+      render(
+        <SeriesPoseList
+          seriesPoses={[{ sort_english_name: 'Old Pose Name' }]}
+          poseIds={{}}
+        />,
+        { wrapper: TestWrapper }
+      )
+
+      expect(screen.getByTestId('series-pose-0-deleted')).toBeInTheDocument()
+      expect(screen.queryByRole('link')).not.toBeInTheDocument()
     })
   })
 })

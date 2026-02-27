@@ -42,9 +42,9 @@ import EditSeriesDialog, {
   Series as EditSeriesShape,
   Asana as EditAsanaShape,
 } from '@app/flows/editSeries/EditSeriesDialog'
-import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
-import { getPoseIdByName } from '@lib/poseService'
+import { getPoseById } from '@lib/poseService'
 import FlowTitlePoseListSection from '@app/clientComponents/FlowTitlePoseListSection'
+import { SeriesPoseEntry } from '@app/clientComponents/SeriesPoseList'
 import ImageCarousel from '@app/clientComponents/imageUpload/ImageCarousel'
 import { PoseImageData } from 'types/images'
 
@@ -202,10 +202,10 @@ export default function Page() {
           const carouselImages = data.images.map(
             (url: string, index: number) =>
               ({
-                id: `series-image-${index}`,
+                id: `series-image-${url}`,
                 userId: '',
                 url,
-                altText: `${flow.seriesName} image ${index + 1}`,
+                altText: `Flow image ${index + 1}`,
                 displayOrder: index + 1,
                 uploadedAt: new Date(),
                 storageType: 'CLOUD' as const,
@@ -229,7 +229,7 @@ export default function Page() {
       mounted = false
       abortController.abort()
     }
-  }, [flow?.id, flow?.seriesName])
+  }, [flow?.id])
 
   // Resolve asana IDs for navigation and deleted pose detection
   useEffect(() => {
@@ -240,27 +240,28 @@ export default function Page() {
         return
       }
 
-      // Extract all pose names first
-      const poseNames: string[] = []
-      for (const pose of flow.seriesPoses) {
-        let poseName = ''
-        if (typeof pose === 'string') {
-          const { name } = splitSeriesPoseEntry(pose)
-          poseName = name
-        } else if (pose && typeof pose === 'object') {
-          poseName = (pose as any).sort_english_name || ''
-        }
-        if (poseName) poseNames.push(poseName)
-      }
+      const poseEntries = flow.seriesPoses
+        .filter((pose): pose is any => !!pose && typeof pose === 'object')
+        .map((pose) => ({
+          poseName: String((pose as any).sort_english_name || ''),
+          poseId: String((pose as any).poseId || ''),
+        }))
+        .filter((entry) => entry.poseName.length > 0)
 
-      // Fetch all pose IDs in parallel for faster resolution
-      const idPromises = poseNames.map(async (poseName) => {
+      // Validate pose IDs in parallel; keep only object-based seriesPoses support
+      const idPromises = poseEntries.map(async ({ poseName, poseId }) => {
+        if (!poseId) {
+          return { poseName, id: null, shouldMarkDeleted: true }
+        }
         try {
-          const id = await getPoseIdByName(poseName)
-          return { poseName, id }
+          await getPoseById(poseId)
+          return { poseName, id: poseId, shouldMarkDeleted: true }
         } catch (error) {
-          console.warn(`Failed to resolve ID for pose: ${poseName}`, error)
-          return { poseName, id: null }
+          console.warn(
+            `Failed to resolve pose by id for pose: ${poseName}`,
+            error
+          )
+          return { poseName, id: null, shouldMarkDeleted: true }
         }
       })
 
@@ -269,7 +270,8 @@ export default function Page() {
         const results = await Promise.all(idPromises)
         if (mounted) {
           const idsMap = results.reduce(
-            (acc, { poseName, id }) => {
+            (acc, { poseName, id, shouldMarkDeleted }) => {
+              if (!shouldMarkDeleted) return acc
               acc[poseName] = id
               return acc
             },
@@ -310,20 +312,9 @@ export default function Page() {
     if (!flow) return null
     const asanas: EditAsanaShape[] = (flow.seriesPoses || []).map(
       (entry, idx) => {
-        // Handle both string and object formats
-        let name = ''
-        let secondary = ''
-        let alignmentCues = ''
-
-        if (typeof entry === 'string') {
-          const split = splitSeriesPoseEntry(entry)
-          name = split.name
-          secondary = split.secondary
-        } else if (entry && typeof entry === 'object') {
-          name = (entry as any).sort_english_name || ''
-          secondary = (entry as any).secondary || ''
-          alignmentCues = (entry as any).alignment_cues || ''
-        }
+        const name = (entry as any)?.sort_english_name || ''
+        const secondary = (entry as any)?.secondary || ''
+        const alignmentCues = (entry as any)?.alignment_cues || ''
 
         const resolvedName = name || `asana-${idx}`
 
@@ -344,6 +335,27 @@ export default function Page() {
       created_by: (flow as any).createdBy || '',
     }
   }, [flow])
+
+  const displaySeriesPoses = useMemo<SeriesPoseEntry[]>(() => {
+    return (flow?.seriesPoses || [])
+      .filter(
+        (entry) => !!entry && typeof entry === 'object' && !Array.isArray(entry)
+      )
+      .map((entry: any) => ({
+        sort_english_name: String(entry.sort_english_name || ''),
+        secondary:
+          typeof entry.secondary === 'string' ? entry.secondary : undefined,
+        sanskrit_names: Array.isArray(entry.sanskrit_names)
+          ? entry.sanskrit_names
+          : undefined,
+        alignment_cues:
+          typeof entry.alignment_cues === 'string'
+            ? entry.alignment_cues
+            : undefined,
+        poseId: typeof entry.poseId === 'string' ? entry.poseId : undefined,
+      }))
+      .filter((entry) => entry.sort_english_name.length > 0)
+  }, [flow?.seriesPoses])
 
   const handleEditSave = async (updated: EditSeriesShape) => {
     try {
@@ -628,7 +640,7 @@ export default function Page() {
                   title={flow.seriesName}
                   isOwner={isOwner}
                   onEditClick={() => setEditOpen(true)}
-                  seriesPoses={flow.seriesPoses}
+                  seriesPoses={displaySeriesPoses}
                   poseIds={poseIds}
                   getHref={(poseName) => getPoseNavigationUrlSync(poseName)}
                   linkColor="primary.contrastText"
@@ -637,37 +649,47 @@ export default function Page() {
 
                 {/* Series Image - Read-only carousel display */}
                 {(images.length > 0 || flow?.image) && (
-                  <Box
-                    sx={{
-                      mt: 3,
-                      width: '100%',
-                      display: 'flex',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Box sx={{ width: '100%', maxWidth: '500px' }}>
-                      <ImageCarousel
-                        images={
-                          images.length > 0
-                            ? images
-                            : [
-                                {
-                                  id: 'legacy-image',
-                                  userId: '',
-                                  url: flow?.image || '',
-                                  altText: `${flow?.seriesName} image`,
-                                  displayOrder: 1,
-                                  uploadedAt: new Date(),
-                                  storageType: 'CLOUD' as const,
-                                  isOffline: false,
-                                  imageType: 'series' as any,
-                                } as PoseImageData,
-                              ]
-                        }
-                        height={400}
-                        showArrows={false}
-                        aria-label={`${flow?.seriesName} series image`}
-                      />
+                  <Box sx={{ width: '100%', mt: 3 }}>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        mb: 1,
+                        color: `${theme.palette.primary.main}`,
+                      }}
+                    >
+                      Flow Image
+                    </Typography>
+                    <Box
+                      sx={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Box sx={{ width: '100%', maxWidth: '500px' }}>
+                        <ImageCarousel
+                          images={
+                            images.length > 0
+                              ? images
+                              : [
+                                  {
+                                    id: 'legacy-image',
+                                    userId: '',
+                                    url: flow?.image || '',
+                                    altText: `${flow?.seriesName} image`,
+                                    displayOrder: 1,
+                                    uploadedAt: new Date(),
+                                    storageType: 'CLOUD' as const,
+                                    isOffline: false,
+                                    imageType: 'series' as any,
+                                  } as PoseImageData,
+                                ]
+                          }
+                          height={400}
+                          showArrows={false}
+                          aria-label={`${flow?.seriesName} series image`}
+                        />
+                      </Box>
                     </Box>
                   </Box>
                 )}
@@ -682,7 +704,7 @@ export default function Page() {
                         color: `${theme.palette.primary.main}`,
                       }}
                     >
-                      Description
+                      Description:
                     </Typography>
                     <Typography
                       color="primary.contrastText"

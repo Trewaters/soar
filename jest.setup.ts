@@ -380,10 +380,47 @@ expect.extend(toHaveNoViolations)
 // Make axe available globally for tests
 ;(globalThis as any).axe = axe
 
+// Suppress console noise in test output
+// ====================================
+// This config mocks console.warn and console.error to reduce test output noise from:
+// - Expected error handling scenarios (hydration failures, graceful degradation, etc.)
+// - Third-party library warnings
+// - Error boundary logging
+// - Other non-critical console messages during tests
+//
+// RESTORING console output for debugging:
+// 1. To see warnings in a specific test file: jest.spyOn(console, 'warn').mockRestore()
+// 2. To enable all console output: Comment out the jest.fn() lines below
+// 3. To verify a specific warning was logged:
+//    const warnSpy = jest.spyOn(console, 'warn')
+//    // ... run code ...
+//    expect(warnSpy).toHaveBeenCalledWith('message-to-check')
+// 4. Original console methods are available at: (global as any).__originalConsole
+//
+// The suppression makes test output cleaner and more readable while preserving
+// the ability to assert on console calls in specific tests using jest.spyOn().
+const originalConsoleWarn = console.warn
+const originalConsoleError = console.error
+
+// Replace console.warn and console.error with jest.fn() mocks to suppress noise
+console.warn = jest.fn()
+console.error = jest.fn()
+
+// Store originals for tests that might need them
+;(globalThis as any).__originalConsole = {
+  warn: originalConsoleWarn,
+  error: originalConsoleError,
+}
+
 // Extend global types for TypeScript
 declare global {
   // eslint-disable-next-line no-var
   var axe: ReturnType<typeof configureAxe>
+  // eslint-disable-next-line no-var
+  var __originalConsole: {
+    warn: typeof console.warn
+    error: typeof console.error
+  }
 
   namespace jest {
     interface Matchers<R> {

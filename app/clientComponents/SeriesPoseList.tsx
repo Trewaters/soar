@@ -9,24 +9,20 @@ import {
   Theme,
   Tooltip,
 } from '@mui/material'
-import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 import NAV_PATHS from '@app/utils/navigation/constants'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
-import { getPoseIdByName } from '@lib/poseService'
 
-export type SeriesPoseEntry =
-  | string
-  | {
-      sort_english_name?: string
-      secondary?: string
-      // Prisma/Asana model stores Sanskrit names as an array on `sanskrit_names`
-      sanskrit_names?: string[]
-      alignment_cues?: string
-      poseId?: string
-    }
+export type SeriesPoseEntry = {
+  sort_english_name?: string
+  secondary?: string
+  // Prisma/Asana model stores Sanskrit names as an array on `sanskrit_names`
+  sanskrit_names?: string[]
+  alignment_cues?: string
+  poseId?: string
+}
 
 export interface SeriesPoseListProps {
-  /** Array of pose entries (legacy string format or object format) */
+  /** Array of pose entries in object format */
   seriesPoses: SeriesPoseEntry[]
 
   /** Optional map of pose names to resolved pose IDs for navigation */
@@ -58,8 +54,8 @@ export interface SeriesPoseListProps {
 /**
  * SeriesPoseList - Shared component for displaying a list of yoga poses in a series
  *
- * Supports both legacy string format ("Pose Name (Sanskrit)") and new object format
- * with alignment_cues. Displays alignment cues inline as minor parenthetical text.
+ * Expects object-based entries with optional alignment cues.
+ * Displays alignment cues inline as minor parenthetical text.
  */
 export default function SeriesPoseList({
   seriesPoses,
@@ -73,11 +69,11 @@ export default function SeriesPoseList({
   dataTestIdPrefix = 'series-pose',
 }: SeriesPoseListProps) {
   const defaultGetHref = (poseName: string, poseId?: string | null): string => {
-    // Link to practice page with query param `?id=` (use ID if available, fallback to encoded name)
+    // Link to practice page only when a valid ID exists.
     if (poseId) {
       return `${NAV_PATHS.PRACTICE_ASANAS}?id=${poseId}`
     }
-    return `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent(poseName)}`
+    return NAV_PATHS.PRACTICE_ASANAS
   }
 
   const navigation = useNavigationWithLoading()
@@ -88,29 +84,17 @@ export default function SeriesPoseList({
     <Stack spacing={0} sx={[{ width: '100%' }, containerSx as any]}>
       {seriesPoses.map((pose, index) => {
         // Normalize pose entry to extract name, secondary, and alignment cues
-        let poseName = ''
-        let secondary = ''
-        let alignmentCues = ''
-
-        if (typeof pose === 'string') {
-          const split = splitSeriesPoseEntry(pose)
-          poseName = split.name
-          secondary = split.secondary
-        } else if (pose && typeof pose === 'object') {
-          poseName = pose.sort_english_name || ''
-          // Prefer explicit `secondary`, otherwise use the first element of `sanskrit_names` from the model
-          secondary =
-            pose.secondary ||
-            (Array.isArray(pose.sanskrit_names) && pose.sanskrit_names[0]) ||
-            ''
-          alignmentCues = pose.alignment_cues || ''
-        }
+        const poseName = pose.sort_english_name || ''
+        const secondary =
+          pose.secondary ||
+          (Array.isArray(pose.sanskrit_names) && pose.sanskrit_names[0]) ||
+          ''
+        const alignmentCues = pose.alignment_cues || ''
 
         const resolvedName = poseName || `pose-${index}`
-        const poseId = poseIds[poseName] || null
+        const poseId = pose.poseId || poseIds[poseName] || null
         const href = hrefResolver(poseName, poseId)
-        const isPoseDeleted =
-          poseName && poseIds.hasOwnProperty(poseName) && poseId === null
+        const isPoseDeleted = !poseId
 
         // Extract first line of alignment cue for inline display
         const alignmentCuesInline =
@@ -194,28 +178,7 @@ export default function SeriesPoseList({
                           String(poseId)
                         )}`
                       )
-                      return
                     }
-
-                    // Attempt to resolve the ObjectId by name. If not found,
-                    // avoid navigating to a name-based `?id=` URL which may
-                    // return a 404; instead navigate to the asana list.
-                    try {
-                      const resolved = await getPoseIdByName(poseName)
-                      if (resolved) {
-                        navigation.push(
-                          `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent(
-                            resolved
-                          )}`
-                        )
-                        return
-                      }
-                    } catch (err) {
-                      // ignore and fall through
-                    }
-
-                    // Fallback: open the asana list page instead of a name-based detail
-                    navigation.push(NAV_PATHS.PRACTICE_ASANAS)
                   }}
                   sx={{
                     display: 'block',

@@ -6,6 +6,83 @@ import fs from 'fs'
 import path from 'path'
 import { AsanaUpdatePayloadValidator } from '@app/utils/validation/schemas/asana'
 import { formatAsValidationResponse } from '@app/utils/validation/errorFormatter'
+import { splitSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
+
+async function syncRenamedPoseAcrossSeries(
+  poseId: string,
+  oldName: string,
+  newName: string
+) {
+  if (!oldName || !newName || oldName === newName) return
+
+  const allSeries = await prisma.asanaSeries.findMany({
+    select: {
+      id: true,
+      seriesPoses: true,
+    },
+  })
+
+  const updates: Promise<any>[] = []
+
+  for (const series of allSeries) {
+    const rawEntries = Array.isArray((series as any).seriesPoses)
+      ? ((series as any).seriesPoses as any[])
+      : []
+
+    let hasChanges = false
+    const nextEntries = rawEntries.map((entry: any) => {
+      if (typeof entry === 'string') {
+        const { name, secondary } = splitSeriesPoseEntry(entry)
+        if (name === oldName) {
+          hasChanges = true
+          return {
+            poseId,
+            sort_english_name: newName,
+            ...(secondary ? { secondary } : {}),
+          }
+        }
+        return entry
+      }
+
+      if (entry && typeof entry === 'object' && !Array.isArray(entry)) {
+        const entryPoseId =
+          typeof entry.poseId === 'string' ? String(entry.poseId) : ''
+        const entryName =
+          typeof entry.sort_english_name === 'string'
+            ? entry.sort_english_name
+            : ''
+        const matchesById = entryPoseId && entryPoseId === String(poseId)
+        const matchesByLegacyName = !entryPoseId && entryName === oldName
+
+        if (matchesById || matchesByLegacyName) {
+          hasChanges = true
+          return {
+            ...entry,
+            sort_english_name: newName,
+          }
+        }
+      }
+
+      return entry
+    })
+
+    if (hasChanges) {
+      updates.push(
+        prisma.asanaSeries.update({
+          where: { id: (series as any).id },
+          data: {
+            seriesPoses: nextEntries,
+            updatedAt: new Date(),
+          },
+        })
+      )
+    }
+  }
+
+  if (updates.length > 0) {
+    await Promise.all(updates)
+  }
+}
 
 export async function PUT(
   request: NextRequest,
@@ -119,10 +196,26 @@ export async function PUT(
       }
     }
 
+    const previousSortEnglishName = existingPose.sort_english_name || ''
+
     const updatedPose = await prisma.asanaPose.update({
       where: { id: resolvedParams.id },
       data,
     })
+
+    const updatedSortEnglishName = updatedPose.sort_english_name || ''
+    if (
+      previousSortEnglishName &&
+      updatedSortEnglishName &&
+      previousSortEnglishName !== updatedSortEnglishName
+    ) {
+      await syncRenamedPoseAcrossSeries(
+        resolvedParams.id,
+        previousSortEnglishName,
+        updatedSortEnglishName
+      )
+    }
+
     // Return the updated pose with consistent formatting
     const poseWithFormattedData = {
       ...updatedPose,

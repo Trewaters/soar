@@ -13,6 +13,10 @@ jest.mock('@lib/prismaClient', () => ({
       update: jest.fn(),
       delete: jest.fn(),
     },
+    asanaSeries: {
+      findMany: jest.fn(),
+      update: jest.fn(),
+    },
   },
 }))
 
@@ -39,7 +43,10 @@ describe('PUT /api/poses/[id] validation', () => {
     ;(prisma.asanaPose.findUnique as jest.Mock).mockResolvedValue({
       id: 'pose-1',
       created_by: 'owner@test.com',
+      sort_english_name: 'Old Pose Name',
     })
+    ;(prisma.asanaSeries.findMany as jest.Mock).mockResolvedValue([])
+    ;(prisma.asanaSeries.update as jest.Mock).mockResolvedValue({})
   })
 
   it('returns 403 before validation if authorization fails', async () => {
@@ -101,5 +108,91 @@ describe('PUT /api/poses/[id] validation', () => {
         }),
       })
     )
+  })
+
+  it('syncs series pose labels when sort_english_name is renamed', async () => {
+    ;(prisma.asanaSeries.findMany as jest.Mock).mockResolvedValue([
+      {
+        id: 'series-1',
+        seriesPoses: [
+          'Old Pose Name; Virabhadrasana',
+          {
+            poseId: 'pose-1',
+            sort_english_name: 'Old Pose Name',
+            secondary: 'Virabhadrasana',
+            alignment_cues: 'Lift chest',
+          },
+          {
+            poseId: 'other-pose',
+            sort_english_name: 'Unchanged Pose',
+          },
+        ],
+      },
+    ])
+    ;(prisma.asanaPose.update as jest.Mock).mockResolvedValue({
+      id: 'pose-1',
+      sort_english_name: 'New Pose Name',
+      breath: ['neutral'],
+    })
+
+    const response = await PUT(
+      {
+        json: async () => ({
+          sort_english_name: 'New Pose Name',
+        }),
+      } as any,
+      params
+    )
+
+    expect(response.status).toBe(200)
+    expect(prisma.asanaSeries.findMany).toHaveBeenCalled()
+    expect(prisma.asanaSeries.update).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: { id: 'series-1' },
+        data: expect.objectContaining({
+          seriesPoses: [
+            expect.objectContaining({
+              poseId: 'pose-1',
+              sort_english_name: 'New Pose Name',
+              secondary: 'Virabhadrasana',
+            }),
+            expect.objectContaining({
+              poseId: 'pose-1',
+              sort_english_name: 'New Pose Name',
+            }),
+            expect.objectContaining({
+              poseId: 'other-pose',
+              sort_english_name: 'Unchanged Pose',
+            }),
+          ],
+        }),
+      })
+    )
+  })
+
+  it('does not sync series when pose name remains unchanged', async () => {
+    ;(prisma.asanaPose.findUnique as jest.Mock).mockResolvedValueOnce({
+      id: 'pose-1',
+      created_by: 'owner@test.com',
+      sort_english_name: 'Same Pose',
+    })
+    ;(prisma.asanaPose.update as jest.Mock).mockResolvedValueOnce({
+      id: 'pose-1',
+      sort_english_name: 'Same Pose',
+      breath: ['neutral'],
+    })
+
+    const response = await PUT(
+      {
+        json: async () => ({
+          sort_english_name: 'Same Pose',
+        }),
+      } as any,
+      params
+    )
+
+    expect(response.status).toBe(200)
+    expect(prisma.asanaSeries.findMany).not.toHaveBeenCalled()
+    expect(prisma.asanaSeries.update).not.toHaveBeenCalled()
   })
 })

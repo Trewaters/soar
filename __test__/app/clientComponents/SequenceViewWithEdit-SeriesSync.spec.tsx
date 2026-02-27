@@ -54,7 +54,10 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
         {
           id: 'series-1',
           seriesName: 'Sun Salutation',
-          seriesPoses: ['Old Pose 1', 'Old Pose 2'], // Stale data
+          seriesPoses: [
+            { sort_english_name: 'Old Pose 1', poseId: 'old-pose-1' },
+            { sort_english_name: 'Old Pose 2', poseId: 'old-pose-2' },
+          ], // Stale data
           description: 'Old description',
           duration: '10 minutes',
         },
@@ -67,7 +70,11 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
       {
         id: 'real-series-id-123',
         seriesName: 'Sun Salutation',
-        seriesPoses: ['Updated Pose 1', 'Updated Pose 2', 'New Pose 3'], // Fresh data
+        seriesPoses: [
+          { sort_english_name: 'Updated Pose 1', poseId: 'updated-pose-1' },
+          { sort_english_name: 'Updated Pose 2', poseId: 'updated-pose-2' },
+          { sort_english_name: 'New Pose 3', poseId: 'updated-pose-3' },
+        ], // Fresh data
         description: 'Updated description',
         duration: '15 minutes',
       },
@@ -109,7 +116,10 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
         {
           id: 'series-1',
           seriesName: 'Deleted Series',
-          seriesPoses: ['Pose 1', 'Pose 2'],
+          seriesPoses: [
+            { sort_english_name: 'Pose 1', poseId: 'pose-1' },
+            { sort_english_name: 'Pose 2', poseId: 'pose-2' },
+          ],
           description: 'This series was deleted',
         },
       ],
@@ -121,7 +131,9 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
       {
         id: 'other-series-id',
         seriesName: 'Other Series',
-        seriesPoses: ['Other Pose'],
+        seriesPoses: [
+          { sort_english_name: 'Other Pose', poseId: 'other-pose' },
+        ],
       },
     ])
 
@@ -157,7 +169,7 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
         {
           id: 'series-1',
           seriesName: 'Test Series',
-          seriesPoses: ['Pose 1'],
+          seriesPoses: [{ sort_english_name: 'Pose 1', poseId: 'pose-1' }],
         },
       ],
       created_by: 'test@example.com',
@@ -185,7 +197,9 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
       {
         id: 'series-1',
         seriesName: 'Test Series',
-        seriesPoses: ['Updated Pose'],
+        seriesPoses: [
+          { sort_english_name: 'Updated Pose', poseId: 'updated-pose' },
+        ],
       },
     ])
 
@@ -208,7 +222,9 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
         {
           id: 'series-1',
           seriesName: 'Test Series',
-          seriesPoses: ['Original Pose'],
+          seriesPoses: [
+            { sort_english_name: 'Original Pose', poseId: 'original-pose' },
+          ],
         },
       ],
       created_by: 'test@example.com',
@@ -247,12 +263,22 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
         {
           id: 'series-1',
           seriesName: 'Morning Series',
-          seriesPoses: ['Old Morning Pose'],
+          seriesPoses: [
+            {
+              sort_english_name: 'Old Morning Pose',
+              poseId: 'old-morning-pose',
+            },
+          ],
         },
         {
           id: 'series-2',
           seriesName: 'Evening Series',
-          seriesPoses: ['Old Evening Pose'],
+          seriesPoses: [
+            {
+              sort_english_name: 'Old Evening Pose',
+              poseId: 'old-evening-pose',
+            },
+          ],
         },
       ],
       created_by: 'test@example.com',
@@ -263,12 +289,18 @@ describe('SequenceViewWithEdit - Series Data Synchronization', () => {
       {
         id: 'real-morning-id',
         seriesName: 'Morning Series',
-        seriesPoses: ['New Morning Pose 1', 'New Morning Pose 2'],
+        seriesPoses: [
+          { sort_english_name: 'New Morning Pose 1', poseId: 'new-morning-1' },
+          { sort_english_name: 'New Morning Pose 2', poseId: 'new-morning-2' },
+        ],
       },
       {
         id: 'real-evening-id',
         seriesName: 'Evening Series',
-        seriesPoses: ['New Evening Pose 1', 'New Evening Pose 2'],
+        seriesPoses: [
+          { sort_english_name: 'New Evening Pose 1', poseId: 'new-evening-1' },
+          { sort_english_name: 'New Evening Pose 2', poseId: 'new-evening-2' },
+        ],
       },
     ]
 

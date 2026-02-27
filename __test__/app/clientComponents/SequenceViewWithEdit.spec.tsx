@@ -251,7 +251,7 @@ describe('SequenceViewWithEdit', () => {
       expect(screen.getByText('(Bend knees deeply)')).toBeInTheDocument()
     })
 
-    it('should handle legacy string format poses in series', () => {
+    it('should render legacy string entries as deleted placeholders', () => {
       mockUseSession.mockReturnValue({
         data: { user: { email: 'user@example.com' } },
         status: 'authenticated',
@@ -277,13 +277,14 @@ describe('SequenceViewWithEdit', () => {
       // Verify series is displayed
       expect(screen.getByText('Legacy Series')).toBeInTheDocument()
 
-      // Verify pose names are parsed and displayed
-      expect(screen.getByText('Warrior II')).toBeInTheDocument()
-      expect(screen.getByText('Triangle Pose')).toBeInTheDocument()
-
-      // Verify Sanskrit names are parsed and displayed
-      expect(screen.getByText('Virabhadrasana II')).toBeInTheDocument()
-      expect(screen.getByText('Trikonasana')).toBeInTheDocument()
+      // Legacy string format is no longer parsed in this component;
+      // entries fall back to deleted placeholders.
+      expect(
+        screen.getByTestId('sequence-series-0-pose-0-deleted')
+      ).toHaveTextContent('pose-0')
+      expect(
+        screen.getByTestId('sequence-series-0-pose-1-deleted')
+      ).toHaveTextContent('pose-1')
     })
 
     it('should display empty state when series has no poses', () => {

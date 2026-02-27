@@ -45,7 +45,11 @@
     "script:verify-ownership": "ts-node scripts/verify-ownership.ts",
     "script:fix-null-creators": "ts-node scripts/fix-null-creators-mongodb.ts",
     "script:complete-alpha-migration": "ts-node scripts/complete-alpha-migration.ts",
-    "script:fix-null-roles": "ts-node scripts/fix-null-roles.ts"
+    "script:fix-null-roles": "ts-node scripts/fix-null-roles.ts",
+    "script:repair-series-poses": "ts-node scripts/migrations/repair-series-pose-references.ts",
+    "script:repair-series-poses:apply": "ts-node scripts/migrations/repair-series-pose-references.ts --apply",
+    "script:repair-series-poses:prod": "ts-node scripts/migrations/repair-series-pose-references.ts --production --i-understand-production",
+    "script:repair-series-poses:prod:apply": "ts-node scripts/migrations/repair-series-pose-references.ts --production --apply --i-understand-production"
   },
   "dependencies": {
     "@auth/core": "^0.37.3",

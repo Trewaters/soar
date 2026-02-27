@@ -376,7 +376,7 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
               >
                 <Image
                   src={currentImage.url}
-                  key={currentImage.id || currentImage.url}
+                  key={currentImage.url}
                   alt={
                     currentImage?.altText ||
                     currentImage?.poseName ||

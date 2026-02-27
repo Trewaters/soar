@@ -3,11 +3,13 @@ import { fetchUserActivityStreakSummary } from '@app/lib/activityStreakClient'
 
 describe('activityStreakClient', () => {
   beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-02-26T12:00:00.000Z'))
     jest.clearAllMocks()
     global.fetch = jest.fn()
   })
 
   afterEach(() => {
+    jest.useRealTimers()
     jest.restoreAllMocks()
   })
 
