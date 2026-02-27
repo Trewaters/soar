@@ -342,7 +342,13 @@ export default function Page() {
                       borderRadius: '12px',
                       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
                     },
-                    '& .MuiInputBase-input': { color: 'primary.main' },
+                    '& .MuiInputBase-input': {
+                      color: 'primary.contrastText',
+                    },
+                    '& .MuiInputBase-input::placeholder': {
+                      color: 'background.text',
+                      opacity: 1,
+                    },
                     width: '100%',
                   }}
                   InputProps={{
@@ -377,7 +383,9 @@ export default function Page() {
                       borderRadius: '12px',
                       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
                     },
-                    '& .MuiInputBase-input': { color: 'primary.main' },
+                    '& .MuiInputBase-input': {
+                      color: 'primary.contrastText',
+                    },
                   }}
                   InputProps={{
                     endAdornment: isDirtyDuration ? (
@@ -435,6 +443,7 @@ export default function Page() {
                     onClose={() => setAcOpen(false)}
                     inputValue={searchInputValue}
                     onInputChange={setSearchInputValue}
+                    fullWidth
                   />
                 </FormControl>
               </Box>
@@ -668,7 +677,9 @@ export default function Page() {
                       borderRadius: '12px',
                       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
                     },
-                    '& .MuiInputBase-input': { color: 'primary.main' },
+                    '& .MuiInputBase-input': {
+                      color: 'primary.contrastText',
+                    },
                   }}
                   InputProps={{
                     endAdornment: isDirtyDescription ? (

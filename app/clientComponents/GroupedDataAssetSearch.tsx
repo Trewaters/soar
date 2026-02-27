@@ -111,6 +111,13 @@ export interface GroupedDataAssetSearchProps<T> {
    * Whether the Autocomplete dropdown is open (controlled mode).
    */
   open?: boolean
+
+  /**
+   * When true, stretches the search container to full available width
+   * instead of the default centered max width behavior.
+   * @default false
+   */
+  fullWidth?: boolean
 }
 
 /** Type guard: returns true if the entry is a section header marker. */
@@ -178,6 +185,7 @@ export default function GroupedDataAssetSearch<T extends object>({
   onOpen,
   onClose,
   open,
+  fullWidth = false,
 }: GroupedDataAssetSearchProps<T>) {
   const { data: session } = useSession()
   const currentUserId = session?.user?.id
@@ -321,8 +329,8 @@ export default function GroupedDataAssetSearch<T extends object>({
       spacing={2}
       sx={{
         background: 'white',
-        width: { xs: '100%', md: '40vw' },
-        mx: 'auto',
+        width: fullWidth ? '100%' : { xs: '100%', md: '40vw' },
+        mx: fullWidth ? 0 : 'auto',
         borderRadius: '12px',
       }}
     >
@@ -372,7 +380,9 @@ export default function GroupedDataAssetSearch<T extends object>({
           <AutocompleteInput
             params={params}
             placeholder={placeholderText}
-            sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+            sx={{
+              '& .MuiInputBase-input': { color: 'primary.contrastText' },
+            }}
             inputValue={inputValue}
             onClear={onInputChange ? () => onInputChange('') : undefined}
           />

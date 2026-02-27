@@ -97,7 +97,9 @@ export default function AutocompleteComponent(props: CustomAutocompleteProps) {
           <AutocompleteInput
             params={params}
             placeholder={props.placeholder || 'Search...'}
-            sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+            sx={{
+              '& .MuiInputBase-input': { color: 'primary.contrastText' },
+            }}
             inputValue={inputValue}
             onClear={() => setInputValue('')}
           />

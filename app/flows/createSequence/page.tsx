@@ -305,7 +305,9 @@ export default function Page() {
                       '& .MuiOutlinedInput-root': {
                         borderRadius: '12px',
                       },
-                      '& .MuiInputBase-input': { color: 'primary.main' },
+                      '& .MuiInputBase-input': {
+                        color: 'primary.contrastText',
+                      },
                     }}
                     InputProps={{
                       endAdornment: isDirtyName ? (
@@ -538,7 +540,9 @@ export default function Page() {
                       '& .MuiOutlinedInput-root': {
                         borderRadius: '12px',
                       },
-                      '& .MuiInputBase-input': { color: 'primary.main' },
+                      '& .MuiInputBase-input': {
+                        color: 'primary.contrastText',
+                      },
                     }}
                     InputProps={{
                       endAdornment: isDirtyDescription ? (

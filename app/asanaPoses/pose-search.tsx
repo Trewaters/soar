@@ -186,7 +186,9 @@ export default function PoseSearch({ posePropData }: PoseSearchProps) {
           <AutocompleteInput
             params={params}
             placeholder="Search for a Yoga Pose"
-            sx={{ '& .MuiInputBase-input': { color: 'primary.main' } }}
+            sx={{
+              '& .MuiInputBase-input': { color: 'primary.contrastText' },
+            }}
           />
         )}
         filterOptions={(options, state) => {

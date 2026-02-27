@@ -28,6 +28,7 @@ declare module '@mui/material/styles' {
 
   interface TypeBackground {
     helper: string
+    text: string
   }
 
   interface PaletteOptions {
@@ -118,6 +119,7 @@ export const theme = createTheme({
       default: '#f0f0f0',
       paper: '#ffffff',
       helper: '#fef5e7',
+      text: COLORS.textDisabled,
     },
     text: {
       primary: COLORS.textPrimary,
@@ -195,6 +197,17 @@ export const theme = createTheme({
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        input: ({ theme }) => ({
+          color: theme.palette.primary.contrastText,
+          '&::placeholder': {
+            color: theme.palette.background.text,
+            opacity: 0.65,
+          },
+        }),
       },
     },
   },

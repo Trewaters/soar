@@ -313,7 +313,13 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
                     inputProps={{
                       'aria-label': `Breath cue for ${asana.name}`,
                     }}
-                    sx={{ mt: 1 }}
+                    sx={{
+                      mt: 1,
+                      '& .MuiInputBase-input::placeholder': {
+                        color: 'background.text',
+                        opacity: 1,
+                      },
+                    }}
                   >
                     <MenuItem value="">(none)</MenuItem>
                     {BREATH_SERIES_OPTIONS.map((option) => (
@@ -352,7 +358,13 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
                       maxLength: 1000,
                       'aria-label': `Alignment cues for ${asana.name}`,
                     }}
-                    sx={{ mt: 1 }}
+                    sx={{
+                      mt: 1,
+                      '& .MuiInputBase-input::placeholder': {
+                        color: 'background.text',
+                        opacity: 1,
+                      },
+                    }}
                   />
 
                   <Typography
