@@ -4,6 +4,13 @@ import { auth } from '../../../../auth'
 import { canModifyContent } from '@app/utils/authorization'
 import { formatSeriesPoseEntry } from '@app/utils/asana/seriesPoseLabels'
 
+const ALLOWED_BREATH_SERIES_VALUES = new Set([
+  'Inhale',
+  'Hold full',
+  'Exhale',
+  'Hold empty',
+])
+
 // Use shared prisma client
 
 export async function GET(
@@ -119,10 +126,19 @@ export async function PATCH(
       // Preserve objects as-is but sanitize alignment_cues
       updateData.seriesPoses = rawSeriesPoses.map((item: any) => {
         if (item && typeof item === 'object' && !Array.isArray(item)) {
-          if (typeof item.alignment_cues === 'string') {
-            item.alignment_cues = item.alignment_cues.slice(0, 1000)
+          const normalized = { ...item }
+          if (typeof normalized.alignment_cues === 'string') {
+            normalized.alignment_cues = normalized.alignment_cues.slice(0, 1000)
           }
-          return item
+          if (typeof normalized.breathSeries === 'string') {
+            const breathValue = normalized.breathSeries.trim()
+            normalized.breathSeries = ALLOWED_BREATH_SERIES_VALUES.has(
+              breathValue
+            )
+              ? breathValue
+              : ''
+          }
+          return normalized
         }
         // fallback: if a string was provided, keep as label
         return item
@@ -132,11 +148,15 @@ export async function PATCH(
         formatSeriesPoseEntry(a.name, a.difficulty)
       )
     }
-    if (Array.isArray(breathInput)) {
-      updateData.breathSeries = breathInput
-    } else if (typeof breathInput === 'string') {
-      const s = breathInput.trim()
-      updateData.breathSeries = s.length ? [s] : []
+    // Legacy top-level breathSeries support (read-only compat path).
+    // New writes should store breath at seriesPoses[].breathSeries.
+    if (!updateData.seriesPoses) {
+      if (Array.isArray(breathInput)) {
+        updateData.breathSeries = breathInput
+      } else if (typeof breathInput === 'string') {
+        const s = breathInput.trim()
+        updateData.breathSeries = s.length ? [s] : []
+      }
     }
     if (typeof durationInput === 'string')
       updateData.durationSeries = durationInput

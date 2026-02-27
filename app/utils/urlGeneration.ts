@@ -42,7 +42,7 @@ const CONTENT_PATHS = {
     production: '', // Use current page URL for production
     test: '/asana', // Test fallback
   },
-  series: {
+  flow: {
     development: '/flows/practiceSeries',
     production: '/flows/practiceSeries',
     test: '/flows/practiceSeries',
@@ -162,7 +162,7 @@ export const generateContentUrl = (
         return currentUrl
       }
 
-      case 'series': {
+      case 'flow': {
         // Series use the [id] route structure for direct navigation
         if (contentData?.id && environment === 'production') {
           const directSeriesUrl = `${baseUrl}/flows/series/${contentData.id}`
@@ -330,7 +330,7 @@ export const getEnvironmentUrls = () => {
     environment,
     baseUrl: BASE_URLS[environment],
     asanaUrl: generateContentUrl('asana'),
-    seriesUrl: generateContentUrl('series'),
+    seriesUrl: generateContentUrl('flow'),
     sequenceUrl: generateContentUrl('sequence'),
     currentPageUrl: getCurrentPageUrl(),
   }

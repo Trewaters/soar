@@ -1,5 +1,3 @@
-import Select from '@mui/material/Select'
-import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -13,30 +11,58 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import AddIcon from '@mui/icons-material/Add'
+import FilterVintageIcon from '@mui/icons-material/FilterVintage'
+import DeblurIcon from '@mui/icons-material/Deblur'
+import PlayForWorkIcon from '@mui/icons-material/PlayForWork'
+import BackHandIcon from '@mui/icons-material/BackHand'
 import SeriesImageManager from '@app/clientComponents/SeriesImageManager'
 import AddAsanasDialog from '@clientComponents/AddAsanasDialog'
+import AsanaDetailsEdit from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
+import type { AsanaEditFieldProps } from '@app/clientComponents/asanaUi/asanaFieldConstants'
 import { sanitizeSeriesSecondaryLabel } from '@app/utils/asana/seriesPoseLabels'
-import {
-  Box,
-  Typography,
-  Paper,
-  FormControl,
-  TextField,
-  InputLabel,
-} from '@mui/material'
+import MenuItem from '@mui/material/MenuItem'
+import { Box, Typography, Paper, TextField } from '@mui/material'
 import React from 'react'
+
+const BREATH_SERIES_OPTIONS = [
+  'Inhale',
+  'Hold full',
+  'Exhale',
+  'Hold empty',
+] as const
+
+const getBreathIcon = (value: string) => {
+  switch (value) {
+    case 'Inhale':
+      return (
+        <FilterVintageIcon sx={{ color: 'success.main' }} fontSize="small" />
+      )
+    case 'Hold full':
+      return <DeblurIcon sx={{ color: 'info.main' }} fontSize="small" />
+    case 'Exhale':
+      return (
+        <PlayForWorkIcon sx={{ color: 'secondary.main' }} fontSize="small" />
+      )
+    case 'Hold empty':
+      return <BackHandIcon sx={{ color: 'error.main' }} fontSize="small" />
+    default:
+      return null
+  }
+}
 
 export interface Asana {
   id: string
   name: string
   difficulty?: string
   alignment_cues?: string
+  breathSeries?: string
 }
 
 export interface Series {
   id: string
   name: string
   description?: string
+  duration?: string
   difficulty?: string
   asanas: Asana[]
   created_by?: string
@@ -65,23 +91,52 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
 }) => {
   const [name, setName] = React.useState(series.name || '')
   const [description, setDescription] = React.useState(series.description || '')
-  const [difficulty, setDifficulty] = React.useState(series.difficulty || '')
+  const [duration, setDuration] = React.useState(series.duration || '')
   const [asanas, setAsanas] = React.useState<Asana[]>(series.asanas || [])
   const [error, setError] = React.useState<string | null>(null)
   const [showAddAsanasDialog, setShowAddAsanasDialog] = React.useState(false)
   const [confirmDeleteOpen, setConfirmDeleteOpen] = React.useState(false)
   const [asanaRefreshTrigger, setAsanaRefreshTrigger] = React.useState(0)
 
+  const detailFields = React.useMemo(
+    (): AsanaEditFieldProps[] => [
+      {
+        type: 'text' as const,
+        label: 'Flow Name',
+        value: name,
+        onChange: (value: string) => setName(value),
+        required: true,
+        placeholder: 'Give your flow a name...',
+      },
+      {
+        type: 'multiline' as const,
+        label: 'Description',
+        value: description,
+        onChange: (value: string) => setDescription(value),
+        rows: 3,
+        placeholder: 'Describe this flow...',
+      },
+      {
+        type: 'text' as const,
+        label: 'Flow Duration',
+        value: duration,
+        onChange: (value: string) => setDuration(value),
+        placeholder: 'e.g. 20 min',
+      },
+    ],
+    [name, description, duration]
+  )
+
   React.useEffect(() => {
     setName(series.name || '')
     setDescription(series.description || '')
-    setDifficulty(series.difficulty || '')
+    setDuration(series.duration || '')
     setAsanas(series.asanas || [])
   }, [series])
 
   React.useEffect(() => {
     if (error) setError(null)
-  }, [name, description, difficulty, asanas, error])
+  }, [name, description, duration, asanas, error])
 
   const validate = (): string | null => {
     if (!name || !name.trim()) return 'Name is required.'
@@ -95,7 +150,7 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
       setError(v)
       return
     }
-    const updated: Series = { ...series, name, description, difficulty, asanas }
+    const updated: Series = { ...series, name, description, duration, asanas }
     onSave && onSave(updated)
   }
 
@@ -111,6 +166,7 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
         id: asanaItem.id,
         name: englishName,
         difficulty: sanitizeSeriesSecondaryLabel(sanskritName),
+        breathSeries: '',
       }
     })
     setAsanas((prev) => [...prev, ...asanaToAdd])
@@ -131,57 +187,12 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
             <Typography variant="h6" gutterBottom color="primary">
               Details
             </Typography>
-
-            <FormControl fullWidth margin="normal">
-              <TextField
-                id="series-name"
-                label="Flow Name *"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                disabled={disabled}
-                required
-                inputProps={{ 'aria-required': true }}
-              />
-            </FormControl>
-
-            <FormControl fullWidth margin="normal">
-              <TextField
-                id="series-description"
-                label="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                disabled={disabled}
-                multiline
-                rows={3}
-              />
-            </FormControl>
-
-            <FormControl fullWidth margin="normal">
-              <InputLabel id="series-difficulty-label">Difficulty</InputLabel>
-              <Select
-                labelId="series-difficulty-label"
-                id="series-difficulty"
-                value={difficulty}
-                label="Difficulty"
-                onChange={(e) => setDifficulty(e.target.value as string)}
-                disabled={disabled}
-              >
-                <MenuItem value="">(none)</MenuItem>
-                <MenuItem value="beginner">Beginner</MenuItem>
-                <MenuItem value="intermediate">Intermediate</MenuItem>
-                <MenuItem value="advanced">Advanced</MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl fullWidth margin="normal">
-              <TextField
-                id="series-created-by"
-                label="Created By"
-                value={series.created_by || ''}
-                disabled
-                inputProps={{ 'aria-readonly': true }}
-              />
-            </FormControl>
+            <AsanaDetailsEdit
+              fields={detailFields.map((field) => ({
+                ...field,
+                disabled: disabled || field.disabled,
+              }))}
+            />
           </Paper>
 
           <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
@@ -286,6 +297,42 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
                       <ArrowDownwardIcon />
                     </IconButton>
                   </Box>
+
+                  <TextField
+                    select
+                    placeholder="Breath cue"
+                    variant="outlined"
+                    value={asana.breathSeries || ''}
+                    onChange={(e) => {
+                      if (disabled) return
+                      setAsanas((prev) =>
+                        prev.map((a, i) =>
+                          i === idx ? { ...a, breathSeries: e.target.value } : a
+                        )
+                      )
+                    }}
+                    disabled={disabled}
+                    inputProps={{
+                      'aria-label': `Breath cue for ${asana.name}`,
+                    }}
+                    sx={{ mt: 1 }}
+                  >
+                    <MenuItem value="">(none)</MenuItem>
+                    {BREATH_SERIES_OPTIONS.map((option) => (
+                      <MenuItem key={option} value={option}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1,
+                          }}
+                        >
+                          {getBreathIcon(option)}
+                          <span>{option}</span>
+                        </Box>
+                      </MenuItem>
+                    ))}
+                  </TextField>
 
                   <TextField
                     placeholder="Optional alignment cues (max 1000 characters)"

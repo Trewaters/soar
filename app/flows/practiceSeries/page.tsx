@@ -392,6 +392,7 @@ export default function Page() {
         const name = (entry as any)?.sort_english_name || ''
         const secondary = (entry as any)?.secondary || ''
         const alignmentCues = (entry as any)?.alignment_cues || ''
+        const breathSeries = (entry as any)?.breathSeries || ''
 
         const resolvedName = name || `asana-${idx}`
 
@@ -400,6 +401,7 @@ export default function Page() {
           name: resolvedName,
           difficulty: secondary,
           alignment_cues: alignmentCues,
+          breathSeries,
         }
       }
     )
@@ -407,6 +409,7 @@ export default function Page() {
       id: flow.id || '',
       name: flow.seriesName,
       description: flow.description || '',
+      duration: flow.duration || '',
       difficulty: 'beginner',
       asanas,
       created_by: (flow as any).createdBy || '',
@@ -432,24 +435,9 @@ export default function Page() {
         const entrySecondary =
           typeof entry.secondary === 'string' ? entry.secondary.trim() : ''
 
-        let resolvedSecondary = entrySecondary
-        const resolvedAlternative = resolvedMetadata?.alternativeName || ''
-
-        const entryLooksLikeSanskrit =
-          !!resolvedSecondary &&
-          !!resolvedSanskritName &&
-          resolvedSecondary.toLowerCase() === resolvedSanskritName.toLowerCase()
-
-        if (
-          resolvedAlternative &&
-          (!resolvedSecondary || entryLooksLikeSanskrit)
-        ) {
-          resolvedSecondary = resolvedAlternative
-        }
-
         return {
           sort_english_name: sortEnglishName,
-          secondary: resolvedSecondary || undefined,
+          secondary: entrySecondary || undefined,
           sanskrit_names: resolvedSanskritName
             ? [resolvedSanskritName]
             : Array.isArray(entry.sanskrit_names)
@@ -458,6 +446,10 @@ export default function Page() {
           alignment_cues:
             typeof entry.alignment_cues === 'string'
               ? entry.alignment_cues
+              : undefined,
+          breathSeries:
+            typeof entry.breathSeries === 'string'
+              ? entry.breathSeries
               : undefined,
           poseId: typeof entry.poseId === 'string' ? entry.poseId : undefined,
         }
@@ -472,6 +464,7 @@ export default function Page() {
         sort_english_name: asana.name,
         secondary: asana.difficulty,
         alignment_cues: asana.alignment_cues || '',
+        breathSeries: asana.breathSeries || '',
       }))
 
       // Send with seriesPoses instead of asanas to preserve alignment_cues
@@ -480,6 +473,7 @@ export default function Page() {
       const { asanas, ...restOfUpdated } = updated
       const payload = {
         ...restOfUpdated,
+        durationSeries: updated.duration || '',
         seriesPoses,
       }
 
@@ -495,7 +489,7 @@ export default function Page() {
         seriesPoses: seriesPoses,
         // Keep existing fields
         breath: flow?.breath || '',
-        duration: flow?.duration || '',
+        duration: updated.duration || '',
         image: flow?.image || '',
       }
 

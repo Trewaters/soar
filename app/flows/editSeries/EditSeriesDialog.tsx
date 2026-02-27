@@ -14,12 +14,14 @@ export interface Asana {
   name: string
   difficulty?: string
   alignment_cues?: string
+  breathSeries?: string
 }
 
 export interface Series {
   id: string
   name: string
   description?: string
+  duration?: string
   difficulty?: string
   asanas: Asana[]
   created_by?: string

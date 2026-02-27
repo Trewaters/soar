@@ -11,6 +11,10 @@ import {
 } from '@mui/material'
 import NAV_PATHS from '@app/utils/navigation/constants'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+import FilterVintageIcon from '@mui/icons-material/FilterVintage'
+import DeblurIcon from '@mui/icons-material/Deblur'
+import PlayForWorkIcon from '@mui/icons-material/PlayForWork'
+import BackHandIcon from '@mui/icons-material/BackHand'
 
 export type SeriesPoseEntry = {
   sort_english_name?: string
@@ -18,6 +22,7 @@ export type SeriesPoseEntry = {
   // Prisma/Asana model stores Sanskrit names as an array on `sanskrit_names`
   sanskrit_names?: string[]
   alignment_cues?: string
+  breathSeries?: string
   poseId?: string
 }
 
@@ -92,15 +97,11 @@ export default function SeriesPoseList({
         const secondaryText = pose.secondary
           ? String(pose.secondary).trim()
           : ''
-        const alternateText =
-          secondaryText &&
-          sanskritName &&
-          secondaryText.toLowerCase() !== sanskritName.toLowerCase()
-            ? secondaryText
-            : ''
         const fallbackSecondary =
           !sanskritName && secondaryText ? secondaryText : ''
         const alignmentCues = pose.alignment_cues || ''
+        const breathSeries =
+          typeof pose.breathSeries === 'string' ? pose.breathSeries.trim() : ''
 
         const resolvedName = poseName || `pose-${index}`
         const hasResolvedPoseState = Object.prototype.hasOwnProperty.call(
@@ -119,6 +120,31 @@ export default function SeriesPoseList({
           showAlignmentInline && alignmentCues
             ? String(alignmentCues).split('\n')[0]
             : ''
+
+        const normalizedBreath = breathSeries.toLowerCase()
+        const breathMeta =
+          normalizedBreath === 'inhale'
+            ? {
+                label: 'Inhale',
+                icon: <FilterVintageIcon sx={{ color: 'success.main' }} />,
+              }
+            : normalizedBreath === 'hold inhale' ||
+                normalizedBreath === 'hold full'
+              ? {
+                  label: 'Hold inhale',
+                  icon: <DeblurIcon sx={{ color: 'info.main' }} />,
+                }
+              : normalizedBreath === 'exhale'
+                ? {
+                    label: 'Exhale',
+                    icon: <PlayForWorkIcon sx={{ color: 'secondary.main' }} />,
+                  }
+                : normalizedBreath === 'hold empty'
+                  ? {
+                      label: 'Hold empty',
+                      icon: <BackHandIcon sx={{ color: 'error.main' }} />,
+                    }
+                  : null
 
         return (
           <Box
@@ -160,59 +186,87 @@ export default function SeriesPoseList({
                 poseSx as any,
               ]}
             >
-              {isPoseDeleted ? (
-                <Tooltip
-                  title="This pose has been deleted and is no longer available"
-                  arrow
-                  placement="top"
-                >
-                  <Typography
-                    component="span"
-                    sx={{
-                      color: 'text.disabled',
-                      textDecoration: 'line-through',
-                      cursor: 'not-allowed',
-                    }}
-                    data-testid={`${dataTestIdPrefix}-${index}-deleted`}
-                  >
-                    {resolvedName}
-                  </Typography>
-                </Tooltip>
-              ) : (
-                <Link
-                  underline="hover"
-                  color={linkColor}
-                  href={href}
-                  onClick={async (e) => {
-                    // Prevent the click from bubbling up to parent cards which
-                    // have an onClick for navigating to the series.
-                    e.preventDefault()
-                    e.stopPropagation()
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  justifyContent: 'space-between',
+                  gap: 1,
+                }}
+              >
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  {isPoseDeleted ? (
+                    <Tooltip
+                      title="This pose has been deleted and is no longer available"
+                      arrow
+                      placement="top"
+                    >
+                      <Typography
+                        component="span"
+                        sx={{
+                          color: 'text.disabled',
+                          textDecoration: 'line-through',
+                          cursor: 'not-allowed',
+                        }}
+                        data-testid={`${dataTestIdPrefix}-${index}-deleted`}
+                      >
+                        {resolvedName}
+                      </Typography>
+                    </Tooltip>
+                  ) : (
+                    <Link
+                      underline="hover"
+                      color={linkColor}
+                      href={href}
+                      onClick={async (e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
 
-                    // Prefer an explicit poseId passed in via props/poseIds
-                    if (poseId) {
-                      navigation.push(
-                        `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent(
-                          String(poseId)
-                        )}`
-                      )
-                    } else {
-                      navigation.push(href)
-                    }
-                  }}
-                  sx={{
-                    display: 'block',
-                    maxWidth: '100%',
-                    overflowWrap: 'break-word',
-                    wordBreak: 'break-word',
-                    whiteSpace: 'normal',
-                    overflow: 'visible',
-                    textOverflow: 'clip',
-                  }}
-                >
-                  {resolvedName}
-                </Link>
-              )}
+                        if (poseId) {
+                          navigation.push(
+                            `${NAV_PATHS.PRACTICE_ASANAS}?id=${encodeURIComponent(
+                              String(poseId)
+                            )}`
+                          )
+                        } else {
+                          navigation.push(href)
+                        }
+                      }}
+                      sx={{
+                        display: 'block',
+                        maxWidth: '100%',
+                        overflowWrap: 'break-word',
+                        wordBreak: 'break-word',
+                        whiteSpace: 'normal',
+                        overflow: 'visible',
+                        textOverflow: 'clip',
+                      }}
+                    >
+                      {resolvedName}
+                    </Link>
+                  )}
+                </Box>
+
+                {breathMeta && (
+                  <Tooltip title={breathMeta.label} arrow placement="left">
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        minWidth: 24,
+                        mt: 0.25,
+                        pr: 1,
+                        mr: 0.5,
+                      }}
+                      data-testid={`${dataTestIdPrefix}-${index}-breath-icon`}
+                    >
+                      {breathMeta.icon}
+                    </Box>
+                  </Tooltip>
+                )}
+              </Box>
               {alignmentCuesInline && (
                 <Typography
                   component="div"
@@ -252,26 +306,6 @@ export default function SeriesPoseList({
                     data-testid={`${dataTestIdPrefix}-${index}-secondary`}
                   >
                     {sanskritName}
-                  </Typography>
-                </Box>
-              )}
-
-              {showSecondary && alternateText && (
-                <Box sx={{ width: '100%', mt: 0.5 }}>
-                  <Typography
-                    textAlign="left"
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{
-                      display: 'block',
-                      width: '100%',
-                      whiteSpace: 'normal',
-                      overflow: 'visible',
-                      textOverflow: 'clip',
-                    }}
-                    data-testid={`${dataTestIdPrefix}-${index}-alternative`}
-                  >
-                    {alternateText}
                   </Typography>
                 </Box>
               )}

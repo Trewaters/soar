@@ -84,6 +84,7 @@ export default function FlowTitlePoseListSection({
         seriesPoses={seriesPoses}
         poseIds={poseIds}
         getHref={getHref}
+        showSecondary={false}
         linkColor={linkColor}
         dataTestIdPrefix={dataTestIdPrefix}
       />

@@ -5,6 +5,13 @@ import { NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
+const ALLOWED_BREATH_SERIES_VALUES = new Set([
+  'Inhale',
+  'Hold full',
+  'Exhale',
+  'Hold empty',
+])
+
 // Use shared prisma client
 
 export async function POST(request: Request) {
@@ -20,11 +27,21 @@ export async function POST(request: Request) {
     if (Array.isArray(rawSeriesPoses)) {
       seriesPoses = rawSeriesPoses.map((item: any) => {
         if (item && typeof item === 'object' && !Array.isArray(item)) {
+          const normalized = { ...item }
           // sanitize alignment_cues
-          if (typeof item.alignment_cues === 'string') {
-            item.alignment_cues = item.alignment_cues.slice(0, 1000)
+          if (typeof normalized.alignment_cues === 'string') {
+            normalized.alignment_cues = normalized.alignment_cues.slice(0, 1000)
           }
-          return item
+          // sanitize breathSeries to one of the supported values
+          if (typeof normalized.breathSeries === 'string') {
+            const breathValue = normalized.breathSeries.trim()
+            normalized.breathSeries = ALLOWED_BREATH_SERIES_VALUES.has(
+              breathValue
+            )
+              ? breathValue
+              : ''
+          }
+          return normalized
         }
         // legacy string entry
         return item
@@ -35,12 +52,9 @@ export async function POST(request: Request) {
     ) {
       seriesPoses = [rawSeriesPoses]
     }
-    const rawBreath = body.breathSeries ?? body.breath ?? []
-    const breathSeries: string[] = Array.isArray(rawBreath)
-      ? rawBreath
-      : typeof rawBreath === 'string' && rawBreath.trim().length > 0
-        ? [rawBreath]
-        : []
+    // Legacy top-level breathSeries is no longer authoritative.
+    // Breath is stored per pose in seriesPoses[].breathSeries.
+    const breathSeries: string[] = []
     const description = body.description ?? ''
     const durationSeries = body.durationSeries ?? body.duration ?? ''
     const image = body.image ?? ''

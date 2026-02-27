@@ -45,6 +45,8 @@ export interface FlowSeriesPose {
   // optional secondary label (e.g., sanskrit name or difficulty tag)
   secondary?: string
   alignment_cues?: string
+  // per-pose flow-specific breath cue: Inhale | Hold full | Exhale | Hold empty
+  breathSeries?: string
 }
 
 export type FlowSeriesPageState = {

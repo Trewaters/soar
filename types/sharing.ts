@@ -13,7 +13,7 @@ export type ShareableContent =
       data: AsanaPose
     }
   | {
-      contentType: 'series'
+      contentType: 'flow'
       data: FlowSeriesData
     }
   | {
@@ -33,7 +33,7 @@ export interface ShareConfig {
   /** The URL where the content can be accessed or practiced */
   url: string
   /** The type of content being shared for analytics and customization */
-  shareType: 'asana' | 'series' | 'sequence'
+  shareType: 'asana' | 'flow' | 'sequence'
 }
 
 /**
@@ -61,7 +61,7 @@ export function createShareStrategy(
   switch (contentType) {
     case 'asana':
       return new AsanaShareStrategy()
-    case 'series':
+    case 'flow':
       return new SeriesShareStrategy()
     case 'sequence':
       return new SequenceShareStrategy()
@@ -105,13 +105,6 @@ ${shareUrl}
   }
 }
 
-/**
- * Share strategy for yoga series (collections of related asanas)
- * Implements exact format specification from PRD with mandatory format:
- * "Sharing a video of the yoga series "[Series Name]"
- * Below are the poses in this series: * [Pose 1], * [Pose 2], etc.
- * Practice with Uvuyoga! https://www.happyyoga.app/flows/practiceSeries (www.happyyoga.app)"
- */
 export class SeriesShareStrategy implements ShareStrategy {
   generateShareConfig(data: FlowSeriesData): ShareConfig {
     const seriesName = data.seriesName
@@ -146,11 +139,10 @@ export class SeriesShareStrategy implements ShareStrategy {
     // generated URL with fallbacks.
     const shareUrl = data?.id
       ? fallbackPracticeUrl
-      : generateUrlWithFallbacks('series', data, fallbackPracticeUrl)
+      : generateUrlWithFallbacks('flow', data, fallbackPracticeUrl)
 
     // Implement exact PRD format specification
-    const shareText = `Sharing a video of
-the yoga series
+    const shareText = `Sharing
 "${seriesName}"
 
 Below are the poses in this series:
@@ -164,10 +156,10 @@ ${shareUrl}
 (www.happyyoga.app)`
 
     return {
-      title: `Sharing a video of the yoga series "${seriesName}"`,
+      title: `Sharing "${seriesName}"`,
       text: shareText,
       url: shareUrl,
-      shareType: 'series',
+      shareType: 'flow',
     }
   }
 }

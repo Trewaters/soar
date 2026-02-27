@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   FormControl,
+  MenuItem,
   IconButton,
   Stack,
   TextField,
@@ -35,6 +36,13 @@ import HelpButton from '@app/clientComponents/HelpButton'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import { HELP_PATHS } from '@app/utils/helpLoader'
 
+const BREATH_SERIES_OPTIONS = [
+  'Inhale',
+  'Hold full',
+  'Exhale',
+  'Hold empty',
+] as const
+
 export default function Page() {
   const { data: session, status } = useSession()
   const { state, dispatch } = useFlowSeries()
@@ -47,6 +55,7 @@ export default function Page() {
   const [open, setOpen] = React.useState(false)
   const [isDirty, setIsDirty] = useState(false)
   const [isDirtyDescription, setIsDirtyDescription] = useState(false)
+  const [isDirtyDuration, setIsDirtyDuration] = useState(false)
   const [acOpen, setAcOpen] = useState(false)
   const [searchInputValue, setSearchInputValue] = useState('')
   // Debug + throttling refs to prevent rapid refetch loops
@@ -120,15 +129,20 @@ export default function Page() {
       Array.isArray(pose.sanskrit_names) && pose.sanskrit_names[0]
         ? pose.sanskrit_names[0]
         : ''
-    const formattedEntry = formatSeriesPoseEntry(
-      pose.sort_english_name,
-      simplifiedName
-    )
     dispatch({
       type: 'SET_FLOW_SERIES',
       payload: {
         ...state.flowSeries,
-        seriesPoses: [...state.flowSeries.seriesPoses, formattedEntry],
+        seriesPoses: [
+          ...state.flowSeries.seriesPoses,
+          {
+            poseId: pose.id,
+            sort_english_name: pose.sort_english_name,
+            secondary: simplifiedName,
+            alignment_cues: '',
+            breathSeries: '',
+          },
+        ],
       },
     })
     // Clear search input after selection
@@ -158,6 +172,7 @@ export default function Page() {
       breath,
       description,
       duration,
+      durationSeries: duration,
       image,
     }
     dispatch({ type: 'SET_FLOW_SERIES', payload: updatedSeries })
@@ -219,6 +234,10 @@ export default function Page() {
         break
       case 'description':
         setIsDirtyDescription(event.target.value.length > 0)
+
+        break
+      case 'duration':
+        setIsDirtyDuration(event.target.value.length > 0)
 
         break
       default:
@@ -343,6 +362,44 @@ export default function Page() {
                     mb: 1,
                   }}
                 >
+                  Flow Duration
+                </Typography>
+                <TextField
+                  id="flow-duration"
+                  fullWidth
+                  placeholder="e.g. 20 min"
+                  variant="outlined"
+                  name="duration"
+                  value={duration}
+                  onChange={handleChange}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: '12px',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                    },
+                    '& .MuiInputBase-input': { color: 'primary.main' },
+                  }}
+                  InputProps={{
+                    endAdornment: isDirtyDuration ? (
+                      <CheckCircleIcon
+                        sx={{
+                          color: 'success.main',
+                        }}
+                      />
+                    ) : null,
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ width: '100%', maxWidth: 900 }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 'bold',
+                    color: 'primary.main',
+                    mb: 1,
+                  }}
+                >
                   Add Poses to Flow
                 </Typography>
                 <Typography
@@ -410,6 +467,7 @@ export default function Page() {
                       let name = ''
                       let secondary = ''
                       let alignmentCues = ''
+                      let breathSeries = ''
 
                       if (typeof entry === 'string') {
                         const split = splitSeriesPoseEntry(entry)
@@ -419,6 +477,7 @@ export default function Page() {
                         name = (entry as any).sort_english_name || ''
                         secondary = (entry as any).secondary || ''
                         alignmentCues = (entry as any).alignment_cues || ''
+                        breathSeries = (entry as any).breathSeries || ''
                       }
 
                       const handleRemove = () => {
@@ -446,6 +505,7 @@ export default function Page() {
                                 sort_english_name: s.name,
                                 secondary: s.secondary,
                                 alignment_cues: newVal,
+                                breathSeries: '',
                               }
                             }
                             return {
@@ -506,6 +566,54 @@ export default function Page() {
                                 {secondary}
                               </Typography>
                             )}
+
+                            <TextField
+                              select
+                              placeholder="Breath cue"
+                              variant="standard"
+                              value={breathSeries}
+                              onChange={(e) => {
+                                const newVal = e.target.value
+                                const newSeries =
+                                  state.flowSeries.seriesPoses.map((it, i) => {
+                                    if (i !== index) return it
+                                    if (typeof it === 'string') {
+                                      const s = splitSeriesPoseEntry(it)
+                                      return {
+                                        poseId: undefined,
+                                        sort_english_name: s.name,
+                                        secondary: s.secondary,
+                                        alignment_cues: '',
+                                        breathSeries: newVal,
+                                      }
+                                    }
+                                    return {
+                                      ...(it as any),
+                                      breathSeries: newVal,
+                                    }
+                                  })
+
+                                dispatch({
+                                  type: 'SET_FLOW_SERIES',
+                                  payload: {
+                                    ...state.flowSeries,
+                                    seriesPoses: newSeries,
+                                  },
+                                })
+                              }}
+                              inputProps={{
+                                'aria-label': `Breath cue for ${name}`,
+                              }}
+                              sx={{ mt: 1 }}
+                            >
+                              <MenuItem value="">(none)</MenuItem>
+                              {BREATH_SERIES_OPTIONS.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                  {option}
+                                </MenuItem>
+                              ))}
+                            </TextField>
+
                             <TextField
                               placeholder="Optional alignment cues (max 1000 characters)"
                               variant="standard"

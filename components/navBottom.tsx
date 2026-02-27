@@ -70,7 +70,7 @@ export default function NavBottom(props: {
         ) {
           const series = await getSingleSeries(id)
           if (series) {
-            setShareContent({ contentType: 'series', data: series })
+            setShareContent({ contentType: 'flow', data: series })
             return
           }
         }

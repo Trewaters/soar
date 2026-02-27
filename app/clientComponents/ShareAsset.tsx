@@ -67,7 +67,7 @@ export default function ShareAsset({
           (c.data as any).sort_english_name ||
             (c.data as any).english_names?.length
         )
-      case 'series':
+      case 'flow':
         return Boolean(
           (c.data as any).seriesName && (c.data as any).seriesPoses?.length
         )
@@ -160,11 +160,11 @@ export default function ShareAsset({
 
     setIsSharing(true)
     try {
-      // Resolve canonical ids for series/sequence to ensure share URL includes
+      // Resolve canonical ids for flow/sequence to ensure share URL includes
       // the public canonical id rather than a pagination or transient id.
       let dataToShare: any = content.data
       try {
-        if (content.contentType === 'series') {
+        if (content.contentType === 'flow') {
           dataToShare = await resolveSeriesCanonical(content.data)
         } else if (content.contentType === 'sequence') {
           dataToShare = await resolveSequenceCanonical(content.data)
@@ -265,8 +265,8 @@ export default function ShareAsset({
     switch (content?.contentType) {
       case 'asana':
         return 'Share this pose'
-      case 'series':
-        return 'Share this series'
+      case 'flow':
+        return 'Share this flow'
       case 'sequence':
         return 'Share this sequence'
       default:
