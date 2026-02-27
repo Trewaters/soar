@@ -3,7 +3,7 @@ import type { Provider } from 'next-auth/providers'
 import GitHub from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 import Credentials from 'next-auth/providers/credentials'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@lib/prismaClient'
 // import { MongoDBAdapter } from '@auth/mongodb-adapter' // Disabled - using custom Prisma-based user management
 // import client from '@lib/mongoDb' // Disabled - using custom Prisma-based user management
 import { hashPassword, comparePassword } from '@app/utils/password'
@@ -31,10 +31,6 @@ function throwAuthError(
   if (provider) error.provider = provider
   throw error
 }
-
-const prisma = new PrismaClient({
-  log: ['error', 'warn'],
-})
 
 // Defensive guard: some server Responses (from auth core or edge cases)
 // may have an empty body which causes Response.json() to throw

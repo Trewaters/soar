@@ -253,18 +253,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 ### Prisma Database
 
-Start using Prisma Client in Node.js (See: https://pris.ly/d/client)
+Prisma v7 uses `prisma.config.ts` for datasource URL configuration.
+Connection URL is configured in `prisma.config.ts` via `datasource.url`.
+
+Use the shared Prisma client in server code:
 
 ```js
-import { PrismaClient } from './prisma/generated/client'
-const prisma = new PrismaClient()
-```
-
-or start using Prisma Client at the edge (See: https://pris.ly/d/accelerate)
-
-```js
-import { PrismaClient } from './prisma/generated/client/edge'
-const prisma = new PrismaClient()
+import { prisma } from '@lib/prismaClient'
 ```
 
 ```bash
@@ -275,7 +270,11 @@ npx prisma generate
 npm exec prisma db push
 ```
 
-This is failing for mongodb at the moment (2024-08-09 06:22:38)
+```bash
+npx prisma validate
+```
+
+For CI, provide `DATABASE_URL` for commands that require database connectivity.
 
 ```bash
 npm exec prisma migrate dev

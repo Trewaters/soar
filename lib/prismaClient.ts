@@ -1,6 +1,3 @@
-// Shared Prisma client for non-app server-side code (e.g., scripts, services)
-// Do not call prisma.$disconnect() in API route handlers that import this shared client.
-// Scripts/tests that create their own client must disconnect explicitly.
 import { PrismaClient } from '@prisma/client'
 
 declare global {

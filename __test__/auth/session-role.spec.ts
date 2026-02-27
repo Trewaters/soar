@@ -20,7 +20,9 @@ jest.mock('@prisma/client', () => {
 })
 
 // Get the mocked Prisma instance
-const prisma = new PrismaClient()
+const prisma = new PrismaClient({
+  errorFormat: 'pretty',
+})
 
 describe('NextAuth Session Role Integration', () => {
   beforeEach(() => {

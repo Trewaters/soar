@@ -197,9 +197,9 @@ describe('URL Generation Utilities', () => {
       expect(url).toBe('https://www.happyyoga.app/practice/session')
     })
 
-    test('should generate series URLs using specific path', () => {
+    test('should generate flow URLs using specific path', () => {
       mockDevelopmentEnvironment()
-      const url = generateContentUrl('series')
+      const url = generateContentUrl('flow')
       expect(url).toBe('http://localhost:3000/flows/practiceSeries')
     })
 
@@ -214,7 +214,7 @@ describe('URL Generation Utilities', () => {
 
       // Test series with ID
       const seriesData = { id: 'series-123', seriesName: 'Sun Salutation' }
-      const seriesUrl = generateContentUrl('series', seriesData)
+      const seriesUrl = generateContentUrl('flow', seriesData)
       expect(seriesUrl).toBe(
         'https://www.happyyoga.app/flows/series/series-123'
       )
@@ -258,7 +258,7 @@ describe('URL Generation Utilities', () => {
   describe('generateUrlWithFallbacks', () => {
     test('should use primary URL when valid', () => {
       mockDevelopmentEnvironment()
-      const url = generateUrlWithFallbacks('series')
+      const url = generateUrlWithFallbacks('flow')
       expect(url).toBe('http://localhost:3000/flows/practiceSeries')
     })
 
@@ -430,7 +430,7 @@ describe('URL Generation Utilities', () => {
 
       // Test all content types
       const asanaUrl = generateContentUrl('asana')
-      const seriesUrl = generateContentUrl('series')
+      const seriesUrl = generateContentUrl('flow')
       const sequenceUrl = generateContentUrl('sequence')
 
       expect(asanaUrl).toContain('happyyoga.app')
@@ -458,7 +458,7 @@ describe('URL Generation Utilities', () => {
       }
 
       const asanaUrl = generateContentUrl('asana', asanaData)
-      const seriesUrl = generateContentUrl('series', seriesData)
+      const seriesUrl = generateContentUrl('flow', seriesData)
       const sequenceUrl = generateContentUrl('sequence', sequenceData)
 
       expect(asanaUrl).toBe('https://www.happyyoga.app/asana/warrior-i')
