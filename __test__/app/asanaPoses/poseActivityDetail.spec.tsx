@@ -167,7 +167,7 @@ describe('PoseActivityDetail', () => {
     )
 
     await user.click(screen.getAllByLabelText('Save changes')[0])
-    expect(await screen.findByText(/english_names:/i)).toBeInTheDocument()
+    // english_names is now optional, so do not expect error
 
     await user.click(
       screen.getByRole('button', { name: 'Fill Valid Edit Values' })

@@ -38,10 +38,11 @@ import WeeklyActivityViewer from '@app/clientComponents/WeeklyActivityViewer'
 import { useSearchParams } from 'next/navigation'
 import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import Paper from '@mui/material/Paper'
-import EditSeriesDialog, {
+import EditSeriesDialog from '@app/flows/editSeries/EditSeriesDialog'
+import {
   Series as EditSeriesShape,
-  Asana as EditAsanaShape,
-} from '@app/flows/editSeries/EditSeriesDialog'
+  AsanaListItem as EditAsanaShape,
+} from '@app/flows/editSeries/SeriesEditorForm'
 import { getPoseById, getPoseByName } from '@lib/poseService'
 import FlowTitlePoseListSection from '@app/clientComponents/FlowTitlePoseListSection'
 import { SeriesPoseEntry } from '@app/clientComponents/SeriesPoseList'
@@ -462,7 +463,7 @@ export default function Page() {
       // Transform asanas array to seriesPoses format to preserve alignment_cues
       const seriesPoses = updated.asanas.map((asana) => ({
         sort_english_name: asana.name,
-        secondary: asana.difficulty,
+        secondary: asana.secondary,
         alignment_cues: asana.alignment_cues || '',
         breathSeries: asana.breathSeries || '',
       }))
@@ -756,7 +757,7 @@ export default function Page() {
                       variant="h4"
                       sx={{
                         mb: 1,
-                        color: `${theme.palette.primary.main}`,
+                        color: 'primary.main',
                       }}
                     >
                       Flow Image
@@ -803,7 +804,7 @@ export default function Page() {
                       variant="h4"
                       sx={{
                         mb: 1,
-                        color: `${theme.palette.primary.main}`,
+                        color: 'primary.main',
                       }}
                     >
                       Description:
@@ -814,6 +815,23 @@ export default function Page() {
                       sx={{ whiteSpace: 'pre-line' }}
                     >
                       {flow.description}
+                    </Typography>
+                  </Box>
+                )}
+
+                {flow.duration && (
+                  <Box sx={{ width: '100%', mt: 3 }}>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        mb: 1,
+                        color: 'primary.main',
+                      }}
+                    >
+                      Duration:
+                    </Typography>
+                    <Typography color="primary.contrastText" variant="body1">
+                      {flow.duration}
                     </Typography>
                   </Box>
                 )}

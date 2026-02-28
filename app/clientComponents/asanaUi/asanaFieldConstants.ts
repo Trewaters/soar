@@ -166,7 +166,6 @@ export const ASANA_FIELD_DEFINITIONS = [
     type: 'variations',
     fieldKey: 'english_names',
     label: 'English Name Variations',
-    required: true,
     placeholder: 'e.g. Downward Dog, Adho Mukha Svanasana',
     helperText: 'Separate variants with commas',
   },

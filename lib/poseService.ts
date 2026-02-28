@@ -20,7 +20,7 @@ export async function fetchWithTimeout(
 
 export type CreatePoseInput = {
   sort_english_name: string
-  english_names: string[]
+  english_names?: string[]
   description?: string | null
   category?: string | null
   difficulty?: string | null
@@ -35,7 +35,7 @@ export type CreatePoseInput = {
 
 export type UpdatePoseInput = {
   sort_english_name: string
-  english_names: string[]
+  english_names?: string[]
   description?: string | null
   category?: string
   difficulty?: string

@@ -7,25 +7,7 @@ import Button from '@mui/material/Button'
 import { useCanEditContent } from '@app/hooks/useCanEditContent'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import SeriesEditorForm from './SeriesEditorForm'
-
-export interface Asana {
-  id: string
-  name: string
-  difficulty?: string
-  alignment_cues?: string
-  breathSeries?: string
-}
-
-export interface Series {
-  id: string
-  name: string
-  description?: string
-  duration?: string
-  difficulty?: string
-  asanas: Asana[]
-  created_by?: string
-}
+import SeriesEditorForm, { type Series } from './SeriesEditorForm'
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */

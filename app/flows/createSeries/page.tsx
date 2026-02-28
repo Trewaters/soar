@@ -7,7 +7,6 @@ import {
   Button,
   FormControl,
   MenuItem,
-  IconButton,
   Stack,
   TextField,
   Typography,
@@ -18,8 +17,8 @@ import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
 import { getAccessiblePoses } from '@lib/poseService'
 import SubNavHeader from '@app/clientComponents/sub-nav-header'
 import SplashHeader from '@app/clientComponents/splash-header'
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import GroupedDataAssetSearch from '@app/clientComponents/GroupedDataAssetSearch'
+import EditableAsanaList from '@app/clientComponents/EditableAsanaList'
 import { AppText } from '@app/constants/Strings'
 import {
   formatSeriesPoseEntry,
@@ -35,13 +34,6 @@ import CloseIcon from '@mui/icons-material/Close'
 import HelpButton from '@app/clientComponents/HelpButton'
 import HelpDrawer from '@app/clientComponents/HelpDrawer'
 import { HELP_PATHS } from '@app/utils/helpLoader'
-
-const BREATH_SERIES_OPTIONS = [
-  'Inhale',
-  'Hold full',
-  'Exhale',
-  'Hold empty',
-] as const
 
 export default function Page() {
   const { data: session, status } = useSession()
@@ -62,6 +54,48 @@ export default function Page() {
   const lastFetchKeyRef = useRef<string | null>(null)
   const lastFetchTimeRef = useRef<number>(0)
   const fetchInFlightRef = useRef<boolean>(false)
+
+  // Convert seriesPoses to EditableAsanaList format
+  const asanaListItems = React.useMemo(() => {
+    return seriesPoses.map((entry) => {
+      // entry may be legacy string or new object
+      if (typeof entry === 'string') {
+        const split = splitSeriesPoseEntry(entry)
+        return {
+          name: split.name,
+          secondary: split.secondary,
+          alignment_cues: '',
+          breathSeries: '',
+        }
+      }
+      const obj = entry as any
+      return {
+        name: obj.sort_english_name || '',
+        secondary: obj.secondary || '',
+        alignment_cues: obj.alignment_cues || '',
+        breathSeries: obj.breathSeries || '',
+        poseId: obj.poseId,
+      }
+    })
+  }, [seriesPoses])
+
+  const handleAsanasChange = (updatedAsanas: any[]) => {
+    // Convert back to seriesPoses format
+    const newSeriesPoses = updatedAsanas.map((asana) => ({
+      poseId: asana.poseId,
+      sort_english_name: asana.name,
+      secondary: asana.secondary,
+      alignment_cues: asana.alignment_cues,
+      breathSeries: asana.breathSeries,
+    }))
+    dispatch({
+      type: 'SET_FLOW_SERIES',
+      payload: {
+        ...state.flowSeries,
+        seriesPoses: newSeriesPoses,
+      },
+    })
+  }
 
   const fetchPoses = React.useCallback(async () => {
     const emailKey = session?.user?.email || 'guest'
@@ -357,37 +391,6 @@ export default function Page() {
                     mb: 1,
                   }}
                 >
-                  Flow Duration
-                </Typography>
-                <TextField
-                  id="flow-duration"
-                  fullWidth
-                  placeholder="e.g. 20 min"
-                  variant="outlined"
-                  name="duration"
-                  value={duration}
-                  onChange={handleChange}
-                  InputProps={{
-                    endAdornment: isDirtyDuration ? (
-                      <CheckCircleIcon
-                        sx={{
-                          color: 'success.main',
-                        }}
-                      />
-                    ) : null,
-                  }}
-                />
-              </Box>
-
-              <Box sx={{ width: '100%', maxWidth: 900 }}>
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    fontWeight: 'bold',
-                    color: 'primary.main',
-                    mb: 1,
-                  }}
-                >
                   Add Poses to Flow
                 </Typography>
                 <Typography
@@ -425,240 +428,13 @@ export default function Page() {
               </Box>
 
               <Box className="journal" sx={{ width: '100%', maxWidth: 900 }}>
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    fontWeight: 'bold',
-                    color: 'primary.main',
-                    mb: 1,
-                  }}
-                >
-                  Your Flow Sequence{' '}
-                  {seriesPoses.length > 0 && `(${seriesPoses.length} poses)`}
-                </Typography>
-                {seriesPoses.length === 0 ? (
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ py: 2, textAlign: 'center' }}
-                  >
-                    No poses added yet. Use the search above to add poses to
-                    your flow.
-                  </Typography>
-                ) : (
-                  <Stack className="lines" spacing={1} sx={{ mt: 2 }}>
-                    {seriesPoses.map((entry, index) => {
-                      // entry may be legacy string or new object
-                      let name = ''
-                      let secondary = ''
-                      let alignmentCues = ''
-                      let breathSeries = ''
-
-                      if (typeof entry === 'string') {
-                        const split = splitSeriesPoseEntry(entry)
-                        name = split.name
-                        secondary = split.secondary
-                      } else if (entry && typeof entry === 'object') {
-                        name = (entry as any).sort_english_name || ''
-                        secondary = (entry as any).secondary || ''
-                        alignmentCues = (entry as any).alignment_cues || ''
-                        breathSeries = (entry as any).breathSeries || ''
-                      }
-
-                      const handleRemove = () => {
-                        dispatch({
-                          type: 'SET_FLOW_SERIES',
-                          payload: {
-                            ...state.flowSeries,
-                            seriesPoses: state.flowSeries.seriesPoses.filter(
-                              (_, i) => i !== index
-                            ),
-                          },
-                        })
-                      }
-
-                      const handleCueChange = (e: React.ChangeEvent<any>) => {
-                        const newVal = e.target.value.slice(0, 1000)
-                        const newSeries = state.flowSeries.seriesPoses.map(
-                          (it, i) => {
-                            if (i !== index) return it
-                            if (typeof it === 'string') {
-                              // convert legacy string to object when user edits cues
-                              const s = splitSeriesPoseEntry(it)
-                              return {
-                                poseId: undefined,
-                                sort_english_name: s.name,
-                                secondary: s.secondary,
-                                alignment_cues: newVal,
-                                breathSeries: '',
-                              }
-                            }
-                            return {
-                              ...(it as any),
-                              alignment_cues: newVal,
-                            }
-                          }
-                        )
-                        dispatch({
-                          type: 'SET_FLOW_SERIES',
-                          payload: {
-                            ...state.flowSeries,
-                            seriesPoses: newSeries,
-                          },
-                        })
-                      }
-
-                      return (
-                        <Stack
-                          className="journalLine"
-                          key={`${String(name)}+${index}`}
-                          sx={{
-                            alignItems: 'center',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            gap: 2,
-                          }}
-                        >
-                          <Stack>
-                            <IconButton
-                              disableRipple
-                              sx={{ color: 'error.light' }}
-                              onClick={handleRemove}
-                            >
-                              <DeleteForeverIcon />
-                            </IconButton>
-                          </Stack>
-                          <Stack sx={{ flex: 1 }}>
-                            <Typography
-                              variant="body1"
-                              sx={{
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                              }}
-                            >
-                              {name}
-                            </Typography>
-                            {secondary && (
-                              <Typography
-                                variant="body2"
-                                sx={{
-                                  textOverflow: 'ellipsis',
-                                  whiteSpace: 'nowrap',
-                                  fontWeight: 'bold',
-                                  fontStyle: 'italic',
-                                }}
-                              >
-                                {secondary}
-                              </Typography>
-                            )}
-
-                            <TextField
-                              select
-                              placeholder="Breath cue"
-                              variant="standard"
-                              value={breathSeries}
-                              onChange={(e) => {
-                                const newVal = e.target.value
-                                const newSeries =
-                                  state.flowSeries.seriesPoses.map((it, i) => {
-                                    if (i !== index) return it
-                                    if (typeof it === 'string') {
-                                      const s = splitSeriesPoseEntry(it)
-                                      return {
-                                        poseId: undefined,
-                                        sort_english_name: s.name,
-                                        secondary: s.secondary,
-                                        alignment_cues: '',
-                                        breathSeries: newVal,
-                                      }
-                                    }
-                                    return {
-                                      ...(it as any),
-                                      breathSeries: newVal,
-                                    }
-                                  })
-
-                                dispatch({
-                                  type: 'SET_FLOW_SERIES',
-                                  payload: {
-                                    ...state.flowSeries,
-                                    seriesPoses: newSeries,
-                                  },
-                                })
-                              }}
-                              inputProps={{
-                                'aria-label': `Breath cue for ${name}`,
-                              }}
-                              sx={{ mt: 1 }}
-                            >
-                              <MenuItem value="">(none)</MenuItem>
-                              {BREATH_SERIES_OPTIONS.map((option) => (
-                                <MenuItem key={option} value={option}>
-                                  {option}
-                                </MenuItem>
-                              ))}
-                            </TextField>
-
-                            <TextField
-                              placeholder="Optional alignment cues (max 1000 characters)"
-                              variant="standard"
-                              multiline
-                              minRows={1}
-                              value={alignmentCues}
-                              onChange={handleCueChange}
-                              inputProps={{
-                                maxLength: 1000,
-                                'data-testid': `alignment-cues-${index}`,
-                                'aria-label': `Alignment cues for ${name}`,
-                              }}
-                              sx={{ mt: 1 }}
-                            />
-                            <Typography
-                              variant="caption"
-                              sx={{ color: 'text.secondary' }}
-                            >
-                              {alignmentCues.length}/1000
-                            </Typography>
-                          </Stack>
-                        </Stack>
-                      )
-                    })}
-                  </Stack>
-                )}
-              </Box>
-
-              <Box sx={{ width: '100%', maxWidth: 900 }}>
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    fontWeight: 'bold',
-                    color: 'primary.main',
-                    mb: 1,
-                  }}
-                >
-                  Description
-                </Typography>
-                <TextField
-                  id="outlined-basic"
-                  fullWidth
-                  placeholder="Add an optional description for your flow..."
-                  multiline
-                  minRows={4}
-                  variant="outlined"
-                  name="description"
-                  value={description}
-                  onChange={handleChange}
-                  InputProps={{
-                    endAdornment: isDirtyDescription ? (
-                      <CheckCircleIcon
-                        sx={{
-                          color: 'success.main',
-                          alignSelf: 'flex-start',
-                          mt: 1,
-                        }}
-                      />
-                    ) : null,
-                  }}
+                <EditableAsanaList
+                  asanas={asanaListItems}
+                  onAsanasChange={handleAsanasChange}
+                  disabled={false}
+                  showAddButton={false}
+                  title={`Your Flow Sequence${seriesPoses.length > 0 ? ` (${seriesPoses.length} poses)` : ''}`}
+                  emptyMessage="No poses added yet. Use the search above to add poses to your flow."
                 />
               </Box>
 
@@ -767,6 +543,72 @@ export default function Page() {
                     </Button>
                   </Box>
                 )}
+              </Box>
+
+              <Box sx={{ width: '100%', maxWidth: 900 }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 'bold',
+                    color: 'primary.main',
+                    mb: 1,
+                  }}
+                >
+                  Description
+                </Typography>
+                <TextField
+                  id="outlined-basic"
+                  fullWidth
+                  placeholder="Add an optional description for your flow..."
+                  multiline
+                  minRows={4}
+                  variant="outlined"
+                  name="description"
+                  value={description}
+                  onChange={handleChange}
+                  InputProps={{
+                    endAdornment: isDirtyDescription ? (
+                      <CheckCircleIcon
+                        sx={{
+                          color: 'success.main',
+                          alignSelf: 'flex-start',
+                          mt: 1,
+                        }}
+                      />
+                    ) : null,
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ width: '100%', maxWidth: 900 }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 'bold',
+                    color: 'primary.main',
+                    mb: 1,
+                  }}
+                >
+                  Flow Duration
+                </Typography>
+                <TextField
+                  id="flow-duration"
+                  fullWidth
+                  placeholder="e.g. 20 min"
+                  variant="outlined"
+                  name="duration"
+                  value={duration}
+                  onChange={handleChange}
+                  InputProps={{
+                    endAdornment: isDirtyDuration ? (
+                      <CheckCircleIcon
+                        sx={{
+                          color: 'success.main',
+                        }}
+                      />
+                    ) : null,
+                  }}
+                />
               </Box>
 
               <Box

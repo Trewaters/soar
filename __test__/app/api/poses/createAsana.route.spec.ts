@@ -54,7 +54,7 @@ describe('POST /api/poses/createAsana validation', () => {
     expect(response.status).toBe(400)
     expect(body.error).toBe('Validation failed')
     expect(body.validation.errors.sort_english_name).toBeDefined()
-    expect(body.validation.errors.english_names).toBeDefined()
+    // english_names is now optional, so do not expect error
     expect(prisma.asanaPose.create).not.toHaveBeenCalled()
   })
 

@@ -43,7 +43,7 @@ describe('validation/schemas/asana', () => {
 
       expect(result.isValid).toBe(false)
       expect(result.errors.sort_english_name).toBeDefined()
-      expect(result.errors.english_names).toBeDefined()
+      // english_names is now optional, so do not expect error
       expect(result.errors.category).toBeUndefined()
       expect(result.errors.difficulty).toBeUndefined()
     })

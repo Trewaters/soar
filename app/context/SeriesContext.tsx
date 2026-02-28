@@ -1,4 +1,4 @@
-import { Series } from '@app/flows/editSeries/EditSeriesDialog'
+import { Series } from '@app/flows/editSeries/SeriesEditorForm'
 import { updateSeries, deleteSeries } from '@lib/seriesService'
 import React, { createContext, useContext, useState, useCallback } from 'react'
 

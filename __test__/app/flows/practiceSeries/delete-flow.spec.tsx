@@ -94,8 +94,9 @@ describe('Practice Series Page - Delete Flow', () => {
     await user.click(editButton)
 
     // Click Delete Flow button in editor
+    // Use the explicit button text to avoid matching multiple delete buttons
     const deleteFlowBtn = await screen.findByRole('button', {
-      name: /delete flow/i,
+      name: 'Delete Flow',
     })
     await user.click(deleteFlowBtn)
 

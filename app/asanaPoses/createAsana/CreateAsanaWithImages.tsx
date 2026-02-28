@@ -208,7 +208,6 @@ export default function CreateAsanaWithImages() {
                           })
                         }}
                         helperText="Separate names with commas"
-                        required
                         placeholder="Tree Pose, Vrikshasana"
                       />
                     </FormControl>

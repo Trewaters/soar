@@ -19,7 +19,7 @@ const ASANA_DIFFICULTIES = ['Easy', 'Average', 'Difficult']
 
 export type AsanaCreatePayload = {
   sort_english_name: string
-  english_names: string[]
+  english_names?: string[]
   alternative_english_names?: string[]
   sanskrit_names?: string[]
   description?: string | null
@@ -46,8 +46,6 @@ function createAsanaSchema(
     english_names: composeValidators(
       stringArray(),
       stringArrayNormalizer(),
-      ...(isCreate ? [required('english_names')] : []),
-      minLength(1, 'english_names'),
       uniqueArrayItems('english_names')
     ),
     alternative_english_names: composeValidators(

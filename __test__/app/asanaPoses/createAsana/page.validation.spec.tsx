@@ -23,10 +23,33 @@ jest.mock('@app/hooks/useNavigationWithLoading', () => ({
   }),
 }))
 
-jest.mock('@app/clientComponents/splash-header', () => () => <div />)
-jest.mock('@app/clientComponents/sub-nav-header', () => () => <div />)
-jest.mock('@app/clientComponents/HelpButton', () => () => <button>Help</button>)
-jest.mock('@app/clientComponents/HelpDrawer', () => () => <div />)
+jest.mock('@app/clientComponents/splash-header', () => {
+  const React = require('react')
+  const Mock = () => <div />
+  Mock.displayName = 'SplashHeader'
+  return Mock
+})
+
+jest.mock('@app/clientComponents/sub-nav-header', () => {
+  const React = require('react')
+  const Mock = () => <div />
+  Mock.displayName = 'SubNavHeader'
+  return Mock
+})
+
+jest.mock('@app/clientComponents/HelpButton', () => {
+  const React = require('react')
+  const Mock = () => <button>Help</button>
+  Mock.displayName = 'HelpButton'
+  return Mock
+})
+
+jest.mock('@app/clientComponents/HelpDrawer', () => {
+  const React = require('react')
+  const Mock = () => <div />
+  Mock.displayName = 'HelpDrawer'
+  return Mock
+})
 
 jest.mock('@app/clientComponents/freemiumNotification', () => ({
   FreemiumNotification: () => null,
@@ -89,7 +112,8 @@ describe('Create Asana page validation feedback', () => {
 
     await user.click(screen.getByRole('button', { name: 'Create Asana' }))
 
-    expect(await screen.findByText(/english_names:/i)).toBeInTheDocument()
+    // english_names is optional; expect required sort_english_name error
+    expect(await screen.findByText(/sort_english_name:/i)).toBeInTheDocument()
     expect(mockCreatePose).not.toHaveBeenCalled()
     expect(mockPush).not.toHaveBeenCalled()
   })
@@ -104,7 +128,8 @@ describe('Create Asana page validation feedback', () => {
     render(<CreateAsanaPage />)
 
     await user.click(screen.getByRole('button', { name: 'Create Asana' }))
-    expect(await screen.findByText(/english_names:/i)).toBeInTheDocument()
+    // expect the required sort_english_name validation error (english_names optional)
+    expect(await screen.findByText(/sort_english_name:/i)).toBeInTheDocument()
 
     await user.click(screen.getByLabelText(/close/i))
     await waitFor(() => {

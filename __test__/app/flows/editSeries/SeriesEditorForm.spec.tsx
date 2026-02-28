@@ -64,14 +64,24 @@ describe('SeriesEditorForm', () => {
       { wrapper: TestWrapper }
     )
 
-    const breathSelect = screen.getByLabelText('Breath cue for Mountain Pose')
-    await user.click(breathSelect)
+    // Use aria-label for breath cue chips
+    const inhaleChip = screen.getByLabelText(
+      'Select Inhale breath cue for Mountain Pose'
+    )
+    const holdFullChip = screen.getByLabelText(
+      'Select Hold full breath cue for Mountain Pose'
+    )
+    const exhaleChip = screen.getByLabelText(
+      'Select Exhale breath cue for Mountain Pose'
+    )
+    const holdEmptyChip = screen.getByLabelText(
+      'Select Hold empty breath cue for Mountain Pose'
+    )
 
-    const listbox = await screen.findByRole('listbox')
-    expect(within(listbox).getByText('Inhale')).toBeInTheDocument()
-    expect(within(listbox).getByText('Hold full')).toBeInTheDocument()
-    expect(within(listbox).getByText('Exhale')).toBeInTheDocument()
-    expect(within(listbox).getByText('Hold empty')).toBeInTheDocument()
+    expect(inhaleChip).toBeInTheDocument()
+    expect(holdFullChip).toBeInTheDocument()
+    expect(exhaleChip).toBeInTheDocument()
+    expect(holdEmptyChip).toBeInTheDocument()
   })
 
   it('saves selected breathSeries and flow duration in payload', async () => {
@@ -87,15 +97,16 @@ describe('SeriesEditorForm', () => {
       { wrapper: TestWrapper }
     )
 
-    const breathSelect = screen.getByLabelText('Breath cue for Mountain Pose')
-    await user.click(breathSelect)
-    await user.click(await screen.findByRole('option', { name: 'Exhale' }))
+    const exhaleChip = screen.getByLabelText(
+      'Select Exhale breath cue for Mountain Pose'
+    )
+    await user.click(exhaleChip)
 
     const durationInput = screen.getByDisplayValue('20 min')
     await user.clear(durationInput)
     await user.type(durationInput, '30 min')
 
-    await user.click(screen.getByRole('button', { name: /save changes/i }))
+    await user.click(screen.getByRole('button', { name: 'Save Changes' }))
 
     expect(onSave).toHaveBeenCalledTimes(1)
     const saved = onSave.mock.calls[0][0]

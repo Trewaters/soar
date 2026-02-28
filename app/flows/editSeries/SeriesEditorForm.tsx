@@ -1,60 +1,24 @@
 import Button from '@mui/material/Button'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
-import IconButton from '@mui/material/IconButton'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
-import DeleteIcon from '@mui/icons-material/Delete'
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
-import AddIcon from '@mui/icons-material/Add'
-import FilterVintageIcon from '@mui/icons-material/FilterVintage'
-import DeblurIcon from '@mui/icons-material/Deblur'
-import PlayForWorkIcon from '@mui/icons-material/PlayForWork'
-import BackHandIcon from '@mui/icons-material/BackHand'
 import SeriesImageManager from '@app/clientComponents/SeriesImageManager'
 import AddAsanasDialog from '@clientComponents/AddAsanasDialog'
 import AsanaDetailsEdit from '@app/clientComponents/asanaUi/AsanaDetailsEdit'
 import type { AsanaEditFieldProps } from '@app/clientComponents/asanaUi/asanaFieldConstants'
 import { sanitizeSeriesSecondaryLabel } from '@app/utils/asana/seriesPoseLabels'
-import MenuItem from '@mui/material/MenuItem'
-import { Box, Typography, Paper, TextField } from '@mui/material'
+import EditableAsanaList, {
+  AsanaListItem,
+} from '@app/clientComponents/EditableAsanaList'
+import { Box, Typography, Paper, IconButton, Stack } from '@mui/material'
+
+// Re-export AsanaListItem for use in other components
+export type { AsanaListItem }
+import SaveIcon from '@mui/icons-material/Save'
+import CloseIcon from '@mui/icons-material/Close'
+import DeleteIcon from '@mui/icons-material/Delete'
 import React from 'react'
-
-const BREATH_SERIES_OPTIONS = [
-  'Inhale',
-  'Hold full',
-  'Exhale',
-  'Hold empty',
-] as const
-
-const getBreathIcon = (value: string) => {
-  switch (value) {
-    case 'Inhale':
-      return (
-        <FilterVintageIcon sx={{ color: 'success.main' }} fontSize="small" />
-      )
-    case 'Hold full':
-      return <DeblurIcon sx={{ color: 'secondary.main' }} fontSize="small" />
-    case 'Exhale':
-      return <PlayForWorkIcon sx={{ color: 'info.main' }} fontSize="small" />
-    case 'Hold empty':
-      return <BackHandIcon sx={{ color: 'error.main' }} fontSize="small" />
-    default:
-      return null
-  }
-}
-
-export interface Asana {
-  id: string
-  name: string
-  difficulty?: string
-  alignment_cues?: string
-  breathSeries?: string
-}
 
 export interface Series {
   id: string
@@ -62,7 +26,7 @@ export interface Series {
   description?: string
   duration?: string
   difficulty?: string
-  asanas: Asana[]
+  asanas: AsanaListItem[]
   created_by?: string
 }
 
@@ -90,7 +54,9 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
   const [name, setName] = React.useState(series.name || '')
   const [description, setDescription] = React.useState(series.description || '')
   const [duration, setDuration] = React.useState(series.duration || '')
-  const [asanas, setAsanas] = React.useState<Asana[]>(series.asanas || [])
+  const [asanas, setAsanas] = React.useState<AsanaListItem[]>(
+    series.asanas || []
+  )
   const [error, setError] = React.useState<string | null>(null)
   const [showAddAsanasDialog, setShowAddAsanasDialog] = React.useState(false)
   const [confirmDeleteOpen, setConfirmDeleteOpen] = React.useState(false)
@@ -153,7 +119,7 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
   }
 
   const handleAddAsanas = (items: any[]) => {
-    const asanaToAdd: Asana[] = items.map((asanaItem) => {
+    const asanaToAdd: AsanaListItem[] = items.map((asanaItem) => {
       const englishName = asanaItem.sort_english_name || ''
       const sanskritName =
         typeof asanaItem.sanskrit_names === 'string'
@@ -182,9 +148,56 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
       <Box id="edit-series-content">
         <form aria-label="Flow Form">
           <Paper elevation={1} sx={{ p: 3, mb: 3, borderRadius: '12px' }}>
-            <Typography variant="h6" gutterBottom color="primary">
-              Details
-            </Typography>
+            {/* Top Row: Details Title with Icon Buttons */}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                mb: 2,
+              }}
+            >
+              {/* Left: Details text with Save Icon directly next to it */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                <Typography variant="h6" color="primary">
+                  Details
+                </Typography>
+                <IconButton
+                  aria-label="Save changes"
+                  onClick={handleSave}
+                  disabled={disabled}
+                  size="small"
+                  color="primary"
+                >
+                  <SaveIcon fontSize="small" />
+                </IconButton>
+              </Box>
+
+              {/* Right: Cancel and Delete Icon Buttons */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                <IconButton
+                  aria-label="Cancel editing"
+                  onClick={onCancel}
+                  size="small"
+                  color="warning"
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+                {mode === 'edit' && (
+                  <IconButton
+                    aria-label="Delete flow"
+                    onClick={() => setConfirmDeleteOpen(true)}
+                    disabled={disabled}
+                    size="small"
+                    color="error"
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                )}
+              </Box>
+            </Box>
+
+            {/* Details Content */}
             <AsanaDetailsEdit
               fields={detailFields.map((field) => ({
                 ...field,
@@ -202,174 +215,18 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
           </Paper>
 
           <Paper elevation={1} sx={{ p: 3, mb: 1.5, borderRadius: '12px' }}>
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                mb: 2,
+            <EditableAsanaList
+              asanas={asanas}
+              onAsanasChange={setAsanas}
+              onAddAsanasClick={() => {
+                setAsanaRefreshTrigger((prev) => prev + 1)
+                setShowAddAsanasDialog(true)
               }}
-            >
-              <Typography variant="h6" gutterBottom color="primary">
-                Asana List
-              </Typography>
-              {!disabled && (
-                <Button
-                  variant="outlined"
-                  startIcon={<AddIcon />}
-                  onClick={() => {
-                    setAsanaRefreshTrigger((prev) => prev + 1)
-                    setShowAddAsanasDialog(true)
-                  }}
-                  size="small"
-                >
-                  Add Asanas
-                </Button>
-              )}
-            </Box>
-
-            <List dense aria-label="Asana list">
-              {asanas.map((asana, idx) => (
-                <ListItem
-                  key={`${asana.id}-${idx}`}
-                  sx={{ flexDirection: 'column', alignItems: 'stretch', py: 2 }}
-                >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      width: '100%',
-                      mb: 1,
-                    }}
-                  >
-                    <ListItemText primary={asana.name} sx={{ flex: 1 }} />
-
-                    <IconButton
-                      edge="end"
-                      aria-label={`Delete, Remove ${asana.name}`}
-                      onClick={() =>
-                        !disabled &&
-                        setAsanas((prev) => prev.filter((_, i) => i !== idx))
-                      }
-                      disabled={disabled}
-                      color="error"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-
-                    <IconButton
-                      edge="end"
-                      aria-label={`Move up, Move ${asana.name} up`}
-                      onClick={() => {
-                        if (disabled || idx === 0) return
-                        setAsanas((prev) => {
-                          const arr = [...prev]
-                          const tmp = arr[idx - 1]
-                          arr[idx - 1] = arr[idx]
-                          arr[idx] = tmp
-                          return arr
-                        })
-                      }}
-                      disabled={disabled || idx === 0}
-                      sx={{ ml: 1 }}
-                    >
-                      <ArrowUpwardIcon />
-                    </IconButton>
-
-                    <IconButton
-                      edge="end"
-                      aria-label={`Move down, Move ${asana.name} down`}
-                      onClick={() => {
-                        if (disabled || idx === asanas.length - 1) return
-                        setAsanas((prev) => {
-                          const arr = [...prev]
-                          const tmp = arr[idx + 1]
-                          arr[idx + 1] = arr[idx]
-                          arr[idx] = tmp
-                          return arr
-                        })
-                      }}
-                      disabled={disabled || idx === asanas.length - 1}
-                      sx={{ ml: 1 }}
-                    >
-                      <ArrowDownwardIcon />
-                    </IconButton>
-                  </Box>
-
-                  <TextField
-                    select
-                    placeholder="Breath cue"
-                    variant="outlined"
-                    value={asana.breathSeries || ''}
-                    onChange={(e) => {
-                      if (disabled) return
-                      setAsanas((prev) =>
-                        prev.map((a, i) =>
-                          i === idx ? { ...a, breathSeries: e.target.value } : a
-                        )
-                      )
-                    }}
-                    disabled={disabled}
-                    inputProps={{
-                      'aria-label': `Breath cue for ${asana.name}`,
-                    }}
-                    sx={{ mt: 1 }}
-                  >
-                    <MenuItem value="">(none)</MenuItem>
-                    {BREATH_SERIES_OPTIONS.map((option) => (
-                      <MenuItem key={option} value={option}>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1,
-                          }}
-                        >
-                          {getBreathIcon(option)}
-                          <span>{option}</span>
-                        </Box>
-                      </MenuItem>
-                    ))}
-                  </TextField>
-
-                  <TextField
-                    placeholder="Optional alignment cues (max 1000 characters)"
-                    variant="outlined"
-                    multiline
-                    minRows={1}
-                    value={asana.alignment_cues || ''}
-                    onChange={(e) => {
-                      if (disabled) return
-                      const newVal = e.target.value.slice(0, 1000)
-                      setAsanas((prev) =>
-                        prev.map((a, i) =>
-                          i === idx ? { ...a, alignment_cues: newVal } : a
-                        )
-                      )
-                    }}
-                    disabled={disabled}
-                    inputProps={{
-                      maxLength: 1000,
-                      'aria-label': `Alignment cues for ${asana.name}`,
-                    }}
-                    sx={{ mt: 1 }}
-                  />
-
-                  <Typography
-                    variant="caption"
-                    sx={{ color: 'text.secondary', mt: 0.5 }}
-                  >
-                    {(asana.alignment_cues || '').length}/1000
-                  </Typography>
-                </ListItem>
-              ))}
-            </List>
-
-            {asanas.length === 0 && (
-              <div style={{ color: 'red' }} role="alert">
-                No asanas in this series.
-              </div>
-            )}
+              disabled={disabled}
+              showAddButton={!disabled}
+              title="Asana List"
+              emptyMessage="No asanas in this series."
+            />
           </Paper>
 
           {error && (
@@ -396,16 +253,14 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
           zIndex: 10,
         }}
       >
-        <Box
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          spacing={1.5}
           sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            gap: 2,
-            justifyContent: 'center',
-            alignItems: 'center',
             width: '100%',
             maxWidth: 600,
             mx: 'auto',
+            alignItems: 'stretch',
           }}
         >
           <Button
@@ -413,14 +268,10 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
             color="primary"
             variant="contained"
             disabled={disabled}
+            startIcon={<SaveIcon fontSize="small" />}
             sx={{
-              borderRadius: '12px',
-              px: 4,
-              py: 1.5,
-              fontSize: '1.1rem',
-              fontWeight: 600,
-              width: { xs: '100%', sm: 'auto' },
-              boxShadow: (theme) => theme.customShadows.cta,
+              textTransform: 'none',
+              borderRadius: '10px',
             }}
           >
             {mode === 'create' ? 'Create Flow' : 'Save Changes'}
@@ -429,15 +280,13 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
             <Button
               onClick={() => setConfirmDeleteOpen(true)}
               color="error"
-              variant="outlined"
+              variant="contained"
               disabled={disabled}
+              startIcon={<DeleteIcon fontSize="small" />}
               sx={{
-                borderRadius: '12px',
-                px: 4,
-                py: 1.5,
-                fontSize: '1.1rem',
-                fontWeight: 600,
-                width: { xs: '100%', sm: 'auto' },
+                textTransform: 'none',
+                borderRadius: '10px',
+                color: 'error.contrastText',
               }}
             >
               Delete Flow
@@ -445,20 +294,18 @@ const SeriesEditorForm: React.FC<SeriesEditorFormProps> = ({
           )}
           <Button
             onClick={onCancel}
-            color="secondary"
-            variant="outlined"
+            color="warning"
+            variant="contained"
+            startIcon={<CloseIcon fontSize="small" />}
             sx={{
-              borderRadius: '12px',
-              px: 4,
-              py: 1.5,
-              fontSize: '1.1rem',
-              fontWeight: 600,
-              width: { xs: '100%', sm: 'auto' },
+              textTransform: 'none',
+              borderRadius: '10px',
+              color: 'warning.contrastText',
             }}
           >
             Cancel
           </Button>
-        </Box>
+        </Stack>
       </Box>
 
       <AddAsanasDialog
