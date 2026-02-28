@@ -198,7 +198,11 @@ const EditableAsanaList: React.FC<EditableAsanaListProps> = ({
                   mb: 1,
                 }}
               >
-                <ListItemText primary={asanaName} sx={{ flex: 1 }} />
+                <ListItemText
+                  primary={asanaName}
+                  primaryTypographyProps={{ variant: 'h3' }}
+                  sx={{ flex: 1 }}
+                />
 
                 <IconButton
                   edge="end"
@@ -249,7 +253,7 @@ const EditableAsanaList: React.FC<EditableAsanaListProps> = ({
 
               {/* Breath cue selection chips */}
               <Box sx={{ mt: 1, mb: 2 }}>
-                <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                <Typography variant="h6" sx={{ mb: 1 }}>
                   Breath cue
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>

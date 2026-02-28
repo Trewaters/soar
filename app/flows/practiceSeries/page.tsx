@@ -718,7 +718,7 @@ export default function Page() {
                     aria-controls="weekly-activity-content"
                     id="weekly-activity-header"
                   >
-                    <Typography variant="h6">Weekly Activity</Typography>
+                    <Typography variant="subtitle1">Weekly Activity</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     <WeeklyActivityViewer

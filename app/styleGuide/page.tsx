@@ -895,6 +895,72 @@ export default function StyleGuide() {
                   Delete
                 </Button>
               </Stack>
+              <Box
+                sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 1 }}
+              >
+                <Typography variant="subtitle2">Icon Action Buttons</Typography>
+                <Stack direction={{ xs: 'row' }} spacing={1}>
+                  <IconButton
+                    aria-label="Edit pose"
+                    title="Edit pose"
+                    size="small"
+                    sx={{
+                      color: 'primary.main',
+                      backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      },
+                    }}
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+
+                  <IconButton
+                    aria-label="Save changes"
+                    title="Save changes"
+                    size="small"
+                    sx={{
+                      color: 'primary.main',
+                      backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      },
+                    }}
+                  >
+                    <SaveIcon fontSize="small" />
+                  </IconButton>
+
+                  <IconButton
+                    aria-label="Cancel editing"
+                    title="Cancel editing"
+                    size="small"
+                    sx={{
+                      color: 'primary.contrastText',
+                      backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      },
+                    }}
+                  >
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+
+                  <IconButton
+                    aria-label="Delete pose"
+                    title="Delete pose"
+                    size="small"
+                    sx={{
+                      color: 'error.main',
+                      backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      },
+                    }}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </Stack>
+              </Box>
             </Box>
           </Box>
 

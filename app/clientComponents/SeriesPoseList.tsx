@@ -211,6 +211,7 @@ export default function SeriesPoseList({
                     >
                       <Typography
                         component="span"
+                        variant="h3"
                         sx={{
                           color: 'text.disabled',
                           textDecoration: 'line-through',
@@ -250,7 +251,21 @@ export default function SeriesPoseList({
                         textOverflow: 'clip',
                       }}
                     >
-                      {resolvedName}
+                      <Typography
+                        component="span"
+                        variant="subtitle2"
+                        sx={{
+                          display: 'inline',
+                          maxWidth: '100%',
+                          overflowWrap: 'break-word',
+                          wordBreak: 'break-word',
+                          whiteSpace: 'normal',
+                          overflow: 'visible',
+                          textOverflow: 'clip',
+                        }}
+                      >
+                        {resolvedName}
+                      </Typography>
                     </Link>
                   )}
                 </Box>

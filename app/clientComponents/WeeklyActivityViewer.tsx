@@ -355,9 +355,7 @@ export default function WeeklyActivityViewer({
         >
           <Stack direction="row" alignItems="center" spacing={1}>
             <TrendingUpIcon color="primary" fontSize="small" />
-            <Typography variant="subtitle2" fontWeight="bold">
-              {getCompactTitle()}
-            </Typography>
+            <Typography variant="subtitle1">{getCompactTitle()}</Typography>
           </Stack>
 
           <Stack direction="row" alignItems="center" spacing={1}>
@@ -410,9 +408,7 @@ export default function WeeklyActivityViewer({
         {/* Header */}
         <Stack direction="row" alignItems="center" spacing={2}>
           <TrendingUpIcon color="primary" fontSize="medium" />
-          <Typography variant="subtitle2" fontWeight="bold">
-            {getDetailedTitle()}
-          </Typography>
+          <Typography variant="subtitle1">{getDetailedTitle()}</Typography>
         </Stack>
 
         <Divider />

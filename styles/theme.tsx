@@ -332,6 +332,30 @@ export const theme = createTheme({
         }),
       },
     },
+    MuiTypography: {
+      styleOverrides: {
+        root: ({ ownerState, theme }: any) => ({
+          ...(ownerState?.variant &&
+            [
+              'h1',
+              'h2',
+              'h3',
+              'h4',
+              'h5',
+              'h6',
+              'subtitle1',
+              'subtitle2',
+              'subtitle3',
+            ].includes(ownerState.variant) && {
+              color: theme.palette.text.secondary,
+            }),
+          ...(ownerState?.variant &&
+            ['body1', 'body2'].includes(ownerState.variant) && {
+              color: theme.palette.text.primary,
+            }),
+        }),
+      },
+    },
   },
   customShadows: {
     cta: '0 4px 8px rgba(0, 0, 0, 0.2)',

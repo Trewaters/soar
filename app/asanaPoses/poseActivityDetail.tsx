@@ -568,7 +568,7 @@ export default function PoseActivityDetail({
               }}
             >
               <Typography
-                variant="h3"
+                variant="h1"
                 sx={{
                   color: 'white',
                   fontWeight: 'bold',
@@ -829,7 +829,7 @@ export default function PoseActivityDetail({
                   aria-controls="weekly-activity-content"
                   id="weekly-activity-header"
                 >
-                  <Typography variant="h6">Weekly Activity</Typography>
+                  <Typography variant="subtitle1">Weekly Activity</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <WeeklyActivityViewer
