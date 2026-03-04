@@ -1,0 +1,10 @@
+{
+  "entryPoints": ["app", "types"],
+  "entryPointStrategy": "expand",
+  "out": "docs/api",
+  "plugin": ["typedoc-plugin-markdown"],
+  "tsconfig": "tsconfig.typedoc.json",
+  "exclude": ["**/__tests__/**", "node_modules"],
+  "excludePrivate": true,
+  "hideGenerator": true
+}

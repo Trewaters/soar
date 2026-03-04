@@ -1,0 +1,195 @@
+import { FlowSeriesData } from '@context/AsanaSeriesContext'
+import { SequenceData } from '@context/SequenceContext'
+import { generateUrlWithFallbacks } from '../app/utils/urlGeneration'
+import { SITE_URL, SITE_HOSTNAME } from '../app/config/site'
+import { AsanaPose } from './asana'
+
+/**
+ * Discriminated union for different types of shareable yoga content
+ * Uses 'contentType' as the discriminator for type safety
+ */
+export type ShareableContent =
+  | {
+      contentType: 'asana'
+      data: AsanaPose
+    }
+  | {
+      contentType: 'flow'
+      data: FlowSeriesData
+    }
+  | {
+      contentType: 'sequence'
+      data: SequenceData
+    }
+
+/**
+ * Standardized configuration for share data structure
+ * Used across all sharing strategies for consistent formatting
+ */
+export interface ShareConfig {
+  /** The title/subject line for the shared content */
+  title: string
+  /** The main text content including descriptions and practice information */
+  text: string
+  /** The URL where the content can be accessed or practiced */
+  url: string
+  /** The type of content being shared for analytics and customization */
+  shareType: 'asana' | 'flow' | 'sequence'
+}
+
+/**
+ * Strategy interface for handling different content types
+ * Implements the Strategy pattern for extensible sharing functionality
+ */
+export interface ShareStrategy {
+  /**
+   * Generates the share configuration for the specific content type
+   * @param data - The yoga content data to be shared
+   * @param url - The current page URL for context (optional)
+   * @returns ShareConfig object with formatted sharing data
+   */
+  generateShareConfig(data: any, url?: string): ShareConfig
+}
+
+/**
+ * Factory function for creating appropriate share strategy based on content type
+ * @param contentType - The type of content being shared
+ * @returns The appropriate ShareStrategy implementation
+ */
+export function createShareStrategy(
+  contentType: ShareableContent['contentType']
+): ShareStrategy {
+  switch (contentType) {
+    case 'asana':
+      return new AsanaShareStrategy()
+    case 'flow':
+      return new SeriesShareStrategy()
+    case 'sequence':
+      return new SequenceShareStrategy()
+    default:
+      throw new Error(`Unsupported content type: ${contentType}`)
+  }
+}
+
+/**
+ * Share strategy for individual asana poses/asanas
+ * Implements exact format specification from PRD with mandatory format:
+ * "The asana pose [Asana Pose sort name] was shared with you. Below is the description:
+ * Practice with Uvuyoga! https://www.happyyoga.app/flows/practiceSeries (www.happyyoga.app)"
+ */
+export class AsanaShareStrategy implements ShareStrategy {
+  generateShareConfig(data: AsanaPose): ShareConfig {
+    const poseName = data.sort_english_name
+
+    // Use canonical practiceAsanas URL with ID
+    const fallbackPracticeUrl = `${SITE_URL}/asanaPoses/practiceAsanas?id=${data.id}`
+    // Prefer a stable, shareable link that includes the pose id.
+    const shareUrl = data?.id
+      ? fallbackPracticeUrl
+      : generateUrlWithFallbacks('asana', data, fallbackPracticeUrl)
+
+    // Implement exact PRD format specification
+    const shareText = `The asana pose ${poseName} was shared with you. Below is the description:
+
+  Practice with Uvuyoga!
+
+  ${shareUrl}
+
+  (${SITE_HOSTNAME})`
+
+    return {
+      title: `The asana pose "${poseName}" was shared with you. Below is the description:`,
+      text: shareText,
+      url: shareUrl,
+      shareType: 'asana',
+    }
+  }
+}
+
+export class SeriesShareStrategy implements ShareStrategy {
+  generateShareConfig(data: FlowSeriesData): ShareConfig {
+    const seriesName = data.seriesName
+
+    // Format poses with exactly the required format: "* [Pose Name],"
+    const posesText = data.seriesPoses
+      .map((pose, index) => {
+        // Support both string entries and object-shaped entries
+        let cleanPose = ''
+        if (typeof pose === 'string') {
+          cleanPose = pose.replace(/;/g, '').trim()
+        } else {
+          cleanPose = (
+            (pose as any).sort_english_name ||
+            String((pose as any).poseId || '')
+          ).trim()
+        }
+        return index === data.seriesPoses.length - 1
+          ? `* ${cleanPose}`
+          : `* ${cleanPose},`
+      })
+      .join('\n')
+
+    // Prefer the practiceSeries route with an `id` query param because
+    // that's the canonical public landing page for shared flows in the app.
+    // Use `generateUrlWithFallbacks` with a fallback to the practiceSeries
+    // id URL to ensure we include the series id when possible.
+    const fallbackPracticeUrl = `${SITE_URL}/flows/practiceSeries?id=${data.id}`
+    // Prefer a stable, shareable production link that includes the series id so
+    // recipients land on the exact flow. If an id is available, use the
+    // production practiceSeries?id=... URL; otherwise fall back to the
+    // generated URL with fallbacks.
+    const shareUrl = data?.id
+      ? fallbackPracticeUrl
+      : generateUrlWithFallbacks('flow', data, fallbackPracticeUrl)
+
+    // Implement exact PRD format specification
+    const shareText = `Sharing
+  "${seriesName}"
+
+  Below are the poses in this series:
+
+  ${posesText}
+
+  Practice with Uvuyoga!
+
+  ${shareUrl}
+
+  (${SITE_HOSTNAME})`
+
+    return {
+      title: `Sharing "${seriesName}"`,
+      text: shareText,
+      url: shareUrl,
+      shareType: 'flow',
+    }
+  }
+}
+
+/**
+ * Share strategy for yoga sequences (ordered flows with multiple series)
+ * Combines sequence information with included series data
+ * Uses sequence-specific URL or falls back to current context
+ */
+export class SequenceShareStrategy implements ShareStrategy {
+  generateShareConfig(data: SequenceData, url?: string): ShareConfig {
+    const sequenceName = data.nameSequence
+    const seriesNames = data.sequencesSeries
+      .map((series) => series.seriesName)
+      .join(', ')
+
+    // Prefer the canonical practice sequences route.
+    const fallbackPracticeUrl = `${SITE_URL}/sequences/practiceSequences?id=${data.id}`
+    const shareUrl = data?.id
+      ? fallbackPracticeUrl
+      : generateUrlWithFallbacks('sequence', data, url || fallbackPracticeUrl)
+
+    const shareText = `The yoga sequence "${sequenceName}" was shared with you.\n\nDescription: ${data.description || 'A custom yoga sequence'}\n\nSeries included: ${seriesNames}\n\nDuration: ${data.durationSequence || 'Varies'}\n\nPractice with Uvuyoga!\n\n${shareUrl}\n\n(${SITE_HOSTNAME})`
+
+    return {
+      title: `The yoga sequence "${sequenceName}" was shared with you.`,
+      text: shareText,
+      url: shareUrl,
+      shareType: 'sequence',
+    }
+  }
+}

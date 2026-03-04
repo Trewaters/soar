@@ -1,0 +1,54 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "auth": ["./auth.ts"],
+      "types/*": ["./types/*"],
+      "lib/*": ["./lib/*"],
+      "components/*": ["./components/*"],
+      "styles/*": ["./styles/*"],
+      "scripts/*": ["./scripts/*"],
+      "@/*": ["./*"],
+      "@app/*": ["./app/*"],
+      "@client-api/*": ["./app/api/*"],
+      "@clientComponents/*": ["./app/clientComponents/*"],
+      "@context/*": ["./app/context/*"],
+      "@interfaces/*": ["./app/interfaces/*"],
+      "@lib/*": ["./lib/*"],
+      "@poses/*": ["./app/asanaPoses/*"],
+      "@prismaSchema/*": ["./prisma/*"],
+      "@providers/*": ["./app/providers/*"],
+      "@serverComponents/*": ["./components/*"],
+      "@styles/*": ["./styles/*"],
+      "@utils/*": ["./utils/*"]
+    },
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.d.ts",
+    ".next/types/**/*.ts",
+    "jest",
+    "jest.setup.ts"
+  ],
+  "exclude": ["node_modules", "dist", "build"]
+}

@@ -1,0 +1,737 @@
+'use client'
+import React from 'react'
+import { useFlowSeries } from '@app/context/AsanaSeriesContext'
+import {
+  Alert,
+  Box,
+  Button,
+  FormControl,
+  IconButton,
+  MenuItem,
+  Snackbar,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@mui/material'
+import { ChangeEvent, useEffect, useState, useRef } from 'react'
+import { useSession } from 'next-auth/react'
+import { useNavigationWithLoading } from '@app/hooks/useNavigationWithLoading'
+import { getAccessiblePoses } from '@lib/poseService'
+import SubNavHeader from '@app/clientComponents/sub-nav-header'
+import SplashHeader from '@app/clientComponents/splash-header'
+import GroupedDataAssetSearch from '@app/clientComponents/GroupedDataAssetSearch'
+import EditableAsanaList from '@app/clientComponents/EditableAsanaList'
+import { AppText } from '@app/constants/Strings'
+import {
+  formatSeriesPoseEntry,
+  splitSeriesPoseEntry,
+} from '@app/utils/asana/seriesPoseLabels'
+import { AsanaPose } from 'types/asana'
+import ImageManagement from '@app/clientComponents/imageUpload/ImageManagement'
+import type { PoseImageData } from '@app/clientComponents/imageUpload/ImageUpload'
+import ImageIcon from '@mui/icons-material/Image'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import SaveIcon from '@mui/icons-material/Save'
+import CloseIcon from '@mui/icons-material/Close'
+import HelpButton from '@app/clientComponents/HelpButton'
+import HelpDrawer from '@app/clientComponents/HelpDrawer'
+import { HELP_PATHS } from '@app/utils/helpLoader'
+
+export default function Page() {
+  const { data: session, status } = useSession()
+  const { state, dispatch } = useFlowSeries()
+  const { seriesName, seriesPoses, breath, description, duration, image } =
+    state.flowSeries
+  const [poses, setPoses] = useState<AsanaPose[]>([])
+  const [uploadedImages, setUploadedImages] = useState<PoseImageData[]>([])
+  const [submissionError, setSubmissionError] = useState<string | null>(null)
+  const [snackbarOpen, setSnackbarOpen] = useState(false)
+  const router = useNavigationWithLoading()
+  const [open, setOpen] = React.useState(false)
+  const [isDirty, setIsDirty] = useState(false)
+  const [isDirtyDescription, setIsDirtyDescription] = useState(false)
+  const [isDirtyDuration, setIsDirtyDuration] = useState(false)
+  const [acOpen, setAcOpen] = useState(false)
+  const [searchInputValue, setSearchInputValue] = useState('')
+  // Debug + throttling refs to prevent rapid refetch loops
+  const lastFetchKeyRef = useRef<string | null>(null)
+  const lastFetchTimeRef = useRef<number>(0)
+  const fetchInFlightRef = useRef<boolean>(false)
+  const formRef = useRef<HTMLFormElement>(null)
+
+  // Convert seriesPoses to EditableAsanaList format
+  const asanaListItems = React.useMemo(() => {
+    return seriesPoses.map((entry) => {
+      // entry may be legacy string or new object
+      if (typeof entry === 'string') {
+        const split = splitSeriesPoseEntry(entry)
+        return {
+          name: split.name,
+          secondary: split.secondary,
+          alignment_cues: '',
+          breathSeries: '',
+        }
+      }
+      const obj = entry as any
+      return {
+        name: obj.sort_english_name || '',
+        secondary: obj.secondary || '',
+        alignment_cues: obj.alignment_cues || '',
+        breathSeries: obj.breathSeries || '',
+        poseId: obj.poseId,
+      }
+    })
+  }, [seriesPoses])
+
+  const handleAsanasChange = (updatedAsanas: any[]) => {
+    // Convert back to seriesPoses format
+    const newSeriesPoses = updatedAsanas.map((asana) => ({
+      poseId: asana.poseId,
+      sort_english_name: asana.name,
+      secondary: asana.secondary,
+      alignment_cues: asana.alignment_cues,
+      breathSeries: asana.breathSeries,
+    }))
+    dispatch({
+      type: 'SET_FLOW_SERIES',
+      payload: {
+        ...state.flowSeries,
+        seriesPoses: newSeriesPoses,
+      },
+    })
+  }
+
+  const fetchPoses = React.useCallback(async () => {
+    const emailKey = session?.user?.email || 'guest'
+    const now = Date.now()
+    const throttleMs = 1500
+
+    // Guard: avoid overlapping/in-flight fetches
+    if (fetchInFlightRef.current) {
+      return
+    }
+
+    // Guard: throttle repeated fetches with same key within window
+    if (
+      lastFetchKeyRef.current === emailKey &&
+      now - lastFetchTimeRef.current < throttleMs
+    ) {
+      return
+    }
+
+    try {
+      fetchInFlightRef.current = true
+      lastFetchKeyRef.current = emailKey
+      lastFetchTimeRef.current = now
+      const poses = await getAccessiblePoses(session?.user?.email || undefined)
+      setPoses(poses)
+    } catch (error: Error | any) {
+      console.error('[CreateSeries] Error fetching poses:', error.message)
+    } finally {
+      fetchInFlightRef.current = false
+    }
+  }, [session?.user?.email])
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.push('/flows')
+      return
+    }
+
+    if (status === 'authenticated') {
+      fetchPoses()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, session?.user?.email])
+
+  // Refetch poses when the page becomes visible (e.g., when returning from create asana page)
+  // This ensures that newly created asanas appear in the autocomplete search
+  // Note: We only use visibilitychange, not focus, to avoid excessive API calls
+  const handleVisibilityChange = React.useCallback(() => {
+    const hidden = document.hidden
+    if (!hidden) {
+      // Only refetch when visible and not throttled/in-flight
+      fetchPoses()
+    }
+  }, [fetchPoses])
+
+  React.useEffect(() => {
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [handleVisibilityChange])
+
+  function handleSelect(pose: AsanaPose) {
+    const simplifiedName =
+      Array.isArray(pose.sanskrit_names) && pose.sanskrit_names[0]
+        ? pose.sanskrit_names[0]
+        : ''
+    dispatch({
+      type: 'SET_FLOW_SERIES',
+      payload: {
+        ...state.flowSeries,
+        seriesPoses: [
+          ...state.flowSeries.seriesPoses,
+          {
+            poseId: pose.id,
+            sort_english_name: pose.sort_english_name,
+            secondary: simplifiedName,
+            alignment_cues: '',
+            breathSeries: '',
+          },
+        ],
+      },
+    })
+    // Clear search input after selection
+    setSearchInputValue('')
+    setAcOpen(false)
+  }
+
+  function showError(msg: string) {
+    setSubmissionError(msg)
+    setSnackbarOpen(true)
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setSubmissionError(null)
+
+    // Validate required fields
+    if (!seriesName.trim()) {
+      showError('Flow name is required')
+      return
+    }
+
+    if (seriesPoses.length === 0) {
+      showError('At least one pose is required')
+      return
+    }
+
+    const updatedSeries = {
+      ...state.flowSeries,
+      seriesName,
+      seriesPoses,
+      breath,
+      description,
+      duration,
+      durationSeries: duration,
+      image,
+    }
+    dispatch({ type: 'SET_FLOW_SERIES', payload: updatedSeries })
+    dispatch({
+      type: 'RESET_FLOW_SERIES',
+      payload: {
+        seriesName: '',
+        seriesPoses: [],
+        breath: '',
+        description: '',
+        duration: '',
+        image: '',
+      },
+    })
+
+    try {
+      const response = await fetch('/api/series/createSeries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          cache: 'no-store',
+        },
+        body: JSON.stringify(updatedSeries),
+      })
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || 'Failed to create flow')
+      }
+      const data = await response.json()
+
+      // Redirect to the series detail page if we got an ID back
+      if (data.id) {
+        router.push(`/flows/practiceSeries?id=${data.id}`)
+        return
+      }
+
+      showError('Flow created but could not retrieve ID')
+    } catch (error: Error | any) {
+      const errorMsg =
+        error instanceof Error ? error.message : 'Error creating flow'
+      console.error('Error creating flow:', errorMsg)
+      showError(errorMsg)
+    }
+  }
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target
+    dispatch({
+      type: 'SET_FLOW_SERIES',
+      payload: {
+        ...state.flowSeries,
+        [name]: value,
+      },
+    })
+    switch (name) {
+      case 'seriesName':
+        setIsDirty(value.length > 0)
+
+        break
+      case 'description':
+        setIsDirtyDescription(event.target.value.length > 0)
+
+        break
+      case 'duration':
+        setIsDirtyDuration(event.target.value.length > 0)
+
+        break
+      default:
+        break
+    }
+  }
+
+  const handleImageUploaded = React.useCallback(
+    (img: PoseImageData) => {
+      // Flows are limited to ONE image - replace the array instead of appending
+      // Prevent multiple uploads by clearing error and updating state
+      setSubmissionError(null)
+      setUploadedImages([img])
+      dispatch({
+        type: 'SET_FLOW_SERIES_IMAGE',
+        payload: img.url,
+      })
+    },
+    [dispatch]
+  )
+
+  function handleCancel() {
+    // Navigate to Flow search view
+    router.push('/flows')
+  }
+
+  return (
+    <>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <SplashHeader
+          src={'/icons/designImages/header-create-series.png'}
+          alt={'Create Flow'}
+          title="Create Flow"
+        />
+        <Stack
+          spacing={2}
+          sx={{
+            mx: { xs: 0, sm: 3 },
+            mb: '1em',
+            width: '100%',
+            maxWidth: 1200,
+          }}
+        >
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            sx={{
+              width: '87%',
+              maxWidth: '384px',
+              alignSelf: 'center',
+            }}
+          >
+            <SubNavHeader mode="back" />
+            <HelpButton onClick={() => setOpen(!open)} />
+          </Stack>
+          <Stack
+            direction="row"
+            spacing={0.5}
+            alignItems="center"
+            justifyContent="space-around"
+          >
+            <Tooltip title="Save Flow">
+              <IconButton
+                aria-label="Save flow"
+                size="small"
+                onClick={() => formRef.current?.requestSubmit()}
+                sx={{
+                  color: 'primary.main',
+                  backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  },
+                }}
+              >
+                <SaveIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Cancel">
+              <IconButton
+                aria-label="Cancel"
+                size="small"
+                onClick={handleCancel}
+                sx={{
+                  color: 'primary.contrastText',
+                  backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  },
+                }}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          </Stack>
+          <form ref={formRef} onSubmit={handleSubmit}>
+            <Stack
+              sx={{ px: { xs: 2, sm: 4 }, pb: 12 }}
+              spacing={3}
+              alignItems="center"
+            >
+              {submissionError && (
+                <Alert
+                  severity="error"
+                  onClose={() => setSubmissionError(null)}
+                  sx={{ mb: 1, width: '100%', maxWidth: 900 }}
+                >
+                  {submissionError}
+                </Alert>
+              )}
+
+              <Box sx={{ width: '100%', maxWidth: 900 }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 'bold',
+                    color: 'primary.main',
+                    mb: 1,
+                    alignSelf: 'flex-start',
+                  }}
+                >
+                  Flow Name *
+                </Typography>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  id="series-name"
+                  placeholder="Give your Flow a name..."
+                  name="seriesName"
+                  value={seriesName}
+                  onChange={handleChange}
+                  required
+                  sx={{
+                    width: '100%',
+                  }}
+                  InputProps={{
+                    endAdornment: isDirty ? (
+                      <CheckCircleIcon sx={{ color: 'success.main' }} />
+                    ) : null,
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ width: '100%', maxWidth: 900 }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 'bold',
+                    color: 'primary.main',
+                    mb: 1,
+                  }}
+                >
+                  Add Poses to Flow
+                </Typography>
+                <Typography variant="body2" sx={{ mb: 2 }}>
+                  Search and select poses to add to your flow. You can add as
+                  many poses as you like, and rearrange or edit them later.
+                </Typography>
+                <FormControl
+                  sx={{
+                    width: '100%',
+                  }}
+                >
+                  <GroupedDataAssetSearch<AsanaPose>
+                    items={poses.sort((a, b) =>
+                      a.sort_english_name.localeCompare(b.sort_english_name)
+                    )}
+                    myLabel="My Poses"
+                    publicLabel="Public Poses"
+                    searchField={(pose) => pose.sort_english_name}
+                    displayField={(pose) => pose.sort_english_name}
+                    placeholderText="Search for a pose to add..."
+                    getCreatedBy={(pose) => pose.created_by || undefined}
+                    onSelect={handleSelect}
+                    open={acOpen}
+                    onOpen={() => setAcOpen(true)}
+                    onClose={() => setAcOpen(false)}
+                    inputValue={searchInputValue}
+                    onInputChange={setSearchInputValue}
+                    fullWidth
+                  />
+                </FormControl>
+              </Box>
+
+              <Box className="journal" sx={{ width: '100%', maxWidth: 900 }}>
+                <EditableAsanaList
+                  asanas={asanaListItems}
+                  onAsanasChange={handleAsanasChange}
+                  disabled={false}
+                  showAddButton={false}
+                  title={`Your Flow Sequence${seriesPoses.length > 0 ? ` (${seriesPoses.length} poses)` : ''}`}
+                  emptyMessage="No poses added yet. Use the search above to add poses to your flow."
+                />
+              </Box>
+
+              <Box sx={{ width: '100%', maxWidth: 900 }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 'bold',
+                    color: 'primary.main',
+                    mb: 1,
+                  }}
+                >
+                  Flow Image
+                </Typography>
+                <Typography variant="body2" sx={{ mb: 2 }}>
+                  Upload one image to represent this flow. Something
+                  inspirational that captures the essence of your Flow.
+                </Typography>
+
+                {uploadedImages.length === 0 ? (
+                  <ImageManagement
+                    title=""
+                    variant="upload-only"
+                    onImageUploaded={handleImageUploaded}
+                    uploadTitle="Upload Flow Image"
+                    uploadSubtitle="Drag and drop an image here, or click to select (one image only)"
+                  />
+                ) : (
+                  <Box sx={{ mt: 2 }}>
+                    <Typography variant="body2" gutterBottom>
+                      <CheckCircleIcon
+                        sx={{
+                          fontSize: 16,
+                          mr: 0.5,
+                          verticalAlign: 'middle',
+                        }}
+                      />
+                      Flow image uploaded successfully
+                    </Typography>
+                    <Box
+                      sx={{
+                        mt: 2,
+                        maxWidth: 300,
+                        borderRadius: '8px',
+                        overflow: 'hidden',
+                        border: '2px solid',
+                        borderColor: 'success.light',
+                      }}
+                    >
+                      <Box
+                        component="img"
+                        src={uploadedImages[0].url}
+                        alt={uploadedImages[0].altText || 'Flow image'}
+                        sx={{
+                          width: '100%',
+                          height: 200,
+                          objectFit: 'cover',
+                          display: 'block',
+                        }}
+                      />
+                      <Box
+                        sx={{
+                          p: 1.5,
+                          bgcolor: 'success.lighter',
+                        }}
+                      >
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 0.5,
+                          }}
+                        >
+                          <ImageIcon sx={{ fontSize: 14 }} />
+                          {uploadedImages[0].fileName || 'Flow Image'}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                      onClick={() => {
+                        setUploadedImages([])
+                        dispatch({
+                          type: 'SET_FLOW_SERIES',
+                          payload: {
+                            ...state.flowSeries,
+                            image: '',
+                          },
+                        })
+                      }}
+                      sx={{ mt: 2 }}
+                    >
+                      Remove Image
+                    </Button>
+                  </Box>
+                )}
+              </Box>
+
+              <Box sx={{ width: '100%', maxWidth: 900 }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 'bold',
+                    color: 'primary.main',
+                    mb: 1,
+                  }}
+                >
+                  Description
+                </Typography>
+                <TextField
+                  id="outlined-basic"
+                  fullWidth
+                  placeholder="Add an optional description for your flow..."
+                  multiline
+                  minRows={4}
+                  variant="outlined"
+                  name="description"
+                  value={description}
+                  onChange={handleChange}
+                  InputProps={{
+                    endAdornment: isDirtyDescription ? (
+                      <CheckCircleIcon
+                        sx={{
+                          color: 'success.main',
+                          alignSelf: 'flex-start',
+                          mt: 1,
+                        }}
+                      />
+                    ) : null,
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ width: '100%', maxWidth: 900 }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: 'bold',
+                    color: 'primary.main',
+                    mb: 1,
+                  }}
+                >
+                  Flow Duration
+                </Typography>
+                <TextField
+                  id="flow-duration"
+                  fullWidth
+                  placeholder="e.g. 20 min"
+                  variant="outlined"
+                  name="duration"
+                  value={duration}
+                  onChange={handleChange}
+                  InputProps={{
+                    endAdornment: isDirtyDuration ? (
+                      <CheckCircleIcon
+                        sx={{
+                          color: 'success.main',
+                        }}
+                      />
+                    ) : null,
+                  }}
+                />
+              </Box>
+
+              <Box
+                data-testid="action-bar"
+                sx={{
+                  position: 'sticky',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  py: 2,
+                  px: 2,
+                  mt: 4,
+                  width: '100%',
+                  boxSizing: 'border-box',
+                  zIndex: 10,
+                }}
+              >
+                <Stack
+                  direction={{ xs: 'column', sm: 'row' }}
+                  spacing={2}
+                  justifyContent="center"
+                  alignItems="center"
+                  sx={{ width: '100%', maxWidth: 600, mx: 'auto' }}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    disabled={session === null}
+                    startIcon={<SaveIcon />}
+                    sx={{
+                      borderRadius: '12px',
+                      px: 4,
+                      py: 1.5,
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
+                      width: { xs: '100%', sm: 'auto' },
+                      minWidth: { sm: '200px' },
+                      boxShadow: (theme) => theme.customShadows.cta,
+                    }}
+                  >
+                    {AppText.APP_BUTTON_CREATE_FLOW}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    startIcon={<CloseIcon />}
+                    sx={{
+                      borderRadius: '12px',
+                      px: 4,
+                      py: 1.5,
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
+                      width: { xs: '100%', sm: 'auto' },
+                      minWidth: { sm: '160px' },
+                    }}
+                    onClick={handleCancel}
+                  >
+                    {AppText.APP_BUTTON_CANCEL}
+                  </Button>
+                </Stack>
+              </Box>
+            </Stack>
+          </form>
+        </Stack>
+      </Box>
+
+      <HelpDrawer
+        content={HELP_PATHS.flows.createFlow}
+        open={open}
+        onClose={() => setOpen(false)}
+      />
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity="error"
+          sx={{ width: '100%' }}
+        >
+          {submissionError}
+        </Alert>
+      </Snackbar>
+    </>
+  )
+}

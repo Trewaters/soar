@@ -1,0 +1,78 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>default | soar</title><meta name="description" content="Documentation for soar"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="../index.html" class="title">soar</a><div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><ul class="tsd-breadcrumb" aria-label="Breadcrumb"><li><a href="../modules/app_clientComponents_WeeklyActivityViewer.html">app/clientComponents/WeeklyActivityViewer</a></li><li><a href="" aria-current="page">default</a></li></ul><h1>Function default</h1></div><section class="tsd-panel"><ul class="tsd-signatures"><li class=""><div class="tsd-signature tsd-anchor-link" id="default"><span class="tsd-kind-call-signature">default</span><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">__namedParameters</span><span class="tsd-signature-symbol">:</span> <a href="../interfaces/app_clientComponents_WeeklyActivityViewer.WeeklyActivityViewerProps.html" class="tsd-signature-type tsd-kind-interface">WeeklyActivityViewerProps</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Element</span><a href="#default" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></div><div class="tsd-description"><div class="tsd-comment tsd-typography"><p>WeeklyActivityViewer</p>
+<p>Client-side React component that displays a weekly activity summary and activity list
+for a given entity (asana, series, or sequence). Fetches weekly activity data for the
+signed-in user and renders either a compact summary card or a detailed tracker view.</p>
+<p>Behavior / Side effects:</p>
+<ul>
+<li>Uses the current session (useSession) to determine the signed-in user id.</li>
+<li>On mount and whenever <a href="http://session.user.id">session.user.id</a>, entityId, entityType, or refreshTrigger changes,
+triggers a fetch via one of:
+<ul>
+<li>getAsanaWeeklyActivity(userId, entityId)</li>
+<li>getSeriesWeeklyActivity(userId, entityId)</li>
+<li>getSequenceWeeklyActivity(userId, entityId)
+and populates local state: weeklyData, loading, error.</li>
+</ul>
+</li>
+<li>Handles network and fetch errors by setting <code>error</code> and logging to console.</li>
+</ul>
+<p>Rendering / UI states:</p>
+<ul>
+<li>Loading: renders a LoadingSkeleton with size depending on variant.</li>
+<li>Error: renders a centered error Box with the error message.</li>
+<li>Not authenticated: renders a Paper prompting the user to sign in and explaining benefits.</li>
+<li>Authenticated: always renders the tracker UI even if there are zero activities. Uses:
+<ul>
+<li>weeklyData.count -&gt; activityCount</li>
+<li>weeklyData.activities -&gt; activities array (may be empty)</li>
+</ul>
+</li>
+</ul>
+<p>Utility behaviors / formatting:</p>
+<ul>
+<li>formatLastPerformed(activities) -&gt; human-friendly last-performed label:
+<ul>
+<li>&quot;Never&quot;, &quot;Today&quot;, &quot;Yesterday&quot;, &quot;N days ago&quot; (for &lt;= 7 days), otherwise uses toLocaleDateString.</li>
+</ul>
+</li>
+<li>getStreakColor(count) -&gt; maps count to chip color tokens: &gt;=5 =&gt; 'success', &gt;=3 =&gt; 'warning', &gt;=1 =&gt; 'info', else 'default'.</li>
+<li>getStreakLabel(count) -&gt; maps count to short label: &gt;=7 =&gt; 'Amazing!', &gt;=5 =&gt; 'Great!', &gt;=3 =&gt; 'Good', &gt;=1 =&gt; 'Started', else 'None'.</li>
+<li>getDifficultyColor(difficulty, completionStatus) -&gt;
+<ul>
+<li>If completionStatus === 'complete' and difficulty provided:
+'easy' -&gt; 'success', 'average'/'medium' -&gt; 'info', 'difficult'/'hard' -&gt; 'error', default -&gt; 'success'</li>
+<li>Otherwise falls back to completionStatus mapping: 'complete' -&gt; 'success', 'partial' -&gt; 'warning', else 'default'.</li>
+</ul>
+</li>
+<li>getEntityTypeLabel, getCompactTitle, getDetailedTitle, getActivityListLabel provide localized labels for each entityType.</li>
+<li>getTimeOfDayIcon(datePerformed) -&gt; returns an icon based on local hour:
+<ul>
+<li>Morning (05:00–11:59): WbTwilightIcon (warning.main)</li>
+<li>Day (12:00–19:59): WbSunnyIcon (warning.light)</li>
+<li>Night (20:00–04:59): NightsStayIcon (info.main)</li>
+</ul>
+</li>
+</ul>
+<p>List rendering:</p>
+<ul>
+<li>For detailed view, each session entry shows:
+<ul>
+<li>Formatted date (weekday, month short, day) and time in 'en-US' format (hour:min).</li>
+<li>Time-of-day icon (see above).</li>
+<li>A Chip showing difficulty or completionStatus with color determined by getDifficultyColor
+and white label text.</li>
+</ul>
+</li>
+<li>Rows alternate backgroundColor between 'grey.50' and 'background.paper' for visual grouping.</li>
+</ul>
+<p>Notes / Accessibility:</p>
+<ul>
+<li>Tooltips are used to expose last-performed details in compact mode and on count chips.</li>
+<li>All dates/times are formatted using the browser locale for display; explicit 'en-US' formatting
+is used for the date/time strings in the activity list.</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>JSX.Element: the appropriate skeleton, error, login prompt, compact card, or detailed tracker UI.</li>
+</ul>
+</div><div class="tsd-parameters"><h4 class="tsd-parameters-title">Parameters</h4><ul class="tsd-parameter-list"><li><span><span class="tsd-kind-parameter">__namedParameters</span>: <a href="../interfaces/app_clientComponents_WeeklyActivityViewer.WeeklyActivityViewerProps.html" class="tsd-signature-type tsd-kind-interface">WeeklyActivityViewerProps</a></span></li></ul></div><h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Element</span></h4></div></li></ul></section></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div></div><div class="site-menu"><nav class="tsd-navigation"><a href="../modules.html">soar</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer></footer><div class="overlay"></div></body></html>
